@@ -1,50 +1,38 @@
-# 12｜GitHub协作与资料同步
+# 12｜GitHub协作与同步 v0.2
 
-负责人已创建`GOD-OF-PPT/reborn-2020-ai-era`，可见性为Public，默认分支为`main`。本次使用GitHub插件提交文本资料，不改变负责人设置的可见性。原始PNG上传状态见[交付说明](../DELIVERY-STATUS.md)。
+负责人已创建公开仓库GOD-OF-PPT/reborn-2020-ai-era，默认main。当前工作保留可见性，不变更权限、分支保护或上线设置。v0.2文档在e172f184文本基线上更新，不导入最初资料包的独立Git历史。
 
-未创建Pages站点、远端Issues、里程碑、分支保护或开源许可证；不能把规划清单视为已经启用的远端管理功能。
-
-## 获取当前基线
+## 从当前远端继续
 
 ```bash
 git clone https://github.com/GOD-OF-PPT/reborn-2020-ai-era.git
 cd reborn-2020-ai-era
-git switch -c feature/P001-scope-and-quarter-flow
+git switch -c feature/P002-project-scaffold
 ```
 
-从远端克隆后继续工作。原始资料包中的本地初始提交`4d94e6d`是一条独立历史，本次接口提交保留的是文本内容，而不是原始Git提交对象。不要将旧`.git`覆盖到新克隆目录，也不要强推覆盖远端。
+任务分支使用feature/、fix/或docs/；PR写明任务ID、规则变化、存档兼容性和真实测试。不要把旧资料包的.git覆盖到新克隆，更不能强推旧历史。
 
-## 补齐原始概念图
+通过插件提交时：先核对目标与分支头；在原树上构建更改；创建以当前提交为父的提交；更新分支前再检查并发；仅快进，不强推；最后重读main及提交树。远端变动先检查冲突，不假报已完成。
 
-从对话中的完整项目包，仅复制三张PNG到克隆目录的`assets/concepts/`下。路径、尺寸及SHA-256须与[清单](../assets/concepts/manifest.json)一致。不要重新生成或改名后误称原图。
+## 任务与阶段
 
-```bash
-python scripts/check_docs.py
-git add assets/concepts/style-01-anime.png assets/concepts/style-02-pixel.png assets/concepts/style-03-cinematic.png
-git commit -m "assets: add original art direction concepts"
-```
+[backlog.json](../planning/backlog.json)现为22项本地规划记录，关联Q01—Q24验收。remoteIssueNumber为空即未创建远端Issue，assignee为空即未指定真实负责人。M0—M5是计划阶段，不代表GitHub已建立同名里程碑或Projects。
 
-提交前更新交付状态和美术文档中的待上传说明。通过正常分支与PR流程合入，不改写已有历史。
+任务完成必须有实现/内容/测试证据。范围调整同步主设计、经济/事件规则、验收矩阵、任务清单和决策记录，避免五类机会只存在于一份文档。
 
-## 旧发布脚本的适用范围
-
-`scripts/publish_github.py`和`publish.ps1`是初始资料包中为“新建私有仓库”提供的辅助脚本。它们拒绝公开仓库，不适用于当前已由负责人创建的公开仓库。保留脚本及其模拟测试是为了记录原交付内容，不要求使用或放宽其安全检查。
-
-当前通过GitHub插件直接提交，不读取、索取或保存个人Token。没有建立新凭据、部署密钥或后台任务。
-
-## 后续开发规范
-
-`main`保存可追溯基线；任务使用`feature/`、`fix/`或`docs/`短分支；小范围PR附任务ID和真实验证结果。保护分支只是建议，不代表已经配置。
-
-[任务清单](../planning/backlog.json)仍有12项待办，`remoteIssueNumber`为空表示尚未创建Issue。模板在`.github/ISSUE_TEMPLATE`与`.github/PULL_REQUEST_TEMPLATE.md`；不自动分配负责人或承诺交付日期。
-
-更新规则时同步策划和验收项；新增历史事件附来源；存档变更记录迁移；资产新增记录用途、来源和校验信息。
-
-## 文本与完整资产检查
+## 检查命令
 
 ```bash
 python scripts/check_docs.py --text-only
-python -m unittest discover -s scripts -p test_publish.py -v
+python scripts/check_plan.py
 ```
 
-第一条明确不要求原图存在，仍会报告缺失清单。第二条只运行旧发布脚本的模拟测试，不是真实GitHub发布测试。补齐原图后运行不带`--text-only`的资料检查，才是包含三张原图的完整校验。
+第一条是已有文本/链接/JSON检查，仍报告三张原始PNG缺失；第二条是本轮新增的规划依赖、验收ID覆盖与固定算例核对，不是游戏测试。实际本轮运行范围见[VALIDATION](../VALIDATION.md)。
+
+旧scripts/publish_github.py与publish.ps1仅为早期新建私有仓库交付保留，不适用于负责人已创建的公开仓库，不要求放宽它们的检查。旧12项模拟测试不等于真实发布或游戏测试，本轮没有把旧结果当成重新运行。
+
+## 原图与公开发布
+
+原始PNG仍待上传，路径与哈希以[manifest](../assets/concepts/manifest.json)为准。补传使用原始文件，不重新生成或空图替代；复制原图而非旧.git。完成后运行不带text-only的资料检查，并更新资产状态。
+
+资料可公开不等于已授权部署游戏。没有创建站点、远端Issues、里程碑、部署密钥、真实支付或许可证。后续公开上线、收费和素材/数据使用条件另行决定；不得为资料同步收集个人Token或修改无关仓库。

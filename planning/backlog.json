@@ -1,144 +1,206 @@
 {
-  "version": 1,
-  "note": "Local planning only; no GitHub Issues have been created.",
+  "version": 2,
+  "designVersion": "0.2",
+  "note": "规划清单；没有创建远端Issues，功能尚未实现。",
+  "scope": {
+    "startYear": 2020,
+    "endYear": 2025,
+    "quarters": 24,
+    "routeIds": [
+      "a_share",
+      "ai_video",
+      "ai_course",
+      "api_relay",
+      "deepseek_opportunity"
+    ]
+  },
   "tasks": [
     {
       "id": "P001",
-      "title": "确定首版边界与季度执行顺序",
+      "title": "评审v0.2范围与季度契约",
       "phase": "M0",
       "status": "todo",
       "priority": "P0",
       "dependsOn": [],
-      "acceptanceCriteria": [
-        "确认历史基础篇和架空范围",
-        "确定季度阶段及资金发生时点"
+      "acceptanceIds": [
+        "Q01",
+        "Q02",
+        "Q03"
       ],
+      "acceptanceCriteria": [
+        "24季度、五机会和架空边界形成评审记录",
+        "明确实际日期、资金和零行动危机规则"
+      ],
+      "deliverableDoc": "docs/00-project-brief.md",
+      "ownerRole": "策划",
       "remoteIssueNumber": null,
       "assignee": null
     },
     {
       "id": "P002",
-      "title": "建立前端工程与规则测试入口",
+      "title": "建立前端与规则测试工程",
       "phase": "M1",
       "status": "todo",
       "priority": "P0",
       "dependsOn": [
         "P001"
       ],
-      "acceptanceCriteria": [
-        "可在本地启动空工程",
-        "建立规则测试命令并锁定依赖"
+      "acceptanceIds": [
+        "Q01",
+        "Q04"
       ],
+      "acceptanceCriteria": [
+        "空工程可本地启动并锁定依赖",
+        "提交实际构建与测试命令，不伪造可玩完成"
+      ],
+      "deliverableDoc": "docs/08-technical-plan.md",
+      "ownerRole": "工程",
       "remoteIssueNumber": null,
       "assignee": null
     },
     {
       "id": "P003",
-      "title": "行动与个人/公司账本",
+      "title": "日期、行动与个人企业账本",
       "phase": "M1",
       "status": "todo",
       "priority": "P0",
       "dependsOn": [
         "P002"
       ],
-      "acceptanceCriteria": [
-        "开局现金样例结果27000元",
-        "无超支行动或重复结算",
-        "注资跨账户成对"
+      "acceptanceIds": [
+        "Q01",
+        "Q02",
+        "Q03",
+        "Q04",
+        "Q05",
+        "Q12"
       ],
+      "acceptanceCriteria": [
+        "固定新手现金27000元且通过月度现金检查",
+        "注资成对、预付款受保护、无超预算和重复结算"
+      ],
+      "deliverableDoc": "docs/02-economy-and-actions.md",
+      "ownerRole": "工程",
       "remoteIssueNumber": null,
       "assignee": null
     },
     {
       "id": "P004",
-      "title": "存档版本与确定性回放",
+      "title": "确定性、存档与写入冲突",
       "phase": "M1",
       "status": "todo",
       "priority": "P0",
       "dependsOn": [
         "P003"
       ],
-      "acceptanceCriteria": [
-        "同种子同动作得到同结果",
-        "导入失败不破坏旧档",
-        "保存规则和内容版本"
+      "acceptanceIds": [
+        "Q04",
+        "Q19",
+        "Q24"
       ],
+      "acceptanceCriteria": [
+        "同版本同种子同指令可回放",
+        "损坏导入保留旧档、旧revision不能覆盖新写入"
+      ],
+      "deliverableDoc": "docs/08-technical-plan.md",
+      "ownerRole": "工程",
       "remoteIssueNumber": null,
       "assignee": null
     },
     {
       "id": "P005",
-      "title": "内容事件结构与资格校验",
-      "phase": "M2",
+      "title": "内容执行白名单与资格校验",
+      "phase": "M1",
       "status": "todo",
       "priority": "P0",
       "dependsOn": [
         "P003"
       ],
-      "acceptanceCriteria": [
-        "校验唯一ID和前置资格",
-        "选项说明成本及不可用原因",
-        "无任意代码执行"
+      "acceptanceIds": [
+        "Q15",
+        "Q19"
       ],
+      "acceptanceCriteria": [
+        "事件实例唯一且效果原子执行",
+        "禁用选项有具体原因，内容不能执行任意脚本"
+      ],
+      "deliverableDoc": "docs/15-content-contracts.md",
+      "ownerRole": "工程",
       "remoteIssueNumber": null,
       "assignee": null
     },
     {
       "id": "P006",
-      "title": "历史时间线与记忆分域失效",
-      "phase": "M2",
+      "title": "历史锚点、世界推进与分域记忆",
+      "phase": "M3",
       "status": "todo",
       "priority": "P0",
       "dependsOn": [
-        "P005"
+        "P005",
+        "P019"
+      ],
+      "acceptanceIds": [
+        "Q17",
+        "Q18"
       ],
       "acceptanceCriteria": [
-        "默认历史按时推进",
-        "改变局部条件只影响相关记忆",
-        "提供可读因果路径"
+        "不点新闻也按日期触发",
+        "局部历史分支影响对应市场与记忆并有因果记录"
       ],
+      "deliverableDoc": "docs/03-history-and-memory.md",
+      "ownerRole": "工程/内容",
       "remoteIssueNumber": null,
       "assignee": null
     },
     {
       "id": "P007",
       "title": "黑天鹅与局部失控样板",
-      "phase": "M2",
+      "phase": "M3",
       "status": "todo",
       "priority": "P0",
       "dependsOn": [
         "P004",
-        "P005"
+        "P005",
+        "P013"
+      ],
+      "acceptanceIds": [
+        "Q20",
+        "Q21"
       ],
       "acceptanceCriteria": [
-        "AI先带来真实收益",
-        "调查区分线索与事实",
-        "危机不赠送行动",
-        "保留退出能力改变可选处置"
+        "收益、扩权、调查、处置、恢复形成完整链",
+        "零行动可推进但不免费接管，真实公司不承载虚构作恶"
       ],
+      "deliverableDoc": "docs/04-ai-risk-and-control.md",
+      "ownerRole": "工程/内容",
       "remoteIssueNumber": null,
       "assignee": null
     },
     {
       "id": "P008",
-      "title": "第三风格的可交互界面样板",
+      "title": "半写实房间与机会工作台样板",
       "phase": "M3",
       "status": "todo",
       "priority": "P0",
       "dependsOn": [
-        "P005"
+        "P005",
+        "P013"
+      ],
+      "acceptanceIds": [
+        "Q23"
       ],
       "acceptanceCriteria": [
-        "完成房间、事件、结算样板",
-        "主要文字及按钮清楚",
-        "不把UI文字烘焙进图片"
+        "五机会入口、账本、事件与结算可以操作",
+        "目标视口可读、键盘可达，UI文本不烘焙进背景"
       ],
+      "deliverableDoc": "docs/06-ui-and-player-flow.md",
+      "ownerRole": "界面/美术",
       "remoteIssueNumber": null,
       "assignee": null
     },
     {
       "id": "P009",
-      "title": "长期人物、承诺与房间变化",
+      "title": "人物、承诺与场景变化",
       "phase": "M3",
       "status": "todo",
       "priority": "P1",
@@ -146,65 +208,352 @@
         "P005",
         "P008"
       ],
-      "acceptanceCriteria": [
-        "承诺与共同经历影响实际选项",
-        "人物有独立目标",
-        "场景变化回应关键事件"
+      "acceptanceIds": [
+        "Q18",
+        "Q22"
       ],
+      "acceptanceCriteria": [
+        "共同经历改变实际选项",
+        "四名长期人物具有目标与承诺，非纯好感加分"
+      ],
+      "deliverableDoc": "docs/01-game-design.md",
+      "ownerRole": "内容/界面",
       "remoteIssueNumber": null,
       "assignee": null
     },
     {
       "id": "P010",
-      "title": "16季度与双路线内容",
+      "title": "24季度与五机会整局串联",
       "phase": "M4",
       "status": "todo",
-      "priority": "P1",
+      "priority": "P0",
       "dependsOn": [
         "P006",
         "P007",
-        "P009"
+        "P009",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "acceptanceIds": [
+        "Q17",
+        "Q22"
       ],
       "acceptanceCriteria": [
-        "两种背景及两条路线可走通",
-        "普通投资路线可接触外部风险",
-        "历史与架空清楚区分"
+        "两种背景通过正常时间线到达五类机会",
+        "不必软件创业也能通关，不依赖手工解锁"
       ],
+      "deliverableDoc": "docs/07-player-walkthrough.md",
+      "ownerRole": "内容/工程",
       "remoteIssueNumber": null,
       "assignee": null
     },
     {
       "id": "P011",
-      "title": "结局因果回放与重玩",
+      "title": "多维结局与因果回放",
       "phase": "M4",
       "status": "todo",
       "priority": "P1",
       "dependsOn": [
         "P010"
       ],
-      "acceptanceCriteria": [
-        "分别结算人生与世界",
-        "每项重大结果有因果",
-        "非创业路线具有完整结局"
+      "acceptanceIds": [
+        "Q18",
+        "Q22"
       ],
+      "acceptanceCriteria": [
+        "现金、股权、人生与世界分别结算",
+        "重大结果可追溯且不泄露全部未选隐藏真相"
+      ],
+      "deliverableDoc": "docs/01-game-design.md",
+      "ownerRole": "内容/工程",
       "remoteIssueNumber": null,
       "assignee": null
     },
     {
       "id": "P012",
-      "title": "平衡、素材、存档与发布审查",
+      "title": "发布候选审查与决定",
+      "phase": "M5",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [
+        "P004",
+        "P011",
+        "P020",
+        "P021",
+        "P022"
+      ],
+      "acceptanceIds": [
+        "Q08",
+        "Q22",
+        "Q23",
+        "Q24"
+      ],
+      "acceptanceCriteria": [
+        "所有阻断项已关闭且有实际验证记录",
+        "公开上线、素材、数据使用与许可证另获负责人决定"
+      ],
+      "deliverableDoc": "docs/09-roadmap-and-backlog.md",
+      "ownerRole": "测试/负责人",
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P013",
+      "title": "机会生命周期与共享经营容量",
+      "phase": "M2",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [
+        "P003",
+        "P005"
+      ],
+      "acceptanceIds": [
+        "Q02",
+        "Q09",
+        "Q11",
+        "Q13",
+        "Q15"
+      ],
+      "acceptanceCriteria": [
+        "五类共享生命周期但有独立收入模型",
+        "进入、维护、扩张、转型和退出均有资源成本"
+      ],
+      "deliverableDoc": "docs/13-opportunity-playbook.md",
+      "ownerRole": "工程",
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P014",
+      "title": "A股个股、订单与行情模式",
+      "phase": "M2",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [
+        "P004",
+        "P013",
+        "P019"
+      ],
+      "acceptanceIds": [
+        "Q06",
+        "Q07",
+        "Q08"
+      ],
+      "acceptanceCriteria": [
+        "个股交易不被抽象组合取代，禁止穿越成交",
+        "按板块日期校验规则，模拟与历史数据明确区分"
+      ],
+      "deliverableDoc": "docs/13-opportunity-playbook.md",
+      "ownerRole": "工程/内容",
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P015",
+      "title": "AI视频制作、商单与流量转化",
+      "phase": "M2",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [
+        "P013"
+      ],
+      "acceptanceIds": [
+        "Q09",
+        "Q10"
+      ],
+      "acceptanceCriteria": [
+        "制作、返工、交付、到账形成完整循环",
+        "没有变现资格时播放不凭空加钱"
+      ],
+      "deliverableDoc": "docs/13-opportunity-playbook.md",
+      "ownerRole": "工程/内容",
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P016",
+      "title": "AI卖课、预售、交付与退款",
+      "phase": "M2",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [
+        "P013"
+      ],
+      "acceptanceIds": [
+        "Q11",
+        "Q12"
+      ],
+      "acceptanceCriteria": [
+        "200人课程算例净收益23029元可复算",
+        "预付款与收入分开，支持容量和更新影响后续经营"
+      ],
+      "deliverableDoc": "docs/13-opportunity-playbook.md",
+      "ownerRole": "工程/内容",
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P017",
+      "title": "API中转站用量与供应经济",
+      "phase": "M2",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [
+        "P013"
+      ],
+      "acceptanceIds": [
+        "Q13",
+        "Q14"
+      ],
+      "acceptanceCriteria": [
+        "充值负债、用量收入和上游账单分开",
+        "样例净收益5500元，降价/中断可转型或退出"
+      ],
+      "deliverableDoc": "docs/13-opportunity-playbook.md",
+      "ownerRole": "工程/内容",
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P018",
+      "title": "DeepSeek生态与架空股权谈判",
+      "phase": "M2",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [
+        "P005",
+        "P013",
+        "P019"
+      ],
+      "acceptanceIds": [
+        "Q15",
+        "Q16"
+      ],
+      "acceptanceCriteria": [
+        "历史生态、题材关联与股权标签不同",
+        "直接投资需对方意愿及资格，20%算例与锁定/治理分别记录"
+      ],
+      "deliverableDoc": "docs/13-opportunity-playbook.md",
+      "ownerRole": "工程/内容",
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P019",
+      "title": "2020至2025史实与交易数据核验",
+      "phase": "M0",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [
+        "P001"
+      ],
+      "acceptanceIds": [
+        "Q08",
+        "Q15",
+        "Q17"
+      ],
+      "acceptanceCriteria": [
+        "逐条核验来源、实际日期、能力与资格",
+        "真实行情覆盖/停牌/复权/使用条件未通过时只用明确模拟"
+      ],
+      "deliverableDoc": "docs/11-historical-sources.md",
+      "ownerRole": "内容/资料",
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P020",
+      "title": "验收自动化与事件可达性检查",
+      "phase": "M4",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [
+        "P004",
+        "P005",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "acceptanceIds": [
+        "Q01",
+        "Q02",
+        "Q03",
+        "Q04",
+        "Q05",
+        "Q06",
+        "Q07",
+        "Q08",
+        "Q09",
+        "Q10",
+        "Q11",
+        "Q12",
+        "Q13",
+        "Q14",
+        "Q15",
+        "Q16",
+        "Q17",
+        "Q18",
+        "Q19",
+        "Q20",
+        "Q21",
+        "Q22",
+        "Q23",
+        "Q24"
+      ],
+      "acceptanceCriteria": [
+        "为Q01至Q24实现适合的规则/回放/浏览器检查",
+        "每项记录真实结果和未覆盖范围，文档校验不冒充游戏测试"
+      ],
+      "deliverableDoc": "docs/14-acceptance-matrix.md",
+      "ownerRole": "测试/工程",
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P021",
+      "title": "多路线收益与风险平衡",
       "phase": "M5",
       "status": "todo",
       "priority": "P1",
       "dependsOn": [
+        "P010",
         "P011"
       ],
-      "acceptanceCriteria": [
-        "核实正式采用的史实及素材",
-        "验证存档与异常输入",
-        "无单一路线无代价碾压",
-        "公开发布与许可已获决定"
+      "acceptanceIds": [
+        "Q22"
       ],
+      "acceptanceCriteria": [
+        "工作投资、内容课程、服务、项目投资均有可行路线",
+        "多种子比较净现金与义务，无零成本通吃或强制失败"
+      ],
+      "deliverableDoc": "docs/14-acceptance-matrix.md",
+      "ownerRole": "策划/测试",
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P022",
+      "title": "原图补齐与正式美术资产验收",
+      "phase": "M5",
+      "status": "todo",
+      "priority": "P1",
+      "dependsOn": [
+        "P008"
+      ],
+      "acceptanceIds": [
+        "Q23"
+      ],
+      "acceptanceCriteria": [
+        "原始PNG按现有清单核对，不用重绘替代",
+        "正式资产核验来源、文字、品牌和界面可读性"
+      ],
+      "deliverableDoc": "docs/05-art-direction.md",
+      "ownerRole": "美术/负责人",
       "remoteIssueNumber": null,
       "assignee": null
     }
