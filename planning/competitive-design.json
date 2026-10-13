@@ -1,0 +1,594 @@
+{
+  "version": 1,
+  "designAmendmentVersion": "0.4",
+  "baseDesignVersion": "0.3",
+  "baseCommit": "e71ea1da10f77d90ef00666eee0dc1a77ed78add",
+  "observedDate": "2026-10-13",
+  "method": "desk_research",
+  "handsOnTested": false,
+  "participantsActual": 0,
+  "purpose": "规格与调研映射，不是运行时事件包或已通过的游戏验收",
+  "baseTaskFile": "planning/backlog.json",
+  "baseSpecFile": "planning/playable-spec.json",
+  "scope": {
+    "startYear": 2020,
+    "endYear": 2025,
+    "quarters": 24,
+    "actionPoints": 4,
+    "routeIds": [
+      "a_share",
+      "ai_video",
+      "ai_course",
+      "api_relay",
+      "deepseek_opportunity"
+    ]
+  },
+  "documents": [
+    "docs/17-competitive-research.md",
+    "docs/18-revised-player-flow.md",
+    "docs/19-research-implementation-plan.md"
+  ],
+  "sources": [
+    {
+      "id": "C01",
+      "product": "STONKS-9800",
+      "evidenceType": "primary_page",
+      "url": "https://stonks.jp/",
+      "observedDate": "2026-10-13",
+      "supports": "投资、分红、健康与生活资产",
+      "limitation": "未实机验证",
+      "tier": "core"
+    },
+    {
+      "id": "C02",
+      "product": "The Founder",
+      "evidenceType": "primary_page",
+      "url": "https://thefounder.biz/",
+      "observedDate": "2026-10-13",
+      "supports": "时代创业、组合产品、研究与世界后果",
+      "limitation": "网页入口只读",
+      "tier": "core"
+    },
+    {
+      "id": "C03",
+      "product": "Game Dev Tycoon",
+      "evidenceType": "primary_page",
+      "url": "https://www.greenheartgames.com/app/game-dev-tycoon/",
+      "observedDate": "2026-10-13",
+      "supports": "开发侧重点、技术与团队分阶段成长",
+      "limitation": "不采用旧评分为当前口碑",
+      "tier": "core"
+    },
+    {
+      "id": "C04",
+      "product": "Youtubers Life 2",
+      "evidenceType": "primary_page",
+      "url": "https://store.steampowered.com/app/1493760/Youtubers_Life_2/",
+      "observedDate": "2026-10-13",
+      "supports": "趋势内容、任务与人物信任",
+      "limitation": "未抽样用户评价",
+      "tier": "core"
+    },
+    {
+      "id": "C05",
+      "product": "Startup Company",
+      "evidenceType": "primary_page",
+      "url": "https://store.steampowered.com/app/606800/Startup_Company/",
+      "observedDate": "2026-10-13",
+      "supports": "功能、营销、服务器容量与员工",
+      "limitation": "未实测自动化细节",
+      "tier": "core"
+    },
+    {
+      "id": "C06",
+      "product": "Reigns",
+      "evidenceType": "primary_page",
+      "url": "https://store.steampowered.com/app/474750/Reigns/",
+      "observedDate": "2026-10-13",
+      "supports": "短选择、多资源与延迟后果",
+      "limitation": "发行方重读403，以商店交叉核对",
+      "tier": "core"
+    },
+    {
+      "id": "C07",
+      "product": "Universal Paperclips",
+      "evidenceType": "primary_page",
+      "url": "https://www.franklantz.net/work",
+      "observedDate": "2026-10-13",
+      "supports": "AI单目标、扩张和逐步系统变化",
+      "limitation": "入口静态DOM可能含隐藏模块",
+      "tier": "core"
+    },
+    {
+      "id": "C08",
+      "product": "重生之我是股神",
+      "evidenceType": "primary_search_excerpt",
+      "url": "https://www.taptap.cn/app/846149",
+      "observedDate": "2026-10-13",
+      "supports": "重生炒股题材候选",
+      "limitation": "全文不可读；不核实规模、行情或首发日期",
+      "tier": "candidate"
+    },
+    {
+      "id": "C09",
+      "product": "Re2 I Rise Alone",
+      "evidenceType": "primary_search_excerpt",
+      "url": "https://store.steampowered.com/app/3816120/2/?l=japanese",
+      "observedDate": "2026-10-13",
+      "supports": "逆袭养成题材候选",
+      "limitation": "仅主体商店索引；未运行Demo或验证内容量",
+      "tier": "candidate"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "D401",
+      "sourceIds": [
+        "C03",
+        "C07"
+      ],
+      "acceptanceIds": [
+        "X01",
+        "X02"
+      ],
+      "title": "第一单与可跳过教学",
+      "status": "proposed"
+    },
+    {
+      "id": "D402",
+      "sourceIds": [
+        "C06",
+        "C03"
+      ],
+      "acceptanceIds": [
+        "X03"
+      ],
+      "title": "单工作台与渐进披露",
+      "status": "proposed"
+    },
+    {
+      "id": "D403",
+      "sourceIds": [
+        "C05",
+        "C07"
+      ],
+      "acceptanceIds": [
+        "X04",
+        "X05"
+      ],
+      "title": "有限例行计划",
+      "status": "proposed"
+    },
+    {
+      "id": "D404",
+      "sourceIds": [
+        "C03",
+        "C04",
+        "C05"
+      ],
+      "acceptanceIds": [
+        "X06"
+      ],
+      "title": "五路线不同策略与反馈",
+      "status": "proposed"
+    },
+    {
+      "id": "D405",
+      "sourceIds": [
+        "C02",
+        "C03"
+      ],
+      "acceptanceIds": [
+        "X07",
+        "X08"
+      ],
+      "title": "记忆准备与同源事件",
+      "status": "proposed"
+    },
+    {
+      "id": "D406",
+      "sourceIds": [
+        "C01",
+        "C04"
+      ],
+      "acceptanceIds": [
+        "X09"
+      ],
+      "title": "财富与生活回响",
+      "status": "proposed"
+    },
+    {
+      "id": "D407",
+      "sourceIds": [
+        "C02",
+        "C07"
+      ],
+      "acceptanceIds": [
+        "X10"
+      ],
+      "title": "效率收益与控制权分离",
+      "status": "proposed"
+    },
+    {
+      "id": "D408",
+      "sourceIds": [
+        "C06",
+        "C02"
+      ],
+      "acceptanceIds": [
+        "X11"
+      ],
+      "title": "普通展示预算不截断强制事件",
+      "status": "proposed"
+    },
+    {
+      "id": "D409",
+      "sourceIds": [
+        "C06",
+        "C01"
+      ],
+      "acceptanceIds": [
+        "X12"
+      ],
+      "title": "因果结局与无永久收益重玩",
+      "status": "proposed"
+    },
+    {
+      "id": "D410",
+      "sourceIds": [
+        "C03",
+        "C06"
+      ],
+      "acceptanceIds": [
+        "X13",
+        "X14"
+      ],
+      "title": "对照灰盒与可读性验证",
+      "status": "proposed"
+    }
+  ],
+  "acceptanceCases": [
+    {
+      "id": "X01",
+      "taskIds": [
+        "P003",
+        "P015"
+      ],
+      "status": "not_run",
+      "document": "docs/19-research-implementation-plan.md"
+    },
+    {
+      "id": "X02",
+      "taskIds": [
+        "P005",
+        "P008"
+      ],
+      "status": "not_run",
+      "document": "docs/19-research-implementation-plan.md"
+    },
+    {
+      "id": "X03",
+      "taskIds": [
+        "P003",
+        "P008"
+      ],
+      "status": "not_run",
+      "document": "docs/19-research-implementation-plan.md"
+    },
+    {
+      "id": "X04",
+      "taskIds": [
+        "P004",
+        "P013"
+      ],
+      "status": "not_run",
+      "document": "docs/19-research-implementation-plan.md"
+    },
+    {
+      "id": "X05",
+      "taskIds": [
+        "P005",
+        "P013",
+        "P017"
+      ],
+      "status": "not_run",
+      "document": "docs/19-research-implementation-plan.md"
+    },
+    {
+      "id": "X06",
+      "taskIds": [
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "status": "not_run",
+      "document": "docs/19-research-implementation-plan.md"
+    },
+    {
+      "id": "X07",
+      "taskIds": [
+        "P005",
+        "P006"
+      ],
+      "status": "not_run",
+      "document": "docs/19-research-implementation-plan.md"
+    },
+    {
+      "id": "X08",
+      "taskIds": [
+        "P006",
+        "P014",
+        "P016",
+        "P017"
+      ],
+      "status": "not_run",
+      "document": "docs/19-research-implementation-plan.md"
+    },
+    {
+      "id": "X09",
+      "taskIds": [
+        "P009",
+        "P011"
+      ],
+      "status": "not_run",
+      "document": "docs/19-research-implementation-plan.md"
+    },
+    {
+      "id": "X10",
+      "taskIds": [
+        "P007",
+        "P013"
+      ],
+      "status": "not_run",
+      "document": "docs/19-research-implementation-plan.md"
+    },
+    {
+      "id": "X11",
+      "taskIds": [
+        "P005",
+        "P007",
+        "P008"
+      ],
+      "status": "not_run",
+      "document": "docs/19-research-implementation-plan.md"
+    },
+    {
+      "id": "X12",
+      "taskIds": [
+        "P010",
+        "P011"
+      ],
+      "status": "not_run",
+      "document": "docs/19-research-implementation-plan.md"
+    },
+    {
+      "id": "X13",
+      "taskIds": [
+        "P020",
+        "P021"
+      ],
+      "status": "not_run",
+      "document": "docs/19-research-implementation-plan.md"
+    },
+    {
+      "id": "X14",
+      "taskIds": [
+        "P004",
+        "P008",
+        "P022"
+      ],
+      "status": "not_run",
+      "document": "docs/19-research-implementation-plan.md"
+    }
+  ],
+  "workPackages": [
+    {
+      "id": "W401",
+      "dependsOn": [],
+      "baseTaskIds": [
+        "P001",
+        "P002",
+        "P003",
+        "P008"
+      ],
+      "acceptanceIds": [
+        "X03"
+      ],
+      "status": "todo",
+      "remoteIssueNumber": null
+    },
+    {
+      "id": "W402",
+      "dependsOn": [
+        "W401"
+      ],
+      "baseTaskIds": [
+        "P003",
+        "P004",
+        "P005",
+        "P015"
+      ],
+      "acceptanceIds": [
+        "X01",
+        "X02"
+      ],
+      "status": "todo",
+      "remoteIssueNumber": null
+    },
+    {
+      "id": "W403",
+      "dependsOn": [
+        "W401"
+      ],
+      "baseTaskIds": [
+        "P004",
+        "P005",
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "acceptanceIds": [
+        "X04",
+        "X05",
+        "X06"
+      ],
+      "status": "todo",
+      "remoteIssueNumber": null
+    },
+    {
+      "id": "W404",
+      "dependsOn": [
+        "W402",
+        "W403"
+      ],
+      "baseTaskIds": [
+        "P006",
+        "P007",
+        "P009"
+      ],
+      "acceptanceIds": [
+        "X07",
+        "X08",
+        "X09",
+        "X10",
+        "X11"
+      ],
+      "status": "todo",
+      "remoteIssueNumber": null
+    },
+    {
+      "id": "W405",
+      "dependsOn": [
+        "W404"
+      ],
+      "baseTaskIds": [
+        "P010",
+        "P011",
+        "P022"
+      ],
+      "acceptanceIds": [
+        "X12",
+        "X14"
+      ],
+      "status": "todo",
+      "remoteIssueNumber": null
+    },
+    {
+      "id": "W406",
+      "dependsOn": [
+        "W405"
+      ],
+      "baseTaskIds": [
+        "P020",
+        "P021",
+        "P012"
+      ],
+      "acceptanceIds": [
+        "X13"
+      ],
+      "status": "todo",
+      "remoteIssueNumber": null
+    }
+  ],
+  "flow": {
+    "steps": [
+      "brief",
+      "plan",
+      "resolve",
+      "receipt",
+      "continue"
+    ],
+    "ordinaryMainCards": 1,
+    "ordinarySideCards": 2,
+    "mandatoryEventsCapped": false,
+    "freeReading": true,
+    "autoAcceptNewCommitments": false,
+    "routinePlansImplicitlyGrantAgentAuthority": false,
+    "permanentProfitMultiplier": false,
+    "crossQuarterRoutineRequiresConfirmation": true
+  },
+  "uxFixture": {
+    "id": "UX01",
+    "classification": "fictional",
+    "startCashFen": 3000000,
+    "actionCosts": [
+      2,
+      1,
+      1
+    ],
+    "expectedCashFen": 4280000,
+    "expectedMinimumCashFen": 2550000,
+    "expectedBusinessNetFen": 80000,
+    "flows": [
+      {
+        "date": "2020-01-01",
+        "kind": "living",
+        "deltaFen": -400000
+      },
+      {
+        "date": "2020-01-05",
+        "kind": "business_cost",
+        "deltaFen": -50000
+      },
+      {
+        "date": "2020-01-20",
+        "kind": "delivered_receipt",
+        "deltaFen": 130000
+      },
+      {
+        "date": "2020-01-31",
+        "kind": "salary",
+        "deltaFen": 800000
+      },
+      {
+        "date": "2020-02-01",
+        "kind": "living",
+        "deltaFen": -400000
+      },
+      {
+        "date": "2020-02-29",
+        "kind": "salary",
+        "deltaFen": 800000
+      },
+      {
+        "date": "2020-03-01",
+        "kind": "living",
+        "deltaFen": -400000
+      },
+      {
+        "date": "2020-03-31",
+        "kind": "salary",
+        "deltaFen": 800000
+      }
+    ],
+    "legacyFixture": {
+      "id": "Q01",
+      "expectedCashFen": 2700000,
+      "changed": false
+    }
+  },
+  "playtest": {
+    "status": "not_started",
+    "participantsTarget": [
+      8,
+      12
+    ],
+    "tutorialActiveMinutesTargetMax": 10,
+    "quarterActiveMinutesTarget": [
+      3,
+      6
+    ],
+    "campaignActiveMinutesTarget": [
+      90,
+      150
+    ],
+    "cashUnderstandingTargetRatio": 0.8,
+    "remoteTelemetryDefault": false,
+    "results": null
+  }
+}
