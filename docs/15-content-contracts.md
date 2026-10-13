@@ -1,57 +1,84 @@
-# 15｜机会、事件与经营数据契约
+# 15｜内容与状态契约 v0.3
 
-v0.2工作契约。此文给出拟实施的数据结构与例子，不代表JSON Schema、校验器或游戏引擎已经实现。实现归P005、P013、P020。
+开发用接口规格，尚无游戏内容执行器。本文替代v0.2中缺少账户、到期路径和完成条件的示意片段。planning下的样例仅供规格校验，不得当作已验证的生产事件。
 
-## 实体与唯一ID
+## 1. 稳定标识与实体
 
-OpportunityDefinition是机会类型；BusinessInstance是玩家实际经营的一个项目；EventDefinition是剧情模板；EventInstance是某日期的一次发生；Command和Transaction有各自幂等ID。不同课期不能共用收款实例ID，同一事件不能被读档重复领取。
+| 实体 | 主键与必要关系 | 主要状态 |
+|---|---|---|
+| GameRun | runId、版本组、revision | 日期、季度、模式、随机域、保存状态 |
+| OpportunityDefinition | definitionId、route、classification | 可用窗口、能力/资格、动作模板、退出模板 |
+| BusinessInstance | businessId、definitionId、ownerAccountId | lifecycle、市场阶段、合同、容量、义务、风险暴露 |
+| ProductionJob | jobId、businessId、commandId | startAt、completeAt、已占容量、完成条件、失败/中断路径 |
+| Contract | contractId、businessId、counterpartyId | 里程碑、交付、收款、退款、未履约和争议 |
+| CashReservation | reservationId、accountId、originId | 金额、互斥类别、到期、释放/转换记录 |
+| MarketOrder | orderId、accountId、assetId | 提交与撮合点、数量、价、费用、剩余冻结 |
+| EquityAgreement | agreementId、subjectId、roundId | 增资/老股、股比、治理、锁定、架空标签 |
+| EventInstance | instanceId、definitionId、bindingIds | 生效/到期、已选分支、隐藏事实、因果父ID |
+| CommandReceipt | runId + commandId | payloadHash、revision前后、结果、事务ID |
 
-OpportunityDefinition字段：id、route、title、description、earliestDate、capabilityRequirements、accessRequirements、initialCost、maintenanceCost、capacityModel、revenueModel、riskExposures、exitActions、historicalSources、classification。
+route固定为a_share、ai_video、ai_course、api_relay、deepseek_opportunity。application仅作可选扩展，不能替代五类。definition与instance不能混用；不同课期、作品、客户充值和供应账单都有各自ID。
 
-BusinessInstance字段：id、definitionId、ownerAccountId、phase、marketStage、createdAt、assignedCapacity、cashReservations、receivables、payables、customerLiabilities、productionAssets、customers、providerDependencies、contracts、riskState、causeIds。
+金额用MoneyFen，百分比用BasisPoints；日期使用ISO日历日和检查点序号，不用浏览器当地时间。字段缺失与数值0有不同意义；未核实融资意愿不能默认true。
 
-五条route标识固定为a_share、ai_video、ai_course、api_relay、deepseek_opportunity；不要把ai_course误写成其他业务。软件项目可增加application类型，但不替代上述五项。
+## 2. 生命周期与独立维度
 
-## 事件字段
+业务生命周期：discovered → preparing → operating ↔ paused → winding_down → closed。风险/crisisState、市场阶段marketStage、能力资格accessState独立保存；热点衰退不自动停业，停业不自动解除风险和负债。
 
-id、classification、sourceIds、effectiveWindow、priority、exclusiveGroup、preconditions、hiddenFactsPolicy、visibleEvidence、choices、defaultOutcome、followUps、causeDomain。
+preparing转operating要求准备任务完成、资格满足、初始产能与资金可用。paused只禁止新合同/新招生，旧合同继续到期。closed必须证明所有义务结清、转移或按清算规则记录，不允许清空数组当退出。
 
-每个choice包含id、label、requirements、costs、immediateEffects、scheduledEffects、replacementActionIds、failureReasonCodes。资金与行动成本在执行时原子校验；预览只读；无法执行时不给扣款。过期/无人处理有明确定义的默认后果，不把世界卡在弹窗。
+每次转换保存触发命令、条件、成本和causeIds。售出业务改变所有权与义务承担者，不删除过去的承诺。已关闭业务可以新建另一实例，不能复用旧订单和回执领取奖励。
 
-条件/效果用白名单结构，首批条件为all、any、not、hasFlag、dateGte、balanceGte、capacityGte、relationAtLeast；效果为transfer、reserveFunds、recognizeRevenue、recordLiability、setFlag、scheduleEvent、changeCapacity、recordCause。条件不执行任意脚本。
+## 3. 事件模板规范
 
-对每种效果注明账户、币种、金额单位、时间、实例与幂等键；若一个效果组失败，整个事务回滚。效果只能修改允许的状态域；历史实际日期不可由普通业务效果重写。
+生产事件必填：id、classification、sourceIds、effectiveWindow、scope、trigger、priority、exclusiveGroup、hiddenFactsPolicy、choices、defaultChoiceId、followUpPolicy。classified为historical的事实需要来源；fictional/counterfactual须明确标记，引用事实不等于事实支持虚构收益。
 
-## 模型发布引发课程更新的示例
+scope限定绑定的业务/合同/人物，不让同一个课程事件修改玩家所有课程。默认选择必须无需新行动或现金即可执行；只能停止新增、记录义务或推进停工等有限结果，不能免费完成有成本的交付。到期处理同样写入回执。
+
+条件采用有类型白名单：all、any、not、flagEquals、dateInWindow、availableFundsGte、capacityGte、businessKindIs、hasEntitlement、contractStateIs。引用通过已绑定ID解析，禁止任意属性路径、表达式代码或外部请求。
+
+效果通过业务服务：postLedgerTransaction、moveReservation、startJob、pauseNewContracts、recordObligation、scheduleEvent、recordEvidence、recordCause。不得使用可任意改余额的setFlag；不得把成本和同额transfer效果重复扣两次。
+
+## 4. 完整选择样板：课程更新
+
+以下JSON是开发方可据此制作的模板契约，不是本次已能执行的生产数据。所有效果细节均由对应命令处理器校验。
 
 ```json
 {
-  "id": "EVT-COURSE-R1-UPDATE",
+  "id": "CRS-UPDATE-01",
   "classification": "fictional",
-  "sourceIds": ["H009"],
-  "effectiveWindow": {"from": "2025-01-20", "to": "2025-03-31"},
-  "causeDomain": "course-and-adoption",
-  "preconditions": {"all": [{"hasFlag": "world.deepseek_r1_released"}, {"hasFlag": "player.has_active_course"}]},
+  "sourceIds": [],
+  "effectiveWindow": {"from": "2025-02-01", "to": "2025-03-31"},
+  "scope": {"binding": "businessId", "businessKind": "ai_course"},
+  "trigger": {"flagEquals": {"key": "course_revision_needed", "value": true}},
+  "priority": 40,
+  "exclusiveGroup": "course-refresh",
   "hiddenFactsPolicy": "fixed_at_instance_creation",
-  "visibleEvidence": ["你使用的工具与部分课程演示已不一致"],
   "choices": [
-    {"id": "update", "label": "更新课程并安排答疑", "costs": {"actionPoints": 1, "moneyFen": 200000}, "immediateEffects": [{"setFlag": "course.update_started"}]},
-    {"id": "pause_enrollment", "label": "暂停新招生，先履行已有课程", "costs": {"actionPoints": 0, "moneyFen": 0}, "immediateEffects": [{"setFlag": "course.new_enrollment_paused"}]}
+    {"id": "refresh", "label": "更新课程并安排交付", "command": {"kind": "StartCourseRefresh", "actionPoints": 1, "costFen": 200000, "payer": "bound_business_owner", "capacityUnits": 1, "durationDays": 7, "onInterruption": "keep_completed_work_and_remaining_obligations"}},
+    {"id": "pause", "label": "暂停新招生，保留已有交付", "command": {"kind": "PauseNewEnrollment", "actionPoints": 0, "costFen": 0}}
   ],
-  "defaultOutcome": "keep_existing_contracts_and_record_update_due"
+  "defaultChoiceId": "pause",
+  "followUpPolicy": "job_completion_or_interruption_receipt"
 }
 ```
 
-这只是结构示例：H009支持模型发布事实，不支持课程损失或收益；这些是虚构经营效果。update后还需排定完成与费用所属账户；暂停招生不代表旧课免费交付。生产事件在P020补齐所有账户、后续、失败与到期校验后才能导入，不能直接复制片段当成已完成事件。
+StartCourseRefresh校验绑定业务、本人行动、目标日期容量和所属账户可用资金，原子扣1点/200000分并创建7天任务。任务创建时固定目标课程版本，开始不等于更新完成。第7天验证任务仍有效且完成要求满足后更新绑定课程版本，记录因果；中断保留已付费用、已做工作与尚未交付部分。完成不再扣同一笔费用。
 
-## 专用数据口径
+PauseNewEnrollment只禁止新招生；已有课程、退款、答疑和更新义务继续存在。无人处理到期时执行同一默认命令，不设置免费完成标记。作用范围以businessId限定，不暂停其他路线。
 
-视频：播放、有效咨询、订单、交付、到账分列；素材是否有权使用与是否标识分列。课程：学生数、单价、课期交付率、退款、平台费和支持成本；退款前后费用口径明确。中转：计费用量用整数，输入/输出或不同服务单位分开；价格有生效日期，客户预付和供应预付各有余额。
+## 5. 专用数据与后续回响
 
-A股：数据来源模式、真实/虚构主体、交易市场/板块、价格日期、公司行动、可成交量、订单检查点；权益：关系类型、主体、融资轮次是否架空、增资/老股、股权和治理/退出。
+视频记录作品/批次、客户验收、修订额度、素材权利、有效受众cohort、平台结算和回款。课程记录课程版本、班期、学员唯一ID、交付里程碑、支持容量、退款与新产品资格。视频到课程的转化记录originCohortId与conversionId，重复执行不重复收费。
 
-## 数据与验收来源
+中转记录供应授权与适用状态、故障域、计费量单位、客户余额、供应预付、已确认用量与版本价格。用量修正使用原账单ID和新更正ID；原纪录不可覆盖。价格调整只影响指定生效时点后的服务，不回写已消费账单。
 
-金额基准以经济规则为唯一算例，历史事实以来源文档为底稿，验收ID以Q01—Q24为准，任务以planning/backlog.json为准。一个字段口径变化同时更新这些引用。新增内容不自动改变已保存游戏：内容版本升级必须有迁移或拒绝策略。
+股票记录simulation/historical、规则包、交易日期、上市状态、可成交数量、公司行动与价格口径。权益记录股比和治理分离，counterfactual标签沿合同、持仓和结局传递；采购或技术适配不能生成股权。
 
-要求校验：唯一ID、引用存在、时间合法、来源与分类匹配、默认路径存在、隐藏事实固定、成本非负、可能结果可达、不会产生免费重复收益。以上都是待实现规则，不宣称本次已通过功能测试。
+因果记录为{id, date, domain, parentIds, sourceEventId, visibleSummary, visibility}。玩家只能查看已经获知的证据和结果，通关复盘不必公开所有未选分支的隐藏真相。
+
+## 6. 导入、版本和内容完成定义
+
+P005校验结构、白名单、类型和引用；P020运行默认路径、成本失败、正常完成、中断、退出与回放。静态校验通过不证明全图可达。生产条目至少提供一个正常和一个受挫存档及命令序列，不能以文案存在就标记完成。
+
+规则口径以经济文档为准；体验以16号规格为准；验收ID与任务从planning/backlog.json读取。新增内容升级contentVersion/contentHash，并定义已有存档的兼容策略；不得静默重抽玩家已经调查的事实。

@@ -1,0 +1,34 @@
+{
+  "specVersion": "0.3",
+  "status": "design_only_not_game_engine",
+  "currency": "CNY",
+  "moneyUnit": "fen",
+  "amountLimitFen": 9000000000000,
+  "scope": {"startYear": 2020, "endYear": 2025, "quarters": 24, "actionPointsPerQuarter": 4},
+  "routeIds": ["a_share", "ai_video", "ai_course", "api_relay", "deepseek_opportunity"],
+  "lifecycle": ["discovered", "preparing", "operating", "paused", "winding_down", "closed"],
+  "contentBudget": {"routeEventTemplates": 15, "crossRouteChains": 3, "productionStatus": "not_written_or_playtested"},
+  "slices": [
+    {"id": "S01", "from": "2020-01-01", "to": "2020-06-30", "classification": "simulation", "routeIds": ["a_share"], "taskIds": ["P003", "P004", "P014"], "acceptanceIds": ["Q01", "Q02", "Q03", "Q06", "Q08", "Q30"]},
+    {"id": "S02", "from": "2023-01-01", "to": "2023-06-30", "classification": "fictional", "routeIds": ["ai_video", "ai_course"], "taskIds": ["P015", "P016"], "acceptanceIds": ["Q09", "Q10", "Q11", "Q12", "Q26", "Q31", "Q36", "Q39"]},
+    {"id": "S03", "from": "2025-01-01", "to": "2025-03-31", "classification": "fictional", "routeIds": ["api_relay"], "taskIds": ["P017"], "acceptanceIds": ["Q13", "Q14", "Q27", "Q31"]},
+    {"id": "S04", "from": "2025-04-01", "to": "2025-09-30", "classification": "counterfactual", "routeIds": ["deepseek_opportunity"], "taskIds": ["P018"], "acceptanceIds": ["Q15", "Q16", "Q32"]},
+    {"id": "S05", "from": "2025-07-01", "to": "2025-09-30", "classification": "fictional", "routeIds": ["api_relay", "ai_course"], "taskIds": ["P006", "P007"], "acceptanceIds": ["Q17", "Q18", "Q20", "Q21", "Q37", "Q40"]}
+  ],
+  "cashExamples": [
+    {"id": "F01", "title": "教学，不是完整按日回放", "initialCashFen": 3000000, "inflowsFen": [2400000], "outflowsFen": [1200000, 300000, 1200000], "reservations": [], "expectedCashFen": 2700000, "expectedAvailableFen": 2700000, "expectedProtectionShortfallFen": 0},
+    {"id": "F02", "title": "视频商单", "initialCashFen": 2000000, "inflowsFen": [900000], "outflowsFen": [270000, 90000, 60000, 45000], "reservations": [], "expectedCashFen": 2435000, "expectedAvailableFen": 2435000, "expectedProtectionShortfallFen": 0, "recognizedIncomeFen": 900000, "recognizedCostFen": 465000, "expectedProfitFen": 435000},
+    {"id": "F03", "title": "课程退款后交付", "initialCashFen": 2000000, "inflowsFen": [3980000], "outflowsFen": [398000, 179100, 600000, 200000, 300000], "reservations": [], "expectedCashFen": 4302900, "expectedAvailableFen": 4302900, "expectedProtectionShortfallFen": 0, "recognizedIncomeFen": 3582000, "recognizedCostFen": 1279100, "expectedProfitFen": 2302900},
+    {"id": "F04", "title": "中转余额保护", "initialCashFen": 1500000, "inflowsFen": [4000000], "outflowsFen": [1800000, 300000, 200000, 150000], "reservations": [{"id": "r-customer", "kind": "customer_protection", "amountFen": 1000000}], "expectedCashFen": 3050000, "expectedAvailableFen": 2050000, "expectedProtectionShortfallFen": 0, "recognizedIncomeFen": 3000000, "recognizedCostFen": 2450000, "expectedProfitFen": 550000},
+    {"id": "F05", "title": "完成半交付后支付成本的会计快照", "initialCashFen": 0, "inflowsFen": [1000000], "outflowsFen": [200000], "reservations": [{"id": "r-course", "kind": "customer_protection", "amountFen": 500000}], "expectedCashFen": 800000, "expectedAvailableFen": 300000, "expectedProtectionShortfallFen": 0, "recognizedIncomeFen": 500000, "recognizedCostFen": 200000, "expectedProfitFen": 300000},
+    {"id": "F06", "title": "股票买卖含费用", "initialCashFen": 3000000, "inflowsFen": [1198800], "outflowsFen": [1001000], "reservations": [], "expectedCashFen": 3197800, "expectedAvailableFen": 3197800, "expectedProtectionShortfallFen": 0, "recognizedIncomeFen": 1200000, "recognizedCostFen": 1002200, "expectedProfitFen": 197800},
+    {"id": "F07", "title": "不同占用桶不重复", "initialCashFen": 1000000, "inflowsFen": [], "outflowsFen": [], "reservations": [{"id": "r-protected", "kind": "customer_protection", "amountFen": 200000}, {"id": "r-plan", "kind": "plan", "amountFen": 300000}], "expectedCashFen": 1000000, "expectedAvailableFen": 500000, "expectedProtectionShortfallFen": 0},
+    {"id": "F08", "title": "已交付退款冲减收入", "initialCashFen": 1000000, "inflowsFen": [500000], "outflowsFen": [100000, 200000], "reservations": [], "expectedCashFen": 1200000, "expectedAvailableFen": 1200000, "expectedProtectionShortfallFen": 0, "recognizedIncomeFen": 400000, "recognizedCostFen": 200000, "expectedProfitFen": 200000},
+    {"id": "F09", "title": "资金保护缺口不得隐藏", "initialCashFen": 100000, "inflowsFen": [], "outflowsFen": [], "reservations": [{"id": "r-short", "kind": "customer_protection", "amountFen": 200000}], "expectedCashFen": 100000, "expectedAvailableFen": 0, "expectedProtectionShortfallFen": 100000},
+    {"id": "F10", "title": "尾声退款与付欠款后现金", "initialCashFen": 1200000, "inflowsFen": [], "outflowsFen": [400000, 300000], "reservations": [], "expectedCashFen": 500000, "expectedAvailableFen": 500000, "expectedProtectionShortfallFen": 0}
+  ],
+  "equityExamples": [
+    {"id": "E01", "classification": "counterfactual", "preMoneyFen": 800000000, "newMoneyFen": 200000000, "priorHoldingBps": 0, "expectedNewInvestorBps": 2000, "expectedPriorHoldingBps": 0},
+    {"id": "E02", "classification": "counterfactual", "preMoneyFen": 1000000000, "newMoneyFen": 250000000, "priorHoldingBps": 2000, "expectedNewInvestorBps": 2000, "expectedPriorHoldingBps": 1600}
+  ]
+}
