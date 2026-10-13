@@ -1,0 +1,212 @@
+{
+  "version": 1,
+  "note": "Local planning only; no GitHub Issues have been created.",
+  "tasks": [
+    {
+      "id": "P001",
+      "title": "确定首版边界与季度执行顺序",
+      "phase": "M0",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [],
+      "acceptanceCriteria": [
+        "确认历史基础篇和架空范围",
+        "确定季度阶段及资金发生时点"
+      ],
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P002",
+      "title": "建立前端工程与规则测试入口",
+      "phase": "M1",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [
+        "P001"
+      ],
+      "acceptanceCriteria": [
+        "可在本地启动空工程",
+        "建立规则测试命令并锁定依赖"
+      ],
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P003",
+      "title": "行动与个人/公司账本",
+      "phase": "M1",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [
+        "P002"
+      ],
+      "acceptanceCriteria": [
+        "开局现金样例结果27000元",
+        "无超支行动或重复结算",
+        "注资跨账户成对"
+      ],
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P004",
+      "title": "存档版本与确定性回放",
+      "phase": "M1",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [
+        "P003"
+      ],
+      "acceptanceCriteria": [
+        "同种子同动作得到同结果",
+        "导入失败不破坏旧档",
+        "保存规则和内容版本"
+      ],
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P005",
+      "title": "内容事件结构与资格校验",
+      "phase": "M2",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [
+        "P003"
+      ],
+      "acceptanceCriteria": [
+        "校验唯一ID和前置资格",
+        "选项说明成本及不可用原因",
+        "无任意代码执行"
+      ],
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P006",
+      "title": "历史时间线与记忆分域失效",
+      "phase": "M2",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [
+        "P005"
+      ],
+      "acceptanceCriteria": [
+        "默认历史按时推进",
+        "改变局部条件只影响相关记忆",
+        "提供可读因果路径"
+      ],
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P007",
+      "title": "黑天鹅与局部失控样板",
+      "phase": "M2",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [
+        "P004",
+        "P005"
+      ],
+      "acceptanceCriteria": [
+        "AI先带来真实收益",
+        "调查区分线索与事实",
+        "危机不赠送行动",
+        "保留退出能力改变可选处置"
+      ],
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P008",
+      "title": "第三风格的可交互界面样板",
+      "phase": "M3",
+      "status": "todo",
+      "priority": "P0",
+      "dependsOn": [
+        "P005"
+      ],
+      "acceptanceCriteria": [
+        "完成房间、事件、结算样板",
+        "主要文字及按钮清楚",
+        "不把UI文字烘焙进图片"
+      ],
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P009",
+      "title": "长期人物、承诺与房间变化",
+      "phase": "M3",
+      "status": "todo",
+      "priority": "P1",
+      "dependsOn": [
+        "P005",
+        "P008"
+      ],
+      "acceptanceCriteria": [
+        "承诺与共同经历影响实际选项",
+        "人物有独立目标",
+        "场景变化回应关键事件"
+      ],
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P010",
+      "title": "16季度与双路线内容",
+      "phase": "M4",
+      "status": "todo",
+      "priority": "P1",
+      "dependsOn": [
+        "P006",
+        "P007",
+        "P009"
+      ],
+      "acceptanceCriteria": [
+        "两种背景及两条路线可走通",
+        "普通投资路线可接触外部风险",
+        "历史与架空清楚区分"
+      ],
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P011",
+      "title": "结局因果回放与重玩",
+      "phase": "M4",
+      "status": "todo",
+      "priority": "P1",
+      "dependsOn": [
+        "P010"
+      ],
+      "acceptanceCriteria": [
+        "分别结算人生与世界",
+        "每项重大结果有因果",
+        "非创业路线具有完整结局"
+      ],
+      "remoteIssueNumber": null,
+      "assignee": null
+    },
+    {
+      "id": "P012",
+      "title": "平衡、素材、存档与发布审查",
+      "phase": "M5",
+      "status": "todo",
+      "priority": "P1",
+      "dependsOn": [
+        "P011"
+      ],
+      "acceptanceCriteria": [
+        "核实正式采用的史实及素材",
+        "验证存档与异常输入",
+        "无单一路线无代价碾压",
+        "公开发布与许可已获决定"
+      ],
+      "remoteIssueNumber": null,
+      "assignee": null
+    }
+  ]
+}
