@@ -1,0 +1,44 @@
+{
+  "taskId": "T10",
+  "featureCommit": "e0f3c1cc91278a28fad6f64d318e6b3730b97e4b",
+  "checks": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "evidence:video"
+      ],
+      "exitCode": 1,
+      "correctlyRefused": true,
+      "reason": "IMMUTABLE_TASK_EVIDENCE"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "evidence:video",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t10-final"
+      ],
+      "exitCode": 1,
+      "correctlyRefused": true,
+      "reason": "IMMUTABLE_TASK_EVIDENCE"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "evidence:video-browser-audit",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t10-final"
+      ],
+      "exitCode": 1,
+      "correctlyRefused": true,
+      "reason": "IMMUTABLE_TASK_EVIDENCE"
+    }
+  ],
+  "recordedFilesUnchanged": 86,
+  "result": "PASS"
+}
