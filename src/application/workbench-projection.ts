@@ -12,7 +12,7 @@ import type { WorldRuntime } from '../core/world.ts'
 import type { OperationsCatalog } from '../core/operations-types.ts'
 import type { MarketCatalog } from '../core/market-types.ts'
 
-const routeText={a_share:{name:'A股AI股票',preparation:'研究产业链、保留生活储备，使用虚构个股模拟制度。',feedback:'现金、持仓成本、市值与订单分别记录。'},ai_video:{name:'AI短视频',preparation:'2020年可做手工剪辑小单；未来生成工具、素材权利和变现资格另行核验。',feedback:'作品完成后仍需提交、客户验收和回款。'},ai_course:{name:'AI卖课',preparation:'积累已交付案例、教学大纲和答疑容量，等待可用工具与资格。',feedback:'预售形成交付义务；本体验暂未开放招生。'},api_relay:{name:'API中转站',preparation:'准备服务材料，取得供应访问资格、自有资金与维护能力。',feedback:'发布新闻不等于获得API；本体验暂未开放服务经营。'},deepseek_opportunity:{name:'DeepSeek生态与架空股权',preparation:'积累部署/服务案例；生态合作与融资资格分别审查。',feedback:'模型发布不等于股权；本体验暂未开放合同或架空融资。'}} as const
+const routeText={a_share:{name:'A股AI股票',preparation:'研究产业链、保留生活储备，使用虚构个股模拟制度。',feedback:'现金、持仓成本、市值与订单分别记录。'},ai_video:{name:'AI短视频',preparation:'2020年可做手工剪辑小单；后续图像辅助与生成视频按时代、素材权利和变现资格开放。',feedback:'作品完成后仍需提交、客户验收和回款。'},ai_course:{name:'AI卖课',preparation:'积累已交付案例、教学大纲和答疑容量，等待可用工具与资格。',feedback:'预售形成交付义务；本体验暂未开放招生。'},api_relay:{name:'API中转站',preparation:'准备服务材料，取得供应访问资格、自有资金与维护能力。',feedback:'发布新闻不等于获得API；本体验暂未开放服务经营。'},deepseek_opportunity:{name:'DeepSeek生态与架空股权',preparation:'积累部署/服务案例；生态合作与融资资格分别审查。',feedback:'模型发布不等于股权；本体验暂未开放合同或架空融资。'}} as const
 
 export function projectWorkbench(run:GameRun,world:WorldRuntime,catalog:OperationsCatalog,market:MarketCatalog){
  const date=run.timeline.cursor.date,quarter=quarterOf(date),from=quarter.slice(0,4)+'-'+String((Number(quarter.slice(-1))-1)*3+1).padStart(2,'0')+'-01',end=dayBefore(quarterLimit(date)),first=projectFirstOrder(run)
@@ -25,6 +25,8 @@ export function projectWorkbench(run:GameRun,world:WorldRuntime,catalog:Operatio
  if(first.status==='running')barriers.push({date:first.dates.submitBy,label:'首单完成，等待你提交'})
  if(first.status==='review'||first.status==='delivered')barriers.push({date:first.dates.earliestReviewAt,label:'客户复核与到账反馈'})
  for(const order of run.market?.orders.filter(o=>['pending','partially_filled'].includes(o.status))??[]){const point=market.checkpoints[Math.max(order.eligibleIndex,(run.market?.lastMatchedIndex??-1)+1)];if(point)barriers.push({date:point.date,label:'订单的下一撮合点'})}
+ for(const job of run.operations?.jobs.filter(j=>j.definitionId.startsWith('video-')&&['planned','running'].includes(j.status))??[])barriers.push({date:job.status==='planned'?job.startAt:job.completeAt,label:'视频任务的实际反馈'})
+ for(const event of run.timeline.pending.filter(e=>e.payload.kind==='video_event'&&e.payload.type!=='deadline'))barriers.push({date:event.date,label:'视频客户/发布/结算反馈'})
  const barrier=barriers.filter(p=>p.date>=date&&p.date<=end).sort((a,b)=>a.date.localeCompare(b.date))[0]
  const unresolvedDelivery=first.status==='awaiting_submission'&&!first.deadlineMissed
  const quarterTarget=barrier?.date??end,next=points.find(p=>p.date>=date)?.date??(date<end?end:addDays(end,1))

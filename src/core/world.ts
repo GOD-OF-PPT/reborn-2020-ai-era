@@ -17,7 +17,7 @@ import { assertWorldRun } from './world-validation.ts'
 import type { RuntimeExtension } from './operations-types.ts'
 
 type State = Omit<RuleModel, 'timeline'>
-type Context = Pick<State, 'world' | 'economy' | 'controlledAccountIds' | 'operations'>
+type Context = Pick<State, 'world' | 'economy' | 'controlledAccountIds' | 'operations'> & {readonly video?:RuleModel['video']}
 type Changes = { state: State; events: ScheduledEvent<RunOperation>[] }
 export const contentId = (prefix: string, ...parts: string[]) => `${prefix}:${hashValue(parts).slice(0, 32)}`
 const worldOf = (state: Context): WorldState => { requireRule(state.world, 'WORLD_NOT_CONFIGURED'); return state.world }
@@ -29,7 +29,7 @@ export class WorldRuntime {
   readonly extension: RuntimeExtension | null
   constructor(value: unknown, extension: RuntimeExtension | null = null) { this.#pack = loadContentPack(value); this.hash = hashValue(this.#pack); this.extension = extension }
   get pack(): ContentPack { return copyJson(this.#pack) }
-  validate(run: GameRun): void { assertWorldRun(this.#pack, run); requireRule(run.operations === null || this.extension, 'OPERATIONS_RUNTIME_REQUIRED');requireRule(run.market===null||this.extension,'MARKET_RUNTIME_REQUIRED'); this.extension?.validate(run) }
+  validate(run: GameRun): void { assertWorldRun(this.#pack, run); requireRule(run.operations === null || this.extension, 'OPERATIONS_RUNTIME_REQUIRED');requireRule(run.market===null||this.extension,'MARKET_RUNTIME_REQUIRED');requireRule(run.video===null||this.extension,'VIDEO_RUNTIME_REQUIRED'); this.extension?.validate(run) }
   definition(id: string): EventDefinition { const definition = this.#pack.events.find((item) => item.id === id); requireRule(definition, 'UNKNOWN_EVENT_DEFINITION'); return definition }
   initialWorld(bindings: readonly WorldBinding[], backgroundId?: string): WorldState {
     const ids = this.#pack.initialEntitlements.find((profile) => profile.backgroundId === backgroundId)?.entitlementIds ?? []
@@ -69,7 +69,7 @@ export class WorldRuntime {
     return { ...model, timeline }
   }
   hasEntitlement(state: Context, bindingId: string, id: string, date: string): boolean {
-    return worldOf(state).entitlements.some((item) => item.id === id && item.bindingId === bindingId && item.acquiredAt <= date && (item.expiresAt === null || date < item.expiresAt))
+    return (this.extension?.hasEntitlement?.(state,bindingId,id,date)??false)||worldOf(state).entitlements.some((item) => item.id === id && item.bindingId === bindingId && item.acquiredAt <= date && (item.expiresAt === null || date < item.expiresAt))
   }
   capabilityReasons(state: Context, bindingId: string, id: string, date: string): readonly string[] {
     const capability = this.#pack.capabilities.find((item) => item.id === id)
@@ -254,7 +254,7 @@ export class WorldRuntime {
   advance(model: RuleModel, target: { readonly date: string; readonly phase?: DayPhase }): RuleModel {
     const result = advanceTimeline(model.timeline, model as State, target, (state, event) => {
       const operation = event.payload
-      if (operation.kind === 'operating_event'||operation.kind==='market_event') { requireRule(this.extension && state.operations, 'OPERATIONS_RUNTIME_REQUIRED'); const asOf = event.date; return this.extension.reduce({ ...state, economy: { ...state.economy, asOf, ledger: { ...state.economy.ledger, asOf } } }, event) }
+      if (operation.kind === 'operating_event'||operation.kind==='market_event'||operation.kind==='video_event') { requireRule(this.extension && state.operations, 'OPERATIONS_RUNTIME_REQUIRED'); const asOf = event.date; return this.extension.reduce({ ...state, economy: { ...state.economy, asOf, ledger: { ...state.economy.ledger, asOf } } }, event) }
       if (!isWorldOperation(operation)) {
         const skippedReason = scheduledActionSkipReason(state.economy, operation)
         if (skippedReason) return { state, skippedReason }

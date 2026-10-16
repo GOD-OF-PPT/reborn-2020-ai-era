@@ -24,7 +24,9 @@
     "check": "npm run typecheck && npm run test:unit && npm run test:docs && npm run validate:content && npm run check:docs && npm run build",
     "evidence:market": "node --experimental-strip-types scripts/collect_market_evidence.ts",
     "evidence:playable": "node --experimental-strip-types scripts/collect_playable_evidence.ts",
-    "evidence:browser-audit": "node --experimental-strip-types scripts/verify_browser_evidence.ts"
+    "evidence:browser-audit": "node --experimental-strip-types scripts/verify_browser_evidence.ts",
+    "evidence:video": "node --experimental-strip-types scripts/collect_video_evidence.ts",
+    "evidence:video-browser-audit": "node --experimental-strip-types scripts/verify_video_browser_evidence.ts"
   },
   "dependencies": {
     "@noble/hashes": "2.4.0",

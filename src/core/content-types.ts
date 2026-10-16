@@ -1,3 +1,4 @@
+import type { VideoEvent } from './video-schema.ts'
 import type { EconomyOperation } from './economy.ts'
 import type { LedgerOperation } from './ledger.ts'
 import type { RandomDomain } from './random.ts'
@@ -78,5 +79,5 @@ export type WorldOperation =
   | { readonly kind: 'open_content_event'; readonly definitionId: string; readonly bindingId: string; readonly date: string }
   | { readonly kind: 'expire_content_event'; readonly eventId: string; readonly date: string }
   | { readonly kind: 'finish_preparation'; readonly jobId: string; readonly date: string }
-export type RunOperation = EconomyOperation | WorldOperation | OperatingEvent | MarketEvent
+export type RunOperation = EconomyOperation | WorldOperation | OperatingEvent | MarketEvent | VideoEvent
 export function isWorldOperation(operation: { readonly kind: string }): operation is WorldOperation { return ['world_anchor', 'open_content_event', 'expire_content_event', 'finish_preparation'].includes(operation.kind) }

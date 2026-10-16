@@ -1,0 +1,86 @@
+{
+  "taskId": "T10",
+  "status": "intermediate_draft_not_final_acceptance",
+  "rulesVersion": "rules-t10-video-v1",
+  "url": "http://127.0.0.1:5191/",
+  "checks": [
+    {
+      "id": "normal-start-production",
+      "pass": false,
+      "observed": "normal tech start; 600 yuan spent, 1 AP, no early output, overlap buttons disabled"
+    },
+    {
+      "id": "q09-unqualified-native",
+      "pass": false,
+      "observed": "6339 views, 90 audience, 9 inquiries; cash remains 25400 yuan and confirmed video income 0"
+    },
+    {
+      "id": "commission-start-native",
+      "pass": true,
+      "observed": "900 yuan production cost; protected prepayment does not increase available cash or recognized income"
+    },
+    {
+      "id": "protected-prepay-and-world-pause",
+      "pass": true,
+      "observed": "cash 25400, spendable 24500, protected 900; world pauses Jan22 and overlapping preparation disabled"
+    },
+    {
+      "id": "acceptance-before-cash",
+      "pass": true,
+      "observed": "customer accepted first version Jan31; 3000 recognized, receivable still uncollected, paid case absent"
+    },
+    {
+      "id": "collection-native",
+      "pass": true,
+      "observed": "Feb7 cash 23350 after Feb living expense, 2100 remainder and 150 fee; paid case becomes visible only now"
+    },
+    {
+      "id": "q10-zero-ap-native",
+      "pass": true,
+      "observed": "third customer requested revision; Q1 AP exhausted, rework disabled, free exit still available"
+    },
+    {
+      "id": "future-quarter-confirmation",
+      "pass": true,
+      "observed": "at Mar10 with Q1 exhausted, explicitly reserves 1 Q2 AP and 300 yuan for Apr1 start"
+    }
+  ],
+  "exports": [
+    {
+      "file": "t10-draft-native-q09.json",
+      "runId": "life-aabe9744-7926-4391-a8cb-08a3a951e5ab",
+      "revision": 7,
+      "bytes": 173118
+    },
+    {
+      "file": "t10-draft-native-before-collection.json",
+      "runId": "life-aabe9744-7926-4391-a8cb-08a3a951e5ab",
+      "revision": 14,
+      "bytes": 205715
+    },
+    {
+      "file": "t10-draft-native-collected.json",
+      "runId": "life-aabe9744-7926-4391-a8cb-08a3a951e5ab",
+      "revision": 17,
+      "bytes": 217699
+    },
+    {
+      "file": "t10-draft-native-future-rework.json",
+      "runId": "life-aabe9744-7926-4391-a8cb-08a3a951e5ab",
+      "revision": 28,
+      "bytes": 280742
+    },
+    {
+      "file": "t10-draft-negotiation.json",
+      "runId": "life-aabe9744-7926-4391-a8cb-08a3a951e5ab",
+      "revision": 34,
+      "bytes": 308551
+    }
+  ],
+  "limitation": "A later review found missing same-version renegotiation review identity and AI quality/client revision separation. Preserve this evidence; repeat on final v2.",
+  "screenshots": {
+    "navigation_only": "t10-draft-leads-navigation.jpg",
+    "draft_feedback": "t10-draft-unqualified-feedback.jpg"
+  },
+  "observerLimit": "The first two draft booleans used an AX diff rather than the full tree. They are observer mismatches and excluded, alongside the entire v1 draft, from final pass counts."
+}

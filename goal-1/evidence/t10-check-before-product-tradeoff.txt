@@ -1,0 +1,117 @@
+
+> reborn-2020-ai-era@0.1.0 check
+> npm run typecheck && npm run test:unit && npm run test:docs && npm run validate:content && npm run check:docs && npm run build
+
+
+> reborn-2020-ai-era@0.1.0 typecheck
+> tsc -b
+
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+
+ Test Files  41 passed (41)
+      Tests  263 passed (263)
+   Start at  05:45:35
+   Duration  70.69s (tests 93%, import 6%)
+
+    Isolate  41 workers spawned · ~232ms startup each (spawn + environment, per file)
+             at least ~4.52s faster with isolate: false — reuses workers across files instead of one per file
+
+
+> reborn-2020-ai-era@0.1.0 test:docs
+> python3 -B -m unittest discover -s scripts -p 'test_*.py'
+
+.................................................Configuring GitHub CLI's Git credential helper (no credentials in project files).
+.Configuring GitHub CLI's Git credential helper (no credentials in project files).
+Pushing main without force ...
+..Creating PRIVATE repository GOD-OF-PPT/reborn-2020-ai-era ...
+Configuring GitHub CLI's Git credential helper (no credentials in project files).
+Pushing main without force ...
+.Creating PRIVATE repository GOD-OF-PPT/reborn-2020-ai-era ...
+Configuring GitHub CLI's Git credential helper (no credentials in project files).
+Pushing main without force ...
+..Configuring GitHub CLI's Git credential helper (no credentials in project files).
+.....
+----------------------------------------------------------------------
+Ran 60 tests in 0.129s
+
+OK
+
+> reborn-2020-ai-era@0.1.0 validate:content
+> node --experimental-strip-types scripts/validate_content.ts
+
+(node:41441) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{
+  "result": "PASS",
+  "evidenceType": "runtime_content_schema_and_initial_bindings",
+  "version": "world-work-v2",
+  "contentHash": "38836e2eaba0b89cabfc257fa0d143bc15d79cd82709072917f164f89cc06ce5",
+  "anchors": 11,
+  "sources": 11,
+  "capabilities": 19,
+  "events": 5,
+  "initialProfiles": 2,
+  "operations": {
+    "version": "operations-work-v3",
+    "businesses": 5,
+    "jobs": 28,
+    "productionOffers": 1,
+    "workers": 2
+  },
+  "video": {
+    "version": "video-work-v2",
+    "modes": 3,
+    "programs": 4,
+    "qualification": "fictional_game_approval_not_real_access"
+  },
+  "market": {
+    "version": "simulation-market-work-v1",
+    "stocks": 6,
+    "exposures": 5,
+    "checkpoints": 216,
+    "rules": 5,
+    "historical": "unverified"
+  },
+  "notCovered": [
+    "all_business_paths",
+    "browser_ui",
+    "balance",
+    "playtest"
+  ]
+}
+
+> reborn-2020-ai-era@0.1.0 check:docs
+> python3 -B scripts/check_docs.py --text-only && python3 -B scripts/check_plan.py && python3 -B scripts/check_competitive_design.py
+
+PENDING ORIGINAL ASSET: assets/concepts/style-01-anime.png
+PENDING ORIGINAL ASSET: assets/concepts/style-02-pixel.png
+PENDING ORIGINAL ASSET: assets/concepts/style-03-cinematic.png
+PASS TEXT-ONLY (original assets may be missing): 52 Markdown files, 22 tasks; text links, JSON and dependency graph verified.
+Original PNG files present and checked: 0/3
+This is documentation validation, not a game build or a remote publication test.
+PASS specification checks: {"tasks": 22, "cases": 40, "slices": 5, "cash_examples": 10, "equity_examples": 2}
+PASS matrix references and documented course-example structure.
+Not game execution, production-content reachability, browser tests, asset validation or release readiness.
+PASS specification checks: {"sources": 9, "decisions": 10, "acceptance_cases": 14, "work_packages": 6, "cash_flows": 8}
+Not game execution, competitor playtesting, UI validation, or publication verification.
+
+> reborn-2020-ai-era@0.1.0 build
+> tsc -b && vite build
+
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 189 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         0.64 kB │ gzip:   0.47 kB
+dist/assets/index-C8vBFpFC.css         18.31 kB │ gzip:   5.22 kB
+dist/assets/browser-game-CHf6rJVJ.js  226.20 kB │ gzip:  64.86 kB
+dist/assets/index-CLb2RGyR.js         468.59 kB │ gzip: 145.76 kB
+
+✓ built in 259ms

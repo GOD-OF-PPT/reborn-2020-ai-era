@@ -87,3 +87,5 @@ T02已提供dev、build、typecheck、test:unit等工程脚本，是否通过以
 每个PR附规则变化、任务与验收ID、实际命令输出、测试存档、已知缺口和兼容性。严重阻断包括重复收益、未来现金、不可继续、错误史实标签、存档覆盖和任一核心路线不可玩。
 
 实施先后、功能切片与停止条件见[路线图](09-roadmap-and-backlog.md)。公开部署、CI权限、收费、许可证、真实数据采购和美术授权另行决定。本轮不创建这些外部资源。
+
+T10接入[视频经营28](28-video-business-contract.md)，显式升级schema7，拒绝并保留旧schema1—6。制作/返工/申请/谈判共用OperationsRuntime，平台/客户事件进入同一时钟与原子Session；当前版本与实际验证范围见README和goal-1记录。

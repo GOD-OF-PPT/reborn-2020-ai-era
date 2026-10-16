@@ -1,0 +1,76 @@
+{
+  "taskId": "T10",
+  "evidenceType": "native_browser_of_production_build",
+  "url": "http://127.0.0.1:5192/?storageTest=abort-video",
+  "seed": "t10-production-original-v2",
+  "backgroundId": "content_employee",
+  "checks": [
+    {
+      "id": "dev-fault-disabled-in-production",
+      "pass": true,
+      "observed": "production ignores storageTest=abort-video query"
+    },
+    {
+      "id": "original-cost-time-and-no-abort",
+      "pass": true,
+      "observed": "normal content background, original work costs900 yuan and14days; saved successfully despite dev fault query"
+    },
+    {
+      "id": "unqualified-publication-warning",
+      "pass": true,
+      "observed": "the production UI warns before publishing without full-window eligibility"
+    },
+    {
+      "id": "world-pause-before-metrics",
+      "pass": true,
+      "observed": "publication feedback does not bypass the Jan22 world decision"
+    },
+    {
+      "id": "original-real-feedback-no-income",
+      "pass": true,
+      "observed": "Jan22: original brand work1, views4262, retention79.1%, audience127, qualified inquiries26, cash25100, income0"
+    }
+  ],
+  "steps": [
+    {
+      "name": "创建并启用内容账号",
+      "revision": 2
+    },
+    {
+      "name": "安排一件新作品",
+      "revision": 3
+    },
+    {
+      "name": "推进到本项制作完成",
+      "revision": 4
+    },
+    {
+      "name": "人工核对素材、权利与使用说明",
+      "revision": 5
+    },
+    {
+      "name": "发布已复核作品",
+      "revision": 6
+    },
+    {
+      "name": "推进到发布反馈",
+      "revision": 7
+    },
+    {
+      "name": "暂不新增承诺",
+      "revision": 8
+    },
+    {
+      "name": "推进到发布反馈",
+      "revision": 9
+    }
+  ],
+  "dom": "t10-production-dom.txt",
+  "screenshot": "t10-production-original.jpg",
+  "notCovered": [
+    "human_playtest",
+    "formal_visual_acceptance",
+    "real_200_percent_zoom",
+    "public_deployment"
+  ]
+}

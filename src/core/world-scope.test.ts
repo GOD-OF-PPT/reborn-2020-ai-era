@@ -20,7 +20,7 @@ it('binds conditions and a free stop/default obligation to one course without er
   let economy = createEconomy(createLedger([{ id: 'personal', kind: 'personal' }, { id: 'world', kind: 'external' }, { id: 'account-one', kind: 'business' }, { id: 'account-two', kind: 'business' }], '2020-01-01'))
   for (const suffix of ['one', 'two']) economy = applyEconomy(economy, { id: `prepay-${suffix}`, date: '2020-01-01', sourceEventId: 'fixture', kind: 'receive_prepayment', accountId: `account-${suffix}`, counterpartyId: 'world', businessId: `business-${suffix}`, contractId: `contract-${suffix}`, reservationId: `protection-${suffix}`, amountFen: 100_000 })
   const world = runtime.initialWorld(['one', 'two'].map((suffix): WorldBinding => ({ id: `course-${suffix}`, kind: 'business', accountId: `account-${suffix}`, businessId: `business-${suffix}`, route: 'ai_course', contractId: `contract-${suffix}`, personId: null, capacityUnits: 1 })))
-  const model = runtime.schedule({ controlledAccountIds: ['personal', 'account-one', 'account-two'], phase: 'playing', economy, timeline: createTimeline<RunOperation>('2020-01-01'), random: createRandom('scope-seed'), facts: [], privateNotes: '', world, operations: null,market:null })
+  const model = runtime.schedule({ controlledAccountIds: ['personal', 'account-one', 'account-two'], phase: 'playing', economy, timeline: createTimeline<RunOperation>('2020-01-01'), random: createRandom('scope-seed'), facts: [], privateNotes: '', world, operations: null,market:null,video:null })
   const versions = { ...BOOTSTRAP_VERSIONS, contentVersion: runtime.pack.version, contentHash: runtime.hash, rulesVersion: 'scope-fixture' }
   let run = createGameRun({ runId: 'scope-fixture', actorId: 'player', commandId: 'create-scope', backgroundId: 'technical_employee', seed: 'scope-seed' }, { origin: 'fixture', personalAccountId: 'personal', controlledAccountIds: model.controlledAccountIds, economy, timeline: model.timeline, world }, versions)
   const registry = createCampaignRegistry(runtime, versions)
@@ -51,3 +51,6 @@ it('binds conditions and a free stop/default obligation to one course without er
   expect(expired.timeline.pause?.reason).toBe('CASH_SHORTFALL')
   expect(expired.world?.instances[0]?.resolution).toBe('default')
 })
+import { createWorldFixture } from '../testing/world-fixture.ts'
+import { campaignVideo } from '../application/campaign.ts'
+it('refuses video state when only the world clock has been configured',()=>{const f=createWorldFixture();expect(()=>f.runtime.validate({...f.run,video:campaignVideo.initial(f.run.seed)})).toThrow('VIDEO_RUNTIME_REQUIRED')})

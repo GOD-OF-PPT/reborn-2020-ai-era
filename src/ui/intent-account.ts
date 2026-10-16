@@ -5,6 +5,8 @@ export function intentAccount(command:CommandEnvelope,view:PlayingView,features:
  const p=command.payload as Record<string,unknown>
  if(typeof p.accountId==='string')return p.accountId
  if(['WorkQuarter','QuitWork','StartFirstOrder','ResearchMarket','StopMarketResearch','FavoriteMemory','ReadNews'].includes(command.kind))return 'personal'
+ const videoChannelId=typeof p.channelId==='string'?p.channelId:typeof p.workId==='string'?features.video?.works.find(w=>w.id===p.workId)?.channelId:typeof p.contractId==='string'?features.video?.contracts.find(c=>c.id===p.contractId)?.channelId:typeof p.applicationId==='string'?features.video?.applications.find(a=>a.id===p.applicationId)?.channelId:typeof p.publicationId==='string'?features.video?.publications.find(a=>a.id===p.publicationId)?.channelId:typeof p.settlementId==='string'?features.video?.settlements.find(a=>a.id===p.settlementId)?.channelId:null
+ if(videoChannelId)return features.video?.channels.find(c=>c.id===videoChannelId)?.accountId??'personal'
  if(typeof p.orderId==='string')return features.market.orders.find(o=>o.id===p.orderId)?.accountId??'personal'
  if(typeof p.instanceId==='string')return features.workbench.events.find(e=>e.id===p.instanceId)?.accountId??'personal'
  if(typeof p.jobId==='string'&&command.kind==='InterruptPreparation')return features.workbench.preparationJobs.find(j=>j.id===p.jobId)?.accountId??'personal'

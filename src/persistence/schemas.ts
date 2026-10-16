@@ -1,3 +1,4 @@
+import { videoStateSchema,videoEventSchema } from '../core/video-schema.ts'
 import { z } from 'zod'
 import { playerProfileSchema } from '../core/player-profile.ts'
 import { DAY_PHASES } from '../core/timeline.ts'
@@ -30,7 +31,7 @@ const economySchema = z.strictObject({
 })
 // Kinds are disjoint. Most scheduled rows are market points; parse that narrow
 // branch first instead of testing every financial operation for every quote.
-export const eventSchema = z.strictObject({ instanceId: idSchema, date: dateSchema, phase: z.enum(DAY_PHASES), priority: signedPriority.refine((value) => value < Number.MAX_SAFE_INTEGER), payload: z.union([marketEventSchema,operatingEventSchema,worldOperationSchema,economyOperationSchema]) })
+export const eventSchema = z.strictObject({ instanceId: idSchema, date: dateSchema, phase: z.enum(DAY_PHASES), priority: signedPriority.refine((value) => value < Number.MAX_SAFE_INTEGER), payload: z.union([marketEventSchema,operatingEventSchema,videoEventSchema,worldOperationSchema,economyOperationSchema]) })
 const timelineSchema = z.strictObject({
   cursor: z.strictObject({ date: dateSchema, phase: z.enum([...DAY_PHASES, 'before']), priority: signedPriority, instanceId: z.string().max(512) }),
   pending: rows(eventSchema),
@@ -49,7 +50,7 @@ export const runSchema = z.strictObject({
   backgroundId: idSchema,playerProfile:playerProfileSchema, origin: z.enum(['normal', 'fixture']), seed: z.string().min(1).max(256), revision: safeCount.min(1),
   controlledAccountIds: rows(idSchema), phase: z.enum(['playing', 'epilogue', 'finished']), economy: economySchema, timeline: timelineSchema, random: randomSchema,
   facts: rows(z.strictObject({ id: idSchema, domain: z.enum(RANDOM_DOMAINS), sourceEventId: idSchema, createdAt: dateSchema, roll: uint32, evidence: z.string().min(1).max(4000).nullable() })),
-  privateNotes: z.string().max(16000), world: worldStateSchema.nullable(), operations: operationsStateSchema.nullable(), market:marketStateSchema.nullable(),receipts: rows(commandReceiptSchema), causes: rows(causeSchema),
+  privateNotes: z.string().max(16000), world: worldStateSchema.nullable(), operations: operationsStateSchema.nullable(), market:marketStateSchema.nullable(),video:videoStateSchema.nullable(),receipts: rows(commandReceiptSchema), causes: rows(causeSchema),
 })
 
 export const envelopeSchema = z.strictObject({

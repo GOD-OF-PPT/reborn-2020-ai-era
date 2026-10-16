@@ -1,3 +1,4 @@
+import type { VideoState } from './video-schema.ts'
 import type { IsoDate } from './calendar.ts'
 import type { EconomyState } from './economy.ts'
 import type { RunOperation, WorldState } from './content-types.ts'
@@ -26,6 +27,7 @@ export interface RuleModel {
   readonly world: WorldState | null
   readonly operations: OperationsState | null
   readonly market:MarketState|null
+  readonly video:VideoState|null
 }
 export interface CommandEnvelope {
   readonly commandId: string
@@ -90,6 +92,7 @@ export interface InitialRunState {
   readonly world?: WorldState | null
   readonly operations?: OperationsState | null
   readonly market?:MarketState|null
+  readonly video?:VideoState|null
 }
 export interface ProposedRun {
   readonly status: 'proposed'
