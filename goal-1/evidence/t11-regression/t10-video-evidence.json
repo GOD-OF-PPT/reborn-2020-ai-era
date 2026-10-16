@@ -1,0 +1,2007 @@
+{
+  "taskId": "T10",
+  "evidenceType": "integration_replay",
+  "baseCommit": "6fba9738738996171c8a5fd852349629294b4c47",
+  "caseIds": [
+    "P015",
+    "F02",
+    "Q09",
+    "Q10",
+    "Q39-video-only"
+  ],
+  "reproduceCommand": "npm run evidence:video",
+  "sourceHashes": {
+    "src/application/bootstrap.test.ts": "129fd7a7cc26821a68907de4c0b092091c3a8a6eeb7dca4ec43b2b0354e15ac5",
+    "src/application/bootstrap.ts": "b698a869d4358ff070eee150160a2dd6c690878cbfcc51214bdc6b0df0c229db",
+    "src/application/browser-game.ts": "549d99cf92ad2240e26ce9aa5bb2e0795e60996cc8fe4f54e682102662fbb64e",
+    "src/application/campaign.test.ts": "bc5a07c73e6372433177679b6b8ee43df6bbcaec015bd57a76db5d418fc3527b",
+    "src/application/campaign.ts": "070089abdfbaa9f7f07efa1fda4a05c46d3e9e38685855fb278ff714645f1c79",
+    "src/application/cash-forecast.test.ts": "75257831e625b8e322c61725d97b9cdcd91cf2b7e07a1faab5980356f8558f39",
+    "src/application/cash-forecast.ts": "70ec3b87b567c8d6c9cd17cc03903f74b6a61b04661ca4f9c984dcbd50265394",
+    "src/application/course-atomic.test.ts": "1bbe34fac1f92dac4e3b2b6c953a01a30b7e46fbba3c37e56597b597c4472d4d",
+    "src/application/course-commands.ts": "5ba60b9f2f8984001fb6e7f7b5062062b6e3728937ef3ae107f64ee9e434b65d",
+    "src/application/course.test.ts": "4aac2dd7884e3f5534f1b2f38a8628858fd8586ec29a8e360ad7575d99f76f30",
+    "src/application/employment.test.ts": "d88fcb35f48f15dc32fd20dc6642322bb8efb3677f502fcbf458d97eb96221df",
+    "src/application/entry-profile.test.ts": "24603fa0587c0b4a2e5c2ae2d5ed5d91a9e7da702d2ebba6e7a1c5fc6f790f15",
+    "src/application/first-order.test.ts": "6e4d216b26c250885767569e6eb82fb2b31c576520ab1c7cc1272c68d981f0d5",
+    "src/application/first-order.ts": "09b09c4702e3235db3c871f0a86e5dfea76cf25cf63e4a4f7b00a5df1a4269e9",
+    "src/application/game-controller.test.ts": "8bf6808d4058ce8f3cee9fb5312164246ae9806966f06f2bba9b3330bb1aa867",
+    "src/application/game-controller.ts": "67592c3bcec8c5d03dea7cc5d857817c6668befa31e165d20bb074b9427e0710",
+    "src/application/game-snapshot.ts": "490d7565be79273ad9f8aacfa2b6f9cf4a1b584999b66cefd9df1694846fec86",
+    "src/application/market-commands.ts": "1675ba4f8afc4bddbb1fe5e22508c47c063e1be66b98424c7a63a8b06a2c1e66",
+    "src/application/market-save.test.ts": "6653a54371d5a0df393c01f10ebf5177dcab66f04ada755209e11161fe2fc353",
+    "src/application/market.test.ts": "f9201fc518e65206679b53cd658685db4a15437348ccad5c2979e37cb25bd23a",
+    "src/application/operations-commands.ts": "438c6dae2c1173dc5b3f3f1c2542ba102f660ae5096929e56066079f5ca6e790",
+    "src/application/operations.test.ts": "67978bca31199dd2eed3a320450941b83b4932e937525b86663140e261c1699a",
+    "src/application/playable-advance.ts": "c703a8eab70aabd3a1cf3f0a4a0f0b25b9c253a0afca8dd4a192d29a0900c9a0",
+    "src/application/playable.test.ts": "629965adab912c033c7543e43e35c0829486b296fb686b83d74f9f1aa75c8cb8",
+    "src/application/session.test.ts": "4f3e41367d4e5d608960ddda570cfc7d219eb804538507c435d9d8610f861bfe",
+    "src/application/session.ts": "d1d2adeebcd09820446ff7df46ebb8a40623d1da759fa3859236c39a130e34a7",
+    "src/application/video-atomic.test.ts": "2a84f919f0a11e2e0de16bcd21b0342ba1b39096f84df529574a553aa0a71386",
+    "src/application/video-commands.ts": "df956f47253ba778d8a5a268d6d3b1b70cb5b9b7695b24bd453c9dbf90ff9d73",
+    "src/application/video.test.ts": "f7ef2a457bae5a19add76e37816467c23c88c8d60078da84c17a3ce1f9a4c22b",
+    "src/application/workbench-projection.test.ts": "2371e822bd32108e704b659d4a2745537d4bcec12ad5edd2c3129cb83d296378",
+    "src/application/workbench-projection.ts": "ba3fe7458d54767b24b93b1f374808f5efe99fdd3b20d29805e9fcf60ef9176d",
+    "src/application/world-session.test.ts": "5305325cca0e9220011cc1892959e833bed49d40565a8cd475e798c4441860c1",
+    "src/content/bootstrap.ts": "9517d1739b026046bd2e6871e7e99e4ad72ae9629cbc89ad6d369aeec2eb5520",
+    "src/content/campaign.ts": "b3189e37e9382358e1d3701d968e4b1b3da77edee3afac8da9b5ca73ba495d29",
+    "src/content/course.ts": "3f64ccf32035ae42a79a8733035cd8a07c3baa205d736f0c15d1f95c774f69a4",
+    "src/content/first-order.ts": "0d71c72ef62914add3e516ef391e5812df7c8a5792841102ad32acd9ca38b75c",
+    "src/content/market.ts": "e3a6eb66cdf3bab446af6aa4a5a49297fb1689d42a6092c7434fd660e7bc98f1",
+    "src/content/operations.ts": "03f378f31b611aa1a0fc12a679816f38e80d0bfddbaf1750377d7e2466504686",
+    "src/content/video.ts": "1aff899fe28dde24c37fde9a37fa066909bd4f90af20d455b91c46f15e443a91",
+    "src/core/calendar.test.ts": "50176fc44923ffd1caf6bee0f94713d001b2e24046af44818aa25d8ac02abfcc",
+    "src/core/calendar.ts": "d252630c17d099e2907df5b0b24e57687f58ab3dd544e03e4a72f41703a83419",
+    "src/core/command-identity.ts": "5ddf588bdf06e756c3f95bd44268dd2ff9bc219cbcd7cd919a6e809eda50f830",
+    "src/core/commands.test.ts": "30f5c5bb268876543b913303dd2225d75c1a2ffdc55b50c66107223057641f71",
+    "src/core/commands.ts": "5be43172ea27f074199bf1c6c3b898cdde46ba6d07fa4e6debdf29442bcebd84",
+    "src/core/content-schema.ts": "bcaaa021c91d2284a525d5a0a5bb48f0776ce120e7a30c96c837686e327fcc67",
+    "src/core/content-types.ts": "6844e2ec0c31c8ea14c87169307411c9276c5812f749cc4125c6d02e767279d0",
+    "src/core/content.test.ts": "df41486022437aa2216b4fef44dad43d9685d75e96d0f136eae6890b3091f7fe",
+    "src/core/course-projection.ts": "cfd1d06d22494a92704ac28518e539c2fe3142d779f6214b32e38ad383b28c20",
+    "src/core/course-schema.ts": "44b6184390c0b65e74d991a0882d5f7baf7bd72969a3d67bb5776c67346cfe62",
+    "src/core/course-validation.ts": "d899944d25c7f7441552cb85534b933b3778d0c8584d59dd73c4f02668229dc5",
+    "src/core/course.ts": "54c89940b1bff6f622ad762b95228fe804b42b37ebf417fefceecf011e415592",
+    "src/core/economic-time.test.ts": "cad6bde3a8bc482dee82bf0c5219ab6c19bd3b38537d454669980d1297e60122",
+    "src/core/economic-time.ts": "b76e328e5a1d629ee4c519635aa8f0dc336d9314b1d03f160d4b81fd0de52639",
+    "src/core/economy.test.ts": "2b7eff1b09ea29538a9ec3902621ee6cd40262f81e5f5c9299e2e9efc359367b",
+    "src/core/economy.ts": "cc28674b5a629edd4ef71190f923835f2edcbb162c3ff00b16dc5901beb50d0c",
+    "src/core/errors.ts": "14ff69a5ca0cdc3c4b93ffac3e139750c43c1048668ed733b2006e7e306c5124",
+    "src/core/facts.test.ts": "c298d8ed705c0e2dbfb7c302db9abe00ba5b3d493d1f7d0db4ca327e6388c610",
+    "src/core/facts.ts": "5ffea6cd89bdd80116fb7d274c478cb1cf17cddeee5d8d8062a3d7f8bb324704",
+    "src/core/first-order.ts": "66e6b4eb2d6008eb1f04230cc63cf1a67637bc96582c331bac37e5ea9c9d7215",
+    "src/core/hash.test.ts": "8b901090248ef989699cbf7100581a1cb30242b147d3e7b322b4dd6c50ce3207",
+    "src/core/hash.ts": "06425267a82e9cb8bac2d0258357d3b43822b12a7592aed38e69cfa17e9ea5a3",
+    "src/core/identity.ts": "2d30f89937a7c8ac84e0213d864aa52207fce416a7d8dc5c7327288f5bc8297c",
+    "src/core/json-input.ts": "317c5b79bad1db8e9289c29159c8e89cf467faf2dfc98431ebbc4f2407f0788a",
+    "src/core/ledger.test.ts": "94eadae0c48b68374f9e669f1dfb3f6db969eff4d68025a4fbc4f26729470548",
+    "src/core/ledger.ts": "994e380af8941809ef4cc67329fdfbe2888ce5579e22194a7c17501725979f74",
+    "src/core/market-ledger.test.ts": "db1d143cca090df21073786b972556e37f9dee5899e3447e3280877d9dae0790",
+    "src/core/market-math.ts": "bbd791e0083d1b61820a3220f7424604d47e40fa1a9a43e417fd24f3676daadd",
+    "src/core/market-projection.ts": "419a08e31d3fc9f1f692934f5fb7a2cace2b762fa8e40bf088c68cd40f190deb",
+    "src/core/market-schema.ts": "5528363053e83176043ac072e392cd6d79a1d65654c66ff94b296fa0c348fc29",
+    "src/core/market-types.ts": "128ff61a76351fa638223ba6770f8280eb40256892af1363d39ea57f06724984",
+    "src/core/market-validation.ts": "50b04cfc279109c1b86109d8b4d9ef91acbdbcfaa48d71661121be3630ed9fa4",
+    "src/core/market.ts": "166fb7074bb24cd79ec8e89ab00864a1a29e7a6e0d39bffc1b333140b27adc39",
+    "src/core/money.test.ts": "836e5c5d775e29a018b3d55776cb4d288b68a10da6cd43efa4749bb9766fdaf9",
+    "src/core/money.ts": "4c3ce1830cd238f43bf65e031bcf07c49fdadf878e0839e80a15ea0e1d532d08",
+    "src/core/operating-ledger.test.ts": "8720251b2b316745347e264c0cc40cddbb4db5aa097dfc8d82452e612713dd91",
+    "src/core/operations-accrual.ts": "6fa00caf7448b9146d229ace91d5027f5404c8c52603beb2e549ca5632a1071f",
+    "src/core/operations-calendar.ts": "ea2517dd47ae1e74234c3b8afb39546d11bfa588c3dbb49a6dba8dc3c417515e",
+    "src/core/operations-schema.ts": "ec42b73c2857461517adefccec790f99c621339427f945056ef2eb1ed5ea4404",
+    "src/core/operations-types.ts": "948008ae2fdba75fcd3bd5a52596285035ef3d4460e09dcac50f41dec0b40179",
+    "src/core/operations-validation.ts": "5b2c0a15c57ba37b7941d9eb1e82d938845dc9e2d86aed16ed039bf462117748",
+    "src/core/operations.ts": "2df15672aa67ddc42d53a2a1c54c75078b69929d1b0c33df43486989482ec14f",
+    "src/core/player-profile.ts": "b7050d18ee1463f2ff63f4bbbe11a59e88f810e65cb6121cdfa6a4d3469244c4",
+    "src/core/random.test.ts": "7adcad3a108f78521d8dee7c948e83658bc7c9062bdc41b4a62dac71ac005322",
+    "src/core/random.ts": "3ef7ca6de0896d42a456e2aae8760eea9c9a73af99afd7009e0d7353809e180b",
+    "src/core/record-schemas.ts": "967d07cc034513d6a3280142279a1066ad99b69cc68c60a476112d8f3efb10a0",
+    "src/core/run-types.ts": "68f897d4b12cb93b6d598ce4c424c06a394eb8844a3617f03b79a338c6dba82c",
+    "src/core/run.ts": "7d04851de58c37a0b9721e07b61defb106a9b5f671e6c4d9b210d72f43cbe9d4",
+    "src/core/timeline.test.ts": "826176fb23ae104d622b45e8d49a3b6855f8a9d818bc855541638b4731b50dfe",
+    "src/core/timeline.ts": "54767b25792c41643b7728ae0ddc1c3e78ee1a9d9dee08ddba567eb712069ff8",
+    "src/core/versions.ts": "3594ad40947f99b43a21ee23629dd809f06ac4a113de63341c9af8bea15eea21",
+    "src/core/video-projection.ts": "ae650879825d4722ad75817e1e796c1ee475556f522d0a563b1a6f14ae420924",
+    "src/core/video-schema.ts": "1e9372ee58b91fe955f8d4993c0c239e9eae01e63aa25a4b2e44458eaed6e455",
+    "src/core/video-validation.ts": "1570ad420fa1ae62de1e9f5d05a8a41ac71587632ef7c3372430487c0f45200a",
+    "src/core/video.ts": "7be47780755e7e751c58a6ef0a140ab75aa135ce0998cd36aa5584ce8cc135c8",
+    "src/core/world-projection.ts": "055780c9e37e6dc63e107e93a3280456ebb9551333b00e948531d6968ea1cc41",
+    "src/core/world-schema.ts": "af9a51e0505ea130417f6bf48e71345569a3afe0f46b53ea1c53cf9e983fc36f",
+    "src/core/world-scope.test.ts": "c6badf3320126434a88a5c382034575eeda228f754cedf917c5e50f9c427cf5a",
+    "src/core/world-validation.ts": "0df2a9dd499ee3daea02cbf406c966571b93484778988909d6528b50aae87316",
+    "src/core/world.ts": "d497fac506fb85617325cf6ad5167ec40e80e521329d634b62220db3570b7f15",
+    "src/main.tsx": "0b3933753fe24aaaa887a39d0f60e4d7a628f56a76c58be382550a15263f2e4d",
+    "src/persistence/codec.test.ts": "5506dcde13519134f736834bf4248f8ab30535ad7839154f85d7ad927b1ebeaa",
+    "src/persistence/codec.ts": "52a34470053f90ad625e5a158d35363797f35f64f1b45a6b4da4693633e2c491",
+    "src/persistence/course-codec.test.ts": "dae6cc196aff33758fd2894d91634d56a9213031746fa51b2b9841156ea7db04",
+    "src/persistence/entry-profile-codec.test.ts": "dcbd66bdfebd31ed21ab6c898916b87cf0cf9818b13674544b4f22d1ce5599f8",
+    "src/persistence/first-order-codec.test.ts": "4e49f4071c9fdd1f0358c58c09b4310d6605c2f5d017c4904f823c0457b02f6b",
+    "src/persistence/indexeddb.test.ts": "5fb99e5137b67cf89f6de9ed2ebc9a7c507c0c0cbcba2760bf15a4e5046cd24f",
+    "src/persistence/indexeddb.ts": "978209e115e087256e81b60c39080ec029d9c067252beb1451817dc0c3f480dd",
+    "src/persistence/library.test.ts": "9d9e3723d858fbab3b5a0a2275465dc03844e1d2325543c3bc0bc1f9b74c920b",
+    "src/persistence/market-codec.test.ts": "c680d4f0cef8d29dfdcbcdbb463c6de588669984b1471dcd1d4e1f074a032811",
+    "src/persistence/operations-codec.test.ts": "31e790fcba94a0747428c370e1cf22bc81234a38464f5528833e7bf739d71c20",
+    "src/persistence/schemas.ts": "efabdb611f197eb5f577c2061095b02d5f8edf5c561830af47e12decc36f7476",
+    "src/persistence/video-codec.test.ts": "a841691f2dae9aa8077eda768fce6f51b0a8c0d5e175ac81800751ff17d0726b",
+    "src/persistence/world-codec.test.ts": "e2a74e8af6cf9894a4f28821019e91ce7cafb4a6f4c8dd79f049eb70e9d0e0e5",
+    "src/persistence/writer-lock.test.ts": "6a9da4132c045eb3b74a1ef75cf451c8f87b1a47ece0355934adb69ac94426aa",
+    "src/persistence/writer-lock.ts": "b5eb19e5beba9b7262cbfce046bdd8e413f8742a77a491184fcbbbd7a96498df",
+    "src/testing/abort-after-write.ts": "da8681842896c19e290883e8d26bbafb5be1a0ba4f6773dc25b519a593b50484",
+    "src/testing/course-fixture.ts": "41bd9d201fbeaa8bfdf8e3851606fd916bd269a09bb4915b7da3b391027dfc54",
+    "src/testing/course-scenarios.ts": "81ba1cd08e3b0758058273020368f34b4f719f27df4f2587998c659930b0f5c1",
+    "src/testing/fact-run.ts": "3873010d328bc2c505122f59751e0713c2c603bceaea078d41beb19aea855944",
+    "src/testing/market-fixture.ts": "fb83e044442d0c17353625ea669d24196f9f35a18e1b9d23aa3261a847ef0339",
+    "src/testing/market-normal-scenario.ts": "73eca4bcbe2b895fe27ebd46a15c1cf98c7bc5b0a600e673a3da0caf2a5380c0",
+    "src/testing/memory-writer-access.ts": "61ee8279cd62e20f6f04ca5163354838acce011d9e24ead12baf10a9c8cff150",
+    "src/testing/normal-course-scenario.ts": "9627160a5d9434fce46b1c729ff3b9356c252e11b6f0a45ff52c929fd584d577",
+    "src/testing/normal-video-scenario.ts": "47ea2c582aa782e15034c00fdcbf60be89769f5cc1ab4529cbb58260cccef234",
+    "src/testing/operations-browser.ts": "52bf5d2a6b14e4c9d5752d4c898acd072e1dda4bd6d5e6448b8f626df9092646",
+    "src/testing/operations-fixture.ts": "77171a7197c735c4a369a7a89d3f1263cd04bb632b5b2e7fd7c3ec0a9d6025c7",
+    "src/testing/persistence-browser.ts": "cff5c300def8c15bad87ba060fb40e3b59f211a8b9f030a9fe636c1cddb21a46",
+    "src/testing/playable-scenarios.ts": "184b5f65a389590e28114922c2ec57fa9682e96d17a0b331995244b641908a4c",
+    "src/testing/q01-accounting.ts": "bf9690677fe052f76c0cb4b29067789ad9049217e92f5c9cd19c00e19d71ef4c",
+    "src/testing/video-fixture.ts": "6f6053759353fff73d8f5b7d17dd4d3a007af6dbb00c695fcd4b6b24e516ed29",
+    "src/testing/video-scenarios.ts": "0eba82ea05c43501175b2db94ac031ffe4a34e0d300abbd047cfdf289af52154",
+    "src/testing/world-fixture.ts": "9c4da48b907bbd40fd379e10efeb55ee39d54a3093451ddcda5b2071e89d82d5",
+    "src/ui/App.test.tsx": "c8dc4ff78a47bf7a5d1e0dbe373e5aa05df2ac78a1909901cedf3d92139fdb25",
+    "src/ui/App.tsx": "f2284c7c4344f3fb788afca5f62aabd61712542c23182ee925d3d4f7ebcbe314",
+    "src/ui/CommandButton.tsx": "7b0314ef79a9d62c71b7683a8cf0da5935b690517277076b6d8361b1a1d2c40c",
+    "src/ui/CoursePanel.tsx": "87b210caaad780a857139eb229a72ad3af94fa11adba7f5a56d6c640c5ebe473",
+    "src/ui/Dialog.tsx": "fb7972e039eaeb683a954f15543f2728d37f5584e0feccf156c42e581794e904",
+    "src/ui/Home.tsx": "deacef4ee96c3bab5980525f27148f5f060e7693c2ab12864741d2a7f7409bd8",
+    "src/ui/MarketPanel.tsx": "8b50c0992df3316273aa7e87550cbdae4c2d818fbfc0eeae58d15864876dbb45",
+    "src/ui/Obligations.tsx": "cf435a0db18013da6a4a1ee7edfb51b848c6f3381a3c0c036b099f2b764278e3",
+    "src/ui/StoragePanel.tsx": "eb081da3499f985405b7d26f5dff0133b7681466be1c7b3499b9631c88dd8e09",
+    "src/ui/VideoPanel.tsx": "2f7e967fb69d66729da78b3df6c1aed7edfe3be80bad49a5f31e803cb0c1b3a4",
+    "src/ui/Workbench.tsx": "4c0d4acd998349fa24bc569a6d3ba0f7b31a8963253a1dad27756e58b0b6790f",
+    "src/ui/game-text.ts": "5bc10416ad0e3c667b73f1dd3855b74beb7759a8b13eb2273951a4dbdb27baf7",
+    "src/ui/game-types.ts": "73d87c0a37138c65f356693a702d3271e7608e778282fc309204c7ef9b3a1e44",
+    "src/ui/intent-account.ts": "658a621a7b0809c3cfad5323065b3f521101226b1f5b8ce67578338215cc32d6",
+    "src/ui/money-input.ts": "ae12f363335c4742de784c15fd404fe15f3b5044829ec6b7070c331e0d0b572a",
+    "src/ui/styles.css": "9a27027211b46ea63ea15dc42ca83c8a861af56671bccb36d9f7f0468869ab8d",
+    "scripts/collect_video_evidence.ts": "bd08a2560692fe2ad416e5c84da895f4069701820691b8ec857d2459257d18be",
+    "scripts/evidence-output.ts": "b70695b15e7cf4f615ad263a9e2f361b847edb6203d844e8c73e3c940e486026",
+    "scripts/validate_content.ts": "ae1037dac958baee2e0a83bc37024373e4959a13b51d8c3fcf6698d02f9915ed",
+    "package.json": "0217d1f3a4b7fed9f111e3a7714ccf7f1465cbac83e5c70d927f28e2b5e6acec",
+    "package-lock.json": "096fd07ea9a5ac837d12495d23f67b4c0ccbb61d36d308ef689d8041e0ec2bb4",
+    "index.html": "83302dbf7255e2796584dccc24a816eeb91f2d0b0e613e6c98c85cf471331d43",
+    "vitest.config.ts": "8bc1e3c6911d48bd8a7be4532e6efbcc849277d3d104309ba94208afc9d6b354",
+    "tsconfig.core.json": "48e4365127083963a2b2d24f5677e93414c3de97cd642ce155a9a10fddcb53df"
+  },
+  "cases": [
+    {
+      "id": "F02",
+      "evidenceType": "integration_replay",
+      "origin": "fixture",
+      "fixtureTerms": {
+        "noLivingCosts": true,
+        "noEmployment": true,
+        "noWorkers": true,
+        "prepaymentFen": 0,
+        "requiredRevisions": 1,
+        "quarterActionPoints": [
+          4,
+          3
+        ]
+      },
+      "seed": "video-fixture-seed",
+      "versions": {
+        "schemaVersion": 8,
+        "rulesVersion": "rules-t10-fixture",
+        "contentVersion": "video-fixture-v1",
+        "contentHash": "f08f885a2792ec2f53d644bba55025ceefbf67e2c36e9e10d94da24a8cf80549",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "snapshots": {
+        "initial": {
+          "file": "t10-video-f02-initial.json",
+          "sha256": "9c7b1fdf9e29956f6188ef1bad38f487e8321334aaa9a16df0cde246f4228ae0"
+        },
+        "final": {
+          "file": "t10-video-f02-final.json",
+          "sha256": "2f1bcb668e2f110113641f3f63024ea967c44811f9031f1a21478f1244a9716d"
+        }
+      },
+      "commands": [
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-1",
+          "expectedRevision": 1,
+          "kind": "OpenVideoChannel",
+          "payload": {
+            "name": "本地店铺样片",
+            "segment": "local_merchants"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-2",
+          "expectedRevision": 2,
+          "kind": "StartVideoMarketing",
+          "payload": {
+            "channelId": "vid:4b6700b30e88378797f3248b50ab06a2",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2020-01-01"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-3",
+          "expectedRevision": 3,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-08"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-4",
+          "expectedRevision": 4,
+          "kind": "AcceptVideoCommission",
+          "payload": {
+            "channelId": "vid:4b6700b30e88378797f3248b50ab06a2",
+            "cohortId": "vid:81bce009c8148bec63fd9a5b1603b469",
+            "clientId": "vid:0ac117cfe0f367b9cdd4b7c97f448784",
+            "modeId": "manual",
+            "materialId": "original",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2020-01-08"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-5",
+          "expectedRevision": 5,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-22"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-6",
+          "expectedRevision": 6,
+          "kind": "ReviewVideoOutput",
+          "payload": {
+            "workId": "vid:007c770b7334e7fb47a7bf820bdb6956",
+            "disclosure": "manual"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-7",
+          "expectedRevision": 7,
+          "kind": "SubmitVideoCommission",
+          "payload": {
+            "contractId": "vid:7e4bc579398ae44686c87f34ea51efb4"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-8",
+          "expectedRevision": 8,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-24"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-9",
+          "expectedRevision": 9,
+          "kind": "ReworkVideo",
+          "payload": {
+            "workId": "vid:007c770b7334e7fb47a7bf820bdb6956",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2020-01-24"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-10",
+          "expectedRevision": 10,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-31"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-11",
+          "expectedRevision": 11,
+          "kind": "ReviewVideoOutput",
+          "payload": {
+            "workId": "vid:007c770b7334e7fb47a7bf820bdb6956",
+            "disclosure": "manual"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-12",
+          "expectedRevision": 12,
+          "kind": "SubmitVideoCommission",
+          "payload": {
+            "contractId": "vid:7e4bc579398ae44686c87f34ea51efb4"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-13",
+          "expectedRevision": 13,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-02"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-14",
+          "expectedRevision": 14,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-09"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-15",
+          "expectedRevision": 15,
+          "kind": "AcceptVideoCommission",
+          "payload": {
+            "channelId": "vid:4b6700b30e88378797f3248b50ab06a2",
+            "cohortId": "vid:81bce009c8148bec63fd9a5b1603b469",
+            "clientId": "vid:e64d0ad0989f403c77006ddb0c29a1f2",
+            "modeId": "manual",
+            "materialId": "original",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2020-02-09"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-16",
+          "expectedRevision": 16,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-23"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-17",
+          "expectedRevision": 17,
+          "kind": "ReviewVideoOutput",
+          "payload": {
+            "workId": "vid:31892bc5d20a6504c8c7cc48b6cf0e05",
+            "disclosure": "manual"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-18",
+          "expectedRevision": 18,
+          "kind": "SubmitVideoCommission",
+          "payload": {
+            "contractId": "vid:f0655f119f46d705d08fe03546341ced"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-19",
+          "expectedRevision": 19,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-25"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-20",
+          "expectedRevision": 20,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-01"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-21",
+          "expectedRevision": 21,
+          "kind": "ReworkVideo",
+          "payload": {
+            "workId": "vid:31892bc5d20a6504c8c7cc48b6cf0e05",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2020-04-01"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-22",
+          "expectedRevision": 22,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-08"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-23",
+          "expectedRevision": 23,
+          "kind": "ReviewVideoOutput",
+          "payload": {
+            "workId": "vid:31892bc5d20a6504c8c7cc48b6cf0e05",
+            "disclosure": "manual"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-24",
+          "expectedRevision": 24,
+          "kind": "SubmitVideoCommission",
+          "payload": {
+            "contractId": "vid:f0655f119f46d705d08fe03546341ced"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-25",
+          "expectedRevision": 25,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-10"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-26",
+          "expectedRevision": 26,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-17"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-27",
+          "expectedRevision": 27,
+          "kind": "AcceptVideoCommission",
+          "payload": {
+            "channelId": "vid:4b6700b30e88378797f3248b50ab06a2",
+            "cohortId": "vid:81bce009c8148bec63fd9a5b1603b469",
+            "clientId": "vid:cdee64efe1bd835513ce4e36c5097f59",
+            "modeId": "manual",
+            "materialId": "original",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2020-04-17"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-28",
+          "expectedRevision": 28,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-05-01"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-29",
+          "expectedRevision": 29,
+          "kind": "ReviewVideoOutput",
+          "payload": {
+            "workId": "vid:7f4f879051d3f0f393949cbed9a2c797",
+            "disclosure": "manual"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-30",
+          "expectedRevision": 30,
+          "kind": "SubmitVideoCommission",
+          "payload": {
+            "contractId": "vid:63bf3f61e5f039e39dedf61d709ac558"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-31",
+          "expectedRevision": 31,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-05-03"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-32",
+          "expectedRevision": 32,
+          "kind": "ReworkVideo",
+          "payload": {
+            "workId": "vid:7f4f879051d3f0f393949cbed9a2c797",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2020-05-03"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-33",
+          "expectedRevision": 33,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-05-10"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-34",
+          "expectedRevision": 34,
+          "kind": "ReviewVideoOutput",
+          "payload": {
+            "workId": "vid:7f4f879051d3f0f393949cbed9a2c797",
+            "disclosure": "manual"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-35",
+          "expectedRevision": 35,
+          "kind": "SubmitVideoCommission",
+          "payload": {
+            "contractId": "vid:63bf3f61e5f039e39dedf61d709ac558"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-36",
+          "expectedRevision": 36,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-05-12"
+          }
+        },
+        {
+          "runId": "video-fixture",
+          "actorId": "player",
+          "commandId": "vid-37",
+          "expectedRevision": 37,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-05-19"
+          }
+        }
+      ],
+      "expected": {
+        "incomeFen": 900000,
+        "costFen": 465000,
+        "profitFen": 435000,
+        "cashFen": 2435000,
+        "heldFen": 0,
+        "paidContracts": 3
+      },
+      "actual": {
+        "incomeFen": 900000,
+        "costFen": 465000,
+        "profitFen": 435000,
+        "cashFen": 2435000,
+        "heldFen": 0,
+        "paidContracts": 3
+      }
+    },
+    {
+      "id": "normal-technical_employee",
+      "evidenceType": "integration_replay",
+      "origin": "normal",
+      "seed": "normal-video-access-v1",
+      "versions": {
+        "schemaVersion": 8,
+        "rulesVersion": "rules-t11-course-v1",
+        "contentVersion": "world-course-work-v1",
+        "contentHash": "be9b6a2640471e243979a69a51703c9aac70687e53fd88422f87e9df19d9d32d",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "snapshots": {
+        "initial": {
+          "file": "t10-video-technical_employee-initial.json",
+          "sha256": "6f4fe206d33aa3455f419da793cb5f68845e27166f30992525adbe4e0b9e2f1f"
+        },
+        "final": {
+          "file": "t10-video-technical_employee-final.json",
+          "sha256": "aefcb2f7f19b5614fcee3f6b4c9cb420f4ca9b3ff991e7926f632fed98f4a270"
+        }
+      },
+      "commands": [
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-1",
+          "expectedRevision": 1,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-2",
+          "expectedRevision": 2,
+          "kind": "OpenVideoChannel",
+          "payload": {
+            "name": "普通上班族的AI观察",
+            "segment": "ai_learners"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-3",
+          "expectedRevision": 3,
+          "kind": "StartVideoWork",
+          "payload": {
+            "channelId": "vid:271b21597639d1bbff748b21357ffb68",
+            "productId": "hotspot",
+            "modeId": "manual",
+            "materialId": "original",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2020-01-01"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-4",
+          "expectedRevision": 4,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-08"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-5",
+          "expectedRevision": 5,
+          "kind": "ReviewVideoOutput",
+          "payload": {
+            "workId": "vid:efe77ab680e20489e69a2e572dacaa23",
+            "disclosure": "manual"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-6",
+          "expectedRevision": 6,
+          "kind": "PublishVideo",
+          "payload": {
+            "workId": "vid:efe77ab680e20489e69a2e572dacaa23",
+            "monetization": "ads"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-7",
+          "expectedRevision": 7,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-15"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-8",
+          "expectedRevision": 8,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-9",
+          "expectedRevision": 9,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-10",
+          "expectedRevision": 10,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-11",
+          "expectedRevision": 11,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-12",
+          "expectedRevision": 12,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-13",
+          "expectedRevision": 13,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-01"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-14",
+          "expectedRevision": 14,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-15",
+          "expectedRevision": 15,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-16",
+          "expectedRevision": 16,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:ce13e97577906b575830973677ff41c1",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-17",
+          "expectedRevision": 17,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-18",
+          "expectedRevision": 18,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-07-01"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-19",
+          "expectedRevision": 19,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-20",
+          "expectedRevision": 20,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-09-30"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-21",
+          "expectedRevision": 21,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-10-01"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-22",
+          "expectedRevision": 22,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-23",
+          "expectedRevision": 23,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-12-31"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-24",
+          "expectedRevision": 24,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-01-01"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-25",
+          "expectedRevision": 25,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-26",
+          "expectedRevision": 26,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-03-31"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-27",
+          "expectedRevision": 27,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-01"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-28",
+          "expectedRevision": 28,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-29",
+          "expectedRevision": 29,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-06-30"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-30",
+          "expectedRevision": 30,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-07-01"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-31",
+          "expectedRevision": 31,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-32",
+          "expectedRevision": 32,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-09-30"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-33",
+          "expectedRevision": 33,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-10-01"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-34",
+          "expectedRevision": 34,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-35",
+          "expectedRevision": 35,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-12-31"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-36",
+          "expectedRevision": 36,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-01-01"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-37",
+          "expectedRevision": 37,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-38",
+          "expectedRevision": 38,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-03-31"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-39",
+          "expectedRevision": 39,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-04-01"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-40",
+          "expectedRevision": 40,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-41",
+          "expectedRevision": 41,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-06-30"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-42",
+          "expectedRevision": 42,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-07-01"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-43",
+          "expectedRevision": 43,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-44",
+          "expectedRevision": 44,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-09-30"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-45",
+          "expectedRevision": 45,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-01"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-46",
+          "expectedRevision": 46,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-47",
+          "expectedRevision": 47,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-31"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-48",
+          "expectedRevision": 48,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:c4573c6eb77d038cb88a52af058aed8a",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-49",
+          "expectedRevision": 49,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-31"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-50",
+          "expectedRevision": 50,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-01"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-51",
+          "expectedRevision": 51,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-52",
+          "expectedRevision": 52,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-02"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-53",
+          "expectedRevision": 53,
+          "kind": "ApplyVideoProgram",
+          "payload": {
+            "channelId": "vid:271b21597639d1bbff748b21357ffb68",
+            "program": "image_rights",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-01-02"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-54",
+          "expectedRevision": 54,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-09"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-55",
+          "expectedRevision": 55,
+          "kind": "DecideVideoProgram",
+          "payload": {
+            "applicationId": "vid:7f2438c58f83549f781cdf8389664624"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-56",
+          "expectedRevision": 56,
+          "kind": "StartVideoWork",
+          "payload": {
+            "channelId": "vid:271b21597639d1bbff748b21357ffb68",
+            "productId": "original_series",
+            "modeId": "image_assisted",
+            "materialId": "licensed",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-01-09"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-57",
+          "expectedRevision": 57,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-16"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-58",
+          "expectedRevision": 58,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-04-01"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-59",
+          "expectedRevision": 59,
+          "kind": "ReworkVideo",
+          "payload": {
+            "workId": "vid:4329647f80e53746c8fe98f361bccc0d",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-04-01"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-60",
+          "expectedRevision": 60,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-04-08"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-61",
+          "expectedRevision": 61,
+          "kind": "ReviewVideoOutput",
+          "payload": {
+            "workId": "vid:4329647f80e53746c8fe98f361bccc0d",
+            "disclosure": "ai_assisted"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-62",
+          "expectedRevision": 62,
+          "kind": "PublishVideo",
+          "payload": {
+            "workId": "vid:4329647f80e53746c8fe98f361bccc0d",
+            "monetization": "none"
+          }
+        },
+        {
+          "runId": "normal-video-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-video-63",
+          "expectedRevision": 63,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-04-15"
+          }
+        }
+      ],
+      "expected": {
+        "normalOpeningOnly": true,
+        "actualLivingAndSalary": true,
+        "qualifyingJob": true,
+        "firstPublicationIncomeFen": 0,
+        "publications": 2
+      },
+      "actual": {
+        "origin": "normal",
+        "backgroundId": "technical_employee",
+        "cashFen": 17910000,
+        "granted": true,
+        "videoWorks": 2,
+        "publications": 2,
+        "salaryPayments": 39,
+        "firstPublicationIncomeFen": 0
+      }
+    },
+    {
+      "id": "normal-content_employee",
+      "evidenceType": "integration_replay",
+      "origin": "normal",
+      "seed": "normal-video-access-v1",
+      "versions": {
+        "schemaVersion": 8,
+        "rulesVersion": "rules-t11-course-v1",
+        "contentVersion": "world-course-work-v1",
+        "contentHash": "be9b6a2640471e243979a69a51703c9aac70687e53fd88422f87e9df19d9d32d",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "snapshots": {
+        "initial": {
+          "file": "t10-video-content_employee-initial.json",
+          "sha256": "94d1d3dc02b7c744943f1a80fd5a9ca6ede07c72f8a5d17e6748f3dcc296e287"
+        },
+        "final": {
+          "file": "t10-video-content_employee-final.json",
+          "sha256": "564852af2569808c852b8cf584be405432f4ce116c204fadb3536ab20c95b15a"
+        }
+      },
+      "commands": [
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-1",
+          "expectedRevision": 1,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-2",
+          "expectedRevision": 2,
+          "kind": "OpenVideoChannel",
+          "payload": {
+            "name": "普通上班族的AI观察",
+            "segment": "ai_learners"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-3",
+          "expectedRevision": 3,
+          "kind": "StartVideoWork",
+          "payload": {
+            "channelId": "vid:271b21597639d1bbff748b21357ffb68",
+            "productId": "hotspot",
+            "modeId": "manual",
+            "materialId": "original",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2020-01-01"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-4",
+          "expectedRevision": 4,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-08"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-5",
+          "expectedRevision": 5,
+          "kind": "ReviewVideoOutput",
+          "payload": {
+            "workId": "vid:efe77ab680e20489e69a2e572dacaa23",
+            "disclosure": "manual"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-6",
+          "expectedRevision": 6,
+          "kind": "PublishVideo",
+          "payload": {
+            "workId": "vid:efe77ab680e20489e69a2e572dacaa23",
+            "monetization": "ads"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-7",
+          "expectedRevision": 7,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-15"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-8",
+          "expectedRevision": 8,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-9",
+          "expectedRevision": 9,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-10",
+          "expectedRevision": 10,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-11",
+          "expectedRevision": 11,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-12",
+          "expectedRevision": 12,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-13",
+          "expectedRevision": 13,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-01"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-14",
+          "expectedRevision": 14,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-15",
+          "expectedRevision": 15,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-16",
+          "expectedRevision": 16,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:ce13e97577906b575830973677ff41c1",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-17",
+          "expectedRevision": 17,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-18",
+          "expectedRevision": 18,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-07-01"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-19",
+          "expectedRevision": 19,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-20",
+          "expectedRevision": 20,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-09-30"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-21",
+          "expectedRevision": 21,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-10-01"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-22",
+          "expectedRevision": 22,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-23",
+          "expectedRevision": 23,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-12-31"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-24",
+          "expectedRevision": 24,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-01-01"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-25",
+          "expectedRevision": 25,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-26",
+          "expectedRevision": 26,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-03-31"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-27",
+          "expectedRevision": 27,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-01"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-28",
+          "expectedRevision": 28,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-29",
+          "expectedRevision": 29,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-06-30"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-30",
+          "expectedRevision": 30,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-07-01"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-31",
+          "expectedRevision": 31,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-32",
+          "expectedRevision": 32,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-09-30"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-33",
+          "expectedRevision": 33,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-10-01"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-34",
+          "expectedRevision": 34,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-35",
+          "expectedRevision": 35,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-12-31"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-36",
+          "expectedRevision": 36,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-01-01"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-37",
+          "expectedRevision": 37,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-38",
+          "expectedRevision": 38,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-03-31"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-39",
+          "expectedRevision": 39,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-04-01"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-40",
+          "expectedRevision": 40,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-41",
+          "expectedRevision": 41,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-06-30"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-42",
+          "expectedRevision": 42,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-07-01"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-43",
+          "expectedRevision": 43,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-44",
+          "expectedRevision": 44,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-09-30"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-45",
+          "expectedRevision": 45,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-01"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-46",
+          "expectedRevision": 46,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-47",
+          "expectedRevision": 47,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-31"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-48",
+          "expectedRevision": 48,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:c4573c6eb77d038cb88a52af058aed8a",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-49",
+          "expectedRevision": 49,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-31"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-50",
+          "expectedRevision": 50,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-01"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-51",
+          "expectedRevision": 51,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-52",
+          "expectedRevision": 52,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-02"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-53",
+          "expectedRevision": 53,
+          "kind": "ApplyVideoProgram",
+          "payload": {
+            "channelId": "vid:271b21597639d1bbff748b21357ffb68",
+            "program": "image_rights",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-01-02"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-54",
+          "expectedRevision": 54,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-09"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-55",
+          "expectedRevision": 55,
+          "kind": "DecideVideoProgram",
+          "payload": {
+            "applicationId": "vid:7f2438c58f83549f781cdf8389664624"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-56",
+          "expectedRevision": 56,
+          "kind": "StartVideoWork",
+          "payload": {
+            "channelId": "vid:271b21597639d1bbff748b21357ffb68",
+            "productId": "original_series",
+            "modeId": "image_assisted",
+            "materialId": "licensed",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-01-09"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-57",
+          "expectedRevision": 57,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-16"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-58",
+          "expectedRevision": 58,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-04-01"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-59",
+          "expectedRevision": 59,
+          "kind": "ReworkVideo",
+          "payload": {
+            "workId": "vid:4329647f80e53746c8fe98f361bccc0d",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-04-01"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-60",
+          "expectedRevision": 60,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-04-08"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-61",
+          "expectedRevision": 61,
+          "kind": "ReviewVideoOutput",
+          "payload": {
+            "workId": "vid:4329647f80e53746c8fe98f361bccc0d",
+            "disclosure": "ai_assisted"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-62",
+          "expectedRevision": 62,
+          "kind": "PublishVideo",
+          "payload": {
+            "workId": "vid:4329647f80e53746c8fe98f361bccc0d",
+            "monetization": "none"
+          }
+        },
+        {
+          "runId": "normal-video-content_employee",
+          "actorId": "player",
+          "commandId": "normal-video-63",
+          "expectedRevision": 63,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-04-15"
+          }
+        }
+      ],
+      "expected": {
+        "normalOpeningOnly": true,
+        "actualLivingAndSalary": true,
+        "qualifyingJob": true,
+        "firstPublicationIncomeFen": 0,
+        "publications": 2
+      },
+      "actual": {
+        "origin": "normal",
+        "backgroundId": "content_employee",
+        "cashFen": 10110000,
+        "granted": true,
+        "videoWorks": 2,
+        "publications": 2,
+        "salaryPayments": 39,
+        "firstPublicationIncomeFen": 0
+      }
+    }
+  ],
+  "notCovered": [
+    "course_conversion",
+    "all_five_routes",
+    "normal_24_quarter_ending",
+    "native_browser_unless_separate_report",
+    "original_png",
+    "human_playtest",
+    "real_video_generation_or_platform_income"
+  ]
+}

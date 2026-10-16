@@ -1,0 +1,126 @@
+{
+  "taskId": "T11",
+  "surface": "IAB native IndexedDB/Web Locks and real UI",
+  "prehistory": "2020-2022 engine normal replay imported Jan1 2023; not native UI prehistory",
+  "url": "http://127.0.0.1:5193/?storageTest=abort-course",
+  "checks": [
+    {
+      "name": "draft projection reload recovery",
+      "pass": true
+    },
+    {
+      "name": "sample start does not complete or earn",
+      "pass": true
+    },
+    {
+      "name": "future support preview Q2 one AP and 3000 yuan",
+      "pass": true,
+      "evidence": " \"冻结班额、阶段期限和真实支持预留\":\n  - heading \"冻结班额、阶段期限和真实支持预留\" [level=2]\n  - button \"关闭对话框\" [active]: ×\n  - paragraph: 这一步只在保存成功后成为本局结果。\n  - term: 执行主体\n  - definition: 企业账户 · AI卖课\n  - term: 开工季度行动\n  - definition: 1点\n  - term: 确定成本\n  - definition: ¥3,000\n  - term: 当前日期\n  - definition: 2023-01-15\n  - term: 已选开工日期\n  - definition: 2023-04-01\n  - paragraph: 执行后已花成本与行动不返还；开始不代表交付完成，回款以客户验收与实际到账为准。\n  - button \"返回调整\"\n  - button \"确认并保存安排\""
+    },
+    {
+      "name": "presale preview is 19980 protected and zero earned",
+      "pass": true,
+      "evidence": " \"为20名学员收受保护预款（不是收入）\":\n  - heading \"为20名学员收受保护预款（不是收入）\" [level=2]\n  - button \"关闭对话框\" [active]: ×\n  - paragraph: 这一步只在保存成功后成为本局结果。\n  - term: 执行主体\n  - definition: 企业账户 · AI卖课\n  - term: 本季行动\n  - definition: 0点\n  - term: 确定成本\n  - definition: ¥0\n  - term: 收到学员预款\n  - definition: ¥19,980\n  - term: 新增客户保护\n  - definition: ¥19,980\n  - term: 当期课程收入\n  - definition: ¥0 · 完成教学阶段后才确认\n  - term: 当前日期\n  - definition: 2023-01-15\n  - paragraph: 执行后已花成本与行动不返还；开始不代表交付完成，回款以客户验收与实际到账为准。\n  - button \"返回调整\"\n  - button \"确认并保存安排\""
+    },
+    {
+      "name": "aborted enrollment leaves committed roster empty and revision unchanged",
+      "pass": true
+    },
+    {
+      "name": "first teaching scheduled for Jan17-27 without early income",
+      "pass": true
+    },
+    {
+      "name": "half-delivered full refund reverses earned and unearned once",
+      "pass": true
+    },
+    {
+      "name": "H004 old student update appears without reading news",
+      "pass": true
+    },
+    {
+      "name": "refresh costs 2000 and version remains1 until March21",
+      "pass": true
+    },
+    {
+      "name": "actual seven-day update creates version2 without new student receipt",
+      "pass": true
+    },
+    {
+      "name": "stop new sales retains scheduled old support",
+      "pass": true
+    },
+    {
+      "name": "real paid seven-day recovery resolves remaining learners",
+      "pass": true
+    },
+    {
+      "name": "closed19 retained learners and 999 refund, fee949.05, old identity retained",
+      "pass": true
+    },
+    {
+      "name": "closed roster survives real reload and native readback",
+      "pass": true
+    }
+  ],
+  "exports": [
+    {
+      "file": "t11-browser-before-enrollment.json",
+      "role": "committed",
+      "sha256": "70b4d05e41d52ef7a9bdc456cc7b82eb84ab24c1aabc2404b03fee6f521af475",
+      "revision": 73,
+      "date": "2023-01-15"
+    },
+    {
+      "file": "t11-browser-enrollment-candidate.json",
+      "role": "candidate",
+      "sha256": "fc79b142078617cdd643e82f51c333253b9817837850207a4b96fb6538540035",
+      "revision": 74,
+      "date": "2023-01-15"
+    },
+    {
+      "file": "t11-browser-aborted-old.json",
+      "role": "committed",
+      "sha256": "70b4d05e41d52ef7a9bdc456cc7b82eb84ab24c1aabc2404b03fee6f521af475",
+      "revision": 73,
+      "date": "2023-01-15"
+    },
+    {
+      "file": "t11-browser-enrolled-retry.json",
+      "role": "committed",
+      "sha256": "fc79b142078617cdd643e82f51c333253b9817837850207a4b96fb6538540035",
+      "revision": 74,
+      "date": "2023-01-15"
+    },
+    {
+      "file": "t11-browser-closed.json",
+      "role": "committed",
+      "sha256": "906d3baa19c639abf48e5db418e0c0a6872d9991cd9590b99bdc558f9228a3ba",
+      "revision": 88,
+      "date": "2023-04-16"
+    },
+    {
+      "file": "t11-browser-reloaded.json",
+      "role": "committed",
+      "sha256": "906d3baa19c639abf48e5db418e0c0a6872d9991cd9590b99bdc558f9228a3ba",
+      "revision": 88,
+      "date": "2023-04-16"
+    }
+  ],
+  "equalPairs": [
+    [
+      "t11-browser-before-enrollment.json",
+      "t11-browser-aborted-old.json"
+    ],
+    [
+      "t11-browser-enrollment-candidate.json",
+      "t11-browser-enrolled-retry.json"
+    ],
+    [
+      "t11-browser-closed.json",
+      "t11-browser-reloaded.json"
+    ]
+  ],
+  "screenshot": "t11-browser-closed.jpg",
+  "scope": "native class presale abort/retry, stages, mixed refund, update, stop, support recovery, fee, reload; actual humans0"
+}

@@ -12,11 +12,14 @@ export function assertVideo(runtime: VideoRuntime, run: GameRun): void {
     requireRule(s.version === runtime.catalog.version && s.catalogHash === runtime.hash && s.audienceKey === hashValue(['audience', run.seed]), 'VIDEO_CONTEXT_MISMATCH');
     const ops = run.operations;
     requireRule(ops, 'VIDEO_OPERATIONS_REQUIRED');
+    requireRule(new Set(s.conversions.map(c=>c.id)).size===s.conversions.length,'DUPLICATE_VIDEO_ID');
+    const courseConversion=(x:typeof s.conversions[number])=>run.course?.enrollments.some(e=>e.id===x.sourceId&&e.conversionId===x.id&&e.personId===x.personId&&e.productKey===x.productVersion)??false;
+    requireRule(new Set(s.conversions.map(c=>[c.personId,c.productVersion].join(':'))).size===s.conversions.length,'DUPLICATE_VIDEO_CONVERSION');
     // An untouched video domain has no records to cross-join. Receipt signatures
     // are canonical JSON (checked by the codec); still reject every orphan timer
     // or video job instead of parsing the market's entire history again.
     if (s.channels.length === 0) {
-        requireRule([s.works, s.publications, s.applications, s.marketing, s.cohorts, s.conversions, s.contracts, s.settlements].every(rows => rows.length === 0) && !ops.jobs.some(j => j.definitionId.startsWith('video-')) && !run.timeline.pending.some(e => e.payload.kind === 'video_event') && !run.timeline.receipts.some(r => r.signature.includes('"kind":"video_event"')), 'INVALID_EMPTY_VIDEO_STATE');
+        requireRule([s.works, s.publications, s.applications, s.marketing, s.cohorts, s.contracts, s.settlements].every(rows => rows.length === 0)&&s.conversions.every(courseConversion) && !ops.jobs.some(j => j.definitionId.startsWith('video-')) && !run.timeline.pending.some(e => e.payload.kind === 'video_event') && !run.timeline.receipts.some(r => r.signature.includes('"kind":"video_event"')), 'INVALID_EMPTY_VIDEO_STATE');
         return;
     }
     const financial = new Map(run.economy.ledger.receipts.map(r => [r.id, JSON.parse(r.signature) as Record<string, unknown>]));
@@ -28,7 +31,7 @@ export function assertVideo(runtime: VideoRuntime, run: GameRun): void {
             payload: unknown;
         })].filter(e => typeof e.payload === 'object' && e.payload !== null && 'kind' in e.payload && e.payload.kind === 'video_event').map(e => { const parsed = videoEventSchema.safeParse(e.payload); requireRule(parsed.success && parsed.data.date === e.date, 'INVALID_VIDEO_TIMER'); return { ...e, payload: parsed.data }; });
     const timer = (type: string, id: string, at: string, version = 0) => requireRule(timers.some(e => e.payload.type === type && e.payload.entityId === id && e.date === at && e.payload.version === version && e.instanceId === videoId(type, id, String(version))), 'MISSING_VIDEO_TIMER');
-    for (const rows of [s.channels, s.works, s.publications, s.applications, s.marketing, s.cohorts, s.conversions, s.contracts, s.settlements])
+    for (const rows of [s.channels, s.works, s.publications, s.applications, s.marketing, s.cohorts, s.contracts, s.settlements])
         requireRule(new Set(rows.map(x => x.id)).size === rows.length, 'DUPLICATE_VIDEO_ID');
     requireRule(new Set(s.publications.map(p => p.workId)).size === s.publications.length && new Set(s.conversions.map(c => [c.personId, c.productVersion].join(':'))).size === s.conversions.length, 'DUPLICATE_VIDEO_CONVERSION');
     for (const c of s.channels) {
@@ -149,6 +152,7 @@ export function assertVideo(runtime: VideoRuntime, run: GameRun): void {
         requireRule(c.date <= date, 'FUTURE_VIDEO_CONVERSION');
         if (c.productVersion === 'commercial-v1')
             requireRule(s.contracts.some(x => x.id === c.sourceId && x.clientId === c.personId), 'INVALID_VIDEO_CONVERSION');
+        else if(c.productVersion.startsWith('course:'))requireRule(courseConversion(c),'INVALID_COURSE_CONVERSION');
         else {
             const p = s.publications.find(p => p.id === c.sourceId), cohort = s.cohorts.find(co => co.id === p?.cohortId);
             requireRule(c.productVersion === 'affiliate-tool-v1' && p?.qualified && p.monetization === 'affiliate' && cohort?.qualifiedMembers.includes(c.personId), 'INVALID_VIDEO_CONVERSION');

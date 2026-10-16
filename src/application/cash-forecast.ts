@@ -1,3 +1,4 @@
+import { cumulativeFee } from '../core/money.ts'
 import { OPERATIONS_CONTENT } from '../content/operations.ts'
 import type { OperationsCatalog } from '../core/operations-types.ts'
 import { addDays,monthEnd } from '../core/calendar.ts'
@@ -27,6 +28,7 @@ export function projectCashForecast(run:GameRun,accountId:string,catalog:Pick<Op
    if(op.type==='loan_due'){const loan=s.loans.find(l=>l.id===op.entityId&&l.accountId===accountId&&!l.feePosted);if(loan){const offer=catalog.loans.find(o=>o.id===loan.offerId);if(offer)add(event.instanceId,event.date,-offer.feeFen,'借款约定费用',loan.id,event.phase,event.priority)}}
   }
   if(op.kind==='video_event'&&op.type==='collect'&&run.video){const c=run.video.contracts.find(c=>c.id===op.entityId&&c.status==='delivered'),settlement=run.video.settlements.find(s=>s.id===op.entityId&&s.collectedAt===null),channel=run.video.channels.find(ch=>ch.id===(c?.channelId??settlement?.channelId)),business=run.operations?.businesses.find(b=>b.id===channel?.businessId),balance=run.economy.ledger.contracts.find(b=>b.id===op.entityId);if(business?.accountId===accountId&&balance){add(event.instanceId,event.date,balance.receivableFen,'视频已确认待收款',op.entityId,event.phase,event.priority);const fee=c?Number(BigInt(c.priceFen)*BigInt(c.feeBps)/10000n):settlement?.feeFen??0;add(event.instanceId+':fee',event.date,-fee,'视频约定结算费',op.entityId,event.phase,event.priority)}}
+  if(op.kind==='course_event'&&op.type==='fee_close'){const co=run.course?.cohorts.find(c=>c.id===op.entityId&&c.feePostedAt===null),course=run.course?.courses.find(c=>c.id===co?.courseId),business=run.operations?.businesses.find(b=>b.id===course?.businessId),balance=run.economy.ledger.contracts.find(c=>c.id===co?.id);if(business?.accountId===accountId&&balance)add(event.instanceId,event.date,-cumulativeFee(0,balance.recognizedIncomeFen,500),'课程结算费（当前留存收入情景）',co!.id,event.phase,event.priority)}
   if(op.kind==='market_event'&&op.type==='settlement'){const settlement=run.market?.settlements.find(s=>s.id===op.entityId&&s.accountId===accountId&&s.paidAt===null);if(settlement)add(event.instanceId,event.date,settlement.amountFen,'已成交款/分红交收',settlement.sourceId,event.phase,event.priority)}
  }
  flows.sort((a,b)=>compareTimePoints({...a,instanceId:a.id},{...b,instanceId:b.id}))

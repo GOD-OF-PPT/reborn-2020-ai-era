@@ -50,6 +50,7 @@ export class RunCodec {
     assertGameRun(run)
     this.#references(run)
     requireRule(run.world === null || this.registry.runtime !== null, 'WORLD_HANDLER_REQUIRED')
+    requireRule(run.course === null || this.registry.runtime !== null, 'COURSE_HANDLER_REQUIRED')
     requireRule(run.video === null || this.registry.runtime !== null, 'VIDEO_HANDLER_REQUIRED')
     requireRule(run.market === null || this.registry.runtime !== null, 'MARKET_HANDLER_REQUIRED')
     this.registry.runtime?.validate(run)
@@ -121,7 +122,7 @@ export class RunCodec {
       requireRule(previousPoint === null || compareTimePoints(event, previousPoint) > 0, 'EVENT_HISTORY_OUT_OF_ORDER')
       requireRule(compareTimePoints(event, run.timeline.cursor) <= 0, 'EVENT_HISTORY_AHEAD_OF_CURSOR')
       previousPoint = event
-      if (isWorldOperation(event.payload) || event.payload.kind === 'operating_event'||event.payload.kind==='market_event'||event.payload.kind==='video_event') {
+      if (isWorldOperation(event.payload) || event.payload.kind === 'operating_event'||event.payload.kind==='market_event'||event.payload.kind==='video_event'||event.payload.kind==='course_event') {
         requireRule(this.registry.runtime && run.world, 'WORLD_HANDLER_REQUIRED')
       } else if (receipt.skippedReason !== undefined) {
         // Validate the historical reason against its earlier operation. The action

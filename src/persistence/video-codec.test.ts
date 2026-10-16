@@ -5,7 +5,7 @@ import { hashValue } from '../core/hash.ts';
 import oldPlayable from '../../goal-1/evidence/t09-s01-technical_employee-initial.json?raw';
 let paid = '', codec = createVideoFixture().codec;
 beforeAll(() => { const result = replayVideoF02(); paid = result.end; codec = result.f.codec; }, 30000);
-it.each(['price', 'revision', 'prepay', 'qualification', 'conversion', 'audience', 'job', 'timer', 'income', 'channel-owner', 'quality-as-client', 'review-identity', 'unreleased-product'])('refuses a resigned inconsistent video save: %s', (variant) => {
+it.each(['price', 'revision', 'prepay', 'qualification', 'conversion', 'conversion-id', 'audience', 'job', 'timer', 'income', 'channel-owner', 'quality-as-client', 'review-identity', 'unreleased-product'])('refuses a resigned inconsistent video save: %s', (variant) => {
     const raw = JSON.parse(paid), s = raw.state.video;
     if (variant === 'price')
         s.contracts[0].priceFen++;
@@ -17,6 +17,7 @@ it.each(['price', 'revision', 'prepay', 'qualification', 'conversion', 'audience
         s.contracts[0].requiredRevisions = 0;
     if (variant === 'conversion')
         s.conversions.push({ ...s.conversions[0], id: 'duplicate-person' });
+    if (variant === 'conversion-id') s.conversions[1].id=s.conversions[0].id;
     if (variant === 'audience')
         s.cohorts[0].members[0] = 'made-up-person';
     if (variant === 'job')
@@ -42,7 +43,7 @@ it.each(['price', 'revision', 'prepay', 'qualification', 'conversion', 'audience
 });
 it('explicitly refuses and preserves the old schema6 export', () => { const before = hashValue(oldPlayable); expect(() => codec.import(oldPlayable)).toThrow('UNSUPPORTED_SCHEMA_VERSION'); expect(hashValue(oldPlayable)).toBe(before); });
 import draftVideo from '../../goal-1/evidence/t10-draft-negotiation.json?raw';
-it('preserves and explicitly refuses the intermediate native v1 video draft under final v2 rules', () => { const before = hashValue(draftVideo); expect(() => codec.import(draftVideo)).toThrow('INCOMPATIBLE_RULES_VERSION'); expect(hashValue(draftVideo)).toBe(before); });
+it('preserves and explicitly refuses the intermediate native v1 video draft under final v2 rules', () => { const before = hashValue(draftVideo); expect(() => codec.import(draftVideo)).toThrow('UNSUPPORTED_SCHEMA_VERSION'); expect(hashValue(draftVideo)).toBe(before); });
 import { createCampaignRun, createCampaignCodec } from '../application/campaign.ts';
 import { queueEvent } from '../core/timeline.ts';
 import { videoId } from '../core/video.ts';

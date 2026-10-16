@@ -1,0 +1,32 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/course.test.ts (10 tests | 1 failed) 63522ms
+   × previews the future support quarter and refuses using student deposits to pay production 714ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/course.test.ts > previews the future support quarter and refuses using student deposits to pay production
+RuleError: INVALID_PAYLOAD
+ ❯ requireRule src/core/errors.ts:12:25
+     10|
+     11| export function requireRule(condition: unknown, code: string): asserts…
+     12|   if (!condition) throw new RuleError(code)
+       |                         ^
+     13| }
+     14|
+ ❯ canonicalJson src/core/identity.ts:16:3
+ ❯ src/core/identity.ts:19:79
+ ❯ canonicalJson src/core/identity.ts:19:40
+ ❯ src/core/identity.ts:15:60
+ ❯ canonicalJson src/core/identity.ts:15:46
+ ❯ src/core/identity.ts:19:79
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 9 passed (10)
+   Start at  07:27:47
+   Duration  64.18s (tests 99%)
+

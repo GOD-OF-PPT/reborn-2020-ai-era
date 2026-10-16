@@ -35,9 +35,10 @@ export type OperatingIntent =
  | { readonly kind: 'SubmitDelivery' | 'CancelContract'; readonly contractId: string }
  | { readonly kind: 'RequestLoan'; readonly accountId: string; readonly offerId: string }
  | { readonly kind: 'PayObligation'; readonly accountId: string; readonly obligationId: string; readonly amountFen: number }
-export type OperatingContext = Pick<RuleModel, 'controlledAccountIds' | 'economy' | 'world' | 'operations'> & {readonly market?:RuleModel['market'];readonly video?:RuleModel['video'];readonly cursor?:RuleModel['timeline']['cursor'];readonly phase?:RuleModel['phase']}
+export type OperatingContext = Pick<RuleModel, 'controlledAccountIds' | 'economy' | 'world' | 'operations'> & {readonly market?:RuleModel['market'];readonly video?:RuleModel['video'];readonly course?:RuleModel['course'];readonly cursor?:RuleModel['timeline']['cursor'];readonly phase?:RuleModel['phase']}
 export type OperatingModel = Omit<RuleModel, 'timeline'>
 export interface RuntimeExtension {
+ worldUpdated?(state:OperatingModel,event:ScheduledEvent<RunOperation>):{state:OperatingModel;newEvents?:readonly ScheduledEvent<RunOperation>[]}
  hasEntitlement?(state:OperatingContext,bindingId:string,id:string,date:string):boolean
  reduce(state: OperatingModel, event: ScheduledEvent<RunOperation>): { readonly state: OperatingModel; readonly newEvents?: readonly ScheduledEvent<RunOperation>[]; readonly pauseReason?: string; readonly skippedReason?: string }
  capacityAvailable(state: OperatingContext, bindingId: string, date: string, days: number): number

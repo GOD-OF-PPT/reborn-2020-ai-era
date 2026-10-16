@@ -1,3 +1,4 @@
+import type { CourseState } from './course-schema.ts'
 import type { VideoState } from './video-schema.ts'
 import type { IsoDate } from './calendar.ts'
 import type { EconomyState } from './economy.ts'
@@ -28,6 +29,7 @@ export interface RuleModel {
   readonly operations: OperationsState | null
   readonly market:MarketState|null
   readonly video:VideoState|null
+  readonly course:CourseState|null
 }
 export interface CommandEnvelope {
   readonly commandId: string
@@ -93,6 +95,7 @@ export interface InitialRunState {
   readonly operations?: OperationsState | null
   readonly market?:MarketState|null
   readonly video?:VideoState|null
+  readonly course?:CourseState|null
 }
 export interface ProposedRun {
   readonly status: 'proposed'

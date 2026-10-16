@@ -89,3 +89,5 @@ T02已提供dev、build、typecheck、test:unit等工程脚本，是否通过以
 实施先后、功能切片与停止条件见[路线图](09-roadmap-and-backlog.md)。公开部署、CI权限、收费、许可证、真实数据采购和美术授权另行决定。本轮不创建这些外部资源。
 
 T10接入[视频经营28](28-video-business-contract.md)，显式升级schema7，拒绝并保留旧schema1—6。制作/返工/申请/谈判共用OperationsRuntime，平台/客户事件进入同一时钟与原子Session；当前版本与实际验证范围见README和goal-1记录。
+
+T11接入[课程与学员29](29-course-business-contract.md)，schema8/rules-t11-course-v1沿用同一Session与原子保存，拒绝并保留schema1—7。课程任务共用实际产能/行动/公司分账，按学员与原批次/阶段复算预款、退款和费用，世界更新不重收旧生学费。资料、Node回放、原生UI与真人证据分别记录，实际范围见[T11验证](../goal-1/evidence/t11-validation.md)。

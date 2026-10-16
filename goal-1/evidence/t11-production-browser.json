@@ -1,0 +1,29 @@
+{
+  "taskId": "T11",
+  "scope": "local production browser smoke; no remote deployment or actual humans",
+  "url": "http://127.0.0.1:5194/?storageTest=abort-course",
+  "checks": [
+    {
+      "name": "production ignores dev abort-course switch",
+      "pass": true
+    },
+    {
+      "name": "2020 normal start gates AI course studio",
+      "pass": true
+    },
+    {
+      "name": "production imports saved course and renders revision2 and closed obligations",
+      "pass": true
+    },
+    {
+      "name": "company selector shows company cash instead of personal",
+      "pass": true
+    },
+    {
+      "name": "production console has no errors",
+      "pass": true
+    }
+  ],
+  "logs": [],
+  "screenshot": "t11-production-course.jpg"
+}

@@ -24,6 +24,9 @@ const envelopeSchema = z.strictObject({ commandId: id, runId: id, actorId: id, e
 export const creationPayloadSchema = z.strictObject({ backgroundId: opaqueId, playerProfile:playerProfileSchema,origin: z.enum(['normal', 'fixture']), seed: z.string().min(1).max(256), initialStateHash: z.string().regex(/^[0-9a-f]{64}$/) })
 
 export interface CommandPreview {
+  readonly actionDate?:string
+  readonly receivedPrepaymentFen?:number
+  readonly protectedIncreaseFen?:number
   readonly allowed: boolean
   readonly reasonCodes: readonly string[]
   readonly actionPoints: number
@@ -45,6 +48,7 @@ export interface CommandView {
   readonly operations: RuleModel['operations']
   readonly market:RuleModel['market']
   readonly video:RuleModel['video']
+  readonly course:RuleModel['course']
 }
 export interface CommandContext { readonly commandId: string; readonly runId: string; readonly actorId: string; readonly date: string }
 export interface CommandEffect { readonly model: RuleModel; readonly summary: string; readonly domain: string }
@@ -127,7 +131,7 @@ export function createBaseRegistry(versions: VersionSet, extra: readonly Command
 }
 
 function commandView(run: GameRun): CommandView {
-  return copyJson({ runId: run.runId, actorId: run.actorId, revision: run.revision, date: run.timeline.cursor.date, phase: run.phase, controlledAccountIds: run.controlledAccountIds, economy: run.economy, cursor: run.timeline.cursor, pause: run.timeline.pause, evidence: visibleFacts(run.facts), world: run.world, operations: run.operations,market:run.market,video:run.video })
+  return copyJson({ runId: run.runId, actorId: run.actorId, revision: run.revision, date: run.timeline.cursor.date, phase: run.phase, controlledAccountIds: run.controlledAccountIds, economy: run.economy, cursor: run.timeline.cursor, pause: run.timeline.pause, evidence: visibleFacts(run.facts), world: run.world, operations: run.operations,market:run.market,video:run.video,course:run.course })
 }
 
 export function projectRun(run: GameRun) {
@@ -183,9 +187,9 @@ export function evaluateCommand(run: GameRun, raw: unknown, registry: CommandReg
     requireRule(handler, command.kind === 'CreateRun' ? 'RUN_ALREADY_EXISTS' : 'UNKNOWN_COMMAND')
     const inspection = handler.inspect(commandView(run), payload)
     if (!inspection.allowed) return { status: 'rejected', reasonCodes: inspection.reasonCodes }
-    const model: RuleModel = copyJson({ controlledAccountIds: run.controlledAccountIds, phase: run.phase, economy: run.economy, timeline: run.timeline, random: run.random, facts: run.facts, privateNotes: run.privateNotes, world: run.world, operations: run.operations,market:run.market,video:run.video })
+    const model: RuleModel = copyJson({ controlledAccountIds: run.controlledAccountIds, phase: run.phase, economy: run.economy, timeline: run.timeline, random: run.random, facts: run.facts, privateNotes: run.privateNotes, world: run.world, operations: run.operations,market:run.market,video:run.video,course:run.course })
     const effect = handler.apply(model, payload, { commandId: command.commandId, runId: run.runId, actorId: command.actorId, date: run.timeline.cursor.date })
-    requireRule(Object.keys(effect.model).length === 11 && Object.keys(effect.model).every((key) => ['controlledAccountIds', 'phase', 'economy', 'timeline', 'random', 'facts', 'privateNotes', 'world', 'operations','market','video'].includes(key)), 'INVALID_RULE_MODEL')
+    requireRule(Object.keys(effect.model).length === 12 && Object.keys(effect.model).every((key) => ['controlledAccountIds', 'phase', 'economy', 'timeline', 'random', 'facts', 'privateNotes', 'world', 'operations','market','video','course'].includes(key)), 'INVALID_RULE_MODEL')
     for (const fact of run.facts) {
       const nextFact = effect.model.facts.find((item) => item.id === fact.id)
       requireRule(nextFact && nextFact.roll === fact.roll && nextFact.domain === fact.domain && nextFact.sourceEventId === fact.sourceEventId && nextFact.createdAt === fact.createdAt && (fact.evidence === null || fact.evidence === nextFact.evidence), 'FACT_REWRITE')

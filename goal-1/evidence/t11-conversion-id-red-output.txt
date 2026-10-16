@@ -1,0 +1,30 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/persistence/video-codec.test.ts -t conversion-id
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/persistence/video-codec.test.ts (17 tests | 1 failed | 16 skipped) 2133ms
+   × refuses a resigned inconsistent video save: conversion-id 45ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/persistence/video-codec.test.ts > refuses a resigned inconsistent video save: conversion-id
+AssertionError: expected [Function] to throw an error
+ ❯ src/persistence/video-codec.test.ts:41:53
+     39|     const { checksum: _, ...body } = raw;
+     40|     raw.checksum = hashValue(body);
+     41|     expect(() => codec.import(JSON.stringify(raw))).toThrow();
+       |                                                     ^
+     42|     expect(codec.export(codec.import(paid))).toBe(paid);
+     43| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 16 skipped (17)
+   Start at  07:35:43
+   Duration  2.90s (tests 80%, import 13%, transform 7%)
+

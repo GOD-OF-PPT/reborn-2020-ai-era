@@ -1,0 +1,69 @@
+[
+  {
+    "step": "course",
+    "command": [
+      "npm",
+      "run",
+      "evidence:course",
+      "--",
+      "--output-dir",
+      "goal-1/evidence/t11-frozen"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 50.236,
+    "output": "t11-course-final-output.txt"
+  },
+  {
+    "step": "native-audit",
+    "command": [
+      "npm",
+      "run",
+      "evidence:course-browser-audit"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 27.773,
+    "output": "t11-native-audit-final-output.txt"
+  },
+  {
+    "step": "video-regression",
+    "command": [
+      "npm",
+      "run",
+      "evidence:video",
+      "--",
+      "--output-dir",
+      "goal-1/evidence/t11-regression"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 30.369,
+    "output": "t11-video-regression-final-output.txt"
+  },
+  {
+    "step": "market-regression",
+    "command": [
+      "npm",
+      "run",
+      "evidence:market",
+      "--",
+      "--output-dir",
+      "goal-1/evidence/t11-regression"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 3.691,
+    "output": "t11-market-regression-final-output.txt"
+  },
+  {
+    "step": "kernel-regression",
+    "command": [
+      "npm",
+      "run",
+      "evidence:kernel",
+      "--",
+      "--output-dir",
+      "goal-1/evidence/t11-regression"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.681,
+    "output": "t11-kernel-regression-final-output.txt"
+  }
+]
