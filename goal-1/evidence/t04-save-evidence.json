@@ -1,0 +1,225 @@
+{
+  "taskId": "T04",
+  "evidenceType": "integration",
+  "caseIds": [
+    "Q19:fact_rng_subcase",
+    "Q24:save_revision_import",
+    "Q34:strict_data_subcase",
+    "Q37:domain_isolation_subcase"
+  ],
+  "baseCommit": "46c15ba2c968ab55a459ac1581bef86219e12058",
+  "runtime": {
+    "node": "v22.12.0"
+  },
+  "reproduceCommand": "npm run evidence:save",
+  "input": {
+    "runId": "t04-evidence",
+    "actorId": "player",
+    "commandId": "create-evidence",
+    "seed": "t04-evidence-seed",
+    "backgroundId": "technical_employee"
+  },
+  "versions": {
+    "schemaVersion": 1,
+    "rulesVersion": "rules-t04-v1",
+    "contentVersion": "bootstrap-work-v1",
+    "contentHash": "716414f8f8d52e73ac2220fb9e1a3c1ffaad3d32c33e02558d9b86d9d6202e76",
+    "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+  },
+  "sourceHashes": {
+    "package-lock.json": "096fd07ea9a5ac837d12495d23f67b4c0ccbb61d36d308ef689d8041e0ec2bb4",
+    "package.json": "e20e90a74dac75dcaf89a38a6a2f7464cf3d8277bdb6121cc768e4892992e3ad",
+    "scripts/collect_save_evidence.ts": "cf1844a0adb5814f9081ab77d6bec78c8c0edecbdf9575f4e9d56c26d986f59d",
+    "src/application/bootstrap.test.ts": "129fd7a7cc26821a68907de4c0b092091c3a8a6eeb7dca4ec43b2b0354e15ac5",
+    "src/application/bootstrap.ts": "b698a869d4358ff070eee150160a2dd6c690878cbfcc51214bdc6b0df0c229db",
+    "src/application/session.test.ts": "4f3e41367d4e5d608960ddda570cfc7d219eb804538507c435d9d8610f861bfe",
+    "src/application/session.ts": "e74d0f8b1a1d53eaf295e648cf84ca370ec5a6d220705ff2bbe009c024277297",
+    "src/content/bootstrap.ts": "c6b3142c39f6b892baaaad750cac8dfaa1f3e8d3b5524394df42f13764837825",
+    "src/core/calendar.test.ts": "50176fc44923ffd1caf6bee0f94713d001b2e24046af44818aa25d8ac02abfcc",
+    "src/core/calendar.ts": "d252630c17d099e2907df5b0b24e57687f58ab3dd544e03e4a72f41703a83419",
+    "src/core/command-identity.ts": "5ddf588bdf06e756c3f95bd44268dd2ff9bc219cbcd7cd919a6e809eda50f830",
+    "src/core/commands.test.ts": "30f5c5bb268876543b913303dd2225d75c1a2ffdc55b50c66107223057641f71",
+    "src/core/commands.ts": "e90d2d42e910aa6d16c774b2a0651b47dd9a31fd4eaddc30585457e1256391ef",
+    "src/core/economic-time.test.ts": "cad6bde3a8bc482dee82bf0c5219ab6c19bd3b38537d454669980d1297e60122",
+    "src/core/economic-time.ts": "77ad7791095e7fc046eea61e1828c1c29521a40c0b2a8b5e3d1d98206191eae4",
+    "src/core/economy.test.ts": "2b7eff1b09ea29538a9ec3902621ee6cd40262f81e5f5c9299e2e9efc359367b",
+    "src/core/economy.ts": "cc28674b5a629edd4ef71190f923835f2edcbb162c3ff00b16dc5901beb50d0c",
+    "src/core/errors.ts": "14ff69a5ca0cdc3c4b93ffac3e139750c43c1048668ed733b2006e7e306c5124",
+    "src/core/facts.test.ts": "c298d8ed705c0e2dbfb7c302db9abe00ba5b3d493d1f7d0db4ca327e6388c610",
+    "src/core/facts.ts": "5ffea6cd89bdd80116fb7d274c478cb1cf17cddeee5d8d8062a3d7f8bb324704",
+    "src/core/hash.test.ts": "8b901090248ef989699cbf7100581a1cb30242b147d3e7b322b4dd6c50ce3207",
+    "src/core/hash.ts": "06425267a82e9cb8bac2d0258357d3b43822b12a7592aed38e69cfa17e9ea5a3",
+    "src/core/identity.ts": "2d30f89937a7c8ac84e0213d864aa52207fce416a7d8dc5c7327288f5bc8297c",
+    "src/core/json-input.ts": "317c5b79bad1db8e9289c29159c8e89cf467faf2dfc98431ebbc4f2407f0788a",
+    "src/core/ledger.test.ts": "94eadae0c48b68374f9e669f1dfb3f6db969eff4d68025a4fbc4f26729470548",
+    "src/core/ledger.ts": "43aadc5e06503800d2b742257544df48440eac3a335e6090f782d4c28c4ff025",
+    "src/core/money.test.ts": "836e5c5d775e29a018b3d55776cb4d288b68a10da6cd43efa4749bb9766fdaf9",
+    "src/core/money.ts": "4c3ce1830cd238f43bf65e031bcf07c49fdadf878e0839e80a15ea0e1d532d08",
+    "src/core/random.test.ts": "7adcad3a108f78521d8dee7c948e83658bc7c9062bdc41b4a62dac71ac005322",
+    "src/core/random.ts": "3ef7ca6de0896d42a456e2aae8760eea9c9a73af99afd7009e0d7353809e180b",
+    "src/core/run-types.ts": "d3a4d008bffe2dc9f58c4b2c638526ff9996076d4668a02a2103930ee7db6e01",
+    "src/core/run.ts": "f1ed9a34fc8ca5974ab681b8c0bfb1c3c5793dc3e75112db9956f94f460a95d0",
+    "src/core/timeline.test.ts": "826176fb23ae104d622b45e8d49a3b6855f8a9d818bc855541638b4731b50dfe",
+    "src/core/timeline.ts": "308ad442fe023747e60fda62e965d2458b5e328b6c7e4cee98bab2bd7a2ee465",
+    "src/core/versions.ts": "3594ad40947f99b43a21ee23629dd809f06ac4a113de63341c9af8bea15eea21",
+    "src/main.tsx": "3f3d9954d438a94785e147460a9e648d9ef7f3ffd7f4564017e5310eb4318eb0",
+    "src/persistence/codec.test.ts": "5506dcde13519134f736834bf4248f8ab30535ad7839154f85d7ad927b1ebeaa",
+    "src/persistence/codec.ts": "1ff8074f5b751fe8f52c0b24ba09da580aa0837aa36b20924b4f41ae70b6e160",
+    "src/persistence/indexeddb.test.ts": "5fb99e5137b67cf89f6de9ed2ebc9a7c507c0c0cbcba2760bf15a4e5046cd24f",
+    "src/persistence/indexeddb.ts": "e733bdfd9d21966e23fdc42337a1d883531bf975e1e9b9f1cf9d1d8aef12674f",
+    "src/persistence/schemas.ts": "ef1d51ec27e5ba5f6104b72427ed42904ba7a5e13836c70d69920ea1a57683cb",
+    "src/persistence/writer-lock.test.ts": "6a9da4132c045eb3b74a1ef75cf451c8f87b1a47ece0355934adb69ac94426aa",
+    "src/persistence/writer-lock.ts": "b5eb19e5beba9b7262cbfce046bdd8e413f8742a77a491184fcbbbd7a96498df",
+    "src/testing/abort-after-write.ts": "c2212256f6ba069035483ac5d19f67bffb46ac5f120eb8cf93761b0c73855b45",
+    "src/testing/fact-run.ts": "3873010d328bc2c505122f59751e0713c2c603bceaea078d41beb19aea855944",
+    "src/testing/memory-writer-access.ts": "61ee8279cd62e20f6f04ca5163354838acce011d9e24ead12baf10a9c8cff150",
+    "src/testing/persistence-browser.ts": "cff5c300def8c15bad87ba060fb40e3b59f211a8b9f030a9fe636c1cddb21a46",
+    "src/testing/q01-accounting.ts": "bf9690677fe052f76c0cb4b29067789ad9049217e92f5c9cd19c00e19d71ef4c",
+    "src/ui/App.test.tsx": "3242d6977f6a663a4fd0718c9598da6d7910a205cab069faee23db26e631b9f8",
+    "src/ui/App.tsx": "d1124cab11c7099284b9be47c5d47af0f2c1848fbb1d1bd181830bf9a0920d4c",
+    "tests/t04-storage.html": "c64ed2d8d58cd5472b86f03702671eb63639e372b4f31f2f8ecdb7923fcf0eb4",
+    "tsconfig.core.json": "48e4365127083963a2b2d24f5677e93414c3de97cd642ce155a9a10fddcb53df"
+  },
+  "snapshots": {
+    "t04-save-initial.json": {
+      "sha256": "c667cf2333ef1a958f922754c8e568656a7b252b54dd0e8ba01712e843aee02c",
+      "checksum": "87d84b169cbf06c4b8a05532fb9d8880293449e256f4e0a0729ec287580628e6"
+    },
+    "t04-save-final.json": {
+      "sha256": "a72fba5bf01781c2aa4b1de209ac6e9e0a68866a33d43778f701b4ba06ec904d",
+      "checksum": "031cc3f0316cd0ebef6c2e2b81b9c97322fb5f399608997ba210c6f1350c664b"
+    },
+    "t04-fact-initial.json": {
+      "sha256": "eda38c9606dac0ea03b811b5959c83c2b90b1a68734a1ca2b6d602a35258b2e4",
+      "checksum": "d12b062643aedd2554de66c7600d44a25aed4d4a62dc6f4b1361bed397688cfc"
+    },
+    "t04-fact-final.json": {
+      "sha256": "4881288ae25ba94375eb7c71988e520e45a415409ca122745588c8ff495da25d",
+      "checksum": "01006d38d67f369c0eb3573eefbda42cb588d0455cf9272f6cf6480b6e49faf9"
+    }
+  },
+  "commandSequence": [
+    {
+      "runId": "t04-evidence",
+      "actorId": "player",
+      "commandId": "advance-evidence",
+      "expectedRevision": 1,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2020-02-01"
+      }
+    },
+    {
+      "runId": "t04-evidence",
+      "actorId": "player",
+      "commandId": "advance-evidence",
+      "expectedRevision": 0,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2020-02-01"
+      }
+    },
+    {
+      "runId": "t04-evidence",
+      "actorId": "player",
+      "commandId": "advance-evidence",
+      "expectedRevision": 1,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2020-03-01"
+      }
+    },
+    {
+      "runId": "t04-evidence",
+      "actorId": "player",
+      "commandId": "new-old-revision",
+      "expectedRevision": 1,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2020-02-01"
+      }
+    }
+  ],
+  "actual": {
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "cashFen": 2200000,
+    "revision": 2,
+    "duplicate": "duplicate",
+    "changed": [
+      "COMMAND_ID_REUSED"
+    ],
+    "stale": [
+      "STALE_REVISION"
+    ],
+    "roundtripEqual": true,
+    "randomUnchanged": true
+  },
+  "expected": {
+    "cashFen": 2200000,
+    "revision": 2,
+    "duplicate": "duplicate",
+    "changed": [
+      "COMMAND_ID_REUSED"
+    ],
+    "stale": [
+      "STALE_REVISION"
+    ],
+    "roundtripEqual": true,
+    "randomUnchanged": true
+  },
+  "investigation": {
+    "rulesVersion": "rules-t04-fixture",
+    "seed": "fixed-fact-seed",
+    "command": {
+      "runId": "t04-evidence-fact",
+      "actorId": "player",
+      "commandId": "inspect-evidence",
+      "expectedRevision": 1,
+      "kind": "InspectSignal",
+      "payload": {
+        "factId": "fact1"
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 1,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "actionPointsSpent": 1,
+    "visibleEvidence": [
+      {
+        "evidence": "独立记录B已核实",
+        "id": "fact1",
+        "sourceEventId": "fixture:event"
+      }
+    ],
+    "randomUnchanged": true,
+    "scope": "isolated_fixture_not_normal_gameplay"
+  },
+  "browserEvidence": {
+    "file": "t04-browser-native.json",
+    "sha256": "1db6cbb9c73616c188c079fde9007ed3d2a59882a6b74e2aafb44353d89dfafc",
+    "screenshot": "t04-browser-native.jpg",
+    "screenshotSha256": "14b3c7e05afc72e9b16c08628e55a0ea6e7e577c55dd256c931f363e6cb276ea",
+    "passed": 46,
+    "total": 46
+  },
+  "notCovered": [
+    "full_business_or_world",
+    "playable_ui",
+    "real_two_tabs_product_flow",
+    "actual_close_dialog",
+    "quota_eviction_power_loss",
+    "full_campaign",
+    "original_png",
+    "human_playtest"
+  ]
+}

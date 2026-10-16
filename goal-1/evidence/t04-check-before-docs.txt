@@ -1,0 +1,52 @@
+
+> reborn-2020-ai-era@0.1.0 check
+> npm run typecheck && npm run test:unit && npm run test:docs && npm run check:docs && npm run build
+
+
+> reborn-2020-ai-era@0.1.0 typecheck
+> tsc -b
+
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+
+ Test Files  16 passed (16)
+      Tests  87 passed (87)
+   Start at  22:32:59
+   Duration  1.92s (tests 62%, import 23%, transform 13%, worker 2%)
+
+    Isolate  16 workers spawned · ~358ms startup each (spawn + environment, per file)
+             at least ~460ms faster with isolate: false — reuses workers across files instead of one per file
+
+
+> reborn-2020-ai-era@0.1.0 test:docs
+> python3 -B -m unittest discover -s scripts -p 'test_*.py'
+
+.................................................Configuring GitHub CLI's Git credential helper (no credentials in project files).
+.Configuring GitHub CLI's Git credential helper (no credentials in project files).
+Pushing main without force ...
+..Creating PRIVATE repository GOD-OF-PPT/reborn-2020-ai-era ...
+Configuring GitHub CLI's Git credential helper (no credentials in project files).
+Pushing main without force ...
+.Creating PRIVATE repository GOD-OF-PPT/reborn-2020-ai-era ...
+Configuring GitHub CLI's Git credential helper (no credentials in project files).
+Pushing main without force ...
+..Configuring GitHub CLI's Git credential helper (no credentials in project files).
+.....
+----------------------------------------------------------------------
+Ran 60 tests in 0.132s
+
+OK
+
+> reborn-2020-ai-era@0.1.0 check:docs
+> python3 -B scripts/check_docs.py --text-only && python3 -B scripts/check_plan.py && python3 -B scripts/check_competitive_design.py
+
+README.md: broken local link goal-1/evidence/t04-validation.md
+docs/22-command-save-contract.md: broken local link ../goal-1/evidence/t04-validation.md
+PENDING ORIGINAL ASSET: assets/concepts/style-01-anime.png
+PENDING ORIGINAL ASSET: assets/concepts/style-02-pixel.png
+PENDING ORIGINAL ASSET: assets/concepts/style-03-cinematic.png

@@ -1,0 +1,316 @@
+{
+  "taskId": "T04",
+  "evidenceType": "browser-native-storage",
+  "database": "reborn-t04-native-5e7e9de5-1358-4133-b560-2d3ed0f692b1",
+  "origin": "http://127.0.0.1:5173",
+  "secureContext": true,
+  "nativeFactory": true,
+  "total": 46,
+  "passed": 46,
+  "checks": [
+    {
+      "name": "secure localhost context",
+      "passed": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "native IndexedDB available",
+      "passed": true,
+      "actual": "function",
+      "expected": "function"
+    },
+    {
+      "name": "native Web Locks available",
+      "passed": true,
+      "actual": "function",
+      "expected": "function"
+    },
+    {
+      "name": "first session owns native writer lock",
+      "passed": true,
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "failed request remains unsaved",
+      "passed": true,
+      "actual": "unsaved",
+      "expected": "unsaved"
+    },
+    {
+      "name": "concurrent same intent shares failure",
+      "passed": true,
+      "actual": "unsaved",
+      "expected": "unsaved"
+    },
+    {
+      "name": "head put really succeeded before abort",
+      "passed": true,
+      "actual": {
+        "writeSucceeded": true,
+        "abortIssued": true
+      },
+      "expected": {
+        "writeSucceeded": true,
+        "abortIssued": true
+      }
+    },
+    {
+      "name": "no premature saved state",
+      "passed": true,
+      "actual": "unsaved",
+      "expected": "unsaved"
+    },
+    {
+      "name": "public cash stays at committed snapshot",
+      "passed": true,
+      "actual": 2600000,
+      "expected": 2600000
+    },
+    {
+      "name": "no premature success receipt",
+      "passed": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "candidate export keeps computed next state",
+      "passed": true,
+      "actual": 2200000,
+      "expected": 2200000
+    },
+    {
+      "name": "old native snapshot/receipt/log bundle survives abort",
+      "passed": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "abort leaves no new backup",
+      "passed": true,
+      "actual": null,
+      "expected": null
+    },
+    {
+      "name": "new commands blocked while candidate exists",
+      "passed": true,
+      "actual": [
+        "UNSAVED_CANDIDATE"
+      ],
+      "expected": [
+        "UNSAVED_CANDIDATE"
+      ]
+    },
+    {
+      "name": "unsaved close-warning signal is installed",
+      "passed": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "retry saves same candidate",
+      "passed": true,
+      "actual": "saved",
+      "expected": "saved"
+    },
+    {
+      "name": "cash published after transaction complete",
+      "passed": true,
+      "actual": 2200000,
+      "expected": 2200000
+    },
+    {
+      "name": "one success receipt after retry",
+      "passed": true,
+      "actual": 2,
+      "expected": 2
+    },
+    {
+      "name": "retry clears warning",
+      "passed": true,
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "new native connection reloads committed snapshot",
+      "passed": true,
+      "actual": 2,
+      "expected": 2
+    },
+    {
+      "name": "second session is read-only",
+      "passed": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "read-only session cannot mutate",
+      "passed": true,
+      "actual": [
+        "READ_ONLY_SESSION"
+      ],
+      "expected": [
+        "READ_ONLY_SESSION"
+      ]
+    },
+    {
+      "name": "writer can save literal text",
+      "passed": true,
+      "actual": "saved",
+      "expected": "saved"
+    },
+    {
+      "name": "private note remains literal data",
+      "passed": true,
+      "actual": "fixture <script>not executable</script>",
+      "expected": "fixture <script>not executable</script>"
+    },
+    {
+      "name": "public view omits private note",
+      "passed": true,
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "reader can take released native lock after reload",
+      "passed": true,
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "restore starting revision",
+      "passed": true,
+      "actual": 3,
+      "expected": 3
+    },
+    {
+      "name": "explicit restore preserves selected revision",
+      "passed": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "restore advances physical generation",
+      "passed": true,
+      "actual": 4,
+      "expected": 4
+    },
+    {
+      "name": "restore backs up prior state",
+      "passed": true,
+      "actual": 3,
+      "expected": 3
+    },
+    {
+      "name": "same game revision cannot bypass storage generation",
+      "passed": true,
+      "actual": "STALE_REVISION",
+      "expected": "STALE_REVISION"
+    },
+    {
+      "name": "selected branch can replay its command",
+      "passed": true,
+      "actual": "saved",
+      "expected": "saved"
+    },
+    {
+      "name": "duplicate import does not rewind a later accepted command",
+      "passed": true,
+      "actual": {
+        "duplicate": true,
+        "revision": 2
+      },
+      "expected": {
+        "duplicate": true,
+        "revision": 2
+      }
+    },
+    {
+      "name": "higher save version is rejected",
+      "passed": true,
+      "actual": "UNSUPPORTED_SAVE_VERSION",
+      "expected": "UNSUPPORTED_SAVE_VERSION"
+    },
+    {
+      "name": "invalid import keeps entire previous bundle",
+      "passed": true,
+      "actual": "b2201f64119fb5526341bb93c979c9c1403c726dd2ffdd532c2376b2f86f6007",
+      "expected": "b2201f64119fb5526341bb93c979c9c1403c726dd2ffdd532c2376b2f86f6007"
+    },
+    {
+      "name": "preview declares the investigation cost",
+      "passed": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "investigation failure is unsaved",
+      "passed": true,
+      "actual": "unsaved",
+      "expected": "unsaved"
+    },
+    {
+      "name": "uncommitted hidden evidence is not published",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "uncommitted cost is not advertised as saved",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "investigation retry saves once",
+      "passed": true,
+      "actual": "saved",
+      "expected": "saved"
+    },
+    {
+      "name": "saved investigation spends one real point",
+      "passed": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "evidence becomes visible only after commit",
+      "passed": true,
+      "actual": 1,
+      "expected": 1
+    },
+    {
+      "name": "native save does not reroll investigation truth",
+      "passed": true,
+      "actual": 2686358525,
+      "expected": 2686358525
+    },
+    {
+      "name": "native save preserves random streams",
+      "passed": true,
+      "actual": "0a97fe290cffa471f31227191f0d538d2c9db427e0079333104835f0e1f62c0d",
+      "expected": "0a97fe290cffa471f31227191f0d538d2c9db427e0079333104835f0e1f62c0d"
+    },
+    {
+      "name": "fact export/import preserves full state",
+      "passed": true,
+      "actual": "525663876209aad4e30ab01eb651b9c0cdc8b30f23c19f6bd4d4014160d5805d",
+      "expected": "525663876209aad4e30ab01eb651b9c0cdc8b30f23c19f6bd4d4014160d5805d"
+    },
+    {
+      "name": "public projection contains no raw random field",
+      "passed": true,
+      "actual": false,
+      "expected": false
+    }
+  ],
+  "beforeUnloadScope": "synthetic cancelable signal, not an actual navigation dialog",
+  "notCovered": [
+    "playable_game_ui",
+    "browser_close_dialog",
+    "full_campaign",
+    "quota_eviction_power_loss",
+    "human_playtest"
+  ]
+}

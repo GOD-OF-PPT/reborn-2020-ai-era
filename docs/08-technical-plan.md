@@ -8,11 +8,11 @@
 
 核验来源：[Vite](https://vite.dev/guide/)、[React自建应用指南](https://react.dev/learn/build-a-react-app-from-scratch)、[Vitest](https://vitest.dev/guide/)及各包npm官方注册表的version/engines/peerDependencies。本机Node 22.12.0、npm 10.9.0；所有所选工具的Node版本交集已在package.json engines与.npmrc严格检查中声明，实际执行结果单独记录于goal-1任务证据。
 
-现有命令为dev、build、preview、typecheck、test:unit、test:docs、check:docs和check。Vitest在Node环境执行src下真实测试，当前只有React入口渲染烟测；后续规则单测直接加入相同入口，不提前创建空回放/e2e命令。dev/preview绑定127.0.0.1并启用strictPort。
+现有命令为dev、build、preview、typecheck、test:unit、test:docs、check:docs和check。Vitest在Node环境执行src下规则、命令、存档/会话测试及React入口渲染烟测；不提前创建空回放/e2e命令。dev/preview绑定127.0.0.1并启用strictPort。
 
 资料扫描使用目录剪枝，排除node_modules、dist、coverage、浏览器报告及明确缓存目录，仍检查docs、planning、src/content、goal和普通子包中的Markdown/JSON；保留缺原图时text-only与完整资产验收的区别。非法项目Markdown编码返回具名错误；新增扫描回归不算游戏测试。
 
-T03已建立[钱/日期/行动内核](21-economy-kernel.md)，由tsconfig.core.json在无DOM/Node类型的ES2023环境独立检查；实际内核测试通过test:unit执行，evidence:kernel另采集Q01账务起止快照与哈希。GameRun命令封套、随机和原子持久化仍属T04，不能从财务发生项回执推断已完成存档。
+T03已建立[钱/日期/行动内核](21-economy-kernel.md)，由tsconfig.core.json在无DOM/Node类型的ES2023环境独立检查；实际内核测试通过test:unit执行，evidence:kernel另采集Q01账务起止快照与哈希。T04增加[命令、随机与存档模块](22-command-save-contract.md)：zod 4.6.7严格校验、@noble/hashes 2.4.0作SHA256，开发测试使用fake-indexeddb 6.2.5，全部精确锁定。核心自身仍不使用DOM/Node类型；为跳过Zod中未使用URL声明所需的环境类型，对第三方声明启用skipLibCheck，不声称检查其内部声明。真实浏览器存储与Node适配器结果分别记录。
 
 ## 1. 结构与职责
 
@@ -30,7 +30,7 @@ T03已建立[钱/日期/行动内核](21-economy-kernel.md)，由tsconfig.core.j
 | src/ui | 只读投影、命令、输入校验提示 | 不裁决收益或修改随机状态 |
 | src/persistence | 存档封套、原子提交、迁移、备份 | 不把单条数据库请求成功当整档成功 |
 
-当前已建立src/main.tsx、src/ui及上述钱/日期/行动内核，其余业务、内容与持久化路径随对应任务建立。规则模块不引用React、浏览器时钟或网络；同一组规则命令须能在无界面环境回放。
+当前已建立src/main.tsx、src/ui、钱/日期/行动内核及src/application、src/persistence，src/content仅有独立版本化开局工作参数。完整内容/世界门控和路线业务随对应任务建立。规则模块不引用React、浏览器时钟或网络；同一组规则命令须能在无界面环境回放。
 
 ## 2. 命令与事务边界
 

@@ -14,19 +14,23 @@
     "typecheck": "tsc -b",
     "test:unit": "vitest run --config vitest.config.ts",
     "evidence:kernel": "node --experimental-strip-types scripts/collect_kernel_evidence.ts",
+    "evidence:save": "node --experimental-strip-types scripts/collect_save_evidence.ts",
     "test:docs": "python3 -B -m unittest discover -s scripts -p 'test_*.py'",
     "check:docs": "python3 -B scripts/check_docs.py --text-only && python3 -B scripts/check_plan.py && python3 -B scripts/check_competitive_design.py",
     "check": "npm run typecheck && npm run test:unit && npm run test:docs && npm run check:docs && npm run build"
   },
   "dependencies": {
+    "@noble/hashes": "2.4.0",
     "react": "19.3.1",
-    "react-dom": "19.3.1"
+    "react-dom": "19.3.1",
+    "zod": "4.6.7"
   },
   "devDependencies": {
     "@types/node": "22.20.5",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.2",
+    "fake-indexeddb": "6.2.5",
     "typescript": "6.0.2",
     "vite": "8.3.4",
     "vitest": "5.0.5"

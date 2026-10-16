@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>T04 原生存档验证</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 72rem; padding: 0 1.5rem; color: #182b35; background: #f3f5f4; }
+      h1 { font-size: 1.8rem; } p { line-height: 1.7; }
+      button { font: inherit; color: white; background: #204a5c; border: 0; padding: .8rem 1.2rem; border-radius: .3rem; cursor: pointer; }
+      button:disabled { opacity: .6; cursor: wait; }
+      pre { background: white; padding: 1.2rem; border: 1px solid #d3dedb; white-space: pre-wrap; overflow-wrap: anywhere; font-size: .85rem; line-height: 1.5; }
+      #status { font-weight: 700; }
+    </style>
+  </head>
+  <body>
+    <h1>T04：原生IndexedDB与写锁验证</h1>
+    <p>本页只创建隔离的合成测试库，调用实际命令、存档和会话模块。它不是可玩游戏、真人试玩或正式资产验收。</p>
+    <button id="run-checks" type="button">运行原生存储检查</button>
+    <p id="status" role="status">尚未运行</p>
+    <pre id="result" aria-label="原生存储检查结果">等待运行</pre>
+    <script type="module" src="/src/testing/persistence-browser.ts"></script>
+  </body>
+</html>
