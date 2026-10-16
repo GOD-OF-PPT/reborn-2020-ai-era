@@ -12,14 +12,16 @@
 
 资料扫描使用目录剪枝，排除node_modules、dist、coverage、浏览器报告及明确缓存目录，仍检查docs、planning、src/content、goal和普通子包中的Markdown/JSON；保留缺原图时text-only与完整资产验收的区别。非法项目Markdown编码返回具名错误；新增扫描回归不算游戏测试。
 
+T03已建立[钱/日期/行动内核](21-economy-kernel.md)，由tsconfig.core.json在无DOM/Node类型的ES2023环境独立检查；实际内核测试通过test:unit执行，evidence:kernel另采集Q01账务起止快照与哈希。GameRun命令封套、随机和原子持久化仍属T04，不能从财务发生项回执推断已完成存档。
+
 ## 1. 结构与职责
 
 单人、电脑优先、本地存档，分层二维场景加网页组件。首版无账号、真实支付、真实券商、线上中转站或运行时模型依赖。
 
 | 拟建模块 | 独占职责 | 不允许做什么 |
 |---|---|---|
-| src/core/time、actions | 日期队列、行动预留与执行 | UI点击次数不能当游戏时间 |
-| src/core/ledger | 账户、科目、资金占用、退款与更正 | 业务适配器不得直接改余额 |
+| src/core/calendar.ts、timeline.ts、economic-time.ts、economy.ts | 日期队列、行动预留与执行 | UI点击次数不能当游戏时间 |
+| src/core/ledger.ts、money.ts | 账户、资金占用、退款与财务余额 | 业务适配器不得直接改余额 |
 | src/core/opportunities | 生命周期、容量、维护、退出 | 不复制五套顶层状态 |
 | src/core/market、equity | 订单/撮合/权益/稀释/锁定 | 不能用市值代现金、股权代治理 |
 | src/core/business | 视频、课程、中转的交付/用量适配器 | 不实际生成视频或转发模型请求 |
@@ -28,7 +30,7 @@
 | src/ui | 只读投影、命令、输入校验提示 | 不裁决收益或修改随机状态 |
 | src/persistence | 存档封套、原子提交、迁移、备份 | 不把单条数据库请求成功当整档成功 |
 
-当前已建立src/main.tsx、src/ui入口，其余规则、内容与持久化路径随对应任务建立。规则模块不引用React、浏览器时钟或网络；同一组规则命令须能在无界面环境回放。
+当前已建立src/main.tsx、src/ui及上述钱/日期/行动内核，其余业务、内容与持久化路径随对应任务建立。规则模块不引用React、浏览器时钟或网络；同一组规则命令须能在无界面环境回放。
 
 ## 2. 命令与事务边界
 
