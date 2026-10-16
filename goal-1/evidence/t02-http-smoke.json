@@ -1,0 +1,39 @@
+{
+  "taskId": "T02",
+  "date": "2026-10-16",
+  "type": "engineering_http_smoke_not_game_acceptance",
+  "httpChecks": [
+    {
+      "url": "http://127.0.0.1:5173/",
+      "status": 200,
+      "check": "Chinese HTML entry"
+    },
+    {
+      "url": "http://127.0.0.1:5173/src/main.tsx",
+      "status": 200,
+      "check": "module or built asset served"
+    },
+    {
+      "url": "http://127.0.0.1:5173/src/ui/App.tsx",
+      "status": 200,
+      "check": "module or built asset served"
+    },
+    {
+      "url": "http://127.0.0.1:4173/",
+      "status": 200,
+      "check": "Chinese HTML entry"
+    },
+    {
+      "url": "http://127.0.0.1:4173/assets/index-BAJ7Wx2S.js",
+      "status": 200,
+      "check": "module or built asset served"
+    },
+    {
+      "url": "http://127.0.0.1:4173/assets/index-BnT6Pn_c.css",
+      "status": 200,
+      "check": "module or built asset served"
+    }
+  ],
+  "occupiedPortRefused": true,
+  "occupiedPortOutput": "\n> reborn-2020-ai-era@0.1.0 dev\n> vite --host 127.0.0.1 --strictPort --port 5173\n\nerror when starting dev server:\nError: Port 5173 is already in use\n    at httpServerStart (file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vite/dist/node/chunks/node.js:14706:10)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async startServer (file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vite/dist/node/chunks/node.js:25156:30)\n    at async Object.listen (file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vite/dist/node/chunks/node.js:24962:4)\n    at async CAC.<anonymous> (file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vite/dist/node/cli.js:725:3)\n"
+}

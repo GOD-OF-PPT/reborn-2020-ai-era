@@ -89,6 +89,6 @@ W401—W406按[实施19](19-research-implementation-plan.md)汇总交付；前�
 
 真实行情使用条件未核验，继续明确模拟模式；原图缺失，继续灰盒但不通过美术验收。批处理如改变真实账目或漏义务，立即阻断；主次卡片造成强制事件丢失，立即阻断。课程/中转会计难理解时改默认展示与小单规模，不撤资金保护；五路线手感同质时改决策，不堆统计。
 
-开工前的具体工程待办：scripts/check_docs.py当前递归扫描Markdown/JSON且只排除.git和.delivery，E02须限制扫描范围，避免node_modules、dist、coverage等产物进入资料检查；不在本次规划复核中冒充已修复。scripts/publish_github.py是只支持private/main的旧初始化脚本，不适用于当前公开仓库；保留其历史用途，不把它作为游戏部署或本仓库日常发布入口。
+E02的资料扫描问题已在T02改为目录剪枝，排除node_modules、dist、coverage等依赖/产物并通过9项扫描回归，具体工程检查见[T02验证](../goal-1/evidence/t02-validation.md)。scripts/publish_github.py仍是只支持private/main的旧初始化脚本，不适用于当前公开仓库；保留其历史用途，不把它作为游戏部署或本仓库日常发布入口。
 
 不在人员和速度未知时编造工期/负责人。不因本次文档推送启用遥测、账户、支付、Pages、许可证、后台任务或权限变更。素材与公开部署仍需单独决定。

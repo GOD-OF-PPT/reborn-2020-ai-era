@@ -1,6 +1,16 @@
 # 08｜技术实施方案 v0.3
 
-状态：开发规格，不是已建工程。仓库仍无package.json、src或可运行游戏。React + TypeScript + Vite为工作选型，版本在P002核验并锁定；Vite官方提供react-ts模板，不能把本页当作已安装依赖。[官方指南](https://vite.dev/guide/)，核验于2026-10-13。
+状态：规则开发规格；2026-10-16的T02已建立React/TypeScript/Vite最小工程，只有明确标识的工程预览，尚无可玩游戏。依赖与命令基线见下文；[Vite官方指南](https://vite.dev/guide/)的react-ts模板在临时目录生成后选择性合入，未覆盖既有资料。
+
+## T02工程基线（2026-10-16）
+
+直接依赖与锁文件使用精确版本：React/React DOM 19.3.1，Vite 8.3.4，React插件6.1.2，TypeScript 6.0.2，Vitest 5.0.5，类型包见package.json。TypeScript沿官方create-vite 9.2.1模板的6.0系列基线；Node类型包使用与本机22主线对应的22.20.5。没有添加UI组件库、分析SDK、运行时模型或在线业务依赖。
+
+核验来源：[Vite](https://vite.dev/guide/)、[React自建应用指南](https://react.dev/learn/build-a-react-app-from-scratch)、[Vitest](https://vitest.dev/guide/)及各包npm官方注册表的version/engines/peerDependencies。本机Node 22.12.0、npm 10.9.0；所有所选工具的Node版本交集已在package.json engines与.npmrc严格检查中声明，实际执行结果单独记录于goal-1任务证据。
+
+现有命令为dev、build、preview、typecheck、test:unit、test:docs、check:docs和check。Vitest在Node环境执行src下真实测试，当前只有React入口渲染烟测；后续规则单测直接加入相同入口，不提前创建空回放/e2e命令。dev/preview绑定127.0.0.1并启用strictPort。
+
+资料扫描使用目录剪枝，排除node_modules、dist、coverage、浏览器报告及明确缓存目录，仍检查docs、planning、src/content、goal和普通子包中的Markdown/JSON；保留缺原图时text-only与完整资产验收的区别。非法项目Markdown编码返回具名错误；新增扫描回归不算游戏测试。
 
 ## 1. 结构与职责
 
@@ -18,7 +28,7 @@
 | src/ui | 只读投影、命令、输入校验提示 | 不裁决收益或修改随机状态 |
 | src/persistence | 存档封套、原子提交、迁移、备份 | 不把单条数据库请求成功当整档成功 |
 
-以上路径全部待建立。规则模块不引用React、浏览器时钟或网络；可在无界面环境运行同一组命令回放。
+当前已建立src/main.tsx、src/ui入口，其余规则、内容与持久化路径随对应任务建立。规则模块不引用React、浏览器时钟或网络；同一组规则命令须能在无界面环境回放。
 
 ## 2. 命令与事务边界
 
@@ -58,7 +68,7 @@ MoneyFen为有界整数，BasisPoints为0—10000整数；计算过程避免乘�
 
 ## 6. 构建、测试与交付
 
-P002应提供并实际验证dev、build、typecheck、test:unit脚本，后续再添加test:replay、test:e2e和validate:content；这些命令当前不存在，不在本次声称通过。仓库已有文件不得被脚手架覆盖；先在临时子目录生成工程再有选择地合入。
+T02已提供dev、build、typecheck、test:unit等工程脚本，是否通过以goal对应的实际命令证据为准；后续再添加test:replay、test:e2e和validate:content，未实现前不声称这些检查通过。仓库已有文件不得被脚手架覆盖；模板先在临时目录整理再选择性合入。
 
 测试分层：整数与账本单测 → 命令/日期/存档集成 → 固定种子路线回放 → 内容可达性 → 浏览器操作与美术。Q01—Q40均需实现侧证据。快照S01—S05用于隔离验证，不能替代从2020正常游玩到2025的通关测试。
 

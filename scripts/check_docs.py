@@ -3,6 +3,7 @@
 from __future__ import annotations
 import hashlib
 import json
+import os
 import re
 import struct
 import sys
@@ -10,11 +11,33 @@ from pathlib import Path
 from urllib.parse import unquote, urlparse
 
 
+EXCLUDED_DIRECTORIES = frozenset({
+    '.git', '.delivery', 'node_modules', 'dist', 'coverage',
+    'playwright-report', 'test-results', '__pycache__', '.vite',
+    '.cache', '.venv', '.pytest_cache',
+})
+
+
+def project_files(root: Path):
+    """Prune generated directories before descending, including nested packages."""
+    for directory, children, names in os.walk(root, followlinks=False):
+        children[:] = sorted(name for name in children if name not in EXCLUDED_DIRECTORIES)
+        for name in sorted(names):
+            path = Path(directory) / name
+            if path.suffix in {'.md', '.json'}:
+                yield path
+
+
 def check(root: Path, *, text_only: bool = False) -> list[str]:
     errors: list[str] = []
-    documents = sorted(p for p in root.rglob('*.md') if '.git' not in p.parts and '.delivery' not in p.parts)
+    files = sorted(project_files(root))
+    documents = [path for path in files if path.suffix == '.md']
     for doc in documents:
-        text = doc.read_text(encoding='utf-8')
+        try:
+            text = doc.read_text(encoding='utf-8')
+        except (OSError, UnicodeError) as exc:
+            errors.append(f'{doc.relative_to(root)}: unreadable Markdown ({exc})')
+            continue
         text = re.sub(r'```.*?```', '', text, flags=re.S)
         for target in re.findall(r'!?\[[^\]]*\]\(([^\s)]+)(?:\s+"[^"]*")?\)', text):
             parsed = urlparse(target)
@@ -23,8 +46,8 @@ def check(root: Path, *, text_only: bool = False) -> list[str]:
             file_path = (doc.parent / unquote(parsed.path)).resolve()
             if not file_path.is_relative_to(root.resolve()) or not file_path.exists():
                 errors.append(f'{doc.relative_to(root)}: broken local link {target}')
-    for path in root.rglob('*.json'):
-        if '.git' not in path.parts and '.delivery' not in path.parts:
+    for path in files:
+        if path.suffix == '.json':
             try:
                 json.loads(path.read_text(encoding='utf-8'))
             except (ValueError, OSError) as exc:
