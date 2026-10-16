@@ -1,6 +1,6 @@
 // Independent runtime working data; historical claims have limited source scope.
 export const CAMPAIGN_CONTENT = {
-  "version": "world-work-v1",
+  "version": "world-work-v2",
   "sources": [
     {
       "id": "H001",
@@ -419,6 +419,7 @@ export const CAMPAIGN_CONTENT = {
     "audience_research"
   ],
   "preparationKeys": [
+    "paid_manual_case",
     "manual_case",
     "customer_research",
     "api_application_materials",

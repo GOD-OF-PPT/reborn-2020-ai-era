@@ -49,7 +49,7 @@ export class RunSession {
 
   get view() {
     // Never publish uncommitted outcomes, hidden evidence, or success receipts.
-    return { ...projectRun(this.#record.run), saveStatus: this.#status, busy: this.#flight !== null || this.#externalBusy, readOnly: this.#lease.mode !== 'writer', readOnlyReason: this.#lease.reason, hasCandidate: this.#candidate !== null, pendingRevision: this.#candidate?.nextRun.revision ?? null }
+    return { ...projectRun(this.#record.run), features:this.#options.registry.runtime?.project?.(this.#record.run)??{}, saveStatus: this.#status, busy: this.#flight !== null || this.#externalBusy, readOnly: this.#lease.mode !== 'writer', readOnlyReason: this.#lease.reason, hasCandidate: this.#candidate !== null, pendingRevision: this.#candidate?.nextRun.revision ?? null }
   }
   get savedView() { return projectRun(this.#record.run) }
   get needsUnsavedWarning(): boolean { return this.#candidate !== null || this.#status === 'saving' }

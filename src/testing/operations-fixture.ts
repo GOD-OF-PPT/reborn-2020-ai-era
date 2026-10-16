@@ -15,7 +15,7 @@ export function createOperationsFixture(catalog:unknown=OPERATING_FIXTURE_CATALO
  const versions={...BOOTSTRAP_VERSIONS,rulesVersion:'rules-t06-fixture',contentVersion:'operations-fixture-v1',contentHash:hashValue({world:runtime.pack,operations:operations.catalog})}
  const input={runId:'operating-fixture',actorId:'player',commandId:'create-fixture',backgroundId:'technical_employee',seed:'operating-fixture-seed'}
  const base=createInitialRun(input);const world=runtime.initialWorld([{id:'player',kind:'player',accountId:'personal',businessId:null,route:null,contractId:null,personId:null,capacityUnits:1}],input.backgroundId)
- const state=operations.initial(input.backgroundId);const model=runtime.schedule({...base,world,operations:state})
+ const state=operations.initial(input.backgroundId);const model=operations.scheduleOffers(runtime.schedule({...base,world,operations:state}))
  const registry=createCampaignRegistry(runtime,versions,createOperatingHandlers(operations));const codec=new RunCodec(registry,['technical_employee','content_employee'])
  const run=createGameRun(input,{origin:'fixture',personalAccountId:'personal',controlledAccountIds:['personal'],economy:model.economy,timeline:model.timeline,world,operations:state},versions)
  const commands:unknown[]=[]

@@ -47,6 +47,7 @@ export interface CommandEffect { readonly model: RuleModel; readonly summary: st
 export interface RegistryRuntime {
   advance(model: RuleModel, target: { readonly date: string; readonly phase?: DayPhase }): RuleModel
   validate(run: GameRun): void
+  project?(run:GameRun):Readonly<Record<string,unknown>>
 }
 export interface CommandHandler {
   readonly kind: string

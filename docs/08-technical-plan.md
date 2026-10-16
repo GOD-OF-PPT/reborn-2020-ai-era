@@ -16,6 +16,8 @@ T03已建立[钱/日期/行动内核](21-economy-kernel.md)，由tsconfig.core.j
 
 ## 1. 结构与职责
 
+T07的[手工首单25](25-manual-first-order-contract.md)登记正常生产报价及可选组合指令、期限默认、有据案例和提交后投影；schema4明确拒绝旧schema1—3。Session的features扩展只接收已提交Run并置于独立命名空间，不能覆盖保存状态或发布候选收入；本轮没有提前接入可玩UI。
+
 T06的[共享经营合同24](24-shared-operations-contract.md)增加operations状态、实际就业/工资、统一日期资源、合同收尾和有限融资；正常schema3明确拒绝旧schema1/2。WorldRuntime通过可信扩展处理经营事件和同一产能，不从JSON注册函数；前台仍为工程预览。
 
 T05增加[内容与世界调用合同23](23-content-world-contract.md)：schema2、严格内容包、事件/期限/准备任务、资格、世界时钟与公开投影。正常入口createCampaignRun与经济底座/测试夹具分开；旧schema1明确拒绝并保留历史导出。validate:content实际检查包与初始绑定；evidence:world是内容/时钟夹具回放，不冒充完整路线或浏览器结果。

@@ -64,7 +64,7 @@ export function assertWorldRun(pack: ContentPack, run: GameRun): void {
   }
   for (const item of world.preparations) {
     const instance = instances.get(item.sourceEventId)
-    requireRule(pack.preparationKeys.includes(item.key) && bindings.has(item.bindingId) && item.date <= date && instance?.bindingId === item.bindingId && authored(instance, (effect) => effect.op === 'recordPreparation' && effect.key === item.key), 'INVALID_PREPARATION_SOURCE')
+    requireRule(pack.preparationKeys.includes(item.key) && bindings.has(item.bindingId) && item.date <= date && ((instance?.bindingId === item.bindingId && authored(instance, (effect) => effect.op === 'recordPreparation' && effect.key === item.key)) || (item.bindingId === 'player' && run.operations?.contracts.some(c=>c.id===item.sourceEventId&&c.status==='settled'&&c.caseKey===item.key&&c.settledAt===item.date))), 'INVALID_PREPARATION_SOURCE')
   }
   for (const item of world.entitlements) {
     const instance = instances.get(item.sourceEventId)
