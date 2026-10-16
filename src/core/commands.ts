@@ -11,6 +11,8 @@ import { requireRule, RuleError } from './errors.ts'
 import { assertGameRun } from './run.ts'
 import { assertCompatible } from './versions.ts'
 import type { CommandEnvelope, GameRun, RuleModel, VersionSet, ProposedRun, RejectedCommand, ExistingReceipt, CauseEntry } from './run-types.ts'
+import type { DayPhase } from './timeline.ts'
+import type { WorldLog } from './content-types.ts'
 
 const id = z.string().min(1).max(128).regex(/^[A-Za-z0-9][A-Za-z0-9_.:/-]*$/)
 const opaqueId = z.string().min(1).max(512).regex(/^[A-Za-z0-9][A-Za-z0-9_.:/-]*$/)
@@ -36,9 +38,14 @@ export interface CommandView {
   readonly cursor: GameRun['timeline']['cursor']
   readonly pause: GameRun['timeline']['pause']
   readonly evidence: ReturnType<typeof visibleFacts>
+  readonly world: RuleModel['world']
 }
 export interface CommandContext { readonly commandId: string; readonly runId: string; readonly actorId: string; readonly date: string }
 export interface CommandEffect { readonly model: RuleModel; readonly summary: string; readonly domain: string }
+export interface RegistryRuntime {
+  advance(model: RuleModel, target: { readonly date: string; readonly phase?: DayPhase }): RuleModel
+  validate(run: GameRun): void
+}
 export interface CommandHandler {
   readonly kind: string
   normalize(payload: unknown): unknown
@@ -61,7 +68,8 @@ export function defineCommand<Payload>(kind: string, schema: z.ZodType<Payload>,
 export class CommandRegistry {
   readonly versions: VersionSet
   readonly #handlers: ReadonlyMap<string, CommandHandler>
-  constructor(versions: VersionSet, handlers: readonly CommandHandler[]) {
+  readonly runtime: RegistryRuntime | null
+  constructor(versions: VersionSet, handlers: readonly CommandHandler[], runtime: RegistryRuntime | null = null) {
     const entries = new Map<string, CommandHandler>()
     for (const handler of handlers) {
       requireRule(id.safeParse(handler.kind).success && handler.kind !== 'CreateRun' && !entries.has(handler.kind), 'INVALID_COMMAND_REGISTRATION')
@@ -69,6 +77,7 @@ export class CommandRegistry {
     }
     this.versions = Object.freeze({ ...versions })
     this.#handlers = entries
+    this.runtime = runtime
   }
   get(kind: string): CommandHandler | undefined { return this.#handlers.get(kind) }
   normalize(kind: string, payload: unknown): unknown {
@@ -83,7 +92,7 @@ export class CommandRegistry {
   }
 }
 
-export function createBaseRegistry(versions: VersionSet, extra: readonly CommandHandler[] = []): CommandRegistry {
+export function createBaseRegistry(versions: VersionSet, extra: readonly CommandHandler[] = [], runtime: RegistryRuntime | null = null): CommandRegistry {
   const advance = defineCommand('AdvanceTime', z.strictObject({ date, phase: z.enum(DAY_PHASES).default('snapshot') }), (view, payload) => {
     requireRule(view.phase === 'playing', 'RUN_NOT_PLAYING')
     requireRule(payload.date <= '2025-12-31', 'DATE_OUTSIDE_CAMPAIGN')
@@ -91,6 +100,8 @@ export function createBaseRegistry(versions: VersionSet, extra: readonly Command
     checkedAdvanceTarget({ cursor: view.cursor }, payload)
     return allowed()
   }, (model, payload) => {
+    if (runtime) { const next = runtime.advance(model, payload); return { model: next, summary: `推进至${next.timeline.cursor.date}${next.timeline.pause ? '，等待处置' : ''}`, domain: 'time' } }
+    requireRule(model.world === null, 'WORLD_HANDLER_REQUIRED')
     const result = advanceEconomicTime(model.timeline, model.economy, payload)
     return { model: { ...model, timeline: result.timeline, economy: result.state }, summary: `推进至${result.timeline.cursor.date}${result.status === 'paused' ? '，等待处置' : ''}`, domain: 'time' }
   })
@@ -105,15 +116,16 @@ export function createBaseRegistry(versions: VersionSet, extra: readonly Command
     requireRule(action.status === 'draft' || action.status === 'reserved', 'ACTION_CANNOT_BE_CANCELLED')
     return { ...allowed(), releasedFen: action.status === 'reserved' ? action.definition.costFen : 0 }
   }, (model, payload, context) => ({ model: { ...model, economy: applyEconomy(model.economy, { id: `command:${context.commandId}:cancel`, sourceEventId: `command:${context.commandId}`, date: context.date, kind: 'cancel_action', actionId: payload.actionId }) }, summary: '未执行计划已取消', domain: 'actions' }))
-  return new CommandRegistry(versions, [advance, note, gap, cancel, ...extra])
+  return new CommandRegistry(versions, [advance, note, gap, cancel, ...extra], runtime)
 }
 
 function commandView(run: GameRun): CommandView {
-  return copyJson({ runId: run.runId, actorId: run.actorId, revision: run.revision, date: run.timeline.cursor.date, phase: run.phase, controlledAccountIds: run.controlledAccountIds, economy: run.economy, cursor: run.timeline.cursor, pause: run.timeline.pause, evidence: visibleFacts(run.facts) })
+  return copyJson({ runId: run.runId, actorId: run.actorId, revision: run.revision, date: run.timeline.cursor.date, phase: run.phase, controlledAccountIds: run.controlledAccountIds, economy: run.economy, cursor: run.timeline.cursor, pause: run.timeline.pause, evidence: visibleFacts(run.facts), world: run.world })
 }
 
 export function projectRun(run: GameRun) {
-  return copyJson({ runId: run.runId, revision: run.revision, origin: run.origin, date: run.timeline.cursor.date, phase: run.phase, accounts: run.controlledAccountIds.map((accountId) => ({ accountId, ...accountPosition(run.economy.ledger, accountId) })), budget: actionBudget(run.economy, run.timeline.cursor.date), evidence: visibleFacts(run.facts), receipts: run.receipts.map(({ commandId, kind, revisionAfter, summary }) => ({ commandId, kind, revisionAfter, summary })) })
+  const world = run.world === null ? null : { anchors: run.world.anchors.map(({ id, happenedAt }) => ({ id, happenedAt })), newsRead: run.world.newsRead, favoriteMemories: run.world.favoriteMemories, events: run.world.instances.map(({ id, definitionId, bindingId, createdAt, expiresAt, status, choiceId, resolution }) => ({ id, definitionId, bindingId, createdAt, expiresAt, status, choiceId, resolution })), jobs: run.world.jobs, preparations: run.world.preparations, entitlements: run.world.entitlements, stoppedBindings: run.world.stoppedBindings, evidence: run.world.evidence }
+  return copyJson({ runId: run.runId, revision: run.revision, origin: run.origin, date: run.timeline.cursor.date, phase: run.phase, accounts: run.controlledAccountIds.map((accountId) => ({ accountId, ...accountPosition(run.economy.ledger, accountId) })), budget: actionBudget(run.economy, run.timeline.cursor.date), evidence: visibleFacts(run.facts), receipts: run.receipts.map(({ commandId, kind, revisionAfter, summary }) => ({ commandId, kind, revisionAfter, summary })), world })
 }
 
 function prepare(run: GameRun, raw: unknown, registry: CommandRegistry, principalActorId: string) {
@@ -151,6 +163,7 @@ export function previewCommand(run: GameRun, raw: unknown, registry: CommandRegi
 export function evaluateCommand(run: GameRun, raw: unknown, registry: CommandRegistry, principalActorId: string): ProposedRun | RejectedCommand | ExistingReceipt {
   try {
     assertGameRun(run)
+    registry.runtime?.validate(run)
     const { command, handler, payload, identity } = prepare(run, raw, registry, principalActorId)
     const previous = run.receipts.find((receipt) => receipt.commandId === command.commandId)
     if (previous) {
@@ -161,9 +174,9 @@ export function evaluateCommand(run: GameRun, raw: unknown, registry: CommandReg
     requireRule(handler, command.kind === 'CreateRun' ? 'RUN_ALREADY_EXISTS' : 'UNKNOWN_COMMAND')
     const inspection = handler.inspect(commandView(run), payload)
     if (!inspection.allowed) return { status: 'rejected', reasonCodes: inspection.reasonCodes }
-    const model: RuleModel = copyJson({ controlledAccountIds: run.controlledAccountIds, phase: run.phase, economy: run.economy, timeline: run.timeline, random: run.random, facts: run.facts, privateNotes: run.privateNotes })
+    const model: RuleModel = copyJson({ controlledAccountIds: run.controlledAccountIds, phase: run.phase, economy: run.economy, timeline: run.timeline, random: run.random, facts: run.facts, privateNotes: run.privateNotes, world: run.world })
     const effect = handler.apply(model, payload, { commandId: command.commandId, runId: run.runId, actorId: command.actorId, date: run.timeline.cursor.date })
-    requireRule(Object.keys(effect.model).length === 7 && Object.keys(effect.model).every((key) => ['controlledAccountIds', 'phase', 'economy', 'timeline', 'random', 'facts', 'privateNotes'].includes(key)), 'INVALID_RULE_MODEL')
+    requireRule(Object.keys(effect.model).length === 8 && Object.keys(effect.model).every((key) => ['controlledAccountIds', 'phase', 'economy', 'timeline', 'random', 'facts', 'privateNotes', 'world'].includes(key)), 'INVALID_RULE_MODEL')
     for (const fact of run.facts) {
       const nextFact = effect.model.facts.find((item) => item.id === fact.id)
       requireRule(nextFact && nextFact.roll === fact.roll && nextFact.domain === fact.domain && nextFact.sourceEventId === fact.sourceEventId && nextFact.createdAt === fact.createdAt && (fact.evidence === null || fact.evidence === nextFact.evidence), 'FACT_REWRITE')
@@ -171,11 +184,15 @@ export function evaluateCommand(run: GameRun, raw: unknown, registry: CommandReg
     requireRule(run.revision < Number.MAX_SAFE_INTEGER, 'REVISION_EXHAUSTED')
     const causeId = `cause:${command.commandId}`
     const cause: CauseEntry = { id: causeId, commandId: command.commandId, date: effect.model.timeline.cursor.date, domain: effect.domain, parentIds: [], sourceEventId: `command:${command.commandId}`, visibleSummary: effect.summary, visibility: 'visible' }
+    const priorLogs = new Set(run.world?.logs.map((log) => log.id) ?? [])
+    const worldCauses: CauseEntry[] = (effect.model.world?.logs.filter((log) => !priorLogs.has(log.id)) ?? []).map((log: WorldLog) => ({ id: log.id, commandId: command.commandId, date: log.date, domain: 'world', parentIds: [...log.parentIds], sourceEventId: log.sourceEventId, visibleSummary: log.text, visibility: log.visibility }))
+    const causes = [cause, ...worldCauses]
     const entries = effect.model.economy.ledger.transactions.slice(run.economy.ledger.transactions.length)
-    const receipt = { runId: run.runId, commandId: command.commandId, actorId: command.actorId, kind: command.kind, payloadHash: identity.hash, payloadSignature: identity.signature, revisionBefore: run.revision, revisionAfter: run.revision + 1, date: effect.model.timeline.cursor.date, summary: effect.summary, transactionIds: entries.map((entry) => entry.id), causeIds: [causeId] }
-    const nextRun: GameRun = { ...run, ...effect.model, revision: run.revision + 1, receipts: [...run.receipts, receipt], causes: [...run.causes, cause] }
+    const receipt = { runId: run.runId, commandId: command.commandId, actorId: command.actorId, kind: command.kind, payloadHash: identity.hash, payloadSignature: identity.signature, revisionBefore: run.revision, revisionAfter: run.revision + 1, date: effect.model.timeline.cursor.date, summary: effect.summary, transactionIds: entries.map((entry) => entry.id), causeIds: causes.map((entry) => entry.id) }
+    const nextRun: GameRun = { ...run, ...effect.model, revision: run.revision + 1, receipts: [...run.receipts, receipt], causes: [...run.causes, ...causes] }
     assertGameRun(nextRun)
-    return { status: 'proposed', previousRevision: run.revision, nextRun, receipt, ledgerEntries: entries, causeEntries: [cause] }
+    registry.runtime?.validate(nextRun)
+    return { status: 'proposed', previousRevision: run.revision, nextRun, receipt, ledgerEntries: entries, causeEntries: causes }
   } catch (error) {
     if (error instanceof RuleError) return { status: 'rejected', reasonCodes: [error.code] }
     throw error

@@ -2,6 +2,7 @@ import { applyEconomy, type EconomyOperation, type EconomyState } from './econom
 import { requireRule } from './errors.ts'
 import { advanceTimeline, type DayPhase, type Timeline } from './timeline.ts'
 import type { IsoDate } from './calendar.ts'
+import { isWorldOperation, type RunOperation } from './content-types.ts'
 
 export function scheduledActionSkipReason(state: EconomyState, operation: EconomyOperation): string | null {
   if (operation.kind !== 'execute_action' && operation.kind !== 'complete_action') return null
@@ -13,16 +14,18 @@ export function scheduledActionSkipReason(state: EconomyState, operation: Econom
   return null
 }
 
-export function advanceEconomicTime(timeline: Timeline<EconomyOperation>, state: EconomyState, target: { readonly date: IsoDate; readonly phase?: DayPhase }) {
+export function advanceEconomicTime<Operation extends RunOperation>(timeline: Timeline<Operation>, state: EconomyState, target: { readonly date: IsoDate; readonly phase?: DayPhase }) {
   requireRule(state.asOf <= timeline.cursor.date, 'ECONOMY_AHEAD_OF_CLOCK')
   const result = advanceTimeline(timeline, state, target, (model, event) => {
-    requireRule(event.payload.date === event.date, 'EVENT_OPERATION_DATE_MISMATCH')
-    const skippedReason = scheduledActionSkipReason(model, event.payload)
+    const operation = event.payload
+    requireRule(!isWorldOperation(operation), 'WORLD_HANDLER_REQUIRED')
+    requireRule(operation.date === event.date, 'EVENT_OPERATION_DATE_MISMATCH')
+    const skippedReason = scheduledActionSkipReason(model, operation)
     if (skippedReason !== null) return { state: model, skippedReason }
-    const next = applyEconomy(model, event.payload)
-    const receipt = next.ledger.receipts.find((item) => item.id === event.payload.id)
-    const obligationId = 'obligationId' in event.payload ? event.payload.obligationId : null
-    const stillDue = next.ledger.obligations.some((item) => item.remainingFen > 0 && (item.originOperationId === event.payload.id || item.id === obligationId))
+    const next = applyEconomy(model, operation)
+    const receipt = next.ledger.receipts.find((item) => item.id === operation.id)
+    const obligationId = 'obligationId' in operation ? operation.obligationId : null
+    const stillDue = next.ledger.obligations.some((item) => item.remainingFen > 0 && (item.originOperationId === operation.id || item.id === obligationId))
     return { state: next, ...(receipt?.status === 'due' && stillDue ? { pauseReason: 'CASH_SHORTFALL' } : {}) }
   })
   const asOf = result.timeline.cursor.date

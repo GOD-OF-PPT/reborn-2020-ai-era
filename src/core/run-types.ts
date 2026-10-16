@@ -1,5 +1,6 @@
 import type { IsoDate } from './calendar.ts'
-import type { EconomyOperation, EconomyState } from './economy.ts'
+import type { EconomyState } from './economy.ts'
+import type { RunOperation, WorldState } from './content-types.ts'
 import type { FrozenFact, FactDescriptor } from './facts.ts'
 import type { RandomState } from './random.ts'
 import type { Timeline } from './timeline.ts'
@@ -15,10 +16,11 @@ export interface RuleModel {
   readonly controlledAccountIds: readonly string[]
   readonly phase: 'playing' | 'epilogue' | 'finished'
   readonly economy: EconomyState
-  readonly timeline: Timeline<EconomyOperation>
+  readonly timeline: Timeline<RunOperation>
   readonly random: RandomState
   readonly facts: readonly FrozenFact[]
   readonly privateNotes: string
+  readonly world: WorldState | null
 }
 export interface CommandEnvelope {
   readonly commandId: string
@@ -76,8 +78,9 @@ export interface InitialRunState {
   readonly personalAccountId: string
   readonly controlledAccountIds: readonly string[]
   readonly economy: EconomyState
-  readonly timeline: Timeline<EconomyOperation>
+  readonly timeline: Timeline<RunOperation>
   readonly initialFacts?: readonly FactDescriptor[]
+  readonly world?: WorldState | null
 }
 export interface ProposedRun {
   readonly status: 'proposed'

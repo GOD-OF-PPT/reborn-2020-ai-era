@@ -10,8 +10,10 @@ import { RunCodec } from '../src/persistence/codec.ts'
 import { canonicalJson } from '../src/core/identity.ts'
 import { accountFunds } from '../src/core/ledger.ts'
 import { createFactFixture } from '../src/testing/fact-run.ts'
+import { evidenceDirectory } from './evidence-output.ts'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
+const outputDirectory = evidenceDirectory(root, 't04-save-evidence.json', ['t04-save-initial.json', 't04-save-final.json', 't04-fact-initial.json', 't04-fact-final.json'])
 const hash = (value: string | Uint8Array) => createHash('sha256').update(value).digest('hex')
 const registry = createBaseRegistry(BOOTSTRAP_VERSIONS)
 const codec = new RunCodec(registry, ['technical_employee', 'content_employee'])
@@ -42,7 +44,7 @@ if (canonicalJson(fixture.run.random) !== canonicalJson(investigated.nextRun.ran
 
 const directory = 'goal-1/evidence/'
 const snapshots = { 't04-save-initial.json': before, 't04-save-final.json': after, 't04-fact-initial.json': factBefore, 't04-fact-final.json': factAfter }
-for (const [name, value] of Object.entries(snapshots)) writeFileSync(join(root, directory, name), value + '\n')
+for (const [name, value] of Object.entries(snapshots)) writeFileSync(join(outputDirectory, name), value + '\n')
 function sourcesIn(directory: string): string[] {
   return readdirSync(join(root, directory), { withFileTypes: true }).flatMap((entry) => entry.isDirectory() ? sourcesIn(`${directory}/${entry.name}`) : /\.tsx?$/.test(entry.name) ? [`${directory}/${entry.name}`] : [])
 }
@@ -59,8 +61,8 @@ const record = {
   actual: { preview, cashFen: accountFunds(loaded.economy.ledger, 'personal').cashFen, revision: loaded.revision, duplicate: duplicate.status, changed: changed.reasonCodes, stale: stale.reasonCodes, roundtripEqual: true, randomUnchanged: canonicalJson(initial.random) === canonicalJson(loaded.random) },
   expected: { cashFen: 2_200_000, revision: 2, duplicate: 'duplicate', changed: ['COMMAND_ID_REUSED'], stale: ['STALE_REVISION'], roundtripEqual: true, randomUnchanged: true },
   investigation: { rulesVersion: fixture.run.versions.rulesVersion, seed: fixture.run.seed, command: investigation, preview: factPreview, actionPointsSpent: projectRun(investigated.nextRun).budget.spent, visibleEvidence: projectRun(investigated.nextRun).evidence, randomUnchanged: true, scope: 'isolated_fixture_not_normal_gameplay' },
-  browserEvidence: { file: 't04-browser-native.json', sha256: hash(readFileSync(join(root, directory, 't04-browser-native.json'))), screenshot: 't04-browser-native.jpg', screenshotSha256: hash(readFileSync(join(root, directory, 't04-browser-native.jpg'))), passed: browser.passed, total: browser.total },
+  browserEvidence: { scope: 'historical_report_only_not_reexecuted_for_current_sources', file: 't04-browser-native.json', sha256: hash(readFileSync(join(root, directory, 't04-browser-native.json'))), screenshot: 't04-browser-native.jpg', screenshotSha256: hash(readFileSync(join(root, directory, 't04-browser-native.jpg'))), passed: browser.passed, total: browser.total },
   notCovered: ['full_business_or_world', 'playable_ui', 'real_two_tabs_product_flow', 'actual_close_dialog', 'quota_eviction_power_loss', 'full_campaign', 'original_png', 'human_playtest'],
 }
-writeFileSync(join(root, directory, 't04-save-evidence.json'), JSON.stringify(record, null, 2) + '\n')
-console.log(JSON.stringify({ evidence: directory + 't04-save-evidence.json', cashFen: record.actual.cashFen, revision: record.actual.revision, browserChecks: `${browser.passed}/${browser.total}`, investigationCost: record.investigation.actionPointsSpent }, null, 2))
+writeFileSync(join(outputDirectory, 't04-save-evidence.json'), JSON.stringify(record, null, 2) + '\n')
+console.log(JSON.stringify({ evidence: join(outputDirectory, 't04-save-evidence.json'), cashFen: record.actual.cashFen, revision: record.actual.revision, historicalBrowserChecks: `${browser.passed}/${browser.total} (not rerun)`, investigationCost: record.investigation.actionPointsSpent }, null, 2))

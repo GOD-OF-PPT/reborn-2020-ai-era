@@ -29,7 +29,7 @@ export interface Timeline<Payload> {
   readonly cursor: TimePoint
   readonly pending: readonly ScheduledEvent<Payload>[]
   readonly receipts: readonly EventReceipt[]
-  readonly pause: { readonly instanceId: string; readonly reason: string } | null
+  readonly pause: { readonly instanceId: string; readonly reason: string; readonly source?: 'command' } | null
 }
 
 function phaseRank(phase: TimePoint['phase']): number { return phase === 'before' ? -1 : DAY_PHASES.indexOf(phase) }

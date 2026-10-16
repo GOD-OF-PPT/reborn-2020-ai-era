@@ -6,5 +6,6 @@ export default defineConfig({
     include: ['src/**/*.test.{ts,tsx}'],
     clearMocks: true,
     restoreMocks: true,
+    maxWorkers: 4,
   },
 })

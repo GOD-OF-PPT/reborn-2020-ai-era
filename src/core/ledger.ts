@@ -311,6 +311,7 @@ function createPayable(state: WorkingLedger, operation: OperationBase & { readon
   identifier(operation.obligationId)
   requireRule(operation.amountFen > 0, 'INVALID_OBLIGATION_AMOUNT')
   requireRule(!state.obligations.some((item) => item.id === operation.obligationId), 'OBLIGATION_ID_REUSED')
+  if (contractId !== null) requireRule(state.contracts.some((contract) => contract.id === contractId && contract.accountId === operation.accountId && (operation.businessId === undefined || operation.businessId === contract.businessId)), 'INVALID_OBLIGATION_BINDING')
   const payable = { id: operation.obligationId, accountId: operation.accountId, businessId: operation.businessId ?? null, contractId, counterpartyId, date: operation.date, sourceEventId: operation.sourceEventId, originOperationId: operation.id, kind, amountFen: operation.amountFen, remainingFen: operation.amountFen, protectionReservationId }
   state.obligations.push(payable)
   return payable
@@ -409,6 +410,7 @@ export function assertLedger(state: LedgerState): void {
     money(obligation.amountFen); money(obligation.remainingFen)
     requireRule(obligation.remainingFen <= obligation.amountFen, 'INVALID_OBLIGATION_AMOUNT')
     requireRule(findAccount(state, obligation.accountId).kind !== 'external' && findAccount(state, obligation.counterpartyId).kind === 'external', 'INVALID_OBLIGATION_BINDING')
+    if (obligation.contractId !== null) requireRule(state.contracts.some((contract) => contract.id === obligation.contractId && contract.accountId === obligation.accountId && (obligation.businessId === null || obligation.businessId === contract.businessId)), 'INVALID_OBLIGATION_BINDING')
     if (obligation.kind === 'refund_delivered') {
       const reservation = state.reservations.find((item) => item.id === obligation.protectionReservationId)
       requireRule(reservation && reservation.kind === 'customer_protection' && reservation.accountId === obligation.accountId && reservation.originId === obligation.id && reservation.amountFen === obligation.remainingFen, 'REFUND_PROTECTION_MISMATCH')
@@ -595,7 +597,7 @@ export function applyLedger(state: LedgerState, operation: LedgerOperation): Led
       break
     }
     case 'due_expense': {
-      const payable = createPayable(next, operation, 'expense', operation.counterpartyId, null, null)
+      const payable = createPayable(next, operation, 'expense', operation.counterpartyId, operation.contractId ?? null, null)
       metric(next, operation, account.id, 'cost', operation.amountFen)
       if (paymentCapacity(next, account.id) >= payable.remainingFen) payObligation(next, operation, payable, payable.remainingFen)
       else status = 'due'

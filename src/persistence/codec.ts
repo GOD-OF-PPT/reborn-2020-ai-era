@@ -9,6 +9,7 @@ import { compareTimePoints, queueEvent, type TimePoint } from '../core/timeline.
 import type { CommandRegistry } from '../core/commands.ts'
 import type { GameRun, VersionSet } from '../core/run-types.ts'
 import type { EconomyOperation } from '../core/economy.ts'
+import { isWorldOperation } from '../core/content-types.ts'
 import { envelopeSchema, eventSchema, parseEconomyOperation, parseLedgerOperation, runSchema } from './schemas.ts'
 
 export const MAX_SAVE_BYTES = 10 * 1024 * 1024
@@ -48,6 +49,8 @@ export class RunCodec {
     requireRule(this.backgrounds.includes(run.backgroundId), 'UNKNOWN_BACKGROUND')
     assertGameRun(run)
     this.#references(run)
+    requireRule(run.world === null || this.registry.runtime !== null, 'WORLD_HANDLER_REQUIRED')
+    this.registry.runtime?.validate(run)
     return run
   }
 
@@ -110,7 +113,9 @@ export class RunCodec {
       requireRule(previousPoint === null || compareTimePoints(event, previousPoint) > 0, 'EVENT_HISTORY_OUT_OF_ORDER')
       requireRule(compareTimePoints(event, run.timeline.cursor) <= 0, 'EVENT_HISTORY_AHEAD_OF_CURSOR')
       previousPoint = event
-      if (receipt.skippedReason !== undefined) {
+      if (isWorldOperation(event.payload)) {
+        requireRule(this.registry.runtime && run.world, 'WORLD_HANDLER_REQUIRED')
+      } else if (receipt.skippedReason !== undefined) {
         // Validate the historical reason against its earlier operation. The action
         // can have progressed since that receipt (executed -> interrupted/completed).
         const reason = receipt.skippedReason
@@ -141,7 +146,8 @@ export class RunCodec {
     requireRule(reconstructed.pending.length === run.timeline.pending.length && canonicalJson(reconstructed.pending) === canonicalJson(run.timeline.pending), 'INVALID_EVENT_QUEUE')
     if (run.timeline.pause !== null) {
       const last = run.timeline.receipts.at(-1)
-      requireRule(last?.instanceId === run.timeline.pause.instanceId && last.pauseReason === run.timeline.pause.reason && run.timeline.cursor.instanceId === last.instanceId, 'INVALID_PAUSE_REFERENCE')
+      if (run.timeline.pause.source === 'command') requireRule(run.timeline.pause.reason === 'CASH_SHORTFALL' && ledger.obligations.some((obligation) => obligation.originOperationId === run.timeline.pause?.instanceId && obligation.remainingFen > 0) && run.causes.some((cause) => cause.id === run.timeline.pause?.instanceId && cause.date === run.timeline.cursor.date), 'INVALID_PAUSE_REFERENCE')
+      else requireRule(last?.instanceId === run.timeline.pause.instanceId && last.pauseReason === run.timeline.pause.reason && run.timeline.cursor.instanceId === last.instanceId, 'INVALID_PAUSE_REFERENCE')
     }
     const transactions = new Set(ledger.transactions.map((entry) => entry.id))
     const claimedTransactions: string[] = []

@@ -16,6 +16,8 @@ T03已建立[钱/日期/行动内核](21-economy-kernel.md)，由tsconfig.core.j
 
 ## 1. 结构与职责
 
+T05增加[内容与世界调用合同23](23-content-world-contract.md)：schema2、严格内容包、事件/期限/准备任务、资格、世界时钟与公开投影。正常入口createCampaignRun与经济底座/测试夹具分开；旧schema1明确拒绝并保留历史导出。validate:content实际检查包与初始绑定；evidence:world是内容/时钟夹具回放，不冒充完整路线或浏览器结果。
+
 单人、电脑优先、本地存档，分层二维场景加网页组件。首版无账号、真实支付、真实券商、线上中转站或运行时模型依赖。
 
 | 拟建模块 | 独占职责 | 不允许做什么 |
