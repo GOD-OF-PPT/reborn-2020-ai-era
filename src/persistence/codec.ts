@@ -170,6 +170,7 @@ export class RunCodec {
         requireRule(receipt.kind === 'CreateRun', 'INVALID_CREATION_RECEIPT')
         const creation = recordBody(payload)
         requireRule(creation.backgroundId === run.backgroundId && creation.origin === run.origin && creation.seed === run.seed, 'INVALID_CREATION_RECEIPT')
+        requireRule(canonicalJson(creation.playerProfile)===canonicalJson(run.playerProfile),'INVALID_PLAYER_PROFILE_RECEIPT')
       } else requireRule(receipt.kind !== 'CreateRun', 'INVALID_CREATION_RECEIPT')
       requireRule(receipt.date <= run.timeline.cursor.date && receipt.transactionIds.every((id) => transactions.has(id)), 'INVALID_TRANSACTION_REFERENCE')
       for (const causeId of receipt.causeIds) requireRule(run.causes.some((cause) => cause.id === causeId && cause.commandId === receipt.commandId), 'INVALID_CAUSE_REFERENCE')

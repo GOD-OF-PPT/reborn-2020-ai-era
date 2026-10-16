@@ -1,0 +1,1713 @@
+{
+  "taskId": "T09",
+  "checkpointId": "C09",
+  "evidenceType": "browser_export_replay_audit",
+  "baseCommit": "45d876c960097f45d4aa65ae4b0178a0bd007d3c",
+  "reproduceCommand": "npm run evidence:browser-audit",
+  "sourceHashes": {
+    "src/application/bootstrap.test.ts": "129fd7a7cc26821a68907de4c0b092091c3a8a6eeb7dca4ec43b2b0354e15ac5",
+    "src/application/bootstrap.ts": "b698a869d4358ff070eee150160a2dd6c690878cbfcc51214bdc6b0df0c229db",
+    "src/application/browser-game.ts": "416f550048b7664b4810468fe8cc8af7badf5d820f0bf380236229462ca3cf89",
+    "src/application/campaign.test.ts": "bc5a07c73e6372433177679b6b8ee43df6bbcaec015bd57a76db5d418fc3527b",
+    "src/application/campaign.ts": "3d6b88f48b3e732e2597323862cb92517aac131ff6833a4b003710b5a08526f0",
+    "src/application/cash-forecast.test.ts": "75257831e625b8e322c61725d97b9cdcd91cf2b7e07a1faab5980356f8558f39",
+    "src/application/cash-forecast.ts": "cb65ed48144111abb26dad58cbd1743b069358dd884c87a1ae2dc42873d92747",
+    "src/application/employment.test.ts": "d88fcb35f48f15dc32fd20dc6642322bb8efb3677f502fcbf458d97eb96221df",
+    "src/application/entry-profile.test.ts": "24603fa0587c0b4a2e5c2ae2d5ed5d91a9e7da702d2ebba6e7a1c5fc6f790f15",
+    "src/application/first-order.test.ts": "6e4d216b26c250885767569e6eb82fb2b31c576520ab1c7cc1272c68d981f0d5",
+    "src/application/first-order.ts": "09b09c4702e3235db3c871f0a86e5dfea76cf25cf63e4a4f7b00a5df1a4269e9",
+    "src/application/game-controller.test.ts": "3b3753af67a5a137b24ee1af9b5aed8544a9ecc990a0f0cd9312bbf9dcabe6e2",
+    "src/application/game-controller.ts": "278845a4a9b85bfce946b9b6097722731002a5b662e7d25fc510f26f78bf971f",
+    "src/application/game-snapshot.ts": "490d7565be79273ad9f8aacfa2b6f9cf4a1b584999b66cefd9df1694846fec86",
+    "src/application/market-commands.ts": "1675ba4f8afc4bddbb1fe5e22508c47c063e1be66b98424c7a63a8b06a2c1e66",
+    "src/application/market-save.test.ts": "6653a54371d5a0df393c01f10ebf5177dcab66f04ada755209e11161fe2fc353",
+    "src/application/market.test.ts": "f9201fc518e65206679b53cd658685db4a15437348ccad5c2979e37cb25bd23a",
+    "src/application/operations-commands.ts": "438c6dae2c1173dc5b3f3f1c2542ba102f660ae5096929e56066079f5ca6e790",
+    "src/application/operations.test.ts": "67978bca31199dd2eed3a320450941b83b4932e937525b86663140e261c1699a",
+    "src/application/playable-advance.ts": "14644b25cf49d167b1e50b9c9801ea6d5636e810d1c86c9e22252b323727e356",
+    "src/application/playable.test.ts": "baab091517b65438591b74bc3af600f1fe442828f24826cf8ccf5c2580372318",
+    "src/application/session.test.ts": "4f3e41367d4e5d608960ddda570cfc7d219eb804538507c435d9d8610f861bfe",
+    "src/application/session.ts": "d1d2adeebcd09820446ff7df46ebb8a40623d1da759fa3859236c39a130e34a7",
+    "src/application/workbench-projection.test.ts": "bd8ef1c3b6a50b804dd57bf1bc6ea6d508dab324d0031fa3a89c51d0f7bea3dc",
+    "src/application/workbench-projection.ts": "6fa62836d3901dbfbdd4390b2a214cfb0afcde9f3604d5232cc077dbfbd57b59",
+    "src/application/world-session.test.ts": "5305325cca0e9220011cc1892959e833bed49d40565a8cd475e798c4441860c1",
+    "src/content/bootstrap.ts": "a74c282579227a154088789ac9071e05caaa11ea73aad9640600b6fa88704b47",
+    "src/content/campaign.ts": "b3189e37e9382358e1d3701d968e4b1b3da77edee3afac8da9b5ca73ba495d29",
+    "src/content/first-order.ts": "0d71c72ef62914add3e516ef391e5812df7c8a5792841102ad32acd9ca38b75c",
+    "src/content/market.ts": "e3a6eb66cdf3bab446af6aa4a5a49297fb1689d42a6092c7434fd660e7bc98f1",
+    "src/content/operations.ts": "abfb3293951d84ea547cbdc24746878d7a90fab5e3e2347ae8ee72fd675cd39e",
+    "src/core/calendar.test.ts": "50176fc44923ffd1caf6bee0f94713d001b2e24046af44818aa25d8ac02abfcc",
+    "src/core/calendar.ts": "d252630c17d099e2907df5b0b24e57687f58ab3dd544e03e4a72f41703a83419",
+    "src/core/command-identity.ts": "5ddf588bdf06e756c3f95bd44268dd2ff9bc219cbcd7cd919a6e809eda50f830",
+    "src/core/commands.test.ts": "30f5c5bb268876543b913303dd2225d75c1a2ffdc55b50c66107223057641f71",
+    "src/core/commands.ts": "711c92d43f2b99f7f6daaaffd49ff464cf5621140f5a2bd792539024d199d58c",
+    "src/core/content-schema.ts": "bcaaa021c91d2284a525d5a0a5bb48f0776ce120e7a30c96c837686e327fcc67",
+    "src/core/content-types.ts": "33b66c6f2bdab3aa6f7340f7ae7aa4b1eb6219e69e0eed9c9507e9b1d19d9a79",
+    "src/core/content.test.ts": "df41486022437aa2216b4fef44dad43d9685d75e96d0f136eae6890b3091f7fe",
+    "src/core/economic-time.test.ts": "cad6bde3a8bc482dee82bf0c5219ab6c19bd3b38537d454669980d1297e60122",
+    "src/core/economic-time.ts": "ef452e8c497e7fd654f96a4f6fa62a0642fbd08c200c74583384bd81ac0b47d7",
+    "src/core/economy.test.ts": "2b7eff1b09ea29538a9ec3902621ee6cd40262f81e5f5c9299e2e9efc359367b",
+    "src/core/economy.ts": "cc28674b5a629edd4ef71190f923835f2edcbb162c3ff00b16dc5901beb50d0c",
+    "src/core/errors.ts": "14ff69a5ca0cdc3c4b93ffac3e139750c43c1048668ed733b2006e7e306c5124",
+    "src/core/facts.test.ts": "c298d8ed705c0e2dbfb7c302db9abe00ba5b3d493d1f7d0db4ca327e6388c610",
+    "src/core/facts.ts": "5ffea6cd89bdd80116fb7d274c478cb1cf17cddeee5d8d8062a3d7f8bb324704",
+    "src/core/first-order.ts": "66e6b4eb2d6008eb1f04230cc63cf1a67637bc96582c331bac37e5ea9c9d7215",
+    "src/core/hash.test.ts": "8b901090248ef989699cbf7100581a1cb30242b147d3e7b322b4dd6c50ce3207",
+    "src/core/hash.ts": "06425267a82e9cb8bac2d0258357d3b43822b12a7592aed38e69cfa17e9ea5a3",
+    "src/core/identity.ts": "2d30f89937a7c8ac84e0213d864aa52207fce416a7d8dc5c7327288f5bc8297c",
+    "src/core/json-input.ts": "317c5b79bad1db8e9289c29159c8e89cf467faf2dfc98431ebbc4f2407f0788a",
+    "src/core/ledger.test.ts": "94eadae0c48b68374f9e669f1dfb3f6db969eff4d68025a4fbc4f26729470548",
+    "src/core/ledger.ts": "994e380af8941809ef4cc67329fdfbe2888ce5579e22194a7c17501725979f74",
+    "src/core/market-ledger.test.ts": "db1d143cca090df21073786b972556e37f9dee5899e3447e3280877d9dae0790",
+    "src/core/market-math.ts": "bbd791e0083d1b61820a3220f7424604d47e40fa1a9a43e417fd24f3676daadd",
+    "src/core/market-projection.ts": "419a08e31d3fc9f1f692934f5fb7a2cace2b762fa8e40bf088c68cd40f190deb",
+    "src/core/market-schema.ts": "5528363053e83176043ac072e392cd6d79a1d65654c66ff94b296fa0c348fc29",
+    "src/core/market-types.ts": "128ff61a76351fa638223ba6770f8280eb40256892af1363d39ea57f06724984",
+    "src/core/market-validation.ts": "50b04cfc279109c1b86109d8b4d9ef91acbdbcfaa48d71661121be3630ed9fa4",
+    "src/core/market.ts": "166fb7074bb24cd79ec8e89ab00864a1a29e7a6e0d39bffc1b333140b27adc39",
+    "src/core/money.test.ts": "836e5c5d775e29a018b3d55776cb4d288b68a10da6cd43efa4749bb9766fdaf9",
+    "src/core/money.ts": "4c3ce1830cd238f43bf65e031bcf07c49fdadf878e0839e80a15ea0e1d532d08",
+    "src/core/operating-ledger.test.ts": "8720251b2b316745347e264c0cc40cddbb4db5aa097dfc8d82452e612713dd91",
+    "src/core/operations-accrual.ts": "6fa00caf7448b9146d229ace91d5027f5404c8c52603beb2e549ca5632a1071f",
+    "src/core/operations-calendar.ts": "ea2517dd47ae1e74234c3b8afb39546d11bfa588c3dbb49a6dba8dc3c417515e",
+    "src/core/operations-schema.ts": "ec42b73c2857461517adefccec790f99c621339427f945056ef2eb1ed5ea4404",
+    "src/core/operations-types.ts": "7e42303bd72cab61fcba0a3e73272fc27c90bfc5f6c4c1f662f5080ab4cb8bcf",
+    "src/core/operations-validation.ts": "5b2c0a15c57ba37b7941d9eb1e82d938845dc9e2d86aed16ed039bf462117748",
+    "src/core/operations.ts": "58f3fb558e3684be14b86a17a3731fa62c8bb6a96fded062f12a3ac5be537007",
+    "src/core/player-profile.ts": "b7050d18ee1463f2ff63f4bbbe11a59e88f810e65cb6121cdfa6a4d3469244c4",
+    "src/core/random.test.ts": "7adcad3a108f78521d8dee7c948e83658bc7c9062bdc41b4a62dac71ac005322",
+    "src/core/random.ts": "3ef7ca6de0896d42a456e2aae8760eea9c9a73af99afd7009e0d7353809e180b",
+    "src/core/record-schemas.ts": "967d07cc034513d6a3280142279a1066ad99b69cc68c60a476112d8f3efb10a0",
+    "src/core/run-types.ts": "b5c42d173fa40b3e8350af22dc81e560742f1bb2ed16f4fcc739d456f2459493",
+    "src/core/run.ts": "6b721e73f6e7422db215bf81f99455ceff696358723c709a8c98a54b1a2ba54a",
+    "src/core/timeline.test.ts": "826176fb23ae104d622b45e8d49a3b6855f8a9d818bc855541638b4731b50dfe",
+    "src/core/timeline.ts": "54767b25792c41643b7728ae0ddc1c3e78ee1a9d9dee08ddba567eb712069ff8",
+    "src/core/versions.ts": "3594ad40947f99b43a21ee23629dd809f06ac4a113de63341c9af8bea15eea21",
+    "src/core/world-projection.ts": "055780c9e37e6dc63e107e93a3280456ebb9551333b00e948531d6968ea1cc41",
+    "src/core/world-schema.ts": "af9a51e0505ea130417f6bf48e71345569a3afe0f46b53ea1c53cf9e983fc36f",
+    "src/core/world-scope.test.ts": "1b55cde00ad37bd17140fe91922fdf400643dccb71064d31b48b004edd201db3",
+    "src/core/world-validation.ts": "b0714963d529ea8e9dc1eb175d5123bde7d285ce0ca42193dfdfc4d4fc3cdbaf",
+    "src/core/world.ts": "2a3dd219dc001c14db6a93676d1599a6d0ae01fcd77d70fe9518ac9ab2f9ef04",
+    "src/main.tsx": "0b3933753fe24aaaa887a39d0f60e4d7a628f56a76c58be382550a15263f2e4d",
+    "src/persistence/codec.test.ts": "5506dcde13519134f736834bf4248f8ab30535ad7839154f85d7ad927b1ebeaa",
+    "src/persistence/codec.ts": "b212c2ac8b3feb39624a622e308ed32594e6469334b5e5c40c09579104311926",
+    "src/persistence/entry-profile-codec.test.ts": "dcbd66bdfebd31ed21ab6c898916b87cf0cf9818b13674544b4f22d1ce5599f8",
+    "src/persistence/first-order-codec.test.ts": "4e49f4071c9fdd1f0358c58c09b4310d6605c2f5d017c4904f823c0457b02f6b",
+    "src/persistence/indexeddb.test.ts": "5fb99e5137b67cf89f6de9ed2ebc9a7c507c0c0cbcba2760bf15a4e5046cd24f",
+    "src/persistence/indexeddb.ts": "978209e115e087256e81b60c39080ec029d9c067252beb1451817dc0c3f480dd",
+    "src/persistence/library.test.ts": "9d9e3723d858fbab3b5a0a2275465dc03844e1d2325543c3bc0bc1f9b74c920b",
+    "src/persistence/market-codec.test.ts": "c680d4f0cef8d29dfdcbcdbb463c6de588669984b1471dcd1d4e1f074a032811",
+    "src/persistence/operations-codec.test.ts": "31e790fcba94a0747428c370e1cf22bc81234a38464f5528833e7bf739d71c20",
+    "src/persistence/schemas.ts": "ae94bd0aac820be092fcb7d291acce32263fd48356e50ee399000a8035bf5239",
+    "src/persistence/world-codec.test.ts": "e2a74e8af6cf9894a4f28821019e91ce7cafb4a6f4c8dd79f049eb70e9d0e0e5",
+    "src/persistence/writer-lock.test.ts": "6a9da4132c045eb3b74a1ef75cf451c8f87b1a47ece0355934adb69ac94426aa",
+    "src/persistence/writer-lock.ts": "b5eb19e5beba9b7262cbfce046bdd8e413f8742a77a491184fcbbbd7a96498df",
+    "src/testing/abort-after-write.ts": "da8681842896c19e290883e8d26bbafb5be1a0ba4f6773dc25b519a593b50484",
+    "src/testing/fact-run.ts": "3873010d328bc2c505122f59751e0713c2c603bceaea078d41beb19aea855944",
+    "src/testing/market-fixture.ts": "fb83e044442d0c17353625ea669d24196f9f35a18e1b9d23aa3261a847ef0339",
+    "src/testing/market-normal-scenario.ts": "73eca4bcbe2b895fe27ebd46a15c1cf98c7bc5b0a600e673a3da0caf2a5380c0",
+    "src/testing/memory-writer-access.ts": "61ee8279cd62e20f6f04ca5163354838acce011d9e24ead12baf10a9c8cff150",
+    "src/testing/operations-browser.ts": "52bf5d2a6b14e4c9d5752d4c898acd072e1dda4bd6d5e6448b8f626df9092646",
+    "src/testing/operations-fixture.ts": "77171a7197c735c4a369a7a89d3f1263cd04bb632b5b2e7fd7c3ec0a9d6025c7",
+    "src/testing/persistence-browser.ts": "cff5c300def8c15bad87ba060fb40e3b59f211a8b9f030a9fe636c1cddb21a46",
+    "src/testing/playable-scenarios.ts": "168247242a0466dce212401a3762792e2b256849d8cdc96016d78ed41e6f83a7",
+    "src/testing/q01-accounting.ts": "bf9690677fe052f76c0cb4b29067789ad9049217e92f5c9cd19c00e19d71ef4c",
+    "src/testing/world-fixture.ts": "9c4da48b907bbd40fd379e10efeb55ee39d54a3093451ddcda5b2071e89d82d5",
+    "src/ui/App.test.tsx": "c8dc4ff78a47bf7a5d1e0dbe373e5aa05df2ac78a1909901cedf3d92139fdb25",
+    "src/ui/App.tsx": "b420e4539572c8f82800746d2ae5ee6cfa2a7b4fc94d743817700963d30870cf",
+    "src/ui/CommandButton.tsx": "7b0314ef79a9d62c71b7683a8cf0da5935b690517277076b6d8361b1a1d2c40c",
+    "src/ui/Dialog.tsx": "fb7972e039eaeb683a954f15543f2728d37f5584e0feccf156c42e581794e904",
+    "src/ui/Home.tsx": "b7ee023aa61dc152944cbf5e66dd3ff7a17f62fd43a42721ecf6bf8b7714da60",
+    "src/ui/MarketPanel.tsx": "4080a9498c4bbd25d81741c13b0f08ba0c86bc18d35b0eac5b38fbde7a9c7793",
+    "src/ui/Obligations.tsx": "cf435a0db18013da6a4a1ee7edfb51b848c6f3381a3c0c036b099f2b764278e3",
+    "src/ui/StoragePanel.tsx": "eb081da3499f985405b7d26f5dff0133b7681466be1c7b3499b9631c88dd8e09",
+    "src/ui/Workbench.tsx": "70429c51e465daebf30e0dc8be649dcdc308277136b71f5221944ac02ae45d9b",
+    "src/ui/game-text.ts": "91d247faa2d6c812d2f7bc623188d317d408ed5c6c8baf3096b36dee2f16f40f",
+    "src/ui/game-types.ts": "071ee18c90b3f00430e64520336d8023a8f3b463646526999e6460280297ae1a",
+    "src/ui/intent-account.ts": "5decb1b238d346791d3c290b06c746f72bab60890f9d2b2a976778c442ae027d",
+    "src/ui/money-input.ts": "ae12f363335c4742de784c15fd404fe15f3b5044829ec6b7070c331e0d0b572a",
+    "src/ui/styles.css": "9a27027211b46ea63ea15dc42ca83c8a861af56671bccb36d9f7f0468869ab8d",
+    "scripts/verify_browser_evidence.ts": "706cba67733ad30600094d6fd4806db7dbf99a5eafdb6ac257501325c24112b3",
+    "scripts/evidence-output.ts": "b70695b15e7cf4f615ad263a9e2f361b847edb6203d844e8c73e3c940e486026",
+    "index.html": "83302dbf7255e2796584dccc24a816eeb91f2d0b0e613e6c98c85cf471331d43",
+    "package.json": "034f7d6dda1953fc323bcbb18c8e6656272b2d935a82938a6d5cfe9ad7561d65",
+    "package-lock.json": "096fd07ea9a5ac837d12495d23f67b4c0ccbb61d36d308ef689d8041e0ec2bb4",
+    "vitest.config.ts": "8bc1e3c6911d48bd8a7be4532e6efbcc849277d3d104309ba94208afc9d6b354",
+    "tsconfig.core.json": "48e4365127083963a2b2d24f5677e93414c3de97cd642ce155a9a10fddcb53df"
+  },
+  "cases": [
+    {
+      "name": "technical-final",
+      "initial": {
+        "file": "t09-browser-technical-initial.json",
+        "sha256": "86baada690fb9260150c9ea6c9b8d0b2b02fa100d69bfce0e2ff0247be2f8902"
+      },
+      "final": {
+        "file": "t09-browser-technical-final.json",
+        "sha256": "51a3b9fb9c3b78b8f0248ec17a1c0c749d8e87a9b83b648c0d4808747646f6da"
+      },
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t09-playable-v1",
+        "contentVersion": "world-playable-work-v1",
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "seed": "t09-browser-technical-first-order",
+      "origin": "normal",
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-82bf1e03-7615-4cb5-81f7-611df05cab0b",
+          "commandId": "command-8f70d65e-5709-461d-a1ba-ef15591c8676",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "StartFirstOrder",
+          "payload": {},
+          "runId": "life-82bf1e03-7615-4cb5-81f7-611df05cab0b",
+          "commandId": "command-25913b89-702d-4852-89cf-6fe8bbef541a",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-05",
+            "phase": "snapshot"
+          },
+          "runId": "life-82bf1e03-7615-4cb5-81f7-611df05cab0b",
+          "commandId": "command-1a079632-6efe-4692-88bc-107b3cbeb2fa",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-19",
+            "phase": "snapshot"
+          },
+          "runId": "life-82bf1e03-7615-4cb5-81f7-611df05cab0b",
+          "commandId": "command-40c32597-e6fc-4c94-b34d-38725f7a3034",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "SubmitDelivery",
+          "payload": {
+            "contractId": "ops:3f39d02431fa63a278c7b1c2364c1c8a"
+          },
+          "runId": "life-82bf1e03-7615-4cb5-81f7-611df05cab0b",
+          "commandId": "command-4b74f5d3-a5df-470a-9465-6fda1f587520",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20",
+            "phase": "snapshot"
+          },
+          "runId": "life-82bf1e03-7615-4cb5-81f7-611df05cab0b",
+          "commandId": "command-3e12b7b4-bf28-4acf-a06b-6161036649d4",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-82bf1e03-7615-4cb5-81f7-611df05cab0b",
+          "commandId": "command-ba6d9942-0c38-41ec-94c5-b9c2c6fc5b68",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "prepare",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "life-82bf1e03-7615-4cb5-81f7-611df05cab0b",
+          "commandId": "command-d3da0fe6-6933-4010-930f-e39d392fb052",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-82bf1e03-7615-4cb5-81f7-611df05cab0b",
+          "commandId": "command-e68ce3a4-fa4a-4f04-a11c-66675896dc1a",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85"
+          },
+          "runId": "life-82bf1e03-7615-4cb5-81f7-611df05cab0b",
+          "commandId": "command-6b697083-ecae-454d-a6c0-5c7414140033",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-82bf1e03-7615-4cb5-81f7-611df05cab0b",
+          "commandId": "command-aa0da184-266f-4164-9cb2-f5c7e7515c53",
+          "expectedRevision": 11
+        }
+      ],
+      "expectedStateHash": "4954097fda995337fee7af8c66a34b73e82f5e9e9549efe17b068d70f25dd931",
+      "actualReplayHash": "4954097fda995337fee7af8c66a34b73e82f5e9e9549efe17b068d70f25dd931",
+      "result": "PASS",
+      "scope": "audit_of_actual_UI_exported_commands_not_a_replacement_for_browser_interaction"
+    },
+    {
+      "name": "content-final",
+      "initial": {
+        "file": "t09-browser-content-initial.json",
+        "sha256": "bbd59498b45b10eca6c5d3498fd2e6e14c9e24aab449bc54fbc115c701b7af3d"
+      },
+      "final": {
+        "file": "t09-browser-content-final.json",
+        "sha256": "2d80bc3d762ea9834fd8d6158529c1ebeeea9610c943138188a1a7a352760394"
+      },
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t09-playable-v1",
+        "contentVersion": "world-playable-work-v1",
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "seed": "t09-browser-content-first-order",
+      "origin": "normal",
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-15041ae1-2f33-47f3-a4b8-9b4709b341f8",
+          "commandId": "command-b536d0d4-d093-4b97-a644-220596b81fe2",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "StartFirstOrder",
+          "payload": {},
+          "runId": "life-15041ae1-2f33-47f3-a4b8-9b4709b341f8",
+          "commandId": "command-c4e50dcd-b85c-4e20-9b24-4551416d7459",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-05",
+            "phase": "snapshot"
+          },
+          "runId": "life-15041ae1-2f33-47f3-a4b8-9b4709b341f8",
+          "commandId": "command-bc74adf9-de65-4d4f-9cc9-0677eca631f9",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-19",
+            "phase": "snapshot"
+          },
+          "runId": "life-15041ae1-2f33-47f3-a4b8-9b4709b341f8",
+          "commandId": "command-21f5ade2-33e0-431d-a7e2-acd67217b81f",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "SubmitDelivery",
+          "payload": {
+            "contractId": "ops:1a74bd4570995aaa79d218978e6a3e0a"
+          },
+          "runId": "life-15041ae1-2f33-47f3-a4b8-9b4709b341f8",
+          "commandId": "command-f0d09582-e58d-471b-8fc6-f105dfee7037",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20",
+            "phase": "snapshot"
+          },
+          "runId": "life-15041ae1-2f33-47f3-a4b8-9b4709b341f8",
+          "commandId": "command-512b4274-558a-4985-8635-650732921889",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-15041ae1-2f33-47f3-a4b8-9b4709b341f8",
+          "commandId": "command-ea7461bb-5569-4c37-ad88-42376655a5a1",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "prepare",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "life-15041ae1-2f33-47f3-a4b8-9b4709b341f8",
+          "commandId": "command-db85ada0-4def-49a4-8b86-8a335fdf5387",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-15041ae1-2f33-47f3-a4b8-9b4709b341f8",
+          "commandId": "command-d7f0e95d-687f-4cb9-8794-44df060c2a6c",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85"
+          },
+          "runId": "life-15041ae1-2f33-47f3-a4b8-9b4709b341f8",
+          "commandId": "command-3c7ce0dd-a06f-4510-9103-b8300e6d6144",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-15041ae1-2f33-47f3-a4b8-9b4709b341f8",
+          "commandId": "command-737e360c-c47d-4671-bea3-6d3981bf6ade",
+          "expectedRevision": 11
+        }
+      ],
+      "expectedStateHash": "722f8d037e7de966d9f4f171bc3f153de25e96d965f1ed5e48493d0657885aff",
+      "actualReplayHash": "722f8d037e7de966d9f4f171bc3f153de25e96d965f1ed5e48493d0657885aff",
+      "result": "PASS",
+      "scope": "audit_of_actual_UI_exported_commands_not_a_replacement_for_browser_interaction"
+    },
+    {
+      "name": "investment-quarter",
+      "initial": {
+        "file": "t09-browser-investment-initial.json",
+        "sha256": "09f53a07bcfb7c910f80c6e4dae0f681d727f4725ecba9c1437365dcbf48f7f6"
+      },
+      "final": {
+        "file": "t09-browser-investment-quarter.json",
+        "sha256": "4a2003bada5977778f44209bfefded3fa8ba706624325f5c96598093b17a2c76"
+      },
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t09-playable-v1",
+        "contentVersion": "world-playable-work-v1",
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "seed": "t09-browser-investment",
+      "origin": "normal",
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "SkipOffer",
+          "payload": {
+            "offerId": "manual-first-2020"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-693cb2b6-c722-4753-8ce1-fc258dec9faa",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-e8b7a9d9-9c68-4876-8e5c-11204d40bce0",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "ResearchMarket",
+          "payload": {
+            "definitionId": "market-overview"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-fa080388-0ad9-4967-b56e-9ba2e526d09c",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "ResearchMarket",
+          "payload": {
+            "definitionId": "market-foundation-course"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-75f56caa-8506-4091-9e40-ee51f972c0cf",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "PlanStockOrder",
+          "payload": {
+            "accountId": "personal",
+            "limitPriceFen": 11988,
+            "quantity": 100,
+            "quoteId": "initial-2020-01-01",
+            "side": "buy",
+            "symbol": "SIM-AI01",
+            "validUntil": "SIM-CP-2020-01-10"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-24cc9190-e00c-40ee-8ccd-52f39f2bb8fd",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "PlanStockOrder",
+          "payload": {
+            "accountId": "personal",
+            "limitPriceFen": 10988,
+            "quantity": 100,
+            "quoteId": "initial-2020-01-01",
+            "side": "buy",
+            "symbol": "SIM-AI01",
+            "validUntil": "SIM-CP-2020-01-10"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-b7de4c69-9c9a-4d1f-9bb1-bee9e7098eba",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-02",
+            "phase": "snapshot"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-cde70500-ed4f-4215-8650-b8ebbb2dccd4",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "CancelStockOrder",
+          "payload": {
+            "orderId": "market:b3c75709aa15ac45237429191060177c"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-2d8d2579-d51e-4146-af2c-1851c779c5fd",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "CancelStockOrder",
+          "payload": {
+            "orderId": "market:2118f166564881a44a95c0fa314fee2a"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-33263c08-f5c8-4b29-96d3-dfc1c644ca45",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "PlaceStockOrder",
+          "payload": {
+            "accountId": "personal",
+            "limitPriceFen": 11988,
+            "quantity": 100,
+            "quoteId": "initial-2020-01-01",
+            "side": "buy",
+            "symbol": "SIM-AI01",
+            "validUntil": "SIM-CP-2020-01-10"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-d118b7c2-fbe7-41f3-81c5-acd39efb4868",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-bcfcba7d-0a99-4037-a45b-b4ad64234739",
+          "expectedRevision": 11
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-81364a88-02a8-4735-b30b-5e189cb3d2bd",
+          "expectedRevision": 12
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-2c5dc2aa-3add-4b5a-bbeb-ed95c48d861a",
+          "expectedRevision": 13
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-b47f6bee-a6df-4875-9a6d-fd3c03cd4aff",
+          "expectedRevision": 14
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-a6eb57d0-c1ee-4143-b050-b643bdf817de",
+          "expectedRevision": 15
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-4a2b1597-da23-4c4f-8ab0-a49b2747a9ed",
+          "expectedRevision": 16
+        }
+      ],
+      "expectedStateHash": "d0af2ea3aa9ac3256546295174d186da84efb38134321ff6446dd227cbb304f1",
+      "actualReplayHash": "d0af2ea3aa9ac3256546295174d186da84efb38134321ff6446dd227cbb304f1",
+      "result": "PASS",
+      "scope": "audit_of_actual_UI_exported_commands_not_a_replacement_for_browser_interaction"
+    },
+    {
+      "name": "investment-final",
+      "initial": {
+        "file": "t09-browser-investment-initial.json",
+        "sha256": "09f53a07bcfb7c910f80c6e4dae0f681d727f4725ecba9c1437365dcbf48f7f6"
+      },
+      "final": {
+        "file": "t09-browser-investment-final.json",
+        "sha256": "302d03f0b6b6b662c9560e4ad242e3402dcd560486e8a27da281bd39d87612b7"
+      },
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t09-playable-v1",
+        "contentVersion": "world-playable-work-v1",
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "seed": "t09-browser-investment",
+      "origin": "normal",
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "SkipOffer",
+          "payload": {
+            "offerId": "manual-first-2020"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-693cb2b6-c722-4753-8ce1-fc258dec9faa",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-e8b7a9d9-9c68-4876-8e5c-11204d40bce0",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "ResearchMarket",
+          "payload": {
+            "definitionId": "market-overview"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-fa080388-0ad9-4967-b56e-9ba2e526d09c",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "ResearchMarket",
+          "payload": {
+            "definitionId": "market-foundation-course"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-75f56caa-8506-4091-9e40-ee51f972c0cf",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "PlanStockOrder",
+          "payload": {
+            "accountId": "personal",
+            "limitPriceFen": 11988,
+            "quantity": 100,
+            "quoteId": "initial-2020-01-01",
+            "side": "buy",
+            "symbol": "SIM-AI01",
+            "validUntil": "SIM-CP-2020-01-10"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-24cc9190-e00c-40ee-8ccd-52f39f2bb8fd",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "PlanStockOrder",
+          "payload": {
+            "accountId": "personal",
+            "limitPriceFen": 10988,
+            "quantity": 100,
+            "quoteId": "initial-2020-01-01",
+            "side": "buy",
+            "symbol": "SIM-AI01",
+            "validUntil": "SIM-CP-2020-01-10"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-b7de4c69-9c9a-4d1f-9bb1-bee9e7098eba",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-02",
+            "phase": "snapshot"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-cde70500-ed4f-4215-8650-b8ebbb2dccd4",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "CancelStockOrder",
+          "payload": {
+            "orderId": "market:b3c75709aa15ac45237429191060177c"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-2d8d2579-d51e-4146-af2c-1851c779c5fd",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "CancelStockOrder",
+          "payload": {
+            "orderId": "market:2118f166564881a44a95c0fa314fee2a"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-33263c08-f5c8-4b29-96d3-dfc1c644ca45",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "PlaceStockOrder",
+          "payload": {
+            "accountId": "personal",
+            "limitPriceFen": 11988,
+            "quantity": 100,
+            "quoteId": "initial-2020-01-01",
+            "side": "buy",
+            "symbol": "SIM-AI01",
+            "validUntil": "SIM-CP-2020-01-10"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-d118b7c2-fbe7-41f3-81c5-acd39efb4868",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-bcfcba7d-0a99-4037-a45b-b4ad64234739",
+          "expectedRevision": 11
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-81364a88-02a8-4735-b30b-5e189cb3d2bd",
+          "expectedRevision": 12
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-2c5dc2aa-3add-4b5a-bbeb-ed95c48d861a",
+          "expectedRevision": 13
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-b47f6bee-a6df-4875-9a6d-fd3c03cd4aff",
+          "expectedRevision": 14
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-a6eb57d0-c1ee-4143-b050-b643bdf817de",
+          "expectedRevision": 15
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-4a2b1597-da23-4c4f-8ab0-a49b2747a9ed",
+          "expectedRevision": 16
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-01ab5e49-5144-4537-973c-5e8b062bb3d4",
+          "expectedRevision": 17
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-41827700-d72a-46e0-8458-7a8c3d4bdd14",
+          "expectedRevision": 18
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-1b222d2e-f9e0-4e4c-8c00-5505bfe6b894",
+          "expectedRevision": 19
+        },
+        {
+          "actorId": "player",
+          "kind": "ReadNews",
+          "payload": {
+            "anchorId": "H001"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-6fe122ec-e74a-42ac-8a22-f7123c288773",
+          "expectedRevision": 20
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:ce13e97577906b575830973677ff41c1"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-a9024b58-5bcb-41b9-9bbe-b5c2550b6a54",
+          "expectedRevision": 21
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+          "commandId": "command-1800e15f-e18e-4689-b356-8ff25a73c812",
+          "expectedRevision": 22
+        }
+      ],
+      "expectedStateHash": "4ad508d3ca4eaa90ee2c7119442aaf2e9142fd5daee4f503f501241ec2a10632",
+      "actualReplayHash": "4ad508d3ca4eaa90ee2c7119442aaf2e9142fd5daee4f503f501241ec2a10632",
+      "result": "PASS",
+      "scope": "audit_of_actual_UI_exported_commands_not_a_replacement_for_browser_interaction"
+    },
+    {
+      "name": "content-investment-final",
+      "initial": {
+        "file": "t09-browser-content-investment-initial.json",
+        "sha256": "f9d8badeaa2521d81d71e4652afc191eb7eb0f6d4b540d94414d78c7fa28fa74"
+      },
+      "final": {
+        "file": "t09-browser-content-investment-final.json",
+        "sha256": "1621bcbcb122151ea626a4c12aa757a9c1613aca71a5fdfdb6685a0bcc6b1a53"
+      },
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t09-playable-v1",
+        "contentVersion": "world-playable-work-v1",
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "seed": "t09-browser-content-investment",
+      "origin": "normal",
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "DeclineOffer",
+          "payload": {
+            "offerId": "manual-first-2020"
+          },
+          "runId": "life-a2c20fbf-337f-4dd9-8986-264305b920e5",
+          "commandId": "command-b2827f96-8b2b-431b-ab76-f43f666cb4b2",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-a2c20fbf-337f-4dd9-8986-264305b920e5",
+          "commandId": "command-eebd8c57-656b-42f1-ac0f-f154d73f0828",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "ResearchMarket",
+          "payload": {
+            "definitionId": "market-overview"
+          },
+          "runId": "life-a2c20fbf-337f-4dd9-8986-264305b920e5",
+          "commandId": "command-0e06f1af-7537-477e-a254-ed987de1a47b",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "ResearchMarket",
+          "payload": {
+            "definitionId": "market-foundation-course"
+          },
+          "runId": "life-a2c20fbf-337f-4dd9-8986-264305b920e5",
+          "commandId": "command-ab014f7d-30f5-4743-b311-34871593ff5f",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "PlaceStockOrder",
+          "payload": {
+            "accountId": "personal",
+            "limitPriceFen": 11988,
+            "quantity": 100,
+            "quoteId": "initial-2020-01-01",
+            "side": "buy",
+            "symbol": "SIM-AI01",
+            "validUntil": "SIM-CP-2020-01-10"
+          },
+          "runId": "life-a2c20fbf-337f-4dd9-8986-264305b920e5",
+          "commandId": "command-adf50b89-72e9-4461-adb5-1c57f89374af",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-a2c20fbf-337f-4dd9-8986-264305b920e5",
+          "commandId": "command-b8c528d7-2171-4c02-95ff-3700209a06a3",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-a2c20fbf-337f-4dd9-8986-264305b920e5",
+          "commandId": "command-975ccec0-66a8-4e67-aba9-018e49b7c6d6",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "life-a2c20fbf-337f-4dd9-8986-264305b920e5",
+          "commandId": "command-bc62d0a8-1392-4fb6-9de3-07a9a4afc70d",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-a2c20fbf-337f-4dd9-8986-264305b920e5",
+          "commandId": "command-6d93267c-948b-420f-b6d8-1bd6670cc4d9",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85"
+          },
+          "runId": "life-a2c20fbf-337f-4dd9-8986-264305b920e5",
+          "commandId": "command-31515b80-0411-40fd-80d3-5e7afe93a9ea",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-a2c20fbf-337f-4dd9-8986-264305b920e5",
+          "commandId": "command-e2479c21-45f7-4f07-a83d-5db0a4abe594",
+          "expectedRevision": 11
+        }
+      ],
+      "expectedStateHash": "e89b34f33fa5594a88eb4bd2be026093353daf13e2c96d45efc06f0ce2844471",
+      "actualReplayHash": "e89b34f33fa5594a88eb4bd2be026093353daf13e2c96d45efc06f0ce2844471",
+      "result": "PASS",
+      "scope": "audit_of_actual_UI_exported_commands_not_a_replacement_for_browser_interaction"
+    },
+    {
+      "name": "fault-candidate",
+      "initial": {
+        "file": "t09-browser-fault-old.json",
+        "sha256": "ecbd3b281ae4c44dece2fcf1f383995beb91c1f06f8c6d2cd5a5b6d3aca2c092"
+      },
+      "final": {
+        "file": "t09-browser-fault-candidate.json",
+        "sha256": "11bfef46e311335ab1fcf0770ff9a91923aace74908c371b94cb4f7014c99bbe"
+      },
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t09-playable-v1",
+        "contentVersion": "world-playable-work-v1",
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "seed": "t09-browser-free-abort",
+      "origin": "normal",
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-695c770d-a5a9-43b8-b949-71efd964f58e",
+          "commandId": "command-18d1501d-c778-49f7-ab68-12bc7dc5443e",
+          "expectedRevision": 1
+        }
+      ],
+      "expectedStateHash": "b33c00b9255370a6712bb978c8a25425d7ba0552ddcf7e517f04d5ae5cdd73d1",
+      "actualReplayHash": "b33c00b9255370a6712bb978c8a25425d7ba0552ddcf7e517f04d5ae5cdd73d1",
+      "result": "PASS",
+      "scope": "audit_of_actual_UI_exported_commands_not_a_replacement_for_browser_interaction"
+    },
+    {
+      "name": "fault-retried",
+      "initial": {
+        "file": "t09-browser-fault-old.json",
+        "sha256": "ecbd3b281ae4c44dece2fcf1f383995beb91c1f06f8c6d2cd5a5b6d3aca2c092"
+      },
+      "final": {
+        "file": "t09-browser-fault-retried.json",
+        "sha256": "11bfef46e311335ab1fcf0770ff9a91923aace74908c371b94cb4f7014c99bbe"
+      },
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t09-playable-v1",
+        "contentVersion": "world-playable-work-v1",
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "seed": "t09-browser-free-abort",
+      "origin": "normal",
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-695c770d-a5a9-43b8-b949-71efd964f58e",
+          "commandId": "command-18d1501d-c778-49f7-ab68-12bc7dc5443e",
+          "expectedRevision": 1
+        }
+      ],
+      "expectedStateHash": "b33c00b9255370a6712bb978c8a25425d7ba0552ddcf7e517f04d5ae5cdd73d1",
+      "actualReplayHash": "b33c00b9255370a6712bb978c8a25425d7ba0552ddcf7e517f04d5ae5cdd73d1",
+      "result": "PASS",
+      "scope": "audit_of_actual_UI_exported_commands_not_a_replacement_for_browser_interaction"
+    },
+    {
+      "name": "income-candidate",
+      "initial": {
+        "file": "t09-browser-income-old.json",
+        "sha256": "50d3b6371aef597b44ea2519e007d61d5ca75ca3baa46847e296c30a6cd53184"
+      },
+      "final": {
+        "file": "t09-browser-income-candidate.json",
+        "sha256": "4f8c3834f5eca97aaf7518647984e2ede52354bbe8d4d55406cad8e321312ccf"
+      },
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t09-playable-v1",
+        "contentVersion": "world-playable-work-v1",
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "seed": "t09-browser-income-abort",
+      "origin": "normal",
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20",
+            "phase": "snapshot"
+          },
+          "runId": "life-9fb4658e-d3a4-4b84-8981-d7fc6e551593",
+          "commandId": "command-f85b46b3-ca7f-4ba6-8d95-0a402dcfb602",
+          "expectedRevision": 6
+        }
+      ],
+      "expectedStateHash": "f848037af1bc56815f5755c47f51eb2cbafb258c8f3d8098a2178187feee7387",
+      "actualReplayHash": "f848037af1bc56815f5755c47f51eb2cbafb258c8f3d8098a2178187feee7387",
+      "result": "PASS",
+      "scope": "audit_of_actual_UI_exported_commands_not_a_replacement_for_browser_interaction"
+    },
+    {
+      "name": "income-retried",
+      "initial": {
+        "file": "t09-browser-income-old.json",
+        "sha256": "50d3b6371aef597b44ea2519e007d61d5ca75ca3baa46847e296c30a6cd53184"
+      },
+      "final": {
+        "file": "t09-browser-income-retried.json",
+        "sha256": "4f8c3834f5eca97aaf7518647984e2ede52354bbe8d4d55406cad8e321312ccf"
+      },
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t09-playable-v1",
+        "contentVersion": "world-playable-work-v1",
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "seed": "t09-browser-income-abort",
+      "origin": "normal",
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20",
+            "phase": "snapshot"
+          },
+          "runId": "life-9fb4658e-d3a4-4b84-8981-d7fc6e551593",
+          "commandId": "command-f85b46b3-ca7f-4ba6-8d95-0a402dcfb602",
+          "expectedRevision": 6
+        }
+      ],
+      "expectedStateHash": "f848037af1bc56815f5755c47f51eb2cbafb258c8f3d8098a2178187feee7387",
+      "actualReplayHash": "f848037af1bc56815f5755c47f51eb2cbafb258c8f3d8098a2178187feee7387",
+      "result": "PASS",
+      "scope": "audit_of_actual_UI_exported_commands_not_a_replacement_for_browser_interaction"
+    },
+    {
+      "name": "production-final",
+      "initial": {
+        "file": "t09-browser-production-initial.json",
+        "sha256": "6919ce3651d0a319b21c80ca4044a785979d1c6c8208bbd198b57a116ef67d1a"
+      },
+      "final": {
+        "file": "t09-browser-production-final.json",
+        "sha256": "526a6eed7db3901d563ad501c5488c4d6f20cc6e0d0542c256e4382ff6c96558"
+      },
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t09-playable-v1",
+        "contentVersion": "world-playable-work-v1",
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "seed": "t09-production-smoke",
+      "origin": "normal",
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-c7909bb3-c1be-4ef5-95ce-af03880a15d9",
+          "commandId": "command-8ccce115-9581-4b80-ae34-3d443380b98a",
+          "expectedRevision": 1
+        }
+      ],
+      "expectedStateHash": "084f6d3e7abf3a0d24e712de1f45a624ebc348a07b9fe12c0edcd5016c592d78",
+      "actualReplayHash": "084f6d3e7abf3a0d24e712de1f45a624ebc348a07b9fe12c0edcd5016c592d78",
+      "result": "PASS",
+      "scope": "audit_of_actual_UI_exported_commands_not_a_replacement_for_browser_interaction"
+    },
+    {
+      "name": "production-current",
+      "initial": {
+        "file": "t09-browser-production-initial.json",
+        "sha256": "6919ce3651d0a319b21c80ca4044a785979d1c6c8208bbd198b57a116ef67d1a"
+      },
+      "final": {
+        "file": "t09-browser-production-current.json",
+        "sha256": "f27b798671e0b1519cf03e539deddc5d0351b4b4955be541e312a0dcc445542e"
+      },
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t09-playable-v1",
+        "contentVersion": "world-playable-work-v1",
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "seed": "t09-production-smoke",
+      "origin": "normal",
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-c7909bb3-c1be-4ef5-95ce-af03880a15d9",
+          "commandId": "command-8ccce115-9581-4b80-ae34-3d443380b98a",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "FavoriteMemory",
+          "payload": {
+            "favorite": true,
+            "memoryId": "MEM-CONTENT"
+          },
+          "runId": "life-c7909bb3-c1be-4ef5-95ce-af03880a15d9",
+          "commandId": "command-b43d1b4c-af75-4332-9637-931190b2c8f1",
+          "expectedRevision": 2
+        }
+      ],
+      "expectedStateHash": "adbe4d5a354994317cd599b96f76986b2878359b675c59f3945cf17011d9b1ac",
+      "actualReplayHash": "adbe4d5a354994317cd599b96f76986b2878359b675c59f3945cf17011d9b1ac",
+      "result": "PASS",
+      "scope": "audit_of_actual_UI_exported_commands_not_a_replacement_for_browser_interaction"
+    },
+    {
+      "name": "recovery-gap",
+      "initial": {
+        "file": "t09-browser-recovery-initial.json",
+        "sha256": "1cd201d3fb5cc7afa4e0db2c814986399e9c0bca69254b8e6449df90efddb443"
+      },
+      "final": {
+        "file": "t09-browser-recovery-gap.json",
+        "sha256": "00dc524f59a4dafa50dc8cc94b8df9d2cf68c55a901bce43eb58b9ef7a20b510"
+      },
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t09-playable-v1",
+        "contentVersion": "world-playable-work-v1",
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "seed": "t09-browser-liquidity-recovery",
+      "origin": "normal",
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "DeclineOffer",
+          "payload": {
+            "offerId": "manual-first-2020"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-9d385d10-3308-4106-8306-8aa95fd17bed",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "PlaceStockOrder",
+          "payload": {
+            "accountId": "personal",
+            "limitPriceFen": 11988,
+            "quantity": 200,
+            "quoteId": "initial-2020-01-01",
+            "side": "buy",
+            "symbol": "SIM-AI01",
+            "validUntil": "SIM-CP-2020-01-10"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-fcb8f0a7-9255-459e-9c48-0ae7d83074df",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-2245b0eb-62dd-46c4-bf5a-b966eb2b11ef",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-d39766c6-64ce-4905-b610-f212dd715d7a",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-337d9fba-a8aa-40d3-9d77-2e0af51b946e",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-160e3ebe-5b79-4f62-b2f9-c90f657e8982",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-76017043-f726-4e4b-a1d3-099af13e6fca",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-01",
+            "phase": "snapshot"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-8f277c07-3aad-4e32-a783-868026f2cbe4",
+          "expectedRevision": 8
+        }
+      ],
+      "expectedStateHash": "b5c022098340d14886c6974574ff0d87b7572103b0b7cfa867b1fb5e4b3bdb9d",
+      "actualReplayHash": "b5c022098340d14886c6974574ff0d87b7572103b0b7cfa867b1fb5e4b3bdb9d",
+      "result": "PASS",
+      "scope": "audit_of_actual_UI_exported_commands_not_a_replacement_for_browser_interaction"
+    },
+    {
+      "name": "recovery-deferred",
+      "initial": {
+        "file": "t09-browser-recovery-initial.json",
+        "sha256": "1cd201d3fb5cc7afa4e0db2c814986399e9c0bca69254b8e6449df90efddb443"
+      },
+      "final": {
+        "file": "t09-browser-recovery-deferred.json",
+        "sha256": "9e5d9b72c57c8835d5ea36ce26a42851c4724bcf14ac986d5ead2990eeb3d391"
+      },
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t09-playable-v1",
+        "contentVersion": "world-playable-work-v1",
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "seed": "t09-browser-liquidity-recovery",
+      "origin": "normal",
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "DeclineOffer",
+          "payload": {
+            "offerId": "manual-first-2020"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-9d385d10-3308-4106-8306-8aa95fd17bed",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "PlaceStockOrder",
+          "payload": {
+            "accountId": "personal",
+            "limitPriceFen": 11988,
+            "quantity": 200,
+            "quoteId": "initial-2020-01-01",
+            "side": "buy",
+            "symbol": "SIM-AI01",
+            "validUntil": "SIM-CP-2020-01-10"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-fcb8f0a7-9255-459e-9c48-0ae7d83074df",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-2245b0eb-62dd-46c4-bf5a-b966eb2b11ef",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-d39766c6-64ce-4905-b610-f212dd715d7a",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-337d9fba-a8aa-40d3-9d77-2e0af51b946e",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-160e3ebe-5b79-4f62-b2f9-c90f657e8982",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-76017043-f726-4e4b-a1d3-099af13e6fca",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-01",
+            "phase": "snapshot"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-8f277c07-3aad-4e32-a783-868026f2cbe4",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "PayObligation",
+          "payload": {
+            "accountId": "personal",
+            "amountFen": 200002,
+            "obligationId": "living-due:2020-02-01"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-208a9b73-36b6-4f70-8ce4-72de972d6a6c",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "AcknowledgeCashGap",
+          "payload": {
+            "instanceId": "living:2020-02-01"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-e8f01fbb-9efc-42b9-973c-9d88fa98e222",
+          "expectedRevision": 10
+        }
+      ],
+      "expectedStateHash": "5997a76f58505cc9a822d5d85106892ec010138460032af834a908e67372789d",
+      "actualReplayHash": "5997a76f58505cc9a822d5d85106892ec010138460032af834a908e67372789d",
+      "result": "PASS",
+      "scope": "audit_of_actual_UI_exported_commands_not_a_replacement_for_browser_interaction"
+    },
+    {
+      "name": "recovery-final",
+      "initial": {
+        "file": "t09-browser-recovery-initial.json",
+        "sha256": "1cd201d3fb5cc7afa4e0db2c814986399e9c0bca69254b8e6449df90efddb443"
+      },
+      "final": {
+        "file": "t09-browser-recovery-final.json",
+        "sha256": "57b9e92fbe0774949c62426dffb59c888029568d66f49a0a250a96c3971ada4f"
+      },
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t09-playable-v1",
+        "contentVersion": "world-playable-work-v1",
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "seed": "t09-browser-liquidity-recovery",
+      "origin": "normal",
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "DeclineOffer",
+          "payload": {
+            "offerId": "manual-first-2020"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-9d385d10-3308-4106-8306-8aa95fd17bed",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "PlaceStockOrder",
+          "payload": {
+            "accountId": "personal",
+            "limitPriceFen": 11988,
+            "quantity": 200,
+            "quoteId": "initial-2020-01-01",
+            "side": "buy",
+            "symbol": "SIM-AI01",
+            "validUntil": "SIM-CP-2020-01-10"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-fcb8f0a7-9255-459e-9c48-0ae7d83074df",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-2245b0eb-62dd-46c4-bf5a-b966eb2b11ef",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-d39766c6-64ce-4905-b610-f212dd715d7a",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-337d9fba-a8aa-40d3-9d77-2e0af51b946e",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-160e3ebe-5b79-4f62-b2f9-c90f657e8982",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-76017043-f726-4e4b-a1d3-099af13e6fca",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-01",
+            "phase": "snapshot"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-8f277c07-3aad-4e32-a783-868026f2cbe4",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "PayObligation",
+          "payload": {
+            "accountId": "personal",
+            "amountFen": 200002,
+            "obligationId": "living-due:2020-02-01"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-208a9b73-36b6-4f70-8ce4-72de972d6a6c",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "AcknowledgeCashGap",
+          "payload": {
+            "instanceId": "living:2020-02-01"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-e8f01fbb-9efc-42b9-973c-9d88fa98e222",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-3c0d89a4-d626-40a0-be6d-2c67a519fa13",
+          "expectedRevision": 11
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-01",
+            "phase": "snapshot"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-983bc7f3-0200-4fae-a81c-89b00f3c087b",
+          "expectedRevision": 12
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-29",
+            "phase": "snapshot"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-e15e1227-6644-4ffd-bb9a-b9a22b47ae2f",
+          "expectedRevision": 13
+        },
+        {
+          "actorId": "player",
+          "kind": "PayObligation",
+          "payload": {
+            "accountId": "personal",
+            "amountFen": 199998,
+            "obligationId": "living-due:2020-02-01"
+          },
+          "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+          "commandId": "command-41359693-7d82-4838-b39c-2678a72772ea",
+          "expectedRevision": 14
+        }
+      ],
+      "expectedStateHash": "ae83368085242ffaf38763be9ffcb7ed442d184032ae73841d16a90d9bbbcbbf",
+      "actualReplayHash": "ae83368085242ffaf38763be9ffcb7ed442d184032ae73841d16a90d9bbbcbbf",
+      "result": "PASS",
+      "scope": "audit_of_actual_UI_exported_commands_not_a_replacement_for_browser_interaction"
+    }
+  ],
+  "notCovered": [
+    "human_playtest",
+    "real_browser_200_percent_zoom",
+    "native_beforeunload_popup_visual_confirmation",
+    "full_campaign"
+  ]
+}

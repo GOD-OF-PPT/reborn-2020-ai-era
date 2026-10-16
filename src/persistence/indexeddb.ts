@@ -21,6 +21,7 @@ export type ImportOptions = { readonly importId: string; readonly actorId: strin
   | { readonly mode: 'replace'; readonly expectedRevision: number; readonly expectedGeneration: number }
 )
 export interface ImportResult { readonly record: StoredRun; readonly duplicate: boolean; readonly importId: string }
+export interface RunListing {readonly runId:string;readonly revision:number|null;readonly date:string|null;readonly backgroundId:string|null;readonly compatible:boolean;readonly errorCode:string|null}
 export interface RunStore {
   readonly name: string
   load(runId: string): Promise<StoredRun | null>
@@ -147,6 +148,18 @@ export class IndexedDbRunStore implements RunStore {
           logs.onsuccess = () => { logRows = logs.result; validate() }
         } catch (error) { abort(error) }
       }
+    })
+  }
+
+  async listRuns():Promise<readonly RunListing[]>{
+    return this.#transaction(['heads'],'readonly',(transaction,finish)=>{
+      const request=transaction.objectStore('heads').getAll()
+      request.onsuccess=()=>finish(request.result.map((raw:unknown)=>{
+        const row=rowSchema.safeParse(raw)
+        if(!row.success)return {runId:'invalid-record',revision:null,date:null,backgroundId:null,compatible:false,errorCode:'INVALID_STORED_RECORD'}
+        try{const loaded=this.#readRow(raw);requireRule(loaded,'RUN_NOT_FOUND');const run=loaded.record.run;return {runId:run.runId,revision:run.revision,date:run.timeline.cursor.date,backgroundId:run.backgroundId,compatible:true,errorCode:null}}
+        catch(error){return {runId:row.data.runId,revision:null,date:null,backgroundId:null,compatible:false,errorCode:error instanceof RuleError?error.code:'INVALID_STORED_RECORD'}}
+      }))
     })
   }
 

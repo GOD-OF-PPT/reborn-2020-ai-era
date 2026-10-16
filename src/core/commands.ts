@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { playerProfileSchema } from './player-profile.ts'
 import { marketValuationComplete } from './market-projection.ts'
 import { accountPosition } from './ledger.ts'
 import { actionBudget, applyEconomy } from './economy.ts'
@@ -20,7 +21,7 @@ const id = z.string().min(1).max(128).regex(/^[A-Za-z0-9][A-Za-z0-9_.:/-]*$/)
 const opaqueId = z.string().min(1).max(512).regex(/^[A-Za-z0-9][A-Za-z0-9_.:/-]*$/)
 const date = z.string().refine((value) => { try { isoDate(value); return true } catch { return false } })
 const envelopeSchema = z.strictObject({ commandId: id, runId: id, actorId: id, expectedRevision: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER), kind: id, payload: z.unknown() })
-export const creationPayloadSchema = z.strictObject({ backgroundId: opaqueId, origin: z.enum(['normal', 'fixture']), seed: z.string().min(1).max(256), initialStateHash: z.string().regex(/^[0-9a-f]{64}$/) })
+export const creationPayloadSchema = z.strictObject({ backgroundId: opaqueId, playerProfile:playerProfileSchema,origin: z.enum(['normal', 'fixture']), seed: z.string().min(1).max(256), initialStateHash: z.string().regex(/^[0-9a-f]{64}$/) })
 
 export interface CommandPreview {
   readonly allowed: boolean
@@ -132,7 +133,7 @@ export function projectRun(run: GameRun) {
   const accruals=operatingAccruals(run,run.timeline.cursor.date)
   const operations=run.operations===null?null:{employment:run.operations.employment,businesses:run.operations.businesses,workers:run.operations.workers,jobs:run.operations.jobs,contracts:run.operations.contracts.map(({factId: _factId,...visible})=>visible),payroll:run.operations.payroll,loans:run.operations.loans,unbilledAccruals:accruals}
   const world = run.world === null ? null : { anchors: run.world.anchors.map(({ id, happenedAt }) => ({ id, happenedAt })), newsRead: run.world.newsRead, favoriteMemories: run.world.favoriteMemories, events: run.world.instances.map(({ id, definitionId, bindingId, createdAt, expiresAt, status, choiceId, resolution }) => ({ id, definitionId, bindingId, createdAt, expiresAt, status, choiceId, resolution })), jobs: run.world.jobs, preparations: run.world.preparations, entitlements: run.world.entitlements, stoppedBindings: run.world.stoppedBindings, evidence: run.world.evidence }
-  return copyJson({ runId: run.runId, revision: run.revision, origin: run.origin, date: run.timeline.cursor.date, phase: run.phase, accounts: run.controlledAccountIds.map((accountId) => ({ accountId, ...accountPosition(run.economy.ledger, accountId),valuationStatus:marketValuationComplete(run,accountId)?'current':'data_unavailable',lastKnownInvestmentValueFen:accountPosition(run.economy.ledger,accountId).investmentValueFen,investmentValueFen:marketValuationComplete(run,accountId)?accountPosition(run.economy.ledger,accountId).investmentValueFen:null,accruedCostFen:accruals.filter(a=>a.accountId===accountId).reduce((sum,a)=>sum+a.amountFen,0),netAssetsFen:marketValuationComplete(run,accountId)?accountPosition(run.economy.ledger,accountId).netAssetsFen-accruals.filter(a=>a.accountId===accountId).reduce((sum,a)=>sum+a.amountFen,0):null })), budget: actionBudget(run.economy, run.timeline.cursor.date), evidence: visibleFacts(run.facts), receipts: run.receipts.map(({ commandId, kind, revisionAfter, summary }) => ({ commandId, kind, revisionAfter, summary })), world,operations })
+  return copyJson({ runId: run.runId,backgroundId:run.backgroundId,playerProfile:run.playerProfile, revision: run.revision, origin: run.origin, date: run.timeline.cursor.date, phase: run.phase, accounts: run.controlledAccountIds.map((accountId) => ({ accountId, ...accountPosition(run.economy.ledger, accountId),valuationStatus:marketValuationComplete(run,accountId)?'current':'data_unavailable',lastKnownInvestmentValueFen:accountPosition(run.economy.ledger,accountId).investmentValueFen,investmentValueFen:marketValuationComplete(run,accountId)?accountPosition(run.economy.ledger,accountId).investmentValueFen:null,accruedCostFen:accruals.filter(a=>a.accountId===accountId).reduce((sum,a)=>sum+a.amountFen,0),netAssetsFen:marketValuationComplete(run,accountId)?accountPosition(run.economy.ledger,accountId).netAssetsFen-accruals.filter(a=>a.accountId===accountId).reduce((sum,a)=>sum+a.amountFen,0):null })), budget: actionBudget(run.economy, run.timeline.cursor.date), evidence: visibleFacts(run.facts), receipts: run.receipts.map(({ commandId, kind, revisionAfter, summary }) => ({ commandId, kind, revisionAfter, summary })), world,operations })
 }
 
 function prepare(run: GameRun, raw: unknown, registry: CommandRegistry, principalActorId: string) {

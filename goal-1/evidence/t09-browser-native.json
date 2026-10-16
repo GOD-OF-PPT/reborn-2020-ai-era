@@ -1,0 +1,781 @@
+{
+  "taskId": "T09",
+  "checkpointId": "C09",
+  "status": "complete_with_explicit_scope_limits",
+  "evidenceType": "browser_product_ui",
+  "baseCommit": "45d876c960097f45d4aa65ae4b0178a0bd007d3c",
+  "sourceBinding": "Frozen source and literal command replay are recorded in t09-browser-replay-audit.json; UI findings were repaired and directionally retested during this task.",
+  "origins": [
+    "http://127.0.0.1:5189",
+    "http://127.0.0.1:5190"
+  ],
+  "versions": {
+    "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+    "contentVersion": "world-playable-work-v1",
+    "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+    "rulesVersion": "rules-t09-playable-v1",
+    "schemaVersion": 6
+  },
+  "total": 40,
+  "passed": 40,
+  "checks": [
+    {
+      "name": "Escape returns focus and does not execute",
+      "actual": {
+        "focus": "安排本季工作 · 2点",
+        "revision": 1
+      },
+      "passed": true
+    },
+    {
+      "name": "backup preserves the normal initial commit",
+      "actual": {
+        "origin": "normal",
+        "revision": 1,
+        "seed": "t09-browser-technical-first-order"
+      },
+      "passed": true
+    },
+    {
+      "name": "normal first payment distinguishes direct cost and wages",
+      "actual": {
+        "date": "2020-01-20",
+        "cashFen": 2680000,
+        "paymentFen": 130000,
+        "costFen": 50000,
+        "netFen": 80000
+      },
+      "passed": true
+    },
+    {
+      "name": "normal technical UX01 quarter",
+      "actual": {
+        "cashFen": 4280000,
+        "minimumFen": 2550000,
+        "spent": 4
+      },
+      "passed": true
+    },
+    {
+      "name": "repeated confirmation creates one work receipt",
+      "actual": 1,
+      "passed": true
+    },
+    {
+      "name": "native reload and continue retain saved quarter",
+      "actual": [
+        "已保存 · 12",
+        "已从本机存档继续。",
+        "客户实际回款¥1,300制作成本¥500 · 本单净额¥800已留下有客户付款依据的案例。工资和股票浮盈没有算进本单净额。"
+      ],
+      "passed": true
+    },
+    {
+      "name": "two real tabs enforce a read-only second session",
+      "actual": [
+        "只读 · 12",
+        "另一标签正在操作，本页只读。"
+      ],
+      "passed": true
+    },
+    {
+      "name": "released native writer can be explicitly acquired",
+      "actual": [
+        "已保存 · 12",
+        "已重新读取本机提交。"
+      ],
+      "passed": true
+    },
+    {
+      "name": "normal content UX01 uses a distinct salary and chosen wish",
+      "actual": {
+        "cashFen": 3680000,
+        "minimumFen": 2550000,
+        "wish": "own_brand"
+      },
+      "passed": true
+    },
+    {
+      "name": "zero action and zero available cash retain real cancellable plans",
+      "actual": {
+        "zeroCash": true,
+        "zeroAction": true,
+        "cancellable": true
+      },
+      "passed": true
+    },
+    {
+      "name": "zero-resource advance and cancellation do not refund spent action",
+      "actual": {
+        "date": "2020-01-02",
+        "availableFen": 2300000,
+        "spent": 4
+      },
+      "passed": true
+    },
+    {
+      "name": "investment guide preserves independent Q01 without first-order reward",
+      "actual": {
+        "cashFen": 2700000,
+        "minimumFen": 1100000,
+        "spent": 4
+      },
+      "passed": true
+    },
+    {
+      "name": "all five routes expose current preparation and qualification limits",
+      "actual": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "passed": true
+    },
+    {
+      "name": "after the June announcement only later matching dates are selectable",
+      "actual": {
+        "worldDate": "2020-06-11",
+        "quoteDate": "2020-06-10",
+        "dates": [
+          "2020-06-20",
+          "2020-06-30",
+          "2020-07-10"
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "reading an already occurred historical announcement is free and does not reroll any domain",
+      "actual": {
+        "anchorsBefore": [
+          "H001"
+        ],
+        "newsRead": [
+          "H001"
+        ],
+        "randomUnchanged": true,
+        "cashUnchanged": true
+      },
+      "passed": true
+    },
+    {
+      "name": "normal browser S01 reaches June 30 after an explicit new-quarter work decision",
+      "actual": {
+        "date": "2020-06-30",
+        "cashFen": 3900000,
+        "quarterSpent": 2
+      },
+      "passed": true
+    },
+    {
+      "name": "restoring a prior revision preserves the replaced head as a real backup",
+      "actual": {
+        "backupRevision": 23,
+        "identicalToHalfYear": true
+      },
+      "passed": true
+    },
+    {
+      "name": "invalid future save with HTML text is refused without executing or replacing data",
+      "actual": {
+        "alerts": [
+          "操作未完成（UNSUPPORTED_SAVE_VERSION）。请检查日期、条件与现有承诺。"
+        ],
+        "scriptDialog": false
+      },
+      "passed": true
+    },
+    {
+      "name": "head-put abort keeps old public state while preserving the real candidate",
+      "actual": {
+        "oldRevision": 1,
+        "candidateRevision": 2,
+        "oldJobs": 0,
+        "candidateJobs": 1,
+        "approach": "free"
+      },
+      "passed": true
+    },
+    {
+      "name": "reload request does not discard the unsaved candidate",
+      "actual": {
+        "driverResult": "reloaded",
+        "nativeDialogObserved": null,
+        "candidateUnchanged": true
+      },
+      "passed": true,
+      "limitation": "The browser tool did not expose a native beforeunload popup; only candidate retention and in-app exit guard are claimed."
+    },
+    {
+      "name": "native retry commits exactly the exported candidate once",
+      "actual": {
+        "identical": true,
+        "revision": 2,
+        "workReceipts": 1
+      },
+      "passed": true
+    },
+    {
+      "name": "aborted customer collection does not publish cash, income receipt or paid case",
+      "actual": {
+        "oldDate": "2020-01-19",
+        "cashFen": 2550000,
+        "receiptPresent": false,
+        "writeAborted": true
+      },
+      "passed": true
+    },
+    {
+      "name": "customer income retry publishes the same candidate once",
+      "actual": {
+        "oldRevision": 6,
+        "candidateRevision": 7,
+        "identical": true,
+        "collections": 1,
+        "paidCases": 1
+      },
+      "passed": true
+    },
+    {
+      "name": "content investment guide and refusal keep distinct salary and no first-order income",
+      "actual": {
+        "cashFen": 2100000,
+        "minimumFen": 1100000,
+        "spent": 4
+      },
+      "passed": true
+    },
+    {
+      "name": "text and reduced-motion settings do not change the saved state or random domains",
+      "actual": {
+        "identical": true
+      },
+      "passed": true
+    },
+    {
+      "name": "1366x768 market layout has no document horizontal overflow",
+      "actual": {
+        "scrollWidth": 1366,
+        "width": 1366
+      },
+      "passed": true
+    },
+    {
+      "name": "the June preview endpoint rejects new future orders while preserving holdings",
+      "actual": {
+        "newOrderEnabled": false
+      },
+      "passed": true
+    },
+    {
+      "name": "1280x720 market layout has no document horizontal overflow",
+      "actual": {
+        "scrollWidth": 1280,
+        "width": 1280
+      },
+      "passed": true
+    },
+    {
+      "name": "1920x1080 market layout remains bounded and readable",
+      "actual": {
+        "scrollWidth": 1920,
+        "width": 1920
+      },
+      "passed": true
+    },
+    {
+      "name": "keyboard can reach the visible quarter advance at 1280x720 without executing it",
+      "actual": {
+        "keyboardFocus": {
+          "active": "进入下一季 · 2020-04-01",
+          "tag": "BUTTON"
+        },
+        "advanceRect": {
+          "bottom": 676.625,
+          "left": 1049.0703125,
+          "right": 1236.6015625,
+          "top": 636.5546875
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "640x360 effective layout keeps the core quarter action reachable",
+      "actual": {
+        "narrowLayout": {
+          "scrollWidth": 640,
+          "width": 640
+        },
+        "narrowAdvance": {
+          "bottom": 319.8203125,
+          "top": 281.8203125
+        }
+      },
+      "passed": true,
+      "limitation": "Effective layout test only; the browser zoom shortcut did not expose a measurable 200 percent zoom change."
+    },
+    {
+      "name": "downloaded JSON contains the complete same saved run",
+      "actual": {
+        "bytes": 226023,
+        "identical": true
+      },
+      "passed": true
+    },
+    {
+      "name": "downloaded file can be read completely and strictly inspected through the native chooser",
+      "actual": {
+        "identical": true,
+        "restoreEnabled": true
+      },
+      "passed": true,
+      "scope": "file read and inspection; actual revision replacement and backup were tested separately"
+    },
+    {
+      "name": "production build ignores development fault query and commits a normal work action",
+      "actual": {
+        "origin": "http://127.0.0.1:5190",
+        "saved": true,
+        "diagnostics": false,
+        "workPoints": true
+      },
+      "passed": true
+    },
+    {
+      "name": "known first-order deadline and non-automatic defaults are visible before advancing",
+      "actual": {
+        "deadlineVisible": true,
+        "noImplicitPlan": true
+      },
+      "passed": true
+    },
+    {
+      "name": "real liquidity gap is visible with its exact shortfall and original payable",
+      "actual": {
+        "cashFen": 200002,
+        "payableFen": 400000,
+        "shortfallFen": 199998,
+        "fullPaymentEnabled": false
+      },
+      "passed": true
+    },
+    {
+      "name": "partial payment leaves zero cash and a payable that remains actionable after deferral",
+      "actual": {
+        "cashFen": 0,
+        "remainingFen": 199998,
+        "paymentEntryPresent": true
+      },
+      "passed": true
+    },
+    {
+      "name": "zero-cash work earns only on the actual salary date and can then settle deferred debt",
+      "actual": {
+        "salaryDate": "2020-02-29",
+        "cashBeforePayFen": 800000,
+        "remainingBeforePayFen": 199998,
+        "cashAfterPayFen": 600002
+      },
+      "passed": true
+    },
+    {
+      "name": "frozen final production build loads the real save and commits without activating fault injection",
+      "actual": {
+        "saved": true,
+        "diagnostics": false,
+        "logs": []
+      },
+      "passed": true
+    },
+    {
+      "name": "save failure focuses the unsaved warning instead of a success receipt",
+      "actual": {
+        "focusedWarning": true
+      },
+      "passed": true
+    }
+  ],
+  "snapshots": [
+    {
+      "file": "t09-browser-content-final.json",
+      "sha256": "2d80bc3d762ea9834fd8d6158529c1ebeeea9610c943138188a1a7a352760394",
+      "runId": "life-15041ae1-2f33-47f3-a4b8-9b4709b341f8",
+      "revision": 12,
+      "origin": "normal",
+      "seed": "t09-browser-content-first-order",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-content-initial.json",
+      "sha256": "bbd59498b45b10eca6c5d3498fd2e6e14c9e24aab449bc54fbc115c701b7af3d",
+      "runId": "life-15041ae1-2f33-47f3-a4b8-9b4709b341f8",
+      "revision": 1,
+      "origin": "normal",
+      "seed": "t09-browser-content-first-order",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-content-investment-final.json",
+      "sha256": "1621bcbcb122151ea626a4c12aa757a9c1613aca71a5fdfdb6685a0bcc6b1a53",
+      "runId": "life-a2c20fbf-337f-4dd9-8986-264305b920e5",
+      "revision": 12,
+      "origin": "normal",
+      "seed": "t09-browser-content-investment",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-content-investment-initial.json",
+      "sha256": "f9d8badeaa2521d81d71e4652afc191eb7eb0f6d4b540d94414d78c7fa28fa74",
+      "runId": "life-a2c20fbf-337f-4dd9-8986-264305b920e5",
+      "revision": 1,
+      "origin": "normal",
+      "seed": "t09-browser-content-investment",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-fault-candidate.json",
+      "sha256": "11bfef46e311335ab1fcf0770ff9a91923aace74908c371b94cb4f7014c99bbe",
+      "runId": "life-695c770d-a5a9-43b8-b949-71efd964f58e",
+      "revision": 2,
+      "origin": "normal",
+      "seed": "t09-browser-free-abort",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "unsaved_candidate"
+    },
+    {
+      "file": "t09-browser-fault-old.json",
+      "sha256": "ecbd3b281ae4c44dece2fcf1f383995beb91c1f06f8c6d2cd5a5b6d3aca2c092",
+      "runId": "life-695c770d-a5a9-43b8-b949-71efd964f58e",
+      "revision": 1,
+      "origin": "normal",
+      "seed": "t09-browser-free-abort",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-fault-retried.json",
+      "sha256": "11bfef46e311335ab1fcf0770ff9a91923aace74908c371b94cb4f7014c99bbe",
+      "runId": "life-695c770d-a5a9-43b8-b949-71efd964f58e",
+      "revision": 2,
+      "origin": "normal",
+      "seed": "t09-browser-free-abort",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-income-candidate.json",
+      "sha256": "4f8c3834f5eca97aaf7518647984e2ede52354bbe8d4d55406cad8e321312ccf",
+      "runId": "life-9fb4658e-d3a4-4b84-8981-d7fc6e551593",
+      "revision": 7,
+      "origin": "normal",
+      "seed": "t09-browser-income-abort",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "unsaved_candidate"
+    },
+    {
+      "file": "t09-browser-income-old.json",
+      "sha256": "50d3b6371aef597b44ea2519e007d61d5ca75ca3baa46847e296c30a6cd53184",
+      "runId": "life-9fb4658e-d3a4-4b84-8981-d7fc6e551593",
+      "revision": 6,
+      "origin": "normal",
+      "seed": "t09-browser-income-abort",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-income-retried.json",
+      "sha256": "4f8c3834f5eca97aaf7518647984e2ede52354bbe8d4d55406cad8e321312ccf",
+      "runId": "life-9fb4658e-d3a4-4b84-8981-d7fc6e551593",
+      "revision": 7,
+      "origin": "normal",
+      "seed": "t09-browser-income-abort",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-investment-final.json",
+      "sha256": "302d03f0b6b6b662c9560e4ad242e3402dcd560486e8a27da281bd39d87612b7",
+      "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+      "revision": 23,
+      "origin": "normal",
+      "seed": "t09-browser-investment",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-investment-initial.json",
+      "sha256": "09f53a07bcfb7c910f80c6e4dae0f681d727f4725ecba9c1437365dcbf48f7f6",
+      "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+      "revision": 1,
+      "origin": "normal",
+      "seed": "t09-browser-investment",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-investment-quarter.json",
+      "sha256": "4a2003bada5977778f44209bfefded3fa8ba706624325f5c96598093b17a2c76",
+      "runId": "life-ed57f95e-8e03-4ab4-82e2-adcef376f7a0",
+      "revision": 17,
+      "origin": "normal",
+      "seed": "t09-browser-investment",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-production-current.json",
+      "sha256": "f27b798671e0b1519cf03e539deddc5d0351b4b4955be541e312a0dcc445542e",
+      "runId": "life-c7909bb3-c1be-4ef5-95ce-af03880a15d9",
+      "revision": 3,
+      "origin": "normal",
+      "seed": "t09-production-smoke",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-production-final.json",
+      "sha256": "526a6eed7db3901d563ad501c5488c4d6f20cc6e0d0542c256e4382ff6c96558",
+      "runId": "life-c7909bb3-c1be-4ef5-95ce-af03880a15d9",
+      "revision": 2,
+      "origin": "normal",
+      "seed": "t09-production-smoke",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-production-initial.json",
+      "sha256": "6919ce3651d0a319b21c80ca4044a785979d1c6c8208bbd198b57a116ef67d1a",
+      "runId": "life-c7909bb3-c1be-4ef5-95ce-af03880a15d9",
+      "revision": 1,
+      "origin": "normal",
+      "seed": "t09-production-smoke",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-recovery-deferred.json",
+      "sha256": "9e5d9b72c57c8835d5ea36ce26a42851c4724bcf14ac986d5ead2990eeb3d391",
+      "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+      "revision": 11,
+      "origin": "normal",
+      "seed": "t09-browser-liquidity-recovery",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-recovery-final.json",
+      "sha256": "57b9e92fbe0774949c62426dffb59c888029568d66f49a0a250a96c3971ada4f",
+      "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+      "revision": 15,
+      "origin": "normal",
+      "seed": "t09-browser-liquidity-recovery",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-recovery-gap.json",
+      "sha256": "00dc524f59a4dafa50dc8cc94b8df9d2cf68c55a901bce43eb58b9ef7a20b510",
+      "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+      "revision": 9,
+      "origin": "normal",
+      "seed": "t09-browser-liquidity-recovery",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-recovery-initial.json",
+      "sha256": "1cd201d3fb5cc7afa4e0db2c814986399e9c0bca69254b8e6449df90efddb443",
+      "runId": "life-b792e837-9429-48e6-9571-b67836732985",
+      "revision": 1,
+      "origin": "normal",
+      "seed": "t09-browser-liquidity-recovery",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-technical-final.json",
+      "sha256": "51a3b9fb9c3b78b8f0248ec17a1c0c749d8e87a9b83b648c0d4808747646f6da",
+      "runId": "life-82bf1e03-7615-4cb5-81f7-611df05cab0b",
+      "revision": 12,
+      "origin": "normal",
+      "seed": "t09-browser-technical-first-order",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    },
+    {
+      "file": "t09-browser-technical-initial.json",
+      "sha256": "86baada690fb9260150c9ea6c9b8d0b2b02fa100d69bfce0e2ff0247be2f8902",
+      "runId": "life-82bf1e03-7615-4cb5-81f7-611df05cab0b",
+      "revision": 1,
+      "origin": "normal",
+      "seed": "t09-browser-technical-first-order",
+      "versions": {
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "contentVersion": "world-playable-work-v1",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1",
+        "rulesVersion": "rules-t09-playable-v1",
+        "schemaVersion": 6
+      },
+      "storageState": "exported_saved_state"
+    }
+  ],
+  "distHashes": {
+    "index.html": "88710a1427bbd59fda6eeb075c8dbf6f8f1514c251e92548ccd00018db2969d8",
+    "assets/browser-game-LncGuaHp.js": "3637228e78d71b03b9b7a06cc5290135cc49d29be6127f1bfbc3bec8273a3ab0",
+    "assets/index-C8vBFpFC.css": "2d4946802a7a0067d1cdbb5b98469fd72929a1db9f53fd3146934b1a713f2dda",
+    "assets/index-CiEcZNd4.js": "00e7ad09f7b9d479fc6bfb03815f0ae4cda35bd404a235ae89cc255fa4690564"
+  },
+  "displaySettingsRestored": true,
+  "viewportOverrideReset": true,
+  "playtestSamples": 0,
+  "originalPngs": 0,
+  "driverObservations": [
+    "A double-click attempt encountered a removed confirmation control after its first commit; the actual saved trace contains exactly one WorkQuarter receipt.",
+    "A delayed click was inspected before continuing; it had already saved and was not resubmitted.",
+    "Browser observation truncates large strings around 200000 characters; full exports were read in 80000-character DOM chunks, validated and compared with actual file download.",
+    "The native beforeunload dialog was not exposed by the tool; a reload request retained the unsaved candidate. No manual popup visual confirmation is claimed.",
+    "The zoom shortcut did not yield a measurable layout change; 640x360 is an effective-layout test only.",
+    "Self-selected date submission was retested after reading the actual form value on submit."
+  ],
+  "notCovered": [
+    "full_campaign",
+    "all_future_business_routes",
+    "all_multi_account_ui_paths",
+    "native_beforeunload_popup_visual_confirmation",
+    "real_browser_200_percent_zoom",
+    "original_assets",
+    "human_playtest"
+  ]
+}

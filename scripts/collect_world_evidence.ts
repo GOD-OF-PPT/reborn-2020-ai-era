@@ -13,6 +13,7 @@ import type { WorldRuntime } from '../src/core/world.ts'
 import { accountPosition } from '../src/core/ledger.ts'
 import { evidenceDirectory } from './evidence-output.ts'
 import { canonicalJson } from '../src/core/identity.ts'
+import { drawRandom } from '../src/core/random.ts'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const directory = evidenceDirectory(root, 't05-world-evidence.json', ['t05-clock-technical_employee', 't05-clock-content_employee', 't05-funded-content', 't05-zero-resource'].flatMap((name) => [`${name}-initial.json`, `${name}-final.json`]))
@@ -44,11 +45,18 @@ function drive(name: string, context: CaseContext, policy: 'prepare' | 'deadline
   const final = context.codec.export(run) + '\n'
   if (context.codec.export(context.codec.import(final)) + '\n' !== final) throw new Error('roundtrip mismatch')
   const marketRandomUnchanged = canonicalJson(run.random.streams.market) === canonicalJson(context.run.random.streams.market)
-  if (!marketRandomUnchanged) throw new Error('content changed the market random stream')
+  // T08 added autonomous quote checkpoints to normal campaigns. Content still
+  // must not draw market randomness beyond those quote-generation occurrences.
+  const quotes=run.market?.history.slice(context.run.market?.history.length??0)??[]
+  if(quotes.some(q=>q.status==='data_unavailable'||q.status==='no_rule'))throw new Error('WORLD_PROBE_MARKET_DATA_UNEXPECTED')
+  const expectedMarketDraws=quotes.filter(q=>q.status==='open'||q.status==='suspended').length
+  let referenceRandom=context.run.random;for(let i=0;i<expectedMarketDraws;i++)referenceRandom=drawRandom(referenceRandom,'market').random
+  const marketRandomMatchesQuoteClock=canonicalJson(run.random.streams.market)===canonicalJson(referenceRandom.streams.market)
+  if(!marketRandomMatchesQuoteClock)throw new Error('content changed market randomness beyond the quote clock')
   const files = { initial: `${name}-initial.json`, final: `${name}-final.json` }
   writeFileSync(join(directory, files.initial), initial)
   writeFileSync(join(directory, files.final), final)
-  return { name, origin: run.origin, scope: policy === 'prepare' ? 'funded_content_fixture_not_normal_campaign' : 'clock_and_deadline_only_not_playable_campaign', seed: run.seed, backgroundId: run.backgroundId, versions: run.versions, target, files, initialSha256: hash(initial), finalSha256: hash(final), commands, expected: { date: target, readNews: 0, marketRandomUnchanged: true, eventResolution: policy === 'deadline' ? 'default' : 'chosen' }, actual: { date: run.timeline.cursor.date, marketRandomUnchanged, position: accountPosition(run.economy.ledger, run.personalAccountId), anchorIds: run.world?.anchors.map((item) => item.id), readNews: run.world?.newsRead.length, eventResults: run.world?.instances.map((item) => ({ id: item.id, definitionId: item.definitionId, resolution: item.resolution, choiceId: item.choiceId, reason: item.reason })), jobs: run.world?.jobs.map((item) => ({ id: item.id, status: item.status })), preparations: run.world?.preparations, marketRandom: run.random.streams.market } }
+  return { name, origin: run.origin, scope: policy === 'prepare' ? 'funded_content_fixture_not_normal_campaign' : 'clock_and_deadline_only_not_playable_campaign', seed: run.seed, backgroundId: run.backgroundId, versions: run.versions, target, files, initialSha256: hash(initial), finalSha256: hash(final), commands, expected: { date: target, readNews: 0, marketRandomMatchesQuoteClock:true,expectedMarketDraws,marketRandomUnchanged:run.market===null, eventResolution: policy === 'deadline' ? 'default' : 'chosen' }, actual: { date: run.timeline.cursor.date, marketRandomUnchanged,marketRandomMatchesQuoteClock,expectedMarketDraws, position: accountPosition(run.economy.ledger, run.personalAccountId), anchorIds: run.world?.anchors.map((item) => item.id), readNews: run.world?.newsRead.length, eventResults: run.world?.instances.map((item) => ({ id: item.id, definitionId: item.definitionId, resolution: item.resolution, choiceId: item.choiceId, reason: item.reason })), jobs: run.world?.jobs.map((item) => ({ id: item.id, status: item.status })), preparations: run.world?.preparations, marketRandom: run.random.streams.market } }
 }
 
 const cases = []

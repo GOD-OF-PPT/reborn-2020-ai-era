@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { playerProfileSchema } from '../core/player-profile.ts'
 import { DAY_PHASES } from '../core/timeline.ts'
 import { RANDOM_DOMAINS, RNG_ALGORITHM } from '../core/random.ts'
 import { worldOperationSchema, worldStateSchema } from '../core/world-schema.ts'
@@ -27,7 +28,9 @@ const economySchema = z.strictObject({
   actions: rows(z.strictObject({ definition: actionDefinitionSchema, status: z.enum(['draft', 'reserved', 'executed', 'completed', 'interrupted', 'cancelled']), plannedAt: dateSchema, executedAt: dateSchema.nullable(), finishedAt: dateSchema.nullable() })),
   receipts: rows(z.strictObject({ id: idSchema, signature })),
 })
-export const eventSchema = z.strictObject({ instanceId: idSchema, date: dateSchema, phase: z.enum(DAY_PHASES), priority: signedPriority.refine((value) => value < Number.MAX_SAFE_INTEGER), payload: z.union([economyOperationSchema, worldOperationSchema, operatingEventSchema,marketEventSchema]) })
+// Kinds are disjoint. Most scheduled rows are market points; parse that narrow
+// branch first instead of testing every financial operation for every quote.
+export const eventSchema = z.strictObject({ instanceId: idSchema, date: dateSchema, phase: z.enum(DAY_PHASES), priority: signedPriority.refine((value) => value < Number.MAX_SAFE_INTEGER), payload: z.union([marketEventSchema,operatingEventSchema,worldOperationSchema,economyOperationSchema]) })
 const timelineSchema = z.strictObject({
   cursor: z.strictObject({ date: dateSchema, phase: z.enum([...DAY_PHASES, 'before']), priority: signedPriority, instanceId: z.string().max(512) }),
   pending: rows(eventSchema),
@@ -43,7 +46,7 @@ export const causeSchema = z.strictObject({ id: idSchema, commandId: commandIdSc
 
 export const runSchema = z.strictObject({
   versions: versionSchema, runId: commandIdSchema, actorId: commandIdSchema, personalAccountId: idSchema,
-  backgroundId: idSchema, origin: z.enum(['normal', 'fixture']), seed: z.string().min(1).max(256), revision: safeCount.min(1),
+  backgroundId: idSchema,playerProfile:playerProfileSchema, origin: z.enum(['normal', 'fixture']), seed: z.string().min(1).max(256), revision: safeCount.min(1),
   controlledAccountIds: rows(idSchema), phase: z.enum(['playing', 'epilogue', 'finished']), economy: economySchema, timeline: timelineSchema, random: randomSchema,
   facts: rows(z.strictObject({ id: idSchema, domain: z.enum(RANDOM_DOMAINS), sourceEventId: idSchema, createdAt: dateSchema, roll: uint32, evidence: z.string().min(1).max(4000).nullable() })),
   privateNotes: z.string().max(16000), world: worldStateSchema.nullable(), operations: operationsStateSchema.nullable(), market:marketStateSchema.nullable(),receipts: rows(commandReceiptSchema), causes: rows(causeSchema),

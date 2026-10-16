@@ -1,5 +1,5 @@
 /** Fault injection at the database seam, shared by emulator and native-browser checks. */
-export function abortAfterHeadWrite(base: IDBFactory, databaseName: string) {
+export function abortAfterHeadWrite(base: IDBFactory, databaseName: string,when:(row:unknown)=>boolean=()=>true) {
   const trace = { writeSucceeded: false, abortIssued: false }
   let armed = true
   const factory: IDBFactory = {
@@ -19,7 +19,7 @@ export function abortAfterHeadWrite(base: IDBFactory, databaseName: string) {
             const put = store.put.bind(store)
             Object.defineProperty(store, 'put', { configurable: true, value: (...values: Parameters<IDBObjectStore['put']>) => {
               const write = put(...values)
-              if (armed) {
+              if (armed&&when(values[0])) {
                 armed = false
                 write.addEventListener('success', () => { trace.writeSucceeded = true; transaction.abort(); trace.abortIssued = true }, { once: true })
               }

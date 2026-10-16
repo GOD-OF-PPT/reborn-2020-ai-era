@@ -1,0 +1,1429 @@
+{
+  "taskId": "T08",
+  "evidenceType": "integration_replay",
+  "baseCommit": "45d876c960097f45d4aa65ae4b0178a0bd007d3c",
+  "caseIds": [
+    "Q01:normal_orders",
+    "Q06",
+    "Q07",
+    "Q08",
+    "Q28",
+    "F06",
+    "Q19:projection",
+    "Q33:atomic_candidate"
+  ],
+  "reproduceCommand": "npm run evidence:market",
+  "sourceHashes": {
+    "src/application/bootstrap.test.ts": "129fd7a7cc26821a68907de4c0b092091c3a8a6eeb7dca4ec43b2b0354e15ac5",
+    "src/application/bootstrap.ts": "b698a869d4358ff070eee150160a2dd6c690878cbfcc51214bdc6b0df0c229db",
+    "src/application/browser-game.ts": "416f550048b7664b4810468fe8cc8af7badf5d820f0bf380236229462ca3cf89",
+    "src/application/campaign.test.ts": "bc5a07c73e6372433177679b6b8ee43df6bbcaec015bd57a76db5d418fc3527b",
+    "src/application/campaign.ts": "3d6b88f48b3e732e2597323862cb92517aac131ff6833a4b003710b5a08526f0",
+    "src/application/cash-forecast.test.ts": "75257831e625b8e322c61725d97b9cdcd91cf2b7e07a1faab5980356f8558f39",
+    "src/application/cash-forecast.ts": "cb65ed48144111abb26dad58cbd1743b069358dd884c87a1ae2dc42873d92747",
+    "src/application/employment.test.ts": "d88fcb35f48f15dc32fd20dc6642322bb8efb3677f502fcbf458d97eb96221df",
+    "src/application/entry-profile.test.ts": "24603fa0587c0b4a2e5c2ae2d5ed5d91a9e7da702d2ebba6e7a1c5fc6f790f15",
+    "src/application/first-order.test.ts": "6e4d216b26c250885767569e6eb82fb2b31c576520ab1c7cc1272c68d981f0d5",
+    "src/application/first-order.ts": "09b09c4702e3235db3c871f0a86e5dfea76cf25cf63e4a4f7b00a5df1a4269e9",
+    "src/application/game-controller.test.ts": "3b3753af67a5a137b24ee1af9b5aed8544a9ecc990a0f0cd9312bbf9dcabe6e2",
+    "src/application/game-controller.ts": "278845a4a9b85bfce946b9b6097722731002a5b662e7d25fc510f26f78bf971f",
+    "src/application/game-snapshot.ts": "490d7565be79273ad9f8aacfa2b6f9cf4a1b584999b66cefd9df1694846fec86",
+    "src/application/market-commands.ts": "1675ba4f8afc4bddbb1fe5e22508c47c063e1be66b98424c7a63a8b06a2c1e66",
+    "src/application/market-save.test.ts": "6653a54371d5a0df393c01f10ebf5177dcab66f04ada755209e11161fe2fc353",
+    "src/application/market.test.ts": "f9201fc518e65206679b53cd658685db4a15437348ccad5c2979e37cb25bd23a",
+    "src/application/operations-commands.ts": "438c6dae2c1173dc5b3f3f1c2542ba102f660ae5096929e56066079f5ca6e790",
+    "src/application/operations.test.ts": "67978bca31199dd2eed3a320450941b83b4932e937525b86663140e261c1699a",
+    "src/application/playable-advance.ts": "14644b25cf49d167b1e50b9c9801ea6d5636e810d1c86c9e22252b323727e356",
+    "src/application/playable.test.ts": "baab091517b65438591b74bc3af600f1fe442828f24826cf8ccf5c2580372318",
+    "src/application/session.test.ts": "4f3e41367d4e5d608960ddda570cfc7d219eb804538507c435d9d8610f861bfe",
+    "src/application/session.ts": "d1d2adeebcd09820446ff7df46ebb8a40623d1da759fa3859236c39a130e34a7",
+    "src/application/workbench-projection.test.ts": "bd8ef1c3b6a50b804dd57bf1bc6ea6d508dab324d0031fa3a89c51d0f7bea3dc",
+    "src/application/workbench-projection.ts": "6fa62836d3901dbfbdd4390b2a214cfb0afcde9f3604d5232cc077dbfbd57b59",
+    "src/application/world-session.test.ts": "5305325cca0e9220011cc1892959e833bed49d40565a8cd475e798c4441860c1",
+    "src/content/bootstrap.ts": "a74c282579227a154088789ac9071e05caaa11ea73aad9640600b6fa88704b47",
+    "src/content/campaign.ts": "b3189e37e9382358e1d3701d968e4b1b3da77edee3afac8da9b5ca73ba495d29",
+    "src/content/first-order.ts": "0d71c72ef62914add3e516ef391e5812df7c8a5792841102ad32acd9ca38b75c",
+    "src/content/market.ts": "e3a6eb66cdf3bab446af6aa4a5a49297fb1689d42a6092c7434fd660e7bc98f1",
+    "src/content/operations.ts": "abfb3293951d84ea547cbdc24746878d7a90fab5e3e2347ae8ee72fd675cd39e",
+    "src/core/calendar.test.ts": "50176fc44923ffd1caf6bee0f94713d001b2e24046af44818aa25d8ac02abfcc",
+    "src/core/calendar.ts": "d252630c17d099e2907df5b0b24e57687f58ab3dd544e03e4a72f41703a83419",
+    "src/core/command-identity.ts": "5ddf588bdf06e756c3f95bd44268dd2ff9bc219cbcd7cd919a6e809eda50f830",
+    "src/core/commands.test.ts": "30f5c5bb268876543b913303dd2225d75c1a2ffdc55b50c66107223057641f71",
+    "src/core/commands.ts": "711c92d43f2b99f7f6daaaffd49ff464cf5621140f5a2bd792539024d199d58c",
+    "src/core/content-schema.ts": "bcaaa021c91d2284a525d5a0a5bb48f0776ce120e7a30c96c837686e327fcc67",
+    "src/core/content-types.ts": "33b66c6f2bdab3aa6f7340f7ae7aa4b1eb6219e69e0eed9c9507e9b1d19d9a79",
+    "src/core/content.test.ts": "df41486022437aa2216b4fef44dad43d9685d75e96d0f136eae6890b3091f7fe",
+    "src/core/economic-time.test.ts": "cad6bde3a8bc482dee82bf0c5219ab6c19bd3b38537d454669980d1297e60122",
+    "src/core/economic-time.ts": "ef452e8c497e7fd654f96a4f6fa62a0642fbd08c200c74583384bd81ac0b47d7",
+    "src/core/economy.test.ts": "2b7eff1b09ea29538a9ec3902621ee6cd40262f81e5f5c9299e2e9efc359367b",
+    "src/core/economy.ts": "cc28674b5a629edd4ef71190f923835f2edcbb162c3ff00b16dc5901beb50d0c",
+    "src/core/errors.ts": "14ff69a5ca0cdc3c4b93ffac3e139750c43c1048668ed733b2006e7e306c5124",
+    "src/core/facts.test.ts": "c298d8ed705c0e2dbfb7c302db9abe00ba5b3d493d1f7d0db4ca327e6388c610",
+    "src/core/facts.ts": "5ffea6cd89bdd80116fb7d274c478cb1cf17cddeee5d8d8062a3d7f8bb324704",
+    "src/core/first-order.ts": "66e6b4eb2d6008eb1f04230cc63cf1a67637bc96582c331bac37e5ea9c9d7215",
+    "src/core/hash.test.ts": "8b901090248ef989699cbf7100581a1cb30242b147d3e7b322b4dd6c50ce3207",
+    "src/core/hash.ts": "06425267a82e9cb8bac2d0258357d3b43822b12a7592aed38e69cfa17e9ea5a3",
+    "src/core/identity.ts": "2d30f89937a7c8ac84e0213d864aa52207fce416a7d8dc5c7327288f5bc8297c",
+    "src/core/json-input.ts": "317c5b79bad1db8e9289c29159c8e89cf467faf2dfc98431ebbc4f2407f0788a",
+    "src/core/ledger.test.ts": "94eadae0c48b68374f9e669f1dfb3f6db969eff4d68025a4fbc4f26729470548",
+    "src/core/ledger.ts": "994e380af8941809ef4cc67329fdfbe2888ce5579e22194a7c17501725979f74",
+    "src/core/market-ledger.test.ts": "db1d143cca090df21073786b972556e37f9dee5899e3447e3280877d9dae0790",
+    "src/core/market-math.ts": "bbd791e0083d1b61820a3220f7424604d47e40fa1a9a43e417fd24f3676daadd",
+    "src/core/market-projection.ts": "419a08e31d3fc9f1f692934f5fb7a2cace2b762fa8e40bf088c68cd40f190deb",
+    "src/core/market-schema.ts": "5528363053e83176043ac072e392cd6d79a1d65654c66ff94b296fa0c348fc29",
+    "src/core/market-types.ts": "128ff61a76351fa638223ba6770f8280eb40256892af1363d39ea57f06724984",
+    "src/core/market-validation.ts": "50b04cfc279109c1b86109d8b4d9ef91acbdbcfaa48d71661121be3630ed9fa4",
+    "src/core/market.ts": "166fb7074bb24cd79ec8e89ab00864a1a29e7a6e0d39bffc1b333140b27adc39",
+    "src/core/money.test.ts": "836e5c5d775e29a018b3d55776cb4d288b68a10da6cd43efa4749bb9766fdaf9",
+    "src/core/money.ts": "4c3ce1830cd238f43bf65e031bcf07c49fdadf878e0839e80a15ea0e1d532d08",
+    "src/core/operating-ledger.test.ts": "8720251b2b316745347e264c0cc40cddbb4db5aa097dfc8d82452e612713dd91",
+    "src/core/operations-accrual.ts": "6fa00caf7448b9146d229ace91d5027f5404c8c52603beb2e549ca5632a1071f",
+    "src/core/operations-calendar.ts": "ea2517dd47ae1e74234c3b8afb39546d11bfa588c3dbb49a6dba8dc3c417515e",
+    "src/core/operations-schema.ts": "ec42b73c2857461517adefccec790f99c621339427f945056ef2eb1ed5ea4404",
+    "src/core/operations-types.ts": "7e42303bd72cab61fcba0a3e73272fc27c90bfc5f6c4c1f662f5080ab4cb8bcf",
+    "src/core/operations-validation.ts": "5b2c0a15c57ba37b7941d9eb1e82d938845dc9e2d86aed16ed039bf462117748",
+    "src/core/operations.ts": "58f3fb558e3684be14b86a17a3731fa62c8bb6a96fded062f12a3ac5be537007",
+    "src/core/player-profile.ts": "b7050d18ee1463f2ff63f4bbbe11a59e88f810e65cb6121cdfa6a4d3469244c4",
+    "src/core/random.test.ts": "7adcad3a108f78521d8dee7c948e83658bc7c9062bdc41b4a62dac71ac005322",
+    "src/core/random.ts": "3ef7ca6de0896d42a456e2aae8760eea9c9a73af99afd7009e0d7353809e180b",
+    "src/core/record-schemas.ts": "967d07cc034513d6a3280142279a1066ad99b69cc68c60a476112d8f3efb10a0",
+    "src/core/run-types.ts": "b5c42d173fa40b3e8350af22dc81e560742f1bb2ed16f4fcc739d456f2459493",
+    "src/core/run.ts": "6b721e73f6e7422db215bf81f99455ceff696358723c709a8c98a54b1a2ba54a",
+    "src/core/timeline.test.ts": "826176fb23ae104d622b45e8d49a3b6855f8a9d818bc855541638b4731b50dfe",
+    "src/core/timeline.ts": "54767b25792c41643b7728ae0ddc1c3e78ee1a9d9dee08ddba567eb712069ff8",
+    "src/core/versions.ts": "3594ad40947f99b43a21ee23629dd809f06ac4a113de63341c9af8bea15eea21",
+    "src/core/world-projection.ts": "055780c9e37e6dc63e107e93a3280456ebb9551333b00e948531d6968ea1cc41",
+    "src/core/world-schema.ts": "af9a51e0505ea130417f6bf48e71345569a3afe0f46b53ea1c53cf9e983fc36f",
+    "src/core/world-scope.test.ts": "1b55cde00ad37bd17140fe91922fdf400643dccb71064d31b48b004edd201db3",
+    "src/core/world-validation.ts": "b0714963d529ea8e9dc1eb175d5123bde7d285ce0ca42193dfdfc4d4fc3cdbaf",
+    "src/core/world.ts": "2a3dd219dc001c14db6a93676d1599a6d0ae01fcd77d70fe9518ac9ab2f9ef04",
+    "src/main.tsx": "0b3933753fe24aaaa887a39d0f60e4d7a628f56a76c58be382550a15263f2e4d",
+    "src/persistence/codec.test.ts": "5506dcde13519134f736834bf4248f8ab30535ad7839154f85d7ad927b1ebeaa",
+    "src/persistence/codec.ts": "b212c2ac8b3feb39624a622e308ed32594e6469334b5e5c40c09579104311926",
+    "src/persistence/entry-profile-codec.test.ts": "dcbd66bdfebd31ed21ab6c898916b87cf0cf9818b13674544b4f22d1ce5599f8",
+    "src/persistence/first-order-codec.test.ts": "4e49f4071c9fdd1f0358c58c09b4310d6605c2f5d017c4904f823c0457b02f6b",
+    "src/persistence/indexeddb.test.ts": "5fb99e5137b67cf89f6de9ed2ebc9a7c507c0c0cbcba2760bf15a4e5046cd24f",
+    "src/persistence/indexeddb.ts": "978209e115e087256e81b60c39080ec029d9c067252beb1451817dc0c3f480dd",
+    "src/persistence/library.test.ts": "9d9e3723d858fbab3b5a0a2275465dc03844e1d2325543c3bc0bc1f9b74c920b",
+    "src/persistence/market-codec.test.ts": "c680d4f0cef8d29dfdcbcdbb463c6de588669984b1471dcd1d4e1f074a032811",
+    "src/persistence/operations-codec.test.ts": "31e790fcba94a0747428c370e1cf22bc81234a38464f5528833e7bf739d71c20",
+    "src/persistence/schemas.ts": "ae94bd0aac820be092fcb7d291acce32263fd48356e50ee399000a8035bf5239",
+    "src/persistence/world-codec.test.ts": "e2a74e8af6cf9894a4f28821019e91ce7cafb4a6f4c8dd79f049eb70e9d0e0e5",
+    "src/persistence/writer-lock.test.ts": "6a9da4132c045eb3b74a1ef75cf451c8f87b1a47ece0355934adb69ac94426aa",
+    "src/persistence/writer-lock.ts": "b5eb19e5beba9b7262cbfce046bdd8e413f8742a77a491184fcbbbd7a96498df",
+    "src/testing/abort-after-write.ts": "da8681842896c19e290883e8d26bbafb5be1a0ba4f6773dc25b519a593b50484",
+    "src/testing/fact-run.ts": "3873010d328bc2c505122f59751e0713c2c603bceaea078d41beb19aea855944",
+    "src/testing/market-fixture.ts": "fb83e044442d0c17353625ea669d24196f9f35a18e1b9d23aa3261a847ef0339",
+    "src/testing/market-normal-scenario.ts": "73eca4bcbe2b895fe27ebd46a15c1cf98c7bc5b0a600e673a3da0caf2a5380c0",
+    "src/testing/memory-writer-access.ts": "61ee8279cd62e20f6f04ca5163354838acce011d9e24ead12baf10a9c8cff150",
+    "src/testing/operations-browser.ts": "52bf5d2a6b14e4c9d5752d4c898acd072e1dda4bd6d5e6448b8f626df9092646",
+    "src/testing/operations-fixture.ts": "77171a7197c735c4a369a7a89d3f1263cd04bb632b5b2e7fd7c3ec0a9d6025c7",
+    "src/testing/persistence-browser.ts": "cff5c300def8c15bad87ba060fb40e3b59f211a8b9f030a9fe636c1cddb21a46",
+    "src/testing/playable-scenarios.ts": "168247242a0466dce212401a3762792e2b256849d8cdc96016d78ed41e6f83a7",
+    "src/testing/q01-accounting.ts": "bf9690677fe052f76c0cb4b29067789ad9049217e92f5c9cd19c00e19d71ef4c",
+    "src/testing/world-fixture.ts": "9c4da48b907bbd40fd379e10efeb55ee39d54a3093451ddcda5b2071e89d82d5",
+    "src/ui/App.test.tsx": "c8dc4ff78a47bf7a5d1e0dbe373e5aa05df2ac78a1909901cedf3d92139fdb25",
+    "src/ui/App.tsx": "b420e4539572c8f82800746d2ae5ee6cfa2a7b4fc94d743817700963d30870cf",
+    "src/ui/CommandButton.tsx": "7b0314ef79a9d62c71b7683a8cf0da5935b690517277076b6d8361b1a1d2c40c",
+    "src/ui/Dialog.tsx": "fb7972e039eaeb683a954f15543f2728d37f5584e0feccf156c42e581794e904",
+    "src/ui/Home.tsx": "b7ee023aa61dc152944cbf5e66dd3ff7a17f62fd43a42721ecf6bf8b7714da60",
+    "src/ui/MarketPanel.tsx": "4080a9498c4bbd25d81741c13b0f08ba0c86bc18d35b0eac5b38fbde7a9c7793",
+    "src/ui/Obligations.tsx": "cf435a0db18013da6a4a1ee7edfb51b848c6f3381a3c0c036b099f2b764278e3",
+    "src/ui/StoragePanel.tsx": "eb081da3499f985405b7d26f5dff0133b7681466be1c7b3499b9631c88dd8e09",
+    "src/ui/Workbench.tsx": "70429c51e465daebf30e0dc8be649dcdc308277136b71f5221944ac02ae45d9b",
+    "src/ui/game-text.ts": "91d247faa2d6c812d2f7bc623188d317d408ed5c6c8baf3096b36dee2f16f40f",
+    "src/ui/game-types.ts": "071ee18c90b3f00430e64520336d8023a8f3b463646526999e6460280297ae1a",
+    "src/ui/intent-account.ts": "5decb1b238d346791d3c290b06c746f72bab60890f9d2b2a976778c442ae027d",
+    "src/ui/money-input.ts": "ae12f363335c4742de784c15fd404fe15f3b5044829ec6b7070c331e0d0b572a",
+    "scripts/collect_market_evidence.ts": "11dd371ea5fe6ee67998c48cc6fdeab93b4b72089e6b13cbe4289410b4d6d9e8",
+    "scripts/evidence-output.ts": "b70695b15e7cf4f615ad263a9e2f361b847edb6203d844e8c73e3c940e486026",
+    "scripts/validate_content.ts": "5fb3b09f66029b40a8b6f4802e8127cc517afb59b0a5751b2dab87215f3037dc",
+    "package.json": "034f7d6dda1953fc323bcbb18c8e6656272b2d935a82938a6d5cfe9ad7561d65",
+    "package-lock.json": "096fd07ea9a5ac837d12495d23f67b4c0ccbb61d36d308ef689d8041e0ec2bb4",
+    "tsconfig.core.json": "48e4365127083963a2b2d24f5677e93414c3de97cd642ce155a9a10fddcb53df",
+    "vitest.config.ts": "8bc1e3c6911d48bd8a7be4532e6efbcc849277d3d104309ba94208afc9d6b354"
+  },
+  "cases": [
+    {
+      "name": "t08-normal-q01",
+      "origin": "normal",
+      "backgroundId": "technical_employee",
+      "seed": "normal-q01-market-seed",
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t09-playable-v1",
+        "contentVersion": "world-playable-work-v1",
+        "contentHash": "b0071995802a867a9f072c8ea289e13916ccd5bb85a2ad4347b1ea4bd69eff19",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "initial": {
+        "file": "t08-normal-q01-initial.json",
+        "sha256": "d93219d3f381d7af6558d593530cf28601c8bb4fa83af47004553ae6fe896280"
+      },
+      "final": {
+        "file": "t08-normal-q01-final.json",
+        "sha256": "a3a187c79ec077b620b3e7e3adb79991ff46c837c134d34fcea2a54a8ee38510"
+      },
+      "commands": [
+        {
+          "runId": "normal-q01-market",
+          "actorId": "player",
+          "commandId": "q01-1",
+          "expectedRevision": 1,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-q01-market",
+          "actorId": "player",
+          "commandId": "q01-2",
+          "expectedRevision": 2,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-02"
+          }
+        },
+        {
+          "runId": "normal-q01-market",
+          "actorId": "player",
+          "commandId": "q01-3",
+          "expectedRevision": 3,
+          "kind": "ResearchMarket",
+          "payload": {
+            "definitionId": "market-overview"
+          }
+        },
+        {
+          "runId": "normal-q01-market",
+          "actorId": "player",
+          "commandId": "q01-4",
+          "expectedRevision": 4,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-03"
+          }
+        },
+        {
+          "runId": "normal-q01-market",
+          "actorId": "player",
+          "commandId": "q01-5",
+          "expectedRevision": 5,
+          "kind": "ResearchMarket",
+          "payload": {
+            "definitionId": "market-foundation-course"
+          }
+        },
+        {
+          "runId": "normal-q01-market",
+          "actorId": "player",
+          "commandId": "q01-6",
+          "expectedRevision": 6,
+          "kind": "PlaceStockOrder",
+          "payload": {
+            "accountId": "personal",
+            "symbol": "SIM-AI01",
+            "side": "buy",
+            "quantity": 100,
+            "limitPriceFen": 11988,
+            "quoteId": "initial-2020-01-01",
+            "validUntil": "SIM-CP-2020-01-10"
+          }
+        },
+        {
+          "runId": "normal-q01-market",
+          "actorId": "player",
+          "commandId": "q01-7",
+          "expectedRevision": 7,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "normal-q01-market",
+          "actorId": "player",
+          "commandId": "q01-8",
+          "expectedRevision": 8,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-q01-market",
+          "actorId": "player",
+          "commandId": "q01-9",
+          "expectedRevision": 9,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "normal-q01-market",
+          "actorId": "player",
+          "commandId": "q01-10",
+          "expectedRevision": 10,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-q01-market",
+          "actorId": "player",
+          "commandId": "q01-11",
+          "expectedRevision": 11,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        }
+      ],
+      "expected": {
+        "cashFen": 2700000,
+        "investmentValueFen": 1100000,
+        "minimumCashFen": 1100000,
+        "spent": 4
+      },
+      "actual": {
+        "accountId": "personal",
+        "accruedCostFen": 0,
+        "availableFen": 2700000,
+        "cashFen": 2700000,
+        "commitmentShortfallFen": 0,
+        "heldFen": 0,
+        "investmentValueFen": 1100000,
+        "lastKnownInvestmentValueFen": 1100000,
+        "netAssetsFen": 3800000,
+        "payableFen": 0,
+        "prepaidLiabilityFen": 0,
+        "protectionRequiredFen": 0,
+        "protectionShortfallFen": 0,
+        "receivableFen": 0,
+        "supplierPrepaidFen": 0,
+        "valuationStatus": "current",
+        "spent": 4,
+        "minimumCashFen": 1100000
+      },
+      "scope": "normal_start_no_injection_Q01_distinct_from_UX01_and_S01"
+    },
+    {
+      "name": "t08-f06-orders",
+      "origin": "fixture",
+      "backgroundId": "technical_employee",
+      "seed": "market-fixture-seed",
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t08-fixture",
+        "contentVersion": "market-fixture-v1",
+        "contentHash": "1d3006713c3af04cb4827686cf9962237ba4ea7e2f786067dbfe84fc45a612b4",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "initial": {
+        "file": "t08-f06-orders-initial.json",
+        "sha256": "189fbe45ecad29e918451306d4e137ce2c956ec53788f0083ab9ce1d99c32d9d"
+      },
+      "final": {
+        "file": "t08-f06-orders-final.json",
+        "sha256": "414d3ccc4965dfb18a1dda4f048c4d9e5630e9dd195ef8f64a06d553dff433b7"
+      },
+      "commands": [
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-1",
+          "expectedRevision": 1,
+          "kind": "PlaceStockOrder",
+          "payload": {
+            "accountId": "personal",
+            "symbol": "SIM-AI01",
+            "side": "buy",
+            "quantity": 1000,
+            "limitPriceFen": 1000,
+            "quoteId": "initial-2020-01-01",
+            "validUntil": "p2"
+          }
+        },
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-2",
+          "expectedRevision": 2,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-02"
+          }
+        },
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-3",
+          "expectedRevision": 3,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-03"
+          }
+        },
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-4",
+          "expectedRevision": 4,
+          "kind": "PlaceStockOrder",
+          "payload": {
+            "accountId": "personal",
+            "symbol": "SIM-AI01",
+            "side": "sell",
+            "quantity": 1000,
+            "limitPriceFen": 1200,
+            "quoteId": "p0",
+            "validUntil": "p2"
+          }
+        },
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-5",
+          "expectedRevision": 5,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-04"
+          }
+        },
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-6",
+          "expectedRevision": 6,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-05"
+          }
+        }
+      ],
+      "expected": {
+        "cashFen": 2797800,
+        "receivableFen": 0,
+        "investmentValueFen": 0,
+        "profitFen": 197800
+      },
+      "actual": {
+        "cashFen": 2797800,
+        "heldFen": 0,
+        "availableFen": 2797800,
+        "protectionRequiredFen": 0,
+        "protectionShortfallFen": 0,
+        "commitmentShortfallFen": 0,
+        "receivableFen": 0,
+        "prepaidLiabilityFen": 0,
+        "payableFen": 0,
+        "supplierPrepaidFen": 0,
+        "investmentValueFen": 0,
+        "netAssetsFen": 2797800,
+        "incomeFen": 1200000,
+        "costFen": 1002200,
+        "profitFen": 197800,
+        "currentValueFen": null,
+        "valuationStatus": null,
+        "market": {
+          "announcements": [],
+          "asOf": "2020-01-04",
+          "fills": [
+            {
+              "checkpointId": "p0",
+              "date": "2020-01-02",
+              "feeFen": 1000,
+              "grossFen": 1000000,
+              "id": "market:faf9addc5f38173d86d90897c8154a5a",
+              "ledgerId": "market:faf9addc5f38173d86d90897c8154a5a",
+              "orderId": "market:c0437aa32be95f38ce4e36db944dd398",
+              "priceFen": 1000,
+              "quantity": 1000,
+              "realizedProfitFen": null,
+              "receivableId": null,
+              "removedBuyFeesFen": 0,
+              "removedPrincipalFen": 0
+            },
+            {
+              "checkpointId": "p1",
+              "date": "2020-01-04",
+              "feeFen": 1200,
+              "grossFen": 1200000,
+              "id": "market:60cbcc001150d8857ed45423df87d028",
+              "ledgerId": "market:60cbcc001150d8857ed45423df87d028",
+              "orderId": "market:03879a916313b07a49826726569e1a34",
+              "priceFen": 1200,
+              "quantity": 1000,
+              "realizedProfitFen": 197800,
+              "receivableId": "market:81344feb281bfb79584d43703f752552",
+              "removedBuyFeesFen": 1000,
+              "removedPrincipalFen": 1000000
+            }
+          ],
+          "historical": {
+            "reason": "真实历史行情/板块逐期制度/公司行动/使用条件未核验，禁止启用。",
+            "requiredEvidence": [
+              "逐日期行情与上市/停牌覆盖",
+              "当时生效规则与公司行动口径",
+              "可追溯一手来源及使用条件"
+            ],
+            "status": "unverified"
+          },
+          "label": "虚构个股与简化模拟制度，不是历史实盘",
+          "matchingCalendar": [
+            {
+              "date": "2020-01-06",
+              "id": "p2"
+            }
+          ],
+          "mode": "simulation",
+          "orders": [
+            {
+              "accountId": "personal",
+              "cashHeldFen": 0,
+              "eligibleIndex": 0,
+              "expiresIndex": 2,
+              "feesPaidFen": 1000,
+              "grossFilledFen": 1000000,
+              "id": "market:c0437aa32be95f38ce4e36db944dd398",
+              "limitPriceFen": 1000,
+              "oddLot": false,
+              "quantity": 1000,
+              "quoteId": "initial-2020-01-01",
+              "reason": null,
+              "remaining": 0,
+              "replacesId": null,
+              "reservationId": "market:5ff3e073a53c47427beca6cb521e2ea0",
+              "ruleId": "fixture-rule",
+              "sequence": 1,
+              "side": "buy",
+              "status": "filled",
+              "submittedAt": "2020-01-01",
+              "symbol": "SIM-AI01"
+            },
+            {
+              "accountId": "personal",
+              "cashHeldFen": 0,
+              "eligibleIndex": 1,
+              "expiresIndex": 2,
+              "feesPaidFen": 1200,
+              "grossFilledFen": 1200000,
+              "id": "market:03879a916313b07a49826726569e1a34",
+              "limitPriceFen": 1200,
+              "oddLot": true,
+              "quantity": 1000,
+              "quoteId": "p0",
+              "reason": null,
+              "remaining": 0,
+              "replacesId": null,
+              "reservationId": null,
+              "ruleId": "fixture-rule",
+              "sequence": 2,
+              "side": "sell",
+              "status": "filled",
+              "submittedAt": "2020-01-03",
+              "symbol": "SIM-AI01"
+            }
+          ],
+          "permissions": [
+            {
+              "date": "2020-01-01",
+              "id": "sim-basic",
+              "sourceId": "bootstrap:simulation"
+            }
+          ],
+          "positions": [],
+          "priceBasis": "raw_unadjusted",
+          "quoteId": "p1",
+          "researches": [],
+          "settlements": [
+            {
+              "accountId": "personal",
+              "amountFen": 1198800,
+              "dueAt": "2020-01-05",
+              "id": "market:81344feb281bfb79584d43703f752552",
+              "kind": "sale",
+              "paidAt": "2020-01-05",
+              "sourceId": "market:60cbcc001150d8857ed45423df87d028",
+              "symbol": "SIM-AI01"
+            }
+          ],
+          "stocks": [
+            {
+              "anchorIds": [],
+              "businessIndex": 100,
+              "checkpointId": "p1",
+              "classification": "simulation",
+              "date": "2020-01-04",
+              "exposure": "compute",
+              "index": 1,
+              "lowerFen": 600,
+              "name": "衡川算力",
+              "priceFen": 1200,
+              "qualified": true,
+              "rule": {
+                "allowOddLotSale": true,
+                "bandBps": 5000,
+                "cashLagDays": 1,
+                "commissionBps": 10,
+                "id": "fixture-rule",
+                "label": "虚构F06制度",
+                "lotSize": 100,
+                "minimumCommissionFen": 1000,
+                "sellTaxBps": 0,
+                "shareLagDays": 1
+              },
+              "ruleId": "fixture-rule",
+              "status": "open",
+              "symbol": "SIM-AI01",
+              "themeIndex": 100,
+              "upperFen": 1800,
+              "volume": 2000
+            }
+          ]
+        },
+        "intermediate": [
+          {
+            "date": "2020-01-04",
+            "cashFen": 1599000,
+            "heldFen": 0,
+            "availableFen": 1599000,
+            "protectionRequiredFen": 0,
+            "protectionShortfallFen": 0,
+            "commitmentShortfallFen": 0,
+            "receivableFen": 1198800,
+            "prepaidLiabilityFen": 0,
+            "payableFen": 0,
+            "supplierPrepaidFen": 0,
+            "investmentValueFen": 0,
+            "netAssetsFen": 2797800
+          }
+        ]
+      },
+      "scope": "explicit_fixture_opens_after_400000_initial_living_cost_cash_2600000_F06_profit_same_as_3000000_ledger_example"
+    },
+    {
+      "name": "t08-partial-cancel",
+      "origin": "fixture",
+      "backgroundId": "technical_employee",
+      "seed": "market-fixture-seed",
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t08-fixture",
+        "contentVersion": "market-fixture-v1",
+        "contentHash": "02b4c10043357a4fd78c590aab38131372dc6c76221d06db24a1076b3a916c48",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "initial": {
+        "file": "t08-partial-cancel-initial.json",
+        "sha256": "053b8a6b709c1b56933b65abe586bec0100426c2708fdcf8cd78aa02dee94cf8"
+      },
+      "final": {
+        "file": "t08-partial-cancel-final.json",
+        "sha256": "07876e53032e73e47824ef75da1ad324da1e58cb69c7024e8234eb0429fab458"
+      },
+      "commands": [
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-1",
+          "expectedRevision": 1,
+          "kind": "PlanStockOrder",
+          "payload": {
+            "accountId": "personal",
+            "symbol": "SIM-AI01",
+            "side": "buy",
+            "quantity": 1000,
+            "limitPriceFen": 1000,
+            "quoteId": "initial-2020-01-01",
+            "validUntil": "p2"
+          }
+        },
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-2",
+          "expectedRevision": 2,
+          "kind": "SubmitStockOrder",
+          "payload": {
+            "orderId": "market:c0437aa32be95f38ce4e36db944dd398",
+            "quoteId": "initial-2020-01-01"
+          }
+        },
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-3",
+          "expectedRevision": 3,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-02"
+          }
+        },
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-4",
+          "expectedRevision": 4,
+          "kind": "CancelStockOrder",
+          "payload": {
+            "orderId": "market:c0437aa32be95f38ce4e36db944dd398"
+          }
+        }
+      ],
+      "expected": {
+        "cashFen": 2199000,
+        "heldFen": 0,
+        "investmentValueFen": 400000
+      },
+      "actual": {
+        "cashFen": 2199000,
+        "heldFen": 0,
+        "availableFen": 2199000,
+        "protectionRequiredFen": 0,
+        "protectionShortfallFen": 0,
+        "commitmentShortfallFen": 0,
+        "receivableFen": 0,
+        "prepaidLiabilityFen": 0,
+        "payableFen": 0,
+        "supplierPrepaidFen": 0,
+        "investmentValueFen": 400000,
+        "netAssetsFen": 2599000,
+        "incomeFen": 0,
+        "costFen": 1000,
+        "profitFen": -1000,
+        "currentValueFen": 400000,
+        "valuationStatus": "current",
+        "market": {
+          "announcements": [],
+          "asOf": "2020-01-02",
+          "fills": [
+            {
+              "checkpointId": "p0",
+              "date": "2020-01-02",
+              "feeFen": 1000,
+              "grossFen": 400000,
+              "id": "market:faf9addc5f38173d86d90897c8154a5a",
+              "ledgerId": "market:faf9addc5f38173d86d90897c8154a5a",
+              "orderId": "market:c0437aa32be95f38ce4e36db944dd398",
+              "priceFen": 1000,
+              "quantity": 400,
+              "realizedProfitFen": null,
+              "receivableId": null,
+              "removedBuyFeesFen": 0,
+              "removedPrincipalFen": 0
+            }
+          ],
+          "historical": {
+            "reason": "真实历史行情/板块逐期制度/公司行动/使用条件未核验，禁止启用。",
+            "requiredEvidence": [
+              "逐日期行情与上市/停牌覆盖",
+              "当时生效规则与公司行动口径",
+              "可追溯一手来源及使用条件"
+            ],
+            "status": "unverified"
+          },
+          "label": "虚构个股与简化模拟制度，不是历史实盘",
+          "matchingCalendar": [
+            {
+              "date": "2020-01-04",
+              "id": "p1"
+            },
+            {
+              "date": "2020-01-06",
+              "id": "p2"
+            }
+          ],
+          "mode": "simulation",
+          "orders": [
+            {
+              "accountId": "personal",
+              "cashHeldFen": 0,
+              "eligibleIndex": 0,
+              "expiresIndex": 2,
+              "feesPaidFen": 1000,
+              "grossFilledFen": 400000,
+              "id": "market:c0437aa32be95f38ce4e36db944dd398",
+              "limitPriceFen": 1000,
+              "oddLot": false,
+              "quantity": 1000,
+              "quoteId": "initial-2020-01-01",
+              "reason": "PLAYER_CANCELLED",
+              "remaining": 600,
+              "replacesId": null,
+              "reservationId": "market:5ff3e073a53c47427beca6cb521e2ea0",
+              "ruleId": "fixture-rule",
+              "sequence": 1,
+              "side": "buy",
+              "status": "cancelled",
+              "submittedAt": "2020-01-01",
+              "symbol": "SIM-AI01"
+            }
+          ],
+          "permissions": [
+            {
+              "date": "2020-01-01",
+              "id": "sim-basic",
+              "sourceId": "bootstrap:simulation"
+            }
+          ],
+          "positions": [
+            {
+              "accountId": "personal",
+              "costIncludingBuyFeesFen": 401000,
+              "id": "market:43f7f180b3876be30c04087f178e606f",
+              "lastKnownValueFen": 400000,
+              "lastMarkIndex": 0,
+              "quantity": 400,
+              "reservedQuantity": 0,
+              "settledQuantity": 0,
+              "symbol": "SIM-AI01",
+              "unrealizedProfitFen": -1000,
+              "valuationStatus": "current",
+              "valueFen": 400000
+            }
+          ],
+          "priceBasis": "raw_unadjusted",
+          "quoteId": "p0",
+          "researches": [],
+          "settlements": [],
+          "stocks": [
+            {
+              "anchorIds": [],
+              "businessIndex": 100,
+              "checkpointId": "p0",
+              "classification": "simulation",
+              "date": "2020-01-02",
+              "exposure": "compute",
+              "index": 0,
+              "lowerFen": 500,
+              "name": "衡川算力",
+              "priceFen": 1000,
+              "qualified": true,
+              "rule": {
+                "allowOddLotSale": true,
+                "bandBps": 5000,
+                "cashLagDays": 1,
+                "commissionBps": 10,
+                "id": "fixture-rule",
+                "label": "虚构F06制度",
+                "lotSize": 100,
+                "minimumCommissionFen": 1000,
+                "sellTaxBps": 0,
+                "shareLagDays": 1
+              },
+              "ruleId": "fixture-rule",
+              "status": "open",
+              "symbol": "SIM-AI01",
+              "themeIndex": 100,
+              "upperFen": 1500,
+              "volume": 400
+            }
+          ]
+        },
+        "intermediate": []
+      },
+      "scope": "explicit_fixture_opens_after_400000_initial_living_cost_cash_2600000_F06_profit_same_as_3000000_ledger_example"
+    },
+    {
+      "name": "t08-unknown-price",
+      "origin": "fixture",
+      "backgroundId": "technical_employee",
+      "seed": "market-fixture-seed",
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t08-fixture",
+        "contentVersion": "market-fixture-v1",
+        "contentHash": "69a7c36c72bf35a1c0d1056117aa910f07939d9eb7d29d07eb16351269701a81",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "initial": {
+        "file": "t08-unknown-price-initial.json",
+        "sha256": "4752689ec071dee3ebce85d385e319b635e193d233a3630de15f6c1659cb97d6"
+      },
+      "final": {
+        "file": "t08-unknown-price-final.json",
+        "sha256": "7511bc759eea20532459cdb2d4a3a6071d2756c2b07841013ad1ca74a071957f"
+      },
+      "commands": [
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-1",
+          "expectedRevision": 1,
+          "kind": "PlaceStockOrder",
+          "payload": {
+            "accountId": "personal",
+            "symbol": "SIM-AI01",
+            "side": "buy",
+            "quantity": 1000,
+            "limitPriceFen": 1000,
+            "quoteId": "initial-2020-01-01",
+            "validUntil": "p2"
+          }
+        },
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-2",
+          "expectedRevision": 2,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-02"
+          }
+        },
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-3",
+          "expectedRevision": 3,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-04"
+          }
+        }
+      ],
+      "expected": {
+        "cashFen": 1599000,
+        "currentValueFen": null,
+        "valuationStatus": "data_unavailable"
+      },
+      "actual": {
+        "cashFen": 1599000,
+        "heldFen": 0,
+        "availableFen": 1599000,
+        "protectionRequiredFen": 0,
+        "protectionShortfallFen": 0,
+        "commitmentShortfallFen": 0,
+        "receivableFen": 0,
+        "prepaidLiabilityFen": 0,
+        "payableFen": 0,
+        "supplierPrepaidFen": 0,
+        "investmentValueFen": 1000000,
+        "netAssetsFen": 2599000,
+        "incomeFen": 0,
+        "costFen": 1000,
+        "profitFen": -1000,
+        "currentValueFen": null,
+        "valuationStatus": "data_unavailable",
+        "market": {
+          "announcements": [],
+          "asOf": "2020-01-04",
+          "fills": [
+            {
+              "checkpointId": "p0",
+              "date": "2020-01-02",
+              "feeFen": 1000,
+              "grossFen": 1000000,
+              "id": "market:faf9addc5f38173d86d90897c8154a5a",
+              "ledgerId": "market:faf9addc5f38173d86d90897c8154a5a",
+              "orderId": "market:c0437aa32be95f38ce4e36db944dd398",
+              "priceFen": 1000,
+              "quantity": 1000,
+              "realizedProfitFen": null,
+              "receivableId": null,
+              "removedBuyFeesFen": 0,
+              "removedPrincipalFen": 0
+            }
+          ],
+          "historical": {
+            "reason": "真实历史行情/板块逐期制度/公司行动/使用条件未核验，禁止启用。",
+            "requiredEvidence": [
+              "逐日期行情与上市/停牌覆盖",
+              "当时生效规则与公司行动口径",
+              "可追溯一手来源及使用条件"
+            ],
+            "status": "unverified"
+          },
+          "label": "虚构个股与简化模拟制度，不是历史实盘",
+          "matchingCalendar": [
+            {
+              "date": "2020-01-06",
+              "id": "p2"
+            }
+          ],
+          "mode": "simulation",
+          "orders": [
+            {
+              "accountId": "personal",
+              "cashHeldFen": 0,
+              "eligibleIndex": 0,
+              "expiresIndex": 2,
+              "feesPaidFen": 1000,
+              "grossFilledFen": 1000000,
+              "id": "market:c0437aa32be95f38ce4e36db944dd398",
+              "limitPriceFen": 1000,
+              "oddLot": false,
+              "quantity": 1000,
+              "quoteId": "initial-2020-01-01",
+              "reason": null,
+              "remaining": 0,
+              "replacesId": null,
+              "reservationId": "market:5ff3e073a53c47427beca6cb521e2ea0",
+              "ruleId": "fixture-rule",
+              "sequence": 1,
+              "side": "buy",
+              "status": "filled",
+              "submittedAt": "2020-01-01",
+              "symbol": "SIM-AI01"
+            }
+          ],
+          "permissions": [
+            {
+              "date": "2020-01-01",
+              "id": "sim-basic",
+              "sourceId": "bootstrap:simulation"
+            }
+          ],
+          "positions": [
+            {
+              "accountId": "personal",
+              "costIncludingBuyFeesFen": 1001000,
+              "id": "market:43f7f180b3876be30c04087f178e606f",
+              "lastKnownValueFen": 1000000,
+              "lastMarkIndex": 0,
+              "quantity": 1000,
+              "reservedQuantity": 0,
+              "settledQuantity": 1000,
+              "symbol": "SIM-AI01",
+              "unrealizedProfitFen": null,
+              "valuationStatus": "data_unavailable",
+              "valueFen": null
+            }
+          ],
+          "priceBasis": "raw_unadjusted",
+          "quoteId": "p1",
+          "researches": [],
+          "settlements": [],
+          "stocks": [
+            {
+              "anchorIds": [],
+              "businessIndex": 100,
+              "checkpointId": "p1",
+              "classification": "simulation",
+              "date": "2020-01-04",
+              "exposure": "compute",
+              "index": 1,
+              "lowerFen": 600,
+              "name": "衡川算力",
+              "priceFen": null,
+              "qualified": true,
+              "rule": {
+                "allowOddLotSale": true,
+                "bandBps": 5000,
+                "cashLagDays": 1,
+                "commissionBps": 10,
+                "id": "fixture-rule",
+                "label": "虚构F06制度",
+                "lotSize": 100,
+                "minimumCommissionFen": 1000,
+                "sellTaxBps": 0,
+                "shareLagDays": 1
+              },
+              "ruleId": "fixture-rule",
+              "status": "data_unavailable",
+              "symbol": "SIM-AI01",
+              "themeIndex": 100,
+              "upperFen": 1800,
+              "volume": 0
+            }
+          ]
+        },
+        "intermediate": []
+      },
+      "scope": "explicit_fixture_opens_after_400000_initial_living_cost_cash_2600000_F06_profit_same_as_3000000_ledger_example"
+    },
+    {
+      "name": "t08-dividend",
+      "origin": "fixture",
+      "backgroundId": "technical_employee",
+      "seed": "market-fixture-seed",
+      "versions": {
+        "schemaVersion": 6,
+        "rulesVersion": "rules-t08-fixture",
+        "contentVersion": "market-fixture-v1",
+        "contentHash": "34b2cc7d3ceed787267856ff4188efe087769e484d840bcad05c17b58dc2f39c",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "initial": {
+        "file": "t08-dividend-initial.json",
+        "sha256": "dc105615a339e40bca29113fe9d7b0ffcb3db984948b5a881329d4bc7d858cdc"
+      },
+      "final": {
+        "file": "t08-dividend-final.json",
+        "sha256": "46515a9cbbe11235d5e9d7dac72fde29359951415f6201073252d8e3f310e674"
+      },
+      "commands": [
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-1",
+          "expectedRevision": 1,
+          "kind": "PlaceStockOrder",
+          "payload": {
+            "accountId": "personal",
+            "symbol": "SIM-AI01",
+            "side": "buy",
+            "quantity": 1000,
+            "limitPriceFen": 1000,
+            "quoteId": "initial-2020-01-01",
+            "validUntil": "p2"
+          }
+        },
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-2",
+          "expectedRevision": 2,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-02"
+          }
+        },
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-3",
+          "expectedRevision": 3,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-04"
+          }
+        },
+        {
+          "runId": "market-fixture",
+          "actorId": "player",
+          "commandId": "market-4",
+          "expectedRevision": 4,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-05"
+          }
+        }
+      ],
+      "expected": {
+        "cashFen": 1609000,
+        "receivableFen": 0,
+        "investmentValueFen": 990000,
+        "incomeFen": 10000
+      },
+      "actual": {
+        "cashFen": 1609000,
+        "heldFen": 0,
+        "availableFen": 1609000,
+        "protectionRequiredFen": 0,
+        "protectionShortfallFen": 0,
+        "commitmentShortfallFen": 0,
+        "receivableFen": 0,
+        "prepaidLiabilityFen": 0,
+        "payableFen": 0,
+        "supplierPrepaidFen": 0,
+        "investmentValueFen": 990000,
+        "netAssetsFen": 2599000,
+        "incomeFen": 10000,
+        "costFen": 1000,
+        "profitFen": 9000,
+        "currentValueFen": 990000,
+        "valuationStatus": "current",
+        "market": {
+          "announcements": [],
+          "asOf": "2020-01-04",
+          "fills": [
+            {
+              "checkpointId": "p0",
+              "date": "2020-01-02",
+              "feeFen": 1000,
+              "grossFen": 1000000,
+              "id": "market:faf9addc5f38173d86d90897c8154a5a",
+              "ledgerId": "market:faf9addc5f38173d86d90897c8154a5a",
+              "orderId": "market:c0437aa32be95f38ce4e36db944dd398",
+              "priceFen": 1000,
+              "quantity": 1000,
+              "realizedProfitFen": null,
+              "receivableId": null,
+              "removedBuyFeesFen": 0,
+              "removedPrincipalFen": 0
+            }
+          ],
+          "historical": {
+            "reason": "真实历史行情/板块逐期制度/公司行动/使用条件未核验，禁止启用。",
+            "requiredEvidence": [
+              "逐日期行情与上市/停牌覆盖",
+              "当时生效规则与公司行动口径",
+              "可追溯一手来源及使用条件"
+            ],
+            "status": "unverified"
+          },
+          "label": "虚构个股与简化模拟制度，不是历史实盘",
+          "matchingCalendar": [
+            {
+              "date": "2020-01-06",
+              "id": "p2"
+            }
+          ],
+          "mode": "simulation",
+          "orders": [
+            {
+              "accountId": "personal",
+              "cashHeldFen": 0,
+              "eligibleIndex": 0,
+              "expiresIndex": 2,
+              "feesPaidFen": 1000,
+              "grossFilledFen": 1000000,
+              "id": "market:c0437aa32be95f38ce4e36db944dd398",
+              "limitPriceFen": 1000,
+              "oddLot": false,
+              "quantity": 1000,
+              "quoteId": "initial-2020-01-01",
+              "reason": null,
+              "remaining": 0,
+              "replacesId": null,
+              "reservationId": "market:5ff3e073a53c47427beca6cb521e2ea0",
+              "ruleId": "fixture-rule",
+              "sequence": 1,
+              "side": "buy",
+              "status": "filled",
+              "submittedAt": "2020-01-01",
+              "symbol": "SIM-AI01"
+            }
+          ],
+          "permissions": [
+            {
+              "date": "2020-01-01",
+              "id": "sim-basic",
+              "sourceId": "bootstrap:simulation"
+            }
+          ],
+          "positions": [
+            {
+              "accountId": "personal",
+              "costIncludingBuyFeesFen": 1001000,
+              "id": "market:43f7f180b3876be30c04087f178e606f",
+              "lastKnownValueFen": 990000,
+              "lastMarkIndex": 1,
+              "quantity": 1000,
+              "reservedQuantity": 0,
+              "settledQuantity": 1000,
+              "symbol": "SIM-AI01",
+              "unrealizedProfitFen": -11000,
+              "valuationStatus": "current",
+              "valueFen": 990000
+            }
+          ],
+          "priceBasis": "raw_unadjusted",
+          "quoteId": "p1",
+          "researches": [],
+          "settlements": [
+            {
+              "accountId": "personal",
+              "amountFen": 10000,
+              "dueAt": "2020-01-05",
+              "id": "market:6ace51f609b927435dd98e47bcc3defe",
+              "kind": "dividend",
+              "paidAt": "2020-01-05",
+              "sourceId": "dividend",
+              "symbol": "SIM-AI01"
+            }
+          ],
+          "stocks": [
+            {
+              "anchorIds": [],
+              "businessIndex": 100,
+              "checkpointId": "p1",
+              "classification": "simulation",
+              "date": "2020-01-04",
+              "exposure": "compute",
+              "index": 1,
+              "lowerFen": 495,
+              "name": "衡川算力",
+              "priceFen": 990,
+              "qualified": true,
+              "rule": {
+                "allowOddLotSale": true,
+                "bandBps": 5000,
+                "cashLagDays": 1,
+                "commissionBps": 10,
+                "id": "fixture-rule",
+                "label": "虚构F06制度",
+                "lotSize": 100,
+                "minimumCommissionFen": 1000,
+                "sellTaxBps": 0,
+                "shareLagDays": 1
+              },
+              "ruleId": "fixture-rule",
+              "status": "open",
+              "symbol": "SIM-AI01",
+              "themeIndex": 100,
+              "upperFen": 1485,
+              "volume": 2000
+            }
+          ]
+        },
+        "intermediate": [
+          {
+            "date": "2020-01-04",
+            "cashFen": 1599000,
+            "heldFen": 0,
+            "availableFen": 1599000,
+            "protectionRequiredFen": 0,
+            "protectionShortfallFen": 0,
+            "commitmentShortfallFen": 0,
+            "receivableFen": 10000,
+            "prepaidLiabilityFen": 0,
+            "payableFen": 0,
+            "supplierPrepaidFen": 0,
+            "investmentValueFen": 990000,
+            "netAssetsFen": 2599000,
+            "market": {
+              "announcements": [],
+              "asOf": "2020-01-04",
+              "fills": [
+                {
+                  "checkpointId": "p0",
+                  "date": "2020-01-02",
+                  "feeFen": 1000,
+                  "grossFen": 1000000,
+                  "id": "market:faf9addc5f38173d86d90897c8154a5a",
+                  "ledgerId": "market:faf9addc5f38173d86d90897c8154a5a",
+                  "orderId": "market:c0437aa32be95f38ce4e36db944dd398",
+                  "priceFen": 1000,
+                  "quantity": 1000,
+                  "realizedProfitFen": null,
+                  "receivableId": null,
+                  "removedBuyFeesFen": 0,
+                  "removedPrincipalFen": 0
+                }
+              ],
+              "historical": {
+                "reason": "真实历史行情/板块逐期制度/公司行动/使用条件未核验，禁止启用。",
+                "requiredEvidence": [
+                  "逐日期行情与上市/停牌覆盖",
+                  "当时生效规则与公司行动口径",
+                  "可追溯一手来源及使用条件"
+                ],
+                "status": "unverified"
+              },
+              "label": "虚构个股与简化模拟制度，不是历史实盘",
+              "matchingCalendar": [
+                {
+                  "date": "2020-01-06",
+                  "id": "p2"
+                }
+              ],
+              "mode": "simulation",
+              "orders": [
+                {
+                  "accountId": "personal",
+                  "cashHeldFen": 0,
+                  "eligibleIndex": 0,
+                  "expiresIndex": 2,
+                  "feesPaidFen": 1000,
+                  "grossFilledFen": 1000000,
+                  "id": "market:c0437aa32be95f38ce4e36db944dd398",
+                  "limitPriceFen": 1000,
+                  "oddLot": false,
+                  "quantity": 1000,
+                  "quoteId": "initial-2020-01-01",
+                  "reason": null,
+                  "remaining": 0,
+                  "replacesId": null,
+                  "reservationId": "market:5ff3e073a53c47427beca6cb521e2ea0",
+                  "ruleId": "fixture-rule",
+                  "sequence": 1,
+                  "side": "buy",
+                  "status": "filled",
+                  "submittedAt": "2020-01-01",
+                  "symbol": "SIM-AI01"
+                }
+              ],
+              "permissions": [
+                {
+                  "date": "2020-01-01",
+                  "id": "sim-basic",
+                  "sourceId": "bootstrap:simulation"
+                }
+              ],
+              "positions": [
+                {
+                  "accountId": "personal",
+                  "costIncludingBuyFeesFen": 1001000,
+                  "id": "market:43f7f180b3876be30c04087f178e606f",
+                  "lastKnownValueFen": 990000,
+                  "lastMarkIndex": 1,
+                  "quantity": 1000,
+                  "reservedQuantity": 0,
+                  "settledQuantity": 1000,
+                  "symbol": "SIM-AI01",
+                  "unrealizedProfitFen": -11000,
+                  "valuationStatus": "current",
+                  "valueFen": 990000
+                }
+              ],
+              "priceBasis": "raw_unadjusted",
+              "quoteId": "p1",
+              "researches": [],
+              "settlements": [
+                {
+                  "accountId": "personal",
+                  "amountFen": 10000,
+                  "dueAt": "2020-01-05",
+                  "id": "market:6ace51f609b927435dd98e47bcc3defe",
+                  "kind": "dividend",
+                  "paidAt": null,
+                  "sourceId": "dividend",
+                  "symbol": "SIM-AI01"
+                }
+              ],
+              "stocks": [
+                {
+                  "anchorIds": [],
+                  "businessIndex": 100,
+                  "checkpointId": "p1",
+                  "classification": "simulation",
+                  "date": "2020-01-04",
+                  "exposure": "compute",
+                  "index": 1,
+                  "lowerFen": 495,
+                  "name": "衡川算力",
+                  "priceFen": 990,
+                  "qualified": true,
+                  "rule": {
+                    "allowOddLotSale": true,
+                    "bandBps": 5000,
+                    "cashLagDays": 1,
+                    "commissionBps": 10,
+                    "id": "fixture-rule",
+                    "label": "虚构F06制度",
+                    "lotSize": 100,
+                    "minimumCommissionFen": 1000,
+                    "sellTaxBps": 0,
+                    "shareLagDays": 1
+                  },
+                  "ruleId": "fixture-rule",
+                  "status": "open",
+                  "symbol": "SIM-AI01",
+                  "themeIndex": 100,
+                  "upperFen": 1485,
+                  "volume": 2000
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "scope": "explicit_fixture_opens_after_400000_initial_living_cost_cash_2600000_F06_profit_same_as_3000000_ledger_example"
+    }
+  ],
+  "notCovered": [
+    "S01_complete_half_year",
+    "playable_ui",
+    "browser_acceptance",
+    "real_historical_data_and_rules",
+    "full_campaign",
+    "original_png",
+    "human_playtest"
+  ]
+}

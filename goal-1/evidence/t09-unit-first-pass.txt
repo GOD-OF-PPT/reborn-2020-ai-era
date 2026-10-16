@@ -1,0 +1,66 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/campaign.test.ts (13 tests | 2 failed) 29703ms
+   × starts a real seven-day preparation, charges once and grants readiness only on completion 6501ms
+   × advances every historical anchor without opening news, while keeping missing access and unpaid duties 20437ms
+ ❯ src/application/first-order.test.ts (12 tests | 1 failed) 105015ms
+   × keeps zero-action refusal available without creating a second personal resource 6539ms
+ ❯ src/application/employment.test.ts (4 tests | 2 failed) 23014ms
+   × settles actual monthly employment for technical_employee after a single two-point quarterly commitment 11493ms
+   × settles actual monthly employment for content_employee after a single two-point quarterly commitment 10425ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/campaign.test.ts > starts a real seven-day preparation, charges once and grants readiness only on completion
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/application/campaign.test.ts:19:1
+     17|   return codec.import(codec.export(result.nextRun))
+     18| }
+     19| it('starts a real seven-day preparation, charges once and grants readi…
+       | ^
+     20|   let run = send(createCampaignRun(input), 'AdvanceTime', { date: '202…
+     21|   const instance = run.world?.instances[0]
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  src/application/campaign.test.ts > advances every historical anchor without opening news, while keeping missing access and unpaid duties
+Error: Test timed out in 20000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/application/campaign.test.ts:75:1
+     73| })
+     74|
+     75| it('advances every historical anchor without opening news, while keepi…
+       | ^
+     76|   let run = createCampaignRun(input)
+     77|   const initialMarket = canonicalJson(run.random.streams.market)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  src/application/employment.test.ts > settles actual monthly employment for technical_employee after a single two-point quarterly commitment
+ FAIL  src/application/employment.test.ts > settles actual monthly employment for content_employee after a single two-point quarterly commitment
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/application/employment.test.ts:7:71
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  src/application/first-order.test.ts > keeps zero-action refusal available without creating a second personal resource
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/application/first-order.test.ts:41:1
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+
+ Test Files  3 failed | 31 passed (34)
+      Tests  5 failed | 204 passed (209)
+   Start at  02:49:10
+   Duration  168.95s (tests 96%, import 4%)

@@ -1,23 +1,52 @@
-const routeNames = ['A股AI股票', 'AI短视频', 'AI卖课', 'API中转站', 'DeepSeek生态与架空股权']
-
-export default function App() {
-  return (
-    <main className="opening">
-      <p className="eyebrow">开发预览 · 工程基线</p>
-      <h1>重生2020<span>AI时代</span></h1>
-      <p className="premise">生活重来一次，你会把时间押在哪里？</p>
-
-      <section className="notice" aria-labelledby="preview-status">
-        <h2 id="preview-status">首个可玩季度准备中</h2>
-        <p>当前页面用于本地工程启动检查，尚不能开始或继续游戏。</p>
-      </section>
-
-      <section className="directions" aria-labelledby="route-heading">
-        <h2 id="route-heading">将要展开的五条财富路线</h2>
-        <ul>{routeNames.map((name) => <li key={name}>{name}</li>)}</ul>
-      </section>
-
-      <p className="footnote">单人策略游戏 · 模拟经营与明确标识的架空分支</p>
-    </main>
-  )
+import { useEffect,useRef,useState,useSyncExternalStore } from 'react'
+import type { GameController } from '../application/game-controller.ts'
+import { INITIAL_GAME_SNAPSHOT } from '../application/game-snapshot.ts'
+import type { ConfirmIntent,PlayFeatures,RequestCommand } from './game-types.ts'
+import { intentAccount } from './intent-account.ts'
+import { Home } from './Home.tsx'
+import { Dialog } from './Dialog.tsx'
+import { StoragePanel } from './StoragePanel.tsx'
+import { QuarterPanel,RoutesPanel,MemoryPanel,FinancePanel } from './Workbench.tsx'
+import { MarketPanel } from './MarketPanel.tsx'
+import { backgroundNames,wishes,moneyText,reasonText } from './game-text.ts'
+const noSubscribe=()=>()=>{}
+const tabs=[['quarter','本季工作台'],['market','模拟市场'],['routes','五条路线'],['memory','记忆与新闻'],['finance','账本与存档']] as const
+type Tab=typeof tabs[number][0]
+type Modal={kind:'command';intent:ConfirmIntent}|{kind:'storage';text:string;source:string}|{kind:'settings'}|{kind:'exit'}|{kind:'reload'}
+function savedLabel(status:string){return ({saved:'已保存',saving:'正在保存…',unsaved:'未保存',conflict:'存档冲突',read_only:'只读',closed:'已关闭'} as Record<string,string>)[status]??status}
+function readSettings(){try{const value=JSON.parse(localStorage.getItem('reborn-2020-display')??'{}') as Record<string,unknown>;return {textOnly:value.textOnly===true,reducedMotion:value.reducedMotion===true,hiddenGuides:Array.isArray(value.hiddenGuides)?value.hiddenGuides.filter((id):id is string=>typeof id==='string'):[]}}catch{return {textOnly:false,reducedMotion:false,hiddenGuides:[] as string[]}}}
+export default function App({controller=null,startupError=null,diagnostics=null}:{controller?:GameController|null;startupError?:string|null;diagnostics?:{name:string;trace:{writeSucceeded:boolean;abortIssued:boolean}}|null}){
+ const state=useSyncExternalStore(controller?.subscribe??noSubscribe,()=>controller?.snapshot??INITIAL_GAME_SNAPSHOT,()=>INITIAL_GAME_SNAPSHOT),view=state.view
+ const [tab,setTab]=useState<Tab>('quarter'),[selectedAccountId,setAccountId]=useState('personal'),[modal,setModal]=useState<Modal|null>(null),[localError,setLocalError]=useState<string|null>(null),[settings,setSettings]=useState(readSettings),[settingsNotice,setSettingsNotice]=useState('')
+ const accountId=view?.accounts.some(account=>account.accountId===selectedAccountId)?selectedAccountId:'personal'
+ const heading=useRef<HTMLHeadingElement>(null),unsavedHeading=useRef<HTMLElement>(null)
+ useEffect(()=>{if(!modal&&(view?.saveStatus==='unsaved'||view?.saveStatus==='conflict'))unsavedHeading.current?.focus()},[view?.saveStatus,modal?.kind])
+ useEffect(()=>{setTab('quarter');setAccountId('personal');if(view?.runId)heading.current?.focus()},[view?.runId])
+ const fail=(error:unknown)=>setLocalError(reasonText(error instanceof Error?error.message:'LOCAL_STORAGE_FAILED'))
+ const openStorage=(text='',source='import')=>{setLocalError(null);setModal({kind:'storage',text,source})}
+ const exportCurrent=(candidate=false)=>{try{if(controller)openStorage(candidate?controller.exportCandidate():controller.exportSaved(),candidate?'candidate':'saved')}catch(error){fail(error)}}
+ const exportOriginal=(runId:string,backup=false)=>{if(controller)void controller.exportStored(runId,backup).then(text=>openStorage(text,backup?'backup':'raw')).catch(fail)}
+ const request:RequestCommand=(kind,payload,label,force=false)=>{if(!controller)return;setLocalError(null);try{const command=controller.prepare(kind,payload),preview=controller.preview(command);if(!preview.allowed){setLocalError(reasonText(preview.reasonCodes[0]??'INVALID_PAYLOAD'));return}if(force||preview.actionPoints>0||preview.upfrontCostFen>0)setModal({kind:'command',intent:{command,label}});else void controller.submit(command).catch(fail)}catch(error){fail(error)}}
+ const features=view?.features as PlayFeatures|undefined,props=controller&&view&&features?{controller,view,features,request,accountId}:null
+ const saveSettings=(next:typeof settings)=>{setSettings(next);try{localStorage.setItem('reborn-2020-display',JSON.stringify(next));setSettingsNotice('显示设置已保存在本机。')}catch{setSettingsNotice('显示设置仅在当前窗口生效，本机设置未保存。')}}
+ const error=localError??(state.error?reasonText(state.error):null)??startupError
+ const accountName=(id:string)=>id==='personal'?'个人账户':view?.operations?.businesses.find(b=>b.accountId===id)?.company?'企业账户 · '+(features?.workbench.routes.find(r=>r.accountId===id)?.name??id.slice(-6)):id
+ const readOnlyTitle=view?.readOnlyReason==='ANOTHER_WRITER'?'另一标签占有写权限，本页只读':view?.readOnlyReason==='LOCK_API_UNAVAILABLE'?'当前浏览器缺少可靠写锁，本页只读':'写锁申请失败，本页只读'
+ const confirm=modal?.kind==='command'&&controller?controller.preview(modal.intent.command):null
+ return <div className={['game-app',settings.textOnly?'text-mode':'',settings.reducedMotion?'reduced-motion':''].join(' ')}><a className="skip-link" href="#main-content">跳到主要操作</a><header className="site-header"><a href="#" className="wordmark" onClick={event=>{event.preventDefault();if(!controller||!view)return;if(controller.needsUnsavedWarning)setModal({kind:'exit'});else void controller.home().catch(fail)}}>重生2020 <span>AI时代</span></a><span className="edition">上半年可玩体验 · 模拟 / 架空持续标识</span><div className="button-row">{view?<button type="button" disabled={state.busy} onClick={()=>{if(controller?.needsUnsavedWarning)setModal({kind:'exit'});else void controller?.home().catch(fail)}}>保存退出到入口</button>:null}<button type="button" onClick={()=>setModal({kind:'settings'})}>设置与说明</button></div></header>
+ {error?<div role="alert" className="global-alert error-box"><strong>操作未完成</strong><p>{error}</p>{state.phase==='error'&&controller?<button type="button" disabled={state.busy} onClick={()=>{void controller.initialize().catch(fail)}}>重试读取本机存档</button>:null}</div>:null}
+ {diagnostics?<aside className="test-banner">隔离存储验证库：{diagnostics.name} · 写入成功后中止：{diagnostics.trace.writeSucceeded&&diagnostics.trace.abortIssued?'已触发':'待触发'}。此开关只存在于本地开发服务。</aside>:null}
+ {props&&view?<>{view.origin==='fixture'?<aside className="warning-box saved-warning">隔离测试存档：可能含预设资金或资格，不代表正常开局成果。</aside>:null}<div className="run-bar"><div><span className="date-label">{view.date}</span><span>{features!.workbench.quarter} · {backgroundNames[view.backgroundId as keyof typeof backgroundNames]??view.backgroundId} · 愿望：{wishes[view.playerProfile.wishId]}</span></div><label>账户主体<select value={accountId} onChange={event=>setAccountId(event.target.value)}>{view.accounts.map(account=><option value={account.accountId} key={account.accountId}>{accountName(account.accountId)}</option>)}</select></label><div className="run-numbers"><strong>可花 {moneyText(view.accounts.find(a=>a.accountId===accountId)?.availableFen)}</strong><span>行动 {view.budget.available} / {view.budget.total} · 预留{view.budget.reserved}</span></div><span className={'save-badge save-'+view.saveStatus} role="status">{savedLabel(view.saveStatus)} · {view.revision}</span></div>
+ {view.readOnly?<aside className="warning-box saved-warning"><strong>{readOnlyTitle}</strong><p>{view.readOnlyReason==='ANOTHER_WRITER'?'可以查看和导出。关闭另一标签或在那里退出后，再尝试接管；不会静默覆盖。':'可以查看和导出。当前不能可靠取得写权限，请在支持本机写锁的浏览器继续，或重试申请；不会无保护写入。'}</p><button type="button" disabled={state.busy} onClick={()=>{void controller!.reload().catch(fail)}}>重新读取并尝试接管</button></aside>:null}
+ {view.hasCandidate||view.saveStatus==='conflict'?<aside className="unsaved-banner" role="alert"><strong ref={unsavedHeading} tabIndex={-1}>{view.saveStatus==='conflict'?'存档冲突：没有覆盖另一提交':'未保存：界面仍是上一次完整提交'}</strong><p>新操作已暂停。候选可以导出；重试不会重新执行命令或抽取结果。</p><div className="button-row">{view.hasCandidate&&view.saveStatus!=='conflict'?<button type="button" className="primary" disabled={state.busy} onClick={()=>{void controller!.retry().catch(fail)}}>重试保存原候选</button>:null}{view.hasCandidate?<button type="button" disabled={state.busy} onClick={()=>exportCurrent(true)}>导出未保存候选</button>:null}<button type="button" disabled={state.busy} onClick={()=>exportCurrent()}>导出旧已保存存档</button><button type="button" disabled={state.busy} onClick={()=>setModal({kind:'reload'})}>舍弃候选并重新读取</button></div></aside>:null}
+ <div className="workbench-layout"><nav className="side-nav" aria-label="工作台导航">{tabs.map(([id,name])=><button type="button" key={id} aria-current={tab===id?'page':undefined} onClick={()=>setTab(id)}>{name}</button>)}<div className="sidebar-note"><span>不是所有机会都要参加。</span><p>本季重点只是信息顺序。可以继续工作，也可以保留现金。</p></div></nav><main id="main-content" tabIndex={-1} className="workbench-main"><h1 ref={heading} tabIndex={-1} className="sr-only">{tabs.find(([id])=>id===tab)?.[1]}</h1>{state.notice?<p className="activity-message" role="status">{state.notice.includes('指令已处理')?'已保存你的安排。详情以当前状态和账本为准。':state.notice}</p>:null}
+ {tab==='quarter'?<QuarterPanel {...props} onMarket={()=>setTab('market')} guideHidden={settings.hiddenGuides.includes(view.runId)} onHideGuide={()=>saveSettings({...settings,hiddenGuides:[...new Set([...settings.hiddenGuides,view.runId])].slice(-100)})}/>:tab==='market'?<MarketPanel key={accountId} {...props}/>:tab==='routes'?<RoutesPanel {...props}/>:tab==='memory'?<MemoryPanel {...props}/>:<FinancePanel {...props} onStorage={()=>openStorage()} onExport={()=>exportCurrent()} onBackup={()=>exportOriginal(view.runId,true)}/>}</main></div></>:<div id="main-content" tabIndex={-1}><Home controller={controller} state={state} onStorage={()=>openStorage()} onExport={id=>exportOriginal(id)}/></div>}
+ <footer className="site-footer">单人本地策略游戏 · 无真实开户、支付或在线模型裁决 · 当前为模拟经营工作版本，原始美术与真人试玩尚待验收</footer>
+ {modal?<Dialog title={modal.kind==='command'?modal.intent.label:modal.kind==='storage'?'本机存档与备份':modal.kind==='settings'?'显示与历史说明':modal.kind==='reload'?'重新读取前确认':'离开前处理未保存操作'} onClose={()=>setModal(null)}>
+ {modal.kind==='command'&&confirm?<><p>这一步只在保存成功后成为本局结果。</p><dl><div><dt>执行主体</dt><dd>{accountName(view&&features?intentAccount(modal.intent.command,view,features):'personal')}</dd></div><div><dt>本季行动</dt><dd>{confirm.actionPoints}点</dd></div><div><dt>{modal.intent.command.kind.includes('StockOrder')?'新预留资金预算':'确定成本'}</dt><dd>{moneyText(confirm.upfrontCostFen)}</dd></div>{confirm.releasedFen>0?<div><dt>原占款释放</dt><dd>{moneyText(confirm.releasedFen)}</dd></div>:null}<div><dt>当前日期</dt><dd>{view?.date}</dd></div></dl>{modal.intent.command.kind.includes('StockOrder')?<p className="warning-box">预留不是成交。限价、费用、可售股份和后续撮合规则仍需满足；提交计划沿用原占款，不冻结第二份。修改会撤销余量并重新排队，已成交部分保留。</p>:<p className="field-help">执行后已花成本与行动不返还；开始不代表交付完成，回款以客户验收与实际到账为准。</p>}{!confirm.allowed?<p role="alert" className="error-box">{reasonText(confirm.reasonCodes[0]??'STALE_REVISION')}</p>:null}<div className="button-row"><button type="button" onClick={()=>setModal(null)}>返回调整</button><button type="button" className="primary" disabled={!confirm.allowed||state.busy} onClick={()=>{const intent=modal.intent;void controller!.submit(intent.command).then(result=>{if(['saved','duplicate','unsaved','conflict'].includes(result.status))setModal(null)}).catch(fail)}}>确认并保存安排</button></div></>:null}
+ {modal.kind==='storage'&&controller?<StoragePanel controller={controller} initialText={modal.text} kind={modal.source} onDone={()=>setModal(null)}/>:null}
+ {modal.kind==='settings'?<div className="stack"><label className="radio-line"><input type="checkbox" checked={settings.textOnly} onChange={event=>saveSettings({...settings,textOnly:event.target.checked})}/>文本模式，简化场景装饰</label><label className="radio-line"><input type="checkbox" checked={settings.reducedMotion} onChange={event=>saveSettings({...settings,reducedMotion:event.target.checked})}/>减少动态效果</label>{settingsNotice?<p role="status">{settingsNotice}</p>:null}<p>真实历史节点标注日期与来源；股票名称和价格为明确模拟。DeepSeek直接股权只会在有资格与对方融资意愿的明确架空条件下提供，本体验没有现实申购入口。</p><p>显示、阅读、收藏和动画不会改变随机结果。切换设置也不会增加钱或行动。</p><p>存档只在本机；浏览器可能清理数据，请手动导出备份。导出的完整档可能包含私人备注与隐藏事实，请妥善保管。</p></div>:null}
+ {modal.kind==='exit'?<><p>离开将丢失尚未保存的候选。旧提交仍完整；建议先导出候选或重试保存。</p><div className="button-row"><button type="button" onClick={()=>setModal(null)}>留在当前人生</button><button type="button" onClick={()=>exportCurrent(true)}>先导出未保存候选</button><button type="button" className="danger" onClick={()=>{void controller?.home(true).then(()=>setModal(null)).catch(fail)}}>明确舍弃候选并返回入口</button></div></>:null}
+ {modal.kind==='reload'?<><p>会舍弃当前尚未保存的候选，并读取本机最新的完整提交。此操作不能把候选合并进另一版本；可先导出保留。</p><div className="button-row"><button type="button" onClick={()=>setModal(null)}>返回</button><button type="button" onClick={()=>exportCurrent(true)}>先导出候选</button><button type="button" className="danger" onClick={()=>{void controller?.reload(true).then(()=>setModal(null)).catch(fail)}}>确认舍弃并重新读取</button></div></>:null}
+ </Dialog>:null}</div>
 }

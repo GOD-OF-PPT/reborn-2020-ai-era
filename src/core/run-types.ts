@@ -6,6 +6,7 @@ import type { RandomState } from './random.ts'
 import type { Timeline } from './timeline.ts'
 import type { MarketState } from './market-types.ts'
 import type { OperationsState } from './operations-types.ts'
+import type { PlayerProfile } from './player-profile.ts'
 
 export interface VersionSet {
   readonly schemaVersion: number
@@ -59,6 +60,7 @@ export interface CauseEntry {
   readonly visibility: 'visible' | 'hidden'
 }
 export interface GameRun extends RuleModel {
+  readonly playerProfile:PlayerProfile
   readonly versions: VersionSet
   readonly runId: string
   readonly actorId: string
@@ -71,6 +73,7 @@ export interface GameRun extends RuleModel {
   readonly causes: readonly CauseEntry[]
 }
 export interface CreateRunInput {
+  readonly playerProfile?:PlayerProfile
   readonly runId: string
   readonly actorId: string
   readonly commandId: string

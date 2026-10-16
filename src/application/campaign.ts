@@ -21,6 +21,7 @@ import { MARKET_CONTENT } from '../content/market.ts'
 import { createMarketHandlers } from './market-commands.ts'
 import { projectMarket } from '../core/market-projection.ts'
 import type { RuntimeExtension } from '../core/operations-types.ts'
+import { projectWorkbench } from './workbench-projection.ts'
 
 export function composeCampaignRuntime(pack:unknown,catalog:unknown,marketCatalog?:unknown){
  const operations:OperationsRuntime=new OperationsRuntime(catalog,(model,id,date):readonly string[]=>runtime.capabilityReasons(model,'player',id,date));const market=marketCatalog===undefined?null:new MarketRuntime(marketCatalog)
@@ -31,7 +32,7 @@ const composition=composeCampaignRuntime(CAMPAIGN_CONTENT,OPERATIONS_CONTENT,MAR
 export const campaignRuntime=composition.runtime
 export const campaignOperations=composition.operations
 export const campaignMarket=composition.market!
-export const CAMPAIGN_VERSIONS: VersionSet = { ...BOOTSTRAP_VERSIONS, rulesVersion: 'rules-t08-market-v1', contentVersion: 'world-market-work-v1', contentHash: hashValue({ bootstrap: BOOTSTRAP_CONTENT, pack: campaignRuntime.pack, operations:campaignOperations.catalog,firstOrder:FIRST_ORDER,market:campaignMarket.catalog }) }
+export const CAMPAIGN_VERSIONS: VersionSet = { ...BOOTSTRAP_VERSIONS, rulesVersion: 'rules-t09-playable-v1', contentVersion: 'world-playable-work-v1', contentHash: hashValue({ bootstrap: BOOTSTRAP_CONTENT, pack: campaignRuntime.pack, operations:campaignOperations.catalog,firstOrder:FIRST_ORDER,market:campaignMarket.catalog }) }
 const allowed = () => ({ allowed: true, reasonCodes: [], actionPoints: 0, upfrontCostFen: 0, releasedFen: 0 })
 
 export function createCampaignRegistry(runtime: WorldRuntime = campaignRuntime, versions: VersionSet = CAMPAIGN_VERSIONS, extra:readonly CommandHandler[]=runtime===campaignRuntime?[...createOperatingHandlers(campaignOperations),createFirstOrderHandler(campaignOperations,campaignRuntime),...createMarketHandlers(campaignMarket)]:[]) {
@@ -44,7 +45,7 @@ export function createCampaignRegistry(runtime: WorldRuntime = campaignRuntime, 
   const interrupt = defineCommand('InterruptPreparation', z.strictObject({ jobId: idSchema }), (view, payload) => { requireRule(view.world?.jobs.some((job) => job.id === payload.jobId && job.status === 'running'), 'JOB_NOT_RUNNING'); return allowed() }, (model, payload) => ({ model: runtime.interrupt(model, payload.jobId), summary: '准备任务已中断，已发生成本保留', domain: 'content' }))
   const read = defineCommand('ReadNews', z.strictObject({ anchorId: idSchema }), (view, payload) => { requireRule(view.world?.anchors.some((anchor) => anchor.id === payload.anchorId), 'NEWS_NOT_YET_OCCURRED'); return allowed() }, (model, payload) => { requireRule(model.world, 'WORLD_NOT_CONFIGURED'); return { model: { ...model, world: { ...model.world, newsRead: [...new Set([...model.world.newsRead, payload.anchorId])] } }, summary: '新闻阅读状态已记录', domain: 'notes' } })
   const favorite = defineCommand('FavoriteMemory', z.strictObject({ memoryId: idSchema, favorite: z.boolean() }), (view, payload) => { requireRule(view.world && runtime.pack.memories.some((memory) => memory.id === payload.memoryId), 'UNKNOWN_MEMORY'); return allowed() }, (model, payload) => { requireRule(model.world, 'WORLD_NOT_CONFIGURED'); return { model: { ...model, world: { ...model.world, favoriteMemories: payload.favorite ? [...new Set([...model.world.favoriteMemories, payload.memoryId])] : model.world.favoriteMemories.filter((id) => id !== payload.memoryId) } }, summary: '记忆收藏已更新', domain: 'notes' } })
-  const registryRuntime=runtime===campaignRuntime?{advance:runtime.advance.bind(runtime),validate:runtime.validate.bind(runtime),project:(run:GameRun)=>({firstOrder:projectFirstOrder(run),market:projectMarket(run,campaignMarket.catalog)})}:runtime
+  const registryRuntime=runtime===campaignRuntime?{advance:runtime.advance.bind(runtime),validate:runtime.validate.bind(runtime),project:(run:GameRun)=>({firstOrder:projectFirstOrder(run),market:projectMarket(run,campaignMarket.catalog),workbench:projectWorkbench(run,campaignRuntime,campaignOperations.catalog,campaignMarket.catalog)})}:runtime
   return createBaseRegistry(versions, [choose, defer, interrupt, read, favorite,...extra], registryRuntime)
 }
 

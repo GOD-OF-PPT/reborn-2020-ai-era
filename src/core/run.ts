@@ -7,8 +7,10 @@ import { freezeFact, type FactState } from './facts.ts'
 import { assertRandom, createRandom, RNG_ALGORITHM } from './random.ts'
 import { identifier } from './identity.ts'
 import type { CreateRunInput, GameRun, InitialRunState, RuleModel, VersionSet } from './run-types.ts'
+import { playerProfileSchema,DEFAULT_PLAYER_PROFILE } from './player-profile.ts'
 
 export function assertGameRun(run: GameRun): void {
+  requireRule(playerProfileSchema.safeParse(run.playerProfile).success,'INVALID_PLAYER_PROFILE')
   commandIdentifier(run.runId); commandIdentifier(run.actorId)
   identifier(run.backgroundId)
   requireRule(Number.isSafeInteger(run.revision) && run.revision >= 1, 'INVALID_REVISION')
@@ -51,13 +53,14 @@ export function createGameRun(input: CreateRunInput, initial: InitialRunState, v
   let factState: FactState = { random: createRandom(input.seed), facts: [] }
   for (const descriptor of initial.initialFacts ?? []) factState = freezeFact(factState, descriptor)
   const model: RuleModel = { controlledAccountIds: [...initial.controlledAccountIds], phase: 'playing', economy: initial.economy, timeline: initial.timeline, random: factState.random, facts: factState.facts, privateNotes: '', world: initial.world ?? null, operations: initial.operations ?? null, market:initial.market??null }
-  const payload = { backgroundId: input.backgroundId, origin: initial.origin, seed: input.seed, initialStateHash: hashValue(model) }
+  const profile=playerProfileSchema.safeParse(input.playerProfile??DEFAULT_PLAYER_PROFILE);requireRule(profile.success,'INVALID_PLAYER_PROFILE')
+  const payload = { backgroundId: input.backgroundId, origin: initial.origin, seed: input.seed, playerProfile:profile.data,initialStateHash: hashValue(model) }
   const identity = commandIdentity(input.runId, input.actorId, 'CreateRun', payload)
   const date = initial.timeline.cursor.date
   const causeId = `cause:${input.commandId}`
   const run: GameRun = {
     ...model, versions: { ...versions }, runId: input.runId, actorId: input.actorId, personalAccountId: initial.personalAccountId,
-    backgroundId: input.backgroundId, origin: initial.origin, seed: input.seed, revision: 1,
+    backgroundId: input.backgroundId,playerProfile:profile.data, origin: initial.origin, seed: input.seed, revision: 1,
     receipts: [{ runId: input.runId, commandId: input.commandId, actorId: input.actorId, kind: 'CreateRun', payloadHash: identity.hash, payloadSignature: identity.signature, revisionBefore: 0, revisionAfter: 1, date, summary: '新人生已建立', transactionIds: initial.economy.ledger.transactions.map((entry) => entry.id), causeIds: [causeId] }],
     causes: [{ id: causeId, commandId: input.commandId, date, domain: 'run', parentIds: [], sourceEventId: `command:${input.commandId}`, visibleSummary: '确认背景与开局义务', visibility: 'visible' }],
   }

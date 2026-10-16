@@ -18,7 +18,7 @@ T03已建立[钱/日期/行动内核](21-economy-kernel.md)，由tsconfig.core.j
 
 T07的[手工首单25](25-manual-first-order-contract.md)登记正常生产报价及可选组合指令、期限默认、有据案例和提交后投影；schema4明确拒绝旧schema1—3。Session的features扩展只接收已提交Run并置于独立命名空间，不能覆盖保存状态或发布候选收入；本轮没有提前接入可玩UI。
 
-T08的[模拟股票26](26-simulated-market-contract.md)把行情与撮合加入同一世界日序和原子存档：world_update先公布、market_matching只处理此前已提交的订单；订单不耗行动，独立研究耗点与实际日期。共享运行时在创建时组合经营/市场扩展。当前schema5、rules-t08-market-v1明确拒绝旧schema1—4；原始价与分红应收分开，未知报价投影为null并保留最后已知值标签。只启用模拟制度；T09继续可玩UI/浏览器。
+T08的[模拟股票26](26-simulated-market-contract.md)把行情与撮合加入同一世界日序和原子存档：world_update先公布、market_matching只处理此前已提交的订单；订单不耗行动，独立研究耗点与实际日期。共享运行时在创建时组合经营/市场扩展。T08当时schema5、rules-t08-market-v1明确拒绝旧schema1—4；原始价与分红应收分开，未知报价投影为null并保留最后已知值标签。只启用模拟制度；T09继续可玩UI/浏览器。
 
 T06的[共享经营合同24](24-shared-operations-contract.md)增加operations状态、实际就业/工资、统一日期资源、合同收尾和有限融资；正常schema3明确拒绝旧schema1/2。WorldRuntime通过可信扩展处理经营事件和同一产能，不从JSON注册函数；前台仍为工程预览。
 
@@ -39,6 +39,8 @@ T05增加[内容与世界调用合同23](23-content-world-contract.md)：schema2
 | src/persistence | 存档封套、原子提交、迁移、备份 | 不把单条数据库请求成功当整档成功 |
 
 当前已建立src/main.tsx、src/ui、钱/日期/行动内核及src/application、src/persistence，src/content仅有独立版本化开局工作参数。完整内容/世界门控和路线业务随对应任务建立。规则模块不引用React、浏览器时钟或网络；同一组规则命令须能在无界面环境回放。
+
+T09的[可玩工作台27](27-playable-workbench-contract.md)接入真实浏览器控制器/会话、不可兼容原档库、背景/愿望/引导、已提交财务与期限投影。当前schema6、rules-t09-playable-v1明确拒绝旧schema1—5；预览到2020-06-30，不代替完整24季度。原始美术与真人试玩继续待办。
 
 ## 2. 命令与事务边界
 

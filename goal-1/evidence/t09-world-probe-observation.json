@@ -1,0 +1,8 @@
+{
+  "taskId": "T09",
+  "checkpointId": "C09",
+  "initialFailure": "content changed the market random stream",
+  "cause": "The pre-T08 collector required a completely unchanged market stream even for normal campaigns that now generate finite autonomous quotes.",
+  "correction": "Reference the original market stream advanced once per known generated quote, compare full words and draw count; market-free world fixtures still require no market draws. Unknown/no-rule market data in this world probe is explicitly rejected.",
+  "scope": "collector correction only; no price, random algorithm, world or financial rule change; committed old artifacts preserved"
+}

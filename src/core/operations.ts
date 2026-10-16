@@ -149,6 +149,7 @@ export class OperationsRuntime implements RuntimeExtension {
   }
   if(!stateOf(current).logs.some(log=>log.id===id))current=this.#log(current,id,date,commandId,intent.kind)
   let timeline=model.timeline;for(const event of events)timeline=queueEvent(timeline,event)
+  if(intent.kind==='PayObligation'&&timeline.pause?.source==='command'&&timeline.pause.reason==='CASH_SHORTFALL'&&!current.economy.ledger.obligations.some(o=>o.originOperationId===timeline.pause?.instanceId&&o.remainingFen>0))timeline={...timeline,pause:null}
   const gap=current.economy.ledger.obligations.find(o=>o.date<=date&&o.remainingFen>0&&!model.economy.ledger.obligations.some(old=>old.id===o.id&&old.remainingFen>0));if(gap&&timeline.pause===null)timeline={...timeline,pause:{instanceId:gap.originOperationId,reason:'CASH_SHORTFALL',source:'command'}}
   return {...current,timeline}
  }

@@ -22,7 +22,9 @@
     "test:docs": "python3 -B -m unittest discover -s scripts -p 'test_*.py'",
     "check:docs": "python3 -B scripts/check_docs.py --text-only && python3 -B scripts/check_plan.py && python3 -B scripts/check_competitive_design.py",
     "check": "npm run typecheck && npm run test:unit && npm run test:docs && npm run validate:content && npm run check:docs && npm run build",
-    "evidence:market": "node --experimental-strip-types scripts/collect_market_evidence.ts"
+    "evidence:market": "node --experimental-strip-types scripts/collect_market_evidence.ts",
+    "evidence:playable": "node --experimental-strip-types scripts/collect_playable_evidence.ts",
+    "evidence:browser-audit": "node --experimental-strip-types scripts/verify_browser_evidence.ts"
   },
   "dependencies": {
     "@noble/hashes": "2.4.0",

@@ -1,6 +1,6 @@
 # 项目协作与智能编程助手约束 v0.4
 
-这是《重生2020：AI时代》的设计资料与游戏工程仓库。T02—T08已建立底座、正常手工首单和模拟股票内核，完整业务与可玩界面仍待实施。先读README、经济02、核心01、流程18、技术08、实施09/19、内容15和验收14；goal执行中另全量读取当前goal的input/plan/tasks，调用合同见21—26。正常组合入口为createCampaignRun，Session复用codec.registry，首单/市场投影为view.features.firstOrder/market，当前schema5明确拒绝旧schema1—4；经济底座夹具不等于完整新局。用户方向不等于每项数值、时长或竞品借鉴已经获验收。
+这是《重生2020：AI时代》的设计资料与游戏工程仓库。T02—T09已建立底座、正常首单/模拟股票和2020上半年可玩切片；完整业务、正式界面与24季度仍待实施。先读README、经济02、核心01、流程18、技术08、实施09/19、内容15和验收14；goal执行中另全量读取当前goal的input/plan/tasks，调用合同见21—27。正常组合入口为createCampaignRun，Session复用codec.registry，首单/市场投影为view.features.firstOrder/market，当前schema6明确拒绝旧schema1—5；经济底座夹具不等于完整新局。用户方向不等于每项数值、时长或竞品借鉴已经获验收。
 
 ## 产品方向不可回退
 
