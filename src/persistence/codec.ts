@@ -50,6 +50,7 @@ export class RunCodec {
     assertGameRun(run)
     this.#references(run)
     requireRule(run.world === null || this.registry.runtime !== null, 'WORLD_HANDLER_REQUIRED')
+    requireRule(run.market === null || this.registry.runtime !== null, 'MARKET_HANDLER_REQUIRED')
     this.registry.runtime?.validate(run)
     return run
   }
@@ -101,6 +102,12 @@ export class RunCodec {
         requireRule(source && 'contractId' in source && source.contractId === operation.contractId && source.accountId === operation.accountId, 'INVALID_REFUND_REFERENCE')
       }
     }
+    for(const receivable of ledger.marketReceivables){
+      const origin=financial.get(receivable.originOperationId)
+      requireRule(origin&&(origin.kind==='trade_sell'||origin.kind==='record_market_income')&&origin.receivableId===receivable.id&&origin.accountId===receivable.accountId&&origin.counterpartyId===receivable.counterpartyId&&origin.dueAt===receivable.dueAt&&origin.date===receivable.date&&receivable.amountFen===(origin.kind==='trade_sell'?origin.grossFen-origin.feeFen:origin.amountFen),'INVALID_MARKET_RECEIVABLE')
+      const paid=[...financial.values()].filter(o=>o.kind==='settle_market_receivable'&&o.receivableId===receivable.id).reduce((sum,o)=>sum+('amountFen' in o?o.amountFen:0),0)
+      requireRule(receivable.remainingFen===receivable.amountFen-paid,'MARKET_RECEIVABLE_BALANCE_MISMATCH')
+    }
     const processedIds = new Set<string>()
     let previousPoint: TimePoint | null = null
     for (const receipt of run.timeline.receipts) {
@@ -113,7 +120,7 @@ export class RunCodec {
       requireRule(previousPoint === null || compareTimePoints(event, previousPoint) > 0, 'EVENT_HISTORY_OUT_OF_ORDER')
       requireRule(compareTimePoints(event, run.timeline.cursor) <= 0, 'EVENT_HISTORY_AHEAD_OF_CURSOR')
       previousPoint = event
-      if (isWorldOperation(event.payload) || event.payload.kind === 'operating_event') {
+      if (isWorldOperation(event.payload) || event.payload.kind === 'operating_event'||event.payload.kind==='market_event') {
         requireRule(this.registry.runtime && run.world, 'WORLD_HANDLER_REQUIRED')
       } else if (receipt.skippedReason !== undefined) {
         // Validate the historical reason against its earlier operation. The action

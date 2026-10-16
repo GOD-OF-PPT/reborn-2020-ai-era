@@ -1,0 +1,46 @@
+{
+  "taskId": "T08",
+  "evidenceType": "test_execution_observation",
+  "initialFullUnit": {
+    "tests": 181,
+    "passed": 172,
+    "failed": 9,
+    "durationSeconds": 61.18,
+    "details": "5 lot canonical ordering failures and 4 existing integration timeouts; both addressed before final check"
+  },
+  "intermediateFullUnit": {
+    "tests": 198,
+    "passed": 198,
+    "durationSeconds": 46.87
+  },
+  "laterFullCheck": {
+    "file": "t08-check-load-timeout.txt",
+    "tests": 202,
+    "passed": 199,
+    "failed": 3,
+    "durationSeconds": 76.86,
+    "failures": "existing employment/shared-capacity/long-world-clock timeouts; no failed business assertion in this run",
+    "nearbyHostLoadAverages": [
+      20.03,
+      9.77,
+      8.09
+    ]
+  },
+  "remediation": [
+    "discriminate event kind before world/operations schema validation",
+    "index quote history, used volume and event schedules; cache fixed catalog schedule identities",
+    "reduce Vitest maxWorkers from 4 to 2; preserve all old timeouts and assertions"
+  ],
+  "optimizedTargeted": {
+    "files": 4,
+    "tests": 60,
+    "passed": 60,
+    "durationSeconds": 19.07,
+    "maxWorkers": 2
+  },
+  "causalLimit": "Do not attribute a speed ratio to one change; implementation, scope, host load and concurrency differ.",
+  "typecheckInitial": {
+    "file": "t08-typecheck-initial.txt",
+    "failure": "possibly undefined fixture checkpoint spread; fixed with verified array element assertion"
+  }
+}

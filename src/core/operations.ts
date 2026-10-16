@@ -102,6 +102,7 @@ export class OperationsRuntime implements RuntimeExtension {
   requireRule(!m.economy.ledger.obligations.some(o=>o.remainingFen>0&&(o.businessId===b.id||(b.company&&o.accountId===b.accountId)))&&!s.loans.some(l=>l.accountId===b.accountId&&!l.feePosted),'UNSETTLED_BUSINESS_DEBT')
   requireRule(!m.economy.ledger.reservations.some(r=>r.accountId===b.accountId&&r.amountFen>0&&(b.company||r.originId===b.id))&&!m.economy.ledger.investments.some(i=>b.company&&i.accountId===b.accountId&&i.valueFen>0),'UNSETTLED_BUSINESS_ASSETS')
   requireRule(!m.economy.ledger.contracts.some(c=>c.businessId===b.id&&(c.prepaidFen>0||c.receivableFen>0))&&!m.economy.ledger.supplierPrepayments.some(p=>p.businessId===b.id&&p.remainingFen>0),'UNSETTLED_BUSINESS_ASSETS')
+  if(b.company)requireRule(!m.market?.positions.some(p=>p.accountId===b.accountId&&p.quantity>0)&&!m.market?.orders.some(o=>o.accountId===b.accountId&&['planned','pending','partially_filled'].includes(o.status))&&!m.economy.ledger.marketReceivables.some(r=>r.accountId===b.accountId&&r.remainingFen>0),'UNSETTLED_BUSINESS_ASSETS')
  }
  #planJob(m:OperatingModel,b:BusinessInstance,definitionId:string,resources:readonly string[],startAt:string,date:string,id:string,contractId:string|null):{state:OperatingModel;events:ScheduledEvent<RunOperation>[]}{
   const d=this.catalog.jobs.find(d=>d.id===definitionId);requireRule(d,'UNKNOWN_JOB_DEFINITION');const completeAt=addDays(startAt,d.durationDays);let current=this.#action(m,id,startAt,b.accountId,d.actionPoints,d.costFen,completeAt,startAt===date,b.id)

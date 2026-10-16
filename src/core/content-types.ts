@@ -1,6 +1,7 @@
 import type { EconomyOperation } from './economy.ts'
 import type { LedgerOperation } from './ledger.ts'
 import type { RandomDomain } from './random.ts'
+import type { MarketEvent } from './market-types.ts'
 import type { OperatingEvent } from './operations-types.ts'
 
 export const ROUTES = ['a_share', 'ai_video', 'ai_course', 'api_relay', 'deepseek_opportunity'] as const
@@ -77,5 +78,5 @@ export type WorldOperation =
   | { readonly kind: 'open_content_event'; readonly definitionId: string; readonly bindingId: string; readonly date: string }
   | { readonly kind: 'expire_content_event'; readonly eventId: string; readonly date: string }
   | { readonly kind: 'finish_preparation'; readonly jobId: string; readonly date: string }
-export type RunOperation = EconomyOperation | WorldOperation | OperatingEvent
+export type RunOperation = EconomyOperation | WorldOperation | OperatingEvent | MarketEvent
 export function isWorldOperation(operation: { readonly kind: string }): operation is WorldOperation { return ['world_anchor', 'open_content_event', 'expire_content_event', 'finish_preparation'].includes(operation.kind) }

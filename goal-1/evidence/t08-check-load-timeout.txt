@@ -1,0 +1,58 @@
+
+> reborn-2020-ai-era@0.1.0 check
+> npm run typecheck && npm run test:unit && npm run test:docs && npm run validate:content && npm run check:docs && npm run build
+
+
+> reborn-2020-ai-era@0.1.0 typecheck
+> tsc -b
+
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/operations.test.ts (9 tests | 1 failed) 31221ms
+   × shares the player production pool with world preparation instead of granting a second personal resource 11204ms
+ ❯ src/application/campaign.test.ts (13 tests | 1 failed) 44697ms
+   × advances every historical anchor without opening news, while keeping missing access and unpaid duties 35048ms
+ ❯ src/application/employment.test.ts (4 tests | 1 failed) 13476ms
+   × settles actual monthly employment for technical_employee after a single two-point quarterly commitment 8214ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/campaign.test.ts > advances every historical anchor without opening news, while keeping missing access and unpaid duties
+Error: Test timed out in 20000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/application/campaign.test.ts:75:1
+     73| })
+     74|
+     75| it('advances every historical anchor without opening news, while keepi…
+       | ^
+     76|   let run = createCampaignRun(input)
+     77|   const initialMarket = canonicalJson(run.random.streams.market)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/application/employment.test.ts > settles actual monthly employment for technical_employee after a single two-point quarterly commitment
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/application/employment.test.ts:7:71
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/application/operations.test.ts > shares the player production pool with world preparation instead of granting a second personal resource
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/application/operations.test.ts:41:1
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  3 failed | 28 passed (31)
+      Tests  3 failed | 199 passed (202)
+   Start at  02:12:51
+   Duration  76.86s (tests 97%, import 3%)

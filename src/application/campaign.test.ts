@@ -93,7 +93,8 @@ it('advances every historical anchor without opening news, while keeping missing
   expect(run.world?.anchors).toHaveLength(11)
   expect(new Set(run.world?.anchors.map((anchor) => anchor.id)).size).toBe(11)
   expect(run.world?.newsRead).toHaveLength(0)
-  expect(canonicalJson(run.random.streams.market)).toBe(initialMarket)
+  expect(canonicalJson(run.random.streams.market)).not.toBe(initialMarket)
+  expect(run.market?.lastMatchedIndex).toBe(215)
   expect(campaignRuntime.capabilityReasons(run, 'player', 'gpt3_api', '2025-12-31')).toEqual(['MISSING_ENTITLEMENT:api_beta_access'])
   expect(campaignRuntime.capabilityReasons(run, 'player', 'deepseek_counterfactual_equity', '2025-12-31')).toHaveLength(3)
   // A bill that cannot be fully paid remains due; no implicit partial payment.

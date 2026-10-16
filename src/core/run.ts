@@ -50,7 +50,7 @@ export function createGameRun(input: CreateRunInput, initial: InitialRunState, v
   commandIdentifier(input.runId); commandIdentifier(input.actorId); commandIdentifier(input.commandId)
   let factState: FactState = { random: createRandom(input.seed), facts: [] }
   for (const descriptor of initial.initialFacts ?? []) factState = freezeFact(factState, descriptor)
-  const model: RuleModel = { controlledAccountIds: [...initial.controlledAccountIds], phase: 'playing', economy: initial.economy, timeline: initial.timeline, random: factState.random, facts: factState.facts, privateNotes: '', world: initial.world ?? null, operations: initial.operations ?? null }
+  const model: RuleModel = { controlledAccountIds: [...initial.controlledAccountIds], phase: 'playing', economy: initial.economy, timeline: initial.timeline, random: factState.random, facts: factState.facts, privateNotes: '', world: initial.world ?? null, operations: initial.operations ?? null, market:initial.market??null }
   const payload = { backgroundId: input.backgroundId, origin: initial.origin, seed: input.seed, initialStateHash: hashValue(model) }
   const identity = commandIdentity(input.runId, input.actorId, 'CreateRun', payload)
   const date = initial.timeline.cursor.date

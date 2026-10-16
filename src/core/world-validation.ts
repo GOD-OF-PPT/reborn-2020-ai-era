@@ -81,6 +81,7 @@ export function assertWorldRun(pack: ContentPack, run: GameRun): void {
     logs.add(log.id)
   }
   function validateOperation(raw: unknown, occurrenceId: string, processed: boolean, skippedReason?: string): void {
+    if(typeof raw!=='object'||raw===null||!('kind' in raw)||!['world_anchor','open_content_event','expire_content_event','finish_preparation'].includes(String(raw.kind)))return
     const parsed = worldOperationSchema.safeParse(raw)
     if (!parsed.success) return
     const operation = parsed.data

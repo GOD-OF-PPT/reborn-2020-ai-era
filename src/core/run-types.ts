@@ -4,6 +4,7 @@ import type { RunOperation, WorldState } from './content-types.ts'
 import type { FrozenFact, FactDescriptor } from './facts.ts'
 import type { RandomState } from './random.ts'
 import type { Timeline } from './timeline.ts'
+import type { MarketState } from './market-types.ts'
 import type { OperationsState } from './operations-types.ts'
 
 export interface VersionSet {
@@ -23,6 +24,7 @@ export interface RuleModel {
   readonly privateNotes: string
   readonly world: WorldState | null
   readonly operations: OperationsState | null
+  readonly market:MarketState|null
 }
 export interface CommandEnvelope {
   readonly commandId: string
@@ -84,6 +86,7 @@ export interface InitialRunState {
   readonly initialFacts?: readonly FactDescriptor[]
   readonly world?: WorldState | null
   readonly operations?: OperationsState | null
+  readonly market?:MarketState|null
 }
 export interface ProposedRun {
   readonly status: 'proposed'

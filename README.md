@@ -37,7 +37,9 @@ T05建立[内容、世界与资格合同23](docs/23-content-world-contract.md)�
 
 T06建立[就业与共享经营合同24](docs/24-shared-operations-contract.md)：季度工作、实际月薪、共享个人/员工产能、合同任务和退出义务接入同一命令/存档入口。T06当时使用schema3，明确拒绝旧schema1/2。`npm run evidence:operations`采集经营底座回放；T06当时正常包尚无专用生产商单，T07接入首单内容。历史采集命令需指定新输出目录。
 
-T07接入[手工第一单25](docs/25-manual-first-order-contract.md)：正常两背景可接、拒绝、跳过或让报价过期；制作、提交、客户复核、收款和已付案例按实际状态处理。当前组合为schema4，旧schema1—3明确拒绝；`npm run evidence:first-order`采集独立首季回放。Session公开首单投影已可接线，完整可玩界面仍由T09实施。
+T07接入[手工第一单25](docs/25-manual-first-order-contract.md)：正常两背景可接、拒绝、跳过或让报价过期；制作、提交、客户复核、收款和已付案例按实际状态处理。T07当时组合为schema4，明确拒绝旧schema1—3；`npm run evidence:first-order`采集独立首季回放。Session公开首单投影已可接线，完整可玩界面仍由T09实施。
+
+T08接入[模拟股票合同26](docs/26-simulated-market-contract.md)：五类虚构个股、216个有限撮合点、计划/订单同一占款、部分成交/撤改/到期、费用/股份与现金交收、原始价分红、独立研究及公开持仓投影。当前正常组合为schema5、rules-t08-market-v1，明确拒绝并保留旧schema1—4导出。`npm run evidence:market`采集正常Q01实际订单与隔离失败路径；Session公开`features.market`只取已提交存档。真实历史行情/制度/使用条件未核验，历史回放禁用；T09负责可玩操作和新浏览器验收。
 
 ## v0.4：从竞品机制转成更清楚的操作
 
