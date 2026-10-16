@@ -20,7 +20,7 @@ export function assertWorldRun(pack: ContentPack, run: GameRun): void {
   for (const binding of world.bindings) {
     requireRule(run.controlledAccountIds.includes(binding.accountId), 'INVALID_CONTENT_BINDING')
     if (binding.kind === 'player') requireRule(binding.businessId === null && binding.contractId === null && binding.personId === null && binding.route === null, 'INVALID_CONTENT_BINDING')
-    if (binding.kind === 'business') requireRule(binding.businessId !== null && binding.route !== null && (run.economy.ledger.accounts.some((account) => account.id === binding.accountId && account.kind === 'business') || run.economy.ledger.contracts.some((contract) => contract.businessId === binding.businessId && contract.accountId === binding.accountId)), 'INVALID_BUSINESS_BINDING')
+    if (binding.kind === 'business') requireRule(binding.businessId !== null && binding.route !== null && (run.operations?.businesses.some((business) => business.id === binding.businessId && business.accountId === binding.accountId && business.route === binding.route) || run.economy.ledger.accounts.some((account) => account.id === binding.accountId && account.kind === 'business') || run.economy.ledger.contracts.some((contract) => contract.businessId === binding.businessId && contract.accountId === binding.accountId)), 'INVALID_BUSINESS_BINDING')
     if (binding.kind === 'contract') requireRule(run.economy.ledger.contracts.some((contract) => contract.id === binding.contractId && contract.businessId === binding.businessId && contract.accountId === binding.accountId), 'INVALID_CONTRACT_BINDING')
     if (binding.kind === 'person') requireRule(binding.personId !== null, 'INVALID_PERSON_BINDING')
   }
@@ -73,7 +73,7 @@ export function assertWorldRun(pack: ContentPack, run: GameRun): void {
   }
   for (const profile of pack.initialEntitlements.filter((item) => item.backgroundId === run.backgroundId)) for (const id of profile.entitlementIds) requireRule(world.entitlements.some((item) => item.id === id && item.sourceEventId === 'bootstrap:profile'), 'MISSING_INITIAL_ENTITLEMENT')
   for (const evidence of world.evidence) requireRule(instances.has(evidence.instanceId) && evidence.date <= date && authored(instances.get(evidence.instanceId) as EventInstance, (effect) => effect.op === 'recordEvidence' && effect.text === evidence.text), 'INVALID_EVIDENCE_SOURCE')
-  requireRule(world.stoppedBindings.every((id) => bindings.has(id) && world.instances.some((instance) => instance.bindingId === id && authored(instance, (effect) => effect.op === 'pauseNewContracts'))), 'INVALID_STOP_SOURCE')
+  requireRule(world.stoppedBindings.every((id) => bindings.has(id) && (run.operations?.businesses.some(b=>b.id===id&&['paused','winding_down','closed'].includes(b.lifecycle)) || world.instances.some((instance) => instance.bindingId === id && authored(instance, (effect) => effect.op === 'pauseNewContracts')))), 'INVALID_STOP_SOURCE')
   const logs = new Set<string>()
   for (const log of world.logs) {
     requireRule(log.date <= date && log.parentIds.every((id) => logs.has(id)), 'INVALID_WORLD_CAUSE')

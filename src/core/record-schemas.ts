@@ -26,6 +26,9 @@ const investment = { ...base, accountId: idSchema, investmentId: idSchema }
 export const classification = z.enum(['historical', 'simulation', 'fictional', 'counterfactual'])
 
 export const ledgerOperationSchema = z.union([
+  z.strictObject({ ...base, kind: z.literal('open_business_account'), accountId: idSchema }),
+  z.strictObject({ ...base, kind: z.literal('owner_transfer'), accountId: idSchema, targetAccountId: idSchema, amountFen: moneySchema.min(1), fundingPurpose: purpose }),
+  z.strictObject({ ...cash, kind: z.literal('borrow_cash'), obligationId: idSchema, dueAt: dateSchema }),
   z.strictObject({ ...cash, kind: z.enum(['opening_cash', 'income']) }),
   z.strictObject({ ...cash, kind: z.literal('expense'), reservationId: optionalId, originId: optionalId, fundingPurpose: purpose }),
   z.strictObject({ ...base, kind: z.literal('reserve_cash'), accountId: idSchema, reservationId: idSchema, bucket: z.enum(['plan', 'order', 'frozen']), originId: idSchema, amountFen: moneySchema, fundingPurpose: purpose }),

@@ -33,7 +33,9 @@ npm run check
 
 T04建立了[命令、随机与存档合同22](docs/22-command-save-contract.md)。开发服务运行时，访问`/tests/t04-storage.html`可手动运行隔离测试库上的原生IndexedDB/Web Locks检查；页面只用于工程验证，不提供游戏入口，也不进入生产构建。浏览器原生报告与已知限制见[T04验证](goal-1/evidence/t04-validation.md)。
 
-T05建立[内容、世界与资格合同23](docs/23-content-world-contract.md)：正常组合入口为`createCampaignRun`，包含独立运行时内容包、世界按日期推进、有限准备任务及资格门控。`npm run validate:content`校验实际内容与初始化，`npm run evidence:world`采集内容/时钟回放；这些结果不代替五路线经营、正常通关或浏览器可玩验收。当前存档schema2明确拒绝旧schema1并保留其历史导出。
+T05建立[内容、世界与资格合同23](docs/23-content-world-contract.md)：正常组合入口为`createCampaignRun`，包含独立运行时内容包、世界按日期推进、有限准备任务及资格门控。`npm run validate:content`校验实际内容与初始化，`npm run evidence:world`采集内容/时钟回放；这些结果不代替五路线经营、正常通关或浏览器可玩验收。T05采用schema2并保留旧schema1历史导出，当前组合版本见下方T06。
+
+T06建立[就业与共享经营合同24](docs/24-shared-operations-contract.md)：季度工作、实际月薪、共享个人/员工产能、合同任务和退出义务接入同一命令/存档入口。当前正常组合使用schema3，明确拒绝旧schema1/2。`npm run evidence:operations`采集经营底座回放；正常包尚无专用生产商单，T07开始接入实际首单内容。历史采集命令需指定新输出目录。
 
 ## v0.4：从竞品机制转成更清楚的操作
 

@@ -1,0 +1,10 @@
+import { z } from 'zod'
+import { defineCommand } from '../core/commands.ts'
+import { idSchema as id, moneySchema, dateSchema as date } from '../core/record-schemas.ts'
+import type { OperatingIntent } from '../core/operations-types.ts'
+import type { OperationsRuntime } from '../core/operations.ts'
+
+export function createOperatingHandlers(runtime:OperationsRuntime){
+ const schemas:Record<OperatingIntent['kind'],z.ZodType>={WorkQuarter:z.strictObject({}),QuitWork:z.strictObject({}),DiscoverBusiness:z.strictObject({definitionId:id}),PrepareBusiness:z.strictObject({businessId:id}),ActivateBusiness:z.strictObject({businessId:id}),PauseBusiness:z.strictObject({businessId:id}),ResumeBusiness:z.strictObject({businessId:id}),WindDownBusiness:z.strictObject({businessId:id}),CloseBusiness:z.strictObject({businessId:id}),FundBusiness:z.strictObject({businessId:id,amountFen:moneySchema.min(1)}),DistributeProfit:z.strictObject({businessId:id,amountFen:moneySchema.min(1)}),HireWorker:z.strictObject({businessId:id,definitionId:id}),DismissWorker:z.strictObject({workerId:id}),StartInternalJob:z.strictObject({businessId:id,definitionId:id,resources:z.array(id).length(1),startAt:date}),AcceptContract:z.strictObject({businessId:id,offerId:id,resources:z.array(id).length(1),startAt:date}),InterruptJob:z.strictObject({jobId:id}),RescheduleJob:z.strictObject({jobId:id,resources:z.array(id).length(1),startAt:date}),SubmitDelivery:z.strictObject({contractId:id}),CancelContract:z.strictObject({contractId:id}),RequestLoan:z.strictObject({accountId:id,offerId:id}),PayObligation:z.strictObject({accountId:id,obligationId:id,amountFen:moneySchema.min(1)})}
+ return (Object.keys(schemas) as OperatingIntent['kind'][]).map(kind=>defineCommand(kind,schemas[kind],(view,payload)=>runtime.inspect(view,{...(payload as object),kind} as OperatingIntent,view.date),(model,payload,context)=>({model:runtime.apply(model,{...(payload as object),kind} as OperatingIntent,context.commandId),summary:`经营指令已处理：${kind}`,domain:'operations'})))
+}

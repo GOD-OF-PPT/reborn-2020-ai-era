@@ -10,12 +10,19 @@ import { requireRule } from '../core/errors.ts'
 import { idSchema } from '../core/record-schemas.ts'
 import type { CreateRunInput, RuleModel, VersionSet } from '../core/run-types.ts'
 import { RunCodec } from '../persistence/codec.ts'
+import { OPERATIONS_CONTENT } from '../content/operations.ts'
+import { OperationsRuntime } from '../core/operations.ts'
+import { createOperatingHandlers } from './operations-commands.ts'
+import type { CommandHandler } from '../core/commands.ts'
 
-export const campaignRuntime = new WorldRuntime(CAMPAIGN_CONTENT)
-export const CAMPAIGN_VERSIONS: VersionSet = { ...BOOTSTRAP_VERSIONS, rulesVersion: 'rules-t05-world-v1', contentVersion: campaignRuntime.pack.version, contentHash: hashValue({ bootstrap: BOOTSTRAP_CONTENT, pack: campaignRuntime.pack }) }
+export function composeCampaignRuntime(pack:unknown,catalog:unknown){const operations:OperationsRuntime=new OperationsRuntime(catalog,(model,id,date):readonly string[]=>runtime.capabilityReasons(model,'player',id,date));const runtime:WorldRuntime=new WorldRuntime(pack,operations);requireRule(operations.catalog.businesses.every(b=>b.capabilities.every(id=>runtime.pack.capabilities.some(c=>c.id===id))&&(b.preparationKey===null||runtime.pack.preparationKeys.includes(b.preparationKey))),'INVALID_OPERATING_QUALIFICATION_REFERENCE');return {runtime,operations}}
+const composition=composeCampaignRuntime(CAMPAIGN_CONTENT,OPERATIONS_CONTENT)
+export const campaignRuntime=composition.runtime
+export const campaignOperations=composition.operations
+export const CAMPAIGN_VERSIONS: VersionSet = { ...BOOTSTRAP_VERSIONS, rulesVersion: 'rules-t06-operations-v1', contentVersion: 'world-operations-work-v1', contentHash: hashValue({ bootstrap: BOOTSTRAP_CONTENT, pack: campaignRuntime.pack, operations:campaignOperations.catalog }) }
 const allowed = () => ({ allowed: true, reasonCodes: [], actionPoints: 0, upfrontCostFen: 0, releasedFen: 0 })
 
-export function createCampaignRegistry(runtime: WorldRuntime = campaignRuntime, versions: VersionSet = CAMPAIGN_VERSIONS) {
+export function createCampaignRegistry(runtime: WorldRuntime = campaignRuntime, versions: VersionSet = CAMPAIGN_VERSIONS, extra:readonly CommandHandler[]=runtime===campaignRuntime?createOperatingHandlers(campaignOperations):[]) {
   const choose = defineCommand('ChooseEvent', z.strictObject({ instanceId: idSchema, choiceId: idSchema }), (view, payload) => runtime.inspect(view, payload.instanceId, payload.choiceId, view.date), (model, payload) => ({ model: runtime.choose(model, payload.instanceId, payload.choiceId), summary: '事件选择已处理', domain: 'content' }))
   const defer = defineCommand('DeferEventDecision', z.strictObject({ instanceId: idSchema }), (view, payload) => {
     const instance = view.world?.instances.find((item) => item.id === payload.instanceId)
@@ -25,14 +32,15 @@ export function createCampaignRegistry(runtime: WorldRuntime = campaignRuntime, 
   const interrupt = defineCommand('InterruptPreparation', z.strictObject({ jobId: idSchema }), (view, payload) => { requireRule(view.world?.jobs.some((job) => job.id === payload.jobId && job.status === 'running'), 'JOB_NOT_RUNNING'); return allowed() }, (model, payload) => ({ model: runtime.interrupt(model, payload.jobId), summary: '准备任务已中断，已发生成本保留', domain: 'content' }))
   const read = defineCommand('ReadNews', z.strictObject({ anchorId: idSchema }), (view, payload) => { requireRule(view.world?.anchors.some((anchor) => anchor.id === payload.anchorId), 'NEWS_NOT_YET_OCCURRED'); return allowed() }, (model, payload) => { requireRule(model.world, 'WORLD_NOT_CONFIGURED'); return { model: { ...model, world: { ...model.world, newsRead: [...new Set([...model.world.newsRead, payload.anchorId])] } }, summary: '新闻阅读状态已记录', domain: 'notes' } })
   const favorite = defineCommand('FavoriteMemory', z.strictObject({ memoryId: idSchema, favorite: z.boolean() }), (view, payload) => { requireRule(view.world && runtime.pack.memories.some((memory) => memory.id === payload.memoryId), 'UNKNOWN_MEMORY'); return allowed() }, (model, payload) => { requireRule(model.world, 'WORLD_NOT_CONFIGURED'); return { model: { ...model, world: { ...model.world, favoriteMemories: payload.favorite ? [...new Set([...model.world.favoriteMemories, payload.memoryId])] : model.world.favoriteMemories.filter((id) => id !== payload.memoryId) } }, summary: '记忆收藏已更新', domain: 'notes' } })
-  return createBaseRegistry(versions, [choose, defer, interrupt, read, favorite], runtime)
+  return createBaseRegistry(versions, [choose, defer, interrupt, read, favorite,...extra], runtime)
 }
 
 export function createCampaignRun(input: CreateRunInput) {
   const base = createInitialRun(input)
   const world = campaignRuntime.initialWorld([{ id: 'player', kind: 'player', accountId: 'personal', businessId: null, route: null, contractId: null, personId: null, capacityUnits: 1 }], input.backgroundId)
-  const model: RuleModel = campaignRuntime.schedule({ ...base, world })
-  const run = createGameRun(input, { origin: 'normal', personalAccountId: 'personal', controlledAccountIds: ['personal'], economy: model.economy, timeline: model.timeline, world }, CAMPAIGN_VERSIONS)
+  const operations=campaignOperations.initial(input.backgroundId)
+  const model: RuleModel = campaignRuntime.schedule({ ...base, world,operations })
+  const run = createGameRun(input, { origin: 'normal', personalAccountId: 'personal', controlledAccountIds: ['personal'], economy: model.economy, timeline: model.timeline, world,operations }, CAMPAIGN_VERSIONS)
   campaignRuntime.validate(run)
   return run
 }

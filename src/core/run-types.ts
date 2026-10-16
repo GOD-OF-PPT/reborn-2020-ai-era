@@ -4,6 +4,7 @@ import type { RunOperation, WorldState } from './content-types.ts'
 import type { FrozenFact, FactDescriptor } from './facts.ts'
 import type { RandomState } from './random.ts'
 import type { Timeline } from './timeline.ts'
+import type { OperationsState } from './operations-types.ts'
 
 export interface VersionSet {
   readonly schemaVersion: number
@@ -21,6 +22,7 @@ export interface RuleModel {
   readonly facts: readonly FrozenFact[]
   readonly privateNotes: string
   readonly world: WorldState | null
+  readonly operations: OperationsState | null
 }
 export interface CommandEnvelope {
   readonly commandId: string
@@ -81,6 +83,7 @@ export interface InitialRunState {
   readonly timeline: Timeline<RunOperation>
   readonly initialFacts?: readonly FactDescriptor[]
   readonly world?: WorldState | null
+  readonly operations?: OperationsState | null
 }
 export interface ProposedRun {
   readonly status: 'proposed'

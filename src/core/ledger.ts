@@ -57,7 +57,8 @@ type InvestmentOperation = OperationBase & { readonly accountId: string; readonl
   | { readonly kind: 'value_asset'; readonly valueFen: number }
 )
 type FeeOperation = OperationBase & { readonly kind: 'charge_fee'; readonly accountId: string; readonly counterpartyId: string; readonly feeId: string; readonly addedBaseFen: number; readonly basisPoints: number }
-export type LedgerOperation = CashOperation | ExpenseOperation | ReservationOperation | ContractOperation | PayObligationOperation | DueExpenseOperation | SupplierOperation | InvestmentOperation | FeeOperation
+type OperatingLedgerOperation = OperationBase & ({ readonly kind: 'open_business_account'; readonly accountId: string } | { readonly kind: 'owner_transfer'; readonly accountId: string; readonly targetAccountId: string; readonly amountFen: number; readonly fundingPurpose?: 'ordinary' | 'recovery' } | { readonly kind: 'borrow_cash'; readonly accountId: string; readonly counterpartyId: string; readonly amountFen: number; readonly obligationId: string; readonly dueAt: string })
+export type LedgerOperation = CashOperation | ExpenseOperation | ReservationOperation | ContractOperation | PayObligationOperation | DueExpenseOperation | SupplierOperation | InvestmentOperation | FeeOperation | OperatingLedgerOperation
 export interface FeeAccrual {
   readonly id: string
   readonly accountId: string
@@ -93,7 +94,7 @@ export interface Payable {
   readonly date: IsoDate
   readonly sourceEventId: string
   readonly originOperationId: string
-  readonly kind: 'expense' | 'refund_undelivered' | 'refund_delivered'
+  readonly kind: 'expense' | 'refund_undelivered' | 'refund_delivered' | 'loan_principal'
   readonly amountFen: number
   readonly remainingFen: number
   readonly protectionReservationId: string | null
@@ -471,11 +472,30 @@ export function applyLedger(state: LedgerState, operation: LedgerOperation): Led
   requireRule(operation.date >= state.asOf, 'BACKDATED_LEDGER_OPERATION')
   const next = cloneLedger(state)
   let status: LedgerReceipt['status'] = 'applied'
+  if (operation.kind === 'open_business_account') {
+    identifier(operation.accountId)
+    requireRule(!next.accounts.some((account) => account.id === operation.accountId), 'ACCOUNT_ALREADY_EXISTS')
+    next.accounts.push({ id: operation.accountId, kind: 'business', balanceFen: 0 })
+  }
   const account = findAccount(next, operation.accountId)
   requireRule(account.kind !== 'external', 'EXPECTED_OWNED_ACCOUNT')
   if ('counterpartyId' in operation) requireRule(findAccount(next, operation.counterpartyId).kind === 'external', 'EXPECTED_EXTERNAL_COUNTERPARTY')
   if ('amountFen' in operation && operation.amountFen !== undefined) money(operation.amountFen)
   switch (operation.kind) {
+    case 'open_business_account': break
+    case 'owner_transfer':
+      requireRule(findAccount(next, operation.targetAccountId).kind !== 'external' && operation.targetAccountId !== account.id && operation.amountFen > 0, 'INVALID_OWNER_TRANSFER')
+      requireSpendingPermission(next, account.id, operation.date, operation.fundingPurpose)
+      cashTransfer(next, operation, account.id, operation.targetAccountId, operation.amountFen)
+      break
+    case 'borrow_cash': {
+      isoDate(operation.dueAt)
+      requireRule(operation.dueAt > operation.date && operation.amountFen > 0, 'INVALID_LOAN_TERMS')
+      const payable = createPayable(next, operation, 'loan_principal', operation.counterpartyId, null, null)
+      payable.date = operation.dueAt
+      cashTransfer(next, operation, operation.counterpartyId, account.id, operation.amountFen)
+      break
+    }
     case 'opening_cash':
       requireRule(!next.openingPosted.includes(account.id), 'OPENING_ALREADY_POSTED')
       next.openingPosted.push(account.id)

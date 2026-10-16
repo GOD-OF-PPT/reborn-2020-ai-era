@@ -14,9 +14,10 @@ import { isWorldOperation, type ContentPack, type Condition, type Effect, type W
 import type { RuleModel } from './run-types.ts'
 import type { GameRun } from './run-types.ts'
 import { assertWorldRun } from './world-validation.ts'
+import type { RuntimeExtension } from './operations-types.ts'
 
 type State = Omit<RuleModel, 'timeline'>
-type Context = Pick<State, 'world' | 'economy' | 'controlledAccountIds'>
+type Context = Pick<State, 'world' | 'economy' | 'controlledAccountIds' | 'operations'>
 type Changes = { state: State; events: ScheduledEvent<RunOperation>[] }
 export const contentId = (prefix: string, ...parts: string[]) => `${prefix}:${hashValue(parts).slice(0, 32)}`
 const worldOf = (state: Context): WorldState => { requireRule(state.world, 'WORLD_NOT_CONFIGURED'); return state.world }
@@ -25,9 +26,10 @@ const bindingOf = (state: Context, id: string): WorldBinding => { const binding 
 export class WorldRuntime {
   readonly #pack: ContentPack
   readonly hash: string
-  constructor(value: unknown) { this.#pack = loadContentPack(value); this.hash = hashValue(this.#pack) }
+  readonly extension: RuntimeExtension | null
+  constructor(value: unknown, extension: RuntimeExtension | null = null) { this.#pack = loadContentPack(value); this.hash = hashValue(this.#pack); this.extension = extension }
   get pack(): ContentPack { return copyJson(this.#pack) }
-  validate(run: GameRun): void { assertWorldRun(this.#pack, run) }
+  validate(run: GameRun): void { assertWorldRun(this.#pack, run); requireRule(run.operations === null || this.extension, 'OPERATIONS_RUNTIME_REQUIRED'); this.extension?.validate(run) }
   definition(id: string): EventDefinition { const definition = this.#pack.events.find((item) => item.id === id); requireRule(definition, 'UNKNOWN_EVENT_DEFINITION'); return definition }
   initialWorld(bindings: readonly WorldBinding[], backgroundId?: string): WorldState {
     const ids = this.#pack.initialEntitlements.find((profile) => profile.backgroundId === backgroundId)?.entitlementIds ?? []
@@ -80,6 +82,7 @@ export class WorldRuntime {
   }
   capacityAvailable(state: Context, bindingId: string, date: string, durationDays: number): number {
     const binding = bindingOf(state, bindingId)
+    if (state.operations !== null) { requireRule(this.extension, 'OPERATIONS_RUNTIME_REQUIRED'); return Math.min(binding.capacityUnits, this.extension.capacityAvailable(state, bindingId, date, durationDays)) }
     const end = addDays(date, durationDays)
     const jobs = worldOf(state).jobs.filter((item) => item.bindingId === bindingId && item.status === 'running' && item.startAt < end && item.completeAt > date)
     const dates = [date, ...jobs.map((job) => job.startAt).filter((start) => start > date)]
@@ -251,6 +254,7 @@ export class WorldRuntime {
   advance(model: RuleModel, target: { readonly date: string; readonly phase?: DayPhase }): RuleModel {
     const result = advanceTimeline(model.timeline, model as State, target, (state, event) => {
       const operation = event.payload
+      if (operation.kind === 'operating_event') { requireRule(this.extension && state.operations, 'OPERATIONS_RUNTIME_REQUIRED'); const asOf = event.date; return this.extension.reduce({ ...state, economy: { ...state.economy, asOf, ledger: { ...state.economy.ledger, asOf } } }, event) }
       if (!isWorldOperation(operation)) {
         const skippedReason = scheduledActionSkipReason(state.economy, operation)
         if (skippedReason) return { state, skippedReason }

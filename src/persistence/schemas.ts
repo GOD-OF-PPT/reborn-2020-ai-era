@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { DAY_PHASES } from '../core/timeline.ts'
 import { RANDOM_DOMAINS, RNG_ALGORITHM } from '../core/random.ts'
 import { worldOperationSchema, worldStateSchema } from '../core/world-schema.ts'
+import { operatingEventSchema, operationsStateSchema } from '../core/operations-schema.ts'
 import { idSchema, commandIdSchema, dateSchema, moneySchema, signedMoney, safeCount, signedPriority, uint32, signature, nullableId, rows, classification, actionDefinitionSchema, economyOperationSchema } from '../core/record-schemas.ts'
 export { idSchema, commandIdSchema, dateSchema, moneySchema, ledgerOperationSchema, actionDefinitionSchema, economyOperationSchema, parseEconomyOperation, parseLedgerOperation } from '../core/record-schemas.ts'
 
@@ -14,7 +15,7 @@ const ledgerSchema = z.strictObject({
   openingPosted: rows(idSchema),
   reservations: rows(z.strictObject({ id: idSchema, accountId: idSchema, kind: z.enum(['plan', 'order', 'frozen', 'customer_protection']), originId: idSchema, amountFen: moneySchema, status: z.enum(['active', 'released']) })),
   contracts: rows(z.strictObject({ id: idSchema, accountId: idSchema, businessId: idSchema, counterpartyId: idSchema, protectionReservationId: nullableId, prepaidFen: moneySchema, receivableFen: moneySchema, recognizedIncomeFen: moneySchema })),
-  obligations: rows(z.strictObject({ id: idSchema, accountId: idSchema, businessId: nullableId, contractId: nullableId, counterpartyId: idSchema, date: dateSchema, sourceEventId: idSchema, originOperationId: idSchema, kind: z.enum(['expense', 'refund_undelivered', 'refund_delivered']), amountFen: moneySchema, remainingFen: moneySchema, protectionReservationId: nullableId })),
+  obligations: rows(z.strictObject({ id: idSchema, accountId: idSchema, businessId: nullableId, contractId: nullableId, counterpartyId: idSchema, date: dateSchema, sourceEventId: idSchema, originOperationId: idSchema, kind: z.enum(['expense', 'refund_undelivered', 'refund_delivered', 'loan_principal']), amountFen: moneySchema, remainingFen: moneySchema, protectionReservationId: nullableId })),
   supplierPrepayments: rows(z.strictObject({ id: idSchema, accountId: idSchema, businessId: idSchema, counterpartyId: idSchema, paidFen: moneySchema, remainingFen: moneySchema })),
   investments: rows(z.strictObject({ id: idSchema, accountId: idSchema, assetId: idSchema, subjectAccountId: nullableId, classification, bookCostFen: moneySchema, valueFen: moneySchema })),
   fees: rows(z.strictObject({ id: idSchema, accountId: idSchema, counterpartyId: idSchema, businessId: nullableId, basisPoints: z.number().int().min(0).max(10000), totalBaseFen: moneySchema, paidFen: moneySchema })),
@@ -24,7 +25,7 @@ const economySchema = z.strictObject({
   actions: rows(z.strictObject({ definition: actionDefinitionSchema, status: z.enum(['draft', 'reserved', 'executed', 'completed', 'interrupted', 'cancelled']), plannedAt: dateSchema, executedAt: dateSchema.nullable(), finishedAt: dateSchema.nullable() })),
   receipts: rows(z.strictObject({ id: idSchema, signature })),
 })
-export const eventSchema = z.strictObject({ instanceId: idSchema, date: dateSchema, phase: z.enum(DAY_PHASES), priority: signedPriority.refine((value) => value < Number.MAX_SAFE_INTEGER), payload: z.union([economyOperationSchema, worldOperationSchema]) })
+export const eventSchema = z.strictObject({ instanceId: idSchema, date: dateSchema, phase: z.enum(DAY_PHASES), priority: signedPriority.refine((value) => value < Number.MAX_SAFE_INTEGER), payload: z.union([economyOperationSchema, worldOperationSchema, operatingEventSchema]) })
 const timelineSchema = z.strictObject({
   cursor: z.strictObject({ date: dateSchema, phase: z.enum([...DAY_PHASES, 'before']), priority: signedPriority, instanceId: z.string().max(512) }),
   pending: rows(eventSchema),
@@ -43,7 +44,7 @@ export const runSchema = z.strictObject({
   backgroundId: idSchema, origin: z.enum(['normal', 'fixture']), seed: z.string().min(1).max(256), revision: safeCount.min(1),
   controlledAccountIds: rows(idSchema), phase: z.enum(['playing', 'epilogue', 'finished']), economy: economySchema, timeline: timelineSchema, random: randomSchema,
   facts: rows(z.strictObject({ id: idSchema, domain: z.enum(RANDOM_DOMAINS), sourceEventId: idSchema, createdAt: dateSchema, roll: uint32, evidence: z.string().min(1).max(4000).nullable() })),
-  privateNotes: z.string().max(16000), world: worldStateSchema.nullable(), receipts: rows(commandReceiptSchema), causes: rows(causeSchema),
+  privateNotes: z.string().max(16000), world: worldStateSchema.nullable(), operations: operationsStateSchema.nullable(), receipts: rows(commandReceiptSchema), causes: rows(causeSchema),
 })
 
 export const envelopeSchema = z.strictObject({

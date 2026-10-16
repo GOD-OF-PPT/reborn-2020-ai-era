@@ -4,7 +4,7 @@ import type { VersionSet } from '../core/run-types.ts'
 
 /** Versioned fictional working values, transcribed from contract 20, not loaded from planning. */
 export const BOOTSTRAP_CONTENT = {
-  version: 'bootstrap-work-v2', startDate: '2020-01-01', endDate: '2025-12-31',
+  version: 'bootstrap-work-v3', startDate: '2020-01-01', endDate: '2025-12-31',
   profiles: [
     { id: 'technical_employee', initialCashFen: 3_000_000, monthlyLivingCostFen: 400_000, monthlySalaryFen: 800_000 },
     { id: 'content_employee', initialCashFen: 3_000_000, monthlyLivingCostFen: 400_000, monthlySalaryFen: 600_000 },
@@ -12,6 +12,6 @@ export const BOOTSTRAP_CONTENT = {
 } as const
 
 export const BOOTSTRAP_VERSIONS: VersionSet = {
-  schemaVersion: 2, rulesVersion: 'rules-t05-core-v1', contentVersion: BOOTSTRAP_CONTENT.version,
+  schemaVersion: 3, rulesVersion: 'rules-t06-core-v1', contentVersion: BOOTSTRAP_CONTENT.version,
   contentHash: hashValue(BOOTSTRAP_CONTENT), rngAlgorithmVersion: RNG_ALGORITHM,
 }

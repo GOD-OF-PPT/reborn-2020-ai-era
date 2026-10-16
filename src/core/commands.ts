@@ -12,6 +12,7 @@ import { assertGameRun } from './run.ts'
 import { assertCompatible } from './versions.ts'
 import type { CommandEnvelope, GameRun, RuleModel, VersionSet, ProposedRun, RejectedCommand, ExistingReceipt, CauseEntry } from './run-types.ts'
 import type { DayPhase } from './timeline.ts'
+import { operatingAccruals } from './operations-accrual.ts'
 import type { WorldLog } from './content-types.ts'
 
 const id = z.string().min(1).max(128).regex(/^[A-Za-z0-9][A-Za-z0-9_.:/-]*$/)
@@ -39,6 +40,7 @@ export interface CommandView {
   readonly pause: GameRun['timeline']['pause']
   readonly evidence: ReturnType<typeof visibleFacts>
   readonly world: RuleModel['world']
+  readonly operations: RuleModel['operations']
 }
 export interface CommandContext { readonly commandId: string; readonly runId: string; readonly actorId: string; readonly date: string }
 export interface CommandEffect { readonly model: RuleModel; readonly summary: string; readonly domain: string }
@@ -120,12 +122,14 @@ export function createBaseRegistry(versions: VersionSet, extra: readonly Command
 }
 
 function commandView(run: GameRun): CommandView {
-  return copyJson({ runId: run.runId, actorId: run.actorId, revision: run.revision, date: run.timeline.cursor.date, phase: run.phase, controlledAccountIds: run.controlledAccountIds, economy: run.economy, cursor: run.timeline.cursor, pause: run.timeline.pause, evidence: visibleFacts(run.facts), world: run.world })
+  return copyJson({ runId: run.runId, actorId: run.actorId, revision: run.revision, date: run.timeline.cursor.date, phase: run.phase, controlledAccountIds: run.controlledAccountIds, economy: run.economy, cursor: run.timeline.cursor, pause: run.timeline.pause, evidence: visibleFacts(run.facts), world: run.world, operations: run.operations })
 }
 
 export function projectRun(run: GameRun) {
+  const accruals=operatingAccruals(run,run.timeline.cursor.date)
+  const operations=run.operations===null?null:{employment:run.operations.employment,businesses:run.operations.businesses,workers:run.operations.workers,jobs:run.operations.jobs,contracts:run.operations.contracts.map(({factId: _factId,...visible})=>visible),payroll:run.operations.payroll,loans:run.operations.loans,unbilledAccruals:accruals}
   const world = run.world === null ? null : { anchors: run.world.anchors.map(({ id, happenedAt }) => ({ id, happenedAt })), newsRead: run.world.newsRead, favoriteMemories: run.world.favoriteMemories, events: run.world.instances.map(({ id, definitionId, bindingId, createdAt, expiresAt, status, choiceId, resolution }) => ({ id, definitionId, bindingId, createdAt, expiresAt, status, choiceId, resolution })), jobs: run.world.jobs, preparations: run.world.preparations, entitlements: run.world.entitlements, stoppedBindings: run.world.stoppedBindings, evidence: run.world.evidence }
-  return copyJson({ runId: run.runId, revision: run.revision, origin: run.origin, date: run.timeline.cursor.date, phase: run.phase, accounts: run.controlledAccountIds.map((accountId) => ({ accountId, ...accountPosition(run.economy.ledger, accountId) })), budget: actionBudget(run.economy, run.timeline.cursor.date), evidence: visibleFacts(run.facts), receipts: run.receipts.map(({ commandId, kind, revisionAfter, summary }) => ({ commandId, kind, revisionAfter, summary })), world })
+  return copyJson({ runId: run.runId, revision: run.revision, origin: run.origin, date: run.timeline.cursor.date, phase: run.phase, accounts: run.controlledAccountIds.map((accountId) => ({ accountId, ...accountPosition(run.economy.ledger, accountId),accruedCostFen:accruals.filter(a=>a.accountId===accountId).reduce((sum,a)=>sum+a.amountFen,0),netAssetsFen:accountPosition(run.economy.ledger,accountId).netAssetsFen-accruals.filter(a=>a.accountId===accountId).reduce((sum,a)=>sum+a.amountFen,0) })), budget: actionBudget(run.economy, run.timeline.cursor.date), evidence: visibleFacts(run.facts), receipts: run.receipts.map(({ commandId, kind, revisionAfter, summary }) => ({ commandId, kind, revisionAfter, summary })), world,operations })
 }
 
 function prepare(run: GameRun, raw: unknown, registry: CommandRegistry, principalActorId: string) {
@@ -174,9 +178,9 @@ export function evaluateCommand(run: GameRun, raw: unknown, registry: CommandReg
     requireRule(handler, command.kind === 'CreateRun' ? 'RUN_ALREADY_EXISTS' : 'UNKNOWN_COMMAND')
     const inspection = handler.inspect(commandView(run), payload)
     if (!inspection.allowed) return { status: 'rejected', reasonCodes: inspection.reasonCodes }
-    const model: RuleModel = copyJson({ controlledAccountIds: run.controlledAccountIds, phase: run.phase, economy: run.economy, timeline: run.timeline, random: run.random, facts: run.facts, privateNotes: run.privateNotes, world: run.world })
+    const model: RuleModel = copyJson({ controlledAccountIds: run.controlledAccountIds, phase: run.phase, economy: run.economy, timeline: run.timeline, random: run.random, facts: run.facts, privateNotes: run.privateNotes, world: run.world, operations: run.operations })
     const effect = handler.apply(model, payload, { commandId: command.commandId, runId: run.runId, actorId: command.actorId, date: run.timeline.cursor.date })
-    requireRule(Object.keys(effect.model).length === 8 && Object.keys(effect.model).every((key) => ['controlledAccountIds', 'phase', 'economy', 'timeline', 'random', 'facts', 'privateNotes', 'world'].includes(key)), 'INVALID_RULE_MODEL')
+    requireRule(Object.keys(effect.model).length === 9 && Object.keys(effect.model).every((key) => ['controlledAccountIds', 'phase', 'economy', 'timeline', 'random', 'facts', 'privateNotes', 'world', 'operations'].includes(key)), 'INVALID_RULE_MODEL')
     for (const fact of run.facts) {
       const nextFact = effect.model.facts.find((item) => item.id === fact.id)
       requireRule(nextFact && nextFact.roll === fact.roll && nextFact.domain === fact.domain && nextFact.sourceEventId === fact.sourceEventId && nextFact.createdAt === fact.createdAt && (fact.evidence === null || fact.evidence === nextFact.evidence), 'FACT_REWRITE')
@@ -186,7 +190,9 @@ export function evaluateCommand(run: GameRun, raw: unknown, registry: CommandReg
     const cause: CauseEntry = { id: causeId, commandId: command.commandId, date: effect.model.timeline.cursor.date, domain: effect.domain, parentIds: [], sourceEventId: `command:${command.commandId}`, visibleSummary: effect.summary, visibility: 'visible' }
     const priorLogs = new Set(run.world?.logs.map((log) => log.id) ?? [])
     const worldCauses: CauseEntry[] = (effect.model.world?.logs.filter((log) => !priorLogs.has(log.id)) ?? []).map((log: WorldLog) => ({ id: log.id, commandId: command.commandId, date: log.date, domain: 'world', parentIds: [...log.parentIds], sourceEventId: log.sourceEventId, visibleSummary: log.text, visibility: log.visibility }))
-    const causes = [cause, ...worldCauses]
+    const priorOperatingLogs = new Set(run.operations?.logs.map((log) => log.id) ?? [])
+    const operatingCauses: CauseEntry[] = (effect.model.operations?.logs.filter((log) => !priorOperatingLogs.has(log.id)) ?? []).map((log) => ({ id: log.id, commandId: command.commandId, date: log.date, domain: 'operations', parentIds: log.parentIds, sourceEventId: log.sourceEventId, visibleSummary: log.text, visibility: log.visibility }))
+    const causes = [cause, ...worldCauses, ...operatingCauses]
     const entries = effect.model.economy.ledger.transactions.slice(run.economy.ledger.transactions.length)
     const receipt = { runId: run.runId, commandId: command.commandId, actorId: command.actorId, kind: command.kind, payloadHash: identity.hash, payloadSignature: identity.signature, revisionBefore: run.revision, revisionAfter: run.revision + 1, date: effect.model.timeline.cursor.date, summary: effect.summary, transactionIds: entries.map((entry) => entry.id), causeIds: causes.map((entry) => entry.id) }
     const nextRun: GameRun = { ...run, ...effect.model, revision: run.revision + 1, receipts: [...run.receipts, receipt], causes: [...run.causes, ...causes] }

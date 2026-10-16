@@ -90,8 +90,8 @@ export class RunCodec {
     for (const entry of ledger.metrics) requireRule(financial.has(entry.operationId), 'INVALID_METRIC_REFERENCE')
     for (const obligation of ledger.obligations) {
       const operation = financial.get(obligation.originOperationId)
-      requireRule(operation && operation.accountId === obligation.accountId && operation.date === obligation.date, 'INVALID_OBLIGATION_REFERENCE')
-      if (obligation.kind !== 'expense') requireRule(obligation.contractId !== null && contracts.get(obligation.contractId)?.accountId === obligation.accountId, 'INVALID_CONTRACT_REFERENCE')
+      requireRule(operation && operation.accountId === obligation.accountId && (operation.kind === 'borrow_cash' ? operation.dueAt : operation.date) === obligation.date, 'INVALID_OBLIGATION_REFERENCE')
+      if (obligation.kind !== 'expense' && obligation.kind !== 'loan_principal') requireRule(obligation.contractId !== null && contracts.get(obligation.contractId)?.accountId === obligation.accountId, 'INVALID_CONTRACT_REFERENCE')
       if (obligation.protectionReservationId !== null) requireRule(reservations.get(obligation.protectionReservationId)?.accountId === obligation.accountId, 'INVALID_RESERVATION_REFERENCE')
     }
     for (const receipt of ledger.receipts) {
@@ -113,7 +113,7 @@ export class RunCodec {
       requireRule(previousPoint === null || compareTimePoints(event, previousPoint) > 0, 'EVENT_HISTORY_OUT_OF_ORDER')
       requireRule(compareTimePoints(event, run.timeline.cursor) <= 0, 'EVENT_HISTORY_AHEAD_OF_CURSOR')
       previousPoint = event
-      if (isWorldOperation(event.payload)) {
+      if (isWorldOperation(event.payload) || event.payload.kind === 'operating_event') {
         requireRule(this.registry.runtime && run.world, 'WORLD_HANDLER_REQUIRED')
       } else if (receipt.skippedReason !== undefined) {
         // Validate the historical reason against its earlier operation. The action

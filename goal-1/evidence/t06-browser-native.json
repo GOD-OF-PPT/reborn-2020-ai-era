@@ -1,0 +1,159 @@
+{
+  "taskId": "T06",
+  "checkpointId": "C06",
+  "evidenceType": "browser-native-storage",
+  "database": "reborn-t06-native-3080f6c0-21c2-4301-8b26-040fcea7749f",
+  "origin": "http://127.0.0.1:5173",
+  "versions": {
+    "schemaVersion": 3,
+    "rulesVersion": "rules-t06-operations-v1",
+    "contentVersion": "world-operations-work-v1",
+    "contentHash": "a640cc1039a3ebb12a0cd640ab7ce40fffeb53ce2fb9aef84d58bac2b795bba6",
+    "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+  },
+  "seed": "t06-native-seed",
+  "initialStateHash": "3161b6d591a34f9500f199c3e9372539392e9a446845d75011b9d613f91fa234",
+  "total": 21,
+  "passed": 21,
+  "checks": [
+    {
+      "name": "native secure context",
+      "actual": true,
+      "expected": true,
+      "passed": true
+    },
+    {
+      "name": "native Web Locks",
+      "actual": "function",
+      "expected": "function",
+      "passed": true
+    },
+    {
+      "name": "aborted command stays unsaved",
+      "actual": "unsaved",
+      "expected": "unsaved",
+      "passed": true
+    },
+    {
+      "name": "head write succeeded before abort",
+      "actual": {
+        "writeSucceeded": true,
+        "abortIssued": true
+      },
+      "expected": {
+        "writeSucceeded": true,
+        "abortIssued": true
+      },
+      "passed": true
+    },
+    {
+      "name": "public employment is still committed",
+      "actual": 0,
+      "expected": 0,
+      "passed": true
+    },
+    {
+      "name": "public action cost is still committed",
+      "actual": 0,
+      "expected": 0,
+      "passed": true
+    },
+    {
+      "name": "candidate preserves actual employment",
+      "actual": 1,
+      "expected": 1,
+      "passed": true
+    },
+    {
+      "name": "old stored revision survives",
+      "actual": 1,
+      "expected": 1,
+      "passed": true
+    },
+    {
+      "name": "retry saves same candidate",
+      "actual": "saved",
+      "expected": "saved",
+      "passed": true
+    },
+    {
+      "name": "saved work costs two points",
+      "actual": 2,
+      "expected": 2,
+      "passed": true
+    },
+    {
+      "name": "same intent only one receipt",
+      "actual": "duplicate",
+      "expected": "duplicate",
+      "passed": true
+    },
+    {
+      "name": "another native session stays read-only",
+      "actual": true,
+      "expected": true,
+      "passed": true
+    },
+    {
+      "name": "released writer can be acquired",
+      "actual": false,
+      "expected": false,
+      "passed": true
+    },
+    {
+      "name": "advance stops at real world decision",
+      "actual": "saved",
+      "expected": "saved",
+      "passed": true
+    },
+    {
+      "name": "stopped date precedes payday",
+      "actual": "2020-01-22",
+      "expected": "2020-01-22",
+      "passed": true
+    },
+    {
+      "name": "advance to payday saves",
+      "actual": "saved",
+      "expected": "saved",
+      "passed": true
+    },
+    {
+      "name": "actual January wage is paid",
+      "actual": 3400000,
+      "expected": 3400000,
+      "passed": true
+    },
+    {
+      "name": "quarterly cost remains two points",
+      "actual": 2,
+      "expected": 2,
+      "passed": true
+    },
+    {
+      "name": "one payroll record",
+      "actual": 1,
+      "expected": 1,
+      "passed": true
+    },
+    {
+      "name": "export roundtrip keeps operations",
+      "actual": "c6a383eb5297ebb4a0b215978a9f6a6fa4a3909ea207413c095a7e149f943f18",
+      "expected": "c6a383eb5297ebb4a0b215978a9f6a6fa4a3909ea207413c095a7e149f943f18",
+      "passed": true
+    },
+    {
+      "name": "new native connection sees payroll",
+      "actual": 1,
+      "expected": 1,
+      "passed": true
+    }
+  ],
+  "notCovered": [
+    "playable_ui",
+    "real_two_tabs_product_flow",
+    "full_campaign",
+    "original_png",
+    "human_playtest"
+  ]
+}
