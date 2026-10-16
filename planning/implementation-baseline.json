@@ -1,0 +1,102 @@
+{
+  "baselineVersion": "0.4.1-work",
+  "status": "design_only_not_runtime_content",
+  "recordedDate": "2026-10-16",
+  "goal": "goal-1",
+  "contractDoc": "docs/20-implementation-contract.md",
+  "sourceObservationFile": "planning/source-observations-2026-10-16.json",
+  "parameterStatus": "fictional_working_values_not_playtested",
+  "scope": {
+    "startDate": "2020-01-01",
+    "lastQuarterEnd": "2025-12-31",
+    "quarters": 24,
+    "actionPointsPerQuarter": 4,
+    "routeIds": ["a_share", "ai_video", "ai_course", "api_relay", "deepseek_opportunity"]
+  },
+  "money": {"unit": "fen", "currency": "CNY", "limit": 9000000000000, "basisPointsScale": 10000},
+  "dayPhases": ["world_update", "certain_receipts", "due_obligations", "player_actions", "market_matching", "snapshot"],
+  "backgrounds": [
+    {
+      "id": "technical_employee",
+      "label": "技术职员",
+      "classification": "fictional",
+      "initialCashFen": 3000000,
+      "monthlySalaryFen": 800000,
+      "monthlyLivingCostFen": 400000,
+      "employmentActionPoints": 2,
+      "salaryTiming": "calendar_month_end",
+      "livingCostTiming": "calendar_month_start",
+      "initialCapabilities": ["manual_editing", "spreadsheet", "basic_programming"],
+      "initialSpareProductionCapacityUnits": 1,
+      "initialTeamMembers": [],
+      "initialEntitlements": [],
+      "initialBusinesses": [],
+      "initialInvestments": [],
+      "firstQuarterManualOrder": {"fixtureId": "UX01", "expectedCashFen": 4280000, "expectedMinimumCashFen": 2550000, "expectedBusinessNetFen": 80000}
+    },
+    {
+      "id": "content_employee",
+      "label": "内容从业者",
+      "classification": "fictional",
+      "initialCashFen": 3000000,
+      "monthlySalaryFen": 600000,
+      "monthlyLivingCostFen": 400000,
+      "employmentActionPoints": 2,
+      "salaryTiming": "calendar_month_end",
+      "livingCostTiming": "calendar_month_start",
+      "initialCapabilities": ["manual_editing", "spreadsheet", "audience_research"],
+      "initialSpareProductionCapacityUnits": 1,
+      "initialTeamMembers": [],
+      "initialEntitlements": [],
+      "initialBusinesses": [],
+      "initialInvestments": [],
+      "firstQuarterManualOrder": {"fixtureId": "BG-CONTENT-Q1-ORDER", "expectedCashFen": 3680000, "expectedMinimumCashFen": 2550000, "expectedBusinessNetFen": 80000}
+    }
+  ],
+  "manualOrder": {
+    "definitionId": "manual-first-order-2020",
+    "classification": "fictional",
+    "capability": "manual_editing",
+    "startAt": "2020-01-05",
+    "completeAt": "2020-01-19",
+    "settlementAt": "2020-01-20",
+    "actionPoints": 1,
+    "costFen": 50000,
+    "priceFen": 130000,
+    "capacityUnits": 1,
+    "paymentModel": "customer_acceptance_then_receipt",
+    "generativeModelRequired": false,
+    "successFixturePrecondition": "job_completed_and_customer_accepted",
+    "notGuaranteedOutsideFixture": true
+  },
+  "quarterOneSuggestedActions": [
+    {"kind": "retain_employment", "actionPoints": 2},
+    {"kind": "manual_first_order", "actionPoints": 1},
+    {"kind": "research_or_case_preparation", "actionPoints": 1}
+  ],
+  "legacyFixtures": {
+    "Q01": {"backgroundId": "technical_employee", "expectedCashFen": 2700000, "changed": false},
+    "UX01": {"backgroundId": "technical_employee", "expectedCashFen": 4280000, "expectedMinimumCashFen": 2550000, "expectedBusinessNetFen": 80000, "changed": false},
+    "S01": {"from": "2020-01-01", "to": "2020-06-30", "changed": false}
+  },
+  "entryPolicy": {
+    "fiveRoutesDiscoverableAtStart": true,
+    "routeFocusLimitsActiveBusinesses": false,
+    "readingConsumesActionPoints": false,
+    "readingConsumesRandomness": false,
+    "releaseAutomaticallyGrantsAccess": false,
+    "historicMarketEnabled": false,
+    "simulatedMarketEnabledAfterImplementation": true,
+    "initialCounterfactualEquityAccess": false,
+    "technicalAdaptationCreatesEquity": false,
+    "crossQuarterRoutineState": "draft_requires_confirmation"
+  },
+  "defaultDecisions": {
+    "implementationBasis": "D401-D410_retained_as_working_hypotheses",
+    "ids": ["D401", "D402", "D403", "D404", "D405", "D406", "D407", "D408", "D409", "D410"],
+    "userValidatedNumbers": false,
+    "participantsActual": 0,
+    "originalAssetsPresent": 0,
+    "originalAssetsExpected": 3
+  }
+}

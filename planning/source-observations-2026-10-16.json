@@ -1,0 +1,59 @@
+{
+  "recordVersion": 1,
+  "observedDate": "2026-10-16",
+  "method": "official_page_reading",
+  "recordKind": "paraphrased_claim_snapshot_not_full_webpage_archive",
+  "note": "本记录保存本轮实际读取的有限事实和定位，提交哈希固定本记录，不声称保存了原网页全部字节、历史条款或收益证据。",
+  "observations": [
+    {
+      "sourceId": "H001",
+      "url": "https://openai.com/index/openai-api/",
+      "pageTitle": "OpenAI API",
+      "eventDate": "2020-06-11",
+      "verification": "verified_relevant_page_sections",
+      "locator": "文章日期；介绍段；说明private beta而非general availability的段落",
+      "claims": ["2020年6月11日宣布API。", "当时以私有测试推出，需要申请访问，不是普遍开放。"],
+      "doesNotEstablish": ["任意玩家当日即有API资格", "2020年第一季度存在该API", "中转授权或现实投资收益"],
+      "implementationUse": "T05世界日期与玩家资格分别检查，2020首季手工小单不依赖API"
+    },
+    {
+      "sourceId": "H003",
+      "url": "https://openai.com/index/chatgpt/",
+      "pageTitle": "Introducing ChatGPT",
+      "eventDate": "2022-11-30",
+      "verification": "verified_relevant_page_sections",
+      "locator": "文章日期；research preview介绍段",
+      "claims": ["2022年11月30日介绍ChatGPT研究预览。"],
+      "doesNotEstablish": ["相同能力API同日普遍可用", "2020已可用ChatGPT", "视频生成能力或课程收入"],
+      "implementationUse": "T05/T10内容能力门控；产品公告不自动授予API或视频能力"
+    },
+    {
+      "sourceId": "H008",
+      "url": "https://api-docs.deepseek.com/zh-cn/updates/",
+      "pageTitle": "更新日志 | DeepSeek API Docs",
+      "eventDate": "2024-12-26",
+      "verification": "verified_relevant_page_sections",
+      "locator": "时间2024-12-26下的deepseek-chat条目",
+      "claims": ["该日期条目说明deepseek-chat升级为DeepSeek-V3。"],
+      "doesNotEstablish": ["融资发生或存在普通玩家股权入口", "特定客户授权", "经营价格或利润"],
+      "implementationUse": "T13/T14模型历史节点；股权与治理继续由独立架空合同控制"
+    },
+    {
+      "sourceId": "H009",
+      "url": "https://api-docs.deepseek.com/zh-cn/updates/",
+      "pageTitle": "更新日志 | DeepSeek API Docs",
+      "eventDate": "2025-01-20",
+      "verification": "verified_relevant_page_sections",
+      "locator": "时间2025-01-20下的deepseek-reasoner条目",
+      "claims": ["该日期条目说明deepseek-reasoner对应新模型DeepSeek-R1。"],
+      "doesNotEstablish": ["股权、融资资格或历史估值", "当日任意地区商业供应授权", "生态业务必定盈利"],
+      "implementationUse": "T13/T14模型历史节点；访问、客户、许可、融资分别核验"
+    }
+  ],
+  "pending": [
+    {"sourceId": "H002", "ownerTaskIds": ["T05", "T10"], "reason": "本轮再读官方文章正文仍不足以补证发布日期年份；相关完整日期门控在补证前不启用。", "url": "https://stability.ai/news-updates/stable-diffusion-public-release"},
+    {"sourceId": "H004/H005/H006/H007/H010/H011", "ownerTaskIds": ["T05", "T10", "T13", "T14"], "reason": "沿用原来源登记，按实际采用节点在对应任务启用前重新核验相关日期、能力和适用范围；本轮未重新认证。"},
+    {"sourceId": "historical_market_rules_and_prices", "ownerTaskIds": ["T08", "T17"], "reason": "真实价格、公司行动、历史交易制度和使用条件未验收；历史回放关闭，模拟规则持续标识。"},
+    {"sourceId": "platform_supplier_permissions", "ownerTaskIds": ["T10", "T11", "T12", "T13"], "reason": "工具可用、平台变现、供应授权、资格与生效版本分别核验；当前条款不能倒填历史。"}
+  ]
+}
