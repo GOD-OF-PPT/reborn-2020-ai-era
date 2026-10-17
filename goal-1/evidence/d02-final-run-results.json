@@ -1,0 +1,48 @@
+{
+  "taskId": "D02",
+  "results": [
+    {
+      "name": "typecheck",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 22.438,
+      "output": "goal-1/evidence/d02-final-typecheck-output.txt"
+    },
+    {
+      "name": "unit",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 371.66,
+      "output": "goal-1/evidence/d02-final-unit-output.txt"
+    },
+    {
+      "name": "build",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 32.437,
+      "output": "goal-1/evidence/d02-final-build-output.txt"
+    }
+  ],
+  "complete": true,
+  "allPassed": true
+}

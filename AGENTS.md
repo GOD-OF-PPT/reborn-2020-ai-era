@@ -1,6 +1,6 @@
 # 项目协作与智能编程助手约束 v0.4
 
-这是《重生2020：AI时代》的设计资料与游戏工程仓库。T02—T13已建立底座、正常首单/模拟股票、上半年入门切片、视频/课程/中转/DeepSeek生态与架空股权及例行经营；历史危机、正式人物界面与正常24季度/结局仍待实施。先读README、经济02、核心01、流程18、技术08、实施09/19、内容15和验收14；goal执行中另全量读取当前goal的input/plan/tasks，调用合同见21—31。正常组合入口为createCampaignRun，Session复用codec.registry，已提交投影为view.features.firstOrder/market/video/course/relay/routines/deepseek；当前schema10、rules-t13-deepseek-v1明确拒绝旧schema1—9并保留原档。前台日期开放至2025用于到达工具节点，不等于完整通关；独立财务/权限夹具不等于正常新局。用户方向不等于每项数值、时长或竞品借鉴已经获验收。
+这是《重生2020：AI时代》的设计资料与游戏工程仓库。T02—T13已建立底座、正常首单/模拟股票、上半年入门切片、视频/课程/中转/DeepSeek生态与架空股权及例行经营；D02已接入四项主导航/季度四阶段/五路线工作区的新前台；历史危机、人物生活与正常24季度/结局仍待实施。先读README、经济02、核心01、流程18、技术08、实施09/19、内容15和验收14；goal执行中另全量读取当前goal的input/plan/tasks，调用合同见21—31。正常组合入口为createCampaignRun，Session复用codec.registry，已提交投影为view.features.firstOrder/market/video/course/relay/routines/deepseek；当前schema10、rules-t13-deepseek-v1明确拒绝旧schema1—9并保留原档。前台日期开放至2025用于到达工具节点，不等于完整通关；独立财务/权限夹具不等于正常新局。用户方向不等于每项数值、时长或竞品借鉴已经获验收。
 
 ## 产品方向不可回退
 

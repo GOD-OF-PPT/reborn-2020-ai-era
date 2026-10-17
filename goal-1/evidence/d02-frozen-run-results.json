@@ -1,0 +1,74 @@
+{
+  "taskId": "D02",
+  "results": [
+    {
+      "name": "typecheck",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 22.319,
+      "output": "goal-1/evidence/d02-frozen-typecheck-output.txt"
+    },
+    {
+      "name": "unit",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 391.391,
+      "output": "goal-1/evidence/d02-frozen-unit-output.txt"
+    },
+    {
+      "name": "tools",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:docs"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 0.672,
+      "output": "goal-1/evidence/d02-frozen-tools-output.txt"
+    },
+    {
+      "name": "content",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "validate:content"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 1.397,
+      "output": "goal-1/evidence/d02-frozen-content-output.txt"
+    },
+    {
+      "name": "build",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 23.277,
+      "output": "goal-1/evidence/d02-frozen-build-output.txt"
+    }
+  ],
+  "complete": true,
+  "allPassed": true
+}

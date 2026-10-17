@@ -1,0 +1,8 @@
+
+> reborn-2020-ai-era@0.1.0 typecheck
+> tsc -b
+
+src/ui/CoursePanel.tsx(24,2): error TS2375: Type '{ children: (Element | null)[]; title: string; status: string | undefined; funds: { receivableFen: number; prepaidLiabilityFen: number; payableFen: number; supplierPrepaidFen: number; ... 7 more ...; commitmentShortfallFen: number; }; open: boolean; }' is not assignable to type '{ title: string; funds: Funds | undefined; children: ReactNode; open?: boolean; status?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'status' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
