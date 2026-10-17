@@ -1,6 +1,6 @@
 # T15接续记录（执行中，不是完成证据）
 
-每次压缩后全读goal-1/input.md、plan.md、tasks.md，再读t15-plan.md、docs/34-people-life-year-contract.md、本文件。只做T15/C15，不做T16。本文保留各阶段原始状态，以下早期“正在运行/未验证”只对应当时；以末尾最新记录及验证索引为准。不勾T15/C15，goal active。
+每次压缩后全读goal-1/input.md、plan.md、tasks.md，再读t15-plan.md、docs/34-people-life-year-contract.md、本文件。只做T15/C15，不做T16。本文保留各阶段原始状态，以下早期“正在运行/未验证/goal active”只对应当时；以末尾最新记录、验证索引与goal工具实际状态为准。不勾T15/C15，当前原生环境受阻。
 
 ## 身份与已完成准备
 
@@ -176,3 +176,9 @@ R3原生三类实际head.put后abort全部已走：
 为补不同于先前reload的实际离页触发，新建tab47/DEV abort-life-work隔离库的新正常技术人生，seed t15-native-leave-followup-01、runId life-b01358cf-ad54-428e-932c-be4e7b0c64a0。真实workspace3000/1AP/7日保存abort，旧1仍26000/AP4/原scene；候选2已完整导出。直接导航到已有D01不同文档被ERR_ABORTED拒绝，两次getJsDialog均无提示；完整AX/显式DOM确认候选仍在，前后两原档SHA764fa009...逐字同。随后重试原候选，保存2现金23000/AP3/workspace仍运行、未提前换景，保存档与候选逐字同。新四导出从完整正常创建和原命令封套独立重放全部BYTE_EQUAL（session16171终态0）。
 
 全部新证据在t15-native-followup-01，原native报告/journal不改。两次中间console用AX diff字符串判断候选存在而输出false，保留说明，未作产品验收；权威是后续完整AX/DOM和原档字节。tab47确认无候选后关闭；24/25/29/35重新markHandoff、46markDeliverable，旧数据/服务保留。新probe不是原生dialog通过，不能因ERR_ABORTED推断唯一原因。相同外部缺口在可确认的连续两轮存在，continuation-audit.json如实记录；尚未达到三轮blocked阈值，goal仍active，不进入T16。若下一轮环境/用户结果仍无变化且无其他独立工作，完成现场复核后按三轮规则更新blocked，不再反复重跑相同探测或全量测试。
+
+## 第三轮受阻审计已满足
+
+开轮HEAD02ae3db897da0afce231b6a0e0c7a87b054bfea1、main、干净树/308源冻结不变。上轮分类progress，实际新增导航补验/四导出完整重放并已提交，不是仍有后台验收在跑。当前新鲜cua.listBrowsers仍browser2 IAB/1 MCPApps，capabilities仍visibility/viewport；无新桌面浏览器或人工结果。现有实际reload/跨文档导航都未观测原生dialog，200%能力仍缺。第三轮同一外部缺口确认，t15-native-environment-blocked-audit.json决定blocked审计通过，准备调用goal工具更新；实际状态以工具返回为准。
+
+当前没有可独立继续的T15代码工作或可等待的原生验收作业；不重复相同探测/495测试，不放宽原门槛，不做T16，也不标目标完成。保留已验证代码/全部证据/存档/备份/原PNG及真人责任，等待可操控桌面浏览器或按t15-browser-followup.md返回真实200%和原生离页两项结果。恢复时新起blocked审计，不复用这三轮计数。24/25/29/35重新markHandoff、46markDeliverable；本轮没有新游戏操作/新业务原档，界面仍停正式生活工作区77。
