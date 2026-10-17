@@ -3,6 +3,7 @@ import type { PlayFeatures,PlayingView } from './game-types.ts'
 /** Presentation reads ownership already decided by the rule model. */
 export function intentAccount(command:CommandEnvelope,view:PlayingView,features:PlayFeatures):string{
  const p=command.payload as Record<string,unknown>
+ if(['StartLifeWork','FulfillLifePromise','InterruptLifeWork','SetLifePriority','AcceptLifePromise','DeclineLifePromise'].includes(command.kind))return 'personal'
  if(command.kind==='FundBusiness'||command.kind==='OpenCourseStudio'||command.kind==='OpenRelayStation'||command.kind==='OpenEcosystemService')return 'personal'
  if(typeof p.accountId==='string')return p.accountId
  if(['WorkQuarter','QuitWork','StartFirstOrder','ResearchMarket','StopMarketResearch','FavoriteMemory','ReadNews'].includes(command.kind))return 'personal'

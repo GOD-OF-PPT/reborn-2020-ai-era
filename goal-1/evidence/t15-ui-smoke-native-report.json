@@ -1,0 +1,236 @@
+{
+  "taskId": "T15",
+  "scope": "preliminary UI smoke; final frozen native suite remains required",
+  "checks": [
+    {
+      "id": "smoke-work-real-abort-and-same-retry",
+      "pass": true,
+      "scope": "preliminary native smoke during source iteration, not final C15 native suite",
+      "observation": "Actual isolated head.put succeeded then transaction aborted; old cash/AP/room stayed, exact candidate retried. Scene changed only at actual Jan8 completion.",
+      "artifacts": [
+        {
+          "file": "t15-ui-smoke-07-dom.txt",
+          "sha256": "2a43ccd09fcdc1ce49ca0901be8f5cbcd7387fe2e363d6bef7295aa13d39a09b"
+        },
+        {
+          "file": "t15-ui-smoke-07.jpg",
+          "sha256": "5a86a4468df17b629253918e928219a2842a278c1235a7615a5e88a1cc9ce3ab"
+        },
+        {
+          "file": "t15-ui-smoke-08-dom.txt",
+          "sha256": "71776c95318fdfac037c285e400a4123f7a8364fb96931b1a1ada8eb71d62c84"
+        },
+        {
+          "file": "t15-ui-smoke-08.jpg",
+          "sha256": "7373ea470b99b8ced130d15f9c4f20058ed75b30cd795a2d400adf113e2e2115"
+        },
+        {
+          "file": "t15-ui-smoke-10-dom.txt",
+          "sha256": "9dffe608b77488d6437ce886d26bd989a77384efb2d98289efb3665b102a45e6"
+        },
+        {
+          "file": "t15-ui-smoke-10.jpg",
+          "sha256": "79f1857cc58a7521fec6458f82745db2c5e9566b66a87fbe748588b5c733dab5"
+        },
+        {
+          "file": "t15-ui-smoke-13-dom.txt",
+          "sha256": "15cdb8cfb1832f7c3c5f1ea87628694f3fb18d025f0cf1e7c83f2f0e78d3a836"
+        },
+        {
+          "file": "t15-ui-smoke-13.jpg",
+          "sha256": "82639c4e655b6681f506cc23c48a9f19c702401082bcffe16932064d1db1ef75"
+        },
+        {
+          "file": "t15-ui-smoke-work-before.json",
+          "sha256": "98cbd37d8e1a85d419bc835b8c4b71f64d095ac798094795f092e6396b00feca"
+        },
+        {
+          "file": "t15-ui-smoke-work-candidate.json",
+          "sha256": "066352524d5ab28ea37a281c665bde72984f5d6a597a182b6aeb3e4277b24496"
+        },
+        {
+          "file": "t15-ui-smoke-work-retried.json",
+          "sha256": "066352524d5ab28ea37a281c665bde72984f5d6a597a182b6aeb3e4277b24496"
+        }
+      ]
+    },
+    {
+      "id": "smoke-promises-all-four-phases",
+      "pass": true,
+      "scope": "preliminary native smoke during source iteration, not final C15 native suite",
+      "observation": "Explicit acceptance costs zero now and displays future work/fee/deadline. Accepted obligation is retained in every quarter phase and actual fulfillment is paid separately.",
+      "artifacts": [
+        {
+          "file": "t15-ui-smoke-18-dom.txt",
+          "sha256": "25c4b46c64719638705e9443775ab478d1d4abbab3d95cb18eea77983217fd56"
+        },
+        {
+          "file": "t15-ui-smoke-18.jpg",
+          "sha256": "ba3256a5f2d680259a24e7a4cb9a7d5b4d1c3dd7c065822dbbc3792f58b17b54"
+        },
+        {
+          "file": "t15-ui-smoke-20-dom.txt",
+          "sha256": "500e4975d02bba2913a9673c5ef440f447de7361e32c7f4717c45e220e4e7de1"
+        },
+        {
+          "file": "t15-ui-smoke-20.jpg",
+          "sha256": "1827edce186a4855bde290962fa79ce90feba12ba1348eb9844ea6a0e39d5b38"
+        },
+        {
+          "file": "t15-ui-smoke-21-dom.txt",
+          "sha256": "17f6e53e06ee58d136755fd57dadfc919c9c9f006cbc01447c1f97a69942e6ba"
+        },
+        {
+          "file": "t15-ui-smoke-21.jpg",
+          "sha256": "20c4aebc4540a389833dc3473bdb8cbbb3ed6c732e55a2c99d58f78b1969a1f4"
+        },
+        {
+          "file": "t15-ui-smoke-22-dom.txt",
+          "sha256": "408876cfe58dc4dc6906d1e4f396b16c09d974adc12ca931d6ed20dc610b8bfd"
+        },
+        {
+          "file": "t15-ui-smoke-22.jpg",
+          "sha256": "d842d55f163d768af0f24bdb78bf3f95130e65a6bb0db843be537c33f0d6b038"
+        },
+        {
+          "file": "t15-ui-smoke-23-dom.txt",
+          "sha256": "d766b54063ad5c0c184cdc4754addf81059b821d8bd6a2ab01f55f0c2d1569d8"
+        },
+        {
+          "file": "t15-ui-smoke-23.jpg",
+          "sha256": "bad4ee5be7fb5f9143bd97902e402244061b2f085bf62e7343afa9e3e3c62b38"
+        },
+        {
+          "file": "t15-ui-smoke-24-dom.txt",
+          "sha256": "3f8f19f2a30e3a0441579311def9f75e57a779b76671790a57318551e1ec3a63"
+        },
+        {
+          "file": "t15-ui-smoke-24.jpg",
+          "sha256": "c455c2c5a026f11b2dec657b89d4adb27ca453a31c08a565842c84212c6934b7"
+        },
+        {
+          "file": "t15-ui-smoke-25-dom.txt",
+          "sha256": "7fef2cdb61e7507c35068e70c0e6a9cad6c5447ee45d5703bc1a55a9b705d93f"
+        },
+        {
+          "file": "t15-ui-smoke-25.jpg",
+          "sha256": "932cc1f41e399916376b93e013774fc145923990ecca2b6783dce61beb3d2008"
+        }
+      ]
+    },
+    {
+      "id": "smoke-real-completion-and-year",
+      "pass": true,
+      "scope": "preliminary native smoke during source iteration, not final C15 native suite",
+      "observation": "Actual normal Jan14 fulfilled record and annual opening30000/outflow7500/cash22500, life costs3500 and zero salary. Quarter record opens actual people pane.",
+      "artifacts": [
+        {
+          "file": "t15-ui-smoke-26-dom.txt",
+          "sha256": "c460a6d0ba9f9a366d991274837e47ec9d4821c57bcd13e28b37bccb3ab634b2"
+        },
+        {
+          "file": "t15-ui-smoke-26.jpg",
+          "sha256": "943b8e78de6fbff1da9ccbd13a1d94a7f7017f54de752b9db8f11c733376bee9"
+        },
+        {
+          "file": "t15-ui-smoke-29-dom.txt",
+          "sha256": "7bf7b2ff483c26f46696f1aea9b766d5d03d5baccb439f4ccd912736be897537"
+        },
+        {
+          "file": "t15-ui-smoke-29.jpg",
+          "sha256": "595b232219790f92f11c9940f92952ae4dbfba78bdb261f69fd4cc416cc03806"
+        },
+        {
+          "file": "t15-ui-smoke-actual-completed-and-year.json",
+          "sha256": "33721bc4a2577a1492303ee1843f9ff50ce74bc36ed6c73cc150f9c82b7d0016"
+        }
+      ]
+    },
+    {
+      "id": "smoke-image-error-and-readonly",
+      "pass": true,
+      "scope": "preliminary native smoke during source iteration, not final C15 native suite",
+      "observation": "Real image error produces ordinary-image fallback and clear notice, preserving completion and exact saved bytes.",
+      "artifacts": [
+        {
+          "file": "t15-ui-smoke-30-dom.txt",
+          "sha256": "d2c32f711ec709cc6738ef6fc1a6681bfe7ff0bdafa67ac48f1af606769d3930"
+        },
+        {
+          "file": "t15-ui-smoke-30.jpg",
+          "sha256": "c5411b7d8b068c3179f64fa9c5b7d786fd1207b38f65e098ab40dc4fb8d7b4e6"
+        },
+        {
+          "file": "t15-ui-smoke-readonly-image-failure-after.json",
+          "sha256": "33721bc4a2577a1492303ee1843f9ff50ce74bc36ed6c73cc150f9c82b7d0016"
+        }
+      ]
+    }
+  ],
+  "checksJournal": "t15-ui-smoke-checks.jsonl",
+  "inputs": [],
+  "exports": [
+    {
+      "file": "t15-ui-smoke-work-before.json",
+      "sha256": "98cbd37d8e1a85d419bc835b8c4b71f64d095ac798094795f092e6396b00feca",
+      "role": "work-before"
+    },
+    {
+      "file": "t15-ui-smoke-work-candidate.json",
+      "sha256": "066352524d5ab28ea37a281c665bde72984f5d6a597a182b6aeb3e4277b24496",
+      "role": "work-candidate"
+    },
+    {
+      "file": "t15-ui-smoke-work-candidate-after-reload-request.json",
+      "sha256": "066352524d5ab28ea37a281c665bde72984f5d6a597a182b6aeb3e4277b24496",
+      "role": "work-candidate-after-reload-request"
+    },
+    {
+      "file": "t15-ui-smoke-work-retried.json",
+      "sha256": "066352524d5ab28ea37a281c665bde72984f5d6a597a182b6aeb3e4277b24496",
+      "role": "work-retried"
+    },
+    {
+      "file": "t15-ui-smoke-actual-completed-and-year.json",
+      "sha256": "33721bc4a2577a1492303ee1843f9ff50ce74bc36ed6c73cc150f9c82b7d0016",
+      "role": "actual-completed-and-year"
+    },
+    {
+      "file": "t15-ui-smoke-readonly-image-failure-after.json",
+      "sha256": "33721bc4a2577a1492303ee1843f9ff50ce74bc36ed6c73cc150f9c82b7d0016",
+      "role": "readonly-image-failure-after"
+    }
+  ],
+  "equalPairs": [
+    [
+      "t15-ui-smoke-work-candidate.json",
+      "t15-ui-smoke-work-retried.json"
+    ],
+    [
+      "t15-ui-smoke-work-candidate.json",
+      "t15-ui-smoke-work-candidate-after-reload-request.json"
+    ],
+    [
+      "t15-ui-smoke-actual-completed-and-year.json",
+      "t15-ui-smoke-readonly-image-failure-after.json"
+    ]
+  ],
+  "pending": [
+    {
+      "id": "native200percent_zoom",
+      "reason": "Current IAB does not expose a verified native zoom control; async environment question remains unanswered."
+    },
+    {
+      "id": "native_close_dialog",
+      "reason": "Reload request resolved without an observed native dialog; UI candidate stayed byte-identical. Cause unknown."
+    },
+    {
+      "id": "final_frozen_native_suite",
+      "reason": "Remaining people, failure seams, production, views, focus, backup/multitab and full frozen audit still required."
+    }
+  ],
+  "observedToolErrors": [
+    "Waiting for a heading used the wrong semantic role; actual unsaved strong alert was then observed.",
+    "After source update, book navigation was not found; fresh state showed entry, then actual revision8 was resumed."
+  ]
+}

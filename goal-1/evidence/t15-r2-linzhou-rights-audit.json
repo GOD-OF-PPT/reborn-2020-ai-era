@@ -1,0 +1,21 @@
+{
+  "scope": "audit of actual UI export versus its exact normal engine input; not an inference from a relationship label",
+  "inputs": [
+    {
+      "file": "t15-browser-input-linzhou.json",
+      "sha256": "5a98fa875a29ca15feb072f569b9e54dd7dfd54e615993094d37398c200f9d64"
+    },
+    {
+      "file": "t15-browser-r2-linzhou-fulfilled.json",
+      "sha256": "21e27dbbba01a56b3f9b283b8de9c10d0d9be6135b7574d85bdd7f0f4619c9ac"
+    }
+  ],
+  "checks": {
+    "originalLinzhouStateUnchanged": true,
+    "originalIndependentWillingnessFactUnchanged": true,
+    "originalStoryJobsUnchanged": true,
+    "noNewAgentAuthority": true,
+    "lifeJobsAdded": true
+  },
+  "result": "PASS"
+}

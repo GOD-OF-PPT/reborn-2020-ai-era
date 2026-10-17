@@ -1,0 +1,32 @@
+[
+  {
+    "step": "typecheck",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "seconds": 44.067
+  },
+  {
+    "step": "unit",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "test:unit",
+      "--",
+      "src/application/life-timer-integrity.test.ts",
+      "src/application/life.test.ts",
+      "src/application/life-atomic.test.ts",
+      "src/core/world-scope.test.ts",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 0,
+    "seconds": 51.106
+  }
+]

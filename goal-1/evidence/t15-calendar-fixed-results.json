@@ -1,0 +1,31 @@
+[
+  {
+    "name": "typecheck",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 28.378,
+    "output": "goal-1/evidence/t15-calendar-fixed-typecheck-output.txt"
+  },
+  {
+    "name": "unit",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "test:unit",
+      "--",
+      "src/application/life.test.ts",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 31.027,
+    "output": "goal-1/evidence/t15-calendar-fixed-unit-output.txt"
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "steps": [
+    {
+      "step": "typecheck",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "seconds": 30.948,
+      "output": "goal-1/evidence/t15-c15-typecheck-output.txt"
+    },
+    {
+      "step": "unit",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 130,
+      "seconds": 359.87,
+      "output": "goal-1/evidence/t15-c15-unit-output.txt"
+    }
+  ],
+  "sourceChanges": [],
+  "appPathSetUnchanged": true,
+  "frozenFiles": 305,
+  "allStepsPassed": false
+}

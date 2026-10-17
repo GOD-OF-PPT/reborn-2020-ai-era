@@ -1,0 +1,55 @@
+[
+  {
+    "step": "typecheck",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "seconds": 32.801,
+    "output": "goal-1/evidence/t15-c6-typecheck-output.txt"
+  },
+  {
+    "step": "unit",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "test:unit",
+      "--",
+      "src/application/life.test.ts",
+      "src/application/life-people.test.ts",
+      "src/application/life-year.test.ts",
+      "src/application/life-atomic.test.ts",
+      "src/application/life-workbench.test.ts",
+      "src/application/game-controller.test.ts",
+      "src/application/workbench-projection.test.ts",
+      "src/ui/confirmation-money.test.ts",
+      "src/ui/App.test.tsx",
+      "src/ui/work-visibility.test.ts",
+      "src/ui/ResourceSelect.test.tsx",
+      "src/ui/continuation.test.ts",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 0,
+    "seconds": 173.448,
+    "output": "goal-1/evidence/t15-c6-unit-output.txt"
+  },
+  {
+    "step": "content",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "validate:content"
+    ],
+    "exitCode": 0,
+    "seconds": 3.126,
+    "output": "goal-1/evidence/t15-c6-content-output.txt"
+  }
+]

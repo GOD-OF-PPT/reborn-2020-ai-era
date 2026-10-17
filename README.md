@@ -10,7 +10,7 @@
 
 玩家从2020年开始，用记忆、资金、时间与关系参与AI浪潮。五条核心财富路线不变：**A股AI股票、AI生成短视频、AI卖课、API中转站、DeepSeek生态与架空股权投资**。工作、生活与创业可以组合，不要求人人成立软件公司；AI作恶、黑天鹅和失控不强制每局发生。
 
-完整首版仍以2020—2025年24季度、两种背景、每季4点为工作范围。第三套半写实电影感仍是美术偏好；原始三张PNG待上传。2026-10-16已创建工程入口和[钱/日期/行动内核](docs/21-economy-kernel.md)，未更换原始素材或部署，现有切片见下方T09—T14记录，完整首版仍待后续实施。
+完整首版仍以2020—2025年24季度、两种背景、每季4点为工作范围。第三套半写实电影感仍是美术偏好；原始三张PNG待上传。2026-10-16已创建工程入口和[钱/日期/行动内核](docs/21-economy-kernel.md)，未更换原始素材或部署，现有切片见下方T09—T15记录，完整首版仍待后续实施。
 
 ## 本地开发
 
@@ -35,7 +35,7 @@ npm run check
 
 T04建立了[命令、随机与存档合同22](docs/22-command-save-contract.md)。开发服务运行时，访问`/tests/t04-storage.html`可手动运行隔离测试库上的原生IndexedDB/Web Locks检查；页面只用于工程验证，不提供游戏入口，也不进入生产构建。浏览器原生报告与已知限制见[T04验证](goal-1/evidence/t04-validation.md)。
 
-T05建立[内容、世界与资格合同23](docs/23-content-world-contract.md)：正常组合入口为`createCampaignRun`，包含独立运行时内容包、世界按日期推进、有限准备任务及资格门控。`npm run validate:content`校验实际内容与初始化，`npm run evidence:world`采集内容/时钟回放；这些结果不代替五路线经营、正常通关或浏览器可玩验收。T05采用schema2并保留旧schema1历史导出，当前组合版本见下方T14。
+T05建立[内容、世界与资格合同23](docs/23-content-world-contract.md)：正常组合入口为`createCampaignRun`，包含独立运行时内容包、世界按日期推进、有限准备任务及资格门控。`npm run validate:content`校验实际内容与初始化，`npm run evidence:world`采集内容/时钟回放；这些结果不代替五路线经营、正常通关或浏览器可玩验收。T05采用schema2并保留旧schema1历史导出，当前组合版本见下方T15。
 
 T06建立[就业与共享经营合同24](docs/24-shared-operations-contract.md)：季度工作、实际月薪、共享个人/员工产能、合同任务和退出义务接入同一命令/存档入口。T06当时使用schema3，明确拒绝旧schema1/2。`npm run evidence:operations`采集经营底座回放；T06当时正常包尚无专用生产商单，T07接入首单内容。历史采集命令需指定新输出目录。
 
@@ -47,7 +47,7 @@ T09接入[首个可玩工作台27](docs/27-playable-workbench-contract.md)：两
 
 T10接入[视频经营合同28](docs/28-video-business-contract.md)：三类作品、素材与人工校正、按年代和本局资格开放的图像/视频工具、付费返工/客户谈判/验收/回款、平台和带货结算、稳定受众cohort与转化去重、共享员工及退出义务。T10当时schema7、rules-t10-video-v2明确拒绝并保留旧schema1—6；前台日期开放至2025-12-31以正常到达工具节点，完整24季度/其余路线/结局仍由后续任务验收。`npm run evidence:video`采集F02独立账务和两背景正常视频回放，`npm run evidence:video-browser-audit`审核实际原生导出；最终采集与真实范围见[T10验证](goal-1/evidence/t10-validation.md)。不以夹具、日期开放或工程测试关闭P/W/Q/X整体。
 
-T11接入[课程与学员合同29](docs/29-course-business-contract.md)：三种形式、已付案例/素材权利、真实样课与教学、分批预款保护/分阶段收入/交付前后退款、按日期支持与投诉补交付、七天更新与停售旧义务、固定受众身份去重和有新需求的进阶课程。T11阶段采用schema8；当前组合版本见T14。`npm run evidence:course`采集独立F03/F05与两背景正常S02，`npm run evidence:course-browser-audit`逐字审核原生导出；证据见[T11验证](goal-1/evidence/t11-validation.md)。正常公司维护/工资/生活费与独立财务夹具分列，不能把23029元夹具利润当作玩家保证收益。历史危机、正式人物界面与24季度/结局、原图/真人/整体平衡继续待实施。
+T11接入[课程与学员合同29](docs/29-course-business-contract.md)：三种形式、已付案例/素材权利、真实样课与教学、分批预款保护/分阶段收入/交付前后退款、按日期支持与投诉补交付、七天更新与停售旧义务、固定受众身份去重和有新需求的进阶课程。T11阶段采用schema8；当前组合版本见T15。`npm run evidence:course`采集独立F03/F05与两背景正常S02，`npm run evidence:course-browser-audit`逐字审核原生导出；证据见[T11验证](goal-1/evidence/t11-validation.md)。正常公司维护/工资/生活费与独立财务夹具分列，不能把23029元夹具利润当作玩家保证收益。历史危机、正式人物界面与24季度/结局、原图/真人/整体平衡继续待实施。
 
 ## v0.4：从竞品机制转成更清楚的操作
 
@@ -93,7 +93,7 @@ python -m unittest discover -s scripts -p test_competitive_design.py -v
 
 先读[AGENTS](AGENTS.md)，从远端当前提交继续工作。不强推原始资料包的独立历史，不改变公开可见性。本轮不新增真实交易/支付、AI服务后台、分析SDK、部署或许可证。所有经营收益是游戏设计，不是现实投资指导；真实节点与架空融资持续分开。
 
-T12接通[中转与例行合同30](docs/30-relay-routine-contract.md)：供应许可/适配、实际客户与预付或信用条款、按日用量/供应账期、三天审计与原账单更正、已授权故障转移、停站与旧余额；例行草稿/逐项确认/同序批处理及条件变化暂停沿用同一原子Session。T12阶段采用schema9；当前组合版本见T14。`npm run evidence:relay`采集F04/两背景正常S03/故障域/X04/X05，`npm run evidence:relay-browser-audit`审核原生导出；实际结果与C12见[T12验证](goal-1/evidence/t12-validation.md)。F04利润5500元是独立财务算例，正常经营承担真实生活/工资/维护/审批与营销；停站不清客户负债，例行不自动交易、招生、融资或扩权。没有真实中转服务、收费或模型调用。
+T12接通[中转与例行合同30](docs/30-relay-routine-contract.md)：供应许可/适配、实际客户与预付或信用条款、按日用量/供应账期、三天审计与原账单更正、已授权故障转移、停站与旧余额；例行草稿/逐项确认/同序批处理及条件变化暂停沿用同一原子Session。T12阶段采用schema9；当前组合版本见T15。`npm run evidence:relay`采集F04/两背景正常S03/故障域/X04/X05，`npm run evidence:relay-browser-audit`审核原生导出；实际结果与C12见[T12验证](goal-1/evidence/t12-validation.md)。F04利润5500元是独立财务算例，正常经营承担真实生活/工资/维护/审批与营销；停站不清客户负债，例行不自动交易、招生、融资或扩权。没有真实中转服务、收费或模型调用。
 
 T13接通[DeepSeek生态与架空股权31](docs/31-deepseek-business-equity-contract.md)：实际部署/培训、用途适配、分阶段验收/支持/预款保护/回款、有限退出；另行确认的架空邀请/尽调/资格/谈判、增资/老股、整数股份20%/16%、独立治理、锁定及实际买方转让/延迟到账。T13阶段schema10、rules-t13-deepseek-v1、world-deepseek-work-v1、operations-work-v6明确拒绝保留schema1—9。`npm run evidence:deepseek`采集15组分层回放，`evidence:deepseek-browser-audit`逐字审核原生导出，`evidence:route-diversity`交叉核对五路线专用状态与反馈；见[T13验证](goal-1/evidence/t13-validation.md)。正常两背景小额2万元实际参与与大额200万元夹具分开；估值不是现金，少数股份不自动成为治理权，没有现实公开申购或真实融资服务。正常24季度、完整尾声、原图/真人及整体Q/X仍待后续任务。
 
@@ -102,4 +102,9 @@ T13接通[DeepSeek生态与架空股权31](docs/31-deepseek-business-equity-cont
 D02正式前台、累计检查和实际浏览器范围见[重构验证](goal-1/evidence/d02-validation.md)。原三张PNG和真人试玩仍未验收，人物生活及正常24季度/尾声继续按goal实施；局部历史与危机见T14。
 
 
-T14接通[历史、代理权限与控制恢复33](docs/33-history-risk-contract.md)：实际合作的局部分支、准备兑现、同源发布影响、真实课程/中转辅助支持与单独权限、独立调查和有成本恢复，以及“变化与处置”工作区。当前工作树采用schema11/rules-t14-story-v1，旧1—10原档保留并明确拒绝，T13段落记录的是当时版本。`npm run evidence:story`用于新目录中的正常前史与固定全样本回放，`evidence:story-browser-audit`逐字审核另行采集的真实UI导出；462项JS/60工具、19组固定剧情/12类旧回放、64项实际浏览器及22导出完整回放通过，范围见[T14验证](goal-1/evidence/t14-validation.md)和[任务记录](goal-1/tasks.md)。原PNG/真人、人物生活与正常24季度/尾声仍归后续任务。未接入真实模型、委托、收费或网络分享。
+T14接通[历史、代理权限与控制恢复33](docs/33-history-risk-contract.md)：实际合作的局部分支、准备兑现、同源发布影响、真实课程/中转辅助支持与单独权限、独立调查和有成本恢复，以及“变化与处置”工作区。T14阶段采用schema11/rules-t14-story-v1，旧1—10原档保留并明确拒绝，T13段落记录的是当时版本。`npm run evidence:story`用于新目录中的正常前史与固定全样本回放，`evidence:story-browser-audit`逐字审核另行采集的真实UI导出；462项JS/60工具、19组固定剧情/12类旧回放、64项实际浏览器及22导出完整回放通过，范围见[T14验证](goal-1/evidence/t14-validation.md)和[任务记录](goal-1/tasks.md)。原PNG/真人、人物生活与正常24季度/尾声仍归后续任务。未接入真实模型、委托、收费或网络分享。
+
+
+T15已接入[人物、生活与年度合同34](docs/34-people-life-year-contract.md)：独立life状态、四名虚构人物的真实共同经历和自主档期、明确接受与实际兑现的承诺、个人账户生活工作与完成场景、只读年度现金/实际记录；在“本季”下打开生活/人物/年度，全部已接受承诺保留在季度各阶段。当前组合schema12/rules-t15-life-v1/world-life-work-v1，明确拒绝并保留旧1—11。生活任务共用原AP/实际日期/产能/原子Session，没有直接加钱、加信任、免费员工或默认新承诺。
+
+T15/C15目前仍在验证：内部累计55项定向检查与10组固定引擎回放通过，完整旧路线/C15与最终原生检查以[当前任务记录](goal-1/tasks.md)为准。`rtk proxy node --experimental-strip-types scripts/collect_life_evidence.ts --output-dir <新目录>`采集正常前史及受挫路径，不替代浏览器或真人。实际200%缩放与原生离开提示未形成通过证据；原PNG仍0/3、真人仍0人，正常完整24季度/尾声与整体平衡继续按T16—T18执行，不关闭整体P/W/Q/X。

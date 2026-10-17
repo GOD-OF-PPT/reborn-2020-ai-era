@@ -1,0 +1,34 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/application/life-timer-integrity.test.ts --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/life-timer-integrity.test.ts (5 tests | 3 failed) 3573ms
+   × rejects an extra well-shaped finish_job timer for a real owner at the wrong date 882ms
+   × rejects an extra well-shaped offer_expiry timer for a real owner at the wrong date 839ms
+   × rejects an extra well-shaped promise_due timer for a real owner at the wrong date 858ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/life-timer-integrity.test.ts > rejects an extra well-shaped finish_job timer for a real owner at the wrong date
+ FAIL  src/application/life-timer-integrity.test.ts > rejects an extra well-shaped offer_expiry timer for a real owner at the wrong date
+ FAIL  src/application/life-timer-integrity.test.ts > rejects an extra well-shaped promise_due timer for a real owner at the wrong date
+AssertionError: expected [Function] to throw an error
+ ❯ src/application/life-timer-integrity.test.ts:17:47
+     15|  // Every referenced job/person/promise exists and the timer has a val…
+     16|  // A second timer must still belong to its owner's exact original lif…
+     17|  expect(()=>h.codec.import(resign(envelope))).toThrow()
+       |                                               ^
+     18| },60000)
+     19| it('preserves exact ordered source parents when comparing work logs an…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 2 passed (5)
+   Start at  02:26:40
+   Duration  4.98s (tests 78%, import 13%, transform 9%)
+

@@ -1,0 +1,25 @@
+{
+  "taskId": "T15",
+  "scope": "first normal rest probe, before any output snapshots were written",
+  "operation": {
+    "kind": "StartLifeWork",
+    "payload": {
+      "kind": "rest",
+      "personId": null,
+      "reference": null
+    }
+  },
+  "actual": {
+    "status": "rejected",
+    "reasonCodes": [
+      "ORPHAN_LIFE_CAUSE"
+    ]
+  },
+  "sourceHashes": {
+    "src/core/life-validation.ts": "015bc422ac41f9d07a74aa9621ba5d065fe918302f5f35132dc6051bacbeaa8a",
+    "src/core/commands.ts": "9a8e3c6c41420a93b6721ba6b0bf909c793d178085387bf20025e8aa7aa3afbe",
+    "src/core/life.ts": "15c062860685641e939ca6b485871fa56a39421fba1f9b9850b0017a19d8bf6c",
+    "src/core/life-work.ts": "41d1aeef9ed581e239f4236de15d9b3148727270ffd6ed89eab46750a7542ac6"
+  },
+  "finding": "reverse Life-cause ownership incorrectly included the original primary command cause; keep validating logs and explicitly validate primary command identity"
+}

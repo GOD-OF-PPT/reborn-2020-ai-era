@@ -1,0 +1,31 @@
+[
+  {
+    "name": "typecheck",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 33.536,
+    "output": "goal-1/evidence/t15-core-reviewed-typecheck-output.txt"
+  },
+  {
+    "name": "unit",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "test:unit",
+      "--",
+      "src/application/life.test.ts",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 1,
+    "wallSeconds": 28.029,
+    "output": "goal-1/evidence/t15-core-reviewed-unit-output.txt"
+  }
+]

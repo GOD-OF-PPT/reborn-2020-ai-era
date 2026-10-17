@@ -1,0 +1,33 @@
+[
+  {
+    "name": "typecheck",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 30.554,
+    "output": "goal-1/evidence/t15-year-reviewed-typecheck-output.txt"
+  },
+  {
+    "name": "unit",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "test:unit",
+      "--",
+      "src/application/life-year.test.ts",
+      "src/application/life.test.ts",
+      "src/application/life-people.test.ts",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 127.835,
+    "output": "goal-1/evidence/t15-year-reviewed-unit-output.txt"
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "scope": "audit of actual UI export and exact normal engine prefix60, separate from native UI checks",
+  "inputs": [
+    {
+      "file": "t15-browser-input-peer.json",
+      "sha256": "1e8708706ab129c1023d7120e0da9ff854c7bac039d94b23d27fe99d931bc7d1"
+    },
+    {
+      "file": "t15-browser-r2-peer-fulfilled.json",
+      "sha256": "27d739feaad806bd208cbd7d0d3a556a8259acbaafac93f45c4ce6fc2aee46a2"
+    }
+  ],
+  "checks": {
+    "noNewCommercialOrModelEntitlement": true,
+    "originalVideoRightsAndAudienceUnchanged": true,
+    "originalCourseRightsAndStudentsUnchanged": true,
+    "originalManualContractsUnchanged": true,
+    "actualSalaryOnlyInflow": true,
+    "actualOutflowIncludesLifeAndLiving": true,
+    "lifeAddsTwoRealCompletedJobs": true
+  },
+  "cashFlowFen": {
+    "newSalaryAndInflow": 600000,
+    "newOutflow": 450000,
+    "newLifeCosts": 50000,
+    "delta": 150000
+  },
+  "result": "PASS"
+}

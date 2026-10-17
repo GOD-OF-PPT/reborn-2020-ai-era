@@ -23,6 +23,7 @@ export function capacityUsage(m:OperatingContext,resource:string,from:string,to:
  const s=stateOf(m),intervals=s.jobs.filter(j=>j.id!==exclude&&j.resources.includes(resource)&&j.status!=='cancelled').map(j=>({from:j.startAt,to:j.releasedAt??j.completeAt}))
  if(resource==='player-production')for(const j of m.world?.jobs??[]) {const action=m.economy.actions.find(a=>a.definition.id===j.actionId);intervals.push({from:j.startAt,to:j.status==='interrupted'?action?.finishedAt??j.completeAt:j.completeAt})}
  for(const j of m.story?.jobs??[])if(j.id!==exclude&&j.resourceId===resource)intervals.push({from:j.startAt,to:j.releasedAt??j.completeAt})
+ for(const j of m.life?.jobs??[])if(j.id!==exclude&&j.resourceId===resource)intervals.push({from:j.startAt,to:j.releasedAt??j.completeAt})
  const overlap=intervals.filter(i=>i.from<to&&i.to>from),points=[from,...overlap.map(i=>i.from).filter(day=>day>from)]
  return Math.max(0,...points.map(day=>overlap.filter(i=>i.from<=day&&i.to>day).length))
 }

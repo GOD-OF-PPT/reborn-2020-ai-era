@@ -1,0 +1,30 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/application/life.test.ts src/application/life-people.test.ts --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/life.test.ts (12 tests | 1 failed) 29746ms
+   ❯ T15 stored results require original work and keep unrelated random domains (3)
+     × cannot erase an offered/accepted/missed commitment or zero its originally proposed price 1570ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/life.test.ts > T15 stored results require original work and keep unrelated random domains > cannot erase an offered/accepted/missed commitment or zero its originally proposed price
+AssertionError: expected [Function] to throw error including 'LIFE_PROMISE_FREE_FULFILLMENT' but got 'LIFE_DUE_RECEIPT_REWRITTEN'
+
+Expected: "LIFE_PROMISE_FREE_FULFILLMENT"
+Received: "LIFE_DUE_RECEIPT_REWRITTEN"
+
+ ❯ src/application/life.test.ts:82:192
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 14 passed (15)
+   Start at  01:23:29
+   Duration  79.65s (tests 98%, import 1%)
+

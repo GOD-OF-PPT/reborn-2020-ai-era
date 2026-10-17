@@ -1,0 +1,85 @@
+{
+  "taskId": "T15",
+  "scope": "preflight on unchanged D01 design page, not T15 runtime acceptance",
+  "browserId": "2",
+  "browserCapabilities": [
+    {
+      "id": "visibility",
+      "description": "Use to show or hide the browser to the user, and to determine the browser's current visibility. Keep browser work in the background unless the user asks to see it or live viewing is useful. When the browser should be visible, call set(true)."
+    },
+    {
+      "id": "viewport",
+      "description": "Controls an explicit browser viewport override for responsive or device-size testing. Use it when a task calls for specific dimensions or breakpoint validation; otherwise leave it unset so the browser uses its normal viewport. Reset temporary overrides before finishing unless the user asked to keep them."
+    }
+  ],
+  "tabCapabilities": [
+    {
+      "id": "pageAssets",
+      "description": "List assets already observed in the current page state and bundle selected assets into a temporary local artifact."
+    },
+    {
+      "id": "webmcp",
+      "description": "Fetch page-defined WebMCP tools bound to the current document, then call them through the returned object."
+    }
+  ],
+  "native200PercentVerified": false,
+  "before": {
+    "cssZoom": "1",
+    "dpr": 2,
+    "height": 720,
+    "viewport": 1280,
+    "width": 1280
+  },
+  "afterReset": {
+    "cssZoom": "1",
+    "dpr": 2,
+    "height": 720,
+    "viewport": 1280,
+    "width": 1280
+  },
+  "afterNativeSuperEqual": {
+    "cssZoom": "1",
+    "dpr": 2,
+    "height": 720,
+    "viewport": 1280,
+    "width": 1280
+  },
+  "afterFocusedMetaEqual": {
+    "cssZoom": "1",
+    "dpr": 2,
+    "height": 720,
+    "viewport": 1280,
+    "width": 1280
+  },
+  "restored": {
+    "cssZoom": "1",
+    "dpr": 2,
+    "height": 720,
+    "viewport": 1280,
+    "width": 1280
+  },
+  "jsDialogAPI": "getJsDialog documented; beforeunload not yet actually tested",
+  "availableBrowsers": [
+    {
+      "id": "2",
+      "metadata": {
+        "codexSessionId": "01a14402-3f43-7380-8e27-f02f1d53c60d"
+      },
+      "name": "ChatGPT in-app browser",
+      "type": "iab"
+    },
+    {
+      "id": "1",
+      "metadata": {
+        "codexSessionId": "01a14402-3f43-7380-8e27-f02f1d53c60d"
+      },
+      "name": "Codex MCP Apps",
+      "type": "mcpapps"
+    }
+  ],
+  "notSubstituted": [
+    "CSS zoom",
+    "viewport equivalence",
+    "device pixel ratio emulation"
+  ]
+}

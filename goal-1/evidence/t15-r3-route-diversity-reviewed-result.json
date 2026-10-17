@@ -1,0 +1,23 @@
+{
+  "scope": "corrected collector input directory only; no source/semantics/assertion change",
+  "initialResults": "t15-r3-regression-results.json",
+  "initialFailure": "X06_SOURCE_HASH_CHANGED:src/application/browser-game.ts because the default reports belonged to prior T13",
+  "priorT14Environment": {
+    "ROUTE_EVIDENCE_DIRECTORY": "goal-1/evidence/t14-frozen"
+  },
+  "correctedEnvironment": {
+    "ROUTE_EVIDENCE_DIRECTORY": "goal-1/evidence/t15-r3-regression"
+  },
+  "command": [
+    "rtk",
+    "proxy",
+    "npm",
+    "run",
+    "evidence:route-diversity",
+    "--",
+    "--output-dir",
+    "goal-1/evidence/t15-r3-route-diversity-reviewed"
+  ],
+  "exitCode": 0,
+  "seconds": 12.436
+}

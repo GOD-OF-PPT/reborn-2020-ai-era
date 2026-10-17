@@ -1,0 +1,35 @@
+[
+  {
+    "name": "typecheck",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 30.93,
+    "output": "goal-1/evidence/t15-c3-retry-integrity-typecheck-output.txt"
+  },
+  {
+    "name": "unit",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "test:unit",
+      "--",
+      "src/application/life.test.ts",
+      "src/application/life-people.test.ts",
+      "src/core/commands.test.ts",
+      "src/core/world-scope.test.ts",
+      "src/persistence/codec.test.ts",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 87.044,
+    "output": "goal-1/evidence/t15-c3-retry-integrity-unit-output.txt"
+  }
+]

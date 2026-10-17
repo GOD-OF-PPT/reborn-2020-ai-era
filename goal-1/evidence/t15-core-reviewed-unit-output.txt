@@ -1,0 +1,90 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/application/life.test.ts --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/life.test.ts (12 tests | 6 failed) 25464ms
+   ❯ T15 promises are explicit future work, with default and another actor choice (5)
+     × accepts no free fulfillment and processes actual deadline-day work before judging a missed promise 191ms
+     × records an accepted but unperformed promise as missed without spending or completing it by default 198ms
+     × expires an unaccepted invitation with no extra work or fee 189ms
+     × can explicitly decline an unaccepted invitation and keep the original life at zero AP 194ms
+     × honors another actor public busy period and withdraws only an invitation not yet accepted 1521ms
+   ❯ T15 stored results require original work and keep unrelated random domains (3)
+     × cannot erase an offered/accepted/missed commitment or zero its originally proposed price 230ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/life.test.ts > T15 promises are explicit future work, with default and another actor choice > accepts no free fulfillment and processes actual deadline-day work before judging a missed promise
+Error: {"date":"2020-01-01","kind":"AdvanceTime","payload":{"date":"2020-01-04"},"result":{"status":"rejected","reasonCodes":["INVALID_DAY_COUNT"]}}
+ ❯ StoryHarness.sendAs src/testing/story-harness.ts:16:195
+
+ ❯ StoryHarness.send src/testing/story-harness.ts:15:48
+ ❯ StoryHarness.at src/testing/story-harness.ts:26:9
+ ❯ friend src/application/life.test.ts:13:73
+ ❯ src/application/life.test.ts:46:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  src/application/life.test.ts > T15 promises are explicit future work, with default and another actor choice > records an accepted but unperformed promise as missed without spending or completing it by default
+Error: {"date":"2020-01-01","kind":"AdvanceTime","payload":{"date":"2020-01-04"},"result":{"status":"rejected","reasonCodes":["INVALID_DAY_COUNT"]}}
+ ❯ StoryHarness.sendAs src/testing/story-harness.ts:16:195
+
+ ❯ StoryHarness.send src/testing/story-harness.ts:15:48
+ ❯ StoryHarness.at src/testing/story-harness.ts:26:9
+ ❯ friend src/application/life.test.ts:13:73
+ ❯ src/application/life.test.ts:52:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  src/application/life.test.ts > T15 promises are explicit future work, with default and another actor choice > expires an unaccepted invitation with no extra work or fee
+Error: {"date":"2020-01-01","kind":"AdvanceTime","payload":{"date":"2020-01-04"},"result":{"status":"rejected","reasonCodes":["INVALID_DAY_COUNT"]}}
+ ❯ StoryHarness.sendAs src/testing/story-harness.ts:16:195
+
+ ❯ StoryHarness.send src/testing/story-harness.ts:15:48
+ ❯ StoryHarness.at src/testing/story-harness.ts:26:9
+ ❯ friend src/application/life.test.ts:13:73
+ ❯ src/application/life.test.ts:57:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  src/application/life.test.ts > T15 promises are explicit future work, with default and another actor choice > can explicitly decline an unaccepted invitation and keep the original life at zero AP
+Error: {"date":"2020-01-01","kind":"AdvanceTime","payload":{"date":"2020-01-04"},"result":{"status":"rejected","reasonCodes":["INVALID_DAY_COUNT"]}}
+ ❯ StoryHarness.sendAs src/testing/story-harness.ts:16:195
+
+ ❯ StoryHarness.send src/testing/story-harness.ts:15:48
+ ❯ StoryHarness.at src/testing/story-harness.ts:26:9
+ ❯ friend src/application/life.test.ts:13:73
+ ❯ src/application/life.test.ts:61:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  src/application/life.test.ts > T15 promises are explicit future work, with default and another actor choice > honors another actor public busy period and withdraws only an invitation not yet accepted
+Error: {"date":"2020-06-20","kind":"AdvanceTime","payload":{"date":"2020-06-23"},"result":{"status":"rejected","reasonCodes":["INVALID_DAY_COUNT"]}}
+ ❯ StoryHarness.sendAs src/testing/story-harness.ts:16:195
+
+ ❯ StoryHarness.send src/testing/story-harness.ts:15:48
+ ❯ StoryHarness.at src/testing/story-harness.ts:26:9
+ ❯ src/application/life.test.ts:66:89
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  src/application/life.test.ts > T15 stored results require original work and keep unrelated random domains > cannot erase an offered/accepted/missed commitment or zero its originally proposed price
+Error: {"date":"2020-01-01","kind":"AdvanceTime","payload":{"date":"2020-01-04"},"result":{"status":"rejected","reasonCodes":["INVALID_DAY_COUNT"]}}
+ ❯ StoryHarness.sendAs src/testing/story-harness.ts:16:195
+
+ ❯ StoryHarness.send src/testing/story-harness.ts:15:48
+ ❯ StoryHarness.at src/testing/story-harness.ts:26:9
+ ❯ friend src/application/life.test.ts:13:73
+ ❯ src/application/life.test.ts:79:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 6 passed (12)
+   Start at  01:17:18
+   Duration  26.88s (tests 96%, transform 3%, import 2%)
+

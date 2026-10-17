@@ -1,0 +1,99 @@
+{
+  "taskId": "T15",
+  "scope": "normal2020 core rest probe only, no UI or full Life acceptance",
+  "revision": 3,
+  "date": "2020-01-08",
+  "personal": {
+    "cashFen": 2600000,
+    "heldFen": 0,
+    "availableFen": 2600000,
+    "protectionRequiredFen": 0,
+    "protectionShortfallFen": 0,
+    "commitmentShortfallFen": 0
+  },
+  "budget": {
+    "quarter": "2020-Q1",
+    "total": 4,
+    "spent": 1,
+    "reserved": 0,
+    "available": 3
+  },
+  "life": {
+    "catalogVersion": "life-work-v1",
+    "catalogHash": "323edc131352d0b1a5b38fdd8afa8d4e6ecbb0cba898fbfbdb9aba7d5e638257",
+    "jobs": [
+      {
+        "id": "life:2b23777ad60dff57bd8787491946754d",
+        "kind": "rest",
+        "personId": null,
+        "promiseId": null,
+        "reference": null,
+        "originCommandId": "t15-probe-1",
+        "actionId": "life:c2bb10311fa8d8c3752e712479ae991f",
+        "accountId": "personal",
+        "resourceId": "player-production",
+        "startAt": "2020-01-01",
+        "completeAt": "2020-01-08",
+        "costFen": 0,
+        "actionPoints": 1,
+        "status": "completed",
+        "releasedAt": "2020-01-08",
+        "result": "rested",
+        "interruptedBy": null,
+        "interruptionReason": null
+      }
+    ],
+    "promises": [],
+    "priorities": [],
+    "agenda": [],
+    "logs": [
+      {
+        "id": "life:e93d123bd201d36798ee0b72566f3f62",
+        "date": "2020-01-01",
+        "sourceEventId": "life:2b23777ad60dff57bd8787491946754d",
+        "text": "reserve_action",
+        "parentIds": [],
+        "visibility": "visible"
+      },
+      {
+        "id": "life:b7e7e96d89bbb30a8ffefd2efbba1f2e",
+        "date": "2020-01-01",
+        "sourceEventId": "life:2b23777ad60dff57bd8787491946754d",
+        "text": "execute_action",
+        "parentIds": [],
+        "visibility": "visible"
+      },
+      {
+        "id": "life:2b23777ad60dff57bd8787491946754d",
+        "date": "2020-01-01",
+        "sourceEventId": "life:2b23777ad60dff57bd8787491946754d",
+        "text": "已实际开始：留出七天休整；完成与后续效果仍按真实日期处理。",
+        "parentIds": [
+          "life:e93d123bd201d36798ee0b72566f3f62",
+          "life:b7e7e96d89bbb30a8ffefd2efbba1f2e"
+        ],
+        "visibility": "visible"
+      },
+      {
+        "id": "life:6adef56cd858eba61635646b76e7eba9",
+        "date": "2020-01-08",
+        "sourceEventId": "life:2b23777ad60dff57bd8787491946754d",
+        "text": "complete_action",
+        "parentIds": [],
+        "visibility": "visible"
+      },
+      {
+        "id": "life:80b0b11118f89041e75c9cb07b916af6",
+        "date": "2020-01-08",
+        "sourceEventId": "life:2b23777ad60dff57bd8787491946754d",
+        "text": "生活工作实际完成：留出七天休整。",
+        "parentIds": [
+          "life:2b23777ad60dff57bd8787491946754d",
+          "life:6adef56cd858eba61635646b76e7eba9"
+        ],
+        "visibility": "visible"
+      }
+    ]
+  },
+  "rngUnchanged": true
+}

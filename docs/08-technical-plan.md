@@ -97,4 +97,9 @@ T12接入[中转与例行30](30-relay-routine-contract.md)，schema9/rules-t12-r
 T13接入[DeepSeek生态与架空股权31](31-deepseek-business-equity-contract.md)，schema10/rules-t13-deepseek-v1/world-deepseek-work-v1、operations-work-v6拒绝保留schema1—9。生态与股权复用同一操作/账本/时钟/Session；新资本和老股、股数和治理、估值和现金、私股应收和实际到账分别记录，少数股份不自动扩权。确认提交中仅保留已核对预览，实际提交与revision/事务验证不减少；规则状态仍只在原子保存后发布。新增严格privateReceivables与关联原投资/买方的处置/回款，费用累计取整和股份FIFO成本验证。两正常前史、独立算例、Node/原生/生产包的实际范围见[T13验证](../goal-1/evidence/t13-validation.md)。
 
 
-T14已按[历史/代理与控制合同33](33-history-risk-contract.md)接线并完成限定验证，当前工作树schema11/rules-t14-story-v1/world-story-work-v1、operations-work-v7，拒绝并保留旧schema1—10。Story任务与支持使用原日期/行动/账本/产能；原授权、本人停止回执、外部撤权验证和独立证据分开。声明旧责任的原命令携带玩家核对的三份ID清单，提交前重算，导入时绑定原命令，后来的新债不改写旧处置。工作台增加变化/代理/持续处置，旧承诺和所有已知风险不裁剪；月服务应计同时影响可分配利润与承诺现金。462项JS/60工具、19组剧情/12类旧回放、64项原生/生产和22导出完整回放及原字节保护通过，实际范围见[T14验证](../goal-1/evidence/t14-validation.md)；不代表人物/24季度/原图/真人或整体验收。
+T14已按[历史/代理与控制合同33](33-history-risk-contract.md)接线并完成限定验证，T14阶段schema11/rules-t14-story-v1/world-story-work-v1、operations-work-v7，拒绝并保留旧schema1—10。Story任务与支持使用原日期/行动/账本/产能；原授权、本人停止回执、外部撤权验证和独立证据分开。声明旧责任的原命令携带玩家核对的三份ID清单，提交前重算，导入时绑定原命令，后来的新债不改写旧处置。工作台增加变化/代理/持续处置，旧承诺和所有已知风险不裁剪；月服务应计同时影响可分配利润与承诺现金。462项JS/60工具、19组剧情/12类旧回放、64项原生/生产和22导出完整回放及原字节保护通过，实际范围见[T14验证](../goal-1/evidence/t14-validation.md)；不代表人物/24季度/原图/真人或整体验收。
+
+
+T15按[人物、生活与年度合同34](34-people-life-year-contract.md)接入独立LifeRuntime和view.features.life，当前schema12/rules-t15-life-v1/world-life-work-v1，明确拒绝并保留旧1—11。life_event进入原WorldRuntime日序，共同任务/休整/环境改善占本人日期产能、个人实际支出和AP，不新增随机抽样。邀请/回应/实际兑现/到期/他方拒绝与原命令、动作、定时器、经济回执和精确日志双向绑定；来源材料从完成次日使用，不以后来结果验证过去决定。
+
+年度个人现金以原交易逐笔核对，Jan1期初与转移/工资/现金流分开，大额有效累计超展示上限明确null/overflow；旧年度截止不读取今天余额。实际workspace完成才选择独立改善图；目标/开工/中断/保存失败都不提前切场景。新增RoomBackdrop真实图片失败降级，减少动效与文本模式只影响呈现；DEV独立三类head.put后abort与图片失败开关在生产构建中禁用。55项累计定向与10组正常/受挫引擎回放已通过，C15全部旧范围和最终原生仍在进行，实际200%与离开提示未验收，不据此标任务或goal完成。

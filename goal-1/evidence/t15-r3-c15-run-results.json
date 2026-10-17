@@ -1,0 +1,118 @@
+{
+  "scope": "R3 whole implemented rules/tools/content/docs/build plus life replay and pre-production-native export audit; full task acceptance and remaining original-route collectors separate",
+  "sourceFreeze": "t15-native-r3-source-freeze.json",
+  "steps": [
+    {
+      "step": "typecheck",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "seconds": 31.932,
+      "output": "goal-1/evidence/t15-r3-c15-typecheck-output.txt"
+    },
+    {
+      "step": "unit",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 0,
+      "seconds": 1464.183,
+      "output": "goal-1/evidence/t15-r3-c15-unit-output.txt"
+    },
+    {
+      "step": "tools",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:docs"
+      ],
+      "exitCode": 0,
+      "seconds": 1.059,
+      "output": "goal-1/evidence/t15-r3-c15-tools-output.txt"
+    },
+    {
+      "step": "content",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "validate:content"
+      ],
+      "exitCode": 0,
+      "seconds": 2.493,
+      "output": "goal-1/evidence/t15-r3-c15-content-output.txt"
+    },
+    {
+      "step": "docs",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 0,
+      "seconds": 18.337,
+      "output": "goal-1/evidence/t15-r3-c15-docs-output.txt"
+    },
+    {
+      "step": "build",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "seconds": 32.899,
+      "output": "goal-1/evidence/t15-r3-c15-build-output.txt"
+    },
+    {
+      "step": "life-replays",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_life_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t15-r3-final-life"
+      ],
+      "exitCode": 0,
+      "seconds": 61.977,
+      "output": "goal-1/evidence/t15-r3-c15-life-replays-output.txt"
+    },
+    {
+      "step": "native-pre-audit",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_life_browser_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t15-r3-native-pre-audit"
+      ],
+      "exitCode": 0,
+      "seconds": 19.799,
+      "output": "goal-1/evidence/t15-r3-c15-native-pre-audit-output.txt"
+    }
+  ],
+  "sourceUnchanged": true,
+  "allStepsPassed": true
+}

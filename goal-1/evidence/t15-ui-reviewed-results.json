@@ -1,0 +1,33 @@
+[
+  {
+    "step": "typecheck",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "seconds": 37.988,
+    "output": "goal-1/evidence/t15-ui-reviewed-typecheck-output.txt"
+  },
+  {
+    "step": "unit",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "test:unit",
+      "--",
+      "src/application/life-atomic.test.ts",
+      "src/application/life-workbench.test.ts",
+      "src/ui/confirmation-money.test.ts",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 0,
+    "seconds": 13.43,
+    "output": "goal-1/evidence/t15-ui-reviewed-unit-output.txt"
+  }
+]

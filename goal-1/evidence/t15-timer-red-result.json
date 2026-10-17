@@ -1,0 +1,15 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "npm",
+    "run",
+    "test:unit",
+    "--",
+    "src/application/life-timer-integrity.test.ts",
+    "--maxWorkers=1"
+  ],
+  "exitCode": 1,
+  "seconds": 6.421,
+  "expected": "red before timer ownership fix; controls must remain rejected"
+}

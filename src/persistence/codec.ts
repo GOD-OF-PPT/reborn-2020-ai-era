@@ -52,6 +52,7 @@ export class RunCodec {
     requireRule(run.world === null || this.registry.runtime !== null, 'WORLD_HANDLER_REQUIRED')
     requireRule(run.deepseek===null||this.registry.runtime!==null,'DEEPSEEK_HANDLER_REQUIRED')
     requireRule(run.story===null||this.registry.runtime!==null,'STORY_HANDLER_REQUIRED')
+    requireRule(run.life===null||this.registry.runtime!==null,'LIFE_HANDLER_REQUIRED')
     requireRule(run.routines===null||this.registry.runtime!==null,'ROUTINE_HANDLER_REQUIRED')
     requireRule(run.relay===null||this.registry.runtime!==null,'RELAY_HANDLER_REQUIRED')
     requireRule(run.course === null || this.registry.runtime !== null, 'COURSE_HANDLER_REQUIRED')
@@ -128,7 +129,8 @@ export class RunCodec {
       requireRule(compareTimePoints(event, run.timeline.cursor) <= 0, 'EVENT_HISTORY_AHEAD_OF_CURSOR')
       previousPoint = event
       if(event.payload.kind==='story_event')requireRule(run.story,'STORY_HANDLER_REQUIRED')
-      if (isWorldOperation(event.payload) || event.payload.kind === 'operating_event'||event.payload.kind==='market_event'||event.payload.kind==='video_event'||event.payload.kind==='course_event'||event.payload.kind==='relay_event'||event.payload.kind==='deepseek_event'||event.payload.kind==='story_event') {
+      if(event.payload.kind==='life_event')requireRule(run.life,'LIFE_HANDLER_REQUIRED')
+      if (isWorldOperation(event.payload) || event.payload.kind === 'operating_event'||event.payload.kind==='market_event'||event.payload.kind==='video_event'||event.payload.kind==='course_event'||event.payload.kind==='relay_event'||event.payload.kind==='deepseek_event'||event.payload.kind==='story_event'||event.payload.kind==='life_event') {
         requireRule(this.registry.runtime && run.world, 'WORLD_HANDLER_REQUIRED')
       } else if (receipt.skippedReason !== undefined) {
         // Validate the historical reason against its earlier operation. The action
@@ -155,6 +157,7 @@ export class RunCodec {
       reconstructed = queueEvent(reconstructed, event)
       const operation = event.payload
       if(operation.kind==='story_event')requireRule(run.story&&this.registry.runtime,'STORY_HANDLER_REQUIRED')
+      if(operation.kind==='life_event')requireRule(run.life&&this.registry.runtime,'LIFE_HANDLER_REQUIRED')
       if ('accountId' in operation) requireRule(accounts.has(operation.accountId), 'INVALID_ACCOUNT_REFERENCE')
       if ('action' in operation) requireRule(accounts.has(operation.action.accountId) && accounts.has(operation.action.counterpartyId), 'INVALID_ACCOUNT_REFERENCE')
       if ('counterpartyId' in operation) requireRule(accounts.has(operation.counterpartyId), 'INVALID_ACCOUNT_REFERENCE')

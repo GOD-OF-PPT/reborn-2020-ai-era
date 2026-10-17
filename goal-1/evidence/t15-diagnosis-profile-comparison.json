@@ -1,0 +1,131 @@
+{
+  "scope": "CPU sample attribution in two separate local runs; wall times differ and do not establish a total speedup or a unique timeout cause. Original test limits/assertions unchanged.",
+  "runs": [
+    {
+      "run": "baseline",
+      "profileSha256": "9475a0f6e02d18db671844434e3fbacd7072968ddd013236244d1b060d5ca936",
+      "sampledMs": 97074.23,
+      "lifeValidationSampledMs": 3708.081,
+      "lifePercent": 3.82,
+      "agendaGenerationSampledMs": 1912.878,
+      "agendaPercent": 1.971,
+      "topSelf": [
+        {
+          "function": "canonicalJson",
+          "file": "src/core/identity.ts",
+          "sampledMs": 17261.343
+        },
+        {
+          "function": "",
+          "file": "src/core/identity.ts",
+          "sampledMs": 7545.436
+        },
+        {
+          "function": "inst._zod.run",
+          "file": "node_modules/zod/v4/core/schemas.js",
+          "sampledMs": 5431.056
+        },
+        {
+          "function": "(garbage collector)",
+          "file": "",
+          "sampledMs": 4715.496
+        },
+        {
+          "function": "process",
+          "file": "node_modules/@noble/hashes/sha2.js",
+          "sampledMs": 4393.159
+        },
+        {
+          "function": "inst._zod.parse",
+          "file": "node_modules/zod/v4/core/schemas.js",
+          "sampledMs": 4155.395
+        },
+        {
+          "function": "visit",
+          "file": "src/core/json-input.ts",
+          "sampledMs": 3851.308
+        },
+        {
+          "function": "",
+          "file": "",
+          "sampledMs": 3626.641
+        },
+        {
+          "function": "assertSupplierHistory",
+          "file": "src/core/ledger.ts",
+          "sampledMs": 3059.227
+        },
+        {
+          "function": "runChecks",
+          "file": "node_modules/zod/v4/core/schemas.js",
+          "sampledMs": 2356.828
+        }
+      ]
+    },
+    {
+      "run": "indexed",
+      "profileSha256": "4f9a97f698259d9ae6d325250ecd1eca7f829fc739b6794cb55e770e0c03b525",
+      "sampledMs": 109698.381,
+      "lifeValidationSampledMs": 1834.36,
+      "lifePercent": 1.672,
+      "agendaGenerationSampledMs": 140.434,
+      "agendaPercent": 0.128,
+      "topSelf": [
+        {
+          "function": "canonicalJson",
+          "file": "src/core/identity.ts",
+          "sampledMs": 18935.774
+        },
+        {
+          "function": "",
+          "file": "src/core/identity.ts",
+          "sampledMs": 8611.559
+        },
+        {
+          "function": "inst._zod.run",
+          "file": "node_modules/zod/v4/core/schemas.js",
+          "sampledMs": 6246.245
+        },
+        {
+          "function": "inst._zod.parse",
+          "file": "node_modules/zod/v4/core/schemas.js",
+          "sampledMs": 5255.704
+        },
+        {
+          "function": "",
+          "file": "",
+          "sampledMs": 4912.249
+        },
+        {
+          "function": "(garbage collector)",
+          "file": "",
+          "sampledMs": 4756.107
+        },
+        {
+          "function": "process",
+          "file": "node_modules/@noble/hashes/sha2.js",
+          "sampledMs": 4414.003
+        },
+        {
+          "function": "visit",
+          "file": "src/core/json-input.ts",
+          "sampledMs": 4133.167
+        },
+        {
+          "function": "assertSupplierHistory",
+          "file": "src/core/ledger.ts",
+          "sampledMs": 3448.929
+        },
+        {
+          "function": "runChecks",
+          "file": "node_modules/zod/v4/core/schemas.js",
+          "sampledMs": 2701.785
+        }
+      ]
+    }
+  ],
+  "normalStateEquality": {
+    "t15-honest-prepared.json": true,
+    "t15-honest-final.json": true
+  }
+}

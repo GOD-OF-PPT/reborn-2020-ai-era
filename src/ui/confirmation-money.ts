@@ -3,6 +3,8 @@ import type {CommandPreview} from '../core/commands.ts'
 export function confirmationMoney(command:CommandEnvelope,preview:CommandPreview){
  const p=typeof command.payload==='object'&&command.payload!==null?command.payload as Record<string,unknown>:{}
  const amount=(key:string)=>typeof p[key]==='number'&&Number.isSafeInteger(p[key])&&(p[key] as number)>=0?p[key] as number:null
+ if(command.kind==='StartLifeWork'||command.kind==='FulfillLifePromise')return {label:'现在从个人账户实际支付的生活成本',amountFen:preview.upfrontCostFen}
+ if(command.kind==='AcceptLifePromise')return {label:'本次接受的即时费用（后续工作与支出另行安排）',amountFen:0}
  if(['StartHengxingDeployment','StartLinzhouWork','StartAgentPreparation'].includes(command.kind))return {label:'本次开始时实际支付的自有成本',amountFen:preview.upfrontCostFen}
  if(command.kind==='StopHengxingAuthority')return {label:'本次新增服务承诺（已用费用另结）',amountFen:0}
  if(command.kind==='SetHengxingAuthority')return {label:'本次授权本身的费用（支持预算另列）',amountFen:0}

@@ -1,3 +1,4 @@
+import type {LifeState} from './life-schema.ts'
 import type {StoryState} from './story-schema.ts'
 import type {DeepseekState} from './deepseek-schema.ts'
 import type {RoutineState} from './routine-schema.ts'
@@ -38,6 +39,7 @@ export interface RuleModel {
   readonly routines:RoutineState|null
   readonly deepseek:DeepseekState|null
   readonly story:StoryState|null
+  readonly life:LifeState|null
 }
 export interface CommandEnvelope {
   readonly commandId: string
@@ -108,6 +110,7 @@ export interface InitialRunState {
   readonly routines?:RoutineState|null
   readonly deepseek?:DeepseekState|null
   readonly story?:StoryState|null
+  readonly life?:LifeState|null
 }
 export interface ProposedRun {
   readonly status: 'proposed'
