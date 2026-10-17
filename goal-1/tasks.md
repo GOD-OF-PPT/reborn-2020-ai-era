@@ -223,6 +223,7 @@ T15本轮内部顺序（执行中）：
 - [杠精审查] 已验证子范围通过；整体待验：修复三个额外错误日期timer的严格导入缺口、季度邀请/结果直接定位人物和年度来源文案；保留红测、旧120秒超时、输入环境错误、浏览器脚本误判与修正。CPU采样开销下降但总wall未下降，不声称通用提速；T04历史浏览器引用不计本轮执行。详见[GJ/REPEAT](evidence/t15-gj-repeat-review.md)，没有新Skill/代理/自动化或依赖。
 - 本地提交：c9a7287ad57afe8c1ec58f005cf113c77d7f66d2（已验证代码与证据检查点，903文件逐字入Git；不是T15完成提交）。[提交后防覆盖](evidence/t15-post-checkpoint-check.json)18入口实际拒绝改写已提交产物，903检查点文件SHA/Git blob均同；[再次保全](evidence/t15-post-checkpoint-preservation.json)2151旧文件/132固定预览仍同。本条阶段记录随后独立提交；未推送，最近现场只读核对公开远端main仍9bf4399a5cf50997dbf522a578f1168c5532acbf。
 - 未覆盖/后续责任：T15原生200%页面缩放和原生离页提示需支持环境，异步问题尚未答复，[补验步骤](evidence/t15-browser-followup.md)明确恢复条件；实际FCP/NavigationTiming在现有只读浏览器scope不可用，不拿Node/tool时间代替。T15/C15继续未勾，goal active，不进入T16。完整24季度/尾声归T16，原PNG0/3/真人0/整体平衡归T17，最终review/候选归T18；P/W/Q/X整体不自动done，无真实支付/模型/融资/分享/公开部署或远端交付。
+- 接续补验：环境现场仍只有IAB/MCPApps和visibility/viewport；新正常技术开局、实际workspace保存abort候选上尝试跨文档导航，返回ERR_ABORTED且未观测到原生dialog。候选前后逐字同，原候选重试后才保存为2；[四导出完整正常前缀审核](evidence/t15-native-followup-01/replay-audit.json)通过。独立新目录保留原生截图/完整AX/原档，不改原R3报告或增加其98项计数；两门槛继续pending。不是200%/原生提示通过，也不据导航中止推断唯一原因。
 
 ### T16
 

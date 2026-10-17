@@ -168,3 +168,11 @@ R3原生三类实际head.put后abort全部已走：
 检查点已实际提交**c9a7287ad57afe8c1ec58f005cf113c77d7f66d2**：903文件、暂存与原字节均同，不是T15完成提交。69509提交后18入口全部实际IMMUTABLE_TASK_EVIDENCE拒绝，903检查点文件SHA/Git blob未变；9030再次读回2151旧文件/132固定预览磁盘HTTP原字节都同，308源仍冻结。任务T15/C15仍未勾，未推送。当前记录随后单独本地提交，不改应用源或重跑已通过的全部游戏测试。
 
 临时标签37/38/39/40/41/42/44在实际读DOM确认没有unsaved-banner后关闭，数据/备份/文件/服务均保留；原24/25/29/35已markHandoff，最终46已markDeliverable并停生活工作区77。不要再使用已关闭的T15旧句柄，后续需要重新从browser2取得或新建相应标签；原native报告和journal不再追加，补验必须新记录/新目录并引用本检查点。真实200%与原生离页仍是同样两项待验证，当前没有可继续的独立代码工作，不自行进入T16或将goal完成。
+
+## 接续复核：新导航触发仍未取得原生提示
+
+当前记录HEAD19365a2056ca03bc91d09b7991ebdd791274b296，开轮工作区干净/308源全同。上轮属于progress（代码/证据检查点及记录提交），不是等待仍在跑的进程。新鲜cua.listBrowsers只有browser2 IAB和1 MCPApps；capabilities仍visibility/viewport，没有新缩放环境。
+
+为补不同于先前reload的实际离页触发，新建tab47/DEV abort-life-work隔离库的新正常技术人生，seed t15-native-leave-followup-01、runId life-b01358cf-ad54-428e-932c-be4e7b0c64a0。真实workspace3000/1AP/7日保存abort，旧1仍26000/AP4/原scene；候选2已完整导出。直接导航到已有D01不同文档被ERR_ABORTED拒绝，两次getJsDialog均无提示；完整AX/显式DOM确认候选仍在，前后两原档SHA764fa009...逐字同。随后重试原候选，保存2现金23000/AP3/workspace仍运行、未提前换景，保存档与候选逐字同。新四导出从完整正常创建和原命令封套独立重放全部BYTE_EQUAL（session16171终态0）。
+
+全部新证据在t15-native-followup-01，原native报告/journal不改。两次中间console用AX diff字符串判断候选存在而输出false，保留说明，未作产品验收；权威是后续完整AX/DOM和原档字节。tab47确认无候选后关闭；24/25/29/35重新markHandoff、46markDeliverable，旧数据/服务保留。新probe不是原生dialog通过，不能因ERR_ABORTED推断唯一原因。相同外部缺口在可确认的连续两轮存在，continuation-audit.json如实记录；尚未达到三轮blocked阈值，goal仍active，不进入T16。若下一轮环境/用户结果仍无变化且无其他独立工作，完成现场复核后按三轮规则更新blocked，不再反复重跑相同探测或全量测试。

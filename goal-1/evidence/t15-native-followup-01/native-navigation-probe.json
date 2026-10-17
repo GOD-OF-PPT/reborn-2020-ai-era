@@ -1,0 +1,92 @@
+{
+  "scope": "new actual navigation probe, separate from committed R3 native report; no 200% claim",
+  "sourceCheckpoint": "c9a7287ad57afe8c1ec58f005cf113c77d7f66d2",
+  "recordHead": "19365a2056ca03bc91d09b7991ebdd791274b296",
+  "browsers": [
+    {
+      "id": "2",
+      "metadata": {
+        "codexSessionId": "01a14402-3f43-7380-8e27-f02f1d53c60d"
+      },
+      "name": "ChatGPT in-app browser",
+      "type": "iab"
+    },
+    {
+      "id": "1",
+      "metadata": {
+        "codexSessionId": "01a14402-3f43-7380-8e27-f02f1d53c60d"
+      },
+      "name": "Codex MCP Apps",
+      "type": "mcpapps"
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "visibility",
+      "description": "Use to show or hide the browser to the user, and to determine the browser's current visibility. Keep browser work in the background unless the user asks to see it or live viewing is useful. When the browser should be visible, call set(true)."
+    },
+    {
+      "id": "viewport",
+      "description": "Controls an explicit browser viewport override for responsive or device-size testing. Use it when a task calls for specific dimensions or breakpoint validation; otherwise leave it unset so the browser uses its normal viewport. Reset temporary overrides before finishing unless the user asked to keep them."
+    }
+  ],
+  "exports": [
+    {
+      "file": "before-saved.json",
+      "sha256": "bc9a83c218594fed571bc5ef2c7c629821e730828f5e1d06972fc56fa58029ed",
+      "bytes": 133996,
+      "runId": "life-b01358cf-ad54-428e-932c-be4e7b0c64a0",
+      "revision": 1,
+      "seed": "t15-native-leave-followup-01"
+    },
+    {
+      "file": "candidate-before-navigation.json",
+      "sha256": "764fa009aec62ce3bdf89fc7df1c6299346609875fb05f6a29634709c13a4207",
+      "bytes": 140626,
+      "runId": "life-b01358cf-ad54-428e-932c-be4e7b0c64a0",
+      "revision": 2,
+      "seed": "t15-native-leave-followup-01"
+    },
+    {
+      "file": "candidate-after-navigation.json",
+      "sha256": "764fa009aec62ce3bdf89fc7df1c6299346609875fb05f6a29634709c13a4207",
+      "bytes": 140626,
+      "runId": "life-b01358cf-ad54-428e-932c-be4e7b0c64a0",
+      "revision": 2,
+      "seed": "t15-native-leave-followup-01"
+    },
+    {
+      "file": "retried-saved.json",
+      "sha256": "764fa009aec62ce3bdf89fc7df1c6299346609875fb05f6a29634709c13a4207",
+      "bytes": 140626,
+      "runId": "life-b01358cf-ad54-428e-932c-be4e7b0c64a0",
+      "revision": 2,
+      "seed": "t15-native-leave-followup-01"
+    }
+  ],
+  "navigation": {
+    "status": "rejected",
+    "target": "http://127.0.0.1:5199/design/ui-redesign-v1/index.html",
+    "error": "Error: Browser Use cannot open http://127.0.0.1:5199/design/ui-redesign-v1/index.html in tab 47. Browser reported: net::ERR_ABORTED",
+    "dialogObserved": null,
+    "candidateStillVisible": true,
+    "stateFile": "after-navigation-state.txt",
+    "screenshot": "after-navigation.jpg",
+    "firstStateWasDiff": true,
+    "fullStateFile": "after-navigation-full-state.txt",
+    "candidateByteEqual": true
+  },
+  "recovery": {
+    "originalCandidateSavedByteEqual": true,
+    "revision": 2,
+    "noCandidate": true
+  },
+  "nativeAcceptanceComplete": false,
+  "pending": [
+    "native200percent_zoom",
+    "native_close_dialog"
+  ],
+  "toolObservationNotes": [
+    "The first after-navigation AX response was a no-change diff, not a complete tree. Candidate visibility is established by the subsequent full AX snapshot and explicit DOM query. Two intermediate console booleans derived from diff text were false; they are not used as product state or acceptance results."
+  ]
+}

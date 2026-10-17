@@ -46,4 +46,6 @@ R3固定生产候选在本机5217，28资源[HTTP原字节一致](t15-production
 
 真实200%浏览器缩放尚无通过证据；原生beforeunload弹窗未被工具观测到，先前reload请求后候选仍逐字保留、原因未知。应用退出对话框不能代替原生关闭证据。用户环境问题仍待答复。只读浏览器scope不暴露FCP/NavigationTiming，不用Node或工具耗时替代浏览器指标。
 
+接续现场仍仅IAB/MCPApps，浏览器capability仍仅visibility/viewport。另在新的正常技术开局与真实workspace保存abort候选上尝试跨文档导航：[实际报告](t15-native-followup-01/native-navigation-probe.json)记录ERR_ABORTED、两次dialog读取均未观测到提示、原候选字节保持且重试才保存为2；[四份导出的完整正常前缀重放](t15-native-followup-01/replay-audit.json)全部逐字同。初次AX为无变化diff，候选存在由后续完整AX和显式DOM确认，两次基于diff文本的中间false不作为产品状态/验收。当前没有新的缩放或原生弹窗通过证据，原R3报告/计数保持原字节。
+
 原PNG仍0/3、真人仍0人，属T17原责任；正常完整24季度/尾声属T16，最终候选属T18。没有真实支付、交易、在线模型、外部委托、公开部署或本轮远端交付。
