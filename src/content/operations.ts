@@ -5,7 +5,7 @@ import { VIDEO_JOBS } from './video.ts'
 import { FIRST_ORDER_JOB,FIRST_ORDER_OFFER } from './first-order.ts'
 import { BOOTSTRAP_CONTENT } from './bootstrap.ts'
 /** Fictional working parameters; route-specific offers are added by their own slices. */
-export const OPERATIONS_CONTENT={version:'operations-work-v6',profiles:BOOTSTRAP_CONTENT.profiles.map(p=>({id:p.id,monthlySalaryFen:p.monthlySalaryFen})),
+export const OPERATIONS_CONTENT={version:'operations-work-v7',profiles:BOOTSTRAP_CONTENT.profiles.map(p=>({id:p.id,monthlySalaryFen:p.monthlySalaryFen})),
  businesses:[
  {id:'investment-plan',route:'a_share',company:false,capabilities:['spreadsheet'],preparationKey:null,minCashFen:0,capacityUnits:0,monthlyMaintenanceFen:0,requiresPreparationJob:false},
  {id:'manual-content',route:'ai_video',company:false,capabilities:['manual_editing'],preparationKey:null,minCashFen:50000,capacityUnits:1,monthlyMaintenanceFen:0,requiresPreparationJob:false},

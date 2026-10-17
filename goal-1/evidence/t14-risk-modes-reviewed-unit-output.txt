@@ -1,0 +1,39 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/application/story-risk-modes.test.ts src/application/story-routine.test.ts --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/story-routine.test.ts (2 tests | 2 failed) 82800ms
+   × a finite routine never implicitly upgrades approval-only agent permissions 189ms
+   × an independent signal pauses the future routine with a durable receipt instead of performing it 1160ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/story-routine.test.ts > a finite routine never implicitly upgrades approval-only agent permissions
+Error: {"date":"2025-07-01","kind":"RenewRelayCustomer","payload":{"customerId":"rly:08aa73ef654c4ad4c28c39bd6e72bfc7","termEnd":"2025-09-29","mode":"prepaid","creditLimitFen":0},"result":{"status":"rejected","reasonCodes":["RELAY_UNSETTLED_SERVICE"]}}
+ ❯ StoryHarness.sendAs src/testing/story-harness.ts:16:195
+
+ ❯ StoryHarness.send src/testing/story-harness.ts:15:48
+ ❯ plan src/application/story-routine.test.ts:8:185
+ ❯ src/application/story-routine.test.ts:9:134
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/application/story-routine.test.ts > an independent signal pauses the future routine with a durable receipt instead of performing it
+Error: {"date":"2025-07-01","kind":"RenewRelayCustomer","payload":{"customerId":"rly:08aa73ef654c4ad4c28c39bd6e72bfc7","termEnd":"2025-09-29","mode":"prepaid","creditLimitFen":0},"result":{"status":"rejected","reasonCodes":["RELAY_UNSETTLED_SERVICE"]}}
+ ❯ StoryHarness.sendAs src/testing/story-harness.ts:16:195
+
+ ❯ StoryHarness.send src/testing/story-harness.ts:15:48
+ ❯ plan src/application/story-routine.test.ts:8:185
+ ❯ src/application/story-routine.test.ts:10:422
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  2 failed | 3 passed (5)
+   Start at  18:32:06
+   Duration  305.23s (tests 100%)
+

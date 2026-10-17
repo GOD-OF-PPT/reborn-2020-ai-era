@@ -1,3 +1,4 @@
+import type {StoryState} from './story-schema.ts'
 import type {DeepseekState} from './deepseek-schema.ts'
 import type {RoutineState} from './routine-schema.ts'
 import type { RelayState } from './relay-schema.ts'
@@ -36,6 +37,7 @@ export interface RuleModel {
   readonly relay:RelayState|null
   readonly routines:RoutineState|null
   readonly deepseek:DeepseekState|null
+  readonly story:StoryState|null
 }
 export interface CommandEnvelope {
   readonly commandId: string
@@ -105,6 +107,7 @@ export interface InitialRunState {
   readonly relay?:RelayState|null
   readonly routines?:RoutineState|null
   readonly deepseek?:DeepseekState|null
+  readonly story?:StoryState|null
 }
 export interface ProposedRun {
   readonly status: 'proposed'

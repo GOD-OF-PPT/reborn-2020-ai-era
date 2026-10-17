@@ -29,7 +29,7 @@ export class WorldRuntime {
   readonly extension: RuntimeExtension | null
   constructor(value: unknown, extension: RuntimeExtension | null = null) { this.#pack = loadContentPack(value); this.hash = hashValue(this.#pack); this.extension = extension }
   get pack(): ContentPack { return copyJson(this.#pack) }
-  validate(run: GameRun): void { assertWorldRun(this.#pack, run); requireRule(run.operations === null || this.extension, 'OPERATIONS_RUNTIME_REQUIRED');requireRule(run.market===null||this.extension,'MARKET_RUNTIME_REQUIRED');requireRule(run.video===null||this.extension,'VIDEO_RUNTIME_REQUIRED');requireRule(run.course===null||this.extension,'COURSE_RUNTIME_REQUIRED');requireRule(run.relay===null||this.extension,'RELAY_RUNTIME_REQUIRED');requireRule(run.routines===null||this.extension,'ROUTINE_RUNTIME_REQUIRED'); requireRule(run.deepseek===null||this.extension,'DEEPSEEK_RUNTIME_REQUIRED'); this.extension?.validate(run) }
+  validate(run: GameRun): void { assertWorldRun(this.#pack, run); requireRule(run.operations === null || this.extension, 'OPERATIONS_RUNTIME_REQUIRED');requireRule(run.market===null||this.extension,'MARKET_RUNTIME_REQUIRED');requireRule(run.video===null||this.extension,'VIDEO_RUNTIME_REQUIRED');requireRule(run.course===null||this.extension,'COURSE_RUNTIME_REQUIRED');requireRule(run.relay===null||this.extension,'RELAY_RUNTIME_REQUIRED');requireRule(run.routines===null||this.extension,'ROUTINE_RUNTIME_REQUIRED'); requireRule(run.deepseek===null||this.extension,'DEEPSEEK_RUNTIME_REQUIRED');requireRule(run.story===null||this.extension,'STORY_RUNTIME_REQUIRED'); this.extension?.validate(run) }
   definition(id: string): EventDefinition { const definition = this.#pack.events.find((item) => item.id === id); requireRule(definition, 'UNKNOWN_EVENT_DEFINITION'); return definition }
   initialWorld(bindings: readonly WorldBinding[], backgroundId?: string): WorldState {
     const ids = this.#pack.initialEntitlements.find((profile) => profile.backgroundId === backgroundId)?.entitlementIds ?? []
@@ -254,7 +254,7 @@ export class WorldRuntime {
   advance(model: RuleModel, target: { readonly date: string; readonly phase?: DayPhase }): RuleModel {
     const result = advanceTimeline(model.timeline, model as State, target, (state, event) => {
       const operation = event.payload
-      if (operation.kind === 'operating_event'||operation.kind==='market_event'||operation.kind==='video_event'||operation.kind==='course_event'||operation.kind==='relay_event'||operation.kind==='deepseek_event') { requireRule(this.extension && state.operations, 'OPERATIONS_RUNTIME_REQUIRED'); const asOf = event.date; return this.extension.reduce({ ...state, economy: { ...state.economy, asOf, ledger: { ...state.economy.ledger, asOf } } }, event) }
+      if (operation.kind === 'operating_event'||operation.kind==='market_event'||operation.kind==='video_event'||operation.kind==='course_event'||operation.kind==='relay_event'||operation.kind==='deepseek_event'||operation.kind==='story_event') { requireRule(this.extension && state.operations, 'OPERATIONS_RUNTIME_REQUIRED'); const asOf = event.date; return this.extension.reduce({ ...state, economy: { ...state.economy, asOf, ledger: { ...state.economy.ledger, asOf } } }, event) }
       if (!isWorldOperation(operation)) {
         const skippedReason = scheduledActionSkipReason(state.economy, operation)
         if (skippedReason) return { state, skippedReason }

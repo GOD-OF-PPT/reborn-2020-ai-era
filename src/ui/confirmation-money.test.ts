@@ -18,3 +18,5 @@ it('keeps explicit zero follow-on participation visible as an investment decisio
  const result=confirmationMoney(command('FollowEquityRound',{agreementId:'position',amountFen:0}),preview)
  expect(result.amountFen).toBe(0);expect(result.label).toContain('投资本金')
 })
+
+it('separates a zero-new-cost stop from original earned service fees',()=>{const p={...preview,accruedServiceFeeFen:1333};expect(confirmationMoney(command('StopHengxingAuthority',{deploymentId:'old'}),p)).toMatchObject({amountFen:0});expect(confirmationMoney(command('StartRiskTask',{incidentId:'case',kind:'isolate'}),{...p,upfrontCostFen:41333})).toMatchObject({amountFen:40000})})

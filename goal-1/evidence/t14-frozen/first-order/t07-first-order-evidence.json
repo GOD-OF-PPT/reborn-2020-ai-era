@@ -1,0 +1,1677 @@
+{
+  "taskId": "T07",
+  "evidenceType": "integration_replay",
+  "baseCommit": "599facfbab4a7bb44e28cc837aa2c96fb755cf70",
+  "caseIds": [
+    "UX01",
+    "BG-CONTENT-Q1-ORDER",
+    "X01:manual_order",
+    "X02:free_decline",
+    "Q04:dedupe",
+    "Q19:projection",
+    "Q33:failed_candidate",
+    "Q40:offer_default"
+  ],
+  "reproduceCommand": "npm run evidence:first-order",
+  "sourceHashes": {
+    "src/application/bootstrap.test.ts": "129fd7a7cc26821a68907de4c0b092091c3a8a6eeb7dca4ec43b2b0354e15ac5",
+    "src/application/bootstrap.ts": "b698a869d4358ff070eee150160a2dd6c690878cbfcc51214bdc6b0df0c229db",
+    "src/application/browser-game.ts": "be81e1c38f2f10734e0c7b841b7e774ac1d693c798793c3d58c0cd5dee08e839",
+    "src/application/campaign.test.ts": "bc5a07c73e6372433177679b6b8ee43df6bbcaec015bd57a76db5d418fc3527b",
+    "src/application/campaign.ts": "85dc6d5125af5157d10d13afb2e33ef3d92082317e78ea9a3cfd79fe3b596ae1",
+    "src/application/cash-forecast.test.ts": "75257831e625b8e322c61725d97b9cdcd91cf2b7e07a1faab5980356f8558f39",
+    "src/application/cash-forecast.ts": "af313cfb54927beee7617112615d7e379953a8ffd6c7110c3458f3e5ba0c6e60",
+    "src/application/course-atomic.test.ts": "1bbe34fac1f92dac4e3b2b6c953a01a30b7e46fbba3c37e56597b597c4472d4d",
+    "src/application/course-commands.ts": "d495eff57e0ee36d087715fa6a5c8a810218ba6a339883fe99f9dfdc74dbd195",
+    "src/application/course.test.ts": "4aac2dd7884e3f5534f1b2f38a8628858fd8586ec29a8e360ad7575d99f76f30",
+    "src/application/deepseek-atomic.test.ts": "e1f766dcfa1a9a4a09a1e6240de5879c50d26b718e65ca550f09cf0922ce7518",
+    "src/application/deepseek-commands.ts": "73f0df92f80c213bd50de2a9de1dff6ae23d45ec8f07602d696e78b05040dc65",
+    "src/application/deepseek-normal.test.ts": "8482a576e345fcfcb626b89d602e686084e1803ea8686fb64e8c59ee6a941b4e",
+    "src/application/deepseek.test.ts": "32dac0d5d061be76159ccb94e1a950ea16460f25b1ba2f3f77dbae38f46dbbd0",
+    "src/application/ecosystem-edges.test.ts": "2d767f84e730b3867a4d90c37b4aa0804b0da4d1e2f41049273feef17eb58dcd",
+    "src/application/employment.test.ts": "d88fcb35f48f15dc32fd20dc6642322bb8efb3677f502fcbf458d97eb96221df",
+    "src/application/entry-profile.test.ts": "24603fa0587c0b4a2e5c2ae2d5ed5d91a9e7da702d2ebba6e7a1c5fc6f790f15",
+    "src/application/equity.test.ts": "540f944d2de40161cb2332264d587923fcc329831e8f09254afe874c0e0b0f58",
+    "src/application/first-order.test.ts": "6e4d216b26c250885767569e6eb82fb2b31c576520ab1c7cc1272c68d981f0d5",
+    "src/application/first-order.ts": "09b09c4702e3235db3c871f0a86e5dfea76cf25cf63e4a4f7b00a5df1a4269e9",
+    "src/application/game-controller.test.ts": "8bf6808d4058ce8f3cee9fb5312164246ae9806966f06f2bba9b3330bb1aa867",
+    "src/application/game-controller.ts": "b63a7034e6a97a1250091ba4884d7c4791cc4e03bf39dccea4f43a7bcff87b00",
+    "src/application/game-snapshot.ts": "490d7565be79273ad9f8aacfa2b6f9cf4a1b584999b66cefd9df1694846fec86",
+    "src/application/market-commands.ts": "1675ba4f8afc4bddbb1fe5e22508c47c063e1be66b98424c7a63a8b06a2c1e66",
+    "src/application/market-save.test.ts": "6653a54371d5a0df393c01f10ebf5177dcab66f04ada755209e11161fe2fc353",
+    "src/application/market.test.ts": "f9201fc518e65206679b53cd658685db4a15437348ccad5c2979e37cb25bd23a",
+    "src/application/operations-commands.ts": "438c6dae2c1173dc5b3f3f1c2542ba102f660ae5096929e56066079f5ca6e790",
+    "src/application/operations.test.ts": "67978bca31199dd2eed3a320450941b83b4932e937525b86663140e261c1699a",
+    "src/application/playable-advance.ts": "c703a8eab70aabd3a1cf3f0a4a0f0b25b9c253a0afca8dd4a192d29a0900c9a0",
+    "src/application/playable.test.ts": "629965adab912c033c7543e43e35c0829486b296fb686b83d74f9f1aa75c8cb8",
+    "src/application/preview-binding.test.ts": "252340b93dfab09ecb8bb53e06620c7420bcb4aeac188e17fdd7a086fcbe44d4",
+    "src/application/relay-atomic.test.ts": "96f9ac4c419fb3521abac6993e5e7064119ccc52edf7dc2e820e26f940623062",
+    "src/application/relay-commands.ts": "a6e74a7e827dbae5c6f9dc0d435996419116ca44a8f9e227e0cb8b0d08f210ca",
+    "src/application/relay-finance.test.ts": "f0fe5aa62a0299c11f153c116b089e91b29cc42dbdfbfe19285cfbbe9e2795ca",
+    "src/application/relay-normal.test.ts": "ff31d51390b66bdb5fad26a6c2ea2a3f38dd1f017dccc80d43db12aec46cbc6b",
+    "src/application/relay.test.ts": "2c9e2b10be554fee21b9c0c50359e224a6feaba430ead126bf67a87a8e107878",
+    "src/application/routine-atomic.test.ts": "aa0a3fafee6201037a2c879c19fec34b757e4f747e499f6cc78e0db8f63b8834",
+    "src/application/routine-commands.ts": "e71094206ccc0f100aeb1c722eb3740184ed5d5f42d671a7f0b919de3a7c8f33",
+    "src/application/routines.test.ts": "446e290205eda2121e497a3866e2d9abb034b085d690a24f4edef00d268d8874",
+    "src/application/session.test.ts": "4f3e41367d4e5d608960ddda570cfc7d219eb804538507c435d9d8610f861bfe",
+    "src/application/session.ts": "11020cace9172dcf049268ba5b7302daab2a2dc6fc6c219b32545aaa344290e1",
+    "src/application/story-agency.test.ts": "ef98a96191db1acadd64d268756e3f13a44d2f27e7cc6055f5b7db0f008b032f",
+    "src/application/story-combined.test.ts": "4cba5a249553e4b68f9a4448d38a64578b529d9160d99375b360069a59d550c8",
+    "src/application/story-commands.ts": "ab5e7ba5445f9a03478436aaef213556b03ee01a40bdbac9237277fd4be4020c",
+    "src/application/story-history.test.ts": "f457b5bc6ae8e9131e896c31c6297526267af225743e06b03288503479fc1ade",
+    "src/application/story-risk-modes.test.ts": "3a1adff28c649a7af7466e0062c62e8cae82d52bd29af7edc70a36daa22ba580",
+    "src/application/story-risk.test.ts": "11cd62cdf017773280df3a0913082ce1e8baf18e3b440fcab77c097b14c7bded",
+    "src/application/story-routine.test.ts": "d8c509b7a69ad30eab5386913072068ca583acde94a32f2b7e3b9f96c5f1d678",
+    "src/application/video-atomic.test.ts": "2a84f919f0a11e2e0de16bcd21b0342ba1b39096f84df529574a553aa0a71386",
+    "src/application/video-commands.ts": "df956f47253ba778d8a5a268d6d3b1b70cb5b9b7695b24bd453c9dbf90ff9d73",
+    "src/application/video.test.ts": "f7ef2a457bae5a19add76e37816467c23c88c8d60078da84c17a3ce1f9a4c22b",
+    "src/application/workbench-projection.test.ts": "2371e822bd32108e704b659d4a2745537d4bcec12ad5edd2c3129cb83d296378",
+    "src/application/workbench-projection.ts": "13e6d3c7198cbd87fd43b626c389cb1278c0136f0a394ee3a5c064885c0046a3",
+    "src/application/world-session.test.ts": "5305325cca0e9220011cc1892959e833bed49d40565a8cd475e798c4441860c1",
+    "src/content/bootstrap.ts": "adf8d4d3a803cebeb14b6050ace9a4fb428f69c14107bda6e0e4929ce91c77c7",
+    "src/content/campaign.ts": "a12c645e375726b8813b09e50a36fe394b9d2b582a2506701cde07f3abc39bb8",
+    "src/content/course.ts": "603fa0d7fc964498e75b1154a0846765eefb531413cc2f036b6dc81818dd434b",
+    "src/content/deepseek.ts": "63761f690f71b6514b06aef5937834dddc9a8b29e2f9c712659424c15778c289",
+    "src/content/first-order.ts": "0d71c72ef62914add3e516ef391e5812df7c8a5792841102ad32acd9ca38b75c",
+    "src/content/market.ts": "94da1efbf90a5512ff5b6da2ea14f168368b1763622f6c24e56851e91c3ec8d6",
+    "src/content/operations.ts": "f1ca3fe6a62a1830ff5dec2c8f9d141895852739ca8d0e778e11d0a22ceb366b",
+    "src/content/relay.ts": "2f4260b229042d6538f5d358d8beab3b8cd5a75e11fe5265dd16abbc89974208",
+    "src/content/routines.ts": "cb6832b1fe44412fb98d244718a867412ba0487fe2ec5ecbc33a17597085ce2c",
+    "src/content/story.ts": "c30da3e255ec92b2e9a9d004c9c787ae8d91114e4671a5840f4ac321b4a78b2a",
+    "src/content/video.ts": "1aff899fe28dde24c37fde9a37fa066909bd4f90af20d455b91c46f15e443a91",
+    "src/core/calendar.test.ts": "50176fc44923ffd1caf6bee0f94713d001b2e24046af44818aa25d8ac02abfcc",
+    "src/core/calendar.ts": "d252630c17d099e2907df5b0b24e57687f58ab3dd544e03e4a72f41703a83419",
+    "src/core/command-identity.ts": "5ddf588bdf06e756c3f95bd44268dd2ff9bc219cbcd7cd919a6e809eda50f830",
+    "src/core/commands.test.ts": "30f5c5bb268876543b913303dd2225d75c1a2ffdc55b50c66107223057641f71",
+    "src/core/commands.ts": "a2041b5d403b6c272c1c962eed48b645ed963f6a5d801687ded4c5bf1a092c37",
+    "src/core/content-schema.ts": "bcaaa021c91d2284a525d5a0a5bb48f0776ce120e7a30c96c837686e327fcc67",
+    "src/core/content-types.ts": "ce218093c882e03e77b50785d6dbad2dee353946198a61e52b4d29f481200a07",
+    "src/core/content.test.ts": "df41486022437aa2216b4fef44dad43d9685d75e96d0f136eae6890b3091f7fe",
+    "src/core/course-projection.ts": "925ea4303f63c5064e7baafa4c97bd73bc57a9d753fa14fbccaee9af4d0b23c5",
+    "src/core/course-schema.ts": "35496523e5b5120ef4823c5defd419c738e59a2a48e60429c252a3ff7dd9c1e8",
+    "src/core/course-validation.ts": "5f757ef13720bf745e18b4f04754bca411767232549883868f2cc757e77da0d8",
+    "src/core/course.ts": "9296f018628eb1fa16d6a29be77f317995f25c4f66d310b0408f8453faad3d16",
+    "src/core/deepseek-projection.ts": "bc4c4a42acd5f54a630daff4ec7eaf454d7c6cf0bccf2c833aaa00107b70b209",
+    "src/core/deepseek-schema.ts": "6337edc8815b945ef6ac17abdec7cde912691f75c118140722b732f8be5a36ce",
+    "src/core/deepseek-state.ts": "d2cb873aa730bdfd01e253276394f00be5096179fdc61ac6eeab4a96372d45a5",
+    "src/core/deepseek-validation.ts": "bcb12522e3c4619c56fb6206ffa55feeacbe01d3377d1a6cad23b5bfb7487e97",
+    "src/core/deepseek.ts": "5a6bd49ddd4debb10d3abdd6e099b51365e55dbd4742d3e7cdb8a67c8ce51e9b",
+    "src/core/economic-time.test.ts": "cad6bde3a8bc482dee82bf0c5219ab6c19bd3b38537d454669980d1297e60122",
+    "src/core/economic-time.ts": "794e4bfe5ba0eea2b6e812031ea90e6a91825a70759aa822878df3fc1d001fcb",
+    "src/core/economy.test.ts": "2b7eff1b09ea29538a9ec3902621ee6cd40262f81e5f5c9299e2e9efc359367b",
+    "src/core/economy.ts": "cc28674b5a629edd4ef71190f923835f2edcbb162c3ff00b16dc5901beb50d0c",
+    "src/core/equity.ts": "ef2c0d406f8453d3fc5910aa26bed7b966ae87720ac86e1fc231922b0edeaa74",
+    "src/core/errors.ts": "14ff69a5ca0cdc3c4b93ffac3e139750c43c1048668ed733b2006e7e306c5124",
+    "src/core/facts.test.ts": "c298d8ed705c0e2dbfb7c302db9abe00ba5b3d493d1f7d0db4ca327e6388c610",
+    "src/core/facts.ts": "5ffea6cd89bdd80116fb7d274c478cb1cf17cddeee5d8d8062a3d7f8bb324704",
+    "src/core/first-order.ts": "66e6b4eb2d6008eb1f04230cc63cf1a67637bc96582c331bac37e5ea9c9d7215",
+    "src/core/hash.test.ts": "8b901090248ef989699cbf7100581a1cb30242b147d3e7b322b4dd6c50ce3207",
+    "src/core/hash.ts": "06425267a82e9cb8bac2d0258357d3b43822b12a7592aed38e69cfa17e9ea5a3",
+    "src/core/identity.ts": "2d30f89937a7c8ac84e0213d864aa52207fce416a7d8dc5c7327288f5bc8297c",
+    "src/core/json-input.ts": "317c5b79bad1db8e9289c29159c8e89cf467faf2dfc98431ebbc4f2407f0788a",
+    "src/core/ledger.test.ts": "94eadae0c48b68374f9e669f1dfb3f6db969eff4d68025a4fbc4f26729470548",
+    "src/core/ledger.ts": "48e5d86f8b556645ac8aad0f6314bbe4fca2722db8202b14798573e58bd92123",
+    "src/core/market-ledger.test.ts": "db1d143cca090df21073786b972556e37f9dee5899e3447e3280877d9dae0790",
+    "src/core/market-math.ts": "bbd791e0083d1b61820a3220f7424604d47e40fa1a9a43e417fd24f3676daadd",
+    "src/core/market-projection.ts": "419a08e31d3fc9f1f692934f5fb7a2cace2b762fa8e40bf088c68cd40f190deb",
+    "src/core/market-schema.ts": "5528363053e83176043ac072e392cd6d79a1d65654c66ff94b296fa0c348fc29",
+    "src/core/market-types.ts": "128ff61a76351fa638223ba6770f8280eb40256892af1363d39ea57f06724984",
+    "src/core/market-validation.ts": "50b04cfc279109c1b86109d8b4d9ef91acbdbcfaa48d71661121be3630ed9fa4",
+    "src/core/market.ts": "166fb7074bb24cd79ec8e89ab00864a1a29e7a6e0d39bffc1b333140b27adc39",
+    "src/core/money.test.ts": "836e5c5d775e29a018b3d55776cb4d288b68a10da6cd43efa4749bb9766fdaf9",
+    "src/core/money.ts": "4c3ce1830cd238f43bf65e031bcf07c49fdadf878e0839e80a15ea0e1d532d08",
+    "src/core/operating-ledger.test.ts": "8720251b2b316745347e264c0cc40cddbb4db5aa097dfc8d82452e612713dd91",
+    "src/core/operations-accrual.ts": "d43d5c828a4a742f027d068017c3f0f47f0bf48854ca120fc433bc8a4998fff2",
+    "src/core/operations-calendar.ts": "ea2517dd47ae1e74234c3b8afb39546d11bfa588c3dbb49a6dba8dc3c417515e",
+    "src/core/operations-schema.ts": "ec42b73c2857461517adefccec790f99c621339427f945056ef2eb1ed5ea4404",
+    "src/core/operations-types.ts": "b42230973c239de9c89abcf2d5a4fd9d1db2c31580181b92864619b407556842",
+    "src/core/operations-validation.ts": "5b2c0a15c57ba37b7941d9eb1e82d938845dc9e2d86aed16ed039bf462117748",
+    "src/core/operations.ts": "bdcb0db438716afae12064115db602e8d332088d4225fd35081d47039fcae7d8",
+    "src/core/player-profile.ts": "b7050d18ee1463f2ff63f4bbbe11a59e88f810e65cb6121cdfa6a4d3469244c4",
+    "src/core/private-equity-ledger.test.ts": "75f3bd2b7db1e123cba11007355d1c9934e1614d955399a29c8ac39ab26cee55",
+    "src/core/random.test.ts": "7adcad3a108f78521d8dee7c948e83658bc7c9062bdc41b4a62dac71ac005322",
+    "src/core/random.ts": "3ef7ca6de0896d42a456e2aae8760eea9c9a73af99afd7009e0d7353809e180b",
+    "src/core/record-dispatch.test.ts": "bf4f3c2469e47a0a2b465ecabfaa6298fe2725bca1649e0566fd74c01b7ba526",
+    "src/core/record-schemas.ts": "432145f48e159711fc5c06a3d9ff84ab9ab60be58b31d37e507a399c344fd7f9",
+    "src/core/relay-ledger.test.ts": "d3473a5adf2eff975a3d41f19778e0d46410fdd6fd27b8d6aa242528914c1804",
+    "src/core/relay-projection.ts": "448313a8d7046b6bc319c4c42d1a1553430ec6d79103bb6385cae8a39448a3e1",
+    "src/core/relay-schema.ts": "44aaf1e9548d824b4141eb07f9531af4f7b2d939de73b016fbae5b4cc9e711ba",
+    "src/core/relay-validation.ts": "ad0aa6cf7bf97586d139d40ae1cea9d4c1bb89590d34b73410ad82cce847f460",
+    "src/core/relay.ts": "b502f5dd010ab6ef1a52c03a54c69d80569125343f62e0583176990de3cf99a7",
+    "src/core/routine-projection.ts": "68b68edc3f75eb3b9dcbc42cfc008fae16308b549627a075ccf5db0ad0bd1766",
+    "src/core/routine-schema.ts": "91225c54ede69b9cbc794d397c26080dfdd3fa53ef0049711aa66886f2afcaab",
+    "src/core/routines.ts": "3085e7782975306b5004369063df6dbb39ab582fc37510127655b2123f708133",
+    "src/core/run-types.ts": "4ae75a469ccccc23d376f183707aac37f21d768ab52da117da83de629ce3ae30",
+    "src/core/run.ts": "8d61e1d2e0e3384fdc27791ae7ec6764d99e52d7c4ddbce2c15b4361e3924fa1",
+    "src/core/story-agency.ts": "e3305de5465eb0d23eb5d01694cbe934cd250ab03d6a1a48eb3ca3c95965e395",
+    "src/core/story-boundary.ts": "ea0fccb106ba61672be5aa01de6a2b425bbc74a1f3cf8376e3ec4db6a4444e52",
+    "src/core/story-history.ts": "9a6fd33976506db2668c2010ee01b3ff02f8de7582a516b96cc1a488f2c01688",
+    "src/core/story-projection.ts": "df35649f5b349d2628509f12c7b1e7b4c355fc79c592c08aaa3cbf1e0f338dea",
+    "src/core/story-risk-validation.ts": "3972ca581a09dfe46de63b2177d41fad7aa7a16e40e852d0564e074d4942473c",
+    "src/core/story-risk.ts": "88b68b4f5cc6c7331d6dc9fa7673f6901cc7aa52da2afd2dbcc96af4e6f4aabd",
+    "src/core/story-schema.ts": "2f8217a8a18cc9b10164743a1628754521386c335fa90b063e6d9e5428dfa58f",
+    "src/core/story-state.ts": "503df7166dd7d06276e314c6e7aa4223b16e6cc9f3bf2b66d346951b0b2076ed",
+    "src/core/story-support.ts": "6bf97fde5a4c7291cc95f7b20867234e5f295f5f8afa851bd1eb7c11ddd5a519",
+    "src/core/story-validation-context.ts": "235a7d58e65eac35e08ea4aaee79e9cd125f04616c752b58b9a5be7da9c191f2",
+    "src/core/story-work.ts": "a008671c8b9409e95c8f01e6405f2fc5453c62b492193b324d822d70a5b2d570",
+    "src/core/story.ts": "f2ba8205c825ae8db1607a15e6e22ae7cc578a985b11aa635d0329a91bed6cb1",
+    "src/core/timeline.test.ts": "826176fb23ae104d622b45e8d49a3b6855f8a9d818bc855541638b4731b50dfe",
+    "src/core/timeline.ts": "54767b25792c41643b7728ae0ddc1c3e78ee1a9d9dee08ddba567eb712069ff8",
+    "src/core/versions.ts": "3594ad40947f99b43a21ee23629dd809f06ac4a113de63341c9af8bea15eea21",
+    "src/core/video-projection.ts": "ae650879825d4722ad75817e1e796c1ee475556f522d0a563b1a6f14ae420924",
+    "src/core/video-schema.ts": "1e9372ee58b91fe955f8d4993c0c239e9eae01e63aa25a4b2e44458eaed6e455",
+    "src/core/video-validation.ts": "63715ac5bd6dabe50da53bda240c3e491cb505eda837c75b9798ae611ebf585f",
+    "src/core/video.ts": "7be47780755e7e751c58a6ef0a140ab75aa135ce0998cd36aa5584ce8cc135c8",
+    "src/core/world-projection.ts": "49fe95455039dd1b04a8d7e0056273625b251561c81bf197703ce3cb7a346ee8",
+    "src/core/world-schema.ts": "af9a51e0505ea130417f6bf48e71345569a3afe0f46b53ea1c53cf9e983fc36f",
+    "src/core/world-scope.test.ts": "9d4ca779f2f433ebc84ac3e4a38f8e71678bfa6879d1c96164de508097bb0f14",
+    "src/core/world-validation.ts": "4359a01dd0530cf75598ef9d599f4575f1f61bbca728f4dbe0e3b17e8539b086",
+    "src/core/world.ts": "b390c5fafa7aa4dd2a73038426a4b096ac75cbfff380eeab5f9b9d5dc38f0c04",
+    "src/main.tsx": "0b3933753fe24aaaa887a39d0f60e4d7a628f56a76c58be382550a15263f2e4d",
+    "src/persistence/codec.test.ts": "5506dcde13519134f736834bf4248f8ab30535ad7839154f85d7ad927b1ebeaa",
+    "src/persistence/codec.ts": "1491be33cf7a72f7831faddf5a274c4c3defdba1b360aec8d2a9e92d2e3d2bb8",
+    "src/persistence/course-codec.test.ts": "dae6cc196aff33758fd2894d91634d56a9213031746fa51b2b9841156ea7db04",
+    "src/persistence/deepseek-codec.test.ts": "b28cab2e102e1c826506b5ca2d9af32084ffc868a209ac9a4e930163fbd15c74",
+    "src/persistence/entry-profile-codec.test.ts": "dcbd66bdfebd31ed21ab6c898916b87cf0cf9818b13674544b4f22d1ce5599f8",
+    "src/persistence/first-order-codec.test.ts": "4e49f4071c9fdd1f0358c58c09b4310d6605c2f5d017c4904f823c0457b02f6b",
+    "src/persistence/indexeddb.test.ts": "5fb99e5137b67cf89f6de9ed2ebc9a7c507c0c0cbcba2760bf15a4e5046cd24f",
+    "src/persistence/indexeddb.ts": "978209e115e087256e81b60c39080ec029d9c067252beb1451817dc0c3f480dd",
+    "src/persistence/library.test.ts": "9d9e3723d858fbab3b5a0a2275465dc03844e1d2325543c3bc0bc1f9b74c920b",
+    "src/persistence/market-codec.test.ts": "c680d4f0cef8d29dfdcbcdbb463c6de588669984b1471dcd1d4e1f074a032811",
+    "src/persistence/operations-codec.test.ts": "31e790fcba94a0747428c370e1cf22bc81234a38464f5528833e7bf739d71c20",
+    "src/persistence/relay-codec.test.ts": "95419b7c7e84cfbbbd45e9d6589900e151b7440b73f9ce2b2f0ce0ed08eb644d",
+    "src/persistence/routine-codec.test.ts": "5fdd16e506dd987cde002782d7f8bec36b8d9b83ff428903ea129529d3b42979",
+    "src/persistence/schemas.ts": "db435e43967fc63e082c09dab0e8718e3ca74f9e2607e5d045157cf4e3b7dcaa",
+    "src/persistence/video-codec.test.ts": "a841691f2dae9aa8077eda768fce6f51b0a8c0d5e175ac81800751ff17d0726b",
+    "src/persistence/world-codec.test.ts": "e2a74e8af6cf9894a4f28821019e91ce7cafb4a6f4c8dd79f049eb70e9d0e0e5",
+    "src/persistence/writer-lock.test.ts": "6a9da4132c045eb3b74a1ef75cf451c8f87b1a47ece0355934adb69ac94426aa",
+    "src/persistence/writer-lock.ts": "b5eb19e5beba9b7262cbfce046bdd8e413f8742a77a491184fcbbbd7a96498df",
+    "src/testing/abort-after-write.ts": "da8681842896c19e290883e8d26bbafb5be1a0ba4f6773dc25b519a593b50484",
+    "src/testing/course-fixture.ts": "41bd9d201fbeaa8bfdf8e3851606fd916bd269a09bb4915b7da3b391027dfc54",
+    "src/testing/course-scenarios.ts": "81ba1cd08e3b0758058273020368f34b4f719f27df4f2587998c659930b0f5c1",
+    "src/testing/deepseek-fixture.ts": "f6c5c8e4231a1bb630b928ee55c8bc515268c7bbaf3892fd7a39f0d24c30d5c1",
+    "src/testing/deepseek-scenarios.ts": "2d9b08318106a360041d858ad22f97c1357a5fc37bcfdd50e79625ef7183e740",
+    "src/testing/fact-run.ts": "3873010d328bc2c505122f59751e0713c2c603bceaea078d41beb19aea855944",
+    "src/testing/market-fixture.ts": "fb83e044442d0c17353625ea669d24196f9f35a18e1b9d23aa3261a847ef0339",
+    "src/testing/market-normal-scenario.ts": "73eca4bcbe2b895fe27ebd46a15c1cf98c7bc5b0a600e673a3da0caf2a5380c0",
+    "src/testing/memory-writer-access.ts": "61ee8279cd62e20f6f04ca5163354838acce011d9e24ead12baf10a9c8cff150",
+    "src/testing/normal-course-scenario.ts": "9627160a5d9434fce46b1c729ff3b9356c252e11b6f0a45ff52c929fd584d577",
+    "src/testing/normal-deepseek-scenario.ts": "36a32ddd88f3b596c0b861d813439922500cf787586b8f2eab04856008746c82",
+    "src/testing/normal-relay-scenario.ts": "ae1fab356cee4c3664268c09c6954335161beecacb7e2a5e63e9393548801122",
+    "src/testing/normal-story-combined.ts": "69bc29c6ad58c5ccece39c6d994e6a4bd89ff1b217906eecf925f04caabae329",
+    "src/testing/normal-story-scenario.ts": "90387ca75d0e7136a29db3aac2423b640503cf1146d76dcbe620b7a278f3ebd3",
+    "src/testing/normal-video-scenario.ts": "47ea2c582aa782e15034c00fdcbf60be89769f5cc1ab4529cbb58260cccef234",
+    "src/testing/operations-browser.ts": "52bf5d2a6b14e4c9d5752d4c898acd072e1dda4bd6d5e6448b8f626df9092646",
+    "src/testing/operations-fixture.ts": "77171a7197c735c4a369a7a89d3f1263cd04bb632b5b2e7fd7c3ec0a9d6025c7",
+    "src/testing/persistence-browser.ts": "cff5c300def8c15bad87ba060fb40e3b59f211a8b9f030a9fe636c1cddb21a46",
+    "src/testing/playable-scenarios.ts": "184b5f65a389590e28114922c2ec57fa9682e96d17a0b331995244b641908a4c",
+    "src/testing/q01-accounting.ts": "bf9690677fe052f76c0cb4b29067789ad9049217e92f5c9cd19c00e19d71ef4c",
+    "src/testing/relay-fixture.ts": "aaa061e863d1c61de36b00550dbacd1b72d61ce6caeed0e11cc4eb948fb5f9c2",
+    "src/testing/relay-scenarios.ts": "480050c325fc502d569cc98b897c45d6cbee9d6f55699525ccc01054ded3e76f",
+    "src/testing/routine-scenarios.ts": "c23b56921b89697366f82f7bbf02941242e580d950e66f8af0551d7c11b56f31",
+    "src/testing/story-harness.ts": "d1c319c97ef4d1eed787ca1b903d6fae6b35ccc47590e572644511d3cba5d15b",
+    "src/testing/video-fixture.ts": "6f6053759353fff73d8f5b7d17dd4d3a007af6dbb00c695fcd4b6b24e516ed29",
+    "src/testing/video-scenarios.ts": "0eba82ea05c43501175b2db94ac031ffe4a34e0d300abbd047cfdf289af52154",
+    "src/testing/world-fixture.ts": "9c4da48b907bbd40fd379e10efeb55ee39d54a3093451ddcda5b2071e89d82d5",
+    "src/ui/AgentSupportChoice.tsx": "d8d4211909902bf3387451f0de9bd388e02cf699e0309fbc261eb8cdbbc93703",
+    "src/ui/App.test.tsx": "c8dc4ff78a47bf7a5d1e0dbe373e5aa05df2ac78a1909901cedf3d92139fdb25",
+    "src/ui/App.tsx": "ac819e6eb10cab0f04d48c549c8104ed5a798d8f435af9d173c0aba0bf78d2b9",
+    "src/ui/BusinessLedger.tsx": "c20c5088324fca8ac5926fb6004a8bd510956a27297896bc9995a3c98c30f882",
+    "src/ui/CommandButton.tsx": "7b0314ef79a9d62c71b7683a8cf0da5935b690517277076b6d8361b1a1d2c40c",
+    "src/ui/CommandDetails.tsx": "0b87c2c5e2c40df824c195b5ff008437b17a872b7c55d9f2136887b996e30ceb",
+    "src/ui/CoursePanel.tsx": "25b12bc78b473b755663946de8012c655a06318b41efc856ee47680f7da29cb6",
+    "src/ui/DeepseekPanel.tsx": "641bb9ab10aaaf386d2ea9c56d47237ab5add577944a51a73ecb1988e30e6dac",
+    "src/ui/DeepseekShared.tsx": "cdf3274bea9b0c61f0c3aea5c80d7cf059c19d5d05d91394a04d68409421f6d9",
+    "src/ui/Dialog.tsx": "b62a1d45932e88d2679a3ee533d1f129629c580c975ffe0e540f4deb0424ab89",
+    "src/ui/EquityPanel.tsx": "9fd5ae9c337c5286c29d1da6106013f1315eceb359ae57ce3eb15f464ef7ee0c",
+    "src/ui/Home.tsx": "7affc86d8356d74a5126f17a2fd78515b0daf754d88245367437e58e68da6547",
+    "src/ui/MarketPanel.tsx": "0cb8cfbd2b43b2d8c0afc93300d9b457da7b42e2541776af5abcff24009258ff",
+    "src/ui/Navigation.tsx": "b2f70aa48aa9d5c03b4d53ed2101346975853875514b52cc10d560d66bdf8bea",
+    "src/ui/Obligations.tsx": "ca1116bdb3a9424e7d52b42d76170a03119ad696246f3e64cc73fc229ca6f9aa",
+    "src/ui/QuarterPanel.tsx": "e7409b1c27172baaffde9cda0fea1fb0c8e6d59a01b137e1019b634b6a69f8d1",
+    "src/ui/RelayPanel.tsx": "04cfa577a7433c1e5286b87226950532c3ef726aeac0f7d864b729eef4db5054",
+    "src/ui/ResourceSelect.test.tsx": "58048f07470b34bfc4c829ed76075a2dcec58baba64b9e1781d81b52b7c69780",
+    "src/ui/ResourceSelect.tsx": "4e7d9f9f1966693345cde1530c7f425f2dd6fab04f7158d64b1d3e616a999bf0",
+    "src/ui/RoutinesPanel.tsx": "3418befb07af1294eb4c027ad928ffa29c64f536912cd56de4601a4d9c8f71a3",
+    "src/ui/StoragePanel.tsx": "eb081da3499f985405b7d26f5dff0133b7681466be1c7b3499b9631c88dd8e09",
+    "src/ui/StoryCommandDetails.tsx": "8e14d01142df1319e99f06a0e8cbcd3ee9e44b8849c797d8f334e587ff99ea46",
+    "src/ui/StoryPanel.tsx": "08b0d54e7549d12f35862253b931133877ff832c2fd99211c9cd83b0e5590ec2",
+    "src/ui/StoryQueue.tsx": "ac10fe2dd87e07f08eec5fc527694aa6ac2fdb11388a54598d20af2d0a19f01b",
+    "src/ui/VideoPanel.tsx": "8d02caba03160493347ce0bb41a59303c4a454391294a54a67868f2e6f2522b3",
+    "src/ui/Workbench.tsx": "6152986558471c92605f37c9706f1b15032e2a2ce780eef266bcf4f9b36a90d4",
+    "src/ui/confirmation-money.test.ts": "4fda52bc2853844dbedc46510f4e790a6cb40564970974aca95d63d56b50d038",
+    "src/ui/confirmation-money.ts": "a8d8e0e0042f4e57cd2997ab2c72a2d4a7a648b6378d3bb74ed6783967abf9e9",
+    "src/ui/continuation.test.ts": "32d2a41c460e5316dca340bc8141cf9b4d578295338a299d9ef57ba35750e819",
+    "src/ui/continuation.ts": "9c280093dc5ada4a216c3b814a7d59eabafec10fad3e14e9be1866709d6fb068",
+    "src/ui/game-text.ts": "555929f5e2c797ec0035d258a342bde96a5dfc40afff11d6ed33d1de82a97c21",
+    "src/ui/game-types.ts": "dbb5e08ececdbb9074086a614b9bff2a99943a79762a5ef52e744d79c2275437",
+    "src/ui/intent-account.ts": "9c2fbcfee6428c7d1c4209dae7c2e0491774d0c56da08412177c3894e35dc9d2",
+    "src/ui/money-input.ts": "ae12f363335c4742de784c15fd404fe15f3b5044829ec6b7070c331e0d0b572a",
+    "src/ui/work-visibility.test.ts": "c708c690d4b070fa629dca0ec61762fa8d0527b4293288efbbafdda1cce39924",
+    "src/ui/work-visibility.ts": "d490dc84a023c21e494871568c10287c12af5e7cb1e23c58f2dec1e1135af38f",
+    "scripts/collect_first_order_evidence.ts": "f5d97373f34f04909c9369b44cd25849e1ef3cd99c0b7779440534fcf5b2f4c1",
+    "scripts/evidence-output.ts": "b70695b15e7cf4f615ad263a9e2f361b847edb6203d844e8c73e3c940e486026",
+    "scripts/validate_content.ts": "daadcf8a85c7c16a30d45611815421c41b788d89b13b41ed8f354972bb01e3a7",
+    "package.json": "f6d163c6a9e886094295935e21a52fa334a21a8fadcc356a798ef326886188b1",
+    "package-lock.json": "096fd07ea9a5ac837d12495d23f67b4c0ccbb61d36d308ef689d8041e0ec2bb4",
+    "tsconfig.core.json": "48e4365127083963a2b2d24f5677e93414c3de97cd642ce155a9a10fddcb53df",
+    "vitest.config.ts": "8bc1e3c6911d48bd8a7be4532e6efbcc849277d3d104309ba94208afc9d6b354"
+  },
+  "cases": [
+    {
+      "name": "t07-technical-success",
+      "origin": "normal",
+      "backgroundId": "technical_employee",
+      "seed": "t07-technical-success-seed",
+      "versions": {
+        "schemaVersion": 11,
+        "rulesVersion": "rules-t14-story-v1",
+        "contentVersion": "world-story-work-v1",
+        "contentHash": "85ae9b276738cc6c8f1a21564d690e43c3022a506ca9e6ffed5c65e590a916a7",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "initial": {
+        "file": "t07-technical-success-initial.json",
+        "sha256": "5b1cf6bfe5dcc0013534d9b646383a30a59c2a5aa17fa4a0445690c1255fcab0"
+      },
+      "final": {
+        "file": "t07-technical-success-final.json",
+        "sha256": "4830194dd1a99056e61ed763c8745ffa59e6843b90e2d10edd5863846c4e0c9c"
+      },
+      "commands": [
+        {
+          "runId": "t07-technical-success",
+          "actorId": "player",
+          "commandId": "t07-technical-success-1",
+          "expectedRevision": 1,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "t07-technical-success",
+          "actorId": "player",
+          "commandId": "t07-technical-success-2",
+          "expectedRevision": 2,
+          "kind": "StartFirstOrder",
+          "payload": {}
+        },
+        {
+          "runId": "t07-technical-success",
+          "actorId": "player",
+          "commandId": "t07-technical-success-3",
+          "expectedRevision": 3,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-19"
+          }
+        },
+        {
+          "runId": "t07-technical-success",
+          "actorId": "player",
+          "commandId": "t07-technical-success-4",
+          "expectedRevision": 4,
+          "kind": "SubmitDelivery",
+          "payload": {
+            "contractId": "ops:cca73c6684e57a37d414d57ce1555e00"
+          }
+        },
+        {
+          "runId": "t07-technical-success",
+          "actorId": "player",
+          "commandId": "t07-technical-success-5",
+          "expectedRevision": 5,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20"
+          }
+        },
+        {
+          "runId": "t07-technical-success",
+          "actorId": "player",
+          "commandId": "t07-technical-success-6",
+          "expectedRevision": 6,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "t07-technical-success",
+          "actorId": "player",
+          "commandId": "t07-technical-success-7",
+          "expectedRevision": 7,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb",
+            "choiceId": "prepare"
+          }
+        },
+        {
+          "runId": "t07-technical-success",
+          "actorId": "player",
+          "commandId": "t07-technical-success-8",
+          "expectedRevision": 8,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "t07-technical-success",
+          "actorId": "player",
+          "commandId": "t07-technical-success-9",
+          "expectedRevision": 9,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "t07-technical-success",
+          "actorId": "player",
+          "commandId": "t07-technical-success-10",
+          "expectedRevision": 10,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        }
+      ],
+      "expected": {
+        "cashFen": 4280000,
+        "minimumCashFen": 2550000,
+        "paymentFen": 130000,
+        "directCostFen": 50000,
+        "paidCaseAvailable": true,
+        "spent": 4
+      },
+      "actual": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "settled",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": "ops:2c1c0ffd60482c2692de4da3d14a1068",
+        "contractId": "ops:cca73c6684e57a37d414d57ce1555e00",
+        "jobId": "ops:74ce821c14595ba0acf0e99d507b8c92",
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 130000,
+          "paymentFen": 130000,
+          "directCostFen": 50000,
+          "netOrderFen": 80000,
+          "businessPostedProfitFen": 80000
+        },
+        "paidCaseAvailable": true,
+        "cashFen": 4280000,
+        "minimumCashFen": 2550000,
+        "quarterClosed": true,
+        "quarterEndCashFen": 4280000,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "ops:268cde94914766c98a6ee2c5db4217fa:cost",
+            "date": "2020-01-05",
+            "cashFen": 2550000
+          },
+          {
+            "transactionId": "ops:63f97244ba7b645ca3e211ee00277ff7",
+            "date": "2020-01-20",
+            "cashFen": 2680000
+          },
+          {
+            "transactionId": "ops:bcf3a056f985c167f8995c623974b40b",
+            "date": "2020-01-31",
+            "cashFen": 3480000
+          },
+          {
+            "transactionId": "living:2020-02-01",
+            "date": "2020-02-01",
+            "cashFen": 3080000
+          },
+          {
+            "transactionId": "ops:96cda69d89fd9972185cc48269ce4a3c",
+            "date": "2020-02-29",
+            "cashFen": 3880000
+          },
+          {
+            "transactionId": "living:2020-03-01",
+            "date": "2020-03-01",
+            "cashFen": 3480000
+          },
+          {
+            "transactionId": "ops:06c4dd035e79fcf4e3fb8f94b0b204f5",
+            "date": "2020-03-31",
+            "cashFen": 4280000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 4,
+          "reserved": 0,
+          "available": 0
+        }
+      },
+      "scope": "normal_start_first_quarter_not_full_campaign_or_browser_acceptance"
+    },
+    {
+      "name": "t07-content-success",
+      "origin": "normal",
+      "backgroundId": "content_employee",
+      "seed": "t07-content-success-seed",
+      "versions": {
+        "schemaVersion": 11,
+        "rulesVersion": "rules-t14-story-v1",
+        "contentVersion": "world-story-work-v1",
+        "contentHash": "85ae9b276738cc6c8f1a21564d690e43c3022a506ca9e6ffed5c65e590a916a7",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "initial": {
+        "file": "t07-content-success-initial.json",
+        "sha256": "76a016da2cad0f9a3723acd5d34fc7a2254fa119b188500b900dcd1a98eea4ff"
+      },
+      "final": {
+        "file": "t07-content-success-final.json",
+        "sha256": "91d3b7f436eef5d44bd728a185a4f027b3df969aeb01e10752b03f004421f654"
+      },
+      "commands": [
+        {
+          "runId": "t07-content-success",
+          "actorId": "player",
+          "commandId": "t07-content-success-1",
+          "expectedRevision": 1,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "t07-content-success",
+          "actorId": "player",
+          "commandId": "t07-content-success-2",
+          "expectedRevision": 2,
+          "kind": "StartFirstOrder",
+          "payload": {}
+        },
+        {
+          "runId": "t07-content-success",
+          "actorId": "player",
+          "commandId": "t07-content-success-3",
+          "expectedRevision": 3,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-19"
+          }
+        },
+        {
+          "runId": "t07-content-success",
+          "actorId": "player",
+          "commandId": "t07-content-success-4",
+          "expectedRevision": 4,
+          "kind": "SubmitDelivery",
+          "payload": {
+            "contractId": "ops:82dfc32b0b47676d51c64d8939517dc4"
+          }
+        },
+        {
+          "runId": "t07-content-success",
+          "actorId": "player",
+          "commandId": "t07-content-success-5",
+          "expectedRevision": 5,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20"
+          }
+        },
+        {
+          "runId": "t07-content-success",
+          "actorId": "player",
+          "commandId": "t07-content-success-6",
+          "expectedRevision": 6,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "t07-content-success",
+          "actorId": "player",
+          "commandId": "t07-content-success-7",
+          "expectedRevision": 7,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb",
+            "choiceId": "prepare"
+          }
+        },
+        {
+          "runId": "t07-content-success",
+          "actorId": "player",
+          "commandId": "t07-content-success-8",
+          "expectedRevision": 8,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "t07-content-success",
+          "actorId": "player",
+          "commandId": "t07-content-success-9",
+          "expectedRevision": 9,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "t07-content-success",
+          "actorId": "player",
+          "commandId": "t07-content-success-10",
+          "expectedRevision": 10,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        }
+      ],
+      "expected": {
+        "cashFen": 3680000,
+        "minimumCashFen": 2550000,
+        "paymentFen": 130000,
+        "directCostFen": 50000,
+        "paidCaseAvailable": true,
+        "spent": 4
+      },
+      "actual": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "settled",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": "ops:716cb4f143526f9d68ff07ed053a9df1",
+        "contractId": "ops:82dfc32b0b47676d51c64d8939517dc4",
+        "jobId": "ops:713e615f9a96f702e4f5bc6d7a71f85d",
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 130000,
+          "paymentFen": 130000,
+          "directCostFen": 50000,
+          "netOrderFen": 80000,
+          "businessPostedProfitFen": 80000
+        },
+        "paidCaseAvailable": true,
+        "cashFen": 3680000,
+        "minimumCashFen": 2550000,
+        "quarterClosed": true,
+        "quarterEndCashFen": 3680000,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "ops:8ab2f695cdc47502b8994c2e5c4de8d1:cost",
+            "date": "2020-01-05",
+            "cashFen": 2550000
+          },
+          {
+            "transactionId": "ops:5f62c86181232253246126b2bbc4a4bc",
+            "date": "2020-01-20",
+            "cashFen": 2680000
+          },
+          {
+            "transactionId": "ops:dcb5fe2f39d1a1c34c2ac619bff3a2ca",
+            "date": "2020-01-31",
+            "cashFen": 3280000
+          },
+          {
+            "transactionId": "living:2020-02-01",
+            "date": "2020-02-01",
+            "cashFen": 2880000
+          },
+          {
+            "transactionId": "ops:ff283aa689a997f3b6e1589cc52e6335",
+            "date": "2020-02-29",
+            "cashFen": 3480000
+          },
+          {
+            "transactionId": "living:2020-03-01",
+            "date": "2020-03-01",
+            "cashFen": 3080000
+          },
+          {
+            "transactionId": "ops:09fc79bf13e99aa9411cd53f30f6a7b8",
+            "date": "2020-03-31",
+            "cashFen": 3680000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 4,
+          "reserved": 0,
+          "available": 0
+        }
+      },
+      "scope": "normal_start_first_quarter_not_full_campaign_or_browser_acceptance"
+    },
+    {
+      "name": "t07-declined",
+      "origin": "normal",
+      "backgroundId": "technical_employee",
+      "seed": "t07-declined-seed",
+      "versions": {
+        "schemaVersion": 11,
+        "rulesVersion": "rules-t14-story-v1",
+        "contentVersion": "world-story-work-v1",
+        "contentHash": "85ae9b276738cc6c8f1a21564d690e43c3022a506ca9e6ffed5c65e590a916a7",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "initial": {
+        "file": "t07-declined-initial.json",
+        "sha256": "0e65313b1d5ad187336d70d6f9783587212df01a4fd7c413590ee5b1a403314e"
+      },
+      "final": {
+        "file": "t07-declined-final.json",
+        "sha256": "f9c68a7dd7974a20e4506b874a70fd70c28130ba302f90f37c05d2b2c7cfac1f"
+      },
+      "commands": [
+        {
+          "runId": "t07-declined",
+          "actorId": "player",
+          "commandId": "t07-declined-1",
+          "expectedRevision": 1,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "t07-declined",
+          "actorId": "player",
+          "commandId": "t07-declined-2",
+          "expectedRevision": 2,
+          "kind": "DeclineOffer",
+          "payload": {
+            "offerId": "manual-first-2020"
+          }
+        },
+        {
+          "runId": "t07-declined",
+          "actorId": "player",
+          "commandId": "t07-declined-3",
+          "expectedRevision": 3,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "t07-declined",
+          "actorId": "player",
+          "commandId": "t07-declined-4",
+          "expectedRevision": 4,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "t07-declined",
+          "actorId": "player",
+          "commandId": "t07-declined-5",
+          "expectedRevision": 5,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "t07-declined",
+          "actorId": "player",
+          "commandId": "t07-declined-6",
+          "expectedRevision": 6,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "t07-declined",
+          "actorId": "player",
+          "commandId": "t07-declined-7",
+          "expectedRevision": 7,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        }
+      ],
+      "expected": {
+        "cashFen": 4200000,
+        "minimumCashFen": 2600000,
+        "paymentFen": 0,
+        "directCostFen": 0,
+        "paidCaseAvailable": false,
+        "spent": 2
+      },
+      "actual": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "declined",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": {
+          "kind": "declined",
+          "date": "2020-01-01"
+        },
+        "businessId": null,
+        "contractId": null,
+        "jobId": null,
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 0,
+          "paymentFen": 0,
+          "directCostFen": 0,
+          "netOrderFen": 0,
+          "businessPostedProfitFen": 0
+        },
+        "paidCaseAvailable": false,
+        "cashFen": 4200000,
+        "minimumCashFen": 2600000,
+        "quarterClosed": true,
+        "quarterEndCashFen": 4200000,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "ops:4790e4c94560244152391c793f588ae9",
+            "date": "2020-01-31",
+            "cashFen": 3400000
+          },
+          {
+            "transactionId": "living:2020-02-01",
+            "date": "2020-02-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "ops:50bed2f5354f57f8c59f79b703ad646e",
+            "date": "2020-02-29",
+            "cashFen": 3800000
+          },
+          {
+            "transactionId": "living:2020-03-01",
+            "date": "2020-03-01",
+            "cashFen": 3400000
+          },
+          {
+            "transactionId": "ops:3a65085f0b055391b0780c4cdbd59db2",
+            "date": "2020-03-31",
+            "cashFen": 4200000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 2,
+          "reserved": 0,
+          "available": 2
+        }
+      },
+      "scope": "normal_start_first_quarter_not_full_campaign_or_browser_acceptance"
+    },
+    {
+      "name": "t07-skipped",
+      "origin": "normal",
+      "backgroundId": "technical_employee",
+      "seed": "t07-skipped-seed",
+      "versions": {
+        "schemaVersion": 11,
+        "rulesVersion": "rules-t14-story-v1",
+        "contentVersion": "world-story-work-v1",
+        "contentHash": "85ae9b276738cc6c8f1a21564d690e43c3022a506ca9e6ffed5c65e590a916a7",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "initial": {
+        "file": "t07-skipped-initial.json",
+        "sha256": "79914a3b9b2a1553f62abab71f7baa59edac7ac03c0071f8a55389196872e3c1"
+      },
+      "final": {
+        "file": "t07-skipped-final.json",
+        "sha256": "1d1a1fb5c46246591b462bef5191e0007506576673bacff8f96416e50de00e98"
+      },
+      "commands": [
+        {
+          "runId": "t07-skipped",
+          "actorId": "player",
+          "commandId": "t07-skipped-1",
+          "expectedRevision": 1,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "t07-skipped",
+          "actorId": "player",
+          "commandId": "t07-skipped-2",
+          "expectedRevision": 2,
+          "kind": "SkipOffer",
+          "payload": {
+            "offerId": "manual-first-2020"
+          }
+        },
+        {
+          "runId": "t07-skipped",
+          "actorId": "player",
+          "commandId": "t07-skipped-3",
+          "expectedRevision": 3,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "t07-skipped",
+          "actorId": "player",
+          "commandId": "t07-skipped-4",
+          "expectedRevision": 4,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "t07-skipped",
+          "actorId": "player",
+          "commandId": "t07-skipped-5",
+          "expectedRevision": 5,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "t07-skipped",
+          "actorId": "player",
+          "commandId": "t07-skipped-6",
+          "expectedRevision": 6,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "t07-skipped",
+          "actorId": "player",
+          "commandId": "t07-skipped-7",
+          "expectedRevision": 7,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        }
+      ],
+      "expected": {
+        "cashFen": 4200000,
+        "minimumCashFen": 2600000,
+        "paymentFen": 0,
+        "directCostFen": 0,
+        "paidCaseAvailable": false,
+        "spent": 2
+      },
+      "actual": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "skipped",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": {
+          "kind": "skipped",
+          "date": "2020-01-01"
+        },
+        "businessId": null,
+        "contractId": null,
+        "jobId": null,
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 0,
+          "paymentFen": 0,
+          "directCostFen": 0,
+          "netOrderFen": 0,
+          "businessPostedProfitFen": 0
+        },
+        "paidCaseAvailable": false,
+        "cashFen": 4200000,
+        "minimumCashFen": 2600000,
+        "quarterClosed": true,
+        "quarterEndCashFen": 4200000,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "ops:d72fc80527533f8bc1432043c221e309",
+            "date": "2020-01-31",
+            "cashFen": 3400000
+          },
+          {
+            "transactionId": "living:2020-02-01",
+            "date": "2020-02-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "ops:96be049700005c9ab702fcb598b4486d",
+            "date": "2020-02-29",
+            "cashFen": 3800000
+          },
+          {
+            "transactionId": "living:2020-03-01",
+            "date": "2020-03-01",
+            "cashFen": 3400000
+          },
+          {
+            "transactionId": "ops:ce07ee332726389ea705fd9e84106534",
+            "date": "2020-03-31",
+            "cashFen": 4200000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 2,
+          "reserved": 0,
+          "available": 2
+        }
+      },
+      "scope": "normal_start_first_quarter_not_full_campaign_or_browser_acceptance"
+    },
+    {
+      "name": "t07-expired",
+      "origin": "normal",
+      "backgroundId": "technical_employee",
+      "seed": "t07-expired-seed",
+      "versions": {
+        "schemaVersion": 11,
+        "rulesVersion": "rules-t14-story-v1",
+        "contentVersion": "world-story-work-v1",
+        "contentHash": "85ae9b276738cc6c8f1a21564d690e43c3022a506ca9e6ffed5c65e590a916a7",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "initial": {
+        "file": "t07-expired-initial.json",
+        "sha256": "8db69009eb37dc9b32370deee701ccb280f5121b0ff1d1250b07bea23947930c"
+      },
+      "final": {
+        "file": "t07-expired-final.json",
+        "sha256": "8090b5e515de15f39d384a0d62716efc4226a580e2d5902d3df27ea282f95e14"
+      },
+      "commands": [
+        {
+          "runId": "t07-expired",
+          "actorId": "player",
+          "commandId": "t07-expired-1",
+          "expectedRevision": 1,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "t07-expired",
+          "actorId": "player",
+          "commandId": "t07-expired-2",
+          "expectedRevision": 2,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "t07-expired",
+          "actorId": "player",
+          "commandId": "t07-expired-3",
+          "expectedRevision": 3,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "t07-expired",
+          "actorId": "player",
+          "commandId": "t07-expired-4",
+          "expectedRevision": 4,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "t07-expired",
+          "actorId": "player",
+          "commandId": "t07-expired-5",
+          "expectedRevision": 5,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "t07-expired",
+          "actorId": "player",
+          "commandId": "t07-expired-6",
+          "expectedRevision": 6,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        }
+      ],
+      "expected": {
+        "cashFen": 4200000,
+        "minimumCashFen": 2600000,
+        "paymentFen": 0,
+        "directCostFen": 0,
+        "paidCaseAvailable": false,
+        "spent": 2
+      },
+      "actual": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "expired",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": {
+          "kind": "expired",
+          "date": "2020-01-06"
+        },
+        "businessId": null,
+        "contractId": null,
+        "jobId": null,
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 0,
+          "paymentFen": 0,
+          "directCostFen": 0,
+          "netOrderFen": 0,
+          "businessPostedProfitFen": 0
+        },
+        "paidCaseAvailable": false,
+        "cashFen": 4200000,
+        "minimumCashFen": 2600000,
+        "quarterClosed": true,
+        "quarterEndCashFen": 4200000,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "ops:e718f63dba4282cd7ca4c2fd6da8f125",
+            "date": "2020-01-31",
+            "cashFen": 3400000
+          },
+          {
+            "transactionId": "living:2020-02-01",
+            "date": "2020-02-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "ops:c01e7994fdf731bab91bd3829bd143db",
+            "date": "2020-02-29",
+            "cashFen": 3800000
+          },
+          {
+            "transactionId": "living:2020-03-01",
+            "date": "2020-03-01",
+            "cashFen": 3400000
+          },
+          {
+            "transactionId": "ops:98682a38c7f1f9afd42379c8fc68429f",
+            "date": "2020-03-31",
+            "cashFen": 4200000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 2,
+          "reserved": 0,
+          "available": 2
+        }
+      },
+      "scope": "normal_start_first_quarter_not_full_campaign_or_browser_acceptance"
+    },
+    {
+      "name": "t07-interrupted",
+      "origin": "normal",
+      "backgroundId": "technical_employee",
+      "seed": "t07-interrupted-seed",
+      "versions": {
+        "schemaVersion": 11,
+        "rulesVersion": "rules-t14-story-v1",
+        "contentVersion": "world-story-work-v1",
+        "contentHash": "85ae9b276738cc6c8f1a21564d690e43c3022a506ca9e6ffed5c65e590a916a7",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "initial": {
+        "file": "t07-interrupted-initial.json",
+        "sha256": "675c9a78ce4c293f770807029bb38752e32424c00350f22ea27ce4a73f2c4ef5"
+      },
+      "final": {
+        "file": "t07-interrupted-final.json",
+        "sha256": "8083bcac50b8eb3e9ce730c12fa595b5898cbc13e5e3afe98347e13b3a156c5f"
+      },
+      "commands": [
+        {
+          "runId": "t07-interrupted",
+          "actorId": "player",
+          "commandId": "t07-interrupted-1",
+          "expectedRevision": 1,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "t07-interrupted",
+          "actorId": "player",
+          "commandId": "t07-interrupted-2",
+          "expectedRevision": 2,
+          "kind": "StartFirstOrder",
+          "payload": {}
+        },
+        {
+          "runId": "t07-interrupted",
+          "actorId": "player",
+          "commandId": "t07-interrupted-3",
+          "expectedRevision": 3,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-10"
+          }
+        },
+        {
+          "runId": "t07-interrupted",
+          "actorId": "player",
+          "commandId": "t07-interrupted-4",
+          "expectedRevision": 4,
+          "kind": "InterruptJob",
+          "payload": {
+            "jobId": "ops:8e914eee87ccd453d8a9e21dfe126cfa"
+          }
+        },
+        {
+          "runId": "t07-interrupted",
+          "actorId": "player",
+          "commandId": "t07-interrupted-5",
+          "expectedRevision": 5,
+          "kind": "CancelContract",
+          "payload": {
+            "contractId": "ops:eca70c9028c2de986ef6def107cad143"
+          }
+        },
+        {
+          "runId": "t07-interrupted",
+          "actorId": "player",
+          "commandId": "t07-interrupted-6",
+          "expectedRevision": 6,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "t07-interrupted",
+          "actorId": "player",
+          "commandId": "t07-interrupted-7",
+          "expectedRevision": 7,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "t07-interrupted",
+          "actorId": "player",
+          "commandId": "t07-interrupted-8",
+          "expectedRevision": 8,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "t07-interrupted",
+          "actorId": "player",
+          "commandId": "t07-interrupted-9",
+          "expectedRevision": 9,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "t07-interrupted",
+          "actorId": "player",
+          "commandId": "t07-interrupted-10",
+          "expectedRevision": 10,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        }
+      ],
+      "expected": {
+        "cashFen": 4150000,
+        "minimumCashFen": 2550000,
+        "paymentFen": 0,
+        "directCostFen": 50000,
+        "paidCaseAvailable": false,
+        "spent": 3
+      },
+      "actual": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "cancelled",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": "ops:99a083b3fc3266aff238a004beecb19c",
+        "contractId": "ops:eca70c9028c2de986ef6def107cad143",
+        "jobId": "ops:8e914eee87ccd453d8a9e21dfe126cfa",
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 0,
+          "paymentFen": 0,
+          "directCostFen": 50000,
+          "netOrderFen": -50000,
+          "businessPostedProfitFen": -50000
+        },
+        "paidCaseAvailable": false,
+        "cashFen": 4150000,
+        "minimumCashFen": 2550000,
+        "quarterClosed": true,
+        "quarterEndCashFen": 4150000,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "ops:37fc9ef3434f8b49ee3b73d3c115213d:cost",
+            "date": "2020-01-05",
+            "cashFen": 2550000
+          },
+          {
+            "transactionId": "ops:d5c607289ea2cb90173eaee8484ce511",
+            "date": "2020-01-31",
+            "cashFen": 3350000
+          },
+          {
+            "transactionId": "living:2020-02-01",
+            "date": "2020-02-01",
+            "cashFen": 2950000
+          },
+          {
+            "transactionId": "ops:9698413c8f90f5504c1f5cb30b6bf808",
+            "date": "2020-02-29",
+            "cashFen": 3750000
+          },
+          {
+            "transactionId": "living:2020-03-01",
+            "date": "2020-03-01",
+            "cashFen": 3350000
+          },
+          {
+            "transactionId": "ops:4fac1600d8518ea5828ee9851fea557e",
+            "date": "2020-03-31",
+            "cashFen": 4150000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 3,
+          "reserved": 0,
+          "available": 1
+        }
+      },
+      "scope": "normal_start_first_quarter_not_full_campaign_or_browser_acceptance"
+    },
+    {
+      "name": "t07-unsubmitted",
+      "origin": "normal",
+      "backgroundId": "technical_employee",
+      "seed": "t07-unsubmitted-seed",
+      "versions": {
+        "schemaVersion": 11,
+        "rulesVersion": "rules-t14-story-v1",
+        "contentVersion": "world-story-work-v1",
+        "contentHash": "85ae9b276738cc6c8f1a21564d690e43c3022a506ca9e6ffed5c65e590a916a7",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "initial": {
+        "file": "t07-unsubmitted-initial.json",
+        "sha256": "9a2e3a65ed346907e98cdf61f7669bcc5623e4ed592b884e02e6a9fee4ab4eae"
+      },
+      "final": {
+        "file": "t07-unsubmitted-final.json",
+        "sha256": "a96e911fc8d1fae64f2ad5b186d4e686691da1f62dd4b01a9104396b8257da4b"
+      },
+      "commands": [
+        {
+          "runId": "t07-unsubmitted",
+          "actorId": "player",
+          "commandId": "t07-unsubmitted-1",
+          "expectedRevision": 1,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "t07-unsubmitted",
+          "actorId": "player",
+          "commandId": "t07-unsubmitted-2",
+          "expectedRevision": 2,
+          "kind": "StartFirstOrder",
+          "payload": {}
+        },
+        {
+          "runId": "t07-unsubmitted",
+          "actorId": "player",
+          "commandId": "t07-unsubmitted-3",
+          "expectedRevision": 3,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20"
+          }
+        },
+        {
+          "runId": "t07-unsubmitted",
+          "actorId": "player",
+          "commandId": "t07-unsubmitted-4",
+          "expectedRevision": 4,
+          "kind": "CancelContract",
+          "payload": {
+            "contractId": "ops:e8f29fbd8033c30b95dd37f6d7aa7cbd"
+          }
+        },
+        {
+          "runId": "t07-unsubmitted",
+          "actorId": "player",
+          "commandId": "t07-unsubmitted-5",
+          "expectedRevision": 5,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "t07-unsubmitted",
+          "actorId": "player",
+          "commandId": "t07-unsubmitted-6",
+          "expectedRevision": 6,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "t07-unsubmitted",
+          "actorId": "player",
+          "commandId": "t07-unsubmitted-7",
+          "expectedRevision": 7,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "t07-unsubmitted",
+          "actorId": "player",
+          "commandId": "t07-unsubmitted-8",
+          "expectedRevision": 8,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "t07-unsubmitted",
+          "actorId": "player",
+          "commandId": "t07-unsubmitted-9",
+          "expectedRevision": 9,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        }
+      ],
+      "expected": {
+        "cashFen": 4150000,
+        "minimumCashFen": 2550000,
+        "paymentFen": 0,
+        "directCostFen": 50000,
+        "paidCaseAvailable": false,
+        "spent": 3
+      },
+      "actual": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "cancelled",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": "ops:a0bb95bd324e8fc8c8db3a3e33429dd5",
+        "contractId": "ops:e8f29fbd8033c30b95dd37f6d7aa7cbd",
+        "jobId": "ops:a9f08a18a4b60bd807922474ff720ac6",
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 0,
+          "paymentFen": 0,
+          "directCostFen": 50000,
+          "netOrderFen": -50000,
+          "businessPostedProfitFen": -50000
+        },
+        "paidCaseAvailable": false,
+        "cashFen": 4150000,
+        "minimumCashFen": 2550000,
+        "quarterClosed": true,
+        "quarterEndCashFen": 4150000,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "ops:a7882ffc15d8d73651a8bd79589a6f6e:cost",
+            "date": "2020-01-05",
+            "cashFen": 2550000
+          },
+          {
+            "transactionId": "ops:55510dcb5f7c7dcd858c8f2157c2abdc",
+            "date": "2020-01-31",
+            "cashFen": 3350000
+          },
+          {
+            "transactionId": "living:2020-02-01",
+            "date": "2020-02-01",
+            "cashFen": 2950000
+          },
+          {
+            "transactionId": "ops:0338ec04f40103d0b81109482f8041f6",
+            "date": "2020-02-29",
+            "cashFen": 3750000
+          },
+          {
+            "transactionId": "living:2020-03-01",
+            "date": "2020-03-01",
+            "cashFen": 3350000
+          },
+          {
+            "transactionId": "ops:3c545a84356be8dc7a416966e03ab485",
+            "date": "2020-03-31",
+            "cashFen": 4150000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 3,
+          "reserved": 0,
+          "available": 1
+        }
+      },
+      "scope": "normal_start_first_quarter_not_full_campaign_or_browser_acceptance"
+    }
+  ],
+  "notCovered": [
+    "market_matching",
+    "S01_complete_half_year",
+    "playable_ui",
+    "browser_acceptance",
+    "video_rework",
+    "full_campaign",
+    "original_png",
+    "human_playtest"
+  ]
+}

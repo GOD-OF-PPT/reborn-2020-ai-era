@@ -6,7 +6,7 @@ const rates=(id:string,extra:number)=>[
  {id:id+'-2024',anchorId:'H006',from:'2024-05-06',unitCostFen:4+extra,benchmarkFen:8},
  {id:id+'-v3',anchorId:'H008',from:'2024-12-26',unitCostFen:3+extra,benchmarkFen:6},
  {id:id+'-r1',anchorId:'H009',from:'2025-01-20',unitCostFen:2+extra,benchmarkFen:4}]
-export const RELAY_CONTENT={version:'relay-work-v1',unit:'one_thousand_simulated_tokens',availableAt:'2020-06-11',
+export const RELAY_CONTENT={version:'relay-work-v2',unit:'one_thousand_simulated_tokens',availableAt:'2020-06-11',
  suppliers:[
   {id:'cedar-direct',label:'杉木直供（虚构）',failureDomain:'cloud-east',availableAt:'2020-06-11',creditLimitFen:2000000,billing:'postpaid',rates:rates('cedar',0)},
   {id:'cedar-reseller',label:'青桥转售（虚构，与杉木共享上游）',failureDomain:'cloud-east',availableAt:'2023-03-14',creditLimitFen:0,billing:'prepaid',rates:rates('bridge',1)},
@@ -24,6 +24,8 @@ export const RELAY_JOBS:readonly JobDefinition[]=[
  {id:'relay-marketing',purpose:'maintenance',routes:['api_relay'],skill:'general',durationDays:7,actionPoints:1,costFen:200000,output:'actual-service-prospects'},
  {id:'relay-service',purpose:'production',routes:['api_relay'],skill:'general',durationDays:28,actionPoints:1,costFen:300000,output:'served-and-metered-period'},
  {id:'relay-support-guided',purpose:'maintenance',routes:['api_relay'],skill:'general',durationDays:7,actionPoints:1,costFen:150000,output:'client-support-receipt'},
+ {id:'relay-support-assisted',purpose:'maintenance',routes:['api_relay'],skill:'general',durationDays:4,actionPoints:1,costFen:100000,output:'agent-assisted-client-support'},
+ {id:'relay-support-delegated',purpose:'maintenance',routes:['api_relay'],skill:'general',durationDays:2,actionPoints:1,costFen:70000,output:'explicitly-delegated-client-support'},
  {id:'relay-support-self',purpose:'maintenance',routes:['api_relay'],skill:'general',durationDays:14,actionPoints:2,costFen:0,output:'limited-client-support'},
  {id:'relay-meter-audit',purpose:'maintenance',routes:['api_relay'],skill:'general',durationDays:3,actionPoints:1,costFen:10000,output:'independent-usage-reconciliation'},
  {id:'relay-requote',purpose:'maintenance',routes:['api_relay'],skill:'general',durationDays:7,actionPoints:1,costFen:0,output:'customer-price-response'}]

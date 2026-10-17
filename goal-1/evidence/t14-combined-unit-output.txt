@@ -1,0 +1,27 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/application/story-combined.test.ts --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/story-combined.test.ts (2 tests | 2 skipped) 40026ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/story-combined.test.ts [ src/application/story-combined.test.ts ]
+Error: {"date":"2025-01-20","kind":"StartCourseRefresh","payload":{"courseId":"crs:337021283324f425f25270847d402b85","resources":["player-production"],"startAt":"2025-01-20"},"result":{"status":"rejected","reasonCodes":["COURSE_TOOL_QUALIFICATION_REQUIRED"]}}
+ ❯ StoryHarness.sendAs src/testing/story-harness.ts:16:195
+
+ ❯ StoryHarness.send src/testing/story-harness.ts:15:48
+ ❯ normalStoryCombined src/testing/normal-story-combined.ts:15:4
+ ❯ src/application/story-combined.test.ts:8:23
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 skipped (2)
+   Start at  18:41:36
+   Duration  40.76s (tests 99%, import 1%)
+

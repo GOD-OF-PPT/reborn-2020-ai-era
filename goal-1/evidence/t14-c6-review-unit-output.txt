@@ -1,0 +1,26 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/application/story-agency.test.ts src/application/story-risk.test.ts src/application/story-combined.test.ts src/application/story-routine.test.ts src/application/story-risk-modes.test.ts src/application/story-history.test.ts src/ui/confirmation-money.test.ts --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/story-agency.test.ts (8 tests | 1 failed) 198989ms
+   × reaches actual zero cash available and zero AP with paid hires, keeps old debt, and can stop and enter the next quarter 66748ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/story-agency.test.ts > reaches actual zero cash available and zero AP with paid hires, keeps old debt, and can stop and enter the next quarter
+Error: Test timed out in 60000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/application/story-agency.test.ts:26:1
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 38 passed (39)
+   Start at  18:53:43
+   Duration  907.66s (tests 100%)
+

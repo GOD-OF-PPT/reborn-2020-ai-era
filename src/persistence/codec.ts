@@ -51,6 +51,7 @@ export class RunCodec {
     this.#references(run)
     requireRule(run.world === null || this.registry.runtime !== null, 'WORLD_HANDLER_REQUIRED')
     requireRule(run.deepseek===null||this.registry.runtime!==null,'DEEPSEEK_HANDLER_REQUIRED')
+    requireRule(run.story===null||this.registry.runtime!==null,'STORY_HANDLER_REQUIRED')
     requireRule(run.routines===null||this.registry.runtime!==null,'ROUTINE_HANDLER_REQUIRED')
     requireRule(run.relay===null||this.registry.runtime!==null,'RELAY_HANDLER_REQUIRED')
     requireRule(run.course === null || this.registry.runtime !== null, 'COURSE_HANDLER_REQUIRED')
@@ -126,7 +127,8 @@ export class RunCodec {
       requireRule(previousPoint === null || compareTimePoints(event, previousPoint) > 0, 'EVENT_HISTORY_OUT_OF_ORDER')
       requireRule(compareTimePoints(event, run.timeline.cursor) <= 0, 'EVENT_HISTORY_AHEAD_OF_CURSOR')
       previousPoint = event
-      if (isWorldOperation(event.payload) || event.payload.kind === 'operating_event'||event.payload.kind==='market_event'||event.payload.kind==='video_event'||event.payload.kind==='course_event'||event.payload.kind==='relay_event'||event.payload.kind==='deepseek_event') {
+      if(event.payload.kind==='story_event')requireRule(run.story,'STORY_HANDLER_REQUIRED')
+      if (isWorldOperation(event.payload) || event.payload.kind === 'operating_event'||event.payload.kind==='market_event'||event.payload.kind==='video_event'||event.payload.kind==='course_event'||event.payload.kind==='relay_event'||event.payload.kind==='deepseek_event'||event.payload.kind==='story_event') {
         requireRule(this.registry.runtime && run.world, 'WORLD_HANDLER_REQUIRED')
       } else if (receipt.skippedReason !== undefined) {
         // Validate the historical reason against its earlier operation. The action
@@ -152,6 +154,7 @@ export class RunCodec {
       requireRule(!processedIds.has(event.instanceId) && event.payload.date === event.date, 'INVALID_EVENT_REFERENCE')
       reconstructed = queueEvent(reconstructed, event)
       const operation = event.payload
+      if(operation.kind==='story_event')requireRule(run.story&&this.registry.runtime,'STORY_HANDLER_REQUIRED')
       if ('accountId' in operation) requireRule(accounts.has(operation.accountId), 'INVALID_ACCOUNT_REFERENCE')
       if ('action' in operation) requireRule(accounts.has(operation.action.accountId) && accounts.has(operation.action.counterpartyId), 'INVALID_ACCOUNT_REFERENCE')
       if ('counterpartyId' in operation) requireRule(accounts.has(operation.counterpartyId), 'INVALID_ACCOUNT_REFERENCE')
@@ -189,15 +192,18 @@ export class RunCodec {
     for (const payable of obligations.values()) requireRule(accounts.has(payable.counterpartyId), 'INVALID_ACCOUNT_REFERENCE')
   }
 
-  seal(run: GameRun): SaveEnvelope {
+  #sealed(run: GameRun): { envelope:SaveEnvelope;serialized:string } {
     const state = this.validateRun(run)
     const body = { saveVersion: 1 as const, ...state.versions, runId: state.runId, revision: state.revision, state }
     const envelope = { ...body, checksum: hashValue(body) }
-    requireRule(utf8Length(canonicalJson(envelope)) <= MAX_SAVE_BYTES, 'SAVE_TOO_LARGE')
-    return envelope
+    const serialized=canonicalJson(envelope)
+    requireRule(utf8Length(serialized) <= MAX_SAVE_BYTES, 'SAVE_TOO_LARGE')
+    return {envelope,serialized}
   }
 
-  export(run: GameRun): string { return canonicalJson(this.seal(run)) }
+  seal(run: GameRun): SaveEnvelope { return this.#sealed(run).envelope }
+
+  export(run: GameRun): string { return this.#sealed(run).serialized }
 
   readEnvelope(value: unknown): SaveEnvelope {
     assertJsonInput(value)

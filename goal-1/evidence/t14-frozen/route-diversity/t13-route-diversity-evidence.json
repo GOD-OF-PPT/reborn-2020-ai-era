@@ -1,0 +1,307 @@
+{
+  "taskId": "T13",
+  "caseId": "X06",
+  "evidenceType": "cross_route_implementation_evidence",
+  "baseCommit": "599facfbab4a7bb44e28cc837aa2c96fb755cf70",
+  "scope": "Actual dedicated states/commands and normal entry for all five, with video paid financial fixture clearly separated. This is not human perceived differentiation, full24quarter reachability, balance, or overall P/W/X closure.",
+  "sourceHash": "135f17a5b61646d4dc3bb48ad183707ac73adf8e539e8d795f190e238c7a7df4",
+  "routes": [
+    {
+      "route": "a_share",
+      "sourceReport": {
+        "file": "goal-1/evidence/t14-frozen/market/t08-market-evidence.json",
+        "sha256": "8edb982824a3154779177a3db95660471761bdc0c836d63ee7abb6788d8af611"
+      },
+      "normalSnapshot": {
+        "file": "goal-1/evidence/t14-frozen/market/t08-normal-q01-final.json",
+        "sha256": "c85ad61b77038ea52c8c7623946377e0851ecb92c66da3710431351531580c33",
+        "origin": "normal",
+        "seed": "normal-q01-market-seed",
+        "versions": {
+          "schemaVersion": 11,
+          "rulesVersion": "rules-t14-story-v1",
+          "contentVersion": "world-story-work-v1",
+          "contentHash": "85ae9b276738cc6c8f1a21564d690e43c3022a506ca9e6ffed5c65e590a916a7",
+          "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+        },
+        "codecValidated": true
+      },
+      "strategyAxes": [
+        "industry_exposure",
+        "limit_and_timing",
+        "actual_fill_and_settlement"
+      ],
+      "actualCommandKinds": [
+        "WorkQuarter",
+        "AdvanceTime",
+        "ResearchMarket",
+        "PlaceStockOrder",
+        "ChooseEvent"
+      ],
+      "feedback": {
+        "orders": 1,
+        "fills": 1,
+        "holdings": [
+          {
+            "symbol": "SIM-AI01",
+            "quantity": 100,
+            "principalFen": 1198800
+          }
+        ],
+        "unrealizedSeparateFromCash": true
+      }
+    },
+    {
+      "route": "ai_video",
+      "sourceReport": {
+        "file": "goal-1/evidence/t14-frozen/video/t10-video-evidence.json",
+        "sha256": "761e6357eddd6dd85e1b85195e4707a1317a2824a8c88e57e4b8fa9a8873cfae"
+      },
+      "normalSnapshot": {
+        "file": "goal-1/evidence/t14-frozen/video/t10-video-technical_employee-final.json",
+        "sha256": "5b10e6b69e97368e85fe9b006975fc790d3447aad21584e291d3c74ebd802beb",
+        "origin": "normal",
+        "seed": "normal-video-access-v1",
+        "versions": {
+          "schemaVersion": 11,
+          "rulesVersion": "rules-t14-story-v1",
+          "contentVersion": "world-story-work-v1",
+          "contentHash": "85ae9b276738cc6c8f1a21564d690e43c3022a506ca9e6ffed5c65e590a916a7",
+          "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+        },
+        "codecValidated": true
+      },
+      "strategyAxes": [
+        "audience_and_product",
+        "manual_or_era_qualified_tools",
+        "commercial_or_actual_qualified_platform_income"
+      ],
+      "actualCommandKinds": [
+        "WorkQuarter",
+        "OpenVideoChannel",
+        "StartVideoWork",
+        "AdvanceTime",
+        "ReviewVideoOutput",
+        "PublishVideo",
+        "ChooseEvent",
+        "ApplyVideoProgram",
+        "DecideVideoProgram",
+        "ReworkVideo"
+      ],
+      "feedback": {
+        "normal": {
+          "works": [
+            {
+              "productId": "hotspot",
+              "modeId": "manual"
+            },
+            {
+              "productId": "original_series",
+              "modeId": "image_assisted"
+            }
+          ],
+          "publications": [
+            {
+              "views": 22458,
+              "qualified": false,
+              "monetization": "ads"
+            },
+            {
+              "views": 3634,
+              "qualified": false,
+              "monetization": "none"
+            }
+          ],
+          "noQualificationDoesNotMintCash": true
+        },
+        "separateFinancialFixture": {
+          "file": "goal-1/evidence/t14-frozen/video/t10-video-f02-final.json",
+          "sha256": "f6274e1df10ee32f8f76dd611142abf3d277594ca1d58897f4f022b4c4ad4a24",
+          "origin": "fixture",
+          "settledCommissions": 3,
+          "recognizedIncomeFen": 900000,
+          "scope": "dedicated collector already replayed and codec-roundtripped fixture; not normal income or balance proof"
+        }
+      }
+    },
+    {
+      "route": "ai_course",
+      "sourceReport": {
+        "file": "goal-1/evidence/t14-frozen/course/t11-course-evidence.json",
+        "sha256": "289e1c638f900b7c1a79709b2cfa259d43372f006bc84067d15f99a67f9febeb"
+      },
+      "normalSnapshot": {
+        "file": "goal-1/evidence/t14-frozen/course/t11-s02-technical_employee-final.json",
+        "sha256": "434d8d25cad0a4e55403a003721432ed3524ab03af8f204ef95c6cd5fc7b09e5",
+        "origin": "normal",
+        "seed": "normal-course-s02-v1",
+        "versions": {
+          "schemaVersion": 11,
+          "rulesVersion": "rules-t14-story-v1",
+          "contentVersion": "world-story-work-v1",
+          "contentHash": "85ae9b276738cc6c8f1a21564d690e43c3022a506ca9e6ffed5c65e590a916a7",
+          "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+        },
+        "codecValidated": true
+      },
+      "strategyAxes": [
+        "learning_target_and_case",
+        "cohort_size_and_support",
+        "actual_stage_and_refund"
+      ],
+      "actualCommandKinds": [
+        "WorkQuarter",
+        "StartFirstOrder",
+        "AdvanceTime",
+        "SubmitDelivery",
+        "ChooseEvent",
+        "OpenVideoChannel",
+        "StartVideoWork",
+        "ReviewVideoOutput",
+        "PublishVideo",
+        "ApplyVideoProgram",
+        "DecideVideoProgram",
+        "OpenCourseStudio",
+        "StartCourseOutline",
+        "ActivateBusiness",
+        "DefineCourse",
+        "BuildCourseSample",
+        "CreateCourseAudience",
+        "PlanCourseCohort",
+        "EnrollCourseAudience",
+        "StartCourseStage",
+        "StartCourseRefresh",
+        "StartCourseRecovery"
+      ],
+      "feedback": {
+        "cohorts": 1,
+        "closedCohorts": 1,
+        "actualLearners": 20,
+        "recognizedIncomeFen": 1998000,
+        "stageDeliveryRefundSupportDistinct": true
+      }
+    },
+    {
+      "route": "api_relay",
+      "sourceReport": {
+        "file": "goal-1/evidence/t14-frozen/relay/t12-relay-evidence.json",
+        "sha256": "4449851f5679fb13addb94f4ae49a8877adf26cc8a7dfccd0d96f0a84587e12d"
+      },
+      "normalSnapshot": {
+        "file": "goal-1/evidence/t14-frozen/relay/t12-s03-content_employee-final.json",
+        "sha256": "bf206af5474118a19cd45751b1e2113b4b66c553e959b0be78646f701bd6ab8c",
+        "origin": "normal",
+        "seed": "normal-relay-s03-v1",
+        "versions": {
+          "schemaVersion": 11,
+          "rulesVersion": "rules-t14-story-v1",
+          "contentVersion": "world-story-work-v1",
+          "contentHash": "85ae9b276738cc6c8f1a21564d690e43c3022a506ca9e6ffed5c65e590a916a7",
+          "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+        },
+        "codecValidated": true
+      },
+      "strategyAxes": [
+        "supplier_failure_domain",
+        "price_and_credit",
+        "meter_invoice_correction_and_old_balance"
+      ],
+      "actualCommandKinds": [
+        "WorkQuarter",
+        "AdvanceTime",
+        "ChooseEvent",
+        "OpenRelayStation",
+        "StartRelayPreparation",
+        "ApplyRelaySupply",
+        "ReadRelaySupplyDecision",
+        "ActivateBusiness",
+        "StartRelayMarketing",
+        "SetRelayOffer",
+        "SignRelayCustomers",
+        "RechargeRelayCustomer",
+        "AcknowledgeRelayMarket",
+        "StartRelayRequote",
+        "StartRelayServicePeriod",
+        "StartRelayAudit",
+        "CorrectRelayPeriod",
+        "CollectRelayDue"
+      ],
+      "feedback": {
+        "actualMeters": 168,
+        "reportedUnits": 169343,
+        "corrections": 168,
+        "recognizedIncomeFen": 1319088,
+        "remainingCustomerPrepaidFen": 720002
+      }
+    },
+    {
+      "route": "deepseek_opportunity",
+      "sourceReport": {
+        "file": "goal-1/evidence/t14-frozen/deepseek/t13-deepseek-evidence.json",
+        "sha256": "ed7525f19091f8e46d2c946b3cf66e915ba01dd1808e9493998dd2cbe16012fa"
+      },
+      "normalSnapshot": {
+        "file": "goal-1/evidence/t14-frozen/deepseek/t13-normal-content_employee-final.json",
+        "sha256": "cfc2c79831e5605ab65d6a526d598f58ef883aeff38e3585ff67d38d54270264",
+        "origin": "normal",
+        "seed": "normal-deepseek-s04-v1",
+        "versions": {
+          "schemaVersion": 11,
+          "rulesVersion": "rules-t14-story-v1",
+          "contentVersion": "world-story-work-v1",
+          "contentHash": "85ae9b276738cc6c8f1a21564d690e43c3022a506ca9e6ffed5c65e590a916a7",
+          "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+        },
+        "codecValidated": true
+      },
+      "strategyAxes": [
+        "actual_ecosystem_service",
+        "verified_counterfactual_eligibility_and_terms",
+        "shares_dilution_lock_and_actual_buyer"
+      ],
+      "actualCommandKinds": [
+        "WorkQuarter",
+        "AdvanceTime",
+        "ChooseEvent",
+        "OpenEcosystemService",
+        "StartEcosystemPreparation",
+        "StartEcosystemAdaptation",
+        "ActivateBusiness",
+        "StartEcoOutreach",
+        "AcceptEcoContract",
+        "SubmitEcoDelivery",
+        "CollectEcoReceivable",
+        "EnableCounterfactualEquity",
+        "OpenEquityDesk",
+        "DiscoverEquityInvitation",
+        "InvestigateEquityInvitation",
+        "StartEquityEligibility",
+        "StartEquityNegotiation",
+        "SignEquityAgreement"
+      ],
+      "feedback": {
+        "actualServiceProducts": [
+          "training"
+        ],
+        "recognizedServiceIncomeFen": 600000,
+        "equity": [
+          {
+            "shares": 2500,
+            "totalShares": 1562500,
+            "classification": "counterfactual",
+            "lockUntil": "2027-04-22",
+            "board": false
+          }
+        ],
+        "serviceContractIsNotEquity": true
+      }
+    }
+  ],
+  "notCovered": [
+    "human_experience",
+    "all_strategy_paths_or_balance",
+    "normal_video_monetization_completion",
+    "all24quarters",
+    "full_Q_X_P_W_acceptance"
+  ]
+}

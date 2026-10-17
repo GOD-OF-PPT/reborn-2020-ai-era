@@ -1,3 +1,4 @@
+import {agentServiceEarned} from '../core/story-state.ts'
 import { cumulativeFee } from '../core/money.ts'
 import { OPERATIONS_CONTENT } from '../content/operations.ts'
 import type { OperationsCatalog } from '../core/operations-types.ts'
@@ -25,6 +26,7 @@ export function projectCashForecast(run:GameRun,accountId:string,catalog:Pick<Op
  for(const event of run.timeline.pending){const op=event.payload
   if(op.kind==='due_expense'&&op.accountId===accountId&&!run.economy.ledger.obligations.some(o=>o.id===op.obligationId))add(event.instanceId,event.date,-op.amountFen,op.sourceEventId==='bootstrap:living'?'生活费':'已确认费用',op.sourceEventId,event.phase,event.priority)
   if(op.kind==='income'&&op.accountId===accountId)add(event.instanceId,event.date,op.amountFen,'已确定到账',op.sourceEventId,event.phase,event.priority)
+  if(op.kind==='story_event'&&op.type==='agent_fee'){const d=run.story?.deployments.find(d=>d.id===op.entityId&&d.accountId===accountId);if(d){const month=event.date.slice(0,7),billed=run.story!.fees.filter(f=>f.deploymentId===d.id&&f.month===month).reduce((n,f)=>n+f.amountFen,0);add(event.instanceId,event.date,-Math.max(0,agentServiceEarned(d,month,event.date)-billed),'衡星已确认服务费（不默续）',d.id,event.phase,event.priority)}}
   if(op.kind==='operating_event'&&run.operations){const s=run.operations,month=op.month
    if(op.type==='salary'&&month){const p=s.employment.find(p=>p.id===op.entityId);if(p&&accountId==='personal')add(event.instanceId,event.date,earnedMonthly(p.salaryFen,p.segments.map(segment=>({from:segment.from,to:segment.to??p.limit})),month,monthEnd(month+'-01')),'已确认工作工资',p.id,event.phase,event.priority)}
    if(op.type==='wage'&&month){const w=s.workers.find(w=>w.id===op.entityId),b=s.businesses.find(b=>b.id===w?.sponsorBusinessId);if(w&&b?.accountId===accountId)add(event.instanceId,event.date,-earnedMonthly(w.monthlyWageFen,[{from:w.from,to:w.to===null?null:addDays(w.to,1)}],month,event.date),'员工工资',w.id,event.phase,event.priority)}
@@ -43,5 +45,5 @@ export function projectCashForecast(run:GameRun,accountId:string,catalog:Pick<Op
  const manualReceivables=run.economy.ledger.privateReceivables.some(r=>r.accountId===accountId&&r.remainingFen>0)||run.deepseek?.deliveries.some(d=>d.creditFen>run.deepseek!.collections.filter(p=>p.deliveryId===d.id).reduce((n,p)=>n+p.amountFen,0)&&run.deepseek!.contracts.some(c=>c.id===d.contractId&&run.operations?.businesses.some(b=>b.id===c.businessId&&b.accountId===accountId)))===true
  const conditional=run.market?.orders.some(o=>o.accountId===accountId&&o.side==='buy'&&(o.status==='pending'||o.status==='partially_filled'||o.status==='planned'&&marketPoints.length===0))??false
  const trace=flows.map(flow=>{cash+=flow.amountFen;held-=flow.releasedFen;const available=cash-held;minimumAvailableFen=Math.min(minimumAvailableFen,available);if(available<0&&earliestGap===null)earliestGap={date:flow.date,shortfallFen:-available,certainty:conditional?'conditional':'committed'};return {...flow,availableFen:available}})
- return {accountId,horizon,flows:trace,minimumAvailableFen,endingAvailableFen:cash-held,earliestGap,assumption:(conditional?'买单按现有冻结预算占用；尚未成交，可取消释放。未来价格和卖股收益不计入。':'仅计现有承诺按期继续的工资、费用和已排定的确定到账；未知收入不计入。')+(manualReceivables?' 生态 / 架空股权的手动应收尚未计作到账；需按合同实际收取。':'')}
+ return {accountId,horizon,flows:trace,minimumAvailableFen,endingAvailableFen:cash-held,earliestGap,assumption:(conditional?'买单按现有冻结预算占用；尚未成交，可取消释放。未来价格和卖股收益不计入。':'仅计现有承诺按期继续的工资、费用和已排定的确定到账；未知收入不计入。')+(run.story?.externalDelegations.some(e=>e.revocationVerifiedAt===null&&run.story!.deployments.some(d=>d.id===e.deploymentId&&d.accountId===accountId))?' 尚未验证撤回的外部代理委托可能有争议；未知结果没有用作确定收支。':'')+(manualReceivables?' 生态 / 架空股权的手动应收尚未计作到账；需按合同实际收取。':'')}
 }

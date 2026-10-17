@@ -1,3 +1,7 @@
+import {agentSupportGrant,isAgentSupportMode,checkAgentBudget} from './story-state.ts'
+import {recordAgentSupport} from './story-support.ts'
+import type {CourseSupportMode} from './course-schema.ts'
+import {storyCompetitionBps} from './story-state.ts'
 import { addDays } from './calendar.ts';
 import { applyEconomy, actionBudget, type EconomyOperation } from './economy.ts';
 import { accountFunds } from './ledger.ts';
@@ -79,7 +83,7 @@ export class CourseRuntime {
     graduates(m: CourseContext, course: Course) { return sOf(m).enrollments.filter(e => e.productKey === course.productKey && enrollmentRefund(e) === 0 && e.outcome === 'helped' && sOf(m).cohorts.some(c => c.id === e.cohortId && c.closedAt !== null && c.stages.every(st => st.deliveredAt !== null))).map(e => e.personId); }
     #capacity(m: CourseContext, c: CourseCohort, completed = false, recoveryOnly = false) { return c.slots.filter(slot => (!recoveryOnly || slot.recovery) && m.operations?.jobs.some(j => j.id === slot.jobId && (completed ? j.status === 'completed' : ['planned', 'running', 'completed'].includes(j.status)))).reduce((total, s) => total + s.capacity, 0); }
     score(m: CourseContext, personId: string, key: string, purpose: string) { requireRule(m.video, 'COURSE_AUDIENCE_REQUIRED'); return parseInt(hashValue([m.video.audienceKey, personId, key, purpose]).slice(0, 8), 16); }
-    eligible(m: CourseContext, c: Course, people: readonly string[], price: number, promise = 'clear_scope') { const base = this.product(c).basePriceFen; const bps = Math.min(10000, Number(BigInt(this.catalog.matchBps) * BigInt(base) / BigInt(price)) + (promise === 'accelerated_results' ? 1500 : 0)); const advanced = c.edition === 'advanced' ? sOf(m).studies.find(s => s.id === c.studyId)?.members ?? [] : null; return people.filter(p => (advanced === null || advanced.includes(p)) && BigInt(this.score(m, p, c.productKey, 'demand')) * 10000n < BigInt(bps) * 4294967296n); }
+    eligible(m: CourseContext, c: Course, people: readonly string[], price: number, promise = 'clear_scope', competitionBps=0) { const base = this.product(c).basePriceFen; const bps = Math.min(10000, Number(BigInt(Math.max(0,this.catalog.matchBps-competitionBps)) * BigInt(base) / BigInt(price)) + (promise === 'accelerated_results' ? 1500 : 0)); const advanced = c.edition === 'advanced' ? sOf(m).studies.find(s => s.id === c.studyId)?.members ?? [] : null; return people.filter(p => (advanced === null || advanced.includes(p)) && BigInt(this.score(m, p, c.productKey, 'demand')) * 10000n < BigInt(bps) * 4294967296n); }
     qualificationForJob(m: OperatingContext, definitionId: string, from: string, to: string) {
         if (!definitionId.startsWith('course-sample-') && !definitionId.startsWith('course-stage-') && !definitionId.startsWith('course-refresh-'))
             return;
@@ -180,7 +184,8 @@ export class CourseRuntime {
                 requireRule(res.length >= 1 && res.length <= 3 && new Set(res).size === res.length, 'COURSE_INVALID_SUPPORT_PLAN');
                 const p = this.product(c), cap = i.supportMode === 'self_small' ? p.selfCapacity : p.capacity;
                 requireRule(num(i.seatLimit) <= res.length * cap, 'COURSE_SUPPORT_CAPACITY_EXCEEDED');
-                const supportDef = this.operations.catalog.jobs.find(j => j.id === `course-support-${c.productId}-${str(i.supportMode)}`)!;
+                const supportDef = this.operations.catalog.jobs.find(j => j.id === `course-support-${c.productId}-${str(i.supportMode)}`);requireRule(supportDef,'COURSE_SUPPORT_MODE_UNAVAILABLE');
+                if(isAgentSupportMode(str(i.supportMode))){const g=agentSupportGrant(m,c.businessId,typeof i.deploymentId==='string'?i.deploymentId:null,str(i.supportMode),support,addDays(support,supportDef.durationDays));checkAgentBudget(m,g,supportDef.costFen*res.length)}
                 requireRule(actionBudget(m.economy, support).available >= supportDef.actionPoints * res.length, 'INSUFFICIENT_ACTION_POINTS');
                 requireRule(accountFunds(m.economy.ledger, this.business(m, c.businessId).accountId).availableFen >= supportDef.costFen * res.length, 'INSUFFICIENT_AVAILABLE_FUNDS');
                 const check = m;
@@ -195,7 +200,7 @@ export class CourseRuntime {
                 this.#active(m, c);
                 requireRule(co.status === 'open' && !co.enrollmentPaused && date < co.startAt, 'COURSE_ENROLLMENT_CLOSED');
                 const a = s.audiences.find(a => a.id === co.audienceId)!;
-                const people = ids(i.personIds), eligiblePeople = new Set(this.eligible(m, c, a.members, co.priceFen, co.promise));
+                const people = ids(i.personIds), eligiblePeople = new Set(this.eligible(m, c, a.members, co.priceFen, co.promise,a.competitionBps));
                 requireRule(people.length > 0 && new Set(people).size === people.length && people.every(id => eligiblePeople.has(id)), 'COURSE_LEARNER_NOT_ELIGIBLE');
                 requireRule(!people.some(id => m.video?.conversions.some(x => x.personId === id && x.productVersion === c.productKey)), 'AUDIENCE_ALREADY_CONVERTED');
                 const active = this.people(m, co.id).filter(e => enrollmentPaid(e) > 0).length;
@@ -219,6 +224,7 @@ export class CourseRuntime {
                 requireRule(co.closedAt === null && co.slots.filter(s => s.recovery).length < 3, 'COURSE_RECOVERY_UNAVAILABLE');
                 const def = `course-support-${c.productId}-${str(i.supportMode)}`, d = this.operations.catalog.jobs.find(j => j.id === def)!;
                 requireRule(addDays(str(i.startAt), d.durationDays) <= co.remedyDueAt, 'COURSE_RECOVERY_DEADLINE_MISSED');
+                if(isAgentSupportMode(str(i.supportMode))){const g=agentSupportGrant(m,c.businessId,typeof i.deploymentId==='string'?i.deploymentId:null,str(i.supportMode),str(i.startAt),addDays(str(i.startAt),d.durationDays));checkAgentBudget(m,g,d.costFen)}
                 return this.#jobPreview(m, i, c.businessId, def, date);
             }
             case 'RefundCourseLearners': {
@@ -301,14 +307,15 @@ export class CourseRuntime {
                     members = [...new Set(next.video!.cohorts.filter(co => ids(i.videoCohortIds).includes(co.id)).flatMap(co => co.members))];
                     completedAt = date;
                 }
-                next = this.#patch(next, { audiences: [...s.audiences, { id, courseId: c.id, mode: i.mode as 'paid' | 'video_referral', priceFen: num(i.priceFen), createdAt: date, jobId, sourceCohortIds: i.mode === 'video_referral' ? ids(i.videoCohortIds) : [], completedAt, members, eligibleMembers: completedAt === null ? [] : this.eligible(next, c, members, num(i.priceFen)) }] });
+                next = this.#patch(next, { audiences: [...s.audiences, { id, courseId: c.id, mode: i.mode as 'paid' | 'video_referral', competitionBps:storyCompetitionBps(next,date), priceFen: num(i.priceFen), createdAt: date, jobId, sourceCohortIds: i.mode === 'video_referral' ? ids(i.videoCohortIds) : [], completedAt, members, eligibleMembers: completedAt === null ? [] : this.eligible(next, c, members, num(i.priceFen),'clear_scope',storyCompetitionBps(next,date)) }] });
                 break;
             }
             case 'PlanCourseCohort': {
-                const c = this.course(next, str(i.courseId)), a = s.audiences.find(a => a.id === i.audienceId)!, p = this.product(c), mode = i.supportMode as 'self_small' | 'guided_group', definitionId = `course-support-${c.productId}-${mode}`, d = this.operations.catalog.jobs.find(j => j.id === definitionId)!, supportCompleteAt = addDays(str(i.supportStartAt), d.durationDays), slots: CourseCohort['slots'] = [];
+                const c = this.course(next, str(i.courseId)), a = s.audiences.find(a => a.id === i.audienceId)!, p = this.product(c), mode = i.supportMode as CourseSupportMode, definitionId = `course-support-${c.productId}-${mode}`, d = this.operations.catalog.jobs.find(j => j.id === definitionId)!, supportCompleteAt = addDays(str(i.supportStartAt), d.durationDays), slots: CourseCohort['slots'] = [];
                 for (const [n, resource] of ids(i.resources).entries()) {
                     const jobId = courseId('support', id, String(n));
                     next = this.#plan(next, { kind: i.kind, resources: [resource], startAt: i.supportStartAt }, c.businessId, definitionId, jobId);
+                    if(isAgentSupportMode(mode)){const manual=this.operations.catalog.jobs.find(d=>d.id===`course-support-${c.productId}-guided_group`)!;next=recordAgentSupport(next,jobId,typeof i.deploymentId==='string'?i.deploymentId:null,mode as 'assisted_group'|'delegated_group',manual.costFen,manual.durationDays,commandId)}
                     slots.push({ jobId, mode, capacity: mode === 'self_small' ? p.selfCapacity : p.capacity, recovery: false });
                 }
                 const co: CourseCohort = { id, courseId: c.id, audienceId: a.id, createdAt: date, startAt: str(i.startAt), endAt: str(i.endAt), seatLimit: num(i.seatLimit), priceFen: a.priceFen, promise: i.promise as CourseCohort['promise'], supportCompleteAt, remedyDueAt: addDays(supportCompleteAt, 7), refundUntil: addDays(supportCompleteAt, 7), slots, stages: [{ index: 0, dueAt: addDays(str(i.startAt), 14), attempts: [], deliveredAt: null, operationId: null, amountFen: 0 }, { index: 1, dueAt: str(i.endAt), attempts: [], deliveredAt: null, operationId: null, amountFen: 0 }], status: 'open', enrollmentPaused: false, teachingCancelled: false, supportSatisfied: false, assessmentAt: null, feePostedAt: null, feeFen: 0, closedAt: null };
@@ -340,8 +347,9 @@ export class CourseRuntime {
                 break;
             }
             case 'StartCourseRecovery': {
-                const co = this.cohort(next, str(i.cohortId)), c = this.course(next, co.courseId), mode = i.supportMode as 'self_small' | 'guided_group', jobId = courseId('job', id);
+                const co = this.cohort(next, str(i.cohortId)), c = this.course(next, co.courseId), mode = i.supportMode as CourseSupportMode, jobId = courseId('job', id);
                 next = this.#plan(next, i, c.businessId, `course-support-${c.productId}-${mode}`, jobId);
+                if(isAgentSupportMode(mode)){const manual=this.operations.catalog.jobs.find(d=>d.id===`course-support-${c.productId}-guided_group`)!;next=recordAgentSupport(next,jobId,typeof i.deploymentId==='string'?i.deploymentId:null,mode as 'assisted_group'|'delegated_group',manual.costFen,manual.durationDays,commandId)}
                 next = this.#patch(next, { cohorts: s.cohorts.map(old => old.id === co.id ? { ...old, slots: [...old.slots, { jobId, mode, capacity: mode === 'self_small' ? this.product(c).selfCapacity : this.product(c).capacity, recovery: true }] } : old) });
                 break;
             }
@@ -425,7 +433,7 @@ export class CourseRuntime {
         for (const a of sOf(next).audiences.filter(a => a.completedAt === null && a.jobId !== null && this.#done(next, a.jobId))) {
             const c = this.course(next, a.courseId), job = next.operations!.jobs.find(j => j.id === a.jobId)!;
             const members = this.video.audienceMembers(next, c.segment, 0, 240);
-            next = this.#patch(next, { audiences: sOf(next).audiences.map(old => old.id === a.id ? { ...old, completedAt: job.completeAt, members, eligibleMembers: this.eligible(next, c, members, a.priceFen) } : old) });
+            next = this.#patch(next, { audiences: sOf(next).audiences.map(old => old.id === a.id ? { ...old, completedAt: job.completeAt, members, eligibleMembers: this.eligible(next, c, members, a.priceFen,'clear_scope',a.competitionBps) } : old) });
         }
         for (const oldCo of sOf(next).cohorts.filter(c => c.closedAt === null)) {
             let co = this.cohort(next, oldCo.id), c = this.course(next, co.courseId), b = this.business(next, c.businessId);

@@ -6,6 +6,9 @@ export function intentAccount(command:CommandEnvelope,view:PlayingView,features:
  if(command.kind==='FundBusiness'||command.kind==='OpenCourseStudio'||command.kind==='OpenRelayStation'||command.kind==='OpenEcosystemService')return 'personal'
  if(typeof p.accountId==='string')return p.accountId
  if(['WorkQuarter','QuitWork','StartFirstOrder','ResearchMarket','StopMarketResearch','FavoriteMemory','ReadNews'].includes(command.kind))return 'personal'
+ if(typeof p.deploymentId==='string')return features.story?.deployments.find(d=>d.id===p.deploymentId)?.accountId??'personal'
+ if(typeof p.incidentId==='string'){const c=features.story?.incidents.find(c=>c.id===p.incidentId);return view.operations?.businesses.find(b=>c?.businessIds.includes(b.id))?.accountId??'personal'}
+ if(typeof p.jobId==='string'&&command.kind==='InterruptStoryWork')return features.story?.jobs.find(j=>j.id===p.jobId)?.accountId??'personal'
  const ds=features.deepseek,dsBusinessId=typeof p.invitationId==='string'?ds?.invitations.find(i=>i.id===p.invitationId)?.businessId:typeof p.negotiationId==='string'?ds?.negotiations.find(n=>n.id===p.negotiationId)?.businessId:typeof p.agreementId==='string'?ds?.agreements.find(a=>a.id===p.agreementId)?.businessId:typeof p.exitId==='string'?ds?.exits.find(e=>e.id===p.exitId)?.businessId:typeof p.leadId==='string'?ds?.leads.find(l=>l.id===p.leadId)?.businessId:typeof p.deliveryId==='string'?ds?.contracts.find(c=>c.id===ds.deliveries.find(d=>d.id===p.deliveryId)?.contractId)?.businessId:typeof p.contractId==='string'?ds?.contracts.find(c=>c.id===p.contractId)?.businessId:null
  if(dsBusinessId)return view.operations?.businesses.find(b=>b.id===dsBusinessId)?.accountId??'personal'
  if(typeof p.planId==='string')return features.routines?.plans.find(plan=>plan.id===p.planId)?.accountId??'personal'

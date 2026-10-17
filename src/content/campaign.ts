@@ -1,6 +1,6 @@
 // Independent runtime working data; historical claims have limited source scope.
 export const CAMPAIGN_CONTENT = {
-  "version": "world-work-v2",
+  "version": "world-work-v3",
   "sources": [
     {
       "id": "H001",
@@ -420,6 +420,7 @@ export const CAMPAIGN_CONTENT = {
     "audience_research"
   ],
   "preparationKeys": [
+    "linzhou_pilot",
     "paid_manual_case",
     "manual_case",
     "customer_research",
@@ -849,7 +850,8 @@ export const CAMPAIGN_CONTENT = {
       "domain": "service",
       "hint": "服务机会仍取决于供应与客户资格，技术发布不会自动变成股权。",
       "preparationKey": "ecosystem_materials"
-    }
+    },
+    {"id":"MEM-LINZHOU","domain":"local_tools","hint":"记得一个虚构协作团队后来把工具交给封闭经营；本局参与可能改变局部合作条件，不代表所有模型或价格都会改变。","preparationKey":"linzhou_pilot"}
   ],
   "initialEntitlements": [
     {

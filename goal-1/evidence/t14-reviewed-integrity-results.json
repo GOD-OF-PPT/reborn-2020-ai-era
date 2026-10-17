@@ -1,0 +1,49 @@
+[
+  {
+    "label": "typecheck",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 32.72583794593811,
+    "output": "goal-1/evidence/t14-reviewed-integrity-typecheck-output.txt"
+  },
+  {
+    "label": "codec",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "test:unit",
+      "--",
+      "src/persistence/codec.test.ts",
+      "src/persistence/relay-codec.test.ts",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 7.413387060165405,
+    "output": "goal-1/evidence/t14-reviewed-integrity-codec-output.txt"
+  },
+  {
+    "label": "story",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "test:unit",
+      "--",
+      "src/application/story-risk-modes.test.ts",
+      "src/application/story-combined.test.ts",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 237.24826002120972,
+    "output": "goal-1/evidence/t14-reviewed-integrity-story-output.txt"
+  }
+]

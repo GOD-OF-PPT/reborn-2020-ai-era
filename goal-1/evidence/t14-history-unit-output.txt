@@ -1,0 +1,32 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/story-history.test.ts (7 tests | 1 failed) 65036ms
+   ❯ T14 local history uses actual work, another actor consent and limited memory scope (7)
+     × preview and visible reports do not reveal frozen intent or consume a random stream 3266ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/story-history.test.ts > T14 local history uses actual work, another actor consent and limited memory scope > preview and visible reports do not reveal frozen intent or consume a random stream
+RuleError: LINZHOU_ACTUAL_CASE_REQUIRED
+ ❯ requireRule src/core/errors.ts:12:25
+     10|
+     11| export function requireRule(condition: unknown, code: string): asserts…
+     12|   if (!condition) throw new RuleError(code)
+       |                         ^
+     13| }
+     14|
+ ❯ StoryHistory.inspect src/core/story-history.ts:34:18
+ ❯ StoryRuntime.inspect src/core/story.ts:16:91
+ ❯ src/application/story-commands.ts:7:130
+ ❯ Object.inspect src/core/commands.ts:84:93
+ ❯ src/application/story-history.test.ts:17:416
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  16:31:07
+   Duration  66.09s (tests 99%, transform 1%)
+

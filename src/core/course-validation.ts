@@ -1,3 +1,4 @@
+import {storyCompetitionBps} from './story-state.ts'
 import { courseStateSchema, courseEventSchema } from './course-schema.ts';
 import { requireRule } from './errors.ts';
 import { hashValue } from './hash.ts';
@@ -93,7 +94,8 @@ export function assertCourse(runtime: CourseRuntime, run: GameRun) {
             const expected = [...new Set(run.video.cohorts.filter(co => a.sourceCohortIds.includes(co.id) && co.segment === c.segment && co.date <= a.createdAt).flatMap(co => co.members))];
             requireRule(a.sourceCohortIds.every(id => run.video!.cohorts.some(co => co.id === id && co.segment === c.segment && co.date <= a.createdAt)) && hashValue(expected) === hashValue(a.members), 'INVALID_COURSE_VIDEO_REFERRAL');
         }
-        requireRule(a.completedAt === null ? a.members.length === 0 && a.eligibleMembers.length === 0 : a.completedAt <= date && hashValue(a.eligibleMembers) === hashValue(runtime.eligible(run, c, a.members, a.priceFen)), 'INVALID_COURSE_DEMAND');
+        requireRule(a.competitionBps===storyCompetitionBps(run,a.createdAt),'COURSE_COMPETITION_SOURCE_MISMATCH');
+        requireRule(a.completedAt === null ? a.members.length === 0 && a.eligibleMembers.length === 0 : a.completedAt <= date && hashValue(a.eligibleMembers) === hashValue(runtime.eligible(run, c, a.members, a.priceFen,'clear_scope',a.competitionBps)), 'INVALID_COURSE_DEMAND');
     }
     for (const co of s.cohorts) {
         const c = runtime.course(run, co.courseId), a = s.audiences.find(a => a.id === co.audienceId);
@@ -138,7 +140,7 @@ export function assertCourse(runtime: CourseRuntime, run: GameRun) {
         if (co.closedAt !== null)
             requireRule(co.status === 'closed' && co.feePostedAt !== null && co.closedAt >= co.feePostedAt && co.closedAt <= date && prepaid === 0 && !run.economy.ledger.obligations.some(o => o.contractId === co.id && o.remainingFen > 0), 'COURSE_CLOSED_WITH_OBLIGATIONS');
     }
-    const eligibleByCohort = new Map(s.cohorts.map(co => { const c = runtime.course(run, co.courseId), a = s.audiences.find(a => a.id === co.audienceId)!; return [co.id, new Set(runtime.eligible(run, c, a.members, co.priceFen, co.promise))]; }));
+    const eligibleByCohort = new Map(s.cohorts.map(co => { const c = runtime.course(run, co.courseId), a = s.audiences.find(a => a.id === co.audienceId)!; return [co.id, new Set(runtime.eligible(run, c, a.members, co.priceFen, co.promise,a.competitionBps))]; }));
     for (const e of s.enrollments) {
         const co = runtime.cohort(run, e.cohortId), c = runtime.course(run, e.courseId), a = s.audiences.find(a => a.id === co.audienceId)!, batch = s.payments.find(b => b.id === e.paymentBatchId);
         requireRule(co.courseId === c.id && e.productKey === c.productKey && e.originAudienceId === a.id && e.paidAt >= a.completedAt! && e.paidAt < co.startAt && e.paidAt <= date && e.priceFen === co.priceFen && eligibleByCohort.get(co.id)!.has(e.personId) && hashValue(e.originCohortIds) === hashValue(runtime.originVideoCohorts(run, a.id, e.personId)) && e.helpRoll === runtime.score(run, e.personId, c.productKey, 'learning') && batch?.cohortId === co.id && batch.personIds.includes(e.personId) && batch.date === e.paidAt, 'INVALID_COURSE_ENROLLMENT');

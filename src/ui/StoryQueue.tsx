@@ -1,0 +1,6 @@
+import type {GamePanelProps} from './game-types.ts'
+import {moneyText} from './game-text.ts'
+type Props=GamePanelProps
+const stageText:Record<string,string>={signal:'有信号，仍待核实',investigating:'独立调查中',confirmed:'已确认范围外行为',containing:'部分隔离 / 等待验证',recovering:'替代准备中',residual:'仍有残余',takeover:'外部托管，仍待独立验证',unresolved:'暂缓，仍未解决'}
+function businessName(p:Props,id:string){const b=p.view.operations?.businesses.find(b=>b.id===id);return (b?.route==='ai_course'?'课程工作室':b?.route==='api_relay'?'API中转站':'原业务')+' · '+id.slice(-6)}
+export function StoryQueue({p,onOpen}:{p:Props;onOpen:()=>void}){const v=p.features.story,active=v.incidents.filter(c=>c.resolvedAt===null&&c.stage!=='normal');return active.length?<section className="story-queue" aria-label="全部待核实风险与控制事项"><div className="section-heading"><h2>变化与持续处置</h2><button type="button" onClick={onOpen}>打开持续处置 →</button></div>{active.map(c=><article className="warning-box" key={c.id}><strong>{c.kind==='agent'?'衡星权限与控制核查':'原合同身份核对'} · {stageText[c.stage]}</strong><p>{c.businessIds.map(id=>businessName(p,id)).join(' / ')} · 最早记录{c.openedAt} · 默认期限{c.deadline}</p><p>已记相关费用或应付{moneyText(c.knownCostFen+c.paidWorkCostFen+c.unverifiedFeePaidFen)}，其中未付{moneyText(c.unpaidKnownCostFen)}。暂停自报不等于独立恢复，旧责任持续保留。</p></article>)}</section>:null}

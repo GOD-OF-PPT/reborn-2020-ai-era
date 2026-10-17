@@ -1,0 +1,158 @@
+{
+  "taskId": "T14",
+  "evidenceType": "actual_production_UI_and_explicit_export",
+  "url": "http://127.0.0.1:5214/?storageTest=abort-risk-evidence",
+  "tabId": "35",
+  "checks": [
+    {
+      "id": "production-dev-failure-parameter-does-not-enable-isolated-store",
+      "pass": true,
+      "actual": {
+        "url": "http://127.0.0.1:5214/?storageTest=abort-risk-evidence",
+        "observed": "normal production entry with no validation-store or abort controls"
+      },
+      "recordedAt": "2026-10-17T15:33:40.535Z"
+    },
+    {
+      "id": "production-limited-control-keeps-original-money",
+      "pass": true,
+      "actual": {
+        "date": "2025-07-22",
+        "revision": 123,
+        "companyAvailableYuan": 24412.55,
+        "customerProtectionYuan": 8292.09,
+        "originalReceivableYuan": 24.24,
+        "availableAP": 0,
+        "network": "only independently adopted as of July1, no premature global resolution"
+      },
+      "recordedAt": "2026-10-17T15:36:14.502Z"
+    },
+    {
+      "id": "production-read-news-saves-without-development-abort",
+      "pass": true,
+      "actual": {
+        "revisionBefore": 123,
+        "revisionAfter": 124,
+        "date": "2025-07-22",
+        "companyAvailableYuan": 24412.55,
+        "availableAP": 0,
+        "operation": "ReadNews H009",
+        "parameter": "storageTest=abort-risk-evidence; imported state already has independent evidence; normal production commit succeeded"
+      },
+      "recordedAt": "2026-10-17T15:37:19.319Z"
+    },
+    {
+      "id": "production-preserves-imported-original-backup-and-rng",
+      "pass": true,
+      "actual": {
+        "backupRevision": 123,
+        "backupByteEqualToDevActual123": true,
+        "readNewsRevision": 124,
+        "randomHashBefore": "448b97168328917592e6316fe508173602708ad616da56bb256e618ac814c426",
+        "randomHashAfter": "448b97168328917592e6316fe508173602708ad616da56bb256e618ac814c426",
+        "scope": "actual explicit UI exports audited privately; no hidden state read from application"
+      },
+      "recordedAt": "2026-10-17T15:38:05.069Z"
+    },
+    {
+      "id": "production-keyboard-modal-boundaries-and-trigger",
+      "pass": true,
+      "actual": {
+        "lastTabToClose": true,
+        "firstShiftTabToLast": true,
+        "escapeRestoresTrigger": true,
+        "settingsChanged": false,
+        "revision": 124
+      },
+      "recordedAt": "2026-10-17T15:39:04.355Z"
+    },
+    {
+      "id": "production-reload-preserves-full-saved124",
+      "pass": true,
+      "actual": {
+        "revision": 124,
+        "byteEqual": true,
+        "date": "2025-07-22",
+        "oldProtectionYuan": 8292.09,
+        "oldReceivableYuan": 24.24
+      },
+      "recordedAt": "2026-10-17T15:39:30.643Z"
+    },
+    {
+      "id": "production-desktop-layout-keeps-context-and-old-money",
+      "pass": true,
+      "actual": {
+        "height": 720,
+        "scrollWidth": 1280,
+        "scrollY": 0,
+        "width": 1280,
+        "revision": 124,
+        "screenshots": [
+          "t14-production-history-risk-overview.jpg",
+          "t14-production-risk-control.jpg"
+        ],
+        "note": "overview at page top and additional result-focused lower viewport; no native200percent claim"
+      },
+      "recordedAt": "2026-10-17T15:40:30.720Z"
+    }
+  ],
+  "exports": [
+    {
+      "file": "t14-browser-production-read-news.json",
+      "role": "saved-production124-after-news",
+      "sha256": "32e7bcc31841e885f252fe4bd6afac94223e69f9dc65aeeaf3c5add7759321bc",
+      "revision": 124,
+      "runId": "normal-relay-technical_employee-ffa5b32f",
+      "schemaVersion": 11,
+      "rngHash": "448b97168328917592e6316fe508173602708ad616da56bb256e618ac814c426",
+      "captureMethod": "actual_UI_export_textarea_bounded_read",
+      "characters": 2880965
+    },
+    {
+      "file": "t14-browser-production-previous-valid-backup.json",
+      "role": "actual-production-previous-valid123",
+      "sha256": "e661a9565571b79dfc695132a8460f38e08cbe8fb08ef978f56445f59fad7acf",
+      "revision": 123,
+      "runId": "normal-relay-technical_employee-ffa5b32f",
+      "schemaVersion": 11,
+      "rngHash": "448b97168328917592e6316fe508173602708ad616da56bb256e618ac814c426",
+      "captureMethod": "actual_UI_export_textarea_bounded_read",
+      "characters": 2880107
+    },
+    {
+      "file": "t14-browser-production-reloaded.json",
+      "role": "actual-production124-after-reload",
+      "sha256": "32e7bcc31841e885f252fe4bd6afac94223e69f9dc65aeeaf3c5add7759321bc",
+      "revision": 124,
+      "runId": "normal-relay-technical_employee-ffa5b32f",
+      "schemaVersion": 11,
+      "rngHash": "448b97168328917592e6316fe508173602708ad616da56bb256e618ac814c426",
+      "captureMethod": "actual_UI_export_textarea_bounded_read",
+      "characters": 2880965
+    }
+  ],
+  "importedActualNativeSave": {
+    "file": "t14-browser-risk-resolved.json",
+    "sha256": "e661a9565571b79dfc695132a8460f38e08cbe8fb08ef978f56445f59fad7acf"
+  },
+  "httpReport": {
+    "file": "t14-production-http.json",
+    "sha256": "ea81a30112da313667ad4a0c7f902013badb5a004a80086ce146e894994e5a3d"
+  },
+  "consoleReport": {
+    "file": "t14-production-console.json",
+    "sha256": "00849bb7668a9c94b563ddb2060182b03cb46be8d7d772952f0205751c902c7d"
+  },
+  "screenshots": [
+    "t14-production-history-risk-overview.jpg",
+    "t14-production-risk-control.jpg"
+  ],
+  "notCovered": [
+    "human",
+    "originalPNG",
+    "native200percent",
+    "browser_beforeunload_dialog",
+    "full24quarter_playthrough",
+    "loading_performance_budget"
+  ]
+}

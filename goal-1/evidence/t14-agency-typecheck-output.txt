@@ -1,0 +1,10 @@
+
+> reborn-2020-ai-era@0.1.0 typecheck
+> tsc -b
+
+src/core/story-agency.ts(9,50): error TS6196: 'StoryState' is declared but never used.
+src/core/story-agency.ts(17,135): error TS2345: Argument of type 'Pick<OperatingModel, "facts" | "story">' is not assignable to parameter of type 'StoryContext'.
+  Type 'Pick<OperatingModel, "facts" | "story">' is missing the following properties from type 'Pick<RuleModel, "controlledAccountIds" | "economy" | "world" | "operations">': controlledAccountIds, economy, world, operations
+src/core/story-agency.ts(9,50): error TS6196: 'StoryState' is declared but never used.
+src/core/story-agency.ts(17,135): error TS2345: Argument of type 'Pick<OperatingModel, "facts" | "story">' is not assignable to parameter of type 'StoryContext'.
+  Type 'Pick<OperatingModel, "facts" | "story">' is missing the following properties from type 'Pick<RuleModel, "controlledAccountIds" | "economy" | "world" | "operations">': controlledAccountIds, economy, world, operations

@@ -30,6 +30,8 @@ export function projectWorkbench(run:GameRun,world:WorldRuntime,catalog:Operatio
  for(const event of run.timeline.pending.filter(e=>e.payload.kind==='course_event'))barriers.push({date:event.date,label:'课程履约/答疑/退款期限'})
  for(const c of run.deepseek?.contracts??[]){if(c.status==='production'&&c.submittedAt===null){const j=run.operations?.jobs.find(j=>j.id===(c.remediationJobId??c.productionJobId));if(j&&['running','planned','completed'].includes(j.status))barriers.push({date:j.completeAt,label:'生态交付完成，等待实际提交'})}if(c.status==='review'&&c.reviewAt!==null)barriers.push({date:c.reviewAt,label:'生态客户实际复核'})}
  for(const e of run.timeline.pending.filter(e=>e.payload.kind==='deepseek_event'))barriers.push({date:e.date,label:e.payload.kind==='deepseek_event'&&e.payload.type==='follow_round'?'架空融资决定 / 默认不付款期限':'生态合同实际履约节点'})
+ for(const job of run.story?.jobs.filter(j=>j.status==='running')??[])barriers.push({date:job.completeAt,label:'历史/独立核查工作的实际完成反馈'})
+ for(const event of run.timeline.pending){const p=event.payload;if(p.kind==='story_event'&&(['grant_expiry','deployment_expiry','claim_response','authority_check'].includes(p.type)||p.type==='incident_deadline'&&run.story?.incidents.some(c=>c.id===p.entityId)))barriers.push({date:event.date,label:'已知授权/核查/期限节点'})}
  const barrier=barriers.filter(p=>p.date>=date&&p.date<=end).sort((a,b)=>a.date.localeCompare(b.date))[0]
  const unresolvedDelivery=first.status==='awaiting_submission'&&!first.deadlineMissed
  const quarterTarget=barrier?.date??end,next=points.find(p=>p.date>=date)?.date??(date<end?end:addDays(end,1))

@@ -24,6 +24,7 @@ const envelopeSchema = z.strictObject({ commandId: id, runId: id, actorId: id, e
 export const creationPayloadSchema = z.strictObject({ backgroundId: opaqueId, playerProfile:playerProfileSchema,origin: z.enum(['normal', 'fixture']), seed: z.string().min(1).max(256), initialStateHash: z.string().regex(/^[0-9a-f]{64}$/) })
 
 export interface CommandPreview {
+  readonly accruedServiceFeeFen?:number
   readonly privateSale?:{readonly shares:number;readonly grossFen:number;readonly feeFen:number;readonly netReceivableFen:number;readonly dueAt:string}
   readonly knownAdjustments?:{readonly customerIncomeDeltaFen:number;readonly supplierCostDeltaFen:number}
   readonly actionAllocations?:readonly {readonly date:string;readonly actionPoints:number;readonly label:string}[]
@@ -55,12 +56,14 @@ export interface CommandView {
   readonly relay:RuleModel['relay']
   readonly routines:RuleModel['routines']
   readonly deepseek:RuleModel['deepseek']
+  readonly story:RuleModel['story']
 }
 export interface CommandContext { readonly commandId: string; readonly runId: string; readonly actorId: string; readonly date: string;readonly revision:number }
 export interface CommandEffect { readonly model: RuleModel; readonly summary: string; readonly domain: string }
 export interface RegistryRuntime {
   advance(model: RuleModel, target: { readonly date: string; readonly phase?: DayPhase }): RuleModel
   validate(run: GameRun): void
+  guard?(view:CommandView,kind:string,payload:unknown):void
   project?(run:GameRun):Readonly<Record<string,unknown>>
 }
 export interface CommandHandler {
@@ -137,7 +140,7 @@ export function createBaseRegistry(versions: VersionSet, extra: readonly Command
 }
 
 function commandView(run: GameRun): CommandView {
-  return copyJson({ runId: run.runId, actorId: run.actorId, revision: run.revision, date: run.timeline.cursor.date, phase: run.phase, controlledAccountIds: run.controlledAccountIds, economy: run.economy, cursor: run.timeline.cursor, pause: run.timeline.pause, evidence: visibleFacts(run.facts), world: run.world, operations: run.operations,market:run.market,video:run.video,course:run.course,relay:run.relay,routines:run.routines,deepseek:run.deepseek })
+  return copyJson({ runId: run.runId, actorId: run.actorId, revision: run.revision, date: run.timeline.cursor.date, phase: run.phase, controlledAccountIds: run.controlledAccountIds, economy: run.economy, cursor: run.timeline.cursor, pause: run.timeline.pause, evidence: visibleFacts(run.facts), world: run.world, operations: run.operations,market:run.market,video:run.video,course:run.course,relay:run.relay,routines:run.routines,deepseek:run.deepseek,story:run.story })
 }
 
 export function projectRun(run: GameRun) {
@@ -173,7 +176,7 @@ function inspectPreview(run:PreviewIdentity,raw:unknown,registry:CommandRegistry
     const {command,handler,payload}=prepare(run,raw,registry,principalActorId)
     requireRule(command.expectedRevision===run.revision,'STALE_REVISION')
     requireRule(handler,command.kind==='CreateRun'?'RUN_ALREADY_EXISTS':'UNKNOWN_COMMAND')
-    return handler.inspect(getView(),payload)
+    const view=getView();registry.runtime?.guard?.(view,command.kind,payload);return handler.inspect(view,payload)
   }catch(error){if(error instanceof RuleError)return {...allowed(),allowed:false,reasonCodes:[error.code]};throw error}
 }
 export function previewCommand(run:GameRun,raw:unknown,registry:CommandRegistry,principalActorId:string):CommandPreview{
@@ -199,11 +202,12 @@ export function evaluateCommand(run: GameRun, raw: unknown, registry: CommandReg
     }
     requireRule(command.expectedRevision === run.revision, 'STALE_REVISION')
     requireRule(handler, command.kind === 'CreateRun' ? 'RUN_ALREADY_EXISTS' : 'UNKNOWN_COMMAND')
-    const inspection = handler.inspect(commandView(run), payload)
+    const view=commandView(run);registry.runtime?.guard?.(view,command.kind,payload)
+    const inspection = handler.inspect(view, payload)
     if (!inspection.allowed) return { status: 'rejected', reasonCodes: inspection.reasonCodes }
-    const model: RuleModel = copyJson({ controlledAccountIds: run.controlledAccountIds, phase: run.phase, economy: run.economy, timeline: run.timeline, random: run.random, facts: run.facts, privateNotes: run.privateNotes, world: run.world, operations: run.operations,market:run.market,video:run.video,course:run.course,relay:run.relay,routines:run.routines,deepseek:run.deepseek })
+    const model: RuleModel = copyJson({ controlledAccountIds: run.controlledAccountIds, phase: run.phase, economy: run.economy, timeline: run.timeline, random: run.random, facts: run.facts, privateNotes: run.privateNotes, world: run.world, operations: run.operations,market:run.market,video:run.video,course:run.course,relay:run.relay,routines:run.routines,deepseek:run.deepseek,story:run.story })
     const effect = handler.apply(model, payload, { commandId: command.commandId, runId: run.runId, actorId: command.actorId, date: run.timeline.cursor.date,revision:run.revision })
-    requireRule(Object.keys(effect.model).length === 15 && Object.keys(effect.model).every((key) => ['controlledAccountIds', 'phase', 'economy', 'timeline', 'random', 'facts', 'privateNotes', 'world', 'operations','market','video','course','relay','routines','deepseek'].includes(key)), 'INVALID_RULE_MODEL')
+    requireRule(Object.keys(effect.model).length === 16 && Object.keys(effect.model).every((key) => ['controlledAccountIds', 'phase', 'economy', 'timeline', 'random', 'facts', 'privateNotes', 'world', 'operations','market','video','course','relay','routines','deepseek','story'].includes(key)), 'INVALID_RULE_MODEL')
     for (const fact of run.facts) {
       const nextFact = effect.model.facts.find((item) => item.id === fact.id)
       requireRule(nextFact && nextFact.roll === fact.roll && nextFact.domain === fact.domain && nextFact.sourceEventId === fact.sourceEventId && nextFact.createdAt === fact.createdAt && (fact.evidence === null || fact.evidence === nextFact.evidence), 'FACT_REWRITE')
@@ -215,7 +219,7 @@ export function evaluateCommand(run: GameRun, raw: unknown, registry: CommandReg
     const worldCauses: CauseEntry[] = (effect.model.world?.logs.filter((log) => !priorLogs.has(log.id)) ?? []).map((log: WorldLog) => ({ id: log.id, commandId: command.commandId, date: log.date, domain: 'world', parentIds: [...log.parentIds], sourceEventId: log.sourceEventId, visibleSummary: log.text, visibility: log.visibility }))
     const priorOperatingLogs = new Set(run.operations?.logs.map((log) => log.id) ?? [])
     const operatingCauses: CauseEntry[] = (effect.model.operations?.logs.filter((log) => !priorOperatingLogs.has(log.id)) ?? []).map((log) => ({ id: log.id, commandId: command.commandId, date: log.date, domain: 'operations', parentIds: log.parentIds, sourceEventId: log.sourceEventId, visibleSummary: log.text, visibility: log.visibility }))
-    const priorMarketLogs=new Set(run.market?.logs.map(log=>log.id)??[]);const marketCauses:CauseEntry[]=(effect.model.market?.logs.filter(log=>!priorMarketLogs.has(log.id))??[]).map(log=>({id:log.id,commandId:command.commandId,date:log.date,domain:'market',parentIds:log.parentIds,sourceEventId:log.sourceEventId,visibleSummary:log.text,visibility:log.visibility}));const causes = [cause, ...worldCauses, ...operatingCauses,...marketCauses]
+    const priorMarketLogs=new Set(run.market?.logs.map(log=>log.id)??[]);const marketCauses:CauseEntry[]=(effect.model.market?.logs.filter(log=>!priorMarketLogs.has(log.id))??[]).map(log=>({id:log.id,commandId:command.commandId,date:log.date,domain:'market',parentIds:log.parentIds,sourceEventId:log.sourceEventId,visibleSummary:log.text,visibility:log.visibility}));const priorStoryLogs=new Set(run.story?.logs.map(log=>log.id)??[]);const storyCauses:CauseEntry[]=(effect.model.story?.logs.filter(log=>!priorStoryLogs.has(log.id))??[]).map(log=>({id:log.id,commandId:command.commandId,date:log.date,domain:'story',parentIds:log.parentIds,sourceEventId:log.sourceEventId,visibleSummary:log.text,visibility:log.visibility}));const causes = [cause, ...worldCauses, ...operatingCauses,...marketCauses,...storyCauses]
     const entries = effect.model.economy.ledger.transactions.slice(run.economy.ledger.transactions.length)
     const receipt = { runId: run.runId, commandId: command.commandId, actorId: command.actorId, kind: command.kind, payloadHash: identity.hash, payloadSignature: identity.signature, revisionBefore: run.revision, revisionAfter: run.revision + 1, date: effect.model.timeline.cursor.date, summary: effect.summary, transactionIds: entries.map((entry) => entry.id), causeIds: causes.map((entry) => entry.id) }
     const nextRun: GameRun = { ...run, ...effect.model, revision: run.revision + 1, receipts: [...run.receipts, receipt], causes: [...run.causes, ...causes] }

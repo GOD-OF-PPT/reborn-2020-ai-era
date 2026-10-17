@@ -1,0 +1,32 @@
+[
+  {
+    "label": "typecheck",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 27.400324821472168,
+    "output": "goal-1/evidence/t14-final-serial-typecheck-output.txt",
+    "sha256": "a201b3b7ad8a0705d4bb4e826f4b4fa5432608843f277120f81c772ee7adef98"
+  },
+  {
+    "label": "unit",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "test:unit",
+      "--",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 143,
+    "wallSeconds": 563.2347121238708,
+    "output": "goal-1/evidence/t14-final-serial-unit-output.txt",
+    "sha256": "c17f7156ceac6df21e8cf1b67ee1123524b5c9b39eb24bd585eda33de1787d46"
+  }
+]

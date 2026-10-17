@@ -1,0 +1,33 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/campaign.test.ts (13 tests | 1 failed) 10405ms
+   × makes memory favorites and news reading free without rerolling or triggering future news 171ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/campaign.test.ts > makes memory favorites and news reading free without rerolling or triggering future news
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/application/campaign.test.ts:232:68
+    230|   const random = canonicalJson(run.random)
+    231|   run = send(run, 'FavoriteMemory', { memoryId: 'MEM-CONTENT', favorit…
+    232|   expect(projectWorld(run, campaignRuntime).memories[0]?.favorite).toB…
+       |                                                                    ^
+    233|   expect(canonicalJson(run.random)).toBe(random)
+    234|   expect(projectRun(run).budget.spent).toBe(0)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 29 passed (30)
+   Start at  16:34:41
+   Duration  130.95s (tests 99%, import 1%)
+

@@ -3,6 +3,10 @@ import type {CommandPreview} from '../core/commands.ts'
 export function confirmationMoney(command:CommandEnvelope,preview:CommandPreview){
  const p=typeof command.payload==='object'&&command.payload!==null?command.payload as Record<string,unknown>:{}
  const amount=(key:string)=>typeof p[key]==='number'&&Number.isSafeInteger(p[key])&&(p[key] as number)>=0?p[key] as number:null
+ if(['StartHengxingDeployment','StartLinzhouWork','StartAgentPreparation'].includes(command.kind))return {label:'本次开始时实际支付的自有成本',amountFen:preview.upfrontCostFen}
+ if(command.kind==='StopHengxingAuthority')return {label:'本次新增服务承诺（已用费用另结）',amountFen:0}
+ if(command.kind==='SetHengxingAuthority')return {label:'本次授权本身的费用（支持预算另列）',amountFen:0}
+ if(command.kind==='StartRiskTask')return {label:'本次独立工作成本（原已用费另结）',amountFen:preview.upfrontCostFen-(preview.accruedServiceFeeFen??0)}
  if(command.kind==='FundBusiness'||command.kind==='DistributeProfit')return {label:command.kind==='FundBusiness'?'个人转入企业的资本（不是费用）':'从企业转回的已可分配资金',amountFen:amount('amountFen')}
  if(['OpenEcosystemService','OpenCourseStudio','OpenRelayStation'].includes(command.kind))return {label:'转入新企业的自有资本（不计收入或费用）',amountFen:amount('capitalFen')}
  if(command.kind==='SignEquityAgreement'||command.kind==='FollowEquityRound')return {label:'投资本金支付（不计经营费用）',amountFen:preview.upfrontCostFen}
