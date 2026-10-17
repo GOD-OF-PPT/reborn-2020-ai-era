@@ -1,0 +1,37 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/application/relay.test.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/relay.test.ts (1 test | 1 failed) 2297ms
+   × executes F04 through actual daily service and due supplier invoices without spending protected recharge cash 2293ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/relay.test.ts > executes F04 through actual daily service and due supplier invoices without spending protected recharge cash
+RuleError: MISSING_EVENT_EFFECT
+ ❯ requireRule src/core/errors.ts:12:25
+     10|
+     11| export function requireRule(condition: unknown, code: string): asserts…
+     12|   if (!condition) throw new RuleError(code)
+       |                         ^
+     13| }
+     14|
+ ❯ RunCodec.#references src/persistence/codec.ts:140:9
+ ❯ RunCodec.validateRun src/persistence/codec.ts:51:10
+ ❯ RunCodec.seal src/persistence/codec.ts:190:24
+ ❯ RunCodec.export src/persistence/codec.ts:197:60
+ ❯ Object.send src/testing/relay-fixture.ts:21:252
+ ❯ replayRelayF04 src/testing/relay-scenarios.ts:12:4
+ ❯ src/application/relay.test.ts:3:128
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  08:03:42
+   Duration  3.90s (tests 67%, import 17%, transform 15%)
+

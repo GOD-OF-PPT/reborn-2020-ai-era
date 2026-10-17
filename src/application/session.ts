@@ -1,4 +1,4 @@
-import { evaluateCommand, fingerprintCommand, previewCommand, projectRun, type CommandPreview, type CommandRegistry } from '../core/commands.ts'
+import { evaluateCommand, fingerprintCommand, bindCommandPreview, projectRun, type CommandPreview, type CommandRegistry } from '../core/commands.ts'
 import { commandIdentifier } from '../core/command-identity.ts'
 import { copyJson } from '../core/json-input.ts'
 import { requireRule, RuleError } from '../core/errors.ts'
@@ -21,6 +21,8 @@ export class RunSession {
   readonly #options: SessionOptions
   #record: StoredRun
   #lease: WriterLease
+  #previewRecord:StoredRun|null=null
+  #previewer:ReturnType<typeof bindCommandPreview>|null=null
   #candidate: ProposedRun | null = null
   #flight: Flight | null = null
   #externalBusy = false
@@ -70,7 +72,8 @@ export class RunSession {
   preview(raw: unknown): CommandPreview {
     const blocked = this.#blockReason()
     if (blocked !== null) return { allowed: false, reasonCodes: [blocked], actionPoints: 0, upfrontCostFen: 0, releasedFen: 0 }
-    return previewCommand(this.#record.run, raw, this.#options.registry, this.#options.actorId)
+    if(this.#previewRecord!==this.#record||this.#previewer===null){this.#previewer=bindCommandPreview(this.#record.run,this.#options.registry,this.#options.actorId);this.#previewRecord=this.#record}
+    return this.#previewer(raw)
   }
   #blockReason(): string | null {
     if (this.#status === 'closed') return 'SESSION_CLOSED'
@@ -194,7 +197,7 @@ export class RunSession {
     requireRule(!this.#externalBusy, 'SAVE_IN_PROGRESS')
     if (this.#flight !== null) await this.#flight.promise
     requireRule(this.#candidate === null || options.discardCandidate === true, 'UNSAVED_CANDIDATE_EXISTS')
-    this.#candidate = null
+    this.#candidate = null;this.#previewer=null;this.#previewRecord=null
     this.#status = 'closed'; this.#notify(); this.#listeners.clear()
     await this.#lease.release()
   }

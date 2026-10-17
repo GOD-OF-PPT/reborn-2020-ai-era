@@ -14,12 +14,13 @@ export function assertVideo(runtime: VideoRuntime, run: GameRun): void {
     requireRule(ops, 'VIDEO_OPERATIONS_REQUIRED');
     requireRule(new Set(s.conversions.map(c=>c.id)).size===s.conversions.length,'DUPLICATE_VIDEO_ID');
     const courseConversion=(x:typeof s.conversions[number])=>run.course?.enrollments.some(e=>e.id===x.sourceId&&e.conversionId===x.id&&e.personId===x.personId&&e.productKey===x.productVersion)??false;
+    const relayConversion=(x:typeof s.conversions[number])=>run.relay?.customers.some(c=>c.id===x.sourceId&&c.conversionId===x.id&&c.personId===x.personId&&x.productVersion==='relay-service-v1')??false;
     requireRule(new Set(s.conversions.map(c=>[c.personId,c.productVersion].join(':'))).size===s.conversions.length,'DUPLICATE_VIDEO_CONVERSION');
     // An untouched video domain has no records to cross-join. Receipt signatures
     // are canonical JSON (checked by the codec); still reject every orphan timer
     // or video job instead of parsing the market's entire history again.
     if (s.channels.length === 0) {
-        requireRule([s.works, s.publications, s.applications, s.marketing, s.cohorts, s.contracts, s.settlements].every(rows => rows.length === 0)&&s.conversions.every(courseConversion) && !ops.jobs.some(j => j.definitionId.startsWith('video-')) && !run.timeline.pending.some(e => e.payload.kind === 'video_event') && !run.timeline.receipts.some(r => r.signature.includes('"kind":"video_event"')), 'INVALID_EMPTY_VIDEO_STATE');
+        requireRule([s.works, s.publications, s.applications, s.marketing, s.cohorts, s.contracts, s.settlements].every(rows => rows.length === 0)&&s.conversions.every(x=>courseConversion(x)||relayConversion(x)) && !ops.jobs.some(j => j.definitionId.startsWith('video-')) && !run.timeline.pending.some(e => e.payload.kind === 'video_event') && !run.timeline.receipts.some(r => r.signature.includes('"kind":"video_event"')), 'INVALID_EMPTY_VIDEO_STATE');
         return;
     }
     const financial = new Map(run.economy.ledger.receipts.map(r => [r.id, JSON.parse(r.signature) as Record<string, unknown>]));
@@ -152,6 +153,7 @@ export function assertVideo(runtime: VideoRuntime, run: GameRun): void {
         requireRule(c.date <= date, 'FUTURE_VIDEO_CONVERSION');
         if (c.productVersion === 'commercial-v1')
             requireRule(s.contracts.some(x => x.id === c.sourceId && x.clientId === c.personId), 'INVALID_VIDEO_CONVERSION');
+        else if(c.productVersion==='relay-service-v1')requireRule(relayConversion(c),'INVALID_RELAY_CONVERSION');
         else if(c.productVersion.startsWith('course:'))requireRule(courseConversion(c),'INVALID_COURSE_CONVERSION');
         else {
             const p = s.publications.find(p => p.id === c.sourceId), cohort = s.cohorts.find(co => co.id === p?.cohortId);

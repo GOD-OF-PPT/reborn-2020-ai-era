@@ -1,0 +1,52 @@
+{
+  "taskId": "T12",
+  "scope": "actual IAB built production UI, native local DB and file chooser; normal2020 creation and import of actual native2025 revision105; no deployed site or human",
+  "url": "http://127.0.0.1:5196/?storageTest=abort-relay",
+  "tabId": "18",
+  "checks": [
+    {
+      "id": "production2020-gate",
+      "pass": true,
+      "detail": "2020-01-01 normal new life, historical API gate disabled"
+    },
+    {
+      "id": "production-fault-param-disabled",
+      "pass": true,
+      "detail": "?storageTest=abort-relay has no development diagnostics in production"
+    },
+    {
+      "id": "production-relay-restored",
+      "pass": true,
+      "detail": "revision105: cash37804.44, protected customer balance7510.80, winding down and close disabled"
+    },
+    {
+      "id": "production-routine-bounds",
+      "pass": true,
+      "detail": "originalQ1 cancelled, Q2 draft unexecuted/zero allocation and cannot confirm duringQ1"
+    },
+    {
+      "id": "production-reload",
+      "pass": true,
+      "detail": "after actual page reload, continue local105 retains actual cash and protected balance; no rule commands rerun"
+    },
+    {
+      "id": "production-console",
+      "pass": true,
+      "detail": "no console errors or warnings in actual production UI"
+    }
+  ],
+  "consoleErrors": [],
+  "input": "t12-browser-final.json",
+  "inputSha256": "70781f2e362d125dfc0e7d2e234bbec6402af0ae53b7104bf1ba719005fdd453",
+  "screenshot": {
+    "file": "t12-production-winding-down.jpg",
+    "sha256": "cd895ed3b1265ae3e8f7b29909fcf344836bd72fe4665442f76debaf355ebd7c"
+  },
+  "httpReport": "t12-production-http.json",
+  "notCovered": [
+    "original_png",
+    "human_playtest",
+    "formal200percent",
+    "all24quarters"
+  ]
+}

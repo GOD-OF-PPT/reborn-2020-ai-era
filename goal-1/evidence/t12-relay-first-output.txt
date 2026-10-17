@@ -1,0 +1,28 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/application/relay.test.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/relay.test.ts (1 test | 1 failed) 515ms
+   × executes F04 through actual daily service and due supplier invoices without spending protected recharge cash 511ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/relay.test.ts > executes F04 through actual daily service and due supplier invoices without spending protected recharge cash
+Error: {"kind":"StartRelayPreparation","payload":{"businessId":"ops:c1f2805f0e894aef6baae2c5fd1df239","preparation":"materials","resources":["player-production"],"startAt":"2024-11-15"},"result":{"status":"rejected","reasonCodes":["RELAY_STATION_REQUIRED"]}}
+ ❯ Object.send src/testing/relay-fixture.ts:21:163
+
+ ❯ prepareRelayF04 src/testing/relay-scenarios.ts:4:243
+ ❯ replayRelayF04 src/testing/relay-scenarios.ts:7:21
+ ❯ src/application/relay.test.ts:3:128
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  08:03:13
+   Duration  4.57s (transform 63%, import 23%, tests 13%)
+

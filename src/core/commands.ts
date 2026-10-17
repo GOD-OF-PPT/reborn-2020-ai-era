@@ -24,6 +24,8 @@ const envelopeSchema = z.strictObject({ commandId: id, runId: id, actorId: id, e
 export const creationPayloadSchema = z.strictObject({ backgroundId: opaqueId, playerProfile:playerProfileSchema,origin: z.enum(['normal', 'fixture']), seed: z.string().min(1).max(256), initialStateHash: z.string().regex(/^[0-9a-f]{64}$/) })
 
 export interface CommandPreview {
+  readonly knownAdjustments?:{readonly customerIncomeDeltaFen:number;readonly supplierCostDeltaFen:number}
+  readonly actionAllocations?:readonly {readonly date:string;readonly actionPoints:number;readonly label:string}[]
   readonly actionDate?:string
   readonly receivedPrepaymentFen?:number
   readonly protectedIncreaseFen?:number
@@ -49,8 +51,10 @@ export interface CommandView {
   readonly market:RuleModel['market']
   readonly video:RuleModel['video']
   readonly course:RuleModel['course']
+  readonly relay:RuleModel['relay']
+  readonly routines:RuleModel['routines']
 }
-export interface CommandContext { readonly commandId: string; readonly runId: string; readonly actorId: string; readonly date: string }
+export interface CommandContext { readonly commandId: string; readonly runId: string; readonly actorId: string; readonly date: string;readonly revision:number }
 export interface CommandEffect { readonly model: RuleModel; readonly summary: string; readonly domain: string }
 export interface RegistryRuntime {
   advance(model: RuleModel, target: { readonly date: string; readonly phase?: DayPhase }): RuleModel
@@ -131,7 +135,7 @@ export function createBaseRegistry(versions: VersionSet, extra: readonly Command
 }
 
 function commandView(run: GameRun): CommandView {
-  return copyJson({ runId: run.runId, actorId: run.actorId, revision: run.revision, date: run.timeline.cursor.date, phase: run.phase, controlledAccountIds: run.controlledAccountIds, economy: run.economy, cursor: run.timeline.cursor, pause: run.timeline.pause, evidence: visibleFacts(run.facts), world: run.world, operations: run.operations,market:run.market,video:run.video,course:run.course })
+  return copyJson({ runId: run.runId, actorId: run.actorId, revision: run.revision, date: run.timeline.cursor.date, phase: run.phase, controlledAccountIds: run.controlledAccountIds, economy: run.economy, cursor: run.timeline.cursor, pause: run.timeline.pause, evidence: visibleFacts(run.facts), world: run.world, operations: run.operations,market:run.market,video:run.video,course:run.course,relay:run.relay,routines:run.routines })
 }
 
 export function projectRun(run: GameRun) {
@@ -141,7 +145,8 @@ export function projectRun(run: GameRun) {
   return copyJson({ runId: run.runId,backgroundId:run.backgroundId,playerProfile:run.playerProfile, revision: run.revision, origin: run.origin, date: run.timeline.cursor.date, phase: run.phase, accounts: run.controlledAccountIds.map((accountId) => ({ accountId, ...accountPosition(run.economy.ledger, accountId),valuationStatus:marketValuationComplete(run,accountId)?'current':'data_unavailable',lastKnownInvestmentValueFen:accountPosition(run.economy.ledger,accountId).investmentValueFen,investmentValueFen:marketValuationComplete(run,accountId)?accountPosition(run.economy.ledger,accountId).investmentValueFen:null,accruedCostFen:accruals.filter(a=>a.accountId===accountId).reduce((sum,a)=>sum+a.amountFen,0),netAssetsFen:marketValuationComplete(run,accountId)?accountPosition(run.economy.ledger,accountId).netAssetsFen-accruals.filter(a=>a.accountId===accountId).reduce((sum,a)=>sum+a.amountFen,0):null })), budget: actionBudget(run.economy, run.timeline.cursor.date), evidence: visibleFacts(run.facts), receipts: run.receipts.map(({ commandId, kind, revisionAfter, summary }) => ({ commandId, kind, revisionAfter, summary })), world,operations })
 }
 
-function prepare(run: GameRun, raw: unknown, registry: CommandRegistry, principalActorId: string) {
+type PreviewIdentity=Pick<GameRun,'runId'|'actorId'|'versions'|'revision'>
+function prepare(run: PreviewIdentity, raw: unknown, registry: CommandRegistry, principalActorId: string) {
   assertJsonInput(raw)
   requireRule(typeof raw === 'object' && raw !== null && Object.hasOwn(raw, 'payload'), 'INVALID_COMMAND')
   const parsed = envelopeSchema.safeParse(raw)
@@ -161,16 +166,23 @@ export function fingerprintCommand(run: GameRun, raw: unknown, registry: Command
   return { commandId: prepared.command.commandId, signature: prepared.identity.signature, hash: prepared.identity.hash }
 }
 
-export function previewCommand(run: GameRun, raw: unknown, registry: CommandRegistry, principalActorId: string): CommandPreview {
+function inspectPreview(run:PreviewIdentity,raw:unknown,registry:CommandRegistry,principalActorId:string,getView:()=>CommandView):CommandPreview{
   try {
-    const { command, handler, payload } = prepare(run, raw, registry, principalActorId)
-    requireRule(command.expectedRevision === run.revision, 'STALE_REVISION')
-    requireRule(handler, command.kind === 'CreateRun' ? 'RUN_ALREADY_EXISTS' : 'UNKNOWN_COMMAND')
-    return handler.inspect(commandView(run), payload)
-  } catch (error) {
-    if (error instanceof RuleError) return { ...allowed(), allowed: false, reasonCodes: [error.code] }
-    throw error
-  }
+    const {command,handler,payload}=prepare(run,raw,registry,principalActorId)
+    requireRule(command.expectedRevision===run.revision,'STALE_REVISION')
+    requireRule(handler,command.kind==='CreateRun'?'RUN_ALREADY_EXISTS':'UNKNOWN_COMMAND')
+    return handler.inspect(getView(),payload)
+  }catch(error){if(error instanceof RuleError)return {...allowed(),allowed:false,reasonCodes:[error.code]};throw error}
+}
+export function previewCommand(run:GameRun,raw:unknown,registry:CommandRegistry,principalActorId:string):CommandPreview{
+  return inspectPreview(run,raw,registry,principalActorId,()=>commandView(run))
+}
+/** A detached read-only snapshot. A session replaces this binding after a durable record changes. */
+export function bindCommandPreview(run:GameRun,registry:CommandRegistry,principalActorId:string):(raw:unknown)=>CommandPreview{
+  const identity:PreviewIdentity={runId:run.runId,actorId:run.actorId,revision:run.revision,versions:{...run.versions}},view=commandView(run)
+  function freeze(value:unknown):void{if(typeof value!=='object'||value===null)return;for(const child of Object.values(value))freeze(child);Object.freeze(value)}
+  freeze(identity);freeze(view)
+  return raw=>inspectPreview(identity,raw,registry,principalActorId,()=>view)
 }
 
 export function evaluateCommand(run: GameRun, raw: unknown, registry: CommandRegistry, principalActorId: string): ProposedRun | RejectedCommand | ExistingReceipt {
@@ -187,9 +199,9 @@ export function evaluateCommand(run: GameRun, raw: unknown, registry: CommandReg
     requireRule(handler, command.kind === 'CreateRun' ? 'RUN_ALREADY_EXISTS' : 'UNKNOWN_COMMAND')
     const inspection = handler.inspect(commandView(run), payload)
     if (!inspection.allowed) return { status: 'rejected', reasonCodes: inspection.reasonCodes }
-    const model: RuleModel = copyJson({ controlledAccountIds: run.controlledAccountIds, phase: run.phase, economy: run.economy, timeline: run.timeline, random: run.random, facts: run.facts, privateNotes: run.privateNotes, world: run.world, operations: run.operations,market:run.market,video:run.video,course:run.course })
-    const effect = handler.apply(model, payload, { commandId: command.commandId, runId: run.runId, actorId: command.actorId, date: run.timeline.cursor.date })
-    requireRule(Object.keys(effect.model).length === 12 && Object.keys(effect.model).every((key) => ['controlledAccountIds', 'phase', 'economy', 'timeline', 'random', 'facts', 'privateNotes', 'world', 'operations','market','video','course'].includes(key)), 'INVALID_RULE_MODEL')
+    const model: RuleModel = copyJson({ controlledAccountIds: run.controlledAccountIds, phase: run.phase, economy: run.economy, timeline: run.timeline, random: run.random, facts: run.facts, privateNotes: run.privateNotes, world: run.world, operations: run.operations,market:run.market,video:run.video,course:run.course,relay:run.relay,routines:run.routines })
+    const effect = handler.apply(model, payload, { commandId: command.commandId, runId: run.runId, actorId: command.actorId, date: run.timeline.cursor.date,revision:run.revision })
+    requireRule(Object.keys(effect.model).length === 14 && Object.keys(effect.model).every((key) => ['controlledAccountIds', 'phase', 'economy', 'timeline', 'random', 'facts', 'privateNotes', 'world', 'operations','market','video','course','relay','routines'].includes(key)), 'INVALID_RULE_MODEL')
     for (const fact of run.facts) {
       const nextFact = effect.model.facts.find((item) => item.id === fact.id)
       requireRule(nextFact && nextFact.roll === fact.roll && nextFact.domain === fact.domain && nextFact.sourceEventId === fact.sourceEventId && nextFact.createdAt === fact.createdAt && (fact.evidence === null || fact.evidence === nextFact.evidence), 'FACT_REWRITE')

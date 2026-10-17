@@ -1,3 +1,5 @@
+import type {RoutineState} from './routine-schema.ts'
+import type { RelayState } from './relay-schema.ts'
 import type { CourseState } from './course-schema.ts'
 import type { VideoState } from './video-schema.ts'
 import type { IsoDate } from './calendar.ts'
@@ -30,6 +32,8 @@ export interface RuleModel {
   readonly market:MarketState|null
   readonly video:VideoState|null
   readonly course:CourseState|null
+  readonly relay:RelayState|null
+  readonly routines:RoutineState|null
 }
 export interface CommandEnvelope {
   readonly commandId: string
@@ -96,6 +100,8 @@ export interface InitialRunState {
   readonly market?:MarketState|null
   readonly video?:VideoState|null
   readonly course?:CourseState|null
+  readonly relay?:RelayState|null
+  readonly routines?:RoutineState|null
 }
 export interface ProposedRun {
   readonly status: 'proposed'

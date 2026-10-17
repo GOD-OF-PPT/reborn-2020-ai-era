@@ -1,0 +1,57 @@
+[
+  {
+    "name": "docs-build",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "check:docs"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 1.785,
+    "output": "goal-1/evidence/t12-final-docs-build-output.txt"
+  },
+  {
+    "name": "build",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 19.961,
+    "output": "goal-1/evidence/t12-final-build-output.txt"
+  },
+  {
+    "name": "relay",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "evidence:relay",
+      "--",
+      "--output-dir",
+      "goal-1/evidence/t12-frozen"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 76.871,
+    "output": "goal-1/evidence/t12-final-relay-output.txt"
+  },
+  {
+    "name": "relay-browser-audit",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "evidence:relay-browser-audit"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 26.89,
+    "output": "goal-1/evidence/t12-final-relay-browser-audit-output.txt"
+  }
+]

@@ -1,0 +1,35 @@
+import { z } from 'zod'
+import { idSchema as id,dateSchema as date,moneySchema as money,safeCount as count,rows,uint32 } from './record-schemas.ts'
+export const relaySegment=z.enum(['ai_learners','local_merchants','lifestyle'])
+export const relayParametersSchema=z.strictObject({applicationAcceptBps:count.max(10000),trafficBps:count.max(10000),billingErrorBps:count.max(10000),faultMode:z.enum(['seeded','none','shared_2025_jan']),unitCostFen:money.nullable(),monthlyUnits:count.min(1).max(300000)})
+export type RelayParameters=z.infer<typeof relayParametersSchema>
+const prep=z.strictObject({id,businessId:id,kind:z.enum(['materials','basics']),jobId:id})
+const application=z.strictObject({id,businessId:id,supplierId:id,jobId:id,appliedAt:date,decisionAt:date,approved:z.boolean().nullable(),expiresAt:date.nullable(),factId:id,read:z.boolean(),allowedSegments:rows(relaySegment),purpose:z.literal('licensed_service_aggregation')})
+const adapter=z.strictObject({id,businessId:id,supplierId:id,jobId:id,kind:z.enum(['initial_verification','migration'])})
+const station=z.strictObject({id,businessId:id,createdAt:date,trafficPaused:z.boolean(),closedAt:date.nullable()})
+const audience=z.strictObject({id,businessId:id,segment:relaySegment,mode:z.enum(['paid','video_referral']),createdAt:date,jobId:id.nullable(),sourceCohortIds:rows(id),completedAt:date.nullable(),members:rows(id)})
+const terms=z.strictObject({id,effectiveAt:date,offerId:z.enum(['low_margin','managed_support']),unitPriceFen:money.min(1),serviceFeeFen:money,sourceId:id})
+const customer=z.strictObject({id,businessId:id,personId:id,originAudienceId:id,originCohortIds:rows(id),conversionId:id,segment:relaySegment,signedAt:date,initialTermEnd:date,termEnd:date,initialMode:z.enum(['prepaid','postpaid']),initialCreditLimitFen:money,mode:z.enum(['prepaid','postpaid']),creditLimitFen:money,monthlyUnits:count.min(1).max(300000),rechargeLimitFen:money,terms:rows(terms),closedAt:date.nullable()})
+const renewal=z.strictObject({id,customerId:id,date,termEnd:date,creditLimitFen:money,mode:z.enum(['prepaid','postpaid'])})
+const receivable=z.strictObject({id,customerId:id,sourceId:id,date,dueAt:date,operationId:id,amountFen:money.min(1),collectedFen:money,reversedFen:money})
+const collection=z.strictObject({id,receivableId:id,date,operationId:id,amountFen:money.min(1)})
+const offer=z.strictObject({id,businessId:id,createdAt:date,offerId:z.enum(['low_margin','managed_support']),unitPriceFen:money.min(1),serviceFeeFen:money})
+const recharge=z.strictObject({id,customerId:id,date,amountFen:money.min(1),operationId:id,usedFen:money,refundedFen:money})
+const period=z.strictObject({id,businessId:id,customerIds:rows(id),supplierIds:rows(id),createdAt:date,from:date,to:date,jobId:id,supportJobId:id,supportMode:z.enum(['guided','self']),maxUnits:count.min(1).max(300000),maxSupplierCostFen:money,feeQuotes:rows(z.strictObject({customerId:id,termsId:id,amountFen:money})),status:z.enum(['planned','running','support','settling','closed','stopped']),feePostedAt:date.nullable(),compensatedAt:date.nullable(),stoppedAt:date.nullable()})
+const meter=z.strictObject({id,periodId:id,customerId:id,date,requestedUnits:count,maxBillableUnits:count,blocked:z.boolean(),actualUnits:count,reportedUnits:count,unitPriceFen:money.min(1),termsId:id,supplierId:id.nullable(),rateId:id.nullable(),unitCostFen:money,supplierBilling:z.enum(['prepaid','postpaid']).nullable(),missedUnits:count,reason:z.string().max(200).nullable(),factId:id,deliveryIds:rows(id),costOperationId:id.nullable(),supplierDueAt:date.nullable(),correctionId:id.nullable()})
+const audit=z.strictObject({id,businessId:id,meterId:id,jobId:id,completedAt:date.nullable(),actualUnits:count.nullable()})
+const correction=z.strictObject({id,meterId:id,auditId:id,date,originalReportedUnits:count,correctUnits:count,customerDeltaFen:z.number().int().min(-9000000000000).max(9000000000000),supplierDeltaFen:z.number().int().min(-9000000000000).max(9000000000000),operationIds:rows(id)})
+const refund=z.strictObject({id,customerId:id,date,amountFen:money.min(1),rechargeIds:rows(id),operationIds:rows(id)})
+const quote=z.strictObject({id,businessId:id,customerIds:rows(id),jobId:id,createdAt:date,effectiveAt:date,offerId:z.enum(['low_margin','managed_support']),unitPriceFen:money.min(1),serviceFeeFen:money,responses:rows(z.strictObject({customerId:id,factId:id,accepted:z.boolean()})),completedAt:date.nullable()})
+const change=z.strictObject({id,businessId:id,anchorId:id,date,acknowledgedAt:date.nullable()})
+const observation=z.strictObject({id,periodId:id,date,domain:id,supplierIds:rows(id),reason:z.string().min(1).max(200)})
+export const relayStateSchema=z.strictObject({version:id,catalogHash:z.string().regex(/^[0-9a-f]{64}$/),stations:rows(station),preparations:rows(prep),applications:rows(application),adapters:rows(adapter),audiences:rows(audience),offers:rows(offer),customers:rows(customer),renewals:rows(renewal),receivables:rows(receivable),collections:rows(collection),recharges:rows(recharge),periods:rows(period),meters:rows(meter),audits:rows(audit),corrections:rows(correction),refunds:rows(refund),quotes:rows(quote),changes:rows(change),observations:rows(observation)})
+export const relayEventSchema=z.strictObject({kind:z.literal('relay_event'),type:z.enum(['meter_day','supplier_due','support_close']),entityId:id,date})
+export type RelayState=z.infer<typeof relayStateSchema>
+export type RelayEvent=z.infer<typeof relayEventSchema>
+export type RelayCustomer=z.infer<typeof customer>
+export type RelayPeriod=z.infer<typeof period>
+export type RelayMeter=z.infer<typeof meter>
+export type RelayContext=Pick<import('./run-types.ts').RuleModel,'controlledAccountIds'|'economy'|'world'|'operations'|'video'|'course'|'relay'>
+export type RelayIntent={kind:string;[key:string]:unknown}
+export const relayRollSchema=uint32

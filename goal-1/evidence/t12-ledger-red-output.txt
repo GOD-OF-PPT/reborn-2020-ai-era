@@ -1,0 +1,47 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/core/relay-ledger.test.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/core/relay-ledger.test.ts (2 tests | 2 failed) 79ms
+   × keeps supplier credit cost and due date separate, reverses unpaid first and restores paid credit as an asset 72ms
+   × reverses actual supplier prepayment consumption without creating cash or profit twice 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/core/relay-ledger.test.ts > keeps supplier credit cost and due date separate, reverses unpaid first and restores paid credit as an asset
+RuleError: INVALID_LEDGER_OPERATION
+ ❯ requireRule src/core/errors.ts:12:25
+     10|
+     11| export function requireRule(condition: unknown, code: string): asserts…
+     12|   if (!condition) throw new RuleError(code)
+       |                         ^
+     13| }
+     14|
+ ❯ parseLedgerOperation src/core/record-schemas.ts:76:3
+ ❯ src/core/relay-ledger.test.ts:7:29
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/core/relay-ledger.test.ts > reverses actual supplier prepayment consumption without creating cash or profit twice
+RuleError: INVALID_LEDGER_OPERATION
+ ❯ requireRule src/core/errors.ts:12:25
+     10|
+     11| export function requireRule(condition: unknown, code: string): asserts…
+     12|   if (!condition) throw new RuleError(code)
+       |                         ^
+     13| }
+     14|
+ ❯ parseLedgerOperation src/core/record-schemas.ts:76:3
+ ❯ src/core/relay-ledger.test.ts:19:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  07:52:06
+   Duration  1.11s (import 53%, transform 30%, tests 15%, worker 1%)
+

@@ -50,6 +50,10 @@ type DueExpenseOperation = OperationBase & { readonly kind: 'due_expense'; reado
 type SupplierOperation = OperationBase & { readonly accountId: string; readonly businessId: string; readonly prepaymentId: string; readonly amountFen: number } & (
   | { readonly kind: 'supplier_prepay'; readonly counterpartyId: string }
   | { readonly kind: 'consume_supplier' }
+  | { readonly kind: 'incur_supplier_usage'; readonly counterpartyId: string; readonly obligationId: string; readonly dueAt: string }
+  | { readonly kind: 'reverse_supplier_usage'; readonly referenceId: string }
+  | { readonly kind: 'refund_supplier' }
+  | { readonly kind: 'settle_supplier_credit'; readonly obligationId: string; readonly referenceId: string }
 )
 type InvestmentOperation = OperationBase & { readonly accountId: string; readonly investmentId: string } & (
   | { readonly kind: 'capital_injection'; readonly targetAccountId: string; readonly assetId: string; readonly classification: InvestmentPosition['classification']; readonly amountFen: number }
@@ -246,6 +250,12 @@ function paymentCapacity(state: LedgerState, accountId: string, reservationId: s
   return Math.max(0, funds.cashFen - (funds.heldFen - own))
 }
 
+/** A refund may use its own protection bucket, never another customer's funds. */
+export function obligationPaymentCapacity(state:LedgerState,accountId:string,obligationId:string){
+ const owed=state.obligations.find(o=>o.id===obligationId&&o.accountId===accountId)
+ requireRule(owed,'OBLIGATION_NOT_FOUND');return paymentCapacity(state,accountId,owed.protectionReservationId)
+}
+
 function cashTransfer(state: WorkingLedger, operation: OperationBase, fromId: string, toId: string, amountFen: number, reservationId: string | null = null) {
   money(amountFen)
   requireRule(fromId !== toId, 'SAME_ACCOUNT_TRANSFER')
@@ -355,7 +365,39 @@ function addInvestment(state: WorkingLedger, operation: OperationBase & { readon
   } else state.investments.push({ id: operation.investmentId, accountId: operation.accountId, assetId: operation.assetId, subjectAccountId, classification: operation.classification, bookCostFen: operation.amountFen, valueFen: operation.amountFen })
 }
 
+/** Reconcile supplier assets and corrected invoices from the immutable operation order. */
+function assertSupplierHistory(state: LedgerState): void {
+  if (state.supplierPrepayments.length === 0 && !state.receipts.some(r => r.kind === 'incur_supplier_usage' || r.kind === 'reverse_supplier_usage' || r.kind === 'refund_supplier')) return
+  const pools = new Map<string,{accountId:string;businessId:string;counterpartyId:string;paidFen:number;remainingFen:number}>()
+  const sources = new Map<string,Extract<LedgerOperation,{kind:'consume_supplier'|'incur_supplier_usage'}>>()
+  const invoices = new Map<string,number>(), reversed = new Map<string,number>()
+  const pool = (id:string,accountId:string,businessId:string,counterpartyId:string) => { let p=pools.get(id); if(!p){p={accountId,businessId,counterpartyId,paidFen:0,remainingFen:0};pools.set(id,p)} requireRule(p.accountId===accountId&&p.businessId===businessId&&p.counterpartyId===counterpartyId,'SUPPLIER_HISTORY_MISMATCH');return p }
+  const costByOperation=new Map<string,number>()
+  for(const entry of state.metrics)if(entry.kind==='cost'){const key=[entry.operationId,entry.accountId,entry.businessId??'-'].join('|');costByOperation.set(key,sumMoney([costByOperation.get(key)??0,entry.deltaFen],true))}
+  const cost=(op:LedgerOperation,amount:number)=>requireRule((costByOperation.get([op.id,op.accountId,op.businessId??'-'].join('|'))??0)===amount,'SUPPLIER_COST_HISTORY_MISMATCH')
+  for (const receipt of state.receipts) {
+    const o=JSON.parse(receipt.signature) as LedgerOperation
+    if(o.kind==='supplier_prepay'){const p=pool(o.prepaymentId,o.accountId,o.businessId,o.counterpartyId);p.paidFen=sumMoney([p.paidFen,o.amountFen]);p.remainingFen=sumMoney([p.remainingFen,o.amountFen])}
+    if(o.kind==='consume_supplier'){const p=pools.get(o.prepaymentId);requireRule(p&&p.accountId===o.accountId&&p.businessId===o.businessId&&p.remainingFen>=o.amountFen,'SUPPLIER_HISTORY_MISMATCH');p.remainingFen-=o.amountFen;sources.set(o.id,o);cost(o,o.amountFen)}
+    if(o.kind==='incur_supplier_usage'){sources.set(o.id,o);requireRule(!invoices.has(o.obligationId),'SUPPLIER_HISTORY_MISMATCH');invoices.set(o.obligationId,o.amountFen);cost(o,o.amountFen)}
+    if(o.kind==='pay_obligation'&&invoices.has(o.obligationId)){const remaining=invoices.get(o.obligationId)!-o.amountFen;requireRule(remaining>=0,'SUPPLIER_HISTORY_MISMATCH');invoices.set(o.obligationId,remaining)}
+    if(o.kind==='reverse_supplier_usage'){
+      const source=sources.get(o.referenceId);requireRule(source&&source.accountId===o.accountId&&source.businessId===o.businessId&&source.prepaymentId===o.prepaymentId,'INVALID_SUPPLIER_CORRECTION_SOURCE')
+      const total=sumMoney([reversed.get(source.id)??0,o.amountFen]);requireRule(total<=source.amountFen,'SUPPLIER_CORRECTION_EXCEEDS_SOURCE');reversed.set(source.id,total)
+      if(source.kind==='consume_supplier'){const p=pools.get(source.prepaymentId);requireRule(p,'SUPPLIER_HISTORY_MISMATCH');p.remainingFen=sumMoney([p.remainingFen,o.amountFen])}
+      else {const unpaid=Math.min(invoices.get(source.obligationId)!,o.amountFen),credit=o.amountFen-unpaid;invoices.set(source.obligationId,invoices.get(source.obligationId)!-unpaid);if(credit>0){const p=pool(source.prepaymentId,source.accountId,source.businessId,source.counterpartyId);p.paidFen=sumMoney([p.paidFen,credit]);p.remainingFen=sumMoney([p.remainingFen,credit])}}
+      cost(o,-o.amountFen)
+    }
+    if(o.kind==='settle_supplier_credit'){const p=pools.get(o.prepaymentId),source=sources.get(o.referenceId);requireRule(p&&source?.kind==='incur_supplier_usage'&&source.obligationId===o.obligationId&&source.prepaymentId===o.prepaymentId&&p.remainingFen>=o.amountFen&&invoices.get(o.obligationId)!>=o.amountFen,'SUPPLIER_HISTORY_MISMATCH');p.remainingFen-=o.amountFen;invoices.set(o.obligationId,invoices.get(o.obligationId)!-o.amountFen)}
+    if(o.kind==='refund_supplier'){const p=pools.get(o.prepaymentId);requireRule(p&&p.accountId===o.accountId&&p.businessId===o.businessId&&p.remainingFen>=o.amountFen,'SUPPLIER_HISTORY_MISMATCH');p.remainingFen-=o.amountFen}
+  }
+  requireRule(pools.size===state.supplierPrepayments.length,'SUPPLIER_HISTORY_MISMATCH')
+  for(const actual of state.supplierPrepayments){const p=pools.get(actual.id);requireRule(p&&p.accountId===actual.accountId&&p.businessId===actual.businessId&&p.counterpartyId===actual.counterpartyId&&p.paidFen===actual.paidFen&&p.remainingFen===actual.remainingFen,'SUPPLIER_HISTORY_MISMATCH')}
+  for(const [id,remaining] of invoices)requireRule(state.obligations.some(o=>o.id===id&&o.remainingFen===remaining),'SUPPLIER_INVOICE_HISTORY_MISMATCH')
+}
+
 export function assertLedger(state: LedgerState): void {
+  assertSupplierHistory(state)
   isoDate(state.asOf)
   const balances = new Map(state.accounts.map((account) => [account.id, 0n]))
   requireRule(balances.size === state.accounts.length, 'DUPLICATE_ACCOUNT')
@@ -665,6 +707,58 @@ export function applyLedger(state: LedgerState, operation: LedgerOperation): Led
       requireRule(operation.amountFen > 0 && operation.amountFen <= prepayment.remainingFen, 'USAGE_EXCEEDS_SUPPLIER_PREPAYMENT')
       prepayment.remainingFen -= operation.amountFen
       metric(next, { ...operation, referenceId: prepayment.id }, account.id, 'cost', operation.amountFen)
+      break
+    }
+    case 'incur_supplier_usage': {
+      identifier(operation.prepaymentId); isoDate(operation.dueAt)
+      requireRule(operation.dueAt >= operation.date, 'INVALID_SUPPLIER_DUE_DATE')
+      const payable = createPayable(next, operation, 'expense', operation.counterpartyId, operation.contractId ?? null, null)
+      payable.date = operation.dueAt
+      metric(next, operation, account.id, 'cost', operation.amountFen)
+      status = 'due'
+      break
+    }
+    case 'reverse_supplier_usage': {
+      const raw = next.receipts.find(r => r.id === operation.referenceId)
+      const source = raw ? JSON.parse(raw.signature) as LedgerOperation : null
+      requireRule(source && (source.kind === 'consume_supplier' || source.kind === 'incur_supplier_usage') && source.accountId === account.id && source.businessId === operation.businessId && source.prepaymentId === operation.prepaymentId, 'INVALID_SUPPLIER_CORRECTION_SOURCE')
+      const prior = sumMoney(next.receipts.filter(r => r.kind === 'reverse_supplier_usage').map(r => JSON.parse(r.signature) as Extract<LedgerOperation,{kind:'reverse_supplier_usage'}>).filter(r => r.referenceId === operation.referenceId).map(r => r.amountFen))
+      requireRule(operation.amountFen > 0 && operation.amountFen <= source.amountFen - prior, 'SUPPLIER_CORRECTION_EXCEEDS_SOURCE')
+      let restored = operation.amountFen
+      let counterpartyId: string
+      if (source.kind === 'incur_supplier_usage') {
+        const payable = next.obligations.find(o => o.id === source.obligationId && o.originOperationId === source.id)
+        requireRule(payable, 'SUPPLIER_INVOICE_NOT_FOUND')
+        const unpaid = Math.min(payable.remainingFen, operation.amountFen)
+        payable.remainingFen -= unpaid; restored -= unpaid; counterpartyId = source.counterpartyId
+      } else {
+        const existing = next.supplierPrepayments.find(p => p.id === source.prepaymentId)
+        requireRule(existing, 'SUPPLIER_PREPAYMENT_NOT_FOUND'); counterpartyId = existing.counterpartyId
+      }
+      if (restored > 0) {
+        const prepayment = next.supplierPrepayments.find(p => p.id === operation.prepaymentId)
+        if (prepayment) {
+          requireRule(prepayment.accountId === account.id && prepayment.businessId === operation.businessId && prepayment.counterpartyId === counterpartyId, 'SUPPLIER_PREPAYMENT_ID_REUSED')
+          if (source.kind === 'incur_supplier_usage') prepayment.paidFen = sumMoney([prepayment.paidFen,restored])
+          prepayment.remainingFen = sumMoney([prepayment.remainingFen,restored])
+        } else next.supplierPrepayments.push({id:operation.prepaymentId,accountId:account.id,businessId:operation.businessId,counterpartyId,paidFen:restored,remainingFen:restored})
+      }
+      metric(next, operation, account.id, 'cost', -operation.amountFen)
+      break
+    }
+    case 'settle_supplier_credit': {
+      const raw=next.receipts.find(r=>r.id===operation.referenceId),source=raw?JSON.parse(raw.signature) as LedgerOperation:null
+      requireRule(source?.kind==='incur_supplier_usage'&&source.accountId===account.id&&source.businessId===operation.businessId&&source.prepaymentId===operation.prepaymentId&&source.obligationId===operation.obligationId,'INVALID_SUPPLIER_SETTLEMENT_SOURCE')
+      const p=next.supplierPrepayments.find(p=>p.id===operation.prepaymentId&&p.accountId===account.id&&p.businessId===operation.businessId),owed=next.obligations.find(o=>o.id===operation.obligationId)
+      requireRule(p&&owed&&operation.amountFen>0&&operation.amountFen<=p.remainingFen&&operation.amountFen<=owed.remainingFen,'INVALID_SUPPLIER_CREDIT_SETTLEMENT')
+      p.remainingFen-=operation.amountFen;owed.remainingFen-=operation.amountFen
+      break
+    }
+    case 'refund_supplier': {
+      const prepayment = next.supplierPrepayments.find(p => p.id === operation.prepaymentId && p.accountId === account.id && p.businessId === operation.businessId)
+      requireRule(prepayment && operation.amountFen > 0 && operation.amountFen <= prepayment.remainingFen, 'INVALID_SUPPLIER_REFUND')
+      cashTransfer(next, operation, prepayment.counterpartyId, account.id, operation.amountFen)
+      prepayment.remainingFen -= operation.amountFen
       break
     }
     case 'capital_injection':

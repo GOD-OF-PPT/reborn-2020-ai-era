@@ -50,6 +50,8 @@ export class RunCodec {
     assertGameRun(run)
     this.#references(run)
     requireRule(run.world === null || this.registry.runtime !== null, 'WORLD_HANDLER_REQUIRED')
+    requireRule(run.routines===null||this.registry.runtime!==null,'ROUTINE_HANDLER_REQUIRED')
+    requireRule(run.relay===null||this.registry.runtime!==null,'RELAY_HANDLER_REQUIRED')
     requireRule(run.course === null || this.registry.runtime !== null, 'COURSE_HANDLER_REQUIRED')
     requireRule(run.video === null || this.registry.runtime !== null, 'VIDEO_HANDLER_REQUIRED')
     requireRule(run.market === null || this.registry.runtime !== null, 'MARKET_HANDLER_REQUIRED')
@@ -93,7 +95,7 @@ export class RunCodec {
     for (const entry of ledger.metrics) requireRule(financial.has(entry.operationId), 'INVALID_METRIC_REFERENCE')
     for (const obligation of ledger.obligations) {
       const operation = financial.get(obligation.originOperationId)
-      requireRule(operation && operation.accountId === obligation.accountId && (operation.kind === 'borrow_cash' ? operation.dueAt : operation.date) === obligation.date, 'INVALID_OBLIGATION_REFERENCE')
+      requireRule(operation && operation.accountId === obligation.accountId && (operation.kind === 'borrow_cash' || operation.kind === 'incur_supplier_usage' ? operation.dueAt : operation.date) === obligation.date, 'INVALID_OBLIGATION_REFERENCE')
       if (obligation.kind !== 'expense' && obligation.kind !== 'loan_principal') requireRule(obligation.contractId !== null && contracts.get(obligation.contractId)?.accountId === obligation.accountId, 'INVALID_CONTRACT_REFERENCE')
       if (obligation.protectionReservationId !== null) requireRule(reservations.get(obligation.protectionReservationId)?.accountId === obligation.accountId, 'INVALID_RESERVATION_REFERENCE')
     }
@@ -122,7 +124,7 @@ export class RunCodec {
       requireRule(previousPoint === null || compareTimePoints(event, previousPoint) > 0, 'EVENT_HISTORY_OUT_OF_ORDER')
       requireRule(compareTimePoints(event, run.timeline.cursor) <= 0, 'EVENT_HISTORY_AHEAD_OF_CURSOR')
       previousPoint = event
-      if (isWorldOperation(event.payload) || event.payload.kind === 'operating_event'||event.payload.kind==='market_event'||event.payload.kind==='video_event'||event.payload.kind==='course_event') {
+      if (isWorldOperation(event.payload) || event.payload.kind === 'operating_event'||event.payload.kind==='market_event'||event.payload.kind==='video_event'||event.payload.kind==='course_event'||event.payload.kind==='relay_event') {
         requireRule(this.registry.runtime && run.world, 'WORLD_HANDLER_REQUIRED')
       } else if (receipt.skippedReason !== undefined) {
         // Validate the historical reason against its earlier operation. The action

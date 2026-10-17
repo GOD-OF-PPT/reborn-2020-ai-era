@@ -1,0 +1,36 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/application/routines.test.ts -t byte-identical
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/routines.test.ts (4 tests | 1 failed | 3 skipped) 4016ms
+   × produces byte-identical saved runs for manual step execution and batch execution of the same confirmed instructions 4013ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/routines.test.ts > produces byte-identical saved runs for manual step execution and batch execution of the same confirmed instructions
+AssertionError: {"error":"INVALID_CAUSE_REFERENCE","notice":null}: expected { Object (stepsExecuted, commandsSaved) } to deeply equal { stepsExecuted: 1, commandsSaved: 1 }
+
+- Expected
++ Received
+
+  {
+-   "commandsSaved": 1,
+-   "stepsExecuted": 1,
++   "commandsSaved": 0,
++   "stepsExecuted": 0,
+  }
+
+ ❯ src/application/routines.test.ts:20:399
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 skipped (4)
+   Start at  08:15:41
+   Duration  6.85s (tests 66%, import 18%, transform 16%)
+

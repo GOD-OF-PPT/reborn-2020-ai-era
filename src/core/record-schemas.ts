@@ -25,7 +25,7 @@ const contract = { ...base, accountId: idSchema, businessId: idSchema, contractI
 const investment = { ...base, accountId: idSchema, investmentId: idSchema }
 export const classification = z.enum(['historical', 'simulation', 'fictional', 'counterfactual'])
 
-export const ledgerOperationSchema = z.union([
+const ledgerVariants = [
   z.strictObject({...base,kind:z.literal('trade_buy'),accountId:idSchema,counterpartyId:idSchema,investmentId:idSchema,assetId:idSchema,reservationId:idSchema,originId:idSchema,principalFen:moneySchema.min(1),feeFen:moneySchema,valueFen:moneySchema}),
   z.strictObject({...base,kind:z.literal('trade_sell'),accountId:idSchema,counterpartyId:idSchema,investmentId:idSchema,removedPrincipalFen:moneySchema,grossFen:moneySchema,feeFen:moneySchema,valueFen:moneySchema,receivableId:idSchema.nullable(),dueAt:dateSchema}),
   z.strictObject({...cash,kind:z.literal('record_market_income'),receivableId:idSchema,dueAt:dateSchema,incomeKind:z.literal('dividend')}),
@@ -49,30 +49,47 @@ export const ledgerOperationSchema = z.union([
   z.strictObject({ ...cash, kind: z.literal('due_expense'), obligationId: idSchema }),
   z.strictObject({ ...cash, kind: z.literal('supplier_prepay'), businessId: idSchema, prepaymentId: idSchema }),
   z.strictObject({ ...base, kind: z.literal('consume_supplier'), accountId: idSchema, businessId: idSchema, prepaymentId: idSchema, amountFen: moneySchema }),
+  z.strictObject({ ...cash, kind: z.literal('incur_supplier_usage'), businessId:idSchema,prepaymentId:idSchema,obligationId:idSchema,dueAt:dateSchema }),
+  z.strictObject({ ...base, kind:z.literal('reverse_supplier_usage'), accountId:idSchema,businessId:idSchema,prepaymentId:idSchema,amountFen:moneySchema.min(1),referenceId:idSchema }),
+  z.strictObject({ ...base, kind:z.literal('settle_supplier_credit'), accountId:idSchema,businessId:idSchema,prepaymentId:idSchema,obligationId:idSchema,referenceId:idSchema,amountFen:moneySchema.min(1) }),
+  z.strictObject({ ...base, kind:z.literal('refund_supplier'), accountId:idSchema,businessId:idSchema,prepaymentId:idSchema,amountFen:moneySchema.min(1) }),
   z.strictObject({ ...investment, kind: z.literal('capital_injection'), targetAccountId: idSchema, assetId: idSchema, classification, amountFen: moneySchema }),
   z.strictObject({ ...investment, kind: z.literal('acquire_asset'), counterpartyId: idSchema, assetId: idSchema, classification, amountFen: moneySchema }),
   z.strictObject({ ...investment, kind: z.literal('value_asset'), valueFen: moneySchema }),
   z.strictObject({ ...base, kind: z.literal('charge_fee'), accountId: idSchema, counterpartyId: idSchema, feeId: idSchema, addedBaseFen: moneySchema, basisPoints: z.number().int().min(0).max(10000) }),
-])
+] as const
+export const ledgerOperationSchema = z.union(ledgerVariants)
 
 export const actionDefinitionSchema = z.strictObject({ id: idSchema, definitionId: idSchema, accountId: idSchema, counterpartyId: idSchema, businessId: optionalId, actionPoints: z.number().int().min(0).max(4), costFen: moneySchema, cashReservationId: idSchema, fundingPurpose: purpose, startAt: dateSchema, completeAt: dateSchema, settlementAt: dateSchema })
-export const economyOperationSchema = z.union([
-  ledgerOperationSchema,
+const actionVariants = [
   z.strictObject({ ...base, kind: z.enum(['draft_action', 'reserve_action']), action: actionDefinitionSchema }),
   z.strictObject({ ...base, kind: z.enum(['execute_action', 'complete_action', 'cancel_action', 'interrupt_action']), actionId: idSchema }),
   z.strictObject({ ...base, kind: z.literal('reschedule_action'), actionId: idSchema, startAt: dateSchema, completeAt: dateSchema, settlementAt: dateSchema }),
-])
+] as const
+export const economyOperationSchema = z.union([ledgerOperationSchema,...actionVariants])
+
+// Every branch already requires its own literal/enum kind. Reuse only matching
+// branches for journal signatures; do not allocate errors for unrelated kinds.
+const ledgerParsers=new Map<string,z.ZodType>(),economyParsers=new Map<string,z.ZodType>()
+function parserFor(value:unknown,ledgerOnly:boolean){
+  const reason=ledgerOnly?'INVALID_LEDGER_OPERATION':'INVALID_ECONOMY_OPERATION'
+  requireRule(typeof value==='object'&&value!==null&&Object.hasOwn(value,'kind'),reason)
+  const kind=Reflect.get(value,'kind');requireRule(typeof kind==='string',reason)
+  const cache=ledgerOnly?ledgerParsers:economyParsers,cached=cache.get(kind);if(cached)return cached
+  const variants=ledgerOnly?ledgerVariants:[...ledgerVariants,...actionVariants],matching=variants.filter(schema=>schema.shape.kind.safeParse(kind).success)
+  requireRule(matching.length>0,reason);const parser:z.ZodType=matching.length===1?matching[0]!:z.union(matching);cache.set(kind,parser);return parser
+}
 
 export function parseEconomyOperation(value: unknown): EconomyOperation {
   assertJsonInput(value)
-  const parsed = economyOperationSchema.safeParse(value)
+  const parsed = parserFor(value,false).safeParse(value)
   requireRule(parsed.success, 'INVALID_ECONOMY_OPERATION')
   // JSON-only input and strict union validation establish the optional-key contract.
   return parsed.data as EconomyOperation
 }
 export function parseLedgerOperation(value: unknown): LedgerOperation {
   assertJsonInput(value)
-  const parsed = ledgerOperationSchema.safeParse(value)
+  const parsed = parserFor(value,true).safeParse(value)
   requireRule(parsed.success, 'INVALID_LEDGER_OPERATION')
   return parsed.data as LedgerOperation
 }

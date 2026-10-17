@@ -1,0 +1,110 @@
+
+> reborn-2020-ai-era@0.1.0 check
+> npm run typecheck && npm run test:unit && npm run test:docs && npm run validate:content && npm run check:docs && npm run build
+
+
+> reborn-2020-ai-era@0.1.0 typecheck
+> tsc -b
+
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+
+ Test Files  55 passed (55)
+      Tests  350 passed (350)
+   Start at  09:28:29
+   Duration  161.89s (tests 95%, import 5%)
+
+
+> reborn-2020-ai-era@0.1.0 test:docs
+> python3 -B -m unittest discover -s scripts -p 'test_*.py'
+
+.................................................Configuring GitHub CLI's Git credential helper (no credentials in project files).
+.Configuring GitHub CLI's Git credential helper (no credentials in project files).
+Pushing main without force ...
+..Creating PRIVATE repository GOD-OF-PPT/reborn-2020-ai-era ...
+Configuring GitHub CLI's Git credential helper (no credentials in project files).
+Pushing main without force ...
+.Creating PRIVATE repository GOD-OF-PPT/reborn-2020-ai-era ...
+Configuring GitHub CLI's Git credential helper (no credentials in project files).
+Pushing main without force ...
+..Configuring GitHub CLI's Git credential helper (no credentials in project files).
+.....
+----------------------------------------------------------------------
+Ran 60 tests in 0.132s
+
+OK
+
+> reborn-2020-ai-era@0.1.0 validate:content
+> node --experimental-strip-types scripts/validate_content.ts
+
+(node:70161) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{
+  "result": "PASS",
+  "evidenceType": "runtime_content_schema_and_initial_bindings",
+  "version": "world-work-v2",
+  "contentHash": "38836e2eaba0b89cabfc257fa0d143bc15d79cd82709072917f164f89cc06ce5",
+  "anchors": 11,
+  "sources": 11,
+  "capabilities": 19,
+  "events": 5,
+  "initialProfiles": 2,
+  "operations": {
+    "version": "operations-work-v5",
+    "businesses": 5,
+    "jobs": 66,
+    "productionOffers": 1,
+    "workers": 2
+  },
+  "relay": {
+    "version": "relay-work-v1",
+    "suppliers": 3,
+    "failureDomains": 2,
+    "permissions": "fictional_contracts_not_real_access"
+  },
+  "routines": {
+    "version": "routine-work-v1",
+    "operations": 6,
+    "scope": "explicit_existing_business_only"
+  },
+  "course": {
+    "version": "course-work-v1",
+    "products": 3,
+    "topics": 2,
+    "sharedAudience": true
+  },
+  "video": {
+    "version": "video-work-v2",
+    "modes": 3,
+    "programs": 4,
+    "qualification": "fictional_game_approval_not_real_access"
+  },
+  "market": {
+    "version": "simulation-market-work-v1",
+    "stocks": 6,
+    "exposures": 5,
+    "checkpoints": 216,
+    "rules": 5,
+    "historical": "unverified"
+  },
+  "notCovered": [
+    "all_business_paths",
+    "browser_ui",
+    "balance",
+    "playtest"
+  ]
+}
+
+> reborn-2020-ai-era@0.1.0 check:docs
+> python3 -B scripts/check_docs.py --text-only && python3 -B scripts/check_plan.py && python3 -B scripts/check_competitive_design.py
+
+README.md: broken local link goal-1/evidence/t12-validation.md
+docs/08-technical-plan.md: broken local link ../goal-1/evidence/t12-validation.md
+PENDING ORIGINAL ASSET: assets/concepts/style-01-anime.png
+PENDING ORIGINAL ASSET: assets/concepts/style-02-pixel.png
+PENDING ORIGINAL ASSET: assets/concepts/style-03-cinematic.png

@@ -18,7 +18,7 @@ export function advanceEconomicTime<Operation extends RunOperation>(timeline: Ti
   requireRule(state.asOf <= timeline.cursor.date, 'ECONOMY_AHEAD_OF_CLOCK')
   const result = advanceTimeline(timeline, state, target, (model, event) => {
     const operation = event.payload
-    requireRule(!isWorldOperation(operation) && operation.kind !== 'operating_event'&&operation.kind !== 'market_event'&&operation.kind !== 'video_event'&&operation.kind!=='course_event', 'WORLD_HANDLER_REQUIRED')
+    requireRule(!isWorldOperation(operation) && operation.kind !== 'operating_event'&&operation.kind !== 'market_event'&&operation.kind !== 'video_event'&&operation.kind!=='course_event'&&operation.kind!=='relay_event', 'WORLD_HANDLER_REQUIRED')
     requireRule(operation.date === event.date, 'EVENT_OPERATION_DATE_MISMATCH')
     const skippedReason = scheduledActionSkipReason(model, operation)
     if (skippedReason !== null) return { state: model, skippedReason }

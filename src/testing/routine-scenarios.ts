@@ -1,0 +1,15 @@
+import {prepareRelayF04} from './relay-scenarios.ts'
+import type {RoutineDraftInput} from '../core/routine-schema.ts'
+export function approvedRoutine(){const {h,business}=prepareRelayF04({withRoutines:true});h.send('StartRelayMarketing',{businessId:business.id,segment:'local_merchants',mode:'paid',resources:['player-production'],startAt:'2025-01-01'});h.send('AdvanceTime',{date:'2025-01-08'});h.send('SetRelayOffer',{businessId:business.id,offerKind:'low_margin',unitPriceFen:10});h.send('SignRelayCustomers',{businessId:business.id,audienceId:h.run.relay!.audiences[0]!.id,offerId:h.run.relay!.offers[0]!.id,personIds:h.run.relay!.audiences[0]!.members.slice(0,1),termEnd:'2025-03-31',mode:'prepaid',creditLimitFen:0});const c=h.run.relay!.customers[0]!;h.send('RechargeRelayCustomer',{customerId:c.id,amountFen:4000000});const input:RoutineDraftInput={name:'既有客户服务授权',quarter:'2025-Q1',accountId:business.accountId,businessIds:[business.id],resourceIds:['player-production'],cashLimitFen:2250000,actionLimit:2,steps:[{at:'2025-01-08',kind:'StartRelayServicePeriod',payload:{businessId:business.id,customerIds:[c.id],supplierIds:['cedar-direct'],maxUnits:300000,maxSupplierCostFen:1800000,supportMode:'guided',resources:['player-production'],startAt:'2025-01-09'}},{at:'2025-01-20',kind:'TopUpRelaySupplier',payload:{businessId:business.id,supplierId:'cedar-direct',amountFen:10000}}]};return {h,business,customer:c,input}}
+
+import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
+import {GameController} from '../application/game-controller.ts'
+import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+import {MemoryWriterAccess} from './memory-writer-access.ts'
+export async function replayRoutineComparison(){
+ const {h,input}=approvedRoutine();input.steps[1]!.at='2025-01-08';input.cashLimitFen=2260000;h.send('CreateRoutinePlan',input);const plan=h.run.routines!.plans[0]!;h.send('ConfirmRoutinePlan',{planId:plan.id});const start=h.codec.export(h.run)
+ const make=async(name:string)=>{const store=new IndexedDbRunStore({name,factory:new IDBFactory(),keyRange:IDBKeyRange,codec:h.codec}),controller=new GameController({store,codec:h.codec,locks:new MemoryWriterAccess(),id:()=>name});await controller.initialize();await controller.importNew(start);return controller}
+ const manual=await make('t12-evidence-manual'),batch=await make('t12-evidence-batch'),manualResults=[await manual.runRoutine(plan.id,false),await manual.runRoutine(plan.id,false)],batchResults=[await batch.runRoutine(plan.id,true)]
+ for(const controller of [manual,batch]){const v=controller.snapshot.view!,r=await controller.submit({runId:v.runId,actorId:'player',commandId:'routine-followup-time',expectedRevision:v.revision,kind:'AdvanceTime',payload:{date:'2025-02-13'}});if(r.status!=='saved')throw Error(JSON.stringify(r))}
+ const manualEnd=manual.exportSaved(),batchEnd=batch.exportSaved();if(manualEnd!==batchEnd)throw Error('ROUTINE_MODE_CHANGED_RULE_STATE');await manual.close();await batch.close();return {h,initial:h.codec.export(h.initial),start,manualEnd,batchEnd,manualResults,batchResults}
+}

@@ -14,7 +14,14 @@ export function projectCashForecast(run:GameRun,accountId:string,catalog:Pick<Op
  const date=run.timeline.cursor.date,horizon=dayBefore(quarterLimit(date)),funds=accountFunds(run.economy.ledger,accountId),flows:KnownCashFlow[]=[]
  const add=(id:string,at:string,amountFen:number,label:string,sourceId:string,phase:DayPhase='due_obligations',priority=0,releasedFen=0)=>{if((amountFen!==0||releasedFen>0)&&at<=horizon)flows.push({id,date:at<date?date:at,phase,priority,amountFen,label,sourceId,releasedFen})}
  for(const order of run.market?.orders.filter(o=>o.status==='planned'&&o.side==='buy'&&o.accountId===accountId)??[]){const point=marketPoints[order.expiresIndex],reservation=run.economy.ledger.reservations.find(r=>r.id===order.reservationId);if(point&&reservation)add('expiry:'+order.id,point.date,0,'未提交计划到期释放占款（不是收入）',order.id,'market_matching',0,reservation.amountFen)}
- for(const obligation of run.economy.ledger.obligations.filter(o=>o.accountId===accountId&&o.remainingFen>0))add(obligation.id,obligation.date,-obligation.remainingFen,'尚未结清的义务',obligation.sourceEventId)
+ const supplierCredits=new Map(run.economy.ledger.supplierPrepayments.filter(p=>p.accountId===accountId).map(p=>[p.id,p.remainingFen]))
+ const financial=new Map(run.economy.ledger.receipts.map(r=>[r.id,r]))
+ for(const obligation of run.economy.ledger.obligations.filter(o=>o.accountId===accountId&&o.remainingFen>0).sort((a,b)=>a.date.localeCompare(b.date)||a.id.localeCompare(b.id))){
+  const origin=financial.get(obligation.originOperationId);let credit=0
+  if(origin?.kind==='incur_supplier_usage'&&supplierCredits.size>0){const {prepaymentId}=JSON.parse(origin.signature) as {prepaymentId:string};credit=Math.min(obligation.remainingFen,supplierCredits.get(prepaymentId)??0);supplierCredits.set(prepaymentId,(supplierCredits.get(prepaymentId)??0)-credit)}
+  const protectedAmount=obligation.protectionReservationId?run.economy.ledger.reservations.find(r=>r.id===obligation.protectionReservationId)?.amountFen??0:0
+  add(obligation.id,obligation.date,-(obligation.remainingFen-credit),credit>0?'已用量供应账单（扣除已有供应贷项）':'尚未结清的义务',obligation.sourceEventId,'due_obligations',origin?.kind==='incur_supplier_usage'?130:0,Math.min(protectedAmount,obligation.remainingFen))
+ }
  for(const event of run.timeline.pending){const op=event.payload
   if(op.kind==='due_expense'&&op.accountId===accountId&&!run.economy.ledger.obligations.some(o=>o.id===op.obligationId))add(event.instanceId,event.date,-op.amountFen,op.sourceEventId==='bootstrap:living'?'生活费':'已确认费用',op.sourceEventId,event.phase,event.priority)
   if(op.kind==='income'&&op.accountId===accountId)add(event.instanceId,event.date,op.amountFen,'已确定到账',op.sourceEventId,event.phase,event.priority)
