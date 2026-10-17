@@ -93,3 +93,5 @@ T10接入[视频经营28](28-video-business-contract.md)，显式升级schema7�
 T11接入[课程与学员29](29-course-business-contract.md)，schema8/rules-t11-course-v1沿用同一Session与原子保存，拒绝并保留schema1—7。课程任务共用实际产能/行动/公司分账，按学员与原批次/阶段复算预款、退款和费用，世界更新不重收旧生学费。资料、Node回放、原生UI与真人证据分别记录，实际范围见[T11验证](../goal-1/evidence/t11-validation.md)。
 
 T12接入[中转与例行30](30-relay-routine-contract.md)，schema9/rules-t12-relay-v1、world-relay-work-v1和operations-work-v5复用原Session/共享产能，明确拒绝保留schema1—8。用量按实际日期、客户/供应额度与已授权故障域生成；审计后以原账单引用追加更正，供应贷项与客户保护均不变成利润。例行逐项使用同一RunRoutineStep命令及原子保存，手动/批处理完整存档逐字相同，价格/许可/合同/风险/资源变化暂停相关未来项；未来季度仅草稿。严格记录解析按kind索引原schema，Session只缓存冻结的已提交只读预览视图，不减少实际提交/导入验证。C12累计结果、正常/夹具/原生与性能测量边界见[T12验证](../goal-1/evidence/t12-validation.md)。
+
+T13接入[DeepSeek生态与架空股权31](31-deepseek-business-equity-contract.md)，schema10/rules-t13-deepseek-v1/world-deepseek-work-v1、operations-work-v6拒绝保留schema1—9。生态与股权复用同一操作/账本/时钟/Session；新资本和老股、股数和治理、估值和现金、私股应收和实际到账分别记录，少数股份不自动扩权。确认提交中仅保留已核对预览，实际提交与revision/事务验证不减少；规则状态仍只在原子保存后发布。新增严格privateReceivables与关联原投资/买方的处置/回款，费用累计取整和股份FIFO成本验证。两正常前史、独立算例、Node/原生/生产包的实际范围见[T13验证](../goal-1/evidence/t13-validation.md)。

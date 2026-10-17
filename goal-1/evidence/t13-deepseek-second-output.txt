@@ -1,0 +1,52 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/application/deepseek.test.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/deepseek.test.ts (7 tests | 3 failed) 1775ms
+   × actually produces, reviews, supports and collects training without treating a prepayment as profit 358ms
+   × actually produces, reviews, supports and collects deployment without treating a prepayment as profit 289ms
+   × protects the full customer prepayment until real accepted delivery 209ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/deepseek.test.ts > actually produces, reviews, supports and collects training without treating a prepayment as profit
+Error: {"kind":"AdvanceTime","payload":{"date":"2024-07-19"},"result":{"status":"rejected","reasonCodes":["CONTRACT_BINDING_MISMATCH"]}}
+ ❯ Object.send src/testing/deepseek-fixture.ts:21:163
+
+ ❯ completedEco src/testing/deepseek-scenarios.ts:12:311
+ ❯ src/application/deepseek.test.ts:8:160
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/application/deepseek.test.ts > actually produces, reviews, supports and collects deployment without treating a prepayment as profit
+Error: {"kind":"AdvanceTime","payload":{"date":"2024-07-26"},"result":{"status":"rejected","reasonCodes":["CONTRACT_BINDING_MISMATCH"]}}
+ ❯ Object.send src/testing/deepseek-fixture.ts:21:163
+
+ ❯ completedEco src/testing/deepseek-scenarios.ts:12:311
+ ❯ src/application/deepseek.test.ts:8:160
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/application/deepseek.test.ts > protects the full customer prepayment until real accepted delivery
+AssertionError: expected undefined to be 300000 // Object.is equality
+
+- Expected:
+300000
+
++ Received:
+undefined
+
+ ❯ src/application/deepseek.test.ts:12:426
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 4 passed (7)
+   Start at  09:57:30
+   Duration  2.51s (tests 78%, import 13%, transform 8%)
+

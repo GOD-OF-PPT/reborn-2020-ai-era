@@ -1,0 +1,3313 @@
+{
+  "taskId": "T11",
+  "evidenceType": "integration_replay",
+  "baseCommit": "78369f4fe9efaffb9c4665315184fa48881561d0",
+  "caseIds": [
+    "S02",
+    "F03",
+    "F05",
+    "Q11",
+    "Q12",
+    "Q26",
+    "Q31-course",
+    "Q36",
+    "Q39-course"
+  ],
+  "reproduceCommand": "npm run evidence:course -- --output-dir <fresh-directory>",
+  "sourceHashes": {
+    "src/application/bootstrap.test.ts": "129fd7a7cc26821a68907de4c0b092091c3a8a6eeb7dca4ec43b2b0354e15ac5",
+    "src/application/bootstrap.ts": "b698a869d4358ff070eee150160a2dd6c690878cbfcc51214bdc6b0df0c229db",
+    "src/application/browser-game.ts": "2a887e39202b8965e2c85599a3a3d54248b6f79d202c78baf0468fe641662642",
+    "src/application/campaign.test.ts": "bc5a07c73e6372433177679b6b8ee43df6bbcaec015bd57a76db5d418fc3527b",
+    "src/application/campaign.ts": "3bbb44870209725c3d0b73c3197a96163634d6567a8cf40f6373e17f6e74fe76",
+    "src/application/cash-forecast.test.ts": "75257831e625b8e322c61725d97b9cdcd91cf2b7e07a1faab5980356f8558f39",
+    "src/application/cash-forecast.ts": "89a3499fd62b719825e9503d1dca4284fd90e9fda363b8cfffbaaaa5c34d2ce0",
+    "src/application/course-atomic.test.ts": "1bbe34fac1f92dac4e3b2b6c953a01a30b7e46fbba3c37e56597b597c4472d4d",
+    "src/application/course-commands.ts": "5ba60b9f2f8984001fb6e7f7b5062062b6e3728937ef3ae107f64ee9e434b65d",
+    "src/application/course.test.ts": "4aac2dd7884e3f5534f1b2f38a8628858fd8586ec29a8e360ad7575d99f76f30",
+    "src/application/deepseek-atomic.test.ts": "e1f766dcfa1a9a4a09a1e6240de5879c50d26b718e65ca550f09cf0922ce7518",
+    "src/application/deepseek-commands.ts": "73f0df92f80c213bd50de2a9de1dff6ae23d45ec8f07602d696e78b05040dc65",
+    "src/application/deepseek-normal.test.ts": "8482a576e345fcfcb626b89d602e686084e1803ea8686fb64e8c59ee6a941b4e",
+    "src/application/deepseek.test.ts": "32dac0d5d061be76159ccb94e1a950ea16460f25b1ba2f3f77dbae38f46dbbd0",
+    "src/application/ecosystem-edges.test.ts": "2d767f84e730b3867a4d90c37b4aa0804b0da4d1e2f41049273feef17eb58dcd",
+    "src/application/employment.test.ts": "d88fcb35f48f15dc32fd20dc6642322bb8efb3677f502fcbf458d97eb96221df",
+    "src/application/entry-profile.test.ts": "24603fa0587c0b4a2e5c2ae2d5ed5d91a9e7da702d2ebba6e7a1c5fc6f790f15",
+    "src/application/equity.test.ts": "540f944d2de40161cb2332264d587923fcc329831e8f09254afe874c0e0b0f58",
+    "src/application/first-order.test.ts": "6e4d216b26c250885767569e6eb82fb2b31c576520ab1c7cc1272c68d981f0d5",
+    "src/application/first-order.ts": "09b09c4702e3235db3c871f0a86e5dfea76cf25cf63e4a4f7b00a5df1a4269e9",
+    "src/application/game-controller.test.ts": "8bf6808d4058ce8f3cee9fb5312164246ae9806966f06f2bba9b3330bb1aa867",
+    "src/application/game-controller.ts": "21b88a97ea3e55f27fc35d68e422fb42502f3b503d85885e8101fc696fa57195",
+    "src/application/game-snapshot.ts": "490d7565be79273ad9f8aacfa2b6f9cf4a1b584999b66cefd9df1694846fec86",
+    "src/application/market-commands.ts": "1675ba4f8afc4bddbb1fe5e22508c47c063e1be66b98424c7a63a8b06a2c1e66",
+    "src/application/market-save.test.ts": "6653a54371d5a0df393c01f10ebf5177dcab66f04ada755209e11161fe2fc353",
+    "src/application/market.test.ts": "f9201fc518e65206679b53cd658685db4a15437348ccad5c2979e37cb25bd23a",
+    "src/application/operations-commands.ts": "438c6dae2c1173dc5b3f3f1c2542ba102f660ae5096929e56066079f5ca6e790",
+    "src/application/operations.test.ts": "67978bca31199dd2eed3a320450941b83b4932e937525b86663140e261c1699a",
+    "src/application/playable-advance.ts": "c703a8eab70aabd3a1cf3f0a4a0f0b25b9c253a0afca8dd4a192d29a0900c9a0",
+    "src/application/playable.test.ts": "629965adab912c033c7543e43e35c0829486b296fb686b83d74f9f1aa75c8cb8",
+    "src/application/preview-binding.test.ts": "252340b93dfab09ecb8bb53e06620c7420bcb4aeac188e17fdd7a086fcbe44d4",
+    "src/application/relay-atomic.test.ts": "96f9ac4c419fb3521abac6993e5e7064119ccc52edf7dc2e820e26f940623062",
+    "src/application/relay-commands.ts": "60f48440606b4359726f45658e9f67eac840e34b5b1ae91c3102fbc4c989568e",
+    "src/application/relay-finance.test.ts": "f0fe5aa62a0299c11f153c116b089e91b29cc42dbdfbfe19285cfbbe9e2795ca",
+    "src/application/relay-normal.test.ts": "ff31d51390b66bdb5fad26a6c2ea2a3f38dd1f017dccc80d43db12aec46cbc6b",
+    "src/application/relay.test.ts": "2c9e2b10be554fee21b9c0c50359e224a6feaba430ead126bf67a87a8e107878",
+    "src/application/routine-atomic.test.ts": "aa0a3fafee6201037a2c879c19fec34b757e4f747e499f6cc78e0db8f63b8834",
+    "src/application/routine-commands.ts": "e71094206ccc0f100aeb1c722eb3740184ed5d5f42d671a7f0b919de3a7c8f33",
+    "src/application/routines.test.ts": "446e290205eda2121e497a3866e2d9abb034b085d690a24f4edef00d268d8874",
+    "src/application/session.test.ts": "4f3e41367d4e5d608960ddda570cfc7d219eb804538507c435d9d8610f861bfe",
+    "src/application/session.ts": "11020cace9172dcf049268ba5b7302daab2a2dc6fc6c219b32545aaa344290e1",
+    "src/application/video-atomic.test.ts": "2a84f919f0a11e2e0de16bcd21b0342ba1b39096f84df529574a553aa0a71386",
+    "src/application/video-commands.ts": "df956f47253ba778d8a5a268d6d3b1b70cb5b9b7695b24bd453c9dbf90ff9d73",
+    "src/application/video.test.ts": "f7ef2a457bae5a19add76e37816467c23c88c8d60078da84c17a3ce1f9a4c22b",
+    "src/application/workbench-projection.test.ts": "2371e822bd32108e704b659d4a2745537d4bcec12ad5edd2c3129cb83d296378",
+    "src/application/workbench-projection.ts": "61a0ff7ffbd24ce47d857bb757efe298adea28ec0d4de482f27f77b0cea86c51",
+    "src/application/world-session.test.ts": "5305325cca0e9220011cc1892959e833bed49d40565a8cd475e798c4441860c1",
+    "src/content/bootstrap.ts": "b999d1f8bd81fa53dd76756ecba0633d167f887f29496a7ddfbeeacf9aeeea8d",
+    "src/content/campaign.ts": "64d9dce8f6d0bd1dec950cf0738b0a8216ea41366d3543b606ef1ebd88f70c54",
+    "src/content/course.ts": "3f64ccf32035ae42a79a8733035cd8a07c3baa205d736f0c15d1f95c774f69a4",
+    "src/content/deepseek.ts": "63761f690f71b6514b06aef5937834dddc9a8b29e2f9c712659424c15778c289",
+    "src/content/first-order.ts": "0d71c72ef62914add3e516ef391e5812df7c8a5792841102ad32acd9ca38b75c",
+    "src/content/market.ts": "e3a6eb66cdf3bab446af6aa4a5a49297fb1689d42a6092c7434fd660e7bc98f1",
+    "src/content/operations.ts": "f6df3328f6b7dc09ddc19de9f06bf95caed95bf347655f4fc56d67e9c4ac690a",
+    "src/content/relay.ts": "da699a5208522adebfff320e2593d2a21cc3e7e3e3079e5c68e78cdc2b592314",
+    "src/content/routines.ts": "57cd757bc6c4ab81948342c61be9182719bf30f4e1e11010608ed0126e49a80b",
+    "src/content/video.ts": "1aff899fe28dde24c37fde9a37fa066909bd4f90af20d455b91c46f15e443a91",
+    "src/core/calendar.test.ts": "50176fc44923ffd1caf6bee0f94713d001b2e24046af44818aa25d8ac02abfcc",
+    "src/core/calendar.ts": "d252630c17d099e2907df5b0b24e57687f58ab3dd544e03e4a72f41703a83419",
+    "src/core/command-identity.ts": "5ddf588bdf06e756c3f95bd44268dd2ff9bc219cbcd7cd919a6e809eda50f830",
+    "src/core/commands.test.ts": "30f5c5bb268876543b913303dd2225d75c1a2ffdc55b50c66107223057641f71",
+    "src/core/commands.ts": "3bc8251c3ae90920ec4d8ea5894bfb8de62b51f94cdf9596dd1cc48c0694b000",
+    "src/core/content-schema.ts": "bcaaa021c91d2284a525d5a0a5bb48f0776ce120e7a30c96c837686e327fcc67",
+    "src/core/content-types.ts": "da77565d71431875e35573f60b05b7adf2843581cc28e52a97d9634c1454abe9",
+    "src/core/content.test.ts": "df41486022437aa2216b4fef44dad43d9685d75e96d0f136eae6890b3091f7fe",
+    "src/core/course-projection.ts": "cfd1d06d22494a92704ac28518e539c2fe3142d779f6214b32e38ad383b28c20",
+    "src/core/course-schema.ts": "44b6184390c0b65e74d991a0882d5f7baf7bd72969a3d67bb5776c67346cfe62",
+    "src/core/course-validation.ts": "d899944d25c7f7441552cb85534b933b3778d0c8584d59dd73c4f02668229dc5",
+    "src/core/course.ts": "54c89940b1bff6f622ad762b95228fe804b42b37ebf417fefceecf011e415592",
+    "src/core/deepseek-projection.ts": "bc4c4a42acd5f54a630daff4ec7eaf454d7c6cf0bccf2c833aaa00107b70b209",
+    "src/core/deepseek-schema.ts": "6337edc8815b945ef6ac17abdec7cde912691f75c118140722b732f8be5a36ce",
+    "src/core/deepseek-state.ts": "d2cb873aa730bdfd01e253276394f00be5096179fdc61ac6eeab4a96372d45a5",
+    "src/core/deepseek-validation.ts": "bcb12522e3c4619c56fb6206ffa55feeacbe01d3377d1a6cad23b5bfb7487e97",
+    "src/core/deepseek.ts": "5a6bd49ddd4debb10d3abdd6e099b51365e55dbd4742d3e7cdb8a67c8ce51e9b",
+    "src/core/economic-time.test.ts": "cad6bde3a8bc482dee82bf0c5219ab6c19bd3b38537d454669980d1297e60122",
+    "src/core/economic-time.ts": "da328ffad19fa556dc86b08fc62f96ce39989e614b2e39e5dea12979938c375a",
+    "src/core/economy.test.ts": "2b7eff1b09ea29538a9ec3902621ee6cd40262f81e5f5c9299e2e9efc359367b",
+    "src/core/economy.ts": "cc28674b5a629edd4ef71190f923835f2edcbb162c3ff00b16dc5901beb50d0c",
+    "src/core/equity.ts": "ef2c0d406f8453d3fc5910aa26bed7b966ae87720ac86e1fc231922b0edeaa74",
+    "src/core/errors.ts": "14ff69a5ca0cdc3c4b93ffac3e139750c43c1048668ed733b2006e7e306c5124",
+    "src/core/facts.test.ts": "c298d8ed705c0e2dbfb7c302db9abe00ba5b3d493d1f7d0db4ca327e6388c610",
+    "src/core/facts.ts": "5ffea6cd89bdd80116fb7d274c478cb1cf17cddeee5d8d8062a3d7f8bb324704",
+    "src/core/first-order.ts": "66e6b4eb2d6008eb1f04230cc63cf1a67637bc96582c331bac37e5ea9c9d7215",
+    "src/core/hash.test.ts": "8b901090248ef989699cbf7100581a1cb30242b147d3e7b322b4dd6c50ce3207",
+    "src/core/hash.ts": "06425267a82e9cb8bac2d0258357d3b43822b12a7592aed38e69cfa17e9ea5a3",
+    "src/core/identity.ts": "2d30f89937a7c8ac84e0213d864aa52207fce416a7d8dc5c7327288f5bc8297c",
+    "src/core/json-input.ts": "317c5b79bad1db8e9289c29159c8e89cf467faf2dfc98431ebbc4f2407f0788a",
+    "src/core/ledger.test.ts": "94eadae0c48b68374f9e669f1dfb3f6db969eff4d68025a4fbc4f26729470548",
+    "src/core/ledger.ts": "48e5d86f8b556645ac8aad0f6314bbe4fca2722db8202b14798573e58bd92123",
+    "src/core/market-ledger.test.ts": "db1d143cca090df21073786b972556e37f9dee5899e3447e3280877d9dae0790",
+    "src/core/market-math.ts": "bbd791e0083d1b61820a3220f7424604d47e40fa1a9a43e417fd24f3676daadd",
+    "src/core/market-projection.ts": "419a08e31d3fc9f1f692934f5fb7a2cace2b762fa8e40bf088c68cd40f190deb",
+    "src/core/market-schema.ts": "5528363053e83176043ac072e392cd6d79a1d65654c66ff94b296fa0c348fc29",
+    "src/core/market-types.ts": "128ff61a76351fa638223ba6770f8280eb40256892af1363d39ea57f06724984",
+    "src/core/market-validation.ts": "50b04cfc279109c1b86109d8b4d9ef91acbdbcfaa48d71661121be3630ed9fa4",
+    "src/core/market.ts": "166fb7074bb24cd79ec8e89ab00864a1a29e7a6e0d39bffc1b333140b27adc39",
+    "src/core/money.test.ts": "836e5c5d775e29a018b3d55776cb4d288b68a10da6cd43efa4749bb9766fdaf9",
+    "src/core/money.ts": "4c3ce1830cd238f43bf65e031bcf07c49fdadf878e0839e80a15ea0e1d532d08",
+    "src/core/operating-ledger.test.ts": "8720251b2b316745347e264c0cc40cddbb4db5aa097dfc8d82452e612713dd91",
+    "src/core/operations-accrual.ts": "6fa00caf7448b9146d229ace91d5027f5404c8c52603beb2e549ca5632a1071f",
+    "src/core/operations-calendar.ts": "ea2517dd47ae1e74234c3b8afb39546d11bfa588c3dbb49a6dba8dc3c417515e",
+    "src/core/operations-schema.ts": "ec42b73c2857461517adefccec790f99c621339427f945056ef2eb1ed5ea4404",
+    "src/core/operations-types.ts": "b327ca0dc8421bc6d413e5e815a809b260eeb5290ed0d1663a2e3e95395aabf2",
+    "src/core/operations-validation.ts": "5b2c0a15c57ba37b7941d9eb1e82d938845dc9e2d86aed16ed039bf462117748",
+    "src/core/operations.ts": "66881eee365a2dadb71732e1c4381d6c09886f80b9731eb8038ba3d9f671418a",
+    "src/core/player-profile.ts": "b7050d18ee1463f2ff63f4bbbe11a59e88f810e65cb6121cdfa6a4d3469244c4",
+    "src/core/private-equity-ledger.test.ts": "75f3bd2b7db1e123cba11007355d1c9934e1614d955399a29c8ac39ab26cee55",
+    "src/core/random.test.ts": "7adcad3a108f78521d8dee7c948e83658bc7c9062bdc41b4a62dac71ac005322",
+    "src/core/random.ts": "3ef7ca6de0896d42a456e2aae8760eea9c9a73af99afd7009e0d7353809e180b",
+    "src/core/record-dispatch.test.ts": "bf4f3c2469e47a0a2b465ecabfaa6298fe2725bca1649e0566fd74c01b7ba526",
+    "src/core/record-schemas.ts": "432145f48e159711fc5c06a3d9ff84ab9ab60be58b31d37e507a399c344fd7f9",
+    "src/core/relay-ledger.test.ts": "d3473a5adf2eff975a3d41f19778e0d46410fdd6fd27b8d6aa242528914c1804",
+    "src/core/relay-projection.ts": "448313a8d7046b6bc319c4c42d1a1553430ec6d79103bb6385cae8a39448a3e1",
+    "src/core/relay-schema.ts": "eb3bae8cc0d71cc159bf8349882f6f207b1ef575201935b90d4811ad491a405e",
+    "src/core/relay-validation.ts": "8fc6a910a1cdcbad4a04c6042ca3fb02efc30c6373a2fb141a50eb2736c11b81",
+    "src/core/relay.ts": "ee9a6de0b2e603c884b42aa0235ef4a8e61cc2dfdb8889590dffa3cf9b6e6628",
+    "src/core/routine-projection.ts": "68b68edc3f75eb3b9dcbc42cfc008fae16308b549627a075ccf5db0ad0bd1766",
+    "src/core/routine-schema.ts": "91225c54ede69b9cbc794d397c26080dfdd3fa53ef0049711aa66886f2afcaab",
+    "src/core/routines.ts": "fe886fc7b6cdbb4f5a65ba2173c0c9c5fc9cf7c01323beedcb90905c0c1d6e41",
+    "src/core/run-types.ts": "9e3e3847e2ffd8a0bf4fac48484c5f1f7760b27e4a8641c75077622a5ffbaea4",
+    "src/core/run.ts": "4208314b6cda55eef8a9e6c560ded936c80906d5c63c337bee84f2e171f03341",
+    "src/core/timeline.test.ts": "826176fb23ae104d622b45e8d49a3b6855f8a9d818bc855541638b4731b50dfe",
+    "src/core/timeline.ts": "54767b25792c41643b7728ae0ddc1c3e78ee1a9d9dee08ddba567eb712069ff8",
+    "src/core/versions.ts": "3594ad40947f99b43a21ee23629dd809f06ac4a113de63341c9af8bea15eea21",
+    "src/core/video-projection.ts": "ae650879825d4722ad75817e1e796c1ee475556f522d0a563b1a6f14ae420924",
+    "src/core/video-schema.ts": "1e9372ee58b91fe955f8d4993c0c239e9eae01e63aa25a4b2e44458eaed6e455",
+    "src/core/video-validation.ts": "63715ac5bd6dabe50da53bda240c3e491cb505eda837c75b9798ae611ebf585f",
+    "src/core/video.ts": "7be47780755e7e751c58a6ef0a140ab75aa135ce0998cd36aa5584ce8cc135c8",
+    "src/core/world-projection.ts": "055780c9e37e6dc63e107e93a3280456ebb9551333b00e948531d6968ea1cc41",
+    "src/core/world-schema.ts": "af9a51e0505ea130417f6bf48e71345569a3afe0f46b53ea1c53cf9e983fc36f",
+    "src/core/world-scope.test.ts": "e81331364b83e581f8dffe2c4e6e7379a0a8aa9ee18379ad8646b5f752575ae0",
+    "src/core/world-validation.ts": "4359a01dd0530cf75598ef9d599f4575f1f61bbca728f4dbe0e3b17e8539b086",
+    "src/core/world.ts": "6fcc8a73b677a51a45c4f150f045bdbbe9efd0a27a283611f1a3fa55daed409f",
+    "src/main.tsx": "0b3933753fe24aaaa887a39d0f60e4d7a628f56a76c58be382550a15263f2e4d",
+    "src/persistence/codec.test.ts": "5506dcde13519134f736834bf4248f8ab30535ad7839154f85d7ad927b1ebeaa",
+    "src/persistence/codec.ts": "d5bae08298dacf64f30f0fa1e81fb75104e8df41da726e18f195c1f6883f299c",
+    "src/persistence/course-codec.test.ts": "dae6cc196aff33758fd2894d91634d56a9213031746fa51b2b9841156ea7db04",
+    "src/persistence/deepseek-codec.test.ts": "b28cab2e102e1c826506b5ca2d9af32084ffc868a209ac9a4e930163fbd15c74",
+    "src/persistence/entry-profile-codec.test.ts": "dcbd66bdfebd31ed21ab6c898916b87cf0cf9818b13674544b4f22d1ce5599f8",
+    "src/persistence/first-order-codec.test.ts": "4e49f4071c9fdd1f0358c58c09b4310d6605c2f5d017c4904f823c0457b02f6b",
+    "src/persistence/indexeddb.test.ts": "5fb99e5137b67cf89f6de9ed2ebc9a7c507c0c0cbcba2760bf15a4e5046cd24f",
+    "src/persistence/indexeddb.ts": "978209e115e087256e81b60c39080ec029d9c067252beb1451817dc0c3f480dd",
+    "src/persistence/library.test.ts": "9d9e3723d858fbab3b5a0a2275465dc03844e1d2325543c3bc0bc1f9b74c920b",
+    "src/persistence/market-codec.test.ts": "c680d4f0cef8d29dfdcbcdbb463c6de588669984b1471dcd1d4e1f074a032811",
+    "src/persistence/operations-codec.test.ts": "31e790fcba94a0747428c370e1cf22bc81234a38464f5528833e7bf739d71c20",
+    "src/persistence/relay-codec.test.ts": "95419b7c7e84cfbbbd45e9d6589900e151b7440b73f9ce2b2f0ce0ed08eb644d",
+    "src/persistence/routine-codec.test.ts": "5fdd16e506dd987cde002782d7f8bec36b8d9b83ff428903ea129529d3b42979",
+    "src/persistence/schemas.ts": "985a59460cf42855bb62cc8c8f0ff37ac1f604b27334bce6c49d76f0f7da2f02",
+    "src/persistence/video-codec.test.ts": "a841691f2dae9aa8077eda768fce6f51b0a8c0d5e175ac81800751ff17d0726b",
+    "src/persistence/world-codec.test.ts": "e2a74e8af6cf9894a4f28821019e91ce7cafb4a6f4c8dd79f049eb70e9d0e0e5",
+    "src/persistence/writer-lock.test.ts": "6a9da4132c045eb3b74a1ef75cf451c8f87b1a47ece0355934adb69ac94426aa",
+    "src/persistence/writer-lock.ts": "b5eb19e5beba9b7262cbfce046bdd8e413f8742a77a491184fcbbbd7a96498df",
+    "src/testing/abort-after-write.ts": "da8681842896c19e290883e8d26bbafb5be1a0ba4f6773dc25b519a593b50484",
+    "src/testing/course-fixture.ts": "41bd9d201fbeaa8bfdf8e3851606fd916bd269a09bb4915b7da3b391027dfc54",
+    "src/testing/course-scenarios.ts": "81ba1cd08e3b0758058273020368f34b4f719f27df4f2587998c659930b0f5c1",
+    "src/testing/deepseek-fixture.ts": "f6c5c8e4231a1bb630b928ee55c8bc515268c7bbaf3892fd7a39f0d24c30d5c1",
+    "src/testing/deepseek-scenarios.ts": "2d9b08318106a360041d858ad22f97c1357a5fc37bcfdd50e79625ef7183e740",
+    "src/testing/fact-run.ts": "3873010d328bc2c505122f59751e0713c2c603bceaea078d41beb19aea855944",
+    "src/testing/market-fixture.ts": "fb83e044442d0c17353625ea669d24196f9f35a18e1b9d23aa3261a847ef0339",
+    "src/testing/market-normal-scenario.ts": "73eca4bcbe2b895fe27ebd46a15c1cf98c7bc5b0a600e673a3da0caf2a5380c0",
+    "src/testing/memory-writer-access.ts": "61ee8279cd62e20f6f04ca5163354838acce011d9e24ead12baf10a9c8cff150",
+    "src/testing/normal-course-scenario.ts": "9627160a5d9434fce46b1c729ff3b9356c252e11b6f0a45ff52c929fd584d577",
+    "src/testing/normal-deepseek-scenario.ts": "36a32ddd88f3b596c0b861d813439922500cf787586b8f2eab04856008746c82",
+    "src/testing/normal-relay-scenario.ts": "29e121bffd96f1b6879532565c020f2969c5386a07ef377a846dd5344af94f2e",
+    "src/testing/normal-video-scenario.ts": "47ea2c582aa782e15034c00fdcbf60be89769f5cc1ab4529cbb58260cccef234",
+    "src/testing/operations-browser.ts": "52bf5d2a6b14e4c9d5752d4c898acd072e1dda4bd6d5e6448b8f626df9092646",
+    "src/testing/operations-fixture.ts": "77171a7197c735c4a369a7a89d3f1263cd04bb632b5b2e7fd7c3ec0a9d6025c7",
+    "src/testing/persistence-browser.ts": "cff5c300def8c15bad87ba060fb40e3b59f211a8b9f030a9fe636c1cddb21a46",
+    "src/testing/playable-scenarios.ts": "184b5f65a389590e28114922c2ec57fa9682e96d17a0b331995244b641908a4c",
+    "src/testing/q01-accounting.ts": "bf9690677fe052f76c0cb4b29067789ad9049217e92f5c9cd19c00e19d71ef4c",
+    "src/testing/relay-fixture.ts": "aaa061e863d1c61de36b00550dbacd1b72d61ce6caeed0e11cc4eb948fb5f9c2",
+    "src/testing/relay-scenarios.ts": "480050c325fc502d569cc98b897c45d6cbee9d6f55699525ccc01054ded3e76f",
+    "src/testing/routine-scenarios.ts": "c23b56921b89697366f82f7bbf02941242e580d950e66f8af0551d7c11b56f31",
+    "src/testing/video-fixture.ts": "6f6053759353fff73d8f5b7d17dd4d3a007af6dbb00c695fcd4b6b24e516ed29",
+    "src/testing/video-scenarios.ts": "0eba82ea05c43501175b2db94ac031ffe4a34e0d300abbd047cfdf289af52154",
+    "src/testing/world-fixture.ts": "9c4da48b907bbd40fd379e10efeb55ee39d54a3093451ddcda5b2071e89d82d5",
+    "src/ui/App.test.tsx": "c8dc4ff78a47bf7a5d1e0dbe373e5aa05df2ac78a1909901cedf3d92139fdb25",
+    "src/ui/App.tsx": "6747c7493016f276253bc8064b09c86174a6b1884ba880dcb2c0427646d53aeb",
+    "src/ui/CommandButton.tsx": "7b0314ef79a9d62c71b7683a8cf0da5935b690517277076b6d8361b1a1d2c40c",
+    "src/ui/CoursePanel.tsx": "87b210caaad780a857139eb229a72ad3af94fa11adba7f5a56d6c640c5ebe473",
+    "src/ui/DeepseekPanel.tsx": "6d853ea97e902f4d26a7eda14871d6fa62088487c1bed555ead3eba3ce926db6",
+    "src/ui/DeepseekShared.tsx": "cdf3274bea9b0c61f0c3aea5c80d7cf059c19d5d05d91394a04d68409421f6d9",
+    "src/ui/Dialog.tsx": "fb7972e039eaeb683a954f15543f2728d37f5584e0feccf156c42e581794e904",
+    "src/ui/EquityPanel.tsx": "3ac0422400da8bf1b7ef3e062f58e0c722dfeabc605087bbfb4aa29187b6eff1",
+    "src/ui/Home.tsx": "ceb35d3af90276de4ba52dfae9183a54a97f6b0a2cbcb33026ac38da58ab89b0",
+    "src/ui/MarketPanel.tsx": "8b50c0992df3316273aa7e87550cbdae4c2d818fbfc0eeae58d15864876dbb45",
+    "src/ui/Obligations.tsx": "cf435a0db18013da6a4a1ee7edfb51b848c6f3381a3c0c036b099f2b764278e3",
+    "src/ui/RelayPanel.tsx": "6e3feb827ed3026a5b3d17a7c665d3caf732271c872f81eaa29f5def752ee866",
+    "src/ui/RoutinesPanel.tsx": "028315849a078c29585974d88db5404f970265a8146d7e533520acdf9bb72e1d",
+    "src/ui/StoragePanel.tsx": "eb081da3499f985405b7d26f5dff0133b7681466be1c7b3499b9631c88dd8e09",
+    "src/ui/VideoPanel.tsx": "2f7e967fb69d66729da78b3df6c1aed7edfe3be80bad49a5f31e803cb0c1b3a4",
+    "src/ui/Workbench.tsx": "549d25b5d601a9b216a68e41d1330f94f5061470bc7d2d32f36cd4709695a972",
+    "src/ui/game-text.ts": "a448a6b07994a642a554b5cc50c628b14b25e4ca3b264b298aa6ed9b74003c2e",
+    "src/ui/game-types.ts": "26c87fa4cf7a679b6bef851104a3a3c908c56699f38c4de126f582a5c661b3fd",
+    "src/ui/intent-account.ts": "b6902cc9e8c8fdc4782e86e26b9cbdca708083caf3a04e555ce6e6c810929ba6",
+    "src/ui/money-input.ts": "ae12f363335c4742de784c15fd404fe15f3b5044829ec6b7070c331e0d0b572a",
+    "src/ui/styles.css": "9a27027211b46ea63ea15dc42ca83c8a861af56671bccb36d9f7f0468869ab8d",
+    "scripts/collect_course_evidence.ts": "3957646283ff8c97d689307eb71f8c0769ececafdc79157a0ee98c2e1f031c11",
+    "scripts/evidence-output.ts": "b70695b15e7cf4f615ad263a9e2f361b847edb6203d844e8c73e3c940e486026",
+    "scripts/validate_content.ts": "917c7490144af2d2e73f965c9ad5cf7bb50b519b167dc7153abbe8a62bc6e2bb",
+    "package.json": "2fc735642d8a3b87a0029771750e1e1b5c2a41b87ffdb2e0ddc263b48e3742f4",
+    "package-lock.json": "096fd07ea9a5ac837d12495d23f67b4c0ccbb61d36d308ef689d8041e0ec2bb4",
+    "index.html": "83302dbf7255e2796584dccc24a816eeb91f2d0b0e613e6c98c85cf471331d43",
+    "vitest.config.ts": "8bc1e3c6911d48bd8a7be4532e6efbcc849277d3d104309ba94208afc9d6b354",
+    "tsconfig.core.json": "48e4365127083963a2b2d24f5677e93414c3de97cd642ce155a9a10fddcb53df"
+  },
+  "cases": [
+    {
+      "id": "F03",
+      "origin": "fixture",
+      "seed": "course-fixture-v1",
+      "versions": {
+        "schemaVersion": 10,
+        "rulesVersion": "rules-t11-fixture-v1",
+        "contentVersion": "course-fixture-v1",
+        "contentHash": "0976e2ee854536d2d018eb51421e6d6e0d93fb5c5928408b8953ae253f189218",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "scope": "isolated financial window Jan1-Apr16; actual prehistory separately retained, no living/salary/maintenance, fixed demand/help outcome, no waived employee wage",
+      "snapshots": {
+        "prehistoryInitial": {
+          "file": "t11-f03-prehistoryInitial.json",
+          "sha256": "4900210fee8c9cdecea232ce7b5aa997a4eb0147cc51d8d82c4696ba900e480a"
+        },
+        "initial": {
+          "file": "t11-f03-initial.json",
+          "sha256": "ca62187caaf7e07eb5aee5502649b4ea566ef6c0d867b42ff5187f082ac2a714"
+        },
+        "prepayment": {
+          "file": "t11-f03-prepayment.json",
+          "sha256": "861a3d97c986274453e9ef9dd94a3d7f79d46747de7269b2495ecd28854682aa"
+        },
+        "half": {
+          "file": "t11-f03-half.json",
+          "sha256": "2ce1ba82f6ef43ebc652526e745cf576b6a704d6b512d2d4749aea3c8b4be503"
+        },
+        "final": {
+          "file": "t11-f03-final.json",
+          "sha256": "322ca705775df925328999612ea32384c5bbe6f51f97408765fb13ac00402230"
+        }
+      },
+      "prehistoryCommands": [
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-1",
+          "expectedRevision": 1,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-08-22"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-2",
+          "expectedRevision": 2,
+          "kind": "OpenVideoChannel",
+          "payload": {
+            "name": "图像工具实际案例",
+            "segment": "ai_learners"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-3",
+          "expectedRevision": 3,
+          "kind": "ApplyVideoProgram",
+          "payload": {
+            "channelId": "vid:431ad80acde8db76c949166d36eb8463",
+            "program": "image_rights",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2022-08-22"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-4",
+          "expectedRevision": 4,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-08-29"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-5",
+          "expectedRevision": 5,
+          "kind": "DecideVideoProgram",
+          "payload": {
+            "applicationId": "vid:9c51bfbb177cb22a5ec55ed966852fe1"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-6",
+          "expectedRevision": 6,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-01"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-7",
+          "expectedRevision": 7,
+          "kind": "StartVideoMarketing",
+          "payload": {
+            "channelId": "vid:431ad80acde8db76c949166d36eb8463",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2022-12-01"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-8",
+          "expectedRevision": 8,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-08"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-9",
+          "expectedRevision": 9,
+          "kind": "AcceptVideoCommission",
+          "payload": {
+            "channelId": "vid:431ad80acde8db76c949166d36eb8463",
+            "cohortId": "vid:2c7f07e4ee2c4d36f6735c954f083e43",
+            "clientId": "vid:36a09a5274d888719a268ac00fe70d94",
+            "modeId": "image_assisted",
+            "materialId": "original",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2022-12-08"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-10",
+          "expectedRevision": 10,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-15"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-11",
+          "expectedRevision": 11,
+          "kind": "ReviewVideoOutput",
+          "payload": {
+            "workId": "vid:d4841ed5008e627cb05e2d049791cf90",
+            "disclosure": "ai_assisted"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-12",
+          "expectedRevision": 12,
+          "kind": "SubmitVideoCommission",
+          "payload": {
+            "contractId": "vid:856efbdd91add688d03fd765faf71c98"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-13",
+          "expectedRevision": 13,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-24"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-14",
+          "expectedRevision": 14,
+          "kind": "DiscoverBusiness",
+          "payload": {
+            "definitionId": "course-studio"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-15",
+          "expectedRevision": 15,
+          "kind": "PrepareBusiness",
+          "payload": {
+            "businessId": "ops:daf7aeb1cdcce57785f41db7b93fa3ab"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-16",
+          "expectedRevision": 16,
+          "kind": "StartCourseOutline",
+          "payload": {
+            "businessId": "ops:daf7aeb1cdcce57785f41db7b93fa3ab",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2022-12-24"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-17",
+          "expectedRevision": 17,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-31"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-18",
+          "expectedRevision": 18,
+          "kind": "ActivateBusiness",
+          "payload": {
+            "businessId": "ops:daf7aeb1cdcce57785f41db7b93fa3ab"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-19",
+          "expectedRevision": 19,
+          "kind": "DefineCourse",
+          "payload": {
+            "businessId": "ops:daf7aeb1cdcce57785f41db7b93fa3ab",
+            "name": "图像工具入门",
+            "productId": "intro_recorded",
+            "topicId": "image_workflows",
+            "edition": "foundation",
+            "segment": "ai_learners",
+            "cases": [
+              {
+                "kind": "video",
+                "id": "vid:856efbdd91add688d03fd765faf71c98"
+              }
+            ],
+            "consent": true
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-20",
+          "expectedRevision": 20,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-01"
+          }
+        }
+      ],
+      "commands": [
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-21",
+          "expectedRevision": 21,
+          "kind": "BuildCourseSample",
+          "payload": {
+            "courseId": "crs:dec613ee12b031d08a63a3a706890090",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-01-01"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-22",
+          "expectedRevision": 22,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-15"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-23",
+          "expectedRevision": 23,
+          "kind": "CreateCourseAudience",
+          "payload": {
+            "courseId": "crs:dec613ee12b031d08a63a3a706890090",
+            "mode": "paid",
+            "priceFen": 19900,
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-01-15"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-24",
+          "expectedRevision": 24,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-22"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-25",
+          "expectedRevision": 25,
+          "kind": "PlanCourseCohort",
+          "payload": {
+            "courseId": "crs:dec613ee12b031d08a63a3a706890090",
+            "audienceId": "crs:78e477cc239fda629d8dd1899a00acd8",
+            "startAt": "2023-01-24",
+            "endAt": "2023-02-28",
+            "supportStartAt": "2023-04-01",
+            "seatLimit": 200,
+            "supportMode": "guided_group",
+            "resources": [
+              "player-production"
+            ],
+            "promise": "clear_scope"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-26",
+          "expectedRevision": 26,
+          "kind": "EnrollCourseAudience",
+          "payload": {
+            "cohortId": "crs:fd41364373217f705ef4a658184f4cdc",
+            "personIds": [
+              "vid:52a85b47188ae91ea55051162c5a7723",
+              "vid:0b7406ae4640073ffcd8cd3d3be69384",
+              "vid:3334b75d9cbdfe212601e607175abc8a",
+              "vid:13e26f0c4a685b2807fc805fc931e722",
+              "vid:b9e0a4b11185bc5b4f288eccffac3b24",
+              "vid:ee9b1c8cec887aad37f6b0ff38dc8490",
+              "vid:b6560119ffae6bdeff40a48f3c6c0b1f",
+              "vid:7a6d39918b2ceb130e5c117503c78364",
+              "vid:85ee633ed4f40f669be9c01a33a35555",
+              "vid:64ba035ab65053016ef786d67e33063b",
+              "vid:c2d859d17b4574f0185a72437ad9ff22",
+              "vid:a93867d6b3c2e0a1b074d957c2ed7560",
+              "vid:e1abf5d896aab1374cef89629d7a8dbe",
+              "vid:e5b267cf2f9f184609e20ca748b8fba5",
+              "vid:0498c6facfd43c5d12ae94f0cbe70787",
+              "vid:8d73ab49636fca11ac3f6009405071c9",
+              "vid:98e71254d873ee279d1cd755eaa738f6",
+              "vid:b062703dfdcfad96df6e72fa1e960725",
+              "vid:15a7fef477ef6656120fd0f39bba465c",
+              "vid:178ef13a39e3d562503c5e8efc49e47e",
+              "vid:3135006b34fa699b27489621bef4e0c5",
+              "vid:58648dbe87b481aabebb5f1c0bc38642",
+              "vid:904665c235b5b3e0f84425f5e1b422d2",
+              "vid:e0cc7864e29bdb2659db35a3c6f6e90a",
+              "vid:00453730040dc736690218a05f320df0",
+              "vid:5f18ab200e8a82d009ee5310551dd5a0",
+              "vid:3db5f06ddb192cc2692d04ec4ef6cd6b",
+              "vid:d1e464982989da278f1eee188db6200a",
+              "vid:622b4375e62812d2d0d66bf82c1ed265",
+              "vid:ffa179a5c37a8392035d28e08b35aa60",
+              "vid:48a37f2f0bd6f18bf67f12e7de6bb9e6",
+              "vid:97ce84820c0fb355898bf6106b001eb2",
+              "vid:0d3f8cb3309bf16a112099fed9243505",
+              "vid:7829badb511823338bdcccb20f5d1ec2",
+              "vid:fa662c96ffe1599e7b3a76103902b037",
+              "vid:8d5d6d87933ffd99bdfea99e1c4166c8",
+              "vid:a06987fea19f44a44ee75e51d9872390",
+              "vid:9b1209a6c608d34faf52d31b30800e4c",
+              "vid:49cda187196653ad58d8c433aff56364",
+              "vid:647a024fd25db256ad87dcf3e78bd9f0",
+              "vid:ac2298981a11ccc2fe93845e4dbb42d5",
+              "vid:97f87cc684e8ebbb21470a0056bb714e",
+              "vid:bcd7bf7892ebb971efcad9a0b2ca1671",
+              "vid:ba38e523d9ef5b44a9865c66432c9da2",
+              "vid:7d4adcd6fec6a849106c48243277e5f5",
+              "vid:434b0961997af18b6bf5e874c4cddcf2",
+              "vid:af35a2c445cdb8f1efd1af45ac070e38",
+              "vid:d1f4347c9cad7de7384d22c8c42d4951",
+              "vid:9b74d0b3da5af374ffc399fc5a7de569",
+              "vid:fec808d0e7b95c8441ee7cc25d54915f",
+              "vid:6b3ca73c7490155926aa7f430714ef77",
+              "vid:a524f8c932d7486fa21f989b8461ffde",
+              "vid:c15f4dda0a8928b7a35bb8b66b18cde5",
+              "vid:eaba2feff7e1b4809540c17bc2c96543",
+              "vid:13969ea19adc45e3657b10c43d3077eb",
+              "vid:68d929d02d387e336cd109cfbe6aa057",
+              "vid:41e747ffc4c8ba3073020f2898672920",
+              "vid:1d7be1eef4f0185744277ea72510ffb5",
+              "vid:a9d5569ea1aa20b032d06c7fee283c77",
+              "vid:dc8a56bfdfe0141c02edb8dea4ce8efe",
+              "vid:3dc829458faae4e8681c8c5c5ba01d8e",
+              "vid:59eff89ac76f39fe2c434600a3356f49",
+              "vid:86c70b8e374845c08285229b1173011e",
+              "vid:ccbf7e90ba2130c918e4ef36c6fafa85",
+              "vid:669fde2d944e8d3d6935d4c373e08669",
+              "vid:8ea9032ca95ebc8fbf53504f3c598821",
+              "vid:e9faf7b1148e6cbf21d720231b18240b",
+              "vid:03baff0b63bc1f3dd3201eaa4d9852d7",
+              "vid:9ab771ccebb2f2864714dce05508d2ee",
+              "vid:f0dd13aa405f5785ab65ab20694973ad",
+              "vid:ab97fa2128520c07fc71ba370753ce93",
+              "vid:68fdeac5cc512913faf261d38fe4deeb",
+              "vid:a5fa6a9706ba9dcacaabd5b70b95e3c9",
+              "vid:591523004b80fccba05918003108e881",
+              "vid:a6d463bc38b778872fe73f9629cc681b",
+              "vid:062e79b2f7b12377e3d84e19e29cf154",
+              "vid:8a0f3550694f6ebbe80e82ea4ef2dde8",
+              "vid:e9cb977e79649ae231adf245d3eeffb0",
+              "vid:122dcc83cc6305e40fa073d63ff38a00",
+              "vid:0ef3d4018d8bf4b2ee7cc71c33e3fa5e",
+              "vid:7c23df93e9955eeed386645261572488",
+              "vid:5157809b92620f3590e28a2f70aedbfa",
+              "vid:0c9999ec683047a77ccaf01e0087507a",
+              "vid:8d81c083e4106fd67e36e23897a6c19e",
+              "vid:84f4fe7757197e96e92e51e7d1829660",
+              "vid:75cb391935fb3479b5982e40215aa17f",
+              "vid:eeae7f871293fd32c1609312ad2b4b2b",
+              "vid:422d147968d4795d05b7de424eab4a57",
+              "vid:73501382d0a16e8538c3c254bb7b5251",
+              "vid:279802deeff04da1ebe61b4c0e659941",
+              "vid:44455f538a91931fb90ff488af3bcf71",
+              "vid:7915267fb40b313736193cb9e280e63e",
+              "vid:0edea2dc451d3654e4228c84b9ec3b3d",
+              "vid:15abe6f31178ae6726305896ba702cc6",
+              "vid:c38e1bc3c2aef0539a20f3c9d869e86a",
+              "vid:f187761cc9f5a435932dd4efaafb2523",
+              "vid:32caeaed215267557a5c1dc72dbe911a",
+              "vid:bb44ca8e633c1a263619966392fffe70",
+              "vid:12a419db43832a36598d854a8fb92cb4",
+              "vid:4ccb997af9b6493a97d500b3cb4e5950",
+              "vid:46e166ae0109e92ad27766b65b32d9f0",
+              "vid:9d73dfaa5a49bcf0ae922a94b964c22a",
+              "vid:efb5310a879e255003e3e5c556993e85",
+              "vid:1cb58157237bc3c697a91334a5895b4c",
+              "vid:4a18c7197c11ac5fe282ad20d1eb0755",
+              "vid:2b085de3cac3d6fa2fa47175cced7594",
+              "vid:76f970ef545e0c10ed4f53622df10a35",
+              "vid:730b7b967c8eb36fa35a0ad7ac53a8ff",
+              "vid:6795e01f9217b5cf0ad093c1cd65e61e",
+              "vid:f679cf15336c9f1666ac319680ff20e3",
+              "vid:08c58de47dba9c16d2c9f6d4f21a77e4",
+              "vid:49dfb0d0a70ea3c2e0d3b7300a1fe7ad",
+              "vid:16f7225599acf5829a0ed6f9f43eaeee",
+              "vid:b7b867c31bb05bb462dd02545e7d4cf5",
+              "vid:31c63f04ba34a20f79ab890f1c7cf487",
+              "vid:0f5344d2a01e23a7e156e9199b9c34d2",
+              "vid:94c72074870f3800b3973c4ed360c724",
+              "vid:28e8fefd189606af6faf3e6984134ba0",
+              "vid:53d8e79edea2527bd07f8db8491c4d32",
+              "vid:00d9c29221a69c8849b642b91ff8f915",
+              "vid:df3cc633f2c0410c370302edfeee9dee",
+              "vid:6255a65a41d3d26963f9fe8b98938a38",
+              "vid:2e27ca34673fab31e779259ee241b99d",
+              "vid:f02b4dc78da4132c35e479206d687262",
+              "vid:faa6c2786c403ba6acbfa8130428bc3d",
+              "vid:c25b269b77dc968f3fd2c56dc9392185",
+              "vid:ee80b55290b57300e6cf3af7f6852937",
+              "vid:75e8432f6b042226c2163d184c249f5d",
+              "vid:83c804b609465e324017eba6ac422cd0",
+              "vid:fde7503cdeee0d8fb01524345ae07383",
+              "vid:c51ad7b5f6730e655d76427896989e3d",
+              "vid:5ebb27a500770c1824472b0f104f9327",
+              "vid:f443a8e262b4a202c12738584279b0b4",
+              "vid:641bad002d59ec9602cbb9acae1de7ff",
+              "vid:d49702479032189f58f0fd8c7d59ff9d",
+              "vid:0b011bde1d4216ca2a6b6086fa6b373c",
+              "vid:e5043d53419b7e56997d7d2ecaa1a2ba",
+              "vid:ebfc05f84aee12ae5991735c463f062d",
+              "vid:5f8cd100f9a8a08ea659f95968b47f22",
+              "vid:029890021ef63f1cb288102dc50c2df1",
+              "vid:48f9b302eda859b458763c050d4304d1",
+              "vid:ebb18e8b440ca1623561a9f995efe08f",
+              "vid:8ff00bac5708e5f367b359b3f7446125",
+              "vid:005788fc4006c04d72be26b72c709c5c",
+              "vid:dc2a700d4d058ea98eaf71f1b53d1a2a",
+              "vid:45b49decc3d749519d2aad0d17fbaeff",
+              "vid:85b04787ebeb5a9b97dbfb712f79b839",
+              "vid:e4636d6524a478b7f6e3c87f034b75b3",
+              "vid:a93ddfa75aa12de9dd8b8ad80c8174e0",
+              "vid:26c8f42d16cdf69312afbc04be81c53a",
+              "vid:b1035c9f8ed725853a319797f4d892d2",
+              "vid:95820887175a3ac4abd17f9d76f73dd0",
+              "vid:c1305d30aa514fdeaf0b6f85dbcd9307",
+              "vid:0668d2087ac7d6ab0d2aa57d6d47685a",
+              "vid:ee041b740a40f756132b8a9d97338b76",
+              "vid:8b538d93fce5a43b29cd1394a2feea8e",
+              "vid:b9643f5fae8c23dd7e8d44fb8763ad80",
+              "vid:50a905e3bfd8b1ef9cadd61f227d0dbd",
+              "vid:ef8d1d69080eb2f40b4449ad53a166b6",
+              "vid:e32b787232091fb0ad3c78dd6d58107b",
+              "vid:1d3f7036d251345942ff1f4e65c30626",
+              "vid:3d174332691a74aa1b91d22bd8592813",
+              "vid:0ccbfa151f584a69687b94f2f1701ebb",
+              "vid:7c19570928884448a1d7fd6453e390bc",
+              "vid:211cdd48a8796702a15605b9c95eef2a",
+              "vid:6939c88c7268c779dbe19217539dd0d1",
+              "vid:2f338eff268ffb2873e415af69e1cb63",
+              "vid:56bca71dd5230b8cf3b7e2a4bafa5c26",
+              "vid:c2e5aec00c595cb6bdc2e01bb343c156",
+              "vid:f85597b9252c2e2d4056ca3fc0b62ae8",
+              "vid:e3f5a8f40a1b12c27a5ce80ef8365690",
+              "vid:313908434211c03f831a65f7f336a971",
+              "vid:f8afd501ab8fd73d3c6bbaf8db326fbc",
+              "vid:6d31534f2d68d5425b18128623bca6bf",
+              "vid:ef70a7b58fe579775985cdc79c4cf8cf",
+              "vid:151f12f8a62ddda9e10e7469454d0d40",
+              "vid:3861f7e8e9eedd8a8ff0581524cf5ed4",
+              "vid:500e7559a9ec6175f51ca59241b31cda",
+              "vid:5a5aef5b5c7b6d461d55c7e3747c0108",
+              "vid:3103e8caa25885f5f8f5ea9ed42e3ed2",
+              "vid:6e115bab65aac73f14cd8ee479d80c2f",
+              "vid:13cb782f902393ae07d153b3eba14f61",
+              "vid:ca8b336f5227572ec58dcd76e5f3f67a",
+              "vid:a2e0fc715832a04a0d6472fda2c719d1",
+              "vid:74e98cfa9c8b5e7f897243d6926a9f43",
+              "vid:a80244afee18153ba12d0f8f7323bf34",
+              "vid:993288ee535122fd20979ddef807cee9",
+              "vid:686a285a8a22cae21eb7eadf711a4146",
+              "vid:3bb72be315f88466801a12763f8d8e4e",
+              "vid:e206953a5bd224189b828d1cf16b30ab",
+              "vid:403ca6183086fd524024a94a1acf5ea5",
+              "vid:a8588577db8ac5c373f92e89b5b02b43",
+              "vid:e5d0b4baa45474d956a7f27b5f5c898a",
+              "vid:98c20c817d9151ac42af908f94c874b9",
+              "vid:ab6f2faa2ee756ad01bc241d8da8b882",
+              "vid:f6a42dffd34d047e794820e4f6e1138c",
+              "vid:0f04fff14757315bd97ec6ca22740c33",
+              "vid:a19120c353ad1ef4f1daf8559a60d2eb",
+              "vid:1fd4c5d1eac419bdfa09c540c419f27d",
+              "vid:5a31241e5c917a3d42d69683c5065735"
+            ]
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-27",
+          "expectedRevision": 27,
+          "kind": "StartCourseStage",
+          "payload": {
+            "cohortId": "crs:fd41364373217f705ef4a658184f4cdc",
+            "index": 0,
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-01-24"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-28",
+          "expectedRevision": 28,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-31"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-29",
+          "expectedRevision": 29,
+          "kind": "StartCourseStage",
+          "payload": {
+            "cohortId": "crs:fd41364373217f705ef4a658184f4cdc",
+            "index": 1,
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-01-31"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-30",
+          "expectedRevision": 30,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-02-07"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-31",
+          "expectedRevision": 31,
+          "kind": "RefundCourseLearners",
+          "payload": {
+            "cohortId": "crs:fd41364373217f705ef4a658184f4cdc",
+            "personIds": [
+              "vid:52a85b47188ae91ea55051162c5a7723",
+              "vid:0b7406ae4640073ffcd8cd3d3be69384",
+              "vid:3334b75d9cbdfe212601e607175abc8a",
+              "vid:13e26f0c4a685b2807fc805fc931e722",
+              "vid:b9e0a4b11185bc5b4f288eccffac3b24",
+              "vid:ee9b1c8cec887aad37f6b0ff38dc8490",
+              "vid:b6560119ffae6bdeff40a48f3c6c0b1f",
+              "vid:7a6d39918b2ceb130e5c117503c78364",
+              "vid:85ee633ed4f40f669be9c01a33a35555",
+              "vid:64ba035ab65053016ef786d67e33063b",
+              "vid:c2d859d17b4574f0185a72437ad9ff22",
+              "vid:a93867d6b3c2e0a1b074d957c2ed7560",
+              "vid:e1abf5d896aab1374cef89629d7a8dbe",
+              "vid:e5b267cf2f9f184609e20ca748b8fba5",
+              "vid:0498c6facfd43c5d12ae94f0cbe70787",
+              "vid:8d73ab49636fca11ac3f6009405071c9",
+              "vid:98e71254d873ee279d1cd755eaa738f6",
+              "vid:b062703dfdcfad96df6e72fa1e960725",
+              "vid:15a7fef477ef6656120fd0f39bba465c",
+              "vid:178ef13a39e3d562503c5e8efc49e47e"
+            ],
+            "reason": "样例约定20名学员退款"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-32",
+          "expectedRevision": 32,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-04-16"
+          }
+        }
+      ],
+      "expected": {
+        "incomeFen": 3582000,
+        "costFen": 1279100,
+        "profitFen": 2302900,
+        "cashFen": 4302900,
+        "heldFen": 0
+      },
+      "actual": {
+        "incomeFen": 3582000,
+        "costFen": 1279100,
+        "profitFen": 2302900,
+        "cashFen": 4302900,
+        "heldFen": 0
+      }
+    },
+    {
+      "id": "F05",
+      "origin": "fixture",
+      "seed": "course-fixture-v1",
+      "versions": {
+        "schemaVersion": 10,
+        "rulesVersion": "rules-t11-fixture-v1",
+        "contentVersion": "course-fixture-v1",
+        "contentHash": "0976e2ee854536d2d018eb51421e6d6e0d93fb5c5928408b8953ae253f189218",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "scope": "isolated zero-cash snapshot with actual prehistory assets; partial delivery then paid seven-day refresh, not instant completion",
+      "snapshots": {
+        "prehistoryInitial": {
+          "file": "t11-f05-prehistoryInitial.json",
+          "sha256": "bbc7ddc8cdee35ec85e96ba52ff22d2cd9fe04a36aaeeafa1816e6c228320142"
+        },
+        "initial": {
+          "file": "t11-f05-initial.json",
+          "sha256": "fb8d293b11ab2fc2c5582034a0242f831676c77541c1ff21d10c25f419222260"
+        },
+        "final": {
+          "file": "t11-f05-final.json",
+          "sha256": "989f95ad0379aaabba884afbae53126c334b693734edf76f4aaf74a427e73d9e"
+        }
+      },
+      "prehistoryCommands": [
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-1",
+          "expectedRevision": 1,
+          "kind": "StartFirstOrder",
+          "payload": {}
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-2",
+          "expectedRevision": 2,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-19"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-3",
+          "expectedRevision": 3,
+          "kind": "SubmitDelivery",
+          "payload": {
+            "contractId": "ops:e227edb50f8fcbd3509c90d06adb76ca"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-4",
+          "expectedRevision": 4,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-5",
+          "expectedRevision": 5,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-08-22"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-6",
+          "expectedRevision": 6,
+          "kind": "OpenVideoChannel",
+          "payload": {
+            "name": "实作课潜客来源",
+            "segment": "ai_learners"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-7",
+          "expectedRevision": 7,
+          "kind": "ApplyVideoProgram",
+          "payload": {
+            "channelId": "vid:cbeb3f5552ad9562dbbaf262cce7ccfb",
+            "program": "image_rights",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2022-08-22"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-8",
+          "expectedRevision": 8,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-08-29"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-9",
+          "expectedRevision": 9,
+          "kind": "DecideVideoProgram",
+          "payload": {
+            "applicationId": "vid:2c1911f8c2e2513ad9df84b07b6b16cf"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-10",
+          "expectedRevision": 10,
+          "kind": "StartVideoWork",
+          "payload": {
+            "channelId": "vid:cbeb3f5552ad9562dbbaf262cce7ccfb",
+            "productId": "hotspot",
+            "modeId": "manual",
+            "materialId": "original",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2022-09-01"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-11",
+          "expectedRevision": 11,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-09-08"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-12",
+          "expectedRevision": 12,
+          "kind": "ReviewVideoOutput",
+          "payload": {
+            "workId": "vid:79ae580bd2b315dc06f3c44991bbcd4b",
+            "disclosure": "manual"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-13",
+          "expectedRevision": 13,
+          "kind": "PublishVideo",
+          "payload": {
+            "workId": "vid:79ae580bd2b315dc06f3c44991bbcd4b",
+            "monetization": "none"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-14",
+          "expectedRevision": 14,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-09-15"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-15",
+          "expectedRevision": 15,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-01"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-16",
+          "expectedRevision": 16,
+          "kind": "DiscoverBusiness",
+          "payload": {
+            "definitionId": "course-studio"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-17",
+          "expectedRevision": 17,
+          "kind": "PrepareBusiness",
+          "payload": {
+            "businessId": "ops:d6ae057f7c4a6d9c590ae85a1bd9dc67"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-18",
+          "expectedRevision": 18,
+          "kind": "StartCourseOutline",
+          "payload": {
+            "businessId": "ops:d6ae057f7c4a6d9c590ae85a1bd9dc67",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2022-12-01"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-19",
+          "expectedRevision": 19,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-08"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-20",
+          "expectedRevision": 20,
+          "kind": "ActivateBusiness",
+          "payload": {
+            "businessId": "ops:d6ae057f7c4a6d9c590ae85a1bd9dc67"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-21",
+          "expectedRevision": 21,
+          "kind": "DefineCourse",
+          "payload": {
+            "businessId": "ops:d6ae057f7c4a6d9c590ae85a1bd9dc67",
+            "name": "案例实操小班",
+            "productId": "practical_cohort",
+            "topicId": "image_workflows",
+            "edition": "foundation",
+            "segment": "ai_learners",
+            "cases": [
+              {
+                "kind": "first_order",
+                "id": "ops:e227edb50f8fcbd3509c90d06adb76ca"
+              }
+            ],
+            "consent": true
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-22",
+          "expectedRevision": 22,
+          "kind": "BuildCourseSample",
+          "payload": {
+            "courseId": "crs:3e4370f62e70f7822a51633227359b03",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2022-12-08"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-23",
+          "expectedRevision": 23,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-01"
+          }
+        }
+      ],
+      "commands": [
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-24",
+          "expectedRevision": 24,
+          "kind": "CreateCourseAudience",
+          "payload": {
+            "courseId": "crs:3e4370f62e70f7822a51633227359b03",
+            "mode": "video_referral",
+            "priceFen": 50000,
+            "videoCohortIds": [
+              "vid:74a055f34c8c76109a520060b9420811"
+            ]
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-25",
+          "expectedRevision": 25,
+          "kind": "PlanCourseCohort",
+          "payload": {
+            "courseId": "crs:3e4370f62e70f7822a51633227359b03",
+            "audienceId": "crs:959ce632f93008ca6f040bf26c46b75e",
+            "startAt": "2023-01-02",
+            "endAt": "2023-01-30",
+            "supportStartAt": "2023-04-01",
+            "seatLimit": 20,
+            "supportMode": "self_small",
+            "resources": [
+              "player-production"
+            ],
+            "promise": "clear_scope"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-26",
+          "expectedRevision": 26,
+          "kind": "EnrollCourseAudience",
+          "payload": {
+            "cohortId": "crs:fd41364373217f705ef4a658184f4cdc",
+            "personIds": [
+              "vid:686a285a8a22cae21eb7eadf711a4146",
+              "vid:3bb72be315f88466801a12763f8d8e4e",
+              "vid:e206953a5bd224189b828d1cf16b30ab",
+              "vid:403ca6183086fd524024a94a1acf5ea5",
+              "vid:a8588577db8ac5c373f92e89b5b02b43",
+              "vid:e5d0b4baa45474d956a7f27b5f5c898a",
+              "vid:98c20c817d9151ac42af908f94c874b9",
+              "vid:ab6f2faa2ee756ad01bc241d8da8b882",
+              "vid:f6a42dffd34d047e794820e4f6e1138c",
+              "vid:0f04fff14757315bd97ec6ca22740c33",
+              "vid:a19120c353ad1ef4f1daf8559a60d2eb",
+              "vid:1fd4c5d1eac419bdfa09c540c419f27d",
+              "vid:5a31241e5c917a3d42d69683c5065735",
+              "vid:2540c45f3ab0f474ad65383f880e040e",
+              "vid:43c5a483c54a2f74f9791763ed513cd7",
+              "vid:e09a1937af43018976bcbc34a34bf0cb",
+              "vid:36a09a5274d888719a268ac00fe70d94",
+              "vid:9a9568f9c6e03e41f8c63d0b5e9f2726",
+              "vid:b2ed3b6de00f260987f85484b6712f87",
+              "vid:4ffb4fbd5e46fb21271836f94b4929a2"
+            ]
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-27",
+          "expectedRevision": 27,
+          "kind": "StartCourseStage",
+          "payload": {
+            "cohortId": "crs:fd41364373217f705ef4a658184f4cdc",
+            "index": 0,
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-01-02"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-28",
+          "expectedRevision": 28,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-12"
+          }
+        },
+        {
+          "runId": "course-fixture",
+          "actorId": "player",
+          "commandId": "course-29",
+          "expectedRevision": 29,
+          "kind": "StartCourseRefresh",
+          "payload": {
+            "courseId": "crs:3e4370f62e70f7822a51633227359b03",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-01-12"
+          }
+        }
+      ],
+      "expected": {
+        "cashFen": 800000,
+        "heldFen": 500000,
+        "availableFen": 300000
+      },
+      "actual": {
+        "cashFen": 800000,
+        "heldFen": 500000,
+        "availableFen": 300000,
+        "protectionRequiredFen": 500000,
+        "protectionShortfallFen": 0,
+        "commitmentShortfallFen": 0
+      }
+    },
+    {
+      "id": "S02-technical_employee",
+      "origin": "normal",
+      "seed": "normal-course-s02-v1",
+      "versions": {
+        "schemaVersion": 10,
+        "rulesVersion": "rules-t13-deepseek-v1",
+        "contentVersion": "world-deepseek-work-v1",
+        "contentHash": "3aecc339d6176ed5cb5b787602e1ed201182072d13c633ce64207f4551aba2ad",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "snapshots": {
+        "initial": {
+          "file": "t11-s02-technical_employee-initial.json",
+          "sha256": "6f0262ba8f3596c93ef66861f0f31ebc4cf0caa26488b08e8ad7b66cf8b73d12"
+        },
+        "sliceInitial": {
+          "file": "t11-s02-technical_employee-sliceInitial.json",
+          "sha256": "7b299623659e17354c553ff03b6e92359fd39ad199c55349fdc5dca2600ee554"
+        },
+        "closed": {
+          "file": "t11-s02-technical_employee-closed.json",
+          "sha256": "77609881f23b2623e85dce6bfdfb0b30724533ceb973f361d034179b30d69aa7"
+        },
+        "final": {
+          "file": "t11-s02-technical_employee-final.json",
+          "sha256": "51c0df8aa7167705b103bfaf1649c136081f437e35d8f91cdccb66244c19ada6"
+        }
+      },
+      "commands": [
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-1",
+          "expectedRevision": 1,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-2",
+          "expectedRevision": 2,
+          "kind": "StartFirstOrder",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-3",
+          "expectedRevision": 3,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-19"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-4",
+          "expectedRevision": 4,
+          "kind": "SubmitDelivery",
+          "payload": {
+            "contractId": "ops:b3afede2091ec6f3a42ea3e43c03bb5b"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-5",
+          "expectedRevision": 5,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-6",
+          "expectedRevision": 6,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-7",
+          "expectedRevision": 7,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-8",
+          "expectedRevision": 8,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-9",
+          "expectedRevision": 9,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-10",
+          "expectedRevision": 10,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-11",
+          "expectedRevision": 11,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-01"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-12",
+          "expectedRevision": 12,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-13",
+          "expectedRevision": 13,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-14",
+          "expectedRevision": 14,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:ce13e97577906b575830973677ff41c1",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-15",
+          "expectedRevision": 15,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-16",
+          "expectedRevision": 16,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-07-01"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-17",
+          "expectedRevision": 17,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-18",
+          "expectedRevision": 18,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-09-30"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-19",
+          "expectedRevision": 19,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-10-01"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-20",
+          "expectedRevision": 20,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-21",
+          "expectedRevision": 21,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-12-31"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-22",
+          "expectedRevision": 22,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-01-01"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-23",
+          "expectedRevision": 23,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-24",
+          "expectedRevision": 24,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-03-31"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-25",
+          "expectedRevision": 25,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-01"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-26",
+          "expectedRevision": 26,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-27",
+          "expectedRevision": 27,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-06-30"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-28",
+          "expectedRevision": 28,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-07-01"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-29",
+          "expectedRevision": 29,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-30",
+          "expectedRevision": 30,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-09-30"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-31",
+          "expectedRevision": 31,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-10-01"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-32",
+          "expectedRevision": 32,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-33",
+          "expectedRevision": 33,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-12-31"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-34",
+          "expectedRevision": 34,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-01-01"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-35",
+          "expectedRevision": 35,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-36",
+          "expectedRevision": 36,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-03-31"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-37",
+          "expectedRevision": 37,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-04-01"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-38",
+          "expectedRevision": 38,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-39",
+          "expectedRevision": 39,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-04-02"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-40",
+          "expectedRevision": 40,
+          "kind": "OpenVideoChannel",
+          "payload": {
+            "name": "普通人的工具学习记录",
+            "segment": "ai_learners"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-41",
+          "expectedRevision": 41,
+          "kind": "StartVideoWork",
+          "payload": {
+            "channelId": "vid:1b8b8b648df6353c25412860736670c9",
+            "productId": "original_series",
+            "modeId": "manual",
+            "materialId": "original",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2022-04-02"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-42",
+          "expectedRevision": 42,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-04-16"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-43",
+          "expectedRevision": 43,
+          "kind": "ReviewVideoOutput",
+          "payload": {
+            "workId": "vid:6889207b61c61ee8a67b41c642a90c53",
+            "disclosure": "manual"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-44",
+          "expectedRevision": 44,
+          "kind": "PublishVideo",
+          "payload": {
+            "workId": "vid:6889207b61c61ee8a67b41c642a90c53",
+            "monetization": "none"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-45",
+          "expectedRevision": 45,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-04-23"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-46",
+          "expectedRevision": 46,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-06-30"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-47",
+          "expectedRevision": 47,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-07-01"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-48",
+          "expectedRevision": 48,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-49",
+          "expectedRevision": 49,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-08-22"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-50",
+          "expectedRevision": 50,
+          "kind": "ApplyVideoProgram",
+          "payload": {
+            "channelId": "vid:1b8b8b648df6353c25412860736670c9",
+            "program": "image_rights",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2022-08-22"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-51",
+          "expectedRevision": 51,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-08-29"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-52",
+          "expectedRevision": 52,
+          "kind": "DecideVideoProgram",
+          "payload": {
+            "applicationId": "vid:6a77b3e45b2cf69ef2213b321c2d5ad7"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-53",
+          "expectedRevision": 53,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-09-30"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-54",
+          "expectedRevision": 54,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-01"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-55",
+          "expectedRevision": 55,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-56",
+          "expectedRevision": 56,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-11-21"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-57",
+          "expectedRevision": 57,
+          "kind": "ApplyVideoProgram",
+          "payload": {
+            "channelId": "vid:1b8b8b648df6353c25412860736670c9",
+            "program": "image_rights",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2022-11-21"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-58",
+          "expectedRevision": 58,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-11-28"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-59",
+          "expectedRevision": 59,
+          "kind": "DecideVideoProgram",
+          "payload": {
+            "applicationId": "vid:72813994038704fe6b2766e8e43114f9"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-60",
+          "expectedRevision": 60,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-11-30"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-61",
+          "expectedRevision": 61,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:c4573c6eb77d038cb88a52af058aed8a",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-62",
+          "expectedRevision": 62,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-11-30"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-63",
+          "expectedRevision": 63,
+          "kind": "OpenCourseStudio",
+          "payload": {
+            "capitalFen": 2000000
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-64",
+          "expectedRevision": 64,
+          "kind": "StartCourseOutline",
+          "payload": {
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2022-12-01"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-65",
+          "expectedRevision": 65,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-08"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-66",
+          "expectedRevision": 66,
+          "kind": "ActivateBusiness",
+          "payload": {
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-67",
+          "expectedRevision": 67,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-01"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-68",
+          "expectedRevision": 68,
+          "kind": "DefineCourse",
+          "payload": {
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "name": "从真实交付案例开始的图像实作",
+            "productId": "practical_cohort",
+            "topicId": "image_workflows",
+            "edition": "foundation",
+            "segment": "ai_learners",
+            "cases": [
+              {
+                "kind": "first_order",
+                "id": "ops:b3afede2091ec6f3a42ea3e43c03bb5b"
+              }
+            ],
+            "consent": true
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-69",
+          "expectedRevision": 69,
+          "kind": "BuildCourseSample",
+          "payload": {
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-01-02"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-70",
+          "expectedRevision": 70,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-16"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-71",
+          "expectedRevision": 71,
+          "kind": "CreateCourseAudience",
+          "payload": {
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "mode": "video_referral",
+            "priceFen": 99900,
+            "videoCohortIds": [
+              "vid:678ce2af1616987d93e7d1b143357cb9"
+            ]
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-72",
+          "expectedRevision": 72,
+          "kind": "PlanCourseCohort",
+          "payload": {
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "audienceId": "crs:31fee8746553a9070ee718c2a6912b4e",
+            "startAt": "2023-01-18",
+            "endAt": "2023-02-22",
+            "supportStartAt": "2023-04-01",
+            "seatLimit": 20,
+            "supportMode": "guided_group",
+            "resources": [
+              "player-production"
+            ],
+            "promise": "clear_scope"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-73",
+          "expectedRevision": 73,
+          "kind": "EnrollCourseAudience",
+          "payload": {
+            "cohortId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "personIds": [
+              "vid:2ab6d390bb8a96cb434a76ed23039635",
+              "vid:20d64dac502091a4d0a26f83a107bb0e",
+              "vid:e12f4c027f201066a5ec4933b4130212",
+              "vid:9be09407d5879101c7c1128825982ce6",
+              "vid:e4d2a313872e98dd8d5aee0bfc5a44b1",
+              "vid:39d088f1e0cef10d7d6b2c20a7023fd5",
+              "vid:c50c66aa17278deec36bcd3160403d55",
+              "vid:be475b651123d3a4a99c21081a8c723a",
+              "vid:1a1ae7894dc383e471b23c4b2eefc2cc",
+              "vid:f20a873cf8681ace04182e6e83b5a2fc",
+              "vid:a9c78a57d9d01cd9d7ba26a1c339bbe0",
+              "vid:ab6f9b2ef3c095748bc99c233d2bf56e",
+              "vid:9573c8060ba7713c1b769c936e2af51a",
+              "vid:9dc456f670803422c8b1709711a60320",
+              "vid:3623213eab6b2d57ece073f059ed9b24",
+              "vid:c24f3ef1e2cf4cfe9e763041252ca656",
+              "vid:be16bd59a062b9f15e4bd9519576c960",
+              "vid:a58e763bac3f241d2e92b07bc372cfdf",
+              "vid:0b1cacf99d342bdea5e1d1606889f49f",
+              "vid:053938afe3023887ba74c08c6cc3593f"
+            ]
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-74",
+          "expectedRevision": 74,
+          "kind": "StartCourseStage",
+          "payload": {
+            "cohortId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "index": 0,
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-01-18"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-75",
+          "expectedRevision": 75,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-28"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-76",
+          "expectedRevision": 76,
+          "kind": "StartCourseStage",
+          "payload": {
+            "cohortId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "index": 1,
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-01-28"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-77",
+          "expectedRevision": 77,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-02-07"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-78",
+          "expectedRevision": 78,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-03-14"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-79",
+          "expectedRevision": 79,
+          "kind": "StartCourseRefresh",
+          "payload": {
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-03-14"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-80",
+          "expectedRevision": 80,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-03-21"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-81",
+          "expectedRevision": 81,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-04-08"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-82",
+          "expectedRevision": 82,
+          "kind": "StartCourseRecovery",
+          "payload": {
+            "cohortId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "supportMode": "guided_group",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-04-08"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-83",
+          "expectedRevision": 83,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-04-15"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-84",
+          "expectedRevision": 84,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-04-16"
+          }
+        },
+        {
+          "runId": "normal-course-technical_employee",
+          "actorId": "player",
+          "commandId": "normal-course-85",
+          "expectedRevision": 85,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-06-30"
+          }
+        }
+      ],
+      "expected": {
+        "normalOpeningOnly": true,
+        "actualSalaryAndLiving": true,
+        "separateCompany": true,
+        "realVideoOrigin": true,
+        "learners": 20,
+        "courseClosed": true
+      },
+      "actual": {
+        "origin": "normal",
+        "backgroundId": "technical_employee",
+        "closedAt": "2023-04-16",
+        "personal": {
+          "cashFen": 12790000,
+          "heldFen": 0,
+          "availableFen": 12790000,
+          "protectionRequiredFen": 0,
+          "protectionShortfallFen": 0,
+          "commitmentShortfallFen": 0
+        },
+        "business": {
+          "cashFen": 2770359,
+          "heldFen": 0,
+          "availableFen": 2770359,
+          "protectionRequiredFen": 0,
+          "protectionShortfallFen": 0,
+          "commitmentShortfallFen": 0,
+          "receivableFen": 0,
+          "prepaidLiabilityFen": 0,
+          "payableFen": 0,
+          "supplierPrepaidFen": 0,
+          "investmentValueFen": 0,
+          "netAssetsFen": 2770359
+        },
+        "courseMetrics": {
+          "incomeFen": 1998000,
+          "costFen": 1209900,
+          "profitFen": 788100
+        },
+        "learners": 20,
+        "recovered": 1,
+        "paidCase": "ops:b3afede2091ec6f3a42ea3e43c03bb5b",
+        "videoOriginCohort": "vid:678ce2af1616987d93e7d1b143357cb9",
+        "salaryPayments": 36
+      }
+    },
+    {
+      "id": "S02-content_employee",
+      "origin": "normal",
+      "seed": "normal-course-s02-v1",
+      "versions": {
+        "schemaVersion": 10,
+        "rulesVersion": "rules-t13-deepseek-v1",
+        "contentVersion": "world-deepseek-work-v1",
+        "contentHash": "3aecc339d6176ed5cb5b787602e1ed201182072d13c633ce64207f4551aba2ad",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "snapshots": {
+        "initial": {
+          "file": "t11-s02-content_employee-initial.json",
+          "sha256": "e282c3b63e3f5e755226d7e42fea3713098a359621c5e69d9f65d543134e042a"
+        },
+        "sliceInitial": {
+          "file": "t11-s02-content_employee-sliceInitial.json",
+          "sha256": "e5db28cbab66803e1e781ea8c4ba76ec0901262329d6ca551390e2e8e406477b"
+        },
+        "closed": {
+          "file": "t11-s02-content_employee-closed.json",
+          "sha256": "c101755117da411525cf76619740e2127fab09dffbf7fe20bd01128c99c6df85"
+        },
+        "final": {
+          "file": "t11-s02-content_employee-final.json",
+          "sha256": "8a05ef68edcc606d47721659c594be5ecbd141eef660aa627c08ddbb06405abe"
+        }
+      },
+      "commands": [
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-1",
+          "expectedRevision": 1,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-2",
+          "expectedRevision": 2,
+          "kind": "StartFirstOrder",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-3",
+          "expectedRevision": 3,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-19"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-4",
+          "expectedRevision": 4,
+          "kind": "SubmitDelivery",
+          "payload": {
+            "contractId": "ops:b3afede2091ec6f3a42ea3e43c03bb5b"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-5",
+          "expectedRevision": 5,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-6",
+          "expectedRevision": 6,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-7",
+          "expectedRevision": 7,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-8",
+          "expectedRevision": 8,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-9",
+          "expectedRevision": 9,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-10",
+          "expectedRevision": 10,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-11",
+          "expectedRevision": 11,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-01"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-12",
+          "expectedRevision": 12,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-13",
+          "expectedRevision": 13,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-14",
+          "expectedRevision": 14,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:ce13e97577906b575830973677ff41c1",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-15",
+          "expectedRevision": 15,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-16",
+          "expectedRevision": 16,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-07-01"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-17",
+          "expectedRevision": 17,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-18",
+          "expectedRevision": 18,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-09-30"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-19",
+          "expectedRevision": 19,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-10-01"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-20",
+          "expectedRevision": 20,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-21",
+          "expectedRevision": 21,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-12-31"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-22",
+          "expectedRevision": 22,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-01-01"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-23",
+          "expectedRevision": 23,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-24",
+          "expectedRevision": 24,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-03-31"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-25",
+          "expectedRevision": 25,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-01"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-26",
+          "expectedRevision": 26,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-27",
+          "expectedRevision": 27,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-06-30"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-28",
+          "expectedRevision": 28,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-07-01"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-29",
+          "expectedRevision": 29,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-30",
+          "expectedRevision": 30,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-09-30"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-31",
+          "expectedRevision": 31,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-10-01"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-32",
+          "expectedRevision": 32,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-33",
+          "expectedRevision": 33,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-12-31"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-34",
+          "expectedRevision": 34,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-01-01"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-35",
+          "expectedRevision": 35,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-36",
+          "expectedRevision": 36,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-03-31"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-37",
+          "expectedRevision": 37,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-04-01"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-38",
+          "expectedRevision": 38,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-39",
+          "expectedRevision": 39,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-04-02"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-40",
+          "expectedRevision": 40,
+          "kind": "OpenVideoChannel",
+          "payload": {
+            "name": "普通人的工具学习记录",
+            "segment": "ai_learners"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-41",
+          "expectedRevision": 41,
+          "kind": "StartVideoWork",
+          "payload": {
+            "channelId": "vid:1b8b8b648df6353c25412860736670c9",
+            "productId": "original_series",
+            "modeId": "manual",
+            "materialId": "original",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2022-04-02"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-42",
+          "expectedRevision": 42,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-04-16"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-43",
+          "expectedRevision": 43,
+          "kind": "ReviewVideoOutput",
+          "payload": {
+            "workId": "vid:6889207b61c61ee8a67b41c642a90c53",
+            "disclosure": "manual"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-44",
+          "expectedRevision": 44,
+          "kind": "PublishVideo",
+          "payload": {
+            "workId": "vid:6889207b61c61ee8a67b41c642a90c53",
+            "monetization": "none"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-45",
+          "expectedRevision": 45,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-04-23"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-46",
+          "expectedRevision": 46,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-06-30"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-47",
+          "expectedRevision": 47,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-07-01"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-48",
+          "expectedRevision": 48,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-49",
+          "expectedRevision": 49,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-08-22"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-50",
+          "expectedRevision": 50,
+          "kind": "ApplyVideoProgram",
+          "payload": {
+            "channelId": "vid:1b8b8b648df6353c25412860736670c9",
+            "program": "image_rights",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2022-08-22"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-51",
+          "expectedRevision": 51,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-08-29"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-52",
+          "expectedRevision": 52,
+          "kind": "DecideVideoProgram",
+          "payload": {
+            "applicationId": "vid:6a77b3e45b2cf69ef2213b321c2d5ad7"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-53",
+          "expectedRevision": 53,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-09-30"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-54",
+          "expectedRevision": 54,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-01"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-55",
+          "expectedRevision": 55,
+          "kind": "WorkQuarter",
+          "payload": {}
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-56",
+          "expectedRevision": 56,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-11-21"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-57",
+          "expectedRevision": 57,
+          "kind": "ApplyVideoProgram",
+          "payload": {
+            "channelId": "vid:1b8b8b648df6353c25412860736670c9",
+            "program": "image_rights",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2022-11-21"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-58",
+          "expectedRevision": 58,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-11-28"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-59",
+          "expectedRevision": 59,
+          "kind": "DecideVideoProgram",
+          "payload": {
+            "applicationId": "vid:72813994038704fe6b2766e8e43114f9"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-60",
+          "expectedRevision": 60,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-11-30"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-61",
+          "expectedRevision": 61,
+          "kind": "ChooseEvent",
+          "payload": {
+            "instanceId": "event:c4573c6eb77d038cb88a52af058aed8a",
+            "choiceId": "defer"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-62",
+          "expectedRevision": 62,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-11-30"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-63",
+          "expectedRevision": 63,
+          "kind": "OpenCourseStudio",
+          "payload": {
+            "capitalFen": 2000000
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-64",
+          "expectedRevision": 64,
+          "kind": "StartCourseOutline",
+          "payload": {
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2022-12-01"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-65",
+          "expectedRevision": 65,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-08"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-66",
+          "expectedRevision": 66,
+          "kind": "ActivateBusiness",
+          "payload": {
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-67",
+          "expectedRevision": 67,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-01"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-68",
+          "expectedRevision": 68,
+          "kind": "DefineCourse",
+          "payload": {
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "name": "从真实交付案例开始的图像实作",
+            "productId": "practical_cohort",
+            "topicId": "image_workflows",
+            "edition": "foundation",
+            "segment": "ai_learners",
+            "cases": [
+              {
+                "kind": "first_order",
+                "id": "ops:b3afede2091ec6f3a42ea3e43c03bb5b"
+              }
+            ],
+            "consent": true
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-69",
+          "expectedRevision": 69,
+          "kind": "BuildCourseSample",
+          "payload": {
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-01-02"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-70",
+          "expectedRevision": 70,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-16"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-71",
+          "expectedRevision": 71,
+          "kind": "CreateCourseAudience",
+          "payload": {
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "mode": "video_referral",
+            "priceFen": 99900,
+            "videoCohortIds": [
+              "vid:678ce2af1616987d93e7d1b143357cb9"
+            ]
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-72",
+          "expectedRevision": 72,
+          "kind": "PlanCourseCohort",
+          "payload": {
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "audienceId": "crs:31fee8746553a9070ee718c2a6912b4e",
+            "startAt": "2023-01-18",
+            "endAt": "2023-02-22",
+            "supportStartAt": "2023-04-01",
+            "seatLimit": 20,
+            "supportMode": "guided_group",
+            "resources": [
+              "player-production"
+            ],
+            "promise": "clear_scope"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-73",
+          "expectedRevision": 73,
+          "kind": "EnrollCourseAudience",
+          "payload": {
+            "cohortId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "personIds": [
+              "vid:2ab6d390bb8a96cb434a76ed23039635",
+              "vid:20d64dac502091a4d0a26f83a107bb0e",
+              "vid:e12f4c027f201066a5ec4933b4130212",
+              "vid:9be09407d5879101c7c1128825982ce6",
+              "vid:e4d2a313872e98dd8d5aee0bfc5a44b1",
+              "vid:39d088f1e0cef10d7d6b2c20a7023fd5",
+              "vid:c50c66aa17278deec36bcd3160403d55",
+              "vid:be475b651123d3a4a99c21081a8c723a",
+              "vid:1a1ae7894dc383e471b23c4b2eefc2cc",
+              "vid:f20a873cf8681ace04182e6e83b5a2fc",
+              "vid:a9c78a57d9d01cd9d7ba26a1c339bbe0",
+              "vid:ab6f9b2ef3c095748bc99c233d2bf56e",
+              "vid:9573c8060ba7713c1b769c936e2af51a",
+              "vid:9dc456f670803422c8b1709711a60320",
+              "vid:3623213eab6b2d57ece073f059ed9b24",
+              "vid:c24f3ef1e2cf4cfe9e763041252ca656",
+              "vid:be16bd59a062b9f15e4bd9519576c960",
+              "vid:a58e763bac3f241d2e92b07bc372cfdf",
+              "vid:0b1cacf99d342bdea5e1d1606889f49f",
+              "vid:053938afe3023887ba74c08c6cc3593f"
+            ]
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-74",
+          "expectedRevision": 74,
+          "kind": "StartCourseStage",
+          "payload": {
+            "cohortId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "index": 0,
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-01-18"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-75",
+          "expectedRevision": 75,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-28"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-76",
+          "expectedRevision": 76,
+          "kind": "StartCourseStage",
+          "payload": {
+            "cohortId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "index": 1,
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-01-28"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-77",
+          "expectedRevision": 77,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-02-07"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-78",
+          "expectedRevision": 78,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-03-14"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-79",
+          "expectedRevision": 79,
+          "kind": "StartCourseRefresh",
+          "payload": {
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-03-14"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-80",
+          "expectedRevision": 80,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-03-21"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-81",
+          "expectedRevision": 81,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-04-08"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-82",
+          "expectedRevision": 82,
+          "kind": "StartCourseRecovery",
+          "payload": {
+            "cohortId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "supportMode": "guided_group",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2023-04-08"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-83",
+          "expectedRevision": 83,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-04-15"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-84",
+          "expectedRevision": 84,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-04-16"
+          }
+        },
+        {
+          "runId": "normal-course-content_employee",
+          "actorId": "player",
+          "commandId": "normal-course-85",
+          "expectedRevision": 85,
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-06-30"
+          }
+        }
+      ],
+      "expected": {
+        "normalOpeningOnly": true,
+        "actualSalaryAndLiving": true,
+        "separateCompany": true,
+        "realVideoOrigin": true,
+        "learners": 20,
+        "courseClosed": true
+      },
+      "actual": {
+        "origin": "normal",
+        "backgroundId": "content_employee",
+        "closedAt": "2023-04-16",
+        "personal": {
+          "cashFen": 5590000,
+          "heldFen": 0,
+          "availableFen": 5590000,
+          "protectionRequiredFen": 0,
+          "protectionShortfallFen": 0,
+          "commitmentShortfallFen": 0
+        },
+        "business": {
+          "cashFen": 2770359,
+          "heldFen": 0,
+          "availableFen": 2770359,
+          "protectionRequiredFen": 0,
+          "protectionShortfallFen": 0,
+          "commitmentShortfallFen": 0,
+          "receivableFen": 0,
+          "prepaidLiabilityFen": 0,
+          "payableFen": 0,
+          "supplierPrepaidFen": 0,
+          "investmentValueFen": 0,
+          "netAssetsFen": 2770359
+        },
+        "courseMetrics": {
+          "incomeFen": 1998000,
+          "costFen": 1209900,
+          "profitFen": 788100
+        },
+        "learners": 20,
+        "recovered": 1,
+        "paidCase": "ops:b3afede2091ec6f3a42ea3e43c03bb5b",
+        "videoOriginCohort": "vid:678ce2af1616987d93e7d1b143357cb9",
+        "salaryPayments": 36
+      }
+    }
+  ],
+  "notCovered": [
+    "native_browser_unless_separate_report",
+    "all_24_quarters",
+    "other_three_routes",
+    "real_training_or_payments",
+    "original_png",
+    "human_playtest",
+    "balance"
+  ]
+}

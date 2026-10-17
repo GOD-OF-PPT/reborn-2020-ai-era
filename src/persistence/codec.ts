@@ -50,6 +50,7 @@ export class RunCodec {
     assertGameRun(run)
     this.#references(run)
     requireRule(run.world === null || this.registry.runtime !== null, 'WORLD_HANDLER_REQUIRED')
+    requireRule(run.deepseek===null||this.registry.runtime!==null,'DEEPSEEK_HANDLER_REQUIRED')
     requireRule(run.routines===null||this.registry.runtime!==null,'ROUTINE_HANDLER_REQUIRED')
     requireRule(run.relay===null||this.registry.runtime!==null,'RELAY_HANDLER_REQUIRED')
     requireRule(run.course === null || this.registry.runtime !== null, 'COURSE_HANDLER_REQUIRED')
@@ -112,6 +113,7 @@ export class RunCodec {
       const paid=[...financial.values()].filter(o=>o.kind==='settle_market_receivable'&&o.receivableId===receivable.id).reduce((sum,o)=>sum+('amountFen' in o?o.amountFen:0),0)
       requireRule(receivable.remainingFen===receivable.amountFen-paid,'MARKET_RECEIVABLE_BALANCE_MISMATCH')
     }
+    for(const r of ledger.privateReceivables){const origin=financial.get(r.originOperationId);requireRule(origin?.kind==='dispose_private_asset'&&origin.receivableId===r.id&&origin.accountId===r.accountId&&origin.counterpartyId===r.counterpartyId&&origin.date===r.date&&origin.dueAt===r.dueAt&&origin.grossFen-origin.feeFen===r.amountFen,'INVALID_PRIVATE_RECEIVABLE');const paid=[...financial.values()].filter(o=>o.kind==='collect_private_sale'&&o.receivableId===r.id).reduce((n,o)=>n+('amountFen' in o?o.amountFen:0),0);requireRule(r.remainingFen===r.amountFen-paid,'PRIVATE_RECEIVABLE_BALANCE_MISMATCH')}
     const processedIds = new Set<string>()
     let previousPoint: TimePoint | null = null
     for (const receipt of run.timeline.receipts) {
@@ -124,7 +126,7 @@ export class RunCodec {
       requireRule(previousPoint === null || compareTimePoints(event, previousPoint) > 0, 'EVENT_HISTORY_OUT_OF_ORDER')
       requireRule(compareTimePoints(event, run.timeline.cursor) <= 0, 'EVENT_HISTORY_AHEAD_OF_CURSOR')
       previousPoint = event
-      if (isWorldOperation(event.payload) || event.payload.kind === 'operating_event'||event.payload.kind==='market_event'||event.payload.kind==='video_event'||event.payload.kind==='course_event'||event.payload.kind==='relay_event') {
+      if (isWorldOperation(event.payload) || event.payload.kind === 'operating_event'||event.payload.kind==='market_event'||event.payload.kind==='video_event'||event.payload.kind==='course_event'||event.payload.kind==='relay_event'||event.payload.kind==='deepseek_event') {
         requireRule(this.registry.runtime && run.world, 'WORLD_HANDLER_REQUIRED')
       } else if (receipt.skippedReason !== undefined) {
         // Validate the historical reason against its earlier operation. The action

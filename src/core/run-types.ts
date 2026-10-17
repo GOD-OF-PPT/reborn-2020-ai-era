@@ -1,3 +1,4 @@
+import type {DeepseekState} from './deepseek-schema.ts'
 import type {RoutineState} from './routine-schema.ts'
 import type { RelayState } from './relay-schema.ts'
 import type { CourseState } from './course-schema.ts'
@@ -34,6 +35,7 @@ export interface RuleModel {
   readonly course:CourseState|null
   readonly relay:RelayState|null
   readonly routines:RoutineState|null
+  readonly deepseek:DeepseekState|null
 }
 export interface CommandEnvelope {
   readonly commandId: string
@@ -102,6 +104,7 @@ export interface InitialRunState {
   readonly course?:CourseState|null
   readonly relay?:RelayState|null
   readonly routines?:RoutineState|null
+  readonly deepseek?:DeepseekState|null
 }
 export interface ProposedRun {
   readonly status: 'proposed'

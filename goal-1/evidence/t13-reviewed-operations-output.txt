@@ -1,0 +1,59 @@
+
+> reborn-2020-ai-era@0.1.0 evidence:operations
+> node --experimental-strip-types scripts/collect_operations_evidence.ts --output-dir goal-1/evidence/t13-reviewed/regression/operations
+
+(node:89895) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{
+  "file": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t13-reviewed/regression/operations/t06-operations-evidence.json",
+  "cases": [
+    {
+      "name": "t06-work-technical_employee",
+      "commands": 6,
+      "expected": {
+        "cashFen": 4200000,
+        "actionPointsSpent": 2,
+        "scope": "employment_only_not_UX01_or_full_campaign"
+      }
+    },
+    {
+      "name": "t06-work-content_employee",
+      "commands": 6,
+      "expected": {
+        "cashFen": 3600000,
+        "actionPointsSpent": 2,
+        "scope": "employment_only_not_UX01_or_full_campaign"
+      }
+    },
+    {
+      "name": "t06-contract-lifecycle",
+      "commands": 13,
+      "expected": {
+        "privateCashFen": 2732259,
+        "realizedProfitFen": 132259,
+        "closedCompanyCashFen": 0,
+        "scope": "synthetic_profitable_contract_not_T07_manual_offer"
+      }
+    },
+    {
+      "name": "t06-contract-interruption",
+      "commands": 8,
+      "expected": {
+        "privateCashFen": 2550000,
+        "retainedCostFen": 50000,
+        "recognizedIncomeFen": 0,
+        "scope": "interrupted_and_refunded_fixture"
+      }
+    },
+    {
+      "name": "t06-loan-shortfall",
+      "commands": 4,
+      "expected": {
+        "privateCashFen": 0,
+        "privatePayableFen": 90000,
+        "pause": "CASH_SHORTFALL",
+        "scope": "explicit_limited_loan_not_income"
+      }
+    }
+  ]
+}

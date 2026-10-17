@@ -396,6 +396,7 @@ export const CAMPAIGN_CONTENT = {
       "classification": "historical",
       "route": null
     },
+    {"id":"deepseek_v2_announcement","anchorId":"H006","availableAt":"2024-05-06","entitlementIds":[],"classification":"historical","route":null},
     {
       "id": "deepseek_v3_announcement",
       "anchorId": "H008",

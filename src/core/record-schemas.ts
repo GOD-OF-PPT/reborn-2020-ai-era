@@ -26,6 +26,8 @@ const investment = { ...base, accountId: idSchema, investmentId: idSchema }
 export const classification = z.enum(['historical', 'simulation', 'fictional', 'counterfactual'])
 
 const ledgerVariants = [
+  z.strictObject({...base,kind:z.literal('dispose_private_asset'),accountId:idSchema,counterpartyId:idSchema,investmentId:idSchema,removedPrincipalFen:moneySchema.min(1),grossFen:moneySchema.min(1),feeFen:moneySchema,valueFen:moneySchema,receivableId:idSchema,dueAt:dateSchema}),
+  z.strictObject({...cash,kind:z.literal('collect_private_sale'),receivableId:idSchema}),
   z.strictObject({...base,kind:z.literal('trade_buy'),accountId:idSchema,counterpartyId:idSchema,investmentId:idSchema,assetId:idSchema,reservationId:idSchema,originId:idSchema,principalFen:moneySchema.min(1),feeFen:moneySchema,valueFen:moneySchema}),
   z.strictObject({...base,kind:z.literal('trade_sell'),accountId:idSchema,counterpartyId:idSchema,investmentId:idSchema,removedPrincipalFen:moneySchema,grossFen:moneySchema,feeFen:moneySchema,valueFen:moneySchema,receivableId:idSchema.nullable(),dueAt:dateSchema}),
   z.strictObject({...cash,kind:z.literal('record_market_income'),receivableId:idSchema,dueAt:dateSchema,incomeKind:z.literal('dividend')}),

@@ -1,0 +1,33 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/ecosystem-edges.test.ts (10 tests | 1 failed) 3451ms
+   × previews the support cancellation compensation and keeps earned production income without inventing another prepayment refund 326ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/ecosystem-edges.test.ts > previews the support cancellation compensation and keeps earned production income without inventing another prepayment refund
+AssertionError: expected +0 to be 60000 // Object.is equality
+
+- Expected
++ Received
+
+- 60000
++ 0
+
+ ❯ src/application/ecosystem-edges.test.ts:43:74
+     41|  h.send('AdvanceTime',{date:'2024-07-09'});h.send('SubmitEcoDelivery',…
+     42|  const before=hashValue(h.run),cash=accountFunds(h.run.economy.ledger,…
+     43|  expect(h.preview('CancelEcoContract',{contractId:c.id}).upfrontCostFe…
+       |                                                                          ^
+     44|  expect(projectDeepseek(h.run,h.deepseek)!.contracts[0]!.cancellationC…
+     45|  h.send('CancelEcoContract',{contractId:c.id});expect(accountFunds(h.r…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 9 passed (10)
+   Start at  11:42:01
+   Duration  4.38s (tests 85%, import 9%, transform 6%)
+

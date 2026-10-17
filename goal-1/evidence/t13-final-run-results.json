@@ -1,0 +1,217 @@
+[
+  {
+    "name": "check-final",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "check"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 260.928,
+    "output": "goal-1/evidence/t13-check-final-output.txt"
+  },
+  {
+    "name": "deepseek-frozen",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "evidence:deepseek",
+      "--",
+      "--output-dir",
+      "goal-1/evidence/t13-frozen"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 97.696,
+    "output": "goal-1/evidence/t13-deepseek-frozen-output.txt"
+  },
+  {
+    "name": "native-audit",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "evidence:deepseek-browser-audit"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 25.358,
+    "output": "goal-1/evidence/t13-native-audit-output.txt"
+  },
+  {
+    "name": "regression-kernel",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "evidence:kernel",
+      "--",
+      "--output-dir",
+      "goal-1/evidence/t13-regression/kernel"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.837,
+    "output": "goal-1/evidence/t13-regression-kernel-output.txt"
+  },
+  {
+    "name": "regression-save",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "evidence:save",
+      "--",
+      "--output-dir",
+      "goal-1/evidence/t13-regression/save"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 1.339,
+    "output": "goal-1/evidence/t13-regression-save-output.txt"
+  },
+  {
+    "name": "regression-world",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "evidence:world",
+      "--",
+      "--output-dir",
+      "goal-1/evidence/t13-regression/world"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 16.933,
+    "output": "goal-1/evidence/t13-regression-world-output.txt"
+  },
+  {
+    "name": "regression-operations",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "evidence:operations",
+      "--",
+      "--output-dir",
+      "goal-1/evidence/t13-regression/operations"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 4.711,
+    "output": "goal-1/evidence/t13-regression-operations-output.txt"
+  },
+  {
+    "name": "regression-first-order",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "evidence:first-order",
+      "--",
+      "--output-dir",
+      "goal-1/evidence/t13-regression/first-order"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 10.313,
+    "output": "goal-1/evidence/t13-regression-first-order-output.txt"
+  },
+  {
+    "name": "regression-market",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "evidence:market",
+      "--",
+      "--output-dir",
+      "goal-1/evidence/t13-regression/market"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 4.446,
+    "output": "goal-1/evidence/t13-regression-market-output.txt"
+  },
+  {
+    "name": "regression-playable",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "evidence:playable",
+      "--",
+      "--output-dir",
+      "goal-1/evidence/t13-regression/playable"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 10.76,
+    "output": "goal-1/evidence/t13-regression-playable-output.txt"
+  },
+  {
+    "name": "regression-video",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "evidence:video",
+      "--",
+      "--output-dir",
+      "goal-1/evidence/t13-regression/video"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 30.557,
+    "output": "goal-1/evidence/t13-regression-video-output.txt"
+  },
+  {
+    "name": "regression-course",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "evidence:course",
+      "--",
+      "--output-dir",
+      "goal-1/evidence/t13-regression/course"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 46.863,
+    "output": "goal-1/evidence/t13-regression-course-output.txt"
+  },
+  {
+    "name": "regression-relay",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "evidence:relay",
+      "--",
+      "--output-dir",
+      "goal-1/evidence/t13-regression/relay"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 81.631,
+    "output": "goal-1/evidence/t13-regression-relay-output.txt"
+  },
+  {
+    "name": "route-diversity",
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "evidence:route-diversity"
+    ],
+    "exitCode": 1,
+    "durationSeconds": 1.241,
+    "output": "goal-1/evidence/t13-route-diversity-output.txt"
+  }
+]

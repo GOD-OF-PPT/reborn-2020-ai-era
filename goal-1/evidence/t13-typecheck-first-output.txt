@@ -1,0 +1,16 @@
+
+> reborn-2020-ai-era@0.1.0 typecheck
+> tsc -b
+
+src/core/deepseek-validation.ts(1,17): error TS6133: 'quarterOf' is declared but its value is never read.
+src/core/deepseek-validation.ts(6,37): error TS6133: 'done' is declared but its value is never read.
+src/core/deepseek.ts(75,239): error TS2353: Object literal may only specify known properties, and 'counterpartyId' does not exist in type 'OperationBase & { readonly accountId: string; readonly businessId: string; readonly contractId: string; readonly amountFen: number; } & { readonly kind: "collect_receivable"; }'.
+src/core/deepseek.ts(83,124): error TS2353: Object literal may only specify known properties, and 'counterpartyId' does not exist in type 'OperationBase & { readonly accountId: string; readonly businessId: string; readonly contractId: string; readonly amountFen: number; } & { readonly kind: "refund_undelivered"; readonly obligationId: string; readonly referenceId: string; }'.
+src/core/deepseek.ts(90,97): error TS2820: Type '"deliver_credit"' is not assignable to type '"opening_cash" | "income" | "expense" | "reserve_cash" | "move_reservation" | "release_reservation" | "receive_prepayment" | "deliver_prepaid" | "deliver_on_credit" | "collect_receivable" | ... 29 more ... | "reschedule_action"'. Did you mean '"deliver_on_credit"'?
+src/core/equity.ts(79,214): error TS2322: Type '"expansion"' is not assignable to type '"ordinary" | "recovery" | undefined'.
+src/core/deepseek-validation.ts(1,17): error TS6133: 'quarterOf' is declared but its value is never read.
+src/core/deepseek-validation.ts(6,37): error TS6133: 'done' is declared but its value is never read.
+src/core/deepseek.ts(75,239): error TS2353: Object literal may only specify known properties, and 'counterpartyId' does not exist in type 'OperationBase & { readonly accountId: string; readonly businessId: string; readonly contractId: string; readonly amountFen: number; } & { readonly kind: "collect_receivable"; }'.
+src/core/deepseek.ts(83,124): error TS2353: Object literal may only specify known properties, and 'counterpartyId' does not exist in type 'OperationBase & { readonly accountId: string; readonly businessId: string; readonly contractId: string; readonly amountFen: number; } & { readonly kind: "refund_undelivered"; readonly obligationId: string; readonly referenceId: string; }'.
+src/core/deepseek.ts(90,97): error TS2820: Type '"deliver_credit"' is not assignable to type '"opening_cash" | "income" | "expense" | "reserve_cash" | "move_reservation" | "release_reservation" | "receive_prepayment" | "deliver_prepaid" | "deliver_on_credit" | "collect_receivable" | ... 29 more ... | "reschedule_action"'. Did you mean '"deliver_on_credit"'?
+src/core/equity.ts(79,214): error TS2322: Type '"expansion"' is not assignable to type '"ordinary" | "recovery" | undefined'.

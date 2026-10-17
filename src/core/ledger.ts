@@ -63,7 +63,9 @@ type InvestmentOperation = OperationBase & { readonly accountId: string; readonl
 type FeeOperation = OperationBase & { readonly kind: 'charge_fee'; readonly accountId: string; readonly counterpartyId: string; readonly feeId: string; readonly addedBaseFen: number; readonly basisPoints: number }
 type OperatingLedgerOperation = OperationBase & ({ readonly kind: 'open_business_account'; readonly accountId: string } | { readonly kind: 'owner_transfer'; readonly accountId: string; readonly targetAccountId: string; readonly amountFen: number; readonly fundingPurpose?: 'ordinary' | 'recovery' } | { readonly kind: 'borrow_cash'; readonly accountId: string; readonly counterpartyId: string; readonly amountFen: number; readonly obligationId: string; readonly dueAt: string })
 type TradingLedgerOperation=OperationBase&{readonly accountId:string;readonly counterpartyId:string}&({readonly kind:'trade_buy';readonly investmentId:string;readonly assetId:string;readonly reservationId:string;readonly originId:string;readonly principalFen:number;readonly feeFen:number;readonly valueFen:number}|{readonly kind:'trade_sell';readonly investmentId:string;readonly removedPrincipalFen:number;readonly grossFen:number;readonly feeFen:number;readonly valueFen:number;readonly receivableId:string|null;readonly dueAt:string}|{readonly kind:'record_market_income';readonly receivableId:string;readonly amountFen:number;readonly dueAt:string;readonly incomeKind:'dividend'}|{readonly kind:'settle_market_receivable';readonly receivableId:string;readonly amountFen:number})
-export type LedgerOperation = CashOperation | ExpenseOperation | ReservationOperation | ContractOperation | PayObligationOperation | DueExpenseOperation | SupplierOperation | InvestmentOperation | FeeOperation | OperatingLedgerOperation | TradingLedgerOperation
+type PrivateSaleOperation = OperationBase & {readonly accountId:string;readonly counterpartyId:string;readonly investmentId:string;readonly kind:'dispose_private_asset';readonly removedPrincipalFen:number;readonly grossFen:number;readonly feeFen:number;readonly valueFen:number;readonly receivableId:string;readonly dueAt:string}
+type PrivateCollectionOperation = OperationBase & {readonly accountId:string;readonly counterpartyId:string;readonly kind:'collect_private_sale';readonly receivableId:string;readonly amountFen:number}
+export type LedgerOperation = PrivateSaleOperation | PrivateCollectionOperation | CashOperation | ExpenseOperation | ReservationOperation | ContractOperation | PayObligationOperation | DueExpenseOperation | SupplierOperation | InvestmentOperation | FeeOperation | OperatingLedgerOperation | TradingLedgerOperation
 export interface MarketReceivable {readonly id:string;readonly accountId:string;readonly counterpartyId:string;readonly sourceEventId:string;readonly originOperationId:string;readonly date:string;readonly dueAt:string;readonly amountFen:number;readonly remainingFen:number;readonly kind:'sale'|'dividend'}
 export interface FeeAccrual {
   readonly id: string
@@ -164,6 +166,7 @@ export interface LedgerState {
   readonly supplierPrepayments: readonly SupplierPrepayment[]
   readonly investments: readonly InvestmentPosition[]
   readonly fees: readonly FeeAccrual[]
+  readonly privateReceivables:readonly (Omit<MarketReceivable,'kind'> & {readonly kind:'private_sale'})[]
   readonly marketReceivables:readonly MarketReceivable[]
 }
 
@@ -176,7 +179,7 @@ export function createLedger(accounts: readonly AccountDefinition[], date: IsoDa
     requireRule(['personal', 'business', 'external'].includes(account.kind), 'INVALID_ACCOUNT_KIND')
     ids.add(account.id)
   }
-  return { asOf: date, accounts: accounts.map((account) => ({ ...account, balanceFen: 0 })), transactions: [], metrics: [], receipts: [], openingPosted: [], reservations: [], contracts: [], obligations: [], supplierPrepayments: [], investments: [], fees: [],marketReceivables:[] }
+  return { asOf: date, accounts: accounts.map((account) => ({ ...account, balanceFen: 0 })), transactions: [], metrics: [], receipts: [], openingPosted: [], reservations: [], contracts: [], obligations: [], supplierPrepayments: [], investments: [], fees: [],privateReceivables:[],marketReceivables:[] }
 }
 
 function cloneLedger(state: LedgerState) {
@@ -192,6 +195,7 @@ function cloneLedger(state: LedgerState) {
     investments: state.investments.map((investment) => ({ ...investment })),
     fees: state.fees.map((fee) => ({ ...fee })),
     marketReceivables:state.marketReceivables.map(r=>({...r})),
+    privateReceivables:state.privateReceivables.map(r=>({...r})),
   }
 }
 type WorkingLedger = ReturnType<typeof cloneLedger>
@@ -235,7 +239,7 @@ export function contractBalance(state: LedgerState, contractId: string): Revenue
 export function accountPosition(state: LedgerState, accountId: string) {
   const funds = accountFunds(state, accountId)
   const contracts = state.contracts.filter((item) => item.accountId === accountId)
-  const receivableFen = sumMoney([...contracts.map((item) => item.receivableFen),...state.marketReceivables.filter(r=>r.accountId===accountId).map(r=>r.remainingFen)])
+  const receivableFen = sumMoney([...contracts.map((item) => item.receivableFen),...state.marketReceivables.filter(r=>r.accountId===accountId).map(r=>r.remainingFen),...state.privateReceivables.filter(r=>r.accountId===accountId).map(r=>r.remainingFen)])
   const prepaidLiabilityFen = sumMoney(contracts.map((item) => item.prepaidFen))
   const payableFen = sumMoney(state.obligations.filter((item) => item.accountId === accountId).map((item) => item.remainingFen))
   const supplierPrepaidFen = sumMoney(state.supplierPrepayments.filter((item) => item.accountId === accountId).map((item) => item.remainingFen))
@@ -495,6 +499,7 @@ export function assertLedger(state: LedgerState): void {
     if (contract) requireRule(contract.accountId === entry.accountId && contract.businessId === entry.businessId, 'METRIC_CONTRACT_MISMATCH')
   }
   const receiptIds = new Set<string>()
+  const privateIds=new Set<string>();for(const r of state.privateReceivables){identifier(r.id);isoDate(r.date);isoDate(r.dueAt);money(r.amountFen);money(r.remainingFen);requireRule(!privateIds.has(r.id)&&r.remainingFen<=r.amountFen&&r.date<=state.asOf&&r.dueAt>=r.date&&findAccount(state,r.accountId).kind!=='external'&&findAccount(state,r.counterpartyId).kind==='external','INVALID_PRIVATE_RECEIVABLE');privateIds.add(r.id)}
   const marketReceivableIds=new Set<string>()
   for(const r of state.marketReceivables){identifier(r.id);identifier(r.originOperationId);identifier(r.sourceEventId);isoDate(r.date);isoDate(r.dueAt);money(r.amountFen);money(r.remainingFen);requireRule(!marketReceivableIds.has(r.id)&&r.remainingFen<=r.amountFen&&r.date<=state.asOf&&r.dueAt>=r.date&&findAccount(state,r.accountId).kind!=='external'&&findAccount(state,r.counterpartyId).kind==='external','INVALID_MARKET_RECEIVABLE');marketReceivableIds.add(r.id)}
   for (const receipt of state.receipts) {
@@ -535,6 +540,20 @@ export function applyLedger(state: LedgerState, operation: LedgerOperation): Led
       const reservation=reservationFor(next,account.id,operation.reservationId);requireRule(reservation.kind==='order'&&reservation.originId===operation.originId,'INVALID_RESERVATION_PERMISSION')
       const cost=sumMoney([operation.principalFen,operation.feeFen]);requireRule(reservation.amountFen>=cost,'INSUFFICIENT_ORDER_RESERVATION');cashTransfer(next,operation,account.id,operation.counterpartyId,cost,reservation.id);reduceReservation(reservation,cost)
       addInvestment(next,{...operation,classification:'simulation',amountFen:operation.principalFen},null);const asset=next.investments.find(i=>i.id===operation.investmentId);requireRule(asset,'INVESTMENT_NOT_FOUND');asset.valueFen=operation.valueFen;if(operation.feeFen>0)metric(next,operation,account.id,'cost',operation.feeFen);break
+    }
+    case 'dispose_private_asset': {
+      money(operation.removedPrincipalFen);money(operation.grossFen);money(operation.feeFen);money(operation.valueFen);isoDate(operation.dueAt);identifier(operation.receivableId)
+      const asset=next.investments.find(i=>i.id===operation.investmentId&&i.accountId===account.id&&i.classification==='counterfactual')
+      requireRule(asset&&operation.removedPrincipalFen>0&&asset.bookCostFen>=operation.removedPrincipalFen&&operation.grossFen>operation.feeFen&&operation.dueAt>=operation.date,'INVALID_PRIVATE_DISPOSAL')
+      requireRule(!next.privateReceivables.some(r=>r.id===operation.receivableId),'PRIVATE_RECEIVABLE_ID_REUSED')
+      asset.bookCostFen-=operation.removedPrincipalFen;asset.valueFen=operation.valueFen
+      next.privateReceivables.push({id:operation.receivableId,accountId:account.id,counterpartyId:operation.counterpartyId,sourceEventId:operation.sourceEventId,originOperationId:operation.id,date:operation.date,dueAt:operation.dueAt,amountFen:operation.grossFen-operation.feeFen,remainingFen:operation.grossFen-operation.feeFen,kind:'private_sale'})
+      metric(next,operation,account.id,'income',operation.grossFen);metric(next,operation,account.id,'cost',sumMoney([operation.removedPrincipalFen,operation.feeFen]));break
+    }
+    case 'collect_private_sale': {
+      const receivable=next.privateReceivables.find(r=>r.id===operation.receivableId&&r.accountId===account.id&&r.counterpartyId===operation.counterpartyId)
+      requireRule(receivable&&operation.date>=receivable.dueAt&&operation.amountFen>0&&operation.amountFen<=receivable.remainingFen,'INVALID_PRIVATE_COLLECTION')
+      cashTransfer(next,operation,operation.counterpartyId,account.id,operation.amountFen);receivable.remainingFen-=operation.amountFen;break
     }
     case 'trade_sell': {
       money(operation.removedPrincipalFen);money(operation.grossFen);money(operation.feeFen);money(operation.valueFen);isoDate(operation.dueAt);requireRule(operation.grossFen>=operation.feeFen&&operation.dueAt>=operation.date,'INVALID_TRADE_AMOUNT');const asset=next.investments.find(i=>i.id===operation.investmentId&&i.accountId===account.id&&i.classification==='simulation');requireRule(asset&&asset.bookCostFen>=operation.removedPrincipalFen,'INVALID_TRADE_BASIS');asset.bookCostFen-=operation.removedPrincipalFen;asset.valueFen=operation.valueFen;const net=operation.grossFen-operation.feeFen

@@ -1,0 +1,26 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/application/deepseek.test.ts src/application/equity.test.ts src/application/ecosystem-edges.test.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/ecosystem-edges.test.ts (6 tests | 1 failed) 1664ms
+   × keeps delivery support obligations on wind down and refuses to close the company early 299ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/ecosystem-edges.test.ts > keeps delivery support obligations on wind down and refuses to close the company early
+Error: {"kind":"SubmitEcoDelivery","payload":{"contractId":"dsk:aff2262372639074222526d73dbb2796"},"result":{"status":"rejected","reasonCodes":["ECO_DELIVERY_NOT_READY"]}}
+ ❯ Object.send src/testing/deepseek-fixture.ts:21:163
+
+ ❯ src/application/ecosystem-edges.test.ts:9:540
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 21 passed (22)
+   Start at  09:59:16
+   Duration  5.19s (tests 82%, import 12%, transform 6%)
+

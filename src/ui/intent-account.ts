@@ -3,9 +3,11 @@ import type { PlayFeatures,PlayingView } from './game-types.ts'
 /** Presentation reads ownership already decided by the rule model. */
 export function intentAccount(command:CommandEnvelope,view:PlayingView,features:PlayFeatures):string{
  const p=command.payload as Record<string,unknown>
- if(command.kind==='FundBusiness'||command.kind==='OpenCourseStudio'||command.kind==='OpenRelayStation')return 'personal'
+ if(command.kind==='FundBusiness'||command.kind==='OpenCourseStudio'||command.kind==='OpenRelayStation'||command.kind==='OpenEcosystemService')return 'personal'
  if(typeof p.accountId==='string')return p.accountId
  if(['WorkQuarter','QuitWork','StartFirstOrder','ResearchMarket','StopMarketResearch','FavoriteMemory','ReadNews'].includes(command.kind))return 'personal'
+ const ds=features.deepseek,dsBusinessId=typeof p.invitationId==='string'?ds?.invitations.find(i=>i.id===p.invitationId)?.businessId:typeof p.negotiationId==='string'?ds?.negotiations.find(n=>n.id===p.negotiationId)?.businessId:typeof p.agreementId==='string'?ds?.agreements.find(a=>a.id===p.agreementId)?.businessId:typeof p.exitId==='string'?ds?.exits.find(e=>e.id===p.exitId)?.businessId:typeof p.leadId==='string'?ds?.leads.find(l=>l.id===p.leadId)?.businessId:typeof p.deliveryId==='string'?ds?.contracts.find(c=>c.id===ds.deliveries.find(d=>d.id===p.deliveryId)?.contractId)?.businessId:typeof p.contractId==='string'?ds?.contracts.find(c=>c.id===p.contractId)?.businessId:null
+ if(dsBusinessId)return view.operations?.businesses.find(b=>b.id===dsBusinessId)?.accountId??'personal'
  if(typeof p.planId==='string')return features.routines?.plans.find(plan=>plan.id===p.planId)?.accountId??'personal'
  if(typeof p.auditId==='string'){const audit=features.relay?.audits.find(a=>a.id===p.auditId);if(audit)return view.operations?.businesses.find(b=>b.id===audit.businessId)?.accountId??'personal'}
  const relayCustomerId=typeof p.customerId==='string'?p.customerId:typeof p.meterId==='string'?features.relay?.meters.find(m=>m.id===p.meterId)?.customerId:typeof p.receivableId==='string'?features.relay?.receivables.find(r=>r.id===p.receivableId)?.customerId:null

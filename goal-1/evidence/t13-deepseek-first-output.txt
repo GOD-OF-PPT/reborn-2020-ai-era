@@ -1,0 +1,40 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/application/deepseek.test.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/deepseek.test.ts (7 tests | 3 failed) 1168ms
+   × actually produces, reviews, supports and collects training without treating a prepayment as profit 36ms
+   × actually produces, reviews, supports and collects deployment without treating a prepayment as profit 34ms
+   × protects the full customer prepayment until real accepted delivery 24ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/deepseek.test.ts > actually produces, reviews, supports and collects training without treating a prepayment as profit
+ FAIL  src/application/deepseek.test.ts > actually produces, reviews, supports and collects deployment without treating a prepayment as profit
+Error: {"kind":"OpenEcosystemService","payload":{"capitalFen":2000000},"result":{"status":"rejected","reasonCodes":["FUNDING_NOT_AVAILABLE"]}}
+ ❯ Object.send src/testing/deepseek-fixture.ts:21:163
+
+ ❯ prepareEco src/testing/deepseek-scenarios.ts:9:85
+ ❯ completedEco src/testing/deepseek-scenarios.ts:12:10
+ ❯ src/application/deepseek.test.ts:8:160
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/application/deepseek.test.ts > protects the full customer prepayment until real accepted delivery
+Error: {"kind":"OpenEcosystemService","payload":{"capitalFen":2000000},"result":{"status":"rejected","reasonCodes":["FUNDING_NOT_AVAILABLE"]}}
+ ❯ Object.send src/testing/deepseek-fixture.ts:21:163
+
+ ❯ prepareEco src/testing/deepseek-scenarios.ts:9:85
+ ❯ src/application/deepseek.test.ts:12:93
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 4 passed (7)
+   Start at  09:56:54
+   Duration  2.27s (tests 58%, transform 25%, import 17%)
+

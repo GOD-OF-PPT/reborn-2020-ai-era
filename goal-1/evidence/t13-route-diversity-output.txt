@@ -1,0 +1,23 @@
+
+> reborn-2020-ai-era@0.1.0 evidence:route-diversity
+> node --experimental-strip-types scripts/collect_route_diversity_evidence.ts
+
+(node:87598) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+node:fs:441
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t13-reviewed/regression/market/t08-market-evidence.json'
+    at readFileSync (node:fs:441:20)
+    at file:///Users/gordon/githome/reborn-2020-ai-era/scripts/collect_route_diversity_evidence.ts:14:45
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t13-reviewed/regression/market/t08-market-evidence.json'
+}
+
+Node.js v22.12.0

@@ -1,0 +1,166 @@
+{
+  "taskId": "T13",
+  "evidenceType": "targeted_negative_import_fixture",
+  "origin": "fixture",
+  "seed": "deepseek-fixture-v1",
+  "versions": {
+    "schemaVersion": 10,
+    "rulesVersion": "rules-t13-fixture-v1",
+    "contentVersion": "deepseek-fixture-v1",
+    "contentHash": "b98f577c2ddde782c1f4a7be0b7e23891e4a3246ae330250598e055838e74677",
+    "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+  },
+  "commands": [
+    {
+      "runId": "deepseek-fixture",
+      "actorId": "player",
+      "commandId": "deepseek-1",
+      "expectedRevision": 1,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2024-05-06"
+      }
+    },
+    {
+      "runId": "deepseek-fixture",
+      "actorId": "player",
+      "commandId": "deepseek-2",
+      "expectedRevision": 2,
+      "kind": "OpenEcosystemService",
+      "payload": {
+        "capitalFen": 2000000
+      }
+    },
+    {
+      "runId": "deepseek-fixture",
+      "actorId": "player",
+      "commandId": "deepseek-3",
+      "expectedRevision": 3,
+      "kind": "StartEcosystemPreparation",
+      "payload": {
+        "businessId": "ops:3118077c595c2549af926d4557eb57a9",
+        "preparation": "materials",
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2024-05-06"
+      }
+    },
+    {
+      "runId": "deepseek-fixture",
+      "actorId": "player",
+      "commandId": "deepseek-4",
+      "expectedRevision": 4,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2024-05-13"
+      }
+    },
+    {
+      "runId": "deepseek-fixture",
+      "actorId": "player",
+      "commandId": "deepseek-5",
+      "expectedRevision": 5,
+      "kind": "StartEcosystemAdaptation",
+      "payload": {
+        "businessId": "ops:3118077c595c2549af926d4557eb57a9",
+        "modelId": "v2",
+        "productId": "training",
+        "acceptSimulationTerms": true,
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2024-05-13"
+      }
+    },
+    {
+      "runId": "deepseek-fixture",
+      "actorId": "player",
+      "commandId": "deepseek-6",
+      "expectedRevision": 6,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2024-05-20"
+      }
+    },
+    {
+      "runId": "deepseek-fixture",
+      "actorId": "player",
+      "commandId": "deepseek-7",
+      "expectedRevision": 7,
+      "kind": "ActivateBusiness",
+      "payload": {
+        "businessId": "ops:3118077c595c2549af926d4557eb57a9"
+      }
+    },
+    {
+      "runId": "deepseek-fixture",
+      "actorId": "player",
+      "commandId": "deepseek-8",
+      "expectedRevision": 8,
+      "kind": "StartEcoOutreach",
+      "payload": {
+        "businessId": "ops:3118077c595c2549af926d4557eb57a9",
+        "modelId": "v2",
+        "productId": "training",
+        "mode": "paid",
+        "sourceCohortIds": [],
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2024-05-20"
+      }
+    },
+    {
+      "runId": "deepseek-fixture",
+      "actorId": "player",
+      "commandId": "deepseek-9",
+      "expectedRevision": 9,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2024-05-27"
+      }
+    },
+    {
+      "runId": "deepseek-fixture",
+      "actorId": "player",
+      "commandId": "deepseek-10",
+      "expectedRevision": 10,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2024-07-01"
+      }
+    },
+    {
+      "runId": "deepseek-fixture",
+      "actorId": "player",
+      "commandId": "deepseek-11",
+      "expectedRevision": 11,
+      "kind": "AcceptEcoContract",
+      "payload": {
+        "leadId": "dsk:5504090d0385b437389f17dc7c7ad664",
+        "scope": "standard",
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2024-07-02"
+      }
+    }
+  ],
+  "inputSha256": "8fda2a9675560dd032341dbfc11ca59b0a791a679b1c284d9ec7be315dc9fad5",
+  "mutation": {
+    "contractStatus": "cancelled",
+    "cancelledAt": "2024-07-01",
+    "recomputedChecksum": true,
+    "unstartedJobsAndPrepaymentKept": true
+  },
+  "expected": "ECO_CANCELLATION_SOURCE_MISSING",
+  "actual": "ECO_CANCELLATION_SOURCE_MISSING",
+  "originalRoundtripUnchanged": true,
+  "sourceHashes": {
+    "src/core/deepseek-validation.ts": "bcb12522e3c4619c56fb6206ffa55feeacbe01d3377d1a6cad23b5bfb7487e97",
+    "src/testing/deepseek-scenarios.ts": "2d9b08318106a360041d858ad22f97c1357a5fc37bcfdd50e79625ef7183e740",
+    "src/testing/deepseek-fixture.ts": "f6c5c8e4231a1bb630b928ee55c8bc515268c7bbaf3892fd7a39f0d24c30d5c1"
+  },
+  "result": "PASS"
+}

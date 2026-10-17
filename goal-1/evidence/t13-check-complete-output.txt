@@ -1,0 +1,42 @@
+
+> reborn-2020-ai-era@0.1.0 check
+> npm run typecheck && npm run test:unit && npm run test:docs && npm run validate:content && npm run check:docs && npm run build
+
+
+> reborn-2020-ai-era@0.1.0 typecheck
+> tsc -b
+
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/campaign.test.ts (13 tests | 1 failed) 30446ms
+   × advances every historical anchor without opening news, while keeping missing access and unpaid duties 21178ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/campaign.test.ts > advances every historical anchor without opening news, while keeping missing access and unpaid duties
+Error: Test timed out in 20000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/application/campaign.test.ts:75:1
+     73| })
+     74|
+     75| it('advances every historical anchor without opening news, while keepi…
+       | ^
+     76|   let run = createCampaignRun(input)
+     77|   const initialMarket = canonicalJson(run.random.streams.market)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 61 passed (62)
+      Tests  1 failed | 407 passed (408)
+   Start at  11:52:49
+   Duration  397.26s (tests 93%, import 7%)
+
+    Isolate  62 workers spawned · ~627ms startup each (spawn + environment, per file)
+             at least ~18.82s faster with isolate: false — reuses workers across files instead of one per file
+

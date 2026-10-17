@@ -1,0 +1,103 @@
+{
+  "taskId": "T13",
+  "scope": "same final source, same test assertions and original per-test limits; one worker after recorded two-worker historical-clock timeout",
+  "results": [
+    {
+      "name": "clock-serial-probe",
+      "command": [
+        "rtk",
+        "proxy",
+        "npx",
+        "vitest",
+        "run",
+        "src/application/campaign.test.ts",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 24.47,
+      "output": "goal-1/evidence/t13-clock-serial-probe-output.txt"
+    },
+    {
+      "name": "serial-typecheck",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 58.622,
+      "output": "goal-1/evidence/t13-serial-typecheck-output.txt"
+    },
+    {
+      "name": "serial-unit",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 489.218,
+      "output": "goal-1/evidence/t13-serial-unit-output.txt"
+    },
+    {
+      "name": "serial-tools",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:docs"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 0.877,
+      "output": "goal-1/evidence/t13-serial-tools-output.txt"
+    },
+    {
+      "name": "serial-content",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "validate:content"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 1.593,
+      "output": "goal-1/evidence/t13-serial-content-output.txt"
+    },
+    {
+      "name": "serial-docs",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 4.85,
+      "output": "goal-1/evidence/t13-serial-docs-output.txt"
+    },
+    {
+      "name": "serial-build",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 24.184,
+      "output": "goal-1/evidence/t13-serial-build-output.txt"
+    }
+  ],
+  "complete": true,
+  "allPassed": true
+}

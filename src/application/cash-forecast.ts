@@ -40,7 +40,8 @@ export function projectCashForecast(run:GameRun,accountId:string,catalog:Pick<Op
  }
  flows.sort((a,b)=>compareTimePoints({...a,instanceId:a.id},{...b,instanceId:b.id}))
  let cash=funds.cashFen,held=funds.heldFen,minimumAvailableFen=funds.availableFen;let earliestGap:{date:string;shortfallFen:number;certainty:'conditional'|'committed'}|null=null
+ const manualReceivables=run.economy.ledger.privateReceivables.some(r=>r.accountId===accountId&&r.remainingFen>0)||run.deepseek?.deliveries.some(d=>d.creditFen>run.deepseek!.collections.filter(p=>p.deliveryId===d.id).reduce((n,p)=>n+p.amountFen,0)&&run.deepseek!.contracts.some(c=>c.id===d.contractId&&run.operations?.businesses.some(b=>b.id===c.businessId&&b.accountId===accountId)))===true
  const conditional=run.market?.orders.some(o=>o.accountId===accountId&&o.side==='buy'&&(o.status==='pending'||o.status==='partially_filled'||o.status==='planned'&&marketPoints.length===0))??false
  const trace=flows.map(flow=>{cash+=flow.amountFen;held-=flow.releasedFen;const available=cash-held;minimumAvailableFen=Math.min(minimumAvailableFen,available);if(available<0&&earliestGap===null)earliestGap={date:flow.date,shortfallFen:-available,certainty:conditional?'conditional':'committed'};return {...flow,availableFen:available}})
- return {accountId,horizon,flows:trace,minimumAvailableFen,endingAvailableFen:cash-held,earliestGap,assumption:conditional?'买单按现有冻结预算占用；尚未成交，可取消释放。未来价格和卖股收益不计入。':'仅计现有承诺按期继续的工资、费用和已确认应收；未知收入不计入。'}
+ return {accountId,horizon,flows:trace,minimumAvailableFen,endingAvailableFen:cash-held,earliestGap,assumption:(conditional?'买单按现有冻结预算占用；尚未成交，可取消释放。未来价格和卖股收益不计入。':'仅计现有承诺按期继续的工资、费用和已排定的确定到账；未知收入不计入。')+(manualReceivables?' 生态 / 架空股权的手动应收尚未计作到账；需按合同实际收取。':'')}
 }
