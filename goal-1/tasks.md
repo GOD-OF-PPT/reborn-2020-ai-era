@@ -221,7 +221,7 @@ T15本轮内部顺序（执行中）：
 - 实际工作：独立LifeRuntime接入原账本/实际日期/四点行动/共享产能/原子Session；四名虚构人物的真实共同经历、自主日程/拒绝、明确接受与另行兑现/失约、休整/改善环境和只读年度记录均已接线。四主导航下新增本季生活与人物，全部已接受承诺常显；确认页列个人主体和未来费用/AP/日期，实际完成保存后才采用新生成场景。schema12拒绝并保留旧1—11；新图/提示词/原字节独立保全，不替代原PNG。
 - 验证与结果（C15已验证子范围）：[验证索引](evidence/t15-validation.md)、[八步冻结结果](evidence/t15-r3-c15-run-results.json)、[13类旧回归](evidence/t15-r3-regression-reviewed-results.json)、[10组Life回放](evidence/t15-r3-final-life/t15-life-evidence.json)、[原生报告](evidence/t15-browser-native.json)、[33导出逐字审核](evidence/t15-browser-replay-audit.json)、[完整性](evidence/t15-integrity.json)。78文件495项JS、60工具、类型/内容/资料/build通过，原断言/时限/隔离保留；101观察/98最新检查通过，33导出/7输入/14字节对与185条不同完整命令前缀逐字一致，源迭代各自绑定。三种真实head.put后abort、两物理旧档读回、候选重试、0可花/0AP有限停止、三桌面/375/键盘/显示/图片错误与四人物实际链均有证据；2151旧文件与132固定预览磁盘/HTTP原字节一致。两项真实浏览器门槛仍pending，不能把上述局部通过写成C15完成。
 - [杠精审查] 已验证子范围通过；整体待验：修复三个额外错误日期timer的严格导入缺口、季度邀请/结果直接定位人物和年度来源文案；保留红测、旧120秒超时、输入环境错误、浏览器脚本误判与修正。CPU采样开销下降但总wall未下降，不声称通用提速；T04历史浏览器引用不计本轮执行。详见[GJ/REPEAT](evidence/t15-gj-repeat-review.md)，没有新Skill/代理/自动化或依赖。
-- 本地提交：准备保存已验证代码与证据检查点，准确SHA在提交后单独记录；这不是T15完成提交。未推送，最近只读核对公开远端main仍9bf4399a5cf50997dbf522a578f1168c5532acbf。
+- 本地提交：c9a7287ad57afe8c1ec58f005cf113c77d7f66d2（已验证代码与证据检查点，903文件逐字入Git；不是T15完成提交）。[提交后防覆盖](evidence/t15-post-checkpoint-check.json)18入口实际拒绝改写已提交产物，903检查点文件SHA/Git blob均同；[再次保全](evidence/t15-post-checkpoint-preservation.json)2151旧文件/132固定预览仍同。本条阶段记录随后独立提交；未推送，最近现场只读核对公开远端main仍9bf4399a5cf50997dbf522a578f1168c5532acbf。
 - 未覆盖/后续责任：T15原生200%页面缩放和原生离页提示需支持环境，异步问题尚未答复，[补验步骤](evidence/t15-browser-followup.md)明确恢复条件；实际FCP/NavigationTiming在现有只读浏览器scope不可用，不拿Node/tool时间代替。T15/C15继续未勾，goal active，不进入T16。完整24季度/尾声归T16，原PNG0/3/真人0/整体平衡归T17，最终review/候选归T18；P/W/Q/X整体不自动done，无真实支付/模型/融资/分享/公开部署或远端交付。
 
 ### T16

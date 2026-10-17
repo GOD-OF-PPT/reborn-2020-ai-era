@@ -38,6 +38,10 @@ R3固定生产候选在本机5217，28资源[HTTP原字节一致](t15-production
 
 补验说明/当前任务记录/证据索引更新后，[资料末轮](t15-final-doc-check-result.json)0退出：77份Markdown及基础/增量规格通过，原PNG仍0/3。[提交前现场身份](t15-pre-checkpoint-identity.json)确认main、PUBLIC原owner、远端main未动且308冻结源未变。
 
+本地检查点c9a7287ad57afe8c1ec58f005cf113c77d7f66d2保存903份变更文件，暂存字节与工作区逐一一致；[提交后18个入口](t15-post-checkpoint-check.json)实际拒绝覆盖当前已提交证据，903文件SHA/Git blob读回均同。随后[再次保全](t15-post-checkpoint-preservation.json)2151旧文件和132固定预览磁盘/HTTP原字节仍同。34份原始日志的尾空白在[提交前审查](t15-pre-checkpoint-review.json)单列保留，源码/资料无空白问题；五种凭据特征扫描无命中，仅为有界检查。阶段记录另行提交，不修改代码或声称T15/C15完成。
+
+临时验证标签确认无候选后关闭，[保留记录](t15-checkpoint-browser-retention.json)说明旧设计/D02/T14和最终R3交付标签保留，存档、备份、所有证据及固定预览服务未删除。当前[预览截图](t15-final-checkpoint-preview.jpg)只用于展示，不追加或虚增98项原生检查。
+
 ## 尚待完成
 
 真实200%浏览器缩放尚无通过证据；原生beforeunload弹窗未被工具观测到，先前reload请求后候选仍逐字保留、原因未知。应用退出对话框不能代替原生关闭证据。用户环境问题仍待答复。只读浏览器scope不暴露FCP/NavigationTiming，不用Node或工具耗时替代浏览器指标。
