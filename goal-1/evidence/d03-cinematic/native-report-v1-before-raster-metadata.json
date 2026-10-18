@@ -1,0 +1,1181 @@
+{
+  "taskId": "D03-CINEMATIC",
+  "direction": "A 长日重启; ForgeTax excluded",
+  "sourceFreeze": "candidate1-source-freeze.json",
+  "baseCommit": "88659545f9a945013465f5dffe206ab18f7d433a",
+  "journals": [
+    {
+      "scope": "final",
+      "file": "final-native-checks.jsonl",
+      "sha256": "6f6c1d65f076b8b8c3d48148286c7392e7309e296ced938e622cde56f80a220a",
+      "iterations": 53,
+      "latest": 49
+    },
+    {
+      "scope": "dev",
+      "file": "dev-native-checks.jsonl",
+      "sha256": "fef8fc663cbe34dc0274aed636b36ab20e9fc95c0423d4bc0e22d31553a4373b",
+      "iterations": 10,
+      "latest": 10
+    }
+  ],
+  "checks": [
+    {
+      "journal": "final",
+      "id": "home-1280",
+      "capture": "final-home-1280",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "viewport": true,
+        "stable": true,
+        "noOverflow": true,
+        "startVisible": true,
+        "selectedScene": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "home-1366",
+      "capture": "final-home-1366",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "viewport": true,
+        "stable": true,
+        "noOverflow": true,
+        "startVisible": true,
+        "selectedScene": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "home-1920",
+      "capture": "final-home-1920",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "viewport": true,
+        "stable": true,
+        "noOverflow": true,
+        "startVisible": true,
+        "selectedScene": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "room-1280",
+      "capture": "final-room-normal1-1280",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "viewport": true,
+        "stable": true,
+        "noOverflow": true,
+        "cashAndAction": true,
+        "saved1": true,
+        "fourHotspots": true,
+        "primaryVisible": true,
+        "ordinaryScene": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "room-1366",
+      "capture": "final-room-normal1-1366",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "viewport": true,
+        "stable": true,
+        "noOverflow": true,
+        "cashAndAction": true,
+        "saved1": true,
+        "fourHotspots": true,
+        "primaryVisible": true,
+        "ordinaryScene": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "room-1920",
+      "capture": "final-room-normal1-1920",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "viewport": true,
+        "stable": true,
+        "noOverflow": true,
+        "cashAndAction": true,
+        "saved1": true,
+        "fourHotspots": true,
+        "primaryVisible": true,
+        "ordinaryScene": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "quarter-brief",
+      "capture": "final-quarter-brief",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "noOverflow": true,
+        "stable": true,
+        "saved1": true,
+        "fourPhases": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "final-quarter-plan",
+      "capture": "final-quarter-plan-v2",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "noOverflow": true,
+        "stable": true,
+        "scrollStable": true,
+        "saved1": true,
+        "content": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "final-quarter-decision",
+      "capture": "final-quarter-decision-v2",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "noOverflow": true,
+        "stable": true,
+        "scrollStable": true,
+        "saved1": true,
+        "content": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "final-quarter-result",
+      "capture": "final-quarter-result-v2",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "noOverflow": true,
+        "stable": true,
+        "scrollStable": true,
+        "saved1": true,
+        "content": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "final-routines",
+      "capture": "final-routines",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "noOverflow": true,
+        "stable": true,
+        "saved1": true,
+        "content": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "final-story",
+      "capture": "final-story",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "noOverflow": true,
+        "stable": true,
+        "saved1": true,
+        "content": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "five-opportunities",
+      "capture": "final-five-opportunities",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "fiveEntrances": true,
+        "noOverflow": true,
+        "stable": true,
+        "firstActionVisible": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "business-market",
+      "capture": "final-business-market",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "screen": true,
+        "noOverflow": true,
+        "stable": true,
+        "saved1": true,
+        "contextScene": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "business-video",
+      "capture": "final-business-video",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "screen": true,
+        "noOverflow": true,
+        "stable": true,
+        "saved1": true,
+        "contextScene": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "business-course",
+      "capture": "final-business-course",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "screen": true,
+        "noOverflow": true,
+        "stable": true,
+        "saved1": true,
+        "contextScene": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "business-relay",
+      "capture": "final-business-relay",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "screen": true,
+        "noOverflow": true,
+        "stable": true,
+        "saved1": true,
+        "contextScene": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "business-deepseek",
+      "capture": "final-business-deepseek",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "screen": true,
+        "noOverflow": true,
+        "stable": true,
+        "saved1": true,
+        "contextScene": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "memory",
+      "capture": "final-memory",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "noOverflow": true,
+        "stable": true,
+        "saved1": true,
+        "contextScene": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "initial-person-boundary",
+      "capture": "final-people-initial-known-boundary",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "fourEntrances": true,
+        "allOnScreen": true,
+        "onlyTwoPortraitElements": true,
+        "threeUnknown": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "life",
+      "capture": "final-life-initial",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "cash": true,
+        "saved1": true,
+        "ordinary": true,
+        "actions": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "year",
+      "capture": "final-year-initial",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "throughDate": true,
+        "saved1": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "text-motion-room",
+      "capture": "final-room-text-motion",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "textMode": true,
+        "reducedMotion": true,
+        "noImages": true,
+        "zeroTransition": true,
+        "hud": true,
+        "noOverflow": true,
+        "focusRestored": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "home-text-1280",
+      "capture": "final-home-text-1280",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "textMode": true,
+        "reducedMotion": true,
+        "noImages": true,
+        "noBackground": true,
+        "stable": true,
+        "noOverflow": true,
+        "continueVisible": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "home-text-1366",
+      "capture": "final-home-text-1366",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "textMode": true,
+        "reducedMotion": true,
+        "noImages": true,
+        "noBackground": true,
+        "stable": true,
+        "noOverflow": true,
+        "continueVisible": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "home-text-1920",
+      "capture": "final-home-text-1920",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "textMode": true,
+        "reducedMotion": true,
+        "noImages": true,
+        "noBackground": true,
+        "stable": true,
+        "noOverflow": true,
+        "continueVisible": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "reloaded-prefs",
+      "capture": "final-text-prefs-reloaded",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "textMode": true,
+        "reducedMotion": true,
+        "noImages": true,
+        "saved1": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "keyboard-confirmation",
+      "capture": "final-keyboard-confirmation",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "forwardWrap": true,
+        "backwardWrap": true,
+        "escapeRestored": true,
+        "actualDate": true,
+        "targetDate": true,
+        "saved1": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "life77-improved",
+      "capture": "final-normal-life77-room-improved",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "date": true,
+        "cash": true,
+        "ap": true,
+        "saved77": true,
+        "improvedOnly": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "people77-1280",
+      "capture": "final-people77-1280",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "stable": true,
+        "viewport": true,
+        "noOverflow": true,
+        "fourEntrances": true,
+        "fiveLoadedPortraits": true,
+        "saved77": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "people77-1366",
+      "capture": "final-people77-1366",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "stable": true,
+        "viewport": true,
+        "noOverflow": true,
+        "fourEntrances": true,
+        "fiveLoadedPortraits": true,
+        "saved77": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "people77-1920",
+      "capture": "final-people77-1920",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "stable": true,
+        "viewport": true,
+        "noOverflow": true,
+        "fourEntrances": true,
+        "fiveLoadedPortraits": true,
+        "saved77": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "person-唐萤",
+      "capture": "final-person-0",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "selected": true,
+        "saved77": true,
+        "cash": true,
+        "portraitLoaded": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "person-林舟",
+      "capture": "final-person-1",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "selected": true,
+        "saved77": true,
+        "cash": true,
+        "portraitLoaded": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "person-许澄",
+      "capture": "final-person-2",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "selected": true,
+        "saved77": true,
+        "cash": true,
+        "portraitLoaded": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "person-陈屿",
+      "capture": "final-person-3",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "selected": true,
+        "saved77": true,
+        "cash": true,
+        "portraitLoaded": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "business95-room",
+      "capture": "final-business95-room",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "saved95": true,
+        "date": true,
+        "personalCash": true,
+        "commitments": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "company-ledger-separate",
+      "capture": "final-business95-company-ledger-v2",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "companyCash": true,
+        "saved95": true,
+        "ledgerScene": true,
+        "accountSeparation": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "equity-remains-locked",
+      "capture": "final-business95-fictional-equity",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "saved95": true,
+        "locked": true,
+        "fictional": true,
+        "holding": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "risk-visible-from-room",
+      "capture": "final-risk114-room-responsibilities",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "saved114": true,
+        "date": true,
+        "personalCash": true,
+        "independentRisk": true,
+        "customerProtection": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "independent-control",
+      "capture": "final-risk114-independent-control",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "saved114": true,
+        "notRecovered": true,
+        "noOverflow": true,
+        "stable": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "risk-ledger",
+      "capture": "final-risk114-company-ledger",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "saved114": true,
+        "available": true,
+        "protected": true,
+        "noOverflow": true,
+        "stable": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "physical-reader-readonly",
+      "capture": "final-reader-readonly114",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/ physical reader tab2",
+      "checks": {
+        "readonlyBadge": true,
+        "writerMessage": true,
+        "advanceDisabled": true,
+        "noOverflow": true,
+        "stable": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "zero-available-and-ap",
+      "capture": "final-zero-available-and-ap6",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "available0": true,
+        "ap0": true,
+        "saved6": true,
+        "canAdvance": true,
+        "lifeStillRunning": true,
+        "ordinary": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "zero-finite-stop",
+      "capture": "final-zero-stopped7",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "saved7": true,
+        "available0": true,
+        "ap0": true,
+        "noFreeScene": true,
+        "interrupted": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "zero-finite-advance",
+      "capture": "final-zero-advanced8",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "saved8": true,
+        "date": true,
+        "available0": true,
+        "ap0": true,
+        "noFreeScene": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "production-ignores-storage-and-scene-flags",
+      "capture": "final-production-flags-room",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production5232 actual dev-flag URL, physical reader tab6",
+      "checks": {
+        "correctRun": true,
+        "noDiagnosticBanner": true,
+        "noSceneFailure": true,
+        "correctCompletedScene": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "production-ignores-portrait-flag",
+      "capture": "final-production-flags-portraits",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production5232 actual dev-flag URL, physical reader tab6",
+      "checks": {
+        "fiveLoadedPortraits": true,
+        "correctRun": true,
+        "noDiagnosticBanner": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "final",
+      "id": "delivery-room77",
+      "capture": "final-delivery-room77",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "checks": {
+        "saved77": true,
+        "cash": true,
+        "scene": true,
+        "noOverflow": true,
+        "stable": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "content-normal-new1",
+      "capture": "dev-content-initial1",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5231/?storageTest=abort-life-work",
+      "checks": {
+        "date": true,
+        "cash": true,
+        "action": true,
+        "saved1": true,
+        "ordinaryScene": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "workspace-real-cost-preview",
+      "capture": "dev-content-work-confirmation",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5231/?storageTest=abort-life-work",
+      "checks": {
+        "cost": true,
+        "subject": true,
+        "saveOld": true,
+        "actualDate": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "actual-head-put-abort",
+      "capture": "dev-content-head-put-abort",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5231/?storageTest=abort-life-work",
+      "checks": {
+        "unsaved": true,
+        "cashUnpublished": true,
+        "apUnpublished": true,
+        "trace": true,
+        "candidateRetry": true,
+        "ordinaryScene": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "durable-head-old1",
+      "capture": "dev-content-physical-reader-old1",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV5231 physical reader tab4 old durable head",
+      "checks": {
+        "readonlyOld1": true,
+        "cash": true,
+        "action": true,
+        "ordinary": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "retry-original-work2",
+      "capture": "dev-content-retried2-still-old-room",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5231/?storageTest=abort-life-work",
+      "checks": {
+        "saved2": true,
+        "cash": true,
+        "action": true,
+        "ordinary": true,
+        "notCompleted": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "unfinished-before-jan8",
+      "capture": "dev-content-jan6-still-ordinary",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5231/?storageTest=abort-life-work",
+      "checks": {
+        "date": true,
+        "saved3": true,
+        "cash": true,
+        "ordinary": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "actual-completion-changes-scene",
+      "capture": "dev-content-jan8-improved4",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5231/?storageTest=abort-life-work",
+      "checks": {
+        "date": true,
+        "saved4": true,
+        "cash": true,
+        "action": true,
+        "improved": true,
+        "completionText": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "reloaded-completed4",
+      "capture": "dev-content-reloaded4",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5231/?storageTest=abort-life-work",
+      "checks": {
+        "saved4": true,
+        "date": true,
+        "cash": true,
+        "improved": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "scene-error-fallback",
+      "capture": "dev-scene-image-failure-reader4",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV5231 actual resource errors, physical reader tab5",
+      "checks": {
+        "oldSaved4": true,
+        "readableNotice": true,
+        "completedRecord": true,
+        "cash": true,
+        "loadedFallback": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "portrait-error-readable",
+      "capture": "dev-portrait-failure-reader4",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV5231 actual resource errors, physical reader tab5",
+      "checks": {
+        "saved4": true,
+        "nameVisible": true,
+        "recordVisible": true,
+        "noBrokenPortrait": true,
+        "noOverflow": true
+      },
+      "pass": true
+    }
+  ],
+  "iterations": 63,
+  "captures": {
+    "final": "final-browser-captures.jsonl",
+    "dev": "dev-browser-captures.jsonl"
+  },
+  "historicalScrollDrift": {
+    "labels": [
+      "final-quarter-plan",
+      "final-quarter-decision",
+      "final-quarter-result"
+    ],
+    "latestUsesNone": true,
+    "explanation": "Three original phase captures measured while native Home scroll was still settling; all raw files preserved. V2 repeats after fresh AX have identical before/after scroll, used by latest checks. Original company check also retained false because ARIA label was incorrectly sought in innerText; actual ARIA V2 check passes, no product change."
+  },
+  "inputs": [
+    {
+      "file": "input-tech1.json",
+      "sha256": "19aea94b67413838067b7602938f1454440a0e2e132bdf0b3177670859f1bb42",
+      "sourceFile": "goal-1/evidence/d03-cinematic/draft-normal-tech-initial1.json",
+      "sourceSha256": "19aea94b67413838067b7602938f1454440a0e2e132bdf0b3177670859f1bb42",
+      "runId": "life-6e5ff058-2e9c-4449-9143-effc8c152109",
+      "revision": 1,
+      "origin": "normal"
+    },
+    {
+      "file": "input-life77.json",
+      "sha256": "6b4eaa7e76aaf68e6d0494899b2d298fbb85c989729cb220dde75a5fc7f08539",
+      "sourceFile": "goal-1/evidence/d03/input-life77.json",
+      "sourceSha256": "6b4eaa7e76aaf68e6d0494899b2d298fbb85c989729cb220dde75a5fc7f08539",
+      "runId": "t15-normal-people-technical_employee",
+      "revision": 77,
+      "origin": "normal"
+    },
+    {
+      "file": "input-business95.json",
+      "sha256": "f5e4c58963f4e2056b8df74d7c51dd5ba8178143cff23310c6c445eea178e34b",
+      "sourceFile": "goal-1/evidence/d03/input-business2025.json",
+      "sourceSha256": "f5e4c58963f4e2056b8df74d7c51dd5ba8178143cff23310c6c445eea178e34b",
+      "runId": "normal-deepseek-technical_employee",
+      "revision": 95,
+      "origin": "normal"
+    },
+    {
+      "file": "input-risk114.json",
+      "sha256": "957abc78e3ea8af5c20be704b22d8d97b61a5ad6e2e05ef266f4602454701125",
+      "sourceFile": "goal-1/evidence/d03/input-risk2025.json",
+      "sourceSha256": "957abc78e3ea8af5c20be704b22d8d97b61a5ad6e2e05ef266f4602454701125",
+      "runId": "normal-relay-content_employee-e9606bbe",
+      "revision": 114,
+      "origin": "normal"
+    },
+    {
+      "file": "input-content1.json",
+      "sha256": "72b88c281eb0361c97542992737c0183218d71ea333f44730068933747ed1265",
+      "sourceFile": "goal-1/evidence/d03-cinematic/dev-content-before-work1.json",
+      "sourceSha256": "72b88c281eb0361c97542992737c0183218d71ea333f44730068933747ed1265",
+      "runId": "life-fc95ba18-16ad-4f89-a62d-a6e18b2302b9",
+      "revision": 1,
+      "origin": "normal"
+    },
+    {
+      "file": "input-zero6.json",
+      "sha256": "c6aced228063bf50e65299d6dbe715e4a5f936cb5d5dd545d96b0a77322da63a",
+      "sourceFile": "goal-1/evidence/d03/replay-life/t15-zero-available-and-ap-stop-zero.json",
+      "sourceSha256": "c6aced228063bf50e65299d6dbe715e4a5f936cb5d5dd545d96b0a77322da63a",
+      "runId": "t15-zero-available-and-ap-stop",
+      "revision": 6,
+      "origin": "normal"
+    }
+  ],
+  "exports": [
+    {
+      "label": "final-normal1-before-navigation",
+      "file": "final-normal1-before-navigation.json",
+      "bytes": 134005,
+      "sha256": "19aea94b67413838067b7602938f1454440a0e2e132bdf0b3177670859f1bb42",
+      "runId": "life-6e5ff058-2e9c-4449-9143-effc8c152109",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "revision": 1
+    },
+    {
+      "label": "final-normal1-after-pages",
+      "file": "final-normal1-after-pages.json",
+      "bytes": 134005,
+      "sha256": "19aea94b67413838067b7602938f1454440a0e2e132bdf0b3177670859f1bb42",
+      "runId": "life-6e5ff058-2e9c-4449-9143-effc8c152109",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "revision": 1
+    },
+    {
+      "label": "final-normal1-after-settings-reload",
+      "file": "final-normal1-after-settings-reload.json",
+      "bytes": 134005,
+      "sha256": "19aea94b67413838067b7602938f1454440a0e2e132bdf0b3177670859f1bb42",
+      "runId": "life-6e5ff058-2e9c-4449-9143-effc8c152109",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "revision": 1
+    },
+    {
+      "label": "final-life77-after-person-navigation",
+      "file": "final-life77-after-person-navigation.json",
+      "bytes": 809520,
+      "sha256": "6b4eaa7e76aaf68e6d0494899b2d298fbb85c989729cb220dde75a5fc7f08539",
+      "runId": "t15-normal-people-technical_employee",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "revision": 77
+    },
+    {
+      "label": "final-business95-after-ledger-equity",
+      "file": "final-business95-after-ledger-equity.json",
+      "bytes": 1292340,
+      "sha256": "1e828fcef51aa3263749d862c83b64302aa8aeb4e1755d0a3d0cf957748bd26f",
+      "runId": "normal-deepseek-technical_employee",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "revision": 95
+    },
+    {
+      "label": "final-risk114-after-review",
+      "file": "final-risk114-after-review.json",
+      "bytes": 2923367,
+      "sha256": "58bfc5a6580fe1e76c38217005d7088244e31da46ea2f6f56965d5d8efe95dd6",
+      "runId": "normal-relay-content_employee-e9606bbe",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "revision": 114
+    },
+    {
+      "label": "final-risk114-reader-export",
+      "file": "final-risk114-reader-export.json",
+      "bytes": 2923367,
+      "sha256": "58bfc5a6580fe1e76c38217005d7088244e31da46ea2f6f56965d5d8efe95dd6",
+      "runId": "normal-relay-content_employee-e9606bbe",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/ physical reader tab2",
+      "revision": 114
+    },
+    {
+      "label": "final-zero-stopped-and-advanced8",
+      "file": "final-zero-stopped-and-advanced8.json",
+      "bytes": 160760,
+      "sha256": "2c426822dfbb1d89e92177624d3e2cbc4f7978cc8680ed01508f91301f0765ff",
+      "runId": "t15-zero-available-and-ap-stop",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5232/",
+      "revision": 8
+    },
+    {
+      "label": "dev-content-before-work1",
+      "file": "dev-content-before-work1.json",
+      "bytes": 133996,
+      "sha256": "72b88c281eb0361c97542992737c0183218d71ea333f44730068933747ed1265",
+      "runId": "life-fc95ba18-16ad-4f89-a62d-a6e18b2302b9",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5231/?storageTest=abort-life-work",
+      "revision": 1
+    },
+    {
+      "label": "dev-content-candidate2",
+      "file": "dev-content-candidate2.json",
+      "bytes": 140626,
+      "sha256": "b63399c26b883346b84126fd983fa87008461b62c18502226f42b7aeb5685fff",
+      "runId": "life-fc95ba18-16ad-4f89-a62d-a6e18b2302b9",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5231/?storageTest=abort-life-work",
+      "revision": 2
+    },
+    {
+      "label": "dev-content-old-saved1-after-abort",
+      "file": "dev-content-old-saved1-after-abort.json",
+      "bytes": 133996,
+      "sha256": "72b88c281eb0361c97542992737c0183218d71ea333f44730068933747ed1265",
+      "runId": "life-fc95ba18-16ad-4f89-a62d-a6e18b2302b9",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5231/?storageTest=abort-life-work",
+      "revision": 1
+    },
+    {
+      "label": "dev-content-physical-old1",
+      "file": "dev-content-physical-old1.json",
+      "bytes": 133996,
+      "sha256": "72b88c281eb0361c97542992737c0183218d71ea333f44730068933747ed1265",
+      "runId": "life-fc95ba18-16ad-4f89-a62d-a6e18b2302b9",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV5231 physical reader tab4 old durable head",
+      "revision": 1
+    },
+    {
+      "label": "dev-content-retried2",
+      "file": "dev-content-retried2.json",
+      "bytes": 140626,
+      "sha256": "b63399c26b883346b84126fd983fa87008461b62c18502226f42b7aeb5685fff",
+      "runId": "life-fc95ba18-16ad-4f89-a62d-a6e18b2302b9",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5231/?storageTest=abort-life-work",
+      "revision": 2
+    },
+    {
+      "label": "dev-content-completed4",
+      "file": "dev-content-completed4.json",
+      "bytes": 144855,
+      "sha256": "4cd4e7d9bbf5e338537066f7a38ca5b04f7d034a5ac453466c58c93428ed8b3d",
+      "runId": "life-fc95ba18-16ad-4f89-a62d-a6e18b2302b9",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5231/?storageTest=abort-life-work",
+      "revision": 4
+    },
+    {
+      "label": "dev-content-error-reader4",
+      "file": "dev-content-error-reader4.json",
+      "bytes": 144855,
+      "sha256": "4cd4e7d9bbf5e338537066f7a38ca5b04f7d034a5ac453466c58c93428ed8b3d",
+      "runId": "life-fc95ba18-16ad-4f89-a62d-a6e18b2302b9",
+      "source": "candidate1-source-freeze.json",
+      "runtime": "DEV5231 actual resource errors, physical reader tab5",
+      "revision": 4
+    }
+  ],
+  "equalPairs": [
+    [
+      "final-normal1-before-navigation.json",
+      "final-normal1-after-pages.json"
+    ],
+    [
+      "final-normal1-before-navigation.json",
+      "final-normal1-after-settings-reload.json"
+    ],
+    [
+      "final-risk114-after-review.json",
+      "final-risk114-reader-export.json"
+    ],
+    [
+      "dev-content-before-work1.json",
+      "dev-content-old-saved1-after-abort.json"
+    ],
+    [
+      "dev-content-before-work1.json",
+      "dev-content-physical-old1.json"
+    ],
+    [
+      "dev-content-candidate2.json",
+      "dev-content-retried2.json"
+    ],
+    [
+      "dev-content-completed4.json",
+      "dev-content-error-reader4.json"
+    ]
+  ],
+  "nativeAcceptanceComplete": false,
+  "D03Complete": false,
+  "pending": [
+    "current full cumulative496 checks and final integrity/commit",
+    "T15 native200percent/beforeunload/load budget",
+    "T16 full24quarter endings",
+    "T17 originalPNG0of3/human0",
+    "M01 mobile last",
+    "T18 whole-goal review"
+  ],
+  "scope": "New cinematic candidate1 actual production plus separate DEV fault seam. Prior C2 checks are not counted. No whole-game/real-service/human acceptance."
+}

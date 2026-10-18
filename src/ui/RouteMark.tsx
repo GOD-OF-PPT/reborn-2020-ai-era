@@ -1,11 +1,12 @@
 import type {ReactNode} from 'react'
 
-export type VisualKind='quarter'|'business'|'memory'|'finance'|'life'|'story'|'routines'|'routes'|'market'|'video'|'course'|'relay'|'deepseek'|'a_share'|'ai_video'|'ai_course'|'api_relay'|'deepseek_opportunity'
+export type VisualKind='room'|'quarter'|'business'|'memory'|'finance'|'life'|'story'|'routines'|'routes'|'market'|'video'|'course'|'relay'|'deepseek'|'a_share'|'ai_video'|'ai_course'|'api_relay'|'deepseek_opportunity'
 
 /** Decorative marks describe the workspace, never a price, permission or result. */
 export function RouteMark({kind}:{kind:VisualKind}){
  let shape:ReactNode
  switch(kind){
+  case 'room':shape=<><path d="m3 11 9-8 9 8M5 10v11h14V10M10 21v-7h4v7"/></>;break
   case 'market':case 'a_share':shape=<><path d="M4 20h16M5 16l5-5 4 3 6-9"/><path d="M15 5h5v5"/></>;break
   case 'video':case 'ai_video':shape=<><rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="m10 9 5 3-5 3Z"/><path d="M7 5v3m0 8v3m10-14v3m0 8v3"/></>;break
   case 'course':case 'ai_course':shape=<><path d="M12 6c-3-2-6-2-9-1v14c3-1 6-1 9 1 3-2 6-2 9-1V5c-3-1-6-1-9 1Zm0 0v14"/><path d="M6 9h3m-3 4h3m6-4h3m-3 4h3"/></>;break

@@ -1,0 +1,13 @@
+(node:5330) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/d03-cinematic/verify-native.mjs:74
+const result={taskId:'D03-CINEMATIC',result:'EXPORT_REPLAY_PASS',d03CinematicNativeSubsetComplete:true,nativeAcceptanceComplete:false,D03Complete:false,pending:report.pending,baseCommit:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),nativeReportHash:sha(reportRaw),verifierHash:sha(readFileSync(fileURLToPath(import.meta.url))),sourceFreezeHash:sha(read(report.sourceFreeze)),frozenFiles:Object.keys(freeze.sha256).length,checks:latestChecks.length,iterations,captures:captured.size,historicalScrollDrift,screenshotDimensionExceptions:report.screenshotDimensionExceptions,inputs:auditedInputs,cases,equality,evaluatedUniqueCommands:evaluated,cachePolicy:'Only identical full creation identity/version and full command envelopes share immutable evaluated prefixes. Every UI raw export byte-equals a full normal replay. One-LF original inputs preserved separately.',scope:report.scope}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^
+
+ReferenceError: historicalScrollDrift is not defined
+    at file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/d03-cinematic/verify-native.mjs:74:512
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+
+Node.js v22.12.0

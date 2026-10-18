@@ -1,0 +1,36 @@
+{
+  "taskId": "D03-CINEMATIC",
+  "status": "failed_stopped",
+  "sourceFreeze": "candidate1-source-freeze.json",
+  "driverSha256": "8421e664528b3721c8bf370eb6354e42d9e96a28487fede22b41b63d39c4f62e",
+  "steps": [
+    {
+      "name": "typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-18T17:25:43.898580+00:00",
+      "exitCode": 0,
+      "wallSeconds": 64.247,
+      "output": "typecheck-output.txt"
+    },
+    {
+      "name": "unit",
+      "command": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "goal-1/evidence/d03-cinematic/ordered.vitest.config.ts",
+        "--maxWorkers=1"
+      ],
+      "startedAt": "2026-10-18T17:26:48.357148+00:00",
+      "exitCode": 1,
+      "wallSeconds": 1432.205,
+      "output": "unit-output.txt"
+    }
+  ],
+  "scope": "Current full496 in79 files; original assertions/deadlines/fork isolation. Explicit pair-first order does not prove default-order timing stability. Not native/human/whole-game acceptance."
+}

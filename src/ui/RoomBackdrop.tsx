@@ -1,6 +1,6 @@
 import {useState} from 'react'
-import ordinaryRoom from '../../assets/ui-redesign/room-2020-v1.png'
-import improvedRoom from '../../assets/ui-redesign/room-workspace-improved-v1.png'
+import ordinaryRoom from '../../assets/ui-redesign/cinematic/room-ordinary-v1.jpg'
+import improvedRoom from '../../assets/ui-redesign/cinematic/room-improved-v1.jpg'
 
 /** Only committed completion chooses the asset; image load/failure never changes the run. */
 export function RoomBackdrop({improved=false}:{improved?:boolean}){
