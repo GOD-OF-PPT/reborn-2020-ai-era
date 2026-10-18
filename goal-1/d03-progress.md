@@ -205,3 +205,9 @@ CUA browser2：C2 production tab7为正常77住处并markDeliverable；C2 DEV ta
 最终资料追加后check_docs再次0（102Markdown/原PNG仍0/3）；integrity再次0：开工4186老跟踪中4179原字节保持，只有README/技术08/界面32/当前plan/tasks/progress及codec的7处授权旧变更。当前293源全部SHA同，所有UI/素材/业务/内容/随机/hash/原79测试/根配置同C1，C1原证据332仍等Git799ff2与SHA；C1/C2各35固定资源HTTP==disk，累计C2 build35文件逐字等固定生产。
 
 当前实际C2最终主场景与人物1280照片已重新目检，visual-comparisons/visual-review按同77原档保全旧基线对比，GJ/REPEAT限定D03范围通过。源码无[DEBUG-...]插桩；Python测试中的PRIVATE/create/push属于原FakeCommands，不是真GitHub动作。原source/失败/诊断完整保留。接下来真实本地feature commit、6入口拒写/字节保护，再勾D03/C-D03和写准确SHA的完成记录；当前还未勾，goal不完成。
+
+## D03/C-D03正式完成记录
+
+本地功能提交c2da7ac65ea098851237b7e3d4f12224c2d9efa7已实际生成。新目录d03-cinematic-c2-post-commit的6入口拒写检查全部通过，531份已提交电影C1/C2证据在尝试前后等原SHA/Git blob，真实owner PUBLIC和远端main9bf4399读回。临时视口reset无错误，production5234/tab7仍为已保存77住处并markDeliverable；DEV5233/tab8及旧固定页保留handoff，本机档未删除。
+
+tasks已勾D03/C-D03并填写完整工作/验证/GJ/准确提交/剩余责任；README/当前计划同步，完成记录随后独立提交。当前293冻结源未改；不重新运行已通过500或改写原证据，完成元数据只做资料与哈希读回。T15/C15及T16/T17/M01/T18继续未勾，goal active。下一轮T15真实200%/离页/FCP收口；持续美术优化、移动最低优先级及原PNG0/3/真人0责任不变。未push或公开部署。

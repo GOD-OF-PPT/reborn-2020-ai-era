@@ -1,0 +1,100 @@
+{
+  "taskId": "D03-CINEMATIC-C2",
+  "featureCommit": "c2da7ac65ea098851237b7e3d4f12224c2d9efa7",
+  "recordedAtUtc": "2026-10-18T19:37:21.398838+00:00",
+  "attempts": [
+    {
+      "name": "native",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/d03-cinematic-c2/verify-native.mjs",
+        "--output-dir",
+        "goal-1/evidence/d03-cinematic-c2/native-audit"
+      ],
+      "exitCode": 1,
+      "wallSeconds": 1.38,
+      "expectedMarker": "IMMUTABLE_TASK_EVIDENCE",
+      "refusedBeforeArtifactWrite": true
+    },
+    {
+      "name": "cross-replay",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/d03-cinematic-c2/verify-c1-native-replay.mjs",
+        "--output-dir",
+        "goal-1/evidence/d03-cinematic-c2/c1-cross-replay"
+      ],
+      "exitCode": 1,
+      "wallSeconds": 1.366,
+      "expectedMarker": "IMMUTABLE_TASK_EVIDENCE",
+      "refusedBeforeArtifactWrite": true
+    },
+    {
+      "name": "life",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_life_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/d03-cinematic-c2/replay-life"
+      ],
+      "exitCode": 1,
+      "wallSeconds": 1.238,
+      "expectedMarker": "IMMUTABLE_TASK_EVIDENCE",
+      "refusedBeforeArtifactWrite": true
+    },
+    {
+      "name": "playable",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_playable_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/d03-cinematic-c2/replay-playable"
+      ],
+      "exitCode": 1,
+      "wallSeconds": 1.393,
+      "expectedMarker": "IMMUTABLE_TASK_EVIDENCE",
+      "refusedBeforeArtifactWrite": true
+    },
+    {
+      "name": "preparation",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/d03-cinematic-c2/measure-preparation.mjs",
+        "--output-dir",
+        "goal-1/evidence/d03-cinematic-c2/preparation-v2"
+      ],
+      "exitCode": 1,
+      "wallSeconds": 1.439,
+      "expectedMarker": "IMMUTABLE_TASK_EVIDENCE",
+      "refusedBeforeArtifactWrite": true
+    },
+    {
+      "name": "cumulative",
+      "command": [
+        "python3",
+        "goal-1/evidence/d03-cinematic-c2/run-cumulative.py"
+      ],
+      "exitCode": 1,
+      "wallSeconds": 0.231,
+      "expectedMarker": "FileExistsError",
+      "refusedBeforeArtifactWrite": true
+    }
+  ],
+  "committedEvidenceFiles": 531,
+  "allOriginalShaAndGitBlobsUnchangedBeforeAfter": true,
+  "repository": {
+    "nameWithOwner": "GOD-OF-PPT/reborn-2020-ai-era",
+    "url": "https://github.com/GOD-OF-PPT/reborn-2020-ai-era",
+    "visibility": "PUBLIC"
+  },
+  "branch": "main",
+  "remoteMainReadback": "9bf4399a5cf50997dbf522a578f1168c5532acbf\trefs/heads/main",
+  "pushedByThisTask": false,
+  "goalComplete": false,
+  "scope": "Post-commit refusal and exact byte preservation only; not whole-game or native200percent/human acceptance."
+}
