@@ -235,7 +235,7 @@ T15原轮内部顺序（记录保留；现先执行D03，移动专项后置M01�
 
 ### D03 桌面美术精修与持续优化基线
 
-阶段状态：用户最新指出软件系统感，按[新原话](game-art-options/input.md)及[阶段计划](game-art-options/plan.md)三备选已交用户查看，用户明确选A，按[电影版实施计划](cinematic-plan.md)继续；完整实施和C-D03未结项。C2仅保存已验证技术检查点。
+阶段状态：用户最新指出软件系统感，按[新原话](game-art-options/input.md)及[阶段计划](game-art-options/plan.md)三备选已交用户查看，用户明确选A，按[电影版实施计划](cinematic-plan.md)继续；完整实施和C-D03未结项。旧C2仅保存已验证技术检查点；新A电影版C1检查点799ff2c已保存，因全量原时钟失败仍未结项，现按[编码修缮计划](cinematic-encoding-repair-plan.md)继续C-D03。
 
 - 实际工作：
 - 验证与结果（含C-D03）：

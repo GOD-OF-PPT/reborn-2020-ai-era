@@ -169,3 +169,39 @@ DEV5231实际新局life-6e5ff058-2e9c-4449-9143-effc8c152109，seed d03-cinema-n
 ## 累计检查出现新的真实待诊断项
 
 45320仍在运行，typecheck0/64.247秒；unit按原79文件/496/原隔离与时限执行，agency8跳过、routine2通过、risk准备链也有跳过，错误需等最终Vitest报告，尚不能结束D03。diagnostics/plan.md先记录3个可证伪假设与顺序；当前只准备独立原型/静态分析，禁止修改冻结C1或并行重型测量。美术59项/原字节293命令审核仍是自己的实际子范围，不替代本次全量。
+
+## 最新：C1检查点799ff2c，C2受限编码修缮验证中
+
+C1电影叙事/素材/59项实际原生/全部原字节与失败已本地提交799ff2c17428cd981a8af029cd88ee83a11cffc6（364文件逐字入Git）；D03/C-D03未勾、未推送，远端PUBLIC main仍9bf4399。提交后C1证据332文件SHA/Git blob全同，结果在新d03-cinematic-c2/c1-checkpoint-readback.json，不向C1旧journal追加。
+
+cinematic-encoding-repair-plan.md先于生产修改完成。C2仅src/persistence/codec.ts私有编码复用：已严格验证canonical body只编码一次；import的原生JSON.parse路径才检查现有键序/尝试原生编码、严格schema不改变JSON数据且根前缀匹配才复用body串；其他情况回旧算法。公开readEnvelope未知对象仍保守；全局canonicalJson/copyJson/SHA和所有业务/版本/持久化事务原样。新增codec-encoding.test.ts四项公开边界守卫先在旧码通过，再连同旧codec/hash共16项通过，typecheck0。
+
+新sourceFreeze293仅旧codec实现与新增4守卫，所有UI/素材/原79测试/业务/内容/原配置同C1，source-reuse.json明确。原入口额外--source-freeze参数被通用evidenceDirectory拒绝，第一次测量终态1且未运行准备；旧入口不改，C2复制相同测量体、改默认路径，用标准--output-dir在preparation-v2运行终态0。三条完整原命令/种子/封套逐字同：relay40.533→40.400秒（CPU未改善），payroll29.487→26.052秒，risk73.623→64.721秒，后两wall约−12%/user约−9%；只为这组Node对比，不冒充Vitest/浏览器或唯一原因。
+
+C2新引擎跨源重放C1原生15导出/6输入/7字节对/293不同完整命令已0通过，c1-cross-replay/native-audit.json；明确crossSourceReplayOnly true，旧59观察仍属C1，不伪标新原生。当前唯一重型作业为original-failed-files原3失败文件/原断言/时限/隔离重验，句柄见当前工具返回；终态后决定下一步。完整C2默认顺序80文件500项（原496+新4）、60工具/内容/资料/build/Life10/Playable2及C2新原生保存链/最终完整性仍未执行。不得现在结项或改时限。
+
+C2新证据全部在evidence/d03-cinematic-c2；C1固定生产5232仍保留，现有DEV5231会随源码HMR，不能再用旧C1记录器写已提交旧文件。后续新C2构建/原生用独立端口和新root。实际1920目标DOM与1910原生JPEG差异、真实200%/离页/FCP、T16/原PNG/真人/M01等原责任保留。
+
+## C2原时限红测复验全部通过
+
+24045终态0：原3失败文件（agency/risk/risk-modes）全部23项通过，598.51秒Vitest，Root默认子集顺序/原60与120秒/每文件fork隔离不改。先前C1失败日志保持；C2只Codec冗余编码修缮，新4守卫加旧codec/hash16通过，Node三前史字节同、当前引擎C1全部293前缀重放字节同。当前开始独立C2 build，完整500/60工具/资料/回放和C2新原生保存链仍待；不要在此勾D03或复用旧C1照片冒充新观察。
+
+## 最新：C2新原生18项通过，完整默认500累计运行中
+
+C2 build终态0，固定.delivery/d03-cinematic-c2-final，生产5234(exec36883)/35资源HTTP==disk；DEV5233(exec77868)。所有UI/资产仍同C1，只有Codec和4新守卫的源组差异。新生产正常技术life-c12ae38f-56d3-46a7-9b38-2a9cfab2fb1b，seed d03-cinematic-c2-tech-1，创建/只读页面两导出SHA dc026...严格同；真实三桌面场景、四人物77三桌面/文字/减少动效/重载原档6b4...同。
+
+新DEV内容life-ff971006-d9a3-46d3-8e08-7bb9334c4587，seed d03-cinematic-c2-content-abort-1：1为26000/4点；实际workspace3000/1点/7日head.put后abort保旧1（原/旧/物理读者SHA d354...同），候选2/原候选重试2 dd c9...同；Jan6保存3仍普通；Jan8保存4才改善，23000/3点，完成/重载4 SHA62c1...严格同。读者tab9已关闭，无候选。
+
+C2新原生18最新/18迭代、11UI/3输入/6字节对/79不同完整命令审核60264终态0，native-audit/native-audit.json。它与C1跨源59项/293前缀不混计；C1照片不改source，C2新实际观察另root。新生产console捕获0；目标1920原生JPEG仍1910，已有明确尺寸例外，不伪称原生200%。
+
+现在唯一重型作业为C2 run-cumulative.py完整8步：原Root默认排序80文件500（旧496+新4）、原时限/每文件fork隔离/maxWorkers1，后60工具/内容/资料/独立build/Life10/Playable2。句柄见本轮工具返回，日志/每步退出在C2/cumulative。不得改293冻结源、不得并行重型浏览器/回放/编译；终态失败就保留并继续诊断，通过后还有integrity/GJ/本地提交及任务勾选/保护读回。Goal仍active，T15/16/17/M01/18原未完成项不变。
+
+CUA browser2：C2 production tab7为正常77住处并markDeliverable；C2 DEV tab8为正常内容4完成并markHandoff。C1旧tab1/3仍保留，不能向已提交C1root写。当前视口1280×720，最终仍须reset覆盖；真实200%/离页/FCP仍待。
+
+## 最新：全部C2累计与最终复核通过，正在本地提交收口
+
+48599终态0，8步全通过：type61.548秒，原Root默认完整80文件500项1535.170秒，60工具0.373、内容1.952、102Markdown/原规格21.792、独立build35.177、Life10无失败60.843、两背景可玩12.450秒。原断言/时限/每文件fork隔离保留，未用旧59观察或单文件23项替代完整500。
+
+最终资料追加后check_docs再次0（102Markdown/原PNG仍0/3）；integrity再次0：开工4186老跟踪中4179原字节保持，只有README/技术08/界面32/当前plan/tasks/progress及codec的7处授权旧变更。当前293源全部SHA同，所有UI/素材/业务/内容/随机/hash/原79测试/根配置同C1，C1原证据332仍等Git799ff2与SHA；C1/C2各35固定资源HTTP==disk，累计C2 build35文件逐字等固定生产。
+
+当前实际C2最终主场景与人物1280照片已重新目检，visual-comparisons/visual-review按同77原档保全旧基线对比，GJ/REPEAT限定D03范围通过。源码无[DEBUG-...]插桩；Python测试中的PRIVATE/create/push属于原FakeCommands，不是真GitHub动作。原source/失败/诊断完整保留。接下来真实本地feature commit、6入口拒写/字节保护，再勾D03/C-D03和写准确SHA的完成记录；当前还未勾，goal不完成。

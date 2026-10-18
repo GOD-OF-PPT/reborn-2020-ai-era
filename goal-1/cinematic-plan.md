@@ -41,3 +41,7 @@ React App.tsx统一管理真实controller、命令确认、saveStatus、账号�
 ## 最新：上述参考更正已被用户撤回
 
 用户连续明确撤回ForgeTax，完整原话保存在game-art-options/reference-retraction-input.md。它不属于当前设计依据，不继续研究或迁入任何风格、交互或机制。上节只保留历史输入身份，当前方向仍为用户已选A长日重启，沿原计划推进。此前短暂只读查看不算采用；未据此更改游戏代码或素材。
+
+## C1检查点后的必要累计修缮
+
+C1电影版已本地保存为799ff2c17428cd981a8af029cd88ee83a11cffc6，但全496有原准备/测试时钟失败，D03未结项。按[编码修缮计划](cinematic-encoding-repair-plan.md)只减少Codec重复编码，先回归再修改并用新C2源/证据完整重验；原C1固定产物、失败和UI/规则身份保留。没有通过升时限或跳用例缩减范围。

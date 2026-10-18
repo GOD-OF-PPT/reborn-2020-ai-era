@@ -123,4 +123,4 @@ D02运行时结果及实际边界见[重构验证](../goal-1/evidence/d02-valida
 - 住处桌上待办不裁剪强制事件、所有到期债务、资金短缺、独立Story/Life记录及课程/中转/架空股权/例行承诺；原组件/命令复用。看图、导航和设定显示模式不消费随机或给资源。
 - 房间只按原已提交完成条件切换普通/改善图。新资产/肖像错误可读降级，文本模式不依赖图片；动效沿用短淡入/焦点/选中反馈，减少动效不改变结果。0资源可有限停止和推进，未保存不发布候选或提前换景。
 
-新增CinematicRoom/ChapterBackdrop/cinematic.css，App、Navigation、RoomBackdrop及原专业页面沿用同一GameController/Session和schema12；未更换经济/规则/内容或依赖。原D01/D02与原PNG历史不覆盖，[正式计划](../goal-1/cinematic-plan.md)、[实际原生报告](../goal-1/evidence/d03-cinematic/native-report.json)与[任务记录](../goal-1/tasks.md)记录本阶段证据与未完成项。三桌面以实际DOM视口和原生JPEG分别登记；1920目标的4份JPEG由接口返回1910×1080，不伪称像素精确1920或原生200%缩放。全量累计检查仍在D03收口，T15原生门槛/T16结局/T17原图真人/M01移动/T18最终review保留原责任。
+新增CinematicRoom/ChapterBackdrop/cinematic.css，App、Navigation、RoomBackdrop及原专业页面沿用同一GameController/Session和schema12；未更换经济/规则/内容或依赖。原D01/D02与原PNG历史不覆盖，[正式计划](../goal-1/cinematic-plan.md)、[实际原生报告](../goal-1/evidence/d03-cinematic/native-report.json)与[任务记录](../goal-1/tasks.md)记录本阶段证据与未完成项。三桌面以实际DOM视口和原生JPEG分别登记；1920目标的4份JPEG由接口返回1910×1080，不伪称像素精确1920或原生200%缩放。C2完整500项累计与新原生链已通过，准确范围及提交收口见[最终验证](../goal-1/evidence/d03-cinematic-c2/validation.md)；T15原生门槛/T16结局/T17原图真人/M01移动/T18最终review保留原责任。

@@ -1,0 +1,509 @@
+{
+  "taskId": "D03-CINEMATIC-C2",
+  "sourceFreeze": "candidate2-source-freeze.json",
+  "baseCommit": "799ff2c17428cd981a8af029cd88ee83a11cffc6",
+  "journals": [
+    {
+      "scope": "production",
+      "file": "production-native-checks.jsonl",
+      "sha256": "5a935ee0fc1cbe5bb47f3746917932ce02a4a1490d70ed011d86713739503b0d",
+      "iterations": 11,
+      "latest": 11
+    },
+    {
+      "scope": "dev",
+      "file": "dev-native-checks.jsonl",
+      "sha256": "47df38704494653593afab8797b8267f78122c49c2ab67ca2ebce72d84f42497",
+      "iterations": 7,
+      "latest": 7
+    }
+  ],
+  "captures": {
+    "production": "production-browser-captures.jsonl",
+    "dev": "dev-browser-captures.jsonl"
+  },
+  "checks": [
+    {
+      "journal": "production",
+      "id": "production-entry",
+      "capture": "c2-production-home",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5234/",
+      "checks": {
+        "noOverflow": true,
+        "stable": true,
+        "startVisible": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "production",
+      "id": "production-room-1280",
+      "capture": "c2-production-room-1280",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5234/",
+      "checks": {
+        "viewport": true,
+        "stable": true,
+        "noOverflow": true,
+        "saved1": true,
+        "cash": true,
+        "ap": true,
+        "ordinary": true,
+        "fourHotspots": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "production",
+      "id": "production-room-1366",
+      "capture": "c2-production-room-1366",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5234/",
+      "checks": {
+        "viewport": true,
+        "stable": true,
+        "noOverflow": true,
+        "saved1": true,
+        "cash": true,
+        "ap": true,
+        "ordinary": true,
+        "fourHotspots": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "production",
+      "id": "production-room-1920",
+      "capture": "c2-production-room-1920",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5234/",
+      "checks": {
+        "viewport": true,
+        "stable": true,
+        "noOverflow": true,
+        "saved1": true,
+        "cash": true,
+        "ap": true,
+        "ordinary": true,
+        "fourHotspots": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "production",
+      "id": "production-five-routes",
+      "capture": "c2-production-five-routes",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5234/",
+      "checks": {
+        "fiveRoutes": true,
+        "saved1": true,
+        "cash": true,
+        "noOverflow": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "production",
+      "id": "production-people-1280",
+      "capture": "c2-production-people77-1280",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5234/",
+      "checks": {
+        "fourOnScreen": true,
+        "portraits": true,
+        "saved77": true,
+        "noOverflow": true,
+        "stable": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "production",
+      "id": "production-people-1366",
+      "capture": "c2-production-people77-1366",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5234/",
+      "checks": {
+        "fourOnScreen": true,
+        "portraits": true,
+        "saved77": true,
+        "noOverflow": true,
+        "stable": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "production",
+      "id": "production-people-1920",
+      "capture": "c2-production-people77-1920",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5234/",
+      "checks": {
+        "fourOnScreen": true,
+        "portraits": true,
+        "saved77": true,
+        "noOverflow": true,
+        "stable": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "production",
+      "id": "production-text-motion",
+      "capture": "c2-production-text-motion",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5234/",
+      "checks": {
+        "noImages": true,
+        "text": true,
+        "motion": true,
+        "saved77": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "production",
+      "id": "production-reloaded77",
+      "capture": "c2-production-reloaded77",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5234/",
+      "checks": {
+        "saved77": true,
+        "cash": true,
+        "text": true,
+        "motion": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "production",
+      "id": "delivery-room77",
+      "capture": "c2-delivery-room77",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5234/",
+      "checks": {
+        "saved77": true,
+        "cash": true,
+        "improved": true,
+        "noOverflow": true,
+        "stable": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "content-new1",
+      "capture": "c2-dev-content-initial1",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5233/?storageTest=abort-life-work",
+      "checks": {
+        "saved1": true,
+        "cash": true,
+        "ap": true,
+        "ordinary": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "actual-head-write-abort",
+      "capture": "c2-dev-content-aborted1",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5233/?storageTest=abort-life-work",
+      "checks": {
+        "unsaved1": true,
+        "cash": true,
+        "ap": true,
+        "trace": true,
+        "retry": true,
+        "ordinary": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "physical-old-head1",
+      "capture": "c2-dev-physical-old1",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "DEV5233 physical old-head reader tab9",
+      "checks": {
+        "readonly1": true,
+        "cash": true,
+        "ap": true,
+        "ordinary": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "original-candidate-retried2",
+      "capture": "c2-dev-retried2",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5233/?storageTest=abort-life-work",
+      "checks": {
+        "saved2": true,
+        "cash": true,
+        "ap": true,
+        "ordinary": true,
+        "notCompleted": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "not-early-completion3",
+      "capture": "c2-dev-jan6-ordinary3",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5233/?storageTest=abort-life-work",
+      "checks": {
+        "saved3": true,
+        "date": true,
+        "ordinary": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "actual-completion-scene4",
+      "capture": "c2-dev-jan8-improved4",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5233/?storageTest=abort-life-work",
+      "checks": {
+        "saved4": true,
+        "date": true,
+        "cash": true,
+        "ap": true,
+        "improved": true
+      },
+      "pass": true
+    },
+    {
+      "journal": "dev",
+      "id": "completed-reload4",
+      "capture": "c2-dev-reloaded4",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5233/?storageTest=abort-life-work",
+      "checks": {
+        "saved4": true,
+        "cash": true,
+        "date": true,
+        "improved": true
+      },
+      "pass": true
+    }
+  ],
+  "iterations": 18,
+  "historicalScrollDrift": {
+    "labels": [],
+    "latestUsesNone": true
+  },
+  "screenshotDimensionExceptions": {
+    "cases": [
+      {
+        "label": "c2-production-room-1920",
+        "domViewport": [
+          1920,
+          1080
+        ],
+        "returnedRaster": [
+          1910,
+          1080
+        ],
+        "sha256": "a9b65b96faf4224a81fc0da022e113aa528c8ffcf17f4605b1d755eb683bbc73"
+      },
+      {
+        "label": "c2-production-people77-1920",
+        "domViewport": [
+          1920,
+          1080
+        ],
+        "returnedRaster": [
+          1910,
+          1080
+        ],
+        "sha256": "642b5e4b20b4e6782511734198cc5fa455b7169db5b960b9a089913030f09bca"
+      }
+    ],
+    "finding": "Same documented API raster limitation as preserved C1 diagnostics: target DOM1920x1080, returned native JPEG1910x1080. No local resize/crop or pixel-exact1920/native200percent claim."
+  },
+  "inputs": [
+    {
+      "file": "input-tech1.json",
+      "sha256": "dc026b3e63acb68c4dffacbbe5a8f4cb0c074831a0b1de78e37e16058e78e2f9",
+      "sourceFile": "goal-1/evidence/d03-cinematic-c2/c2-production-tech1-before-pages.json",
+      "sourceSha256": "dc026b3e63acb68c4dffacbbe5a8f4cb0c074831a0b1de78e37e16058e78e2f9",
+      "runId": "life-c12ae38f-56d3-46a7-9b38-2a9cfab2fb1b",
+      "revision": 1,
+      "origin": "normal"
+    },
+    {
+      "file": "input-life77.json",
+      "sha256": "6b4eaa7e76aaf68e6d0494899b2d298fbb85c989729cb220dde75a5fc7f08539",
+      "sourceFile": "goal-1/evidence/d03/input-life77.json",
+      "sourceSha256": "6b4eaa7e76aaf68e6d0494899b2d298fbb85c989729cb220dde75a5fc7f08539",
+      "runId": "t15-normal-people-technical_employee",
+      "revision": 77,
+      "origin": "normal"
+    },
+    {
+      "file": "input-content1.json",
+      "sha256": "d3549c11364b2f45be315709506cc3237fb218a4feb3aeb36d7a54220d464949",
+      "sourceFile": "goal-1/evidence/d03-cinematic-c2/c2-dev-content-before1.json",
+      "sourceSha256": "d3549c11364b2f45be315709506cc3237fb218a4feb3aeb36d7a54220d464949",
+      "runId": "life-ff971006-d9a3-46d3-8e08-7bb9334c4587",
+      "revision": 1,
+      "origin": "normal"
+    }
+  ],
+  "exports": [
+    {
+      "label": "c2-production-tech1-before-pages",
+      "file": "c2-production-tech1-before-pages.json",
+      "bytes": 133990,
+      "sha256": "dc026b3e63acb68c4dffacbbe5a8f4cb0c074831a0b1de78e37e16058e78e2f9",
+      "runId": "life-c12ae38f-56d3-46a7-9b38-2a9cfab2fb1b",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5234/",
+      "revision": 1
+    },
+    {
+      "label": "c2-production-tech1-after-pages",
+      "file": "c2-production-tech1-after-pages.json",
+      "bytes": 133990,
+      "sha256": "dc026b3e63acb68c4dffacbbe5a8f4cb0c074831a0b1de78e37e16058e78e2f9",
+      "runId": "life-c12ae38f-56d3-46a7-9b38-2a9cfab2fb1b",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5234/",
+      "revision": 1
+    },
+    {
+      "label": "c2-production-life77-before-reload",
+      "file": "c2-production-life77-before-reload.json",
+      "bytes": 809520,
+      "sha256": "6b4eaa7e76aaf68e6d0494899b2d298fbb85c989729cb220dde75a5fc7f08539",
+      "runId": "t15-normal-people-technical_employee",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5234/",
+      "revision": 77
+    },
+    {
+      "label": "c2-production-life77-after-reload",
+      "file": "c2-production-life77-after-reload.json",
+      "bytes": 809520,
+      "sha256": "6b4eaa7e76aaf68e6d0494899b2d298fbb85c989729cb220dde75a5fc7f08539",
+      "runId": "t15-normal-people-technical_employee",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "production http://127.0.0.1:5234/",
+      "revision": 77
+    },
+    {
+      "label": "c2-dev-content-before1",
+      "file": "c2-dev-content-before1.json",
+      "bytes": 134000,
+      "sha256": "d3549c11364b2f45be315709506cc3237fb218a4feb3aeb36d7a54220d464949",
+      "runId": "life-ff971006-d9a3-46d3-8e08-7bb9334c4587",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5233/?storageTest=abort-life-work",
+      "revision": 1
+    },
+    {
+      "label": "c2-dev-content-candidate2",
+      "file": "c2-dev-content-candidate2.json",
+      "bytes": 140630,
+      "sha256": "ddc9c9b94c8b58fd47231b7dd8fd56efccd5fd416efc3260a7a9cf272957cadb",
+      "runId": "life-ff971006-d9a3-46d3-8e08-7bb9334c4587",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5233/?storageTest=abort-life-work",
+      "revision": 2
+    },
+    {
+      "label": "c2-dev-content-old1-after-abort",
+      "file": "c2-dev-content-old1-after-abort.json",
+      "bytes": 134000,
+      "sha256": "d3549c11364b2f45be315709506cc3237fb218a4feb3aeb36d7a54220d464949",
+      "runId": "life-ff971006-d9a3-46d3-8e08-7bb9334c4587",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5233/?storageTest=abort-life-work",
+      "revision": 1
+    },
+    {
+      "label": "c2-dev-physical-export1",
+      "file": "c2-dev-physical-export1.json",
+      "bytes": 134000,
+      "sha256": "d3549c11364b2f45be315709506cc3237fb218a4feb3aeb36d7a54220d464949",
+      "runId": "life-ff971006-d9a3-46d3-8e08-7bb9334c4587",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "DEV5233 physical old-head reader tab9",
+      "revision": 1
+    },
+    {
+      "label": "c2-dev-retried-export2",
+      "file": "c2-dev-retried-export2.json",
+      "bytes": 140630,
+      "sha256": "ddc9c9b94c8b58fd47231b7dd8fd56efccd5fd416efc3260a7a9cf272957cadb",
+      "runId": "life-ff971006-d9a3-46d3-8e08-7bb9334c4587",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5233/?storageTest=abort-life-work",
+      "revision": 2
+    },
+    {
+      "label": "c2-dev-completed-export4",
+      "file": "c2-dev-completed-export4.json",
+      "bytes": 144859,
+      "sha256": "62c1adabdc9820f9ef853edead9776f53fb3e4e9d7ef75088d0dbbef7e5fb7c8",
+      "runId": "life-ff971006-d9a3-46d3-8e08-7bb9334c4587",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5233/?storageTest=abort-life-work",
+      "revision": 4
+    },
+    {
+      "label": "c2-dev-reloaded-export4",
+      "file": "c2-dev-reloaded-export4.json",
+      "bytes": 144859,
+      "sha256": "62c1adabdc9820f9ef853edead9776f53fb3e4e9d7ef75088d0dbbef7e5fb7c8",
+      "runId": "life-ff971006-d9a3-46d3-8e08-7bb9334c4587",
+      "source": "candidate2-source-freeze.json",
+      "runtime": "DEV http://127.0.0.1:5233/?storageTest=abort-life-work",
+      "revision": 4
+    }
+  ],
+  "equalPairs": [
+    [
+      "c2-production-tech1-before-pages.json",
+      "c2-production-tech1-after-pages.json"
+    ],
+    [
+      "c2-production-life77-before-reload.json",
+      "c2-production-life77-after-reload.json"
+    ],
+    [
+      "c2-dev-content-before1.json",
+      "c2-dev-content-old1-after-abort.json"
+    ],
+    [
+      "c2-dev-content-before1.json",
+      "c2-dev-physical-export1.json"
+    ],
+    [
+      "c2-dev-content-candidate2.json",
+      "c2-dev-retried-export2.json"
+    ],
+    [
+      "c2-dev-completed-export4.json",
+      "c2-dev-reloaded-export4.json"
+    ]
+  ],
+  "nativeAcceptanceComplete": false,
+  "D03Complete": false,
+  "pending": [
+    "whole default-order500 cumulative",
+    "T15 native200percent/beforeunload/FCP",
+    "T16 complete24quarters/endings",
+    "T17 originalPNG0of3/human0",
+    "M01 mobile last",
+    "T18 final review"
+  ],
+  "scope": "Fresh C2 production and separately identified DEV native observations. Original C1 UI source/asset59 checks remain historical and byte-preserved, additionally cross-replayed under C2; no relabeling or full-game/human acceptance."
+}

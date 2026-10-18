@@ -103,3 +103,12 @@ T14已按[历史/代理与控制合同33](33-history-risk-contract.md)接线并�
 T15按[人物、生活与年度合同34](34-people-life-year-contract.md)接入独立LifeRuntime和view.features.life，当前schema12/rules-t15-life-v1/world-life-work-v1，明确拒绝并保留旧1—11。life_event进入原WorldRuntime日序，共同任务/休整/环境改善占本人日期产能、个人实际支出和AP，不新增随机抽样。邀请/回应/实际兑现/到期/他方拒绝与原命令、动作、定时器、经济回执和精确日志双向绑定；来源材料从完成次日使用，不以后来结果验证过去决定。
 
 年度个人现金以原交易逐笔核对，Jan1期初与转移/工资/现金流分开，大额有效累计超展示上限明确null/overflow；旧年度截止不读取今天余额。实际workspace完成才选择独立改善图；目标/开工/中断/保存失败都不提前切场景。新增RoomBackdrop真实图片失败降级，减少动效与文本模式只影响呈现；DEV独立三类head.put后abort与图片失败开关在生产构建中禁用。55项累计定向与10组正常/受挫引擎回放已通过，C15全部旧范围和最终原生仍在进行，实际200%与离开提示未验收，不据此标任务或goal完成。
+
+
+## D03电影版累计修缮：Codec内部编码复用
+
+电影场景/热点前台保持同一GameController/Session和原schema12/rules-t15-life-v1；[C2修缮计划](../goal-1/cinematic-encoding-repair-plan.md)只减少同一信封的重复编码，未调整游戏规则、随机、金额、日期、权限、SHA算法、存档版本或事务提交/发布语义。全局canonicalJson/copyJson未改。
+
+Codec.#sealed在完整validateRun后复用原canonical body得到同一SHA；checksum成员不在最前时回原完整规范编码，仍核对最终UTF8上限。只有import自身原生JSON.parse的私有路径可在原assertJsonInput之后检查现有键序并尝试原生编码；对象键序不规范则回原算法，公开readEnvelope(unknown)保持保守路径。解析前后JSON数据不同或根checksum前缀不匹配时，仍按原parsed body计算SHA-256校验和。版本/严格shape/全部引用和状态不变量继续校验，既有坏档拒绝与旧档保留策略不变。
+
+兼容性守卫覆盖非规范输入顺序、Unicode与孤立代理码元、错误checksum/header，以及canonical UTF8扩张超过上限时的原错误优先级；原3个时限失败文件在原约束下23项复验通过。完整累计与新原生结果按[当前C2验证索引](../goal-1/evidence/d03-cinematic-c2/validation.md)和[任务记录](../goal-1/tasks.md)独立登记，不以编码微基准或一次Node准备链测量声称浏览器性能已验收。

@@ -1,7 +1,7 @@
 import { requireRule, RuleError } from '../core/errors.ts'
 import { canonicalJson } from '../core/identity.ts'
 import { assertJsonInput } from '../core/json-input.ts'
-import { hashValue, utf8Length } from '../core/hash.ts'
+import { hashValue, hashText, utf8Length } from '../core/hash.ts'
 import { assertGameRun } from '../core/run.ts'
 import { assertCompatible } from '../core/versions.ts'
 import { commandIdentity } from '../core/command-identity.ts'
@@ -29,6 +29,27 @@ function unique(values: readonly string[], code: string): void { requireRule(new
 function recordBody(value: unknown): Record<string, unknown> {
   requireRule(typeof value === 'object' && value !== null && !Array.isArray(value), 'INVALID_RECEIPT_SIGNATURE')
   return value as Record<string, unknown>
+}
+
+// Only the private JSON.parse path uses this after assertJsonInput. It cannot
+// contain getters, custom toJSON/map methods, sparse arrays or proxy behavior.
+function hasCanonicalKeyOrder(value: unknown): boolean {
+  if (value === null || typeof value !== 'object') return true
+  const keys = Object.keys(value)
+  if (!Array.isArray(value)) for (let i = 1; i < keys.length; i++) if (keys[i - 1]! > keys[i]!) return false
+  return keys.every(key => hasCanonicalKeyOrder(Reflect.get(value, key)))
+}
+function encodeParsedJson(value: unknown): string {
+  if (!hasCanonicalKeyOrder(value)) return canonicalJson(value)
+  const encoded = JSON.stringify(value)
+  requireRule(typeof encoded === 'string', 'INVALID_PAYLOAD')
+  return encoded
+}
+function sameJsonData(first: unknown, second: unknown): boolean {
+  if (first === second) return true
+  if (first === null || second === null || typeof first !== 'object' || typeof second !== 'object' || Array.isArray(first) !== Array.isArray(second)) return false
+  const keys = Object.keys(first)
+  return keys.length === Object.keys(second).length && keys.every(key => Object.hasOwn(second, key) && sameJsonData(Reflect.get(first, key), Reflect.get(second, key)))
 }
 
 export class RunCodec {
@@ -198,8 +219,13 @@ export class RunCodec {
   #sealed(run: GameRun): { envelope:SaveEnvelope;serialized:string } {
     const state = this.validateRun(run)
     const body = { saveVersion: 1 as const, ...state.versions, runId: state.runId, revision: state.revision, state }
-    const envelope = { ...body, checksum: hashValue(body) }
-    const serialized=canonicalJson(envelope)
+    const encodedBody = canonicalJson(body), checksum = hashText(encodedBody)
+    const envelope = { ...body, checksum }, keys = Object.keys(body)
+    // Reuse the exact body bytes. A future header sorting before checksum
+    // falls back to the original canonical envelope rather than changing wire order.
+    const serialized = keys.length > 0 && keys.every(key => key > 'checksum')
+      ? '{"checksum":' + JSON.stringify(checksum) + ',' + encodedBody.slice(1)
+      : canonicalJson(envelope)
     requireRule(utf8Length(serialized) <= MAX_SAVE_BYTES, 'SAVE_TOO_LARGE')
     return {envelope,serialized}
   }
@@ -208,15 +234,21 @@ export class RunCodec {
 
   export(run: GameRun): string { return this.#sealed(run).serialized }
 
-  readEnvelope(value: unknown): SaveEnvelope {
+  readEnvelope(value: unknown): SaveEnvelope { return this.#readEnvelope(value, false) }
+
+  #readEnvelope(value: unknown, fromJsonText: boolean): SaveEnvelope {
     assertJsonInput(value)
-    requireRule(utf8Length(canonicalJson(value)) <= MAX_SAVE_BYTES, 'SAVE_TOO_LARGE')
+    const encoded = fromJsonText ? encodeParsedJson(value) : canonicalJson(value)
+    requireRule(utf8Length(encoded) <= MAX_SAVE_BYTES, 'SAVE_TOO_LARGE')
     requireRule(typeof value === 'object' && value !== null && Reflect.get(value, 'saveVersion') === 1, 'UNSUPPORTED_SAVE_VERSION')
     const parsed = envelopeSchema.safeParse(value)
     requireRule(parsed.success, 'INVALID_SAVE_ENVELOPE')
     assertCompatible(parsed.data, this.registry.versions)
     const { checksum, ...body } = parsed.data
-    requireRule(hashValue(body) === checksum, 'CORRUPT_SAVE')
+    const prefix = '{"checksum":' + JSON.stringify(checksum) + ','
+    const unchanged = fromJsonText && sameJsonData(value, parsed.data) && encoded.startsWith(prefix)
+    const expectedChecksum = unchanged ? hashText('{' + encoded.slice(prefix.length)) : hashValue(body)
+    requireRule(expectedChecksum === checksum, 'CORRUPT_SAVE')
     const state = this.validateRun(body.state)
     requireRule(body.runId === state.runId && body.revision === state.revision, 'SAVE_HEADER_MISMATCH')
     assertCompatible(state.versions, body)
@@ -228,6 +260,6 @@ export class RunCodec {
     requireRule(text.length <= MAX_SAVE_BYTES && utf8Length(text) <= MAX_SAVE_BYTES, 'SAVE_TOO_LARGE')
     let raw: unknown
     try { raw = JSON.parse(text) } catch { throw new RuleError('INVALID_SAVE_JSON') }
-    return this.readEnvelope(raw).state
+    return this.#readEnvelope(raw, true).state
   }
 }

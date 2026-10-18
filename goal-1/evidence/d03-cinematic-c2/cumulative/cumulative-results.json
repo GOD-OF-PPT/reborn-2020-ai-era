@@ -1,0 +1,121 @@
+{
+  "taskId": "D03-CINEMATIC-C2",
+  "status": "passed",
+  "sourceFreeze": "candidate2-source-freeze.json",
+  "driverSha256": "6302a8e126f1f793de1657df16cd102edeb90444805af3e866c1e8dca68d640f",
+  "steps": [
+    {
+      "name": "typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-18T18:58:09.801803+00:00",
+      "exitCode": 0,
+      "wallSeconds": 61.548,
+      "output": "typecheck-output.txt"
+    },
+    {
+      "name": "unit",
+      "command": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "--reporter=verbose"
+      ],
+      "startedAt": "2026-10-18T18:59:11.564791+00:00",
+      "exitCode": 0,
+      "wallSeconds": 1535.17,
+      "output": "unit-output.txt"
+    },
+    {
+      "name": "tools",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "startedAt": "2026-10-18T19:24:46.999002+00:00",
+      "exitCode": 0,
+      "wallSeconds": 0.373,
+      "output": "tools-output.txt"
+    },
+    {
+      "name": "content",
+      "command": [
+        "npm",
+        "run",
+        "validate:content"
+      ],
+      "startedAt": "2026-10-18T19:24:47.510031+00:00",
+      "exitCode": 0,
+      "wallSeconds": 1.952,
+      "output": "content-output.txt"
+    },
+    {
+      "name": "docs",
+      "command": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "startedAt": "2026-10-18T19:24:49.583817+00:00",
+      "exitCode": 0,
+      "wallSeconds": 21.792,
+      "output": "docs-output.txt"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        ".delivery/d03-cinematic-c2-cumulative"
+      ],
+      "startedAt": "2026-10-18T19:25:11.504792+00:00",
+      "exitCode": 0,
+      "wallSeconds": 35.177,
+      "output": "build-output.txt"
+    },
+    {
+      "name": "life",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_life_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/d03-cinematic-c2/replay-life"
+      ],
+      "startedAt": "2026-10-18T19:25:46.810655+00:00",
+      "exitCode": 0,
+      "wallSeconds": 60.843,
+      "output": "life-output.txt"
+    },
+    {
+      "name": "playable",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_playable_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/d03-cinematic-c2/replay-playable"
+      ],
+      "startedAt": "2026-10-18T19:26:47.764666+00:00",
+      "exitCode": 0,
+      "wallSeconds": 12.45,
+      "output": "playable-output.txt"
+    }
+  ],
+  "scope": "Current full500 in80 files: all original496 plus4 encoding guards, original root config/default ordering/assertions/deadlines/fork isolation, maxWorkers1. Not native/human/whole-game acceptance."
+}
