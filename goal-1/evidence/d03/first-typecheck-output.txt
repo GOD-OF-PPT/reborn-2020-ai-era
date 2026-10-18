@@ -1,0 +1,16 @@
+
+> reborn-2020-ai-era@0.1.0 typecheck
+> tsc -b
+
+src/ui/LifePanel.tsx(27,385): error TS2375: Type '{ personId: "tang-ying" | "linzhou" | "xu-cheng" | "chen-yu"; name: string; revealed: boolean; textOnly: boolean | undefined; }' is not assignable to type '{ personId: "tang-ying" | "linzhou" | "xu-cheng" | "chen-yu"; name: string; revealed: boolean; textOnly?: boolean; feature?: boolean; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'textOnly' are incompatible.
+    Type 'boolean | undefined' is not assignable to type 'boolean'.
+      Type 'undefined' is not assignable to type 'boolean'.
+src/ui/LifePanel.tsx(28,276): error TS2375: Type '{ personId: "tang-ying" | "linzhou" | "xu-cheng" | "chen-yu"; name: string; revealed: boolean; textOnly: boolean | undefined; }' is not assignable to type '{ personId: "tang-ying" | "linzhou" | "xu-cheng" | "chen-yu"; name: string; revealed: boolean; textOnly?: boolean; feature?: boolean; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'textOnly' are incompatible.
+    Type 'boolean | undefined' is not assignable to type 'boolean'.
+      Type 'undefined' is not assignable to type 'boolean'.
+src/ui/LifePanel.tsx(35,85): error TS2375: Type '{ personId: "tang-ying" | "linzhou" | "xu-cheng" | "chen-yu"; name: string; revealed: boolean; textOnly: boolean | undefined; feature: true; }' is not assignable to type '{ personId: "tang-ying" | "linzhou" | "xu-cheng" | "chen-yu"; name: string; revealed: boolean; textOnly?: boolean; feature?: boolean; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'textOnly' are incompatible.
+    Type 'boolean | undefined' is not assignable to type 'boolean'.
+      Type 'undefined' is not assignable to type 'boolean'.

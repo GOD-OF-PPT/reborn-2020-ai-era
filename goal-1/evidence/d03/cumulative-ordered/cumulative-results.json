@@ -1,0 +1,112 @@
+{
+  "scope": "D03/C-D03 current frozen source; original assertions, limits and isolation unchanged",
+  "sourceFreeze": "../candidate1-source-freeze.json",
+  "diagnosticEntryHashes": {
+    "ordered.vitest.config.ts": "8f1716cd306a444b84f7cadd114b4f8302f7d6050fc2a101623f8267755ba90d",
+    "ordered-sequencer.mjs": "6acc364c37501215ac122350189b70c5c784c0d9b699ace1cfcb0ee8287bbbfe",
+    "run-cumulative-ordered.py": "05834ac186b6641409485e3231ab5c2bb43301d9f3f5666d49b062138302ec74"
+  },
+  "executionOrder": "actual-file-order.json",
+  "sourceFiles": 322,
+  "results": [
+    {
+      "step": 1,
+      "name": "typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 34.859
+    },
+    {
+      "step": 2,
+      "name": "unit",
+      "command": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "--config",
+        "goal-1/evidence/d03/ordered.vitest.config.ts",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 1461.561
+    },
+    {
+      "step": 3,
+      "name": "tools",
+      "command": [
+        "npm",
+        "run",
+        "test:docs"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.861
+    },
+    {
+      "step": 4,
+      "name": "content",
+      "command": [
+        "npm",
+        "run",
+        "validate:content"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 2.029
+    },
+    {
+      "step": 5,
+      "name": "docs",
+      "command": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 20.129
+    },
+    {
+      "step": 6,
+      "name": "build",
+      "command": [
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        "/Users/gordon/githome/reborn-2020-ai-era/.delivery/d03-cumulative"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 36.543
+    },
+    {
+      "step": 7,
+      "name": "life-replay",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_life_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/d03/replay-life"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 71.395
+    },
+    {
+      "step": 8,
+      "name": "playable-replay",
+      "command": [
+        "npm",
+        "run",
+        "evidence:playable",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/d03/replay-playable"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 13.842
+    }
+  ],
+  "sourceUnchanged": true
+}

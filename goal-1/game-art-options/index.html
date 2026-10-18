@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="data:,">
+  <title>重生2020 · 三种人生，三种画面</title>
+  <link rel="stylesheet" href="options.css">
+  <script src="options.js" defer></script>
+</head>
+<body>
+  <header class="review-bar">
+    <span class="review-brand">美术方向 / <strong>重生2020</strong></span>
+    <nav class="directions" aria-label="美术备选">
+      <button data-direction="a" aria-pressed="true">A <span>长日重启</span></button>
+      <button data-direction="b" aria-pressed="false">B <span>街区人生</span></button>
+      <button data-direction="c" aria-pressed="false">C <span>像素旧时光</span></button>
+    </nav>
+    <button id="about" class="review-link">比较方向</button>
+    <details class="display-settings">
+      <summary>显示</summary>
+      <label><input id="text-mode" type="checkbox">文字模式</label>
+      <label><input id="motion-mode" type="checkbox">减少动效</label>
+    </details>
+  </header>
+  <main>
+    <section class="game-frame" data-direction="a" aria-label="A 长日重启游戏界面设计">
+      <img class="world-art" src="assets/a-cinematic-room-v1.jpg" alt="清晨的租屋，电脑、书架、床和通向城市的门" width="1672" height="941" fetchpriority="high">
+      <div class="world-shade" aria-hidden="true"></div>
+      <div class="world-light" aria-hidden="true"></div>
+      <header class="game-hud">
+        <button class="game-title" data-open="chapter"><span class="title-mark" aria-hidden="true">↶</span><span>重生 <b>2020</b><small>AI 时代</small></span></button>
+        <div class="date-hud"><span class="season">第一年 · 冬</span><strong>2020<span> / </span>01<span> / </span>01</strong><small>第一季度</small></div>
+        <div class="resources">
+          <button data-open="money" class="cash"><span>个人现金</span><strong>¥ 26,000</strong></button>
+          <button data-open="action-points" class="ap"><span>本季行动</span><strong aria-label="剩余4点，共4点"><i aria-hidden="true">◆ ◆ ◆ ◆</i><b>4 / 4</b></strong></button>
+        </div>
+      </header>
+      <div class="chapter-copy"><span class="chapter-kicker">PROLOGUE / 序章</span><h1>如果人生，<br>可以再来一次。</h1><p>窗外还是熟悉的城市。<br>这一次，选择权在你手里。</p></div>
+      <aside class="world-tools" aria-label="随身物品">
+        <button data-open="journal"><span aria-hidden="true">▤</span><b>手记</b></button>
+        <button data-open="people"><span aria-hidden="true">♧</span><b>人物</b></button>
+        <button data-open="obligations"><span aria-hidden="true">◷</span><b>约定</b></button>
+      </aside>
+      <div class="hotspots" aria-label="探索场景"></div>
+      <footer class="scene-dialogue">
+        <div class="narrator"><span class="narrator-label">你 · 内心独白</span><p>你在旧房间醒来。电脑还亮着，日历回到了2020年。</p><small>一切还没开始。一切，都来得及。</small></div>
+        <button class="main-action" data-open="choices">从今天开始 <span aria-hidden="true">→</span></button>
+      </footer>
+      <div class="scene-caption"><span class="scene-place">出租屋 · 城市清晨</span><span class="prototype-badge">交互样稿 · 不写入游戏</span></div>
+      <div class="image-fallback" hidden><strong>场景暂时无法显示</strong><p>仍可用场景入口和下方按钮比较交互。</p></div>
+      <div class="feedback" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+  <div class="review-footer"><span id="direction-description">A · 电影叙事场景 / 物件探索 + 关键抉择</span><span>Tab 选择 · Enter 互动 · Esc 返回</span></div>
+  <dialog id="scene-modal" aria-labelledby="modal-title">
+    <form method="dialog" class="modal-top"><span class="modal-eyebrow">重生2020</span><button aria-label="关闭对话">×</button></form>
+    <div class="modal-content"></div>
+  </dialog>
+</body>
+</html>

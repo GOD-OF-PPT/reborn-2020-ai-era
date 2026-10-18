@@ -1,0 +1,61 @@
+{
+  "scope": "input transport-format diagnosis and independent strict canonical expectations; original files/hashes preserved, no gameplay fix or assertion weakening",
+  "initialRawByteEquality": false,
+  "diagnosis": "only one trailing LF, source collector explicitly appends raw+newline; every other byte and checksum match",
+  "collector": "scripts/collect_deepseek_evidence.ts:15",
+  "rawInputSha256": "f5e4c58963f4e2056b8df74d7c51dd5ba8178143cff23310c6c445eea178e34b",
+  "uiExportSha256": "1e828fcef51aa3263749d862c83b64302aa8aeb4e1755d0a3d0cf957748bd26f",
+  "independentCanonicalExpectedSha256": "1e828fcef51aa3263749d862c83b64302aa8aeb4e1755d0a3d0cf957748bd26f",
+  "canonicalBusinessExportByteEqual": true,
+  "inputs": [
+    {
+      "label": "life77",
+      "originalFile": "input-life77.json",
+      "originalSha256": "6b4eaa7e76aaf68e6d0494899b2d298fbb85c989729cb220dde75a5fc7f08539",
+      "canonicalFile": "canonical-input-life77.json",
+      "canonicalSha256": "6b4eaa7e76aaf68e6d0494899b2d298fbb85c989729cb220dde75a5fc7f08539",
+      "format": "already canonical",
+      "parsedObjectEqual": true,
+      "strictImportAccepted": true,
+      "runId": "t15-normal-people-technical_employee",
+      "revision": 77
+    },
+    {
+      "label": "normal1",
+      "originalFile": "input-normal1.json",
+      "originalSha256": "bc9a83c218594fed571bc5ef2c7c629821e730828f5e1d06972fc56fa58029ed",
+      "canonicalFile": "canonical-input-normal1.json",
+      "canonicalSha256": "bc9a83c218594fed571bc5ef2c7c629821e730828f5e1d06972fc56fa58029ed",
+      "format": "already canonical",
+      "parsedObjectEqual": true,
+      "strictImportAccepted": true,
+      "runId": "life-b01358cf-ad54-428e-932c-be4e7b0c64a0",
+      "revision": 1
+    },
+    {
+      "label": "business2025",
+      "originalFile": "input-business2025.json",
+      "originalSha256": "f5e4c58963f4e2056b8df74d7c51dd5ba8178143cff23310c6c445eea178e34b",
+      "canonicalFile": "canonical-input-business2025.json",
+      "canonicalSha256": "1e828fcef51aa3263749d862c83b64302aa8aeb4e1755d0a3d0cf957748bd26f",
+      "format": "exactly one trailing LF from original collector",
+      "parsedObjectEqual": true,
+      "strictImportAccepted": true,
+      "runId": "normal-deepseek-technical_employee",
+      "revision": 95
+    },
+    {
+      "label": "risk2025",
+      "originalFile": "input-risk2025.json",
+      "originalSha256": "957abc78e3ea8af5c20be704b22d8d97b61a5ad6e2e05ef266f4602454701125",
+      "canonicalFile": "canonical-input-risk2025.json",
+      "canonicalSha256": "58bfc5a6580fe1e76c38217005d7088244e31da46ea2f6f56965d5d8efe95dd6",
+      "format": "exactly one trailing LF from original collector",
+      "parsedObjectEqual": true,
+      "strictImportAccepted": true,
+      "runId": "normal-relay-content_employee-e9606bbe",
+      "revision": 114
+    }
+  ],
+  "requiresGameCodeChange": false
+}

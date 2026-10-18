@@ -1,0 +1,5596 @@
+{
+  "taskId": "D03",
+  "result": "EXPORT_REPLAY_PASS",
+  "d03DesktopChecksComplete": true,
+  "nativeAcceptanceComplete": false,
+  "pending": [
+    {
+      "id": "T15-native-200-percent",
+      "reason": "actual browser 200% page zoom remains unverified"
+    },
+    {
+      "id": "T15-native-beforeunload",
+      "reason": "native leave prompt remains unverified"
+    }
+  ],
+  "baseCommit": "2bdb9c33d9488db2169e2168865351647f1abbad",
+  "nativeReportHash": "5b58dc72348b28fe7831eae0ae22e6cca4a1a665d95904296d136ad39cbf72ef",
+  "verifierHash": "83d351438f5f4b0b083a43023c9829c9aa1d1a1eb5f2037e00990b72ec9c00a7",
+  "sourceFreezeHash": "caac8bf1fac04d37910193db521aba3a17381bddc7004c88f5ef4d0d588b2502",
+  "frozenFiles": 322,
+  "checks": 52,
+  "iterations": 72,
+  "inputs": [
+    {
+      "file": "input-life77.json",
+      "runId": "t15-normal-people-technical_employee",
+      "revision": 77,
+      "rawSha256": "6b4eaa7e76aaf68e6d0494899b2d298fbb85c989729cb220dde75a5fc7f08539",
+      "canonicalSha256": "6b4eaa7e76aaf68e6d0494899b2d298fbb85c989729cb220dde75a5fc7f08539",
+      "format": "canonical",
+      "fullNormalPrefixByteEqual": true
+    },
+    {
+      "file": "input-normal1.json",
+      "runId": "life-b01358cf-ad54-428e-932c-be4e7b0c64a0",
+      "revision": 1,
+      "rawSha256": "bc9a83c218594fed571bc5ef2c7c629821e730828f5e1d06972fc56fa58029ed",
+      "canonicalSha256": "bc9a83c218594fed571bc5ef2c7c629821e730828f5e1d06972fc56fa58029ed",
+      "format": "canonical",
+      "fullNormalPrefixByteEqual": true
+    },
+    {
+      "file": "input-business2025.json",
+      "runId": "normal-deepseek-technical_employee",
+      "revision": 95,
+      "rawSha256": "f5e4c58963f4e2056b8df74d7c51dd5ba8178143cff23310c6c445eea178e34b",
+      "canonicalSha256": "1e828fcef51aa3263749d862c83b64302aa8aeb4e1755d0a3d0cf957748bd26f",
+      "format": "exactly_one_LF",
+      "fullNormalPrefixByteEqual": true
+    },
+    {
+      "file": "input-risk2025.json",
+      "runId": "normal-relay-content_employee-e9606bbe",
+      "revision": 114,
+      "rawSha256": "957abc78e3ea8af5c20be704b22d8d97b61a5ad6e2e05ef266f4602454701125",
+      "canonicalSha256": "58bfc5a6580fe1e76c38217005d7088244e31da46ea2f6f56965d5d8efe95dd6",
+      "format": "exactly_one_LF",
+      "fullNormalPrefixByteEqual": true
+    },
+    {
+      "file": "final-content-before-work.json",
+      "runId": "life-a28a49c4-500e-4289-9dd8-0ab42162351f",
+      "revision": 1,
+      "rawSha256": "75185693108cdb5bfd3ccef3201acdcdb642a33e28a25f8c6aef45c43e81f76e",
+      "canonicalSha256": "75185693108cdb5bfd3ccef3201acdcdb642a33e28a25f8c6aef45c43e81f76e",
+      "format": "canonical",
+      "fullNormalPrefixByteEqual": true
+    }
+  ],
+  "cases": [
+    {
+      "file": "final-life77-after-art-review.json",
+      "runId": "t15-normal-people-technical_employee",
+      "seed": "t14-linzhou-normal-0",
+      "revision": 77,
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "StartFirstOrder",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-1",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-2",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-19",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-3",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "SubmitDelivery",
+          "payload": {
+            "contractId": "ops:c868142a100e6b1d89193dc353a5c729"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-4",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-5",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-21",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-6",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-7",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-8",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-9",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-10",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-11",
+          "expectedRevision": 11
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-12",
+          "expectedRevision": 12
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-13",
+          "expectedRevision": 13
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "partner_review",
+            "personId": "chen-yu",
+            "reference": {
+              "date": "2020-01-20",
+              "id": "ops:c868142a100e6b1d89193dc353a5c729",
+              "kind": "paid_case"
+            }
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-14",
+          "expectedRevision": 14
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-08",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-15",
+          "expectedRevision": 15
+        },
+        {
+          "actorId": "player",
+          "kind": "AcceptLifePromise",
+          "payload": {
+            "consent": true,
+            "promiseId": "life:8690d887f04b56e4d92b81ecc2c6445f"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-16",
+          "expectedRevision": 16
+        },
+        {
+          "actorId": "player",
+          "kind": "FulfillLifePromise",
+          "payload": {
+            "promiseId": "life:8690d887f04b56e4d92b81ecc2c6445f"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-17",
+          "expectedRevision": 17
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-15",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-18",
+          "expectedRevision": 18
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-19",
+          "expectedRevision": 19
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:ce13e97577906b575830973677ff41c1"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-20",
+          "expectedRevision": 20
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-21",
+          "expectedRevision": 21
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-22",
+          "expectedRevision": 22
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-23",
+          "expectedRevision": 23
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-24",
+          "expectedRevision": 24
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-25",
+          "expectedRevision": 25
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-26",
+          "expectedRevision": 26
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-27",
+          "expectedRevision": 27
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-28",
+          "expectedRevision": 28
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-29",
+          "expectedRevision": 29
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLinzhouWork",
+          "payload": {
+            "kind": "pilot",
+            "resourceId": "player-production"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-30",
+          "expectedRevision": 30
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-01-08",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-31",
+          "expectedRevision": 31
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLinzhouWork",
+          "payload": {
+            "kind": "continuity",
+            "resourceId": "player-production"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-32",
+          "expectedRevision": 32
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-01-15",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-33",
+          "expectedRevision": 33
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-34",
+          "expectedRevision": 34
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-35",
+          "expectedRevision": 35
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLinzhouWork",
+          "payload": {
+            "kind": "participation",
+            "resourceId": "player-production"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-36",
+          "expectedRevision": 36
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-08",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-37",
+          "expectedRevision": 37
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-09",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-38",
+          "expectedRevision": 38
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "linzhou_review",
+            "personId": "linzhou",
+            "reference": {
+              "date": "2021-04-08",
+              "id": "story:90c7609c045e6442a7b4d96b953ed91d",
+              "kind": "linzhou_participation"
+            }
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-39",
+          "expectedRevision": 39
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-16",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-40",
+          "expectedRevision": 40
+        },
+        {
+          "actorId": "player",
+          "kind": "AcceptLifePromise",
+          "payload": {
+            "consent": true,
+            "promiseId": "life:a060be1750e9a4f8ecf3e943d9e08353"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-41",
+          "expectedRevision": 41
+        },
+        {
+          "actorId": "player",
+          "kind": "FulfillLifePromise",
+          "payload": {
+            "promiseId": "life:a060be1750e9a4f8ecf3e943d9e08353"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-42",
+          "expectedRevision": 42
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-19",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-43",
+          "expectedRevision": 43
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-44",
+          "expectedRevision": 44
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-45",
+          "expectedRevision": 45
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-46",
+          "expectedRevision": 46
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-47",
+          "expectedRevision": 47
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-48",
+          "expectedRevision": 48
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-49",
+          "expectedRevision": 49
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-50",
+          "expectedRevision": 50
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-51",
+          "expectedRevision": 51
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-52",
+          "expectedRevision": 52
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-53",
+          "expectedRevision": 53
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-54",
+          "expectedRevision": 54
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-55",
+          "expectedRevision": 55
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-56",
+          "expectedRevision": 56
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-57",
+          "expectedRevision": 57
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-58",
+          "expectedRevision": 58
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-08-22",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-59",
+          "expectedRevision": 59
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-08-23",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-60",
+          "expectedRevision": 60
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "peer_notes",
+            "personId": "xu-cheng",
+            "reference": {
+              "date": "2020-01-20",
+              "id": "ops:c868142a100e6b1d89193dc353a5c729",
+              "kind": "paid_case"
+            }
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-61",
+          "expectedRevision": 61
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-08-30",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-62",
+          "expectedRevision": 62
+        },
+        {
+          "actorId": "player",
+          "kind": "AcceptLifePromise",
+          "payload": {
+            "consent": true,
+            "promiseId": "life:6ee2cdf5abba5110352ef245aeba5178"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-63",
+          "expectedRevision": 63
+        },
+        {
+          "actorId": "player",
+          "kind": "FulfillLifePromise",
+          "payload": {
+            "promiseId": "life:6ee2cdf5abba5110352ef245aeba5178"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-64",
+          "expectedRevision": 64
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-09-06",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-65",
+          "expectedRevision": 65
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-66",
+          "expectedRevision": 66
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-67",
+          "expectedRevision": 67
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "friend_visit",
+            "personId": "tang-ying",
+            "reference": null
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-68",
+          "expectedRevision": 68
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-04",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-69",
+          "expectedRevision": 69
+        },
+        {
+          "actorId": "player",
+          "kind": "AcceptLifePromise",
+          "payload": {
+            "consent": true,
+            "promiseId": "life:a0bf02e422c3698d2d078f3a893741db"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-70",
+          "expectedRevision": 70
+        },
+        {
+          "actorId": "player",
+          "kind": "FulfillLifePromise",
+          "payload": {
+            "promiseId": "life:a0bf02e422c3698d2d078f3a893741db"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-71",
+          "expectedRevision": 71
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-07",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-72",
+          "expectedRevision": 72
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "workspace",
+            "personId": null,
+            "reference": null
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-73",
+          "expectedRevision": 73
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-14",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "command-bf0292cc-2e19-4fd4-9681-dfcde0eb8e92",
+          "expectedRevision": 74
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "rest",
+            "personId": null,
+            "reference": null
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "command-5ac789f9-b8ee-4abe-b4ca-f56075c3996a",
+          "expectedRevision": 75
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-21",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "command-1656acf4-f842-455a-946e-fdea0d21bf3d",
+          "expectedRevision": 76
+        }
+      ],
+      "expectedHash": "6b4eaa7e76aaf68e6d0494899b2d298fbb85c989729cb220dde75a5fc7f08539",
+      "actualReplayHash": "6b4eaa7e76aaf68e6d0494899b2d298fbb85c989729cb220dde75a5fc7f08539",
+      "result": "BYTE_EQUAL"
+    },
+    {
+      "file": "final-life77-after-reload.json",
+      "runId": "t15-normal-people-technical_employee",
+      "seed": "t14-linzhou-normal-0",
+      "revision": 77,
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "StartFirstOrder",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-1",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-2",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-19",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-3",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "SubmitDelivery",
+          "payload": {
+            "contractId": "ops:c868142a100e6b1d89193dc353a5c729"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-4",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-5",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-21",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-6",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-7",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-8",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-9",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-10",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-11",
+          "expectedRevision": 11
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-12",
+          "expectedRevision": 12
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-13",
+          "expectedRevision": 13
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "partner_review",
+            "personId": "chen-yu",
+            "reference": {
+              "date": "2020-01-20",
+              "id": "ops:c868142a100e6b1d89193dc353a5c729",
+              "kind": "paid_case"
+            }
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-14",
+          "expectedRevision": 14
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-08",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-15",
+          "expectedRevision": 15
+        },
+        {
+          "actorId": "player",
+          "kind": "AcceptLifePromise",
+          "payload": {
+            "consent": true,
+            "promiseId": "life:8690d887f04b56e4d92b81ecc2c6445f"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-16",
+          "expectedRevision": 16
+        },
+        {
+          "actorId": "player",
+          "kind": "FulfillLifePromise",
+          "payload": {
+            "promiseId": "life:8690d887f04b56e4d92b81ecc2c6445f"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-17",
+          "expectedRevision": 17
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-15",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-18",
+          "expectedRevision": 18
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-19",
+          "expectedRevision": 19
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:ce13e97577906b575830973677ff41c1"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-20",
+          "expectedRevision": 20
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-21",
+          "expectedRevision": 21
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-22",
+          "expectedRevision": 22
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-23",
+          "expectedRevision": 23
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-24",
+          "expectedRevision": 24
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-25",
+          "expectedRevision": 25
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-26",
+          "expectedRevision": 26
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-27",
+          "expectedRevision": 27
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-28",
+          "expectedRevision": 28
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-29",
+          "expectedRevision": 29
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLinzhouWork",
+          "payload": {
+            "kind": "pilot",
+            "resourceId": "player-production"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-30",
+          "expectedRevision": 30
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-01-08",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-31",
+          "expectedRevision": 31
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLinzhouWork",
+          "payload": {
+            "kind": "continuity",
+            "resourceId": "player-production"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-32",
+          "expectedRevision": 32
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-01-15",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-33",
+          "expectedRevision": 33
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-34",
+          "expectedRevision": 34
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-35",
+          "expectedRevision": 35
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLinzhouWork",
+          "payload": {
+            "kind": "participation",
+            "resourceId": "player-production"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-36",
+          "expectedRevision": 36
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-08",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-37",
+          "expectedRevision": 37
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-09",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-38",
+          "expectedRevision": 38
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "linzhou_review",
+            "personId": "linzhou",
+            "reference": {
+              "date": "2021-04-08",
+              "id": "story:90c7609c045e6442a7b4d96b953ed91d",
+              "kind": "linzhou_participation"
+            }
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-39",
+          "expectedRevision": 39
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-16",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-40",
+          "expectedRevision": 40
+        },
+        {
+          "actorId": "player",
+          "kind": "AcceptLifePromise",
+          "payload": {
+            "consent": true,
+            "promiseId": "life:a060be1750e9a4f8ecf3e943d9e08353"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-41",
+          "expectedRevision": 41
+        },
+        {
+          "actorId": "player",
+          "kind": "FulfillLifePromise",
+          "payload": {
+            "promiseId": "life:a060be1750e9a4f8ecf3e943d9e08353"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-42",
+          "expectedRevision": 42
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-19",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-43",
+          "expectedRevision": 43
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-44",
+          "expectedRevision": 44
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-45",
+          "expectedRevision": 45
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-46",
+          "expectedRevision": 46
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-47",
+          "expectedRevision": 47
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-48",
+          "expectedRevision": 48
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-49",
+          "expectedRevision": 49
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-50",
+          "expectedRevision": 50
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-51",
+          "expectedRevision": 51
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-52",
+          "expectedRevision": 52
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-53",
+          "expectedRevision": 53
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-54",
+          "expectedRevision": 54
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-55",
+          "expectedRevision": 55
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-56",
+          "expectedRevision": 56
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-57",
+          "expectedRevision": 57
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-58",
+          "expectedRevision": 58
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-08-22",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-59",
+          "expectedRevision": 59
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-08-23",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-60",
+          "expectedRevision": 60
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "peer_notes",
+            "personId": "xu-cheng",
+            "reference": {
+              "date": "2020-01-20",
+              "id": "ops:c868142a100e6b1d89193dc353a5c729",
+              "kind": "paid_case"
+            }
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-61",
+          "expectedRevision": 61
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-08-30",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-62",
+          "expectedRevision": 62
+        },
+        {
+          "actorId": "player",
+          "kind": "AcceptLifePromise",
+          "payload": {
+            "consent": true,
+            "promiseId": "life:6ee2cdf5abba5110352ef245aeba5178"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-63",
+          "expectedRevision": 63
+        },
+        {
+          "actorId": "player",
+          "kind": "FulfillLifePromise",
+          "payload": {
+            "promiseId": "life:6ee2cdf5abba5110352ef245aeba5178"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-64",
+          "expectedRevision": 64
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-09-06",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-65",
+          "expectedRevision": 65
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-66",
+          "expectedRevision": 66
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-67",
+          "expectedRevision": 67
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "friend_visit",
+            "personId": "tang-ying",
+            "reference": null
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-68",
+          "expectedRevision": 68
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-04",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-69",
+          "expectedRevision": 69
+        },
+        {
+          "actorId": "player",
+          "kind": "AcceptLifePromise",
+          "payload": {
+            "consent": true,
+            "promiseId": "life:a0bf02e422c3698d2d078f3a893741db"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-70",
+          "expectedRevision": 70
+        },
+        {
+          "actorId": "player",
+          "kind": "FulfillLifePromise",
+          "payload": {
+            "promiseId": "life:a0bf02e422c3698d2d078f3a893741db"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-71",
+          "expectedRevision": 71
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-07",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-72",
+          "expectedRevision": 72
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "workspace",
+            "personId": null,
+            "reference": null
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "t14-command-73",
+          "expectedRevision": 73
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-14",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "command-bf0292cc-2e19-4fd4-9681-dfcde0eb8e92",
+          "expectedRevision": 74
+        },
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "rest",
+            "personId": null,
+            "reference": null
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "command-5ac789f9-b8ee-4abe-b4ca-f56075c3996a",
+          "expectedRevision": 75
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-21",
+            "phase": "snapshot"
+          },
+          "runId": "t15-normal-people-technical_employee",
+          "commandId": "command-1656acf4-f842-455a-946e-fdea0d21bf3d",
+          "expectedRevision": 76
+        }
+      ],
+      "expectedHash": "6b4eaa7e76aaf68e6d0494899b2d298fbb85c989729cb220dde75a5fc7f08539",
+      "actualReplayHash": "6b4eaa7e76aaf68e6d0494899b2d298fbb85c989729cb220dde75a5fc7f08539",
+      "result": "BYTE_EQUAL"
+    },
+    {
+      "file": "final-normal1-after-keyboard.json",
+      "runId": "life-b01358cf-ad54-428e-932c-be4e7b0c64a0",
+      "seed": "t15-native-leave-followup-01",
+      "revision": 1,
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "commands": [],
+      "expectedHash": "bc9a83c218594fed571bc5ef2c7c629821e730828f5e1d06972fc56fa58029ed",
+      "actualReplayHash": "bc9a83c218594fed571bc5ef2c7c629821e730828f5e1d06972fc56fa58029ed",
+      "result": "BYTE_EQUAL"
+    },
+    {
+      "file": "final-business95-after-review.json",
+      "runId": "normal-deepseek-technical_employee",
+      "seed": "normal-deepseek-s04-v1",
+      "revision": 95,
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-1",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-2",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-3",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-4",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-5",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-6",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-7",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-8",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-9",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:ce13e97577906b575830973677ff41c1"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-10",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-11",
+          "expectedRevision": 11
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-12",
+          "expectedRevision": 12
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-13",
+          "expectedRevision": 13
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-14",
+          "expectedRevision": 14
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-15",
+          "expectedRevision": 15
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-16",
+          "expectedRevision": 16
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-17",
+          "expectedRevision": 17
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-18",
+          "expectedRevision": 18
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-19",
+          "expectedRevision": 19
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-20",
+          "expectedRevision": 20
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-21",
+          "expectedRevision": 21
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-22",
+          "expectedRevision": 22
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-23",
+          "expectedRevision": 23
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-24",
+          "expectedRevision": 24
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-25",
+          "expectedRevision": 25
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-26",
+          "expectedRevision": 26
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-27",
+          "expectedRevision": 27
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-28",
+          "expectedRevision": 28
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-29",
+          "expectedRevision": 29
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-30",
+          "expectedRevision": 30
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-31",
+          "expectedRevision": 31
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-32",
+          "expectedRevision": 32
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-33",
+          "expectedRevision": 33
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-34",
+          "expectedRevision": 34
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-35",
+          "expectedRevision": 35
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-36",
+          "expectedRevision": 36
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-37",
+          "expectedRevision": 37
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-38",
+          "expectedRevision": 38
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-39",
+          "expectedRevision": 39
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-40",
+          "expectedRevision": 40
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-41",
+          "expectedRevision": 41
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:c4573c6eb77d038cb88a52af058aed8a"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-42",
+          "expectedRevision": 42
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-43",
+          "expectedRevision": 43
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-44",
+          "expectedRevision": 44
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-45",
+          "expectedRevision": 45
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-46",
+          "expectedRevision": 46
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-47",
+          "expectedRevision": 47
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-48",
+          "expectedRevision": 48
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-49",
+          "expectedRevision": 49
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-50",
+          "expectedRevision": 50
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-51",
+          "expectedRevision": 51
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-52",
+          "expectedRevision": 52
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-53",
+          "expectedRevision": 53
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-54",
+          "expectedRevision": 54
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-55",
+          "expectedRevision": 55
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-56",
+          "expectedRevision": 56
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-57",
+          "expectedRevision": 57
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-58",
+          "expectedRevision": 58
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-59",
+          "expectedRevision": 59
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-05-06",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-60",
+          "expectedRevision": 60
+        },
+        {
+          "actorId": "player",
+          "kind": "OpenEcosystemService",
+          "payload": {
+            "capitalFen": 3000000
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-61",
+          "expectedRevision": 61
+        },
+        {
+          "actorId": "player",
+          "kind": "StartEcosystemPreparation",
+          "payload": {
+            "businessId": "ops:2b793c9617dd060678e11dc51ccec9da",
+            "preparation": "materials",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2024-05-06"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-62",
+          "expectedRevision": 62
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-05-13",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-63",
+          "expectedRevision": 63
+        },
+        {
+          "actorId": "player",
+          "kind": "StartEcosystemAdaptation",
+          "payload": {
+            "acceptSimulationTerms": true,
+            "businessId": "ops:2b793c9617dd060678e11dc51ccec9da",
+            "modelId": "v2",
+            "productId": "deployment",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2024-05-13"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-64",
+          "expectedRevision": 64
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-05-20",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-65",
+          "expectedRevision": 65
+        },
+        {
+          "actorId": "player",
+          "kind": "ActivateBusiness",
+          "payload": {
+            "businessId": "ops:2b793c9617dd060678e11dc51ccec9da"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-66",
+          "expectedRevision": 66
+        },
+        {
+          "actorId": "player",
+          "kind": "StartEcoOutreach",
+          "payload": {
+            "businessId": "ops:2b793c9617dd060678e11dc51ccec9da",
+            "mode": "paid",
+            "modelId": "v2",
+            "productId": "deployment",
+            "resources": [
+              "player-production"
+            ],
+            "sourceCohortIds": [],
+            "startAt": "2024-05-20"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-67",
+          "expectedRevision": 67
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-05-27",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-68",
+          "expectedRevision": 68
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-69",
+          "expectedRevision": 69
+        },
+        {
+          "actorId": "player",
+          "kind": "AcceptEcoContract",
+          "payload": {
+            "leadId": "dsk:030a3ca77f4adbb14cab1605b86595cb",
+            "resources": [
+              "player-production"
+            ],
+            "scope": "standard",
+            "startAt": "2024-07-02"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-70",
+          "expectedRevision": 70
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-07-16",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-71",
+          "expectedRevision": 71
+        },
+        {
+          "actorId": "player",
+          "kind": "SubmitEcoDelivery",
+          "payload": {
+            "contractId": "dsk:2a98c5cc3db487c6f7249db5676450d9"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-72",
+          "expectedRevision": 72
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-07-26",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-73",
+          "expectedRevision": 73
+        },
+        {
+          "actorId": "player",
+          "kind": "CollectEcoReceivable",
+          "payload": {
+            "amountFen": 360000,
+            "deliveryId": "dsk:e0dfc4856d37d5792405bd57d62a0388"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-74",
+          "expectedRevision": 74
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-08-02",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-75",
+          "expectedRevision": 75
+        },
+        {
+          "actorId": "player",
+          "kind": "CollectEcoReceivable",
+          "payload": {
+            "amountFen": 240000,
+            "deliveryId": "dsk:ba1bfd9302629b7d46d5a35ea80a999e"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-76",
+          "expectedRevision": 76
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-77",
+          "expectedRevision": 77
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-78",
+          "expectedRevision": 78
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-79",
+          "expectedRevision": 79
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:065837245bece65bbd55b8e8c3c99a5f"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-80",
+          "expectedRevision": 80
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-81",
+          "expectedRevision": 81
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-82",
+          "expectedRevision": 82
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-83",
+          "expectedRevision": 83
+        },
+        {
+          "actorId": "player",
+          "kind": "EnableCounterfactualEquity",
+          "payload": {
+            "acknowledge": true
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-84",
+          "expectedRevision": 84
+        },
+        {
+          "actorId": "player",
+          "kind": "OpenEquityDesk",
+          "payload": {},
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-85",
+          "expectedRevision": 85
+        },
+        {
+          "actorId": "player",
+          "kind": "DiscoverEquityInvitation",
+          "payload": {
+            "businessId": "ops:8576614dfbcb49debc31982710f8f7a6",
+            "source": "referral"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-86",
+          "expectedRevision": 86
+        },
+        {
+          "actorId": "player",
+          "kind": "InvestigateEquityInvitation",
+          "payload": {
+            "invitationId": "dsk:f14f12aac0739b3c51d9537a261e4947",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2025-04-01"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-87",
+          "expectedRevision": 87
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-04-08",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-88",
+          "expectedRevision": 88
+        },
+        {
+          "actorId": "player",
+          "kind": "StartEquityEligibility",
+          "payload": {
+            "businessId": "ops:8576614dfbcb49debc31982710f8f7a6",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2025-04-08"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-89",
+          "expectedRevision": 89
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-04-15",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-90",
+          "expectedRevision": 90
+        },
+        {
+          "actorId": "player",
+          "kind": "StartEquityNegotiation",
+          "payload": {
+            "acquisitionKind": "new_capital",
+            "amountFen": 2000000,
+            "invitationId": "dsk:f14f12aac0739b3c51d9537a261e4947",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2025-04-15",
+            "termsId": "financial"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-91",
+          "expectedRevision": 91
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-04-22",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-92",
+          "expectedRevision": 92
+        },
+        {
+          "actorId": "player",
+          "kind": "SignEquityAgreement",
+          "payload": {
+            "negotiationId": "dsk:2748578ed8ccc7af7a0807e2fa6dac2e"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-93",
+          "expectedRevision": 93
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-deepseek-technical_employee",
+          "commandId": "normal-deepseek-94",
+          "expectedRevision": 94
+        }
+      ],
+      "expectedHash": "1e828fcef51aa3263749d862c83b64302aa8aeb4e1755d0a3d0cf957748bd26f",
+      "actualReplayHash": "1e828fcef51aa3263749d862c83b64302aa8aeb4e1755d0a3d0cf957748bd26f",
+      "result": "BYTE_EQUAL"
+    },
+    {
+      "file": "final-risk114-after-review.json",
+      "runId": "normal-relay-content_employee-e9606bbe",
+      "seed": "t14-normal-risk-9",
+      "revision": 114,
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-1",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-2",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-3",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-4",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-5",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-6",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-7",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-8",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-9",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:ce13e97577906b575830973677ff41c1"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-10",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-11",
+          "expectedRevision": 11
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-12",
+          "expectedRevision": 12
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-13",
+          "expectedRevision": 13
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-14",
+          "expectedRevision": 14
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-15",
+          "expectedRevision": 15
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-16",
+          "expectedRevision": 16
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-17",
+          "expectedRevision": 17
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-18",
+          "expectedRevision": 18
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-19",
+          "expectedRevision": 19
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-20",
+          "expectedRevision": 20
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-21",
+          "expectedRevision": 21
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-22",
+          "expectedRevision": 22
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-23",
+          "expectedRevision": 23
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-24",
+          "expectedRevision": 24
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-25",
+          "expectedRevision": 25
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-26",
+          "expectedRevision": 26
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-27",
+          "expectedRevision": 27
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-28",
+          "expectedRevision": 28
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-29",
+          "expectedRevision": 29
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-30",
+          "expectedRevision": 30
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-31",
+          "expectedRevision": 31
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-32",
+          "expectedRevision": 32
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-33",
+          "expectedRevision": 33
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-34",
+          "expectedRevision": 34
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-35",
+          "expectedRevision": 35
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-36",
+          "expectedRevision": 36
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-37",
+          "expectedRevision": 37
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-38",
+          "expectedRevision": 38
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-39",
+          "expectedRevision": 39
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-40",
+          "expectedRevision": 40
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-41",
+          "expectedRevision": 41
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:c4573c6eb77d038cb88a52af058aed8a"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-42",
+          "expectedRevision": 42
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-43",
+          "expectedRevision": 43
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-44",
+          "expectedRevision": 44
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-45",
+          "expectedRevision": 45
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-46",
+          "expectedRevision": 46
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-47",
+          "expectedRevision": 47
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-48",
+          "expectedRevision": 48
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-49",
+          "expectedRevision": 49
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-50",
+          "expectedRevision": 50
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-51",
+          "expectedRevision": 51
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-52",
+          "expectedRevision": 52
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-53",
+          "expectedRevision": 53
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-54",
+          "expectedRevision": 54
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-55",
+          "expectedRevision": 55
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-56",
+          "expectedRevision": 56
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-57",
+          "expectedRevision": 57
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-58",
+          "expectedRevision": 58
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-59",
+          "expectedRevision": 59
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-60",
+          "expectedRevision": 60
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-61",
+          "expectedRevision": 61
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-62",
+          "expectedRevision": 62
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-63",
+          "expectedRevision": 63
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-07-02",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-64",
+          "expectedRevision": 64
+        },
+        {
+          "actorId": "player",
+          "kind": "OpenRelayStation",
+          "payload": {
+            "capitalFen": 3000000
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-65",
+          "expectedRevision": 65
+        },
+        {
+          "actorId": "player",
+          "kind": "StartRelayPreparation",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "preparation": "materials",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2024-07-02"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-66",
+          "expectedRevision": 66
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-07-09",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-67",
+          "expectedRevision": 67
+        },
+        {
+          "actorId": "player",
+          "kind": "StartRelayPreparation",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "preparation": "basics",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2024-07-09"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-68",
+          "expectedRevision": 68
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-07-16",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-69",
+          "expectedRevision": 69
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-10-02",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-70",
+          "expectedRevision": 70
+        },
+        {
+          "actorId": "player",
+          "kind": "ApplyRelaySupply",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2024-10-02",
+            "supplierId": "cedar-direct"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-71",
+          "expectedRevision": 71
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-10-09",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-72",
+          "expectedRevision": 72
+        },
+        {
+          "actorId": "player",
+          "kind": "ReadRelaySupplyDecision",
+          "payload": {
+            "applicationId": "rly:c0e2420f05a2a97c14737506084ee55a"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-73",
+          "expectedRevision": 73
+        },
+        {
+          "actorId": "player",
+          "kind": "ActivateBusiness",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-74",
+          "expectedRevision": 74
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-12-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-75",
+          "expectedRevision": 75
+        },
+        {
+          "actorId": "player",
+          "kind": "StartRelayMarketing",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "mode": "paid",
+            "resources": [
+              "player-production"
+            ],
+            "segment": "local_merchants",
+            "startAt": "2024-12-01",
+            "videoCohortIds": []
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-76",
+          "expectedRevision": 76
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-12-08",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-77",
+          "expectedRevision": 77
+        },
+        {
+          "actorId": "player",
+          "kind": "StartHengxingDeployment",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "consent": true,
+            "expiresAt": "2025-09-30",
+            "initialCashLimitFen": 500000,
+            "resourceId": "player-production"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-78",
+          "expectedRevision": 78
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-12-15",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-79",
+          "expectedRevision": 79
+        },
+        {
+          "actorId": "player",
+          "kind": "StartAgentPreparation",
+          "payload": {
+            "deploymentId": "story:e43394504045d70a80ff40d3bdd6a902",
+            "kind": "records",
+            "resourceId": "player-production"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-80",
+          "expectedRevision": 80
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-12-22",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-81",
+          "expectedRevision": 81
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-78",
+          "expectedRevision": 82
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:065837245bece65bbd55b8e8c3c99a5f"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-79",
+          "expectedRevision": 83
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-80",
+          "expectedRevision": 84
+        },
+        {
+          "actorId": "player",
+          "kind": "StartAgentPreparation",
+          "payload": {
+            "deploymentId": "story:e43394504045d70a80ff40d3bdd6a902",
+            "kind": "drill",
+            "resourceId": "player-production"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-85",
+          "expectedRevision": 85
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-01-04",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-86",
+          "expectedRevision": 86
+        },
+        {
+          "actorId": "player",
+          "kind": "SetRelayOffer",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "offerKind": "low_margin",
+            "unitPriceFen": 10
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-81",
+          "expectedRevision": 87
+        },
+        {
+          "actorId": "player",
+          "kind": "SignRelayCustomers",
+          "payload": {
+            "audienceId": "rly:61f562c9b6bd00a8bcd683d9cf23222c",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "creditLimitFen": 0,
+            "mode": "prepaid",
+            "offerId": "rly:27dcef290ac6101c2bfec30c671ba0c0",
+            "personIds": [
+              "vid:e13c2aa9618c1ca2d51fb3d2c0cb0501",
+              "vid:468c9701ec424dd7a203b50c22d25a6f",
+              "vid:9447a17a8634df0ef138942503e423e7",
+              "vid:d06ff365ee9935321fe523b42ebadfc6"
+            ],
+            "termEnd": "2025-03-31"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-82",
+          "expectedRevision": 88
+        },
+        {
+          "actorId": "player",
+          "kind": "SignRelayCustomers",
+          "payload": {
+            "audienceId": "rly:61f562c9b6bd00a8bcd683d9cf23222c",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "creditLimitFen": 500000,
+            "mode": "postpaid",
+            "offerId": "rly:27dcef290ac6101c2bfec30c671ba0c0",
+            "personIds": [
+              "vid:9e61dfb532fc1cdc07e15f125a6c2789",
+              "vid:ca8433a7e3259cdb35cf1b620949b974"
+            ],
+            "termEnd": "2025-03-31"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-83",
+          "expectedRevision": 89
+        },
+        {
+          "actorId": "player",
+          "kind": "RechargeRelayCustomer",
+          "payload": {
+            "amountFen": 400000,
+            "customerId": "rly:f2da21c5392bd2a4d163fe9ecee14dc0"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-84",
+          "expectedRevision": 90
+        },
+        {
+          "actorId": "player",
+          "kind": "RechargeRelayCustomer",
+          "payload": {
+            "amountFen": 400000,
+            "customerId": "rly:b66291fc20e7f9075cd3a7d3b2fea6ff"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-85",
+          "expectedRevision": 91
+        },
+        {
+          "actorId": "player",
+          "kind": "RechargeRelayCustomer",
+          "payload": {
+            "amountFen": 400000,
+            "customerId": "rly:63a446c06e75b6fbbae4537d5c007b15"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-86",
+          "expectedRevision": 92
+        },
+        {
+          "actorId": "player",
+          "kind": "RechargeRelayCustomer",
+          "payload": {
+            "amountFen": 400000,
+            "customerId": "rly:b9c1dc599d368fec9cd2d5ce05979d30"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-87",
+          "expectedRevision": 93
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-01-20",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-88",
+          "expectedRevision": 94
+        },
+        {
+          "actorId": "player",
+          "kind": "AcknowledgeRelayMarket",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-89",
+          "expectedRevision": 95
+        },
+        {
+          "actorId": "player",
+          "kind": "StartRelayRequote",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "customerIds": [
+              "rly:f2da21c5392bd2a4d163fe9ecee14dc0",
+              "rly:b66291fc20e7f9075cd3a7d3b2fea6ff",
+              "rly:63a446c06e75b6fbbae4537d5c007b15",
+              "rly:b9c1dc599d368fec9cd2d5ce05979d30",
+              "rly:ab1cc6b96be45d4e8d0162c4dfff43cb",
+              "rly:4079f4436acc25f9915bb52748a1fbcd"
+            ],
+            "effectiveAt": "2025-01-28",
+            "offerKind": "managed_support",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2025-01-20",
+            "unitPriceFen": 6
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-90",
+          "expectedRevision": 96
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-01-27",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-91",
+          "expectedRevision": 97
+        },
+        {
+          "actorId": "player",
+          "kind": "AcknowledgeRelayMarket",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-92",
+          "expectedRevision": 98
+        },
+        {
+          "actorId": "player",
+          "kind": "StartRelayServicePeriod",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "customerIds": [
+              "rly:f2da21c5392bd2a4d163fe9ecee14dc0",
+              "rly:b66291fc20e7f9075cd3a7d3b2fea6ff",
+              "rly:63a446c06e75b6fbbae4537d5c007b15",
+              "rly:b9c1dc599d368fec9cd2d5ce05979d30",
+              "rly:ab1cc6b96be45d4e8d0162c4dfff43cb",
+              "rly:4079f4436acc25f9915bb52748a1fbcd"
+            ],
+            "deploymentId": "story:e43394504045d70a80ff40d3bdd6a902",
+            "maxSupplierCostFen": 1200000,
+            "maxUnits": 300000,
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2025-01-28",
+            "supplierIds": [
+              "cedar-direct"
+            ],
+            "supportMode": "assisted"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-93",
+          "expectedRevision": 99
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-03-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-100",
+          "expectedRevision": 100
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-101",
+          "expectedRevision": 101
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-102",
+          "expectedRevision": 102
+        },
+        {
+          "actorId": "player",
+          "kind": "StartRelayAudit",
+          "payload": {
+            "periodId": "rly:b8c5f3cadb0624a2fd1fbe15e74e5acf",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2025-04-01"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-103",
+          "expectedRevision": 103
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-04-04",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-104",
+          "expectedRevision": 104
+        },
+        {
+          "actorId": "player",
+          "kind": "CorrectRelayPeriod",
+          "payload": {
+            "periodId": "rly:b8c5f3cadb0624a2fd1fbe15e74e5acf"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-105",
+          "expectedRevision": 105
+        },
+        {
+          "actorId": "player",
+          "kind": "CollectRelayDue",
+          "payload": {
+            "customerId": "rly:ab1cc6b96be45d4e8d0162c4dfff43cb"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-106",
+          "expectedRevision": 106
+        },
+        {
+          "actorId": "player",
+          "kind": "CollectRelayDue",
+          "payload": {
+            "customerId": "rly:4079f4436acc25f9915bb52748a1fbcd"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-107",
+          "expectedRevision": 107
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-108",
+          "expectedRevision": 108
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-109",
+          "expectedRevision": 109
+        },
+        {
+          "actorId": "player",
+          "kind": "SetHengxingAuthority",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "cashLimitFen": 100000,
+            "consent": true,
+            "deploymentId": "story:e43394504045d70a80ff40d3bdd6a902",
+            "expiresAt": "2025-09-30",
+            "externalDelegation": true,
+            "level": "cross_flow",
+            "scopes": [
+              "relay_support",
+              "external_service_commitments"
+            ]
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-110",
+          "expectedRevision": 110
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-07-08",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-111",
+          "expectedRevision": 111
+        },
+        {
+          "actorId": "player",
+          "kind": "AcknowledgeStoryPause",
+          "payload": {
+            "instanceId": "story:049ad7c7be010df7672f3264f0b1861a"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-112",
+          "expectedRevision": 112
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-07-08",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-113",
+          "expectedRevision": 113
+        }
+      ],
+      "expectedHash": "58bfc5a6580fe1e76c38217005d7088244e31da46ea2f6f56965d5d8efe95dd6",
+      "actualReplayHash": "58bfc5a6580fe1e76c38217005d7088244e31da46ea2f6f56965d5d8efe95dd6",
+      "result": "BYTE_EQUAL"
+    },
+    {
+      "file": "final-reader-risk114.json",
+      "runId": "normal-relay-content_employee-e9606bbe",
+      "seed": "t14-normal-risk-9",
+      "revision": 114,
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-1",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-2",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-3",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-4",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-5",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-6",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-7",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-8",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-9",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:ce13e97577906b575830973677ff41c1"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-10",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-11",
+          "expectedRevision": 11
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-12",
+          "expectedRevision": 12
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-13",
+          "expectedRevision": 13
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-14",
+          "expectedRevision": 14
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-15",
+          "expectedRevision": 15
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-16",
+          "expectedRevision": 16
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-17",
+          "expectedRevision": 17
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-18",
+          "expectedRevision": 18
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-19",
+          "expectedRevision": 19
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-20",
+          "expectedRevision": 20
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-21",
+          "expectedRevision": 21
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-22",
+          "expectedRevision": 22
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-23",
+          "expectedRevision": 23
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-24",
+          "expectedRevision": 24
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-25",
+          "expectedRevision": 25
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-26",
+          "expectedRevision": 26
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-27",
+          "expectedRevision": 27
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-28",
+          "expectedRevision": 28
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2021-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-29",
+          "expectedRevision": 29
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-30",
+          "expectedRevision": 30
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-31",
+          "expectedRevision": 31
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-32",
+          "expectedRevision": 32
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-33",
+          "expectedRevision": 33
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-34",
+          "expectedRevision": 34
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-35",
+          "expectedRevision": 35
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-36",
+          "expectedRevision": 36
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-37",
+          "expectedRevision": 37
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-38",
+          "expectedRevision": 38
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-39",
+          "expectedRevision": 39
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-40",
+          "expectedRevision": 40
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-41",
+          "expectedRevision": 41
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:c4573c6eb77d038cb88a52af058aed8a"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-42",
+          "expectedRevision": 42
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2022-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-43",
+          "expectedRevision": 43
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-44",
+          "expectedRevision": 44
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-45",
+          "expectedRevision": 45
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-46",
+          "expectedRevision": 46
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-47",
+          "expectedRevision": 47
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-48",
+          "expectedRevision": 48
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-49",
+          "expectedRevision": 49
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-50",
+          "expectedRevision": 50
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-51",
+          "expectedRevision": 51
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-09-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-52",
+          "expectedRevision": 52
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-10-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-53",
+          "expectedRevision": 53
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-54",
+          "expectedRevision": 54
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2023-12-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-55",
+          "expectedRevision": 55
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-56",
+          "expectedRevision": 56
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-57",
+          "expectedRevision": 57
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-58",
+          "expectedRevision": 58
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-59",
+          "expectedRevision": 59
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-60",
+          "expectedRevision": 60
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-61",
+          "expectedRevision": 61
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-62",
+          "expectedRevision": 62
+        },
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-63",
+          "expectedRevision": 63
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-07-02",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-64",
+          "expectedRevision": 64
+        },
+        {
+          "actorId": "player",
+          "kind": "OpenRelayStation",
+          "payload": {
+            "capitalFen": 3000000
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-65",
+          "expectedRevision": 65
+        },
+        {
+          "actorId": "player",
+          "kind": "StartRelayPreparation",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "preparation": "materials",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2024-07-02"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-66",
+          "expectedRevision": 66
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-07-09",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-67",
+          "expectedRevision": 67
+        },
+        {
+          "actorId": "player",
+          "kind": "StartRelayPreparation",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "preparation": "basics",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2024-07-09"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-68",
+          "expectedRevision": 68
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-07-16",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-69",
+          "expectedRevision": 69
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-10-02",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-70",
+          "expectedRevision": 70
+        },
+        {
+          "actorId": "player",
+          "kind": "ApplyRelaySupply",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2024-10-02",
+            "supplierId": "cedar-direct"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-71",
+          "expectedRevision": 71
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-10-09",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-72",
+          "expectedRevision": 72
+        },
+        {
+          "actorId": "player",
+          "kind": "ReadRelaySupplyDecision",
+          "payload": {
+            "applicationId": "rly:c0e2420f05a2a97c14737506084ee55a"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-73",
+          "expectedRevision": 73
+        },
+        {
+          "actorId": "player",
+          "kind": "ActivateBusiness",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-74",
+          "expectedRevision": 74
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-12-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-75",
+          "expectedRevision": 75
+        },
+        {
+          "actorId": "player",
+          "kind": "StartRelayMarketing",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "mode": "paid",
+            "resources": [
+              "player-production"
+            ],
+            "segment": "local_merchants",
+            "startAt": "2024-12-01",
+            "videoCohortIds": []
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-76",
+          "expectedRevision": 76
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-12-08",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-77",
+          "expectedRevision": 77
+        },
+        {
+          "actorId": "player",
+          "kind": "StartHengxingDeployment",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "consent": true,
+            "expiresAt": "2025-09-30",
+            "initialCashLimitFen": 500000,
+            "resourceId": "player-production"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-78",
+          "expectedRevision": 78
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-12-15",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-79",
+          "expectedRevision": 79
+        },
+        {
+          "actorId": "player",
+          "kind": "StartAgentPreparation",
+          "payload": {
+            "deploymentId": "story:e43394504045d70a80ff40d3bdd6a902",
+            "kind": "records",
+            "resourceId": "player-production"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-80",
+          "expectedRevision": 80
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2024-12-22",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-81",
+          "expectedRevision": 81
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-78",
+          "expectedRevision": 82
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:065837245bece65bbd55b8e8c3c99a5f"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-79",
+          "expectedRevision": 83
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-01-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-80",
+          "expectedRevision": 84
+        },
+        {
+          "actorId": "player",
+          "kind": "StartAgentPreparation",
+          "payload": {
+            "deploymentId": "story:e43394504045d70a80ff40d3bdd6a902",
+            "kind": "drill",
+            "resourceId": "player-production"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-85",
+          "expectedRevision": 85
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-01-04",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-86",
+          "expectedRevision": 86
+        },
+        {
+          "actorId": "player",
+          "kind": "SetRelayOffer",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "offerKind": "low_margin",
+            "unitPriceFen": 10
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-81",
+          "expectedRevision": 87
+        },
+        {
+          "actorId": "player",
+          "kind": "SignRelayCustomers",
+          "payload": {
+            "audienceId": "rly:61f562c9b6bd00a8bcd683d9cf23222c",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "creditLimitFen": 0,
+            "mode": "prepaid",
+            "offerId": "rly:27dcef290ac6101c2bfec30c671ba0c0",
+            "personIds": [
+              "vid:e13c2aa9618c1ca2d51fb3d2c0cb0501",
+              "vid:468c9701ec424dd7a203b50c22d25a6f",
+              "vid:9447a17a8634df0ef138942503e423e7",
+              "vid:d06ff365ee9935321fe523b42ebadfc6"
+            ],
+            "termEnd": "2025-03-31"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-82",
+          "expectedRevision": 88
+        },
+        {
+          "actorId": "player",
+          "kind": "SignRelayCustomers",
+          "payload": {
+            "audienceId": "rly:61f562c9b6bd00a8bcd683d9cf23222c",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "creditLimitFen": 500000,
+            "mode": "postpaid",
+            "offerId": "rly:27dcef290ac6101c2bfec30c671ba0c0",
+            "personIds": [
+              "vid:9e61dfb532fc1cdc07e15f125a6c2789",
+              "vid:ca8433a7e3259cdb35cf1b620949b974"
+            ],
+            "termEnd": "2025-03-31"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-83",
+          "expectedRevision": 89
+        },
+        {
+          "actorId": "player",
+          "kind": "RechargeRelayCustomer",
+          "payload": {
+            "amountFen": 400000,
+            "customerId": "rly:f2da21c5392bd2a4d163fe9ecee14dc0"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-84",
+          "expectedRevision": 90
+        },
+        {
+          "actorId": "player",
+          "kind": "RechargeRelayCustomer",
+          "payload": {
+            "amountFen": 400000,
+            "customerId": "rly:b66291fc20e7f9075cd3a7d3b2fea6ff"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-85",
+          "expectedRevision": 91
+        },
+        {
+          "actorId": "player",
+          "kind": "RechargeRelayCustomer",
+          "payload": {
+            "amountFen": 400000,
+            "customerId": "rly:63a446c06e75b6fbbae4537d5c007b15"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-86",
+          "expectedRevision": 92
+        },
+        {
+          "actorId": "player",
+          "kind": "RechargeRelayCustomer",
+          "payload": {
+            "amountFen": 400000,
+            "customerId": "rly:b9c1dc599d368fec9cd2d5ce05979d30"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-87",
+          "expectedRevision": 93
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-01-20",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-88",
+          "expectedRevision": 94
+        },
+        {
+          "actorId": "player",
+          "kind": "AcknowledgeRelayMarket",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-89",
+          "expectedRevision": 95
+        },
+        {
+          "actorId": "player",
+          "kind": "StartRelayRequote",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "customerIds": [
+              "rly:f2da21c5392bd2a4d163fe9ecee14dc0",
+              "rly:b66291fc20e7f9075cd3a7d3b2fea6ff",
+              "rly:63a446c06e75b6fbbae4537d5c007b15",
+              "rly:b9c1dc599d368fec9cd2d5ce05979d30",
+              "rly:ab1cc6b96be45d4e8d0162c4dfff43cb",
+              "rly:4079f4436acc25f9915bb52748a1fbcd"
+            ],
+            "effectiveAt": "2025-01-28",
+            "offerKind": "managed_support",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2025-01-20",
+            "unitPriceFen": 6
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-90",
+          "expectedRevision": 96
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-01-27",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-91",
+          "expectedRevision": 97
+        },
+        {
+          "actorId": "player",
+          "kind": "AcknowledgeRelayMarket",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-92",
+          "expectedRevision": 98
+        },
+        {
+          "actorId": "player",
+          "kind": "StartRelayServicePeriod",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "customerIds": [
+              "rly:f2da21c5392bd2a4d163fe9ecee14dc0",
+              "rly:b66291fc20e7f9075cd3a7d3b2fea6ff",
+              "rly:63a446c06e75b6fbbae4537d5c007b15",
+              "rly:b9c1dc599d368fec9cd2d5ce05979d30",
+              "rly:ab1cc6b96be45d4e8d0162c4dfff43cb",
+              "rly:4079f4436acc25f9915bb52748a1fbcd"
+            ],
+            "deploymentId": "story:e43394504045d70a80ff40d3bdd6a902",
+            "maxSupplierCostFen": 1200000,
+            "maxUnits": 300000,
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2025-01-28",
+            "supplierIds": [
+              "cedar-direct"
+            ],
+            "supportMode": "assisted"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "normal-relay-93",
+          "expectedRevision": 99
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-03-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-100",
+          "expectedRevision": 100
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-101",
+          "expectedRevision": 101
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-04-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-102",
+          "expectedRevision": 102
+        },
+        {
+          "actorId": "player",
+          "kind": "StartRelayAudit",
+          "payload": {
+            "periodId": "rly:b8c5f3cadb0624a2fd1fbe15e74e5acf",
+            "resources": [
+              "player-production"
+            ],
+            "startAt": "2025-04-01"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-103",
+          "expectedRevision": 103
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-04-04",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-104",
+          "expectedRevision": 104
+        },
+        {
+          "actorId": "player",
+          "kind": "CorrectRelayPeriod",
+          "payload": {
+            "periodId": "rly:b8c5f3cadb0624a2fd1fbe15e74e5acf"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-105",
+          "expectedRevision": 105
+        },
+        {
+          "actorId": "player",
+          "kind": "CollectRelayDue",
+          "payload": {
+            "customerId": "rly:ab1cc6b96be45d4e8d0162c4dfff43cb"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-106",
+          "expectedRevision": 106
+        },
+        {
+          "actorId": "player",
+          "kind": "CollectRelayDue",
+          "payload": {
+            "customerId": "rly:4079f4436acc25f9915bb52748a1fbcd"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-107",
+          "expectedRevision": 107
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-06-30",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-108",
+          "expectedRevision": 108
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-07-01",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-109",
+          "expectedRevision": 109
+        },
+        {
+          "actorId": "player",
+          "kind": "SetHengxingAuthority",
+          "payload": {
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "cashLimitFen": 100000,
+            "consent": true,
+            "deploymentId": "story:e43394504045d70a80ff40d3bdd6a902",
+            "expiresAt": "2025-09-30",
+            "externalDelegation": true,
+            "level": "cross_flow",
+            "scopes": [
+              "relay_support",
+              "external_service_commitments"
+            ]
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-110",
+          "expectedRevision": 110
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-07-08",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-111",
+          "expectedRevision": 111
+        },
+        {
+          "actorId": "player",
+          "kind": "AcknowledgeStoryPause",
+          "payload": {
+            "instanceId": "story:049ad7c7be010df7672f3264f0b1861a"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-112",
+          "expectedRevision": 112
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2025-07-08",
+            "phase": "snapshot"
+          },
+          "runId": "normal-relay-content_employee-e9606bbe",
+          "commandId": "t14-command-113",
+          "expectedRevision": 113
+        }
+      ],
+      "expectedHash": "58bfc5a6580fe1e76c38217005d7088244e31da46ea2f6f56965d5d8efe95dd6",
+      "actualReplayHash": "58bfc5a6580fe1e76c38217005d7088244e31da46ea2f6f56965d5d8efe95dd6",
+      "result": "BYTE_EQUAL"
+    },
+    {
+      "file": "final-content-before-work.json",
+      "runId": "life-a28a49c4-500e-4289-9dd8-0ab42162351f",
+      "seed": "d03-native-content-art-1",
+      "revision": 1,
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "commands": [],
+      "expectedHash": "75185693108cdb5bfd3ccef3201acdcdb642a33e28a25f8c6aef45c43e81f76e",
+      "actualReplayHash": "75185693108cdb5bfd3ccef3201acdcdb642a33e28a25f8c6aef45c43e81f76e",
+      "result": "BYTE_EQUAL"
+    },
+    {
+      "file": "final-content-work-candidate.json",
+      "runId": "life-a28a49c4-500e-4289-9dd8-0ab42162351f",
+      "seed": "d03-native-content-art-1",
+      "revision": 2,
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "workspace",
+            "personId": null,
+            "reference": null
+          },
+          "runId": "life-a28a49c4-500e-4289-9dd8-0ab42162351f",
+          "commandId": "command-edb4bde9-ca9e-4159-87ba-e530aba76a0d",
+          "expectedRevision": 1
+        }
+      ],
+      "expectedHash": "0975d429538fc5bde2ae1858a62b8c251a141ea52a0782b58f61ae4a8dbe8698",
+      "actualReplayHash": "0975d429538fc5bde2ae1858a62b8c251a141ea52a0782b58f61ae4a8dbe8698",
+      "result": "BYTE_EQUAL"
+    },
+    {
+      "file": "final-content-old1-after-abort.json",
+      "runId": "life-a28a49c4-500e-4289-9dd8-0ab42162351f",
+      "seed": "d03-native-content-art-1",
+      "revision": 1,
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "commands": [],
+      "expectedHash": "75185693108cdb5bfd3ccef3201acdcdb642a33e28a25f8c6aef45c43e81f76e",
+      "actualReplayHash": "75185693108cdb5bfd3ccef3201acdcdb642a33e28a25f8c6aef45c43e81f76e",
+      "result": "BYTE_EQUAL"
+    },
+    {
+      "file": "final-content-physical-old1.json",
+      "runId": "life-a28a49c4-500e-4289-9dd8-0ab42162351f",
+      "seed": "d03-native-content-art-1",
+      "revision": 1,
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "commands": [],
+      "expectedHash": "75185693108cdb5bfd3ccef3201acdcdb642a33e28a25f8c6aef45c43e81f76e",
+      "actualReplayHash": "75185693108cdb5bfd3ccef3201acdcdb642a33e28a25f8c6aef45c43e81f76e",
+      "result": "BYTE_EQUAL"
+    },
+    {
+      "file": "final-content-retried2.json",
+      "runId": "life-a28a49c4-500e-4289-9dd8-0ab42162351f",
+      "seed": "d03-native-content-art-1",
+      "revision": 2,
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "workspace",
+            "personId": null,
+            "reference": null
+          },
+          "runId": "life-a28a49c4-500e-4289-9dd8-0ab42162351f",
+          "commandId": "command-edb4bde9-ca9e-4159-87ba-e530aba76a0d",
+          "expectedRevision": 1
+        }
+      ],
+      "expectedHash": "0975d429538fc5bde2ae1858a62b8c251a141ea52a0782b58f61ae4a8dbe8698",
+      "actualReplayHash": "0975d429538fc5bde2ae1858a62b8c251a141ea52a0782b58f61ae4a8dbe8698",
+      "result": "BYTE_EQUAL"
+    },
+    {
+      "file": "final-content-completed4.json",
+      "runId": "life-a28a49c4-500e-4289-9dd8-0ab42162351f",
+      "seed": "d03-native-content-art-1",
+      "revision": 4,
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "workspace",
+            "personId": null,
+            "reference": null
+          },
+          "runId": "life-a28a49c4-500e-4289-9dd8-0ab42162351f",
+          "commandId": "command-edb4bde9-ca9e-4159-87ba-e530aba76a0d",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-06",
+            "phase": "snapshot"
+          },
+          "runId": "life-a28a49c4-500e-4289-9dd8-0ab42162351f",
+          "commandId": "command-14edd0b6-a360-429a-82f3-0444d7c0f9a0",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-08",
+            "phase": "snapshot"
+          },
+          "runId": "life-a28a49c4-500e-4289-9dd8-0ab42162351f",
+          "commandId": "command-8eeea381-f4f6-489e-bd1b-17bc00af1b41",
+          "expectedRevision": 3
+        }
+      ],
+      "expectedHash": "5d2bf247aae3f3778a12ea6644bc9350e6bc104881f016f73b5b29494bbee88d",
+      "actualReplayHash": "5d2bf247aae3f3778a12ea6644bc9350e6bc104881f016f73b5b29494bbee88d",
+      "result": "BYTE_EQUAL"
+    },
+    {
+      "file": "final-content-after-portrait-error.json",
+      "runId": "life-a28a49c4-500e-4289-9dd8-0ab42162351f",
+      "seed": "d03-native-content-art-1",
+      "revision": 4,
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "workspace",
+            "personId": null,
+            "reference": null
+          },
+          "runId": "life-a28a49c4-500e-4289-9dd8-0ab42162351f",
+          "commandId": "command-edb4bde9-ca9e-4159-87ba-e530aba76a0d",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-06",
+            "phase": "snapshot"
+          },
+          "runId": "life-a28a49c4-500e-4289-9dd8-0ab42162351f",
+          "commandId": "command-14edd0b6-a360-429a-82f3-0444d7c0f9a0",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-08",
+            "phase": "snapshot"
+          },
+          "runId": "life-a28a49c4-500e-4289-9dd8-0ab42162351f",
+          "commandId": "command-8eeea381-f4f6-489e-bd1b-17bc00af1b41",
+          "expectedRevision": 3
+        }
+      ],
+      "expectedHash": "5d2bf247aae3f3778a12ea6644bc9350e6bc104881f016f73b5b29494bbee88d",
+      "actualReplayHash": "5d2bf247aae3f3778a12ea6644bc9350e6bc104881f016f73b5b29494bbee88d",
+      "result": "BYTE_EQUAL"
+    }
+  ],
+  "equality": [
+    {
+      "first": "final-life77-after-art-review.json",
+      "last": "final-life77-after-reload.json",
+      "byteEqual": true
+    },
+    {
+      "first": "final-risk114-after-review.json",
+      "last": "final-reader-risk114.json",
+      "byteEqual": true
+    },
+    {
+      "first": "final-content-before-work.json",
+      "last": "final-content-old1-after-abort.json",
+      "byteEqual": true
+    },
+    {
+      "first": "final-content-before-work.json",
+      "last": "final-content-physical-old1.json",
+      "byteEqual": true
+    },
+    {
+      "first": "final-content-work-candidate.json",
+      "last": "final-content-retried2.json",
+      "byteEqual": true
+    },
+    {
+      "first": "final-content-completed4.json",
+      "last": "final-content-after-portrait-error.json",
+      "byteEqual": true
+    }
+  ],
+  "evaluatedUniqueCommands": 286,
+  "cachePolicy": "Only identical full creation identity/version and full command envelopes share immutable evaluated prefixes. Every UI raw export is byte-equal to full replay. Original LF-bearing inputs are preserved and separately identified.",
+  "notCovered": [
+    "full24quarter_epilogue_T16",
+    "mobile_compatibility_M01",
+    "original_three_png_T17",
+    "human_playtest_T17",
+    "overall_goal_Q_X_acceptance",
+    "real_browser_FCP_load_budget"
+  ]
+}

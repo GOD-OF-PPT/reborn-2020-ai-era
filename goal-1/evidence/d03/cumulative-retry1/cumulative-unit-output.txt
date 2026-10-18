@@ -1,0 +1,28 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/story-agency.test.ts (8 tests | 8 skipped) 63236ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/story-agency.test.ts [ src/application/story-agency.test.ts ]
+Error: Hook timed out in 60000ms.
+If this is a long-running hook, pass a timeout value as the last argument or configure it globally with "hookTimeout".
+ ❯ src/application/story-agency.test.ts:14:1
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 77 passed (78)
+      Tests  487 passed | 8 skipped (495)
+   Start at  14:59:15
+   Duration  1495.01s (tests 98%, import 2%)
+
+    Isolate  78 workers spawned · ~256ms startup each (spawn + environment, per file)
+             at least ~19.70s faster with isolate: false — reuses workers across files instead of one per file
+
