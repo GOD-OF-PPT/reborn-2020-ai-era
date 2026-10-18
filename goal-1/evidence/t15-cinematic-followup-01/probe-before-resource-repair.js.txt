@@ -1,0 +1,102 @@
+/* Local, opt-in, read-only acceptance instrumentation. No telemetry or storage. */
+(() => {
+  if (!['127.0.0.1', 'localhost', '[::1]'].includes(location.hostname) || new URLSearchParams(location.search).get('performanceTest') !== 'startup-v1') return
+  const prefix = 'REBORN_STARTUP_METRICS_V1 '
+  const installedAtMs = performance.now()
+  const visibility = [{ atMs: installedAtMs, state: document.visibilityState }]
+  const paints = new Map()
+  const errors = []
+  let enabledActionObservedAtMs = null
+  let finished = false
+  let paintObserver = null
+  let domObserver = null
+  let timeoutId = null
+  let afterLoadId = null
+  const readPaints = () => {
+    for (const entry of performance.getEntriesByType('paint')) paints.set(entry.name, entry.startTime)
+  }
+  const navigation = () => performance.getEntriesByType('navigation')[0] ?? null
+  const observeAction = () => {
+    if (enabledActionObservedAtMs !== null) return
+    const button = document.querySelector('.home-actions > button.primary')
+    if (!(button instanceof HTMLButtonElement) || button.disabled) return
+    const rect = button.getBoundingClientRect()
+    if (rect.width > 0 && rect.height > 0) enabledActionObservedAtMs = performance.now()
+  }
+  const numeric = (entry, key) => typeof entry?.[key] === 'number' && Number.isFinite(entry[key]) ? entry[key] : null
+  const assetName = name => {
+    try {
+      const url = new URL(name, location.href)
+      return url.origin === location.origin && url.pathname.startsWith('/assets/') ? url.pathname.slice('/assets/'.length) : null
+    } catch { return null }
+  }
+  const finish = timedOut => {
+    if (finished) return
+    readPaints()
+    observeAction()
+    const nav = navigation()
+    const fcp = paints.get('first-contentful-paint') ?? null
+    const complete = fcp !== null && enabledActionObservedAtMs !== null && numeric(nav, 'loadEventEnd') > 0
+    if (!timedOut && !complete) return
+    finished = true
+    paintObserver?.disconnect()
+    domObserver?.disconnect()
+    window.clearTimeout(timeoutId)
+    window.clearTimeout(afterLoadId)
+    window.removeEventListener('load', onLoad)
+    document.removeEventListener('visibilitychange', onVisibility)
+    const resources = performance.getEntriesByType('resource').flatMap(entry => {
+      const name = assetName(entry.name)
+      return name === null ? [] : [{ name, initiatorType: entry.initiatorType, startTimeMs: entry.startTime, responseEndMs: entry.responseEnd, durationMs: entry.duration, transferSize: entry.transferSize, encodedBodySize: entry.encodedBodySize, decodedBodySize: entry.decodedBodySize }]
+    })
+    const background = document.querySelector('.home-story')
+    const sceneMatch = background ? getComputedStyle(background).backgroundImage.match(/url\(["']?([^"')]+)["']?\)/) : null
+    const sceneName = sceneMatch ? assetName(sceneMatch[1]) : null
+    const sceneResource = sceneName === null ? null : resources.find(entry => entry.name === sceneName) ?? null
+    const navFields = ['startTime', 'fetchStart', 'domainLookupStart', 'domainLookupEnd', 'connectStart', 'connectEnd', 'requestStart', 'responseStart', 'responseEnd', 'domInteractive', 'domContentLoadedEventEnd', 'domComplete', 'loadEventStart', 'loadEventEnd', 'transferSize', 'encodedBodySize', 'decodedBodySize']
+    const report = {
+      schema: 'reborn-startup-metrics-v1',
+      status: complete ? 'complete' : 'incomplete',
+      timedOut,
+      installedAtMs,
+      observedAtMs: performance.now(),
+      browser: navigator.userAgent,
+      viewport: { width: innerWidth, height: innerHeight, devicePixelRatio },
+      visibility,
+      firstPaintMs: paints.get('first-paint') ?? null,
+      firstContentfulPaintMs: fcp,
+      enabledActionObservedAtMs,
+      enabledActionDefinition: 'First diagnostic observation of an enabled, laid-out home primary action; not TTI or a paint timestamp.',
+      navigation: nav ? { type: nav.type, ...Object.fromEntries(navFields.map(key => [key, numeric(nav, key)])) } : null,
+      sceneResource,
+      sceneDefinition: 'Response timing of the active CSS scene asset only; not image decode or paint completion.',
+      resources,
+      paintObserverSupported: typeof PerformanceObserver !== 'undefined' && PerformanceObserver.supportedEntryTypes?.includes('paint') === true,
+      errors,
+      scope: 'Top-level localhost production document with explicit diagnostic overhead; browser cache and network are uncontrolled. No gameplay, storage, seed, private notes or complete URLs are recorded.'
+    }
+    console.info(prefix + JSON.stringify(report))
+  }
+  const tryFinish = () => finish(false)
+  const onLoad = () => { afterLoadId = window.setTimeout(tryFinish, 0) }
+  const onVisibility = () => {
+    if (visibility.length < 16) visibility.push({ atMs: performance.now(), state: document.visibilityState })
+    tryFinish()
+  }
+  try {
+    if (typeof PerformanceObserver !== 'undefined' && PerformanceObserver.supportedEntryTypes?.includes('paint')) {
+      paintObserver = new PerformanceObserver(list => {
+        for (const entry of list.getEntries()) paints.set(entry.name, entry.startTime)
+        tryFinish()
+      })
+      paintObserver.observe({ type: 'paint', buffered: true })
+    }
+  } catch { errors.push('PAINT_OBSERVER_UNAVAILABLE') }
+  domObserver = new MutationObserver(tryFinish)
+  domObserver.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['disabled'] })
+  window.addEventListener('load', onLoad, { once: true })
+  document.addEventListener('visibilitychange', onVisibility)
+  timeoutId = window.setTimeout(() => finish(true), 10000)
+  if (document.readyState === 'complete') onLoad()
+  else tryFinish()
+})()

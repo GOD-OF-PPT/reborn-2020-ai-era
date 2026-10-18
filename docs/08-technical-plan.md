@@ -112,3 +112,8 @@ T15按[人物、生活与年度合同34](34-people-life-year-contract.md)接入�
 Codec.#sealed在完整validateRun后复用原canonical body得到同一SHA；checksum成员不在最前时回原完整规范编码，仍核对最终UTF8上限。只有import自身原生JSON.parse的私有路径可在原assertJsonInput之后检查现有键序并尝试原生编码；对象键序不规范则回原算法，公开readEnvelope(unknown)保持保守路径。解析前后JSON数据不同或根checksum前缀不匹配时，仍按原parsed body计算SHA-256校验和。版本/严格shape/全部引用和状态不变量继续校验，既有坏档拒绝与旧档保留策略不变。
 
 兼容性守卫覆盖非规范输入顺序、Unicode与孤立代理码元、错误checksum/header，以及canonical UTF8扩张超过上限时的原错误优先级；原3个时限失败文件在原约束下23项复验通过。完整累计与新原生结果按[当前C2验证索引](../goal-1/evidence/d03-cinematic-c2/validation.md)和[任务记录](../goal-1/tasks.md)独立登记，不以编码微基准或一次Node准备链测量声称浏览器性能已验收。
+
+
+### T15电影版的本机首屏取证
+
+仅本机且显式performanceTest=startup-v1时，index加载独立public/diagnostics/startup-metrics-v1.js；默认游戏不加载/记录。浏览器原生Paint/Navigation/Resource时序与DOM主动作启用观察分列，只输出一次本地console，不接入SDK/遥测或存档、种子、私人备注、完整URL。缺项为null/不完整，场景responseEnd不等于图片绘制，实际DPR不充浏览器200%缩放。[本轮验证](../goal-1/evidence/t15-cinematic-followup-01/validation.md)包含原采样缺口/修缮、3份非受控缓存本机基线与文字模式，不能充通用性能预算或C15整体完成。

@@ -9,6 +9,15 @@
   <body>
     <div id="root"></div>
     <noscript>请启用JavaScript以打开本地游戏体验并使用本机存档。</noscript>
+    <script>
+      // Explicit local acceptance probe. Normal play loads no diagnostic resource.
+      if (['127.0.0.1', 'localhost', '[::1]'].includes(location.hostname) && new URLSearchParams(location.search).get('performanceTest') === 'startup-v1') {
+        const probe = document.createElement('script')
+        probe.src = '/diagnostics/startup-metrics-v1.js'
+        probe.async = true
+        document.head.append(probe)
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
