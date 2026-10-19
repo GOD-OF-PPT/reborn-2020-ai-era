@@ -1,0 +1,42 @@
+{
+  "checks": [
+    {
+      "step": "typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "seconds": 32.176
+    },
+    {
+      "step": "ui-tests",
+      "command": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/ui"
+      ],
+      "exitCode": 0,
+      "seconds": 5.077
+    },
+    {
+      "step": "production-build",
+      "command": [
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        ".delivery/d04-cinematic-interaction"
+      ],
+      "exitCode": 0,
+      "seconds": 29.38
+    }
+  ],
+  "allPassed": true,
+  "scope": "Current type/UI/build only; prior500/60 not rerun or claimed"
+}

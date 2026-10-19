@@ -1,0 +1,37 @@
+{
+  "observations": 40,
+  "passedRows": 37,
+  "retainedIntermediateFalse": [
+    {
+      "id": "real-illustration-fetch-failure",
+      "source": "source-freeze-final.json; fixed production5241; normal content run",
+      "checks": {
+        "failedIllustrationRemoved": false,
+        "fiveChoicesRemain": true,
+        "titleReadable": true,
+        "enterStillPresent": true,
+        "savedStillOne": true
+      }
+    },
+    {
+      "id": "original-production-illustration-intact",
+      "source": "source-freeze-final.json; fixed production5241; normal content run",
+      "checks": {
+        "sameUrl": false
+      }
+    },
+    {
+      "id": "c2-final-composition-1366",
+      "source": "source-freeze-c2.json; final fixed production5241, same original content run; C1 retained",
+      "checks": {
+        "target": false,
+        "fiveVisibleLabels": true,
+        "mainVisible": true,
+        "noOverflow": true,
+        "roomHotspots": true
+      }
+    }
+  ],
+  "currentFinalBusinessGates": "C2 text/normal desktop; C1 identical-TS interaction and paid-cancel; actual404 fallback; finalC2 full normal byte audit",
+  "notClaimed": "All historical observations green, native200/stay, mobile, fullgoal"
+}

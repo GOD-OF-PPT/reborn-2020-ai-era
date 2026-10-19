@@ -37,3 +37,56 @@
 /* Existing narrow-screen access is retained; mobile acceptance remains M01. */
 @media(max-width:1100px){.cinema-app .site-header{gap:14px}.cinema-app .main-navigation{gap:16px}.cinema-playing[data-screen=room] .run-bar{gap:14px}.cinema-playing[data-screen=room] .run-numbers{gap:14px}.room-next{min-width:210px}.room-hotspot small{max-width:140px}.cinema-app .route-grid>.opportunity-card{grid-template-columns:60px minmax(180px,1fr) minmax(180px,.7fr);gap:8px 18px}}
 @media(max-width:800px){.cinema-app .run-bar{width:92%;flex-wrap:wrap}.cinema-app .workbench-layout{width:92%}.cinema-app .workbench-main{padding:20px}.cinema-app .site-header{padding:10px 4%;gap:14px}.cinema-app .wordmark{font-size:19px}.cinema-app .main-navigation{gap:5px}.cinema-app .main-navigation button{font-size:11px}.cinema-app .main-navigation .route-mark{display:none}.cinema-playing[data-screen=room] .site-header{position:relative;background:#14292d}.cinema-playing[data-screen=room]>.run-bar{position:relative;top:auto;left:auto;width:92%;margin:auto;gap:10px;background:#14292d}.cinema-playing[data-screen=room] .run-bar label{max-width:160px}.cinema-playing[data-screen=room] .cinematic-stage{width:100%;aspect-ratio:auto;min-height:620px}.cinematic-stage>.room-backdrop img{object-fit:cover}.room-chapter{top:7%;max-width:70%}.room-chapter h1{font-size:27px}.room-hotspot{transform:translate(-25px,-10px);gap:6px}.room-hotspot strong{font-size:10px}.room-hotspot small{display:none!important}.room-hotspot>span:last-child{padding:6px}.room-hotspot .hotspot-diamond{width:15px;height:15px}.room-objects>.room-hotspot:nth-child(1){left:58%!important;top:43%!important}.room-objects>.room-hotspot:nth-child(2){left:28%!important;top:32%!important}.room-objects>.room-hotspot:nth-child(3){left:10%!important;top:48%!important}.room-objects>.room-hotspot:nth-child(4){left:18%!important;top:62%!important}.room-pocket{top:10%;right:3%;gap:10px}.room-pocket span{font-size:20px}.room-pocket button,.room-pocket a{font-size:9px}.room-narrative{bottom:8%;gap:13px;align-items:stretch;flex-direction:column;padding-top:14px}.room-narrative p{font-size:15px;margin:5px 0}.room-narrative small{font-size:10px}.room-next{max-width:none;display:flex;gap:10px;min-width:0}.room-next>.primary{font-size:10px;padding:9px 13px;flex:1;gap:10px}.room-next>.command{flex:1;align-self:center}.room-next .command>button{font-size:9px}.room-caption{font-size:8px}.room-responsibilities{width:92%;padding-top:25px}.room-commitment-list>article,.room-running-life{align-items:flex-start;flex-direction:column;gap:10px}.cinema-app .route-grid>.opportunity-card{grid-template-columns:40px 1fr;gap:10px 16px}.cinema-app .opportunity-card>.primary{grid-column:2;grid-row:4;max-width:none}.cinema-app .opportunity-card>.route-requirements{grid-column:2;grid-row:5}.cinema-app .opportunity-card>.section-heading{grid-row:1/5}.cinema-app .opportunity-card>h3{font-size:21px}.cinema-app .quarter-phases>button{padding:10px 13px;font-size:11px}.cinema-app .cinematic-chapter{min-height:165px;padding:25px 5%}.cinema-app .cinematic-chapter h1{font-size:24px}.cinema-entry .entry-card{padding:25px}.cinema-app .dialog{padding:22px}.cinema-entry .home-story .premise{font-size:21px}}
+
+/* D04: looking at an object changes the story's attention, never its state. */
+.room-exploration-guide{font-size:10px;color:#e0d6bc;letter-spacing:1px;margin-top:14px}
+.room-attention{position:absolute;z-index:-2;transform:translate(-50%,-50%);width:28%;aspect-ratio:1;background:radial-gradient(ellipse,#f8d29032,transparent 65%);pointer-events:none;mix-blend-mode:screen}
+.room-hotspot[data-inspected=true] .hotspot-diamond{background:#a4864c;box-shadow:0 0 0 8px #e1bb732b,0 0 35px #f8d39c40}
+.room-hotspot[data-inspected=true]>span:last-child{background:#193531e8;border-color:#ffe3a6}
+.room-hotspot[data-inspected=true] small{display:block}
+.room-narrative>div:first-child{min-width:0;flex:1}
+.room-narrative small{display:block}
+.room-narrative[data-inspecting=true] .narrative-speaker{color:#ffe1a1}
+.room-narrative[data-inspecting=true] p{color:#fff2d8}
+
+/* An open opportunity book, with every path within reach of the same spread. */
+.cinema-app[data-screen=routes] .cinematic-chapter{min-height:66px;padding-block:7px}
+.cinema-app[data-screen=routes] .cinematic-chapter h1{font-size:23px;margin:2px 0;letter-spacing:2px}
+.cinema-app[data-screen=routes] .cinematic-chapter .chapter-quote{font-size:12px}
+.cinema-app[data-screen=routes] .run-bar{padding:8px 18px}
+.cinema-app[data-screen=routes] .workbench-main{padding:20px 26px 26px}
+.cinema-app[data-screen=routes] .section-navigation{margin-bottom:12px;padding-bottom:10px}
+.cinema-app[data-screen=routes] .activity-message{font-size:11px;padding:6px 12px;margin-bottom:10px}
+.opportunity-book{display:grid;grid-template-columns:minmax(245px,.42fr) minmax(0,1fr);border:1px solid #bca77e;box-shadow:0 8px 28px #503e211a;background:#eee5d0}
+.opportunity-choices{padding:20px 15px;background:linear-gradient(90deg,#e7dbc0,#f0e6cf 93%,#d6c5a2);border-right:1px solid #b5a47a;min-width:0}
+.opportunity-choices>header{padding:0 13px 10px}.opportunity-choices .eyebrow{font-size:9px;color:#7a6744;letter-spacing:2px;margin:0 0 7px}
+.opportunity-choices h2{font:500 21px/1.5 var(--serif);letter-spacing:1px;margin:0 0 8px}
+.cinema-app .opportunity-choice{display:grid;grid-template-columns:20px 20px minmax(0,1fr) 12px;gap:9px;align-items:center;width:100%;text-align:left;min-height:61px;padding:10px 8px;background:transparent;border:0;border-block-end:1px solid #bca77755;color:#455249;position:relative;box-shadow:none}
+.opportunity-choice-number{font:14px Georgia;color:#958063}.opportunity-choice>.route-mark{width:20px;height:20px;color:var(--path-color,#6a7350)}
+.opportunity-choice strong{font:500 12px/1.6 system-ui;display:block;overflow-wrap:anywhere}.opportunity-choice small{font:10px/1.6 system-ui;display:block;color:#77715f;margin-top:2px}.opportunity-choice-arrow{opacity:0;color:#876b37;font-size:15px}
+.cinema-app .opportunity-choice:hover{background:#faf2dfaa;color:#263c31}
+.cinema-app .opportunity-choice[aria-pressed=true]{background:#354b42;color:#fff0cd;border-color:#354b42;box-shadow:inset 3px 0 #ddbb76,0 3px 10px #39432a18}
+.opportunity-choice[aria-pressed=true] :is(.route-mark,.opportunity-choice-number,small){color:#e4d7b3}.opportunity-choice[aria-pressed=true] .opportunity-choice-arrow{opacity:1;color:#f4d394}
+.path-a_share{--path-color:#667a4c}.path-ai_video{--path-color:#9a7248}.path-ai_course{--path-color:#587c7e}.path-api_relay{--path-color:#63718a}.path-deepseek_opportunity{--path-color:#7d6683}
+.opportunity-page{min-width:0;background:linear-gradient(100deg,#f2e8d2,#fff7e6);position:relative;animation:opportunity-page-reveal .22s ease-out both}
+@keyframes opportunity-page-reveal{from{opacity:.4;transform:translateX(6px)}to{opacity:1;transform:translateX(0)}}
+.opportunity-scene{height:88px;position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;justify-content:space-between;padding:12px 26px;background:#233c37;color:#f7e8c7}
+.opportunity-scene>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 58%;z-index:-2}
+.opportunity-scene:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#102a2ae8,#182c287a);pointer-events:none}
+.opportunity-folio{font-size:9px;letter-spacing:4px;color:#e4c78d}.opportunity-scene p{font:500 18px/1.7 var(--serif);letter-spacing:1px;margin:7px 0 0}.opportunity-scene>.route-mark{width:48px;height:48px;flex:none;opacity:.5;color:#f4d49c;margin-left:18px}
+.opportunity-page-body{padding:16px 26px}.opportunity-page-heading{display:flex;justify-content:space-between;align-items:baseline;gap:15px;flex-wrap:wrap}
+.opportunity-page-heading h3{font:500 24px/1.5 var(--serif);letter-spacing:1px;margin:0;color:#314b3f}.opportunity-readiness{font-size:10px;color:#7e6a42;border-block-end:1px solid #bfa56b;padding-bottom:3px;white-space:nowrap}
+.opportunity-preparation{font-size:12px;line-height:1.9;color:#5f6659;margin:5px 0 10px;min-height:23px}
+.opportunity-milestones{list-style:none;padding:0 0 10px;margin:0;display:flex;gap:15px;flex-wrap:wrap;border-bottom:1px solid #c3b18d77}.opportunity-milestones li{font-size:11px;line-height:1.7;color:#445b4e;display:flex;align-items:center;gap:6px}.opportunity-milestones span{font:10px Georgia;color:#a38a56}
+.opportunity-money{display:flex;flex-wrap:wrap;gap:18px 40px;margin:14px 0}.opportunity-money>div{display:grid;gap:4px}.opportunity-money dt{font-size:10px;color:#76725e}.opportunity-money dd{margin:0;font:21px Georgia;color:#374d40;font-variant-numeric:tabular-nums}
+.opportunity-boundaries{border-top:1px solid #c3b18d77;padding-top:10px;font-size:12px;line-height:1.9}.opportunity-boundaries summary{font-size:11px;cursor:pointer;color:#5e674e}.opportunity-boundaries p{margin:10px 0}.opportunity-boundaries .warning-box{padding:10px;font-size:12px}
+.opportunity-enter{border-top:1px solid #c3b18d77;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;padding-top:10px}.opportunity-enter>span{font:11px/1.7 var(--serif);color:#817452}.opportunity-enter .primary{padding:11px 16px;font-size:12px;display:flex;justify-content:space-between;gap:18px;align-items:center;max-width:100%;overflow-wrap:anywhere}.opportunity-enter .primary>span{font-size:18px;font-weight:400}
+.opportunity-afterword{font-size:11px;line-height:1.9;color:#6b6c5c;margin:14px 0 0}
+.cinema-app.text-mode .room-attention{display:none}
+.cinema-app.text-mode .opportunity-scene{background:#233c37}
+
+/* Keep the title column when text mode removes decorative SVG children. */
+.opportunity-choice-number{grid-column:1;grid-row:1}
+.opportunity-choice>.route-mark{grid-column:2;grid-row:1}
+.opportunity-choice>span:nth-last-child(2){grid-column:3;grid-row:1}
+.opportunity-choice-arrow{grid-column:4;grid-row:1}

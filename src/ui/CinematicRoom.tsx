@@ -1,4 +1,4 @@
-import type {Ref} from 'react'
+import {useState,type Ref} from 'react'
 import type {GamePanelProps} from './game-types.ts'
 import type {Screen} from './Navigation.tsx'
 import type {LifePerson} from '../core/life-schema.ts'
@@ -13,8 +13,17 @@ import {moneyText,playableThrough} from './game-text.ts'
 
 type Props=GamePanelProps&{headingRef:Ref<HTMLHeadingElement>;notice:string|null;onNavigate:(screen:Screen)=>void;onPeople:(id?:LifePerson)=>void;onYear:()=>void}
 const spots=[['routes','电脑 · 经营','新的机会，都从一次尝试开始。',76,49],['quarter','门外 · 安排','工作与时间，仍由你决定。',37,40],['memory','书架 · 记忆','记得趋势，不是答案。',22,48],['life','床边 · 生活','也留一些时间，给自己。',21,65]] as const
+type Spot=typeof spots[number][0]
+const inspection:Record<Spot,{speaker:string;line:string;hint:string}>={
+ routes:{speaker:'目光所至 · 电脑',line:'一台电脑，也可能是一条新的路。',hint:'翻看五条路线，了解眼下的门槛。真正投入资金或时间前，仍由你另行确认。'},
+ quarter:{speaker:'目光所至 · 门外',line:'门外的日子，等你重新安排。',hint:'保留工作、为未来准备，或留些时间休整。每一项安排，都要用真实的日子去完成。'},
+ memory:{speaker:'目光所至 · 书架',line:'有些未来，还只是模糊的片段。',hint:'翻开记忆与已经发生的新闻。阅读不会推进时间，也不会替你作出决定。'},
+ life:{speaker:'目光所至 · 床边',line:'这一次，也记得照顾自己的生活。',hint:'看看生活、人物与已经答应的事。休整和改善环境，需要你决定何时付诸行动。'},
+}
 
 export function CinematicRoom(p:Props){
+ const [hovered,setHovered]=useState<Spot|null>(null),[focused,setFocused]=useState<Spot|null>(null)
+ const inspected=hovered??focused,spot=spots.find(([screen])=>screen===inspected),look=inspected?inspection[inspected]:null
  const {view,features:f}=p,w=f.workbench
  const forced=w.events.filter(e=>e.presentation!=='ordinary'||e.isBlocking)
  const debts=w.finance.flatMap(a=>a.obligations.filter(o=>o.remainingFen>0&&o.date<=view.date))
@@ -35,11 +44,12 @@ export function CinematicRoom(p:Props){
   <section className="cinematic-stage" aria-label="可探索的住处">
    {!p.textOnly?<RoomBackdrop improved={f.life.scene.workspaceCompleted}/>:null}
    <div className="room-vignette" aria-hidden="true"/>
-   <header className="room-chapter"><p className="eyebrow">{w.quarter} / 你的人生</p><h1 ref={p.headingRef} tabIndex={-1}>{view.date==='2020-01-01'?<>如果人生，<br/>可以再来一次。</>:<>日子还在向前，<br/>选择由你。</>}</h1></header>
-   <nav className="room-objects" aria-label="探索住处">{spots.map(([screen,label,hint,x,y])=><button type="button" className="room-hotspot" key={screen} style={{left:x+'%',top:y+'%'}} onClick={()=>p.onNavigate(screen)}><span className="hotspot-diamond" aria-hidden="true"/><span><strong>{label}</strong><small>{hint}</small></span></button>)}</nav>
+   {spot?<div className="room-attention" aria-hidden="true" style={{left:spot[3]+'%',top:spot[4]+'%'}}/>:null}
+   <header className="room-chapter"><p className="eyebrow">{w.quarter} / 你的人生</p><h1 ref={p.headingRef} tabIndex={-1}>{view.date==='2020-01-01'?<>如果人生，<br/>可以再来一次。</>:<>日子还在向前，<br/>选择由你。</>}</h1><p className="room-exploration-guide">悬停或聚焦物件，发现下一步</p></header>
+   <nav className="room-objects" aria-label="探索住处">{spots.map(([screen,label,hint,x,y])=><button type="button" className="room-hotspot" key={screen} style={{left:x+'%',top:y+'%'}} aria-label={label} aria-describedby={inspected===screen?'room-inspection-copy':undefined} data-inspected={inspected===screen?'true':undefined} onPointerEnter={()=>setHovered(screen)} onPointerLeave={()=>setHovered(null)} onFocus={()=>{setFocused(screen);setHovered(null)}} onBlur={()=>setFocused(null)} onClick={()=>p.onNavigate(screen)}><span className="hotspot-diamond" aria-hidden="true"/><span><strong>{label}</strong><small>{hint}</small></span></button>)}</nav>
    <nav className="room-pocket" aria-label="随身记录"><button type="button" onClick={()=>p.onPeople()}><span aria-hidden="true">♧</span>人物</button><button type="button" onClick={p.onYear}><span aria-hidden="true">▤</span>年度</button><a href="#room-responsibilities"><span aria-hidden="true">◷</span>桌上待办{urgent+commitmentRows.length>0?<b>{urgent+commitmentRows.length}</b>:null}</a></nav>
    {p.notice?<p className="room-action-note" role="status">{p.notice}</p>:null}
-   <footer className="room-narrative"><div><span className="narrative-speaker">你 · 内心独白</span><p>{f.life.scene.workspaceCompleted?'桌椅与照明已经改善，投入成了每天用得上的东西。':view.date==='2020-01-01'?'你在旧房间醒来。电脑还亮着，日历回到了2020年。':'窗外是熟悉的城市，生活与新的机会仍在继续。'}</p><small>{w.pause?'有一件需要先面对的事。看看桌上待办，再决定如何继续。':w.progression.requiresDelivery?'作品已经完成。下一步，仍要由你决定是否提交。':w.atQuarterEnd?'这一季留下了自己的结果，旧承诺仍会延续。':'一切，都从眼前的一个选择开始。'}</small></div><div className="room-next"><button type="button" className="primary" onClick={()=>p.onNavigate('quarter')}>{w.progression.requiresDelivery?'处理这份交付':'安排本季的生活'} <span aria-hidden="true">→</span></button>{canAdvance?<CommandButton {...p} kind="AdvanceTime" payload={{date:nextDate}} label={(w.progression.nextQuarterDate?'进入下一季 · ':'推进下一节点 · ')+nextDate} confirm/>:null}</div></footer>
+   <footer className="room-narrative" data-inspecting={look?'true':undefined}><div id="room-inspection-copy"><span className="narrative-speaker">{look?.speaker??'你 · 内心独白'}</span><p>{look?.line??(f.life.scene.workspaceCompleted?'桌椅与照明已经改善，投入成了每天用得上的东西。':view.date==='2020-01-01'?'你在旧房间醒来。电脑还亮着，日历回到了2020年。':'窗外是熟悉的城市，生活与新的机会仍在继续。')}</p><small>{w.pause?'有一件需要先面对的事。看看桌上待办，再决定如何继续。':w.progression.requiresDelivery?'作品已经完成。下一步，仍要由你决定是否提交。':look?.hint??(w.atQuarterEnd?'这一季留下了自己的结果，旧承诺仍会延续。':'一切，都从眼前的一个选择开始。')}</small></div><div className="room-next"><button type="button" className="primary" onClick={()=>p.onNavigate('quarter')}>{w.progression.requiresDelivery?'处理这份交付':'安排本季的生活'} <span aria-hidden="true">→</span></button>{canAdvance?<CommandButton {...p} kind="AdvanceTime" payload={{date:nextDate}} label={(w.progression.nextQuarterDate?'进入下一季 · ':'推进下一节点 · ')+nextDate} confirm/>:null}</div></footer>
    <p className="room-caption"><span>{f.life.scene.workspaceCompleted?'已改善的住处':'普通出租屋'} · {view.date}</span><span>模拟市场 / 明确架空股权</span></p>
   </section>
   <section id="room-responsibilities" className="room-responsibilities" aria-label="桌上全部待办与持续责任"><header className="section-heading"><div><p className="eyebrow">别忘了，已经答应的事</p><h2>桌上，还有这些牵挂。</h2></div><button type="button" onClick={()=>p.onNavigate('quarter')}>打开本季安排 →</button></header>
