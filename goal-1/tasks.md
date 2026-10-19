@@ -264,6 +264,8 @@ T15原轮内部顺序（记录保留；现先执行D03，移动专项后置M01�
 
 - Chrome实际连接后的补验进展：用户“chrome设置完毕请再次尝试”后实际连入Chrome extension/browser3，旧不可用审计是之前事实，ee420c中的blocked仅为请求，更新前环境已改变，goal保持active。按[Chrome计划](t15-chrome-native-plan.md)完成[阶段验证](evidence/t15-chrome-native-a-01/validation.md)：两正常背景实际新局、真实3000元/1点/7日head.put后abort、10份可见导出完整正常前缀逐字重放（5个同旧1上的未保存替代命令，非五次提交采购）、四份旧物理/已保存导出fd73原字节同；294源与生产36资源保持。本次原生beforeunload opening/hasBrowserHandler及closed true已有真实Chrome事件，但取消前离开已被接受，响应方未核定，原生“留在”未通过；正式接口/立即处理/普通同源reload的原结果保留，不冒充取消或完整原生验收。原生zoom最后为1，快捷键未改，1280布局覆盖已reset，不冒充200%。已备份第五个候选2e/旧1，异步请求用户亲自设Chrome菜单200%及刷新选留在；操作后的事件/原字节仍待核实。Chrome正常住处图已目检，A美术保持；没有游戏/规则/素材/版本或依赖修缮，不重跑旧500/60当新执行。[杠精审查] 已验证子范围通过，T15/C15仍不勾，完整目标/移动末位不变。REPEAT复用正常前缀/源冻结/截图/原字节记录，Chrome专用读取仍只读产品可见textarea，无新Skill/代理/自动化。阶段检查点a1c1891408e652fa3f3b149574c99a10c9414eeb已提交；[提交后保护](evidence/t15-chrome-native-a-01-post-commit/post-commit-check.json)核对59文件原SHA/Git blob、两入口拒写与294源不变，PUBLIC远端main仍9bf4399，未推送。完成记录另行提交；新人工结果用A02新目录，不追加已提交A01 journal。
 
+- Chrome原生待验第2轮只读审计：[本轮观察](evidence/t15-chrome-native-a-02/audit.json)确认生产原生zoom仍1；DEV游标264之后没有新的原生离页opening/closed，读到270、hasMore/truncated均false，尚未收到人工结果。上一轮是Chrome实测与归档进展，本轮只是no progress审计，不冒充实际等待作业或新增验收通过；当前同一缺口连续2轮，保留active，未到3轮blocked阈值，不复用旧Chrome不可用计数。两个标签已再次handoff保留，没有刷新/重做付费/改视口或候选；候选E只按原A01备份记录，不声称本轮已导出核定。294源及58份前检查点保护文件原字节保持；未运行旧500/60。[杠精审查] 通过（如实只读审计范围），T15/C15仍未勾，完整任务/美术优先/移动末位保留；REPEAT复用原工具，无新Skill/代理/自动化。新人工结果继续写新A03目录，不向已提交A01/A02追加。
+
 ### T16
 
 - 实际工作：
