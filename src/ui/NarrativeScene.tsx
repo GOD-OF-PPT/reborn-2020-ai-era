@@ -1,5 +1,6 @@
 import {useState,type Ref} from 'react'
 import {Dialog} from './Dialog.tsx'
+import {SceneEcho,type EchoFrame} from './SceneEcho.tsx'
 import {ScreenBook} from './ScreenBook.tsx'
 import type {GamePanelProps} from './game-types.ts'
 import type {Screen} from './Navigation.tsx'
@@ -15,7 +16,7 @@ type Props=GamePanelProps&{
  screen:Screen;headingRef:Ref<HTMLHeadingElement>;personId:LifePerson
  onPerson:(id:LifePerson)=>void;onOpen:(screen?:Screen)=>void
  onPeople:()=>void;onYear:()=>void;onNavigate:(screen:Screen)=>void
- receipt:string|null;onDismissReceipt?:()=>void
+ receipt:string|null;echoFrame?:EchoFrame|null;onDismissReceipt?:()=>void
 }
 const stories:Record<Exclude<Screen,'room'|'routes'>,{overline:string;title:string;line:string;open:string}>={
  quarter:{overline:'这一季 / 把日子重新握在手里',title:'从眼前的一件事开始。',line:'工作、一个小单，或者留给自己的时间。你不必同时抓住所有机会。',open:'翻开本季日历'},
@@ -87,7 +88,7 @@ export function NarrativeScene(p:Props){
   </div>
   </ScreenBook>
 
-  {p.receipt?<aside className="scene-receipt" role="status"><span>这一笔，已经记下。</span><p>{p.receipt}</p>{p.screen!=='life'?<small>开始、完成、客户验收和实际到账，仍按原日期发生。</small>:null}<button type="button" onClick={p.onDismissReceipt}>继续选择 →</button></aside>:null}
+  {p.receipt?<SceneEcho text={p.receipt} frame={p.echoFrame??null} onClose={()=>p.onDismissReceipt?.()} accountName={id=>id==='personal'?'个人账户':w.routes.find(r=>r.accountId===id)?.name??'企业账户'}/>:null}
   <footer className="scene-turn"><div><button type="button" className="scene-text-action" onClick={()=>p.onOpen('quarter')}>日历上的牵挂{commitmentCount>0?' · '+commitmentCount:''} ↗</button>{p.screen==='life'?<button type="button" className="scene-text-action" onClick={p.onYear}>回看年度胶片 ↗</button>:null}<button type="button" className="scene-text-action" onClick={()=>p.onOpen()}>细看这一幕的安排 ↗</button></div>{canAdvance?<CommandButton {...p} kind="AdvanceTime" payload={{date:next}} label={(w.progression.nextQuarterDate?'走进下一季 · ':'让日子向前 · ')+next} confirm/>:<button type="button" onClick={()=>p.onOpen('quarter')}>{w.progression.requiresDelivery?'先面对这份交付':view.date===playableThrough&&w.atQuarterEnd?'回看最后一季':'看看停在了哪件事'}</button>}</footer>
  </section>
 }

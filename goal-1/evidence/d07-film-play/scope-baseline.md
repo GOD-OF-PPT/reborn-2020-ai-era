@@ -1,0 +1,1 @@
+D07 starts at dd3e3155f843f7f0e101b659b21db31b9322286e after T16 documentation-only investigation. Opening tracked SHA256 map: ../t16-campaign/opening-baseline.json. Before image copied from the read-only Chrome 5260 capture. Original goal input and sealed earlier evidence must remain unchanged. New asset generated before source changes.
