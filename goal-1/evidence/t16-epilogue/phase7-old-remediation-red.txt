@@ -1,0 +1,33 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/application/deepseek.test.ts -t old rejected contract --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/deepseek.test.ts (8 tests | 1 failed | 7 skipped) 1037ms
+   × an old rejected contract can schedule paid remediation today in closing, while normal new work still starts later 1032ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/deepseek.test.ts > an old rejected contract can schedule paid remediation today in closing, while normal new work still starts later
+RuleError: ECO_FUTURE_START_REQUIRED
+ ❯ requireRule src/core/errors.ts:12:25
+     10|
+     11| export function requireRule(condition: unknown, code: string): asserts…
+     12|   if (!condition) throw new RuleError(code)
+       |                         ^
+     13| }
+     14|
+ ❯ DeepseekRuntime.#pair src/core/deepseek.ts:34:313
+ ❯ DeepseekRuntime.inspect src/core/deepseek.ts:48:491
+ ❯ src/application/deepseek.test.ts:23:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 7 skipped (8)
+   Start at  01:50:30
+   Duration  3.32s (tests 38%, import 30%, transform 29%, worker 2%)
+

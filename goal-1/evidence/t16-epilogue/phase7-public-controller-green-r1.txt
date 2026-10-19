@@ -1,0 +1,40 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/application/epilogue.test.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/epilogue.test.ts (7 tests | 2 failed) 153899ms
+   × requires an actual complete 24-quarter snapshot and current review before entering 8013ms
+   × personal zero cash does not erase the old principal, fee or living debt 10531ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/epilogue.test.ts > requires an actual complete 24-quarter snapshot and current review before entering
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/application/epilogue.test.ts:29:1
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/application/epilogue.test.ts > personal zero cash does not erase the old principal, fee or living debt
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/application/epilogue.test.ts:57:1
+     55| },120000)
+     56|
+     57| it('personal zero cash does not erase the old principal, fee or living…
+       | ^
+     58|  const h=new StoryHarness({priorRun:unfunded});expect(accountFunds(h.r…
+     59|  h.send('AdvanceEpilogueTime',{date:'2026-01-01'});expect(accountFunds…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 5 passed (7)
+   Start at  01:19:28
+   Duration  155.78s (tests 99%)
+

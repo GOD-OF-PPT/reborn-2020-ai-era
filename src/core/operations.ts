@@ -1,3 +1,4 @@
+import {operatingId} from './operations-calendar.ts'
 import { addDays, monthEnd, quarterOf } from './calendar.ts'
 import { applyEconomy, actionBudget, type EconomyOperation } from './economy.ts'
 import { obligationPaymentCapacity,accountFunds, metricsFor, contractBalance } from './ledger.ts'
@@ -14,7 +15,7 @@ import type { OperationsCatalog, OperationsState, OperatingContext, OperatingMod
 import { operatingAccruals } from './operations-accrual.ts'
 import { assertOperations } from './operations-validation.ts'
 
-export const operatingId=(...parts:string[])=>`ops:${hashValue(parts).slice(0,32)}`
+export {operatingId} from './operations-calendar.ts'
 const stateOf=(m:OperatingContext):OperationsState=>{requireRule(m.operations,'OPERATIONS_NOT_CONFIGURED');return m.operations}
 const dateOf=(m:RuleModel)=>m.timeline.cursor.date
 const employmentStart=(m:OperatingContext,date:string)=>date===monthEnd(date)&&m.cursor&&m.cursor.phase!=='before'&&m.cursor.phase!=='world_update'?addDays(date,1):date
@@ -64,7 +65,7 @@ export class OperationsRuntime implements RuntimeExtension {
  }
  #qualification(m:OperatingContext,b:BusinessInstance,from:string,to:string):void {for(let date=from;date<=dayBefore(to);date=addDays(date,1))requireRule(this.#definition(b).capabilities.every(id=>this.#capabilities(m,id,date).length===0),'BUSINESS_QUALIFICATION_REQUIRED')}
  #jobCheck(m:OperatingContext,b:BusinessInstance,definitionId:string,resources:readonly string[],from:string,date:string,exclude:string|null=null):void {
-  const d=this.catalog.jobs.find(j=>j.id===definitionId);requireRule(d&&d.routes.includes(b.route),'JOB_NOT_AVAILABLE');if(d.purpose==='production')this.#qualification(m,b,from,addDays(from,d.durationDays));requireRule(from>=date&&from<='2025-12-31','CANNOT_BACKDATE_JOB');requireRule(resources.length===1&&new Set(resources).size===resources.length,'INVALID_JOB_RESOURCES')
+  const d=this.catalog.jobs.find(j=>j.id===definitionId);requireRule(d&&d.routes.includes(b.route),'JOB_NOT_AVAILABLE');if(d.purpose==='production')this.#qualification(m,b,from,addDays(from,d.durationDays));requireRule(from>=date&&(from<='2025-12-31'||m.economy.tailQuarterLock==='2025-Q4'&&from===date),'CANNOT_BACKDATE_JOB');requireRule(resources.length===1&&new Set(resources).size===resources.length,'INVALID_JOB_RESOURCES')
   const to=addDays(from,d.durationDays);this.jobConstraint(m,definitionId,from,to,exclude??undefined,b.id)
   for(const resource of resources){requireRule(remainingCapacity(m,resource,from,to,exclude)>=1,'INSUFFICIENT_CAPACITY');if(resource!=='player-production'){const w=stateOf(m).workers.find(w=>w.id===resource);const wd=this.catalog.workers.find(wd=>wd.id===w?.definitionId);requireRule(wd?.skills.includes(d.skill),'WORKER_SKILL_MISMATCH')}else if(d.skill!=='general')requireRule(this.#capabilities(m,d.skill,date).length===0,'PLAYER_SKILL_REQUIRED')}
   const old=exclude?m.economy.actions.find(a=>a.definition.id===stateOf(m).jobs.find(j=>j.id===exclude)?.actionId):null
@@ -74,7 +75,7 @@ export class OperationsRuntime implements RuntimeExtension {
  }
  inspect(m:OperatingContext,intent:OperatingIntent,date:string){
   const s=stateOf(m);let points=0,cost=0
-  requireRule(m.phase===undefined||m.phase==='playing'||['PayObligation','SubmitDelivery','CancelContract','WindDownBusiness','CloseBusiness','DismissWorker','InterruptJob','QuitWork','DeclineOffer','SkipOffer'].includes(intent.kind),'RUN_NOT_PLAYING')
+  requireRule(m.phase===undefined||m.phase==='playing'||['PayObligation','FundBusiness','DistributeProfit','SubmitDelivery','CancelContract','WindDownBusiness','CloseBusiness','DismissWorker','InterruptJob','RescheduleJob','QuitWork','DeclineOffer','SkipOffer'].includes(intent.kind),'RUN_NOT_PLAYING')
   switch(intent.kind){
    case 'WorkQuarter':{requireRule(quarterOf(employmentStart(m,date))===quarterOf(date),'NEXT_QUARTER_CONFIRMATION_REQUIRED');const p=s.employment.find(p=>p.quarter===quarterOf(date));requireRule(!p||p.segments.every(seg=>seg.to!==null&&seg.to<=date),'ALREADY_WORKING');points=p?0:2;requireRule(actionBudget(m.economy,date).available>=points,'INSUFFICIENT_ACTION_POINTS');break}
    case 'QuitWork':requireRule(s.employment.some(p=>date<p.limit&&p.segments.some(seg=>seg.to===null)),'NOT_EMPLOYED');break

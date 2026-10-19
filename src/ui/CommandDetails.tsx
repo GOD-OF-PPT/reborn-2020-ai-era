@@ -1,5 +1,6 @@
 import {StoryCommandDetails} from './StoryCommandDetails.tsx'
 import {LifeCommandDetails} from './LifeCommandDetails.tsx'
+import {JourneyCommandDetails} from './JourneyCommandDetails.tsx'
 import type {CommandEnvelope} from '../core/run-types.ts'
 import type {CommandPreview} from '../core/commands.ts'
 import type {PlayFeatures,PlayingView} from './game-types.ts'
@@ -13,6 +14,7 @@ export function CommandDetails({command,confirm,features,view,accountName}:{comm
  const openRoute=command.kind==='OpenCourseStudio'?'ai_course':command.kind==='OpenRelayStation'?'api_relay':command.kind==='OpenEcosystemService'?'deepseek_opportunity':null,opening=features.workbench.routes.find(r=>r.id===openRoute)
  const c=typeof p.contractId==='string'?features.deepseek?.contracts.find(c=>c.id===p.contractId):undefined
  return <>
+ <JourneyCommandDetails command={command} features={features}/>
  <StoryCommandDetails command={command} confirm={confirm} features={features} view={view} accountName={accountName}/>
  <LifeCommandDetails command={command} confirm={confirm} features={features} view={view}/>
  {command.kind==='FundBusiness'||command.kind==='DistributeProfit'?<section className="confirmation-context"><h3>本次转账不产生一份新利润</h3><p>{command.kind==='FundBusiness'?'个人账户 → '+(business?accountName(business.accountId):'指定企业账户'):(business?accountName(business.accountId):'指定企业账户')+' → 个人账户'}，实际金额{moneyText(typeof p.amountFen==='number'?p.amountFen:null)}。转入资金不计业务收入，已确认利润也不等于当前可分配现金。</p></section>:null}

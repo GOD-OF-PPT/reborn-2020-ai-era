@@ -1,3 +1,4 @@
+import {tailCostPreview} from './tail-cost-preview.ts'
 import {JOURNEY_CONTENT} from '../content/journey.ts'
 import {hashValue} from './hash.ts'
 import {requireRule} from './errors.ts'
@@ -6,6 +7,8 @@ import {journeyCatalogSchema,journeyStateSchema,type JourneyState} from './journ
 import type {RunOperation} from './content-types.ts'
 import type {GameRun,RuleModel} from './run-types.ts'
 import type {OperatingModel} from './operations-types.ts'
+import {assertJourneyTransitions,canEnterEpilogue,nextTailDate,reviewFingerprint} from './epilogue.ts'
+import {assertTailBilling} from './tail-billing.ts'
 
 export function journeyCauseSpecs(before:JourneyState|null,after:JourneyState|null){
  const sources=(s:JourneyState|null)=>s?.quarters.flatMap(q=>[...(q.openSourceId.startsWith('journey:')?[{source:q.openSourceId,date:q.openedAt,quarter:q.quarter,type:'开启'}]:[]),...(q.closeSourceId&&q.closedAt?[{source:q.closeSourceId,date:q.closedAt,quarter:q.quarter,type:'走过'}]:[])])??[]
@@ -28,7 +31,7 @@ export class JourneyRuntime {
   return {state:{...model,journey:{...s,quarters}}}
  }
  validate(run:GameRun){
-  if(run.journey===null){requireRule(run.origin==='fixture'&&run.phase==='playing','JOURNEY_REQUIRED');return}
+  if(run.journey===null){requireRule(run.origin==='fixture'&&run.economy.tailQuarterLock===undefined,'JOURNEY_REQUIRED');return}
   const parsed=journeyStateSchema.safeParse(run.journey);requireRule(parsed.success,'INVALID_JOURNEY_STATE');const s=parsed.data
   requireRule(s.catalogVersion===this.catalog.version&&s.catalogHash===this.hash,'JOURNEY_CATALOG_MISMATCH')
   const creation=run.receipts[0];requireRule(creation?.kind==='CreateRun','JOURNEY_CREATION_REQUIRED')
@@ -47,11 +50,11 @@ export class JourneyRuntime {
   const specs=journeyCauseSpecs(null,s),causeIds=new Set(specs.map(c=>c.id))
   for(const spec of specs){const cause=run.causes.find(c=>c.id===spec.id),clock=run.receipts.find(r=>r.commandId===cause?.commandId);requireRule(cause&&clock&&['AdvanceTime','RunRoutineStep'].includes(clock.kind)&&clock.causeIds.includes(spec.id)&&clock.date>=spec.date&&run.receipts[clock.revisionBefore-1]!.date<=spec.date&&hashValue({...cause,commandId:''})===hashValue({...spec,commandId:''}),'JOURNEY_CLOCK_SOURCE_MISSING')}
   for(const r of run.timeline.receipts.filter(r=>r.instanceId.startsWith('journey:')))requireRule(r.pauseReason===null&&r.skippedReason===undefined,'JOURNEY_TIMER_RESULT_MISMATCH')
-  requireRule(run.causes.filter(c=>c.domain==='journey').every(c=>causeIds.has(c.id)),'ORPHAN_JOURNEY_CAUSE')
-  requireRule(s.epilogue===null&&s.endings.length===0&&s.resumes.length===0&&run.phase==='playing','JOURNEY_PHASE_SOURCE_MISMATCH')
+  requireRule(run.causes.filter(c=>c.domain==='journey').every(c=>causeIds.has(c.id)||c.id==='cause:'+c.commandId&&run.receipts.some(r=>r.commandId===c.commandId&&['EnterEpilogue','AdvanceEpilogueTime','FinishJourney','ResumeEpilogue'].includes(r.kind)&&r.causeIds.includes(c.id)&&r.summary===c.visibleSummary)),'ORPHAN_JOURNEY_CAUSE')
+  assertJourneyTransitions(run);assertTailBilling(run)
  }
 }
 
 export function projectJourney(run:GameRun,runtime:JourneyRuntime){
- const s=run.journey;return s?{classification:'fictional' as const,asOf:run.timeline.cursor.date,phase:run.phase,chapters:s.quarters.map(q=>({...q,...runtime.catalog.quarters.find(c=>c.id===q.quarter)!})),closedQuarters:s.quarters.filter(q=>q.closedAt!==null).length,yearThemes:runtime.catalog.years.slice(0,Math.min(6,Number(run.timeline.cursor.date.slice(0,4))-2019)),canEnterEpilogue:false}:null
+ const s=run.journey,context={...run,date:run.timeline.cursor.date,cursor:run.timeline.cursor,pause:run.timeline.pause,pending:run.timeline.pending},next=nextTailDate(context);return s?{classification:'fictional' as const,asOf:run.timeline.cursor.date,phase:run.phase,chapters:s.quarters.map(q=>({...q,...runtime.catalog.quarters.find(c=>c.id===q.quarter)!})),closedQuarters:s.quarters.filter(q=>q.closedAt!==null).length,yearThemes:runtime.catalog.years.slice(0,Math.min(6,Number(run.timeline.cursor.date.slice(0,4))-2019)),canEnterEpilogue:canEnterEpilogue(context),reviewHash:canEnterEpilogue(context)||run.phase!=='playing'?reviewFingerprint(run):null,nextTailDate:next,tailCosts:run.phase==='epilogue'?tailCostPreview(run,next):null}:null
 }

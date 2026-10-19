@@ -19,7 +19,7 @@ export class LifeWork{
  inspect(m:LifeContext,kind:LifeJob['kind'],personId:LifePerson|null,date:string){
   requireRule(m.operations&&m.controlledAccountIds.includes('personal'),'LIFE_PERSONAL_ACCOUNT_REQUIRED')
   const t=jobTerms(kind,personId),completeAt=addDays(date,t.days)
-  requireRule(date===m.economy.asOf&&completeAt<='2025-12-31','LIFE_WORK_OUTSIDE_TIMELINE')
+  requireRule(date===m.economy.asOf&&(completeAt<='2025-12-31'||m.economy.tailQuarterLock==='2025-Q4'&&kind==='promise_keep'),'LIFE_WORK_OUTSIDE_TIMELINE')
   requireRule(actionBudget(m.economy,date).available>=1,'INSUFFICIENT_ACTION_POINTS')
   requireRule(accountFunds(m.economy.ledger,'personal').availableFen>=t.costFen,'INSUFFICIENT_AVAILABLE_FUNDS')
   if(t.costFen>0)requireRule(!m.economy.ledger.obligations.some(o=>o.accountId==='personal'&&o.date<=date&&o.remainingFen>0),'OVERDUE_OBLIGATION')

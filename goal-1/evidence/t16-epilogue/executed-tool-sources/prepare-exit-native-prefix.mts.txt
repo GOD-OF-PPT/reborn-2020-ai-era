@@ -1,0 +1,16 @@
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs'
+import {createHash} from 'node:crypto'
+import {createCampaignRun,createCampaignCodec} from '../../../src/application/campaign.ts'
+import {evaluateCommand} from '../../../src/core/commands.ts'
+import {actionBudget} from '../../../src/core/economy.ts'
+const here=new URL('./',import.meta.url),output=new URL('./native-exit-prefix/',here),source=JSON.parse(readFileSync(new URL('./asset-a01/normal-asset-closing.json',here),'utf8')),original=readFileSync(new URL('./asset-a01/normal-asset-finished.json',here),'utf8'),expected=JSON.parse(original).state,codec=createCampaignCodec(),sha=(s:string)=>createHash('sha256').update(s).digest('hex')
+mkdirSync(output,{recursive:true})
+const cut=source.commands.findIndex((c:{kind:string})=>c.kind==='AcceptEquityExit');if(cut<1)throw Error('ORIGINAL_NORMAL_ACCEPT_POINT_NOT_FOUND')
+let run=createCampaignRun({runId:expected.runId,actorId:expected.actorId,commandId:expected.receipts[0].commandId,backgroundId:expected.backgroundId,seed:expected.seed,playerProfile:expected.playerProfile}),prefix:string|null=null
+for(let i=0;i<source.commands.length;i++){
+ if(i===cut)prefix=codec.export(run)
+ const result=evaluateCommand(run,source.commands[i],codec.registry,run.actorId);if(result.status!=='proposed')throw Error('ORIGINAL_NORMAL_COMMAND_REJECTED:'+JSON.stringify({i,result}));run=codec.import(codec.export(result.nextRun))
+}
+if(!prefix||codec.export(run)!==original)throw Error('CURRENT_ENGINE_NOT_BYTE_EQUAL_TO_COMPLETE_LEGACY_CASE')
+const before=codec.import(prefix),record={scope:'Supplemental original normal T13 seed reachability, not a replacement for any fixed matrix sample; actual complete source replay, cut before the already-disclosed willing quote is accepted',sourceResult:'asset-a01/normal-asset-closing.json',sourceFinalSha256:sha(original),sourceCommands:source.commands.length,prefixCommands:cut,runId:before.runId,seed:before.seed,origin:before.origin,date:before.timeline.cursor.date,phase:before.phase,budget:actionBudget(before.economy,before.timeline.cursor.date),closedQuarters:before.journey!.quarters.filter(q=>q.closedAt!==null).length,knownBuyerReplies:before.deepseek!.exits.map(e=>({responseAt:e.responseAt,buyerWilling:e.buyerWilling,unitPriceFen:e.unitPriceFen,expiresAt:e.expiresAt})),fullOriginalReplayByteEqual:true,prefixSha256:sha(prefix)}
+writeFileSync(new URL('normal-before-exit-accept.json',output),prefix,{flag:'wx'});writeFileSync(new URL('provenance.json',output),JSON.stringify(record,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(record))

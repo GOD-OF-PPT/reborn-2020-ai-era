@@ -1,0 +1,20 @@
+> vitest run --config vitest.config.ts src/application/epilogue.test.ts --maxWorkers=1
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+ ❯ src/application/epilogue.test.ts (6 tests | 1 failed) 67152ms
+   × personal zero cash does not erase the old principal, fee or living debt 5130ms
+ Test Files  1 failed (1)
+      Tests  1 failed | 5 passed (6)
+   Start at  00:15:52
+   Duration  69.23s (tests 98%, import 1%, transform 1%)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/application/epilogue.test.ts > personal zero cash does not erase the old principal, fee or living debt
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/application/epilogue.test.ts:47:1
+     45| },120000)
+     46|
+     47| it('personal zero cash does not erase the old principal, fee or living…
+       | ^
+     48|  const h=new StoryHarness({priorRun:prepared})
+     49|  h.send('DiscoverBusiness',{definitionId:'relay-station'});const busin…
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯

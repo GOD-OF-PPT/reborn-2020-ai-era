@@ -26,7 +26,7 @@ export function assertLife(run:GameRun,runtime:LifeRuntime){
  const events:Event[]=[...run.timeline.pending,...run.timeline.receipts.map(r=>({...JSON.parse(r.signature),processed:true,skippedReason:r.skippedReason}) as Event)].filter(e=>e.payload.kind==='life_event'||e.instanceId.startsWith('life:'))
  const byEvent=new Map<string,Event[]>();for(const e of events){const rows=byEvent.get(e.instanceId)??[];rows.push(e);byEvent.set(e.instanceId,rows)}
  const eventFor=(expected:ScheduledEvent<RunOperation>)=>{const list=byEvent.get(expected.instanceId)??[];requireRule(list.length===1,'LIFE_TIMER_MISSING');const actual=list[0]!;requireRule(hashValue(actual.payload)===hashValue(expected.payload)&&actual.date===expected.date&&actual.phase===expected.phase&&actual.priority===expected.priority,'LIFE_TIMER_MISMATCH');expectedTimers.add(expected.instanceId);return actual}
- const clockRoot=(logId:string)=>{const c=causes.get(logId),r=commands.get(c?.commandId??'');requireRule(r&&['AdvanceTime','RunRoutineStep'].includes(r.kind),'LIFE_CLOCK_CAUSE_MISSING');return r}
+ const clockRoot=(logId:string)=>{const c=causes.get(logId),r=commands.get(c?.commandId??'');requireRule(r&&['AdvanceTime','RunRoutineStep','AdvanceEpilogueTime'].includes(r.kind),'LIFE_CLOCK_CAUSE_MISSING');return r}
  const expectedLogs=new Set<string>()
  function expectLog(id:string,at:string,source:string,text:string,parents:readonly string[]=[],visibility:Log['visibility']='visible',commandId?:string){
   const l=logs.get(id),c=causes.get(id);requireRule(l&&l.date===at&&l.sourceEventId===source&&l.text===text&&l.visibility===visibility&&hashValue(l.parentIds)===hashValue(parents),'LIFE_LOG_SOURCE_MISMATCH')
@@ -44,7 +44,7 @@ export function assertLife(run:GameRun,runtime:LifeRuntime){
  for(const action of run.economy.actions)if(action.definition.definitionId.startsWith('life-'))requireRule(s.jobs.some(j=>j.actionId===action.definition.id),'ORPHAN_LIFE_ACTION')
  for(const j of s.jobs){
   const source=commands.get(j.originCommandId),p=source?payload(source):null,terms=jobTerms(j.kind,j.personId)
-  requireRule(source&&source.date===j.startAt&&j.id===lifeId('job',j.originCommandId)&&j.actionId===lifeId('action',j.id)&&j.accountId==='personal'&&j.resourceId==='player-production'&&j.actionPoints===1&&j.costFen===terms.costFen&&j.completeAt===addDays(j.startAt,terms.days)&&j.completeAt<='2025-12-31'&&j.startAt<=date,'LIFE_JOB_SOURCE_MISMATCH')
+  requireRule(source&&source.date===j.startAt&&j.id===lifeId('job',j.originCommandId)&&j.actionId===lifeId('action',j.id)&&j.accountId==='personal'&&j.resourceId==='player-production'&&j.actionPoints===1&&j.costFen===terms.costFen&&j.completeAt===addDays(j.startAt,terms.days)&&(j.completeAt<='2025-12-31'||run.economy.tailQuarterLock==='2025-Q4'&&j.kind==='promise_keep')&&j.startAt<=date,'LIFE_JOB_SOURCE_MISMATCH')
   if(j.kind==='promise_keep'){
    const promise=s.promises.find(o=>o.id===j.promiseId),accepted=commands.get(promise?.acceptedCommandId??'')
    requireRule(source.kind==='FulfillLifePromise'&&p?.promiseId===promise?.id&&promise?.personId===j.personId&&j.reference===null&&accepted&&accepted.revisionAfter<source.revisionAfter&&promise.acceptedAt!==null&&promise.acceptedAt<=j.startAt&&j.completeAt<=promise.deadline,'LIFE_PROMISE_WORK_WITHOUT_ACCEPTANCE')

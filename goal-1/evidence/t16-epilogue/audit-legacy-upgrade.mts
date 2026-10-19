@@ -1,0 +1,26 @@
+import {readFileSync,writeFileSync,existsSync} from 'node:fs'
+import {join,resolve} from 'node:path'
+import {pathToFileURL,fileURLToPath} from 'node:url'
+import {createHash} from 'node:crypto'
+import {createCampaignRun,createCampaignCodec} from '../../../src/application/campaign.ts'
+import {accountFunds} from '../../../src/core/ledger.ts'
+if(existsSync(new URL('./sealed-evidence.json',import.meta.url)))throw Error('EVIDENCE_SEALED_USE_NEW_ROOT')
+const root=fileURLToPath(new URL('../../../',import.meta.url)),folder=fileURLToPath(new URL('./legacy-upgrade-native/',import.meta.url)),codec=createCampaignCodec(),sha=(s:string|Uint8Array)=>createHash('sha256').update(s).digest('hex')
+const sources=JSON.parse(readFileSync(join(folder,'original-source-extraction.json'),'utf8')).records,results:unknown[]=[],oldIds:string[]=[]
+const cases=[{source:'schema12',before:'original-schema12-s1.json',after:'preserved-schema12-after-new-life.json',expected:'UNSUPPORTED_SCHEMA_VERSION'},{source:'schema13-v1',before:'original-schema13-v1-s1.json',after:'preserved-schema13-v1-after-new-life.json',expected:'INCOMPATIBLE_CONTENT'}]
+const newText=readFileSync(join(folder,'current-schema13-v2-new-s1.json'),'utf8'),newRun=codec.import(newText)
+for(const c of cases){
+ const original=readFileSync(join(folder,c.before),'utf8'),preserved=readFileSync(join(folder,c.after),'utf8');if(original!==preserved)throw Error('LEGACY_PHYSICAL_BYTES_CHANGED:'+c.source)
+ const source=sources.find((s:{name:string})=>s.name===c.source);if(!source)throw Error('ORIGINAL_SOURCE_MISSING')
+ for(const [p,digest]of Object.entries(source.files))if(sha(readFileSync(join(source.path,p)))!==digest)throw Error('ORIGINAL_SOURCE_COPY_CHANGED:'+p)
+ const factory=await import(pathToFileURL(resolve(source.path,'src/application/campaign.ts')).href),oldCodec=factory.createCampaignCodec(),old=oldCodec.import(original);oldIds.push(old.runId)
+ if(old.origin!=='normal'||old.receipts.length!==1)throw Error('LEGACY_TEST_NOT_ACTUAL_NORMAL_CREATION')
+ const replay=factory.createCampaignRun({runId:old.runId,actorId:old.actorId,commandId:old.receipts[0].commandId,backgroundId:old.backgroundId,seed:old.seed,playerProfile:old.playerProfile});if(oldCodec.export(replay)!==original)throw Error('ORIGINAL_FACTORY_REPLAY_BYTE_MISMATCH')
+ let reject:string|null=null;try{codec.import(original)}catch(error){reject=String((error as {code?:string}).code)}if(reject!==c.expected)throw Error('CURRENT_REJECTION_MISMATCH:'+reject)
+ let oldRejectsNew=false;try{oldCodec.import(newText)}catch{oldRejectsNew=true}if(!oldRejectsNew)throw Error('OLD_READER_SILENTLY_ACCEPTED_NEW_FORMAT')
+ results.push({source:c.source,originalCommit:source.commit,runId:old.runId,bytes:Buffer.byteLength(original),sha256:sha(original),physicalBytesPreserved:true,originalSourceCreateReplayByteEqual:true,currentRejection:reject,oldReaderRejectsNew:true})
+}
+if(oldIds.includes(newRun.runId)||newRun.origin!=='normal'||newRun.revision!==1||newRun.deepseek!.agreements.length!==0||newRun.journey!.endings.length!==0||accountFunds(newRun.economy.ledger,'personal').cashFen!==2600000)throw Error('NEW_LIFE_INHERITED_OLD_IDENTITY_OR_DATA')
+const rebuilt=createCampaignRun({runId:newRun.runId,actorId:newRun.actorId,commandId:newRun.receipts[0]!.commandId,backgroundId:newRun.backgroundId,seed:newRun.seed,playerProfile:newRun.playerProfile});if(codec.export(rebuilt)!==newText)throw Error('CURRENT_NEW_LIFE_CREATE_REPLAY_MISMATCH')
+const report={scope:'Actual browser-created old12 and intermediate13-v1 heads, current incompatibility/physical byte preservation/new independent life, plus exact original tracked-factory creation replays; separate from current compatible full-campaign audit',legacy:results,current:{runId:newRun.runId,bytes:Buffer.byteLength(newText),sha256:sha(newText),normalCreateReplayByteEqual:true,noInheritedData:true},actualStoredStories:3,allPassed:true}
+writeFileSync(join(folder,'legacy-original-source-and-physical-audit.json'),JSON.stringify(report,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify({allPassed:true,actualLegacyCreations:2,originalFactoryReplays:2,currentCreateReplay:true,physicalOriginalsPreserved:true}))

@@ -1,0 +1,17 @@
+> vitest run --config vitest.config.ts src/application/epilogue.test.ts --maxWorkers=1
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+ ❯ src/application/epilogue.test.ts (3 tests | 1 failed) 105669ms
+   × keeps original Q4 points, living expenses and the original loan while settling actual future dates 4839ms
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  23:47:16
+   Duration  108.96s (tests 98%, transform 1%, import 1%)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/application/epilogue.test.ts > keeps original Q4 points, living expenses and the original loan while settling actual future dates
+AssertionError: expected 31390000 to be 31490000 // Object.is equality
+- Expected
++ Received
+- 31490000
++ 31390000
+ ❯ src/application/epilogue.test.ts:36:64
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯

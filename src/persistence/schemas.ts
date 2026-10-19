@@ -33,7 +33,7 @@ const ledgerSchema = z.strictObject({
   fees: rows(z.strictObject({ id: idSchema, accountId: idSchema, counterpartyId: idSchema, businessId: nullableId, basisPoints: z.number().int().min(0).max(10000), totalBaseFen: moneySchema, paidFen: moneySchema })),
 })
 const economySchema = z.strictObject({
-  asOf: dateSchema, ledger: ledgerSchema,
+  asOf: dateSchema, ledger: ledgerSchema,tailQuarterLock:z.literal('2025-Q4').optional(),
   actions: rows(z.strictObject({ definition: actionDefinitionSchema, status: z.enum(['draft', 'reserved', 'executed', 'completed', 'interrupted', 'cancelled']), plannedAt: dateSchema, executedAt: dateSchema.nullable(), finishedAt: dateSchema.nullable() })),
   receipts: rows(z.strictObject({ id: idSchema, signature })),
 })
@@ -50,7 +50,7 @@ const words = z.tuple([uint32, uint32, uint32, uint32]).refine((value) => value.
 const stream = z.strictObject({ words, draws: safeCount })
 const randomSchema = z.strictObject({ algorithm: z.literal(RNG_ALGORITHM), streams: z.strictObject({ world: stream, market: stream, opportunity: stream, crisis: stream }) })
 export const versionSchema = z.strictObject({ schemaVersion: z.number().int().min(1).max(Number.MAX_SAFE_INTEGER), rulesVersion: commandIdSchema, contentVersion: commandIdSchema, contentHash: z.string().regex(/^[0-9a-f]{64}$/), rngAlgorithmVersion: commandIdSchema })
-export const commandReceiptSchema = z.strictObject({ runId: commandIdSchema, commandId: commandIdSchema, actorId: commandIdSchema, kind: commandIdSchema, payloadHash: z.string().regex(/^[0-9a-f]{64}$/), payloadSignature: signature, revisionBefore: safeCount, revisionAfter: safeCount, date: dateSchema, summary: z.string().max(4000), transactionIds: rows(idSchema), causeIds: rows(idSchema) })
+export const commandReceiptSchema = z.strictObject({ runId: commandIdSchema, commandId: commandIdSchema, actorId: commandIdSchema, kind: commandIdSchema, payloadHash: z.string().regex(/^[0-9a-f]{64}$/), payloadSignature: signature, revisionBefore: safeCount, revisionAfter: safeCount,ledgerReceiptCountAfter:safeCount,date: dateSchema, summary: z.string().max(4000), transactionIds: rows(idSchema), causeIds: rows(idSchema) })
 export const causeSchema = z.strictObject({ id: idSchema, commandId: commandIdSchema, date: dateSchema, domain: commandIdSchema, parentIds: rows(idSchema), sourceEventId: idSchema, visibleSummary: z.string().max(4000), visibility: z.enum(['visible', 'hidden']) })
 
 export const runSchema = z.strictObject({

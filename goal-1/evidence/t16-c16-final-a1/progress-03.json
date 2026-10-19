@@ -1,0 +1,53 @@
+{
+  "sourceUnchanged": true,
+  "allExecutedPassed": true,
+  "results": [
+    {
+      "step": "typecheck",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 36.177,
+      "output": "goal-1/evidence/t16-c16-final-a1/typecheck-output.txt"
+    },
+    {
+      "step": "build",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        ".delivery/t16-c16-final-a1"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 32.45,
+      "output": "goal-1/evidence/t16-c16-final-a1/build-output.txt"
+    },
+    {
+      "step": "all-unit",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 1271.834,
+      "output": "goal-1/evidence/t16-c16-final-a1/all-unit-output.txt"
+    }
+  ]
+}

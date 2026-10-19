@@ -10,3 +10,17 @@ it('records E01 and E02 actual integer shares, passive dilution and no free cash
 it('separates actual old-share payment from newly issued shares and project financing',()=>{const {h,agreement}=signedEquity({},'financial',200000000,'secondary');expect(agreement.initialShares).toBe(250000);expect(h.run.deepseek!.rounds[0]).toMatchObject({newMoneyFen:0,issuedShares:0,transferredShares:250000,totalShares:1000000});expect(projectDeepseek(h.run,h.deepseek)!.agreements[0]!.holdingBps).toBe(2500)},60000)
 it('can decline completed but rejected counterpart terms without receiving any equity',()=>{const {h,negotiation}=prepareEquity({parameters:{negotiationAcceptBps:0}});expect(negotiation.accepted).toBe(false);expect(h.preview('SignEquityAgreement',{negotiationId:negotiation.id}).allowed).toBe(false);h.send('DeclineEquityTerms',{negotiationId:negotiation.id});expect(h.run.economy.ledger.investments).toHaveLength(0)},60000)
 it('protects the full customer prepayment until real accepted delivery',()=>{const {h,lead,b}=prepareEco();const before=accountFunds(h.run.economy.ledger,b.accountId);h.send('AcceptEcoContract',{leadId:lead.id,scope:'standard',resources:['player-production'],startAt:'2024-07-02'});const after=accountFunds(h.run.economy.ledger,b.accountId);expect(after.cashFen-before.cashFen).toBe(300000);expect(h.run.economy.ledger.contracts[0]!.prepaidFen).toBe(300000);expect(after.heldFen-before.heldFen).toBe(450000);expect(h.run.deepseek!.deliveries).toHaveLength(0)},60000)
+it('an old rejected contract can schedule paid remediation today in closing, while normal new work still starts later',()=>{
+ const {h,lead}=prepareEco({parameters:{deliveryAcceptBps:0}})
+ h.send('AcceptEcoContract',{leadId:lead.id,scope:'standard',resources:['player-production'],startAt:'2024-07-02'})
+ const c=h.run.deepseek!.contracts[0]!
+ h.send('AdvanceTime',{date:h.run.operations!.jobs.find(j=>j.id===c.productionJobId)!.completeAt});h.send('SubmitEcoDelivery',{contractId:c.id});h.send('AdvanceTime',{date:h.run.operations!.jobs.find(j=>j.id===c.supportJobId)!.completeAt})
+ expect(h.run.deepseek!.contracts[0]!.status).toBe('rejected')
+ const date=h.run.timeline.cursor.date,payload={contractId:c.id,resources:['player-production'],startAt:date},before=h.codec.export(h.run)
+ expect(h.preview('StartEcoRemediation',payload).reasonCodes).toContain('ECO_FUTURE_START_REQUIRED')
+ // An isolated runtime context checks the old-contract permission seam. It is
+ // not a normal campaign ending or a bypass of its 24-quarter entry command.
+ const preview=h.deepseek.inspect({...h.run,phase:'epilogue'},{kind:'StartEcoRemediation',...payload},date)
+ expect(preview.actionPoints).toBe(2);expect(preview.upfrontCostFen).toBe(120000)
+ expect(h.codec.export(h.run)).toBe(before)
+},60000)

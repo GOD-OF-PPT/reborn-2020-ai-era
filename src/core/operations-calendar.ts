@@ -1,4 +1,6 @@
 import { addDays,monthEnd,quarterOf } from './calendar.ts'
+import {hashValue} from './hash.ts'
+export const operatingId=(...parts:string[])=>`ops:${hashValue(parts).slice(0,32)}`
 export function quarterLimit(date:string):string { const q=Number(quarterOf(date).slice(-1));return q===4?`${Number(date.slice(0,4))+1}-01-01`:`${date.slice(0,4)}-${String(q*3+1).padStart(2,'0')}-01` }
 export function earnedMonthly(rate:number,segments:readonly {readonly from:string;readonly to:string|null}[],month:string,through:string):number {
  let days=0;const last=monthEnd(`${month}-01`)

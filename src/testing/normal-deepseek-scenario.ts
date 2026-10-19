@@ -1,12 +1,13 @@
+import type {GameRun} from '../core/run-types.ts'
 import {createCampaignRun,createCampaignCodec,campaignRuntime} from '../application/campaign.ts'
 import {evaluateCommand} from '../core/commands.ts'
 import {quarterOf,addDays} from '../core/calendar.ts'
 import {quarterLimit,dayBefore} from '../core/operations-calendar.ts'
 import {accountPosition,metricsFor} from '../core/ledger.ts'
 import {actionBudget} from '../core/economy.ts'
-export function replayNormalDeepseek(backgroundId:string){
- const input={runId:`normal-deepseek-${backgroundId}`,actorId:'player',commandId:'create',backgroundId,seed:'normal-deepseek-s04-v1'},codec=createCampaignCodec();let run=createCampaignRun(input);const initial=run,commands:unknown[]=[]
- const send=(kind:string,payload:unknown)=>{const c={runId:run.runId,actorId:'player',commandId:`normal-deepseek-${run.revision}`,expectedRevision:run.revision,kind,payload},r=evaluateCommand(run,c,codec.registry,'player');if(r.status!=='proposed')throw Error(JSON.stringify({kind,payload,result:r}));commands.push(c);run=codec.import(codec.export(r.nextRun))}
+export function replayNormalDeepseek(backgroundId:string,options:{seed?:string;runId?:string;onCommitted?:(run:GameRun)=>void}={}){
+ const input={runId:options.runId??`normal-deepseek-${backgroundId}`,actorId:'player',commandId:'create',backgroundId,seed:options.seed??'normal-deepseek-s04-v1'},codec=createCampaignCodec();let run=createCampaignRun(input);const initial=run,commands:unknown[]=[]
+ const send=(kind:string,payload:unknown)=>{const c={runId:run.runId,actorId:'player',commandId:`normal-deepseek-${run.revision}`,expectedRevision:run.revision,kind,payload},r=evaluateCommand(run,c,codec.registry,'player');if(r.status!=='proposed')throw Error(JSON.stringify({kind,payload,result:r}));commands.push(c);run=codec.import(codec.export(r.nextRun));options.onCommitted?.(run)}
  const advance=(target:string)=>{for(let guard=0;guard<200;guard++){if(run.timeline.pause){if(run.timeline.pause.reason==='CONTENT_DECISION_PENDING'){const instance=run.world!.instances.find(i=>i.openedBy===run.timeline.pause!.instanceId)!;send('ChooseEvent',{instanceId:instance.id,choiceId:campaignRuntime.definition(instance.definitionId).defaultChoiceId})}else throw Error(JSON.stringify(run.timeline.pause))}else if(run.timeline.cursor.date<target||run.timeline.cursor.phase!=='snapshot')send('AdvanceTime',{date:target});else return}throw Error('normal DeepSeek clock guard')}
  while(quarterOf(run.timeline.cursor.date)!=='2024-Q2'){send('WorkQuarter',{});advance(dayBefore(quarterLimit(run.timeline.cursor.date)));advance(quarterLimit(run.timeline.cursor.date))}
  advance('2024-05-06');send('OpenEcosystemService',{capitalFen:3000000});const b=run.operations!.businesses.find(b=>b.definitionId==='ecosystem-service')!,assignment=(startAt:string)=>({resources:['player-production'],startAt}),productId=backgroundId==='technical_employee'?'deployment':'training'

@@ -3,12 +3,14 @@ import { evaluateCommand } from '../core/commands.ts';
 import { addDays, quarterOf } from '../core/calendar.ts';
 import { quarterLimit, dayBefore } from '../core/operations-calendar.ts';
 import { accountFunds, accountPosition, metricsFor } from '../core/ledger.ts';
-export function replayNormalCourse(backgroundId: string) {
-    const input = { runId: `normal-course-${backgroundId}`, actorId: 'player', commandId: 'create', backgroundId, seed: 'normal-course-s02-v1' }, codec = createCampaignCodec();
+import type {GameRun} from '../core/run-types.ts';
+import {hashValue} from '../core/hash.ts';
+export function replayNormalCourse(backgroundId: string,options:{seed?:string;onCommitted?:(run:GameRun)=>void}={}) {
+    const input = { runId: `normal-course-${backgroundId}${options.seed===undefined?'':'-'+hashValue(options.seed).slice(0,8)}`, actorId: 'player', commandId: 'create', backgroundId, seed: options.seed??'normal-course-s02-v1' }, codec = createCampaignCodec();
     let run = createCampaignRun(input);
     const initial = run, commands: unknown[] = [];
     const send = (kind: string, payload: unknown) => { const command = { runId: run.runId, actorId: 'player', commandId: `normal-course-${run.revision}`, expectedRevision: run.revision, kind, payload }, r = evaluateCommand(run, command, codec.registry, 'player'); if (r.status !== 'proposed')
-        throw new Error(JSON.stringify({ kind, payload, result: r })); commands.push(command); run = codec.import(codec.export(r.nextRun)); };
+        throw new Error(JSON.stringify({ kind, payload, result: r })); commands.push(command); run = codec.import(codec.export(r.nextRun));options.onCommitted?.(run); };
     const advance = (target: string) => { for (let n = 0; n < 100; n++) {
         if (run.timeline.pause) {
             if (run.timeline.pause.reason !== 'CONTENT_DECISION_PENDING')

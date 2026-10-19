@@ -67,7 +67,7 @@ export class VideoRuntime {
         readonly phase?: RuleModel['phase'];
     }, i: VideoIntent, date: string) {
         const s = stateOf(m);
-        requireRule(m.phase === undefined || m.phase === 'playing' || ['ExitVideoCommission', 'AbandonVideoWork', 'UnlistVideo', 'CollectVideoSettlement'].includes(i.kind), 'RUN_NOT_PLAYING');
+        requireRule(m.phase === undefined || m.phase === 'playing' || ['ExitVideoCommission', 'AbandonVideoWork', 'UnlistVideo', 'CollectVideoSettlement', 'ReviewVideoOutput', 'ReworkVideo', 'PublishVideo', 'SubmitVideoCommission', 'NegotiateVideoCommission'].includes(i.kind), 'RUN_NOT_PLAYING');
         switch (i.kind) {
             case 'OpenVideoChannel': {
                 requireRule(s.channels.length < 12, 'VIDEO_CHANNEL_LIMIT');

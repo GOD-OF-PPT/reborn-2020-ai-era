@@ -1,0 +1,29 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/ui/equity-exit-history.test.tsx --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/equity-exit-history.test.tsx (1 test | 1 failed) 2651ms
+   × keeps an actual no-buyer reply distinct from an expired real quote while preserving the later willing buyer 2648ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/equity-exit-history.test.tsx > keeps an actual no-buyer reply distinct from an expired real quote while preserving the later willing buyer
+AssertionError: expected '<div class="stack-lg equity-workspace…' to contain '本次没有可接受的买方窗口，保留全部未售股份。'
+
+Expected: "本次没有可接受的买方窗口，保留全部未售股份。"
+Received: "<div class="stack-lg equity-workspace"><section class="counterfactual-boundary"><h3>明确架空融资安排 · 不是现实公开申购</h3><p>本局于2025-04-01明确选择架空情境；协议、持仓、治理与退出持续标识，估值不能花。</p><details><summary>技术、合同、题材与真实融资的边界</summary><p>技术适配、购买服务、题材关联和合同合作均不产生DeepSeek股权。本内容包未核验历史公开申购入口，不声称现实融资、估值或退出已经发生。</p></details></section><section class="workflow-overview" aria-label="架空投资进展"><div><span class="workflow-number">01</span><div><strong>持有的权益</strong><small>1份已实际签署协议</small><a href="#equity-holdings">查看这一层 →</a></div></div><div><span class="workflow-number">02</span><div><strong>邀请与条款</strong><small>0份当前邀请</small><a href="#equity-preparation">查看这一层 →</a></div></div><div><span class="workflow-number">03</span><div><strong>转让与到账</strong><small>1项待核实/确认/收款</small><a href="#equity-exits">查看这一层 →</a></div></div></section><section id="equity-holdings" class="stack"><h3>已持有的权益与下一次资金决定</h3> <section class="panel"><h3>DeepSeek直接投资 · 明确架空融资安排</h3><p class="tag">持续counterfactual / 架空投资标识</p><p class="field-help">原协议主体：个人账户，与新邀请准备主体分别记录。</p><dl class="finance-grid"><div><dt>实际模拟股数 / 总股数</dt><dd>2500 / 1562500</dd></div><div><dt>当前比例（约）</dt><dd>0.16%</dd></div><div><dt>尚持有投资成本</dt><dd>¥20,000</dd></div><div><dt>账面估值，不能花</dt><dd>¥20,000</dd></div><div><dt>锁定至</dt><dd>2027-04-22 · 锁定期已到，仍需买方</dd></div><div><dt>治理权</dt><dd>无董事权</dd></div></dl><p>估值不增加现金；退出款到账前是独立应收。跟投权来自已签条款。投资不是永久收益倍率或模型控制权限。</p><p>后续融资：到期默认不新增付款，已实际稀释。</p><details><summary>锁定、独立买方与有限退出</summary><p>锁定结束并不保证出售。申请1点/500元/7天，独立买方可能拒绝或只给有限折价报价；不能按过去峰值套现。转让费按总价的3%累计取整，确认页显示总价、费用、净应收和约定日期。已通过的研究用途约束次日起影响新的退出申请。</p><label class="field">本次拟转让的模拟股数<input inputMode="numeric" value="1"/></label><div class="command "><button type="button" class="" disabled="">申请核实独立买方，尚不出售股份</button><small class="reason">请核对实际股数，本季只能进行一次独立买方申请。</small></div></details></section></section><section id="equity-exits" class="stack"> <section class="panel"><h3>架空独立买方报价与到账</h3><div class="stack"><p>已实际完成 · 2027-04-22—2027-04-29</p></div><p>报价已经到期，未自动转让，保留未售股份。</p></section><section class="panel"><h3>架空独立买方报价与到账</h3><div class="stack"><p>已实际完成 · 2027-07-01—2027-07-08</p></div><p>有条件报价：每模拟股¥7.11，最多2500股，最迟2027-07-22确认。</p><label class="field">接受此报价的实际股数<input inputMode="numeric" value="2500"/></label><div class="command "><button type="button" class="">确认实际转让所填股数，余股保留，等待到账</button></div></section></section> <details class="panel" id="equity-preparation"><summary>新邀请、关系与参与准备</summary><h3>实际谈判主体与资格</h3><div class="command "><button type="button" class="" disabled="">建立个人架空投资准备分账，不领取资金或股份</button><small class="reason">现在是有限尾声，只处理原合同、旧风险和原资产。</small></div><label class="field">新邀请与谈判的准备主体<select><option value="ops:2b793c9617dd060678e11dc51ccec9da">生态企业账户</option><option value="ops:8576614dfbcb49debc31982710f8f7a6" selected="">个人投资准备分账</option></select></label><p>本主体可花¥91,000；客户保护款不计入。已签协议的原主体不随这里切换。已有实际已付合作案例或完成的介绍任务。本主体参与资格任务已完成。</p><div class="button-row"><div class="command "><button type="button" class="">停止个人投资准备，保留持仓与旧费用</button></div><div class="command "><button type="button" class="" disabled="">股权及转让应收结清后关闭准备分账</button><small class="reason">仍有生态交付、支持、锁定股权或转让应收，不能清空后关闭。</small></div></div><div class="command "><button type="button" class="" disabled="">寻找实际合作介绍的架空邀请</button><small class="reason">现在是有限尾声，只处理原合同、旧风险和原资产。</small></div><div class="command "><button type="button" class="" disabled="">查看虚构中间人的未核验邀请</button><small class="reason">现在是有限尾声，只处理原合同、旧风险和原资产。</small></div><div class="command "><button type="button" class="" disabled="">完成本局架空参与资格 · 1点/1500元/7天</button><small class="reason">现在是有限尾声，只处理原合同、旧风险和原资产。</small></div><article><h4>本局参与资格核验</h4><div class="stack"><p>已实际完成 · 2025-04-08—2025-04-15</p></div></article></details><section class="stack"><h3>当前邀请与条款回应</h3></section><details class="panel"><summary>邀请与谈判历史 · 已使用、拒绝或到期的原记录</summary><section class="panel"><h3>架空邀请1 · 合作介绍</h3><p>持续架空标识 · 有效至2025-06-30 · 已用于真实本局协议</p><p>实际尽调确认了本局架空授权与有条件融资意愿，仍需资格和谈判。</p><div class="stack"><p>已实际完成 · 2025-04-01—2025-04-08</p></div></section><section class="panel"><h3>架空增资条款回应</h3><p>拟支付¥20,000，2500模拟股 · 财务参与 / 长期锁定。</p><div class="stack"><p>已实际完成 · 2025-04-15—2025-04-22</p></div><p>本条款已实际付款并签约，股权另列，不会重复支付。</p></section></details></div>"
+
+ ❯ src/ui/equity-exit-history.test.tsx:20:16
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  02:57:25
+   Duration  4.41s (tests 65%, transform 18%, import 16%)
+

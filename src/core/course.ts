@@ -110,7 +110,7 @@ export class CourseRuntime {
         readonly phase?: RuleModel['phase'];
     }, i: CourseIntent, date: string) {
         const s = sOf(m);
-        requireRule(m.phase === undefined || m.phase === 'playing' || ['PauseNewEnrollment', 'StopCourseSales', 'RefundCourseLearners', 'RetireCourse'].includes(i.kind), 'RUN_NOT_PLAYING');
+        requireRule(m.phase === undefined || m.phase === 'playing' || ['PauseNewEnrollment', 'StopCourseSales', 'RefundCourseLearners', 'RetireCourse', 'StartCourseStage', 'StartCourseRecovery', 'StartCourseRefresh'].includes(i.kind), 'RUN_NOT_PLAYING');
         switch (i.kind) {
             case 'OpenCourseStudio':
                 requireRule(date >= this.catalog.availableAt && this.capabilities(m, 'chatgpt_announcement', date).length === 0, 'COURSE_NOT_AVAILABLE');

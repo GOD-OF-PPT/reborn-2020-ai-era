@@ -193,6 +193,8 @@ export class RunCodec {
     }
     const transactions = new Set(ledger.transactions.map((entry) => entry.id))
     const claimedTransactions: string[] = []
+    let ledgerBoundary=0
+    const ledgerTransactionIds=new Set(ledger.transactions.map(t=>t.id))
     run.receipts.forEach((receipt, index) => {
       assertJsonInput(parseSignature(receipt.payloadSignature))
       const signature = recordBody(parseSignature(receipt.payloadSignature))
@@ -209,6 +211,8 @@ export class RunCodec {
       } else requireRule(receipt.kind !== 'CreateRun', 'INVALID_CREATION_RECEIPT')
       requireRule(receipt.date <= run.timeline.cursor.date && receipt.transactionIds.every((id) => transactions.has(id)), 'INVALID_TRANSACTION_REFERENCE')
       for (const causeId of receipt.causeIds) requireRule(run.causes.some((cause) => cause.id === causeId && cause.commandId === receipt.commandId), 'INVALID_CAUSE_REFERENCE')
+      const expectedTransactions=ledger.receipts.slice(ledgerBoundary,receipt.ledgerReceiptCountAfter).filter(r=>ledgerTransactionIds.has(r.id)).map(r=>r.id)
+      requireRule(canonicalJson(expectedTransactions)===canonicalJson(receipt.transactionIds),'COMMAND_LEDGER_BOUNDARY_MISMATCH');ledgerBoundary=receipt.ledgerReceiptCountAfter
       claimedTransactions.push(...receipt.transactionIds)
     })
     unique(claimedTransactions, 'DUPLICATE_TRANSACTION_CLAIM')

@@ -29,7 +29,7 @@ const sceneMoods = [
 ] as const
 
 export const JOURNEY_CONTENT = {
- version:'journey-work-v1', classification:'fictional' as const,
+ version:'journey-work-v2', classification:'fictional' as const,
  years:['把生活重新握在手里','让尝试变成日常','工具之外的判断','走到时代的路口','连接与边界','你想留下什么'],
  quarters:sceneMoods.map((copy,index)=>{const year=2020+Math.floor(index/4),season=index%4+1;return {id:`${year}-Q${season}`,year,season,from:`${year}-${String((season-1)*3+1).padStart(2,'0')}-01`,through:monthEnd(`${year}-${String(season*3).padStart(2,'0')}-01`),title:copy[0],thought:copy[1],line:copy[2]}}),
 } as const

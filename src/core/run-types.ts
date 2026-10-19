@@ -60,6 +60,7 @@ export interface CommandReceipt {
   readonly payloadSignature: string
   readonly revisionBefore: number
   readonly revisionAfter: number
+  readonly ledgerReceiptCountAfter:number
   readonly date: IsoDate
   readonly summary: string
   readonly transactionIds: readonly string[]

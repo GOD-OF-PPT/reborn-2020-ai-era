@@ -36,6 +36,7 @@ type ActionOperation = OperationBase & (
 )
 export type EconomyOperation = LedgerOperation | ActionOperation
 export interface EconomyState {
+  readonly tailQuarterLock?:'2025-Q4'
   readonly asOf: IsoDate
   readonly ledger: LedgerState
   readonly actions: readonly ActionRecord[]
@@ -48,14 +49,16 @@ export function createEconomy(ledger: LedgerState): EconomyState {
 }
 
 export function actionBudget(state: EconomyState, date: IsoDate) {
-  const quarter = quarterOf(date)
+  const locked=state.tailQuarterLock==='2025-Q4'&&date>='2025-10-01'
+  const quarter = locked?'2025-Q4':quarterOf(date)
   let spent = 0
   let reserved = 0
   for (const action of state.actions) {
-    if (quarterOf(action.definition.startAt) !== quarter) continue
+    if (locked?action.definition.startAt<'2025-10-01':quarterOf(action.definition.startAt)!==quarter) continue
     if (action.status === 'reserved') reserved += action.definition.actionPoints
     else if (['executed', 'completed', 'interrupted'].includes(action.status)) spent += action.definition.actionPoints
   }
+  if(locked){requireRule(spent<=4,'EPILOGUE_ACTION_BUDGET_EXCEEDED');return {quarter,total:4,spent,reserved,available:Math.max(0,4-spent-reserved),overReserved:Math.max(0,spent+reserved-4)}}
   requireRule(spent + reserved <= 4, 'ACTION_BUDGET_CORRUPT')
   return { quarter, total: 4, spent, reserved, available: 4 - spent - reserved }
 }
@@ -83,6 +86,7 @@ function fundingFor(state: EconomyState, action: ActionDefinition) {
 
 export function assertEconomy(state: EconomyState): void {
   isoDate(state.asOf)
+  requireRule(state.tailQuarterLock===undefined||state.tailQuarterLock==='2025-Q4'&&state.asOf>='2025-12-31','INVALID_EPILOGUE_BUDGET_LOCK')
   assertLedger(state.ledger)
   requireRule(state.ledger.asOf <= state.asOf, 'LEDGER_AHEAD_OF_ECONOMY')
   const ids = new Set<string>()
@@ -152,6 +156,7 @@ export function applyEconomy(state: EconomyState, operation: EconomyOperation): 
       const action = next.actions.find((item) => item.definition.id === operation.actionId)
       requireRule(action && action.status === 'reserved', 'ACTION_NOT_RESERVED')
       requireRule(operation.date === action.definition.startAt, 'ACTION_START_DATE_MISMATCH')
+      if(next.tailQuarterLock&&action.definition.startAt>='2025-10-01')requireRule(actionBudget(next,operation.date).spent+action.definition.actionPoints<=4,'EPILOGUE_ACTION_BUDGET_EXCEEDED')
       if (action.definition.costFen > 0) {
         fundingFor(next, action.definition)
         next.ledger = applyLedger(next.ledger, {
@@ -198,7 +203,7 @@ export function applyEconomy(state: EconomyState, operation: EconomyOperation): 
       requireRule(action && (action.status === 'draft' || action.status === 'reserved'), 'ACTION_CANNOT_BE_RESCHEDULED')
       const definition = { ...action.definition, startAt: operation.startAt, completeAt: operation.completeAt, settlementAt: operation.settlementAt }
       validateDefinition(definition, operation.date, next.ledger)
-      if (action.status === 'reserved' && quarterOf(definition.startAt) !== quarterOf(action.definition.startAt)) requireRule(actionBudget(next, definition.startAt).available >= definition.actionPoints, 'INSUFFICIENT_ACTION_POINTS')
+      if (action.status === 'reserved' && actionBudget(next,definition.startAt).quarter !== actionBudget(next,action.definition.startAt).quarter) requireRule(actionBudget(next, definition.startAt).available >= definition.actionPoints, 'INSUFFICIENT_ACTION_POINTS')
       action.definition = definition
       break
     }

@@ -39,6 +39,8 @@ export interface CommandPreview {
   readonly releasedFen: number
 }
 export interface CommandView {
+  readonly origin?:GameRun['origin']
+  readonly pending:GameRun['timeline']['pending']
   readonly runId: string
   readonly actorId: string
   readonly revision: number
@@ -143,7 +145,7 @@ export function createBaseRegistry(versions: VersionSet, extra: readonly Command
 }
 
 function commandView(run: GameRun): CommandView {
-  return copyJson({ runId: run.runId, actorId: run.actorId, revision: run.revision, date: run.timeline.cursor.date, phase: run.phase, controlledAccountIds: run.controlledAccountIds, economy: run.economy, cursor: run.timeline.cursor, pause: run.timeline.pause, evidence: visibleFacts(run.facts), world: run.world, operations: run.operations,market:run.market,video:run.video,course:run.course,relay:run.relay,routines:run.routines,deepseek:run.deepseek,story:run.story,life:run.life,journey:run.journey })
+  return copyJson({origin:run.origin,pending:run.timeline.pending, runId: run.runId, actorId: run.actorId, revision: run.revision, date: run.timeline.cursor.date, phase: run.phase, controlledAccountIds: run.controlledAccountIds, economy: run.economy, cursor: run.timeline.cursor, pause: run.timeline.pause, evidence: visibleFacts(run.facts), world: run.world, operations: run.operations,market:run.market,video:run.video,course:run.course,relay:run.relay,routines:run.routines,deepseek:run.deepseek,story:run.story,life:run.life,journey:run.journey })
 }
 
 export function projectRun(run: GameRun) {
@@ -224,7 +226,7 @@ export function evaluateCommand(run: GameRun, raw: unknown, registry: CommandReg
     const operatingCauses: CauseEntry[] = (effect.model.operations?.logs.filter((log) => !priorOperatingLogs.has(log.id)) ?? []).map((log) => ({ id: log.id, commandId: command.commandId, date: log.date, domain: 'operations', parentIds: log.parentIds, sourceEventId: log.sourceEventId, visibleSummary: log.text, visibility: log.visibility }))
     const priorMarketLogs=new Set(run.market?.logs.map(log=>log.id)??[]);const marketCauses:CauseEntry[]=(effect.model.market?.logs.filter(log=>!priorMarketLogs.has(log.id))??[]).map(log=>({id:log.id,commandId:command.commandId,date:log.date,domain:'market',parentIds:log.parentIds,sourceEventId:log.sourceEventId,visibleSummary:log.text,visibility:log.visibility}));const priorStoryLogs=new Set(run.story?.logs.map(log=>log.id)??[]);const storyCauses:CauseEntry[]=(effect.model.story?.logs.filter(log=>!priorStoryLogs.has(log.id))??[]).map(log=>({id:log.id,commandId:command.commandId,date:log.date,domain:'story',parentIds:log.parentIds,sourceEventId:log.sourceEventId,visibleSummary:log.text,visibility:log.visibility}));const priorLifeLogs=new Set(run.life?.logs.map(log=>log.id)??[]);const lifeCauses:CauseEntry[]=(effect.model.life?.logs.filter(log=>!priorLifeLogs.has(log.id))??[]).map(log=>({id:log.id,commandId:command.commandId,date:log.date,domain:'life',parentIds:log.parentIds,sourceEventId:log.sourceEventId,visibleSummary:log.text,visibility:log.visibility}));const journeyCauses=journeyCauseSpecs(run.journey,effect.model.journey).map(c=>({...c,commandId:command.commandId}));const causes = [cause, ...worldCauses, ...operatingCauses,...marketCauses,...storyCauses,...lifeCauses,...journeyCauses]
     const entries = effect.model.economy.ledger.transactions.slice(run.economy.ledger.transactions.length)
-    const receipt = { runId: run.runId, commandId: command.commandId, actorId: command.actorId, kind: command.kind, payloadHash: identity.hash, payloadSignature: identity.signature, revisionBefore: run.revision, revisionAfter: run.revision + 1, date: effect.model.timeline.cursor.date, summary: effect.summary, transactionIds: entries.map((entry) => entry.id), causeIds: causes.map((entry) => entry.id) }
+    const receipt = { runId: run.runId, commandId: command.commandId, actorId: command.actorId, kind: command.kind, payloadHash: identity.hash, payloadSignature: identity.signature, revisionBefore: run.revision, revisionAfter: run.revision + 1, ledgerReceiptCountAfter:effect.model.economy.ledger.receipts.length,date: effect.model.timeline.cursor.date, summary: effect.summary, transactionIds: entries.map((entry) => entry.id), causeIds: causes.map((entry) => entry.id) }
     const nextRun: GameRun = { ...run, ...effect.model, revision: run.revision + 1, receipts: [...run.receipts, receipt], causes: [...run.causes, ...causes] }
     assertGameRun(nextRun)
     registry.runtime?.validate(nextRun)

@@ -28,7 +28,7 @@ export function storyWorkTerms(m:StoryContext,kind:StoryJobKind,entityId:string,
 export class StoryWork {
  inspect(m:StoryContext,kind:StoryJobKind,entityId:string,accountId:string,resourceId:string,date:string){
   requireRule(m.operations&&m.controlledAccountIds.includes(accountId),'STORY_ACCOUNT_NOT_CONTROLLED');const t=storyWorkTerms(m,kind,entityId,date),completeAt=addDays(date,t.days)
-  requireRule(completeAt<='2025-12-31','STORY_WORK_OUTSIDE_TIMELINE');requireRule(actionBudget(m.economy,date).available>=t.points,'INSUFFICIENT_ACTION_POINTS');requireRule(accountFunds(m.economy.ledger,accountId).availableFen>=t.costFen,'INSUFFICIENT_AVAILABLE_FUNDS');requireRule(remainingCapacity(m,resourceId,date,completeAt)>=1,'INSUFFICIENT_CAPACITY')
+  requireRule((completeAt<='2025-12-31'||m.economy.tailQuarterLock==='2025-Q4'&&!['pilot','continuity','participation','deployment','records','drill'].includes(kind)),'STORY_WORK_OUTSIDE_TIMELINE');requireRule(actionBudget(m.economy,date).available>=t.points,'INSUFFICIENT_ACTION_POINTS');requireRule(accountFunds(m.economy.ledger,accountId).availableFen>=t.costFen,'INSUFFICIENT_AVAILABLE_FUNDS');requireRule(remainingCapacity(m,resourceId,date,completeAt)>=1,'INSUFFICIENT_CAPACITY')
   return {allowed:true,reasonCodes:[] as readonly string[],actionPoints:t.points,upfrontCostFen:t.costFen,releasedFen:0,actionDate:date}
  }
  start(m:StoryModel,kind:StoryJobKind,entityId:string,businessId:string|null,accountId:string,resourceId:string,date:string,commandId:string){

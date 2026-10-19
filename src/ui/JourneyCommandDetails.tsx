@@ -1,0 +1,12 @@
+import type {CommandEnvelope} from '../core/run-types.ts'
+import type {PlayFeatures} from './game-types.ts'
+import {moneyText} from './game-text.ts'
+import {recoveryEstimateSchema} from '../core/journey-schema.ts'
+
+export function JourneyCommandDetails({command,features}:{command:CommandEnvelope;features:PlayFeatures}){
+ const j=features.journey,e=j?.ending
+ if(!j||!e||!['EnterEpilogue','AdvanceEpilogueTime','FinishJourney','ResumeEpilogue'].includes(command.kind))return null
+ const name=(id:string)=>e.accounts.find(a=>a.accountId===id)?.name??'原涉及账户'
+ const payload=command.payload,parsed=command.kind==='FinishJourney'&&typeof payload==='object'&&payload!==null&&'estimates' in payload?recoveryEstimateSchema.array().safeParse(payload.estimates):null
+ return <section className="journey-command-context"><h3>{command.kind==='EnterEpilogue'?'把旧事带入有限尾声':command.kind==='FinishJourney'?'按这一刻的事实归档':command.kind==='ResumeEpilogue'?'继续原事项，原回顾保留':'沿原日历，承担实际费用'}</h3>{command.kind==='ResumeEpilogue'?<p>以前归档的来源继续保留。原2025年第四季与尾声的四点合用，不重新发工资、行动或权限。</p>:command.kind==='AdvanceEpilogueTime'?<><p>推进本身不占新点。已经确认的旧工作仍会按实际开工日期消耗原预留、资金和产能；不足时保留原责任。</p>{j.tailCosts?.living.map((c,i)=><p key={'living'+i}>{c.date} · {name(c.accountId)}原生活费用{moneyText(c.amountFen)}。</p>)}{j.tailCosts?.loans.map((c,i)=><p key={'loan'+i}>{c.date} · {name(c.accountId)}原借款到期，本金尚余{moneyText(c.principalFen)}，原费用{moneyText(c.feeFen)}。不足部分仍留原账。</p>)}{j.tailCosts?.scheduled.map(c=><p key={c.actionId}>{c.date} · {name(c.accountId)}原已确认工作：预留费用{moneyText(c.costFen)} / {c.actionPoints}点。预留与已付款分别记录。</p>)}{j.tailCosts?.accruedAtTarget.map(c=><p key={c.businessId}>{name(c.accountId)}截至该日按当前旧条款预计已用未出账{moneyText(c.amountFen)}，实际结算和到账仍按原日序。</p>)}</>:<><p>原预算已耗{e.budget.spent}点，预留{e.budget.reserved}点；尾声与2025年第四季共用原4点。期间原生活费、雇佣、维护和已用服务仍会发生。</p>{e.items.map(item=><article key={item.id}><h4>{item.title}</h4><p>{item.detail}</p>{item.amountFen!==null?<p>{moneyText(item.amountFen)}</p>:null}</article>)}{!e.items.length?<p>当前没有尚待处理的已知旧事项。</p>:null}<p>原现金、应收应付、未履约款、锁定与控制状态继续保留；本次没有清债或把估计变成回款。</p></>}{command.kind==='FinishJourney'?<section><h4>本次明确记录的回收假设</h4>{parsed?.success?parsed.data.length?parsed.data.map((a,index)=><p key={a.kind+':'+a.assetId}>第{index+1}项{({contract_receivable:'原合同应收',market_receivable:'原证券交收应收',private_receivable:'原架空转让应收',supplier_prepayment:'原供应预付',private_asset:'明确架空股权成本'})[a.kind]}：依据{moneyText(a.basisFen)}，本次估计{moneyText(a.estimatedFen)}。</p>):<p>当前没有需要逐项估计的原资产。</p>:<p>本次估计尚未核对。</p>}<p>这里只保存回收假设，不改变现金或债务。原处置条件与实际收款仍须满足；可以稍后明确继续旧事项。</p></section>:null}</section>
+}

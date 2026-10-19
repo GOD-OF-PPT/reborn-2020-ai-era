@@ -1,0 +1,33 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/application/epilogue.test.ts -t public product controller
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/epilogue.test.ts (7 tests | 1 failed | 6 skipped) 67676ms
+   × the public product controller reaches, archives and resumes the earned ending, then starts an independent life 5382ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/epilogue.test.ts > the public product controller reaches, archives and resumes the earned ending, then starts an independent life
+AssertionError: EnterEpilogue: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ send src/application/epilogue.test.ts:103:134
+
+ ❯ src/application/epilogue.test.ts:107:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 skipped (7)
+   Start at  01:17:49
+   Duration  69.91s (tests 97%, transform 1%, import 1%)
+

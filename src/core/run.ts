@@ -33,12 +33,15 @@ export function assertGameRun(run: GameRun): void {
   }
   requireRule(run.receipts.length === run.revision, 'RECEIPT_REVISION_MISMATCH')
   const commands = new Set<string>()
+  let ledgerBoundary=0
   run.receipts.forEach((receipt, index) => {
     commandIdentifier(receipt.commandId)
     requireRule(!commands.has(receipt.commandId), 'DUPLICATE_COMMAND_RECEIPT')
     commands.add(receipt.commandId)
+    requireRule(Number.isSafeInteger(receipt.ledgerReceiptCountAfter)&&receipt.ledgerReceiptCountAfter>=ledgerBoundary&&receipt.ledgerReceiptCountAfter<=run.economy.ledger.receipts.length,'INVALID_COMMAND_LEDGER_BOUNDARY');ledgerBoundary=receipt.ledgerReceiptCountAfter
     requireRule(receipt.runId === run.runId && receipt.actorId === run.actorId && receipt.revisionBefore === index && receipt.revisionAfter === index + 1, 'INVALID_COMMAND_RECEIPT')
   })
+  requireRule(ledgerBoundary===run.economy.ledger.receipts.length,'COMMAND_LEDGER_BOUNDARY_MISSING')
   const causes = new Set<string>()
   for (const cause of run.causes) {
     identifier(cause.id); identifier(cause.sourceEventId); isoDate(cause.date)
@@ -61,7 +64,7 @@ export function createGameRun(input: CreateRunInput, initial: InitialRunState, v
   const run: GameRun = {
     ...model, versions: { ...versions }, runId: input.runId, actorId: input.actorId, personalAccountId: initial.personalAccountId,
     backgroundId: input.backgroundId,playerProfile:profile.data, origin: initial.origin, seed: input.seed, revision: 1,
-    receipts: [{ runId: input.runId, commandId: input.commandId, actorId: input.actorId, kind: 'CreateRun', payloadHash: identity.hash, payloadSignature: identity.signature, revisionBefore: 0, revisionAfter: 1, date, summary: '新人生已建立', transactionIds: initial.economy.ledger.transactions.map((entry) => entry.id), causeIds: [causeId] }],
+    receipts: [{ runId: input.runId, commandId: input.commandId, actorId: input.actorId, kind: 'CreateRun', payloadHash: identity.hash, payloadSignature: identity.signature, revisionBefore: 0, revisionAfter: 1, ledgerReceiptCountAfter:initial.economy.ledger.receipts.length,date, summary: '新人生已建立', transactionIds: initial.economy.ledger.transactions.map((entry) => entry.id), causeIds: [causeId] }],
     causes: [{ id: causeId, commandId: input.commandId, date, domain: 'run', parentIds: [], sourceEventId: `command:${input.commandId}`, visibleSummary: '确认背景与开局义务', visibility: 'visible' }],
   }
   assertGameRun(run)

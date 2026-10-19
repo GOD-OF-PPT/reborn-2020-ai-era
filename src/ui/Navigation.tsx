@@ -4,9 +4,9 @@ export const screens=[['room','回到住处'],['quarter','本季安排'],['life'
 export type Screen=typeof screens[number][0]
 const businessScreens:readonly Screen[]=['routes','market','video','course','relay','deepseek']
 export function groupOf(screen:Screen){return businessScreens.includes(screen)?'business':['room','life','routines','story'].includes(screen)?'quarter':screen}
-export function MainNavigation({screen,onNavigate}:{screen:Screen;onNavigate:(screen:Screen)=>void}){
+export function MainNavigation({screen,onNavigate,closing=false}:{screen:Screen;onNavigate:(screen:Screen)=>void;closing?:boolean}){
  const group=groupOf(screen)
- return <nav className="main-navigation" aria-label="主要导航">{([['quarter','住处','room'],['business','机遇','routes'],['memory','手记','memory'],['finance','账本','finance']] as const).map(([id,label,target])=><button type="button" key={id} aria-current={group===id?'page':undefined} onClick={()=>onNavigate(target)}><RouteMark kind={id}/>{label}</button>)}</nav>
+ return <nav className="main-navigation" aria-label="主要导航">{([['quarter','住处','room'],['business','机遇','routes'],['memory','手记','memory'],['finance','账本','finance']] as const).map(([id,label,target])=><button type="button" key={id} aria-current={group===id?'page':undefined} onClick={()=>onNavigate(target)}><RouteMark kind={id}/>{closing&&id==='business'?'旧路':label}</button>)}</nav>
 }
 export function SectionNavigation({screen,onNavigate}:{screen:Screen;onNavigate:(screen:Screen)=>void}){
  const group=groupOf(screen),list=group==='business'?businessScreens:group==='quarter'?['quarter','life','routines','story'] as const:[]

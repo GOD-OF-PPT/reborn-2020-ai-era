@@ -1,0 +1,280 @@
+{
+  "identity": {
+    "head": "ee287c5f000bd8c8af0462846f2c2d00d4505a8e",
+    "branch": "main",
+    "node": "v22.12.0",
+    "startedAt": "2026-10-19T19:38:54.270Z",
+    "sourceFiles": 449,
+    "testFiles": 88
+  },
+  "commands": [
+    {
+      "step": "typecheck",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "typecheck"
+      ]
+    },
+    {
+      "step": "build",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        ".delivery/t16-c16-final-a1"
+      ]
+    },
+    {
+      "step": "all-unit",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1"
+      ]
+    },
+    {
+      "step": "tool-tests",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:docs"
+      ]
+    },
+    {
+      "step": "content",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "validate:content"
+      ]
+    },
+    {
+      "step": "docs",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_docs.py",
+        "--text-only"
+      ]
+    },
+    {
+      "step": "plan",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_plan.py"
+      ]
+    },
+    {
+      "step": "competitive",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_competitive_design.py"
+      ]
+    },
+    {
+      "step": "life",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_life_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/life"
+      ]
+    },
+    {
+      "step": "replay-story",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:story",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/story"
+      ]
+    },
+    {
+      "step": "replay-kernel",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:kernel",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/kernel"
+      ]
+    },
+    {
+      "step": "replay-save",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:save",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/save"
+      ]
+    },
+    {
+      "step": "replay-world",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:world",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/world"
+      ]
+    },
+    {
+      "step": "replay-operations",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:operations",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/operations"
+      ]
+    },
+    {
+      "step": "replay-first-order",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:first-order",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/first-order"
+      ]
+    },
+    {
+      "step": "replay-market",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:market",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/market"
+      ]
+    },
+    {
+      "step": "replay-playable",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:playable",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/playable"
+      ]
+    },
+    {
+      "step": "replay-video",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:video",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/video"
+      ]
+    },
+    {
+      "step": "replay-course",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:course",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/course"
+      ]
+    },
+    {
+      "step": "replay-relay",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:relay",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/relay"
+      ]
+    },
+    {
+      "step": "replay-deepseek",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:deepseek",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/deepseek"
+      ]
+    },
+    {
+      "step": "replay-route-diversity",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:route-diversity",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/route-diversity"
+      ]
+    }
+  ],
+  "policy": "Same original22 cumulative command contracts; original assertions/timeouts and per-file isolation retained. No concurrent timed test/collector jobs; browser UI inspection may continue without editing frozen sources. New fixed42 evidence is separately source-matched, not counted as a rerun."
+}

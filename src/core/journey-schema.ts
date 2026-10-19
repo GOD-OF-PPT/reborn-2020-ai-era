@@ -8,8 +8,8 @@ export const recoveryEstimateSchema=z.strictObject({assetId:idSchema,kind:z.enum
 export const journeyStateSchema=z.strictObject({
  catalogVersion:idSchema,catalogHash:digest,
  quarters:z.array(z.strictObject({quarter:quarterSchema,openedAt:dateSchema,openSourceId:idSchema,closedAt:dateSchema.nullable(),closeSourceId:idSchema.nullable()})).min(1).max(24),
- epilogue:z.strictObject({commandId:commandIdSchema,date:dateSchema,sourceRevision:safeCount}).nullable(),
- endings:rows(z.strictObject({commandId:commandIdSchema,date:dateSchema,sourceRevision:safeCount,reviewHash:digest,estimates:rows(recoveryEstimateSchema)})),
+ epilogue:z.strictObject({commandId:commandIdSchema,date:dateSchema,sourceRevision:safeCount,reviewHash:digest}).nullable(),
+ endings:rows(z.strictObject({commandId:commandIdSchema,date:dateSchema,sourceRevision:safeCount,ledgerReceiptCount:safeCount,reviewHash:digest,estimates:rows(recoveryEstimateSchema)})),
  resumes:rows(z.strictObject({commandId:commandIdSchema,date:dateSchema,sourceRevision:safeCount,endingCommandId:commandIdSchema})),
 })
 export type JourneyState=z.infer<typeof journeyStateSchema>

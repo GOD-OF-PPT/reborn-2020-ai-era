@@ -15,10 +15,11 @@ const routesCopy:Record<RouteId,{chapter:string;line:string}>={
 }
 export function OpportunityAtlas(p:GamePanelProps&{onRoute:(id:RouteId)=>void;headingRef?:Ref<HTMLHeadingElement>}){
  const [inspecting,setInspecting]=useState<RouteId|null>(null),[failed,setFailed]=useState<readonly RouteId[]>([]),[selection,setSelection]=useState<RouteId>('a_share')
+ const closing=p.view.phase!=='playing'
  const routes=p.features.workbench.routes,detail=routes.find(r=>r.id===inspecting),selected=routes.find(r=>r.id===selection)??routes[0]!,index=routes.indexOf(selected)
  const ready=selected.requirements.reasons.length===0&&selected.requirements.preparationReady&&selected.requirements.availableCashFen>=selected.requirements.minimumCashFen
  const turn=(offset:number)=>setSelection(routes[(index+offset+routes.length)%routes.length]!.id)
- return <section className="route-choice-scene" aria-label="选择一条人生路线"><header className="scene-title"><p className="scene-overline">{p.features.workbench.quarter} / 时代的门，刚刚打开</p><h1 ref={p.headingRef} tabIndex={-1}>这一次，你想走哪条路？</h1><p>先选一个念头，再决定把时间和本金放在哪里。</p></header>
+ return <section className="route-choice-scene" aria-label="选择一条人生路线"><header className="scene-title"><p className="scene-overline">{closing?'尾声 / 原来的经营':p.features.workbench.quarter+' / 时代的门，刚刚打开'}</p><h1 ref={p.headingRef} tabIndex={-1}>{closing?'回到走过的路，处理原来的事。':'这一次，你想走哪条路？'}</h1><p>{closing?'原合同、应收和资产都保留；这一次不再接受新的时代机会。':'先选一个念头，再决定把时间和本金放在哪里。'}</p></header>
  <div className="route-film" aria-label="五条路线电影抉择">
   <div className="route-film-picture" aria-hidden="true" data-route={selected.id}>{!p.textOnly&&!failed.includes(selected.id)?<img key={selected.id} src={routeArt[selected.id]} width={1672} height={941} alt="" decoding="async" onError={()=>setFailed(ids=>ids.includes(selected.id)?ids:[...ids,selected.id])}/>:<RouteMark kind={selected.id}/>}</div>
   <section className="route-film-thought" aria-live="polite" aria-atomic="true"><p className="scene-overline">可能的人生 / 0{index+1}</p><h2>{routesCopy[selected.id].chapter}</h2><p>{routesCopy[selected.id].line}</p><small>{selected.id==='deepseek_opportunity'?'明确架空股权 · 融资资格与他方意愿单独核验':selected.id==='a_share'?'虚构个股模拟 · 判断不保证收益':'先看真实前提，再决定投入'}</small><div className="route-film-actions"><button type="button" className="primary" aria-label={'走进'+selected.name} onClick={()=>p.onRoute(selected.id)}>走进这一幕 <span aria-hidden="true">→</span></button><button type="button" aria-label={'查看'+selected.name+'的准备条件'} onClick={()=>setInspecting(selected.id)}>{ready?'出发前，再看一眼条件':'还要准备什么'} ↗</button></div></section>

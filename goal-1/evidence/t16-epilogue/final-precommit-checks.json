@@ -1,0 +1,31 @@
+{
+  "scope": "Final new documentation and source-only whitespace check after limited review; not a rerun of529 or original22",
+  "checks": [
+    {
+      "command": "rtk proxy python3 -B scripts/check_docs.py --text-only",
+      "exitCode": 0,
+      "markdownFiles": 141,
+      "originalPNGsChecked": "0/3",
+      "textOnly": true
+    },
+    {
+      "command": "rtk proxy python3 -B scripts/check_plan.py",
+      "exitCode": 0,
+      "tasks": 22,
+      "cases": 40
+    },
+    {
+      "command": "rtk proxy python3 -B scripts/check_competitive_design.py",
+      "exitCode": 0,
+      "sources": 9,
+      "acceptanceCases": 14
+    },
+    {
+      "command": "rtk proxy git diff --check -- src scripts docs README.md AGENTS.md goal-1/tasks.md goal-1/plan.md goal-1/t16-plan.md",
+      "exitCode": 0
+    }
+  ],
+  "c16All449FilesStillExact": true,
+  "implementationCommitPending": true,
+  "pendingOriginalAssetsAndHumanAndM01AndT18Preserved": true
+}

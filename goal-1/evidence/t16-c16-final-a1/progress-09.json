@@ -1,0 +1,140 @@
+{
+  "sourceUnchanged": true,
+  "allExecutedPassed": true,
+  "results": [
+    {
+      "step": "typecheck",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 36.177,
+      "output": "goal-1/evidence/t16-c16-final-a1/typecheck-output.txt"
+    },
+    {
+      "step": "build",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        ".delivery/t16-c16-final-a1"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 32.45,
+      "output": "goal-1/evidence/t16-c16-final-a1/build-output.txt"
+    },
+    {
+      "step": "all-unit",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 1271.834,
+      "output": "goal-1/evidence/t16-c16-final-a1/all-unit-output.txt"
+    },
+    {
+      "step": "tool-tests",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:docs"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 0.899,
+      "output": "goal-1/evidence/t16-c16-final-a1/tool-tests-output.txt"
+    },
+    {
+      "step": "content",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "validate:content"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 1.793,
+      "output": "goal-1/evidence/t16-c16-final-a1/content-output.txt"
+    },
+    {
+      "step": "docs",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_docs.py",
+        "--text-only"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 30.356,
+      "output": "goal-1/evidence/t16-c16-final-a1/docs-output.txt"
+    },
+    {
+      "step": "plan",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_plan.py"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 0.121,
+      "output": "goal-1/evidence/t16-c16-final-a1/plan-output.txt"
+    },
+    {
+      "step": "competitive",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_competitive_design.py"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 0.125,
+      "output": "goal-1/evidence/t16-c16-final-a1/competitive-output.txt"
+    },
+    {
+      "step": "life",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_life_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/life"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 64.622,
+      "output": "goal-1/evidence/t16-c16-final-a1/life-output.txt"
+    }
+  ]
+}

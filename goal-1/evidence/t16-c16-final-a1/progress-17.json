@@ -1,0 +1,276 @@
+{
+  "sourceUnchanged": true,
+  "allExecutedPassed": true,
+  "results": [
+    {
+      "step": "typecheck",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 36.177,
+      "output": "goal-1/evidence/t16-c16-final-a1/typecheck-output.txt"
+    },
+    {
+      "step": "build",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        ".delivery/t16-c16-final-a1"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 32.45,
+      "output": "goal-1/evidence/t16-c16-final-a1/build-output.txt"
+    },
+    {
+      "step": "all-unit",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 1271.834,
+      "output": "goal-1/evidence/t16-c16-final-a1/all-unit-output.txt"
+    },
+    {
+      "step": "tool-tests",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:docs"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 0.899,
+      "output": "goal-1/evidence/t16-c16-final-a1/tool-tests-output.txt"
+    },
+    {
+      "step": "content",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "validate:content"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 1.793,
+      "output": "goal-1/evidence/t16-c16-final-a1/content-output.txt"
+    },
+    {
+      "step": "docs",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_docs.py",
+        "--text-only"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 30.356,
+      "output": "goal-1/evidence/t16-c16-final-a1/docs-output.txt"
+    },
+    {
+      "step": "plan",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_plan.py"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 0.121,
+      "output": "goal-1/evidence/t16-c16-final-a1/plan-output.txt"
+    },
+    {
+      "step": "competitive",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_competitive_design.py"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 0.125,
+      "output": "goal-1/evidence/t16-c16-final-a1/competitive-output.txt"
+    },
+    {
+      "step": "life",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_life_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/life"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 64.622,
+      "output": "goal-1/evidence/t16-c16-final-a1/life-output.txt"
+    },
+    {
+      "step": "replay-story",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:story",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/story"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 742.95,
+      "output": "goal-1/evidence/t16-c16-final-a1/replay-story-output.txt"
+    },
+    {
+      "step": "replay-kernel",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:kernel",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/kernel"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 0.883,
+      "output": "goal-1/evidence/t16-c16-final-a1/replay-kernel-output.txt"
+    },
+    {
+      "step": "replay-save",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:save",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/save"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 1.351,
+      "output": "goal-1/evidence/t16-c16-final-a1/replay-save-output.txt"
+    },
+    {
+      "step": "replay-world",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:world",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/world"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 22.315,
+      "output": "goal-1/evidence/t16-c16-final-a1/replay-world-output.txt"
+    },
+    {
+      "step": "replay-operations",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:operations",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/operations"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 4.655,
+      "output": "goal-1/evidence/t16-c16-final-a1/replay-operations-output.txt"
+    },
+    {
+      "step": "replay-first-order",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:first-order",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/first-order"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 13.144,
+      "output": "goal-1/evidence/t16-c16-final-a1/replay-first-order-output.txt"
+    },
+    {
+      "step": "replay-market",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:market",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/market"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 4.778,
+      "output": "goal-1/evidence/t16-c16-final-a1/replay-market-output.txt"
+    },
+    {
+      "step": "replay-playable",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:playable",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/playable"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "seconds": 13.421,
+      "output": "goal-1/evidence/t16-c16-final-a1/replay-playable-output.txt"
+    }
+  ]
+}

@@ -17,7 +17,7 @@ export class LifeRuntime{
  initial(){return initialLife()}
  schedule(m:RuleModel){let timeline=m.timeline;for(const e of agendaEvents())timeline=queueEvent(timeline,e);return {...m,timeline}}
  inspect(m:LifeContext&{readonly phase?:RuleModel['phase']},kind:string,p:Record<string,unknown>,date:string){
-  const s=lifeOf(m);requireRule(m.phase===undefined||m.phase==='playing'||kind==='InterruptLifeWork','RUN_NOT_PLAYING')
+  const s=lifeOf(m);requireRule(m.phase===undefined||m.phase==='playing'||['InterruptLifeWork','FulfillLifePromise','DeclineLifePromise'].includes(kind),'RUN_NOT_PLAYING')
   if(kind==='StartLifeWork'){
    const work=String(p.kind) as LifeJob['kind'];requireRule(work!=='promise_keep'&&Object.hasOwn(this.catalog.work,work),'UNKNOWN_LIFE_WORK')
    const personId=p.personId===null?null:String(p.personId) as LifePerson,reference=p.reference as LifeReference|null

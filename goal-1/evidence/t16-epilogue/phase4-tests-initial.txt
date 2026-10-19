@@ -1,0 +1,21 @@
+> vitest run --config vitest.config.ts src/application/epilogue.test.ts --maxWorkers=1
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+ ❯ src/application/epilogue.test.ts (3 tests | 1 failed) 65135ms
+   × keeps original Q4 points, living expenses and the original loan while settling actual future dates 2426ms
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  23:40:58
+   Duration  68.84s (tests 95%, transform 3%, import 1%)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/application/epilogue.test.ts > keeps original Q4 points, living expenses and the original loan while settling actual future dates
+AssertionError: expected '2026-01-29' to be '2026-02-01' // Object.is equality
+Expected: "2026-02-01"
+Received: "2026-01-29"
+ ❯ src/application/epilogue.test.ts:31:144
+     29|  h.send('EnterEpilogue',{consent:true,reviewHash:reviewFingerprint(h.r…
+     30|  for(const date of ['2026-01-01','2026-02-01','2026-03-01']){
+     31|   const next=nextTailDate({...h.run,date:h.run.timeline.cursor.date,cu…
+       |                                                                                                                                                ^
+     32|   h.send('AdvanceEpilogueTime',{date});expect(actionBudget(h.run.econo…
+     33|  }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯

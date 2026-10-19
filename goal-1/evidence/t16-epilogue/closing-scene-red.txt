@@ -1,0 +1,42 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/ui/equity-exit-history.test.tsx src/ui/ending-stage.test.tsx --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/ending-stage.test.tsx (1 test | 1 failed) 3018ms
+   × retains the actual old partial-sale ending and every dated recovery assumption in the public read-only review 3016ms
+ ❯ src/ui/equity-exit-history.test.tsx (1 test | 1 failed) 2689ms
+   × keeps an actual no-buyer reply distinct from an expired real quote while preserving the later willing buyer 2687ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/ending-stage.test.tsx > retains the actual old partial-sale ending and every dated recovery assumption in the public read-only review
+AssertionError: expected '<section class="narrative-scene narra…' to contain '核对原持仓与交收'
+
+Expected: "核对原持仓与交收"
+Received: "<section class="narrative-scene narrative-market" aria-label="场景中的选择"><header class="scene-title"><p class="scene-overline">2027-Q3 / 窗前 / 判断与等待</p><h1 tabindex="-1">把生活留好，再看远方。</h1><p>记忆不是明天的价格。一次研究、一个仓位，都要留下足够的余地。</p></header><div tabindex="-1" class="screen-book scene-story-book" role="region" aria-label="眼前的选择 · 翻页阅读" data-page="1" data-pages="1"><div class="book-index"><span class="book-binding" aria-hidden="true">LONG DAY / 眼前的选择</span><span class="book-hint">无需滚动 · 一页一页，慢慢决定</span></div><div class="book-viewport" id="_R_4_"><div class="book-flow" style="transform:translateX(0px);animation-name:book-ink-even;--book-gap:48px"><div class="scene-choices" aria-label="这一幕可以做的事"><div class="command scene-action"><button type="button" class="" aria-label="核对公开研究安排" disabled=""><span class="scene-choice-overline">由你决定</span><strong data-book-chapter="先把产业线索理一理">先把产业线索理一理</strong><span class="scene-choice-line">1点 · ¥0 · 1日。研究不揭示未来价格。</span><span class="scene-choice-end">核对公开研究安排<span aria-hidden="true">→</span></span></button><small class="reason">这段人生已经归档。可以回看，或明确继续处理原事项。</small></div><button type="button" class="scene-choice" aria-label="看看行情与自己的仓位"><span class="scene-choice-overline">一个念头</span><strong data-book-chapter="再给判断一个仓位">再给判断一个仓位</strong><span class="scene-choice-line">查看模拟个股、委托与交收，再决定是否投入。看到新闻不能按旧价买入。</span><span class="scene-choice-end">看看行情与自己的仓位<span aria-hidden="true">↗</span></span></button></div></div></div><nav class="book-pagination" aria-label="眼前的选择翻页"><button type="button" disabled="" aria-controls="_R_4_">← 上一页</button><span class="book-page-counter"><label><input aria-label="眼前的选择页码" type="number" min="1" max="1" value="1"/><span aria-hidden="true"> / 01</span></label><span role="status" aria-live="polite" class="sr-only">第1页，共1页</span><small>PageUp / PageDown</small></span><button type="button" disabled="" aria-controls="_R_4_">下一页 →</button></nav></div><footer class="scene-turn"><div><button type="button" class="scene-text-action">日历上的牵挂 · 1 ↗</button><button type="button" class="scene-text-action">细看这一幕的安排 ↗</button></div><button type="button">看看停在了哪件事</button></footer></section>"
+
+ ❯ src/ui/ending-stage.test.tsx:26:49
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/ui/equity-exit-history.test.tsx > keeps an actual no-buyer reply distinct from an expired real quote while preserving the later willing buyer
+AssertionError: expected '<section class="narrative-scene narra…' to contain '有限尾声'
+
+Expected: "有限尾声"
+Received: "<section class="narrative-scene narrative-deepseek" aria-label="场景中的选择"><header class="scene-title"><p class="scene-overline">2027-Q3 / 天将亮时 / 参与一种可能</p><h1 tabindex="-1">从真正的合作开始。</h1><p>技术服务、融资资格和拥有的权利，是不同的事。生态合作不会自动变成股权。</p></header><div tabindex="-1" class="screen-book scene-story-book" role="region" aria-label="眼前的选择 · 翻页阅读" data-page="1" data-pages="1"><div class="book-index"><span class="book-binding" aria-hidden="true">LONG DAY / 眼前的选择</span><span class="book-hint">无需滚动 · 一页一页，慢慢决定</span></div><div class="book-viewport" id="_R_4_"><div class="book-flow" style="transform:translateX(0px);animation-name:book-ink-even;--book-gap:48px"><div class="scene-choices" aria-label="这一幕可以做的事"><button type="button" class="scene-choice" aria-label="寻找合作与核对参与条件"><span class="scene-choice-overline">一个念头</span><strong data-book-chapter="先看看实际合作的前提">先看看实际合作的前提</strong><span class="scene-choice-line">技术服务、融资资格和拥有的权利，是不同的事。生态合作不会自动变成股权。</span><span class="scene-choice-end">寻找合作与核对参与条件<span aria-hidden="true">↗</span></span></button><button type="button" class="scene-choice" aria-label="回到住处想一想"><span class="scene-choice-overline">一个念头</span><strong data-book-chapter="仍可以慢慢选择">仍可以慢慢选择</strong><span class="scene-choice-line">回到自己的住处，再决定这一季把时间留给哪里。</span><span class="scene-choice-end">回到住处想一想<span aria-hidden="true">↗</span></span></button></div></div></div><nav class="book-pagination" aria-label="眼前的选择翻页"><button type="button" disabled="" aria-controls="_R_4_">← 上一页</button><span class="book-page-counter"><label><input aria-label="眼前的选择页码" type="number" min="1" max="1" value="1"/><span aria-hidden="true"> / 01</span></label><span role="status" aria-live="polite" class="sr-only">第1页，共1页</span><small>PageUp / PageDown</small></span><button type="button" disabled="" aria-controls="_R_4_">下一页 →</button></nav></div><footer class="scene-turn"><div><button type="button" class="scene-text-action">日历上的牵挂 · 1 ↗</button><button type="button" class="scene-text-action">细看这一幕的安排 ↗</button></div><button type="button">看看停在了哪件事</button></footer></section>"
+
+ ❯ src/ui/equity-exit-history.test.tsx:24:17
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  2 failed (2)
+   Start at  03:18:54
+   Duration  8.52s (tests 72%, import 16%, transform 11%)
+
