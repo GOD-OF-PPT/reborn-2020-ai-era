@@ -1,0 +1,29 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/story-risk-modes.test.ts (3 tests | 1 failed) 241043ms
+   × a fixed ordinary-fault seed is independently disproved without granting free full recovery 126713ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/story-risk-modes.test.ts > a fixed ordinary-fault seed is independently disproved without granting free full recovery
+Error: Test timed out in 120000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/application/story-risk-modes.test.ts:7:1
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 80 passed (81)
+      Tests  1 failed | 508 passed (509)
+   Start at  13:21:06
+   Duration  1431.01s (tests 98%, import 2%)
+
+    Isolate  81 workers spawned · ~276ms startup each (spawn + environment, per file)
+             at least ~22.05s faster with isolate: false — reuses workers across files instead of one per file
+

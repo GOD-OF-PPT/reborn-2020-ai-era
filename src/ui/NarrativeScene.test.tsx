@@ -7,6 +7,11 @@ import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
 import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
 import type {PlayFeatures} from './game-types.ts'
 import {NarrativeScene,SceneAttention} from './NarrativeScene.tsx'
+import {SceneThreads} from './SceneThreads.tsx'
+import {riskThreads} from './scene-thread-notes.ts'
+import {annualRoomImproved} from './annual-scene.ts'
+import {AnnualScene} from './AnnualScene.tsx'
+import {YearReview} from './YearReview.tsx'
 
 async function normalScene(){
  const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'d05-narrative'})
@@ -36,6 +41,65 @@ it('scene choices are read-only and keep delivery, end-of-range and read-only ac
   const readOnly=renderToStaticMarkup(<NarrativeScene {...h.p} view={{...h.view,readOnly:true}}/>)
   expect(readOnly.match(/<button[^>]*aria-label="核对本季工作安排"[^>]*>/)?.[0]).toContain('disabled=""')
   expect(h.controller.exportSaved()).toBe(before)
+ }finally{await h.controller.close();await h.store.close()}
+},20000)
+
+it('an actually accepted promise is named with its deadline outside the operation sheet',async()=>{
+ const h=await normalScene()
+ try{
+  for(const [kind,payload] of [['StartLifeWork',{kind:'friend_visit',personId:'tang-ying',reference:null}],['AdvanceTime',{date:'2020-01-04'}]] as const)expect((await h.controller.submit(h.controller.prepare(kind,payload))).status).toBe('saved')
+  const offered=(h.controller.snapshot.view!.features as unknown as PlayFeatures).life.promises.find(o=>o.status==='offered')!
+  expect((await h.controller.submit(h.controller.prepare('AcceptLifePromise',{promiseId:offered.id,consent:true}))).status).toBe('saved')
+  const view=h.controller.snapshot.view!,features=view.features as unknown as PlayFeatures,before=h.controller.exportSaved()
+  const html=renderToStaticMarkup(<SceneThreads p={{...h.p,view,features}} onOpen={h.p.onNavigate}/>)
+  expect(html).toContain('全部持续牵挂');expect(html).toContain('唐萤');expect(html).toContain(offered.deadline);expect(html).toContain('仍需另行工作');expect(html).toContain('¥300')
+  const unavailableBusinesses={...features,course:null,relay:null,deepseek:null,routines:null}
+  expect(renderToStaticMarkup(<SceneThreads p={{...h.p,view,features:unavailableBusinesses}} onOpen={h.p.onNavigate}/>)).toContain(offered.deadline)
+  const scene=renderToStaticMarkup(<NarrativeScene {...h.p} view={view} features={features} screen="life"/>)
+  expect(scene).toContain('核对并兑现与唐萤的约定');expect(scene).toContain('你已经接受，仍要用实际工作兑现')
+  expect(scene).not.toContain('答应过的事，已经实际做到');expect(h.controller.exportSaved()).toBe(before)
+ }finally{await h.controller.close();await h.store.close()}
+},20000)
+
+it('an invitation remains separate from accepting and completing it, and can be declined from the scene',async()=>{
+ const h=await normalScene()
+ try{
+  await h.controller.submit(h.controller.prepare('StartLifeWork',{kind:'friend_visit',personId:'tang-ying',reference:null}));await h.controller.submit(h.controller.prepare('AdvanceTime',{date:'2020-01-04'}))
+  const view=h.controller.snapshot.view!,features=view.features as unknown as PlayFeatures,before=h.controller.exportSaved()
+  const html=renderToStaticMarkup(<NarrativeScene {...h.p} view={view} features={features} screen="life"/>)
+  expect(html).toContain('这是一项邀请，还没有接受');expect(html).toContain('核对唐萤的邀请');expect(html).toContain('婉拒唐萤的邀请');expect(html).toContain('以后仍需个人¥300')
+  expect(html).not.toContain('你已经接受');expect(h.controller.exportSaved()).toBe(before)
+ }finally{await h.controller.close();await h.store.close()}
+},20000)
+
+it('every unresolved public risk survives the ordinary highlight budget without assuming recovery',()=>{
+ const base={kind:'agent' as const,stage:'signal' as const,deadline:'2025-01-31',resolvedAt:null,businessIds:['public-course'],knownCostFen:100,paidWorkCostFen:0,unverifiedFeePaidFen:0,unpaidKnownCostFen:100}
+ // Public display facts only: no private verdict, permissions, RNG or stored campaign fixture.
+ const notes=riskThreads([...Array.from({length:6},(_,i)=>({...base,id:'public-risk-'+i})),{...base,id:'resolved-risk',resolvedAt:'2025-01-20'},{...base,id:'normal-risk',stage:'normal'}],()=> '课程工作室')
+ expect(notes).toHaveLength(6);expect(notes.map(n=>n.id)).toEqual(Array.from({length:6},(_,i)=>'risk:public-risk-'+i))
+ for(const note of notes){expect(note.title).toContain('课程工作室');expect(note.title).toContain('仍待核实');expect(note.detail).toContain('暂停自报不代表独立恢复');expect(note.screen).toBe('story')}
+})
+
+it('annual scenes use completion as of that date, and text mode needs no decorative image',async()=>{
+ const h=await normalScene()
+ try{
+  await h.controller.submit(h.controller.prepare('StartLifeWork',{kind:'workspace',personId:null,reference:null}))
+  let view=h.controller.snapshot.view!,features=view.features as unknown as PlayFeatures
+  expect(annualRoomImproved(features.life.jobs,'2020-01-08')).toBe(false)
+  await h.controller.submit(h.controller.prepare('AdvanceTime',{date:'2020-01-08'}));view=h.controller.snapshot.view!;features=view.features as unknown as PlayFeatures
+  const before=h.controller.exportSaved();expect(annualRoomImproved(features.life.jobs,'2020-01-07')).toBe(false);expect(annualRoomImproved(features.life.jobs,'2020-01-08')).toBe(true)
+  const html=renderToStaticMarkup(<AnnualScene life={features.life} year={features.life.years[0]!} textOnly/>);expect(html).toContain('桌椅与照明已经改善');expect(html).not.toContain('<img');expect(h.controller.exportSaved()).toBe(before)
+ }finally{await h.controller.close();await h.store.close()}
+},20000)
+
+it('the year retains the actual promise beyond its five selected causal highlights',async()=>{
+ const h=await normalScene()
+ try{
+  await h.controller.submit(h.controller.prepare('StartLifeWork',{kind:'friend_visit',personId:'tang-ying',reference:null}));await h.controller.submit(h.controller.prepare('AdvanceTime',{date:'2020-01-04'}))
+  let features=h.controller.snapshot.view!.features as unknown as PlayFeatures;const offered=features.life.promises.find(o=>o.status==='offered')!
+  await h.controller.submit(h.controller.prepare('AcceptLifePromise',{promiseId:offered.id,consent:true}));await h.controller.submit(h.controller.prepare('FulfillLifePromise',{promiseId:offered.id}));await h.controller.submit(h.controller.prepare('AdvanceTime',{date:'2020-01-07'}))
+  const view=h.controller.snapshot.view!;features=view.features as unknown as PlayFeatures;const before=h.controller.exportSaved()
+  const html=renderToStaticMarkup(<YearReview p={{...h.p,view,features}} onPlan={h.p.onPeople}/>);expect(html).toContain('这一年提出的全部邀请与原约定');expect(html).toContain('唐萤 · 已经通过实际工作兑现');expect(html).toContain('2020-01-07留下这项结果');expect(h.controller.exportSaved()).toBe(before)
  }finally{await h.controller.close();await h.store.close()}
 },20000)
 

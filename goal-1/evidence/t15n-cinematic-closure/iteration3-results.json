@@ -1,0 +1,31 @@
+{
+  "steps": [
+    {
+      "step": "ui-3",
+      "command": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/ui"
+      ],
+      "exitCode": 0,
+      "seconds": 13.72074294090271
+    },
+    {
+      "step": "build-3",
+      "command": [
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        ".delivery/t15n-cinematic-3"
+      ],
+      "exitCode": 0,
+      "seconds": 32.603265047073364
+    }
+  ],
+  "allPassed": true
+}

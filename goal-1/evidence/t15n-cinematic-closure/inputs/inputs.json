@@ -1,0 +1,77 @@
+{
+  "kind": "normal engine-generated complete prefixes, not native prehistory",
+  "seed": "t15n-life-contract-normal",
+  "versions": {
+    "schemaVersion": 12,
+    "rulesVersion": "rules-t15-life-v1",
+    "contentVersion": "world-life-work-v1",
+    "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+    "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+  },
+  "commands": [
+    {
+      "runId": "t15n-accepted-technical",
+      "actorId": "player",
+      "commandId": "t15n-engine-1",
+      "expectedRevision": 1,
+      "kind": "StartLifeWork",
+      "payload": {
+        "kind": "friend_visit",
+        "personId": "tang-ying",
+        "reference": null
+      }
+    },
+    {
+      "runId": "t15n-accepted-technical",
+      "actorId": "player",
+      "commandId": "t15n-engine-2",
+      "expectedRevision": 2,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2020-01-04"
+      }
+    },
+    {
+      "runId": "t15n-accepted-technical",
+      "actorId": "player",
+      "commandId": "t15n-engine-3",
+      "expectedRevision": 3,
+      "kind": "AcceptLifePromise",
+      "payload": {
+        "promiseId": "life:41f85a063e4bfab5e46a9eefe283ae77",
+        "consent": true
+      }
+    }
+  ],
+  "snapshots": [
+    {
+      "file": "normal-initial.json",
+      "sha256": "2307a056b66792f5abb2a0cf11c4609f3739c9ed46fd722a38ee0de16fec7618",
+      "bytes": 133756,
+      "revision": 1,
+      "date": "2020-01-01",
+      "runId": "t15n-accepted-technical",
+      "origin": "normal"
+    },
+    {
+      "file": "normal-offered.json",
+      "sha256": "eeb5754bf46c64af1d80cb5540ae1a42fa04de56d9a85f66a3c0811d81e984b6",
+      "bytes": 143968,
+      "revision": 3,
+      "date": "2020-01-04",
+      "runId": "t15n-accepted-technical",
+      "origin": "normal"
+    },
+    {
+      "file": "normal-accepted.json",
+      "sha256": "fd5b7e19857d950fcc4db1571f01dba82dc9fab92530a14e3409b22461be6984",
+      "bytes": 145444,
+      "revision": 4,
+      "date": "2020-01-04",
+      "runId": "t15n-accepted-technical",
+      "origin": "normal"
+    }
+  ],
+  "source": "source-before.json",
+  "noInjectedCashOrFixture": true
+}

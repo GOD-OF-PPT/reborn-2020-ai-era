@@ -1,0 +1,27 @@
+{
+  "observed": "Full unchanged source6:508/509, ordinary original120000 timeout126713. Same original singleworker fixedcase isolated passed93.16s total95.339s. No source/limits/assertions/isolation change.",
+  "ranked": [
+    {
+      "id": "H1",
+      "hypothesis": "Full-suite compilation/scheduling or transient host CPU load amplifies a CPU-heavy case.",
+      "prediction": "Unchanged isolated/harness durations lower than full; wall versus child CPU and repeat context distinguish contention from consistently high intrinsic cost."
+    },
+    {
+      "id": "H2",
+      "hypothesis": "Repeated strict serialization/validation of the same normal snapshots dominates.",
+      "prediction": "CPU samples concentrate in codec, canonical JSON, hash or state validators; preserving bytes and all validations while removing redundant internal work lowers full-path cost."
+    },
+    {
+      "id": "H3",
+      "hypothesis": "Historical ledger/reference scans grow nonlinearly with the normal run.",
+      "prediction": "Late setup/tail costs and validation lookup stacks dominate; equivalent per-call indices reduce work without skipping any invariant."
+    },
+    {
+      "id": "H4",
+      "hypothesis": "Normal relay template preparation plus a second real replay duplicates expensive prefix construction.",
+      "prediction": "Prepared-stage timing dominates and profile shows both construction passes; any remedy must retain complete normal actual command execution, original IDs/seed and strict main-path roundtrips\u2014not substitute a fixture or simply drop checks."
+    }
+  ],
+  "profileOrder": "Unprofiled staged full path, then sampled same path; capture canonical prepared/final and all original assertions. Never run two heavy probes together.",
+  "rules": "No production edit before measurement supports a hypothesis; original test remains regression seam, no timeout/seed/assertion/isolation change."
+}
