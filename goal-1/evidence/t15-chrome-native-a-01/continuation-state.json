@@ -1,0 +1,91 @@
+{
+  "goal": "active, T15/C15 not complete",
+  "openingCommit": "ee420c28129dde9464ab9d87effaa0ac6a566dec",
+  "latestUser": "chrome设置完毕请再次尝试",
+  "chrome": {
+    "browserId": "3",
+    "type": "extension",
+    "prodTab": "387926830",
+    "devTab": "387926837",
+    "prodUrl": "http://127.0.0.1:5237/",
+    "devUrl": "http://127.0.0.1:5238/?storageTest=abort-life-work",
+    "explicitViewport": null,
+    "viewportResetPending": false,
+    "viewportResetInvoked": true
+  },
+  "sources": "current294 exactly same source-freeze-c2; no game code changed",
+  "plan": "goal-1/t15-chrome-native-plan.md",
+  "nativeZoom": {
+    "protocolZoom": 1,
+    "MetaEqualPlaywrightChanged": false,
+    "superPlusCuaChanged": false,
+    "noCSSOrPageScaleMutation": true,
+    "actualBaselineViewportIsOnlyLayoutOverride": true,
+    "real200NotPassed": true
+  },
+  "prodNormal": {
+    "runId": "life-6835362e-ac19-4cd1-8d7d-0fe920389f96",
+    "seed": "t15-chrome-native-zoom-tech-1",
+    "savedRevision": 1,
+    "cashYuan": 26000,
+    "AP": 4,
+    "raw": "chrome-zoom-tech-before1.json",
+    "sha256": "25ccd2a176a4166ede61dfd60fde9f8d965560d255a7d12a575eeb6dc3be1b8e"
+  },
+  "devNormal": {
+    "runId": "life-fea9b8fe-7986-402f-a08e-b5695dd2f0af",
+    "seed": "t15-chrome-native-leave-content-1",
+    "physicalRevision": 1,
+    "raw": "chrome-dev-before1.json",
+    "oldSha256": "fd73a5cfacc54825f92726e1f85000f09f03aa224000adab95484356178bd45f",
+    "candidateA": "chrome-dev-candidate2-before-leave.json",
+    "candidateASha": "951dd9c1bc51f1d6d7e2a6762acfae48d91ed83ff203e881e282f945aef3c981",
+    "candidateB": "chrome-dev-candidate2b-before-cancel.json",
+    "candidateBSha": "be2a39408611b7c70596faadd1e435d623fe78ce680dfff8720c8dbdd467697c",
+    "scope": "A and B are two alternative real unsaved commands from same original head1, not one committed history",
+    "currentPage": "DEV last confirmed unsaved1 holding alternativeE; after asking manual native stay no further Chrome UI action should run until user response",
+    "candidateAlternatives": {
+      "A": "chrome-dev-candidate2-before-leave.json",
+      "B": "chrome-dev-candidate2b-before-cancel.json",
+      "C": "chrome-dev-candidate2c-before-script-cancel.json",
+      "D": "chrome-dev-candidate2d-before-native-api.json",
+      "E": "chrome-dev-candidate2e-before-manual.json"
+    },
+    "lastConfirmedLiveCandidate": "E, revision2, SHA0703250575b30eec28dc4d22f72e2fa1e86fb43e211ec7fb78331c86f3182165; user may act after this snapshot"
+  },
+  "actualNativeBeforeUnload": {
+    "openingEvents": true,
+    "hasBrowserHandler": true,
+    "closedResult": true,
+    "chosenByAgent": false,
+    "cancel1": "No dialog is showing after highlevel dialog/screenshot",
+    "cancel2": "Raw CDP unavailable while Browser Use resolving paused document response, autoaccepted true",
+    "originalOld1PhysicalAfterFirstLeaveExact": true,
+    "stayNotPassed": true,
+    "doNotCallThisFullAcceptance": true,
+    "observedAcceptedReloads": 4,
+    "responseActor": "unknown; all accepted before agent cancellation completed, do not claim known unique cause",
+    "lastAutoAcceptanceScope": "rawPage.reload, ordinary location.reload, highlevelTab.reload all produced native opening/closed true"
+  },
+  "helpers": {
+    "capture": "chrome-evidence.mjs (raw PNG/JPEG, originals unedited)",
+    "export": "chrome-raw-export.mjs (read-only CDP visible textarea, reliable; use instead of slow Playwright field helper)",
+    "original": "../d03-cinematic/browser-evidence.mjs unchanged"
+  },
+  "toolFailures": "Several Playwright Input/evaluate timeouts. Inspect actual state first; exports may have already written before close timeout. AX native click(index)/setValue and CUA Escape worked. Do not repeat successful commands. Browser.getVersion unsupported, get actual UA via read-only Runtime.evaluate.",
+  "pending": "Finish genuine native zoom and cancellation if supported, verify all raw exports/full prefixes, source/production hashes/GJ/docs, local commit. User manual intervention may be needed for menu200 and native cancellation; do independent work first. Do not markT15/C15 or whole goal yet.",
+  "viewportResetPending": false,
+  "manualObservationCursor": 264,
+  "questions": "Two pending asynchronous requests: set prodChrome menu200; manually refresh DEV and choose stay. Do not assume silence is completion.",
+  "prefixAudit01": {
+    "exitCode": 0,
+    "exports": 10,
+    "uniquePostCreationCommands": 5,
+    "oldByteEqualFiles": 4
+  },
+  "recordersAfterCheckpoint": "Never append committed A01. On resumed manual results create fresh A02 directory and new recorders, preserving A01 source/runtime.",
+  "snapshotStage": "Awaiting the two requested real native UI operations; no Chrome page commands after the questions to avoid interfering with manual work",
+  "lastConfirmedProtocolZoom": 1,
+  "manualQuestionResponseReceived": false,
+  "nextDataMustUseNewDirectoryAfterCheckpoint": true
+}

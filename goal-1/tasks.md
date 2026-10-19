@@ -262,6 +262,8 @@ T15原轮内部顺序（记录保留；现先执行D03，移动专项后置M01�
 
 - 用户指定Chrome后的新一轮受阻审计：[恢复后第三轮](evidence/t15-chrome-resume-blocked-03/audit.json)从“使用chrome验证”重新计数，未复用上轮阈值。首次Chrome直连实际返回不可用，第二轮仍无Chrome，本轮库存仍仅IAB/MCPApps，无extension/CDP/原生App或人工结果。另发现5237/5238返回502，旧93431/48403句柄明确missing且端口无监听，遂复用原固定build/未改源码恢复服务；[恢复结果](evidence/t15-chrome-resume-blocked-03/runtime-recovery.json)记录新99313/25379句柄、生产36资源HTTP原字节与DEV200，原因未知不推断。此为维护进展，Chrome/真实200%/原生离页并未推进，不用IAB或其他自动化替代指定Chrome。294源与原input/plan保持，恢复后无独立T15实施/准备可做、无可等待Chrome验收作业，满足恢复后连续三轮且真正依赖外部连接的blocked条件，本轮申请goal工具登记blocked，以实际返回为准。T15/C15及后续任务不勾，完整目标和美术优先/移动末位不变。[杠精审查] 通过（恢复/保全/受阻审计范围）；复用原构建/源码/补验包，无新Skill/代理/自动化、不重跑旧全量。Chrome接入并选择@Chrome后恢复，恢复后再次重新审计。审计/记录本地提交，未推送。
 
+- Chrome实际连接后的补验进展：用户“chrome设置完毕请再次尝试”后实际连入Chrome extension/browser3，旧不可用审计是之前事实，ee420c中的blocked仅为请求，更新前环境已改变，goal保持active。按[Chrome计划](t15-chrome-native-plan.md)完成[阶段验证](evidence/t15-chrome-native-a-01/validation.md)：两正常背景实际新局、真实3000元/1点/7日head.put后abort、10份可见导出完整正常前缀逐字重放（5个同旧1上的未保存替代命令，非五次提交采购）、四份旧物理/已保存导出fd73原字节同；294源与生产36资源保持。本次原生beforeunload opening/hasBrowserHandler及closed true已有真实Chrome事件，但取消前离开已被接受，响应方未核定，原生“留在”未通过；正式接口/立即处理/普通同源reload的原结果保留，不冒充取消或完整原生验收。原生zoom最后为1，快捷键未改，1280布局覆盖已reset，不冒充200%。已备份第五个候选2e/旧1，异步请求用户亲自设Chrome菜单200%及刷新选留在；操作后的事件/原字节仍待核实。Chrome正常住处图已目检，A美术保持；没有游戏/规则/素材/版本或依赖修缮，不重跑旧500/60当新执行。[杠精审查] 已验证子范围通过，T15/C15仍不勾，完整目标/移动末位不变。REPEAT复用正常前缀/源冻结/截图/原字节记录，Chrome专用读取仍只读产品可见textarea，无新Skill/代理/自动化。阶段证据以本地检查点保存，未推送；提交后新人工结果另新目录，不追加已提交journal。
+
 ### T16
 
 - 实际工作：

@@ -1,0 +1,58 @@
+{
+  "start": {
+    "cursor": 111,
+    "events": [],
+    "hasMore": false,
+    "truncated": false
+  },
+  "opening": {
+    "cursor": 114,
+    "events": [
+      {
+        "sequence": 114,
+        "source": {
+          "tabId": 387926837
+        },
+        "method": "Page.javascriptDialogOpening",
+        "params": {
+          "defaultPrompt": "",
+          "frameId": "595E9EC27FA5B53F7167CA738B97D314",
+          "hasBrowserHandler": true,
+          "message": "",
+          "type": "beforeunload",
+          "url": "http://127.0.0.1:5238/?storageTest=abort-life-work"
+        }
+      }
+    ],
+    "hasMore": false,
+    "truncated": false
+  },
+  "handling": {
+    "status": "rejected",
+    "message": "Error: Raw CDP is unavailable while Browser Use is resolving a paused document response."
+  },
+  "after": {
+    "cursor": 126,
+    "events": [
+      {
+        "sequence": 115,
+        "source": {
+          "tabId": 387926837
+        },
+        "method": "Page.javascriptDialogClosed",
+        "params": {
+          "frameId": "595E9EC27FA5B53F7167CA738B97D314",
+          "result": true,
+          "userInput": ""
+        }
+      }
+    ],
+    "hasMore": false,
+    "truncated": false
+  },
+  "reload": {
+    "status": "fulfilled",
+    "value": {}
+  },
+  "method": "No high-level DOM/screenshot/dialog call or file IO between opening event and accept:false request"
+}

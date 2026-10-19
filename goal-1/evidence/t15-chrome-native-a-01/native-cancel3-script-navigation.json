@@ -1,0 +1,62 @@
+{
+  "start": {
+    "cursor": 161,
+    "events": [],
+    "hasMore": false,
+    "truncated": false
+  },
+  "opening": {
+    "cursor": 164,
+    "events": [
+      {
+        "sequence": 164,
+        "source": {
+          "tabId": 387926837
+        },
+        "method": "Page.javascriptDialogOpening",
+        "params": {
+          "defaultPrompt": "",
+          "frameId": "595E9EC27FA5B53F7167CA738B97D314",
+          "hasBrowserHandler": true,
+          "message": "",
+          "type": "beforeunload",
+          "url": "http://127.0.0.1:5238/?storageTest=abort-life-work"
+        }
+      }
+    ],
+    "hasMore": false,
+    "truncated": false
+  },
+  "handling": {
+    "status": "rejected",
+    "message": "Error: Raw CDP is unavailable while Browser Use is resolving a paused document response."
+  },
+  "after": {
+    "cursor": 178,
+    "events": [
+      {
+        "sequence": 165,
+        "source": {
+          "tabId": 387926837
+        },
+        "method": "Page.javascriptDialogClosed",
+        "params": {
+          "frameId": "595E9EC27FA5B53F7167CA738B97D314",
+          "result": true,
+          "userInput": ""
+        }
+      }
+    ],
+    "hasMore": false,
+    "truncated": false
+  },
+  "reload": {
+    "status": "fulfilled",
+    "value": {
+      "result": {
+        "type": "undefined"
+      }
+    }
+  },
+  "method": "Ordinary in-origin location.reload; actual native handler, no synthetic event or app state mutation"
+}
