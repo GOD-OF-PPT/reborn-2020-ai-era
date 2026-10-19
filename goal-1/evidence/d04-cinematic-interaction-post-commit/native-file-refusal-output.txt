@@ -1,0 +1,16 @@
+node:internal/fs/promises:638
+  return new FileHandle(await PromisePrototypeThen(
+                        ^
+
+Error: EEXIST: file already exists, open '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/d04-cinematic-interaction/c2-browser-handoff.json'
+    at async open (node:internal/fs/promises:638:25)
+    at async writeFile (node:internal/fs/promises:1208:14)
+    at async Object.save (file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/d04-cinematic-interaction/browser-observe.mjs:5:34)
+    at async file:///Users/gordon/githome/reborn-2020-ai-era/[eval1]:1:91 {
+  errno: -17,
+  code: 'EEXIST',
+  syscall: 'open',
+  path: '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/d04-cinematic-interaction/c2-browser-handoff.json'
+}
+
+Node.js v22.12.0
