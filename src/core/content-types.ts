@@ -1,4 +1,5 @@
 import type {LifeEvent} from './life-schema.ts'
+import type {JourneyEvent} from './journey-schema.ts'
 import type {StoryEvent} from './story-schema.ts'
 import type {DeepseekEvent} from './deepseek-schema.ts'
 import type { RelayEvent } from './relay-schema.ts'
@@ -84,5 +85,5 @@ export type WorldOperation =
   | { readonly kind: 'open_content_event'; readonly definitionId: string; readonly bindingId: string; readonly date: string }
   | { readonly kind: 'expire_content_event'; readonly eventId: string; readonly date: string }
   | { readonly kind: 'finish_preparation'; readonly jobId: string; readonly date: string }
-export type RunOperation = LifeEvent | StoryEvent | DeepseekEvent | EconomyOperation | WorldOperation | OperatingEvent | MarketEvent | VideoEvent | CourseEvent | RelayEvent
+export type RunOperation = JourneyEvent | LifeEvent | StoryEvent | DeepseekEvent | EconomyOperation | WorldOperation | OperatingEvent | MarketEvent | VideoEvent | CourseEvent | RelayEvent
 export function isWorldOperation(operation: { readonly kind: string }): operation is WorldOperation { return ['world_anchor', 'open_content_event', 'expire_content_event', 'finish_preparation'].includes(operation.kind) }

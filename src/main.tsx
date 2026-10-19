@@ -7,6 +7,7 @@ import './ui/cinematic.css'
 import './ui/film-gameplay.css'
 import './ui/single-screen.css'
 import './ui/scene-play.css'
+import './ui/journey.css'
 
 const root = document.getElementById('root')
 if (!root) throw new Error('Application root is missing')

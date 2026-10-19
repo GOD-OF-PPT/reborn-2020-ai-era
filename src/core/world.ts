@@ -254,7 +254,7 @@ export class WorldRuntime {
   advance(model: RuleModel, target: { readonly date: string; readonly phase?: DayPhase }): RuleModel {
     const result = advanceTimeline(model.timeline, model as State, target, (state, event) => {
       const operation = event.payload
-      if (operation.kind === 'operating_event'||operation.kind==='market_event'||operation.kind==='video_event'||operation.kind==='course_event'||operation.kind==='relay_event'||operation.kind==='deepseek_event'||operation.kind==='story_event'||operation.kind==='life_event') { requireRule(this.extension && state.operations, 'OPERATIONS_RUNTIME_REQUIRED'); const asOf = event.date; return this.extension.reduce({ ...state, economy: { ...state.economy, asOf, ledger: { ...state.economy.ledger, asOf } } }, event) }
+      if (operation.kind === 'operating_event'||operation.kind==='market_event'||operation.kind==='video_event'||operation.kind==='course_event'||operation.kind==='relay_event'||operation.kind==='deepseek_event'||operation.kind==='story_event'||operation.kind==='life_event'||operation.kind==='journey_event') { requireRule(this.extension && state.operations, 'OPERATIONS_RUNTIME_REQUIRED'); const asOf = event.date; return this.extension.reduce({ ...state, economy: { ...state.economy, asOf, ledger: { ...state.economy.ledger, asOf } } }, event) }
       if (!isWorldOperation(operation)) {
         const skippedReason = scheduledActionSkipReason(state.economy, operation)
         if (skippedReason) return { state, skippedReason }

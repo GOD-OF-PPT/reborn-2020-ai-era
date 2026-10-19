@@ -151,7 +151,8 @@ export class RunCodec {
       previousPoint = event
       if(event.payload.kind==='story_event')requireRule(run.story,'STORY_HANDLER_REQUIRED')
       if(event.payload.kind==='life_event')requireRule(run.life,'LIFE_HANDLER_REQUIRED')
-      if (isWorldOperation(event.payload) || event.payload.kind === 'operating_event'||event.payload.kind==='market_event'||event.payload.kind==='video_event'||event.payload.kind==='course_event'||event.payload.kind==='relay_event'||event.payload.kind==='deepseek_event'||event.payload.kind==='story_event'||event.payload.kind==='life_event') {
+      if(event.payload.kind==='journey_event')requireRule(run.journey,'JOURNEY_REQUIRED')
+      if (isWorldOperation(event.payload) || event.payload.kind === 'operating_event'||event.payload.kind==='market_event'||event.payload.kind==='video_event'||event.payload.kind==='course_event'||event.payload.kind==='relay_event'||event.payload.kind==='deepseek_event'||event.payload.kind==='story_event'||event.payload.kind==='life_event'||event.payload.kind==='journey_event') {
         requireRule(this.registry.runtime && run.world, 'WORLD_HANDLER_REQUIRED')
       } else if (receipt.skippedReason !== undefined) {
         // Validate the historical reason against its earlier operation. The action
@@ -179,6 +180,7 @@ export class RunCodec {
       const operation = event.payload
       if(operation.kind==='story_event')requireRule(run.story&&this.registry.runtime,'STORY_HANDLER_REQUIRED')
       if(operation.kind==='life_event')requireRule(run.life&&this.registry.runtime,'LIFE_HANDLER_REQUIRED')
+      if(operation.kind==='journey_event')requireRule(run.journey&&this.registry.runtime,'JOURNEY_REQUIRED')
       if ('accountId' in operation) requireRule(accounts.has(operation.accountId), 'INVALID_ACCOUNT_REFERENCE')
       if ('action' in operation) requireRule(accounts.has(operation.action.accountId) && accounts.has(operation.action.counterpartyId), 'INVALID_ACCOUNT_REFERENCE')
       if ('counterpartyId' in operation) requireRule(accounts.has(operation.counterpartyId), 'INVALID_ACCOUNT_REFERENCE')
