@@ -1,0 +1,406 @@
+{
+  "implementationCommit": "cb8e22c058fa3596eca7c3723d476533598630f7",
+  "actualRefusals": 23,
+  "allExpectedGuardsRefused": true,
+  "protectedFiles": 1368,
+  "allProtectedBytesAndFileSetsUnchanged": true,
+  "source449StillExact": true,
+  "results": [
+    {
+      "name": "life",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_life_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/life"
+      ],
+      "exitCode": 1,
+      "expected": "IMMUTABLE_TASK_EVIDENCE",
+      "refused": true,
+      "seconds": 1.012,
+      "output": "life-guard-output.txt"
+    },
+    {
+      "name": "replay-story",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:story",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/story"
+      ],
+      "exitCode": 1,
+      "expected": "IMMUTABLE_TASK_EVIDENCE",
+      "refused": true,
+      "seconds": 1.421,
+      "output": "replay-story-guard-output.txt"
+    },
+    {
+      "name": "replay-kernel",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:kernel",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/kernel"
+      ],
+      "exitCode": 1,
+      "expected": "IMMUTABLE_TASK_EVIDENCE",
+      "refused": true,
+      "seconds": 0.804,
+      "output": "replay-kernel-guard-output.txt"
+    },
+    {
+      "name": "replay-save",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:save",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/save"
+      ],
+      "exitCode": 1,
+      "expected": "IMMUTABLE_TASK_EVIDENCE",
+      "refused": true,
+      "seconds": 1.022,
+      "output": "replay-save-guard-output.txt"
+    },
+    {
+      "name": "replay-world",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:world",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/world"
+      ],
+      "exitCode": 1,
+      "expected": "IMMUTABLE_TASK_EVIDENCE",
+      "refused": true,
+      "seconds": 1.319,
+      "output": "replay-world-guard-output.txt"
+    },
+    {
+      "name": "replay-operations",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:operations",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/operations"
+      ],
+      "exitCode": 1,
+      "expected": "IMMUTABLE_TASK_EVIDENCE",
+      "refused": true,
+      "seconds": 1.44,
+      "output": "replay-operations-guard-output.txt"
+    },
+    {
+      "name": "replay-first-order",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:first-order",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/first-order"
+      ],
+      "exitCode": 1,
+      "expected": "IMMUTABLE_TASK_EVIDENCE",
+      "refused": true,
+      "seconds": 1.382,
+      "output": "replay-first-order-guard-output.txt"
+    },
+    {
+      "name": "replay-market",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:market",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/market"
+      ],
+      "exitCode": 1,
+      "expected": "IMMUTABLE_TASK_EVIDENCE",
+      "refused": true,
+      "seconds": 1.364,
+      "output": "replay-market-guard-output.txt"
+    },
+    {
+      "name": "replay-playable",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:playable",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/playable"
+      ],
+      "exitCode": 1,
+      "expected": "IMMUTABLE_TASK_EVIDENCE",
+      "refused": true,
+      "seconds": 1.484,
+      "output": "replay-playable-guard-output.txt"
+    },
+    {
+      "name": "replay-video",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:video",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/video"
+      ],
+      "exitCode": 1,
+      "expected": "IMMUTABLE_TASK_EVIDENCE",
+      "refused": true,
+      "seconds": 1.395,
+      "output": "replay-video-guard-output.txt"
+    },
+    {
+      "name": "replay-course",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:course",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/course"
+      ],
+      "exitCode": 1,
+      "expected": "IMMUTABLE_TASK_EVIDENCE",
+      "refused": true,
+      "seconds": 1.367,
+      "output": "replay-course-guard-output.txt"
+    },
+    {
+      "name": "replay-relay",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:relay",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/relay"
+      ],
+      "exitCode": 1,
+      "expected": "IMMUTABLE_TASK_EVIDENCE",
+      "refused": true,
+      "seconds": 1.382,
+      "output": "replay-relay-guard-output.txt"
+    },
+    {
+      "name": "replay-deepseek",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:deepseek",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/deepseek"
+      ],
+      "exitCode": 1,
+      "expected": "IMMUTABLE_TASK_EVIDENCE",
+      "refused": true,
+      "seconds": 1.501,
+      "output": "replay-deepseek-guard-output.txt"
+    },
+    {
+      "name": "replay-route-diversity",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "evidence:route-diversity",
+        "--",
+        "--output-dir",
+        "goal-1/evidence/t16-c16-final-a1/replay/route-diversity-r2"
+      ],
+      "exitCode": 1,
+      "expected": "IMMUTABLE_TASK_EVIDENCE",
+      "refused": true,
+      "seconds": 1.365,
+      "output": "replay-route-diversity-guard-output.txt"
+    },
+    {
+      "name": "fixed42",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_journey_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t16-epilogue/matrix-full-r2"
+      ],
+      "exitCode": 1,
+      "expected": "IMMUTABLE_TASK_EVIDENCE",
+      "refused": true,
+      "seconds": 1.044,
+      "output": "fixed42-guard-output.txt"
+    },
+    {
+      "name": "legacy-asset",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/t16-epilogue/collect-legacy-asset-closing.mts",
+        "--output-dir",
+        "goal-1/evidence/t16-epilogue/asset-a01"
+      ],
+      "exitCode": 1,
+      "expected": "IMMUTABLE_TASK_EVIDENCE",
+      "refused": true,
+      "seconds": 0.942,
+      "output": "legacy-asset-guard-output.txt"
+    },
+    {
+      "name": "c16-old-root",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "goal-1/evidence/t16-epilogue/run-c16.mjs",
+        "goal-1/evidence/t16-c16-final-a1"
+      ],
+      "exitCode": 1,
+      "expected": "FRESH_C16_DIRECTORY_REQUIRED",
+      "refused": true,
+      "seconds": 0.173,
+      "output": "c16-old-root-guard-output.txt"
+    },
+    {
+      "name": "audit-native-prefixes",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/t16-epilogue/audit-native-prefixes.mts",
+        "a99"
+      ],
+      "exitCode": 1,
+      "expected": "EVIDENCE_SEALED_USE_NEW_ROOT",
+      "refused": true,
+      "seconds": 0.897,
+      "output": "audit-native-prefixes-guard-output.txt"
+    },
+    {
+      "name": "audit-legacy-upgrade",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/t16-epilogue/audit-legacy-upgrade.mts",
+        "a99"
+      ],
+      "exitCode": 1,
+      "expected": "EVIDENCE_SEALED_USE_NEW_ROOT",
+      "refused": true,
+      "seconds": 0.923,
+      "output": "audit-legacy-upgrade-guard-output.txt"
+    },
+    {
+      "name": "prepare-exit-native-prefix",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/t16-epilogue/prepare-exit-native-prefix.mts",
+        "a99"
+      ],
+      "exitCode": 1,
+      "expected": "EVIDENCE_SEALED_USE_NEW_ROOT",
+      "refused": true,
+      "seconds": 0.888,
+      "output": "prepare-exit-native-prefix-guard-output.txt"
+    },
+    {
+      "name": "audit-chrome-r2",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/t16-epilogue/audit-chrome-r2.mts",
+        "a99"
+      ],
+      "exitCode": 1,
+      "expected": "EVIDENCE_SEALED_USE_NEW_ROOT",
+      "refused": true,
+      "seconds": 0.931,
+      "output": "audit-chrome-r2-guard-output.txt"
+    },
+    {
+      "name": "ui-journal",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--input-type=module",
+        "-e",
+        "import {bind} from './goal-1/evidence/d06-single-screen/browser-harness.mjs'; await bind(null,null,\"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t16-epilogue/chrome-final-r11\",'postcommit guard probe').journal({});"
+      ],
+      "exitCode": 1,
+      "expected": "EVIDENCE_SEALED_USE_NEW_ROOT",
+      "refused": true,
+      "seconds": 0.19,
+      "output": "ui-journal-guard-output.txt"
+    },
+    {
+      "name": "ui-click",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--input-type=module",
+        "-e",
+        "import {bind} from './goal-1/evidence/d06-single-screen/browser-harness.mjs'; await bind(null,null,\"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t16-implementation\",'postcommit guard probe').click('should never reach a browser');"
+      ],
+      "exitCode": 1,
+      "expected": "EVIDENCE_SEALED_USE_NEW_ROOT",
+      "refused": true,
+      "seconds": 0.176,
+      "output": "ui-click-guard-output.txt"
+    }
+  ]
+}

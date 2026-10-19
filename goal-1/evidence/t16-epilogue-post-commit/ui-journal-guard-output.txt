@@ -1,0 +1,14 @@
+file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/d06-single-screen/browser-harness.mjs:4
+export function assertEvidenceWritable(root){if(existsSync(root+'/sealed-evidence.json'))throw Error('EVIDENCE_SEALED_USE_NEW_ROOT');}
+                                                                                               ^
+
+Error: EVIDENCE_SEALED_USE_NEW_ROOT
+    at assertEvidenceWritable (file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/d06-single-screen/browser-harness.mjs:4:96)
+    at Object.journal (file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/d06-single-screen/browser-harness.mjs:9:29)
+    at file:///Users/gordon/githome/reborn-2020-ai-era/[eval1]:1:215
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:217:26)
+    at async ModuleLoader.eval (node:internal/modules/esm/loader:213:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+
+Node.js v22.12.0

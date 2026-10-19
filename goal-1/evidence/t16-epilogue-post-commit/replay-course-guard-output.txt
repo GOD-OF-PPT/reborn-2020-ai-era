@@ -1,0 +1,18 @@
+
+> reborn-2020-ai-era@0.1.0 evidence:course
+> node --experimental-strip-types scripts/collect_course_evidence.ts --output-dir goal-1/evidence/t16-c16-final-a1/replay/course
+
+(node:55370) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+file:///Users/gordon/githome/reborn-2020-ai-era/scripts/evidence-output.ts:15
+  if (committed) throw new Error('IMMUTABLE_TASK_EVIDENCE: rerun with --output-dir <new directory>; preserve the committed artifact')
+                       ^
+
+Error: IMMUTABLE_TASK_EVIDENCE: rerun with --output-dir <new directory>; preserve the committed artifact
+    at evidenceDirectory (file:///Users/gordon/githome/reborn-2020-ai-era/scripts/evidence-output.ts:15:24)
+    at file:///Users/gordon/githome/reborn-2020-ai-era/scripts/collect_course_evidence.ts:10:71
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+
+Node.js v22.12.0

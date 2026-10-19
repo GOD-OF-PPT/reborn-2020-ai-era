@@ -1,0 +1,13 @@
+(node:55537) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t16-epilogue/audit-legacy-upgrade.mts:7
+if(existsSync(new URL('./sealed-evidence.json',import.meta.url)))throw Error('EVIDENCE_SEALED_USE_NEW_ROOT')
+                                                                       ^
+
+Error: EVIDENCE_SEALED_USE_NEW_ROOT
+    at file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t16-epilogue/audit-legacy-upgrade.mts:7:72
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+
+Node.js v22.12.0
