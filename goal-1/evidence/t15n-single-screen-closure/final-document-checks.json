@@ -1,0 +1,39 @@
+[
+  {
+    "name": "docs-final-before-commit",
+    "command": [
+      "rtk",
+      "proxy",
+      "python3",
+      "-B",
+      "scripts/check_docs.py",
+      "--text-only"
+    ],
+    "exitCode": 0,
+    "seconds": 29.468722844001604
+  },
+  {
+    "name": "plan-final-before-commit",
+    "command": [
+      "rtk",
+      "proxy",
+      "python3",
+      "-B",
+      "scripts/check_plan.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.12905730899365153
+  },
+  {
+    "name": "competitive-final-before-commit",
+    "command": [
+      "rtk",
+      "proxy",
+      "python3",
+      "-B",
+      "scripts/check_competitive_design.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.11339462500473019
+  }
+]

@@ -1,0 +1,500 @@
+{
+  "result": "COMPLETE_NORMAL_PREFIXES_BYTE_EQUAL",
+  "sourceFiles": 293,
+  "exports": 3,
+  "uniqueEvaluatedCommands": 6,
+  "normalIdentities": [
+    "life-a90fc225-c78c-499d-939d-62c182bbad31"
+  ],
+  "cases": [
+    {
+      "file": "native-content-fulfilled-7.json",
+      "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+      "seed": "seed-e4350d46-6f04-4024-91e6-eb2974b3da2f",
+      "backgroundId": "content_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-01-07",
+      "revision": 7,
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "friend_visit",
+            "personId": "tang-ying",
+            "reference": null
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-e23358e2-a8e0-48b8-9615-16e7cfde5fa1",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-04",
+            "phase": "snapshot"
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-e84f2d04-7a53-4703-a2f2-e0b5542aa811",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AcceptLifePromise",
+          "payload": {
+            "consent": true,
+            "promiseId": "life:41f85a063e4bfab5e46a9eefe283ae77"
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-254b890a-ed23-45a3-802f-af7bb4da701b",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "FulfillLifePromise",
+          "payload": {
+            "promiseId": "life:41f85a063e4bfab5e46a9eefe283ae77"
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-9900e613-1d5b-4c26-b808-e84eb90277ea",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-06",
+            "phase": "snapshot"
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-69c45edc-cb71-4034-93c0-572ff42c94f2",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-07",
+            "phase": "snapshot"
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-e2ee922e-3ac3-4fc1-b881-1d8e8e67d340",
+          "expectedRevision": 6
+        }
+      ],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "expired",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": {
+          "kind": "expired",
+          "date": "2020-01-06"
+        },
+        "businessId": null,
+        "contractId": null,
+        "jobId": null,
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 0,
+          "paymentFen": 0,
+          "directCostFen": 0,
+          "netOrderFen": 0,
+          "businessPostedProfitFen": 0
+        },
+        "paidCaseAvailable": false,
+        "cashFen": 2550000,
+        "minimumCashFen": 2550000,
+        "quarterClosed": false,
+        "quarterEndCashFen": null,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "life:3b76bfa46e7adc91cecedddaa9a472c5:cost",
+            "date": "2020-01-01",
+            "cashFen": 2580000
+          },
+          {
+            "transactionId": "life:59259b58362189add4a6d12bc13860ff:cost",
+            "date": "2020-01-04",
+            "cashFen": 2550000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 2,
+          "reserved": 0,
+          "available": 2
+        }
+      },
+      "rawSha256": "5a60ceb5f5d1be6aed15dc618633dc9f8f7db3534427ac7d2d74c3a31a32d7b3",
+      "canonicalSha256": "5a60ceb5f5d1be6aed15dc618633dc9f8f7db3534427ac7d2d74c3a31a32d7b3",
+      "origin": "actual_product_export",
+      "normalization": null,
+      "fullReplayByteEqual": true,
+      "source": "source-final-unchanged"
+    },
+    {
+      "file": "native-after-annual-7.json",
+      "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+      "seed": "seed-e4350d46-6f04-4024-91e6-eb2974b3da2f",
+      "backgroundId": "content_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-01-07",
+      "revision": 7,
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "friend_visit",
+            "personId": "tang-ying",
+            "reference": null
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-e23358e2-a8e0-48b8-9615-16e7cfde5fa1",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-04",
+            "phase": "snapshot"
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-e84f2d04-7a53-4703-a2f2-e0b5542aa811",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AcceptLifePromise",
+          "payload": {
+            "consent": true,
+            "promiseId": "life:41f85a063e4bfab5e46a9eefe283ae77"
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-254b890a-ed23-45a3-802f-af7bb4da701b",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "FulfillLifePromise",
+          "payload": {
+            "promiseId": "life:41f85a063e4bfab5e46a9eefe283ae77"
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-9900e613-1d5b-4c26-b808-e84eb90277ea",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-06",
+            "phase": "snapshot"
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-69c45edc-cb71-4034-93c0-572ff42c94f2",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-07",
+            "phase": "snapshot"
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-e2ee922e-3ac3-4fc1-b881-1d8e8e67d340",
+          "expectedRevision": 6
+        }
+      ],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "expired",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": {
+          "kind": "expired",
+          "date": "2020-01-06"
+        },
+        "businessId": null,
+        "contractId": null,
+        "jobId": null,
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 0,
+          "paymentFen": 0,
+          "directCostFen": 0,
+          "netOrderFen": 0,
+          "businessPostedProfitFen": 0
+        },
+        "paidCaseAvailable": false,
+        "cashFen": 2550000,
+        "minimumCashFen": 2550000,
+        "quarterClosed": false,
+        "quarterEndCashFen": null,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "life:3b76bfa46e7adc91cecedddaa9a472c5:cost",
+            "date": "2020-01-01",
+            "cashFen": 2580000
+          },
+          {
+            "transactionId": "life:59259b58362189add4a6d12bc13860ff:cost",
+            "date": "2020-01-04",
+            "cashFen": 2550000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 2,
+          "reserved": 0,
+          "available": 2
+        }
+      },
+      "rawSha256": "5a60ceb5f5d1be6aed15dc618633dc9f8f7db3534427ac7d2d74c3a31a32d7b3",
+      "canonicalSha256": "5a60ceb5f5d1be6aed15dc618633dc9f8f7db3534427ac7d2d74c3a31a32d7b3",
+      "origin": "actual_product_export",
+      "normalization": null,
+      "fullReplayByteEqual": true,
+      "source": "source-final-unchanged"
+    },
+    {
+      "file": "native-after-reload-7.json",
+      "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+      "seed": "seed-e4350d46-6f04-4024-91e6-eb2974b3da2f",
+      "backgroundId": "content_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-01-07",
+      "revision": 7,
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "friend_visit",
+            "personId": "tang-ying",
+            "reference": null
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-e23358e2-a8e0-48b8-9615-16e7cfde5fa1",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-04",
+            "phase": "snapshot"
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-e84f2d04-7a53-4703-a2f2-e0b5542aa811",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AcceptLifePromise",
+          "payload": {
+            "consent": true,
+            "promiseId": "life:41f85a063e4bfab5e46a9eefe283ae77"
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-254b890a-ed23-45a3-802f-af7bb4da701b",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "FulfillLifePromise",
+          "payload": {
+            "promiseId": "life:41f85a063e4bfab5e46a9eefe283ae77"
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-9900e613-1d5b-4c26-b808-e84eb90277ea",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-06",
+            "phase": "snapshot"
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-69c45edc-cb71-4034-93c0-572ff42c94f2",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-07",
+            "phase": "snapshot"
+          },
+          "runId": "life-a90fc225-c78c-499d-939d-62c182bbad31",
+          "commandId": "command-e2ee922e-3ac3-4fc1-b881-1d8e8e67d340",
+          "expectedRevision": 6
+        }
+      ],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "expired",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": {
+          "kind": "expired",
+          "date": "2020-01-06"
+        },
+        "businessId": null,
+        "contractId": null,
+        "jobId": null,
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 0,
+          "paymentFen": 0,
+          "directCostFen": 0,
+          "netOrderFen": 0,
+          "businessPostedProfitFen": 0
+        },
+        "paidCaseAvailable": false,
+        "cashFen": 2550000,
+        "minimumCashFen": 2550000,
+        "quarterClosed": false,
+        "quarterEndCashFen": null,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "life:3b76bfa46e7adc91cecedddaa9a472c5:cost",
+            "date": "2020-01-01",
+            "cashFen": 2580000
+          },
+          {
+            "transactionId": "life:59259b58362189add4a6d12bc13860ff:cost",
+            "date": "2020-01-04",
+            "cashFen": 2550000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 2,
+          "reserved": 0,
+          "available": 2
+        }
+      },
+      "rawSha256": "5a60ceb5f5d1be6aed15dc618633dc9f8f7db3534427ac7d2d74c3a31a32d7b3",
+      "canonicalSha256": "5a60ceb5f5d1be6aed15dc618633dc9f8f7db3534427ac7d2d74c3a31a32d7b3",
+      "origin": "actual_product_export",
+      "normalization": null,
+      "fullReplayByteEqual": true,
+      "source": "source-final-unchanged"
+    }
+  ],
+  "journalSha256": "db4af462eb5d04e6a8b46fdc8fc5d82b5dd505411764e3a83610e92b56a4efef",
+  "scope": "Each export is its real complete creation plus command prefix. Imported normal histories and native actions are separated in UI observation metadata. No direct browser-state injection or fake balance.",
+  "taskId": "T15-N",
+  "notWholeT15Closure": true,
+  "nativeCompatibilityAcceptanceComplete": false,
+  "goalComplete": false
+}

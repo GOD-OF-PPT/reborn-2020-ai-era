@@ -1,0 +1,53 @@
+{
+  "finalSource": "../source-final.json",
+  "sourceUnchanged": true,
+  "allExecutedPassed": false,
+  "steps": [
+    {
+      "step": "typecheck",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "seconds": 41.742,
+      "output": "goal-1/evidence/t15n-single-screen-closure/cumulative/typecheck-output.txt"
+    },
+    {
+      "step": "build",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        ".delivery/t15n-single-screen-final1"
+      ],
+      "exitCode": 0,
+      "seconds": 83.704,
+      "output": "goal-1/evidence/t15n-single-screen-closure/cumulative/build-output.txt"
+    },
+    {
+      "step": "all-unit",
+      "command": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 143,
+      "seconds": 707.231,
+      "output": "goal-1/evidence/t15n-single-screen-closure/cumulative/all-unit-output.txt"
+    }
+  ],
+  "wholeGoalComplete": false,
+  "compatibilityAcceptance": "pending M01, not executed here"
+}

@@ -1,0 +1,307 @@
+{
+  "taskId": "T13",
+  "caseId": "X06",
+  "evidenceType": "cross_route_implementation_evidence",
+  "baseCommit": "ea5e441dc68121ec3ca1f8e834f223d6baa732c3",
+  "scope": "Actual dedicated states/commands and normal entry for all five, with video paid financial fixture clearly separated. This is not human perceived differentiation, full24quarter reachability, balance, or overall P/W/X closure.",
+  "sourceHash": "135f17a5b61646d4dc3bb48ad183707ac73adf8e539e8d795f190e238c7a7df4",
+  "routes": [
+    {
+      "route": "a_share",
+      "sourceReport": {
+        "file": "goal-1/evidence/t15n-single-screen-closure/cumulative-final2/replay/market/t08-market-evidence.json",
+        "sha256": "26b85c12a8e16c609843824cc63b4da68aa025e78365f3120c8e1fa0186e4422"
+      },
+      "normalSnapshot": {
+        "file": "goal-1/evidence/t15n-single-screen-closure/cumulative-final2/replay/market/t08-normal-q01-final.json",
+        "sha256": "46080a2b8e935689cf5a50b9a1024704fc8d4ba3c82a8ed7cec6c9f6a55d0d59",
+        "origin": "normal",
+        "seed": "normal-q01-market-seed",
+        "versions": {
+          "schemaVersion": 12,
+          "rulesVersion": "rules-t15-life-v1",
+          "contentVersion": "world-life-work-v1",
+          "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+          "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+        },
+        "codecValidated": true
+      },
+      "strategyAxes": [
+        "industry_exposure",
+        "limit_and_timing",
+        "actual_fill_and_settlement"
+      ],
+      "actualCommandKinds": [
+        "WorkQuarter",
+        "AdvanceTime",
+        "ResearchMarket",
+        "PlaceStockOrder",
+        "ChooseEvent"
+      ],
+      "feedback": {
+        "orders": 1,
+        "fills": 1,
+        "holdings": [
+          {
+            "symbol": "SIM-AI01",
+            "quantity": 100,
+            "principalFen": 1198800
+          }
+        ],
+        "unrealizedSeparateFromCash": true
+      }
+    },
+    {
+      "route": "ai_video",
+      "sourceReport": {
+        "file": "goal-1/evidence/t15n-single-screen-closure/cumulative-final2/replay/video/t10-video-evidence.json",
+        "sha256": "2d30f225d557d000864540f5bb68924142276186b3d3ef556c65aea41ad32d4e"
+      },
+      "normalSnapshot": {
+        "file": "goal-1/evidence/t15n-single-screen-closure/cumulative-final2/replay/video/t10-video-technical_employee-final.json",
+        "sha256": "cf2e8c4c5f4da1200cc63e9b5105243b3d4e480b607543efd6d2fc3df2fbe8eb",
+        "origin": "normal",
+        "seed": "normal-video-access-v1",
+        "versions": {
+          "schemaVersion": 12,
+          "rulesVersion": "rules-t15-life-v1",
+          "contentVersion": "world-life-work-v1",
+          "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+          "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+        },
+        "codecValidated": true
+      },
+      "strategyAxes": [
+        "audience_and_product",
+        "manual_or_era_qualified_tools",
+        "commercial_or_actual_qualified_platform_income"
+      ],
+      "actualCommandKinds": [
+        "WorkQuarter",
+        "OpenVideoChannel",
+        "StartVideoWork",
+        "AdvanceTime",
+        "ReviewVideoOutput",
+        "PublishVideo",
+        "ChooseEvent",
+        "ApplyVideoProgram",
+        "DecideVideoProgram",
+        "ReworkVideo"
+      ],
+      "feedback": {
+        "normal": {
+          "works": [
+            {
+              "productId": "hotspot",
+              "modeId": "manual"
+            },
+            {
+              "productId": "original_series",
+              "modeId": "image_assisted"
+            }
+          ],
+          "publications": [
+            {
+              "views": 22458,
+              "qualified": false,
+              "monetization": "ads"
+            },
+            {
+              "views": 3634,
+              "qualified": false,
+              "monetization": "none"
+            }
+          ],
+          "noQualificationDoesNotMintCash": true
+        },
+        "separateFinancialFixture": {
+          "file": "goal-1/evidence/t15n-single-screen-closure/cumulative-final2/replay/video/t10-video-f02-final.json",
+          "sha256": "da61cdc37f0c38fac32d00f0bb978b13082505d26e2c08ff76910b6c350d268b",
+          "origin": "fixture",
+          "settledCommissions": 3,
+          "recognizedIncomeFen": 900000,
+          "scope": "dedicated collector already replayed and codec-roundtripped fixture; not normal income or balance proof"
+        }
+      }
+    },
+    {
+      "route": "ai_course",
+      "sourceReport": {
+        "file": "goal-1/evidence/t15n-single-screen-closure/cumulative-final2/replay/course/t11-course-evidence.json",
+        "sha256": "01eefd8b1c16fba18980eb6da08a0d200465eb8f8946b9edaf57d2fa4d2fe6ba"
+      },
+      "normalSnapshot": {
+        "file": "goal-1/evidence/t15n-single-screen-closure/cumulative-final2/replay/course/t11-s02-technical_employee-final.json",
+        "sha256": "15a0da0b7f2c3f3befb55a4530026a2072e0b29dfcfd43accb96da365837f593",
+        "origin": "normal",
+        "seed": "normal-course-s02-v1",
+        "versions": {
+          "schemaVersion": 12,
+          "rulesVersion": "rules-t15-life-v1",
+          "contentVersion": "world-life-work-v1",
+          "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+          "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+        },
+        "codecValidated": true
+      },
+      "strategyAxes": [
+        "learning_target_and_case",
+        "cohort_size_and_support",
+        "actual_stage_and_refund"
+      ],
+      "actualCommandKinds": [
+        "WorkQuarter",
+        "StartFirstOrder",
+        "AdvanceTime",
+        "SubmitDelivery",
+        "ChooseEvent",
+        "OpenVideoChannel",
+        "StartVideoWork",
+        "ReviewVideoOutput",
+        "PublishVideo",
+        "ApplyVideoProgram",
+        "DecideVideoProgram",
+        "OpenCourseStudio",
+        "StartCourseOutline",
+        "ActivateBusiness",
+        "DefineCourse",
+        "BuildCourseSample",
+        "CreateCourseAudience",
+        "PlanCourseCohort",
+        "EnrollCourseAudience",
+        "StartCourseStage",
+        "StartCourseRefresh",
+        "StartCourseRecovery"
+      ],
+      "feedback": {
+        "cohorts": 1,
+        "closedCohorts": 1,
+        "actualLearners": 20,
+        "recognizedIncomeFen": 1998000,
+        "stageDeliveryRefundSupportDistinct": true
+      }
+    },
+    {
+      "route": "api_relay",
+      "sourceReport": {
+        "file": "goal-1/evidence/t15n-single-screen-closure/cumulative-final2/replay/relay/t12-relay-evidence.json",
+        "sha256": "571d062853930d11fbe6264a83fb2220ca35bb267cd4c22a41d33c3860547b0a"
+      },
+      "normalSnapshot": {
+        "file": "goal-1/evidence/t15n-single-screen-closure/cumulative-final2/replay/relay/t12-s03-content_employee-final.json",
+        "sha256": "98fe09a78ec706b7351f6f0b07bf17e9448371d5ac1c26b3a96595e7badbadfc",
+        "origin": "normal",
+        "seed": "normal-relay-s03-v1",
+        "versions": {
+          "schemaVersion": 12,
+          "rulesVersion": "rules-t15-life-v1",
+          "contentVersion": "world-life-work-v1",
+          "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+          "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+        },
+        "codecValidated": true
+      },
+      "strategyAxes": [
+        "supplier_failure_domain",
+        "price_and_credit",
+        "meter_invoice_correction_and_old_balance"
+      ],
+      "actualCommandKinds": [
+        "WorkQuarter",
+        "AdvanceTime",
+        "ChooseEvent",
+        "OpenRelayStation",
+        "StartRelayPreparation",
+        "ApplyRelaySupply",
+        "ReadRelaySupplyDecision",
+        "ActivateBusiness",
+        "StartRelayMarketing",
+        "SetRelayOffer",
+        "SignRelayCustomers",
+        "RechargeRelayCustomer",
+        "AcknowledgeRelayMarket",
+        "StartRelayRequote",
+        "StartRelayServicePeriod",
+        "StartRelayAudit",
+        "CorrectRelayPeriod",
+        "CollectRelayDue"
+      ],
+      "feedback": {
+        "actualMeters": 168,
+        "reportedUnits": 169343,
+        "corrections": 168,
+        "recognizedIncomeFen": 1319088,
+        "remainingCustomerPrepaidFen": 720002
+      }
+    },
+    {
+      "route": "deepseek_opportunity",
+      "sourceReport": {
+        "file": "goal-1/evidence/t15n-single-screen-closure/cumulative-final2/replay/deepseek/t13-deepseek-evidence.json",
+        "sha256": "5cc6cd80ce3f93d61797fa8dcb563341af55bb555e6aaa05d9892dc5a83879cc"
+      },
+      "normalSnapshot": {
+        "file": "goal-1/evidence/t15n-single-screen-closure/cumulative-final2/replay/deepseek/t13-normal-content_employee-final.json",
+        "sha256": "4b1857c1e37ab040c79f09f156e2225e34dff9b314d72651bd892b75383793ea",
+        "origin": "normal",
+        "seed": "normal-deepseek-s04-v1",
+        "versions": {
+          "schemaVersion": 12,
+          "rulesVersion": "rules-t15-life-v1",
+          "contentVersion": "world-life-work-v1",
+          "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+          "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+        },
+        "codecValidated": true
+      },
+      "strategyAxes": [
+        "actual_ecosystem_service",
+        "verified_counterfactual_eligibility_and_terms",
+        "shares_dilution_lock_and_actual_buyer"
+      ],
+      "actualCommandKinds": [
+        "WorkQuarter",
+        "AdvanceTime",
+        "ChooseEvent",
+        "OpenEcosystemService",
+        "StartEcosystemPreparation",
+        "StartEcosystemAdaptation",
+        "ActivateBusiness",
+        "StartEcoOutreach",
+        "AcceptEcoContract",
+        "SubmitEcoDelivery",
+        "CollectEcoReceivable",
+        "EnableCounterfactualEquity",
+        "OpenEquityDesk",
+        "DiscoverEquityInvitation",
+        "InvestigateEquityInvitation",
+        "StartEquityEligibility",
+        "StartEquityNegotiation",
+        "SignEquityAgreement"
+      ],
+      "feedback": {
+        "actualServiceProducts": [
+          "training"
+        ],
+        "recognizedServiceIncomeFen": 600000,
+        "equity": [
+          {
+            "shares": 2500,
+            "totalShares": 1562500,
+            "classification": "counterfactual",
+            "lockUntil": "2027-04-22",
+            "board": false
+          }
+        ],
+        "serviceContractIsNotEquity": true
+      }
+    }
+  ],
+  "notCovered": [
+    "human_experience",
+    "all_strategy_paths_or_balance",
+    "normal_video_monetization_completion",
+    "all24quarters",
+    "full_Q_X_P_W_acceptance"
+  ]
+}

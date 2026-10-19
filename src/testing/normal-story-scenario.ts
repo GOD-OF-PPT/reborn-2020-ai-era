@@ -8,12 +8,18 @@ import {STORY_CONTENT} from '../content/story.ts'
 import type {GameRun} from '../core/run-types.ts'
 /** Normal 2020 source plus extra real work. Original command IDs preserve already-created references. */
 export function normalStoryPrepared(backgroundId:string,seed:string){
- const template=replayNormalRelay(backgroundId,{seed,stopAfterServicePlan:true}),h=new StoryHarness({priorRun:template.initial});let deployed=false,records=false,preparationInQ1=false
- for(const receipt of template.beforeService.receipts.slice(1,-1)){
-  const p=JSON.parse(receipt.payloadSignature).payload;h.sendAs(receipt.kind,p,receipt.commandId)
+ // The template has already executed and codec-roundtripped this exact common
+ // prefix. Branch from its first eligible state instead of executing it twice.
+ let checkpoint:GameRun|null=null
+ const template=replayNormalRelay(backgroundId,{seed,stopAfterServicePlan:true,onCommitted:run=>{if(checkpoint===null&&run.timeline.cursor.date>='2024-12-08'&&run.timeline.cursor.date<='2024-12-24'&&run.operations!.businesses.some(b=>b.definitionId==='relay-station')&&actionBudget(run.economy,run.timeline.cursor.date).available>=1)checkpoint=run}}),prefix:GameRun=checkpoint??template.initial,h=new StoryHarness({priorRun:prefix});let deployed=false,records=false,preparationInQ1=false
+ const prepare=()=>{
   const date=h.run.timeline.cursor.date,b=h.run.operations!.businesses.find(b=>b.definitionId==='relay-station')
   if(!deployed&&b&&date>='2024-12-08'&&date<='2024-12-24'&&actionBudget(h.run.economy,date).available>=1){h.send('StartHengxingDeployment',{businessId:b.id,resourceId:'player-production',expiresAt:'2025-09-30',initialCashLimitFen:500000,consent:true});h.at(addDays(date,7),{work:false});deployed=true;const d=h.run.story!.deployments[0]!;if(h.run.timeline.cursor.date<='2024-12-24'&&actionBudget(h.run.economy,h.run.timeline.cursor.date).available>=1){h.send('StartAgentPreparation',{deploymentId:d.id,kind:'records',resourceId:'player-production'});h.at(addDays(h.run.timeline.cursor.date,7),{work:false});records=true}}
   if(deployed&&!preparationInQ1&&h.run.timeline.cursor.date==='2025-01-01'){const d=h.run.story!.deployments[0]!,kind=records?'drill':'records';h.send('StartAgentPreparation',{deploymentId:d.id,kind,resourceId:'player-production'});h.at(addDays(h.run.timeline.cursor.date,kind==='drill'?3:7),{work:false});preparationInQ1=true;records=true}
+ }
+ if(checkpoint!==null)prepare()
+ for(const receipt of template.beforeService.receipts.slice(prefix.receipts.length,-1)){
+  const p=JSON.parse(receipt.payloadSignature).payload;h.sendAs(receipt.kind,p,receipt.commandId);prepare()
  }
  if(!deployed)return normalStoryLatePrepared({...template,run:template.finishService()})
  const b=h.run.operations!.businesses.find(b=>b.definitionId==='relay-station')!,d=h.run.story!.deployments[0]!,original=template.beforeService.receipts.at(-1)!,p=JSON.parse(original.payloadSignature).payload

@@ -1,0 +1,302 @@
+{
+  "taskId": "T03",
+  "checkpointId": "C03",
+  "caseId": "Q01",
+  "evidenceType": "integration",
+  "scope": "accounting_kernel_only_not_order_matching_or_browser_acceptance",
+  "fixtureVersion": "q01-accounting-v1",
+  "rulesVersion": "rules-t15-core-v1",
+  "seed": null,
+  "randomness": "none_consumed_in_this_accounting_fixture",
+  "runtime": {
+    "node": "v22.12.0",
+    "runner": "node --experimental-strip-types"
+  },
+  "baseCommit": "ea5e441dc68121ec3ca1f8e834f223d6baa732c3",
+  "sourceHashes": {
+    "src/core/errors.ts": "14ff69a5ca0cdc3c4b93ffac3e139750c43c1048668ed733b2006e7e306c5124",
+    "src/core/identity.ts": "2d30f89937a7c8ac84e0213d864aa52207fce416a7d8dc5c7327288f5bc8297c",
+    "src/core/money.ts": "4c3ce1830cd238f43bf65e031bcf07c49fdadf878e0839e80a15ea0e1d532d08",
+    "src/core/calendar.ts": "d252630c17d099e2907df5b0b24e57687f58ab3dd544e03e4a72f41703a83419",
+    "src/core/ledger.ts": "48e5d86f8b556645ac8aad0f6314bbe4fca2722db8202b14798573e58bd92123",
+    "src/core/economy.ts": "cc28674b5a629edd4ef71190f923835f2edcbb162c3ff00b16dc5901beb50d0c",
+    "src/core/timeline.ts": "54767b25792c41643b7728ae0ddc1c3e78ee1a9d9dee08ddba567eb712069ff8",
+    "src/core/economic-time.ts": "30f09d03ac5182abca4b425f8556955ed9b3d0fb8aea61e46905347956d65522",
+    "src/testing/q01-accounting.ts": "bf9690677fe052f76c0cb4b29067789ad9049217e92f5c9cd19c00e19d71ef4c",
+    "scripts/collect_kernel_evidence.ts": "2c405079bd7d56a53949c7f00b2b56d0a83c36c86c06936071bc6ed7c4077c6c",
+    "tsconfig.core.json": "48e4365127083963a2b2d24f5677e93414c3de97cd642ce155a9a10fddcb53df",
+    "package.json": "f6d163c6a9e886094295935e21a52fa334a21a8fadcc356a798ef326886188b1",
+    "package-lock.json": "096fd07ea9a5ac837d12495d23f67b4c0ccbb61d36d308ef689d8041e0ec2bb4",
+    "planning/playable-spec.json": "458d20a822e1044728a7af880a870d9fe8348f0597918e34c761454a2eed8971",
+    "planning/implementation-baseline.json": "665d583c80056a88303d7042744921859898435774c022e5319a695b15f0ee89"
+  },
+  "reproduceCommand": "npm run evidence:kernel",
+  "initialSnapshot": {
+    "file": "t03-q01-initial.json",
+    "sha256": "017c5761359dd979f91b759fc8f6e3e0d0277f76c14fb130c64aa4bf8242e710"
+  },
+  "finalSnapshot": {
+    "file": "t03-q01-final.json",
+    "sha256": "83ec6075537842ebc664f7d54e4abd89cd51a20ccf35adaa58238cf3f07439bc"
+  },
+  "commandSequence": [
+    {
+      "accountId": "personal",
+      "amountFen": 3000000,
+      "counterpartyId": "world",
+      "date": "2020-01-01",
+      "id": "opening",
+      "kind": "opening_cash",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "accountId": "personal",
+      "amountFen": 400000,
+      "counterpartyId": "world",
+      "date": "2020-01-01",
+      "id": "living:2020-01-01",
+      "kind": "due_expense",
+      "obligationId": "living-due:2020-01-01",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "action": {
+        "accountId": "personal",
+        "actionPoints": 2,
+        "cashReservationId": "work-funds",
+        "completeAt": "2020-03-31",
+        "costFen": 0,
+        "counterpartyId": "world",
+        "definitionId": "fixture:work",
+        "id": "work",
+        "settlementAt": "2020-03-31",
+        "startAt": "2020-01-01"
+      },
+      "date": "2020-01-01",
+      "id": "reserve:work",
+      "kind": "reserve_action",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "action": {
+        "accountId": "personal",
+        "actionPoints": 1,
+        "cashReservationId": "research-funds",
+        "completeAt": "2020-01-02",
+        "costFen": 0,
+        "counterpartyId": "world",
+        "definitionId": "fixture:research",
+        "id": "research",
+        "settlementAt": "2020-01-02",
+        "startAt": "2020-01-02"
+      },
+      "date": "2020-01-01",
+      "id": "reserve:research",
+      "kind": "reserve_action",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "action": {
+        "accountId": "personal",
+        "actionPoints": 1,
+        "cashReservationId": "study-funds",
+        "completeAt": "2020-01-10",
+        "costFen": 300000,
+        "counterpartyId": "world",
+        "definitionId": "fixture:study",
+        "id": "study",
+        "settlementAt": "2020-01-10",
+        "startAt": "2020-01-03"
+      },
+      "date": "2020-01-01",
+      "id": "reserve:study",
+      "kind": "reserve_action",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "actionId": "work",
+      "date": "2020-01-01",
+      "id": "execute:work",
+      "kind": "execute_action",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "actionId": "research",
+      "date": "2020-01-02",
+      "id": "execute:research",
+      "kind": "execute_action",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "actionId": "research",
+      "date": "2020-01-02",
+      "id": "finish:research",
+      "kind": "complete_action",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "actionId": "study",
+      "date": "2020-01-03",
+      "id": "execute:study",
+      "kind": "execute_action",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "actionId": "study",
+      "date": "2020-01-10",
+      "id": "finish:study",
+      "kind": "complete_action",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "accountId": "personal",
+      "amountFen": 1200000,
+      "assetId": "SIM-AI01",
+      "classification": "simulation",
+      "counterpartyId": "world",
+      "date": "2020-01-10",
+      "id": "investment",
+      "investmentId": "sim-position",
+      "kind": "acquire_asset",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "accountId": "personal",
+      "amountFen": 800000,
+      "counterpartyId": "world",
+      "date": "2020-01-31",
+      "id": "salary:2020-01-31",
+      "kind": "income",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "accountId": "personal",
+      "amountFen": 400000,
+      "counterpartyId": "world",
+      "date": "2020-02-01",
+      "id": "living:2020-02-01",
+      "kind": "due_expense",
+      "obligationId": "living-due:2020-02-01",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "accountId": "personal",
+      "amountFen": 800000,
+      "counterpartyId": "world",
+      "date": "2020-02-29",
+      "id": "salary:2020-02-29",
+      "kind": "income",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "accountId": "personal",
+      "amountFen": 400000,
+      "counterpartyId": "world",
+      "date": "2020-03-01",
+      "id": "living:2020-03-01",
+      "kind": "due_expense",
+      "obligationId": "living-due:2020-03-01",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "accountId": "personal",
+      "amountFen": 800000,
+      "counterpartyId": "world",
+      "date": "2020-03-31",
+      "id": "salary:2020-03-31",
+      "kind": "income",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "actionId": "work",
+      "date": "2020-03-31",
+      "id": "finish:work",
+      "kind": "complete_action",
+      "sourceEventId": "spec:Q01"
+    },
+    {
+      "accountId": "personal",
+      "date": "2020-03-31",
+      "id": "mark-value",
+      "investmentId": "sim-position",
+      "kind": "value_asset",
+      "sourceEventId": "spec:Q01",
+      "valueFen": 1100000
+    }
+  ],
+  "cashTrace": [
+    {
+      "date": "2020-01-01",
+      "cashFen": 2600000
+    },
+    {
+      "date": "2020-01-03",
+      "cashFen": 2300000
+    },
+    {
+      "date": "2020-01-10",
+      "cashFen": 1100000
+    },
+    {
+      "date": "2020-01-31",
+      "cashFen": 1900000
+    },
+    {
+      "date": "2020-02-01",
+      "cashFen": 1500000
+    },
+    {
+      "date": "2020-02-29",
+      "cashFen": 2300000
+    },
+    {
+      "date": "2020-03-01",
+      "cashFen": 1900000
+    },
+    {
+      "date": "2020-03-31",
+      "cashFen": 2700000
+    }
+  ],
+  "minimumCashFen": 1100000,
+  "actual": {
+    "position": {
+      "cashFen": 2700000,
+      "heldFen": 0,
+      "availableFen": 2700000,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0,
+      "receivableFen": 0,
+      "prepaidLiabilityFen": 0,
+      "payableFen": 0,
+      "supplierPrepaidFen": 0,
+      "investmentValueFen": 1100000,
+      "netAssetsFen": 3800000
+    },
+    "actionBudget": {
+      "quarter": "2020-Q1",
+      "total": 4,
+      "spent": 4,
+      "reserved": 0,
+      "available": 0
+    }
+  },
+  "expected": {
+    "cashFen": 2700000,
+    "investmentValueFen": 1100000,
+    "netAssetsFen": 3800000,
+    "actionPointsSpent": 4
+  },
+  "repeatedSnapshotEqual": true,
+  "notCovered": [
+    "market_orders_and_matching",
+    "employment_eligibility",
+    "runId_revision_atomic_persistence",
+    "content_runtime",
+    "capacity_jobs",
+    "browser_gameplay",
+    "full_campaign",
+    "playtest"
+  ]
+}
