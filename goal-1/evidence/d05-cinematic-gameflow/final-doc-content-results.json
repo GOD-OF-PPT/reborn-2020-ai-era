@@ -1,0 +1,46 @@
+{
+  "steps": [
+    {
+      "step": "content",
+      "command": [
+        "npm",
+        "run",
+        "validate:content"
+      ],
+      "exitCode": 0,
+      "seconds": 1.961
+    },
+    {
+      "step": "docs",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_docs.py",
+        "--text-only"
+      ],
+      "exitCode": 0,
+      "seconds": 21.742
+    },
+    {
+      "step": "plan",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_plan.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.095
+    },
+    {
+      "step": "competitive",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_competitive_design.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.103
+    }
+  ],
+  "allPassed": true
+}

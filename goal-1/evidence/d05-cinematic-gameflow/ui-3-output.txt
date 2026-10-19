@@ -1,0 +1,42 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts --maxWorkers=1 src/ui
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/NarrativeScene.test.tsx (4 tests | 1 failed) 2477ms
+   × a quarter result has its own scene and does not reannounce an old first order in another quarter 429ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/NarrativeScene.test.tsx > a quarter result has its own scene and does not reannounce an old first order in another quarter
+RuleError: CANNOT_REWIND_TIME
+ ❯ requireRule src/core/errors.ts:12:25
+     10|
+     11| export function requireRule(condition: unknown, code: string): asserts…
+     12|   if (!condition) throw new RuleError(code)
+       |                         ^
+     13| }
+     14|
+ ❯ playableAdvanceDate src/application/playable-advance.ts:7:21
+ ❯ NarrativeScene src/ui/NarrativeScene.tsx:64:56
+ ❯ Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:10371:18
+ ❯ renderWithHooks node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:5361:19
+ ❯ renderElement node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:5796:23
+ ❯ retryNode node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:6783:21
+ ❯ performWork node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:7919:19
+ ❯ startWork node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:8807:7
+ ❯ renderToStringImpl node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:8933:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 22 passed (23)
+   Start at  11:38:21
+   Duration  7.60s (tests 58%, import 25%, transform 16%, worker 1%)
+
+    Isolate  7 workers spawned · ~256ms startup each (spawn + environment, per file)
+             at least ~1.54s faster with isolate: false — reuses workers across files instead of one per file
+

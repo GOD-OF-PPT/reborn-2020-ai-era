@@ -1,0 +1,2453 @@
+{
+  "result": "COMPLETE_NORMAL_PREFIXES_BYTE_EQUAL",
+  "sourceFiles": 309,
+  "exports": 14,
+  "uniqueEvaluatedCommands": 29,
+  "normalIdentities": [
+    "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+    "life-38396c9c-9f6e-4df1-b82c-baf73e7a8ecd"
+  ],
+  "cases": [
+    {
+      "file": "technical-start-r1.json",
+      "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+      "seed": "d05-film-first-order-technical",
+      "backgroundId": "technical_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-01-01",
+      "revision": 1,
+      "commands": [],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "available",
+        "nextStep": "choose_offer",
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": null,
+        "contractId": null,
+        "jobId": null,
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 0,
+          "paymentFen": 0,
+          "directCostFen": 0,
+          "netOrderFen": 0,
+          "businessPostedProfitFen": 0
+        },
+        "paidCaseAvailable": false,
+        "cashFen": 2600000,
+        "minimumCashFen": 2600000,
+        "quarterClosed": false,
+        "quarterEndCashFen": null,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 0,
+          "reserved": 0,
+          "available": 4
+        }
+      },
+      "rawSha256": "425951517ea8f5623125ccb8a2999b9cde24974a056015545e194265d72a12f9",
+      "fullReplayByteEqual": true,
+      "source": "source-freeze-1.json; fixed production5244, original normal technical run"
+    },
+    {
+      "file": "technical-order-reserved-r3.json",
+      "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+      "seed": "d05-film-first-order-technical",
+      "backgroundId": "technical_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-01-01",
+      "revision": 3,
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-d01e4aa0-86a5-431f-8f6a-c92f9a83cb9b",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "StartFirstOrder",
+          "payload": {},
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-e0c18b74-de38-497e-93f9-623d6887588a",
+          "expectedRevision": 2
+        }
+      ],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "planned",
+        "nextStep": "advance_to_start",
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": "ops:c4ace228d0aa066ff5169d98f07cf620",
+        "contractId": "ops:07d0aaa0879242109052451e26db35a1",
+        "jobId": "ops:b684c9681da92224875959e76d45abd6",
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 0,
+          "paymentFen": 0,
+          "directCostFen": 0,
+          "netOrderFen": 0,
+          "businessPostedProfitFen": 0
+        },
+        "paidCaseAvailable": false,
+        "cashFen": 2600000,
+        "minimumCashFen": 2600000,
+        "quarterClosed": false,
+        "quarterEndCashFen": null,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 2,
+          "reserved": 1,
+          "available": 1
+        }
+      },
+      "rawSha256": "57ee72bc46d943545d5e9fd7ce7190ec0ac286df7baeb0bd7b4eafdc168c1bec",
+      "fullReplayByteEqual": true,
+      "source": "source-freeze-1.json; fixed production5244, original normal technical run"
+    },
+    {
+      "file": "technical-world-decision-r12.json",
+      "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+      "seed": "d05-film-first-order-technical",
+      "backgroundId": "technical_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-01-22",
+      "revision": 12,
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-d01e4aa0-86a5-431f-8f6a-c92f9a83cb9b",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "StartFirstOrder",
+          "payload": {},
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-e0c18b74-de38-497e-93f9-623d6887588a",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-05",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-db7d0fe2-dd0e-4b10-9281-c4fc4655de67",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-06",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-24d69e1e-1c7f-49a6-8b67-2f19a85cf3dc",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-bb0c5f68-b76a-4369-a8af-cf8de136be62",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-19",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-3dcf4c3f-8490-4c94-a5c6-dfd8824fad4c",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "SubmitDelivery",
+          "payload": {
+            "contractId": "ops:07d0aaa0879242109052451e26db35a1"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-15eee443-0a1c-4df7-896c-4261abc3d585",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-90730f55-2b63-4362-aecb-46aef6349e3e",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "ResearchMarket",
+          "payload": {
+            "definitionId": "market-overview"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-0d608127-5f2d-40f3-a044-f111380fcad1",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-21",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-1c66571e-c03a-4419-92da-54d94c931bdc",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-22",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-c6c680b8-fcdb-4c7a-a9d3-298d1c5b7812",
+          "expectedRevision": 11
+        }
+      ],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "settled",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": "ops:c4ace228d0aa066ff5169d98f07cf620",
+        "contractId": "ops:07d0aaa0879242109052451e26db35a1",
+        "jobId": "ops:b684c9681da92224875959e76d45abd6",
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 130000,
+          "paymentFen": 130000,
+          "directCostFen": 50000,
+          "netOrderFen": 80000,
+          "businessPostedProfitFen": 80000
+        },
+        "paidCaseAvailable": true,
+        "cashFen": 2680000,
+        "minimumCashFen": 2550000,
+        "quarterClosed": false,
+        "quarterEndCashFen": null,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "ops:fac5ad70701be08b754a9631c8f303c6:cost",
+            "date": "2020-01-05",
+            "cashFen": 2550000
+          },
+          {
+            "transactionId": "ops:6adb38a5d8588d170f0fe1e46927371d",
+            "date": "2020-01-20",
+            "cashFen": 2680000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 4,
+          "reserved": 0,
+          "available": 0
+        }
+      },
+      "rawSha256": "0b7d5b8558b29f546189204a693a015ed8502c242a582559b8c47801f019be4d",
+      "fullReplayByteEqual": true,
+      "source": "source-freeze-2.json; fixed production5244, same real normal technical run"
+    },
+    {
+      "file": "technical-quarter-end-r26.json",
+      "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+      "seed": "d05-film-first-order-technical",
+      "backgroundId": "technical_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-03-31",
+      "revision": 26,
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-d01e4aa0-86a5-431f-8f6a-c92f9a83cb9b",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "StartFirstOrder",
+          "payload": {},
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-e0c18b74-de38-497e-93f9-623d6887588a",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-05",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-db7d0fe2-dd0e-4b10-9281-c4fc4655de67",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-06",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-24d69e1e-1c7f-49a6-8b67-2f19a85cf3dc",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-bb0c5f68-b76a-4369-a8af-cf8de136be62",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-19",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-3dcf4c3f-8490-4c94-a5c6-dfd8824fad4c",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "SubmitDelivery",
+          "payload": {
+            "contractId": "ops:07d0aaa0879242109052451e26db35a1"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-15eee443-0a1c-4df7-896c-4261abc3d585",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-90730f55-2b63-4362-aecb-46aef6349e3e",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "ResearchMarket",
+          "payload": {
+            "definitionId": "market-overview"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-0d608127-5f2d-40f3-a044-f111380fcad1",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-21",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-1c66571e-c03a-4419-92da-54d94c931bdc",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-22",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-c6c680b8-fcdb-4c7a-a9d3-298d1c5b7812",
+          "expectedRevision": 11
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-0b4639bb-3e27-42fe-8c35-3e0ee5f8300c",
+          "expectedRevision": 12
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-f95127d3-3438-492a-a7bc-1217273f6332",
+          "expectedRevision": 13
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-01",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-ab423d41-ff3e-4f25-952a-15bbf738f79c",
+          "expectedRevision": 14
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-6cd7710e-e871-4c09-8935-18bace06af04",
+          "expectedRevision": 15
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-01",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-5a6b7979-2c49-4dce-b003-060373b49959",
+          "expectedRevision": 16
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-05",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-851e783f-c2dd-4326-b404-da90af9ebd17",
+          "expectedRevision": 17
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-7154467c-5c09-448c-b845-780d6a0c5662",
+          "expectedRevision": 18
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-15",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-55f958cd-42b3-40bf-8a90-377e3dce2047",
+          "expectedRevision": 19
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-20",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-6387328c-fe62-43c9-85c4-593f62453929",
+          "expectedRevision": 20
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-29",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-062c0f16-e9c7-4031-aa0d-5f06f6c212d5",
+          "expectedRevision": 21
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-01",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-29074e17-a9cd-4cb2-a7b1-d999f468fa0d",
+          "expectedRevision": 22
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-d7808fb0-ff79-462e-bf67-50994a56a505",
+          "expectedRevision": 23
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-20",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-43df81b5-2b63-409a-8829-787de57cafe0",
+          "expectedRevision": 24
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-31f2b7c2-4a25-438a-b86d-bae5893852de",
+          "expectedRevision": 25
+        }
+      ],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "settled",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": "ops:c4ace228d0aa066ff5169d98f07cf620",
+        "contractId": "ops:07d0aaa0879242109052451e26db35a1",
+        "jobId": "ops:b684c9681da92224875959e76d45abd6",
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 130000,
+          "paymentFen": 130000,
+          "directCostFen": 50000,
+          "netOrderFen": 80000,
+          "businessPostedProfitFen": 80000
+        },
+        "paidCaseAvailable": true,
+        "cashFen": 4280000,
+        "minimumCashFen": 2550000,
+        "quarterClosed": true,
+        "quarterEndCashFen": 4280000,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "ops:fac5ad70701be08b754a9631c8f303c6:cost",
+            "date": "2020-01-05",
+            "cashFen": 2550000
+          },
+          {
+            "transactionId": "ops:6adb38a5d8588d170f0fe1e46927371d",
+            "date": "2020-01-20",
+            "cashFen": 2680000
+          },
+          {
+            "transactionId": "ops:39cb23814b822fcc6650511942f205ca",
+            "date": "2020-01-31",
+            "cashFen": 3480000
+          },
+          {
+            "transactionId": "living:2020-02-01",
+            "date": "2020-02-01",
+            "cashFen": 3080000
+          },
+          {
+            "transactionId": "ops:703dfee508421c88233dcce086406f82",
+            "date": "2020-02-29",
+            "cashFen": 3880000
+          },
+          {
+            "transactionId": "living:2020-03-01",
+            "date": "2020-03-01",
+            "cashFen": 3480000
+          },
+          {
+            "transactionId": "ops:9a3d43ab6a7e6b4d1aa8ffeca07f796e",
+            "date": "2020-03-31",
+            "cashFen": 4280000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 4,
+          "reserved": 0,
+          "available": 0
+        }
+      },
+      "rawSha256": "b17a21a8291479cb50a7ef3b0478b3e54dd3945bb4d6485a2fe5bcdb6654b88f",
+      "fullReplayByteEqual": true,
+      "source": "source-freeze-4.json, fixed5244"
+    },
+    {
+      "file": "content-before-failure-r1.json",
+      "runId": "life-38396c9c-9f6e-4df1-b82c-baf73e7a8ecd",
+      "seed": "seed-dfb306a1-5d1e-4a5a-9d7b-25084802b792",
+      "backgroundId": "content_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-01-01",
+      "revision": 1,
+      "commands": [],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "available",
+        "nextStep": "choose_offer",
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": null,
+        "contractId": null,
+        "jobId": null,
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 0,
+          "paymentFen": 0,
+          "directCostFen": 0,
+          "netOrderFen": 0,
+          "businessPostedProfitFen": 0
+        },
+        "paidCaseAvailable": false,
+        "cashFen": 2600000,
+        "minimumCashFen": 2600000,
+        "quarterClosed": false,
+        "quarterEndCashFen": null,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 0,
+          "reserved": 0,
+          "available": 4
+        }
+      },
+      "rawSha256": "fdad4887dbfa5f4ee4841c68c9c848b25c269a0ac36d082b50959afe1e1a9fc9",
+      "fullReplayByteEqual": true,
+      "source": "source-freeze-5.json, DEV5246 abort-life-work, normal content"
+    },
+    {
+      "file": "content-after-abort-old-r1.json",
+      "runId": "life-38396c9c-9f6e-4df1-b82c-baf73e7a8ecd",
+      "seed": "seed-dfb306a1-5d1e-4a5a-9d7b-25084802b792",
+      "backgroundId": "content_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-01-01",
+      "revision": 1,
+      "commands": [],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "available",
+        "nextStep": "choose_offer",
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": null,
+        "contractId": null,
+        "jobId": null,
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 0,
+          "paymentFen": 0,
+          "directCostFen": 0,
+          "netOrderFen": 0,
+          "businessPostedProfitFen": 0
+        },
+        "paidCaseAvailable": false,
+        "cashFen": 2600000,
+        "minimumCashFen": 2600000,
+        "quarterClosed": false,
+        "quarterEndCashFen": null,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 0,
+          "reserved": 0,
+          "available": 4
+        }
+      },
+      "rawSha256": "fdad4887dbfa5f4ee4841c68c9c848b25c269a0ac36d082b50959afe1e1a9fc9",
+      "fullReplayByteEqual": true,
+      "source": "source-freeze-5.json, DEV5246 abort-life-work, normal content"
+    },
+    {
+      "file": "content-after-abort-candidate-r2.json",
+      "runId": "life-38396c9c-9f6e-4df1-b82c-baf73e7a8ecd",
+      "seed": "seed-dfb306a1-5d1e-4a5a-9d7b-25084802b792",
+      "backgroundId": "content_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-01-01",
+      "revision": 2,
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "workspace",
+            "personId": null,
+            "reference": null
+          },
+          "runId": "life-38396c9c-9f6e-4df1-b82c-baf73e7a8ecd",
+          "commandId": "command-aff3b848-c869-4b31-9cb5-7bb5a3d4f877",
+          "expectedRevision": 1
+        }
+      ],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "available",
+        "nextStep": "choose_offer",
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": null,
+        "contractId": null,
+        "jobId": null,
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 0,
+          "paymentFen": 0,
+          "directCostFen": 0,
+          "netOrderFen": 0,
+          "businessPostedProfitFen": 0
+        },
+        "paidCaseAvailable": false,
+        "cashFen": 2300000,
+        "minimumCashFen": 2300000,
+        "quarterClosed": false,
+        "quarterEndCashFen": null,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "life:79e5662000e6e00cbf5273bd985012e3:cost",
+            "date": "2020-01-01",
+            "cashFen": 2300000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 1,
+          "reserved": 0,
+          "available": 3
+        }
+      },
+      "rawSha256": "ea6d938265cbd3adc38b70eca9bd0307bae5f295ea59b42ab8ac46e328d97794",
+      "fullReplayByteEqual": true,
+      "source": "source-freeze-5.json, DEV5246 abort-life-work, normal content"
+    },
+    {
+      "file": "content-retry-saved-r2.json",
+      "runId": "life-38396c9c-9f6e-4df1-b82c-baf73e7a8ecd",
+      "seed": "seed-dfb306a1-5d1e-4a5a-9d7b-25084802b792",
+      "backgroundId": "content_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-01-01",
+      "revision": 2,
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "workspace",
+            "personId": null,
+            "reference": null
+          },
+          "runId": "life-38396c9c-9f6e-4df1-b82c-baf73e7a8ecd",
+          "commandId": "command-aff3b848-c869-4b31-9cb5-7bb5a3d4f877",
+          "expectedRevision": 1
+        }
+      ],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "available",
+        "nextStep": "choose_offer",
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": null,
+        "contractId": null,
+        "jobId": null,
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 0,
+          "paymentFen": 0,
+          "directCostFen": 0,
+          "netOrderFen": 0,
+          "businessPostedProfitFen": 0
+        },
+        "paidCaseAvailable": false,
+        "cashFen": 2300000,
+        "minimumCashFen": 2300000,
+        "quarterClosed": false,
+        "quarterEndCashFen": null,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "life:79e5662000e6e00cbf5273bd985012e3:cost",
+            "date": "2020-01-01",
+            "cashFen": 2300000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 1,
+          "reserved": 0,
+          "available": 3
+        }
+      },
+      "rawSha256": "ea6d938265cbd3adc38b70eca9bd0307bae5f295ea59b42ab8ac46e328d97794",
+      "fullReplayByteEqual": true,
+      "source": "source-freeze-5.json, DEV5246 abort-life-work, normal content"
+    },
+    {
+      "file": "content-workspace-completed-r4.json",
+      "runId": "life-38396c9c-9f6e-4df1-b82c-baf73e7a8ecd",
+      "seed": "seed-dfb306a1-5d1e-4a5a-9d7b-25084802b792",
+      "backgroundId": "content_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-01-08",
+      "revision": 4,
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "StartLifeWork",
+          "payload": {
+            "kind": "workspace",
+            "personId": null,
+            "reference": null
+          },
+          "runId": "life-38396c9c-9f6e-4df1-b82c-baf73e7a8ecd",
+          "commandId": "command-aff3b848-c869-4b31-9cb5-7bb5a3d4f877",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-06",
+            "phase": "snapshot"
+          },
+          "runId": "life-38396c9c-9f6e-4df1-b82c-baf73e7a8ecd",
+          "commandId": "command-0c0a69f6-5035-423e-b89a-06d6f41de363",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-08",
+            "phase": "snapshot"
+          },
+          "runId": "life-38396c9c-9f6e-4df1-b82c-baf73e7a8ecd",
+          "commandId": "command-2691e736-834e-4d61-a0c3-62a687aa6379",
+          "expectedRevision": 3
+        }
+      ],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "expired",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": {
+          "kind": "expired",
+          "date": "2020-01-06"
+        },
+        "businessId": null,
+        "contractId": null,
+        "jobId": null,
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 0,
+          "paymentFen": 0,
+          "directCostFen": 0,
+          "netOrderFen": 0,
+          "businessPostedProfitFen": 0
+        },
+        "paidCaseAvailable": false,
+        "cashFen": 2300000,
+        "minimumCashFen": 2300000,
+        "quarterClosed": false,
+        "quarterEndCashFen": null,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "life:79e5662000e6e00cbf5273bd985012e3:cost",
+            "date": "2020-01-01",
+            "cashFen": 2300000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 1,
+          "reserved": 0,
+          "available": 3
+        }
+      },
+      "rawSha256": "c386b776447f91338a19d9756026eed0e4181700a0f38e4284c10dca1dec0b88",
+      "fullReplayByteEqual": true,
+      "source": "source-freeze-5.json, DEV5246 abort-life-work, normal content"
+    },
+    {
+      "file": "imported-world-node-readonly-r12.json",
+      "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+      "seed": "d05-film-first-order-technical",
+      "backgroundId": "technical_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-01-22",
+      "revision": 12,
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-d01e4aa0-86a5-431f-8f6a-c92f9a83cb9b",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "StartFirstOrder",
+          "payload": {},
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-e0c18b74-de38-497e-93f9-623d6887588a",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-05",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-db7d0fe2-dd0e-4b10-9281-c4fc4655de67",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-06",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-24d69e1e-1c7f-49a6-8b67-2f19a85cf3dc",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-bb0c5f68-b76a-4369-a8af-cf8de136be62",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-19",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-3dcf4c3f-8490-4c94-a5c6-dfd8824fad4c",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "SubmitDelivery",
+          "payload": {
+            "contractId": "ops:07d0aaa0879242109052451e26db35a1"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-15eee443-0a1c-4df7-896c-4261abc3d585",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-90730f55-2b63-4362-aecb-46aef6349e3e",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "ResearchMarket",
+          "payload": {
+            "definitionId": "market-overview"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-0d608127-5f2d-40f3-a044-f111380fcad1",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-21",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-1c66571e-c03a-4419-92da-54d94c931bdc",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-22",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-c6c680b8-fcdb-4c7a-a9d3-298d1c5b7812",
+          "expectedRevision": 11
+        }
+      ],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "settled",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": "ops:c4ace228d0aa066ff5169d98f07cf620",
+        "contractId": "ops:07d0aaa0879242109052451e26db35a1",
+        "jobId": "ops:b684c9681da92224875959e76d45abd6",
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 130000,
+          "paymentFen": 130000,
+          "directCostFen": 50000,
+          "netOrderFen": 80000,
+          "businessPostedProfitFen": 80000
+        },
+        "paidCaseAvailable": true,
+        "cashFen": 2680000,
+        "minimumCashFen": 2550000,
+        "quarterClosed": false,
+        "quarterEndCashFen": null,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "ops:fac5ad70701be08b754a9631c8f303c6:cost",
+            "date": "2020-01-05",
+            "cashFen": 2550000
+          },
+          {
+            "transactionId": "ops:6adb38a5d8588d170f0fe1e46927371d",
+            "date": "2020-01-20",
+            "cashFen": 2680000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 4,
+          "reserved": 0,
+          "available": 0
+        }
+      },
+      "rawSha256": "0b7d5b8558b29f546189204a693a015ed8502c242a582559b8c47801f019be4d",
+      "fullReplayByteEqual": true,
+      "source": "source-freeze-5.json independent5247 courseJPEG404; importednormal12"
+    },
+    {
+      "file": "final-fallback-free-world-r13.json",
+      "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+      "seed": "d05-film-first-order-technical",
+      "backgroundId": "technical_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-01-22",
+      "revision": 13,
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-d01e4aa0-86a5-431f-8f6a-c92f9a83cb9b",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "StartFirstOrder",
+          "payload": {},
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-e0c18b74-de38-497e-93f9-623d6887588a",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-05",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-db7d0fe2-dd0e-4b10-9281-c4fc4655de67",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-06",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-24d69e1e-1c7f-49a6-8b67-2f19a85cf3dc",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-bb0c5f68-b76a-4369-a8af-cf8de136be62",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-19",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-3dcf4c3f-8490-4c94-a5c6-dfd8824fad4c",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "SubmitDelivery",
+          "payload": {
+            "contractId": "ops:07d0aaa0879242109052451e26db35a1"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-15eee443-0a1c-4df7-896c-4261abc3d585",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-90730f55-2b63-4362-aecb-46aef6349e3e",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "ResearchMarket",
+          "payload": {
+            "definitionId": "market-overview"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-0d608127-5f2d-40f3-a044-f111380fcad1",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-21",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-1c66571e-c03a-4419-92da-54d94c931bdc",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-22",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-c6c680b8-fcdb-4c7a-a9d3-298d1c5b7812",
+          "expectedRevision": 11
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-dde08e72-c182-4f07-ac69-5eedcd6d55ee",
+          "expectedRevision": 12
+        }
+      ],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "settled",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": "ops:c4ace228d0aa066ff5169d98f07cf620",
+        "contractId": "ops:07d0aaa0879242109052451e26db35a1",
+        "jobId": "ops:b684c9681da92224875959e76d45abd6",
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 130000,
+          "paymentFen": 130000,
+          "directCostFen": 50000,
+          "netOrderFen": 80000,
+          "businessPostedProfitFen": 80000
+        },
+        "paidCaseAvailable": true,
+        "cashFen": 2680000,
+        "minimumCashFen": 2550000,
+        "quarterClosed": false,
+        "quarterEndCashFen": null,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "ops:fac5ad70701be08b754a9631c8f303c6:cost",
+            "date": "2020-01-05",
+            "cashFen": 2550000
+          },
+          {
+            "transactionId": "ops:6adb38a5d8588d170f0fe1e46927371d",
+            "date": "2020-01-20",
+            "cashFen": 2680000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 4,
+          "reserved": 0,
+          "available": 0
+        }
+      },
+      "rawSha256": "7852f46964d283a73c8b5278117187eddf11ac46611436a5cabea5e8cb75202c",
+      "fullReplayByteEqual": true,
+      "source": "source-freeze-6.json independent5247 courseJPEG404; imported normal12, currentreadonly checks"
+    },
+    {
+      "file": "final-art-readonly-quarter-r26.json",
+      "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+      "seed": "d05-film-first-order-technical",
+      "backgroundId": "technical_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-03-31",
+      "revision": 26,
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-d01e4aa0-86a5-431f-8f6a-c92f9a83cb9b",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "StartFirstOrder",
+          "payload": {},
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-e0c18b74-de38-497e-93f9-623d6887588a",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-05",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-db7d0fe2-dd0e-4b10-9281-c4fc4655de67",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-06",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-24d69e1e-1c7f-49a6-8b67-2f19a85cf3dc",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-bb0c5f68-b76a-4369-a8af-cf8de136be62",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-19",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-3dcf4c3f-8490-4c94-a5c6-dfd8824fad4c",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "SubmitDelivery",
+          "payload": {
+            "contractId": "ops:07d0aaa0879242109052451e26db35a1"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-15eee443-0a1c-4df7-896c-4261abc3d585",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-90730f55-2b63-4362-aecb-46aef6349e3e",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "ResearchMarket",
+          "payload": {
+            "definitionId": "market-overview"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-0d608127-5f2d-40f3-a044-f111380fcad1",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-21",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-1c66571e-c03a-4419-92da-54d94c931bdc",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-22",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-c6c680b8-fcdb-4c7a-a9d3-298d1c5b7812",
+          "expectedRevision": 11
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-0b4639bb-3e27-42fe-8c35-3e0ee5f8300c",
+          "expectedRevision": 12
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-f95127d3-3438-492a-a7bc-1217273f6332",
+          "expectedRevision": 13
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-01",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-ab423d41-ff3e-4f25-952a-15bbf738f79c",
+          "expectedRevision": 14
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:2f88c8b815f5eea01cf56576af196a85"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-6cd7710e-e871-4c09-8935-18bace06af04",
+          "expectedRevision": 15
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-01",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-5a6b7979-2c49-4dce-b003-060373b49959",
+          "expectedRevision": 16
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-05",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-851e783f-c2dd-4326-b404-da90af9ebd17",
+          "expectedRevision": 17
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-7154467c-5c09-448c-b845-780d6a0c5662",
+          "expectedRevision": 18
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-15",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-55f958cd-42b3-40bf-8a90-377e3dce2047",
+          "expectedRevision": 19
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-20",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-6387328c-fe62-43c9-85c4-593f62453929",
+          "expectedRevision": 20
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-02-29",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-062c0f16-e9c7-4031-aa0d-5f06f6c212d5",
+          "expectedRevision": 21
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-01",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-29074e17-a9cd-4cb2-a7b1-d999f468fa0d",
+          "expectedRevision": 22
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-d7808fb0-ff79-462e-bf67-50994a56a505",
+          "expectedRevision": 23
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-20",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-43df81b5-2b63-409a-8829-787de57cafe0",
+          "expectedRevision": 24
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-03-31",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-31f2b7c2-4a25-438a-b86d-bae5893852de",
+          "expectedRevision": 25
+        }
+      ],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "settled",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": "ops:c4ace228d0aa066ff5169d98f07cf620",
+        "contractId": "ops:07d0aaa0879242109052451e26db35a1",
+        "jobId": "ops:b684c9681da92224875959e76d45abd6",
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 130000,
+          "paymentFen": 130000,
+          "directCostFen": 50000,
+          "netOrderFen": 80000,
+          "businessPostedProfitFen": 80000
+        },
+        "paidCaseAvailable": true,
+        "cashFen": 4280000,
+        "minimumCashFen": 2550000,
+        "quarterClosed": true,
+        "quarterEndCashFen": 4280000,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "ops:fac5ad70701be08b754a9631c8f303c6:cost",
+            "date": "2020-01-05",
+            "cashFen": 2550000
+          },
+          {
+            "transactionId": "ops:6adb38a5d8588d170f0fe1e46927371d",
+            "date": "2020-01-20",
+            "cashFen": 2680000
+          },
+          {
+            "transactionId": "ops:39cb23814b822fcc6650511942f205ca",
+            "date": "2020-01-31",
+            "cashFen": 3480000
+          },
+          {
+            "transactionId": "living:2020-02-01",
+            "date": "2020-02-01",
+            "cashFen": 3080000
+          },
+          {
+            "transactionId": "ops:703dfee508421c88233dcce086406f82",
+            "date": "2020-02-29",
+            "cashFen": 3880000
+          },
+          {
+            "transactionId": "living:2020-03-01",
+            "date": "2020-03-01",
+            "cashFen": 3480000
+          },
+          {
+            "transactionId": "ops:9a3d43ab6a7e6b4d1aa8ffeca07f796e",
+            "date": "2020-03-31",
+            "cashFen": 4280000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 4,
+          "reserved": 0,
+          "available": 0
+        }
+      },
+      "rawSha256": "b17a21a8291479cb50a7ef3b0478b3e54dd3945bb4d6485a2fe5bcdb6654b88f",
+      "fullReplayByteEqual": true,
+      "source": "source-freeze-7.json fixed5248 final"
+    },
+    {
+      "file": "final-restoration-backup-r13.json",
+      "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+      "seed": "d05-film-first-order-technical",
+      "backgroundId": "technical_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-01-22",
+      "revision": 13,
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-d01e4aa0-86a5-431f-8f6a-c92f9a83cb9b",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "StartFirstOrder",
+          "payload": {},
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-e0c18b74-de38-497e-93f9-623d6887588a",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-05",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-db7d0fe2-dd0e-4b10-9281-c4fc4655de67",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-06",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-24d69e1e-1c7f-49a6-8b67-2f19a85cf3dc",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-bb0c5f68-b76a-4369-a8af-cf8de136be62",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-19",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-3dcf4c3f-8490-4c94-a5c6-dfd8824fad4c",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "SubmitDelivery",
+          "payload": {
+            "contractId": "ops:07d0aaa0879242109052451e26db35a1"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-15eee443-0a1c-4df7-896c-4261abc3d585",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-90730f55-2b63-4362-aecb-46aef6349e3e",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "ResearchMarket",
+          "payload": {
+            "definitionId": "market-overview"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-0d608127-5f2d-40f3-a044-f111380fcad1",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-21",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-1c66571e-c03a-4419-92da-54d94c931bdc",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-22",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-c6c680b8-fcdb-4c7a-a9d3-298d1c5b7812",
+          "expectedRevision": 11
+        },
+        {
+          "actorId": "player",
+          "kind": "ChooseEvent",
+          "payload": {
+            "choiceId": "defer",
+            "instanceId": "event:397f9e80a8d5abe6f247ae2c7775a7eb"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-dde08e72-c182-4f07-ac69-5eedcd6d55ee",
+          "expectedRevision": 12
+        }
+      ],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "settled",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": "ops:c4ace228d0aa066ff5169d98f07cf620",
+        "contractId": "ops:07d0aaa0879242109052451e26db35a1",
+        "jobId": "ops:b684c9681da92224875959e76d45abd6",
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 130000,
+          "paymentFen": 130000,
+          "directCostFen": 50000,
+          "netOrderFen": 80000,
+          "businessPostedProfitFen": 80000
+        },
+        "paidCaseAvailable": true,
+        "cashFen": 2680000,
+        "minimumCashFen": 2550000,
+        "quarterClosed": false,
+        "quarterEndCashFen": null,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "ops:fac5ad70701be08b754a9631c8f303c6:cost",
+            "date": "2020-01-05",
+            "cashFen": 2550000
+          },
+          {
+            "transactionId": "ops:6adb38a5d8588d170f0fe1e46927371d",
+            "date": "2020-01-20",
+            "cashFen": 2680000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 4,
+          "reserved": 0,
+          "available": 0
+        }
+      },
+      "rawSha256": "7852f46964d283a73c8b5278117187eddf11ac46611436a5cabea5e8cb75202c",
+      "fullReplayByteEqual": true,
+      "source": "source-freeze-7.json independent5247; own normal12 restored throughUI after13raw preserved, former13 backup"
+    },
+    {
+      "file": "final-restored-world-node-r12.json",
+      "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+      "seed": "d05-film-first-order-technical",
+      "backgroundId": "technical_employee",
+      "playerProfile": {
+        "wishId": "autonomy",
+        "approach": "free"
+      },
+      "versions": {
+        "schemaVersion": 12,
+        "rulesVersion": "rules-t15-life-v1",
+        "contentVersion": "world-life-work-v1",
+        "contentHash": "5bb7850b4fd5ee261b2bc330b1b6987199f0aba67fd14b6e8ade21c2841d5900",
+        "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+      },
+      "date": "2020-01-22",
+      "revision": 12,
+      "commands": [
+        {
+          "actorId": "player",
+          "kind": "WorkQuarter",
+          "payload": {},
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-d01e4aa0-86a5-431f-8f6a-c92f9a83cb9b",
+          "expectedRevision": 1
+        },
+        {
+          "actorId": "player",
+          "kind": "StartFirstOrder",
+          "payload": {},
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-e0c18b74-de38-497e-93f9-623d6887588a",
+          "expectedRevision": 2
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-05",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-db7d0fe2-dd0e-4b10-9281-c4fc4655de67",
+          "expectedRevision": 3
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-06",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-24d69e1e-1c7f-49a6-8b67-2f19a85cf3dc",
+          "expectedRevision": 4
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-10",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-bb0c5f68-b76a-4369-a8af-cf8de136be62",
+          "expectedRevision": 5
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-19",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-3dcf4c3f-8490-4c94-a5c6-dfd8824fad4c",
+          "expectedRevision": 6
+        },
+        {
+          "actorId": "player",
+          "kind": "SubmitDelivery",
+          "payload": {
+            "contractId": "ops:07d0aaa0879242109052451e26db35a1"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-15eee443-0a1c-4df7-896c-4261abc3d585",
+          "expectedRevision": 7
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-20",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-90730f55-2b63-4362-aecb-46aef6349e3e",
+          "expectedRevision": 8
+        },
+        {
+          "actorId": "player",
+          "kind": "ResearchMarket",
+          "payload": {
+            "definitionId": "market-overview"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-0d608127-5f2d-40f3-a044-f111380fcad1",
+          "expectedRevision": 9
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-21",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-1c66571e-c03a-4419-92da-54d94c931bdc",
+          "expectedRevision": 10
+        },
+        {
+          "actorId": "player",
+          "kind": "AdvanceTime",
+          "payload": {
+            "date": "2020-01-22",
+            "phase": "snapshot"
+          },
+          "runId": "life-ec4c0e5d-3bbb-47d9-9721-ae2a8903ebfe",
+          "commandId": "command-c6c680b8-fcdb-4c7a-a9d3-298d1c5b7812",
+          "expectedRevision": 11
+        }
+      ],
+      "firstOrder": {
+        "offerId": "manual-first-2020",
+        "title": "手工剪辑与资料整理小单",
+        "classification": "fictional",
+        "productionMode": "manual",
+        "status": "settled",
+        "nextStep": null,
+        "deadlineMissed": false,
+        "decision": null,
+        "businessId": "ops:c4ace228d0aa066ff5169d98f07cf620",
+        "contractId": "ops:07d0aaa0879242109052451e26db35a1",
+        "jobId": "ops:b684c9681da92224875959e76d45abd6",
+        "dates": {
+          "replyBy": "2020-01-05",
+          "startAt": "2020-01-05",
+          "submitBy": "2020-01-19",
+          "earliestReviewAt": "2020-01-20"
+        },
+        "terms": {
+          "costFen": 50000,
+          "priceFen": 130000,
+          "actionPoints": 1
+        },
+        "result": {
+          "confirmedIncomeFen": 130000,
+          "paymentFen": 130000,
+          "directCostFen": 50000,
+          "netOrderFen": 80000,
+          "businessPostedProfitFen": 80000
+        },
+        "paidCaseAvailable": true,
+        "cashFen": 2680000,
+        "minimumCashFen": 2550000,
+        "quarterClosed": false,
+        "quarterEndCashFen": null,
+        "cashTrace": [
+          {
+            "transactionId": "bootstrap:opening",
+            "date": "2020-01-01",
+            "cashFen": 3000000
+          },
+          {
+            "transactionId": "living:2020-01-01",
+            "date": "2020-01-01",
+            "cashFen": 2600000
+          },
+          {
+            "transactionId": "ops:fac5ad70701be08b754a9631c8f303c6:cost",
+            "date": "2020-01-05",
+            "cashFen": 2550000
+          },
+          {
+            "transactionId": "ops:6adb38a5d8588d170f0fe1e46927371d",
+            "date": "2020-01-20",
+            "cashFen": 2680000
+          }
+        ],
+        "budget": {
+          "quarter": "2020-Q1",
+          "total": 4,
+          "spent": 4,
+          "reserved": 0,
+          "available": 0
+        }
+      },
+      "rawSha256": "0b7d5b8558b29f546189204a693a015ed8502c242a582559b8c47801f019be4d",
+      "fullReplayByteEqual": true,
+      "source": "source-freeze-7.json independent5247; own normal12 restored throughUI after13raw preserved, former13 backup"
+    }
+  ],
+  "journalSha256": "3bab671e54191293601ff565ec1577098b9efc2ea8d0fb481fd99aa76a737cca",
+  "scope": "Each export is its real complete creation plus command prefix. Imported normal histories and native actions are separated in UI observation metadata. No direct browser-state injection or fake balance.",
+  "D05Only": true,
+  "nativeCompatibilityAcceptanceComplete": false,
+  "goalComplete": false
+}

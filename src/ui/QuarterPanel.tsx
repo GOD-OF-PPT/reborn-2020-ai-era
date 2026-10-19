@@ -8,7 +8,7 @@ import {CommandButton} from './CommandButton.tsx'
 import {moneyText,lifecycleText,reasonText,playableThrough} from './game-text.ts'
 import type {LifePerson} from '../core/life-schema.ts'
 
-type QuarterProps=GamePanelProps&{onLife:()=>void;onPeople:(personId?:LifePerson)=>void;onMarket:()=>void;onDeepseek:()=>void;onCourse:()=>void;onRelay:()=>void;onRoutines:()=>void;onStory:()=>void;guideHidden:boolean;onHideGuide:()=>void}
+type QuarterProps=GamePanelProps&{onLife:()=>void;onPeople:(personId?:LifePerson)=>void;onMarket:()=>void;onDeepseek:()=>void;onCourse:()=>void;onRelay:()=>void;onRoutines:()=>void;onStory:()=>void;guideHidden:boolean;onHideGuide:()=>void;initialPhase?:Phase}
 type Phase='brief'|'plan'|'decision'|'result'
 const phases:readonly [Phase,string][]=[['brief','简报'],['plan','计划'],['decision','抉择'],['result','结果']]
 export function EventCard({event,props}:{event:GamePanelProps['features']['workbench']['events'][number];props:GamePanelProps}){return <article className={'panel decision '+(event.isBlocking?'decision-blocking':'')}><div className="section-heading"><h3>{event.title}</h3><span className="tag">{event.classification==='historical'?'史实':'模拟事件'}</span></div><p className="muted">{event.createdAt}出现 · 最迟{event.expiresAt}；无人响应时：{event.choices.find(c=>c.isDefault)?.label}</p><div className="decision-options">{event.choices.map(choice=><div key={choice.id}><CommandButton {...props} kind="ChooseEvent" payload={{instanceId:event.id,choiceId:choice.id}} label={choice.label}/><small>{choice.actionPoints}点 · 确定费用{moneyText(choice.costFen)}</small></div>)}</div>{event.isBlocking?<CommandButton {...props} kind="DeferEventDecision" payload={{instanceId:event.id}} label="暂缓，按期限默认"/>:null}</article>}
@@ -17,7 +17,7 @@ export function QuarterPanel(props:QuarterProps){
  const {view,features,accountId}=props,w=features.workbench,first=features.firstOrder,finance=w.finance.find(f=>f.accountId===accountId)!
  const context=view.runId+'|'+w.quarter+'|'+String(w.atQuarterEnd)
  const [choice,setChoice]=useState<{context:string;phase:Phase}|null>(null)
- const phase=choice?.context===context?choice.phase:w.atQuarterEnd?'result':w.progression.requiresDelivery?'decision':'brief'
+ const phase=choice?.context===context?choice.phase:w.atQuarterEnd?'result':w.progression.requiresDelivery?'decision':props.initialPhase??'brief'
  const phaseHeading=useRef<HTMLHeadingElement>(null)
  useEffect(()=>{phaseHeading.current?.focus({preventScroll:true})},[phase])
  const selectPhase=(next:Phase)=>setChoice({context,phase:next})

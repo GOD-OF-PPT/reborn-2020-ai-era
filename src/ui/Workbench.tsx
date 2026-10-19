@@ -1,11 +1,11 @@
-import {useState} from 'react'
+import {useState,type Ref} from 'react'
 import type {GamePanelProps} from './game-types.ts'
 import {Obligations} from './Obligations.tsx'
 import {CommandButton} from './CommandButton.tsx'
 import {moneyText} from './game-text.ts'
 import {OpportunityAtlas,type RouteId} from './OpportunityAtlas.tsx'
 
-export function RoutesPanel(props:GamePanelProps&{onRoute:(id:RouteId)=>void}){
+export function RoutesPanel(props:GamePanelProps&{onRoute:(id:RouteId)=>void;headingRef?:Ref<HTMLHeadingElement>}){
  return <OpportunityAtlas {...props}/>
 }
 

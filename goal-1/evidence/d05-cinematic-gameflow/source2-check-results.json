@@ -1,0 +1,31 @@
+{
+  "steps": [
+    {
+      "step": "ui-2",
+      "command": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/ui"
+      ],
+      "exitCode": 0,
+      "seconds": 8.981
+    },
+    {
+      "step": "build-2",
+      "command": [
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        ".delivery/d05-gameflow-2"
+      ],
+      "exitCode": 0,
+      "seconds": 32.135
+    }
+  ],
+  "allPassed": true
+}
