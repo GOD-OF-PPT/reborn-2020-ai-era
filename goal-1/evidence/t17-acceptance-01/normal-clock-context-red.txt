@@ -1,0 +1,78 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts --maxWorkers=1 src/application/clock-commitments.test.ts src/ui/confirmation-money.test.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/clock-commitments.test.ts (3 tests | 3 failed) 3634ms
+   × normal clock review shows the actual500 start payment and original reservation without executing either 1368ms
+   × a selected next-quarter horizon includes its4000 living bill while the ordinary quarter forecast stays unchanged 1046ms
+   × clock queries reject stale/non-clock/out-of-range requests and never publish private notes or hidden state 1218ms
+ ❯ src/ui/confirmation-money.test.ts (6 tests | 1 failed) 14ms
+   × a normal calendar advance labels only the instruction cost, with original dated costs reviewed separately 6ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/clock-commitments.test.ts > normal clock review shows the actual500 start payment and original reservation without executing either
+TypeError: h.controller.clockCommitments is not a function
+ ❯ src/application/clock-commitments.test.ts:22:29
+     20|  try{
+     21|   const before=h.controller.exportSaved(),view=h.controller.snapshot.v…
+     22|   const review=h.controller.clockCommitments(command),personal=review.…
+       |                             ^
+     23|   expect(review).toMatchObject({runId:view.runId,sourceRevision:view.r…
+     24|   expect(personal.outflows).toContainEqual(expect.objectContaining({da…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/application/clock-commitments.test.ts > a selected next-quarter horizon includes its4000 living bill while the ordinary quarter forecast stays unchanged
+TypeError: h.controller.clockCommitments is not a function
+ ❯ src/application/clock-commitments.test.ts:33:29
+     31|  try{
+     32|   const before=h.controller.exportSaved(),ordinary=JSON.stringify((h.c…
+     33|   const review=h.controller.clockCommitments(h.controller.prepare('Adv…
+       |                             ^
+     34|   expect(personal.outflows).toContainEqual(expect.objectContaining({da…
+     35|   expect(personal.outflows.every(f=>f.amountFen<0)).toBe(true)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/application/clock-commitments.test.ts > clock queries reject stale/non-clock/out-of-range requests and never publish private notes or hidden state
+AssertionError: expected [Function] to throw error including 'STALE_REVISION' but got 'h.controller.clockCommitments is not …'
+
+Expected: "STALE_REVISION"
+Received: "h.controller.clockCommitments is not a function"
+
+ ❯ src/application/clock-commitments.test.ts:46:50
+     44|   const old=h.controller.prepare('AdvanceTime',{date:'2020-01-05'})
+     45|   expect((await h.controller.submit(h.controller.prepare('SetPrivateNo…
+     46|   expect(()=>h.controller.clockCommitments(old)).toThrowError('STALE_R…
+       |                                                  ^
+     47|   expect(()=>h.controller.clockCommitments(h.controller.prepare('SetPr…
+     48|   expect(()=>h.controller.clockCommitments(h.controller.prepare('Advan…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/ui/confirmation-money.test.ts > a normal calendar advance labels only the instruction cost, with original dated costs reviewed separately
+AssertionError: expected '本次确定费用' to contain '推进本身'
+
+Expected: "推进本身"
+Received: "本次确定费用"
+
+ ❯ src/ui/confirmation-money.test.ts:19:56
+     17| it('a normal calendar advance labels only the instruction cost, with o…
+     18|  const result=confirmationMoney(command('AdvanceTime',{date:'2020-01-0…
+     19|  expect(result.amountFen).toBe(0);expect(result.label).toContain('推进本身…
+       |                                                        ^
+     20| })
+     21| it('keeps explicit zero follow-on participation visible as an investme…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  4 failed | 5 passed (9)
+   Start at  05:38:34
+   Duration  5.03s (tests 81%, import 11%, transform 8%)
+

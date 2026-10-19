@@ -1,0 +1,10 @@
+{
+  "scope": "Investigation of a suspected display-ID issue, disproved before any production ID change",
+  "actualExitCode": 0,
+  "probePassedBeforeImplementation": true,
+  "sourceSha256": "ba239b213255d3650313f424656b78d9413345edada2f447f5854f6a95846382",
+  "executedSource": "display-preview-identity-probe.test.tsx.txt",
+  "output": "display-preview-identity-red.txt",
+  "authority": "src/core/commands.ts inspectPreview and bindCommandPreview use PreviewIdentity without receipt lookup; evaluateCommand separately enforces COMMAND_ID_REUSED",
+  "conclusion": "Current preview already accepts a legal creation with the same display ID. Do not add unused-ID generation/caching or alter commit identity checks. Probe retained as investigation evidence, not a new shipped test count."
+}

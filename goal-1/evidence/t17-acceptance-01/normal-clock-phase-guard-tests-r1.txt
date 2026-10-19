@@ -1,0 +1,35 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts --maxWorkers=1 src/application/clock-commitments.test.ts src/ui/clock-command-details.test.tsx src/ui/confirmation-money.test.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/application/clock-commitments.test.ts (5 tests | 1 failed) 7260ms
+   × an early within-day target does not present a later same-day living bill as already inside the selected interval 1145ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/application/clock-commitments.test.ts > an early within-day target does not present a later same-day living bill as already inside the selected interval
+RuleError: INVALID_PAYLOAD
+ ❯ requireRule src/core/errors.ts:12:25
+     10|
+     11| export function requireRule(condition: unknown, code: string): asserts…
+     12|   if (!condition) throw new RuleError(code)
+       |                         ^
+     13| }
+     14|
+ ❯ GameController.clockCommitments src/application/game-controller.ts:53:3
+ ❯ src/application/clock-commitments.test.ts:44:62
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 11 passed (12)
+   Start at  05:49:15
+   Duration  11.32s (tests 82%, import 12%, transform 6%)
+
+    Isolate  3 workers spawned · ~294ms startup each (spawn + environment, per file)
+             at least ~588ms faster with isolate: false — reuses workers across files instead of one per file
+

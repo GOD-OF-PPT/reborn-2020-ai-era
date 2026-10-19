@@ -1,0 +1,47 @@
+{
+  "scope": "Actual local audit-tool negative executions using explicitly labeled derived fixtures; no private data or browser injection",
+  "checks": [
+    {
+      "case": "hash-mismatch",
+      "expected": "RECORDED_EXPORT_BYTES_MISMATCH",
+      "exitCode": 1,
+      "rejected": true,
+      "scope": "adversarial tool fixture only, not a game case or native save"
+    },
+    {
+      "case": "duplicate-path",
+      "expected": "INVALID_OR_DUPLICATE_NATIVE_EXPORT_PATH",
+      "exitCode": 1,
+      "rejected": true,
+      "scope": "adversarial tool fixture only, not a game case or native save"
+    },
+    {
+      "case": "path-traversal",
+      "expected": "INVALID_OR_DUPLICATE_NATIVE_EXPORT_PATH",
+      "exitCode": 1,
+      "rejected": true,
+      "scope": "adversarial tool fixture only, not a game case or native save"
+    },
+    {
+      "case": "empty",
+      "expected": "NO_RECORDED_PUBLIC_EXPORTS",
+      "exitCode": 1,
+      "rejected": true,
+      "scope": "adversarial tool fixture only, not a game case or native save"
+    },
+    {
+      "case": "symlink-escape",
+      "expected": "NATIVE_INPUT_SYMLINK_ESCAPES_DIRECTORY",
+      "exitCode": 1,
+      "rejected": true,
+      "scope": "adversarial tool fixture only, not a game case or native save"
+    },
+    {
+      "case": "existing-uncommitted-output",
+      "exitCode": 1,
+      "rejected": true,
+      "originalReportUnchanged": true
+    }
+  ],
+  "allExpectedRejections": true
+}

@@ -1,0 +1,14 @@
+(node:57671) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+file:///Users/gordon/githome/reborn-2020-ai-era/scripts/verify_normal_browser_exports.ts:20
+function readInput(path       ){const name=relative(realInput,realpathSync(path));if(name.startsWith('..')||isAbsolute(name))throw Error('NATIVE_INPUT_SYMLINK_ESCAPES_DIRECTORY');return readFileSync(path,'utf8')}
+                                                                                                                                   ^
+
+Error: NATIVE_INPUT_SYMLINK_ESCAPES_DIRECTORY
+    at readInput (file:///Users/gordon/githome/reborn-2020-ai-era/scripts/verify_normal_browser_exports.ts:20:132)
+    at file:///Users/gordon/githome/reborn-2020-ai-era/scripts/verify_normal_browser_exports.ts:37:14
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+
+Node.js v22.12.0

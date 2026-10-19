@@ -1,0 +1,45 @@
+/* Dialogue choices leave the scene visible. Every original action and cost remains in the book. */
+.cinema-app .narrative-scene:not(.narrative-life)>.scene-story-book{width:min(730px,70%)}
+.cinema-app .scene-story-book .scene-choices{display:block!important;counter-reset:scene-thought;margin:0!important}
+.cinema-app .scene-story-book .scene-choices>:is(.command,.scene-choice){counter-increment:scene-thought;margin:0 0 8px!important;break-inside:avoid}
+.cinema-app .scene-story-book .scene-choice,.cinema-app .scene-story-book .scene-action>button{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:5px;min-height:88px;height:auto;padding:13px 16px 13px 64px!important;border:0;border-left:1px solid #bea36a55;border-bottom:1px solid #bea36a33;background:linear-gradient(90deg,#09262bd9,#17382e9c 72%,#17382e22);box-shadow:none;transform:none;transition:background .18s,border-color .18s,color .18s}
+.cinema-app .scene-story-book .scene-choice::before,.cinema-app .scene-story-book .scene-action>button::before{content:counter(scene-thought,decimal-leading-zero);position:absolute;left:14px;top:15px;font:25px/1.3 Georgia;color:#d5ba80;letter-spacing:1px}
+.cinema-app .scene-story-book .scene-choice-overline{display:none}
+.cinema-app .scene-story-book .scene-choices strong{display:block;max-width:calc(100% - 184px);font:500 19px/1.5 var(--serif);letter-spacing:1px;color:#f5e6c6}
+.cinema-app .scene-story-book .scene-choice-line{flex:none;font:12px/1.8 system-ui;color:#d2d7c4}
+.cinema-app .scene-story-book .scene-choice-end{position:absolute;top:17px;right:16px;max-width:170px;border:0;padding:0;font:11px/1.65 var(--serif);color:#ddc18b;gap:10px}
+.cinema-app .scene-story-book .scene-choice-end>span{font-size:18px}
+.cinema-app .scene-story-book .scene-choice:hover,.cinema-app .scene-story-book .scene-action>button:hover:not(:disabled),.cinema-app .scene-story-book .scene-choice:focus-visible,.cinema-app .scene-story-book .scene-action>button:focus-visible{transform:none;border-left-color:#f0d493;border-bottom-color:#d9bb7e99;background:linear-gradient(90deg,#2b453cfa,#264b3ed9 72%,#264b3e55);color:#fff0ce}
+.cinema-app .scene-story-book .scene-choice:hover::before,.cinema-app .scene-story-book .scene-action>button:hover:not(:disabled)::before{color:#fff0bd}
+.cinema-app .scene-story-book .scene-action>.reason{padding-left:64px;margin:5px 0 10px;font-size:12px;color:#f3d3ab}
+.cinema-app .book-decisions button[aria-current=page]{border-color:#ddc486;color:#ffe5b3;background:#47533ab0}
+.cinema-app .scene-story-book .book-hint{color:#c4ccb8;letter-spacing:.5px}
+.cinema-app.text-mode .scene-story-book .scene-choice,.cinema-app.text-mode .scene-story-book .scene-action>button{background:#163b35;border-color:#d4bb7b66}
+.cinema-app.reduced-motion .scene-story-book :is(.scene-choice,.scene-action>button){transition:none}
+@media(prefers-reduced-motion:reduce){.cinema-app .scene-story-book :is(.scene-choice,.scene-action>button){transition:none}}
+@media(min-height:900px){.cinema-app .scene-story-book .scene-choice,.cinema-app .scene-story-book .scene-action>button{min-height:110px;padding-top:18px!important;padding-bottom:18px!important;gap:8px}.cinema-app .scene-story-book .scene-choices>:is(.command,.scene-choice){margin-bottom:14px!important}.cinema-app .scene-story-book .scene-choices strong{font-size:23px}.cinema-app .scene-story-book .scene-choice::before,.cinema-app .scene-story-book .scene-action>button::before{top:21px;font-size:29px}.cinema-app .scene-story-book .scene-choice-end{top:24px}}
+
+/* Time is a game step. Its original commitment review stays beside the primary control. */
+.clock-advance{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex:none}
+.cinema-app .clock-advance>.command{margin:0}
+.cinema-app .clock-advance .clock-main>button{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:3px 12px;text-align:left;min-height:40px;padding:9px 13px;color:#213b33;background:#d8bf82;border:1px solid #d8bf82;font:12px/1.5 var(--serif)}
+.clock-main>button>small{grid-column:1/-1;color:#41523a;font:11px/1.6 var(--serif)}
+.clock-main kbd{font:9px Georgia;padding:2px 4px;border:1px solid #8c825944;color:#6b6849}
+.cinema-app .clock-advance .clock-review>button{min-height:30px;padding:4px 6px;border:0;border-bottom:1px solid #c0a36e66;background:none;color:#e2cea4;font:11px/1.7 var(--serif)}
+.cinema-app .clock-advance .clock-main>button:hover:not(:disabled){background:#ebd398;border-color:#f0d99e;color:#17352e}
+.clock-advance-room{display:flex;flex-direction:column;align-items:stretch;gap:3px}
+.clock-advance-room .clock-review{align-self:flex-end}
+.cinema-app .clock-advance-room .clock-main>button{width:100%}
+.scene-time-note{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px 10px;color:#e6d5ac;font:12px/1.7 var(--serif)}
+.scene-time-note time{color:#cfb980;font:11px Georgia}
+.cinema-app .scene-time-note>button{display:inline-flex;align-items:center;border:0;border-bottom:1px solid #b6a26b55;background:none;color:#eed4a0;font:11px/1.7 var(--serif);min-height:24px;padding:2px 5px}
+.cinema-app .scene-time-note>button:hover{color:#fff0c3;border-color:#dfc88d}
+.film-play .room-action-note{top:auto;left:55%;bottom:calc(30% + 20px);height:auto;max-width:30%}
+.film-play .room-action-note.room-time-note{pointer-events:auto}
+.cinema-app .command-review .book-flow .command-facts{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 18px;margin:0 0 18px}
+.cinema-app .command-review .book-flow .command-facts>div{display:block;padding:10px 14px;border-left:1px solid #b8a16c77;background:#b7a26a13;break-inside:avoid}
+.cinema-app .command-review .command-facts dt{font:12px/1.7 var(--serif);color:#797353}
+.cinema-app .command-review .command-facts dd{margin:5px 0 0;text-align:left;font:18px/1.5 Georgia,var(--serif);color:#3b513e}
+.cinema-app .command-review .command-facts ul{padding-left:18px;margin:5px 0;font:12px/1.7 var(--serif)}
+.cinema-app .command-review .command-introduction{color:#6b7459;font:12px/1.8 var(--serif);margin:2px 0 14px}
+.cinema-app .screen-book[data-pages="1"]>.book-pagination{visibility:hidden}

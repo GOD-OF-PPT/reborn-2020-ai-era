@@ -1,6 +1,7 @@
-import {useState,type Ref} from 'react'
+import {useState,useEffect,useRef,type Ref} from 'react'
 import {Dialog} from './Dialog.tsx'
-import {SceneEcho,type EchoFrame} from './SceneEcho.tsx'
+import {SceneEcho,SceneTimeNotice,type EchoFrame} from './SceneEcho.tsx'
+import {ClockAdvance} from './ClockAdvance.tsx'
 import {ScreenBook} from './ScreenBook.tsx'
 import type {GamePanelProps} from './game-types.ts'
 import type {Screen} from './Navigation.tsx'
@@ -16,7 +17,7 @@ type Props=GamePanelProps&{
  screen:Screen;headingRef:Ref<HTMLHeadingElement>;personId:LifePerson
  onPerson:(id:LifePerson)=>void;onOpen:(screen?:Screen)=>void
  onPeople:()=>void;onYear:()=>void;onNavigate:(screen:Screen)=>void
- receipt:string|null;echoFrame?:EchoFrame|null;onDismissReceipt?:()=>void
+ receipt:string|null;receiptKind?:string|null;echoFrame?:EchoFrame|null;onDismissReceipt?:()=>void
 }
 const stories:Record<Exclude<Screen,'room'|'routes'>,{overline:string;title:string;line:string;open:string}>={
  quarter:{overline:'这一季 / 把日子重新握在手里',title:'从眼前的一件事开始。',line:'工作、一个小单，或者留给自己的时间。你不必同时抓住所有机会。',open:'翻开本季日历'},
@@ -52,6 +53,24 @@ function Action({p,kind,payload,title,line,label}:{p:GamePanelProps;kind:string;
  return <CommandButton {...p} kind={kind} payload={payload} label={label} confirm className="scene-action"><span className="scene-choice-overline">由你决定</span><strong data-book-chapter={title}>{title}</strong><span className="scene-choice-line">{line}</span><span className="scene-choice-end">{label}<span aria-hidden="true">→</span></span></CommandButton>
 }
 
+/** The visible button owns every preview and guard; a number never submits a command directly. */
+function chooseWithNumber(root:HTMLElement,event:KeyboardEvent){
+ if(event.defaultPrevented||event.repeat||event.isComposing||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||!/^[1-9]$/.test(event.key))return
+ const target=event.target
+ if(!(target instanceof Element)||target.closest('input,textarea,select,[contenteditable]:not([contenteditable=false])')||document.querySelector('dialog[open]'))return
+ const number=Number(event.key)-1,button=root.querySelectorAll<HTMLButtonElement>('.scene-choices button')[number],viewport=button?.closest('.book-viewport')
+ if(!button||!viewport)return
+ const bounds=viewport.getBoundingClientRect(),rect=button.getBoundingClientRect()
+ if(!button.getClientRects().length)return
+ if(button.inert||rect.left<bounds.left-1||rect.right>bounds.right+1||rect.top<bounds.top-1||rect.bottom>bounds.bottom+1){
+  const jump=viewport.closest('.screen-book')?.querySelectorAll<HTMLButtonElement>('.book-decisions button')[number]
+  if(jump&&!jump.disabled){event.preventDefault();jump.click()}
+  return
+ }
+ if(button.disabled)return
+ event.preventDefault();button.click()
+}
+
 function sceneCommitmentCount(p:GamePanelProps){
  const f=p.features,w=f.workbench
  return sceneThreads(f).length+w.events.filter(e=>e.presentation!=='ordinary'||e.isBlocking).length+
@@ -73,6 +92,8 @@ export function SceneAttention({p,onOpen}:{p:GamePanelProps;onOpen:(screen:Scree
 }
 
 export function NarrativeScene(p:Props){
+ const stage=useRef<HTMLElement>(null)
+ useEffect(()=>{const choose=(event:KeyboardEvent)=>{if(stage.current&&(event.target===document.body||event.target===document.getElementById('main-content')))chooseWithNumber(stage.current,event)};document.addEventListener('keydown',choose);return()=>document.removeEventListener('keydown',choose)},[])
  const {view,features:f}=p,w=f.workbench,first=f.firstOrder
  const screen=p.screen as Exclude<Screen,'room'|'routes'>,closing=view.phase!=='playing',archived=view.phase==='finished'
  const copy=closing?{...stories[screen],...closingStories[screen],overline:'原来的记录与边界',line:archived?'已经归档的经历和原账仍可以翻阅。若想继续实做，请回到住处明确继续旧事项；原回顾会保留。':'原合同、原资产与答应过的事，仍沿真实日期发生。尾声共用原四点，等候与收尾仍承担原来的费用。'}:stories[screen]
@@ -85,10 +106,10 @@ export function NarrativeScene(p:Props){
  const personChoice=running?<Choice title="把这段相处，认真走完" line={`${running.startAt}—${running.completeAt}，已经开始，仍待实际完成。`} label={'翻看与'+person.name+'的实际记录'} onClick={p.onPeople}/>:accepted?<Action p={p} kind="FulfillLifePromise" payload={{promiseId:accepted.id}} title="答应过的事，留出日子去做" line={`个人${moneyText(accepted.costFen)} · ${person.promiseTerms.actionPoints}点 · ${accepted.days}日，须在${accepted.deadline}前实际完成。`} label={'核对并兑现与'+person.name+'的约定'}/>:offered?<Action p={p} kind="AcceptLifePromise" payload={{promiseId:offered.id,consent:true}} title="给这项邀请，一个明确答复" line={`现在只是接受；以后仍需个人${moneyText(offered.costFen)}、${person.promiseTerms.actionPoints}点和${offered.days}日，在${offered.deadline}前完成。`} label={'核对'+person.name+'的邀请'}/>:shared?<Choice title="这一季，已经有相处过的日子" line={`${shared.completeAt}实际完成；共同经历和对方自己的选择，都留在原记录里。`} label={'翻看与'+person.name+'的实际记录'} onClick={p.onPeople}/>:<Action p={p} kind="StartLifeWork" payload={{kind:person.work.kind,personId:person.id,reference:person.id==='tang-ying'?null:person.references[0]??null}} title={'和'+person.name+'留下一段共同经历'} line={`个人${moneyText(person.work.costFen)} · ${person.work.points}点 · ${person.work.days}日。对方有自己的日程与意愿。`} label={'核对与'+person.name+'的共同活动'}/>
  const personalWork=f.life.jobs.filter(j=>j.personId===null&&j.status==='running'),commitmentCount=sceneCommitmentCount(p)
  const firstChoice=first.status==='available'?<Action p={p} kind="StartFirstOrder" payload={{}} title="接下一笔手工小单" line={`制作预算${moneyText(first.terms.costFen)}，${first.terms.actionPoints}点；先核对开工与交付日期，再接受。`} label="核对这笔手工第一单"/>:first.status==='awaiting_submission'?<Action p={p} kind="SubmitDelivery" payload={{contractId:first.contractId}} title="把完成的作品交给客户" line="作品已经完成。提交后仍要等客户复核，回款不会提前发生。" label="核对并提交这份作品"/>:['planned','running'].includes(String(first.status))?<Choice title={first.status==='planned'?'这份作品，已排进日历':'把这一份作品认真做完'} line={first.status==='planned'?`${first.dates.startAt}实际开工，${first.dates.submitBy}前完成；此刻还没有交付和回款。`:`${first.dates.submitBy}前完成并提交；当前已发生成本${moneyText(first.result.directCostFen)}。完成以后还要交给客户。`} label="核对这笔小单的日历" onClick={()=>p.onOpen('quarter')}/>:['review','delivered'].includes(String(first.status))?<Choice title="作品已经交出，等下一处反馈" line={`最早${first.dates.earliestReviewAt}客户复核。复核、验收和实际到账还要分别核对，未到账不能叫回款。`} label="看看客户复核与收款记录" onClick={()=>p.onOpen('quarter')}/>:null
- return <section className={'narrative-scene narrative-'+p.screen} aria-label="场景中的选择"><header className="scene-title"><p className="scene-overline">{closing?(archived?'已经归档':'有限尾声')+' / '+view.date:w.quarter} / {copy.overline}</p><h1 ref={p.headingRef} tabIndex={-1}>{!closing&&p.screen==='quarter'&&w.atQuarterEnd?'这一季，你留下了什么？':copy.title}</h1><p>{!closing&&p.screen==='quarter'&&w.atQuarterEnd?'已经发生的回款、成本和经历，留在这一季。旧承诺还在，下一季的安排仍由你决定。':copy.line}</p></header>
+ return <section ref={stage} className={'narrative-scene narrative-'+p.screen} aria-label="场景中的选择" onKeyDown={event=>chooseWithNumber(event.currentTarget,event.nativeEvent)}><header className="scene-title"><p className="scene-overline">{closing?(archived?'已经归档':'有限尾声')+' / '+view.date:w.quarter} / {copy.overline}</p><h1 ref={p.headingRef} tabIndex={-1}>{!closing&&p.screen==='quarter'&&w.atQuarterEnd?'这一季，你留下了什么？':copy.title}</h1><p>{p.receipt&&p.receiptKind==='AdvanceTime'?<SceneTimeNotice key={view.revision} date={view.date} text={p.receipt} frame={p.echoFrame??null} onClose={()=>p.onDismissReceipt?.()} accountName={id=>id==='personal'?'个人账户':w.routes.find(r=>r.accountId===id)?.name??'经营账户'}/>:!closing&&p.screen==='quarter'&&w.atQuarterEnd?'已经发生的回款、成本和经历，留在这一季。旧承诺还在，下一季的安排仍由你决定。':copy.line}</p></header>
   {p.screen==='life'?<div className="scene-people" aria-label="你的长期联系">{f.life.people.map(person=><button type="button" key={person.id} aria-label={'看看'+person.name} aria-pressed={person.id===p.personId} onClick={()=>p.onPerson(person.id)}><PersonPortrait personId={person.id} name={person.name} revealed={person.known} textOnly={p.textOnly===true}/><span>{person.name}<small>{person.known?'已经相识':'还未形成联系'}</small></span></button>)}</div>:null}
-  {p.screen==='life'&&!p.receipt?<figure className="scene-person-focus"><PersonPortrait personId={person.id} name={person.name} revealed={person.known} textOnly={p.textOnly===true} feature/><figcaption><strong>{person.name}</strong><span>{person.known?person.role:'这段联系，还没有实际前提。'}</span><p>{person.goal}</p><small>{person.boundary}</small></figcaption></figure>:null}
-  <ScreenBook choiceNavigation key={p.screen+':'+view.phase+':'+(p.screen==='life'?p.personId:'')+':'+(p.receipt??'choosing')} label="眼前的选择" className="scene-story-book">
+  {p.screen==='life'&&(!p.receipt||p.receiptKind==='AdvanceTime')?<figure className="scene-person-focus"><PersonPortrait personId={person.id} name={person.name} revealed={person.known} textOnly={p.textOnly===true} feature/><figcaption><strong>{person.name}</strong><span>{person.known?person.role:'这段联系，还没有实际前提。'}</span><p>{person.goal}</p><small>{person.boundary}</small></figcaption></figure>:null}
+  <ScreenBook choiceNavigation key={p.screen+':'+view.phase+':'+view.date+':'+(p.screen==='life'?p.personId:'')+':'+(p.receipt&&p.receiptKind!=='AdvanceTime'?p.receipt:'choosing')} label="眼前的选择" className="scene-story-book">
 
   {p.screen==='life'?<><SceneLifeMoment p={p} person={person}/>{personalWork.map(j=><section className="scene-life-moment" key={j.id}><h2>{j.kind==='promise_keep'?'约定工作':f.life.work[j.kind].title}，还在进行。</h2><p>{j.startAt}—{j.completeAt} · 已付{moneyText(j.costFen)} / 已耗{j.actionPoints}点。实际完成后才改变生活记录与场景。</p><CommandButton {...p} kind="InterruptLifeWork" payload={{jobId:j.id}} label="停止这次生活工作，保留已付成本" confirm/></section>)}</>:null}
   {p.screen==='life'&&sceneThreads(f).length>0?<section className="scene-person-voice"><h3>{person.name}在意的事</h3><p>{person.goal}</p><small>{person.boundary}</small></section>:null}
@@ -104,7 +125,7 @@ export function NarrativeScene(p:Props){
   </div>
   </ScreenBook>
 
-  {p.receipt?<SceneEcho text={p.receipt} frame={p.echoFrame??null} onClose={()=>p.onDismissReceipt?.()} accountName={id=>id==='personal'?'个人账户':w.routes.find(r=>r.accountId===id)?.name??'企业账户'}/>:null}
-  <footer className="scene-turn"><div><button type="button" className="scene-text-action" onClick={()=>p.onOpen('quarter')}>日历上的牵挂{commitmentCount>0?' · '+commitmentCount:''} ↗</button>{p.screen==='life'?<button type="button" className="scene-text-action" onClick={p.onYear}>回看年度胶片 ↗</button>:null}<button type="button" className="scene-text-action" onClick={()=>p.onOpen()}>{closing?'翻看原记录':'细看这一幕的安排'} ↗</button></div>{canAdvance?<CommandButton {...p} kind="AdvanceTime" payload={{date:next}} label={(w.progression.nextQuarterDate?'走进下一季 · ':'让日子向前 · ')+next} confirm/>:<button type="button" onClick={()=>closing?p.onNavigate('room'):p.onOpen('quarter')}>{closing?'回到人生回顾':w.progression.requiresDelivery?'先面对这份交付':view.date===playableThrough&&w.atQuarterEnd?'回看最后一季':'看看停在了哪件事'}</button>}</footer>
+  {p.receipt&&p.receiptKind!=='AdvanceTime'?<SceneEcho text={p.receipt} frame={p.echoFrame??null} onClose={()=>p.onDismissReceipt?.()} accountName={id=>id==='personal'?'个人账户':w.routes.find(r=>r.accountId===id)?.name??'企业账户'}/>:null}
+  <footer className="scene-turn"><div><button type="button" className="scene-text-action" onClick={()=>p.onOpen('quarter')}>日历上的牵挂{commitmentCount>0?' · '+commitmentCount:''} ↗</button>{p.screen==='life'?<button type="button" className="scene-text-action" onClick={p.onYear}>回看年度胶片 ↗</button>:null}<button type="button" className="scene-text-action" onClick={()=>p.onOpen()}>{closing?'翻看原记录':'细看这一幕的安排'} ↗</button></div>{canAdvance&&next?<ClockAdvance p={p} date={next} label={(w.progression.nextQuarterDate?'走进下一季 · ':'让日子向前 · ')+next}/>:<button type="button" onClick={()=>closing?p.onNavigate('room'):p.onOpen('quarter')}>{closing?'回到人生回顾':w.progression.requiresDelivery?'先面对这份交付':view.date===playableThrough&&w.atQuarterEnd?'回看最后一季':'看看停在了哪件事'}</button>}</footer>
  </section>
 }

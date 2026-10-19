@@ -1,11 +1,12 @@
 import { evaluateCommand, fingerprintCommand, bindCommandPreview, projectRun, type CommandPreview, type CommandRegistry } from '../core/commands.ts'
 import { commandIdentifier } from '../core/command-identity.ts'
-import { copyJson } from '../core/json-input.ts'
+import { copyJson,assertJsonInput } from '../core/json-input.ts'
 import { requireRule, RuleError } from '../core/errors.ts'
-import type { CommandReceipt, ProposedRun } from '../core/run-types.ts'
+import type { CommandReceipt, ProposedRun,CommandEnvelope } from '../core/run-types.ts'
 import type { RunStore, StoredRun } from '../persistence/indexeddb.ts'
 import { RunCodec } from '../persistence/codec.ts'
 import type { WriterAccess, WriterLease } from '../persistence/writer-lock.ts'
+import {DAY_PHASES} from '../core/timeline.ts'
 
 export type SaveStatus = 'saved' | 'saving' | 'unsaved' | 'conflict' | 'read_only' | 'closed'
 type PublicReceipt = Pick<CommandReceipt, 'commandId' | 'kind' | 'revisionAfter' | 'date' | 'summary'>
@@ -74,6 +75,18 @@ export class RunSession {
     if (blocked !== null) return { allowed: false, reasonCodes: [blocked], actionPoints: 0, upfrontCostFen: 0, releasedFen: 0 }
     if(this.#previewRecord!==this.#record||this.#previewer===null){this.#previewer=bindCommandPreview(this.#record.run,this.#options.registry,this.#options.actorId);this.#previewRecord=this.#record}
     return this.#previewer(raw)
+  }
+  clockCommitments(raw:CommandEnvelope){
+    assertJsonInput(raw)
+    const command=copyJson(raw),preview=this.preview(command)
+    requireRule(preview.allowed,preview.reasonCodes[0]??'INVALID_PAYLOAD')
+    requireRule(command.expectedRevision===this.#record.run.revision,'STALE_REVISION')
+    requireRule(command.kind==='AdvanceTime'&&typeof command.payload==='object'&&command.payload!==null&&'date'in command.payload&&typeof command.payload.date==='string','CLOCK_COMMAND_REQUIRED')
+    const requestedPhase='phase'in command.payload?command.payload.phase:'snapshot',phase=DAY_PHASES.find(p=>p===requestedPhase)
+    requireRule(phase,'INVALID_PAYLOAD')
+    const runtime=this.#options.registry.runtime
+    requireRule(runtime?.clockCommitments,'CLOCK_PREVIEW_UNAVAILABLE')
+    return copyJson(runtime.clockCommitments(this.#record.run,{date:command.payload.date,phase}))
   }
   #blockReason(): string | null {
     if (this.#status === 'closed') return 'SESSION_CLOSED'

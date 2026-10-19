@@ -9,6 +9,7 @@ import type { RunListing,RunStore } from '../persistence/indexeddb.ts'
 import type { WriterAccess } from '../persistence/writer-lock.ts'
 import type { RunCodec } from '../persistence/codec.ts'
 import type { SessionResult } from './session.ts'
+import {assertJsonInput,copyJson} from '../core/json-input.ts'
 export interface GameStart {readonly backgroundId:string;readonly playerProfile:PlayerProfile;readonly seed?:string}
 export { INITIAL_GAME_SNAPSHOT } from './game-snapshot.ts'
 export type { GameSnapshot } from './game-snapshot.ts'
@@ -46,6 +47,12 @@ export class GameController {
   return view&&!view.receipts.some(r=>r.commandId===command.commandId)&&(requestedPastRange||!tail&&view.date>=PLAYABLE_THROUGH&&!endActions.has(command.kind))
  }
  preview(command:CommandEnvelope){requireRule(this.#session,'RUN_NOT_FOUND');if(this.#routineRunning)return {allowed:false,reasonCodes:['SAVE_IN_PROGRESS'],actionPoints:0,upfrontCostFen:0,releasedFen:0};if(this.#rangeBlocks(command))return {allowed:false,reasonCodes:['PREVIEW_RANGE_ENDED'],actionPoints:0,upfrontCostFen:0,releasedFen:0};return this.#session.preview(command)}
+ clockCommitments(raw:CommandEnvelope){
+  requireRule(this.#session,'RUN_NOT_FOUND');requireRule(!this.#libraryBusy&&!this.#routineRunning,'SAVE_IN_PROGRESS');assertJsonInput(raw)
+  const command=copyJson(raw),preview=this.preview(command)
+  requireRule(preview.allowed,preview.reasonCodes[0]??'INVALID_PAYLOAD')
+  return this.#session.clockCommitments(command)
+ }
  submit(command:CommandEnvelope):Promise<SessionResult>{requireRule(this.#session,'RUN_NOT_FOUND');requireRule(!this.#libraryBusy&&!this.#routineRunning,'SAVE_IN_PROGRESS');if(this.#rangeBlocks(command)){this.#set({error:'PREVIEW_RANGE_ENDED'});return Promise.resolve({status:'rejected',reasonCodes:['PREVIEW_RANGE_ENDED']})}return this.#session.submit(command).then(result=>{this.#set({error:result.reasonCodes[0]??null,notice:result.status==='saved'||result.status==='duplicate'?result.receipt.summary:null});return result})}
  /** Both UI modes dispatch the same deterministic envelopes, one durable command at a time. */
  async runRoutine(planId:string,batch=true){

@@ -14,6 +14,10 @@ it('keeps a scheduled first-order reservation distinct from already incurred cos
  const result=confirmationMoney(command('StartFirstOrder',{}),{...preview,actionPoints:1,upfrontCostFen:50000})
  expect(result.amountFen).toBe(50000);expect(result.label).toContain('开工后')
 })
+it('a normal calendar advance labels only the instruction cost, with original dated costs reviewed separately',()=>{
+ const result=confirmationMoney(command('AdvanceTime',{date:'2020-01-05'}),preview)
+ expect(result.amountFen).toBe(0);expect(result.label).toContain('推进本身');expect(result.label).toContain('原费用')
+})
 it('keeps explicit zero follow-on participation visible as an investment decision',()=>{
  const result=confirmationMoney(command('FollowEquityRound',{agreementId:'position',amountFen:0}),preview)
  expect(result.amountFen).toBe(0);expect(result.label).toContain('投资本金')

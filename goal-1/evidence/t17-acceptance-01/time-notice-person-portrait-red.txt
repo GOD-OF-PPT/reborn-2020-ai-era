@@ -1,0 +1,34 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts --maxWorkers=1 src/ui/NarrativeScene.test.tsx
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/NarrativeScene.test.tsx (10 tests | 1 failed) 8695ms
+   × ordinary saved time keeps the person portrait in the game scene while its full reel is optional 806ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/NarrativeScene.test.tsx > ordinary saved time keeps the person portrait in the game scene while its full reel is optional
+AssertionError: expected '<section class="narrative-scene narra…' to contain 'scene-person-focus'
+
+Expected: "scene-person-focus"
+Received: "<section class="narrative-scene narrative-life" aria-label="场景中的选择"><header class="scene-title"><p class="scene-overline">2020-Q1 / 眼前生活 / 也给人留一点时间</p><h1 tabindex="-1">这一次，别只记得赚钱。</h1><p><span class="scene-time-note" role="status"><time dateTime="2020-01-04">2020-01-04</time><span>原安排，已经记下。</span><button type="button">查看回响 ↗</button><button type="button" aria-label="收起这次时间回响">收好</button></span></p></header><div class="scene-people" aria-label="你的长期联系"><button type="button" aria-label="看看唐萤" aria-pressed="true"><span class="person-portrait portrait-tang-ying"><img src="/assets/ui-redesign/portraits/tang-ying-cinematic-v1.jpg" alt="" width="1122" height="1402" loading="lazy" decoding="async"/></span><span>唐萤<small>已经相识</small></span></button><button type="button" aria-label="看看林舟" aria-pressed="false"><span class="person-portrait portrait-linzhou portrait-without-image"><span class="portrait-initial" aria-hidden="true"><svg viewBox="0 0 80 100" fill="none"><circle cx="40" cy="34" r="16"></circle><path d="M12 94V83c0-18 13-29 28-29s28 11 28 29v11"></path></svg><span>林</span></span></span><span>林舟<small>还未形成联系</small></span></button><button type="button" aria-label="看看许澄" aria-pressed="false"><span class="person-portrait portrait-xu-cheng portrait-without-image"><span class="portrait-initial" aria-hidden="true"><svg viewBox="0 0 80 100" fill="none"><circle cx="40" cy="34" r="16"></circle><path d="M12 94V83c0-18 13-29 28-29s28 11 28 29v11"></path></svg><span>许</span></span></span><span>许澄<small>还未形成联系</small></span></button><button type="button" aria-label="看看陈屿" aria-pressed="false"><span class="person-portrait portrait-chen-yu portrait-without-image"><span class="portrait-initial" aria-hidden="true"><svg viewBox="0 0 80 100" fill="none"><circle cx="40" cy="34" r="16"></circle><path d="M12 94V83c0-18 13-29 28-29s28 11 28 29v11"></path></svg><span>陈</span></span></span><span>陈屿<small>还未形成联系</small></span></button></div><div tabindex="-1" class="screen-book scene-story-book" role="region" aria-label="眼前的选择 · 翻页阅读" data-page="1" data-pages="1"><div class="book-index"><span class="book-binding" aria-hidden="true">眼前的选择</span><span class="book-hint">选择一个念头，先看清再决定</span></div><div class="book-viewport" id="_R_4_"><div class="book-flow" style="transform:translateX(0px);animation-name:book-ink-even;--book-gap:48px"><div class="scene-choices" aria-label="这一幕可以做的事"><div class="command scene-action"><button type="button" class="" aria-label="核对与唐萤的共同活动"><span class="scene-choice-overline">由你决定</span><strong data-book-chapter="和唐萤留下一段共同经历">和唐萤留下一段共同经历</strong><span class="scene-choice-line">个人¥200 · 1点 · 3日。对方有自己的日程与意愿。</span><span class="scene-choice-end">核对与唐萤的共同活动<span aria-hidden="true">→</span></span></button></div><div class="command scene-action"><button type="button" class="" aria-label="核对这次休整"><span class="scene-choice-overline">由你决定</span><strong data-book-chapter="把七天留给自己">把七天留给自己</strong><span class="scene-choice-line">个人¥0 · 1点 · 7日。休整不会返还行动或增加收益。</span><span class="scene-choice-end">核对这次休整<span aria-hidden="true">→</span></span></button></div><button type="button" class="scene-choice" aria-label="打开人物与原约定"><span class="scene-choice-overline">一个念头</span><strong data-book-chapter="翻看答应过的事">翻看答应过的事</strong><span class="scene-choice-line">已接受的约定不会因为离开页面消失。也可以回看已经发生的年度记录。</span><span class="scene-choice-end">打开人物与原约定<span aria-hidden="true">↗</span></span></button></div></div></div></div><footer class="scene-turn"><div><button type="button" class="scene-text-action">日历上的牵挂 ↗</button><button type="button" class="scene-text-action">回看年度胶片 ↗</button><button type="button" class="scene-text-action">细看这一幕的安排 ↗</button></div><div class="clock-advance"><div class="command clock-review"><button type="button" class="" aria-label="核对后推进 · 2020-01-06"><span>先核对 ↗</span></button></div><div class="command clock-main"><button type="button" class="" aria-label="让日子向前 · 2020-01-06"><span>让日子向前 · 2020-01-06</span><kbd aria-hidden="true">Space</kbd></button></div></div></footer></section>"
+
+ ❯ src/ui/NarrativeScene.test.tsx:53:16
+     51|   const view=h.controller.snapshot.view!,features=view.features as unk…
+     52|   const html=renderToStaticMarkup(<NarrativeScene {...h.p} view={view}…
+     53|   expect(html).toContain('scene-person-focus');expect(html).toContain(…
+       |                ^
+     54|   expect(h.controller.exportSaved()).toBe(before)
+     55|  }finally{await h.controller.close();await h.store.close()}
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 9 passed (10)
+   Start at  07:16:57
+   Duration  10.58s (tests 85%, transform 9%, import 6%)
+

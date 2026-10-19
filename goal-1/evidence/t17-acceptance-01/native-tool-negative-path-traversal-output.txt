@@ -1,0 +1,13 @@
+(node:57647) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+file:///Users/gordon/githome/reborn-2020-ai-era/scripts/verify_normal_browser_exports.ts:35
+  if(basename(file)!==file||!/^[a-zA-Z0-9_.-]+\.json$/.test(file)||seen.has(key))throw Error('INVALID_OR_DUPLICATE_NATIVE_EXPORT_PATH')
+                                                                                       ^
+
+Error: INVALID_OR_DUPLICATE_NATIVE_EXPORT_PATH
+    at file:///Users/gordon/githome/reborn-2020-ai-era/scripts/verify_normal_browser_exports.ts:35:88
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+
+Node.js v22.12.0

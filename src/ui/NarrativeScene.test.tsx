@@ -44,6 +44,17 @@ it('scene choices are read-only and keep delivery, end-of-range and read-only ac
  }finally{await h.controller.close();await h.store.close()}
 },20000)
 
+it('ordinary saved time keeps the person portrait in the game scene while its full reel is optional',async()=>{
+ const h=await normalScene()
+ try{
+  expect((await h.controller.submit(h.controller.prepare('AdvanceTime',{date:'2020-01-04'}))).status).toBe('saved')
+  const view=h.controller.snapshot.view!,features=view.features as unknown as PlayFeatures,before=h.controller.exportSaved()
+  const html=renderToStaticMarkup(<NarrativeScene {...h.p} view={view} features={features} screen="life" receipt="2020-01-04，原安排已经记下。" receiptKind="AdvanceTime"/>)
+  expect(html).toContain('scene-person-focus');expect(html).toContain('scene-time-note');expect(html).not.toContain('<dialog')
+  expect(h.controller.exportSaved()).toBe(before)
+ }finally{await h.controller.close();await h.store.close()}
+},20000)
+
 it('an actually accepted promise is named with its deadline outside the operation sheet',async()=>{
  const h=await normalScene()
  try{

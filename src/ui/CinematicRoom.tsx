@@ -1,4 +1,4 @@
-import {useEffect,useState,type Ref} from 'react'
+import {useEffect,useState,type Ref,type ReactNode} from 'react'
 import {SceneJournal} from './SceneJournal.tsx'
 import {sceneSeason,sceneShortcut} from './scene-season.ts'
 import {Dialog} from './Dialog.tsx'
@@ -10,11 +10,11 @@ import {StoryQueue} from './StoryQueue.tsx'
 import {LifeQueue} from './LifeQueue.tsx'
 import {Obligations} from './Obligations.tsx'
 import {EventCard} from './QuarterPanel.tsx'
-import {CommandButton} from './CommandButton.tsx'
+import {ClockAdvance} from './ClockAdvance.tsx'
 import {playableAdvanceDate} from '../application/playable-advance.ts'
 import {moneyText,playableThrough} from './game-text.ts'
 
-type Props=GamePanelProps&{headingRef:Ref<HTMLHeadingElement>;notice:string|null;onNavigate:(screen:Screen)=>void;onPeople:(id?:LifePerson)=>void;onYear:()=>void;onJourney?:()=>void}
+type Props=GamePanelProps&{headingRef:Ref<HTMLHeadingElement>;notice:string|null;timeEcho?:ReactNode;onNavigate:(screen:Screen)=>void;onPeople:(id?:LifePerson)=>void;onYear:()=>void;onJourney?:()=>void}
 const spots=[['routes','电脑 · 经营','新的机会，都从一次尝试开始。',76,49],['quarter','门外 · 安排','工作与时间，仍由你决定。',37,40],['memory','书架 · 记忆','记得趋势，不是答案。',22,48],['life','床边 · 生活','也留一些时间，给自己。',21,65]] as const
 type Spot=typeof spots[number][0]
 const inspection:Record<Spot,{speaker:string;line:string;hint:string}>={
@@ -63,8 +63,8 @@ export function CinematicRoom(p:Props){
    <SceneJournal p={p} onNavigate={p.onNavigate}/>
    <nav className="room-objects" aria-label="探索住处">{spots.map(([screen,label,hint,x,y])=><button type="button" className="room-hotspot" key={screen} style={{left:x+'%',top:y+'%'}} aria-label={label} aria-describedby={inspected===screen?'room-inspection-copy':undefined} data-inspected={inspected===screen?'true':undefined} onPointerEnter={()=>setHovered(screen)} onPointerLeave={()=>setHovered(null)} onFocus={()=>{setFocused(screen);setHovered(null)}} onBlur={()=>setFocused(null)} onClick={()=>p.onNavigate(screen)}><span className="hotspot-diamond" aria-hidden="true"/><span><strong>{label}</strong><small>{hint}</small></span></button>)}</nav>
    <nav className="room-pocket" aria-label="随身记录">{p.onJourney?<button type="button" onClick={p.onJourney}><span aria-hidden="true">◈</span>篇章</button>:null}<button type="button" onClick={()=>p.onPeople()}><span aria-hidden="true">♧</span>人物</button><button type="button" onClick={p.onYear}><span aria-hidden="true">▤</span>年度</button><button type="button" onClick={()=>setResponsibilities(true)}><span aria-hidden="true">◷</span>桌上待办{urgent+commitmentRows.length>0?<b>{urgent+commitmentRows.length}</b>:null}</button></nav>
-   {p.notice?<p className="room-action-note" role="status">{p.notice}</p>:null}
-   <footer className="room-narrative" data-inspecting={look?'true':undefined}><div id="room-inspection-copy"><span className="narrative-speaker">{look?.speaker??'你 · 内心独白'}</span><p>{look?.line??(f.life.scene.workspaceCompleted?'桌椅与照明已经改善，投入成了每天用得上的东西。':view.date==='2020-01-01'?'你在旧房间醒来。电脑还亮着，日历回到了2020年。':season.line)}</p><small>{w.pause?'有一件需要先面对的事。看看桌上待办，再决定如何继续。':w.progression.requiresDelivery?'作品已经完成。下一步，仍要由你决定是否提交。':look?.hint??(w.atQuarterEnd?'这一季留下了自己的结果，旧承诺仍会延续。':'一切，都从眼前的一个选择开始。')}</small><nav className="room-intentions" aria-label="此刻的四个念头">{([['quarter','安排日子'],['routes','试试另一条路'],['life','见见在意的人'],['memory','翻翻旧记忆']] as const).map(([screen,label],i)=><button type="button" key={screen} onClick={()=>p.onNavigate(screen)}><kbd>{i+1}</kbd>{label}</button>)}</nav></div><div className="room-next"><button type="button" className="primary" onClick={()=>p.onNavigate('quarter')}>{w.progression.requiresDelivery?'处理这份交付':'安排本季的生活'} <span aria-hidden="true">→</span></button>{canAdvance?<CommandButton {...p} kind="AdvanceTime" payload={{date:nextDate}} label={(w.progression.nextQuarterDate?'进入下一季 · ':'推进下一节点 · ')+nextDate} confirm/>:null}</div></footer>
+   {p.timeEcho?<p className="room-action-note room-time-note">{p.timeEcho}</p>:p.notice?<p className="room-action-note" role="status">{p.notice}</p>:null}
+   <footer className="room-narrative" data-inspecting={look?'true':undefined}><div id="room-inspection-copy"><span className="narrative-speaker">{look?.speaker??'你 · 内心独白'}</span><p>{look?.line??(f.life.scene.workspaceCompleted?'桌椅与照明已经改善，投入成了每天用得上的东西。':view.date==='2020-01-01'?'你在旧房间醒来。电脑还亮着，日历回到了2020年。':season.line)}</p><small>{w.pause?'有一件需要先面对的事。看看桌上待办，再决定如何继续。':w.progression.requiresDelivery?'作品已经完成。下一步，仍要由你决定是否提交。':look?.hint??(w.atQuarterEnd?'这一季留下了自己的结果，旧承诺仍会延续。':'一切，都从眼前的一个选择开始。')}</small><nav className="room-intentions" aria-label="此刻的四个念头">{([['quarter','安排日子'],['routes','试试另一条路'],['life','见见在意的人'],['memory','翻翻旧记忆']] as const).map(([screen,label],i)=><button type="button" key={screen} onClick={()=>p.onNavigate(screen)}><kbd>{i+1}</kbd>{label}</button>)}</nav></div><div className="room-next"><button type="button" className="primary" onClick={()=>p.onNavigate('quarter')}>{w.progression.requiresDelivery?'处理这份交付':'安排本季的生活'} <span aria-hidden="true">→</span></button>{canAdvance?<ClockAdvance p={p} date={nextDate!} label={(w.progression.nextQuarterDate?'进入下一季 · ':'推进下一节点 · ')+nextDate} room/>:null}</div></footer>
    <p className="room-caption"><span>{f.life.scene.workspaceCompleted?'已改善的住处':'普通出租屋'} · {view.date}</span><span>模拟市场 / 明确架空股权</span></p>
   </section>
   {responsibilities?<Dialog title="桌上的牵挂" onClose={()=>setResponsibilities(false)} className="responsibility-book"><section id="room-responsibilities" className="room-responsibilities" aria-label="桌上全部待办与持续责任"><header className="section-heading"><div><p className="eyebrow">别忘了，已经答应的事</p><h2>桌上，还有这些牵挂。</h2></div><button type="button" onClick={()=>p.onNavigate('quarter')}>打开本季安排 →</button></header>

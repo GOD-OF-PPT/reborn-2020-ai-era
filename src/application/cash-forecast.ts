@@ -2,7 +2,8 @@ import {agentServiceEarned} from '../core/story-state.ts'
 import { cumulativeFee } from '../core/money.ts'
 import { OPERATIONS_CONTENT } from '../content/operations.ts'
 import type { OperationsCatalog } from '../core/operations-types.ts'
-import { addDays,monthEnd } from '../core/calendar.ts'
+import { addDays,monthEnd,isoDate } from '../core/calendar.ts'
+import {requireRule} from '../core/errors.ts'
 import { dayBefore,earnedMonthly,quarterLimit } from '../core/operations-calendar.ts'
 import { accountFunds } from '../core/ledger.ts'
 import { compareTimePoints,type DayPhase } from '../core/timeline.ts'
@@ -11,8 +12,9 @@ import type { GameRun } from '../core/run-types.ts'
 export interface KnownCashFlow {readonly id:string;readonly date:string;readonly phase:DayPhase;readonly priority:number;readonly amountFen:number;readonly releasedFen:number;readonly label:string;readonly sourceId:string}
 export interface CashForecast {readonly accountId:string;readonly horizon:string;readonly flows:readonly (KnownCashFlow&{availableFen:number})[];readonly minimumAvailableFen:number;readonly endingAvailableFen:number;readonly earliestGap:{date:string;shortfallFen:number;certainty:'conditional'|'committed'}|null;readonly assumption:string}
 /** A projection of existing commitments; never advances the world or prices an unknown trade. */
-export function projectCashForecast(run:GameRun,accountId:string,catalog:Pick<OperationsCatalog,'loans'>={loans:OPERATIONS_CONTENT.loans},marketPoints:readonly {id:string;date:string}[]=[]):CashForecast{
- const date=run.timeline.cursor.date,horizon=dayBefore(quarterLimit(date)),funds=accountFunds(run.economy.ledger,accountId),flows:KnownCashFlow[]=[]
+export function projectCashForecast(run:GameRun,accountId:string,catalog:Pick<OperationsCatalog,'loans'>={loans:OPERATIONS_CONTENT.loans},marketPoints:readonly {id:string;date:string}[]=[],through?:string):CashForecast{
+ const date=run.timeline.cursor.date,horizon=through===undefined?dayBefore(quarterLimit(date)):isoDate(through),funds=accountFunds(run.economy.ledger,accountId),flows:KnownCashFlow[]=[]
+ if(through!==undefined)requireRule(horizon>=date,'INVALID_FORECAST_HORIZON')
  const add=(id:string,at:string,amountFen:number,label:string,sourceId:string,phase:DayPhase='due_obligations',priority=0,releasedFen=0)=>{if((amountFen!==0||releasedFen>0)&&at<=horizon)flows.push({id,date:at<date?date:at,phase,priority,amountFen,label,sourceId,releasedFen})}
  for(const order of run.market?.orders.filter(o=>o.status==='planned'&&o.side==='buy'&&o.accountId===accountId)??[]){const point=marketPoints[order.expiresIndex],reservation=run.economy.ledger.reservations.find(r=>r.id===order.reservationId);if(point&&reservation)add('expiry:'+order.id,point.date,0,'未提交计划到期释放占款（不是收入）',order.id,'market_matching',0,reservation.amountFen)}
  const supplierCredits=new Map(run.economy.ledger.supplierPrepayments.filter(p=>p.accountId===accountId).map(p=>[p.id,p.remainingFen]))

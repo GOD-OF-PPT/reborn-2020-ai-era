@@ -17,6 +17,7 @@ import type { CommandEnvelope, GameRun, RuleModel, VersionSet, ProposedRun, Reje
 import type { DayPhase } from './timeline.ts'
 import { operatingAccruals } from './operations-accrual.ts'
 import type { WorldLog } from './content-types.ts'
+import type {ClockCommitmentProjection,ClockTarget} from './clock-projection-types.ts'
 
 const id = z.string().min(1).max(128).regex(/^[A-Za-z0-9][A-Za-z0-9_.:/-]*$/)
 const opaqueId = z.string().min(1).max(512).regex(/^[A-Za-z0-9][A-Za-z0-9_.:/-]*$/)
@@ -70,6 +71,7 @@ export interface RegistryRuntime {
   validate(run: GameRun): void
   guard?(view:CommandView,kind:string,payload:unknown):void
   project?(run:GameRun):Readonly<Record<string,unknown>>
+  clockCommitments?(run:GameRun,target:ClockTarget):ClockCommitmentProjection
 }
 export interface CommandHandler {
   readonly kind: string

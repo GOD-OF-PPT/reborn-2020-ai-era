@@ -1,0 +1,18 @@
+import {expect,it} from 'vitest'
+import {renderToStaticMarkup} from 'react-dom/server'
+import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
+import {createCampaignRun,createCampaignCodec} from '../application/campaign.ts'
+import {GameController} from '../application/game-controller.ts'
+import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
+import {CommandButton} from './CommandButton.tsx'
+
+it('a valid normal imported creation named display-preview must not disable an unrelated displayed choice',async()=>{
+ const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'t17-preview-identity'}),controller=new GameController({codec,store,locks:new MemoryWriterAccess()})
+ const run=createCampaignRun({runId:'preview-identity-life',actorId:'player',commandId:'display-preview',backgroundId:'technical_employee',seed:'t17-preview-identity',playerProfile:{wishId:'autonomy',approach:'free'}})
+ try{
+  await controller.initialize();await controller.importNew(codec.export(run));const view=controller.snapshot.view!,before=controller.exportSaved()
+  const html=renderToStaticMarkup(<CommandButton controller={controller} view={view} request={()=>{throw Error('RENDER_MUST_NOT_EXECUTE')}} kind="WorkQuarter" payload={{}} label="安排本季工作"/>)
+  expect(html).not.toContain('disabled=');expect(controller.exportSaved()).toBe(before)
+ }finally{await controller.close();await store.close()}
+})

@@ -1,12 +1,14 @@
 import {StoryCommandDetails} from './StoryCommandDetails.tsx'
 import {LifeCommandDetails} from './LifeCommandDetails.tsx'
 import {JourneyCommandDetails} from './JourneyCommandDetails.tsx'
+import {ClockCommandDetails} from './ClockCommandDetails.tsx'
+import type {ClockCommitmentProjection} from '../core/clock-projection-types.ts'
 import type {CommandEnvelope} from '../core/run-types.ts'
 import type {CommandPreview} from '../core/commands.ts'
 import type {PlayFeatures,PlayingView} from './game-types.ts'
 import {moneyText,routineKindText} from './game-text.ts'
 /** Created from the immutable snapshot being reviewed; never rebind to a newly committed view. */
-export function CommandDetails({command,confirm,features,view,accountName}:{command:CommandEnvelope;confirm:CommandPreview;features:PlayFeatures;view:PlayingView;accountName:(id:string)=>string}){
+export function CommandDetails({command,confirm,features,view,accountName,clock}:{command:CommandEnvelope;confirm:CommandPreview;features:PlayFeatures;view:PlayingView;accountName:(id:string)=>string;clock:ClockCommitmentProjection|null}){
  const p=typeof command.payload==='object'&&command.payload!==null?command.payload as Record<string,unknown>:{},business=typeof p.businessId==='string'?view.operations?.businesses.find(b=>b.id===p.businessId):undefined
  const stockOrder=typeof p.orderId==='string'?features.market.orders.find(o=>o.id===p.orderId):undefined
  const stockSymbol=typeof p.symbol==='string'?p.symbol:stockOrder?.symbol,stockSide=typeof p.side==='string'?p.side:stockOrder?.side,stockQuantity=typeof p.quantity==='number'?p.quantity:stockOrder?.remaining,stockPrice=typeof p.limitPriceFen==='number'?p.limitPriceFen:stockOrder?.limitPriceFen
@@ -14,6 +16,7 @@ export function CommandDetails({command,confirm,features,view,accountName}:{comm
  const openRoute=command.kind==='OpenCourseStudio'?'ai_course':command.kind==='OpenRelayStation'?'api_relay':command.kind==='OpenEcosystemService'?'deepseek_opportunity':null,opening=features.workbench.routes.find(r=>r.id===openRoute)
  const c=typeof p.contractId==='string'?features.deepseek?.contracts.find(c=>c.id===p.contractId):undefined
  return <>
+ {command.kind==='AdvanceTime'?clock?<ClockCommandDetails projection={clock} accountName={accountName}/>:<p className="warning-box">没有取得这一步的当前原承诺明细，请返回重新核对。</p>:null}
  <JourneyCommandDetails command={command} features={features}/>
  <StoryCommandDetails command={command} confirm={confirm} features={features} view={view} accountName={accountName}/>
  <LifeCommandDetails command={command} confirm={confirm} features={features} view={view}/>

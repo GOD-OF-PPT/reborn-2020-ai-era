@@ -1,0 +1,13 @@
+(node:57682) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+file:///Users/gordon/githome/reborn-2020-ai-era/scripts/verify_normal_browser_exports.ts:22
+if(existsSync(join(output,'normal-browser-export-audit.json')))throw Error('FRESH_NATIVE_AUDIT_OUTPUT_REQUIRED')
+                                                                     ^
+
+Error: FRESH_NATIVE_AUDIT_OUTPUT_REQUIRED
+    at file:///Users/gordon/githome/reborn-2020-ai-era/scripts/verify_normal_browser_exports.ts:22:70
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+
+Node.js v22.12.0
