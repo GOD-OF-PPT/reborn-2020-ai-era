@@ -1,0 +1,60 @@
+{
+  "scope": "Actual CLI rejection before game command execution; literal links not followed.",
+  "before": {
+    "regularIncludingMarker": 1194,
+    "literalLinks": 12,
+    "directories": 260,
+    "marker": {
+      "bytes": 223170,
+      "sha256": "c3fdd33406bc469452fb836e3cb00204ba64e4cf5b93459d6b0979a296e8bfba"
+    }
+  },
+  "after": {
+    "regularIncludingMarker": 1194,
+    "literalLinks": 12,
+    "directories": 260,
+    "marker": {
+      "bytes": 223170,
+      "sha256": "c3fdd33406bc469452fb836e3cb00204ba64e4cf5b93459d6b0979a296e8bfba"
+    }
+  },
+  "checks": [
+    {
+      "mode": "collector",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "--experimental-transform-types",
+        "scripts/collect_course_critical_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-09/matrix-r10001"
+      ],
+      "exitCode": 1,
+      "sealedAncestorRejected": true,
+      "outputDirectoryCreated": false,
+      "rootBytesLinksAndDirectoriesUnchanged": true,
+      "gameExecution": 0
+    },
+    {
+      "mode": "auditor",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "--experimental-transform-types",
+        "scripts/verify_course_critical_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-09/audit-r10001"
+      ],
+      "exitCode": 1,
+      "sealedAncestorRejected": true,
+      "outputDirectoryCreated": false,
+      "rootBytesLinksAndDirectoriesUnchanged": true,
+      "gameExecution": 0
+    }
+  ],
+  "passed": true
+}

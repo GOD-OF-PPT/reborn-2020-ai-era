@@ -1,0 +1,34 @@
+{
+  "wholeStagedDiffExitCode": 2,
+  "wholeDiffOnlyIssues": "Three original npm typecheck stdout files have a final blank line; literal output retained and all original source freezes match.",
+  "exactOriginalOutputFiles": {
+    "goal-1/evidence/t17-acceptance-09/project-types-r1.txt": {
+      "bytes": 48,
+      "sha256": "a201b3b7ad8a0705d4bb4e826f4b4fa5432608843f277120f81c772ee7adef98"
+    },
+    "goal-1/evidence/t17-acceptance-09/project-types-r2.txt": {
+      "bytes": 48,
+      "sha256": "a201b3b7ad8a0705d4bb4e826f4b4fa5432608843f277120f81c772ee7adef98"
+    },
+    "goal-1/evidence/t17-acceptance-09/project-types-r3.txt": {
+      "bytes": 48,
+      "sha256": "a201b3b7ad8a0705d4bb4e826f4b4fa5432608843f277120f81c772ee7adef98"
+    }
+  },
+  "allOtherStagedPathsCommand": [
+    "rtk",
+    "proxy",
+    "git",
+    "diff",
+    "--cached",
+    "--check",
+    "--",
+    ".",
+    ":(exclude)goal-1/evidence/t17-acceptance-09/project-types-r1.txt",
+    ":(exclude)goal-1/evidence/t17-acceptance-09/project-types-r2.txt",
+    ":(exclude)goal-1/evidence/t17-acceptance-09/project-types-r3.txt"
+  ],
+  "allOtherStagedPathsExitCode": 0,
+  "allOtherOutput": "",
+  "scope": "No normalization of actual console evidence or hook/config bypass. Current eleven code sources also separately passed whitespace."
+}
