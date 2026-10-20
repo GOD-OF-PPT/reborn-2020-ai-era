@@ -379,3 +379,6 @@ T15原轮内部顺序（记录保留；现先执行D03，移动专项后置M01�
 - P2原288有限策略采集/审核检查点：[限定验证](evidence/t17-acceptance-06/validation.md)记录六Create前史878命令与原文核定、4594成功后缀、全部288已执行（216闭环/72默认停权/0未知/0未执行）。3534原文和3234里程碑逐字读回，9095旧文件在本段追加前不变，5302原44资源同字节。R1字段默认值审核错误及全部红测保留，只改测试工具，不改生产/UI/依赖或兼容。完整P2仍缺12委托正向，下一新同级根先实际补充真实付费核查与合法排程，再原90关键/P4；5b/T17/goal未完成。[杠精审查] 通过（原有限结果与证据限定），准确提交/保护见随后记录，未推送。
 
 - 原288有限策略检查点已本地提交0679d645da0a41cb1d84551ed638dcae44a38f52，共4200文件；[提交后实核](evidence/t17-course-shape-post-commit-01/postcommit-byte-integrity.json)逐blob/磁盘/封存4193文件相同，[两入口实拒写](evidence/t17-course-shape-post-commit-01/immutable-parent-guard-results.json)后4194含marker文件集/哈希保持。5302原44资源和PUBLIC远端README另已读回，main仍9bf4399，无推送/部署。[交付摘要](evidence/t17-course-shape-post-commit-01/acceptance-summary.json)不宣称完整P2正向：12委托仍待新同级P2补充真实付费核查/合法排程，再原90关键/P4；完整5b/T17/goal未完成，兼容开发测试继续暂停。原root06及本post随后封存后不得追加，本完成记录随独立提交交回。
+
+
+- P2-S1电影风险互动限定检查点：本轮[验证](evidence/t17-acceptance-07/validation.md)完成来信—真实付费委托—等待—独立回信—确认的场景，逐封/原责任与原确认完整；实际Chrome155→161，ordinary结果和重载原文同，1Create/160命令/5原文全字节一致。85UI/最终30受影响及保存/入口增量分批通过；真实集成abort仍waiting，原候选提交后才显示完成。原72委托补充/90关键/P4仍0，不把UI子任务当完整P2/5b/T17。页面兼容开发测试为0，M01暂停。当前本地提交与提交后保护待随后准确SHA记录，无推送。

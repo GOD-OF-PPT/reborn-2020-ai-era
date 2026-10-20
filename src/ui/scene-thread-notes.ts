@@ -5,13 +5,13 @@ import {moneyText} from './game-text.ts'
 import {addDays} from '../core/calendar.ts'
 import type {VideoProjection} from '../core/video-projection.ts'
 
-export interface SceneThread {id:string;screen:Screen;title:string;detail:string;personId?:LifePerson}
+export interface SceneThread {id:string;screen:Screen;title:string;detail:string;personId?:LifePerson;incidentId?:string}
 type KnownRisk=Pick<PlayFeatures['story']['incidents'][number],'id'|'kind'|'stage'|'deadline'|'resolvedAt'|'businessIds'|'knownCostFen'|'paidWorkCostFen'|'unverifiedFeePaidFen'|'unpaidKnownCostFen'>
 const stages:Record<string,string>={signal:'有信号，仍待核实',investigating:'独立调查中',confirmed:'已确认范围外行为',containing:'部分隔离，等待验证',recovering:'替代准备中',residual:'仍有残余',takeover:'托管后仍待验证',unresolved:'暂缓，仍未解决'}
 
 /** These are already public facts. Never infer a hidden verdict from a warning. */
 export function riskThreads(incidents:readonly KnownRisk[],businessName:(id:string)=>string=id=>'原业务 · '+id.slice(-6)):SceneThread[]{
- return incidents.filter(i=>i.resolvedAt===null&&i.stage!=='normal').map(i=>({id:'risk:'+i.id,screen:'story',title:(i.kind==='agent'?'衡星权限与控制核查':'原合同身份核对')+' · '+i.businessIds.map(businessName).join(' / ')+' · '+(stages[i.stage]??'仍需核对'),detail:`期限${i.deadline} · 已记费用${moneyText(i.knownCostFen+i.paidWorkCostFen+i.unverifiedFeePaidFen)}，其中未付${moneyText(i.unpaidKnownCostFen)}。暂停自报不代表独立恢复。`}))
+ return incidents.filter(i=>i.resolvedAt===null&&i.stage!=='normal').map(i=>({id:'risk:'+i.id,screen:'story',incidentId:i.id,title:(i.kind==='agent'?'衡星权限与控制核查':'原合同身份核对')+' · '+i.businessIds.map(businessName).join(' / ')+' · '+(stages[i.stage]??'仍需核对'),detail:`期限${i.deadline} · 已记费用${moneyText(i.knownCostFen+i.paidWorkCostFen+i.unverifiedFeePaidFen)}，其中未付${moneyText(i.unpaidKnownCostFen)}。暂停自报不代表独立恢复。`}))
 }
 
 /** No highlight budget: every accepted promise and continuing business responsibility is retained. */
