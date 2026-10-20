@@ -337,6 +337,8 @@ T15原轮内部顺序（记录保留；现先执行D03，移动专项后置M01�
 
 - 步骤2封存补充：[实际保护补正](evidence/t17-course-ui-post-commit-01/seal-guard-addendum.md)保留旧子目录guard的四项false：父目录封存后仅journal追加1条受控测试行，另三入口在按钮/路径检查停止，没有游戏命令或原档变化。新scripts/browser_evidence_guard.mjs检查所有父目录/符号链接并在四入口委派前拒写，实际Chrome四入口均拒绝；真实文件系统9项和正向委派1项通过。原父marker/false不改，[独立实际索引](evidence/t17-course-ui-post-commit-01/verified-sealed-tree-index-r2.json)覆盖176真实文件，明确唯一受控日志变化；19原文/审核输入和326源保持。最终R2另补export/import单文件名与两个追加目标的文件符号链接/非普通文件拒绝，27项实际回归通过（正向3委派/负向0，哨兵不变）；R1真实Chrome四拒绝和模块刷新失败分列，不冒充R2新增Chrome执行。今后取证必须用该父目录guard，旧acceptance-04不再追加。源码/全部证据及准确Git blob保护随后提交，不把封存标记自身当字节正确性的证明。
 
+- 课程美术交互子检查点已本地提交fb702632d2d48997eb96562da806a1b5bdcf9f46，203文件逐字入Git；[提交后实核](evidence/t17-course-ui-post-commit-01/postcommit-byte-and-source-check.json)证明203个Git blob/磁盘一致、176实际证据文件集/哈希及326源不变，最终父目录guard R2源相同，当前5302原构建字节可用，远端main仍9bf4399，未推送。补正目录随后封存及完成记录另行提交，不追加acceptance-04。本轮止于5b内部步骤2；下一轮在新同级根按原完整政策实际执行378课程形态/关键分支，完整5b/T17/goal仍未完成，兼容开发和测试继续停止。
+
 ### M01 兼容性集中收尾（最低实施优先级）
 
 - 实际工作：
