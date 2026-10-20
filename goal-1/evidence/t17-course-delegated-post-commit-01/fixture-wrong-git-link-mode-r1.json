@@ -1,0 +1,43 @@
+{
+  "scope": "Exact task paths, file/link types, Git mode and original blob bytes only; no game, UI, compatibility, COW, index or HEAD mutation",
+  "mode": "staged",
+  "commit": null,
+  "repository": "/private/tmp/course-byte-fixture-9phe779_/repository",
+  "manifest": "/private/tmp/course-byte-fixture-9phe779_/manifest.json",
+  "completeTreeRoots": [
+    "evidence"
+  ],
+  "passed": false,
+  "error": "RuntimeError:GIT_MODE_MISMATCH:evidence/file-link",
+  "rows": [
+    {
+      "file": "evidence/data/note.txt",
+      "kind": "file",
+      "gitMode": "100644",
+      "gitBlobId": "bd864586e07e300838847f47bdb4173475960c51",
+      "bytes": 27,
+      "sha256": "f654a207dd38b77bbc3ee9a583161132c107f66fffcfdb739ba83a654d526e46"
+    },
+    {
+      "file": "evidence/dir-link",
+      "kind": "symlink",
+      "gitMode": "120000",
+      "gitBlobId": "6320cd248dd8aeaab759d5871f8781b5c0505172",
+      "bytes": 4,
+      "sha256": "3a6eb0790f39ac87c94f3856b2dd2c5d110e6811602261a9a923d3bb23adc8b7"
+    }
+  ],
+  "headBefore": "d89e40953fa435d6bf80ac69344efc6ce0316f24",
+  "indexBefore": {
+    "bytes": 374,
+    "sha256": "690bc7fd681084831109502ba18118e19c9aa08e28df4c010bced2495c8a8410"
+  },
+  "manifestBytes": 743,
+  "manifestSha256": "6dce931ce19bda369dd357301ad16c5e52f6b1987200154da9c88a4a55275b49",
+  "expectedFiles": 2,
+  "expectedSymlinks": 2,
+  "expectedEntries": 4,
+  "checkedEntries": 2,
+  "wallSeconds": 0.3065760970057454,
+  "verifierSha256": "4945b9e7ca31078d7a96e4af468a979268fd7d7fe0bcd5f1a5201d4106149a75"
+}
