@@ -1,0 +1,259 @@
+from pathlib import Path
+import hashlib,json
+
+ROOT=Path.cwd(); OUT=ROOT/'goal-1/evidence/t17-acceptance-02'
+assert not (OUT/'sealed-evidence.json').exists()
+INDEX=json.loads((OUT/'current-source-index.json').read_text())
+BIND=json.loads((OUT/'unit-evidence-source-scope.json').read_text())
+sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+TESTS={
+ 'ledger':'src/core/ledger.test.ts','econ':'src/core/economy.test.ts','time':'src/core/timeline.test.ts','etime':'src/core/economic-time.test.ts','commands':'src/core/commands.test.ts','random':'src/core/random.test.ts','facts':'src/core/facts.test.ts','content':'src/core/content.test.ts',
+ 'campaign':'src/application/campaign.test.ts','market':'src/application/market.test.ts','first':'src/application/first-order.test.ts','controller':'src/application/game-controller.test.ts','session':'src/application/session.test.ts','worldsession':'src/application/world-session.test.ts','cash':'src/application/cash-forecast.test.ts','clock':'src/application/clock-commitments.test.ts','operations':'src/application/operations.test.ts',
+ 'video':'src/application/video.test.ts','course':'src/application/course.test.ts','relay':'src/application/relay.test.ts','relayfinance':'src/application/relay-finance.test.ts','routine':'src/application/routines.test.ts','routineatomic':'src/application/routine-atomic.test.ts','deepseek':'src/application/deepseek.test.ts','deepnormal':'src/application/deepseek-normal.test.ts','equity':'src/application/equity.test.ts','ecosystem':'src/application/ecosystem-edges.test.ts',
+ 'history':'src/application/story-history.test.ts','combined':'src/application/story-combined.test.ts','agency':'src/application/story-agency.test.ts','risk':'src/application/story-risk.test.ts','riskmodes':'src/application/story-risk-modes.test.ts','storyroutine':'src/application/story-routine.test.ts','life':'src/application/life.test.ts','lifeyear':'src/application/life-year.test.ts','lifewb':'src/application/life-workbench.test.ts','people':'src/application/life-people.test.ts','journey':'src/application/journey.test.ts','tail':'src/application/epilogue.test.ts','share':'src/core/ending-share.test.ts',
+ 'codec':'src/persistence/codec.test.ts','encoding':'src/persistence/codec-encoding.test.ts','idb':'src/persistence/indexeddb.test.ts','library':'src/persistence/library.test.ts','locks':'src/persistence/writer-lock.test.ts',
+ 'scene':'src/ui/NarrativeScene.test.tsx','room':'src/ui/CinematicRoom.test.tsx','book':'src/ui/book-layout.test.ts','play':'src/ui/scene-play.test.tsx','visible':'src/ui/work-visibility.test.ts','clockui':'src/ui/clock-advance.test.tsx','clockdetails':'src/ui/clock-command-details.test.tsx','confirm':'src/ui/confirmation-money.test.ts','endingui':'src/ui/ending-stage.test.tsx','equityui':'src/ui/equity-exit-history.test.tsx',
+}
+BASE='goal-1/evidence/t16-c16-final-a1/replay/'
+ART={k:BASE+v for k,v in {
+ 'kernel':'kernel/t03-kernel-evidence.json','save':'save/t04-save-evidence.json','first':'first-order/t07-first-order-evidence.json','market':'market/t08-market-evidence.json','video':'video/t10-video-evidence.json','course':'course/t11-course-evidence.json','relay':'relay/t12-relay-evidence.json','deepseek':'deepseek/t13-deepseek-evidence.json','world':'world/t05-world-evidence.json','story':'story/t14-story-evidence.json','operations':'operations/t06-operations-evidence.json','playable':'playable/t09-playable-evidence.json','routes':'route-diversity-r2/t13-route-diversity-evidence.json'}.items()}
+ART.update({
+ 'matrix':'goal-1/evidence/t16-epilogue/matrix-full-r2/t16-journey-evidence.json','matrixcheck':'goal-1/evidence/t16-epilogue/matrix-full-r2-checked.json',
+ 'currentaudit':'goal-1/evidence/t17-acceptance-01/native-current-r9-audit-a2/normal-browser-export-audit.json',
+ 'old3':'goal-1/evidence/t17-acceptance-01/chrome-dev-a1/workspace-completion-old-saved-s3.json','physical3':'goal-1/evidence/t17-acceptance-01/chrome-readonly-a1/physical-old-s3-readonly.json','candidate4':'goal-1/evidence/t17-acceptance-01/chrome-dev-a1/workspace-completion-unsaved-candidate-s4.json','retry4':'goal-1/evidence/t17-acceptance-01/chrome-dev-a1/retried-workspace-completion-s4.json','physical4':'goal-1/evidence/t17-acceptance-01/chrome-readonly-a1/physical-retried-s4-readonly.json',
+ 'native25':'goal-1/evidence/t17-acceptance-01/chrome-r9/r9-actual-next-quarter-s25.json','geometry':'goal-1/evidence/t17-acceptance-01/chrome-r9/final-life-geometry.json','currentcheck':'goal-1/evidence/t17-acceptance-01/step3-final-summary.json',
+})
+RECORDS=[]; OBS=[]
+def test(key):
+ alias,line=key.split(':');file=TESTS[alias];line=int(line)
+ matches=[d for d in INDEX['testDeclarations'] if d['file']==file and d['line']==line and d['kind']=='test-declaration']
+ assert len(matches)==1,(key,matches)
+ d=matches[0];b=next(b for b in BIND['tests'] if b['file']==file)
+ return {**d,'sourceBinding':{k:b[k] for k in ['currentUnitSourceMatched','currentRun','legacyUnitSourceReusable','changedSinceC16','filesystemReadsNeedingManualBinding','unresolved']},'proofLimit':'Review the assertion and its fixture; the source binding is not itself a behavior result.'}
+def source(spec):
+ file,name=spec.split('#');p='src/'+file; p+=('.tsx' if (ROOT/(p+'.tsx')).exists() else '.ts')
+ found=[s for s in INDEX['symbols'] if s['file']==p and s['name']==name]
+ assert found,(spec,'missing current symbol')
+ return {k:found[0][k] for k in ['file','name','line','kind','sha256']}
+def observation(alias,pointer,expected=None):
+ file=ART[alias];d=json.loads((ROOT/file).read_text());value=d
+ for key in pointer.strip('/').split('/') if pointer else []:
+  key=key.replace('~1','/').replace('~0','~');value=value[int(key)] if isinstance(value,list) else value[key]
+ if expected is not None:assert value==expected,(file,pointer,value,expected)
+ hashes=d.get('sourceHashes',{}) if isinstance(d,dict) else {};drift=[]
+ for path,h in hashes.items():
+  if not (ROOT/path).is_file() or sha(ROOT/path)!=h:drift.append(path)
+ row={'file':file,'sha256':sha(ROOT/file),'pointer':pointer,'observed':value,'epoch':'T17 current execution' if alias in ['currentaudit','old3','physical3','candidate4','retry4','physical4','native25','geometry','currentcheck'] else 'T16 historical execution','reportSourceDifferences':drift,'proofLimit':'This field proves only the stated sample and role; fixture, current replay, native operation and human study are distinct.'}
+ assert len(json.dumps(value,ensure_ascii=False))<3000,(alias,pointer,'use a narrower field')
+ OBS.append(row);return row
+def check(statement,keys,fields=(),status='部分',gap='当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。',owner='T17'):
+ return {'requirement':statement,'tests':[test(k) for k in keys],'observations':[observation(*f) for f in fields],'adjudication':status,'remaining':gap,'owner':owner}
+def case(id,impl,checks,whole=False):
+ original=next(c for c in INDEX['requirements'] if c['caseId']==id)
+ RECORDS.append({'caseId':id,'original':original,'implementation':[source(s) for s in impl],'conditions':[{'conditionId':id+'.'+str(i+1),**c} for i,c in enumerate(checks)],'wholeCasePassed':whole,'adjudication':'有据' if whole else ('缺失' if all(c['adjudication']=='缺失' for c in checks) else '部分')})
+
+case('Q01',['core/economic-time#advanceEconomicTime','core/ledger#accountPosition'],[
+ check('按原教学输入期末现金2700000分；不与首单UX01叠加。',['etime:24','market:54'],[('kernel','/actual/position/cashFen',2700000)]),
+ check('持仓1100000分独立于现金，总财富3800000分。',['etime:24','market:54'],[('kernel','/actual/position/investmentValueFen',1100000),('kernel','/actual/position/netAssetsFen',3800000)]),
+ check('工资与生活/学习/投资按实际日期发生，最低现金1100000分，不透支。',['etime:9','etime:24'],[('kernel','/minimumCashFen',1100000)])])
+case('Q02',['core/economy#applyEconomy','ui/CommandButton#CommandButton'],[
+ check('季度共享四点；用尽后有成本动作原子拒绝并显示原因。',['econ:38','controller:24']),
+ check('阅读/只读投影不收费；未执行计划取消返还原预留，不返还已花成本。',['econ:28','campaign:228','clock:18'],[('currentaudit','/allByteEqual',True)])])
+case('Q03',['core/economic-time#advanceEconomicTime','ui/Obligations#Obligations'],[
+ check('月初资金不足不能由月末工资垫付；欠款保留。',['etime:9','ledger:101','controller:30']),
+ check('资金缺口有真实恢复/有限清算路径，不无偿清债。',['controller:30','operations:38','tail:58'])])
+case('Q04',['core/commands#evaluateCommand','core/ledger#applyLedger'],[
+ check('相同命令返回已有回执，即使原revision已旧；不重复奖励。',['commands:15','session:45'],[('save','/actual/duplicate','duplicate')]),
+ check('同一结算或流水只记一次，重复日序不重复付钱。',['ledger:28','time:19','commands:15'])])
+case('Q05',['core/ledger#applyLedger','core/ledger#accountPosition'],[
+ check('个人向企业的资本转移双边配平，不算经营收入。',['ledger:129']),
+ check('企业增估值不增加现金，个人股权和企业主体不重复合并财富。',['ledger:129','ledger:139','confirm:6'])])
+case('Q06',['core/market#MarketRuntime','application/market-commands#createMarketHandlers'],[
+ check('已看新闻/新报价后下单不能回到旧撮合点。',['market:28','market:58']),
+ check('最早在后续有效检查点成交，不以旧价兜底。',['market:28','market:75'])])
+case('Q07',['core/market#MarketRuntime','ui/MarketPanel#MarketPanel'],[
+ check('停牌和无量分别保留具体未成交原因，不假造全部成交。',['market:33']),
+ check('无资格订单拒绝，数量、制度与未知价格不兜底。',['market:41','market:75','market:92'])])
+case('Q08',['core/market#MarketRuntime','ui/MarketPanel#MarketPanel'],[
+ check('真实历史源不全时拒绝真实回放模式。',['market:41']),
+ check('股票名称/报价持续标模拟，不以现实名称配虚构价格。',['market:41','room:11'])])
+case('Q09',['core/video#VideoRuntime','ui/VideoPanel#VideoPanel'],[
+ check('真实发布有曝光反馈，但未获变现资格不加现金。',['video:5','video:129'],[('video','/cases/1/actual/firstPublicationIncomeFen',0)]),
+ check('商单、平台应收与实际回款分别发生，不因播放量直接加钱。',['video:129','video:36'])])
+case('Q10',['core/video#VideoRuntime','core/operations#remainingCapacity'],[
+ check('返工占共享人力/日期，产能冲突拒绝或另行排期。',['video:52','operations:44']),
+ check('追加修改有实际成本、谈判或有限退出，不免费无限接单。',['video:171','video:284','video:318'])])
+case('Q11',['core/course#CourseRuntime','core/ledger#applyLedger'],[
+ check('独立F03为200人×199元，20退款后确认收入3582000分。',['course:8'],[('course','/cases/0/actual/incomeFen',3582000)]),
+ check('费用1279100分、利润2302900分，实际生产/阶段/支持均履行；财务夹具与正常生活费分开。',['course:8'],[('course','/cases/0/actual/costFen',1279100),('course','/cases/0/actual/profitFen',2302900)])])
+case('Q12',['core/course#CourseRuntime','core/ledger#accountFunds'],[
+ check('原预款1000000分，半交付后付200000分成本，现金800000分。',['course:12','ledger:52'],[('course','/cases/1/actual/cashFen',800000)]),
+ check('未履约负债/保护500000分，可动用300000分；保护款不能代付生产。',['course:12','course:13'],[('course','/cases/1/actual/heldFen',500000),('course','/cases/1/actual/availableFen',300000)])])
+case('Q13',['core/relay#RelayRuntime','core/ledger#metricsFor'],[
+ check('F04收入3000000分，供应/支持/维护/费用合计2450000分，利润550000分。',['relay:4'],[('relay','/cases/0/actual/metrics/profitFen',550000)]),
+ check('未用充值保留为负债和保护，不计收入；实际日用量和供应账期独立。',['relay:4','relay:19'],[('relay','/cases/0/actual/funds/prepaidLiabilityFen',1000000)])])
+case('Q14',['core/relay#RelayRuntime','ui/RelayPanel#RelayPanel'],[
+ check('两供应商共享故障域不能构成独立冗余，只有已授权独立备选能避开该故障。',['relay:17'],[('relay','/cases/3/actual/missedUnits',19285),('relay','/cases/4/actual/missedUnits',0)]),
+ check('停站保留客户余额、退款和旧任务，不直接关闭企业。',['relay:18'],[('relay','/cases/1/actual/business/prepaidLiabilityFen',720002)])])
+case('Q15',['core/equity#EquityRuntime','ui/EquityPanel#EquityPanel'],[
+ check('技术适配和有钱不生成现实公开申购入口，架空模式另行同意。',['deepseek:7']),
+ check('须真实资格、对方融资意愿及已完成谈判；他方拒绝不能用钱覆盖。',['equity:14','deepseek:11'],[('deepseek','/cases/8/id','financing-refusal')])])
+case('Q16',['core/equity#EquityRuntime','core/deepseek-projection#projectDeepseek'],[
+ check('E01投前800000000分，实增200000000分，250000/1250000股为20%。',['deepseek:9'],[('deepseek','/cases/0/actual/rounds/0/preMoneyFen',800000000),('deepseek','/cases/0/actual/rounds/0/totalShares',1250000)]),
+ check('E02新增312500股，不跟投后250000/1562500股为16%，不免费付跟投资金。',['deepseek:9','equity:7'],[('deepseek','/cases/0/actual/agreements/0/holdingBps',1600)]),
+ check('股权、董事权、锁定与退出按独立条款，不能默认获治理或买方。',['equity:8','equity:10','equity:12'],[('deepseek','/cases/0/actual/agreements/0/board',False)])])
+case('Q17',['core/world#WorldRuntime','core/story-history#StoryHistory'],[
+ check('不打开新闻，按日期所有历史节点仍发生。',['campaign:75'],[('world','/cases/0/actual/readNews',0)]),
+ check('同一真实世界节点传播到相关路线，阅读不决定世界是否发生。',['combined:9','course:16'])])
+case('Q18',['core/story-history#StoryHistory','core/story-projection#projectStory'],[
+ check('林舟分岔需已履约合作、对方同意和实际发布参与权。',['history:15','history:16','history:17']),
+ check('开放/封闭改变经营条件与局部记忆两种真实结果，不清空无关域。',['history:15','life:97'],[('story','/cases/6/actual/story/linzhou/branch'),('story','/cases/8/actual/story/linzhou/branch')])])
+case('Q19',['core/facts#freezeFact','application/session#RunSession'],[
+ check('调查/导入保留预冻结隐藏事实和随机状态，不把证据揭示当重抽。',['codec:91','history:21']),
+ check('预览/窗口/场景翻阅为只读，不能因UI增删改变随机；私密状态不进入读模型。',['market:49','lifeyear:24','clock:51'],[('currentaudit','/allByteEqual',True)])])
+case('Q20',['core/story-risk#StoryRisk','core/story-agency#StoryAgency'],[
+ check('危机实际0行动/0可用现金仍可停止可控新增行为并有限推进。',['agency:29','relay:28'],[('story','/cases/10/id','zero-resources')]),
+ check('撤权/停工不等于免费调查、拆离、观察或人工接管；原债保留。',['agency:22','risk:24','risk:25'])])
+
+case('Q21',['core/story-risk#controlPrerequisites','core/story-projection#projectStory'],[
+ check('只有自身停止/暂停回执不能宣称独立恢复控制。',['risk:23','agency:22']),
+ check('独立验证窗口、原责任清单与替代条件不足时，证据不足状态明确。',['risk:24','risk:55','risk:57'])])
+case('Q22',['core/journey#JourneyRuntime','core/ending-projection#projectEnding'],[
+ check('两背景正常创建实际关闭24季度，含保留工作与不采用代理。',['journey:47','riskmodes:9'],[('matrixcheck','/closed24',42),('matrix','/results/0/phase','finished')]),
+ check('投资、内容、服务各有真实收入和完整回顾，不能把未完成策略仅归档说成该路线成功。',['deepnormal:3','course:32','video:197'],[('matrixcheck','/strategyStoppedOrRefused',13)]),
+ check('五机会按真实前提可达，非程序员软件创业单一路径。',['deepnormal:3','course:32','market:54'],[('deepseek','/cases/13/actual/origin','normal')],gap='42正常结果中13项策略受阻保留；步骤5逐形态核对主策略成功/被拒/有限退出，步骤11当前重验，不以归档代替路线完成。')])
+case('Q23',['ui/ScreenBook#ScreenBook','ui/Dialog#Dialog','ui/App#App'],[
+ check('目标桌面核心选择可达，保存及模拟/架空标识持续可见。',['scene:27','room:11'],[('geometry','/outsideViewport',[]),('geometry','/scroll',[0,0])],status='有据',gap='当前限定三桌面和所验证场景；全部形态继续步骤5/12。'),
+ check('真实200%浏览器缩放仍须实际验收，不能拿等效小视口替代。',[],status='后置',gap='真实菜单缩放与完整原生离页结果待M01；未标通过。',owner='M01'),
+ check('键盘编号/翻页/对话框及焦点恢复正确，编辑不误触。',['play:21','book:4','scene:27'],[('geometry','/books/0/offPageTabStops',[])],status='有据',gap='本轮已验证的焦点链有据；完整兼容矩阵在M01归还。')])
+case('Q24',['persistence/codec#RunCodec','persistence/indexeddb#IndexedDbRunStore','application/session#RunSession'],[
+ check('损坏/高版本/不兼容导入具体拒绝并保留原始旧档。',['codec:76','library:9','journey:19']),
+ check('旧revision及同revision物理代次旧写者不能覆盖另一提交。',['idb:33','idb:72','session:81'],[('save','/actual/stale',['STALE_REVISION'])])])
+case('Q25',['core/ledger#applyLedger'],[
+ check('计划资金转订单冻结沿用同一预留，占款不重复扣可用现金。',['ledger:39','market:18']),
+ check('部分使用及剩余释放精确，不把释放当收入。',['ledger:39','market:18'])])
+case('Q26',['core/ledger#applyLedger','core/course#CourseRuntime'],[
+ check('已交付课程退款冲减原确认收入或未收应收。',['ledger:77','ledger:89','course:8']),
+ check('实际赔偿另列，缺现金保留应付，不重造未履约负债。',['ledger:156','ledger:169','course:17'])])
+case('Q27',['core/relay#RelayRuntime','core/relay-validation#assertRelay'],[
+ check('重复用量ID不重复收费、成本、现金或抽随机。',['relay:9']),
+ check('审计更正逐条关联原计量/账单，不改写已发生记录或重计收入。',['relay:10','relayfinance:7'],[('relay','/cases/1/actual/corrections',9)])])
+case('Q28',['core/market#MarketRuntime','core/ledger#applyLedger'],[
+ check('部分成交只更新实际成交的股份、成本与资金。',['market:18','market:88']),
+ check('撤余量只释放未成交冻结/股份锁；已成交与独立交收仍保留。',['market:18','market:66','market:79'])])
+case('Q29',['core/operations#remainingCapacity','core/operations#OperationsRuntime'],[
+ check('同一员工/日期在多个业务共用容量，不生成第二个人。',['operations:44','operations:41']),
+ check('返工、课程支持、世界准备跨业务冲突拒绝或显式重排。',['course:30','history:18','operations:29'])])
+case('Q30',['core/timeline#advanceTimeline','core/market#MarketRuntime'],[
+ check('同日世界→确定到账→到期义务→动作→撮合→快照按原阶段稳定执行。',['time:5','market:58']),
+ check('同优先级按稳定ID，不因新事件或继续暂停重复旧处理。',['time:5','time:19','time:34']),
+ check('未来工资不能支付此前费用，已见行情不能倒流成交。',['etime:9','market:58'])])
+case('Q31',['core/course#CourseRuntime','core/relay#RelayRuntime','core/operations#OperationsRuntime'],[
+ check('课程停售保留旧教学、更新、支持和退款，实际结束才能关闭。',['course:17']),
+ check('中转停站保留未用充值、退款、供应应付与旧任务，清算后才能closed。',['relay:18','relay:31','visible:31'],[('relay','/cases/1/actual/business/prepaidLiabilityFen',720002)])])
+case('Q32',['core/epilogue#guardJourney','core/tail-billing#tailBillingEvents','core/ending-ledger#recoveryAssets'],[
+ check('2025年末未结预款/欠款和锁定股权继续保留，归档不是清债。',['tail:42','tail:58','tail:74','equity:10']),
+ check('尾声沿实际收款/退款/处置/计提与原Q4行动，不免费确认收入或按峰值卖股。',['tail:66','tail:91','equity:11','endingui:14']),
+ check('回收估计需明确假设，估计不入现金，继续旧事项保留原回顾。',['tail:91','tail:100','endingui:14'])])
+case('Q33',['application/session#RunSession','persistence/indexeddb#IndexedDbRunStore','ui/App#App'],[
+ check('head.put成功后事务中止，旧完整提交和物理旧档仍为Jan6/3。',['session:17','controller:18'],[('old3','/state/timeline/cursor/date','2020-01-06'),('physical3','/revision',3)],status='有据',gap='限定IndexedDB实际中途abort；不声称断电或磁盘损坏测试。'),
+ check('候选单独标未保存，界面不提前改日期/完成场景，新写入被阻挡。',['session:17','controller:18','worldsession:9'],[('old3','/state/life/jobs/0/status','running'),('candidate4','/state/life/jobs/0/status','completed')],status='有据',gap='当前真实候选/旧UI和API阻挡有据。'),
+ check('只重试原候选，实际commit后才发布完成，另一物理连接读回相同新4。',['session:17','worldsession:9'],[('retry4','/revision',4),('physical4','/revision',4),('currentaudit','/allByteEqual',True)],status='有据',gap='候选/重试/物理4与旧3/物理3整档字节相等另行核对。')],whole=True)
+case('Q34',['persistence/codec#RunCodec','core/json-input#assertJsonInput','ui/SaveTextPages#SaveTextPages'],[
+ check('超限、非法字段、坏checksum及非法引用拒绝，旧档原字节保留。',['codec:52','codec:76','encoding:33','commands:32']),
+ check('允许的玩家文本含HTML时仅作文本转义展示，不执行任意代码。',['commands:32'],gap='命令测试证实标签字符串保留且不泄露私密投影；当前专用浏览器/DOM转义检查需步骤6/12核对，不能用Node存储断言代替渲染。')])
+case('Q35',['core/commands#evaluateCommand','core/commands#fingerprintCommand'],[
+ check('相同commandId但payload不同，返回COMMAND_ID_REUSED。',['commands:15'],[('save','/actual/changed',['COMMAND_ID_REUSED'])],status='有据',gap='当前已执行的commands用例直接检查此拒绝，旧save字段单独标历史。'),
+ check('拒绝不返回错误旧回执、不再次扣钱；相同载荷重试才复用原回执。',['commands:15','session:45'],status='有据',gap='当前共同命令入口/会话用例已执行；不将独立新commandId当作重复意图。')],whole=True)
+case('Q36',['core/course#CourseRuntime','core/economy#applyEconomy'],[
+ check('课程更新花1点并经历真实七天，开始当天不完成。',['course:16','campaign:19']),
+ check('中断保留已花费用/AP与原学员义务，完成不再扣一次。',['econ:49','campaign:105','course:16'])])
+case('Q37',['core/random#createRandom','core/story-history#StoryHistory'],[
+ check('无关闲聊/生活或事件不改市场随机域，序列化后续接同流。',['random:20','life:97','market:49']),
+ check('相关世界改变可按真实来源影响相应域，不把全部域清零或锁死。',['combined:9','history:15'],[('world','/cases/0/actual/marketRandomMatchesQuoteClock',True)])])
+case('Q38',['application/campaign#createCampaignRun','core/run#createGameRun'],[
+ check('财务/权限快照能运行不算正常可达；M4必须从CreateRun保留前置和资源来源。',['deepnormal:3','course:32','video:197']),
+ check('两背景五路线需真实获客/资格/技能/工资/日期前史，不赠资金或授权。',['deepnormal:3','course:32','market:54'],[('deepseek','/cases/13/actual/origin','normal'),('course','/cases/2/actual/origin','normal'),('relay','/cases/1/actual/origin','normal')],gap='旧正常主路径有据；步骤5仍须逐产品形态/关键与默认分支检查，不能用一条成功链代替全部形态。')])
+case('Q39',['core/video#VideoRuntime','core/course#CourseRuntime'],[
+ check('同一人口身份/产品版本跨账号与班期不重复转化收款。',['video:69','video:149','course:13']),
+ check('维护更新不生成新付费身份；新产品必须新需求研究、样课和实际交付。',['course:16','course:18'])])
+case('Q40',['core/world#WorldRuntime','core/content-schema#loadContentPack'],[
+ check('事件到期有明确免费默认，0现金/0AP仍有限停止并继续。',['campaign:40','content:5'],[('world','/cases/3/origin','fixture')]),
+ check('默认不领取收费成果或新承诺，互斥分支后继仍可处理。',['campaign:240','campaign:40','equity:20','lifewb:14'])])
+
+case('X01',['core/first-order#projectFirstOrder','application/first-order#createFirstOrderHandler'],[
+ check('UX01技术分支按Jan5成本500、Jan20回款1300，净800，季末42800。',['first:14'],[('first','/cases/0/actual/cashFen',4280000),('first','/cases/0/actual/result/netOrderFen',80000)]),
+ check('旧Q01仍27000，内容背景独立为36800，不混算两教学结果。',['market:54','first:14'],[('kernel','/actual/position/cashFen',2700000),('first','/cases/1/actual/cashFen',3680000)]),
+ check('2020不开放未来图像/视频模型；手工生产持续明确。',['video:91','course:6'],[('first','/cases/0/actual/productionMode','manual')])])
+case('X02',['ui/Home#Home','core/first-order#projectFirstOrder','ui/OpportunityAtlas#OpportunityAtlas'],[
+ check('可拒绝/跳过首单，按投资或自由计划正常继续，不以没赚800判失败。',['first:24','controller:10'],[('first','/cases/3/actual/result/paymentFen',0)]),
+ check('不强迫创业，五路线始终可查准备和时代门槛。',['room:11','video:91','deepseek:7'])])
+case('X03',['application/workbench-projection#projectWorkbench','ui/BusinessLedger#BusinessLedger','ui/CinematicRoom#CinematicRoom'],[
+ check('场景与展开账本的账户主体/钱数一致，现金与企业不混合。',['cash:7','lifeyear:9','confirm:6'],[('native25','/state/personalAccountId','personal')]),
+ check('默认能找到可花、最早承诺缺口、未履约，全部主体缺口不截断。',['scene:117','visible:27','cash:7']),
+ check('普通日期无需打开总账即可推进，仍可先核对费用。',['clockui:12','clockdetails:10'],[('native25','/revision',25)],status='有据',gap='R7完整首季与R9原生Space跨季有据；其他复杂场景继续步骤5/12。')])
+case('X04',['core/routines#RoutineRuntime','application/game-controller#GameController'],[
+ check('同版本/种子/同序已确认动作，逐步手动与批处理完整档/账目/日期/随机相同。',['routine:16'],[('relay','/cases/5/actual/fullSaveByteEqual',True)]),
+ check('跨季复用先生成免费待确认草稿，禁止交易、招生、融资与代理扩权。',['routine:11','storyroutine:10']),
+ check('每步仍原子保存，失败停止批次，不能提前发布后续结果。',['routineatomic:9'])])
+case('X05',['core/routines#RoutineRuntime','core/relay#RelayRuntime'],[
+ check('价格/资格/现金/容量变化暂停受影响的未来步骤，解释具体原因。',['routine:14','routineatomic:13','routineatomic:16','routineatomic:19'],[('relay','/cases/6/actual/plan/status','paused')]),
+ check('已履约费用和已发生日期保留，不擅自换供应、借款或重授权。',['routine:15','routine:21','routine:24'],[('relay','/cases/6/actual/meters',12)])])
+case('X06',['core/market#MarketRuntime','core/video#VideoRuntime','core/course#CourseRuntime','core/relay#RelayRuntime','core/deepseek#DeepseekRuntime'],[
+ check('股票有仓位/撮合/交收策略和真实实现损益反馈。',['market:11','market:18']),
+ check('短视频有原创/热点/品牌、质量/返工/议价和曝光/商单独立收入。',['video:377','video:339','video:129']),
+ check('课程有产品/班额/支持排程/预款保护及实际分段收入。',['course:8','course:30']),
+ check('中转有供应故障域/价格/信用/用量/更正与实际服务利润。',['relay:4','relay:17','relay:10']),
+ check('DeepSeek有生态合同及另行架空股权、尽调/权利/融资/退出，非同一收益按钮。',['deepseek:8','equity:8','equity:11'],gap='五路线旧专用维度与收入有据，全部形态/普通默认/关键分支及当前UI结果仍由步骤5/6/12核对。')])
+case('X07',['core/story-history#StoryHistory','core/world#WorldRuntime'],[
+ check('记忆收藏不收费，真正准备仍按点/费用/日期完成，不提前授予未来能力。',['campaign:19','campaign:228','video:91']),
+ check('准备案例/关系在真实节点实际解锁变化，不发免费收益乘数。',['history:15','history:16','deepnormal:3'])])
+case('X08',['core/story-history#StoryHistory','core/story#StoryRuntime'],[
+ check('一个实际发布源同时关联股票、已有课程、中转，源只发生一次，各消费者只结算一次。',['combined:9','combined:20']),
+ check('未选反事实不泄露隐藏意愿、另一分支精确利润或种子事实。',['history:21','video:79','clock:51'])])
+case('X09',['core/life#LifeRuntime','core/life-projection#projectPersonalYear','ui/AnnualScene#AnnualScene'],[
+ check('生活改善/保持不变要明确选择；开始才从个人账户扣费用/AP，企业和客户款不能代付。',['life:27','life:35','lifeyear:16'],[('old3','/state/life/jobs/0/status','running')]),
+ check('实际完成且保存后才换场景，不自动豪宅，不把后来家具放入旧年度。',['life:27','scene:94','lifeyear:16'],[('retry4','/state/life/jobs/0/status','completed')],status='有据',gap='当前正常改善完成abort/物理旧档/重试及年度只读渲染有据；全年细项当前累计仍待步骤11。'),
+ check('年度回顾只读，主体、当年工资/现金与当前余额分开。',['lifeyear:9','lifeyear:24','lifeyear:35'])])
+case('X10',['core/routines#RoutineRuntime','core/story-agency#StoryAgency','core/story-risk#StoryRisk'],[
+ check('确定性例行计划不隐式授予代理权限；扩权另行确认范围/预算/日期。',['storyroutine:10','agency:23']),
+ check('自报停止不等于独立控制恢复，独立信号可暂停未来例行。',['risk:23','storyroutine:11'])])
+case('X11',['application/workbench-projection#projectWorkbench','ui/NarrativeScene#SceneAttention','ui/CinematicRoom#CinematicRoom'],[
+ check('同季10条消息的普通1主2支预算不丢任何原实例；长册全部可达。',['campaign:123','book:4']),
+ check('强制付款、每个账户缺口与全部风险证据不受普通截断。',['scene:86','scene:117','visible:18']),
+ check('0AP仍保留已有有限恢复/停止路径，不免费执行人工处置。',['agency:29','relay:28','controller:24'])])
+case('X12',['core/ending-projection#endingSharePreview','core/epilogue#guardJourney','ui/EndingStage#EndingStage'],[
+ check('实际通关/归档仍保留负债，不发永久倍率，不按账面峰值变现。',['tail:74','equity:10','tail:91']),
+ check('分享只含用户选中的已揭示因果；财务需另勾选，不带隐藏种子或私人备注。',['share:4','tail:100']),
+ check('明确新人生重新正常创建，不继承旧财富/权限，旧回顾仍可读。',['tail:100','controller:10'])])
+case('X13',[],[
+ check('相同动作/奖励的灰盒与电影前台对照入口，预登记版本/任务与交叉顺序。',[],status='缺失',gap='步骤10仍需实现独立本机对照入口及预登记；默认游戏保持电影风格，不接SDK。'),
+ check('记录实际样本、开始/结束、时间/操作/错误/中止，8—12人和目标用时不能冒充成绩。',[],[('currentcheck','/humanParticipants',0)],status='缺失',gap='已提供的实际真人记录为0；用户组织/提供实际匿名记录后在步骤13核验。'),
+ check('只本机记录，参与者同意后手动导出匿名数据，不自动分享。',[],status='缺失',gap='随独立对照入口实现明确本机范围和同意；没有授权对外招募/发消息。')])
+case('X14',['ui/ScreenBook#ScreenBook','ui/Dialog#Dialog','ui/SceneEcho#SceneTimeNotice','application/session#RunSession'],[
+ check('1280×720/1366×768核心选择与标签可读、全部长内容同屏翻页，不滚动或缩字藏操作。',['scene:27','book:4','room:11'],[('geometry','/outsideViewport',[])],status='有据',gap='当前三桌面/稳定逐页图有据；全部形态步骤5/12继续。'),
+ check('键盘聚焦与对话框恢复、文本/减少动画可用，动画时长不改钱。',['play:21','scene:47','clockui:12'],[('currentaudit','/allByteEqual',True)],status='有据',gap='当前原生键盘/两种模式/导出不变有据；完整兼容归M01。'),
+ check('保存失败明确未保存且旧画面保全，候选重试才给回响。',['session:17','controller:18','worldsession:9'],[('physical3','/revision',3),('physical4','/revision',4)],status='有据',gap='当前正常DEV实际abort和独立物理读回有据。'),
+ check('P022原资产按manifest原字节核验，不用新图替代；兼容仍后置而非通过。',[],[('currentcheck','/originalPNG',0)],status='缺失',gap='原三PNG0/3继续T17资产责任；真实200%/完整原生离页/移动最低优先级M01，不关闭W405。')])
+
+assert len(RECORDS)==54 and len({r['caseId'] for r in RECORDS})==54
+assert {r['caseId'] for r in RECORDS}=={r['caseId'] for r in INDEX['requirements']}
+for r in RECORDS:
+ assert len(r['conditions'])>=2
+ for c in r['conditions']:
+  assert c['tests'] or c['adjudication'] in ['缺失','后置']
+  if r['wholeCasePassed']:assert c['adjudication']=='有据'
+for a,b in [('old3','physical3'),('candidate4','retry4'),('retry4','physical4')]:assert (ROOT/ART[a]).read_bytes()==(ROOT/ART[b]).read_bytes()
+report={'scope':'Manual decomposition and concrete source/test/field mapping for all54; source declarations are not behavior executions. No blanket green matrix.','headAtReview':'3c218edfabe7896d03971c38a30fe185e9b49910','authorityHashes':INDEX['authorityHashes'],'indexSha256':sha(OUT/'current-source-index.json'),'sourceScopeSha256':sha(OUT/'unit-evidence-source-scope.json'),'authoringSourceSha256':sha(OUT/'build-requirement-review.py'),'cases':RECORDS,'caseCount':len(RECORDS),'conditionCount':sum(len(r['conditions']) for r in RECORDS),'wholeCasesPassed':[r['caseId'] for r in RECORDS if r['wholeCasePassed']],'behaviorTestsRunByThisIndex':0,'wholeT17Complete':False}
+with (OUT/'requirement-review.json').open('x') as f:json.dump(report,f,ensure_ascii=False,indent=2)
+lines=['# 54项逐条件复核','', '本表是源码、具体测试与实际字段的对应，不把声明索引当行为执行。Q33/Q35的限定条件有当前执行证据；其余当前未覆盖/旧依赖变化/外部责任逐条保留。完整数据与字段哈希见requirement-review.json。','', '| 原编号 | 条件数 | 判定 | 后续责任 |','|---|---:|---|---|']
+for r in RECORDS:
+ owners=sorted({c['owner'] for c in r['conditions'] if c['remaining']})
+ lines.append('|'+r['caseId']+'|'+str(len(r['conditions']))+'|'+r['adjudication']+'|'+','.join(owners)+'|')
+for r in RECORDS:
+ lines+=['','## '+r['caseId'],'',r['original']['trigger']+' → '+r['original']['expected'],'']
+ for c in r['conditions']:
+  refs='；'.join(t['file']+':'+str(t['line'])+' '+t['title'] for t in c['tests']) or '尚无实际测试/人测'
+  lines+=['- '+c['conditionId']+' '+c['requirement']+' ['+c['adjudication']+']','  - 对应：'+refs,'  - 实际字段：'+('；'.join(o['file']+'#'+o['pointer']+'（'+o['epoch']+'）' for o in c['observations']) or '当前引用源码/测试条件，不能推断未执行的实际字段。'),'  - 余项：'+c['remaining']]
+with (OUT/'requirement-review.md').open('x') as f:f.write('\n'.join(lines)+'\n')
+print(json.dumps({'cases':len(RECORDS),'conditions':report['conditionCount'],'wholeCasesPassed':report['wholeCasesPassed'],'behaviorTestsRun':0},ensure_ascii=False))

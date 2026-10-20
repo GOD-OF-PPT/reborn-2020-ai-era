@@ -1,0 +1,1853 @@
+{
+  "scope": "Concrete follow-up obligations; proposed commands are not executions",
+  "requirementsSha256": "7ee6fa2ca8a189e046bb773f9807feae78c85247dec44e1e57c4e8be3e562bbe",
+  "cases": [
+    {
+      "caseId": "Q01",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q01.1",
+        "Q01.2",
+        "Q01.3"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/market.test.ts",
+        "src/core/economic-time.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q01.1",
+          "requirement": "按原教学输入期末现金2700000分；不与首单UX01叠加。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q01.2",
+          "requirement": "持仓1100000分独立于现金，总财富3800000分。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q01.3",
+          "requirement": "工资与生活/学习/投资按实际日期发生，最低现金1100000分，不透支。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q02",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q02.1",
+        "Q02.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/campaign.test.ts",
+        "src/application/clock-commitments.test.ts",
+        "src/application/game-controller.test.ts",
+        "src/core/economy.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q02.1",
+          "requirement": "季度共享四点；用尽后有成本动作原子拒绝并显示原因。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q02.2",
+          "requirement": "阅读/只读投影不收费；未执行计划取消返还原预留，不返还已花成本。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q03",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q03.1",
+        "Q03.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/epilogue.test.ts",
+        "src/application/game-controller.test.ts",
+        "src/application/operations.test.ts",
+        "src/core/economic-time.test.ts",
+        "src/core/ledger.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q03.1",
+          "requirement": "月初资金不足不能由月末工资垫付；欠款保留。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q03.2",
+          "requirement": "资金缺口有真实恢复/有限清算路径，不无偿清债。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q04",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q04.1",
+        "Q04.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/session.test.ts",
+        "src/core/commands.test.ts",
+        "src/core/ledger.test.ts",
+        "src/core/timeline.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q04.1",
+          "requirement": "相同命令返回已有回执，即使原revision已旧；不重复奖励。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q04.2",
+          "requirement": "同一结算或流水只记一次，重复日序不重复付钱。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q05",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q05.1",
+        "Q05.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/core/ledger.test.ts",
+        "src/ui/confirmation-money.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q05.1",
+          "requirement": "个人向企业的资本转移双边配平，不算经营收入。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q05.2",
+          "requirement": "企业增估值不增加现金，个人股权和企业主体不重复合并财富。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q06",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q06.1",
+        "Q06.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/market.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q06.1",
+          "requirement": "已看新闻/新报价后下单不能回到旧撮合点。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q06.2",
+          "requirement": "最早在后续有效检查点成交，不以旧价兜底。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q07",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q07.1",
+        "Q07.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/market.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q07.1",
+          "requirement": "停牌和无量分别保留具体未成交原因，不假造全部成交。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q07.2",
+          "requirement": "无资格订单拒绝，数量、制度与未知价格不兜底。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q08",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q08.1",
+        "Q08.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/market.test.ts",
+        "src/ui/CinematicRoom.test.tsx"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q08.1",
+          "requirement": "真实历史源不全时拒绝真实回放模式。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q08.2",
+          "requirement": "股票名称/报价持续标模拟，不以现实名称配虚构价格。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q09",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q09.1",
+        "Q09.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/video.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q09.1",
+          "requirement": "真实发布有曝光反馈，但未获变现资格不加现金。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q09.2",
+          "requirement": "商单、平台应收与实际回款分别发生，不因播放量直接加钱。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q10",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q10.1",
+        "Q10.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/operations.test.ts",
+        "src/application/video.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q10.1",
+          "requirement": "返工占共享人力/日期，产能冲突拒绝或另行排期。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q10.2",
+          "requirement": "追加修改有实际成本、谈判或有限退出，不免费无限接单。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q11",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q11.1",
+        "Q11.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/course.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q11.1",
+          "requirement": "独立F03为200人×199元，20退款后确认收入3582000分。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q11.2",
+          "requirement": "费用1279100分、利润2302900分，实际生产/阶段/支持均履行；财务夹具与正常生活费分开。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q12",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q12.1",
+        "Q12.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/course.test.ts",
+        "src/core/ledger.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q12.1",
+          "requirement": "原预款1000000分，半交付后付200000分成本，现金800000分。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q12.2",
+          "requirement": "未履约负债/保护500000分，可动用300000分；保护款不能代付生产。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q13",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q13.1",
+        "Q13.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/relay.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q13.1",
+          "requirement": "F04收入3000000分，供应/支持/维护/费用合计2450000分，利润550000分。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q13.2",
+          "requirement": "未用充值保留为负债和保护，不计收入；实际日用量和供应账期独立。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q14",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q14.1",
+        "Q14.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/relay.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q14.1",
+          "requirement": "两供应商共享故障域不能构成独立冗余，只有已授权独立备选能避开该故障。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q14.2",
+          "requirement": "停站保留客户余额、退款和旧任务，不直接关闭企业。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q15",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q15.1",
+        "Q15.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/deepseek.test.ts",
+        "src/application/equity.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q15.1",
+          "requirement": "技术适配和有钱不生成现实公开申购入口，架空模式另行同意。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q15.2",
+          "requirement": "须真实资格、对方融资意愿及已完成谈判；他方拒绝不能用钱覆盖。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q16",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q16.1",
+        "Q16.2",
+        "Q16.3"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/deepseek.test.ts",
+        "src/application/equity.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q16.1",
+          "requirement": "E01投前800000000分，实增200000000分，250000/1250000股为20%。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q16.2",
+          "requirement": "E02新增312500股，不跟投后250000/1562500股为16%，不免费付跟投资金。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q16.3",
+          "requirement": "股权、董事权、锁定与退出按独立条款，不能默认获治理或买方。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q17",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q17.1",
+        "Q17.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/campaign.test.ts",
+        "src/application/course.test.ts",
+        "src/application/story-combined.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q17.1",
+          "requirement": "不打开新闻，按日期所有历史节点仍发生。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q17.2",
+          "requirement": "同一真实世界节点传播到相关路线，阅读不决定世界是否发生。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q18",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q18.1",
+        "Q18.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/life.test.ts",
+        "src/application/story-history.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q18.1",
+          "requirement": "林舟分岔需已履约合作、对方同意和实际发布参与权。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q18.2",
+          "requirement": "开放/封闭改变经营条件与局部记忆两种真实结果，不清空无关域。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q19",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q19.1",
+        "Q19.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/clock-commitments.test.ts",
+        "src/application/life-year.test.ts",
+        "src/application/market.test.ts",
+        "src/application/story-history.test.ts",
+        "src/persistence/codec.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q19.1",
+          "requirement": "调查/导入保留预冻结隐藏事实和随机状态，不把证据揭示当重抽。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q19.2",
+          "requirement": "预览/窗口/场景翻阅为只读，不能因UI增删改变随机；私密状态不进入读模型。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q20",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q20.1",
+        "Q20.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/relay.test.ts",
+        "src/application/story-agency.test.ts",
+        "src/application/story-risk.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q20.1",
+          "requirement": "危机实际0行动/0可用现金仍可停止可控新增行为并有限推进。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q20.2",
+          "requirement": "撤权/停工不等于免费调查、拆离、观察或人工接管；原债保留。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q21",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q21.1",
+        "Q21.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/story-agency.test.ts",
+        "src/application/story-risk.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q21.1",
+          "requirement": "只有自身停止/暂停回执不能宣称独立恢复控制。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q21.2",
+          "requirement": "独立验证窗口、原责任清单与替代条件不足时，证据不足状态明确。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q22",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q22.1",
+        "Q22.2",
+        "Q22.3"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/course.test.ts",
+        "src/application/deepseek-normal.test.ts",
+        "src/application/journey.test.ts",
+        "src/application/market.test.ts",
+        "src/application/story-risk-modes.test.ts",
+        "src/application/video.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q22.1",
+          "requirement": "两背景正常创建实际关闭24季度，含保留工作与不采用代理。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q22.2",
+          "requirement": "投资、内容、服务各有真实收入和完整回顾，不能把未完成策略仅归档说成该路线成功。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q22.3",
+          "requirement": "五机会按真实前提可达，非程序员软件创业单一路径。",
+          "remaining": "42正常结果中13项策略受阻保留；步骤5逐形态核对主策略成功/被拒/有限退出，步骤11当前重验，不以归档代替路线完成。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q23",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q23.2"
+      ],
+      "owners": [
+        "M01"
+      ],
+      "targetedCommand": null,
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q23.2",
+          "requirement": "真实200%浏览器缩放仍须实际验收，不能拿等效小视口替代。",
+          "remaining": "真实菜单缩放与完整原生离页结果待M01；未标通过。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q24",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q24.1",
+        "Q24.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/journey.test.ts",
+        "src/application/session.test.ts",
+        "src/persistence/codec.test.ts",
+        "src/persistence/indexeddb.test.ts",
+        "src/persistence/library.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q24.1",
+          "requirement": "损坏/高版本/不兼容导入具体拒绝并保留原始旧档。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q24.2",
+          "requirement": "旧revision及同revision物理代次旧写者不能覆盖另一提交。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q25",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q25.1",
+        "Q25.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/market.test.ts",
+        "src/core/ledger.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q25.1",
+          "requirement": "计划资金转订单冻结沿用同一预留，占款不重复扣可用现金。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q25.2",
+          "requirement": "部分使用及剩余释放精确，不把释放当收入。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q26",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q26.1",
+        "Q26.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/course.test.ts",
+        "src/core/ledger.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q26.1",
+          "requirement": "已交付课程退款冲减原确认收入或未收应收。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q26.2",
+          "requirement": "实际赔偿另列，缺现金保留应付，不重造未履约负债。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q27",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q27.1",
+        "Q27.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/relay-finance.test.ts",
+        "src/application/relay.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q27.1",
+          "requirement": "重复用量ID不重复收费、成本、现金或抽随机。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q27.2",
+          "requirement": "审计更正逐条关联原计量/账单，不改写已发生记录或重计收入。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q28",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q28.1",
+        "Q28.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/market.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q28.1",
+          "requirement": "部分成交只更新实际成交的股份、成本与资金。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q28.2",
+          "requirement": "撤余量只释放未成交冻结/股份锁；已成交与独立交收仍保留。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q29",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q29.1",
+        "Q29.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/course.test.ts",
+        "src/application/operations.test.ts",
+        "src/application/story-history.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q29.1",
+          "requirement": "同一员工/日期在多个业务共用容量，不生成第二个人。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q29.2",
+          "requirement": "返工、课程支持、世界准备跨业务冲突拒绝或显式重排。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q30",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q30.1",
+        "Q30.2",
+        "Q30.3"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/market.test.ts",
+        "src/core/economic-time.test.ts",
+        "src/core/timeline.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q30.1",
+          "requirement": "同日世界→确定到账→到期义务→动作→撮合→快照按原阶段稳定执行。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q30.2",
+          "requirement": "同优先级按稳定ID，不因新事件或继续暂停重复旧处理。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q30.3",
+          "requirement": "未来工资不能支付此前费用，已见行情不能倒流成交。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q31",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q31.1",
+        "Q31.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/course.test.ts",
+        "src/application/relay.test.ts",
+        "src/ui/work-visibility.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q31.1",
+          "requirement": "课程停售保留旧教学、更新、支持和退款，实际结束才能关闭。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q31.2",
+          "requirement": "中转停站保留未用充值、退款、供应应付与旧任务，清算后才能closed。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q32",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q32.1",
+        "Q32.2",
+        "Q32.3"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/epilogue.test.ts",
+        "src/application/equity.test.ts",
+        "src/ui/ending-stage.test.tsx"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q32.1",
+          "requirement": "2025年末未结预款/欠款和锁定股权继续保留，归档不是清债。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q32.2",
+          "requirement": "尾声沿实际收款/退款/处置/计提与原Q4行动，不免费确认收入或按峰值卖股。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q32.3",
+          "requirement": "回收估计需明确假设，估计不入现金，继续旧事项保留原回顾。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q33",
+      "wholeCasePassed": true,
+      "unresolvedConditions": [],
+      "owners": [],
+      "targetedCommand": null,
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": []
+    },
+    {
+      "caseId": "Q34",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q34.1",
+        "Q34.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/core/commands.test.ts",
+        "src/persistence/codec-encoding.test.ts",
+        "src/persistence/codec.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q34.1",
+          "requirement": "超限、非法字段、坏checksum及非法引用拒绝，旧档原字节保留。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q34.2",
+          "requirement": "允许的玩家文本含HTML时仅作文本转义展示，不执行任意代码。",
+          "remaining": "命令测试证实标签字符串保留且不泄露私密投影；当前专用浏览器/DOM转义检查需步骤6/12核对，不能用Node存储断言代替渲染。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q35",
+      "wholeCasePassed": true,
+      "unresolvedConditions": [],
+      "owners": [],
+      "targetedCommand": null,
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": []
+    },
+    {
+      "caseId": "Q36",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q36.1",
+        "Q36.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/campaign.test.ts",
+        "src/application/course.test.ts",
+        "src/core/economy.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q36.1",
+          "requirement": "课程更新花1点并经历真实七天，开始当天不完成。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q36.2",
+          "requirement": "中断保留已花费用/AP与原学员义务，完成不再扣一次。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q37",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q37.1",
+        "Q37.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/life.test.ts",
+        "src/application/market.test.ts",
+        "src/application/story-combined.test.ts",
+        "src/application/story-history.test.ts",
+        "src/core/random.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q37.1",
+          "requirement": "无关闲聊/生活或事件不改市场随机域，序列化后续接同流。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q37.2",
+          "requirement": "相关世界改变可按真实来源影响相应域，不把全部域清零或锁死。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q38",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q38.1",
+        "Q38.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/course.test.ts",
+        "src/application/deepseek-normal.test.ts",
+        "src/application/market.test.ts",
+        "src/application/video.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q38.1",
+          "requirement": "财务/权限快照能运行不算正常可达；M4必须从CreateRun保留前置和资源来源。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q38.2",
+          "requirement": "两背景五路线需真实获客/资格/技能/工资/日期前史，不赠资金或授权。",
+          "remaining": "旧正常主路径有据；步骤5仍须逐产品形态/关键与默认分支检查，不能用一条成功链代替全部形态。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q39",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q39.1",
+        "Q39.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/course.test.ts",
+        "src/application/video.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q39.1",
+          "requirement": "同一人口身份/产品版本跨账号与班期不重复转化收款。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q39.2",
+          "requirement": "维护更新不生成新付费身份；新产品必须新需求研究、样课和实际交付。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "Q40",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "Q40.1",
+        "Q40.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/campaign.test.ts",
+        "src/application/equity.test.ts",
+        "src/application/life-workbench.test.ts",
+        "src/core/content.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "Q40.1",
+          "requirement": "事件到期有明确免费默认，0现金/0AP仍有限停止并继续。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "Q40.2",
+          "requirement": "默认不领取收费成果或新承诺，互斥分支后继仍可处理。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "X01",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "X01.1",
+        "X01.2",
+        "X01.3"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/course.test.ts",
+        "src/application/first-order.test.ts",
+        "src/application/market.test.ts",
+        "src/application/video.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "X01.1",
+          "requirement": "UX01技术分支按Jan5成本500、Jan20回款1300，净800，季末42800。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X01.2",
+          "requirement": "旧Q01仍27000，内容背景独立为36800，不混算两教学结果。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X01.3",
+          "requirement": "2020不开放未来图像/视频模型；手工生产持续明确。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "X02",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "X02.1",
+        "X02.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/deepseek.test.ts",
+        "src/application/first-order.test.ts",
+        "src/application/game-controller.test.ts",
+        "src/application/video.test.ts",
+        "src/ui/CinematicRoom.test.tsx"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "X02.1",
+          "requirement": "可拒绝/跳过首单，按投资或自由计划正常继续，不以没赚800判失败。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X02.2",
+          "requirement": "不强迫创业，五路线始终可查准备和时代门槛。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "X03",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "X03.1",
+        "X03.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/cash-forecast.test.ts",
+        "src/application/life-year.test.ts",
+        "src/ui/NarrativeScene.test.tsx",
+        "src/ui/confirmation-money.test.ts",
+        "src/ui/work-visibility.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "X03.1",
+          "requirement": "场景与展开账本的账户主体/钱数一致，现金与企业不混合。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X03.2",
+          "requirement": "默认能找到可花、最早承诺缺口、未履约，全部主体缺口不截断。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "X04",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "X04.1",
+        "X04.2",
+        "X04.3"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/routine-atomic.test.ts",
+        "src/application/routines.test.ts",
+        "src/application/story-routine.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "X04.1",
+          "requirement": "同版本/种子/同序已确认动作，逐步手动与批处理完整档/账目/日期/随机相同。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X04.2",
+          "requirement": "跨季复用先生成免费待确认草稿，禁止交易、招生、融资与代理扩权。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X04.3",
+          "requirement": "每步仍原子保存，失败停止批次，不能提前发布后续结果。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "X05",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "X05.1",
+        "X05.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/routine-atomic.test.ts",
+        "src/application/routines.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "X05.1",
+          "requirement": "价格/资格/现金/容量变化暂停受影响的未来步骤，解释具体原因。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X05.2",
+          "requirement": "已履约费用和已发生日期保留，不擅自换供应、借款或重授权。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "X06",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "X06.1",
+        "X06.2",
+        "X06.3",
+        "X06.4",
+        "X06.5"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/course.test.ts",
+        "src/application/deepseek.test.ts",
+        "src/application/equity.test.ts",
+        "src/application/market.test.ts",
+        "src/application/relay.test.ts",
+        "src/application/video.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "X06.1",
+          "requirement": "股票有仓位/撮合/交收策略和真实实现损益反馈。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X06.2",
+          "requirement": "短视频有原创/热点/品牌、质量/返工/议价和曝光/商单独立收入。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X06.3",
+          "requirement": "课程有产品/班额/支持排程/预款保护及实际分段收入。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X06.4",
+          "requirement": "中转有供应故障域/价格/信用/用量/更正与实际服务利润。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X06.5",
+          "requirement": "DeepSeek有生态合同及另行架空股权、尽调/权利/融资/退出，非同一收益按钮。",
+          "remaining": "五路线旧专用维度与收入有据，全部形态/普通默认/关键分支及当前UI结果仍由步骤5/6/12核对。"
+        }
+      ]
+    },
+    {
+      "caseId": "X07",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "X07.1",
+        "X07.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/campaign.test.ts",
+        "src/application/deepseek-normal.test.ts",
+        "src/application/story-history.test.ts",
+        "src/application/video.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "X07.1",
+          "requirement": "记忆收藏不收费，真正准备仍按点/费用/日期完成，不提前授予未来能力。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X07.2",
+          "requirement": "准备案例/关系在真实节点实际解锁变化，不发免费收益乘数。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "X08",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "X08.1",
+        "X08.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/clock-commitments.test.ts",
+        "src/application/story-combined.test.ts",
+        "src/application/story-history.test.ts",
+        "src/application/video.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "X08.1",
+          "requirement": "一个实际发布源同时关联股票、已有课程、中转，源只发生一次，各消费者只结算一次。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X08.2",
+          "requirement": "未选反事实不泄露隐藏意愿、另一分支精确利润或种子事实。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "X09",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "X09.1",
+        "X09.3"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/life-year.test.ts",
+        "src/application/life.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "X09.1",
+          "requirement": "生活改善/保持不变要明确选择；开始才从个人账户扣费用/AP，企业和客户款不能代付。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X09.3",
+          "requirement": "年度回顾只读，主体、当年工资/现金与当前余额分开。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "X10",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "X10.1",
+        "X10.2"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/story-agency.test.ts",
+        "src/application/story-risk.test.ts",
+        "src/application/story-routine.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "X10.1",
+          "requirement": "确定性例行计划不隐式授予代理权限；扩权另行确认范围/预算/日期。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X10.2",
+          "requirement": "自报停止不等于独立控制恢复，独立信号可暂停未来例行。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "X11",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "X11.1",
+        "X11.2",
+        "X11.3"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/campaign.test.ts",
+        "src/application/game-controller.test.ts",
+        "src/application/relay.test.ts",
+        "src/application/story-agency.test.ts",
+        "src/ui/NarrativeScene.test.tsx",
+        "src/ui/book-layout.test.ts",
+        "src/ui/work-visibility.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "X11.1",
+          "requirement": "同季10条消息的普通1主2支预算不丢任何原实例；长册全部可达。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X11.2",
+          "requirement": "强制付款、每个账户缺口与全部风险证据不受普通截断。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X11.3",
+          "requirement": "0AP仍保留已有有限恢复/停止路径，不免费执行人工处置。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "X12",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "X12.1",
+        "X12.2",
+        "X12.3"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/application/epilogue.test.ts",
+        "src/application/equity.test.ts",
+        "src/application/game-controller.test.ts",
+        "src/core/ending-share.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "X12.1",
+          "requirement": "实际通关/归档仍保留负债，不发永久倍率，不按账面峰值变现。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X12.2",
+          "requirement": "分享只含用户选中的已揭示因果；财务需另勾选，不带隐藏种子或私人备注。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        },
+        {
+          "condition": "X12.3",
+          "requirement": "明确新人生重新正常创建，不继承旧财富/权限，旧回顾仍可读。",
+          "remaining": "当前全量/相关业务重验尚待步骤6或11，不能仅凭声明或旧报告结项。"
+        }
+      ]
+    },
+    {
+      "caseId": "X13",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "X13.1",
+        "X13.2",
+        "X13.3"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": null,
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "X13.1",
+          "requirement": "相同动作/奖励的灰盒与电影前台对照入口，预登记版本/任务与交叉顺序。",
+          "remaining": "步骤10仍需实现独立本机对照入口及预登记；默认游戏保持电影风格，不接SDK。"
+        },
+        {
+          "condition": "X13.2",
+          "requirement": "记录实际样本、开始/结束、时间/操作/错误/中止，8—12人和目标用时不能冒充成绩。",
+          "remaining": "已提供的实际真人记录为0；用户组织/提供实际匿名记录后在步骤13核验。"
+        },
+        {
+          "condition": "X13.3",
+          "requirement": "只本机记录，参与者同意后手动导出匿名数据，不自动分享。",
+          "remaining": "随独立对照入口实现明确本机范围和同意；没有授权对外招募/发消息。"
+        }
+      ]
+    },
+    {
+      "caseId": "X14",
+      "wholeCasePassed": false,
+      "unresolvedConditions": [
+        "X14.1",
+        "X14.3",
+        "X14.6"
+      ],
+      "owners": [
+        "T17"
+      ],
+      "targetedCommand": [
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "--maxWorkers=1",
+        "src/ui/CinematicRoom.test.tsx",
+        "src/ui/NarrativeScene.test.tsx",
+        "src/ui/book-layout.test.ts"
+      ],
+      "commandBoundary": "Proposed verification only, not executed here. Preserve original test assertions, per-file isolation and timeouts. Already evidenced cases rejoin the required finalC17 cumulative run, not a redundant isolated rerun.",
+      "specificWork": [
+        {
+          "condition": "X14.1",
+          "requirement": "1280×720/1366×768核心选择与标签可读、全部长内容同屏翻页，不滚动或缩字藏操作。",
+          "remaining": "当前三桌面/稳定逐页图有据；全部形态步骤5/12继续。"
+        },
+        {
+          "condition": "X14.3",
+          "requirement": "文本和减少动态模式保留可读选择与全部分页。",
+          "remaining": "当前两页稳定图、所有原操作和模式恢复有据；完整形态仍步骤5/12。"
+        },
+        {
+          "condition": "X14.6",
+          "requirement": "P022原资产按manifest原字节核验，不用新图替代。",
+          "remaining": "原三PNG0/3继续T17资产责任，不能提前关闭X14/W405；Q23真实200%等兼容责任另交M01，不混在本条件内。"
+        }
+      ]
+    }
+  ]
+}
