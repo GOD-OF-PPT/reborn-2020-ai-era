@@ -1,0 +1,30 @@
+[
+  {
+    "id": "docs",
+    "cmd": "rtk proxy python3 -B scripts/check_docs.py --text-only",
+    "chunk_id": "e04064",
+    "wall_time_seconds": 10.001152677,
+    "original_token_count": 0,
+    "output": "PENDING ORIGINAL ASSET: assets/concepts/style-01-anime.png\nPENDING ORIGINAL ASSET: assets/concepts/style-02-pixel.png\nPENDING ORIGINAL ASSET: assets/concepts/style-03-cinematic.png\nPASS TEXT-ONLY (original assets may be missing): 154 Markdown files, 22 tasks; text links, JSON and dependency graph verified.\nOriginal PNG files present and checked: 0/3\nThis is documentation validation, not a game build or a remote publication test.\n",
+    "exit_code": 0,
+    "completionObservedBy": "write_stdin session 22494 exit 0"
+  },
+  {
+    "id": "plan",
+    "cmd": "rtk proxy python3 -B scripts/check_plan.py",
+    "chunk_id": "1863da",
+    "wall_time_seconds": 0.133079271,
+    "exit_code": 0,
+    "original_token_count": 71,
+    "output": "PASS specification checks: {\"tasks\": 22, \"cases\": 40, \"slices\": 5, \"cash_examples\": 10, \"equity_examples\": 2}\nPASS matrix references and documented course-example structure.\nNot game execution, production-content reachability, browser tests, asset validation or release readiness.\n"
+  },
+  {
+    "id": "competitive",
+    "cmd": "rtk proxy python3 -B scripts/check_competitive_design.py",
+    "chunk_id": "9e7853",
+    "wall_time_seconds": 0.168691311,
+    "exit_code": 0,
+    "original_token_count": 52,
+    "output": "PASS specification checks: {\"sources\": 9, \"decisions\": 10, \"acceptance_cases\": 14, \"work_packages\": 6, \"cash_flows\": 8}\nNot game execution, competitor playtesting, UI validation, or publication verification.\n"
+  }
+]
