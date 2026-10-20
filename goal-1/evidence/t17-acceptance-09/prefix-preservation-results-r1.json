@@ -1,0 +1,79 @@
+{
+  "scope": "Small actual filesystem/XZ prefix-finalization seam, not original90 or full P1 execution; no business, browser or compatibility commands.",
+  "mode": "legacy",
+  "label": "r1",
+  "prefixSource": {
+    "bytes": 8215,
+    "sha256": "34f2d78f8f8982ab747466d02ca192385326294587743b6668c442c7c72ca12f"
+  },
+  "legacyExcerpt": [
+    "const archive = archiveMembers(writer, identity.name + '/prefix-evidence.xz', members)",
+    "const index = writer.json(identity.name + '/prefix-index.json', {identity, record, archive})"
+  ],
+  "actualNormalCreates": 1,
+  "businessCommands": 0,
+  "cases": [
+    {
+      "kind": "normal",
+      "output": "goal-1/evidence/t17-acceptance-09/matrix-r9801",
+      "error": null,
+      "persisted": {
+        "archive": {
+          "encoding": "xz",
+          "file": "prefix-evidence.xz",
+          "storedBytes": 14816,
+          "storedSha256": "4d9aacc2353518e54ae8a194ba30d448e8d0ad074c78baaac1e01c049aa2a8b7",
+          "containerBytes": 165133,
+          "containerSha256": "82077e6dbe11c158218ef2419064598a726ba62c75089da56c1e60d43cb182b8",
+          "members": [
+            {
+              "name": "initial.json",
+              "bytes": 143457,
+              "sha256": "250faeedfa29263c132b651e530ee4ffbc219177117e8c121700bff507715dee"
+            },
+            {
+              "name": "complete-notes.txt",
+              "bytes": 56,
+              "sha256": "f7aafe41142ed305f9c8a8df9a737209eb3a886f7980892bd5b16957ea97125e"
+            },
+            {
+              "name": "prefix-attempts.jsonl",
+              "bytes": 0,
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          ]
+        },
+        "index": {
+          "file": "prefix-fixture/prefix-index.json",
+          "bytes": 1315,
+          "sha256": "c39a7f4fc71f152cff30e655789b47b794f2f0aedc0261b7bb4f70c7b25f53c3"
+        }
+      },
+      "recovery": null,
+      "fullOriginalPreserved": false,
+      "occupiedUnchanged": true,
+      "passed": true
+    },
+    {
+      "kind": "archive-collision",
+      "output": "goal-1/evidence/t17-acceptance-09/matrix-r9802",
+      "error": "Error: spawnSync rtk EPIPE",
+      "persisted": null,
+      "recovery": null,
+      "fullOriginalPreserved": false,
+      "occupiedUnchanged": true,
+      "passed": false
+    },
+    {
+      "kind": "index-collision",
+      "output": "goal-1/evidence/t17-acceptance-09/matrix-r9803",
+      "error": "Error: EEXIST: file already exists, open '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9803/prefix-fixture/prefix-index.json'",
+      "persisted": null,
+      "recovery": null,
+      "fullOriginalPreserved": false,
+      "occupiedUnchanged": true,
+      "passed": false
+    }
+  ],
+  "passed": false
+}

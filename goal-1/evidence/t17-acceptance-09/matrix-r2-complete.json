@@ -1,0 +1,31 @@
+{
+  "job": "matrix-r2",
+  "command": [
+    "rtk",
+    "proxy",
+    "node",
+    "--max-old-space-size=1024",
+    "--trace-gc",
+    "--trace-gc-ignore-scavenger",
+    "--experimental-strip-types",
+    "--experimental-transform-types",
+    "scripts/collect_course_critical_evidence.ts",
+    "--output-dir",
+    "goal-1/evidence/t17-acceptance-09/matrix-r2"
+  ],
+  "started": 1792535043.088075,
+  "driverPid": 1605,
+  "inputDirectory": null,
+  "resourceBounds": {
+    "managedHeapMiB": 1024,
+    "freeBytesBeforeLaunch": 8176001024,
+    "minimumLaunchFreeBytes": 2147483648,
+    "majorGcLogOnly": true
+  },
+  "scope": "P3 original90 Node rules/evidence only; no UI, browser or compatibility work",
+  "wrapperPid": 1608,
+  "finished": 1792535589.46529,
+  "exitCode": 1,
+  "state": "terminal",
+  "metadataErrors": []
+}

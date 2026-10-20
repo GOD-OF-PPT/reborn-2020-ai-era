@@ -1,0 +1,80 @@
+{
+  "caseId": "tool-only-accepted",
+  "sourceRevision": 1,
+  "purpose": "Independent protocol canary; outside original45 and original90",
+  "requiredChecks": [
+    "unreached-after-fault"
+  ],
+  "status": "failed",
+  "error": "Error: CANARY_RESULT_JOURNAL_FAILURE",
+  "source": {
+    "member": "source.json",
+    "bytes": 143465,
+    "sha256": "eef8f3f1c44f8cda95d12b75a296374ed8280b754e816ed8c69a6f00cf0a2a04"
+  },
+  "terminal": {
+    "member": "partial.json",
+    "bytes": 148634,
+    "sha256": "3bb4f46a2f012cb7e7e5f9f08ba64871ab382858f7378f5a632ee06f3b9543b9"
+  },
+  "attempts": [
+    {
+      "sequence": 1,
+      "command": {
+        "runId": "p3-candidate-preservation-canary",
+        "actorId": "player",
+        "commandId": "t14-command-1",
+        "expectedRevision": 1,
+        "kind": "WorkQuarter",
+        "payload": {}
+      },
+      "sourceRevision": 1,
+      "sourceDate": "2020-01-01",
+      "expectedRejection": false,
+      "status": "accepted",
+      "reasonCodes": [],
+      "revisionAfter": 2,
+      "dateAfter": "2020-01-01"
+    }
+  ],
+  "observations": [],
+  "milestones": [],
+  "commandCash": [],
+  "acceptedCommands": 1,
+  "rejectedCommands": 0,
+  "fullCommands": [
+    {
+      "actorId": "player",
+      "kind": "WorkQuarter",
+      "payload": {},
+      "runId": "p3-candidate-preservation-canary",
+      "commandId": "t14-command-1",
+      "expectedRevision": 1
+    }
+  ],
+  "suffixCommands": [
+    {
+      "actorId": "player",
+      "kind": "WorkQuarter",
+      "payload": {},
+      "runId": "p3-candidate-preservation-canary",
+      "commandId": "t14-command-1",
+      "expectedRevision": 1
+    }
+  ],
+  "finalRevision": 2,
+  "finalDate": "2020-01-01",
+  "finalMoney": {
+    "courseMoney": [],
+    "quarters": [
+      {
+        "quarter": "2020-Q1",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      }
+    ]
+  },
+  "finalMoneyError": null,
+  "scope": "One fixed normal critical branch. The registered target assertions run on public decisions and actual state; complete raw, exact expected rejections and independent accounting are retained. No browser, compatibility or human-playtest result."
+}

@@ -1,0 +1,513 @@
+{
+  "label": "r1-red",
+  "classification": "Pure synthetic metadata regression; not original90 GameRun or browser acceptance.",
+  "legacyInlineExactCopy": true,
+  "sources": {
+    "helper": {
+      "file": "helper-under-test.ts",
+      "bytes": 3832,
+      "sha256": "98ab7dc6df36c284dd7890cbdbce0bad74931f9960452598d7efadca9a2f2fc7"
+    },
+    "verifier": {
+      "file": "verifier-under-test.ts",
+      "bytes": 15627,
+      "sha256": "65e050e52a1f50600dbb73ddff5232d20c5429ff43a1f3946affb7a8e4ef9e52"
+    },
+    "testScript": {
+      "file": "test-script-under-test.mjs",
+      "bytes": 10888,
+      "sha256": "cfe298ab78e04ca86d04eeffc055cd6f344c05761af08158b792a5286b96eba9"
+    },
+    "plan": {
+      "file": "test-plan-under-test.md",
+      "bytes": 2926,
+      "sha256": "1d734db7405d60c5bcbf8aa3f9bfd869fe642f7723c50dcad6f99a875d12908d"
+    }
+  },
+  "fixture": {
+    "file": "complete-synthetic-metadata-fixture.json",
+    "bytes": 285120,
+    "sha256": "f7755874e22ce63a03bf6b9abe9d0032e9aad4f8773df3fe6e5fcb981d01bf5e"
+  },
+  "cases": 32,
+  "passed": 7,
+  "failed": 25,
+  "results": [
+    {
+      "id": "valid-full-original90-metadata",
+      "expected": "accepted",
+      "actual": "accepted",
+      "errorPrefix": null,
+      "passed": true,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "4c80e0dba3cda25d845def64078b795078deec4db2113a040865fedd4d4c63c9"
+    },
+    {
+      "id": "wrong-summary-identity",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "8e96e1cc312ab9927ce174c6d023c3e0af8bd8c53bb1f85ee8e4c6abf4ede770"
+    },
+    {
+      "id": "wrong-summary-case-id",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "cb1c0d780dc9abf6b28eb8588a1bf19bda0c2895e6dcf60b392042d5cbb9973b"
+    },
+    {
+      "id": "wrong-summary-folder",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "a0ca81e21206ea0853c747d1c32f1109a1537397aaf512da596687b42177d0a2"
+    },
+    {
+      "id": "wrong-summary-source-revision",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "ffe51210b024575fa16d84d621152e4fbc0f6d1ed0cb49812b415b8c7b8e5586"
+    },
+    {
+      "id": "wrong-summary-archive-reference",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "42ef5d1671f8835b706733d1419101caff6e87125a387c87ed7714e4ec3bd1cb"
+    },
+    {
+      "id": "wrong-summary-archive-hash",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "83d720f94840617a4c9ecc44487175b359295b6dc83b1636f4b15df6c9798440"
+    },
+    {
+      "id": "wrong-summary-index-reference",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "92f724193aa7c8a7234fc8169c38732dc7317aa8e1d0389c40ab96e16ab55463"
+    },
+    {
+      "id": "wrong-summary-index-bytes",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "4ca4dde81afb7f2816612c5d5277a5f362379d456bd5a540369f80d06df2ee7f"
+    },
+    {
+      "id": "wrong-summary-index-hash",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "fb22af6c3cc88cd4a584922edbb523cf8dcbde806dd3231c564cf69f7816aa3b"
+    },
+    {
+      "id": "wrong-summary-terminal-revision",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "556a61eb31929882abc4657c629db6ec0ca05ff5228c4dac7a6fa1b4914d842c"
+    },
+    {
+      "id": "wrong-summary-terminal-date",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "f7539c6bf14ad11f0f81b5153f487b9af089084abd025f72110f5bb80d2c965a"
+    },
+    {
+      "id": "wrong-summary-target-count",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "bf948f69e89f6177331cfc3ac3cd7b0960b8602b8df2c98b893aa9c404ae0452"
+    },
+    {
+      "id": "summary-has-error",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "0fa9471efc0ce56a7711f0970b7d4af4a319d4793acc180a1a844bc6e1e54334"
+    },
+    {
+      "id": "summary-has-recovery",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "de770028c3e5af546d6a4ba4d31c12feba1813b564ee30f538b9a5b0ac54e081"
+    },
+    {
+      "id": "wrong-summary-exact-replay",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "c4cebc219558770307a2c891faf71cdeddfecb9ce0f94a3fd55f0d0bf9f731e6"
+    },
+    {
+      "id": "wrong-summary-source-binding",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_SOURCE_BINDING_CHANGED",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "795df3a7eaf6b327ceb5a86a7944186d5e267d5710b90025050925b397d6efd4"
+    },
+    {
+      "id": "wrong-summary-input-binding",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_INPUT_BINDING_CHANGED",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "8cb5d08391121bde251863e43c58fb936c588d067b5725bbfe0be04472a23fbc"
+    },
+    {
+      "id": "wrong-prefix-status",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_PREFIX_PROOFS_CHANGED",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "f41295a5f26810cfaeceb94d0db7cbece96124fec774c39b33fe801ad95f2227"
+    },
+    {
+      "id": "wrong-prefix-index-reference",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_PREFIX_PROOFS_CHANGED",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "8a49fddc5f39c6ef2bf2585280c51fc46aa3f29c43c5789b5f8c17cef4354de3"
+    },
+    {
+      "id": "wrong-prefix-archive-reference",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_PREFIX_PROOFS_CHANGED",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "2392e107fd6e894d3387c867a87966d61283ea35cb0e49317a58a397da80c075"
+    },
+    {
+      "id": "wrong-all-targets-flag",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ALL_TARGETS_FLAG_CHANGED",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "5afbdeb466d35b74ccfa00c33fbde64a6382f5ce0e3e7f24e486530d84ea1916"
+    },
+    {
+      "id": "unknown-summary-row-field",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "fe24a4a33c6770abfb830ec6dcf708cbd51fa240d19ed8d1b7cc3cef17be2de4"
+    },
+    {
+      "id": "wrong-summary-row-order",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "4031099869a70ad6e7c986a5633bb97ad2d1b4bed55fe4fe088acfcf0408f257"
+    },
+    {
+      "id": "wrong-summary-scope",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_SCOPE_CHANGED",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "5b94f87ab86409b9e7357c30d4684a73077f2e9636848fa47ee478608197d744"
+    },
+    {
+      "id": "unknown-summary-top-level-field",
+      "expected": "rejected",
+      "actual": "accepted",
+      "errorPrefix": "ORIGINAL_SUMMARY_EXACT_FIELDS_CHANGED",
+      "passed": false,
+      "error": null,
+      "result": {
+        "status": "verified-complete-collector-summary",
+        "registered": 90,
+        "recorded": 90,
+        "prefixProofs": 2,
+        "fullResultRowsCompared": false
+      },
+      "changedSummarySha256": "2a3ed247183c8783ef8da3124375d6067cd36fe0b8aafc85c039579775952dca"
+    },
+    {
+      "id": "wrong-total-target-count",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errorPrefix": "FULL_ORIGINAL_COLLECTOR_TOTALS_DISAGREE_WITH_INDEPENDENT_RESULTS",
+      "passed": true,
+      "error": "Error: FULL_ORIGINAL_COLLECTOR_TOTALS_DISAGREE_WITH_INDEPENDENT_RESULTS",
+      "result": null,
+      "changedSummarySha256": "25bb09fd6d68205148e8d22f706227337b34d62bb02144a77e4ca9c8d7381cc7"
+    },
+    {
+      "id": "wrong-total-accepted-count",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errorPrefix": "ORIGINAL_REAL_ATTEMPT_TOTALS_CHANGED",
+      "passed": true,
+      "error": "Error: ORIGINAL_REAL_ATTEMPT_TOTALS_CHANGED",
+      "result": null,
+      "changedSummarySha256": "0149667b7321b492d73dde0ced55d6f720627e874f0d917a6c23ec9886be5277"
+    },
+    {
+      "id": "missing-summary-row",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errorPrefix": "COMPLETE_ORIGINAL_SUMMARY_ROWS_REQUIRED",
+      "passed": true,
+      "error": "Error: COMPLETE_ORIGINAL_SUMMARY_ROWS_REQUIRED",
+      "result": null,
+      "changedSummarySha256": "41b97be80441278bbd5652f4d39f04700bf18ac3cc9eee15317850526dcd5303"
+    },
+    {
+      "id": "duplicate-summary-row",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": true,
+      "error": "Error: ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:technical_employee-t16-campaign-0--enterprise-case-count",
+      "result": null,
+      "changedSummarySha256": "a7a0e7d4f114ea438677a91376e35b00484266f77720e12fd182c2cd01310a3a"
+    },
+    {
+      "id": "failed-summary-row",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errorPrefix": "ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:",
+      "passed": true,
+      "error": "Error: ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:technical_employee-t16-campaign-0--case-missing",
+      "result": null,
+      "changedSummarySha256": "223c06ca36b8cc67d834919b828b3b1201f153cdc374ade18e1c504d979944f1"
+    },
+    {
+      "id": "summary-fatal-retained",
+      "expected": "rejected",
+      "actual": "rejected",
+      "errorPrefix": "FULL_ORIGINAL_COLLECTOR_TOTALS_DISAGREE_WITH_INDEPENDENT_RESULTS",
+      "passed": true,
+      "error": "Error: FULL_ORIGINAL_COLLECTOR_TOTALS_DISAGREE_WITH_INDEPENDENT_RESULTS",
+      "result": null,
+      "changedSummarySha256": "cf775f064fcf2872e874d4e736f029bfa859fa46ff824ce384fc7ec9f14b2e57"
+    }
+  ]
+}

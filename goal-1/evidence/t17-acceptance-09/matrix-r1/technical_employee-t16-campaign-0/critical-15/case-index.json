@@ -1,0 +1,61 @@
+{
+  "rowId": "technical_employee-t16-campaign-0--deadline-stage0",
+  "identity": "technical_employee-t16-campaign-0",
+  "backgroundId": "technical_employee",
+  "seed": "t16-campaign-0",
+  "caseId": "deadline-stage0",
+  "sourceRevision": 74,
+  "purpose": "首段完成日越过原due，命中原日历守卫",
+  "requiredChecks": [
+    "deadline-stage0-actual-paid-no-attempt",
+    "deadline-stage0-exact-deadline-rejection"
+  ],
+  "folder": "technical_employee-t16-campaign-0/critical-15",
+  "status": "failed",
+  "error": "RuleError: INVALID_DAY_COUNT",
+  "acceptedCommands": 0,
+  "rejectedCommands": 0,
+  "targetChecks": 1,
+  "exactAttemptReplay": {
+    "status": "verified-exact-actual-history",
+    "accepted": 0,
+    "rejected": 0,
+    "milestones": 1,
+    "terminalMatched": true
+  },
+  "archive": {
+    "encoding": "xz",
+    "file": "case-evidence.xz",
+    "storedBytes": 66048,
+    "storedSha256": "3433d086585e7f8890687e03d922e58ef22624cf66cc1e11abe64995e7bfd36c",
+    "containerBytes": 3215402,
+    "containerSha256": "89d4c75b06483b17f26f74d4321a3ea1bc6218902145ed72e967f9fd94b36854",
+    "members": [
+      {
+        "name": "source.json",
+        "bytes": 895881,
+        "sha256": "9da781a6f967596f2b9d9a55ce8f44935cdb56f820e73e9ed72f714a8f036204"
+      },
+      {
+        "name": "milestone-001.json",
+        "bytes": 895881,
+        "sha256": "9da781a6f967596f2b9d9a55ce8f44935cdb56f820e73e9ed72f714a8f036204"
+      },
+      {
+        "name": "partial.json",
+        "bytes": 895881,
+        "sha256": "9da781a6f967596f2b9d9a55ce8f44935cdb56f820e73e9ed72f714a8f036204"
+      },
+      {
+        "name": "command-attempts.jsonl",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "case-record.json",
+        "bytes": 107931,
+        "sha256": "9e1e799a6618836510efd4ff29314b2db29ee4f41a7c09d8fad523834ac61f72"
+      }
+    ]
+  }
+}

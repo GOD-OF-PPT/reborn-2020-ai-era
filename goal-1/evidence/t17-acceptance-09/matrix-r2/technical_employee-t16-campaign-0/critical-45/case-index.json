@@ -1,0 +1,95 @@
+{
+  "rowId": "technical_employee-t16-campaign-0--pause-resume",
+  "identity": "technical_employee-t16-campaign-0",
+  "backgroundId": "technical_employee",
+  "seed": "t16-campaign-0",
+  "caseId": "pause-resume",
+  "sourceRevision": 73,
+  "purpose": "暂停只阻新招生、保留原学员与教学；明确恢复不自动收费，另次报名才收原款",
+  "requiredChecks": [
+    "PAUSE_ORIGINAL_STUDENTS_AND_SUPPORT_RETAINED",
+    "PAUSE_NEW_ENROLLMENT_REJECTED",
+    "PAUSE_OLD_TEACHING_STILL_ALLOWED",
+    "RESUME_DOES_NOT_IMPLICITLY_ENROLL",
+    "RESUME_SEPARATE_ACTUAL_SECOND_BATCH",
+    "PAUSE_RESUME_FINAL_MONEY_IDENTITIES"
+  ],
+  "folder": "technical_employee-t16-campaign-0/critical-45",
+  "status": "failed",
+  "error": "Error: CRITICAL_UNEXPECTED_COMMAND_REJECTION:{\"kind\":\"EnrollCourseAudience\",\"payload\":{\"cohortId\":\"crs:fb6e5e3d54b08f603cca8a44b816e31c\",\"personIds\":[\"vid:bda591538dc0c381634c2596e275db3b\",\"vid:3c9c72b168ddd5176e856277018e7a73\",\"vid:e6be18ffdefd81e61fd21d71ed67036a\",\"vid:fd59cfe62f83a14315b01e96a317febc\",\"vid:7ac448d5bf33525ad23179cccfc76e9a\",\"vid:7b18f96991d8fa73b9e2b8162bada6c9\",\"vid:063d8c7efd0ab392812bc5b2e635c75c\",\"vid:b9484313aba51eedfefbbd978d471f91\",\"vid:07edabed7e9b1209de09a42a60515b22\",\"vid:85ab051f334615177f0c25ec36beec50\"]},\"date\":\"2023-01-16\",\"reasonCodes\":[\"COURSE_ENROLLMENT_CLOSED\"]}",
+  "acceptedCommands": 4,
+  "rejectedCommands": 2,
+  "targetChecks": 7,
+  "exactAttemptReplay": {
+    "status": "verified-exact-actual-history",
+    "accepted": 4,
+    "rejected": 2,
+    "milestones": 7,
+    "terminalMatched": true
+  },
+  "archive": {
+    "encoding": "xz",
+    "file": "case-evidence.xz",
+    "storedBytes": 68772,
+    "storedSha256": "2c6fb384f30d10e919cca02aed4d077ec93f90ea62c43721fae319c175f4b137",
+    "containerBytes": 9428361,
+    "containerSha256": "ab90b41ed32a8c74ba1c97667a28711a6460a4c37414de495c88cdab463efdd8",
+    "members": [
+      {
+        "name": "source.json",
+        "bytes": 872610,
+        "sha256": "9ff4d066dd3b617993570e064daf2f0474a204060fdf0ec22822510731c84d75"
+      },
+      {
+        "name": "milestone-001.json",
+        "bytes": 872610,
+        "sha256": "9ff4d066dd3b617993570e064daf2f0474a204060fdf0ec22822510731c84d75"
+      },
+      {
+        "name": "milestone-002.json",
+        "bytes": 887668,
+        "sha256": "ea0cac51b0b05a48a319466ad699415193b1eccf7ced962eba9afdadf7c969df"
+      },
+      {
+        "name": "milestone-003.json",
+        "bytes": 887668,
+        "sha256": "ea0cac51b0b05a48a319466ad699415193b1eccf7ced962eba9afdadf7c969df"
+      },
+      {
+        "name": "milestone-004.json",
+        "bytes": 887668,
+        "sha256": "ea0cac51b0b05a48a319466ad699415193b1eccf7ced962eba9afdadf7c969df"
+      },
+      {
+        "name": "milestone-005.json",
+        "bytes": 891644,
+        "sha256": "e1d94621451385df9513fbec7d163982a65c51400dad79f3344eee43d554243e"
+      },
+      {
+        "name": "milestone-006.json",
+        "bytes": 891644,
+        "sha256": "e1d94621451385df9513fbec7d163982a65c51400dad79f3344eee43d554243e"
+      },
+      {
+        "name": "milestone-007.json",
+        "bytes": 893023,
+        "sha256": "ab7777f8f88695aae3b9707eb4b77ab69e47ce84b93efdccc08adaddb25ca8bc"
+      },
+      {
+        "name": "partial.json",
+        "bytes": 893023,
+        "sha256": "ab7777f8f88695aae3b9707eb4b77ab69e47ce84b93efdccc08adaddb25ca8bc"
+      },
+      {
+        "name": "command-attempts.jsonl",
+        "bytes": 7512,
+        "sha256": "b2f7d0ff244b784e7e826a34b84225d0e73eaec9ccbb474b03eb17690d669268"
+      },
+      {
+        "name": "case-record.json",
+        "bytes": 201888,
+        "sha256": "88f84a692d309148f56c1b469b94af2517fd5bc8ca14582628ee816cc81c71c5"
+      }
+    ]
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "rowId": "content_employee-t16-campaign-0--case-missing",
+  "identity": "content_employee-t16-campaign-0",
+  "backgroundId": "content_employee",
+  "seed": "t16-campaign-0",
+  "caseId": "case-missing",
+  "sourceRevision": 87,
+  "purpose": "保留空案例 schema 边界与真实未回款案例业务边界",
+  "requiredChecks": [
+    "empty-case-schema",
+    "empty-case-schema-complete-raw-unchanged",
+    "unpaid-case-business-guard",
+    "unpaid-case-business-guard-complete-raw-unchanged"
+  ],
+  "folder": "content_employee-t16-campaign-0/critical-01",
+  "status": "target_verified",
+  "error": null,
+  "acceptedCommands": 0,
+  "rejectedCommands": 2,
+  "targetChecks": 4,
+  "exactAttemptReplay": {
+    "status": "verified-exact-actual-history",
+    "accepted": 0,
+    "rejected": 2,
+    "milestones": 4,
+    "terminalMatched": true
+  },
+  "archive": {
+    "encoding": "xz",
+    "file": "case-evidence.xz",
+    "storedBytes": 77132,
+    "storedSha256": "b5276111f8e7dddb2b0f0973784b3f3721a0030b6c4bc6382666d8c7117a588c",
+    "containerBytes": 7462765,
+    "containerSha256": "6e08f166f6bbbd2b3e6a3899640e64605f56414e706ada979419ba607673a573",
+    "members": [
+      {
+        "name": "source.json",
+        "bytes": 1040782,
+        "sha256": "867caab05f247f67293b600af27ee8c29cb82a1a096f3a70f92fe75eebb0ad31"
+      },
+      {
+        "name": "milestone-001.json",
+        "bytes": 1040782,
+        "sha256": "867caab05f247f67293b600af27ee8c29cb82a1a096f3a70f92fe75eebb0ad31"
+      },
+      {
+        "name": "milestone-002.json",
+        "bytes": 1040782,
+        "sha256": "867caab05f247f67293b600af27ee8c29cb82a1a096f3a70f92fe75eebb0ad31"
+      },
+      {
+        "name": "milestone-003.json",
+        "bytes": 1040782,
+        "sha256": "867caab05f247f67293b600af27ee8c29cb82a1a096f3a70f92fe75eebb0ad31"
+      },
+      {
+        "name": "milestone-004.json",
+        "bytes": 1040782,
+        "sha256": "867caab05f247f67293b600af27ee8c29cb82a1a096f3a70f92fe75eebb0ad31"
+      },
+      {
+        "name": "final.json",
+        "bytes": 1040782,
+        "sha256": "867caab05f247f67293b600af27ee8c29cb82a1a096f3a70f92fe75eebb0ad31"
+      },
+      {
+        "name": "command-attempts.jsonl",
+        "bytes": 2552,
+        "sha256": "0b7efbf9e1a65cbfceceb4dccd009c3de3e11101e1df2789b731fc73b35071a8"
+      },
+      {
+        "name": "case-record.json",
+        "bytes": 244088,
+        "sha256": "f0a6939a347993f4946ce4d25cdc43697495687e3294ce2b91bbd01437d05bf6"
+      }
+    ]
+  }
+}

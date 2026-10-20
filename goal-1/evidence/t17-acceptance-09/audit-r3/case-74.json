@@ -1,0 +1,2761 @@
+{
+  "rowId": "content_employee-t16-campaign-0--update-default",
+  "identity": "content_employee-t16-campaign-0",
+  "backgroundId": "content_employee",
+  "seed": "t16-campaign-0",
+  "caseId": "update-default",
+  "sourceRevision": 79,
+  "purpose": "更新违约真实暂停并依法退款原旧学员，不以暂停清责任",
+  "requiredChecks": [
+    "update-default-actual-expiry",
+    "update-default-resume-rejected",
+    "update-default-old-money-refunded"
+  ],
+  "folder": "content_employee-t16-campaign-0/critical-29",
+  "status": "verified",
+  "source": {
+    "member": "source.json",
+    "bytes": 945769,
+    "sha256": "a6b76d7725d48a6c07c2b110dd67c7415124089d01330d3904faf1967f0c8648"
+  },
+  "terminal": {
+    "member": "final.json",
+    "bytes": 986119,
+    "sha256": "67bc13fe1f298ac62cc8c8f63f98fd34cb463f7d8cdc90341ef60e7ddce1f1b9"
+  },
+  "archive": {
+    "encoding": "xz",
+    "file": "case-evidence.xz",
+    "storedBytes": 76424,
+    "storedSha256": "554a3d709e9ff7b47a35b2a8080860e288d88600fc8805daa6946afd26716ded",
+    "containerBytes": 6977563,
+    "containerSha256": "421621c105abe78911aa55f8fdd7cfdfbd7137d7307f7d8704846edf4f60e6cf",
+    "members": [
+      {
+        "name": "source.json",
+        "bytes": 945769,
+        "sha256": "a6b76d7725d48a6c07c2b110dd67c7415124089d01330d3904faf1967f0c8648"
+      },
+      {
+        "name": "milestone-001.json",
+        "bytes": 949794,
+        "sha256": "975f707169268ef63f984efbfd256a9f9095999cafdebe54714b45b324be16cc"
+      },
+      {
+        "name": "milestone-002.json",
+        "bytes": 949794,
+        "sha256": "975f707169268ef63f984efbfd256a9f9095999cafdebe54714b45b324be16cc"
+      },
+      {
+        "name": "milestone-003.json",
+        "bytes": 949794,
+        "sha256": "975f707169268ef63f984efbfd256a9f9095999cafdebe54714b45b324be16cc"
+      },
+      {
+        "name": "milestone-004.json",
+        "bytes": 986119,
+        "sha256": "67bc13fe1f298ac62cc8c8f63f98fd34cb463f7d8cdc90341ef60e7ddce1f1b9"
+      },
+      {
+        "name": "final.json",
+        "bytes": 986119,
+        "sha256": "67bc13fe1f298ac62cc8c8f63f98fd34cb463f7d8cdc90341ef60e7ddce1f1b9"
+      },
+      {
+        "name": "command-attempts.jsonl",
+        "bytes": 3784,
+        "sha256": "c782b4bb95b1e3ec022a3db5701dc2f515c764eae0840b621f26aa6a87e9cc07"
+      },
+      {
+        "name": "case-record.json",
+        "bytes": 301598,
+        "sha256": "3345c8e033a8b2c10ef0d0d00d49b4ed095d01b293d2227e45a8197b1b9cce68"
+      }
+    ]
+  },
+  "actualAcceptedCommands": 4,
+  "actualRejectedCommands": 1,
+  "actualTargetAssertions": [
+    {
+      "code": "update-default-actual-expiry",
+      "revision": 80,
+      "date": "2023-03-22",
+      "detail": {
+        "update": {
+          "affectedCohortIds": [
+            "crs:fb6e5e3d54b08f603cca8a44b816e31c"
+          ],
+          "anchorId": "H004",
+          "courseId": "crs:337021283324f425f25270847d402b85",
+          "defaulted": true,
+          "dueAt": "2023-03-21",
+          "id": "crs:d966dadb86088d3f763af50f47ef9eb6",
+          "occurredAt": "2023-03-14",
+          "resolution": null,
+          "resolvedAt": null,
+          "settledCohortIds": []
+        },
+        "courseId": "crs:337021283324f425f25270847d402b85",
+        "paused": true
+      }
+    },
+    {
+      "code": "update-default-resume-rejected",
+      "revision": 80,
+      "date": "2023-03-22",
+      "detail": {
+        "kind": "ResumeCourseEnrollment",
+        "expectedReason": "COURSE_UPDATE_REQUIRED",
+        "actualReasons": [
+          "COURSE_UPDATE_REQUIRED"
+        ]
+      }
+    },
+    {
+      "code": "update-default-resume-rejected-complete-raw-unchanged",
+      "revision": 80,
+      "date": "2023-03-22",
+      "detail": null
+    },
+    {
+      "code": "update-default-old-money-refunded",
+      "revision": 83,
+      "date": "2023-04-16",
+      "detail": {
+        "update": {
+          "affectedCohortIds": [
+            "crs:fb6e5e3d54b08f603cca8a44b816e31c"
+          ],
+          "anchorId": "H004",
+          "courseId": "crs:337021283324f425f25270847d402b85",
+          "defaulted": true,
+          "dueAt": "2023-03-21",
+          "id": "crs:d966dadb86088d3f763af50f47ef9eb6",
+          "occurredAt": "2023-03-14",
+          "resolution": "refunded",
+          "resolvedAt": "2023-04-16",
+          "settledCohortIds": [
+            "crs:fb6e5e3d54b08f603cca8a44b816e31c"
+          ]
+        },
+        "money": {
+          "runId": "normal-course-content_employee-ee9cb440",
+          "revision": 83,
+          "date": "2023-04-16",
+          "origin": "normal",
+          "cohortId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+          "courseId": "crs:337021283324f425f25270847d402b85",
+          "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+          "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+          "productId": "practical_cohort",
+          "topicId": "image_workflows",
+          "edition": "foundation",
+          "productKey": "course:image_workflows:foundation",
+          "priceFen": 99900,
+          "status": "closed",
+          "startAt": "2023-01-18",
+          "endAt": "2023-02-22",
+          "supportCompleteAt": "2023-04-08",
+          "remedyDueAt": "2023-04-15",
+          "refundUntil": "2023-04-15",
+          "supportSatisfied": true,
+          "assessmentAt": "2023-04-08",
+          "feePostedAt": "2023-04-16",
+          "feeFen": 0,
+          "feeBps": 500,
+          "closedAt": "2023-04-16",
+          "students": [
+            {
+              "id": "crs:2f09363bcbf9ad402d24d32b50fcaa4a",
+              "personId": "vid:292af264674e89e85006a24617bd8004",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:bf6773472692e7cb57e406a36b05b4e9",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:87e3e226891881b9ab6cad16fd1d0e7a",
+              "personId": "vid:c541567bb259291c140ad247a51030f3",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:524f505d4ba4714f57973fb2db81f952",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:cf9b3f296ff3c6607410cc8421a3e990",
+              "personId": "vid:d351d6e17266c3975597c7216eee01f7",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:e3ca0b375abbcfd0486355cd50ddda1b",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:5a6c8462624f0362516b8fe982506569",
+              "personId": "vid:e4d1a0dfd440b87828f77b11fffa92a1",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:2c8da2f8efa1059c484334b344aa3afd",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:b665d7478728952256a30274c4ed863a",
+              "personId": "vid:8830d7cf8ef28e7519ce6c15455faf88",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:980cc9aa3bbb6fb884b40f38620c800b",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:79769d539ff253ec8d6b6195f47ae3c8",
+              "personId": "vid:3f919493ea31db84cdfdab1ad929c414",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:0cffc0e257493bdf659ce516d135367b",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:8125f7cf4b56cbdd11c75adbdb7c5a15",
+              "personId": "vid:c1dc21346817a5ac2e9315c48daa6657",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:ae7d65cc7cbed39808ae42e0368adf4b",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:fcc983f79a9439d7f9bf134a4fdfe745",
+              "personId": "vid:900575681321b81cae5f150df2aa4a95",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:a1bcbfb09ef83ec42e9b66afb177dd49",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:8b883f8a174be820ff62971bf3c3f34a",
+              "personId": "vid:2ab9f1455e9d0279c8571cf430365436",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:43c236a9d014c842013780e5e8a5968a",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:b25d8b49584e213b968598ee7f356cc2",
+              "personId": "vid:0fc889b128b9be739d67be2703d0d30d",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:448f7373225d7778dc17095838705a6e",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:2d92a996a41e83ec8bb4cb3cb2960a07",
+              "personId": "vid:bda591538dc0c381634c2596e275db3b",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:7f3c78219b51a0bacb8f66ecbfd37050",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:8dfb09a137b32d7204a5b42a033ec3e4",
+              "personId": "vid:3c9c72b168ddd5176e856277018e7a73",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:83dbd896f3999f7bf0250aefba6a195f",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:3edc8d3a77852a543416278709901eea",
+              "personId": "vid:e6be18ffdefd81e61fd21d71ed67036a",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:43c8da8584b155484b498da20a31a6eb",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:b5bcbb8b84b943679a1adf5987c743c7",
+              "personId": "vid:fd59cfe62f83a14315b01e96a317febc",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:56daf3576a3fa9b1add5ad5be1da1cfa",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:e31e3f402105f30307c5dbfcc2362749",
+              "personId": "vid:7ac448d5bf33525ad23179cccfc76e9a",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:2f10b90717762d3de959fc26c12de8f1",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:e26203040d5b4ac2425cfe1c734f8c03",
+              "personId": "vid:7b18f96991d8fa73b9e2b8162bada6c9",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:26c873db2190bddd78a610dec5e2d275",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:5112adc974a370d7f0cefcfaf5f692ea",
+              "personId": "vid:063d8c7efd0ab392812bc5b2e635c75c",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:896de69da16e695fed5c3ab7d3859110",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:7696127865eba1672b3040831e89e8d9",
+              "personId": "vid:b9484313aba51eedfefbbd978d471f91",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:2818af1b6b6497a5c96cd3e0fe272c67",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:389989701c44cf97cf23689da3bc0a81",
+              "personId": "vid:07edabed7e9b1209de09a42a60515b22",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:0fb577e9a8b7e5458549b33c2e519803",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            },
+            {
+              "id": "crs:d3343a95f654a9303c538f64e10da6a7",
+              "personId": "vid:85ab051f334615177f0c25ec36beec50",
+              "courseId": "crs:337021283324f425f25270847d402b85",
+              "productKey": "course:image_workflows:foundation",
+              "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "conversionId": "crs:5b2d4f49341eea6fa046a19311228c1d",
+              "paidAt": "2023-01-16",
+              "priceFen": 99900,
+              "delivered": [
+                49950,
+                49950
+              ],
+              "refundedDelivered": [
+                49950,
+                49950
+              ],
+              "refundedUnearned": 0,
+              "outcome": "refunded",
+              "recovered": false
+            }
+          ],
+          "payments": [
+            {
+              "id": "crs:79df971c7d386240b4b9b2d04d88eebb",
+              "cohortId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "date": "2023-01-16",
+              "personIds": [
+                "vid:292af264674e89e85006a24617bd8004",
+                "vid:c541567bb259291c140ad247a51030f3",
+                "vid:d351d6e17266c3975597c7216eee01f7",
+                "vid:e4d1a0dfd440b87828f77b11fffa92a1",
+                "vid:8830d7cf8ef28e7519ce6c15455faf88",
+                "vid:3f919493ea31db84cdfdab1ad929c414",
+                "vid:c1dc21346817a5ac2e9315c48daa6657",
+                "vid:900575681321b81cae5f150df2aa4a95",
+                "vid:2ab9f1455e9d0279c8571cf430365436",
+                "vid:0fc889b128b9be739d67be2703d0d30d",
+                "vid:bda591538dc0c381634c2596e275db3b",
+                "vid:3c9c72b168ddd5176e856277018e7a73",
+                "vid:e6be18ffdefd81e61fd21d71ed67036a",
+                "vid:fd59cfe62f83a14315b01e96a317febc",
+                "vid:7ac448d5bf33525ad23179cccfc76e9a",
+                "vid:7b18f96991d8fa73b9e2b8162bada6c9",
+                "vid:063d8c7efd0ab392812bc5b2e635c75c",
+                "vid:b9484313aba51eedfefbbd978d471f91",
+                "vid:07edabed7e9b1209de09a42a60515b22",
+                "vid:85ab051f334615177f0c25ec36beec50"
+              ],
+              "amountFen": 1998000,
+              "operationId": "crs:31dc2ac339a26b8e8cdb07cdd60b5f71"
+            }
+          ],
+          "refunds": [
+            {
+              "id": "crs:3019711ad1bf70a3a95f26df3a620e17",
+              "cohortId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "date": "2023-04-16",
+              "personIds": [
+                "vid:d351d6e17266c3975597c7216eee01f7",
+                "vid:bda591538dc0c381634c2596e275db3b",
+                "vid:85ab051f334615177f0c25ec36beec50"
+              ],
+              "mode": "full",
+              "reason": "答疑整改期限已过，按约定退款",
+              "undeliveredFen": 0,
+              "deliveredFen": 299700,
+              "operationIds": [
+                "crs:4741b4032f2e4de3245c9c3a7d5339cb",
+                "crs:e9b925d8e2e8687488aa33f11aaee788"
+              ]
+            },
+            {
+              "id": "crs:0679a700d9dafdd54c90e73eb04baac3",
+              "cohortId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "date": "2023-04-16",
+              "personIds": [
+                "vid:292af264674e89e85006a24617bd8004",
+                "vid:c541567bb259291c140ad247a51030f3",
+                "vid:e4d1a0dfd440b87828f77b11fffa92a1",
+                "vid:8830d7cf8ef28e7519ce6c15455faf88",
+                "vid:3f919493ea31db84cdfdab1ad929c414",
+                "vid:c1dc21346817a5ac2e9315c48daa6657",
+                "vid:900575681321b81cae5f150df2aa4a95",
+                "vid:2ab9f1455e9d0279c8571cf430365436",
+                "vid:0fc889b128b9be739d67be2703d0d30d",
+                "vid:3c9c72b168ddd5176e856277018e7a73",
+                "vid:e6be18ffdefd81e61fd21d71ed67036a",
+                "vid:fd59cfe62f83a14315b01e96a317febc",
+                "vid:7ac448d5bf33525ad23179cccfc76e9a",
+                "vid:7b18f96991d8fa73b9e2b8162bada6c9",
+                "vid:063d8c7efd0ab392812bc5b2e635c75c",
+                "vid:b9484313aba51eedfefbbd978d471f91",
+                "vid:07edabed7e9b1209de09a42a60515b22"
+              ],
+              "mode": "full",
+              "reason": "旧学员更新承诺未兑现，退款收尾",
+              "undeliveredFen": 0,
+              "deliveredFen": 1698300,
+              "operationIds": [
+                "crs:032b00bfa6247e4fc5cbe0bfcdf39993",
+                "crs:b331db4c4202d66f0e3fe22a1ece4b63"
+              ]
+            }
+          ],
+          "stages": [
+            {
+              "index": 0,
+              "dueAt": "2023-02-01",
+              "deliveredAt": "2023-01-28",
+              "operationId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+              "amountFen": 999000,
+              "attempts": [
+                {
+                  "jobId": "crs:e6fdd9f5f9f063dbaead90896b838609",
+                  "revision": 1
+                }
+              ]
+            },
+            {
+              "index": 1,
+              "dueAt": "2023-02-22",
+              "deliveredAt": "2023-02-07",
+              "operationId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+              "amountFen": 999000,
+              "attempts": [
+                {
+                  "jobId": "crs:daddcebdbaaf91761ec2d48654404971",
+                  "revision": 1
+                }
+              ]
+            }
+          ],
+          "contract": {
+            "id": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "counterpartyId": "world",
+            "protectionReservationId": "crs:7f30f1386b1e2bdb81c3d9101de9273a",
+            "prepaidFen": 0,
+            "receivableFen": 0,
+            "recognizedIncomeFen": 0
+          },
+          "obligations": [
+            {
+              "id": "crs:e39a8a6e778c7751f6b4802d0f799271",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "counterpartyId": "world",
+              "date": "2023-04-16",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "originOperationId": "crs:4741b4032f2e4de3245c9c3a7d5339cb",
+              "kind": "refund_delivered",
+              "amountFen": 149850,
+              "remainingFen": 0,
+              "protectionReservationId": "crs:cc64123f2113611d5c3c449df73d1452"
+            },
+            {
+              "id": "crs:d905c173f21a04e62d29159d5b46981b",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "counterpartyId": "world",
+              "date": "2023-04-16",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "originOperationId": "crs:e9b925d8e2e8687488aa33f11aaee788",
+              "kind": "refund_delivered",
+              "amountFen": 149850,
+              "remainingFen": 0,
+              "protectionReservationId": "crs:0ff2e1d2a74cf92eaf2aa9752cfab0b6"
+            },
+            {
+              "id": "crs:4096bee86ed93232813b2a11d3d0366d",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "counterpartyId": "world",
+              "date": "2023-04-16",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "originOperationId": "crs:032b00bfa6247e4fc5cbe0bfcdf39993",
+              "kind": "refund_delivered",
+              "amountFen": 849150,
+              "remainingFen": 0,
+              "protectionReservationId": "crs:748a41885032f593a51e526184a2c46a"
+            },
+            {
+              "id": "crs:1895be1e68e66b27c17cde379216e788",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "counterpartyId": "world",
+              "date": "2023-04-16",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "originOperationId": "crs:b331db4c4202d66f0e3fe22a1ece4b63",
+              "kind": "refund_delivered",
+              "amountFen": 849150,
+              "remainingFen": 0,
+              "protectionReservationId": "crs:904d9bb4161c87af583916486b4cb0fa"
+            }
+          ],
+          "reservations": [
+            {
+              "id": "crs:7f30f1386b1e2bdb81c3d9101de9273a",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "kind": "customer_protection",
+              "originId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "amountFen": 0,
+              "status": "released"
+            },
+            {
+              "id": "crs:cc64123f2113611d5c3c449df73d1452",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "kind": "customer_protection",
+              "originId": "crs:e39a8a6e778c7751f6b4802d0f799271",
+              "amountFen": 0,
+              "status": "released"
+            },
+            {
+              "id": "crs:0ff2e1d2a74cf92eaf2aa9752cfab0b6",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "kind": "customer_protection",
+              "originId": "crs:d905c173f21a04e62d29159d5b46981b",
+              "amountFen": 0,
+              "status": "released"
+            },
+            {
+              "id": "crs:748a41885032f593a51e526184a2c46a",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "kind": "customer_protection",
+              "originId": "crs:4096bee86ed93232813b2a11d3d0366d",
+              "amountFen": 0,
+              "status": "released"
+            },
+            {
+              "id": "crs:904d9bb4161c87af583916486b4cb0fa",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "kind": "customer_protection",
+              "originId": "crs:1895be1e68e66b27c17cde379216e788",
+              "amountFen": 0,
+              "status": "released"
+            }
+          ],
+          "financial": [
+            {
+              "id": "crs:31dc2ac339a26b8e8cdb07cdd60b5f71",
+              "kind": "receive_prepayment",
+              "status": "applied",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "date": "2023-01-16",
+              "amountFen": 1998000,
+              "referenceId": null,
+              "reservationId": "crs:7f30f1386b1e2bdb81c3d9101de9273a",
+              "obligationId": null
+            },
+            {
+              "id": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+              "kind": "deliver_prepaid",
+              "status": "applied",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "date": "2023-01-28",
+              "amountFen": 999000,
+              "referenceId": null,
+              "reservationId": null,
+              "obligationId": null
+            },
+            {
+              "id": "crs:401a44479cdc92a5c67260f3c4d371d3",
+              "kind": "deliver_prepaid",
+              "status": "applied",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "date": "2023-02-07",
+              "amountFen": 999000,
+              "referenceId": null,
+              "reservationId": null,
+              "obligationId": null
+            },
+            {
+              "id": "crs:4741b4032f2e4de3245c9c3a7d5339cb",
+              "kind": "refund_delivered",
+              "status": "applied",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "date": "2023-04-16",
+              "amountFen": 149850,
+              "referenceId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+              "reservationId": "crs:cc64123f2113611d5c3c449df73d1452",
+              "obligationId": "crs:e39a8a6e778c7751f6b4802d0f799271"
+            },
+            {
+              "id": "crs:e9b925d8e2e8687488aa33f11aaee788",
+              "kind": "refund_delivered",
+              "status": "applied",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "date": "2023-04-16",
+              "amountFen": 149850,
+              "referenceId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+              "reservationId": "crs:0ff2e1d2a74cf92eaf2aa9752cfab0b6",
+              "obligationId": "crs:d905c173f21a04e62d29159d5b46981b"
+            },
+            {
+              "id": "crs:032b00bfa6247e4fc5cbe0bfcdf39993",
+              "kind": "refund_delivered",
+              "status": "applied",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "date": "2023-04-16",
+              "amountFen": 849150,
+              "referenceId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+              "reservationId": "crs:748a41885032f593a51e526184a2c46a",
+              "obligationId": "crs:4096bee86ed93232813b2a11d3d0366d"
+            },
+            {
+              "id": "crs:b331db4c4202d66f0e3fe22a1ece4b63",
+              "kind": "refund_delivered",
+              "status": "applied",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "date": "2023-04-16",
+              "amountFen": 849150,
+              "referenceId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+              "reservationId": "crs:904d9bb4161c87af583916486b4cb0fa",
+              "obligationId": "crs:1895be1e68e66b27c17cde379216e788"
+            }
+          ],
+          "jobs": [
+            {
+              "id": "crs:9c40916d042155ea52210e7c82b400a4",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "definitionId": "course-sample-practical_cohort-image_workflows",
+              "status": "completed",
+              "startAt": "2023-01-02",
+              "completeAt": "2023-01-16",
+              "actionId": "crs:9c40916d042155ea52210e7c82b400a4",
+              "actionStatus": "completed",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "costFen": 250000,
+              "actionPoints": 1,
+              "cashReservationId": "ops:61f7049e7f756fdc55dd8920ad2974e5"
+            },
+            {
+              "id": "crs:37d6a254c1b381f1cd32fc1e47882a5c",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "definitionId": "course-support-practical_cohort-guided_group",
+              "status": "completed",
+              "startAt": "2023-04-01",
+              "completeAt": "2023-04-08",
+              "actionId": "crs:37d6a254c1b381f1cd32fc1e47882a5c",
+              "actionStatus": "completed",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "costFen": 300000,
+              "actionPoints": 1,
+              "cashReservationId": "ops:6f79e8490cecf0a163d907515e407527"
+            },
+            {
+              "id": "crs:e6fdd9f5f9f063dbaead90896b838609",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "definitionId": "course-stage-practical_cohort-image_workflows",
+              "status": "completed",
+              "startAt": "2023-01-18",
+              "completeAt": "2023-01-28",
+              "actionId": "crs:e6fdd9f5f9f063dbaead90896b838609",
+              "actionStatus": "completed",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "costFen": 0,
+              "actionPoints": 1,
+              "cashReservationId": "ops:cfa687870c45ef0eea1de12b71220c8e"
+            },
+            {
+              "id": "crs:daddcebdbaaf91761ec2d48654404971",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "definitionId": "course-stage-practical_cohort-image_workflows",
+              "status": "completed",
+              "startAt": "2023-01-28",
+              "completeAt": "2023-02-07",
+              "actionId": "crs:daddcebdbaaf91761ec2d48654404971",
+              "actionStatus": "completed",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "costFen": 0,
+              "actionPoints": 1,
+              "cashReservationId": "ops:21bde3022b2461f54629a6d9a1a2b732"
+            }
+          ],
+          "incomeMetrics": [
+            {
+              "operationId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "referenceId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "date": "2023-01-28",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "income",
+              "deltaFen": 999000
+            },
+            {
+              "operationId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "referenceId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "date": "2023-02-07",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "income",
+              "deltaFen": 999000
+            },
+            {
+              "operationId": "crs:4741b4032f2e4de3245c9c3a7d5339cb",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "referenceId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+              "date": "2023-04-16",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "income",
+              "deltaFen": -149850
+            },
+            {
+              "operationId": "crs:e9b925d8e2e8687488aa33f11aaee788",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "referenceId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+              "date": "2023-04-16",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "income",
+              "deltaFen": -149850
+            },
+            {
+              "operationId": "crs:032b00bfa6247e4fc5cbe0bfcdf39993",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "referenceId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+              "date": "2023-04-16",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "income",
+              "deltaFen": -849150
+            },
+            {
+              "operationId": "crs:b331db4c4202d66f0e3fe22a1ece4b63",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "referenceId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+              "date": "2023-04-16",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "income",
+              "deltaFen": -849150
+            }
+          ],
+          "company": {
+            "cashFen": 1402259,
+            "heldFen": 0,
+            "availableFen": 1402259,
+            "incomeFen": 0,
+            "costFen": 597741,
+            "metrics": [
+              {
+                "operationId": "ops:07e8789e9f66e37eb8abc6a3ec1fd4fe:cost",
+                "sourceEventId": "crs:d6779dfa737b9bcd311cba0e440b9e61",
+                "contractId": null,
+                "referenceId": "crs:d6779dfa737b9bcd311cba0e440b9e61",
+                "date": "2022-12-01",
+                "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "kind": "cost",
+                "deltaFen": 10000
+              },
+              {
+                "operationId": "ops:a1f95edd21f4ac86919ca932790e03c6",
+                "sourceEventId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "contractId": null,
+                "referenceId": null,
+                "date": "2022-12-31",
+                "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "kind": "cost",
+                "deltaFen": 7741
+              },
+              {
+                "operationId": "ops:6c50eca3eb3b45d8a60643cab349b70b:cost",
+                "sourceEventId": "crs:9c40916d042155ea52210e7c82b400a4",
+                "contractId": null,
+                "referenceId": "crs:9c40916d042155ea52210e7c82b400a4",
+                "date": "2023-01-02",
+                "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "kind": "cost",
+                "deltaFen": 250000
+              },
+              {
+                "operationId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+                "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+                "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+                "referenceId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+                "date": "2023-01-28",
+                "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "kind": "income",
+                "deltaFen": 999000
+              },
+              {
+                "operationId": "ops:a4197809c2618d0cc5d529b4f50140aa",
+                "sourceEventId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "contractId": null,
+                "referenceId": null,
+                "date": "2023-01-31",
+                "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "kind": "cost",
+                "deltaFen": 10000
+              },
+              {
+                "operationId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+                "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+                "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+                "referenceId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+                "date": "2023-02-07",
+                "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "kind": "income",
+                "deltaFen": 999000
+              },
+              {
+                "operationId": "ops:fa06eff2c065dd958dae12a5541478b5",
+                "sourceEventId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "contractId": null,
+                "referenceId": null,
+                "date": "2023-02-28",
+                "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "kind": "cost",
+                "deltaFen": 10000
+              },
+              {
+                "operationId": "ops:dbfed37176ea4e1f6a236e1ab66d123a",
+                "sourceEventId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "contractId": null,
+                "referenceId": null,
+                "date": "2023-03-31",
+                "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "kind": "cost",
+                "deltaFen": 10000
+              },
+              {
+                "operationId": "ops:a969b25505b2894d57fd0c16397c611b:cost",
+                "sourceEventId": "crs:37d6a254c1b381f1cd32fc1e47882a5c",
+                "contractId": null,
+                "referenceId": "crs:37d6a254c1b381f1cd32fc1e47882a5c",
+                "date": "2023-04-01",
+                "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "kind": "cost",
+                "deltaFen": 300000
+              },
+              {
+                "operationId": "crs:4741b4032f2e4de3245c9c3a7d5339cb",
+                "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+                "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+                "referenceId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+                "date": "2023-04-16",
+                "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "kind": "income",
+                "deltaFen": -149850
+              },
+              {
+                "operationId": "crs:e9b925d8e2e8687488aa33f11aaee788",
+                "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+                "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+                "referenceId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+                "date": "2023-04-16",
+                "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "kind": "income",
+                "deltaFen": -149850
+              },
+              {
+                "operationId": "crs:032b00bfa6247e4fc5cbe0bfcdf39993",
+                "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+                "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+                "referenceId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+                "date": "2023-04-16",
+                "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "kind": "income",
+                "deltaFen": -849150
+              },
+              {
+                "operationId": "crs:b331db4c4202d66f0e3fe22a1ece4b63",
+                "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+                "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+                "referenceId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+                "date": "2023-04-16",
+                "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+                "kind": "income",
+                "deltaFen": -849150
+              }
+            ]
+          },
+          "quarters": [
+            {
+              "quarter": "2020-Q1",
+              "spent": 3,
+              "reserved": 0,
+              "actionIds": [
+                "ops:2c410b83be453564b3c9716b0709c42d",
+                "ops:0f62f82b77f682f83e5b73e7729e98ff"
+              ]
+            },
+            {
+              "quarter": "2020-Q2",
+              "spent": 2,
+              "reserved": 0,
+              "actionIds": [
+                "ops:8172483a76741d5751d21c1091b30128"
+              ]
+            },
+            {
+              "quarter": "2020-Q3",
+              "spent": 2,
+              "reserved": 0,
+              "actionIds": [
+                "ops:c4250ee5e821789681dfec5073ae4498"
+              ]
+            },
+            {
+              "quarter": "2020-Q4",
+              "spent": 2,
+              "reserved": 0,
+              "actionIds": [
+                "ops:7c654f3b41e9af74d36aa807a92b3bc4"
+              ]
+            },
+            {
+              "quarter": "2021-Q1",
+              "spent": 2,
+              "reserved": 0,
+              "actionIds": [
+                "ops:ef992a8d6cb817005bcd2e63714475b5"
+              ]
+            },
+            {
+              "quarter": "2021-Q2",
+              "spent": 2,
+              "reserved": 0,
+              "actionIds": [
+                "ops:9bd89ac5b7a9e0134cf0f8af11caab7c"
+              ]
+            },
+            {
+              "quarter": "2021-Q3",
+              "spent": 2,
+              "reserved": 0,
+              "actionIds": [
+                "ops:3c50c4ef9431f2e7f4c9511d0018e6d1"
+              ]
+            },
+            {
+              "quarter": "2021-Q4",
+              "spent": 2,
+              "reserved": 0,
+              "actionIds": [
+                "ops:dfab3bcbf1e0d595f1ee4bf42faafdc6"
+              ]
+            },
+            {
+              "quarter": "2022-Q1",
+              "spent": 2,
+              "reserved": 0,
+              "actionIds": [
+                "ops:c249783a20ac17a7e9b2e2a55f0f739f"
+              ]
+            },
+            {
+              "quarter": "2022-Q2",
+              "spent": 3,
+              "reserved": 0,
+              "actionIds": [
+                "ops:351f75d3ab3b493f33489b801fc27255",
+                "vid:7ed23a3b8a28b44d2a89b7441bab5b79"
+              ]
+            },
+            {
+              "quarter": "2022-Q3",
+              "spent": 3,
+              "reserved": 0,
+              "actionIds": [
+                "ops:7668e8a33f527a410185373b0a0fda64",
+                "vid:15e3cd36dfbf6282466578de075921a6"
+              ]
+            },
+            {
+              "quarter": "2022-Q4",
+              "spent": 4,
+              "reserved": 0,
+              "actionIds": [
+                "ops:a177182615382aae724c8c05c84ba53b",
+                "vid:963c00a5f0d8eeb458885faa2e9569e2",
+                "crs:d6779dfa737b9bcd311cba0e440b9e61"
+              ]
+            },
+            {
+              "quarter": "2023-Q1",
+              "spent": 3,
+              "reserved": 0,
+              "actionIds": [
+                "crs:9c40916d042155ea52210e7c82b400a4",
+                "crs:e6fdd9f5f9f063dbaead90896b838609",
+                "crs:daddcebdbaaf91761ec2d48654404971"
+              ]
+            },
+            {
+              "quarter": "2023-Q2",
+              "spent": 1,
+              "reserved": 0,
+              "actionIds": [
+                "crs:37d6a254c1b381f1cd32fc1e47882a5c"
+              ]
+            }
+          ],
+          "independentChecks": {
+            "paymentBatches": 1,
+            "stageIncomeFen": 1998000,
+            "expectedPrepaidFen": 0,
+            "expectedRecognizedIncomeFen": 0,
+            "expectedFeeFenIfClosedNow": 0,
+            "unpaidCohortFen": 0,
+            "allFinancialIdentitiesPassed": true
+          }
+        },
+        "cash": {
+          "runId": "normal-course-content_employee-ee9cb440",
+          "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+          "beforeRevision": 79,
+          "afterRevision": 83,
+          "beforeDate": "2023-03-14",
+          "afterDate": "2023-04-16",
+          "beforeCashFen": 3710259,
+          "afterCashFen": 1402259,
+          "transactionDeltaFen": -2308000,
+          "appendedTransactionCount": 7,
+          "accountTransactions": [
+            {
+              "id": "ops:dbfed37176ea4e1f6a236e1ab66d123a",
+              "date": "2023-03-31",
+              "sourceEventId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "contractId": null,
+              "referenceId": "ops:b37f9d6858deffec3ec480d05f687b79",
+              "lines": [
+                {
+                  "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                  "deltaFen": -10000
+                },
+                {
+                  "accountId": "world",
+                  "deltaFen": 10000
+                }
+              ]
+            },
+            {
+              "id": "ops:a969b25505b2894d57fd0c16397c611b:cost",
+              "date": "2023-04-01",
+              "sourceEventId": "crs:37d6a254c1b381f1cd32fc1e47882a5c",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "contractId": null,
+              "referenceId": "crs:37d6a254c1b381f1cd32fc1e47882a5c",
+              "lines": [
+                {
+                  "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                  "deltaFen": -300000
+                },
+                {
+                  "accountId": "world",
+                  "deltaFen": 300000
+                }
+              ]
+            },
+            {
+              "id": "crs:4741b4032f2e4de3245c9c3a7d5339cb",
+              "date": "2023-04-16",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "referenceId": "crs:e39a8a6e778c7751f6b4802d0f799271",
+              "lines": [
+                {
+                  "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                  "deltaFen": -149850
+                },
+                {
+                  "accountId": "world",
+                  "deltaFen": 149850
+                }
+              ]
+            },
+            {
+              "id": "crs:e9b925d8e2e8687488aa33f11aaee788",
+              "date": "2023-04-16",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "referenceId": "crs:d905c173f21a04e62d29159d5b46981b",
+              "lines": [
+                {
+                  "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                  "deltaFen": -149850
+                },
+                {
+                  "accountId": "world",
+                  "deltaFen": 149850
+                }
+              ]
+            },
+            {
+              "id": "crs:032b00bfa6247e4fc5cbe0bfcdf39993",
+              "date": "2023-04-16",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "referenceId": "crs:4096bee86ed93232813b2a11d3d0366d",
+              "lines": [
+                {
+                  "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                  "deltaFen": -849150
+                },
+                {
+                  "accountId": "world",
+                  "deltaFen": 849150
+                }
+              ]
+            },
+            {
+              "id": "crs:b331db4c4202d66f0e3fe22a1ece4b63",
+              "date": "2023-04-16",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "referenceId": "crs:1895be1e68e66b27c17cde379216e788",
+              "lines": [
+                {
+                  "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+                  "deltaFen": -849150
+                },
+                {
+                  "accountId": "world",
+                  "deltaFen": 849150
+                }
+              ]
+            }
+          ],
+          "allCashIdentitiesPassed": true
+        }
+      }
+    }
+  ],
+  "completeOriginalMembersCompared": [
+    {
+      "name": "source.json",
+      "bytes": 945769,
+      "sha256": "a6b76d7725d48a6c07c2b110dd67c7415124089d01330d3904faf1967f0c8648"
+    },
+    {
+      "name": "milestone-001.json",
+      "bytes": 949794,
+      "sha256": "975f707169268ef63f984efbfd256a9f9095999cafdebe54714b45b324be16cc"
+    },
+    {
+      "name": "milestone-002.json",
+      "bytes": 949794,
+      "sha256": "975f707169268ef63f984efbfd256a9f9095999cafdebe54714b45b324be16cc"
+    },
+    {
+      "name": "milestone-003.json",
+      "bytes": 949794,
+      "sha256": "975f707169268ef63f984efbfd256a9f9095999cafdebe54714b45b324be16cc"
+    },
+    {
+      "name": "milestone-004.json",
+      "bytes": 986119,
+      "sha256": "67bc13fe1f298ac62cc8c8f63f98fd34cb463f7d8cdc90341ef60e7ddce1f1b9"
+    },
+    {
+      "name": "final.json",
+      "bytes": 986119,
+      "sha256": "67bc13fe1f298ac62cc8c8f63f98fd34cb463f7d8cdc90341ef60e7ddce1f1b9"
+    },
+    {
+      "name": "command-attempts.jsonl",
+      "bytes": 3784,
+      "sha256": "c782b4bb95b1e3ec022a3db5701dc2f515c764eae0840b621f26aa6a87e9cc07"
+    },
+    {
+      "name": "case-record.json",
+      "bytes": 301598,
+      "sha256": "3345c8e033a8b2c10ef0d0d00d49b4ed095d01b293d2227e45a8197b1b9cce68"
+    }
+  ],
+  "independentlyRecomputedMilestones": 4,
+  "finalMoney": {
+    "courseMoney": [
+      {
+        "runId": "normal-course-content_employee-ee9cb440",
+        "revision": 83,
+        "date": "2023-04-16",
+        "origin": "normal",
+        "cohortId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+        "courseId": "crs:337021283324f425f25270847d402b85",
+        "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+        "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+        "productId": "practical_cohort",
+        "topicId": "image_workflows",
+        "edition": "foundation",
+        "productKey": "course:image_workflows:foundation",
+        "priceFen": 99900,
+        "status": "closed",
+        "startAt": "2023-01-18",
+        "endAt": "2023-02-22",
+        "supportCompleteAt": "2023-04-08",
+        "remedyDueAt": "2023-04-15",
+        "refundUntil": "2023-04-15",
+        "supportSatisfied": true,
+        "assessmentAt": "2023-04-08",
+        "feePostedAt": "2023-04-16",
+        "feeFen": 0,
+        "feeBps": 500,
+        "closedAt": "2023-04-16",
+        "students": [
+          {
+            "id": "crs:2f09363bcbf9ad402d24d32b50fcaa4a",
+            "personId": "vid:292af264674e89e85006a24617bd8004",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:bf6773472692e7cb57e406a36b05b4e9",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:87e3e226891881b9ab6cad16fd1d0e7a",
+            "personId": "vid:c541567bb259291c140ad247a51030f3",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:524f505d4ba4714f57973fb2db81f952",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:cf9b3f296ff3c6607410cc8421a3e990",
+            "personId": "vid:d351d6e17266c3975597c7216eee01f7",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:e3ca0b375abbcfd0486355cd50ddda1b",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:5a6c8462624f0362516b8fe982506569",
+            "personId": "vid:e4d1a0dfd440b87828f77b11fffa92a1",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:2c8da2f8efa1059c484334b344aa3afd",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:b665d7478728952256a30274c4ed863a",
+            "personId": "vid:8830d7cf8ef28e7519ce6c15455faf88",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:980cc9aa3bbb6fb884b40f38620c800b",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:79769d539ff253ec8d6b6195f47ae3c8",
+            "personId": "vid:3f919493ea31db84cdfdab1ad929c414",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:0cffc0e257493bdf659ce516d135367b",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:8125f7cf4b56cbdd11c75adbdb7c5a15",
+            "personId": "vid:c1dc21346817a5ac2e9315c48daa6657",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:ae7d65cc7cbed39808ae42e0368adf4b",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:fcc983f79a9439d7f9bf134a4fdfe745",
+            "personId": "vid:900575681321b81cae5f150df2aa4a95",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:a1bcbfb09ef83ec42e9b66afb177dd49",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:8b883f8a174be820ff62971bf3c3f34a",
+            "personId": "vid:2ab9f1455e9d0279c8571cf430365436",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:43c236a9d014c842013780e5e8a5968a",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:b25d8b49584e213b968598ee7f356cc2",
+            "personId": "vid:0fc889b128b9be739d67be2703d0d30d",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:448f7373225d7778dc17095838705a6e",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:2d92a996a41e83ec8bb4cb3cb2960a07",
+            "personId": "vid:bda591538dc0c381634c2596e275db3b",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:7f3c78219b51a0bacb8f66ecbfd37050",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:8dfb09a137b32d7204a5b42a033ec3e4",
+            "personId": "vid:3c9c72b168ddd5176e856277018e7a73",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:83dbd896f3999f7bf0250aefba6a195f",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:3edc8d3a77852a543416278709901eea",
+            "personId": "vid:e6be18ffdefd81e61fd21d71ed67036a",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:43c8da8584b155484b498da20a31a6eb",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:b5bcbb8b84b943679a1adf5987c743c7",
+            "personId": "vid:fd59cfe62f83a14315b01e96a317febc",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:56daf3576a3fa9b1add5ad5be1da1cfa",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:e31e3f402105f30307c5dbfcc2362749",
+            "personId": "vid:7ac448d5bf33525ad23179cccfc76e9a",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:2f10b90717762d3de959fc26c12de8f1",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:e26203040d5b4ac2425cfe1c734f8c03",
+            "personId": "vid:7b18f96991d8fa73b9e2b8162bada6c9",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:26c873db2190bddd78a610dec5e2d275",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:5112adc974a370d7f0cefcfaf5f692ea",
+            "personId": "vid:063d8c7efd0ab392812bc5b2e635c75c",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:896de69da16e695fed5c3ab7d3859110",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:7696127865eba1672b3040831e89e8d9",
+            "personId": "vid:b9484313aba51eedfefbbd978d471f91",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:2818af1b6b6497a5c96cd3e0fe272c67",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:389989701c44cf97cf23689da3bc0a81",
+            "personId": "vid:07edabed7e9b1209de09a42a60515b22",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:0fb577e9a8b7e5458549b33c2e519803",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          },
+          {
+            "id": "crs:d3343a95f654a9303c538f64e10da6a7",
+            "personId": "vid:85ab051f334615177f0c25ec36beec50",
+            "courseId": "crs:337021283324f425f25270847d402b85",
+            "productKey": "course:image_workflows:foundation",
+            "paymentBatchId": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "conversionId": "crs:5b2d4f49341eea6fa046a19311228c1d",
+            "paidAt": "2023-01-16",
+            "priceFen": 99900,
+            "delivered": [
+              49950,
+              49950
+            ],
+            "refundedDelivered": [
+              49950,
+              49950
+            ],
+            "refundedUnearned": 0,
+            "outcome": "refunded",
+            "recovered": false
+          }
+        ],
+        "payments": [
+          {
+            "id": "crs:79df971c7d386240b4b9b2d04d88eebb",
+            "cohortId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "date": "2023-01-16",
+            "personIds": [
+              "vid:292af264674e89e85006a24617bd8004",
+              "vid:c541567bb259291c140ad247a51030f3",
+              "vid:d351d6e17266c3975597c7216eee01f7",
+              "vid:e4d1a0dfd440b87828f77b11fffa92a1",
+              "vid:8830d7cf8ef28e7519ce6c15455faf88",
+              "vid:3f919493ea31db84cdfdab1ad929c414",
+              "vid:c1dc21346817a5ac2e9315c48daa6657",
+              "vid:900575681321b81cae5f150df2aa4a95",
+              "vid:2ab9f1455e9d0279c8571cf430365436",
+              "vid:0fc889b128b9be739d67be2703d0d30d",
+              "vid:bda591538dc0c381634c2596e275db3b",
+              "vid:3c9c72b168ddd5176e856277018e7a73",
+              "vid:e6be18ffdefd81e61fd21d71ed67036a",
+              "vid:fd59cfe62f83a14315b01e96a317febc",
+              "vid:7ac448d5bf33525ad23179cccfc76e9a",
+              "vid:7b18f96991d8fa73b9e2b8162bada6c9",
+              "vid:063d8c7efd0ab392812bc5b2e635c75c",
+              "vid:b9484313aba51eedfefbbd978d471f91",
+              "vid:07edabed7e9b1209de09a42a60515b22",
+              "vid:85ab051f334615177f0c25ec36beec50"
+            ],
+            "amountFen": 1998000,
+            "operationId": "crs:31dc2ac339a26b8e8cdb07cdd60b5f71"
+          }
+        ],
+        "refunds": [
+          {
+            "id": "crs:3019711ad1bf70a3a95f26df3a620e17",
+            "cohortId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "date": "2023-04-16",
+            "personIds": [
+              "vid:d351d6e17266c3975597c7216eee01f7",
+              "vid:bda591538dc0c381634c2596e275db3b",
+              "vid:85ab051f334615177f0c25ec36beec50"
+            ],
+            "mode": "full",
+            "reason": "答疑整改期限已过，按约定退款",
+            "undeliveredFen": 0,
+            "deliveredFen": 299700,
+            "operationIds": [
+              "crs:4741b4032f2e4de3245c9c3a7d5339cb",
+              "crs:e9b925d8e2e8687488aa33f11aaee788"
+            ]
+          },
+          {
+            "id": "crs:0679a700d9dafdd54c90e73eb04baac3",
+            "cohortId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "date": "2023-04-16",
+            "personIds": [
+              "vid:292af264674e89e85006a24617bd8004",
+              "vid:c541567bb259291c140ad247a51030f3",
+              "vid:e4d1a0dfd440b87828f77b11fffa92a1",
+              "vid:8830d7cf8ef28e7519ce6c15455faf88",
+              "vid:3f919493ea31db84cdfdab1ad929c414",
+              "vid:c1dc21346817a5ac2e9315c48daa6657",
+              "vid:900575681321b81cae5f150df2aa4a95",
+              "vid:2ab9f1455e9d0279c8571cf430365436",
+              "vid:0fc889b128b9be739d67be2703d0d30d",
+              "vid:3c9c72b168ddd5176e856277018e7a73",
+              "vid:e6be18ffdefd81e61fd21d71ed67036a",
+              "vid:fd59cfe62f83a14315b01e96a317febc",
+              "vid:7ac448d5bf33525ad23179cccfc76e9a",
+              "vid:7b18f96991d8fa73b9e2b8162bada6c9",
+              "vid:063d8c7efd0ab392812bc5b2e635c75c",
+              "vid:b9484313aba51eedfefbbd978d471f91",
+              "vid:07edabed7e9b1209de09a42a60515b22"
+            ],
+            "mode": "full",
+            "reason": "旧学员更新承诺未兑现，退款收尾",
+            "undeliveredFen": 0,
+            "deliveredFen": 1698300,
+            "operationIds": [
+              "crs:032b00bfa6247e4fc5cbe0bfcdf39993",
+              "crs:b331db4c4202d66f0e3fe22a1ece4b63"
+            ]
+          }
+        ],
+        "stages": [
+          {
+            "index": 0,
+            "dueAt": "2023-02-01",
+            "deliveredAt": "2023-01-28",
+            "operationId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+            "amountFen": 999000,
+            "attempts": [
+              {
+                "jobId": "crs:e6fdd9f5f9f063dbaead90896b838609",
+                "revision": 1
+              }
+            ]
+          },
+          {
+            "index": 1,
+            "dueAt": "2023-02-22",
+            "deliveredAt": "2023-02-07",
+            "operationId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+            "amountFen": 999000,
+            "attempts": [
+              {
+                "jobId": "crs:daddcebdbaaf91761ec2d48654404971",
+                "revision": 1
+              }
+            ]
+          }
+        ],
+        "contract": {
+          "id": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+          "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+          "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+          "counterpartyId": "world",
+          "protectionReservationId": "crs:7f30f1386b1e2bdb81c3d9101de9273a",
+          "prepaidFen": 0,
+          "receivableFen": 0,
+          "recognizedIncomeFen": 0
+        },
+        "obligations": [
+          {
+            "id": "crs:e39a8a6e778c7751f6b4802d0f799271",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "counterpartyId": "world",
+            "date": "2023-04-16",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "originOperationId": "crs:4741b4032f2e4de3245c9c3a7d5339cb",
+            "kind": "refund_delivered",
+            "amountFen": 149850,
+            "remainingFen": 0,
+            "protectionReservationId": "crs:cc64123f2113611d5c3c449df73d1452"
+          },
+          {
+            "id": "crs:d905c173f21a04e62d29159d5b46981b",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "counterpartyId": "world",
+            "date": "2023-04-16",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "originOperationId": "crs:e9b925d8e2e8687488aa33f11aaee788",
+            "kind": "refund_delivered",
+            "amountFen": 149850,
+            "remainingFen": 0,
+            "protectionReservationId": "crs:0ff2e1d2a74cf92eaf2aa9752cfab0b6"
+          },
+          {
+            "id": "crs:4096bee86ed93232813b2a11d3d0366d",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "counterpartyId": "world",
+            "date": "2023-04-16",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "originOperationId": "crs:032b00bfa6247e4fc5cbe0bfcdf39993",
+            "kind": "refund_delivered",
+            "amountFen": 849150,
+            "remainingFen": 0,
+            "protectionReservationId": "crs:748a41885032f593a51e526184a2c46a"
+          },
+          {
+            "id": "crs:1895be1e68e66b27c17cde379216e788",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "counterpartyId": "world",
+            "date": "2023-04-16",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "originOperationId": "crs:b331db4c4202d66f0e3fe22a1ece4b63",
+            "kind": "refund_delivered",
+            "amountFen": 849150,
+            "remainingFen": 0,
+            "protectionReservationId": "crs:904d9bb4161c87af583916486b4cb0fa"
+          }
+        ],
+        "reservations": [
+          {
+            "id": "crs:7f30f1386b1e2bdb81c3d9101de9273a",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "kind": "customer_protection",
+            "originId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "amountFen": 0,
+            "status": "released"
+          },
+          {
+            "id": "crs:cc64123f2113611d5c3c449df73d1452",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "kind": "customer_protection",
+            "originId": "crs:e39a8a6e778c7751f6b4802d0f799271",
+            "amountFen": 0,
+            "status": "released"
+          },
+          {
+            "id": "crs:0ff2e1d2a74cf92eaf2aa9752cfab0b6",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "kind": "customer_protection",
+            "originId": "crs:d905c173f21a04e62d29159d5b46981b",
+            "amountFen": 0,
+            "status": "released"
+          },
+          {
+            "id": "crs:748a41885032f593a51e526184a2c46a",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "kind": "customer_protection",
+            "originId": "crs:4096bee86ed93232813b2a11d3d0366d",
+            "amountFen": 0,
+            "status": "released"
+          },
+          {
+            "id": "crs:904d9bb4161c87af583916486b4cb0fa",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "kind": "customer_protection",
+            "originId": "crs:1895be1e68e66b27c17cde379216e788",
+            "amountFen": 0,
+            "status": "released"
+          }
+        ],
+        "financial": [
+          {
+            "id": "crs:31dc2ac339a26b8e8cdb07cdd60b5f71",
+            "kind": "receive_prepayment",
+            "status": "applied",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "date": "2023-01-16",
+            "amountFen": 1998000,
+            "referenceId": null,
+            "reservationId": "crs:7f30f1386b1e2bdb81c3d9101de9273a",
+            "obligationId": null
+          },
+          {
+            "id": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+            "kind": "deliver_prepaid",
+            "status": "applied",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "date": "2023-01-28",
+            "amountFen": 999000,
+            "referenceId": null,
+            "reservationId": null,
+            "obligationId": null
+          },
+          {
+            "id": "crs:401a44479cdc92a5c67260f3c4d371d3",
+            "kind": "deliver_prepaid",
+            "status": "applied",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "date": "2023-02-07",
+            "amountFen": 999000,
+            "referenceId": null,
+            "reservationId": null,
+            "obligationId": null
+          },
+          {
+            "id": "crs:4741b4032f2e4de3245c9c3a7d5339cb",
+            "kind": "refund_delivered",
+            "status": "applied",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "date": "2023-04-16",
+            "amountFen": 149850,
+            "referenceId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+            "reservationId": "crs:cc64123f2113611d5c3c449df73d1452",
+            "obligationId": "crs:e39a8a6e778c7751f6b4802d0f799271"
+          },
+          {
+            "id": "crs:e9b925d8e2e8687488aa33f11aaee788",
+            "kind": "refund_delivered",
+            "status": "applied",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "date": "2023-04-16",
+            "amountFen": 149850,
+            "referenceId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+            "reservationId": "crs:0ff2e1d2a74cf92eaf2aa9752cfab0b6",
+            "obligationId": "crs:d905c173f21a04e62d29159d5b46981b"
+          },
+          {
+            "id": "crs:032b00bfa6247e4fc5cbe0bfcdf39993",
+            "kind": "refund_delivered",
+            "status": "applied",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "date": "2023-04-16",
+            "amountFen": 849150,
+            "referenceId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+            "reservationId": "crs:748a41885032f593a51e526184a2c46a",
+            "obligationId": "crs:4096bee86ed93232813b2a11d3d0366d"
+          },
+          {
+            "id": "crs:b331db4c4202d66f0e3fe22a1ece4b63",
+            "kind": "refund_delivered",
+            "status": "applied",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "date": "2023-04-16",
+            "amountFen": 849150,
+            "referenceId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+            "reservationId": "crs:904d9bb4161c87af583916486b4cb0fa",
+            "obligationId": "crs:1895be1e68e66b27c17cde379216e788"
+          }
+        ],
+        "jobs": [
+          {
+            "id": "crs:9c40916d042155ea52210e7c82b400a4",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "definitionId": "course-sample-practical_cohort-image_workflows",
+            "status": "completed",
+            "startAt": "2023-01-02",
+            "completeAt": "2023-01-16",
+            "actionId": "crs:9c40916d042155ea52210e7c82b400a4",
+            "actionStatus": "completed",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "costFen": 250000,
+            "actionPoints": 1,
+            "cashReservationId": "ops:61f7049e7f756fdc55dd8920ad2974e5"
+          },
+          {
+            "id": "crs:37d6a254c1b381f1cd32fc1e47882a5c",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "definitionId": "course-support-practical_cohort-guided_group",
+            "status": "completed",
+            "startAt": "2023-04-01",
+            "completeAt": "2023-04-08",
+            "actionId": "crs:37d6a254c1b381f1cd32fc1e47882a5c",
+            "actionStatus": "completed",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "costFen": 300000,
+            "actionPoints": 1,
+            "cashReservationId": "ops:6f79e8490cecf0a163d907515e407527"
+          },
+          {
+            "id": "crs:e6fdd9f5f9f063dbaead90896b838609",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "definitionId": "course-stage-practical_cohort-image_workflows",
+            "status": "completed",
+            "startAt": "2023-01-18",
+            "completeAt": "2023-01-28",
+            "actionId": "crs:e6fdd9f5f9f063dbaead90896b838609",
+            "actionStatus": "completed",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "costFen": 0,
+            "actionPoints": 1,
+            "cashReservationId": "ops:cfa687870c45ef0eea1de12b71220c8e"
+          },
+          {
+            "id": "crs:daddcebdbaaf91761ec2d48654404971",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "definitionId": "course-stage-practical_cohort-image_workflows",
+            "status": "completed",
+            "startAt": "2023-01-28",
+            "completeAt": "2023-02-07",
+            "actionId": "crs:daddcebdbaaf91761ec2d48654404971",
+            "actionStatus": "completed",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "costFen": 0,
+            "actionPoints": 1,
+            "cashReservationId": "ops:21bde3022b2461f54629a6d9a1a2b732"
+          }
+        ],
+        "incomeMetrics": [
+          {
+            "operationId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "referenceId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "date": "2023-01-28",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "kind": "income",
+            "deltaFen": 999000
+          },
+          {
+            "operationId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "referenceId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "date": "2023-02-07",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "kind": "income",
+            "deltaFen": 999000
+          },
+          {
+            "operationId": "crs:4741b4032f2e4de3245c9c3a7d5339cb",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "referenceId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+            "date": "2023-04-16",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "kind": "income",
+            "deltaFen": -149850
+          },
+          {
+            "operationId": "crs:e9b925d8e2e8687488aa33f11aaee788",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "referenceId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+            "date": "2023-04-16",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "kind": "income",
+            "deltaFen": -149850
+          },
+          {
+            "operationId": "crs:032b00bfa6247e4fc5cbe0bfcdf39993",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "referenceId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+            "date": "2023-04-16",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "kind": "income",
+            "deltaFen": -849150
+          },
+          {
+            "operationId": "crs:b331db4c4202d66f0e3fe22a1ece4b63",
+            "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+            "referenceId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+            "date": "2023-04-16",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "kind": "income",
+            "deltaFen": -849150
+          }
+        ],
+        "company": {
+          "cashFen": 1402259,
+          "heldFen": 0,
+          "availableFen": 1402259,
+          "incomeFen": 0,
+          "costFen": 597741,
+          "metrics": [
+            {
+              "operationId": "ops:07e8789e9f66e37eb8abc6a3ec1fd4fe:cost",
+              "sourceEventId": "crs:d6779dfa737b9bcd311cba0e440b9e61",
+              "contractId": null,
+              "referenceId": "crs:d6779dfa737b9bcd311cba0e440b9e61",
+              "date": "2022-12-01",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "cost",
+              "deltaFen": 10000
+            },
+            {
+              "operationId": "ops:a1f95edd21f4ac86919ca932790e03c6",
+              "sourceEventId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "contractId": null,
+              "referenceId": null,
+              "date": "2022-12-31",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "cost",
+              "deltaFen": 7741
+            },
+            {
+              "operationId": "ops:6c50eca3eb3b45d8a60643cab349b70b:cost",
+              "sourceEventId": "crs:9c40916d042155ea52210e7c82b400a4",
+              "contractId": null,
+              "referenceId": "crs:9c40916d042155ea52210e7c82b400a4",
+              "date": "2023-01-02",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "cost",
+              "deltaFen": 250000
+            },
+            {
+              "operationId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "referenceId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "date": "2023-01-28",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "income",
+              "deltaFen": 999000
+            },
+            {
+              "operationId": "ops:a4197809c2618d0cc5d529b4f50140aa",
+              "sourceEventId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "contractId": null,
+              "referenceId": null,
+              "date": "2023-01-31",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "cost",
+              "deltaFen": 10000
+            },
+            {
+              "operationId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "referenceId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "date": "2023-02-07",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "income",
+              "deltaFen": 999000
+            },
+            {
+              "operationId": "ops:fa06eff2c065dd958dae12a5541478b5",
+              "sourceEventId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "contractId": null,
+              "referenceId": null,
+              "date": "2023-02-28",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "cost",
+              "deltaFen": 10000
+            },
+            {
+              "operationId": "ops:dbfed37176ea4e1f6a236e1ab66d123a",
+              "sourceEventId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "contractId": null,
+              "referenceId": null,
+              "date": "2023-03-31",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "cost",
+              "deltaFen": 10000
+            },
+            {
+              "operationId": "ops:a969b25505b2894d57fd0c16397c611b:cost",
+              "sourceEventId": "crs:37d6a254c1b381f1cd32fc1e47882a5c",
+              "contractId": null,
+              "referenceId": "crs:37d6a254c1b381f1cd32fc1e47882a5c",
+              "date": "2023-04-01",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "cost",
+              "deltaFen": 300000
+            },
+            {
+              "operationId": "crs:4741b4032f2e4de3245c9c3a7d5339cb",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "referenceId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+              "date": "2023-04-16",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "income",
+              "deltaFen": -149850
+            },
+            {
+              "operationId": "crs:e9b925d8e2e8687488aa33f11aaee788",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "referenceId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+              "date": "2023-04-16",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "income",
+              "deltaFen": -149850
+            },
+            {
+              "operationId": "crs:032b00bfa6247e4fc5cbe0bfcdf39993",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "referenceId": "crs:fb5d555e5b65202ec52b36ece3fb5044",
+              "date": "2023-04-16",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "income",
+              "deltaFen": -849150
+            },
+            {
+              "operationId": "crs:b331db4c4202d66f0e3fe22a1ece4b63",
+              "sourceEventId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "contractId": "crs:fb6e5e3d54b08f603cca8a44b816e31c",
+              "referenceId": "crs:401a44479cdc92a5c67260f3c4d371d3",
+              "date": "2023-04-16",
+              "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+              "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+              "kind": "income",
+              "deltaFen": -849150
+            }
+          ]
+        },
+        "quarters": [
+          {
+            "quarter": "2020-Q1",
+            "spent": 3,
+            "reserved": 0,
+            "actionIds": [
+              "ops:2c410b83be453564b3c9716b0709c42d",
+              "ops:0f62f82b77f682f83e5b73e7729e98ff"
+            ]
+          },
+          {
+            "quarter": "2020-Q2",
+            "spent": 2,
+            "reserved": 0,
+            "actionIds": [
+              "ops:8172483a76741d5751d21c1091b30128"
+            ]
+          },
+          {
+            "quarter": "2020-Q3",
+            "spent": 2,
+            "reserved": 0,
+            "actionIds": [
+              "ops:c4250ee5e821789681dfec5073ae4498"
+            ]
+          },
+          {
+            "quarter": "2020-Q4",
+            "spent": 2,
+            "reserved": 0,
+            "actionIds": [
+              "ops:7c654f3b41e9af74d36aa807a92b3bc4"
+            ]
+          },
+          {
+            "quarter": "2021-Q1",
+            "spent": 2,
+            "reserved": 0,
+            "actionIds": [
+              "ops:ef992a8d6cb817005bcd2e63714475b5"
+            ]
+          },
+          {
+            "quarter": "2021-Q2",
+            "spent": 2,
+            "reserved": 0,
+            "actionIds": [
+              "ops:9bd89ac5b7a9e0134cf0f8af11caab7c"
+            ]
+          },
+          {
+            "quarter": "2021-Q3",
+            "spent": 2,
+            "reserved": 0,
+            "actionIds": [
+              "ops:3c50c4ef9431f2e7f4c9511d0018e6d1"
+            ]
+          },
+          {
+            "quarter": "2021-Q4",
+            "spent": 2,
+            "reserved": 0,
+            "actionIds": [
+              "ops:dfab3bcbf1e0d595f1ee4bf42faafdc6"
+            ]
+          },
+          {
+            "quarter": "2022-Q1",
+            "spent": 2,
+            "reserved": 0,
+            "actionIds": [
+              "ops:c249783a20ac17a7e9b2e2a55f0f739f"
+            ]
+          },
+          {
+            "quarter": "2022-Q2",
+            "spent": 3,
+            "reserved": 0,
+            "actionIds": [
+              "ops:351f75d3ab3b493f33489b801fc27255",
+              "vid:7ed23a3b8a28b44d2a89b7441bab5b79"
+            ]
+          },
+          {
+            "quarter": "2022-Q3",
+            "spent": 3,
+            "reserved": 0,
+            "actionIds": [
+              "ops:7668e8a33f527a410185373b0a0fda64",
+              "vid:15e3cd36dfbf6282466578de075921a6"
+            ]
+          },
+          {
+            "quarter": "2022-Q4",
+            "spent": 4,
+            "reserved": 0,
+            "actionIds": [
+              "ops:a177182615382aae724c8c05c84ba53b",
+              "vid:963c00a5f0d8eeb458885faa2e9569e2",
+              "crs:d6779dfa737b9bcd311cba0e440b9e61"
+            ]
+          },
+          {
+            "quarter": "2023-Q1",
+            "spent": 3,
+            "reserved": 0,
+            "actionIds": [
+              "crs:9c40916d042155ea52210e7c82b400a4",
+              "crs:e6fdd9f5f9f063dbaead90896b838609",
+              "crs:daddcebdbaaf91761ec2d48654404971"
+            ]
+          },
+          {
+            "quarter": "2023-Q2",
+            "spent": 1,
+            "reserved": 0,
+            "actionIds": [
+              "crs:37d6a254c1b381f1cd32fc1e47882a5c"
+            ]
+          }
+        ],
+        "independentChecks": {
+          "paymentBatches": 1,
+          "stageIncomeFen": 1998000,
+          "expectedPrepaidFen": 0,
+          "expectedRecognizedIncomeFen": 0,
+          "expectedFeeFenIfClosedNow": 0,
+          "unpaidCohortFen": 0,
+          "allFinancialIdentitiesPassed": true
+        }
+      }
+    ],
+    "quarters": [
+      {
+        "quarter": "2020-Q1",
+        "spent": 3,
+        "reserved": 0,
+        "available": 1
+      },
+      {
+        "quarter": "2020-Q2",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2020-Q3",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2020-Q4",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q1",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q2",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q3",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q4",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2022-Q1",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2022-Q2",
+        "spent": 3,
+        "reserved": 0,
+        "available": 1
+      },
+      {
+        "quarter": "2022-Q3",
+        "spent": 3,
+        "reserved": 0,
+        "available": 1
+      },
+      {
+        "quarter": "2022-Q4",
+        "spent": 4,
+        "reserved": 0,
+        "available": 0
+      },
+      {
+        "quarter": "2023-Q1",
+        "spent": 3,
+        "reserved": 0,
+        "available": 1
+      },
+      {
+        "quarter": "2023-Q2",
+        "spent": 1,
+        "reserved": 0,
+        "available": 3
+      }
+    ]
+  },
+  "exactFullRecordBytes": {
+    "bytes": 301598,
+    "sha256": "3345c8e033a8b2c10ef0d0d00d49b4ed095d01b293d2227e45a8197b1b9cce68"
+  },
+  "scope": "Same registered target assertions independently re-executed from an independently earned normal source; complete original requests, expected reasons, raw and accounting matched. This does not prove P4, UI or whole-goal completion."
+}

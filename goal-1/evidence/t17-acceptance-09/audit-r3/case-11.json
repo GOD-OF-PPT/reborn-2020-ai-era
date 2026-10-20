@@ -1,0 +1,208 @@
+{
+  "rowId": "technical_employee-t16-campaign-0--price-above",
+  "identity": "technical_employee-t16-campaign-0",
+  "backgroundId": "technical_employee",
+  "seed": "t16-campaign-0",
+  "caseId": "price-above",
+  "sourceRevision": 71,
+  "purpose": "原产品价格端点及越界原子拒绝",
+  "requiredChecks": [
+    "price-above-rejected-out-of-range",
+    "price-above-rejected-out-of-range-complete-raw-unchanged"
+  ],
+  "folder": "technical_employee-t16-campaign-0/critical-11",
+  "status": "verified",
+  "source": {
+    "member": "source.json",
+    "bytes": 854185,
+    "sha256": "88a215006dcf9e907b3d2cb2490dfcbb3ae24a7ba0c8584af34fb4739624528b"
+  },
+  "terminal": {
+    "member": "final.json",
+    "bytes": 854185,
+    "sha256": "88a215006dcf9e907b3d2cb2490dfcbb3ae24a7ba0c8584af34fb4739624528b"
+  },
+  "archive": {
+    "encoding": "xz",
+    "file": "case-evidence.xz",
+    "storedBytes": 60972,
+    "storedSha256": "4639035251932ec05af8d8cb867b5cb5958da23d3d35b340371f51b9185f979b",
+    "containerBytes": 3981412,
+    "containerSha256": "3b95c1106c0ec50e542ab61247b49ba8077cce9bdf00d0ffb50e6afb73acc26f",
+    "members": [
+      {
+        "name": "source.json",
+        "bytes": 854185,
+        "sha256": "88a215006dcf9e907b3d2cb2490dfcbb3ae24a7ba0c8584af34fb4739624528b"
+      },
+      {
+        "name": "milestone-001.json",
+        "bytes": 854185,
+        "sha256": "88a215006dcf9e907b3d2cb2490dfcbb3ae24a7ba0c8584af34fb4739624528b"
+      },
+      {
+        "name": "milestone-002.json",
+        "bytes": 854185,
+        "sha256": "88a215006dcf9e907b3d2cb2490dfcbb3ae24a7ba0c8584af34fb4739624528b"
+      },
+      {
+        "name": "final.json",
+        "bytes": 854185,
+        "sha256": "88a215006dcf9e907b3d2cb2490dfcbb3ae24a7ba0c8584af34fb4739624528b"
+      },
+      {
+        "name": "command-attempts.jsonl",
+        "bytes": 1043,
+        "sha256": "22478d09f86f2e498c2c51d2c4f4b0b3a1944b9d1a1cd6b3fad6ec0824cf00bc"
+      },
+      {
+        "name": "case-record.json",
+        "bytes": 29386,
+        "sha256": "14909f0d15d5914e4333ca650afc7189cf914eee0548425e0dbde3f360fafb6c"
+      }
+    ]
+  },
+  "actualAcceptedCommands": 0,
+  "actualRejectedCommands": 1,
+  "actualTargetAssertions": [
+    {
+      "code": "price-above-rejected-out-of-range",
+      "revision": 71,
+      "date": "2023-01-16",
+      "detail": {
+        "kind": "CreateCourseAudience",
+        "expectedReason": "COURSE_PRICE_OUT_OF_RANGE",
+        "actualReasons": [
+          "COURSE_PRICE_OUT_OF_RANGE"
+        ]
+      }
+    },
+    {
+      "code": "price-above-rejected-out-of-range-complete-raw-unchanged",
+      "revision": 71,
+      "date": "2023-01-16",
+      "detail": null
+    }
+  ],
+  "completeOriginalMembersCompared": [
+    {
+      "name": "source.json",
+      "bytes": 854185,
+      "sha256": "88a215006dcf9e907b3d2cb2490dfcbb3ae24a7ba0c8584af34fb4739624528b"
+    },
+    {
+      "name": "milestone-001.json",
+      "bytes": 854185,
+      "sha256": "88a215006dcf9e907b3d2cb2490dfcbb3ae24a7ba0c8584af34fb4739624528b"
+    },
+    {
+      "name": "milestone-002.json",
+      "bytes": 854185,
+      "sha256": "88a215006dcf9e907b3d2cb2490dfcbb3ae24a7ba0c8584af34fb4739624528b"
+    },
+    {
+      "name": "final.json",
+      "bytes": 854185,
+      "sha256": "88a215006dcf9e907b3d2cb2490dfcbb3ae24a7ba0c8584af34fb4739624528b"
+    },
+    {
+      "name": "command-attempts.jsonl",
+      "bytes": 1043,
+      "sha256": "22478d09f86f2e498c2c51d2c4f4b0b3a1944b9d1a1cd6b3fad6ec0824cf00bc"
+    },
+    {
+      "name": "case-record.json",
+      "bytes": 29386,
+      "sha256": "14909f0d15d5914e4333ca650afc7189cf914eee0548425e0dbde3f360fafb6c"
+    }
+  ],
+  "independentlyRecomputedMilestones": 2,
+  "finalMoney": {
+    "courseMoney": [],
+    "quarters": [
+      {
+        "quarter": "2020-Q1",
+        "spent": 3,
+        "reserved": 0,
+        "available": 1
+      },
+      {
+        "quarter": "2020-Q2",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2020-Q3",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2020-Q4",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q1",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q2",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q3",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q4",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2022-Q1",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2022-Q2",
+        "spent": 3,
+        "reserved": 0,
+        "available": 1
+      },
+      {
+        "quarter": "2022-Q3",
+        "spent": 3,
+        "reserved": 0,
+        "available": 1
+      },
+      {
+        "quarter": "2022-Q4",
+        "spent": 4,
+        "reserved": 0,
+        "available": 0
+      },
+      {
+        "quarter": "2023-Q1",
+        "spent": 1,
+        "reserved": 0,
+        "available": 3
+      }
+    ]
+  },
+  "exactFullRecordBytes": {
+    "bytes": 29386,
+    "sha256": "14909f0d15d5914e4333ca650afc7189cf914eee0548425e0dbde3f360fafb6c"
+  },
+  "scope": "Same registered target assertions independently re-executed from an independently earned normal source; complete original requests, expected reasons, raw and accounting matched. This does not prove P4, UI or whole-goal completion."
+}

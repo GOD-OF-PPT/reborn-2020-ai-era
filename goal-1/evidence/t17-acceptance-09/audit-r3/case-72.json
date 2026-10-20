@@ -1,0 +1,228 @@
+{
+  "rowId": "content_employee-t16-campaign-0--advanced-without-study",
+  "identity": "content_employee-t16-campaign-0",
+  "backgroundId": "content_employee",
+  "seed": "t16-campaign-0",
+  "caseId": "advanced-without-study",
+  "sourceRevision": 69,
+  "purpose": "真实基础课ID但没有新需求研究时不能售卖进阶版",
+  "requiredChecks": [
+    "advanced-without-study-real-parent-no-study",
+    "advanced-without-study-exact-refusal"
+  ],
+  "folder": "content_employee-t16-campaign-0/critical-27",
+  "status": "verified",
+  "source": {
+    "member": "source.json",
+    "bytes": 841472,
+    "sha256": "7c39b18e98e823de313b8180984e811c0ce8264074708a69ae04b959cd1dfec1"
+  },
+  "terminal": {
+    "member": "final.json",
+    "bytes": 841472,
+    "sha256": "7c39b18e98e823de313b8180984e811c0ce8264074708a69ae04b959cd1dfec1"
+  },
+  "archive": {
+    "encoding": "xz",
+    "file": "case-evidence.xz",
+    "storedBytes": 60312,
+    "storedSha256": "96fc213c821c2390a27815ea0d7c6942831e4cb8fa5a6324956cc6697ca65d42",
+    "containerBytes": 4898103,
+    "containerSha256": "df7010fa19ae8fac500656cf3fbf947356d81e19ac61bdf4a210a4a50f74d772",
+    "members": [
+      {
+        "name": "source.json",
+        "bytes": 841472,
+        "sha256": "7c39b18e98e823de313b8180984e811c0ce8264074708a69ae04b959cd1dfec1"
+      },
+      {
+        "name": "milestone-001.json",
+        "bytes": 841472,
+        "sha256": "7c39b18e98e823de313b8180984e811c0ce8264074708a69ae04b959cd1dfec1"
+      },
+      {
+        "name": "milestone-002.json",
+        "bytes": 841472,
+        "sha256": "7c39b18e98e823de313b8180984e811c0ce8264074708a69ae04b959cd1dfec1"
+      },
+      {
+        "name": "milestone-003.json",
+        "bytes": 841472,
+        "sha256": "7c39b18e98e823de313b8180984e811c0ce8264074708a69ae04b959cd1dfec1"
+      },
+      {
+        "name": "final.json",
+        "bytes": 841472,
+        "sha256": "7c39b18e98e823de313b8180984e811c0ce8264074708a69ae04b959cd1dfec1"
+      },
+      {
+        "name": "command-attempts.jsonl",
+        "bytes": 1420,
+        "sha256": "e45f00235c5c0717238bfb181dd11c6d1157e0f7a5921cd3b29f2a1ad5d043b9"
+      },
+      {
+        "name": "case-record.json",
+        "bytes": 31158,
+        "sha256": "da879c85ff9c4808870d9d67e1b63cb85bf6b7aaae881467895566f020865677"
+      }
+    ]
+  },
+  "actualAcceptedCommands": 0,
+  "actualRejectedCommands": 1,
+  "actualTargetAssertions": [
+    {
+      "code": "advanced-without-study-real-parent-no-study",
+      "revision": 69,
+      "date": "2023-01-01",
+      "detail": {
+        "courseId": "crs:337021283324f425f25270847d402b85",
+        "edition": "foundation",
+        "studies": []
+      }
+    },
+    {
+      "code": "advanced-without-study-exact-refusal",
+      "revision": 69,
+      "date": "2023-01-01",
+      "detail": {
+        "kind": "DefineCourse",
+        "expectedReason": "COURSE_NEW_DEMAND_REQUIRED",
+        "actualReasons": [
+          "COURSE_NEW_DEMAND_REQUIRED"
+        ]
+      }
+    },
+    {
+      "code": "advanced-without-study-exact-refusal-complete-raw-unchanged",
+      "revision": 69,
+      "date": "2023-01-01",
+      "detail": null
+    }
+  ],
+  "completeOriginalMembersCompared": [
+    {
+      "name": "source.json",
+      "bytes": 841472,
+      "sha256": "7c39b18e98e823de313b8180984e811c0ce8264074708a69ae04b959cd1dfec1"
+    },
+    {
+      "name": "milestone-001.json",
+      "bytes": 841472,
+      "sha256": "7c39b18e98e823de313b8180984e811c0ce8264074708a69ae04b959cd1dfec1"
+    },
+    {
+      "name": "milestone-002.json",
+      "bytes": 841472,
+      "sha256": "7c39b18e98e823de313b8180984e811c0ce8264074708a69ae04b959cd1dfec1"
+    },
+    {
+      "name": "milestone-003.json",
+      "bytes": 841472,
+      "sha256": "7c39b18e98e823de313b8180984e811c0ce8264074708a69ae04b959cd1dfec1"
+    },
+    {
+      "name": "final.json",
+      "bytes": 841472,
+      "sha256": "7c39b18e98e823de313b8180984e811c0ce8264074708a69ae04b959cd1dfec1"
+    },
+    {
+      "name": "command-attempts.jsonl",
+      "bytes": 1420,
+      "sha256": "e45f00235c5c0717238bfb181dd11c6d1157e0f7a5921cd3b29f2a1ad5d043b9"
+    },
+    {
+      "name": "case-record.json",
+      "bytes": 31158,
+      "sha256": "da879c85ff9c4808870d9d67e1b63cb85bf6b7aaae881467895566f020865677"
+    }
+  ],
+  "independentlyRecomputedMilestones": 3,
+  "finalMoney": {
+    "courseMoney": [],
+    "quarters": [
+      {
+        "quarter": "2020-Q1",
+        "spent": 3,
+        "reserved": 0,
+        "available": 1
+      },
+      {
+        "quarter": "2020-Q2",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2020-Q3",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2020-Q4",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q1",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q2",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q3",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q4",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2022-Q1",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2022-Q2",
+        "spent": 3,
+        "reserved": 0,
+        "available": 1
+      },
+      {
+        "quarter": "2022-Q3",
+        "spent": 3,
+        "reserved": 0,
+        "available": 1
+      },
+      {
+        "quarter": "2022-Q4",
+        "spent": 4,
+        "reserved": 0,
+        "available": 0
+      },
+      {
+        "quarter": "2023-Q1",
+        "spent": 0,
+        "reserved": 0,
+        "available": 4
+      }
+    ]
+  },
+  "exactFullRecordBytes": {
+    "bytes": 31158,
+    "sha256": "da879c85ff9c4808870d9d67e1b63cb85bf6b7aaae881467895566f020865677"
+  },
+  "scope": "Same registered target assertions independently re-executed from an independently earned normal source; complete original requests, expected reasons, raw and accounting matched. This does not prove P4, UI or whole-goal completion."
+}

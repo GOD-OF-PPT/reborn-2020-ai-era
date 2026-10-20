@@ -1,0 +1,344 @@
+{
+  "rowId": "content_employee-t16-campaign-0--interrupt-sample",
+  "identity": "content_employee-t16-campaign-0",
+  "backgroundId": "content_employee",
+  "seed": "t16-campaign-0",
+  "caseId": "interrupt-sample",
+  "sourceRevision": 70,
+  "purpose": "原样课真实运行后中断，不能产生免费样课版本",
+  "requiredChecks": [
+    "interrupt-sample-actually-started",
+    "interrupt-sample-spent-cost-ap-retained",
+    "interrupt-sample-no-completed-version"
+  ],
+  "folder": "content_employee-t16-campaign-0/critical-17",
+  "status": "verified",
+  "source": {
+    "member": "source.json",
+    "bytes": 846237,
+    "sha256": "ff3d8f57db735dab68ce00fd972a1276708e5488028458f8c8f42c35735399d4"
+  },
+  "terminal": {
+    "member": "final.json",
+    "bytes": 855805,
+    "sha256": "2317544672c9e349375fddb8bcd9465e4b0264b077f18c726284309ead21523a"
+  },
+  "archive": {
+    "encoding": "xz",
+    "file": "case-evidence.xz",
+    "storedBytes": 62696,
+    "storedSha256": "5efa703efbc6b4484dbcdd5405ccf12099c851d07e375ba06c2c2247f94ffe9b",
+    "containerBytes": 4969450,
+    "containerSha256": "b32f646fc7704b256cfe0cf6d9fa54be3db95964776713dbdb47a54707334ed7",
+    "members": [
+      {
+        "name": "source.json",
+        "bytes": 846237,
+        "sha256": "ff3d8f57db735dab68ce00fd972a1276708e5488028458f8c8f42c35735399d4"
+      },
+      {
+        "name": "milestone-001.json",
+        "bytes": 849797,
+        "sha256": "cf71200c9005fe42cee351c6f664ec5c7244c6268aa95f727a8bedf7a4013f73"
+      },
+      {
+        "name": "milestone-002.json",
+        "bytes": 851808,
+        "sha256": "7d5d2e4bbab0cf0e8f28839900e6591c76b89ef70950d86785ccc713421d2718"
+      },
+      {
+        "name": "milestone-003.json",
+        "bytes": 855805,
+        "sha256": "2317544672c9e349375fddb8bcd9465e4b0264b077f18c726284309ead21523a"
+      },
+      {
+        "name": "final.json",
+        "bytes": 855805,
+        "sha256": "2317544672c9e349375fddb8bcd9465e4b0264b077f18c726284309ead21523a"
+      },
+      {
+        "name": "command-attempts.jsonl",
+        "bytes": 2264,
+        "sha256": "99fb280e412c63cdf87818fccc0c8decee0303b6b06080412332c499728cf104"
+      },
+      {
+        "name": "case-record.json",
+        "bytes": 41077,
+        "sha256": "759508ed0b8f50abba67d02452cc8f173e4cca7b1740fdea6f606e4cbb317d50"
+      }
+    ]
+  },
+  "actualAcceptedCommands": 3,
+  "actualRejectedCommands": 0,
+  "actualTargetAssertions": [
+    {
+      "code": "interrupt-sample-actually-started",
+      "revision": 71,
+      "date": "2023-01-02",
+      "detail": {
+        "job": {
+          "id": "crs:9c40916d042155ea52210e7c82b400a4",
+          "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+          "definitionId": "course-sample-practical_cohort-image_workflows",
+          "contractId": null,
+          "actionId": "crs:9c40916d042155ea52210e7c82b400a4",
+          "resources": [
+            "player-production"
+          ],
+          "startAt": "2023-01-02",
+          "completeAt": "2023-01-16",
+          "releasedAt": null,
+          "status": "running",
+          "outputId": null
+        },
+        "action": {
+          "definition": {
+            "id": "crs:9c40916d042155ea52210e7c82b400a4",
+            "definitionId": "operating-action",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "counterpartyId": "world",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "actionPoints": 1,
+            "costFen": 250000,
+            "cashReservationId": "ops:61f7049e7f756fdc55dd8920ad2974e5",
+            "startAt": "2023-01-02",
+            "completeAt": "2023-01-16",
+            "settlementAt": "2023-01-16"
+          },
+          "status": "executed",
+          "plannedAt": "2023-01-01",
+          "executedAt": "2023-01-02",
+          "finishedAt": null
+        }
+      }
+    },
+    {
+      "code": "interrupt-sample-spent-cost-ap-retained",
+      "revision": 72,
+      "date": "2023-01-02",
+      "detail": {
+        "job": {
+          "id": "crs:9c40916d042155ea52210e7c82b400a4",
+          "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+          "definitionId": "course-sample-practical_cohort-image_workflows",
+          "contractId": null,
+          "actionId": "crs:9c40916d042155ea52210e7c82b400a4",
+          "resources": [
+            "player-production"
+          ],
+          "startAt": "2023-01-02",
+          "completeAt": "2023-01-16",
+          "releasedAt": "2023-01-02",
+          "status": "interrupted",
+          "outputId": null
+        },
+        "action": {
+          "definition": {
+            "id": "crs:9c40916d042155ea52210e7c82b400a4",
+            "definitionId": "operating-action",
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "counterpartyId": "world",
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "actionPoints": 1,
+            "costFen": 250000,
+            "cashReservationId": "ops:61f7049e7f756fdc55dd8920ad2974e5",
+            "startAt": "2023-01-02",
+            "completeAt": "2023-01-16",
+            "settlementAt": "2023-01-16"
+          },
+          "status": "interrupted",
+          "plannedAt": "2023-01-01",
+          "executedAt": "2023-01-02",
+          "finishedAt": "2023-01-02"
+        },
+        "budget": {
+          "quarter": "2023-Q1",
+          "total": 4,
+          "spent": 1,
+          "reserved": 0,
+          "available": 3
+        },
+        "cost": [
+          {
+            "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+            "amountFen": 250000,
+            "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+            "counterpartyId": "world",
+            "date": "2023-01-02",
+            "id": "ops:6c50eca3eb3b45d8a60643cab349b70b:cost",
+            "kind": "expense",
+            "originId": "crs:9c40916d042155ea52210e7c82b400a4",
+            "referenceId": "crs:9c40916d042155ea52210e7c82b400a4",
+            "reservationId": "ops:61f7049e7f756fdc55dd8920ad2974e5",
+            "sourceEventId": "crs:9c40916d042155ea52210e7c82b400a4"
+          }
+        ],
+        "cash": {
+          "runId": "normal-course-content_employee-ee9cb440",
+          "accountId": "ops:410a7bc61916ad67229d817efdd2079a",
+          "beforeRevision": 71,
+          "afterRevision": 72,
+          "beforeDate": "2023-01-02",
+          "afterDate": "2023-01-02",
+          "beforeCashFen": 1732259,
+          "afterCashFen": 1732259,
+          "transactionDeltaFen": 0,
+          "appendedTransactionCount": 0,
+          "accountTransactions": [],
+          "allCashIdentitiesPassed": true
+        }
+      }
+    },
+    {
+      "code": "interrupt-sample-no-completed-version",
+      "revision": 73,
+      "date": "2023-01-16",
+      "detail": {
+        "courseId": "crs:337021283324f425f25270847d402b85",
+        "status": "building",
+        "versions": [],
+        "job": {
+          "id": "crs:9c40916d042155ea52210e7c82b400a4",
+          "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+          "definitionId": "course-sample-practical_cohort-image_workflows",
+          "contractId": null,
+          "actionId": "crs:9c40916d042155ea52210e7c82b400a4",
+          "resources": [
+            "player-production"
+          ],
+          "startAt": "2023-01-02",
+          "completeAt": "2023-01-16",
+          "releasedAt": "2023-01-02",
+          "status": "interrupted",
+          "outputId": null
+        }
+      }
+    }
+  ],
+  "completeOriginalMembersCompared": [
+    {
+      "name": "source.json",
+      "bytes": 846237,
+      "sha256": "ff3d8f57db735dab68ce00fd972a1276708e5488028458f8c8f42c35735399d4"
+    },
+    {
+      "name": "milestone-001.json",
+      "bytes": 849797,
+      "sha256": "cf71200c9005fe42cee351c6f664ec5c7244c6268aa95f727a8bedf7a4013f73"
+    },
+    {
+      "name": "milestone-002.json",
+      "bytes": 851808,
+      "sha256": "7d5d2e4bbab0cf0e8f28839900e6591c76b89ef70950d86785ccc713421d2718"
+    },
+    {
+      "name": "milestone-003.json",
+      "bytes": 855805,
+      "sha256": "2317544672c9e349375fddb8bcd9465e4b0264b077f18c726284309ead21523a"
+    },
+    {
+      "name": "final.json",
+      "bytes": 855805,
+      "sha256": "2317544672c9e349375fddb8bcd9465e4b0264b077f18c726284309ead21523a"
+    },
+    {
+      "name": "command-attempts.jsonl",
+      "bytes": 2264,
+      "sha256": "99fb280e412c63cdf87818fccc0c8decee0303b6b06080412332c499728cf104"
+    },
+    {
+      "name": "case-record.json",
+      "bytes": 41077,
+      "sha256": "759508ed0b8f50abba67d02452cc8f173e4cca7b1740fdea6f606e4cbb317d50"
+    }
+  ],
+  "independentlyRecomputedMilestones": 3,
+  "finalMoney": {
+    "courseMoney": [],
+    "quarters": [
+      {
+        "quarter": "2020-Q1",
+        "spent": 3,
+        "reserved": 0,
+        "available": 1
+      },
+      {
+        "quarter": "2020-Q2",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2020-Q3",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2020-Q4",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q1",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q2",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q3",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q4",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2022-Q1",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2022-Q2",
+        "spent": 3,
+        "reserved": 0,
+        "available": 1
+      },
+      {
+        "quarter": "2022-Q3",
+        "spent": 3,
+        "reserved": 0,
+        "available": 1
+      },
+      {
+        "quarter": "2022-Q4",
+        "spent": 4,
+        "reserved": 0,
+        "available": 0
+      },
+      {
+        "quarter": "2023-Q1",
+        "spent": 1,
+        "reserved": 0,
+        "available": 3
+      }
+    ]
+  },
+  "exactFullRecordBytes": {
+    "bytes": 41077,
+    "sha256": "759508ed0b8f50abba67d02452cc8f173e4cca7b1740fdea6f606e4cbb317d50"
+  },
+  "scope": "Same registered target assertions independently re-executed from an independently earned normal source; complete original requests, expected reasons, raw and accounting matched. This does not prove P4, UI or whole-goal completion."
+}

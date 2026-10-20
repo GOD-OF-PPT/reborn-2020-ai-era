@@ -1,0 +1,9 @@
+# 前史最终归档失败保全回归
+
+这是P3工具前置检查，不是原90游戏分支或完整148命令前史执行。原前史finalize有两条真实I/O失败路径：XZ输出已存在、index独占写已存在；旧实现均直接抛出而无完整成员fallback。先以旧实现末段的相同archive/index调用做小文件系统红测并保存精确源SHA/片段，再将这段提取为persistCriticalPrefix并加失败保全，按新标签运行原断言。
+
+每轮三个全新自有writer目录：正常、归档占位冲突、index占位冲突。仅root09/matrix-r9801起（R1）及matrix-r9901起（R2），不触旧目录或存档；目录名是writer夹具要求，不是正式matrix-r1或原90。两个小完整文本成员含真实normal Create的完整原文、Unicode/换行及journal，业务命令0；不制造资金或资格。不运行完整前史、浏览器或兼容。
+
+失败冲突必须使用真实exclusive-create错误且占位文件原字节不变；新的fallback必须保全部成员原名字节与内容，而非只有error。正常路径必须有实际XZ/index与完整readback且不生成失败fallback。每组原始异常、实际对象/字节/SHA和判据保存为新报告，不覆盖红测；不以legacy抽取段小检查冒充完整earnCriticalPrefix已执行。
+
+根修复只涉及prefix最终归档/index保全，前史原Create/148命令/25里程碑/目标分岔及256MiB/12MiB/120秒原约束不变。完整90仍需登记后独立执行/审核。

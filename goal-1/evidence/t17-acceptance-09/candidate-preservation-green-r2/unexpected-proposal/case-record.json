@@ -1,0 +1,62 @@
+{
+  "caseId": "tool-only-unexpected-proposal",
+  "sourceRevision": 1,
+  "purpose": "Independent protocol canary; outside original45 and original90",
+  "requiredChecks": [
+    "unreached-after-fault"
+  ],
+  "status": "failed",
+  "error": "Error: CANARY_RESULT_JOURNAL_FAILURE",
+  "source": {
+    "member": "source.json",
+    "bytes": 143465,
+    "sha256": "eef8f3f1c44f8cda95d12b75a296374ed8280b754e816ed8c69a6f00cf0a2a04"
+  },
+  "terminal": {
+    "member": "partial.json",
+    "bytes": 143465,
+    "sha256": "eef8f3f1c44f8cda95d12b75a296374ed8280b754e816ed8c69a6f00cf0a2a04"
+  },
+  "attempts": [
+    {
+      "sequence": 1,
+      "command": {
+        "runId": "p3-candidate-preservation-canary",
+        "actorId": "player",
+        "commandId": "t14-command-1",
+        "expectedRevision": 1,
+        "kind": "WorkQuarter",
+        "payload": {}
+      },
+      "sourceRevision": 1,
+      "sourceDate": "2020-01-01",
+      "expectedRejection": true,
+      "status": "unexpected_proposal",
+      "reasonCodes": [],
+      "revisionAfter": 1,
+      "dateAfter": "2020-01-01"
+    }
+  ],
+  "observations": [],
+  "milestones": [],
+  "commandCash": [],
+  "acceptedCommands": 0,
+  "rejectedCommands": 0,
+  "fullCommands": [],
+  "suffixCommands": [],
+  "finalRevision": 1,
+  "finalDate": "2020-01-01",
+  "finalMoney": {
+    "courseMoney": [],
+    "quarters": [
+      {
+        "quarter": "2020-Q1",
+        "spent": 0,
+        "reserved": 0,
+        "available": 4
+      }
+    ]
+  },
+  "finalMoneyError": null,
+  "scope": "One fixed normal critical branch. The registered target assertions run on public decisions and actual state; complete raw, exact expected rejections and independent accounting are retained. No browser, compatibility or human-playtest result."
+}

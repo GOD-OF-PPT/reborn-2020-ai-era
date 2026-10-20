@@ -1,0 +1,12 @@
+check(summary.registered === 90 && summary.recorded === 90 && summary.attempted === 90 && summary.targetVerified === verified &&
+  summary.failed === 0 && summary.unexecutedDueToFatal === 0 && summary.fatal === null && summary.finalGuardError === null,
+  'FULL_ORIGINAL_COLLECTOR_TOTALS_DISAGREE_WITH_INDEPENDENT_RESULTS')
+ check(summary.actualAcceptedCommands === accepted && summary.actualRejectedCommands === rejected, 'ORIGINAL_REAL_ATTEMPT_TOTALS_CHANGED')
+ check(summary.results.length === 90, 'COMPLETE_ORIGINAL_SUMMARY_ROWS_REQUIRED')
+ for (const registered of expectedRows) {
+  const originalRow = summary.results.map(value => object(value, 'ORIGINAL_SUMMARY_ROW_REQUIRED')).find(value => value.rowId === registered.rowId)
+  const audited = rows.map(value => object(value, 'AUDIT_ROW_REQUIRED')).find(value => value.rowId === registered.rowId)
+  check(originalRow && audited && originalRow.status === 'target_verified' && audited.status === 'verified' &&
+   originalRow.acceptedCommands === audited.accepted && originalRow.rejectedCommands === audited.rejected,
+   'ORIGINAL_SUMMARY_ROW_NOT_INDEPENDENTLY_REPRODUCED:' + registered.rowId)
+ }

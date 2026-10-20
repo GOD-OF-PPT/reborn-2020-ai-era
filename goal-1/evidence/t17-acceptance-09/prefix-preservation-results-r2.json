@@ -1,0 +1,84 @@
+{
+  "scope": "Small actual filesystem/XZ prefix-finalization seam, not original90 or full P1 execution; no business, browser or compatibility commands.",
+  "mode": "current",
+  "label": "r2",
+  "prefixSource": {
+    "bytes": 9208,
+    "sha256": "d6e35e5ec69ccf2645b05826e372b1b225c16bf63471c0b30fc4fb8bac5f8d98"
+  },
+  "legacyExcerpt": null,
+  "actualNormalCreates": 1,
+  "businessCommands": 0,
+  "cases": [
+    {
+      "kind": "normal",
+      "output": "goal-1/evidence/t17-acceptance-09/matrix-r9901",
+      "error": null,
+      "persisted": {
+        "archive": {
+          "encoding": "xz",
+          "file": "prefix-evidence.xz",
+          "storedBytes": 14824,
+          "storedSha256": "e92ff59e13bc0ad8ce4d3fb75687c62a03b4afbfa8b926740b981c84450f9188",
+          "containerBytes": 165133,
+          "containerSha256": "491c36329278c0f300a37fac44580579c3f421b83c3076fe2c9e35da2c0709b8",
+          "members": [
+            {
+              "name": "initial.json",
+              "bytes": 143457,
+              "sha256": "7842a080affb127cd92930f4421dc463d4fcb28fe2c48e8fb0e963f8c6672a52"
+            },
+            {
+              "name": "complete-notes.txt",
+              "bytes": 56,
+              "sha256": "f7aafe41142ed305f9c8a8df9a737209eb3a886f7980892bd5b16957ea97125e"
+            },
+            {
+              "name": "prefix-attempts.jsonl",
+              "bytes": 0,
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          ]
+        },
+        "index": {
+          "file": "prefix-fixture/prefix-index.json",
+          "bytes": 1315,
+          "sha256": "ac5e2c1b158d4a9ccc152da1b795691d1eefe414d40fab551e2a78e55e429ec7"
+        }
+      },
+      "recovery": null,
+      "fullOriginalPreserved": false,
+      "occupiedUnchanged": true,
+      "passed": true
+    },
+    {
+      "kind": "archive-collision",
+      "output": "goal-1/evidence/t17-acceptance-09/matrix-r9902",
+      "error": "Error: spawnSync rtk EPIPE",
+      "persisted": null,
+      "recovery": {
+        "bytes": 165902,
+        "sha256": "36501ce192edadb87d31a7f844ac8472c24c7b86e5150bc6735a463a9edb5dd3",
+        "file": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9902/prefix-fixture/prefix-output-recovery.json"
+      },
+      "fullOriginalPreserved": true,
+      "occupiedUnchanged": true,
+      "passed": true
+    },
+    {
+      "kind": "index-collision",
+      "output": "goal-1/evidence/t17-acceptance-09/matrix-r9903",
+      "error": "Error: EEXIST: file already exists, open '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9903/prefix-fixture/prefix-index.json'",
+      "persisted": null,
+      "recovery": {
+        "bytes": 166039,
+        "sha256": "b018b34dfdba558529cd10543a85b537b9d992639d910ddf6d7fb85786b88b45",
+        "file": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9903/prefix-fixture/prefix-output-recovery.json"
+      },
+      "fullOriginalPreserved": true,
+      "occupiedUnchanged": true,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

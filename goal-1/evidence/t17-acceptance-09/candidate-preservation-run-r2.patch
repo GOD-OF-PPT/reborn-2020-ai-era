@@ -1,0 +1,14 @@
+--- source-protocol-preflight-r2/course-critical-run.ts
++++ scripts/course-critical-run.ts
+@@ -79,9 +79,9 @@
+    check(recorded?.sequence === attempt.sequence, 'CRITICAL_ATTEMPT_RESULT_WITHOUT_EXACT_START')
+    Object.assign(recorded, {status: attempt.status, reasonCodes: [...attempt.reasonCodes],
+     revisionAfter: attempt.after.revision, dateAfter: attempt.after.timeline.cursor.date})
+-   // The result journal precedes supplemental accounting/progress work.
++   if (attempt.proposedCandidate !== null) putMember(members, 'unexpected-candidate-' + attempt.sequence + '.json', codec.export(attempt.proposedCandidate))
++   // Preserve an uncommitted proposal before a fallible external result journal; accounting follows it.
+    callbacks.after?.(recorded, attempt.after)
+-   if (attempt.proposedCandidate !== null) putMember(members, 'unexpected-candidate-' + attempt.sequence + '.json', codec.export(attempt.proposedCandidate))
+    cash.push({sequence: attempt.sequence, proof: commandCash(attempt.before, attempt.after)})
+   },
+  })

@@ -1,0 +1,169 @@
+{
+  "mode": "helper",
+  "label": "r2",
+  "source": "src/testing/course-critical-lifecycle.ts",
+  "sourceSha256": "6942eb1c7ff567f659599a98552e0d3098aace24b6a8a964865e7c1b15d00daa",
+  "total": 14,
+  "passed": 14,
+  "failed": 0,
+  "exitCode": 0,
+  "results": [
+    {
+      "name": "original-stage0",
+      "dueAt": "2023-02-01",
+      "stageDays": 10,
+      "expectedStart": "2023-01-23",
+      "expectedComplete": "2023-02-02",
+      "classStart": "2023-01-18",
+      "status": "passed",
+      "actualStart": "2023-01-23",
+      "actualComplete": "2023-02-02",
+      "error": null
+    },
+    {
+      "name": "original-stage1",
+      "dueAt": "2023-02-22",
+      "stageDays": 10,
+      "expectedStart": "2023-02-13",
+      "expectedComplete": "2023-02-23",
+      "classStart": "2023-01-18",
+      "status": "passed",
+      "actualStart": "2023-02-13",
+      "actualComplete": "2023-02-23",
+      "error": null
+    },
+    {
+      "name": "seven-same-month",
+      "dueAt": "2023-05-20",
+      "stageDays": 7,
+      "expectedStart": "2023-05-14",
+      "expectedComplete": "2023-05-21",
+      "status": "passed",
+      "actualStart": "2023-05-14",
+      "actualComplete": "2023-05-21",
+      "error": null
+    },
+    {
+      "name": "seven-cross-month",
+      "dueAt": "2023-05-01",
+      "stageDays": 7,
+      "expectedStart": "2023-04-25",
+      "expectedComplete": "2023-05-02",
+      "status": "passed",
+      "actualStart": "2023-04-25",
+      "actualComplete": "2023-05-02",
+      "error": null
+    },
+    {
+      "name": "fourteen-same-month",
+      "dueAt": "2023-07-30",
+      "stageDays": 14,
+      "expectedStart": "2023-07-17",
+      "expectedComplete": "2023-07-31",
+      "status": "passed",
+      "actualStart": "2023-07-17",
+      "actualComplete": "2023-07-31",
+      "error": null
+    },
+    {
+      "name": "fourteen-cross-year",
+      "dueAt": "2025-01-01",
+      "stageDays": 14,
+      "expectedStart": "2024-12-19",
+      "expectedComplete": "2025-01-02",
+      "status": "passed",
+      "actualStart": "2024-12-19",
+      "actualComplete": "2025-01-02",
+      "error": null
+    },
+    {
+      "name": "ten-leap-day",
+      "dueAt": "2024-02-29",
+      "stageDays": 10,
+      "expectedStart": "2024-02-20",
+      "expectedComplete": "2024-03-01",
+      "status": "passed",
+      "actualStart": "2024-02-20",
+      "actualComplete": "2024-03-01",
+      "error": null
+    },
+    {
+      "name": "seven-cross-leap-month",
+      "dueAt": "2024-03-01",
+      "stageDays": 7,
+      "expectedStart": "2024-02-24",
+      "expectedComplete": "2024-03-02",
+      "status": "passed",
+      "actualStart": "2024-02-24",
+      "actualComplete": "2024-03-02",
+      "error": null
+    },
+    {
+      "name": "fourteen-from-leap-day",
+      "dueAt": "2024-03-13",
+      "stageDays": 14,
+      "expectedStart": "2024-02-29",
+      "expectedComplete": "2024-03-14",
+      "status": "passed",
+      "actualStart": "2024-02-29",
+      "actualComplete": "2024-03-14",
+      "error": null
+    },
+    {
+      "name": "seven-common-year",
+      "dueAt": "2023-03-01",
+      "stageDays": 7,
+      "expectedStart": "2023-02-23",
+      "expectedComplete": "2023-03-02",
+      "status": "passed",
+      "actualStart": "2023-02-23",
+      "actualComplete": "2023-03-02",
+      "error": null
+    },
+    {
+      "name": "seven-century-common-year",
+      "dueAt": "1900-03-01",
+      "stageDays": 7,
+      "expectedStart": "1900-02-23",
+      "expectedComplete": "1900-03-02",
+      "status": "passed",
+      "actualStart": "1900-02-23",
+      "actualComplete": "1900-03-02",
+      "error": null
+    },
+    {
+      "name": "seven-four-century-leap-year",
+      "dueAt": "2000-03-01",
+      "stageDays": 7,
+      "expectedStart": "2000-02-24",
+      "expectedComplete": "2000-03-02",
+      "status": "passed",
+      "actualStart": "2000-02-24",
+      "actualComplete": "2000-03-02",
+      "error": null
+    },
+    {
+      "name": "fourteen-end-year",
+      "dueAt": "2023-12-31",
+      "stageDays": 14,
+      "expectedStart": "2023-12-18",
+      "expectedComplete": "2024-01-01",
+      "status": "passed",
+      "actualStart": "2023-12-18",
+      "actualComplete": "2024-01-01",
+      "error": null
+    },
+    {
+      "name": "one-day-nonnegative-control",
+      "dueAt": "2023-02-01",
+      "stageDays": 1,
+      "expectedStart": "2023-02-01",
+      "expectedComplete": "2023-02-02",
+      "status": "passed",
+      "actualStart": "2023-02-01",
+      "actualComplete": "2023-02-02",
+      "error": null
+    }
+  ],
+  "scope": "Pure literal date regression only. No GameRun was created, no commands or original90 scenarios were executed, no browser or compatibility work."
+}

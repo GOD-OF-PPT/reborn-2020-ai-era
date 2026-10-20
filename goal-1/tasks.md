@@ -421,3 +421,16 @@ P2-S2最新终态（覆盖上方历史live状态）：exec49178实际exit0，R4 
 - [x] P2-S2限定任务（含内部步骤7）完成：本地提交5727873cfdea34013bbd8d12d30e715ed927fd78，765条Git/暂存/磁盘逐字、类型与mode核定；root08的751普通文件/6链接与marker精确集合保持，119个被忽略的自有fixture条目逐项纳入，未改.gitignore或广泛强制纳入项目。六链接只核readlink原文/Git120000，不跟随目标。采集入口真实拒写，审核入口R1因缺env未达到guard，原错误保留；R2传原sealed输入后明确父目录拒写，目标目录均未创建，完整根字节未变。详见[提交后实核](evidence/t17-course-delegated-post-commit-01/feature-commit-r1.json)。root08步骤7为提交前不可改快照，本条是其真实完成记录。
 - 本轮验证分层：72/72独立审核（48闭环/24有限）及类型/77工具等限定通过；plan/competitive各0；全仓docs实际1，仅三份历史ENOSPC空JSON，原输出保留，不称全仓通过。原冻结verifier两条尾空行原字节保留，默认source whitespace检查2单列。原R1/R2/R3失败及COW未采用保持。PUBLIC远端main仍9bf4399，README原Git blob/SHA和5311/5302首页实际读回同，未push/deploy；这不是Chrome/兼容/游戏新验收。
 - [杠精审查] P2-S2限定完成通过：实际正向责任补齐、真实有限与外部控制分列、无隐藏profile/未来roll指挥策略、无赠钱/AP/资格或生产规则变更。REPEAT只扩展原项目工具，无全局Skill、自动化或外部资源。当前页面兼容开发/测试0、M01暂停；完整P2/P3原90关键/P4/5b/T17/goal仍未完成。下一轮新同级根继续原90关键分支及P4，随后5c—5f、6/全面检查2、7—15与旧PNG0/3/新A三案3/3/真人0/M01暂停/T18全部不减；本轮不越序实施下一任务。
+
+- P3当前执行中：[root09新计划](evidence/t17-acceptance-09/plan.md)先于代码建立，main/02c10484、14200原跟踪条目和原45×两背景seed0/90权威核定。14前提/20履约/11权限原ID完整实现；sourceRevision来自原148命令早期状态，本轮将从Create实际重挣并逐原文核定，非从晚档删条件。self补支持14日超过反馈后7日窗口，登记具体期限拒绝，不能说self成功恢复；其余三模式真实跨季排程/费用/权限独立核。
+- 原90游戏执行仍0：context初次严格类型3错误、协议R1两处startAt字段错误均保留原源/输出，全部CLI严格R2实际0后，独立交叉复核又发现实际证据保全/引用/append链接漏洞；当前先做小工具真实红绿修复，不把类型绿或原45注册当游戏通过。writer的高编号matrix-r900x、prefix的matrix-r980x等仅自有工具夹具；正常Create或故意未提交proposal canary另列，不算90场景。正式matrix-r1与独立audit尚未启动，无活正式采集；原root08/post不改。兼容开发测试0、M01暂停，原P4/5b/T17/整个goal及全部资产/真人/后续未完成。[杠精审查] 前置复核发现的缺口必须修复后再冻结执行，不降级原门槛；无push/deploy/真实API或新依赖。
+
+- P3接续实际状态：R1已exit1并sealed，90登记/15尝试/14目标命中/1测试日期API错误/75未执行。原155源快照与51矩阵原文件保持。R2日期helper仅修负天数调用，旧14项13失败/1控制通过、新14/14；CLI严格R4及项目R2均实际0，writer方法原字节保持。新全90注册/156源/56输入/249冻结后，唯一matrix-r2（exec48668/Python1605/RTK1608/Node1611）已启动，从两Create全重做；未终态/未audit，不拼接旧14或预勾步骤4—6/P4/5b/T17/goal。兼容开发测试0，M01仍须人类明确恢复，无commit/push/deploy。
+
+P3最新状态覆盖旧live记录：matrix-r2已真实exit1，44目标满足/1暂停恢复策略顺序错误/45未执行；156原源与141矩阵文件完整封存。按policy-risk-pause-r3修正测试顺序，原6目标/同班20人两原款保持，定向7接受/2拒绝/15观察/17完整原文及重放通过。CLI-R5/项目-R3均0；新全90注册、157源/56输入/289冻结后，唯一matrix-r3从两Create完整重做（exec21159/Python4838/RTK4839/Node4840），未终态、未audit，不合并旧44。见evidence/t17-acceptance-09/live-run-r3-handoff.md；全部父项/后续责任及兼容开发测试0/M01暂停保持。
+
+P3采集R3已实际exit0：完整90/90目标满足，328接受/60精确拒绝、442目标观察/里程碑、802完整case成员；两Create/296前史命令/50原里程碑、157源/56输入/289冻结核同，279矩阵原文件sealed（marker88d1639d）。当前唯一独立audit-r3为exec44984/Python12207/RTK12209/Node12210，同sealed输入与576冻结；尚未全量审核，不预勾P3/P4/5b/T17/goal或stage/commit。见evidence/t17-acceptance-09/live-audit-r3-handoff.md；原R1/R2失败与全部后续保持，兼容开发测试0、M01暂停。
+
+P3独立全量审核已真实exit0（821.308秒）：90/90 verified、invalid/missing/setupErrors0；完整328接受/60精确拒绝/442里程碑/802case成员及汇总一致，两个Create的296前史命令/50原里程碑重新核定。90proof、576冻结、280物理输入逐字读回，audit99文件sealed（marker dcd7fead）。本轮限定验证见evidence/t17-acceptance-09/validation.md；当前最终封存与本地Git逐blob核验/提交待完成，不提前报已提交。下一具体任务仍原P4累计，再5c—5f/6/7—15；完整5b/T17/goal及资产/真人/M01暂停/T18不减，兼容开发测试0。
+
+P3提交前限定检查通过：R3采集与独立审核90/90、所有原文/账务/完整范围核定，最终独立GJ通过；root09已封存1193普通文件/12原文链接（另marker自身排除，SHAc3fdd334）。原两失败/源快照不改，当前只准备本地feature提交与Git逐blob/mode核验，准确SHA随后追加。后续原P4与完整5b/T17/goal继续未完成；兼容开发测试0，M01暂停，无push/deploy。

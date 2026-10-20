@@ -1,0 +1,443 @@
+{
+  "label": "r2",
+  "source": "scripts/course-critical-evidence.ts",
+  "sourceSha256": "2a6e74b7df4226569aedf9dd29fee0fbaa48cc4f3907543bdf6ee9989e7feef1",
+  "total": 19,
+  "passed": 19,
+  "failed": 0,
+  "exitCode": 0,
+  "results": [
+    {
+      "name": "normal-wx-text-and-owned-append",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9101",
+      "status": "passed",
+      "observations": {
+        "initial": {
+          "file": "journal.jsonl",
+          "bytes": 10,
+          "sha256": "6e5e189fd42b1a0dd6d6bfdee495d21414119abc4df0d570f066166065abb877"
+        },
+        "final": {
+          "type": "regular",
+          "bytes": 42,
+          "sha256": "4d1f6aefd79cfba70f6f73b795dd35089327f4e5021375dd6e80750bc19dc4d0",
+          "dev": 16777223,
+          "ino": 226729276,
+          "nlink": 1
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "missing-append-never-creates-leaf",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9102",
+      "status": "passed",
+      "observations": {
+        "before": {
+          "type": "missing"
+        },
+        "rejection": "Error: APPEND_WRITER_OWNED_FILE_REQUIRED",
+        "after": {
+          "type": "missing"
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "unowned-regular-append-rejected",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9103",
+      "status": "passed",
+      "observations": {
+        "before": {
+          "type": "regular",
+          "bytes": 17,
+          "sha256": "b48cb971e3894a7854f5106f20aa233cf818a8d1691779d4d68f0c6ff6edfcd9"
+        },
+        "rejection": "Error: APPEND_WRITER_OWNED_FILE_REQUIRED",
+        "after": {
+          "type": "regular",
+          "bytes": 17,
+          "sha256": "b48cb971e3894a7854f5106f20aa233cf818a8d1691779d4d68f0c6ff6edfcd9"
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "regular-leaf-link-append-rejected",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9104",
+      "status": "passed",
+      "observations": {
+        "link": {
+          "type": "symlink",
+          "literal": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9104/owned-external.txt",
+          "dev": 16777223,
+          "ino": 226729292
+        },
+        "before": {
+          "type": "regular",
+          "bytes": 18,
+          "sha256": "ac6114c8a27642bd15cefb6aa8b8f49be33d62824cb48a415be81377abd64e89"
+        },
+        "rejection": "Error: OUTPUT_LINK_OR_NONREGULAR",
+        "after": {
+          "type": "regular",
+          "bytes": 18,
+          "sha256": "ac6114c8a27642bd15cefb6aa8b8f49be33d62824cb48a415be81377abd64e89"
+        },
+        "linkAfter": {
+          "type": "symlink",
+          "literal": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9104/owned-external.txt",
+          "dev": 16777223,
+          "ino": 226729292
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "dangling-leaf-link-append-rejected",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9105",
+      "status": "passed",
+      "observations": {
+        "link": {
+          "type": "symlink",
+          "literal": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9105/owned-external.txt",
+          "dev": 16777223,
+          "ino": 226729298
+        },
+        "before": {
+          "type": "missing"
+        },
+        "rejection": "Error: OUTPUT_LINK_OR_NONREGULAR",
+        "after": {
+          "type": "missing"
+        },
+        "linkAfter": {
+          "type": "symlink",
+          "literal": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9105/owned-external.txt",
+          "dev": 16777223,
+          "ino": 226729298
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "regular-directory-parent-link-rejected",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9106",
+      "status": "passed",
+      "observations": {
+        "before": {
+          "type": "symlink",
+          "literal": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9106/owned-external-directory",
+          "dev": 16777223,
+          "ino": 226729304
+        },
+        "rejection": "Error: EVIDENCE_PARENT_LINK_OR_NON_DIRECTORY",
+        "after": {
+          "type": "symlink",
+          "literal": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9106/owned-external-directory",
+          "dev": 16777223,
+          "ino": 226729304
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "dangling-directory-parent-link-rejected",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9107",
+      "status": "passed",
+      "observations": {
+        "before": {
+          "type": "symlink",
+          "literal": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9107/owned-external-directory",
+          "dev": 16777223,
+          "ino": 226729309
+        },
+        "rejection": "Error: EVIDENCE_PARENT_LINK_OR_NON_DIRECTORY",
+        "after": {
+          "type": "symlink",
+          "literal": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9107/owned-external-directory",
+          "dev": 16777223,
+          "ino": 226729309
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "regular-ancestor-seal-marker-rejected",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9108",
+      "status": "passed",
+      "observations": {
+        "marker": {
+          "type": "regular",
+          "bytes": 16,
+          "sha256": "8c6eaf26a7e63b3501d633b87dfe97b5a0552e444a615f3186a18508731b1bbe",
+          "dev": 16777223,
+          "ino": 226729315,
+          "nlink": 1
+        },
+        "rejection": "Error: EVIDENCE_PARENT_SEALED_USE_NEW_SIBLING"
+      },
+      "error": null
+    },
+    {
+      "name": "dangling-ancestor-seal-marker-rejected",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9109",
+      "status": "passed",
+      "observations": {
+        "marker": {
+          "type": "symlink",
+          "literal": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9109/owned-sealed/owned-missing-marker-target",
+          "dev": 16777223,
+          "ino": 226729321
+        },
+        "rejection": "Error: EVIDENCE_PARENT_SEALED_USE_NEW_SIBLING"
+      },
+      "error": null
+    },
+    {
+      "name": "nonregular-leaf-directory-rejected",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9110",
+      "status": "passed",
+      "observations": {
+        "rejection": "Error: OUTPUT_LINK_OR_NONREGULAR",
+        "after": {
+          "type": "directory",
+          "dev": 16777223,
+          "ino": 226729326
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "created-leaf-regular-inode-replacement-rejected",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9111",
+      "status": "passed",
+      "observations": {
+        "original": {
+          "type": "regular",
+          "bytes": 22,
+          "sha256": "6cc5544cd2a09c124b509d013cdf7abae889276e9816089fbba4c59d882a94ea"
+        },
+        "before": {
+          "type": "regular",
+          "bytes": 25,
+          "sha256": "3c284286d75a5067da967ca06b376cfcc392be9edbb7db40a5eba8c082e1e07f"
+        },
+        "rejection": "Error: APPEND_CREATED_FILE_CHANGED",
+        "after": {
+          "type": "regular",
+          "bytes": 25,
+          "sha256": "3c284286d75a5067da967ca06b376cfcc392be9edbb7db40a5eba8c082e1e07f"
+        },
+        "originalAfter": {
+          "type": "regular",
+          "bytes": 22,
+          "sha256": "6cc5544cd2a09c124b509d013cdf7abae889276e9816089fbba4c59d882a94ea"
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "created-leaf-additional-hardlink-rejected",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9112",
+      "status": "passed",
+      "observations": {
+        "before": {
+          "type": "regular",
+          "bytes": 22,
+          "sha256": "6cc5544cd2a09c124b509d013cdf7abae889276e9816089fbba4c59d882a94ea"
+        },
+        "aliasBefore": {
+          "type": "regular",
+          "bytes": 22,
+          "sha256": "6cc5544cd2a09c124b509d013cdf7abae889276e9816089fbba4c59d882a94ea"
+        },
+        "statBefore": {
+          "type": "regular",
+          "bytes": 22,
+          "sha256": "6cc5544cd2a09c124b509d013cdf7abae889276e9816089fbba4c59d882a94ea",
+          "dev": 16777223,
+          "ino": 226729337,
+          "nlink": 2
+        },
+        "rejection": "Error: APPEND_CREATED_FILE_CHANGED",
+        "after": {
+          "type": "regular",
+          "bytes": 22,
+          "sha256": "6cc5544cd2a09c124b509d013cdf7abae889276e9816089fbba4c59d882a94ea"
+        },
+        "aliasAfter": {
+          "type": "regular",
+          "bytes": 22,
+          "sha256": "6cc5544cd2a09c124b509d013cdf7abae889276e9816089fbba4c59d882a94ea"
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "created-leaf-removed-append-rejected-no-recreate",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9113",
+      "status": "passed",
+      "observations": {
+        "rejection": "Error: ENOENT: no such file or directory, open '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9113/journal.jsonl'",
+        "after": {
+          "type": "missing"
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "exclusive-text-never-overwrites",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9114",
+      "status": "passed",
+      "observations": {
+        "before": {
+          "type": "regular",
+          "bytes": 15,
+          "sha256": "45c0b761a6c6640319e6cddeb492718532f70161ed9174c75ca7f1158c508b2f"
+        },
+        "rejection": "Error: EEXIST: file already exists, open '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9114/original.txt'",
+        "after": {
+          "type": "regular",
+          "bytes": 15,
+          "sha256": "45c0b761a6c6640319e6cddeb492718532f70161ed9174c75ca7f1158c508b2f"
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "dangling-text-leaf-recognized-before-wx",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9115",
+      "status": "passed",
+      "observations": {
+        "rejection": "Error: OUTPUT_LINK_OR_NONREGULAR",
+        "link": {
+          "type": "symlink",
+          "literal": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9115/owned-missing-external",
+          "dev": 16777223,
+          "ino": 226729354
+        },
+        "external": {
+          "type": "missing"
+        }
+      },
+      "error": null
+    },
+    {
+      "name": "output-parent-traversal-rejected",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9116",
+      "status": "passed",
+      "observations": {
+        "rejection": "Error: CRITICAL_OUTPUT_ESCAPE"
+      },
+      "error": null
+    },
+    {
+      "name": "small-real-xz-full-member-roundtrip",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9117",
+      "status": "passed",
+      "observations": {
+        "descriptor": {
+          "encoding": "xz",
+          "file": "small-evidence.xz",
+          "storedBytes": 216,
+          "storedSha256": "55d143851065ed483d5c489260f8ebd342a4d4dcf3f49a980e277be932aa6b36",
+          "containerBytes": 187,
+          "containerSha256": "1234f5192323093eb2b672baef459edacf312ded92f63c590156c7c3b0c0fc10",
+          "members": [
+            {
+              "name": "initial.json",
+              "bytes": 38,
+              "sha256": "521029d770210167b111bb44d479aab2d25ff0d9b6512b00a155ea0a200e328f"
+            },
+            {
+              "name": "journal.jsonl",
+              "bytes": 21,
+              "sha256": "154348a35324d6c0f073f210ed2e165787755790d676f315f2b7b68d49ca2334"
+            }
+          ]
+        },
+        "stored": {
+          "type": "regular",
+          "bytes": 216,
+          "sha256": "55d143851065ed483d5c489260f8ebd342a4d4dcf3f49a980e277be932aa6b36",
+          "dev": 16777223,
+          "ino": 226729369,
+          "nlink": 1
+        },
+        "members": [
+          {
+            "name": "initial.json",
+            "bytes": 38,
+            "sha256": "521029d770210167b111bb44d479aab2d25ff0d9b6512b00a155ea0a200e328f"
+          },
+          {
+            "name": "journal.jsonl",
+            "bytes": 21,
+            "sha256": "154348a35324d6c0f073f210ed2e165787755790d676f315f2b7b68d49ca2334"
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "name": "small-real-xz-wrong-encoding-rejected",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9118",
+      "status": "passed",
+      "observations": {
+        "descriptor": {
+          "encoding": "xz",
+          "file": "small-evidence.xz",
+          "storedBytes": 216,
+          "storedSha256": "55d143851065ed483d5c489260f8ebd342a4d4dcf3f49a980e277be932aa6b36",
+          "containerBytes": 187,
+          "containerSha256": "1234f5192323093eb2b672baef459edacf312ded92f63c590156c7c3b0c0fc10",
+          "members": [
+            {
+              "name": "initial.json",
+              "bytes": 38,
+              "sha256": "521029d770210167b111bb44d479aab2d25ff0d9b6512b00a155ea0a200e328f"
+            },
+            {
+              "name": "journal.jsonl",
+              "bytes": 21,
+              "sha256": "154348a35324d6c0f073f210ed2e165787755790d676f315f2b7b68d49ca2334"
+            }
+          ]
+        },
+        "rejection": "Error: AUDIT_CRITICAL_XZ_DESCRIPTOR_REQUIRED"
+      },
+      "error": null
+    },
+    {
+      "name": "small-real-xz-wrong-file-rejected",
+      "outputName": "goal-1/evidence/t17-acceptance-09/matrix-r9119",
+      "status": "passed",
+      "observations": {
+        "descriptor": {
+          "encoding": "xz",
+          "file": "small-evidence.xz",
+          "storedBytes": 216,
+          "storedSha256": "55d143851065ed483d5c489260f8ebd342a4d4dcf3f49a980e277be932aa6b36",
+          "containerBytes": 187,
+          "containerSha256": "1234f5192323093eb2b672baef459edacf312ded92f63c590156c7c3b0c0fc10",
+          "members": [
+            {
+              "name": "initial.json",
+              "bytes": 38,
+              "sha256": "521029d770210167b111bb44d479aab2d25ff0d9b6512b00a155ea0a200e328f"
+            },
+            {
+              "name": "journal.jsonl",
+              "bytes": 21,
+              "sha256": "154348a35324d6c0f073f210ed2e165787755790d676f315f2b7b68d49ca2334"
+            }
+          ]
+        },
+        "rejection": "Error: AUDIT_CRITICAL_XZ_DESCRIPTOR_REQUIRED"
+      },
+      "error": null
+    }
+  ],
+  "scope": "Owned small filesystem fixtures and small XZ only; no game commands, normal scenarios, full90, browser or compatibility. Does not prove concurrent ancestor replacement/hardlink races, ENOSPC or maximum-size containers."
+}

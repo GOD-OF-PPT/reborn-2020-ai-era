@@ -1,0 +1,226 @@
+{
+  "rowId": "technical_employee-t16-campaign-0--qualification-missing",
+  "identity": "technical_employee-t16-campaign-0",
+  "backgroundId": "technical_employee",
+  "seed": "t16-campaign-0",
+  "caseId": "qualification-missing",
+  "sourceRevision": 67,
+  "purpose": "正常早期视频工具未开放资格时样课原子拒绝",
+  "requiredChecks": [
+    "video-qualification-publicly-unavailable",
+    "missing-tool-qualification",
+    "missing-tool-qualification-complete-raw-unchanged"
+  ],
+  "folder": "technical_employee-t16-campaign-0/critical-05",
+  "status": "verified",
+  "source": {
+    "member": "source.json",
+    "bytes": 821448,
+    "sha256": "c01bbb9e8b5e041a4bd8d1f42257276c9c7bc25d88697cf469784995a153d9a0"
+  },
+  "terminal": {
+    "member": "final.json",
+    "bytes": 823630,
+    "sha256": "0283628fca122300d83447100aadd1f97fe45a7446c3923637e0b04ea6572abe"
+  },
+  "archive": {
+    "encoding": "xz",
+    "file": "case-evidence.xz",
+    "storedBytes": 59652,
+    "storedSha256": "f6f995150ee23b355c79ba4f0da6fededdead9f09649c5c86ee861c1154f1434",
+    "containerBytes": 4794999,
+    "containerSha256": "80c0386c9b6509855aba871a033fd3269bc40170a57633049937e1570ce8430b",
+    "members": [
+      {
+        "name": "source.json",
+        "bytes": 821448,
+        "sha256": "c01bbb9e8b5e041a4bd8d1f42257276c9c7bc25d88697cf469784995a153d9a0"
+      },
+      {
+        "name": "milestone-001.json",
+        "bytes": 823630,
+        "sha256": "0283628fca122300d83447100aadd1f97fe45a7446c3923637e0b04ea6572abe"
+      },
+      {
+        "name": "milestone-002.json",
+        "bytes": 823630,
+        "sha256": "0283628fca122300d83447100aadd1f97fe45a7446c3923637e0b04ea6572abe"
+      },
+      {
+        "name": "milestone-003.json",
+        "bytes": 823630,
+        "sha256": "0283628fca122300d83447100aadd1f97fe45a7446c3923637e0b04ea6572abe"
+      },
+      {
+        "name": "final.json",
+        "bytes": 823630,
+        "sha256": "0283628fca122300d83447100aadd1f97fe45a7446c3923637e0b04ea6572abe"
+      },
+      {
+        "name": "command-attempts.jsonl",
+        "bytes": 2298,
+        "sha256": "7c0a64439bd203144033c60c92beb2c0bd65676375c5f1b4a269fe3bc15136b4"
+      },
+      {
+        "name": "case-record.json",
+        "bytes": 33110,
+        "sha256": "4a7d7d600f5f18b374f30492fa665fee59a50d1d789d08866803cc7a3f746c58"
+      }
+    ]
+  },
+  "actualAcceptedCommands": 1,
+  "actualRejectedCommands": 1,
+  "actualTargetAssertions": [
+    {
+      "code": "video-qualification-publicly-unavailable",
+      "revision": 68,
+      "date": "2022-12-08",
+      "detail": {
+        "date": "2022-12-08",
+        "reasons": [
+          "CAPABILITY_NOT_YET_AVAILABLE",
+          "WORLD_RELEASE_NOT_OCCURRED",
+          "MISSING_ENTITLEMENT:kling_access"
+        ]
+      }
+    },
+    {
+      "code": "missing-tool-qualification",
+      "revision": 68,
+      "date": "2022-12-08",
+      "detail": {
+        "kind": "BuildCourseSample",
+        "expectedReason": "COURSE_TOOL_QUALIFICATION_REQUIRED",
+        "actualReasons": [
+          "COURSE_TOOL_QUALIFICATION_REQUIRED"
+        ]
+      }
+    },
+    {
+      "code": "missing-tool-qualification-complete-raw-unchanged",
+      "revision": 68,
+      "date": "2022-12-08",
+      "detail": null
+    }
+  ],
+  "completeOriginalMembersCompared": [
+    {
+      "name": "source.json",
+      "bytes": 821448,
+      "sha256": "c01bbb9e8b5e041a4bd8d1f42257276c9c7bc25d88697cf469784995a153d9a0"
+    },
+    {
+      "name": "milestone-001.json",
+      "bytes": 823630,
+      "sha256": "0283628fca122300d83447100aadd1f97fe45a7446c3923637e0b04ea6572abe"
+    },
+    {
+      "name": "milestone-002.json",
+      "bytes": 823630,
+      "sha256": "0283628fca122300d83447100aadd1f97fe45a7446c3923637e0b04ea6572abe"
+    },
+    {
+      "name": "milestone-003.json",
+      "bytes": 823630,
+      "sha256": "0283628fca122300d83447100aadd1f97fe45a7446c3923637e0b04ea6572abe"
+    },
+    {
+      "name": "final.json",
+      "bytes": 823630,
+      "sha256": "0283628fca122300d83447100aadd1f97fe45a7446c3923637e0b04ea6572abe"
+    },
+    {
+      "name": "command-attempts.jsonl",
+      "bytes": 2298,
+      "sha256": "7c0a64439bd203144033c60c92beb2c0bd65676375c5f1b4a269fe3bc15136b4"
+    },
+    {
+      "name": "case-record.json",
+      "bytes": 33110,
+      "sha256": "4a7d7d600f5f18b374f30492fa665fee59a50d1d789d08866803cc7a3f746c58"
+    }
+  ],
+  "independentlyRecomputedMilestones": 3,
+  "finalMoney": {
+    "courseMoney": [],
+    "quarters": [
+      {
+        "quarter": "2020-Q1",
+        "spent": 3,
+        "reserved": 0,
+        "available": 1
+      },
+      {
+        "quarter": "2020-Q2",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2020-Q3",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2020-Q4",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q1",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q2",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q3",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2021-Q4",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2022-Q1",
+        "spent": 2,
+        "reserved": 0,
+        "available": 2
+      },
+      {
+        "quarter": "2022-Q2",
+        "spent": 3,
+        "reserved": 0,
+        "available": 1
+      },
+      {
+        "quarter": "2022-Q3",
+        "spent": 3,
+        "reserved": 0,
+        "available": 1
+      },
+      {
+        "quarter": "2022-Q4",
+        "spent": 4,
+        "reserved": 0,
+        "available": 0
+      }
+    ]
+  },
+  "exactFullRecordBytes": {
+    "bytes": 33110,
+    "sha256": "4a7d7d600f5f18b374f30492fa665fee59a50d1d789d08866803cc7a3f746c58"
+  },
+  "scope": "Same registered target assertions independently re-executed from an independently earned normal source; complete original requests, expected reasons, raw and accounting matched. This does not prove P4, UI or whole-goal completion."
+}
