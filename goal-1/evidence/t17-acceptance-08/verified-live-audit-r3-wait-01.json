@@ -1,0 +1,37 @@
+{
+  "observedAt": 1792520293.886351,
+  "turnClassification": "progress: lower-memory full independent audit actually launched after preserving original failures; verified wait on same live process",
+  "sessionId": 85454,
+  "actualProcessResult": {
+    "exitCode": 0,
+    "stdout": "  PID  PPID    RSS  %CPU ELAPSED COMMAND\n61385 61383  22416   0.0   04:30 /usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B goal-1/evidence/t17-acceptance-08/run-audit-r3.py\n61386 61385   5412   0.3   04:30 rtk proxy node --max-old-space-size=1024 --trace-gc --experimental-strip-types --experimental-transform-types scripts/verify_course_delegated_evidence.ts --output-dir goal-1/evidence/t17-acceptance-08/audit-r3\n61387 61386 501556 103.6   04:30 /Users/gordon/.nvm/versions/node/v22.12.0/bin/node --max-old-space-size=1024 --trace-gc --experimental-strip-types --experimental-transform-types scripts/verify_course_delegated_evidence.ts --output-dir goal-1/evidence/t17-acceptance-08/audit-r3\n"
+  },
+  "sourceFreezeFiles": 427,
+  "sourceDrift": [],
+  "sealedInputFiles": 237,
+  "sealedInputDrift": [],
+  "progressEvents": 1,
+  "caseStatuses": {
+    "verified": 0,
+    "invalid": 0,
+    "missing": 0,
+    "partial": 0
+  },
+  "lastProgress": [
+    {
+      "type": "independent-prefix-replay-start",
+      "registered": 72,
+      "prefixes": 6
+    }
+  ],
+  "majorGcLast": [
+    "[61387:0x7faf6da00000]   251014 ms: Mark-Compact 325.5 (355.6) -> 190.3 (250.9) MB, pooled: 40 MB, 12.94 / 0.00 ms  (+ 0.4 ms in 0 steps since start of marking, biggest step 0.0 ms, walltime since start of marking 28 ms) (average mu = 0.997, current mu = 0.998) finalize incremental marking via stack guard; GC in old space requested",
+    "[61387:0x7faf6da00000]   258510 ms: Mark-Compact 328.3 (358.8) -> 193.4 (257.4) MB, pooled: 40 MB, 10.42 / 0.00 ms  (+ 0.3 ms in 0 steps since start of marking, biggest step 0.0 ms, walltime since start of marking 24 ms) (average mu = 0.998, current mu = 0.999) finalize incremental marking via stack guard; GC in old space requested",
+    "[61387:0x7faf6da00000]   265269 ms: Mark-Compact 330.7 (358.6) -> 193.7 (260.4) MB, pooled: 38 MB, 15.01 / 0.00 ms  (+ 0.6 ms in 0 steps since start of marking, biggest step 0.0 ms, walltime since start of marking 30 ms) (average mu = 0.998, current mu = 0.998) finalize incremental marking via stack guard; GC in old space requested"
+  ],
+  "diskFree": 654073856,
+  "swap": "vm.swapusage: total = 5120.00M  used = 4023.00M  free = 1097.00M  (encrypted)\n",
+  "terminalExists": false,
+  "fullAuditAccepted": false,
+  "compatibilityDevelopmentAndTests": 0
+}

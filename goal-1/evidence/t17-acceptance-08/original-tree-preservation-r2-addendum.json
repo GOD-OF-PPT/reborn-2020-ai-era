@@ -1,0 +1,128 @@
+{
+  "scope": "Narrow addendum for the one originally committed negative symlink fixture. This corrects interpretation of the first report without changing it, its terminal exit code, any original file, source freeze, matrix or audit.",
+  "startedAt": "2026-10-20T17:39:30.734428+00:00",
+  "finishedAt": "2026-10-20T17:39:30.986117+00:00",
+  "originalReport": {
+    "file": "goal-1/evidence/t17-acceptance-08/original-tree-preservation-r2.json",
+    "bytes": 6464130,
+    "sha256": "b12e7bf940126aebbef1f28f18049f5590e14e2855e6bf6966176633c3ac635a",
+    "terminalExitCode": 1,
+    "reportedAllPreserved": false,
+    "unchangedAfterThisCheck": true
+  },
+  "explanation": "The first checker added a regular-file-only condition that the original byte baseline did not require. It rejected an already committed negative-test symlink before checking its original link text and referent bytes. This was a checker classification error, not an original-tree mutation. The original false/exit1 report is retained; the first run is not relabeled green.",
+  "baseline": {
+    "file": "goal-1/evidence/t17-acceptance-08/baseline.json",
+    "bytes": 2463753,
+    "sha256": "ea6e5d84dd1ed908ee32193fee74b4cdad9525a7351d0f32e5d42170a7ed38fc",
+    "registered": 13409,
+    "head": "7975ae73526b8c17e185012518a2724bfd04308f"
+  },
+  "originalSymlink": {
+    "path": "goal-1/evidence/t17-acceptance-01/native-tool-negative-inputs/symlink-escape/chrome-tool-fixture/public-input.json",
+    "classification": "same-original-symlink",
+    "newExceptionOrAllowedMutation": false,
+    "originalHead": "7975ae73526b8c17e185012518a2724bfd04308f",
+    "originalGitLsTree": "120000 blob d2542eb5de213add5ce1a292b182915781056681\tgoal-1/evidence/t17-acceptance-01/native-tool-negative-inputs/symlink-escape/chrome-tool-fixture/public-input.json",
+    "gitMode": "120000",
+    "gitObjectType": "blob",
+    "gitBlob": "d2542eb5de213add5ce1a292b182915781056681",
+    "gitLinkLiteral": "../../../../t16-epilogue/chrome-final-r11/new-content-r11-s1.json",
+    "currentReadlink": "../../../../t16-epilogue/chrome-final-r11/new-content-r11-s1.json",
+    "linkLiteralBytesEqualOriginalGitBlob": true,
+    "referentWithinRepository": true,
+    "referent": {
+      "path": "goal-1/evidence/t16-epilogue/chrome-final-r11/new-content-r11-s1.json",
+      "bytes": 143775,
+      "sha256": "705bd9dedfe3ae55d7f122a4019526cf3834fc6c26f0a608a6fa43074c32dd60",
+      "baselineBytes": 143775,
+      "baselineSha256": "705bd9dedfe3ae55d7f122a4019526cf3834fc6c26f0a608a6fa43074c32dd60",
+      "fullStreamBytesAndShaEqualBaseline": true
+    }
+  },
+  "combinedCounts": {
+    "registered": 13409,
+    "same": 13407,
+    "sameRegularFilesFromOriginalReport": 13406,
+    "sameOriginalSymlinksVerifiedInThisAddendum": 1,
+    "allowedChange": 2,
+    "unexpectedChange": 0,
+    "missing": 0,
+    "unreadable": 0,
+    "unexpectedFileType": 0
+  },
+  "allowedChanges": [
+    "goal-1/plan.md",
+    "goal-1/tasks.md"
+  ],
+  "headBefore": "7975ae73526b8c17e185012518a2724bfd04308f",
+  "headAfter": "7975ae73526b8c17e185012518a2724bfd04308f",
+  "headUnchanged": true,
+  "originalGoalInput": {
+    "path": "goal-1/input.md",
+    "bytes": 61,
+    "sha256": "20c73f8fec1a17a39606fc854126c59f949cddc6f8342ec2d55eb999c10a70b1",
+    "matchesRequired": true
+  },
+  "combinedOriginalTreeBytePreservationVerifiedExceptTwoAllowedGoalRecords": true,
+  "ownedCowNegativeSymlinks": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-08/storage-cow-tests-r1/fixtures/test_refuses_symlink_parent_directory/workspace/.delivery/symlinked-build",
+      "type": "symlink",
+      "linkLiteral": "build-b",
+      "followed": false,
+      "deletedOrModified": false,
+      "scope": "self-owned negative test fixture; retained"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-08/storage-cow-tests-r1/fixtures/test_refuses_symlink_source/workspace/.delivery/build-a/memory-v1-fixture-symlink-source.jpg",
+      "type": "symlink",
+      "linkLiteral": "memory-v1-fixture-source.jpg",
+      "followed": false,
+      "deletedOrModified": false,
+      "scope": "self-owned negative test fixture; retained"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-08/storage-cow-tests-r1/fixtures/test_refuses_symlink_destination/workspace/.delivery/build-b/memory-v1-fixture-symlink-destination.jpg",
+      "type": "symlink",
+      "linkLiteral": "memory-v1-fixture-target.jpg",
+      "followed": false,
+      "deletedOrModified": false,
+      "scope": "self-owned negative test fixture; retained"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-08/storage-cow-tests-r2/fixtures/test_refuses_symlink_parent_directory/workspace/.delivery/symlinked-build",
+      "type": "symlink",
+      "linkLiteral": "build-b",
+      "followed": false,
+      "deletedOrModified": false,
+      "scope": "self-owned negative test fixture; retained"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-08/storage-cow-tests-r2/fixtures/test_refuses_symlink_source/workspace/.delivery/build-a/memory-v1-fixture-symlink-source.jpg",
+      "type": "symlink",
+      "linkLiteral": "memory-v1-fixture-source.jpg",
+      "followed": false,
+      "deletedOrModified": false,
+      "scope": "self-owned negative test fixture; retained"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-08/storage-cow-tests-r2/fixtures/test_refuses_symlink_destination/workspace/.delivery/build-b/memory-v1-fixture-symlink-destination.jpg",
+      "type": "symlink",
+      "linkLiteral": "memory-v1-fixture-target.jpg",
+      "followed": false,
+      "deletedOrModified": false,
+      "scope": "self-owned negative test fixture; retained"
+    }
+  ],
+  "ownedCowOtherNonregularOrUnreadable": [],
+  "ownedCowRebuildableCaches": [],
+  "noCleanupOrModificationPerformed": true,
+  "notEvidenceFor": [
+    "P2-S2 independent audit",
+    "gameplay acceptance",
+    "browser or compatibility",
+    "COW readiness or real asset replacement",
+    "whole goal completion"
+  ]
+}

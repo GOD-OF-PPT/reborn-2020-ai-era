@@ -187,3 +187,26 @@ P2原288结果/工具已本地提交0679d645da0a41cb1d84551ed638dcae44a38f52；[
 
 
 P2-S1电影风险互动已本地提交ab99c88b793fcc5bb5a636f55b77cbd3d75c437c，完整Create/160命令/5原文与实际付费—等待—回信—确认在限定范围通过，见[验证](evidence/t17-acceptance-07/validation.md)及[提交后保护](evidence/t17-risk-scene-post-commit-01/acceptance-summary.json)。下一新同级根执行真实72委托补充，不将本UI当完整P2正向；其后原90/P4及全部原T17/M01/T18不减。当前兼容开发/测试仍禁止，goal保持active。
+
+
+## T17 P2-S2实际72委托补充执行
+
+按[本轮计划](evidence/t17-acceptance-08/plan.md)及[执行前策略](evidence/t17-acceptance-08/policy-r1.md)，固定六正常身份×原十二delegated形态，实际付费独立核查、先扩权后续办、真实跨季教学/原支持/原费窗及后续监看。原288及失败不替换；十二项正向只有真实证据补齐才结项。完整XZ保留原文字节和独立账务/重放，原90/P4及后续继续原范围；兼容开发和测试仍禁止，M01不启动。
+
+R1实际7尝试/6完成后因归档stdin等待及ENOSPC终态失败，原目录与原源已保全，第七条0字节恢复不算完整证据。现按[传输修复R2](evidence/t17-acceptance-08/policy-r2.md)补明确整帧长度/SHA、红绿与同缝隙大输入验证，真实磁盘写入与完整失败恢复空间恢复后再新目录完整72及独立全量审核；不改业务策略或删原范围，当前继续禁止兼容性开发/测试。
+
+恢复轮goal实际active、现场空间回升约1GiB且真实写入恢复，三次完整54163289B/28成员同Node调用缝隙与原XZ逐字同；77工具通过。按policy-r2先完成原项目/CLI类型并新源冻结，新driver与每个新prefix/case前保留640MiB可用空间、managed heap1536MiB；它们不约束总RSS或保证其他进程不抢盘，不改游戏或减原文。之后新matrix-r2全72、独立全审核；旧失败/受阻/所有未完成责任保留，兼容仍0。
+
+P2-S2采集持续执行中；针对先前ENOSPC及余量波动，另按[存储保全方案](evidence/t17-acceptance-08/storage-cow-recovery-plan.md)只读盘点派生构建重复字节，并准备仅自有fixture验证的强制APFS COW辅助工具。当前原.delivery尚未apply，实际空间已回升约1GiB，先保留为备用；不动404冻结源、游戏规则、原证据/存档/服务或640MiB预留，不做任何兼容开发测试。原完整72及独立审核/全部后续责任不减。
+
+最新实际：matrix-r2已终态exit0，全72=48完成/24有限、2006成功后缀、72年末监看、源404保持；237原文件已封存。现按[当前独立审核交接](evidence/t17-acceptance-08/live-audit-r2-handoff.md)续同exec49093/Node54226，六Create/150原里程碑和前10case已独立核定，余下仍待；独立审核结束前不关闭P2或提交本root。COW方案已判notReady/未采用，真实候选0/apply0，不清属性或扩试验，不把它当已验证资产；原构建未替换。原树13409最终13407同字节+2允许计划记录，初始false与旧负向symlink补正均保留。全部原后续责任和兼容禁令不变。
+
+当前终态修正：旧audit-r2因ENOSPC已exit143并封存partial，26verified/2输出invalid/44未审；不再沿旧live记录等待。按[内存压力方案](evidence/t17-acceptance-08/audit-memory-recovery-plan.md)及[资源选择补正](evidence/t17-acceptance-08/audit-r3-heap-choice-r2.md)唯一fresh audit-r3已启动，同sealed输入/原审核器/完整72，heap1024+GC；427冻结与实际handle见[当前交接](evidence/t17-acceptance-08/live-audit-r3-handoff.md)。独立全量结果仍待，不关闭任何父项或推送；兼容开发测试仍0。
+
+最新终态：audit-r3亦因真实ENOSPC失败，exec85454已关闭，实际RTK-wrapper/driver exit1；67事件中64有完整有效proof，3写入invalid，5未审。部分66文件已封存，终态文件/全量报告未创建；详情见evidence/t17-acceptance-08/audit-r3-resource-abort-r1.json及当前handoff。新post工具仅静态/内存语法检查，fixture在shell临时文件创建就ENOSPC、运行0，仍notReady。现同一磁盘条件连线程writer-lock也写失败，需先恢复至少2GiB真实可写空间，再对同sealed matrix-r2新目录完整全72审核，不重启closed85454/覆写partial/只拼余8项。源427/原input237/64proof读回保持，步骤6—7/P2/5b/T17/goal未完成，兼容开发和测试继续0，无commit/push/deploy。
+
+实际空间恢复后，当前唯一接续改为[全量audit-r4交接](evidence/t17-acceptance-08/live-audit-r4-handoff.md)，新freeze-r5/435与原全部scope不减。现场5.9GB及真实写入成功后启动，无旧活audit；post工具小fixture已10/10，真实feature核验/完整audit仍待。当前不blocked，不复用旧计数；全部页面兼容开发测试继续0。
+
+## P2-S2完整独立审核已结束
+
+[限定验证](evidence/t17-acceptance-08/validation.md)核定R4实际exit0、72/72 verified（48业务闭环/24固定策略有限）、十二委托形态各四实际正向；六Create/878命令/150原里程碑、2006成功后缀和完整原文/账务通过，根代理72proof/435源/237输入回读相同。原R1及两次空间失败partial保留，COW未采用。当前进行最终文档/封存/真实Git逐blob核验和本地提交，准确SHA随后记主tasks；不能把此记录当已提交。后续仍原90关键/P4及全部原5b/T17范围，不关闭上层或恢复兼容开发测试；M01暂停，真人/旧原PNG与T18保留。

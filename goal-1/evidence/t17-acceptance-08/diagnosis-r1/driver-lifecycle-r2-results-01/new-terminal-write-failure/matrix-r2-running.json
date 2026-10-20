@@ -1,0 +1,18 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "/usr/local/opt/python@3.13/bin/python3.13",
+    "-B",
+    "-c",
+    "import json,os,sys,time\nfrom pathlib import Path\nprint(json.dumps({'state':'owned-child-started','pid':os.getpid()}),flush=True)\ntime.sleep(0.2)\nwith Path(sys.argv[1]).open('x') as out:\n json.dump({'pid':os.getpid(),'state':'finished','exitCode':0},out);out.write('\\n')\nprint(json.dumps({'state':'owned-child-marker-written','pid':os.getpid()}),flush=True)\n",
+    "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2-results-01/new-terminal-write-failure/owned-child-finished.json"
+  ],
+  "started": 1792511392.538759,
+  "pid": 39819,
+  "state": "launched; check actual process/session for liveness",
+  "resourceBounds": {
+    "lifecycleRegressionOnly": true,
+    "gameCommandsExecuted": 0
+  }
+}

@@ -1,0 +1,24 @@
+R4 original tracked-tree byte/type preservation
+startedAt=2026-10-20T20:03:55.483634+00:00
+finishedAt=2026-10-20T20:04:23.787041+00:00
+baselineFiles=13409
+counts={"allowed_change": 2, "missing": 0, "same": 13407, "type_changed": 0, "unexpected_change": 0, "unknown": 0}
+allPreserved=True
+HEADbefore=7975ae73526b8c17e185012518a2724bfd04308f
+HEADafter=7975ae73526b8c17e185012518a2724bfd04308f
+indexUnchanged=True
+goalInputMatches=True
+priorFalseAndAddendumUnchanged=True
+symlinkGitMode=120000 symlinkBlob=d2542eb5de213add5ce1a292b182915781056681
+symlinkLiteral=../../../../t16-epilogue/chrome-final-r11/new-content-r11-s1.json
+symlinkFollowed=False
+independentReferentVerified=True
+commands=[{"argv": ["rtk", "proxy", "git", "--no-optional-locks", "rev-parse", "HEAD"], "stdoutBytes": 41, "stdoutSha256": "111ad07e38b8a11cc62e2977fd958dd33ef458b56d41f4cd913ca4c2f434657f", "exitCode": 0}, {"argv": ["rtk", "proxy", "git", "--no-optional-locks", "rev-parse", "--git-path", "index"], "stdoutBytes": 11, "stdoutSha256": "742e1586a644af64934a892663d03c75415bfb01edafdfdd924a8627573bfb9c", "exitCode": 0}, {"argv": ["rtk", "proxy", "git", "--no-optional-locks", "ls-tree", "-rz", "--full-tree", "7975ae73526b8c17e185012518a2724bfd04308f"], "stdoutBytes": 1817689, "stdoutSha256": "c9adf816ff95b4e4bcf05261fcfb07c81dfd4f2ee43e1c7bf32c8bf8e3d4e4c1", "exitCode": 0}, {"argv": ["rtk", "proxy", "git", "--no-optional-locks", "cat-file", "blob", "d2542eb5de213add5ce1a292b182915781056681"], "stdoutBytes": 65, "stdoutSha256": "6d3f3c9dab83642c5031761a6c9963a1203f1aa7afabe08283d647e3397def4b", "exitCode": 0}, {"argv": ["rtk", "proxy", "git", "--no-optional-locks", "rev-parse", "HEAD"], "stdoutBytes": 41, "stdoutSha256": "111ad07e38b8a11cc62e2977fd958dd33ef458b56d41f4cd913ca4c2f434657f", "exitCode": 0}]
+maxStreamChunkBytes=1048576
+{"path": "goal-1/plan.md", "baseline": {"bytes": 26291, "sha256": "842662808ec4fdaaca8024e91466958e85f0ca891ecebea0a8034e5a7770e8db"}, "git": {"mode": "100644", "kind": "blob", "blob": "6289a00b9d7eee78fba930165572cb0f33a79f31"}, "actual": {"type": "regular", "diskMode": 420, "bytes": 30638, "sha256": "6655ddf8bd9cdd2a3312781aaa9be14629511d3807b0a83e10964af043d2fa82", "stableWhileReading": true}, "classification": "allowed_change", "error": null}
+{"path": "goal-1/tasks.md", "baseline": {"bytes": 124342, "sha256": "7a13bb2b806b7fbef50e99d1cad6787df7befd67e53ecdbc0f3becc848a02795"}, "git": {"mode": "100644", "kind": "blob", "blob": "9b03d8440120a9593a9ea6015d77153040a6ea2b"}, "actual": {"type": "regular", "diskMode": 420, "bytes": 133954, "sha256": "286ae123a42442bba48f51e4918e003748732a045bc2eab01e8b6410f5a743aa", "stableWhileReading": true}, "classification": "allowed_change", "error": null}
+Checks original tracked baseline files only; does not inventory unrelated untracked files, delivery builds, caches or external user data.
+The symlink itself is checked as Git mode120000 and exact link bytes; it is never opened as a regular file. Its existing independent referent is checked under its own baseline row.
+No original file was restored, deleted, chmodded, retimed or replaced. No index/HEAD/object mutation, COW action, UI, compatibility, game, typecheck or audit execution was requested.
+Ordinary reads may cause natural access-time changes; byte/type preservation is not an assertion that access-time metadata is unchanged.
+No evidence here completes or replaces the separate full P2-S2 audit.

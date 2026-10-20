@@ -1,0 +1,1068 @@
+{
+  "format": "storage-cow-self-owned-fixtures-v1",
+  "startedAt": "2026-10-20T16:48:11.870997+00:00",
+  "scope": "new self-owned fixture roots only",
+  "realDeliveryOrMatrixTouched": false,
+  "compatibilityDevelopmentOrTests": false,
+  "helper": {
+    "file": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/storage_cow_recovery.py",
+    "bytes": 24046,
+    "sha256": "156fcdf6cf3cff91dde25b1709dc016a19dec5d2e4441f6717a9c218a8166fa2"
+  },
+  "test": {
+    "file": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py",
+    "bytes": 33304,
+    "sha256": "aa180800e52b12959b81c9800a271076b89b7634ca6e7b1a53896217b3933e65"
+  },
+  "platform": {
+    "system": "darwin",
+    "python": "3.13.1 (main, Dec  3 2024, 17:59:52) [Clang 16.0.0 (clang-1600.0.26.4)]"
+  },
+  "passed": false,
+  "registeredTests": [
+    "test_clone_strict_creates_distinct_inode_and_private_writes",
+    "test_clone_strict_existing_destination_eexist_preserves_both",
+    "test_external_same_inode_write_after_first_swap_is_retained",
+    "test_fault_after_replace_restores_bytes_and_metadata",
+    "test_fault_before_replace_preserves_existing_target",
+    "test_find_candidates_is_dry_run_and_excludes_current_deliveries",
+    "test_refuses_destination_outside_delivery_scope",
+    "test_refuses_equal_length_different_bytes",
+    "test_refuses_frozen_destination",
+    "test_refuses_hardlinked_destination",
+    "test_refuses_hardlinked_source",
+    "test_refuses_real_extended_acl_destination",
+    "test_refuses_real_source_xattr",
+    "test_refuses_real_target_xattr",
+    "test_refuses_setuid_destination",
+    "test_refuses_special_flags_destination",
+    "test_refuses_symlink_destination",
+    "test_refuses_symlink_parent_directory",
+    "test_refuses_symlink_source",
+    "test_refuses_tracked_destination",
+    "test_replace_preserves_target_mode_and_nanosecond_times"
+  ],
+  "testsRun": 21,
+  "passedCount": 14,
+  "failureCount": 6,
+  "errorCount": 1,
+  "skippedCount": 0,
+  "cases": [
+    {
+      "id": "__main__.CowRecoveryFixtures.test_clone_strict_creates_distinct_inode_and_private_writes",
+      "status": "passed",
+      "seconds": 0.021442225988721475,
+      "detail": null,
+      "observations": [
+        {
+          "beforeSource": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514891882983481,
+            "ino": 226501959,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514891889916631
+          },
+          "beforeClone": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514891883168101,
+            "ino": 226501960,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514891899398135
+          },
+          "sourceAfterSha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+          "cloneAfterSha256": "5afa067402e1760ac00b180ee9ef63edd1dce4320110561fd6227cd70f0fc26e",
+          "actualCloneFileCall": true,
+          "independentWriteObserved": true
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_clone_strict_existing_destination_eexist_preserves_both",
+      "status": "passed",
+      "seconds": 0.002190431987401098,
+      "detail": null,
+      "observations": [
+        {
+          "errno": 17,
+          "sourceSha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+          "targetSha256": "a9deb3ab07e54d50f0d59919fa5a05b32ea1983cd1a6874c0184c77acd270c45",
+          "inodeBefore": [
+            226501966,
+            226501968
+          ],
+          "inodeAfter": [
+            226501966,
+            226501968
+          ]
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_external_same_inode_write_after_first_swap_is_retained",
+      "status": "failed",
+      "seconds": 0.022096708009485155,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 576, in test_external_same_inode_write_after_first_swap_is_retained\n    self.assertEqual(len(calls), 1, \"external installed content must not be swapped away\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 != 1 : external installed content must not be swapped away\n",
+      "observations": []
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_fault_after_replace_restores_bytes_and_metadata",
+      "status": "failed",
+      "seconds": 0.02072157201473601,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 356, in test_fault_after_replace_restores_bytes_and_metadata\n    self.run_fault(\"after_replace\")\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 333, in run_fault\n    self.assertIn(expected_stage, stages)\n    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 'after_replace' not found in []\n",
+      "observations": []
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_fault_before_replace_preserves_existing_target",
+      "status": "failed",
+      "seconds": 0.020733201992698014,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 353, in test_fault_before_replace_preserves_existing_target\n    self.run_fault(\"before_replace\")\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 333, in run_fault\n    self.assertIn(expected_stage, stages)\n    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 'before_replace' not found in []\n",
+      "observations": []
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_find_candidates_is_dry_run_and_excludes_current_deliveries",
+      "status": "failed",
+      "seconds": 0.049919182987650856,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 516, in test_find_candidates_is_dry_run_and_excludes_current_deliveries\n    self.assertEqual(len(found[\"eligible\"]), 1)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 != 1\n",
+      "observations": []
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_destination_outside_delivery_scope",
+      "status": "passed",
+      "seconds": 0.040048073016805574,
+      "detail": null,
+      "observations": [
+        {
+          "refusal": "CowError('DELIVERY_SCOPE_REQUIRED')",
+          "before": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892032466920,
+            "ino": 226502016,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1610000000987654321
+          },
+          "after": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892032466920,
+            "ino": 226502016,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892048283356
+          },
+          "sourceBefore": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892041665932,
+            "ino": 226502012,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1600000000123456789
+          },
+          "sourceAfter": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892041665932,
+            "ino": 226502012,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892057343478
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_equal_length_different_bytes",
+      "status": "passed",
+      "seconds": 0.038826908014016226,
+      "detail": null,
+      "observations": [
+        {
+          "refusal": "CowError('ACL_INSPECTION_UNAVAILABLE:2')",
+          "before": {
+            "bytes": 14135,
+            "sha256": "8b4555c39a18386a9f36873c52bd844b9a922dcf7a7d36e077daba059c308894",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1792514892062596792,
+            "mtimeNs": 1792514892062357893,
+            "ctimeNs": 1792514892070521619,
+            "ino": 226502025,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892062596792
+          },
+          "after": {
+            "bytes": 14135,
+            "sha256": "8b4555c39a18386a9f36873c52bd844b9a922dcf7a7d36e077daba059c308894",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1792514892062596792,
+            "mtimeNs": 1792514892062357893,
+            "ctimeNs": 1792514892070521619,
+            "ino": 226502025,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892062596792
+          },
+          "sourceBefore": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1792514892070567213,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892079928449,
+            "ino": 226502023,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892070567213
+          },
+          "sourceAfter": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1792514892070567213,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892079928449,
+            "ino": 226502023,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892070567213
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_frozen_destination",
+      "status": "passed",
+      "seconds": 0.036391011002706364,
+      "detail": null,
+      "observations": [
+        {
+          "refusal": "CowError('TRACKED_OR_FROZEN_FILE')",
+          "before": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892109714771,
+            "ino": 226502032,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1610000000987654321
+          },
+          "after": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892109714771,
+            "ino": 226502032,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892124022461
+          },
+          "sourceBefore": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892118605520,
+            "ino": 226502030,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1600000000123456789
+          },
+          "sourceAfter": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892118605520,
+            "ino": 226502030,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892132679786
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_hardlinked_destination",
+      "status": "passed",
+      "seconds": 0.04086342197842896,
+      "detail": null,
+      "observations": [
+        {
+          "refusal": "CowError('ACL_INSPECTION_UNAVAILABLE:2')",
+          "before": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892147638267,
+            "ino": 226502039,
+            "nlink": 2,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1610000000987654321
+          },
+          "after": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892147638267,
+            "ino": 226502039,
+            "nlink": 2,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892164575819
+          },
+          "sourceBefore": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892156005502,
+            "ino": 226502037,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1600000000123456789
+          },
+          "sourceAfter": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892156005502,
+            "ino": 226502037,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892173175192
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_hardlinked_source",
+      "status": "passed",
+      "seconds": 0.037151547003304586,
+      "detail": null,
+      "observations": [
+        {
+          "refusal": "CowError('ACL_INSPECTION_UNAVAILABLE:2')",
+          "before": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892187407802,
+            "ino": 226502048,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1610000000987654321
+          },
+          "after": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892187407802,
+            "ino": 226502048,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892202367646
+          },
+          "sourceBefore": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892195562205,
+            "ino": 226502046,
+            "nlink": 2,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1600000000123456789
+          },
+          "sourceAfter": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892195562205,
+            "ino": 226502046,
+            "nlink": 2,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892210911520
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_real_extended_acl_destination",
+      "status": "failed",
+      "seconds": 0.022681044007185847,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 478, in test_refuses_real_extended_acl_destination\n    self.assertIn(\"EXTENDED_ACL_UNSUPPORTED\", str(inspected.exception))\n    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 'EXTENDED_ACL_UNSUPPORTED' not found in 'XATTR_UNSUPPORTED'\n",
+      "observations": []
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_real_source_xattr",
+      "status": "passed",
+      "seconds": 0.03944853998837061,
+      "detail": null,
+      "observations": [
+        {
+          "refusal": "CowError('ACL_INSPECTION_UNAVAILABLE:2')",
+          "before": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892248589783,
+            "ino": 226502067,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1610000000987654321
+          },
+          "after": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892248589783,
+            "ino": 226502067,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892265589452
+          },
+          "sourceBefore": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892257823539,
+            "ino": 226502065,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a",
+              "com.codex.storage-cow-fixture": "736f757263652d617474726962757465"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1600000000123456789
+          },
+          "sourceAfter": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892257823539,
+            "ino": 226502065,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a",
+              "com.codex.storage-cow-fixture": "736f757263652d617474726962757465"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892273541652
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_real_target_xattr",
+      "status": "failed",
+      "seconds": 0.003147514013107866,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 366, in test_refuses_real_target_xattr\n    self.assertIn(\"XATTR_UNSUPPORTED\", str(inspected.exception))\n    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 'XATTR_UNSUPPORTED' not found in 'ACL_INSPECTION_UNAVAILABLE:2'\n",
+      "observations": []
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_setuid_destination",
+      "status": "passed",
+      "seconds": 0.03773992200149223,
+      "detail": null,
+      "observations": [
+        {
+          "refusal": "CowError('ACL_INSPECTION_UNAVAILABLE:2')",
+          "before": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 2464,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892291497350,
+            "ino": 226502081,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1610000000987654321
+          },
+          "after": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 2464,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892291497350,
+            "ino": 226502081,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892305951798
+          },
+          "sourceBefore": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892299748851,
+            "ino": 226502079,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1600000000123456789
+          },
+          "sourceAfter": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892299748851,
+            "ino": 226502079,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892314260202
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_special_flags_destination",
+      "status": "passed",
+      "seconds": 0.0400676779972855,
+      "detail": null,
+      "observations": [
+        {
+          "refusal": "CowError('ACL_INSPECTION_UNAVAILABLE:2')",
+          "before": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892329341152,
+            "ino": 226502088,
+            "nlink": 1,
+            "flags": 32768,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1610000000987654321
+          },
+          "after": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892329341152,
+            "ino": 226502088,
+            "nlink": 1,
+            "flags": 32768,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892346876955
+          },
+          "sourceBefore": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892338172263,
+            "ino": 226502086,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1600000000123456789
+          },
+          "sourceAfter": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892338172263,
+            "ino": 226502086,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892354815379
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_symlink_destination",
+      "status": "passed",
+      "seconds": 0.03775305798626505,
+      "detail": null,
+      "observations": [
+        {
+          "refusal": "OSError(62, 'Too many levels of symbolic links')",
+          "before": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892369829174,
+            "ino": 226502095,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1610000000987654321
+          },
+          "after": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892369829174,
+            "ino": 226502095,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892384200196
+          },
+          "targetSymlinkStillPresent": true
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_symlink_parent_directory",
+      "status": "passed",
+      "seconds": 0.019272496982011944,
+      "detail": null,
+      "observations": [
+        {
+          "refusal": "CowError('PARENT_SYMLINK_OR_NON_DIRECTORY')",
+          "before": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892406657027,
+            "ino": 226502103,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1610000000987654321
+          },
+          "after": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892406657027,
+            "ino": 226502103,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892412113232
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_symlink_source",
+      "status": "passed",
+      "seconds": 0.03685258101904765,
+      "detail": null,
+      "observations": [
+        {
+          "refusal": "OSError(62, 'Too many levels of symbolic links')",
+          "before": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892425143108,
+            "ino": 226502111,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1610000000987654321
+          },
+          "after": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892425143108,
+            "ino": 226502111,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892439566008
+          },
+          "sourceSymlinkStillPresent": true
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_tracked_destination",
+      "status": "passed",
+      "seconds": 0.036055731994565576,
+      "detail": null,
+      "observations": [
+        {
+          "refusal": "CowError('TRACKED_OR_FROZEN_FILE')",
+          "before": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892462505217,
+            "ino": 226502119,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1610000000987654321
+          },
+          "after": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 416,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1610000000987654321,
+            "mtimeNs": 1610000001123456789,
+            "ctimeNs": 1792514892462505217,
+            "ino": 226502119,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892477020857
+          },
+          "sourceBefore": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892470683659,
+            "ino": 226502117,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1600000000123456789
+          },
+          "sourceAfter": {
+            "bytes": 14135,
+            "sha256": "e0c34d01d2c15fcf95959166887046824ed64b19b4c365c65952e6b9f0f46cda",
+            "mode": 384,
+            "uid": 501,
+            "gid": 20,
+            "atimeNs": 1600000000123456789,
+            "mtimeNs": 1600000001987654321,
+            "ctimeNs": 1792514892470683659,
+            "ino": 226502117,
+            "nlink": 1,
+            "flags": 0,
+            "xattrs": {
+              "com.apple.provenance": "010200ac9cd2c0ecc5f80a"
+            },
+            "aclEntries": [],
+            "probeReadAtimeAfterNs": 1792514892485319479
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_replace_preserves_target_mode_and_nanosecond_times",
+      "status": "error",
+      "seconds": 0.0216906999994535,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 299, in test_replace_preserves_target_mode_and_nanosecond_times\n    report = self.rec.replace_one(src, dst)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/storage_cow_recovery.py\", line 222, in replace_one\n    a, b = self.pair(src, dst)\n           ~~~~~~~~~^^^^^^^^^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/storage_cow_recovery.py\", line 185, in pair\n    a, b = self.inspect(src), self.inspect(dst)\n           ~~~~~~~~~~~~^^^^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/storage_cow_recovery.py\", line 151, in inspect\n    result['aclEntries'] = acl_entries(path)\n                           ~~~~~~~~~~~^^^^^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/storage_cow_recovery.py\", line 65, in acl_entries\n    raise CowError('ACL_INSPECTION_UNAVAILABLE:' + str(ctypes.get_errno()))\nself_owned_storage_cow_recovery.CowError: ACL_INSPECTION_UNAVAILABLE:2\n",
+      "observations": []
+    }
+  ],
+  "helperAndTestSourcesUnchanged": true,
+  "finishedAt": "2026-10-20T16:48:12.511767+00:00",
+  "exitCode": 1,
+  "fixturesRetained": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/storage-cow-tests-r2/fixtures"
+}

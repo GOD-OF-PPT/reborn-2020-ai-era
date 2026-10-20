@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2.py", line 128, in worker
+    exec(code, environment)
+    ~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/source-r2-preflight/run-matrix-r2.py", line 50, in <module>
+    with (p / 'matrix-r2-running.json').open('x') as out:
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2.py", line 117, in injected_open
+    raise OSError(errno.ENOSPC, "injected parent-only metadata open failure", str(path))
+OSError: [Errno 28] injected parent-only metadata open failure: '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2-results-01/old-running-write-failure/matrix-r2-running.json'

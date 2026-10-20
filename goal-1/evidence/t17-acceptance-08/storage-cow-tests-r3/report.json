@@ -1,0 +1,371 @@
+{
+  "format": "storage-cow-self-owned-fixtures-v1",
+  "startedAt": "2026-10-20T17:24:33.357433+00:00",
+  "scope": "new self-owned fixture roots only",
+  "realDeliveryOrMatrixTouched": false,
+  "compatibilityDevelopmentOrTests": false,
+  "helper": {
+    "file": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/storage_cow_recovery.py",
+    "bytes": 24773,
+    "sha256": "ff5539069fb0005279198f322cd6575ce4f372bf0799f2263b507ecb829c3e47"
+  },
+  "test": {
+    "file": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py",
+    "bytes": 35474,
+    "sha256": "b051e591cf8e193b01576cfa83d63efff0674ffee418e80c62557e77d556898a"
+  },
+  "platform": {
+    "system": "darwin",
+    "python": "3.13.1 (main, Dec  3 2024, 17:59:52) [Clang 16.0.0 (clang-1600.0.26.4)]"
+  },
+  "passed": false,
+  "registeredTests": [
+    "test_clone_strict_creates_distinct_inode_and_private_writes",
+    "test_clone_strict_existing_destination_eexist_preserves_both",
+    "test_external_same_inode_write_after_first_swap_is_retained",
+    "test_fault_after_replace_restores_bytes_and_metadata",
+    "test_fault_before_replace_preserves_existing_target",
+    "test_find_candidates_is_dry_run_and_excludes_current_deliveries",
+    "test_refuses_destination_outside_delivery_scope",
+    "test_refuses_equal_length_different_bytes",
+    "test_refuses_frozen_destination",
+    "test_refuses_hardlinked_destination",
+    "test_refuses_hardlinked_source",
+    "test_refuses_real_extended_acl_destination",
+    "test_refuses_real_source_xattr",
+    "test_refuses_real_target_xattr",
+    "test_refuses_setuid_destination",
+    "test_refuses_special_flags_destination",
+    "test_refuses_symlink_destination",
+    "test_refuses_symlink_parent_directory",
+    "test_refuses_symlink_source",
+    "test_refuses_tracked_destination",
+    "test_replace_preserves_target_mode_and_nanosecond_times"
+  ],
+  "testsRun": 21,
+  "passedCount": 0,
+  "failureCount": 21,
+  "errorCount": 0,
+  "skippedCount": 0,
+  "cases": [
+    {
+      "id": "__main__.CowRecoveryFixtures.test_clone_strict_creates_distinct_inode_and_private_writes",
+      "status": "failed",
+      "seconds": 0.0036235259904060513,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 275, in test_clone_strict_creates_distinct_inode_and_private_writes\n    src = self.new_file(\".delivery/build-a/memory-v1-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_clone_strict_existing_destination_eexist_preserves_both",
+      "status": "failed",
+      "seconds": 0.0021388969908002764,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 297, in test_clone_strict_existing_destination_eexist_preserves_both\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_external_same_inode_write_after_first_swap_is_retained",
+      "status": "failed",
+      "seconds": 0.002524042996810749,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 577, in test_external_same_inode_write_after_first_swap_is_retained\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_fault_after_replace_restores_bytes_and_metadata",
+      "status": "failed",
+      "seconds": 0.0022181700041983277,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 377, in test_fault_after_replace_restores_bytes_and_metadata\n    self.run_fault(\"after_replace\")\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 345, in run_fault\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_fault_before_replace_preserves_existing_target",
+      "status": "failed",
+      "seconds": 0.002818428009049967,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 374, in test_fault_before_replace_preserves_existing_target\n    self.run_fault(\"before_replace\")\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 345, in run_fault\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_find_candidates_is_dry_run_and_excludes_current_deliveries",
+      "status": "failed",
+      "seconds": 0.0025131859874818474,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 527, in test_find_candidates_is_dry_run_and_excludes_current_deliveries\n    self.new_file(\".delivery/build-a/assets/memory-v1-shared-fixture.jpg\",\n    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                  mode=0o600, times=SOURCE_TIMES),\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/assets/memory-v1-shared-fixture.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_destination_outside_delivery_scope",
+      "status": "failed",
+      "seconds": 0.0027386280125938356,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 461, in test_refuses_destination_outside_delivery_scope\n    src, _ = self.pair()\n             ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_equal_length_different_bytes",
+      "status": "failed",
+      "seconds": 0.002150029002223164,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 452, in test_refuses_equal_length_different_bytes\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_frozen_destination",
+      "status": "failed",
+      "seconds": 0.002221527975052595,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 472, in test_refuses_frozen_destination\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_hardlinked_destination",
+      "status": "failed",
+      "seconds": 0.0020988059986848384,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 435, in test_refuses_hardlinked_destination\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_hardlinked_source",
+      "status": "failed",
+      "seconds": 0.00195129300118424,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 444, in test_refuses_hardlinked_source\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_real_extended_acl_destination",
+      "status": "failed",
+      "seconds": 0.0019310759962536395,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 490, in test_refuses_real_extended_acl_destination\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_real_source_xattr",
+      "status": "failed",
+      "seconds": 0.0019742560107260942,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 394, in test_refuses_real_source_xattr\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_real_target_xattr",
+      "status": "failed",
+      "seconds": 0.002093495015287772,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 380, in test_refuses_real_target_xattr\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_setuid_destination",
+      "status": "failed",
+      "seconds": 0.002161361975595355,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 478, in test_refuses_setuid_destination\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_special_flags_destination",
+      "status": "failed",
+      "seconds": 0.0025366279878653586,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 484, in test_refuses_special_flags_destination\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_symlink_destination",
+      "status": "failed",
+      "seconds": 0.002242170012323186,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 417, in test_refuses_symlink_destination\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_symlink_parent_directory",
+      "status": "failed",
+      "seconds": 0.0021823749993927777,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 510, in test_refuses_symlink_parent_directory\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_symlink_source",
+      "status": "failed",
+      "seconds": 0.0037345640012063086,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 399, in test_refuses_symlink_source\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_refuses_tracked_destination",
+      "status": "failed",
+      "seconds": 0.002493993000825867,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 466, in test_refuses_tracked_destination\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "__main__.CowRecoveryFixtures.test_replace_preserves_target_mode_and_nanosecond_times",
+      "status": "failed",
+      "seconds": 0.001996615988900885,
+      "detail": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 315, in test_replace_preserves_target_mode_and_nanosecond_times\n    src, dst = self.pair()\n               ~~~~~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 240, in pair\n    src = self.new_file(\".delivery/build-a/memory-v1-fixture-source.jpg\",\n                        mode=0o600, times=SOURCE_TIMES)\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/test_storage_cow_recovery.py\", line 236, in new_file\n    self.assertEqual(actual_xattrs(path), {}, \"fresh clean fixture has unknown attributes\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'} != {}\n- {'com.apple.provenance': '010200ac9cd2c0ecc5f80a'}\n+ {} : fresh clean fixture has unknown attributes\n",
+      "observations": [
+        {
+          "fixtureSetupRemovedAutomaticProvenance": {
+            "path": ".delivery/build-a/memory-v1-fixture-source.jpg",
+            "originalHex": "010200ac9cd2c0ecc5f80a",
+            "freshInputFixtureOnly": true
+          }
+        }
+      ]
+    }
+  ],
+  "helperAndTestSourcesUnchanged": true,
+  "finishedAt": "2026-10-20T17:24:33.434228+00:00",
+  "exitCode": 1,
+  "fixturesRetained": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/storage-cow-tests-r3/fixtures"
+}

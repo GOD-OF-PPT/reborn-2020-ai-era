@@ -1,0 +1,49 @@
+{
+  "scope": "Driver lifecycle only: original AST, parent-only metadata ENOSPC injection, real short owned child; no game/prerequisite simulation or compatibility work.",
+  "sources": {
+    "old": {
+      "file": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/source-r2-preflight/run-matrix-r2.py",
+      "bytes": 3236,
+      "sha256": "3f1fac43bafbb9e9f803564e1959232096938b52dda0470f140e1c8cf79b009d",
+      "fromLine": 48,
+      "throughLine": 63,
+      "lifecycleBytes": 1011,
+      "lifecycleSha256": "567a0a4fea9ce2596e8f37bd1a0cf93de8c93322983bb5bcc5a4f7752fff8495"
+    },
+    "new": {
+      "file": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/run-matrix-r2.py",
+      "bytes": 3896,
+      "sha256": "ea3bff0102534a6eb97961ffaaf6f045691f7b53ecffdd6bce34e897c2b72bc1",
+      "fromLine": 49,
+      "throughLine": 75,
+      "lifecycleBytes": 1650,
+      "lifecycleSha256": "75692cccafe42b1cd65db0390651b3dfb0698cf683ca81fe4da0b76233ecc0cc"
+    }
+  },
+  "cases": [
+    {
+      "case": "old-running-write-failure",
+      "version": "old",
+      "faultFile": "matrix-r2-running.json",
+      "expectedExitCode": 1
+    },
+    {
+      "case": "new-running-write-failure",
+      "version": "new",
+      "faultFile": "matrix-r2-running.json",
+      "expectedExitCode": 1
+    },
+    {
+      "case": "new-normal",
+      "version": "new",
+      "faultFile": null,
+      "expectedExitCode": 0
+    },
+    {
+      "case": "new-terminal-write-failure",
+      "version": "new",
+      "faultFile": "matrix-r2-complete.json",
+      "expectedExitCode": 1
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "observedAt": 1792524610.424497,
+  "sessionId": 49178,
+  "actualProcessRows": "  PID  PPID    RSS  %CPU ELAPSED COMMAND\n76868 76867  22476   0.0   03:34 /usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python -B goal-1/evidence/t17-acceptance-08/run-audit-r4.py\n76869 76868   3876   0.0   03:34 rtk proxy node --max-old-space-size=1024 --trace-gc --trace-gc-ignore-scavenger --experimental-strip-types --experimental-transform-types scripts/verify_course_delegated_evidence.ts --output-dir goal-1/evidence/t17-acceptance-08/audit-r4\n76870 76869 472328 105.3   03:34 /Users/gordon/.nvm/versions/node/v22.12.0/bin/node --max-old-space-size=1024 --trace-gc --trace-gc-ignore-scavenger --experimental-strip-types --experimental-transform-types scripts/verify_course_delegated_evidence.ts --output-dir goal-1/evidence/t17-acceptance-08/audit-r4\n",
+  "running": {
+    "command": [
+      "rtk",
+      "proxy",
+      "node",
+      "--max-old-space-size=1024",
+      "--trace-gc",
+      "--trace-gc-ignore-scavenger",
+      "--experimental-strip-types",
+      "--experimental-transform-types",
+      "scripts/verify_course_delegated_evidence.ts",
+      "--output-dir",
+      "goal-1/evidence/t17-acceptance-08/audit-r4"
+    ],
+    "started": 1792524396.740653,
+    "inputDirectory": "goal-1/evidence/t17-acceptance-08/matrix-r2",
+    "scope": "Independent complete Create, raw, command and money audit; no browser or compatibility work",
+    "resourceBounds": {
+      "managedHeapMiB": 1024,
+      "minimumFreeEvidenceBytes": 2147483648,
+      "freeEvidenceBytesBeforeLaunch": 6589739008,
+      "trace": "major GC only; no business validation suppression"
+    },
+    "pid": 76869,
+    "state": "launched; check actual process/session for liveness"
+  },
+  "sourceFreeze": "audit-source-freeze-r5.json",
+  "driverVerifiedSourceFilesBeforeLaunch": 435,
+  "progress": [
+    {
+      "type": "independent-prefix-replay-start",
+      "registered": 72,
+      "prefixes": 6
+    }
+  ],
+  "majorGcLast": [
+    "[76870:0x7fc6aff00000]   201468 ms: Mark-Compact 235.8 (285.6) -> 185.4 (246.7) MB, pooled: 37 MB, 7.65 / 0.00 ms  (+ 1.4 ms in 0 steps since start of marking, biggest step 0.0 ms, walltime since start of marking 26 ms) (average mu = 0.997, current mu = 0.996) finalize incremental marking via stack guard; GC in old space requested",
+    "[76870:0x7fc6aff00000]   204630 ms: Mark-Compact 250.5 (281.0) -> 187.2 (249.2) MB, pooled: 34 MB, 9.26 / 0.00 ms  (+ 0.4 ms in 0 steps since start of marking, biggest step 0.0 ms, walltime since start of marking 23 ms) (average mu = 0.997, current mu = 0.997) finalize incremental marking via stack guard; GC in old space requested",
+    "[76870:0x7fc6aff00000]   210701 ms: Mark-Compact 325.1 (353.6) -> 187.7 (255.8) MB, pooled: 36 MB, 11.89 / 0.00 ms  (+ 0.5 ms in 0 steps since start of marking, biggest step 0.0 ms, walltime since start of marking 34 ms) (average mu = 0.998, current mu = 0.998) finalize incremental marking via stack guard; GC in old space requested"
+  ],
+  "consoleBytes": 22486,
+  "diskFree": 6937743360,
+  "terminalExists": false,
+  "postSmallFixtures": {
+    "file": "../t17-course-delegated-post-commit-01/fixture-results-r1.json",
+    "actualOutcomes": 10,
+    "positive": 2,
+    "expectedRefusal": 8,
+    "currentProjectHeadAndIndexUnchanged": true,
+    "sourceSha256": "4945b9e7ca31078d7a96e4af468a979268fd7d7fe0bcd5f1a5201d4106149a75",
+    "realFeatureVerificationExecuted": false
+  },
+  "fullAuditAccepted": false,
+  "compatibilityDevelopmentAndTests": 0
+}

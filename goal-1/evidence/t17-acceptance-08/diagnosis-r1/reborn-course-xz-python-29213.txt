@@ -1,0 +1,410 @@
+Analysis of sampling Python (pid 29213) every 1 millisecond
+Process:         Python [29213]
+Path:            /usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python
+Load Address:    0x10826a000
+Identifier:      org.python.python
+Version:         3.13.1 (3.13.1)
+Code Type:       X86-64
+Platform:        macOS
+Parent Process:  rtk [29212]
+Target Type:     live task
+
+Date/Time:       2026-10-20 22:46:19.374 +0800
+Launch Time:     2026-10-20 22:42:18.600 +0800
+OS Version:      macOS 26.6.2 (25G83)
+Report Version:  7
+Analysis Tool:   /usr/bin/sample
+
+Physical footprint:         61.2M
+Physical footprint (peak):  61.2M
+Idle exit:                  untracked
+----
+
+Call graph:
+    822 Thread_5289301   DispatchQueue_1: com.apple.main-thread  (serial)
+      822 start  (in dyld) + 3240  [0x7ff803b941c8]
+        822 Py_BytesMain  (in Python) + 42  [0x10898137c]
+          822 pymain_main  (in Python) + 371  [0x1089812c9]
+            822 Py_RunMain  (in Python) + 1263  [0x108980c01]
+              822 pymain_run_file  (in Python) + 94  [0x108981aa7]
+                822 pymain_run_file_obj  (in Python) + 187  [0x108981dbd]
+                  822 _PyRun_AnyFileObject  (in Python) + 66  [0x108959114]
+                    822 _PyRun_SimpleFileObject  (in Python) + 272  [0x108959454]
+                      822 pyrun_file  (in Python) + 141  [0x10895a039]
+                        822 run_mod  (in Python) + 154  [0x10895b7c7]
+                          822 run_eval_code_obj  (in Python) + 97  [0x10895be25]
+                            822 PyEval_EvalCode  (in Python) + 207  [0x1088e5bdf]
+                              822 _PyEval_EvalFrameDefault  (in Python) + 11631  [0x1088e8af7]
+                                822 PyObject_Vectorcall  (in Python) + 75  [0x1087b482a]
+                                  822 method_vectorcall_FASTCALL  (in Python) + 99  [0x1087c121b]
+                                    822 _io__Buffered_read  (in Python) + 1117  [0x1089b20c8]
+                                      822 _bufferedreader_raw_read  (in Python) + 184  [0x1089b1332]
+                                        822 PyObject_VectorcallMethod  (in Python) + 140  [0x1087b6191]
+                                          822 method_vectorcall_FASTCALL_KEYWORDS_METHOD  (in Python) + 117  [0x1087c1558]
+                                            822 _io_FileIO_readinto  (in Python) + 192  [0x1089ab1e3]
+                                              822 _Py_read  (in Python) + 133  [0x10897f07d]
+                                                822 read  (in libsystem_kernel.dylib) + 10  [0x7ff803f365d2]
+
+Total number in stack (recursive counted multiple, when >=5):
+
+Sort by top of stack, same collapsed (when >= 5):
+        read  (in libsystem_kernel.dylib)        822
+
+Binary Images:
+       0x10826a000 -        0x10826bfff +org.python.python (3.13.1 - 3.13.1) <1331B080-1A52-32E4-A125-795CD568EDCA> /usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python
+       0x10859a000 -        0x10859bffb +grp.cpython-313-darwin.so (0) <24013972-6053-3B83-AABD-2E3487069648> /usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/lib-dynload/grp.cpython-313-darwin.so
+       0x1085a3000 -        0x1085a9ff3 +_hashlib.cpython-313-darwin.so (0) <25261B3C-AAA0-322F-AA48-37B116345C29> /usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/lib-dynload/_hashlib.cpython-313-darwin.so
+       0x1085b1000 -        0x1085b7ff7 +_blake2.cpython-313-darwin.so (0) <6F9C4763-EAA3-31DA-B1C3-D93BE04AD46A> /usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/lib-dynload/_blake2.cpython-313-darwin.so
+       0x1085bc000 -        0x1085c1ff7 +_json.cpython-313-darwin.so (0) <A7575FD8-DA97-3CFE-AB62-327DCCE06B9D> /usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/lib-dynload/_json.cpython-313-darwin.so
+       0x1085c6000 -        0x1085cbff7 +_lzma.cpython-313-darwin.so (0) <B27F8782-0A19-317B-8801-92C76405E74D> /usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/lib-dynload/_lzma.cpython-313-darwin.so
+       0x1085d7000 -        0x1085d9ff3 +fcntl.cpython-313-darwin.so (0) <3AFB886C-A92F-3F51-80DE-C2DB17438688> /usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/lib-dynload/fcntl.cpython-313-darwin.so
+       0x1085e4000 -        0x1085e6fff +_posixsubprocess.cpython-313-darwin.so (0) <598DDBB8-B024-3448-800F-8CA2B4B00032> /usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/lib-dynload/_posixsubprocess.cpython-313-darwin.so
+       0x1085eb000 -        0x1085edffb +_bz2.cpython-313-darwin.so (0) <EA071398-5101-3674-9845-BCBE1731181B> /usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/lib-dynload/_bz2.cpython-313-darwin.so
+       0x1085f5000 -        0x1086129f7 +liblzma.5.dylib (0) <D106A4B5-D9C3-32DA-8011-CDCCFFACD2FA> /usr/local/Cellar/xz/5.8.3/lib/liblzma.5.dylib
+       0x108719000 -        0x10871dffb +select.cpython-313-darwin.so (0) <220E56BE-FCE2-361B-878F-B5536FE4A807> /usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/lib-dynload/select.cpython-313-darwin.so
+       0x108733000 -        0x10873dfff +math.cpython-313-darwin.so (0) <BCDA870A-5459-3D0F-9B4C-C505FB3AAD07> /usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/lib-dynload/math.cpython-313-darwin.so
+       0x108743000 -        0x108749ffb +zlib.cpython-313-darwin.so (0) <BF00A158-A0DD-30FF-803F-47C5382142A8> /usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/lib-dynload/zlib.cpython-313-darwin.so
+       0x108751000 -        0x108af2feb +org.python.python (3.13.1, [c] 2001-2024 Python Software Foundation. - 3.13.1) <E306943A-6C92-3A2F-A554-E42C403ABFF2> /usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/Python
+       0x1091a4000 -        0x109512e97 +libcrypto.3.dylib (0) <6109ECEE-9986-30DD-8750-8F7E856AFCCB> /usr/local/Cellar/openssl@3/3.6.3/lib/libcrypto.3.dylib
+    0x7ff803b0d000 -     0x7ff803b5138b  libobjc.A.dylib (951.7) <F3E59C4B-890F-3381-82C1-0E29B08226A3> /usr/lib/libobjc.A.dylib
+    0x7ff803b52000 -     0x7ff803b80a9f  libdyld.dylib (1387) <576B6A23-6A9E-3910-B3E5-0790731BB4AB> /usr/lib/system/libdyld.dylib
+    0x7ff803b81000 -     0x7ff803c2d84f  dyld (1.0.0 - 1387) <CF55CA34-3ECB-38F3-9E3E-E20592C197BE> /usr/lib/dyld
+    0x7ff803c2e000 -     0x7ff803c316e8  libsystem_blocks.dylib (96) <33F2AE3F-12EE-3467-8481-698BC42C52F1> /usr/lib/system/libsystem_blocks.dylib
+    0x7ff803c32000 -     0x7ff803c85041  libxpc.dylib (3102.160.5) <19C9DA96-742F-3A7D-A22D-E1DF683CE47B> /usr/lib/system/libxpc.dylib
+    0x7ff803c86000 -     0x7ff803ca5749  libsystem_trace.dylib (1861.160.4) <79D484CC-C253-3348-B56E-366A4A97D051> /usr/lib/system/libsystem_trace.dylib
+    0x7ff803ca6000 -     0x7ff803d6c94f  libcorecrypto.dylib (1922.160.10) <6E14793F-E8ED-31CE-B255-603A9CFF4CF3> /usr/lib/system/libcorecrypto.dylib
+    0x7ff803d6d000 -     0x7ff803dbedcf  libsystem_malloc.dylib (812.160.5) <1D09BF46-BD85-3C22-9CB9-D04963024069> /usr/lib/system/libsystem_malloc.dylib
+    0x7ff803dbf000 -     0x7ff803e06d91  libdispatch.dylib (1542.160.2) <EEDF9EFE-1B9B-39AC-B37F-BA6F1FA18CEC> /usr/lib/system/libdispatch.dylib
+    0x7ff803e07000 -     0x7ff803e09d43  libsystem_featureflags.dylib (103) <2AF93358-8BB8-3390-8847-994AB8425E86> /usr/lib/system/libsystem_featureflags.dylib
+    0x7ff803e0a000 -     0x7ff803e91e9f  libsystem_c.dylib (1752.160.4) <D8E26E42-0A43-3361-B0A8-B45C3BB10F19> /usr/lib/system/libsystem_c.dylib
+    0x7ff803e92000 -     0x7ff803f1cb63  libc++.1.dylib (2100.43) <DC8BE9A5-9501-3439-9189-9E16C26DF6B3> /usr/lib/libc++.1.dylib
+    0x7ff803f1d000 -     0x7ff803f345f7  libc++abi.dylib (2100.43) <DC940B98-BF91-3E69-9821-7E2BBF9631CD> /usr/lib/libc++abi.dylib
+    0x7ff803f35000 -     0x7ff803f735af  libsystem_kernel.dylib (12377.161.14) <0E16C3E3-E224-378F-9FDC-28BC144F39AF> /usr/lib/system/libsystem_kernel.dylib
+    0x7ff803f74000 -     0x7ff803f7febf  libsystem_pthread.dylib (539.100.4) <A55CF178-EA25-3CC0-8BCD-A4209F2ACD1D> /usr/lib/system/libsystem_pthread.dylib
+    0x7ff803f80000 -     0x7ff803f89ebf  libsystem_platform.dylib (375.120.2) <CD621568-6D00-376A-B8DA-6B794DADAFE4> /usr/lib/system/libsystem_platform.dylib
+    0x7ff803f8a000 -     0x7ff803fb82a7  libsystem_info.dylib (600) <D5713F2F-7E03-3AEE-82DA-89F175842724> /usr/lib/system/libsystem_info.dylib
+    0x7ff803fb9000 -     0x7ff804476714  com.apple.CoreFoundation (6.9 - 5026.6.7) <43436234-A738-3EBE-BD81-C7FBFF29035E> /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+    0x7ff804477000 -     0x7ff80479bb5e  com.apple.LaunchServices (1141.1 - 1141.1) <EC70B3DD-84D7-359D-863A-DFB7E5AB7D49> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/LaunchServices
+    0x7ff80479c000 -     0x7ff804990d77  com.apple.gpusw.MetalTools (1.0 - 1) <BB1241B8-46C7-3ED8-AB5A-633660485985> /System/Library/PrivateFrameworks/MetalTools.framework/Versions/A/MetalTools
+    0x7ff804991000 -     0x7ff804c0329f  libBLAS.dylib (1551.160.2) <8E2DC006-4236-3B59-8E75-F27B9F621D79> /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+    0x7ff804c04000 -     0x7ff804d09bf2  com.apple.Lexicon-framework (1.0 - 195.12) <567D1439-FC5C-35E0-8DBC-DB3D8C363711> /System/Library/PrivateFrameworks/Lexicon.framework/Versions/A/Lexicon
+    0x7ff804d0a000 -     0x7ff804edfcaf  libSparse.dylib (184.160.6) <F2DC2FE9-BD63-3E0B-B0F6-F104FEB43451> /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libSparse.dylib
+    0x7ff804ee0000 -     0x7ff804f65e5f  com.apple.SystemConfiguration (1.21 - 1.21) <5A3070B0-CAE4-38FD-801B-315EF682022A> /System/Library/Frameworks/SystemConfiguration.framework/Versions/A/SystemConfiguration
+    0x7ff804f66000 -     0x7ff804f9b3e7  libCRFSuite.dylib (55) <30C42217-18AF-3FC1-BB54-8CC9B4EE7652> /usr/lib/libCRFSuite.dylib
+    0x7ff805249000 -     0x7ff806284702  com.apple.Foundation (6.9 - 5026.6.7) <44158FA3-1C9F-370D-BE8D-650DAB02BC40> /System/Library/Frameworks/Foundation.framework/Versions/C/Foundation
+    0x7ff80642f000 -     0x7ff806557e3e  com.apple.CoreDisplay (291.4 - 291.4) <8BFEFF75-C8C8-3B5B-AFA0-61385199A1BB> /System/Library/Frameworks/CoreDisplay.framework/Versions/A/CoreDisplay
+    0x7ff806558000 -     0x7ff8069257de  com.apple.audio.AudioToolboxCore (1.0 - 1556.704) <99F3B62D-5BA7-3B89-8104-AF66B9239BCD> /System/Library/PrivateFrameworks/AudioToolboxCore.framework/Versions/A/AudioToolboxCore
+    0x7ff806926000 -     0x7ff806b61b59  com.apple.CoreText (877.6.0.2 - 877.6.0.2) <4175A353-92E4-30AD-B86B-FEE0D1938AAA> /System/Library/Frameworks/CoreText.framework/Versions/A/CoreText
+    0x7ff806b62000 -     0x7ff807307a93  com.apple.audio.CoreAudio (5.0 - 5.0) <FF424749-D74D-321D-B45C-EEE40E1BEC57> /System/Library/Frameworks/CoreAudio.framework/Versions/A/CoreAudio
+    0x7ff807308000 -     0x7ff80770703f  com.apple.security (7.0 - 61901.160.44) <3A5C7B18-3753-337C-AA62-D9EC9E7FCB6E> /System/Library/Frameworks/Security.framework/Versions/A/Security
+    0x7ff807708000 -     0x7ff8079bee47  libicucore.A.dylib (76142.5.2.1) <59DA3130-0A2A-301A-B722-42605523D35F> /usr/lib/libicucore.A.dylib
+    0x7ff8079bf000 -     0x7ff8079c970f  libsystem_darwin.dylib (1752.160.4) <15F72020-5373-3B02-B29D-B9F2D93FE254> /usr/lib/system/libsystem_darwin.dylib
+    0x7ff8079ca000 -     0x7ff807cb8341  com.apple.CoreServices.CarbonCore (1333 - 1333) <CD1CAB46-6B8A-3DDA-8CB0-C921E261526E> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/CarbonCore
+    0x7ff807cb9000 -     0x7ff807cfacaf  com.apple.CoreServicesInternal (505 - 505) <5A1E4018-2C56-3A43-BD80-563418858A8A> /System/Library/PrivateFrameworks/CoreServicesInternal.framework/Versions/A/CoreServicesInternal
+    0x7ff807cfb000 -     0x7ff807d38657  com.apple.CSStore (1141.1 - 1141.1) <C5E7418E-3CFF-3F84-9137-E1F42617AE2B> /System/Library/PrivateFrameworks/CoreServicesStore.framework/Versions/A/CoreServicesStore
+    0x7ff807d39000 -     0x7ff807e06557  com.apple.framework.IOKit (2.0.2 - 100231.120.3) <B9AA56C2-5180-33FE-B587-8032DB130AB7> /System/Library/Frameworks/IOKit.framework/Versions/A/IOKit
+    0x7ff807e07000 -     0x7ff807e182b7  libsystem_notify.dylib (348.160.3) <19A5D538-D6BE-34A2-B28D-7648B10CEB2B> /usr/lib/system/libsystem_notify.dylib
+    0x7ff809857000 -     0x7ff80986cdc4  com.apple.UniformTypeIdentifiers (709 - 709) <74967534-6DCC-3BA8-83FC-6F8964B48E57> /System/Library/Frameworks/UniformTypeIdentifiers.framework/Versions/A/UniformTypeIdentifiers
+    0x7ff809d80000 -     0x7ff809e64f89  libboringssl.dylib (532.120.8) <08514CCB-97F8-3EE7-8881-32F850E689E8> /usr/lib/libboringssl.dylib
+    0x7ff809e65000 -     0x7ff80a200083  com.apple.CFNetwork (1.0 - 3860.700.1) <2C490C42-0B50-33E6-81B7-C2E84B85DCCF> /System/Library/Frameworks/CFNetwork.framework/Versions/A/CFNetwork
+    0x7ff80a201000 -     0x7ff80a21a4a7  libsystem_networkextension.dylib (2226.161.1) <75D4DD3E-69BB-3E37-82B3-4222BA907541> /usr/lib/system/libsystem_networkextension.dylib
+    0x7ff80a21b000 -     0x7ff80a21bedb  libenergytrace.dylib (23) <25E21253-F850-3A71-A2AD-B9DA914A46A5> /usr/lib/libenergytrace.dylib
+    0x7ff80a21c000 -     0x7ff80a297602  libMobileGestalt.dylib (1484.120.3) <F9783CD2-F49E-34D6-AB1D-D7D33F3D2868> /usr/lib/libMobileGestalt.dylib
+    0x7ff80a298000 -     0x7ff80a2af1bf  libsystem_asl.dylib (406) <478E2407-26A1-3545-AA66-B9E4806FDF5D> /usr/lib/system/libsystem_asl.dylib
+    0x7ff80a2b0000 -     0x7ff80a2d1a83  com.apple.TCC (1.0 - 1) <854C41DC-FE79-33BD-A803-6427A7537B5B> /System/Library/PrivateFrameworks/TCC.framework/Versions/A/TCC
+    0x7ff80a2d2000 -     0x7ff80a82d4c4  com.apple.SkyLight (1.600.0 - 922.13.1) <7B70D8DF-984A-3FA9-829E-C26AFC896D9D> /System/Library/PrivateFrameworks/SkyLight.framework/Versions/A/SkyLight
+    0x7ff80a82e000 -     0x7ff80b1488d1  com.apple.CoreGraphics (2.0 - 1965.6.3) <C96FF509-2CF4-32AA-AC67-7F75CA59A80D> /System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics
+    0x7ff80b149000 -     0x7ff80b2f059f  com.apple.ColorSync (4.13.0 - 3813.5.1) <43920A1B-9178-33DA-98A8-771413961EAB> /System/Library/Frameworks/ColorSync.framework/Versions/A/ColorSync
+    0x7ff80b769000 -     0x7ff80bbf376d  com.apple.CoreData (120 - 1526) <D597A9A8-7E55-3757-A9D8-8FC5535EDC02> /System/Library/Frameworks/CoreData.framework/Versions/A/CoreData
+    0x7ff80bbf4000 -     0x7ff80bc0fe9a  com.apple.ProtocolBuffer (1 - 310.26.4.23.2) <58056106-7294-350B-934F-0E7A6A28F389> /System/Library/PrivateFrameworks/ProtocolBuffer.framework/Versions/A/ProtocolBuffer
+    0x7ff80bc10000 -     0x7ff80be000bf  libsqlite3.dylib (382) <ADCB4D91-1E45-32D4-8DBF-16AADB0B5D8F> /usr/lib/libsqlite3.dylib
+    0x7ff80bea1000 -     0x7ff80bf9287c  com.apple.BaseBoard (732.1.1 - 732.1.1) <0B115A45-6BDD-3123-A1CE-84120CDC4828> /System/Library/PrivateFrameworks/BaseBoard.framework/Versions/A/BaseBoard
+    0x7ff80bf93000 -     0x7ff80bffbf37  com.apple.RunningBoardServices (1.0 - 1015.160.2.0.1) <215B2A78-3607-3FE3-B604-1DB9B11B473C> /System/Library/PrivateFrameworks/RunningBoardServices.framework/Versions/A/RunningBoardServices
+    0x7ff80bffc000 -     0x7ff80c06c81f  com.apple.AE (944 - 944) <4D3B6881-8335-3176-9D00-0FC69D51D0CF> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/AE
+    0x7ff80c06d000 -     0x7ff80c07e36b  libdns_services.dylib (2881.160.4) <B8D072A4-1A48-3A3D-A095-5FEDF85AD3C7> /usr/lib/libdns_services.dylib
+    0x7ff80c07f000 -     0x7ff80c086c57  libsystem_symptoms.dylib (2169.160.3) <5B6FB9F4-F87A-3849-BE0B-A63706010384> /usr/lib/system/libsystem_symptoms.dylib
+    0x7ff80c087000 -     0x7ff80d978b64  com.apple.Network (1.0 - 5812.160.9) <7DA15241-E5A9-3551-B6B4-70FC822F1593> /System/Library/Frameworks/Network.framework/Versions/A/Network
+    0x7ff80d979000 -     0x7ff80d9a6c24  com.apple.analyticsd (1.0 - 1) <00DB3F70-E7B5-3776-BAAC-BC0052DF8B41> /System/Library/PrivateFrameworks/CoreAnalytics.framework/Versions/A/CoreAnalytics
+    0x7ff80d9a7000 -     0x7ff80d9a86b3  libDiagnosticMessagesClient.dylib (113) <7D5756CF-AF78-39C7-BEA7-D332EFF3DD2F> /usr/lib/libDiagnosticMessagesClient.dylib
+    0x7ff80d9a9000 -     0x7ff80da11742  com.apple.spotlight.metadata.utilities (1.0 - 2418.6.3.9.400) <B8F5F65E-FF11-3B40-BA8A-C3F6BAB3D502> /System/Library/PrivateFrameworks/MetadataUtilities.framework/Versions/A/MetadataUtilities
+    0x7ff80da12000 -     0x7ff80da9b9fa  com.apple.Metadata (26.6 - 2418.6.3.9.400) <FC8629BA-97CD-3365-B989-CFB91C1E845D> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Metadata
+    0x7ff80da9c000 -     0x7ff80daa3dc7  com.apple.DiskArbitration (2.7 - 2.7) <5A64788B-FBC5-3C04-AAA2-4FB629D3871C> /System/Library/Frameworks/DiskArbitration.framework/Versions/A/DiskArbitration
+    0x7ff80daa4000 -     0x7ff80e1714ff  com.apple.vImage (8.1 - 632.120.2) <E3CCB626-9E3C-3133-B933-DDC0861561CB> /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vImage.framework/Versions/A/vImage
+    0x7ff80e172000 -     0x7ff80e558fd2  com.apple.QuartzCore (1195.17 - 1195.17) <F49244FC-239E-3B57-BC0F-9EC5BAD7C765> /System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore
+    0x7ff80e559000 -     0x7ff80e5a4b14  libFontRegistry.dylib (408.6.0.3) <F18611F6-642D-39F4-8B3B-013565FC2A2C> /System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/Resources/libFontRegistry.dylib
+    0x7ff80e876000 -     0x7ff80e881f00  com.apple.OpenDirectory (26.6 - 666.100.1) <98EB5959-41BB-3742-B629-30F375BED4A7> /System/Library/Frameworks/OpenDirectory.framework/Versions/A/OpenDirectory
+    0x7ff80e882000 -     0x7ff80e8a865f  com.apple.CFOpenDirectory (26.6 - 666.100.1) <8688886C-E36D-37B2-9BCA-15898E753E7D> /System/Library/Frameworks/OpenDirectory.framework/Versions/A/Frameworks/CFOpenDirectory.framework/Versions/A/CFOpenDirectory
+    0x7ff80e8a9000 -     0x7ff80e8b647f  com.apple.CoreServices.FSEvents (1413.160.2 - 1413.160.2) <19E67B9E-7240-3A03-976F-4AD1B3DD3423> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/FSEvents.framework/Versions/A/FSEvents
+    0x7ff80e8b7000 -     0x7ff80e8de0bb  com.apple.coreservices.SharedFileList (225 - 225) <D7891E0E-E19A-3851-8BEA-635AFF6ECD7C> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SharedFileList.framework/Versions/A/SharedFileList
+    0x7ff80e8df000 -     0x7ff80e8e1c67  libapp_launch_measurement.dylib (17) <B4408F71-89F9-3331-840D-2275D1F2A3A1> /usr/lib/libapp_launch_measurement.dylib
+    0x7ff80e8e2000 -     0x7ff80e92afe7  com.apple.CoreAutoLayout (1.0 - 34) <4D5A364C-1E9D-308E-BB2B-7BB4958DF5E3> /System/Library/PrivateFrameworks/CoreAutoLayout.framework/Versions/A/CoreAutoLayout
+    0x7ff80e92b000 -     0x7ff80ea0b82f  libxml2.2.dylib (39.10.3) <F1FD7E28-8866-3CDC-9353-F83F0B530A55> /usr/lib/libxml2.2.dylib
+    0x7ff80ea0c000 -     0x7ff80ea7f567  com.apple.CoreVideo (1.8 - 0.0) <339BD3CC-8D1D-3FDA-9A6B-961F6A795948> /System/Library/Frameworks/CoreVideo.framework/Versions/A/CoreVideo
+    0x7ff80ea80000 -     0x7ff80ea82ab7  com.apple.loginsupport (3.0 - 264.4.2) <04567FDD-4F39-3C7A-A235-7AEB0ACCFDFC> /System/Library/PrivateFrameworks/login.framework/Versions/A/Frameworks/loginsupport.framework/Versions/A/loginsupport
+    0x7ff80eac0000 -     0x7ff80eae9666  com.apple.UserManagement (1.0 - 1) <180FF0DA-A8F0-31EB-96B8-72908F36214C> /System/Library/PrivateFrameworks/UserManagement.framework/Versions/A/UserManagement
+    0x7ff8104f6000 -     0x7ff81052ca3b  libsystem_containermanager.dylib (725.160.3) <A00409FB-484B-3970-A4FD-85BB4960230E> /usr/lib/system/libsystem_containermanager.dylib
+    0x7ff81052d000 -     0x7ff8105473e6  com.apple.IOSurface (393.5.8 - 393.5.8) <22FD6F7E-0019-3347-8A16-2A6AF8BE0F4F> /System/Library/Frameworks/IOSurface.framework/Versions/A/IOSurface
+    0x7ff810548000 -     0x7ff810550e07  com.apple.IOAccelerator (487.4.3 - 487.4.3) <0F4E28CD-8A03-3D84-BB55-3B8AFBF5626C> /System/Library/PrivateFrameworks/IOAccelerator.framework/Versions/A/IOAccelerator
+    0x7ff810551000 -     0x7ff81083c159  com.apple.Metal (373.7 - 373.7) <5D64FA80-29CE-32AA-BAB6-4E5034132C0B> /System/Library/Frameworks/Metal.framework/Versions/A/Metal
+    0x7ff81083d000 -     0x7ff81086182f  com.apple.audio.caulk (1.0 - 214.701) <7D527E3A-F6C8-386F-B19B-C8D521BA9860> /System/Library/PrivateFrameworks/caulk.framework/Versions/A/caulk
+    0x7ff810862000 -     0x7ff810a09d5a  com.apple.CoreMedia (1.0 - 3330.13.2) <22136E11-19F5-3CBE-85E3-10423449D083> /System/Library/Frameworks/CoreMedia.framework/Versions/A/CoreMedia
+    0x7ff810a0a000 -     0x7ff810cd8d51  libFontParser.dylib (435.6.0.2) <11CD9563-4AF4-3003-90AD-85DC2CA305F2> /System/Library/PrivateFrameworks/FontServices.framework/libFontParser.dylib
+    0x7ff811009000 -     0x7ff81134fff4  com.apple.ImageIO (3.3.0 - 2784.6.4) <1D3A381B-E94D-39C7-8229-707D9AE70465> /System/Library/Frameworks/ImageIO.framework/Versions/A/ImageIO
+    0x7ff811350000 -     0x7ff8118a29cf  com.apple.CoreImage (19.0.0 - 1592.120.2) <580C82D4-9EEB-30FD-B533-52896D0DBFCF> /System/Library/Frameworks/CoreImage.framework/Versions/A/CoreImage
+    0x7ff8118a3000 -     0x7ff811964bdd  com.apple.MetalPerformanceShaders.MPSCore (1.0 - 1) <BE561550-6866-3CFF-8D4A-534DDB650805> /System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSCore.framework/Versions/A/MPSCore
+    0x7ff811965000 -     0x7ff81196890f  libsystem_configuration.dylib (1405.160.3) <198D5252-EA49-3D24-A345-474D0560D060> /usr/lib/system/libsystem_configuration.dylib
+    0x7ff811969000 -     0x7ff81196fbf7  libsystem_sandbox.dylib (2680.160.6) <A1A25866-BB0A-3525-9044-839F1EBCC15E> /usr/lib/system/libsystem_sandbox.dylib
+    0x7ff811970000 -     0x7ff811970e88  com.apple.AggregateDictionary (1.0 - 1) <3044A03C-5E9B-3E4C-B5E7-F80CE04BE31B> /System/Library/PrivateFrameworks/AggregateDictionary.framework/Versions/A/AggregateDictionary
+    0x7ff811971000 -     0x7ff81197556b  com.apple.AppleSystemInfo (3.1.5 - 3.1.5) <7AF80A80-AE15-3530-9096-0839CE31825E> /System/Library/PrivateFrameworks/AppleSystemInfo.framework/Versions/A/AppleSystemInfo
+    0x7ff811976000 -     0x7ff8119771df  liblangid.dylib (140) <4DBCF2A3-5329-31A4-AB25-6251086BEF84> /usr/lib/liblangid.dylib
+    0x7ff811978000 -     0x7ff811a85cbd  com.apple.CoreNLP (1.0 - 313) <9CA46E06-319C-3DE8-99EB-C8BDC2A020CC> /System/Library/PrivateFrameworks/CoreNLP.framework/Versions/A/CoreNLP
+    0x7ff811a86000 -     0x7ff811a8bf73  com.apple.LinguisticData (1.0 - 483.10) <5FB0602F-7A90-359B-ACCC-00AE9BF65F13> /System/Library/PrivateFrameworks/LinguisticData.framework/Versions/A/LinguisticData
+    0x7ff811a8c000 -     0x7ff812b6bd6f  libBNNS.dylib (1961.160.8) <DDFE41A8-E644-37C6-87B6-BAFBD289B78B> /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBNNS.dylib
+    0x7ff812b6c000 -     0x7ff812d5bae7  libvDSP.dylib (1126.160.2) <D171B590-1B54-3564-9C52-960289057CC4> /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvDSP.dylib
+    0x7ff812d8e000 -     0x7ff812dc7867  com.apple.IOMobileFramebuffer (343.0.0 - 343.0.0) <0A1FE04F-6853-3F89-B698-F64B2226D793> /System/Library/PrivateFrameworks/IOMobileFramebuffer.framework/Versions/A/IOMobileFramebuffer
+    0x7ff812fb3000 -     0x7ff812fc8968  com.apple.MobileKeyBag (2.0 - 1.0) <B00EC08D-EB63-3194-A8A9-624F02048A5C> /System/Library/PrivateFrameworks/MobileKeyBag.framework/Versions/A/MobileKeyBag
+    0x7ff812fc9000 -     0x7ff812fd5e53  com.apple.AssertionServices (1.0 - 1015.160.2.0.1) <1522D96B-001D-35B3-8E41-F10706F8BBA8> /System/Library/PrivateFrameworks/AssertionServices.framework/Versions/A/AssertionServices
+    0x7ff812fd6000 -     0x7ff813064634  com.apple.securityfoundation (6.0 - 55293) <9F1543C0-85F3-3826-B6A5-C996B1679D08> /System/Library/Frameworks/SecurityFoundation.framework/Versions/A/SecurityFoundation
+    0x7ff813065000 -     0x7ff813094d38  com.apple.coreservices.BackgroundTaskManagement (1.0 - 104) <0775A66C-728B-330B-ABF8-FA3ED6139B93> /System/Library/PrivateFrameworks/BackgroundTaskManagement.framework/Versions/A/BackgroundTaskManagement
+    0x7ff81309f000 -     0x7ff8130a1dbb  libquarantine.dylib (196.160.2) <F734C4CD-5330-357E-B3B8-3721095096BE> /usr/lib/system/libquarantine.dylib
+    0x7ff8130a2000 -     0x7ff8130abb17  libCheckFix.dylib (33) <B18BA165-1CDF-3109-A747-A843CD2AFD5F> /usr/lib/libCheckFix.dylib
+    0x7ff8130ac000 -     0x7ff8130c3ea7  libcoretls.dylib (187.100.3) <D564776B-6694-3702-BFE8-70F521C1B897> /usr/lib/libcoretls.dylib
+    0x7ff8130c4000 -     0x7ff8130d38ff  libbsm.0.dylib (90) <631214F6-53AA-34E6-B2E9-86CD26FD5BC6> /usr/lib/libbsm.0.dylib
+    0x7ff8130d4000 -     0x7ff81312e6ef  libmecab.dylib (1121.5.1) <7C3CEFAB-5591-3F7A-8FB3-A7D277014AE9> /usr/lib/libmecab.dylib
+    0x7ff81312f000 -     0x7ff813131627  libgermantok.dylib (31) <1D893E47-B697-3EEE-90C4-8BA6D87691D2> /usr/lib/libgermantok.dylib
+    0x7ff813132000 -     0x7ff81314651e  libLinearAlgebra.dylib (1551.160.2) <945FA63F-81B9-3521-B15B-A89CA9473101> /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLinearAlgebra.dylib
+    0x7ff813147000 -     0x7ff813445b48  com.apple.MetalPerformanceShaders.MPSNeuralNetwork (1.0 - 1) <3F0CB02D-217B-3FC4-8B7C-8DB87AA81604> /System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSNeuralNetwork.framework/Versions/A/MPSNeuralNetwork
+    0x7ff813446000 -     0x7ff8134a7fdb  com.apple.MetalPerformanceShaders.MPSRayIntersector (1.0 - 1) <298A45A3-ABE4-370A-BA0F-4DD552B7B9ED> /System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSRayIntersector.framework/Versions/A/MPSRayIntersector
+    0x7ff813690000 -     0x7ff8136ceaa5  com.apple.MetalPerformanceShaders.MPSMatrix (1.0 - 1) <17E4E877-7893-317E-9D62-AC396BBE8AA5> /System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSMatrix.framework/Versions/A/MPSMatrix
+    0x7ff8136cf000 -     0x7ff8138f14c0  com.apple.MetalPerformanceShaders.MPSNDArray (1.0 - 1) <337CAD79-9E29-35FE-BE93-2119F1935C04> /System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSNDArray.framework/Versions/A/MPSNDArray
+    0x7ff8138f2000 -     0x7ff813996768  com.apple.MetalPerformanceShaders.MPSImage (1.0 - 1) <9A43C509-416C-3968-829B-4B76E98098A6> /System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSImage.framework/Versions/A/MPSImage
+    0x7ff813997000 -     0x7ff8139a1b7f  com.apple.AppleFSCompression (174.160.2 - 1.0) <FB0550FE-93AC-3346-981B-B75419DAD2E5> /System/Library/PrivateFrameworks/AppleFSCompression.framework/Versions/A/AppleFSCompression
+    0x7ff8139a2000 -     0x7ff8139af82f  libbz2.1.0.dylib (49) <6863DCCE-5A27-3131-81BA-37D7DFA06E19> /usr/lib/libbz2.1.0.dylib
+    0x7ff8139b0000 -     0x7ff8139b698f  libsystem_coreservices.dylib (191.5.1) <B0BDCA58-7438-3E13-9C05-59660B573A77> /usr/lib/system/libsystem_coreservices.dylib
+    0x7ff8139b7000 -     0x7ff8139e30b3  com.apple.CoreServices.OSServices (1141.1 - 1141.1) <CF2E7CCF-C513-370C-8F64-5FF4E7219C36> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/OSServices.framework/Versions/A/OSServices
+    0x7ff813e99000 -     0x7ff813eac5eb  libz.1.dylib (100.120.1) <5F30060B-9283-3F0C-B36A-003C2A25D967> /usr/lib/libz.1.dylib
+    0x7ff813ead000 -     0x7ff813f1aa97  libsystem_m.dylib (3312.100.1) <9DB423C5-F390-3129-8451-F530207EB049> /usr/lib/system/libsystem_m.dylib
+    0x7ff813f1b000 -     0x7ff813f1bb97  libcharset.1.dylib (115.120.2) <405B25C8-B6BF-3E91-9618-29E3B4E601E9> /usr/lib/libcharset.1.dylib
+    0x7ff813f1c000 -     0x7ff813f1f63f  libmacho.dylib (1387) <0A615DBA-558B-3500-86E9-5DE7DA349727> /usr/lib/system/libmacho.dylib
+    0x7ff813f20000 -     0x7ff813f36413  libkxld.dylib (12377.161.14) <1ED63E3E-E3F0-3C78-B8C4-58AFE48EEBD7> /usr/lib/system/libkxld.dylib
+    0x7ff813f37000 -     0x7ff813f42f57  libcommonCrypto.dylib (600035) <D35EDE6C-94CA-3DCD-A906-ABD86DA57F77> /usr/lib/system/libcommonCrypto.dylib
+    0x7ff813f43000 -     0x7ff813f4b567  libunwind.dylib (2100.2) <8EDA0474-8AC2-37B8-B6B7-B4B712A6FA1F> /usr/lib/system/libunwind.dylib
+    0x7ff813f4c000 -     0x7ff813f5356f  liboah.dylib (367.9) <7A1D9CE0-41E8-3D9A-B8A4-FCC3F43674B5> /usr/lib/liboah.dylib
+    0x7ff813f54000 -     0x7ff813f5fa7f  libcopyfile.dylib (240.160.2.0.1) <E9D173D3-075B-3DB2-8204-0C56346FB9BC> /usr/lib/system/libcopyfile.dylib
+    0x7ff813f60000 -     0x7ff813f67aff  libcompiler_rt.dylib (103.3) <C5CCBE5A-9844-3EF7-80A9-303679EA5AA3> /usr/lib/system/libcompiler_rt.dylib
+    0x7ff813f68000 -     0x7ff813f6c76b  libsystem_collections.dylib (1752.160.4) <A22B7276-A6B6-35CC-8635-E502BE26FA95> /usr/lib/system/libsystem_collections.dylib
+    0x7ff813f6d000 -     0x7ff813f70107  libsystem_secinit.dylib (168.100.7) <03FEC1A7-6AB4-3ED4-80A2-28AABFB4A95D> /usr/lib/system/libsystem_secinit.dylib
+    0x7ff813f71000 -     0x7ff813f7380f  libremovefile.dylib (85.100.6) <40EACBDA-A392-3D22-822D-AE6F3A0E4FE6> /usr/lib/system/libremovefile.dylib
+    0x7ff813f74000 -     0x7ff813f74b37  libkeymgr.dylib (31) <963CDDED-015D-3B77-8B30-B0CE28AA7B8B> /usr/lib/system/libkeymgr.dylib
+    0x7ff813f75000 -     0x7ff813f7d62f  libsystem_dnssd.dylib (2881.160.4) <52521127-FB30-3A8E-A364-EE73C6A18130> /usr/lib/system/libsystem_dnssd.dylib
+    0x7ff813f7e000 -     0x7ff813f83003  libcache.dylib (95) <9F17FD1D-C57E-32CF-A3B8-37BF7D4FA9E6> /usr/lib/system/libcache.dylib
+    0x7ff813f84000 -     0x7ff813f85b2b  libSystem.B.dylib (1356) <3229D4F7-FE40-3BE4-BCB9-F21F1C734B21> /usr/lib/libSystem.B.dylib
+    0x7ff813f86000 -     0x7ff813f8820b  libfakelink.dylib (5) <FD1779E5-A6DD-3E54-A6AE-70F9BED2EF5D> /usr/lib/libfakelink.dylib
+    0x7ff813f89000 -     0x7ff813f89913  com.apple.SoftLinking (1.0 - 71) <D09F0D10-2825-31FA-98C4-CDFE1C87EFA4> /System/Library/PrivateFrameworks/SoftLinking.framework/Versions/A/SoftLinking
+    0x7ff813fbf000 -     0x7ff813fc5b97  libiconv.2.dylib (115.120.2) <57D5B423-4BD5-3C08-B873-64C5F00A1E45> /usr/lib/libiconv.2.dylib
+    0x7ff813fd7000 -     0x7ff8140b2287  libarchive.2.dylib (167.160.4) <48E2D0D6-E76C-3F05-B808-4C140AD7D28D> /usr/lib/libarchive.2.dylib
+    0x7ff8140b3000 -     0x7ff81410a58f  com.apple.SearchKit (1.4.2 - 1.4.2) <6274111E-0AC7-3EC5-8693-A92E2BCA3210> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SearchKit.framework/Versions/A/SearchKit
+    0x7ff81410b000 -     0x7ff814112b87  libThaiTokenizer.dylib (28) <69BCE6D3-3EAE-363F-A865-1995DEBEE255> /usr/lib/libThaiTokenizer.dylib
+    0x7ff814113000 -     0x7ff814134683  com.apple.applesauce (1.0 - 17.7) <47D32FC3-B16C-3BB9-A93E-1AA35203BBDA> /System/Library/PrivateFrameworks/AppleSauce.framework/Versions/A/AppleSauce
+    0x7ff814135000 -     0x7ff81414e61f  libapple_nghttp2.dylib (37.120.3) <3302EFEB-B389-34F5-96B4-C52161383EB5> /usr/lib/libapple_nghttp2.dylib
+    0x7ff81414f000 -     0x7ff8141f39f7  libSparseBLAS.dylib (184.160.6) <16BD66E5-1AE5-3C3B-8BBA-6DD0093169F6> /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libSparseBLAS.dylib
+    0x7ff8141f4000 -     0x7ff8141f54b1  com.apple.MetalPerformanceShaders.MetalPerformanceShaders (1.0 - 1) <6BFF7DF4-A553-3228-A1EB-7A79E19F8D2F> /System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/MetalPerformanceShaders
+    0x7ff8141f6000 -     0x7ff8141fbb3f  libpam.2.dylib (35) <D14A7E53-C2E8-3502-B513-38281D5D63ED> /usr/lib/libpam.2.dylib
+    0x7ff8141fc000 -     0x7ff8142de17f  libcompression.dylib (193.120.2) <DFF6F36E-1413-3741-8239-8181A45F7866> /usr/lib/libcompression.dylib
+    0x7ff8142df000 -     0x7ff8142e447f  libQuadrature.dylib (8) <0142AB98-269D-3532-980C-CD5DF0CE7A6C> /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libQuadrature.dylib
+    0x7ff8142e5000 -     0x7ff81553636f  libLAPACK.dylib (1551.160.2) <111CED46-F324-3E83-A801-6890ECA316FB> /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLAPACK.dylib
+    0x7ff815537000 -     0x7ff815585ece  com.apple.DictionaryServices (1.2 - 382.0.1) <21349442-A9FC-339D-BE6F-31289ABF2267> /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/DictionaryServices.framework/Versions/A/DictionaryServices
+    0x7ff815586000 -     0x7ff8155a4a6f  liblzma.5.dylib (21) <0B581C5B-F586-392F-8FAC-81F0DB607275> /usr/lib/liblzma.5.dylib
+    0x7ff8155a5000 -     0x7ff8155a6517  libcoretls_cfhelpers.dylib (187.100.3) <CA06AFB1-7041-39AD-AF38-812FC26E0CAA> /usr/lib/libcoretls_cfhelpers.dylib
+    0x7ff8155a7000 -     0x7ff815621a4f  com.apple.APFS (2811.160.7 - 2811.160.7) <7A7943CC-B713-3CF7-952C-19FABCFDAF8E> /System/Library/PrivateFrameworks/APFS.framework/Versions/A/APFS
+    0x7ff815622000 -     0x7ff81562fee7  libxar.1.dylib (503.160.5) <E60F2EED-C284-3ECE-A374-7B835BC2A679> /usr/lib/libxar.1.dylib
+    0x7ff815630000 -     0x7ff81563328f  libutil.dylib (73) <555DAB1F-B035-313F-9154-270715163970> /usr/lib/libutil.dylib
+    0x7ff815634000 -     0x7ff81565d45f  libxslt.1.dylib (21.13.2) <1FDA4AF2-634E-3171-BC46-20815A37DA42> /usr/lib/libxslt.1.dylib
+    0x7ff815664000 -     0x7ff8157d7657  libvMisc.dylib (1126.160.2) <0BE304AE-C35C-3184-A439-69C69637C75F> /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvMisc.dylib
+    0x7ff8157d8000 -     0x7ff81586d3b3  libate.dylib (3.0.9) <5E84380E-B110-373A-B709-F970E57A1DEB> /usr/lib/libate.dylib
+    0x7ff815877000 -     0x7ff8158892e9  com.apple.CrashReporterSupport (10.13 - 15140) <44FD1330-21DB-3884-8035-24157D7E86A0> /System/Library/PrivateFrameworks/CrashReporterSupport.framework/Versions/A/CrashReporterSupport
+    0x7ff8159c8000 -     0x7ff815a0a757  com.apple.pluginkit.framework (1.0 - 1) <EBE0640C-B6DD-3339-B151-3C3AE730F0F8> /System/Library/PrivateFrameworks/PlugInKit.framework/Versions/A/PlugInKit
+    0x7ff815a8d000 -     0x7ff815ad9f97  com.apple.AppleVAFramework (6.2.10 - 6.2.10) <644ABC3A-B3CA-3820-85F5-97776F052BFE> /System/Library/PrivateFrameworks/AppleVA.framework/Versions/A/AppleVA
+    0x7ff815ada000 -     0x7ff815af5e1b  libexpat.1.dylib (47) <E7BBBC35-CE93-342D-A0CE-F576FB206171> /usr/lib/libexpat.1.dylib
+    0x7ff815af6000 -     0x7ff815afe623  libheimdal-asn1.dylib (710.160.4) <805A1CC1-56EC-3CBA-B8F1-E58FBB88854D> /usr/lib/libheimdal-asn1.dylib
+    0x7ff815c26000 -     0x7ff815ce1438  com.apple.MediaExperience (1.0 - 1) <280CB75D-A660-3EEC-A6CF-4D4E3D48CFDE> /System/Library/PrivateFrameworks/MediaExperience.framework/Versions/A/MediaExperience
+    0x7ff815d0c000 -     0x7ff815d1e810  com.apple.GraphVisualizer (1.0 - 307) <233F1E10-0BC6-3FDF-9806-9B726FC8ECFD> /System/Library/PrivateFrameworks/GraphVisualizer.framework/Versions/A/GraphVisualizer
+    0x7ff815d1f000 -     0x7ff815d62098  com.apple.OTSVG (1.0 - 877.6.0.2) <C121A599-99DD-3B13-912D-8E9770C3E55A> /System/Library/PrivateFrameworks/OTSVG.framework/Versions/A/OTSVG
+    0x7ff815d63000 -     0x7ff815d7077e  com.apple.xpc.AppServerSupport (1.0 - 3102.160.5) <29B68F41-E5BC-3393-A392-068218AD3741> /System/Library/PrivateFrameworks/AppServerSupport.framework/Versions/A/AppServerSupport
+    0x7ff815d71000 -     0x7ff815d77b52  libspindump.dylib (419.11) <FC35DA0E-0D70-3A9F-A47A-ED02F077BF2A> /usr/lib/libspindump.dylib
+    0x7ff815d78000 -     0x7ff815e238ca  com.apple.Heimdal (4.0 - 2.0) <71AD21D9-5588-34AC-907B-4CF5B2DCB855> /System/Library/PrivateFrameworks/Heimdal.framework/Versions/A/Heimdal
+    0x7ff8160d9000 -     0x7ff8161241ff  com.apple.AppleJPEG (1.0 - 1) <3F24A24B-5658-3D0B-9985-BD56779DB0BC> /System/Library/PrivateFrameworks/AppleJPEG.framework/Versions/A/AppleJPEG
+    0x7ff816125000 -     0x7ff8162ee1df  libJP2.dylib (2784.6.6) <56C50E41-C61A-39E7-9B10-469905A48467> /System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libJP2.dylib
+    0x7ff8162ef000 -     0x7ff8162f0b17  com.apple.WatchdogClient.framework (1.0 - 333) <D566E95D-52F7-370D-9A23-9683B165D296> /System/Library/PrivateFrameworks/WatchdogClient.framework/Versions/A/WatchdogClient
+    0x7ff8162f1000 -     0x7ff816335305  com.apple.MultitouchSupport.framework (9460.1 - 9460.1) <7CB780A9-95D1-326E-A52E-6D2088F49ECD> /System/Library/PrivateFrameworks/MultitouchSupport.framework/Versions/A/MultitouchSupport
+    0x7ff816336000 -     0x7ff8169aa685  com.apple.VideoToolbox (1.0 - 3330.13.2) <C194209D-05FA-3517-94C0-A96208E00602> /System/Library/Frameworks/VideoToolbox.framework/Versions/A/VideoToolbox
+    0x7ff8169ab000 -     0x7ff8169ccbbf  libAudioToolboxUtility.dylib (1556.704) <FBD32AB9-5553-3C8B-934A-BDA2017C0E50> /usr/lib/libAudioToolboxUtility.dylib
+    0x7ff8169cd000 -     0x7ff8169fa08f  libPng.dylib (2784.6.6) <0F1779B2-EB1A-3838-AA0A-82EBB08BC1F5> /System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libPng.dylib
+    0x7ff8169fb000 -     0x7ff816a60c0f  libTIFF.dylib (2784.6.6) <8051C885-A358-3C5F-9467-938606F1C6F0> /System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libTIFF.dylib
+    0x7ff816a61000 -     0x7ff816a7ccd7  com.apple.IOPresentment (67 - 67) <83B0006D-9749-32A7-9E89-284ACF882886> /System/Library/PrivateFrameworks/IOPresentment.framework/Versions/A/IOPresentment
+    0x7ff816a7d000 -     0x7ff816a8352f  com.apple.GPUWrangler (8.1.12 - 8.1.12) <7BE63F38-D354-3C56-808F-CFC64AC0E159> /System/Library/PrivateFrameworks/GPUWrangler.framework/Versions/A/GPUWrangler
+    0x7ff816a84000 -     0x7ff816a86c57  libRadiance.dylib (2784.6.6) <1C943FED-4B88-3573-ACC0-791047548B74> /System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libRadiance.dylib
+    0x7ff816a87000 -     0x7ff816a8c163  com.apple.DSExternalDisplay (3.1 - 380) <AEE03FA3-AEFD-3AFF-99FD-C471875F7E3C> /System/Library/PrivateFrameworks/DSExternalDisplay.framework/Versions/A/DSExternalDisplay
+    0x7ff816a8d000 -     0x7ff816abd4a7  libJPEG.dylib (2784.6.6) <52D6AB7A-51F5-3560-AB48-BE215E9471D2> /System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libJPEG.dylib
+    0x7ff816aec000 -     0x7ff816af178f  libGIF.dylib (2784.6.6) <034DC159-CD77-3710-9E43-8ED54C755975> /System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libGIF.dylib
+    0x7ff816af2000 -     0x7ff816b02237  com.apple.CMCaptureCore (1.0 - 665.140.6) <AEAF7293-2BA5-3A77-94EB-4EB8E0012163> /System/Library/PrivateFrameworks/CMCaptureCore.framework/Versions/A/CMCaptureCore
+    0x7ff817b12000 -     0x7ff817b87567  libusrtcp.dylib (5812.160.9) <A95D223B-4773-3DC7-9217-3838026A72BB> /usr/lib/libusrtcp.dylib
+    0x7ff817b88000 -     0x7ff8180af458  libswiftCore.dylib (6.3.2 - 6.3.2.1.11) <DBC808F7-C406-3707-9747-F3F1773EA6E6> /usr/lib/swift/libswiftCore.dylib
+    0x7ff81815b000 -     0x7ff8181a984e  libSessionUtility.dylib (398.701) <06C3777F-BCBB-3E70-AFA7-5104E4317BE7> /System/Library/PrivateFrameworks/AudioSession.framework/libSessionUtility.dylib
+    0x7ff8181aa000 -     0x7ff818370937  com.apple.audio.toolbox.AudioToolbox (1.14 - 1.14) <F141647C-C446-3104-8AF3-31B3A0189680> /System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox
+    0x7ff818371000 -     0x7ff8183ec2f4  com.apple.audio.AudioSession (1.0 - 398.701) <81BF359F-4980-390F-85EF-C7DB97ADE84F> /System/Library/PrivateFrameworks/AudioSession.framework/Versions/A/AudioSession
+    0x7ff8183ed000 -     0x7ff8184053cf  libAudioStatistics.dylib (262.601) <07908580-9609-3986-B0D1-1E4695518446> /usr/lib/libAudioStatistics.dylib
+    0x7ff81847b000 -     0x7ff81849768f  libresolv.9.dylib (96) <18A6E532-BD8A-3D67-9DAA-0D87259D8E79> /usr/lib/libresolv.9.dylib
+    0x7ff818498000 -     0x7ff8184aa437  libsasl2.2.dylib (215) <79952FD0-21DB-3E00-906D-EC3733EEF346> /usr/lib/libsasl2.2.dylib
+    0x7ff81869d000 -     0x7ff81877d0f7  libSMC.dylib (38) <A03E70D3-1A2E-3450-A599-9716A5CB0873> /usr/lib/libSMC.dylib
+    0x7ff8187e1000 -     0x7ff8187ec557  com.apple.NetAuth (6.2 - 6.2) <59FF7E7A-D59D-3E3E-AE09-BD96266DE970> /System/Library/PrivateFrameworks/NetAuth.framework/Versions/A/NetAuth
+    0x7ff8187fb000 -     0x7ff818808647  com.apple.perfdata (1.0 - 130) <BA37EC66-E230-3C7D-827F-350C63D1A7B5> /System/Library/PrivateFrameworks/perfdata.framework/Versions/A/perfdata
+    0x7ff818809000 -     0x7ff818817294  libperfcheck.dylib (46) <134CB1C5-3976-3424-803C-5E3D66D3AA5E> /usr/lib/libperfcheck.dylib
+    0x7ff818818000 -     0x7ff818826e33  com.apple.Kerberos (3.0 - 1) <441171C2-71F1-381C-93ED-F30D02A1D07D> /System/Library/Frameworks/Kerberos.framework/Versions/A/Kerberos
+    0x7ff818827000 -     0x7ff81886f40f  com.apple.GSS (4.0 - 2.0) <C394B69D-722E-3361-8CEC-931A12066089> /System/Library/Frameworks/GSS.framework/Versions/A/GSS
+    0x7ff818870000 -     0x7ff81887e58b  com.apple.CommonAuth (4.0 - 2.0) <26516710-8E11-3276-A36C-F84CA85C36F2> /System/Library/PrivateFrameworks/CommonAuth.framework/Versions/A/CommonAuth
+    0x7ff81887f000 -     0x7ff818963b32  com.apple.MobileAssets (1.0 - 1837.160.15) <2F1B0A7E-8072-32A5-8C5A-413F9B3FA1EF> /System/Library/PrivateFrameworks/MobileAsset.framework/Versions/A/MobileAsset
+    0x7ff8189fa000 -     0x7ff818a08758  com.apple.CorePhoneNumbers (1.0 - 1) <9BE5BE35-229C-3440-A0B1-8D29888DBFD9> /System/Library/PrivateFrameworks/CorePhoneNumbers.framework/Versions/A/CorePhoneNumbers
+    0x7ff81a5de000 -     0x7ff81a69c296  com.apple.combine (1.0 - 3023) <88588E61-E1DF-38E2-B49C-802F68284D93> /System/Library/Frameworks/Combine.framework/Versions/A/Combine
+    0x7ff81cb72000 -     0x7ff81cb7288f  com.apple.Accelerate.vecLib (3.11 - vecLib 3.11) <C61EE844-32E7-3503-B3D5-385CFC1028F6> /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/vecLib
+    0x7ff81cb9c000 -     0x7ff81cb9c9af  com.apple.CoreServices (1226 - 1226) <8A753D2C-252D-3356-8F30-477878B9741D> /System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices
+    0x7ff81ce14000 -     0x7ff81ce14437  com.apple.Accelerate (1.11 - Accelerate 1.11) <24A2FAAE-CC69-39BA-BB48-64F60F37E4F6> /System/Library/Frameworks/Accelerate.framework/Versions/A/Accelerate
+    0x7ff81dc88000 -     0x7ff81dc963c3  com.apple.SymptomDiagnosticReporter (1.0 - 411.160.2) <429945E3-DFE9-3906-B623-A2736863672D> /System/Library/PrivateFrameworks/SymptomDiagnosticReporter.framework/Versions/A/SymptomDiagnosticReporter
+    0x7ff81dc97000 -     0x7ff81dcc5682  com.apple.PowerLog (1.0 - 1) <614812DB-BA04-3B6C-B058-D5C73D1228BC> /System/Library/PrivateFrameworks/PowerLog.framework/Versions/A/PowerLog
+    0x7ff81dcd3000 -     0x7ff81dd781d8  com.apple.DiscRecording (9.0.3 - 9030.4.5) <704CDD00-2EB5-326D-BE06-00101E0B8A92> /System/Library/Frameworks/DiscRecording.framework/Versions/A/DiscRecording
+    0x7ff81dd79000 -     0x7ff81ddab047  com.apple.MediaKit (16 - 938) <9F11C6AA-C7E8-3C63-B2ED-875DA836AAF2> /System/Library/PrivateFrameworks/MediaKit.framework/Versions/A/MediaKit
+    0x7ff81ebee000 -     0x7ff81ec02e10  libswiftDispatch.dylib (1542.160.2) <36FF7F2E-73AC-35D3-A567-7DAFB3FBE4FD> /usr/lib/swift/libswiftDispatch.dylib
+    0x7ff81ef3b000 -     0x7ff81efcc5f0  com.apple.BoardServices (1.0 - 732.1.1) <07952B32-FDB7-32BF-88F4-ACDC7658D456> /System/Library/PrivateFrameworks/BoardServices.framework/Versions/A/BoardServices
+    0x7ff81f008000 -     0x7ff81f01395e  com.apple.GraphicsServices (1.0 - 1.0) <B9F40B0A-466C-3F03-9EA5-B727D185DA24> /System/Library/PrivateFrameworks/GraphicsServices.framework/Versions/A/GraphicsServices
+    0x7ff81f340000 -     0x7ff81f35dbf4  com.apple.DebugSymbols (216 - 217) <DA419B24-56E5-32DB-8E70-8B75073F8DA6> /System/Library/PrivateFrameworks/DebugSymbols.framework/Versions/A/DebugSymbols
+    0x7ff81f35e000 -     0x7ff81f4c1b71  com.apple.CoreSymbolication (16.0 - 64575.55.1) <90915777-21D4-3DE4-AA4A-79B63F46F33F> /System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/CoreSymbolication
+    0x7ff81f4c2000 -     0x7ff81f4cbee2  com.apple.CoreTime (334.0.16.3 - 334.0.16.3) <6FDFD586-2693-33EA-ABCF-524455FE6B2A> /System/Library/PrivateFrameworks/CoreTime.framework/Versions/A/CoreTime
+    0x7ff820e26000 -     0x7ff820e96a6a  com.apple.BackBoardServices (1.0 - 1.0) <AA0EEA47-4200-361C-BE46-D38C9517D3BE> /System/Library/PrivateFrameworks/BackBoardServices.framework/Versions/A/BackBoardServices
+    0x7ff820e97000 -     0x7ff820ed0c8f  com.apple.LDAPFramework (2.4.28 - 194.5) <3B15B189-012A-33EF-8CB4-B0EC7ED747A3> /System/Library/Frameworks/LDAP.framework/Versions/A/LDAP
+    0x7ff820ed1000 -     0x7ff820ed25ab  com.apple.TrustEvaluationAgent (2.0 - 38) <D9F3B147-829E-36F2-ACA5-E5321A11165C> /System/Library/PrivateFrameworks/TrustEvaluationAgent.framework/Versions/A/TrustEvaluationAgent
+    0x7ff821007000 -     0x7ff8210b0566  com.apple.DiskImagesFramework (683.160.3 - 683.160.3) <04C06301-5CAA-344C-AE6D-3C47F9C69E1F> /System/Library/PrivateFrameworks/DiskImages.framework/Versions/A/DiskImages
+    0x7ff8210f1000 -     0x7ff8211073c1  com.apple.RemoteServiceDiscovery (1.0 - 219.160.4) <52169C73-70F0-3A27-BC23-862B89B80785> /System/Library/PrivateFrameworks/RemoteServiceDiscovery.framework/Versions/A/RemoteServiceDiscovery
+    0x7ff821108000 -     0x7ff82111ec81  com.apple.xpc.RemoteXPC (1.0 - 3102.160.5) <22A280FB-C7EA-3A85-8369-8BC4B2207A35> /System/Library/PrivateFrameworks/RemoteXPC.framework/Versions/A/RemoteXPC
+    0x7ff8211b7000 -     0x7ff82123a05f  libcurl.4.dylib (168) <EBCEDFCF-EFC1-3530-9F4C-661060531834> /usr/lib/libcurl.4.dylib
+    0x7ff821241000 -     0x7ff82127fd18  com.apple.AppSupport (1.0.0 - 29) <981778D9-AAB2-351D-AEE6-57D4AAA3E858> /System/Library/PrivateFrameworks/AppSupport.framework/Versions/A/AppSupport
+    0x7ff82154e000 -     0x7ff821550807  com.apple.InternationalTextSearch (1.0 - 1) <E3F81F02-3A63-3BDA-B0BE-B8457FF73721> /System/Library/PrivateFrameworks/InternationalTextSearch.framework/Versions/A/InternationalTextSearch
+    0x7ff821a4b000 -     0x7ff821a4b417  libHeimdalProxy.dylib (88) <C8E9B6EC-95C5-3B1B-9B25-EFEA4CDFE2F1> /System/Library/Frameworks/Kerberos.framework/Versions/A/Libraries/libHeimdalProxy.dylib
+    0x7ff821a71000 -     0x7ff821a9055e  com.apple.StreamingZip (1.0 - 1) <23A079FD-DF27-3064-AB35-6ED2FCD75274> /System/Library/PrivateFrameworks/StreamingZip.framework/Versions/A/StreamingZip
+    0x7ff821aeb000 -     0x7ff821aee1ae  libswiftObjectiveC.dylib (951.7) <32C4FD66-C0C5-3FCA-94AC-34E7913ECF98> /usr/lib/swift/libswiftObjectiveC.dylib
+    0x7ff821aef000 -     0x7ff821b0b34a  libswiftos.dylib (1082) <9AF6FDF0-6117-3355-BCDD-8F8F68F6F9E4> /usr/lib/swift/libswiftos.dylib
+    0x7ff822b34000 -     0x7ff822bbe02d  com.apple.proactive.support.ProactiveSupport (1.0 - 418.1) <9390E199-CB83-3A7A-977D-3503625C24A7> /System/Library/PrivateFrameworks/ProactiveSupport.framework/Versions/A/ProactiveSupport
+    0x7ff90159a000 -     0x7ff901660467  com.apple.audio.midi.CoreMIDI (2.0 - 88) <C3A2B1D2-F259-3AEA-8A3F-91DED0DA8C0F> /System/Library/Frameworks/CoreMIDI.framework/Versions/A/CoreMIDI
+    0x7ff902188000 -     0x7ff90218c35f  com.apple.IOSurfaceAccelerator (1.0.0 - 1.0.0) <F59708FB-0F48-3C30-B326-7936AFE14B6D> /System/Library/PrivateFrameworks/IOSurfaceAccelerator.framework/Versions/A/IOSurfaceAccelerator
+    0x7ff907ae1000 -     0x7ff907af2e42  com.apple.HID (1.0 - 1) <10E2F579-2AA5-387F-9424-B84623FAAF63> /System/Library/PrivateFrameworks/HID.framework/Versions/A/HID
+    0x7ff90c831000 -     0x7ff90c83fabc  com.apple.NetFS (6.0 - 4.0) <DE6A509F-CF20-39DB-B2F3-C9D947C2EA74> /System/Library/Frameworks/NetFS.framework/Versions/A/NetFS
+    0x7ff90cd90000 -     0x7ff90cd9264f  libswiftDarwin.dylib (377.160.5) <A94A09A1-F830-30F3-8CB9-68CF9C6031E4> /usr/lib/swift/libswiftDarwin.dylib
+    0x7ff90ee16000 -     0x7ff90eef3517  libquic.dylib (5812.160.9) <9053556D-CB2D-3374-A557-771DAD6D6046> /usr/lib/libquic.dylib
+    0x7ff90eefe000 -     0x7ff90ef2605f  com.apple.private.SystemPolicy (1.0 - 1) <D9AF019D-3DE0-33C3-89D6-636D043D02B8> /System/Library/PrivateFrameworks/SystemPolicy.framework/Versions/A/SystemPolicy
+    0x7ff90fd8e000 -     0x7ff90fe2215d  com.apple.LoggingSupport (1.0 - 1861.160.4) <BBAFF235-4204-3420-AF33-9525238F5BFD> /System/Library/PrivateFrameworks/LoggingSupport.framework/Versions/A/LoggingSupport
+    0x7ff90fe23000 -     0x7ff90fe2f5e7  com.apple.MallocStackLogging (1.0 - 65000) <0475E0ED-BDAF-36B0-ABF6-95D94F7DE458> /System/Library/PrivateFrameworks/MallocStackLogging.framework/Versions/A/MallocStackLogging
+    0x7ff90fe53000 -     0x7ff90fea9a76  libmis.dylib (463.160.2) <CF47560F-9037-3D01-8DB0-C7ADB097DA4E> /usr/lib/libmis.dylib
+    0x7ff90feaa000 -     0x7ff90fead73b  com.apple.gpusw.GPURawCounter (34 - 34) <77678EF8-5AB0-3758-ABEF-5286E008CC79> /System/Library/PrivateFrameworks/GPURawCounter.framework/Versions/A/GPURawCounter
+    0x7ff90feae000 -     0x7ff90fec7b4c  libswiftCoreAudio.dylib (411.701) <13C1BC3C-531E-3A2D-A70B-DFD9680CB258> /usr/lib/swift/libswiftCoreAudio.dylib
+    0x7ff90fec8000 -     0x7ff90fecdb2f  libswiftCoreFoundation.dylib (2411) <224C06D6-3F3A-3D8E-889C-705CB0B122AB> /usr/lib/swift/libswiftCoreFoundation.dylib
+    0x7ff90fed8000 -     0x7ff90ff1bc83  libswiftXPC.dylib (128.120.2) <4AE13A05-D817-316E-88CF-A9490C6A11B7> /usr/lib/swift/libswiftXPC.dylib
+    0x7ff90ff1d000 -     0x7ff90ff1d993  libswiftIOKit.dylib (1) <EBE9EA3C-5D62-35F9-AB2E-369038B909AA> /usr/lib/swift/libswiftIOKit.dylib
+    0x7ff912128000 -     0x7ff912139f3b  libbootpolicy.dylib (289.160.2) <A86FA9BD-AE22-3CED-BF47-2AE9C714C138> /usr/lib/libbootpolicy.dylib
+    0x7ff913c22000 -     0x7ff913c41797  libswiftsimd.dylib (23) <2CB02DB7-ADBD-395D-BAEF-13148D8EC299> /usr/lib/swift/libswiftsimd.dylib
+    0x7ff91549c000 -     0x7ff9154a57a7  com.apple.IOAccelMemoryInfo (1.0 - 1) <5A75D4AB-310C-3316-8C1C-98B15FC4588F> /System/Library/PrivateFrameworks/IOAccelMemoryInfo.framework/Versions/A/IOAccelMemoryInfo
+    0x7ff916b97000 -     0x7ff916ba041e  libswiftCoreMIDI.dylib (6) <53712981-3502-34BD-8736-D26F4C9F9111> /usr/lib/swift/libswiftCoreMIDI.dylib
+    0x7ff91735e000 -     0x7ff917364276  com.apple.MSUDataAccessor (1.0 - 1) <E1E03A05-A46C-3A13-AF20-11013EE82704> /System/Library/PrivateFrameworks/MSUDataAccessor.framework/Versions/A/MSUDataAccessor
+    0x7ff917796000 -     0x7ff9177f7d4e  com.apple.SoftwareUpdateCoreSupport (1.0 - 1) <ECED3774-4750-333B-B55E-8ECE3FD5D9E7> /System/Library/PrivateFrameworks/SoftwareUpdateCoreSupport.framework/Versions/A/SoftwareUpdateCoreSupport
+    0x7ff91b016000 -     0x7ff91b06ea9c  com.apple.biome.BiomeFoundation (1.0 - 209.21) <7B3CD1F6-2B6E-37F7-BE1B-76CFF300968D> /System/Library/PrivateFrameworks/BiomeFoundation.framework/Versions/A/BiomeFoundation
+    0x7ff91e225000 -     0x7ff91e2310aa  libswiftMetal.dylib (373.7) <A61154E5-B0C9-3E00-AD62-00399D5F3AEA> /usr/lib/swift/libswiftMetal.dylib
+    0x7ff91f10a000 -     0x7ff91f1d16ec  libFDR.dylib (1499.160.2) <EECE172A-4BA2-3958-B777-CC79D34C4FBA> /usr/lib/libFDR.dylib
+    0x7ff91f25b000 -     0x7ff91f7b6bcb  com.apple.biome.BiomeStreams (1.0 - 209.21) <A91EB2EF-E14A-3879-B04D-32F2BCA63B69> /System/Library/PrivateFrameworks/BiomeStreams.framework/Versions/A/BiomeStreams
+    0x7ff91fc06000 -     0x7ff91fc1a7dd  com.apple.SoftwareUpdateCoreConnect (1.0 - 1) <F19F1182-6F06-3BCD-99AA-3F4C77F1AFF9> /System/Library/PrivateFrameworks/SoftwareUpdateCoreConnect.framework/Versions/A/SoftwareUpdateCoreConnect
+    0x7ffa02129000 -     0x7ffa02198c6c  com.apple.osanalytics.OSAnalytics (1.0 - 1) <9CE2F317-0385-3156-9994-D6E6BB1F11BD> /System/Library/PrivateFrameworks/OSAnalytics.framework/Versions/A/OSAnalytics
+    0x7ffa0350b000 -     0x7ffa0350d100  libswiftQuartzCore.dylib (5) <3D9CF00D-7DD6-3E0E-81E0-9DCDD9C740F5> /usr/lib/swift/libswiftQuartzCore.dylib
+    0x7ffa03917000 -     0x7ffa0391bda7  com.apple.kperf (1.0 - 1) <3FCD852B-2AA0-39A7-99E5-03F8448743E6> /System/Library/PrivateFrameworks/kperf.framework/Versions/A/kperf
+    0x7ffa03a21000 -     0x7ffa03a25b9f  com.apple.MobileSystemServices (1.0 - 1) <281ADEEC-8851-3AEA-835F-F1921E925516> /System/Library/PrivateFrameworks/MobileSystemServices.framework/Versions/A/MobileSystemServices
+    0x7ffa050b3000 -     0x7ffa050d4475  libamsupport.dylib (434.160.4) <0043BD2B-5491-35FE-AE21-3739A1B2835E> /usr/lib/libamsupport.dylib
+    0x7ffa05489000 -     0x7ffa054eb08b  com.apple.biome.BiomePubSub (1.0 - 209.21) <70A379DD-10D4-3D32-988A-0B5D63133E1E> /System/Library/PrivateFrameworks/BiomePubSub.framework/Versions/A/BiomePubSub
+    0x7ffa054ec000 -     0x7ffa0553052f  com.apple.biome.BiomeStorage (1.0 - 209.21) <1FC00E99-E845-33AE-845C-9587C7C4E73C> /System/Library/PrivateFrameworks/BiomeStorage.framework/Versions/A/BiomeStorage
+    0x7ffa0804d000 -     0x7ffa0805b463  libswiftUniformTypeIdentifiers.dylib (877.5.1) <A8656AEA-62FC-31E2-9771-81F690C24171> /usr/lib/swift/libswiftUniformTypeIdentifiers.dylib
+    0x7ffa0805c000 -     0x7ffa0810f2fb  libswiftAccelerate.dylib (77.100.2) <79C92F4D-8EB1-3ECC-B99E-3ADD689670A1> /usr/lib/swift/libswiftAccelerate.dylib
+    0x7ffa0826d000 -     0x7ffa0827d53f  libpartition2_dynamic.dylib (3476.160.2) <3316D115-71EB-3D8C-BAD4-CEC901393000> /usr/lib/libpartition2_dynamic.dylib
+    0x7ffa0c0c2000 -     0x7ffa0c11f70f  libswiftCoreMedia.dylib (3330.13.2) <0AD81B07-CC3E-3FEC-AB1E-40DC8B5F483F> /usr/lib/swift/libswiftCoreMedia.dylib
+    0x7ffa0d8b8000 -     0x7ffa0d8b98e3  libswiftOSLog.dylib (10) <C5BF632E-F71A-3816-8790-08D8FE7D0207> /usr/lib/swift/libswiftOSLog.dylib
+    0x7ffa119b5000 -     0x7ffa11acba60  com.apple.Symbolication (16.0 - 64575.70.1) <4BF86976-9136-39D8-AB35-7B48C623C6CF> /System/Library/PrivateFrameworks/Symbolication.framework/Versions/A/Symbolication
+    0x7ffa1622c000 -     0x7ffa1623b52d  com.apple.OSLog (1.0 - 1861.160.4) <0C496C13-A667-38E3-BD90-335C320A8D42> /System/Library/Frameworks/OSLog.framework/Versions/A/OSLog
+    0x7ffa1653d000 -     0x7ffa16634ecc  com.apple.InternalSwiftProtobuf (1.0 - 1.26.0) <D10E4F4F-41E9-38BB-B82A-ABE9208B6629> /System/Library/PrivateFrameworks/InternalSwiftProtobuf.framework/Versions/A/InternalSwiftProtobuf
+    0x7ffa16710000 -     0x7ffa1671b2f8  com.apple.HIDDisplay (1.0 - 1) <89DF2C07-85B0-3571-B46E-62B13EA8DD27> /System/Library/PrivateFrameworks/HIDDisplay.framework/Versions/A/HIDDisplay
+    0x7ffa1e021000 -     0x7ffa1e021a5b  com.apple.FeatureFlags (1.0 - 103) <F2D19187-957B-3AC3-A82A-68C07D84A872> /System/Library/PrivateFrameworks/FeatureFlags.framework/Versions/A/FeatureFlags
+    0x7ffb07779000 -     0x7ffb0777b0c7  com.apple.ConfigProfileHelper (18.0 - 1800) <F32E9DA8-D92D-31FC-A2B9-299033FE2602> /System/Library/PrivateFrameworks/ConfigProfileHelper.framework/Versions/A/ConfigProfileHelper
+    0x7ffb0f6f1000 -     0x7ffb0f6f8307  libCoreFSCache.dylib (352.2) <64AB32D0-7082-3395-A568-B2C9F8DCDFD8> /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCoreFSCache.dylib
+    0x7ffb0f6f9000 -     0x7ffb0f6fda83  libCoreVMClient.dylib (352.2) <A781005E-91A5-3571-8FC6-9D8DE7F2F923> /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCoreVMClient.dylib
+    0x7ffb0f6fe000 -     0x7ffb0f70dcf7  com.apple.opengl (23.1.1 - 23.1.1) <34698DF9-67D3-3EC2-B5A2-F1D9ECDB6278> /System/Library/Frameworks/OpenGL.framework/Versions/A/OpenGL
+    0x7ffb0f70e000 -     0x7ffb0f710327  libCVMSPluginSupport.dylib (23.1.1) <68236367-B485-3478-9D4A-886794D73DE5> /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCVMSPluginSupport.dylib
+    0x7ffb0f711000 -     0x7ffb0f71906f  libGFXShared.dylib (23.1.1) <5A9651DF-B059-3222-8CA9-7CB8F188A4BA> /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGFXShared.dylib
+    0x7ffb0f71a000 -     0x7ffb0f74edcf  libGLImage.dylib (23.1.1) <8ED6D480-E28B-3C68-B6D9-F30AA7FB81E5> /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLImage.dylib
+    0x7ffb0f74f000 -     0x7ffb0f78e6cf  libGLU.dylib (23.1.1) <27C4BEDB-4D7A-39E2-ACAA-2ED09598832A> /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib
+    0x7ffb0f910000 -     0x7ffb0f91a6d3  libGL.dylib (23.1.1) <28D03B6F-EF36-325C-A378-561E7CC1B390> /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
+    0x7ffb10d62000 -     0x7ffb10db8727  com.apple.opencl (5.5 - 5.5) <29996580-8645-34C4-BD87-9F1C0824D917> /System/Library/Frameworks/OpenCL.framework/Versions/A/OpenCL
+    0x7ffb140c8000 -     0x7ffb1421ce17  com.apple.ExtensionFoundation (97 - 97) <BBA2845F-F1E9-3719-88BD-7015ED19C582> /System/Library/Frameworks/ExtensionFoundation.framework/Versions/A/ExtensionFoundation
+    0x7ffb15277000 -     0x7ffb152b3573  com.apple.LightweightCodeRequirements (1.0 - 1) <4CDBC47C-52A3-3741-B42D-6BDB58835074> /System/Library/Frameworks/LightweightCodeRequirements.framework/Versions/A/LightweightCodeRequirements
+    0x7ffb160c1000 -     0x7ffb160e0135  com.apple.MPSBenchmarkLoop (1.0 - 1) <5376C373-B5E5-3260-9638-8F8FF655B581> /System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSBenchmarkLoop.framework/Versions/A/MPSBenchmarkLoop
+    0x7ffb160e1000 -     0x7ffb160f5ce1  com.apple.MPSFunctions (1.0 - 1) <3CC99821-5F08-3734-B46C-A6A3E60AD3A6> /System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSFunctions.framework/Versions/A/MPSFunctions
+    0x7ffb160f6000 -     0x7ffb160fc25a  com.apple.MPSHost (1.0 - 1) <9EDF94AA-565B-343B-9073-0E4A826DAD1A> /System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSHost.framework/Versions/A/MPSHost
+    0x7ffb1945e000 -     0x7ffb195bc311  com.apple.SwiftData (1.0 - 135) <6BCF9A64-7D9A-3D1D-AD02-BFEADE5C2AE8> /System/Library/Frameworks/SwiftData.framework/Versions/A/SwiftData
+    0x7ffb1f84c000 -     0x7ffb1f86136d  com.apple.AppleDeviceQuerySupport (1.0 - 408.120.3) <B530DC4D-A78E-3D7C-BF75-18E9A29B9047> /System/Library/PrivateFrameworks/AppleDeviceQuerySupport.framework/Versions/A/AppleDeviceQuerySupport
+    0x7ffb20082000 -     0x7ffb200ffb76  com.apple.AppleKeyStore (1.0 - 1.0) <80968FD4-9A54-38BF-8AFA-51B73165191C> /System/Library/PrivateFrameworks/AppleKeyStore.framework/Versions/A/AppleKeyStore
+    0x7ffb20a1e000 -     0x7ffb20a361a7  com.apple.private.AppleMobileFileIntegrity-fmk (1.0 - 1) <269CA03C-8964-3EBF-99AB-D9017456DEBE> /System/Library/PrivateFrameworks/AppleMobileFileIntegrity.framework/Versions/A/AppleMobileFileIntegrity
+    0x7ffb20edb000 -     0x7ffb20eeb1d1  com.apple.AtomicsInternal (1.1.0 - 5026.6.1) <D0593D92-2262-33FE-99C0-AE255BD3B8DE> /System/Library/PrivateFrameworks/AtomicsInternal.framework/Versions/A/AtomicsInternal
+    0x7ffb20fa0000 -     0x7ffb20fbfb21  com.apple.imgaudio.AudioAnalytics (1.0 - 1) <2B1DD82F-1650-3133-83B7-13FCBC81401D> /System/Library/PrivateFrameworks/AudioAnalytics.framework/Versions/A/AudioAnalytics
+    0x7ffc01418000 -     0x7ffc01462dbd  com.apple.BackBoardHIDEventFoundation (1.0 - 1) <4C8B1943-A6BF-33C4-9EFC-A13D95B68239> /System/Library/PrivateFrameworks/BackBoardHIDEventFoundation.framework/Versions/A/BackBoardHIDEventFoundation
+    0x7ffc014ed000 -     0x7ffc01505472  com.apple.biome.BiomeDSL (1.0 - 209.21) <3C3DDBD7-F1C6-3317-B9EC-F1236B60D7D6> /System/Library/PrivateFrameworks/BiomeDSL.framework/Versions/A/BiomeDSL
+    0x7ffc01506000 -     0x7ffc01eea67d  com.apple.BiomeLibrary (274.60) <6C0E5D68-BA4B-3671-A6EB-8BC75829DBE6> /System/Library/PrivateFrameworks/BiomeLibrary.framework/Versions/A/BiomeLibrary
+    0x7ffc01eeb000 -     0x7ffc01ef03d4  com.apple.biome.BiomeSync (1.0 - 209.21) <187DE075-27D4-3CB2-857E-5E518E8A0070> /System/Library/PrivateFrameworks/BiomeSync.framework/Versions/A/BiomeSync
+    0x7ffc03349000 -     0x7ffc033dfdc7  com.apple.biome.CascadeSets (1.0 - 209.21) <01AB34C0-67EA-3AA0-A2CC-17008488E182> /System/Library/PrivateFrameworks/CascadeSets.framework/Versions/A/CascadeSets
+    0x7ffc044f9000 -     0x7ffc046120ae  com.apple.CollectionsInternal (1.2.0 - 5026.6.1) <D874EE80-172A-32C7-A808-C0EB1BF09899> /System/Library/PrivateFrameworks/CollectionsInternal.framework/Versions/A/CollectionsInternal
+    0x7ffc0baaa000 -     0x7ffc0babd794  com.apple.DeviceRecovery (1.0 - 1) <3A523FE2-0C11-3C91-BE81-BBFF0224430A> /System/Library/PrivateFrameworks/DeviceRecovery.framework/Versions/A/DeviceRecovery
+    0x7ffc0da0b000 -     0x7ffc0da0e33c  com.apple.FontServices (1.0 - 1) <32AB095B-559F-399E-9B55-86C524E20A99> /System/Library/PrivateFrameworks/FontServices.framework/Versions/A/FontServices
+    0x7ffc0da0f000 -     0x7ffc0dafedff  libXTFontStaticRegistryData.dylib (335.4.0.6) <FFE956E2-299C-343A-97A7-AEA9FC9EBA75> /System/Library/PrivateFrameworks/FontServices.framework/libXTFontStaticRegistryData.dylib
+    0x7ffc0db00000 -     0x7ffc0db0d15c  com.apple.FramePacing (1.0 - 1) <4EEB38AA-9836-371E-9059-6A82B07C87F1> /System/Library/PrivateFrameworks/FramePacing.framework/Versions/A/FramePacing
+    0x7ffc0ea68000 -     0x7ffc0ea6e60f  libGPUCompilerUtils.dylib (32023.886.1) <A31B29B2-39FA-3F2D-81D5-81BDE0189011> /System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/libGPUCompilerUtils.dylib
+    0x7ffc13217000 -     0x7ffc1325ff13  libllvm-flatbuffers.dylib (32023.886.1) <1279D1D2-724F-3945-A773-77EEED69F239> /System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/32023/Libraries/libllvm-flatbuffers.dylib
+    0x7ffc1a32f000 -     0x7ffc1a435d71  com.apple.InstalledContentLibrary (1.0 - 1.0) <3DD27E55-7236-3E5C-B6DB-C66463C3AF1D> /System/Library/PrivateFrameworks/InstalledContentLibrary.framework/Versions/A/InstalledContentLibrary
+    0x7ffc1c836000 -     0x7ffc1d0203ad  com.apple.IntelligencePlatformLibrary (274.60) <8F0553BB-9C97-3EA9-8B6F-31D61DF58074> /System/Library/PrivateFrameworks/IntelligencePlatformLibrary.framework/Versions/A/IntelligencePlatformLibrary
+    0x7ffc1e61e000 -     0x7ffc1ed1c10f  com.apple.MIL (3520.4 - 3520.4.1) <00822916-4D37-3989-9E53-E71AAACE5623> /System/Library/PrivateFrameworks/MIL.framework/Versions/A/MIL
+    0x7ffd05bf1000 -     0x7ffd05c558ed  com.apple.MessageSecurity (1.0 - 195.160.36) <563C28B4-A892-372D-8DA4-D1BB8344DE9F> /System/Library/PrivateFrameworks/MessageSecurity.framework/Versions/A/MessageSecurity
+    0x7ffd0a807000 -     0x7ffd0a82b242  com.apple.OSEligibility (319.160.17) <9C723749-BD2E-350A-9B1A-EBC0E5C725F6> /System/Library/PrivateFrameworks/OSEligibility.framework/Versions/A/OSEligibility
+    0x7ffd0b359000 -     0x7ffd0b410117  com.apple.ParsingInternal (0.0.1 - 5026.6.1) <CA5B21DF-159F-3D90-9BC9-07DF45EBA780> /System/Library/PrivateFrameworks/ParsingInternal.framework/Versions/A/ParsingInternal
+    0x7ffd0e304000 -     0x7ffd0e325d10  com.apple.accessibility.PhotosensitivityProcessing (1.0 - 1) <593F6C4E-0540-3B21-A0AB-D947CCFFB95B> /System/Library/PrivateFrameworks/PhotosensitivityProcessing.framework/Versions/A/PhotosensitivityProcessing
+    0x7ffd0e70c000 -     0x7ffd0e740f6c  com.apple.PoirotSQLite (1.0 - 1) <343E7653-3C93-37D2-AF18-9D684ABFC315> /System/Library/PrivateFrameworks/PoirotSQLite.framework/Versions/A/PoirotSQLite
+    0x7ffd0e741000 -     0x7ffd0e7b5ece  com.apple.PoirotSchematizer (1.0 - 1) <5D38E9A1-0990-33BD-AE0C-FA05E3DC15A5> /System/Library/PrivateFrameworks/PoirotSchematizer.framework/Versions/A/PoirotSchematizer
+    0x7ffd0e7b6000 -     0x7ffd0e7e10a8  com.apple.PoirotUDFs (1.0 - 1) <B6E1AC8E-B13D-37F8-865E-A61F969876D0> /System/Library/PrivateFrameworks/PoirotUDFs.framework/Versions/A/PoirotUDFs
+    0x7ffd0f766000 -     0x7ffd0f8aa1a6  com.apple.ProDisplayLibrary (10.6.1 - 10.6.1) <853EBFF0-C629-3E43-867D-246AAA2EB64E> /System/Library/PrivateFrameworks/ProDisplayLibrary.framework/Versions/A/ProDisplayLibrary
+    0x7ffd10716000 -     0x7ffd1071df27  com.apple.ReflectionInternal (1.0.0 - 5026.6.1) <71D0E7D8-2420-3A8C-B678-FED4097A0BBA> /System/Library/PrivateFrameworks/ReflectionInternal.framework/Versions/A/ReflectionInternal
+    0x7ffd114fb000 -     0x7ffd1150f8af  com.apple.RuntimeInternal (1.0.0 - 5026.6.1) <E1460377-A158-36D4-B206-E8931918B099> /System/Library/PrivateFrameworks/RuntimeInternal.framework/Versions/A/RuntimeInternal
+    0x7ffd1bba2000 -     0x7ffd1bbcad91  com.apple.security.SwiftASN1Internal (1.0 - 1) <3F1DB273-F035-36F1-9102-D7C776986793> /System/Library/PrivateFrameworks/SwiftASN1Internal.framework/Versions/A/SwiftASN1Internal
+    0x7ffe0346b000 -     0x7ffe0346c02f  com.apple.VideoToolboxParavirtualizationSupport (64.4.7 - 64.4.7) <01370A52-8E06-319C-9453-3A61C2153D5F> /System/Library/PrivateFrameworks/VideoToolboxParavirtualizationSupport.framework/Versions/A/VideoToolboxParavirtualizationSupport
+    0x7ffe0b2a3000 -     0x7ffe0b34393f  libAppleArchive.dylib (450.160.2) <FB26CC77-4EC4-3A4D-B451-33E159872E2F> /usr/lib/libAppleArchive.dylib
+    0x7ffe0b41f000 -     0x7ffe0b429f8c  libCoreEntitlements.dylib (80.100.6) <C3FB081E-794A-3489-A6A3-530ECB413152> /usr/lib/libCoreEntitlements.dylib
+    0x7ffe0b6a2000 -     0x7ffe0b6a956f  libRosetta.dylib (367.9) <7A1D9CE0-41E8-3D9A-B8A4-FCC3F43674B5> /usr/lib/libRosetta.dylib
+    0x7ffe0b709000 -     0x7ffe0b711bb4  libTLE.dylib (80.100.6) <7ECB6322-0766-3766-9AA5-C8995BA5DB09> /usr/lib/libTLE.dylib
+    0x7ffe0c0a9000 -     0x7ffe0c1c4927  libcrypto.46.dylib (109.100.2) <4945E3F1-017F-3AD0-9559-511DB7518EF0> /usr/lib/libcrypto.46.dylib
+    0x7ffe0c2ff000 -     0x7ffe0c31c8f2  libhvf.dylib (11) <407AF96F-0D39-3049-AD71-439B069CCB16> /usr/lib/libhvf.dylib
+    0x7ffe0cc67000 -     0x7ffe0cc9f4eb  libssl.48.dylib (109.100.2) <E9127CFE-EB4B-3623-8455-158041F79E62> /usr/lib/libssl.48.dylib
+    0x7ffe0ccda000 -     0x7ffe0cd08097  libswiftPrespecialized.dylib (0) <C6D2CFD6-1953-3FC5-AF1E-C30C17FB5A6C> /usr/lib/libswiftPrespecialized.dylib
+    0x7ffe0cf33000 -     0x7ffe0cf42b33  libswiftDistributed.dylib (6.3.2 - 6.3.2.1.11) <317E6467-2D35-3E13-B4D6-83BBB8A07166> /usr/lib/swift/libswiftDistributed.dylib
+    0x7ffe0cf57000 -     0x7ffe0cf6552c  libswiftObservation.dylib (6.3.2 - 6.3.2.1.11) <2A73367D-1679-39AC-9A20-6510A8CE2623> /usr/lib/swift/libswiftObservation.dylib
+    0x7ffe0d0c1000 -     0x7ffe0d0d4d47  libswiftSynchronization.dylib (6.3.2 - 6.3.2.1.11) <0507F595-CE62-3409-BFCF-A5E7D92B19A2> /usr/lib/swift/libswiftSynchronization.dylib
+    0x7ffe0d0d5000 -     0x7ffe0d0eac30  libswiftSystem.dylib (75) <F342EFC5-4A75-36E1-9B3A-0ED0A1531B93> /usr/lib/swift/libswiftSystem.dylib
+    0x7ffe0d0ec000 -     0x7ffe0d101385  libswiftVideoToolbox.dylib (3330.13.2) <6CCF6403-0B93-310D-A9E7-1F3996CAFE9C> /usr/lib/swift/libswiftVideoToolbox.dylib
+    0x7ffe0d103000 -     0x7ffe0d103aa1  libswift_Builtin_float.dylib (6.3.2.1.11) <999932D7-C531-39D5-BB8B-610BD125574C> /usr/lib/swift/libswift_Builtin_float.dylib
+    0x7ffe0d104000 -     0x7ffe0d172ec5  libswift_Concurrency.dylib (6.3.2 - 6.3.2.1.11) <2069030D-9674-3F7A-B86D-18D0302979A4> /usr/lib/swift/libswift_Concurrency.dylib
+    0x7ffe0d173000 -     0x7ffe0d1760e7  libswift_DarwinFoundation1.dylib (377.160.5) <D9558AA5-0D9B-3A82-871E-7B4131C9DAA8> /usr/lib/swift/libswift_DarwinFoundation1.dylib
+    0x7ffe0d177000 -     0x7ffe0d177ccb  libswift_DarwinFoundation2.dylib (377.160.5) <10D48EBB-010C-3465-8C24-61FC95F22384> /usr/lib/swift/libswift_DarwinFoundation2.dylib
+    0x7ffe0d178000 -     0x7ffe0d178797  libswift_DarwinFoundation3.dylib (377.160.5) <A38C93D6-1C38-38EF-8982-1FF7DD30EAB7> /usr/lib/swift/libswift_DarwinFoundation3.dylib
+    0x7ffe0d179000 -     0x7ffe0d222fc7  libswift_RegexParser.dylib (6.3.2 - 6.3.2.1.11) <071958F2-C5DE-3D0C-BE05-45903103D419> /usr/lib/swift/libswift_RegexParser.dylib
+    0x7ffe0d223000 -     0x7ffe0d2a314d  libswift_StringProcessing.dylib (6.3.2 - 6.3.2.1.11) <6D1E09AD-3C33-3C1D-8120-D5D6EAA43946> /usr/lib/swift/libswift_StringProcessing.dylib
+    0x7ffe0d419000 -     0x7ffe0d41d003  libsystem_darwindirectory.dylib (122) <81911493-D73C-3AE8-B547-00236D7BFC3B> /usr/lib/system/libsystem_darwindirectory.dylib
+    0x7ffe0d41e000 -     0x7ffe0d428253  libsystem_eligibility.dylib (319.160.17) <41D00E59-199C-3C4B-A641-36794AD637E7> /usr/lib/system/libsystem_eligibility.dylib
+    0x7ffe0d429000 -     0x7ffe0d430ffb  libsystem_sanitizers.dylib (26.1) <81684A61-0905-3ED7-9872-C262429B0675> /usr/lib/system/libsystem_sanitizers.dylib
+    0x7ffe0d431000 -     0x7ffe0d431ba7  libsystem_trial.dylib (474.2.18.2) <C3DAE42B-23E1-3B50-8B7B-99F20C1D3FDE> /usr/lib/system/libsystem_trial.dylib

@@ -1,0 +1,139 @@
+{
+  "scope": "Driver lifecycle only: original AST, parent-only metadata ENOSPC injection, real short owned child; no game/prerequisite simulation or compatibility work.",
+  "scriptSha256": "1557aba97fd979418aa8024a911ce1d3332d33215f2dcfeee554eff8f586c3fd",
+  "sources": {
+    "old": {
+      "file": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/source-r2-preflight/run-matrix-r2.py",
+      "bytes": 3236,
+      "sha256": "3f1fac43bafbb9e9f803564e1959232096938b52dda0470f140e1c8cf79b009d",
+      "fromLine": 48,
+      "throughLine": 63,
+      "lifecycleBytes": 1011,
+      "lifecycleSha256": "567a0a4fea9ce2596e8f37bd1a0cf93de8c93322983bb5bcc5a4f7752fff8495"
+    },
+    "new": {
+      "file": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/run-matrix-r2.py",
+      "bytes": 3896,
+      "sha256": "ea3bff0102534a6eb97961ffaaf6f045691f7b53ecffdd6bce34e897c2b72bc1",
+      "fromLine": 49,
+      "throughLine": 75,
+      "lifecycleBytes": 1650,
+      "lifecycleSha256": "75692cccafe42b1cd65db0390651b3dfb0698cf683ca81fe4da0b76233ecc0cc"
+    }
+  },
+  "registered": 4,
+  "executed": 4,
+  "results": [
+    {
+      "case": "old-running-write-failure",
+      "workerCommand": [
+        "rtk",
+        "proxy",
+        "/usr/local/opt/python@3.13/bin/python3.13",
+        "-B",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2.py",
+        "--case",
+        "old-running-write-failure",
+        "--case-dir",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2-results-01/old-running-write-failure"
+      ],
+      "actualWorkerExitCode": 1,
+      "checks": {
+        "actualWorkerExitMatches": true,
+        "oneRealOwnedChild": true,
+        "realChildExitedZero": true,
+        "markerWritten": true,
+        "sourceUnchanged": true,
+        "oldNeverCalledWait": true,
+        "oldExitedWhileChildLive": true,
+        "oldParentOpenReallyFailed": true,
+        "oldNoTerminalClaim": true
+      },
+      "passed": true
+    },
+    {
+      "case": "new-running-write-failure",
+      "workerCommand": [
+        "rtk",
+        "proxy",
+        "/usr/local/opt/python@3.13/bin/python3.13",
+        "-B",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2.py",
+        "--case",
+        "new-running-write-failure",
+        "--case-dir",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2-results-01/new-running-write-failure"
+      ],
+      "actualWorkerExitCode": 1,
+      "checks": {
+        "actualWorkerExitMatches": true,
+        "oneRealOwnedChild": true,
+        "realChildExitedZero": true,
+        "markerWritten": true,
+        "sourceUnchanged": true,
+        "newWaitedOnce": true,
+        "newChildEndedBeforeDriverExit": true,
+        "waitObservedMarkerAndZeroExit": true,
+        "terminalHasRealCollectorZero": true
+      },
+      "passed": true
+    },
+    {
+      "case": "new-normal",
+      "workerCommand": [
+        "rtk",
+        "proxy",
+        "/usr/local/opt/python@3.13/bin/python3.13",
+        "-B",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2.py",
+        "--case",
+        "new-normal",
+        "--case-dir",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2-results-01/new-normal"
+      ],
+      "actualWorkerExitCode": 0,
+      "checks": {
+        "actualWorkerExitMatches": true,
+        "oneRealOwnedChild": true,
+        "realChildExitedZero": true,
+        "markerWritten": true,
+        "sourceUnchanged": true,
+        "newWaitedOnce": true,
+        "newChildEndedBeforeDriverExit": true,
+        "waitObservedMarkerAndZeroExit": true,
+        "terminalHasRealCollectorZero": true
+      },
+      "passed": true
+    },
+    {
+      "case": "new-terminal-write-failure",
+      "workerCommand": [
+        "rtk",
+        "proxy",
+        "/usr/local/opt/python@3.13/bin/python3.13",
+        "-B",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2.py",
+        "--case",
+        "new-terminal-write-failure",
+        "--case-dir",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2-results-01/new-terminal-write-failure"
+      ],
+      "actualWorkerExitCode": 1,
+      "checks": {
+        "actualWorkerExitMatches": true,
+        "oneRealOwnedChild": true,
+        "realChildExitedZero": true,
+        "markerWritten": true,
+        "sourceUnchanged": true,
+        "newWaitedOnce": true,
+        "newChildEndedBeforeDriverExit": true,
+        "waitObservedMarkerAndZeroExit": true,
+        "terminalFailureAfterWait": true,
+        "failedTerminalNotInvented": true
+      },
+      "passed": true
+    }
+  ],
+  "sourcesUnchanged": true,
+  "allPassed": true
+}

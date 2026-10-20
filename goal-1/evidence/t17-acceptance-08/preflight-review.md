@@ -1,0 +1,7 @@
+# 冻结前静态复核
+
+root/risk_ui_audit仅读核新scenario和原核心合同，发现并修正两处：known violation遮盖后续独立来源/重查，known verdict的interrupted核查被跳过。现已允许真实新/中断核查、实际完成后另Confirm；原本人有限Stop仍一次，不免费恢复外部。at的next不超过target，wake同日只推进后续真实phase；AP候选没有双算已Plan支持，Refund在原窗口，InterruptJob接口合法。合并到旧案件的新signal可能在一次AdvanceTime后较晚观察，分开记录来源日与观察日，不称全部当日响应。
+
+collector与独立verifier已交叉核XZ/member/原72/旧288关联，旧0679与当前7975 Git锚保留各自身份而同原blob；同revision多个真实milestone逐一核对，重放匹配distinct revision并保持每份原字节。新Python XZ helper11项真实文件回归已通过；该静态复核不冒充游戏执行、原72正向或兼容。
+
+执行前补强：collector作者的最后只读交叉核发现summary.sourceInputHashes及record.rawMembers两张冗余表尚未核对；虽然实际原输入/全XZ成员已经独立锚定，根仍在实际采集0时补齐两张表与其原始来源的精确相等检查。旧预冻结清单保留，最终新清单R2另存，并只重跑受影响CLI严格类型；未改规则/collector/策略或白名单。

@@ -1,0 +1,3319 @@
+{
+  "scope": "Read-only preservation of the two existing static deliveries against their exact original committed resource contracts. Every original resource receives an actual local HTTP GET and a disk bytes/SHA256 check; each home document is also fetched. No browser, compatibility, visual, performance, IndexedDB, gameplay, typecheck, matrix inspection, replacement server, storage mutation, remote request or service change.",
+  "startedAt": "2026-10-20T15:57:14.255774+00:00",
+  "finishedAt": "2026-10-20T15:57:14.855823+00:00",
+  "headCommit": "7975ae73526b8c17e185012518a2724bfd04308f",
+  "sourceContracts": [
+    {
+      "file": "goal-1/evidence/t17-risk-scene-post-commit-01/expected-feature-files.json",
+      "bytes": 16866,
+      "sha256": "add6fb003d41bde5d93ccdb433095fe0e89b8f569f113c669d895f7f5a450440",
+      "headCommit": "7975ae73526b8c17e185012518a2724bfd04308f",
+      "diskEqualsCommittedBlob": true
+    },
+    {
+      "file": "goal-1/evidence/t17-course-ui-post-commit-01/postcommit-byte-and-source-check.json",
+      "bytes": 30333,
+      "sha256": "3a489b5812ebe700728ba6257affed6b6fada6e4519efacd98d1bac0dcb56776",
+      "headCommit": "7975ae73526b8c17e185012518a2724bfd04308f",
+      "diskEqualsCommittedBlob": true
+    },
+    {
+      "file": "goal-1/evidence/t17-acceptance-07/delivery-http-and-preservation.json",
+      "bytes": 10491,
+      "sha256": "bd91098ec0d8520f44481cb8b79db3f20b2bb8451453883ee003ce348c4cae26",
+      "headCommit": "7975ae73526b8c17e185012518a2724bfd04308f",
+      "diskEqualsCommittedBlob": true
+    },
+    {
+      "file": "goal-1/evidence/t17-acceptance-04/current-build-http-r10.json",
+      "bytes": 8855,
+      "sha256": "209febc2cf792383cceea1d6c2b46205a61f97476ebce3b8abf45e864da23974",
+      "headCommit": "7975ae73526b8c17e185012518a2724bfd04308f",
+      "diskEqualsCommittedBlob": true
+    },
+    {
+      "file": "goal-1/evidence/t17-acceptance-07/delivery-http-and-preservation.json",
+      "originalFeatureCommit": "ab99c88b793fcc5bb5a636f55b77cbd3d75c437c",
+      "bytes": 10491,
+      "sha256": "bd91098ec0d8520f44481cb8b79db3f20b2bb8451453883ee003ce348c4cae26",
+      "diskEqualsOriginalFeatureBlob": true
+    },
+    {
+      "file": "goal-1/evidence/t17-acceptance-04/current-build-http-r10.json",
+      "originalFeatureCommit": "fb702632d2d48997eb96562da806a1b5bdcf9f46",
+      "bytes": 8855,
+      "sha256": "209febc2cf792383cceea1d6c2b46205a61f97476ebce3b8abf45e864da23974",
+      "diskEqualsOriginalFeatureBlob": true
+    }
+  ],
+  "originalContractsUnchangedAfterCheck": true,
+  "originalRegisteredResourceTotal": 88,
+  "actualResourceHttpRequests": 88,
+  "actualHomepageHttpRequests": 2,
+  "actualHttpRequestsTotal": 90,
+  "resourceHttpStatus200": 88,
+  "diskResourcesMatched": 88,
+  "httpResourcesMatched": 88,
+  "unknownResourceHttpCount": 0,
+  "failedResourceCount": 0,
+  "allPreserved": true,
+  "entries": [
+    {
+      "port": 5311,
+      "build": ".delivery/t17-risk-final",
+      "originalContract": "goal-1/evidence/t17-acceptance-07/delivery-http-and-preservation.json",
+      "originalRegisteredResources": 44,
+      "actualDiskInventoryResources": 44,
+      "diskFileSetExactlyEqualOriginal": true,
+      "diskInventoryError": null,
+      "unexpectedDiskFiles": [],
+      "missingDiskFiles": [],
+      "diskMatchedExpected": 44,
+      "httpMatchedExpected": 44,
+      "httpRequests": 45,
+      "failedResources": [],
+      "unknownHttpResources": [],
+      "diskChangedDuringVerification": [],
+      "homepage": {
+        "method": "GET",
+        "url": "http://127.0.0.1:5311/",
+        "requestedAt": "2026-10-20T15:57:14.643272+00:00",
+        "requestHeaders": {
+          "Accept-Encoding": "identity",
+          "Cache-Control": "no-cache"
+        },
+        "attempted": true,
+        "status": 200,
+        "bytes": 1496,
+        "sha256": "e56cc7234f7e0b8a24b845bcd85c18436a3cd3ec8b6099fb6702c02ba3dae1c2",
+        "byteCountEqualExpected": true,
+        "sha256EqualExpected": true,
+        "bodyBytesEqualDisk": true,
+        "error": null,
+        "unknown": false,
+        "contentLength": "1496",
+        "contentType": "text/html",
+        "contentEncoding": null,
+        "equalExpected": true
+      },
+      "resources": [
+        {
+          "file": "assets/AgentSupportChoice-BufsvDTf.js",
+          "expected": {
+            "bytes": 2988,
+            "sha256": "e9fba3bcc6666f67d9c844986f55d68f96c6fd5623e7362d9d77a56f34f2facf"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/AgentSupportChoice-BufsvDTf.js",
+            "bytes": 2988,
+            "sha256": "e9fba3bcc6666f67d9c844986f55d68f96c6fd5623e7362d9d77a56f34f2facf",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/AgentSupportChoice-BufsvDTf.js",
+            "requestedAt": "2026-10-20T15:57:14.500885+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 2988,
+            "sha256": "e9fba3bcc6666f67d9c844986f55d68f96c6fd5623e7362d9d77a56f34f2facf",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "2988",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/BusinessLedger-C61mrd_9.js",
+          "expected": {
+            "bytes": 1837,
+            "sha256": "1cd427c228601b4c0a969300704c5716702f8ff16ca05e8c5ca45d70ee9e93f9"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/BusinessLedger-C61mrd_9.js",
+            "bytes": 1837,
+            "sha256": "1cd427c228601b4c0a969300704c5716702f8ff16ca05e8c5ca45d70ee9e93f9",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/BusinessLedger-C61mrd_9.js",
+            "requestedAt": "2026-10-20T15:57:14.514529+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 1837,
+            "sha256": "1cd427c228601b4c0a969300704c5716702f8ff16ca05e8c5ca45d70ee9e93f9",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "1837",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/CoursePanel-BSef2Kbg.js",
+          "expected": {
+            "bytes": 28485,
+            "sha256": "04f1aa9bedffe7a919a38f782d5347f9ff04b45b2b99546d58d0e8e568171be9"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/CoursePanel-BSef2Kbg.js",
+            "bytes": 28485,
+            "sha256": "04f1aa9bedffe7a919a38f782d5347f9ff04b45b2b99546d58d0e8e568171be9",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/CoursePanel-BSef2Kbg.js",
+            "requestedAt": "2026-10-20T15:57:14.516526+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 28485,
+            "sha256": "04f1aa9bedffe7a919a38f782d5347f9ff04b45b2b99546d58d0e8e568171be9",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "28485",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/DeepseekPanel-Bg_KUd4i.js",
+          "expected": {
+            "bytes": 16482,
+            "sha256": "666d7b478f302b8566f6154bf4a34b401f87cd675a48ac98e6f6a6c566e3c656"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/DeepseekPanel-Bg_KUd4i.js",
+            "bytes": 16482,
+            "sha256": "666d7b478f302b8566f6154bf4a34b401f87cd675a48ac98e6f6a6c566e3c656",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/DeepseekPanel-Bg_KUd4i.js",
+            "requestedAt": "2026-10-20T15:57:14.520816+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 16482,
+            "sha256": "666d7b478f302b8566f6154bf4a34b401f87cd675a48ac98e6f6a6c566e3c656",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "16482",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/EndingStage-COesX-HD.js",
+          "expected": {
+            "bytes": 15879,
+            "sha256": "862fa2572c47219c85b6cc56d930b2309b85a86828c080773fd58732058451a8"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/EndingStage-COesX-HD.js",
+            "bytes": 15879,
+            "sha256": "862fa2572c47219c85b6cc56d930b2309b85a86828c080773fd58732058451a8",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/EndingStage-COesX-HD.js",
+            "requestedAt": "2026-10-20T15:57:14.522817+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 15879,
+            "sha256": "862fa2572c47219c85b6cc56d930b2309b85a86828c080773fd58732058451a8",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "15879",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/EndingStage-epIyIgZ4.css",
+          "expected": {
+            "bytes": 5134,
+            "sha256": "98ac9e9f02e196bdd7966c873f7914b788de210b9618af3cf58a291df95e6f8e"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/EndingStage-epIyIgZ4.css",
+            "bytes": 5134,
+            "sha256": "98ac9e9f02e196bdd7966c873f7914b788de210b9618af3cf58a291df95e6f8e",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/EndingStage-epIyIgZ4.css",
+            "requestedAt": "2026-10-20T15:57:14.525712+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 5134,
+            "sha256": "98ac9e9f02e196bdd7966c873f7914b788de210b9618af3cf58a291df95e6f8e",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "5134",
+            "contentType": "text/css",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/EquityPanel-DKZbXcbT.js",
+          "expected": {
+            "bytes": 17389,
+            "sha256": "4f7eccd30932da97b3028b682da2f0a8209ca4e9cc15fef36bd240c87fef0005"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/EquityPanel-DKZbXcbT.js",
+            "bytes": 17389,
+            "sha256": "4f7eccd30932da97b3028b682da2f0a8209ca4e9cc15fef36bd240c87fef0005",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/EquityPanel-DKZbXcbT.js",
+            "requestedAt": "2026-10-20T15:57:14.527697+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 17389,
+            "sha256": "4f7eccd30932da97b3028b682da2f0a8209ca4e9cc15fef36bd240c87fef0005",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "17389",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/JourneyPanel-D1U5ym8F.js",
+          "expected": {
+            "bytes": 2435,
+            "sha256": "7acb54097a372c8cc08d0697dc57e5f12b701ac0151485608ad9db111dd1562d"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/JourneyPanel-D1U5ym8F.js",
+            "bytes": 2435,
+            "sha256": "7acb54097a372c8cc08d0697dc57e5f12b701ac0151485608ad9db111dd1562d",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/JourneyPanel-D1U5ym8F.js",
+            "requestedAt": "2026-10-20T15:57:14.530125+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 2435,
+            "sha256": "7acb54097a372c8cc08d0697dc57e5f12b701ac0151485608ad9db111dd1562d",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "2435",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/LifePanel-CITjBhNb.js",
+          "expected": {
+            "bytes": 19406,
+            "sha256": "5ca327be11200cd8fc735af2a065d243af5c1cfc7d52774d7700c915c20b28f2"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/LifePanel-CITjBhNb.js",
+            "bytes": 19406,
+            "sha256": "5ca327be11200cd8fc735af2a065d243af5c1cfc7d52774d7700c915c20b28f2",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/LifePanel-CITjBhNb.js",
+            "requestedAt": "2026-10-20T15:57:14.532733+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 19406,
+            "sha256": "5ca327be11200cd8fc735af2a065d243af5c1cfc7d52774d7700c915c20b28f2",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "19406",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/LifePanel-D-6r1W4-.css",
+          "expected": {
+            "bytes": 7689,
+            "sha256": "60f533f85fa83add2f1f48d290a072b91d06e21d93a4771fb6e5184a24f31c42"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/LifePanel-D-6r1W4-.css",
+            "bytes": 7689,
+            "sha256": "60f533f85fa83add2f1f48d290a072b91d06e21d93a4771fb6e5184a24f31c42",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/LifePanel-D-6r1W4-.css",
+            "requestedAt": "2026-10-20T15:57:14.534597+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 7689,
+            "sha256": "60f533f85fa83add2f1f48d290a072b91d06e21d93a4771fb6e5184a24f31c42",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "7689",
+            "contentType": "text/css",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/MarketPanel-BGQYvx98.js",
+          "expected": {
+            "bytes": 10677,
+            "sha256": "6ff2da293a002b06111934186deb4b7d0e78334ac252e12dee93a0cb790352d8"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/MarketPanel-BGQYvx98.js",
+            "bytes": 10677,
+            "sha256": "6ff2da293a002b06111934186deb4b7d0e78334ac252e12dee93a0cb790352d8",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/MarketPanel-BGQYvx98.js",
+            "requestedAt": "2026-10-20T15:57:14.536525+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 10677,
+            "sha256": "6ff2da293a002b06111934186deb4b7d0e78334ac252e12dee93a0cb790352d8",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "10677",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/RelayPanel-DRKrZ5ZW.js",
+          "expected": {
+            "bytes": 32240,
+            "sha256": "90a10696f34b4196462edba4fe5e2297fc2d5cb0d1b8f0085080ccb9003d4830"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/RelayPanel-DRKrZ5ZW.js",
+            "bytes": 32240,
+            "sha256": "90a10696f34b4196462edba4fe5e2297fc2d5cb0d1b8f0085080ccb9003d4830",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/RelayPanel-DRKrZ5ZW.js",
+            "requestedAt": "2026-10-20T15:57:14.540572+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 32240,
+            "sha256": "90a10696f34b4196462edba4fe5e2297fc2d5cb0d1b8f0085080ccb9003d4830",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "32240",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/RoutinesPanel-DinfKfut.js",
+          "expected": {
+            "bytes": 16841,
+            "sha256": "765875a28c253530eb031d94af4c037890d97c6e9b8e8529732d1657c2a4ec30"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/RoutinesPanel-DinfKfut.js",
+            "bytes": 16841,
+            "sha256": "765875a28c253530eb031d94af4c037890d97c6e9b8e8529732d1657c2a4ec30",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/RoutinesPanel-DinfKfut.js",
+            "requestedAt": "2026-10-20T15:57:14.543258+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 16841,
+            "sha256": "765875a28c253530eb031d94af4c037890d97c6e9b8e8529732d1657c2a4ec30",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "16841",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/StoryPanel-CQGydUbm.js",
+          "expected": {
+            "bytes": 29776,
+            "sha256": "20d8ff838163dd60b834d7c673c93ce56374ec219e8517dcda3293d685f7f43b"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/StoryPanel-CQGydUbm.js",
+            "bytes": 29776,
+            "sha256": "20d8ff838163dd60b834d7c673c93ce56374ec219e8517dcda3293d685f7f43b",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/StoryPanel-CQGydUbm.js",
+            "requestedAt": "2026-10-20T15:57:14.546541+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 29776,
+            "sha256": "20d8ff838163dd60b834d7c673c93ce56374ec219e8517dcda3293d685f7f43b",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "29776",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/VideoPanel-C9ovGHWK.js",
+          "expected": {
+            "bytes": 20872,
+            "sha256": "58ff2447c48955548e6630ede4af1080cff53d909c5835d8816aeb6f39a21d2b"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/VideoPanel-C9ovGHWK.js",
+            "bytes": 20872,
+            "sha256": "58ff2447c48955548e6630ede4af1080cff53d909c5835d8816aeb6f39a21d2b",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/VideoPanel-C9ovGHWK.js",
+            "requestedAt": "2026-10-20T15:57:14.549422+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 20872,
+            "sha256": "58ff2447c48955548e6630ede4af1080cff53d909c5835d8816aeb6f39a21d2b",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "20872",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/Workbench-2x7ADCrq.js",
+          "expected": {
+            "bytes": 15503,
+            "sha256": "63ff20b51fcf0ad64f3dfc90b258286b166f2890ff8f0a28c8d904525dd3db28"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/Workbench-2x7ADCrq.js",
+            "bytes": 15503,
+            "sha256": "63ff20b51fcf0ad64f3dfc90b258286b166f2890ff8f0a28c8d904525dd3db28",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/Workbench-2x7ADCrq.js",
+            "requestedAt": "2026-10-20T15:57:14.551442+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 15503,
+            "sha256": "63ff20b51fcf0ad64f3dfc90b258286b166f2890ff8f0a28c8d904525dd3db28",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "15503",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/browser-game-DnRlDabv.js",
+          "expected": {
+            "bytes": 596166,
+            "sha256": "728c5306e558e4fe8c1c13551d1138d65e45d7d91d3cc37d6339a052602ef47d"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/browser-game-DnRlDabv.js",
+            "bytes": 596166,
+            "sha256": "728c5306e558e4fe8c1c13551d1138d65e45d7d91d3cc37d6339a052602ef47d",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/browser-game-DnRlDabv.js",
+            "requestedAt": "2026-10-20T15:57:14.555145+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 596166,
+            "sha256": "728c5306e558e4fe8c1c13551d1138d65e45d7d91d3cc37d6339a052602ef47d",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "596166",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/calendar-CdKNcqQl.js",
+          "expected": {
+            "bytes": 960,
+            "sha256": "1b97c65a82d3c3b572c032c00c343fd541238eaa6654876bbe79a7a00eeb8797"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/calendar-CdKNcqQl.js",
+            "bytes": 960,
+            "sha256": "1b97c65a82d3c3b572c032c00c343fd541238eaa6654876bbe79a7a00eeb8797",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/calendar-CdKNcqQl.js",
+            "requestedAt": "2026-10-20T15:57:14.558850+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 960,
+            "sha256": "1b97c65a82d3c3b572c032c00c343fd541238eaa6654876bbe79a7a00eeb8797",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "960",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/chen-yu-cinematic-v1-Vz90zwXy.jpg",
+          "expected": {
+            "bytes": 380665,
+            "sha256": "b085ae8a995998dbaac26e714a37951d9de6eaaf3b7fcdaa334bfad4b3d29c4d"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/chen-yu-cinematic-v1-Vz90zwXy.jpg",
+            "bytes": 380665,
+            "sha256": "b085ae8a995998dbaac26e714a37951d9de6eaaf3b7fcdaa334bfad4b3d29c4d",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/chen-yu-cinematic-v1-Vz90zwXy.jpg",
+            "requestedAt": "2026-10-20T15:57:14.561917+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 380665,
+            "sha256": "b085ae8a995998dbaac26e714a37951d9de6eaaf3b7fcdaa334bfad4b3d29c4d",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "380665",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/course-v1-CVUv2UJ3.jpg",
+          "expected": {
+            "bytes": 417600,
+            "sha256": "12bf2c9bf26c7cc8b68e40df0bb42615c01cddfe8484b38e980487f3920d60c8"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/course-v1-CVUv2UJ3.jpg",
+            "bytes": 417600,
+            "sha256": "12bf2c9bf26c7cc8b68e40df0bb42615c01cddfe8484b38e980487f3920d60c8",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/course-v1-CVUv2UJ3.jpg",
+            "requestedAt": "2026-10-20T15:57:14.565613+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 417600,
+            "sha256": "12bf2c9bf26c7cc8b68e40df0bb42615c01cddfe8484b38e980487f3920d60c8",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "417600",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/deepseek-v1-DJGKddLJ.jpg",
+          "expected": {
+            "bytes": 393835,
+            "sha256": "0b7280188122bbbf0461e9c04801df64fbdc4ded1fcaa1531f7007e2e5535fe7"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/deepseek-v1-DJGKddLJ.jpg",
+            "bytes": 393835,
+            "sha256": "0b7280188122bbbf0461e9c04801df64fbdc4ded1fcaa1531f7007e2e5535fe7",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/deepseek-v1-DJGKddLJ.jpg",
+            "requestedAt": "2026-10-20T15:57:14.569234+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 393835,
+            "sha256": "0b7280188122bbbf0461e9c04801df64fbdc4ded1fcaa1531f7007e2e5535fe7",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "393835",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/ending-city-v1-CnkNimKl.js",
+          "expected": {
+            "bytes": 59,
+            "sha256": "aa589d4dfecf427c7790443cbcc9ab18244453f222d391efdbce7d6fedaf17a4"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/ending-city-v1-CnkNimKl.js",
+            "bytes": 59,
+            "sha256": "aa589d4dfecf427c7790443cbcc9ab18244453f222d391efdbce7d6fedaf17a4",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/ending-city-v1-CnkNimKl.js",
+            "requestedAt": "2026-10-20T15:57:14.571957+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 59,
+            "sha256": "aa589d4dfecf427c7790443cbcc9ab18244453f222d391efdbce7d6fedaf17a4",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "59",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/ending-city-v1-gJm3KE7a.jpg",
+          "expected": {
+            "bytes": 255749,
+            "sha256": "a507a38d598183be08522a3874c60092a75b284f13d35a1f2c3721cfc62d4e70"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/ending-city-v1-gJm3KE7a.jpg",
+            "bytes": 255749,
+            "sha256": "a507a38d598183be08522a3874c60092a75b284f13d35a1f2c3721cfc62d4e70",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/ending-city-v1-gJm3KE7a.jpg",
+            "requestedAt": "2026-10-20T15:57:14.574621+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 255749,
+            "sha256": "a507a38d598183be08522a3874c60092a75b284f13d35a1f2c3721cfc62d4e70",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "255749",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/ending-projection-E5eDj1no.js",
+          "expected": {
+            "bytes": 28703,
+            "sha256": "efe5e97dccd79233aa8abba5d4c3535466f63c4a45381e44a6da3c8266f38d60"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/ending-projection-E5eDj1no.js",
+            "bytes": 28703,
+            "sha256": "efe5e97dccd79233aa8abba5d4c3535466f63c4a45381e44a6da3c8266f38d60",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/ending-projection-E5eDj1no.js",
+            "requestedAt": "2026-10-20T15:57:14.577062+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 28703,
+            "sha256": "efe5e97dccd79233aa8abba5d4c3535466f63c4a45381e44a6da3c8266f38d60",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "28703",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/errors-CsEDQvMX.js",
+          "expected": {
+            "bytes": 150,
+            "sha256": "57718ab29451f285cdaeebc171e6a7fb1af5f0b94b2f0fd691e1880764ceaf32"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/errors-CsEDQvMX.js",
+            "bytes": 150,
+            "sha256": "57718ab29451f285cdaeebc171e6a7fb1af5f0b94b2f0fd691e1880764ceaf32",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/errors-CsEDQvMX.js",
+            "requestedAt": "2026-10-20T15:57:14.578888+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 150,
+            "sha256": "57718ab29451f285cdaeebc171e6a7fb1af5f0b94b2f0fd691e1880764ceaf32",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "150",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/index-BcCnTkyS.js",
+          "expected": {
+            "bytes": 664843,
+            "sha256": "64124fafd39ac0fcd0994fbde7c22578e5e3737ffd91bfc8d1db70e837389fb5"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/index-BcCnTkyS.js",
+            "bytes": 664843,
+            "sha256": "64124fafd39ac0fcd0994fbde7c22578e5e3737ffd91bfc8d1db70e837389fb5",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/index-BcCnTkyS.js",
+            "requestedAt": "2026-10-20T15:57:14.582655+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 664843,
+            "sha256": "64124fafd39ac0fcd0994fbde7c22578e5e3737ffd91bfc8d1db70e837389fb5",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "664843",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/index-BhFfPKLH.css",
+          "expected": {
+            "bytes": 149014,
+            "sha256": "ca8118db12294ed4cace2e194a65a8a32b9fb49c257fcbe75ce7ad9dded8780e"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/index-BhFfPKLH.css",
+            "bytes": 149014,
+            "sha256": "ca8118db12294ed4cace2e194a65a8a32b9fb49c257fcbe75ce7ad9dded8780e",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/index-BhFfPKLH.css",
+            "requestedAt": "2026-10-20T15:57:14.586177+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 149014,
+            "sha256": "ca8118db12294ed4cace2e194a65a8a32b9fb49c257fcbe75ce7ad9dded8780e",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "149014",
+            "contentType": "text/css",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/jsx-runtime-DHXBON9B.js",
+          "expected": {
+            "bytes": 8432,
+            "sha256": "74ad6ea1ee3716d0da78024e6518564a7482d72ad5130ae1e96963b0c9efbcbf"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/jsx-runtime-DHXBON9B.js",
+            "bytes": 8432,
+            "sha256": "74ad6ea1ee3716d0da78024e6518564a7482d72ad5130ae1e96963b0c9efbcbf",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/jsx-runtime-DHXBON9B.js",
+            "requestedAt": "2026-10-20T15:57:14.588763+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 8432,
+            "sha256": "74ad6ea1ee3716d0da78024e6518564a7482d72ad5130ae1e96963b0c9efbcbf",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "8432",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/ledger-v1-BaDUWRJT.jpg",
+          "expected": {
+            "bytes": 398941,
+            "sha256": "ba8ac4c5d179df5d41e5cc18dddc7df0fa3d1749503911b4af403817c348e1c2"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/ledger-v1-BaDUWRJT.jpg",
+            "bytes": 398941,
+            "sha256": "ba8ac4c5d179df5d41e5cc18dddc7df0fa3d1749503911b4af403817c348e1c2",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/ledger-v1-BaDUWRJT.jpg",
+            "requestedAt": "2026-10-20T15:57:14.591599+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 398941,
+            "sha256": "ba8ac4c5d179df5d41e5cc18dddc7df0fa3d1749503911b4af403817c348e1c2",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "398941",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/linzhou-cinematic-v1-CEsj0Mfk.jpg",
+          "expected": {
+            "bytes": 372343,
+            "sha256": "568f49c0391092b20f17e26e3fcd9f08a497a879bcdf8dbd5a0f9adc9f4b7f66"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/linzhou-cinematic-v1-CEsj0Mfk.jpg",
+            "bytes": 372343,
+            "sha256": "568f49c0391092b20f17e26e3fcd9f08a497a879bcdf8dbd5a0f9adc9f4b7f66",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/linzhou-cinematic-v1-CEsj0Mfk.jpg",
+            "requestedAt": "2026-10-20T15:57:14.595488+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 372343,
+            "sha256": "568f49c0391092b20f17e26e3fcd9f08a497a879bcdf8dbd5a0f9adc9f4b7f66",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "372343",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/market-v1-C2IGLBJ8.jpg",
+          "expected": {
+            "bytes": 460981,
+            "sha256": "3dcca73b78087928c4b8557f498375d06314ce354ea6e603dfb12a877e9b1342"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/market-v1-C2IGLBJ8.jpg",
+            "bytes": 460981,
+            "sha256": "3dcca73b78087928c4b8557f498375d06314ce354ea6e603dfb12a877e9b1342",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/market-v1-C2IGLBJ8.jpg",
+            "requestedAt": "2026-10-20T15:57:14.599222+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 460981,
+            "sha256": "3dcca73b78087928c4b8557f498375d06314ce354ea6e603dfb12a877e9b1342",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "460981",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/memory-v1-CoFs-C5z.jpg",
+          "expected": {
+            "bytes": 571325,
+            "sha256": "b856d3da52f3b4babc71880f43df27a8697ffa35fdef7142e4a8b07c2887feec"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/memory-v1-CoFs-C5z.jpg",
+            "bytes": 571325,
+            "sha256": "b856d3da52f3b4babc71880f43df27a8697ffa35fdef7142e4a8b07c2887feec",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/memory-v1-CoFs-C5z.jpg",
+            "requestedAt": "2026-10-20T15:57:14.603103+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 571325,
+            "sha256": "b856d3da52f3b4babc71880f43df27a8697ffa35fdef7142e4a8b07c2887feec",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "571325",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/money-ILI-7Spm.js",
+          "expected": {
+            "bytes": 638,
+            "sha256": "62f961a4fe27cdb7fe642edb327fcd03f03d357098f527c0cb42f0989e7050cb"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/money-ILI-7Spm.js",
+            "bytes": 638,
+            "sha256": "62f961a4fe27cdb7fe642edb327fcd03f03d357098f527c0cb42f0989e7050cb",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/money-ILI-7Spm.js",
+            "requestedAt": "2026-10-20T15:57:14.606566+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 638,
+            "sha256": "62f961a4fe27cdb7fe642edb327fcd03f03d357098f527c0cb42f0989e7050cb",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "638",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/opportunities-v1-jvpnJw_V.jpg",
+          "expected": {
+            "bytes": 373328,
+            "sha256": "d7419f47dfd811914f89fdb1daf4f2ce5c20019687ccdb14ca97115d2f91a264"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/opportunities-v1-jvpnJw_V.jpg",
+            "bytes": 373328,
+            "sha256": "d7419f47dfd811914f89fdb1daf4f2ce5c20019687ccdb14ca97115d2f91a264",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/opportunities-v1-jvpnJw_V.jpg",
+            "requestedAt": "2026-10-20T15:57:14.609749+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 373328,
+            "sha256": "d7419f47dfd811914f89fdb1daf4f2ce5c20019687ccdb14ca97115d2f91a264",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "373328",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/playable-advance-BgpD8YUc.js",
+          "expected": {
+            "bytes": 443,
+            "sha256": "635c26a2f686709b30162af4e3e59552e42d614dd56cc433857dac75003f65b9"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/playable-advance-BgpD8YUc.js",
+            "bytes": 443,
+            "sha256": "635c26a2f686709b30162af4e3e59552e42d614dd56cc433857dac75003f65b9",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/playable-advance-BgpD8YUc.js",
+            "requestedAt": "2026-10-20T15:57:14.612187+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 443,
+            "sha256": "635c26a2f686709b30162af4e3e59552e42d614dd56cc433857dac75003f65b9",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "443",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/relay-v1-Cz2i0o3A.jpg",
+          "expected": {
+            "bytes": 456936,
+            "sha256": "69238c3b32528a005c11e466700a10f6dfbfb4488964471abd4d2d1045885eb6"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/relay-v1-Cz2i0o3A.jpg",
+            "bytes": 456936,
+            "sha256": "69238c3b32528a005c11e466700a10f6dfbfb4488964471abd4d2d1045885eb6",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/relay-v1-Cz2i0o3A.jpg",
+            "requestedAt": "2026-10-20T15:57:14.616041+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 456936,
+            "sha256": "69238c3b32528a005c11e466700a10f6dfbfb4488964471abd4d2d1045885eb6",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "456936",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/room-improved-v1-B6AIlFzd.jpg",
+          "expected": {
+            "bytes": 530809,
+            "sha256": "d9294c6ec9adfd79a9a2b3d84097cc67835f760241f3a81e81d4b8af053430d6"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/room-improved-v1-B6AIlFzd.jpg",
+            "bytes": 530809,
+            "sha256": "d9294c6ec9adfd79a9a2b3d84097cc67835f760241f3a81e81d4b8af053430d6",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/room-improved-v1-B6AIlFzd.jpg",
+            "requestedAt": "2026-10-20T15:57:14.619874+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 530809,
+            "sha256": "d9294c6ec9adfd79a9a2b3d84097cc67835f760241f3a81e81d4b8af053430d6",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "530809",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/room-ordinary-v1-Ccc5kFZS.jpg",
+          "expected": {
+            "bytes": 526460,
+            "sha256": "ec1ada1f54c1891239676aae93a112f69f067791882036779871b4978ff5a011"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/room-ordinary-v1-Ccc5kFZS.jpg",
+            "bytes": 526460,
+            "sha256": "ec1ada1f54c1891239676aae93a112f69f067791882036779871b4978ff5a011",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/room-ordinary-v1-Ccc5kFZS.jpg",
+            "requestedAt": "2026-10-20T15:57:14.623876+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 526460,
+            "sha256": "ec1ada1f54c1891239676aae93a112f69f067791882036779871b4978ff5a011",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "526460",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/tang-ying-cinematic-v1-CONyOoly.jpg",
+          "expected": {
+            "bytes": 470310,
+            "sha256": "b811ae58ebf6d8eda7e04d6e53f2a5b6f1b69952a74be3be7688cb5732fd9c80"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/tang-ying-cinematic-v1-CONyOoly.jpg",
+            "bytes": 470310,
+            "sha256": "b811ae58ebf6d8eda7e04d6e53f2a5b6f1b69952a74be3be7688cb5732fd9c80",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/tang-ying-cinematic-v1-CONyOoly.jpg",
+            "requestedAt": "2026-10-20T15:57:14.628092+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 470310,
+            "sha256": "b811ae58ebf6d8eda7e04d6e53f2a5b6f1b69952a74be3be7688cb5732fd9c80",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "470310",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/video-v1-vV__FERo.jpg",
+          "expected": {
+            "bytes": 512074,
+            "sha256": "ca7fa95da5be88cde6e77416771eedee52f90343f4235335e278c4383a17b82a"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/video-v1-vV__FERo.jpg",
+            "bytes": 512074,
+            "sha256": "ca7fa95da5be88cde6e77416771eedee52f90343f4235335e278c4383a17b82a",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/video-v1-vV__FERo.jpg",
+            "requestedAt": "2026-10-20T15:57:14.631755+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 512074,
+            "sha256": "ca7fa95da5be88cde6e77416771eedee52f90343f4235335e278c4383a17b82a",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "512074",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/work-visibility--wZFKkMP.js",
+          "expected": {
+            "bytes": 665,
+            "sha256": "f071e7b867f98b8041af02b0790d87962fffca6c0170985b2ee3f7b1a0f79afd"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/work-visibility--wZFKkMP.js",
+            "bytes": 665,
+            "sha256": "f071e7b867f98b8041af02b0790d87962fffca6c0170985b2ee3f7b1a0f79afd",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/work-visibility--wZFKkMP.js",
+            "requestedAt": "2026-10-20T15:57:14.634482+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 665,
+            "sha256": "f071e7b867f98b8041af02b0790d87962fffca6c0170985b2ee3f7b1a0f79afd",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "665",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/xu-cheng-cinematic-v1-CezMxv_X.jpg",
+          "expected": {
+            "bytes": 479058,
+            "sha256": "db185b3016e62694199c8bb6d5b9c952e73689ba366214091c923ab801ed18fa"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/assets/xu-cheng-cinematic-v1-CezMxv_X.jpg",
+            "bytes": 479058,
+            "sha256": "db185b3016e62694199c8bb6d5b9c952e73689ba366214091c923ab801ed18fa",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/assets/xu-cheng-cinematic-v1-CezMxv_X.jpg",
+            "requestedAt": "2026-10-20T15:57:14.637217+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 479058,
+            "sha256": "db185b3016e62694199c8bb6d5b9c952e73689ba366214091c923ab801ed18fa",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "479058",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "diagnostics/startup-metrics-v1.js",
+          "expected": {
+            "bytes": 6229,
+            "sha256": "2954834f4c1bb87402f18525181c3a5b15715c54396cdb49f9cf748b36c0a201"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/diagnostics/startup-metrics-v1.js",
+            "bytes": 6229,
+            "sha256": "2954834f4c1bb87402f18525181c3a5b15715c54396cdb49f9cf748b36c0a201",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/diagnostics/startup-metrics-v1.js",
+            "requestedAt": "2026-10-20T15:57:14.640160+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 6229,
+            "sha256": "2954834f4c1bb87402f18525181c3a5b15715c54396cdb49f9cf748b36c0a201",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "6229",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "index.html",
+          "expected": {
+            "bytes": 1496,
+            "sha256": "e56cc7234f7e0b8a24b845bcd85c18436a3cd3ec8b6099fb6702c02ba3dae1c2"
+          },
+          "disk": {
+            "file": ".delivery/t17-risk-final/index.html",
+            "bytes": 1496,
+            "sha256": "e56cc7234f7e0b8a24b845bcd85c18436a3cd3ec8b6099fb6702c02ba3dae1c2",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5311/index.html",
+            "requestedAt": "2026-10-20T15:57:14.642024+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 1496,
+            "sha256": "e56cc7234f7e0b8a24b845bcd85c18436a3cd3ec8b6099fb6702c02ba3dae1c2",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "1496",
+            "contentType": "text/html",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        }
+      ],
+      "allOriginalDiskAndHttpEqual": true
+    },
+    {
+      "port": 5302,
+      "build": ".delivery/t17-course-r10",
+      "originalContract": "goal-1/evidence/t17-acceptance-04/current-build-http-r10.json",
+      "originalRegisteredResources": 44,
+      "actualDiskInventoryResources": 44,
+      "diskFileSetExactlyEqualOriginal": true,
+      "diskInventoryError": null,
+      "unexpectedDiskFiles": [],
+      "missingDiskFiles": [],
+      "diskMatchedExpected": 44,
+      "httpMatchedExpected": 44,
+      "httpRequests": 45,
+      "failedResources": [],
+      "unknownHttpResources": [],
+      "diskChangedDuringVerification": [],
+      "homepage": {
+        "method": "GET",
+        "url": "http://127.0.0.1:5302/",
+        "requestedAt": "2026-10-20T15:57:14.835437+00:00",
+        "requestHeaders": {
+          "Accept-Encoding": "identity",
+          "Cache-Control": "no-cache"
+        },
+        "attempted": true,
+        "status": 200,
+        "bytes": 1496,
+        "sha256": "e4e26028fd8b4d75597d2e2534735f392f5b4ac8a72dce02d5a65279dd0debd5",
+        "byteCountEqualExpected": true,
+        "sha256EqualExpected": true,
+        "bodyBytesEqualDisk": true,
+        "error": null,
+        "unknown": false,
+        "contentLength": "1496",
+        "contentType": "text/html",
+        "contentEncoding": null,
+        "equalExpected": true
+      },
+      "resources": [
+        {
+          "file": "assets/AgentSupportChoice-xW0x72NJ.js",
+          "expected": {
+            "bytes": 2988,
+            "sha256": "39997a5ebe9662464c36d4b5ffdf01eb71e5464a4076662682a9bc0d49b0e8df"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/AgentSupportChoice-xW0x72NJ.js",
+            "bytes": 2988,
+            "sha256": "39997a5ebe9662464c36d4b5ffdf01eb71e5464a4076662682a9bc0d49b0e8df",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/AgentSupportChoice-xW0x72NJ.js",
+            "requestedAt": "2026-10-20T15:57:14.666123+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 2988,
+            "sha256": "39997a5ebe9662464c36d4b5ffdf01eb71e5464a4076662682a9bc0d49b0e8df",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "2988",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/BusinessLedger-D4fWjs_G.js",
+          "expected": {
+            "bytes": 1837,
+            "sha256": "a3866e7466e1c73ec2184839abe8210c2166df5336b461cc060f9d30351185b4"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/BusinessLedger-D4fWjs_G.js",
+            "bytes": 1837,
+            "sha256": "a3866e7466e1c73ec2184839abe8210c2166df5336b461cc060f9d30351185b4",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/BusinessLedger-D4fWjs_G.js",
+            "requestedAt": "2026-10-20T15:57:14.680291+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 1837,
+            "sha256": "a3866e7466e1c73ec2184839abe8210c2166df5336b461cc060f9d30351185b4",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "1837",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/CoursePanel-CKRxVekv.js",
+          "expected": {
+            "bytes": 28485,
+            "sha256": "d97344e18683f06b447e377cf717d66015a84728e6bf5e190cab40f141e49ad6"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/CoursePanel-CKRxVekv.js",
+            "bytes": 28485,
+            "sha256": "d97344e18683f06b447e377cf717d66015a84728e6bf5e190cab40f141e49ad6",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/CoursePanel-CKRxVekv.js",
+            "requestedAt": "2026-10-20T15:57:14.688212+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 28485,
+            "sha256": "d97344e18683f06b447e377cf717d66015a84728e6bf5e190cab40f141e49ad6",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "28485",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/DeepseekPanel-C8dvrgQs.js",
+          "expected": {
+            "bytes": 16482,
+            "sha256": "213fd5edc982ec5b0ea6b006db520e31cd7e04f64fdbd2990c4a4babcd038ccb"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/DeepseekPanel-C8dvrgQs.js",
+            "bytes": 16482,
+            "sha256": "213fd5edc982ec5b0ea6b006db520e31cd7e04f64fdbd2990c4a4babcd038ccb",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/DeepseekPanel-C8dvrgQs.js",
+            "requestedAt": "2026-10-20T15:57:14.691774+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 16482,
+            "sha256": "213fd5edc982ec5b0ea6b006db520e31cd7e04f64fdbd2990c4a4babcd038ccb",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "16482",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/EndingStage-Ba3z_fL5.js",
+          "expected": {
+            "bytes": 15879,
+            "sha256": "073e635674441f188781c3f953c44c98608945b46365cfafbb754addec8160b8"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/EndingStage-Ba3z_fL5.js",
+            "bytes": 15879,
+            "sha256": "073e635674441f188781c3f953c44c98608945b46365cfafbb754addec8160b8",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/EndingStage-Ba3z_fL5.js",
+            "requestedAt": "2026-10-20T15:57:14.694310+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 15879,
+            "sha256": "073e635674441f188781c3f953c44c98608945b46365cfafbb754addec8160b8",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "15879",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/EndingStage-epIyIgZ4.css",
+          "expected": {
+            "bytes": 5134,
+            "sha256": "98ac9e9f02e196bdd7966c873f7914b788de210b9618af3cf58a291df95e6f8e"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/EndingStage-epIyIgZ4.css",
+            "bytes": 5134,
+            "sha256": "98ac9e9f02e196bdd7966c873f7914b788de210b9618af3cf58a291df95e6f8e",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/EndingStage-epIyIgZ4.css",
+            "requestedAt": "2026-10-20T15:57:14.697036+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 5134,
+            "sha256": "98ac9e9f02e196bdd7966c873f7914b788de210b9618af3cf58a291df95e6f8e",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "5134",
+            "contentType": "text/css",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/EquityPanel-DyBQLIUP.js",
+          "expected": {
+            "bytes": 17389,
+            "sha256": "c07773cc6cf192adc4a91d7e2ffcb592b84213df5d9a92aed955530871fb5712"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/EquityPanel-DyBQLIUP.js",
+            "bytes": 17389,
+            "sha256": "c07773cc6cf192adc4a91d7e2ffcb592b84213df5d9a92aed955530871fb5712",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/EquityPanel-DyBQLIUP.js",
+            "requestedAt": "2026-10-20T15:57:14.699490+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 17389,
+            "sha256": "c07773cc6cf192adc4a91d7e2ffcb592b84213df5d9a92aed955530871fb5712",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "17389",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/JourneyPanel-D1U5ym8F.js",
+          "expected": {
+            "bytes": 2435,
+            "sha256": "7acb54097a372c8cc08d0697dc57e5f12b701ac0151485608ad9db111dd1562d"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/JourneyPanel-D1U5ym8F.js",
+            "bytes": 2435,
+            "sha256": "7acb54097a372c8cc08d0697dc57e5f12b701ac0151485608ad9db111dd1562d",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/JourneyPanel-D1U5ym8F.js",
+            "requestedAt": "2026-10-20T15:57:14.703608+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 2435,
+            "sha256": "7acb54097a372c8cc08d0697dc57e5f12b701ac0151485608ad9db111dd1562d",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "2435",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/LifePanel-6A6_bK96.js",
+          "expected": {
+            "bytes": 19406,
+            "sha256": "c25630249e27dcf7fcdc33c6b8b9c78b37753887947e4e6f7e073c3550f62c40"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/LifePanel-6A6_bK96.js",
+            "bytes": 19406,
+            "sha256": "c25630249e27dcf7fcdc33c6b8b9c78b37753887947e4e6f7e073c3550f62c40",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/LifePanel-6A6_bK96.js",
+            "requestedAt": "2026-10-20T15:57:14.705712+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 19406,
+            "sha256": "c25630249e27dcf7fcdc33c6b8b9c78b37753887947e4e6f7e073c3550f62c40",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "19406",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/LifePanel-D-6r1W4-.css",
+          "expected": {
+            "bytes": 7689,
+            "sha256": "60f533f85fa83add2f1f48d290a072b91d06e21d93a4771fb6e5184a24f31c42"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/LifePanel-D-6r1W4-.css",
+            "bytes": 7689,
+            "sha256": "60f533f85fa83add2f1f48d290a072b91d06e21d93a4771fb6e5184a24f31c42",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/LifePanel-D-6r1W4-.css",
+            "requestedAt": "2026-10-20T15:57:14.710599+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 7689,
+            "sha256": "60f533f85fa83add2f1f48d290a072b91d06e21d93a4771fb6e5184a24f31c42",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "7689",
+            "contentType": "text/css",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/MarketPanel-DRH5JqTx.js",
+          "expected": {
+            "bytes": 10677,
+            "sha256": "bcc76bd8e0155a1af4005bc1c98a91e45c5d225c9ec3020d0c784e6d4632390f"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/MarketPanel-DRH5JqTx.js",
+            "bytes": 10677,
+            "sha256": "bcc76bd8e0155a1af4005bc1c98a91e45c5d225c9ec3020d0c784e6d4632390f",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/MarketPanel-DRH5JqTx.js",
+            "requestedAt": "2026-10-20T15:57:14.713143+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 10677,
+            "sha256": "bcc76bd8e0155a1af4005bc1c98a91e45c5d225c9ec3020d0c784e6d4632390f",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "10677",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/RelayPanel-TmrGDJjQ.js",
+          "expected": {
+            "bytes": 32240,
+            "sha256": "fbcd502cd686b56ec8e05205e5b1a9012f420c380e55fc2f1db4331f16ea706e"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/RelayPanel-TmrGDJjQ.js",
+            "bytes": 32240,
+            "sha256": "fbcd502cd686b56ec8e05205e5b1a9012f420c380e55fc2f1db4331f16ea706e",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/RelayPanel-TmrGDJjQ.js",
+            "requestedAt": "2026-10-20T15:57:14.715438+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 32240,
+            "sha256": "fbcd502cd686b56ec8e05205e5b1a9012f420c380e55fc2f1db4331f16ea706e",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "32240",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/RoutinesPanel-CY8i-Ty0.js",
+          "expected": {
+            "bytes": 16841,
+            "sha256": "44893c2ba70566cec424338d24f9552cd60822a65eb3fa480ce563f0add6f6fb"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/RoutinesPanel-CY8i-Ty0.js",
+            "bytes": 16841,
+            "sha256": "44893c2ba70566cec424338d24f9552cd60822a65eb3fa480ce563f0add6f6fb",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/RoutinesPanel-CY8i-Ty0.js",
+            "requestedAt": "2026-10-20T15:57:14.717917+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 16841,
+            "sha256": "44893c2ba70566cec424338d24f9552cd60822a65eb3fa480ce563f0add6f6fb",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "16841",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/StoryPanel-Cj-3scx2.js",
+          "expected": {
+            "bytes": 29775,
+            "sha256": "f082f79c9bdacf937a014ae32db2e64f16bf7a707b445baa4d75d40ab4f5eaf9"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/StoryPanel-Cj-3scx2.js",
+            "bytes": 29775,
+            "sha256": "f082f79c9bdacf937a014ae32db2e64f16bf7a707b445baa4d75d40ab4f5eaf9",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/StoryPanel-Cj-3scx2.js",
+            "requestedAt": "2026-10-20T15:57:14.720372+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 29775,
+            "sha256": "f082f79c9bdacf937a014ae32db2e64f16bf7a707b445baa4d75d40ab4f5eaf9",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "29775",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/VideoPanel-CaVA7qFW.js",
+          "expected": {
+            "bytes": 20872,
+            "sha256": "00bad4e2a10e4f4e90818f0c95cbbb400d372d76803c51d058298e3a03b9f66e"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/VideoPanel-CaVA7qFW.js",
+            "bytes": 20872,
+            "sha256": "00bad4e2a10e4f4e90818f0c95cbbb400d372d76803c51d058298e3a03b9f66e",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/VideoPanel-CaVA7qFW.js",
+            "requestedAt": "2026-10-20T15:57:14.722706+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 20872,
+            "sha256": "00bad4e2a10e4f4e90818f0c95cbbb400d372d76803c51d058298e3a03b9f66e",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "20872",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/Workbench-BQGRKPQn.js",
+          "expected": {
+            "bytes": 15503,
+            "sha256": "cd309fb465f8e6783c8b2e9e3ccb300f589d70a1e4e5fd6633217eac06594196"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/Workbench-BQGRKPQn.js",
+            "bytes": 15503,
+            "sha256": "cd309fb465f8e6783c8b2e9e3ccb300f589d70a1e4e5fd6633217eac06594196",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/Workbench-BQGRKPQn.js",
+            "requestedAt": "2026-10-20T15:57:14.726092+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 15503,
+            "sha256": "cd309fb465f8e6783c8b2e9e3ccb300f589d70a1e4e5fd6633217eac06594196",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "15503",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/browser-game-qGy6ff_I.js",
+          "expected": {
+            "bytes": 596166,
+            "sha256": "ffb36bac508342ea3acae3a0861f6a7c776c1d64c1ce0fccdfcf6812bc855f7b"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/browser-game-qGy6ff_I.js",
+            "bytes": 596166,
+            "sha256": "ffb36bac508342ea3acae3a0861f6a7c776c1d64c1ce0fccdfcf6812bc855f7b",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/browser-game-qGy6ff_I.js",
+            "requestedAt": "2026-10-20T15:57:14.729827+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 596166,
+            "sha256": "ffb36bac508342ea3acae3a0861f6a7c776c1d64c1ce0fccdfcf6812bc855f7b",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "596166",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/calendar-CdKNcqQl.js",
+          "expected": {
+            "bytes": 960,
+            "sha256": "1b97c65a82d3c3b572c032c00c343fd541238eaa6654876bbe79a7a00eeb8797"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/calendar-CdKNcqQl.js",
+            "bytes": 960,
+            "sha256": "1b97c65a82d3c3b572c032c00c343fd541238eaa6654876bbe79a7a00eeb8797",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/calendar-CdKNcqQl.js",
+            "requestedAt": "2026-10-20T15:57:14.733674+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 960,
+            "sha256": "1b97c65a82d3c3b572c032c00c343fd541238eaa6654876bbe79a7a00eeb8797",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "960",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/chen-yu-cinematic-v1-Vz90zwXy.jpg",
+          "expected": {
+            "bytes": 380665,
+            "sha256": "b085ae8a995998dbaac26e714a37951d9de6eaaf3b7fcdaa334bfad4b3d29c4d"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/chen-yu-cinematic-v1-Vz90zwXy.jpg",
+            "bytes": 380665,
+            "sha256": "b085ae8a995998dbaac26e714a37951d9de6eaaf3b7fcdaa334bfad4b3d29c4d",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/chen-yu-cinematic-v1-Vz90zwXy.jpg",
+            "requestedAt": "2026-10-20T15:57:14.737528+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 380665,
+            "sha256": "b085ae8a995998dbaac26e714a37951d9de6eaaf3b7fcdaa334bfad4b3d29c4d",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "380665",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/course-v1-CVUv2UJ3.jpg",
+          "expected": {
+            "bytes": 417600,
+            "sha256": "12bf2c9bf26c7cc8b68e40df0bb42615c01cddfe8484b38e980487f3920d60c8"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/course-v1-CVUv2UJ3.jpg",
+            "bytes": 417600,
+            "sha256": "12bf2c9bf26c7cc8b68e40df0bb42615c01cddfe8484b38e980487f3920d60c8",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/course-v1-CVUv2UJ3.jpg",
+            "requestedAt": "2026-10-20T15:57:14.742180+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 417600,
+            "sha256": "12bf2c9bf26c7cc8b68e40df0bb42615c01cddfe8484b38e980487f3920d60c8",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "417600",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/deepseek-v1-DJGKddLJ.jpg",
+          "expected": {
+            "bytes": 393835,
+            "sha256": "0b7280188122bbbf0461e9c04801df64fbdc4ded1fcaa1531f7007e2e5535fe7"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/deepseek-v1-DJGKddLJ.jpg",
+            "bytes": 393835,
+            "sha256": "0b7280188122bbbf0461e9c04801df64fbdc4ded1fcaa1531f7007e2e5535fe7",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/deepseek-v1-DJGKddLJ.jpg",
+            "requestedAt": "2026-10-20T15:57:14.746219+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 393835,
+            "sha256": "0b7280188122bbbf0461e9c04801df64fbdc4ded1fcaa1531f7007e2e5535fe7",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "393835",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/ending-city-v1-CnkNimKl.js",
+          "expected": {
+            "bytes": 59,
+            "sha256": "aa589d4dfecf427c7790443cbcc9ab18244453f222d391efdbce7d6fedaf17a4"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/ending-city-v1-CnkNimKl.js",
+            "bytes": 59,
+            "sha256": "aa589d4dfecf427c7790443cbcc9ab18244453f222d391efdbce7d6fedaf17a4",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/ending-city-v1-CnkNimKl.js",
+            "requestedAt": "2026-10-20T15:57:14.749665+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 59,
+            "sha256": "aa589d4dfecf427c7790443cbcc9ab18244453f222d391efdbce7d6fedaf17a4",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "59",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/ending-city-v1-gJm3KE7a.jpg",
+          "expected": {
+            "bytes": 255749,
+            "sha256": "a507a38d598183be08522a3874c60092a75b284f13d35a1f2c3721cfc62d4e70"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/ending-city-v1-gJm3KE7a.jpg",
+            "bytes": 255749,
+            "sha256": "a507a38d598183be08522a3874c60092a75b284f13d35a1f2c3721cfc62d4e70",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/ending-city-v1-gJm3KE7a.jpg",
+            "requestedAt": "2026-10-20T15:57:14.753026+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 255749,
+            "sha256": "a507a38d598183be08522a3874c60092a75b284f13d35a1f2c3721cfc62d4e70",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "255749",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/ending-projection-Dk-vLfEh.js",
+          "expected": {
+            "bytes": 28703,
+            "sha256": "f31a0881cbe21a42d270f5d1b831e0175820e3d6edb54c009e84e8bd600b1ce6"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/ending-projection-Dk-vLfEh.js",
+            "bytes": 28703,
+            "sha256": "f31a0881cbe21a42d270f5d1b831e0175820e3d6edb54c009e84e8bd600b1ce6",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/ending-projection-Dk-vLfEh.js",
+            "requestedAt": "2026-10-20T15:57:14.756380+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 28703,
+            "sha256": "f31a0881cbe21a42d270f5d1b831e0175820e3d6edb54c009e84e8bd600b1ce6",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "28703",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/errors-CsEDQvMX.js",
+          "expected": {
+            "bytes": 150,
+            "sha256": "57718ab29451f285cdaeebc171e6a7fb1af5f0b94b2f0fd691e1880764ceaf32"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/errors-CsEDQvMX.js",
+            "bytes": 150,
+            "sha256": "57718ab29451f285cdaeebc171e6a7fb1af5f0b94b2f0fd691e1880764ceaf32",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/errors-CsEDQvMX.js",
+            "requestedAt": "2026-10-20T15:57:14.759141+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 150,
+            "sha256": "57718ab29451f285cdaeebc171e6a7fb1af5f0b94b2f0fd691e1880764ceaf32",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "150",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/index-BDZnL6iW.js",
+          "expected": {
+            "bytes": 650253,
+            "sha256": "bd954c5ef3aecb980bce933459aa225f30adb791e006f01d8af67982cd0d19d3"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/index-BDZnL6iW.js",
+            "bytes": 650253,
+            "sha256": "bd954c5ef3aecb980bce933459aa225f30adb791e006f01d8af67982cd0d19d3",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/index-BDZnL6iW.js",
+            "requestedAt": "2026-10-20T15:57:14.763008+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 650253,
+            "sha256": "bd954c5ef3aecb980bce933459aa225f30adb791e006f01d8af67982cd0d19d3",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "650253",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/index-CFdDFRij.css",
+          "expected": {
+            "bytes": 147869,
+            "sha256": "d737a46a5d2a7e095f390b68254a23b922bc5a101d59c78e0253f9b5ece74486"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/index-CFdDFRij.css",
+            "bytes": 147869,
+            "sha256": "d737a46a5d2a7e095f390b68254a23b922bc5a101d59c78e0253f9b5ece74486",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/index-CFdDFRij.css",
+            "requestedAt": "2026-10-20T15:57:14.766472+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 147869,
+            "sha256": "d737a46a5d2a7e095f390b68254a23b922bc5a101d59c78e0253f9b5ece74486",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "147869",
+            "contentType": "text/css",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/jsx-runtime-DHXBON9B.js",
+          "expected": {
+            "bytes": 8432,
+            "sha256": "74ad6ea1ee3716d0da78024e6518564a7482d72ad5130ae1e96963b0c9efbcbf"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/jsx-runtime-DHXBON9B.js",
+            "bytes": 8432,
+            "sha256": "74ad6ea1ee3716d0da78024e6518564a7482d72ad5130ae1e96963b0c9efbcbf",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/jsx-runtime-DHXBON9B.js",
+            "requestedAt": "2026-10-20T15:57:14.769265+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 8432,
+            "sha256": "74ad6ea1ee3716d0da78024e6518564a7482d72ad5130ae1e96963b0c9efbcbf",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "8432",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/ledger-v1-BaDUWRJT.jpg",
+          "expected": {
+            "bytes": 398941,
+            "sha256": "ba8ac4c5d179df5d41e5cc18dddc7df0fa3d1749503911b4af403817c348e1c2"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/ledger-v1-BaDUWRJT.jpg",
+            "bytes": 398941,
+            "sha256": "ba8ac4c5d179df5d41e5cc18dddc7df0fa3d1749503911b4af403817c348e1c2",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/ledger-v1-BaDUWRJT.jpg",
+            "requestedAt": "2026-10-20T15:57:14.772235+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 398941,
+            "sha256": "ba8ac4c5d179df5d41e5cc18dddc7df0fa3d1749503911b4af403817c348e1c2",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "398941",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/linzhou-cinematic-v1-CEsj0Mfk.jpg",
+          "expected": {
+            "bytes": 372343,
+            "sha256": "568f49c0391092b20f17e26e3fcd9f08a497a879bcdf8dbd5a0f9adc9f4b7f66"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/linzhou-cinematic-v1-CEsj0Mfk.jpg",
+            "bytes": 372343,
+            "sha256": "568f49c0391092b20f17e26e3fcd9f08a497a879bcdf8dbd5a0f9adc9f4b7f66",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/linzhou-cinematic-v1-CEsj0Mfk.jpg",
+            "requestedAt": "2026-10-20T15:57:14.776373+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 372343,
+            "sha256": "568f49c0391092b20f17e26e3fcd9f08a497a879bcdf8dbd5a0f9adc9f4b7f66",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "372343",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/market-v1-C2IGLBJ8.jpg",
+          "expected": {
+            "bytes": 460981,
+            "sha256": "3dcca73b78087928c4b8557f498375d06314ce354ea6e603dfb12a877e9b1342"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/market-v1-C2IGLBJ8.jpg",
+            "bytes": 460981,
+            "sha256": "3dcca73b78087928c4b8557f498375d06314ce354ea6e603dfb12a877e9b1342",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/market-v1-C2IGLBJ8.jpg",
+            "requestedAt": "2026-10-20T15:57:14.780312+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 460981,
+            "sha256": "3dcca73b78087928c4b8557f498375d06314ce354ea6e603dfb12a877e9b1342",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "460981",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/memory-v1-CoFs-C5z.jpg",
+          "expected": {
+            "bytes": 571325,
+            "sha256": "b856d3da52f3b4babc71880f43df27a8697ffa35fdef7142e4a8b07c2887feec"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/memory-v1-CoFs-C5z.jpg",
+            "bytes": 571325,
+            "sha256": "b856d3da52f3b4babc71880f43df27a8697ffa35fdef7142e4a8b07c2887feec",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/memory-v1-CoFs-C5z.jpg",
+            "requestedAt": "2026-10-20T15:57:14.785050+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 571325,
+            "sha256": "b856d3da52f3b4babc71880f43df27a8697ffa35fdef7142e4a8b07c2887feec",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "571325",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/money-ILI-7Spm.js",
+          "expected": {
+            "bytes": 638,
+            "sha256": "62f961a4fe27cdb7fe642edb327fcd03f03d357098f527c0cb42f0989e7050cb"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/money-ILI-7Spm.js",
+            "bytes": 638,
+            "sha256": "62f961a4fe27cdb7fe642edb327fcd03f03d357098f527c0cb42f0989e7050cb",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/money-ILI-7Spm.js",
+            "requestedAt": "2026-10-20T15:57:14.791319+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 638,
+            "sha256": "62f961a4fe27cdb7fe642edb327fcd03f03d357098f527c0cb42f0989e7050cb",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "638",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/opportunities-v1-jvpnJw_V.jpg",
+          "expected": {
+            "bytes": 373328,
+            "sha256": "d7419f47dfd811914f89fdb1daf4f2ce5c20019687ccdb14ca97115d2f91a264"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/opportunities-v1-jvpnJw_V.jpg",
+            "bytes": 373328,
+            "sha256": "d7419f47dfd811914f89fdb1daf4f2ce5c20019687ccdb14ca97115d2f91a264",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/opportunities-v1-jvpnJw_V.jpg",
+            "requestedAt": "2026-10-20T15:57:14.794789+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 373328,
+            "sha256": "d7419f47dfd811914f89fdb1daf4f2ce5c20019687ccdb14ca97115d2f91a264",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "373328",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/playable-advance-BgpD8YUc.js",
+          "expected": {
+            "bytes": 443,
+            "sha256": "635c26a2f686709b30162af4e3e59552e42d614dd56cc433857dac75003f65b9"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/playable-advance-BgpD8YUc.js",
+            "bytes": 443,
+            "sha256": "635c26a2f686709b30162af4e3e59552e42d614dd56cc433857dac75003f65b9",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/playable-advance-BgpD8YUc.js",
+            "requestedAt": "2026-10-20T15:57:14.798297+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 443,
+            "sha256": "635c26a2f686709b30162af4e3e59552e42d614dd56cc433857dac75003f65b9",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "443",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/relay-v1-Cz2i0o3A.jpg",
+          "expected": {
+            "bytes": 456936,
+            "sha256": "69238c3b32528a005c11e466700a10f6dfbfb4488964471abd4d2d1045885eb6"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/relay-v1-Cz2i0o3A.jpg",
+            "bytes": 456936,
+            "sha256": "69238c3b32528a005c11e466700a10f6dfbfb4488964471abd4d2d1045885eb6",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/relay-v1-Cz2i0o3A.jpg",
+            "requestedAt": "2026-10-20T15:57:14.802316+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 456936,
+            "sha256": "69238c3b32528a005c11e466700a10f6dfbfb4488964471abd4d2d1045885eb6",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "456936",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/room-improved-v1-B6AIlFzd.jpg",
+          "expected": {
+            "bytes": 530809,
+            "sha256": "d9294c6ec9adfd79a9a2b3d84097cc67835f760241f3a81e81d4b8af053430d6"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/room-improved-v1-B6AIlFzd.jpg",
+            "bytes": 530809,
+            "sha256": "d9294c6ec9adfd79a9a2b3d84097cc67835f760241f3a81e81d4b8af053430d6",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/room-improved-v1-B6AIlFzd.jpg",
+            "requestedAt": "2026-10-20T15:57:14.807142+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 530809,
+            "sha256": "d9294c6ec9adfd79a9a2b3d84097cc67835f760241f3a81e81d4b8af053430d6",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "530809",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/room-ordinary-v1-Ccc5kFZS.jpg",
+          "expected": {
+            "bytes": 526460,
+            "sha256": "ec1ada1f54c1891239676aae93a112f69f067791882036779871b4978ff5a011"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/room-ordinary-v1-Ccc5kFZS.jpg",
+            "bytes": 526460,
+            "sha256": "ec1ada1f54c1891239676aae93a112f69f067791882036779871b4978ff5a011",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/room-ordinary-v1-Ccc5kFZS.jpg",
+            "requestedAt": "2026-10-20T15:57:14.811362+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 526460,
+            "sha256": "ec1ada1f54c1891239676aae93a112f69f067791882036779871b4978ff5a011",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "526460",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/tang-ying-cinematic-v1-CONyOoly.jpg",
+          "expected": {
+            "bytes": 470310,
+            "sha256": "b811ae58ebf6d8eda7e04d6e53f2a5b6f1b69952a74be3be7688cb5732fd9c80"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/tang-ying-cinematic-v1-CONyOoly.jpg",
+            "bytes": 470310,
+            "sha256": "b811ae58ebf6d8eda7e04d6e53f2a5b6f1b69952a74be3be7688cb5732fd9c80",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/tang-ying-cinematic-v1-CONyOoly.jpg",
+            "requestedAt": "2026-10-20T15:57:14.815845+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 470310,
+            "sha256": "b811ae58ebf6d8eda7e04d6e53f2a5b6f1b69952a74be3be7688cb5732fd9c80",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "470310",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/video-v1-vV__FERo.jpg",
+          "expected": {
+            "bytes": 512074,
+            "sha256": "ca7fa95da5be88cde6e77416771eedee52f90343f4235335e278c4383a17b82a"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/video-v1-vV__FERo.jpg",
+            "bytes": 512074,
+            "sha256": "ca7fa95da5be88cde6e77416771eedee52f90343f4235335e278c4383a17b82a",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/video-v1-vV__FERo.jpg",
+            "requestedAt": "2026-10-20T15:57:14.821541+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 512074,
+            "sha256": "ca7fa95da5be88cde6e77416771eedee52f90343f4235335e278c4383a17b82a",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "512074",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/work-visibility--wZFKkMP.js",
+          "expected": {
+            "bytes": 665,
+            "sha256": "f071e7b867f98b8041af02b0790d87962fffca6c0170985b2ee3f7b1a0f79afd"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/work-visibility--wZFKkMP.js",
+            "bytes": 665,
+            "sha256": "f071e7b867f98b8041af02b0790d87962fffca6c0170985b2ee3f7b1a0f79afd",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/work-visibility--wZFKkMP.js",
+            "requestedAt": "2026-10-20T15:57:14.825400+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 665,
+            "sha256": "f071e7b867f98b8041af02b0790d87962fffca6c0170985b2ee3f7b1a0f79afd",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "665",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "assets/xu-cheng-cinematic-v1-CezMxv_X.jpg",
+          "expected": {
+            "bytes": 479058,
+            "sha256": "db185b3016e62694199c8bb6d5b9c952e73689ba366214091c923ab801ed18fa"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/assets/xu-cheng-cinematic-v1-CezMxv_X.jpg",
+            "bytes": 479058,
+            "sha256": "db185b3016e62694199c8bb6d5b9c952e73689ba366214091c923ab801ed18fa",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/assets/xu-cheng-cinematic-v1-CezMxv_X.jpg",
+            "requestedAt": "2026-10-20T15:57:14.829038+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 479058,
+            "sha256": "db185b3016e62694199c8bb6d5b9c952e73689ba366214091c923ab801ed18fa",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "479058",
+            "contentType": "image/jpeg",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "diagnostics/startup-metrics-v1.js",
+          "expected": {
+            "bytes": 6229,
+            "sha256": "2954834f4c1bb87402f18525181c3a5b15715c54396cdb49f9cf748b36c0a201"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/diagnostics/startup-metrics-v1.js",
+            "bytes": 6229,
+            "sha256": "2954834f4c1bb87402f18525181c3a5b15715c54396cdb49f9cf748b36c0a201",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/diagnostics/startup-metrics-v1.js",
+            "requestedAt": "2026-10-20T15:57:14.832406+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 6229,
+            "sha256": "2954834f4c1bb87402f18525181c3a5b15715c54396cdb49f9cf748b36c0a201",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "6229",
+            "contentType": "text/javascript",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        },
+        {
+          "file": "index.html",
+          "expected": {
+            "bytes": 1496,
+            "sha256": "e4e26028fd8b4d75597d2e2534735f392f5b4ac8a72dce02d5a65279dd0debd5"
+          },
+          "disk": {
+            "file": ".delivery/t17-course-r10/index.html",
+            "bytes": 1496,
+            "sha256": "e4e26028fd8b4d75597d2e2534735f392f5b4ac8a72dce02d5a65279dd0debd5",
+            "equalExpected": true,
+            "error": null
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://127.0.0.1:5302/index.html",
+            "requestedAt": "2026-10-20T15:57:14.834286+00:00",
+            "requestHeaders": {
+              "Accept-Encoding": "identity",
+              "Cache-Control": "no-cache"
+            },
+            "attempted": true,
+            "status": 200,
+            "bytes": 1496,
+            "sha256": "e4e26028fd8b4d75597d2e2534735f392f5b4ac8a72dce02d5a65279dd0debd5",
+            "byteCountEqualExpected": true,
+            "sha256EqualExpected": true,
+            "bodyBytesEqualDisk": true,
+            "error": null,
+            "unknown": false,
+            "contentLength": "1496",
+            "contentType": "text/html;charset=utf-8",
+            "contentEncoding": null,
+            "equalExpected": true
+          }
+        }
+      ],
+      "allOriginalDiskAndHttpEqual": true
+    }
+  ],
+  "limits": [
+    "Static delivery bytes only; no claim about gameplay, saves, browser rendering, compatibility, performance, original PNG provenance, human playtests, P2 matrix results or whole goal completion.",
+    "Only the two assigned ports and the original 44 resources per delivery were requested. No API endpoint or game action was invoked."
+  ]
+}

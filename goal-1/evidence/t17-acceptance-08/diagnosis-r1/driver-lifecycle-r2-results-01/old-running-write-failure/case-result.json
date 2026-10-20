@@ -1,0 +1,80 @@
+{
+  "scope": "Driver lifecycle only: original AST, parent-only metadata ENOSPC injection, real short owned child; no game/prerequisite simulation or compatibility work.",
+  "case": "old-running-write-failure",
+  "sourceVersion": "old",
+  "source": {
+    "file": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/source-r2-preflight/run-matrix-r2.py",
+    "bytes": 3236,
+    "sha256": "3f1fac43bafbb9e9f803564e1959232096938b52dda0470f140e1c8cf79b009d",
+    "fromLine": 48,
+    "throughLine": 63,
+    "lifecycleBytes": 1011,
+    "lifecycleSha256": "567a0a4fea9ce2596e8f37bd1a0cf93de8c93322983bb5bcc5a4f7752fff8495"
+  },
+  "faultFile": "matrix-r2-running.json",
+  "actualChildCommand": [
+    "rtk",
+    "proxy",
+    "/usr/local/opt/python@3.13/bin/python3.13",
+    "-B",
+    "-c",
+    "import json,os,sys,time\nfrom pathlib import Path\nprint(json.dumps({'state':'owned-child-started','pid':os.getpid()}),flush=True)\ntime.sleep(0.2)\nwith Path(sys.argv[1]).open('x') as out:\n json.dump({'pid':os.getpid(),'state':'finished','exitCode':0},out);out.write('\\n')\nprint(json.dumps({'state':'owned-child-marker-written','pid':os.getpid()}),flush=True)\n",
+    "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2-results-01/old-running-write-failure/owned-child-finished.json"
+  ],
+  "actualChildSleepSeconds": 0.2,
+  "driverExitCode": 1,
+  "exception": {
+    "type": "OSError",
+    "error": "[Errno 28] injected parent-only metadata open failure: '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2-results-01/old-running-write-failure/matrix-r2-running.json'",
+    "errno": 28
+  },
+  "events": [
+    {
+      "event": "real-popen",
+      "pid": 39806,
+      "command": [
+        "rtk",
+        "proxy",
+        "/usr/local/opt/python@3.13/bin/python3.13",
+        "-B",
+        "-c",
+        "import json,os,sys,time\nfrom pathlib import Path\nprint(json.dumps({'state':'owned-child-started','pid':os.getpid()}),flush=True)\ntime.sleep(0.2)\nwith Path(sys.argv[1]).open('x') as out:\n json.dump({'pid':os.getpid(),'state':'finished','exitCode':0},out);out.write('\\n')\nprint(json.dumps({'state':'owned-child-marker-written','pid':os.getpid()}),flush=True)\n",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2-results-01/old-running-write-failure/owned-child-finished.json"
+      ],
+      "at": 1792511391.0429819
+    },
+    {
+      "event": "injected-parent-open-enospc",
+      "file": "matrix-r2-running.json",
+      "childPolls": [
+        null
+      ],
+      "markerExists": false,
+      "at": 1792511391.0432582
+    }
+  ],
+  "atLifecycleExit": {
+    "childPolls": [
+      null
+    ],
+    "markerExists": false,
+    "at": 1792511391.044787,
+    "driverWaitCalls": 0
+  },
+  "ownedChildCleanupWaits": [
+    {
+      "pid": 39806,
+      "returnCode": 0,
+      "markerExists": true,
+      "at": 1792511391.348546
+    }
+  ],
+  "actualMarker": {
+    "pid": 39807,
+    "state": "finished",
+    "exitCode": 0
+  },
+  "terminalMetadata": null,
+  "driverMetadataErrors": [],
+  "sourceBytesUnchanged": true
+}

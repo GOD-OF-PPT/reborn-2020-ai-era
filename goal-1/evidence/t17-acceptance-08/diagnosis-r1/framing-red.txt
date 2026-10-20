@@ -1,0 +1,32 @@
+.....FF..........
+======================================================================
+FAIL: test_framed_48_mib_transport_keeps_all_members_without_raw_staging (__main__.EvidenceXzBundleTests.test_framed_48_mib_transport_keeps_all_members_without_raw_staging)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/gordon/githome/reborn-2020-ai-era/scripts/test_evidence_xz_bundle.py", line 289, in test_framed_48_mib_transport_keeps_all_members_without_raw_staging
+    proof = self.pack_while_input_remains_open(original)
+  File "/Users/gordon/githome/reborn-2020-ai-era/scripts/test_evidence_xz_bundle.py", line 257, in pack_while_input_remains_open
+    self.assertEqual(code, 0, stderr.decode("utf-8", errors="replace"))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 2 != 0 : usage: evidence_xz_bundle.py [-h] {pack,unpack} ...
+evidence_xz_bundle.py: error: unrecognized arguments: --container-bytes 50332198 --container-sha256 4d5d8f3312624161c10c8866bba50d7d10a0e0e2376ea76603c8e4d9d1f71ebb
+
+
+======================================================================
+FAIL: test_framed_complete_utf8_body_exits_without_stdin_eof (__main__.EvidenceXzBundleTests.test_framed_complete_utf8_body_exits_without_stdin_eof)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/gordon/githome/reborn-2020-ai-era/scripts/test_evidence_xz_bundle.py", line 279, in test_framed_complete_utf8_body_exits_without_stdin_eof
+    self.pack_while_input_remains_open(container())
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/gordon/githome/reborn-2020-ai-era/scripts/test_evidence_xz_bundle.py", line 257, in pack_while_input_remains_open
+    self.assertEqual(code, 0, stderr.decode("utf-8", errors="replace"))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 2 != 0 : usage: evidence_xz_bundle.py [-h] {pack,unpack} ...
+evidence_xz_bundle.py: error: unrecognized arguments: --container-bytes 433 --container-sha256 4d0db28e895f2ff5b947d6705083d6b4ec41476e05a37102914fd1ea19c21598
+
+
+----------------------------------------------------------------------
+Ran 17 tests in 10.058s
+
+FAILED (failures=2)

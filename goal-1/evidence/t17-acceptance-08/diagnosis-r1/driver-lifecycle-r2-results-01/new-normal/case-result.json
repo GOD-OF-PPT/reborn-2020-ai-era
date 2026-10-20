@@ -1,0 +1,99 @@
+{
+  "scope": "Driver lifecycle only: original AST, parent-only metadata ENOSPC injection, real short owned child; no game/prerequisite simulation or compatibility work.",
+  "case": "new-normal",
+  "sourceVersion": "new",
+  "source": {
+    "file": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/run-matrix-r2.py",
+    "bytes": 3896,
+    "sha256": "ea3bff0102534a6eb97961ffaaf6f045691f7b53ecffdd6bce34e897c2b72bc1",
+    "fromLine": 49,
+    "throughLine": 75,
+    "lifecycleBytes": 1650,
+    "lifecycleSha256": "75692cccafe42b1cd65db0390651b3dfb0698cf683ca81fe4da0b76233ecc0cc"
+  },
+  "faultFile": null,
+  "actualChildCommand": [
+    "rtk",
+    "proxy",
+    "/usr/local/opt/python@3.13/bin/python3.13",
+    "-B",
+    "-c",
+    "import json,os,sys,time\nfrom pathlib import Path\nprint(json.dumps({'state':'owned-child-started','pid':os.getpid()}),flush=True)\ntime.sleep(0.2)\nwith Path(sys.argv[1]).open('x') as out:\n json.dump({'pid':os.getpid(),'state':'finished','exitCode':0},out);out.write('\\n')\nprint(json.dumps({'state':'owned-child-marker-written','pid':os.getpid()}),flush=True)\n",
+    "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2-results-01/new-normal/owned-child-finished.json"
+  ],
+  "actualChildSleepSeconds": 0.2,
+  "driverExitCode": 0,
+  "exception": null,
+  "events": [
+    {
+      "event": "real-popen",
+      "pid": 39815,
+      "command": [
+        "rtk",
+        "proxy",
+        "/usr/local/opt/python@3.13/bin/python3.13",
+        "-B",
+        "-c",
+        "import json,os,sys,time\nfrom pathlib import Path\nprint(json.dumps({'state':'owned-child-started','pid':os.getpid()}),flush=True)\ntime.sleep(0.2)\nwith Path(sys.argv[1]).open('x') as out:\n json.dump({'pid':os.getpid(),'state':'finished','exitCode':0},out);out.write('\\n')\nprint(json.dumps({'state':'owned-child-marker-written','pid':os.getpid()}),flush=True)\n",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2-results-01/new-normal/owned-child-finished.json"
+      ],
+      "at": 1792511392.0540621
+    },
+    {
+      "event": "driver-wait-start",
+      "pid": 39815,
+      "at": 1792511392.054892
+    },
+    {
+      "event": "driver-wait-end",
+      "pid": 39815,
+      "returnCode": 0,
+      "markerExists": true,
+      "at": 1792511392.33186
+    }
+  ],
+  "atLifecycleExit": {
+    "childPolls": [
+      0
+    ],
+    "markerExists": true,
+    "at": 1792511392.3329039,
+    "driverWaitCalls": 1
+  },
+  "ownedChildCleanupWaits": [
+    {
+      "pid": 39815,
+      "returnCode": 0,
+      "markerExists": true,
+      "at": 1792511392.332938
+    }
+  ],
+  "actualMarker": {
+    "pid": 39816,
+    "state": "finished",
+    "exitCode": 0
+  },
+  "terminalMetadata": {
+    "command": [
+      "rtk",
+      "proxy",
+      "/usr/local/opt/python@3.13/bin/python3.13",
+      "-B",
+      "-c",
+      "import json,os,sys,time\nfrom pathlib import Path\nprint(json.dumps({'state':'owned-child-started','pid':os.getpid()}),flush=True)\ntime.sleep(0.2)\nwith Path(sys.argv[1]).open('x') as out:\n json.dump({'pid':os.getpid(),'state':'finished','exitCode':0},out);out.write('\\n')\nprint(json.dumps({'state':'owned-child-marker-written','pid':os.getpid()}),flush=True)\n",
+      "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-08/diagnosis-r1/driver-lifecycle-r2-results-01/new-normal/owned-child-finished.json"
+    ],
+    "started": 1792511392.0491462,
+    "finished": 1792511392.332376,
+    "pid": 39815,
+    "exitCode": 0,
+    "state": "terminal",
+    "resourceBounds": {
+      "lifecycleRegressionOnly": true,
+      "gameCommandsExecuted": 0
+    },
+    "metadataErrors": []
+  },
+  "driverMetadataErrors": [],
+  "sourceBytesUnchanged": true
+}
