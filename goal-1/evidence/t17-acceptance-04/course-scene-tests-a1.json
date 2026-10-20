@@ -1,0 +1,18 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "node",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "vitest.config.ts",
+    "--maxWorkers",
+    "1",
+    "src/ui/course-scene-progress.test.ts"
+  ],
+  "exitCode": 1,
+  "wallSeconds": 14.992374463996384,
+  "stdout": "\n RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era\n\n \u276f src/ui/course-scene-progress.test.ts (8 tests | 2 failed) 12536ms\n   \u00d7 offers only the actual next undelivered stage of a real prepaid class and retains its own deadline 1275ms\n   \u00d7 does not offer a new stage when its original completion deadline can no longer be met 1439ms\n\n Test Files  1 failed (1)\n      Tests  2 failed | 6 passed (8)\n   Start at  13:55:12\n   Duration  14.16s (tests 91%, transform 5%, import 4%)\n\n",
+  "stderr": "\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 2 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  src/ui/course-scene-progress.test.ts > offers only the actual next undelivered stage of a real prepaid class and retains its own deadline\nRuleError: INVALID_DAY_COUNT\n \u276f requireRule src/core/errors.ts:12:25\n     10|\n     11| export function requireRule(condition: unknown, code: string): asserts\u2026\n     12|   if (!condition) throw new RuleError(code)\n       |                         ^\n     13| }\n     14|\n \u276f addDays src/core/calendar.ts:25:3\n \u276f courseSceneProgress src/ui/course-scene-progress.ts:44:12\n \u276f src/ui/course-scene-progress.test.ts:36:15\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/2]\u23af\n\n FAIL  src/ui/course-scene-progress.test.ts > does not offer a new stage when its original completion deadline can no longer be met\nRuleError: INVALID_DAY_COUNT\n \u276f requireRule src/core/errors.ts:12:25\n     10|\n     11| export function requireRule(condition: unknown, code: string): asserts\u2026\n     12|   if (!condition) throw new RuleError(code)\n       |                         ^\n     13| }\n     14|\n \u276f addDays src/core/calendar.ts:25:3\n \u276f courseSceneProgress src/ui/course-scene-progress.ts:44:12\n \u276f Object.progress src/ui/course-scene-progress.test.ts:10:21\n \u276f src/ui/course-scene-progress.test.ts:65:11\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[2/2]\u23af\n\n"
+}

@@ -1,0 +1,6 @@
+{
+  "actualInitialResult": "6/8 pass,2 actual new scene cases fail with INVALID_DAY_COUNT",
+  "cause": "New UI incorrectly called core.addDays with negative duration; core intentionally accepts nonnegative day counts only.",
+  "fix": "Use existing calendar dayBefore for at most product.stageDays steps in a UI-only helper, shared by display deadline and date field. No core/day count rule/assertion/timeout changes.",
+  "initialEvidence": "course-scene-tests-a1.json"
+}

@@ -1,0 +1,50 @@
+{
+  "rows": [
+    {
+      "case": "fresh project evidence directory",
+      "passed": true
+    },
+    {
+      "case": "goal-1/evidence/t17-course-ui-post-commit-01/guard-probes/parent",
+      "rejected": true,
+      "reason": "Error: EVIDENCE_SEALED_USE_NEW_ROOT"
+    },
+    {
+      "case": "goal-1/evidence/t17-course-ui-post-commit-01/guard-probes/parent/child",
+      "rejected": true,
+      "reason": "Error: EVIDENCE_SEALED_USE_NEW_ROOT"
+    },
+    {
+      "case": "goal-1/evidence/t17-acceptance-04/chrome-course-r10-a1",
+      "rejected": true,
+      "reason": "Error: EVIDENCE_SEALED_USE_NEW_ROOT"
+    },
+    {
+      "case": "symbolic-link root",
+      "rejected": true
+    },
+    {
+      "case": "journal",
+      "rejected": true,
+      "beforeDelegate": true
+    },
+    {
+      "case": "click",
+      "rejected": true,
+      "beforeDelegate": true
+    },
+    {
+      "case": "exportRaw",
+      "rejected": true,
+      "beforeDelegate": true
+    },
+    {
+      "case": "importText",
+      "rejected": true,
+      "beforeDelegate": true
+    }
+  ],
+  "delegated": 0,
+  "allPassed": true,
+  "scope": "Real filesystem ancestor and symlink regression, plus guarded delegate fencing; no compatibility or game command."
+}

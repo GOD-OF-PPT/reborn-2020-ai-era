@@ -1,0 +1,16 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "npm",
+    "run",
+    "build",
+    "--",
+    "--outDir",
+    ".delivery/t17-course-r8"
+  ],
+  "exitCode": 2,
+  "wallSeconds": 34.533328265009914,
+  "stdout": "\n> reborn-2020-ai-era@0.1.0 build\n> tsc -b && vite build --outDir .delivery/t17-course-r8\n\nsrc/ui/CommandDetails.tsx(26,3): error TS2719: Type '{ command: import(\"/Users/gordon/githome/reborn-2020-ai-era/src/core/run-types\").CommandEnvelope; course: { catalog: Omit<{ readonly version: \"course-work-v2\"; readonly availableAt: \"2022-11-30\"; ... 7 more ...; readonly feeBps: 500; }, \"matchBps\" | ... 1 more ... | \"feeBps\"> & { ...; }; ... 11 more ...; resources: ...' is not assignable to type '{ command: import(\"/Users/gordon/githome/reborn-2020-ai-era/src/core/run-types\").CommandEnvelope; course: { catalog: Omit<{ readonly version: \"course-work-v2\"; readonly availableAt: \"2022-11-30\"; ... 7 more ...; readonly feeBps: 500; }, \"matchBps\" | ... 1 more ... | \"feeBps\"> & { ...; }; ... 11 more ...; resources: ...'. Two different types with this name exist, but they are unrelated.\n  Types of property 'workers' are incompatible.\n    Type 'readonly WorkerInstance[] | undefined' is not assignable to type 'readonly WorkerInstance[]'.\n      Type 'undefined' is not assignable to type 'readonly WorkerInstance[]'.\n",
+  "stderr": ""
+}

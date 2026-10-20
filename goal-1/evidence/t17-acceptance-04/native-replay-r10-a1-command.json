@@ -1,0 +1,18 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "node",
+    "--experimental-strip-types",
+    "scripts/verify_normal_browser_exports.ts",
+    "--output-dir",
+    "goal-1/evidence/t17-acceptance-04/native-replay-r10-a1"
+  ],
+  "environment": {
+    "NATIVE_EXPORT_INPUT_DIRECTORY": "goal-1/evidence/t17-acceptance-04"
+  },
+  "exitCode": 0,
+  "wallSeconds": 173.55213758099126,
+  "stdout": "{\"creations\":1,\"executedUniqueCommands\":101,\"files\":19,\"inputBuffers\":8,\"allByteEqual\":true}\n",
+  "stderr": "(node:60427) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+}
