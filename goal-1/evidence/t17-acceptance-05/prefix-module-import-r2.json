@@ -1,0 +1,15 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "node",
+    "--experimental-strip-types",
+    "--input-type=module",
+    "-e",
+    "await import('./src/testing/course-matrix-prefix.ts'); console.log('prefix helper module imported without executing a scenario')"
+  ],
+  "exitCode": 0,
+  "wallSeconds": 0.9657237860083114,
+  "stdout": "prefix helper module imported without executing a scenario\n",
+  "stderr": "(node:67625) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+}

@@ -1,0 +1,15 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "node",
+    "--experimental-strip-types",
+    "--input-type=module",
+    "-e",
+    "await import('./src/testing/course-matrix-prefix.ts'); console.log('prefix helper module imported without executing a scenario')"
+  ],
+  "exitCode": 1,
+  "wallSeconds": 0.28510111101786606,
+  "stdout": "",
+  "stderr": "(node:67609) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\nnode:internal/modules/helpers:346\n    throw new ERR_INVALID_TYPESCRIPT_SYNTAX(error);\n          ^\n\nSyntaxError [ERR_INVALID_TYPESCRIPT_SYNTAX]:   x TypeScript parameter property is not supported in strip-only mode\n    ,-[13:1]\n 10 | import type {GameRun} from '../core/run-types.ts'\n 11 | \n 12 | export class CoursePrefixPolicyRefusal extends Error{\n 13 |  constructor(readonly code:string,readonly detail:unknown){super(code);this.name='CoursePrefixPolicyRefusal'}\n    :                       ^^^^^^^^^^^\n 14 | }\n 15 | export interface CoursePrefixCallbacks{\n 16 |  readonly committed?:(run:GameRun,kind:string)=>void\n    `----\n  x TypeScript parameter property is not supported in strip-only mode\n    ,-[13:1]\n 10 | import type {GameRun} from '../core/run-types.ts'\n 11 | \n 12 | export class CoursePrefixPolicyRefusal extends Error{\n 13 |  constructor(readonly code:string,readonly detail:unknown){super(code);this.name='CoursePrefixPolicyRefusal'}\n    :                                            ^^^^^^^^^^^^^^\n 14 | }\n 15 | export interface CoursePrefixCallbacks{\n 16 |  readonly committed?:(run:GameRun,kind:string)=>void\n    `----\n  x TypeScript parameter property is not supported in strip-only mode\n    ,-[27:1]\n 24 | const resource=['player-production']\n 25 | \n 26 | class PrefixHarness extends StoryHarness{\n 27 |  constructor(prior:GameRun,readonly onCommitted:CoursePrefixCallbacks['committed']){super({priorRun:prior})}\n    :                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n 28 |  override sendAs(kind:string,payload:unknown,id:string){const result=super.sendAs(kind,payload,id);this.onCommitted?.(result,kind);return result}\n 29 | }\n 30 | /** Work is a separate command. It is never implicit in a date observation or a full-budget quarter. */\n    `----\n\n    at parseTypeScript (node:internal/modules/helpers:346:11)\n    at stripTypeScriptTypes (node:internal/modules/helpers:368:25)\n    at ModuleLoader.<anonymous> (node:internal/modules/esm/translators:471:16)\n    at #translate (node:internal/modules/esm/loader:437:12)\n    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:484:27)\n    at async ModuleJob._link (node:internal/modules/esm/module_job:115:19) {\n  code: 'ERR_INVALID_TYPESCRIPT_SYNTAX'\n}\n\nNode.js v22.12.0\n"
+}

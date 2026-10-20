@@ -1,0 +1,26 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "node",
+    "node_modules/typescript/bin/tsc",
+    "--noEmit",
+    "--target",
+    "ES2023",
+    "--module",
+    "NodeNext",
+    "--moduleResolution",
+    "NodeNext",
+    "--allowImportingTsExtensions",
+    "--strict",
+    "--exactOptionalPropertyTypes",
+    "--skipLibCheck",
+    "--types",
+    "node",
+    "src/testing/course-matrix-prefix.ts"
+  ],
+  "exitCode": 1,
+  "wallSeconds": 0.315561102994252,
+  "stdout": "error TS5112: tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.\n",
+  "stderr": ""
+}

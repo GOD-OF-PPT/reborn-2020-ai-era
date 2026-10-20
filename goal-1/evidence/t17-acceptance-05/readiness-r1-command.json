@@ -1,0 +1,18 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "node",
+    "--experimental-strip-types",
+    "scripts/verify_course_prefix_readiness.ts",
+    "--output-dir",
+    "goal-1/evidence/t17-acceptance-05/readiness-r1"
+  ],
+  "environment": {
+    "COURSE_PREFIX_INPUT_DIRECTORY": "goal-1/evidence/t17-acceptance-05/prefix-r1"
+  },
+  "exitCode": 0,
+  "wallSeconds": 3.301294862991199,
+  "stdout": "{\"registered\":6,\"ready\":6,\"notReady\":0,\"fullMatrixBranchesExecuted\":0}\n",
+  "stderr": "(node:71056) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+}

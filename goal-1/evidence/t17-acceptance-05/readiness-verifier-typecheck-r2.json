@@ -1,0 +1,30 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "node",
+    "node_modules/typescript/bin/tsc",
+    "--ignoreConfig",
+    "--noEmit",
+    "--target",
+    "ES2023",
+    "--module",
+    "NodeNext",
+    "--moduleResolution",
+    "NodeNext",
+    "--allowImportingTsExtensions",
+    "--strict",
+    "--exactOptionalPropertyTypes",
+    "--skipLibCheck",
+    "--types",
+    "node",
+    "scripts/verify_course_prefix_readiness.ts"
+  ],
+  "environment": {
+    "COURSE_PREFIX_INPUT_DIRECTORY": "goal-1/evidence/t17-acceptance-05/prefix-r1"
+  },
+  "exitCode": 0,
+  "wallSeconds": 13.662125235015992,
+  "stdout": "",
+  "stderr": ""
+}
