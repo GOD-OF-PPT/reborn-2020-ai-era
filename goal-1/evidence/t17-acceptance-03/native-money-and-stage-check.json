@@ -1,0 +1,216 @@
+{
+  "sourceSHA": "786dd6983638649e864b148c70c89773fbb180188b8780d95c6f553f9943edf0",
+  "actualStages": [
+    {
+      "revision": 104,
+      "date": "2025-04-01",
+      "availableFen": 20110000,
+      "role": "normal prefix before new contract"
+    },
+    {
+      "revision": 105,
+      "date": "2025-04-01",
+      "availableFen": 20020000,
+      "role": "received900 protected and paid900 production"
+    },
+    {
+      "revision": 106,
+      "date": "2025-04-06",
+      "availableFen": 20020000,
+      "role": "production actually completed"
+    },
+    {
+      "revision": 107,
+      "date": "2025-04-06",
+      "availableFen": 20020000,
+      "role": "free public scene review, no submit"
+    },
+    {
+      "revision": 108,
+      "date": "2025-04-06",
+      "availableFen": 20020000,
+      "role": "explicit submission, no new income or payment"
+    },
+    {
+      "revision": 109,
+      "date": "2025-04-08",
+      "availableFen": 20110000,
+      "role": "customer accepted, protected900 released,2100 receivable"
+    },
+    {
+      "revision": 110,
+      "date": "2025-04-10",
+      "availableFen": 20110000,
+      "role": "original intermediate market clock, not skipped"
+    },
+    {
+      "revision": 111,
+      "date": "2025-04-15",
+      "availableFen": 20305000,
+      "role": "received2100 and charged150"
+    }
+  ],
+  "orderNetCashFen": 195000,
+  "originalProductionFen": 90000,
+  "actualFeeFen": 15000,
+  "businessCumulative": {
+    "incomeFen": 300000,
+    "costFen": 595000,
+    "profitFen": -295000,
+    "includesPriorQualificationAndPortfolio": true
+  },
+  "originalBalance": {
+    "accountId": "personal",
+    "businessId": "ops:b87afd152bc329570e2f103515e96af5",
+    "counterpartyId": "world",
+    "id": "vid:a1e52ef54dec24e40a117e9a0d3bcf39",
+    "prepaidFen": 0,
+    "protectionReservationId": "vid:d6a1cebba6248bfab3318c5a09ea8a1f",
+    "receivableFen": 0,
+    "recognizedIncomeFen": 300000
+  },
+  "nativeActions": [
+    {
+      "actorId": "player",
+      "causeIds": [
+        "cause:command-3dedef7c-9daf-4792-912a-38bca2e0622a",
+        "vid:56f66f40a08a5e55c6ba4c237e4de671:reserve",
+        "vid:56f66f40a08a5e55c6ba4c237e4de671:execute",
+        "vid:82530c940e6fa02ca805561a6cd8586d",
+        "vid:a1e52ef54dec24e40a117e9a0d3bcf39"
+      ],
+      "commandId": "command-3dedef7c-9daf-4792-912a-38bca2e0622a",
+      "date": "2025-04-01",
+      "kind": "AcceptVideoCommission",
+      "ledgerReceiptCountAfter": 138,
+      "payloadHash": "20ddf018203ecd5207163c56c10fd8608f38a9992a1a0f037c6aa613dca12809",
+      "payloadSignature": "{\"actorId\":\"player\",\"kind\":\"AcceptVideoCommission\",\"payload\":{\"channelId\":\"vid:db752b97c3efb839694eaac333e9a77c\",\"clientId\":\"vid:e34807ce70f5046b801b9e37c28a2dc7\",\"cohortId\":\"vid:244383f28b64b4a0007b913c53715634\",\"materialId\":\"licensed\",\"modeId\":\"generative_video\",\"resources\":[\"player-production\"],\"startAt\":\"2025-04-01\"},\"runId\":\"t17-video-chrome-tech-campaign-0-a2\"}",
+      "revisionAfter": 105,
+      "revisionBefore": 104,
+      "runId": "t17-video-chrome-tech-campaign-0-a2",
+      "summary": "视频决策已保存：AcceptVideoCommission",
+      "transactionIds": [
+        "vid:56f66f40a08a5e55c6ba4c237e4de671:execute:cost",
+        "vid:82530c940e6fa02ca805561a6cd8586d"
+      ]
+    },
+    {
+      "actorId": "player",
+      "causeIds": [
+        "cause:command-c7c89435-2a6c-4f3d-84af-458ca716d7fa",
+        "ops:73992121dcaba61f8fcba876d59fb5ea",
+        "ops:889891721a584c8890170e84c075c676"
+      ],
+      "commandId": "command-c7c89435-2a6c-4f3d-84af-458ca716d7fa",
+      "date": "2025-04-06",
+      "kind": "AdvanceTime",
+      "ledgerReceiptCountAfter": 138,
+      "payloadHash": "3291973f00759a4925f24570df7d3f079b06ab3789b3c4f96d6e0cbde6261b32",
+      "payloadSignature": "{\"actorId\":\"player\",\"kind\":\"AdvanceTime\",\"payload\":{\"date\":\"2025-04-06\",\"phase\":\"snapshot\"},\"runId\":\"t17-video-chrome-tech-campaign-0-a2\"}",
+      "revisionAfter": 106,
+      "revisionBefore": 105,
+      "runId": "t17-video-chrome-tech-campaign-0-a2",
+      "summary": "推进至2025-04-06",
+      "transactionIds": []
+    },
+    {
+      "actorId": "player",
+      "causeIds": [
+        "cause:command-30fa93b3-c817-4160-8fd8-c974435a3baa",
+        "vid:21c52730d68f42a5a8b81544e89184b8"
+      ],
+      "commandId": "command-30fa93b3-c817-4160-8fd8-c974435a3baa",
+      "date": "2025-04-06",
+      "kind": "ReviewVideoOutput",
+      "ledgerReceiptCountAfter": 138,
+      "payloadHash": "853ee097520de810b4aea87ff669dbbb8285cdcca3888da4b4383863074541a7",
+      "payloadSignature": "{\"actorId\":\"player\",\"kind\":\"ReviewVideoOutput\",\"payload\":{\"disclosure\":\"synthetic\",\"workId\":\"vid:0b974e6131dcd8d18096e49cc7625963\"},\"runId\":\"t17-video-chrome-tech-campaign-0-a2\"}",
+      "revisionAfter": 107,
+      "revisionBefore": 106,
+      "runId": "t17-video-chrome-tech-campaign-0-a2",
+      "summary": "视频决策已保存：ReviewVideoOutput",
+      "transactionIds": []
+    },
+    {
+      "actorId": "player",
+      "causeIds": [
+        "cause:command-a79c904a-e988-4580-bd77-81c67bd23c0b",
+        "vid:4b08b7f57221b2cc7027976ffb41a1f7"
+      ],
+      "commandId": "command-a79c904a-e988-4580-bd77-81c67bd23c0b",
+      "date": "2025-04-06",
+      "kind": "SubmitVideoCommission",
+      "ledgerReceiptCountAfter": 138,
+      "payloadHash": "5aaaa23bad0281d2851a6d631d1d47f5c130d2f7b1587467fd6f0fb65eb1093f",
+      "payloadSignature": "{\"actorId\":\"player\",\"kind\":\"SubmitVideoCommission\",\"payload\":{\"contractId\":\"vid:a1e52ef54dec24e40a117e9a0d3bcf39\"},\"runId\":\"t17-video-chrome-tech-campaign-0-a2\"}",
+      "revisionAfter": 108,
+      "revisionBefore": 107,
+      "runId": "t17-video-chrome-tech-campaign-0-a2",
+      "summary": "视频决策已保存：SubmitVideoCommission",
+      "transactionIds": []
+    },
+    {
+      "actorId": "player",
+      "causeIds": [
+        "cause:command-5bc2438b-dc9d-45e4-b1b8-e4d9a25d496c",
+        "vid:fe069d0936b0083208efe8215fc6dd8b",
+        "vid:ee8c4a9561fda9ac4ed5879f4671662a",
+        "vid:c3c014f9e96963b499607e7146103bc1"
+      ],
+      "commandId": "command-5bc2438b-dc9d-45e4-b1b8-e4d9a25d496c",
+      "date": "2025-04-08",
+      "kind": "AdvanceTime",
+      "ledgerReceiptCountAfter": 140,
+      "payloadHash": "d06f43ad5161b7aac9653f6c384aaa006e3f4d826d20393d4aa183877d9bedeb",
+      "payloadSignature": "{\"actorId\":\"player\",\"kind\":\"AdvanceTime\",\"payload\":{\"date\":\"2025-04-08\",\"phase\":\"snapshot\"},\"runId\":\"t17-video-chrome-tech-campaign-0-a2\"}",
+      "revisionAfter": 109,
+      "revisionBefore": 108,
+      "runId": "t17-video-chrome-tech-campaign-0-a2",
+      "summary": "推进至2025-04-08",
+      "transactionIds": []
+    },
+    {
+      "actorId": "player",
+      "causeIds": [
+        "cause:command-6bdf870c-c4e8-4706-baf6-b571299a981a",
+        "market:cc6c0077459f3319b4d7a6ea18036593",
+        "market:783da1670d40039a1909291ae47d390b"
+      ],
+      "commandId": "command-6bdf870c-c4e8-4706-baf6-b571299a981a",
+      "date": "2025-04-10",
+      "kind": "AdvanceTime",
+      "ledgerReceiptCountAfter": 140,
+      "payloadHash": "b1c3bfcfddab008259703ff6220b2ae8bf604806008cbfce797fd17ef86face4",
+      "payloadSignature": "{\"actorId\":\"player\",\"kind\":\"AdvanceTime\",\"payload\":{\"date\":\"2025-04-10\",\"phase\":\"snapshot\"},\"runId\":\"t17-video-chrome-tech-campaign-0-a2\"}",
+      "revisionAfter": 110,
+      "revisionBefore": 109,
+      "runId": "t17-video-chrome-tech-campaign-0-a2",
+      "summary": "推进至2025-04-10",
+      "transactionIds": []
+    },
+    {
+      "actorId": "player",
+      "causeIds": [
+        "cause:command-5e1a3b9e-4a6b-40be-919f-68882f661b68",
+        "vid:c94a632142096c2e705a0ced1e510443",
+        "vid:ac7b82980788fa284bf409c122bac741",
+        "vid:f559aa6c47f6297f71bfcac4aed448aa"
+      ],
+      "commandId": "command-5e1a3b9e-4a6b-40be-919f-68882f661b68",
+      "date": "2025-04-15",
+      "kind": "AdvanceTime",
+      "ledgerReceiptCountAfter": 142,
+      "payloadHash": "80d1c47d781b7bfd8aa8b69133cdb05f1f10846c717b095143f0b5c50b333029",
+      "payloadSignature": "{\"actorId\":\"player\",\"kind\":\"AdvanceTime\",\"payload\":{\"date\":\"2025-04-15\",\"phase\":\"snapshot\"},\"runId\":\"t17-video-chrome-tech-campaign-0-a2\"}",
+      "revisionAfter": 111,
+      "revisionBefore": 110,
+      "runId": "t17-video-chrome-tech-campaign-0-a2",
+      "summary": "推进至2025-04-15",
+      "transactionIds": [
+        "vid:c94a632142096c2e705a0ced1e510443",
+        "vid:ac7b82980788fa284bf409c122bac741"
+      ]
+    }
+  ],
+  "scope": "Public observed date/available/save stages joined with complete exported actual ledger. Not total business profit1950, not full native2020-2025 play or human balance result."
+}

@@ -1,0 +1,31 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "node",
+    "node_modules/typescript/bin/tsc",
+    "--ignoreConfig",
+    "--noEmit",
+    "--target",
+    "ES2022",
+    "--lib",
+    "ES2023,DOM",
+    "--module",
+    "NodeNext",
+    "--moduleResolution",
+    "NodeNext",
+    "--allowImportingTsExtensions",
+    "--strict",
+    "--exactOptionalPropertyTypes",
+    "--noUncheckedIndexedAccess",
+    "--skipLibCheck",
+    "--types",
+    "node",
+    "scripts/collect_video_shape_evidence.ts",
+    "scripts/video-shape-output.ts"
+  ],
+  "exitCode": 0,
+  "wallSeconds": 12.501528439985123,
+  "stdout": "",
+  "stderr": ""
+}

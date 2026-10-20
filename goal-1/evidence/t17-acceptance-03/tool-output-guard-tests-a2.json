@@ -1,0 +1,14 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "scripts/video-shape-output.test.mjs"
+  ],
+  "exitCode": 0,
+  "wallSeconds": 0.8023947280016728,
+  "stdout": "TAP version 13\n# (node:91414) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time\n# (Use `node --trace-warnings ...` to show where the warning was created)\n# Subtest: accepts a fresh sibling destination without creating any directory\nok 1 - accepts a fresh sibling destination without creating any directory\n  ---\n  duration_ms: 44.00684\n  ...\n# Subtest: accepts missing nested parents without creating them\nok 2 - accepts missing nested parents without creating them\n  ---\n  duration_ms: 35.375121\n  ...\n# Subtest: requires one explicit output argument\nok 3 - requires one explicit output argument\n  ---\n  duration_ms: 0.872049\n  ...\n# Subtest: rejects project paths outside evidence and the evidence container itself\nok 4 - rejects project paths outside evidence and the evidence container itself\n  ---\n  duration_ms: 0.981143\n  ...\n# Subtest: rejects an existing empty directory\nok 5 - rejects an existing empty directory\n  ---\n  duration_ms: 30.192264\n  ...\n# Subtest: does not overwrite an existing marker or unrelated file\nok 6 - does not overwrite an existing marker or unrelated file\n  ---\n  duration_ms: 42.164649\n  ...\n# Subtest: rejects a child of committed evidence without changing its file set\nok 7 - rejects a child of committed evidence without changing its file set\n  ---\n  duration_ms: 49.489806\n  ...\n# Subtest: rejects a symlink into another committed evidence root before creating a child\nok 8 - rejects a symlink into another committed evidence root before creating a child\n  ---\n  duration_ms: 35.831723\n  ...\n1..8\n# tests 8\n# suites 0\n# pass 8\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 598.252498\n",
+  "stderr": "(node:91410) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+}

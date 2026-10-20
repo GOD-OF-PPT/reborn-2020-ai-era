@@ -1,0 +1,148 @@
+import {readFileSync,writeFileSync,readdirSync,mkdirSync,openSync,writeSync,closeSync} from 'node:fs'
+import {execFileSync} from 'node:child_process'
+import {createHash} from 'node:crypto'
+import {join,relative} from 'node:path'
+import {fileURLToPath} from 'node:url'
+import {evidenceDirectory} from './evidence-output.ts'
+import {assertFreshVideoEvidencePath} from './video-shape-output.ts'
+import {StoryHarness} from '../src/testing/story-harness.ts'
+import {createCampaignRun,createCampaignCodec,campaignVideo} from '../src/application/campaign.ts'
+import {projectVideo} from '../src/core/video-projection.ts'
+import {evaluateCommand} from '../src/core/commands.ts'
+import {actionBudget} from '../src/core/economy.ts'
+import {accountFunds} from '../src/core/ledger.ts'
+import {addDays} from '../src/core/calendar.ts'
+import {quarterLimit} from '../src/core/operations-calendar.ts'
+import {VIDEO_CONTENT,VIDEO_JOBS} from '../src/content/video.ts'
+import type {GameRun,CommandEnvelope} from '../src/core/run-types.ts'
+
+// Actual normal creation and commands; no fixture, runtime override or reward changes.
+const root=fileURLToPath(new URL('../',import.meta.url))
+assertFreshVideoEvidencePath(root,process.argv.slice(2))
+const output=evidenceDirectory(root,'video-shape-results.json')
+if(!relative(root,output).split('\\').join('/').startsWith('goal-1/evidence/')||readdirSync(output).length)throw Error('FRESH_PROJECT_EVIDENCE_DIRECTORY_REQUIRED')
+const sha=(v:string|Uint8Array)=>createHash('sha256').update(v).digest('hex')
+const save=(name:string,v:unknown)=>writeFileSync(join(output,name),JSON.stringify(v,null,2)+'\n',{flag:'wx'})
+const rawSave=(name:string,raw:string)=>{writeFileSync(join(output,name),raw,{flag:'wx'});return {file:name,bytes:Buffer.byteLength(raw),sha256:sha(raw)}}
+function check(ok:unknown,message:string):asserts ok{if(!ok)throw Error(message)}
+const codec=createCampaignCodec(),backgrounds=['technical_employee','content_employee'] as const,seeds=['t16-campaign-0','t16-campaign-1','t16-campaign-2'] as const
+const edges=['ads','affiliate','no-qualification-ads','no-qualification-affiliate','unlist-before','unlist-after','abandon-planned','abandon-running','exit-planned','exit-running','deadline','paused-delivery','wind-down','zero-ap','label-before','label-after','audience-local_merchants','audience-lifestyle'] as const
+type Mode=typeof VIDEO_CONTENT.modes[number]['id']
+type Material='original'|'licensed'
+type Case={id:string;kind:'sample';product:typeof VIDEO_CONTENT.products[number]['id'];mode:Mode;material:Material}|{id:string;kind:'commission';mode:Mode;material:Material}|{id:typeof edges[number];kind:'edge'}
+const cases:Case[]=[...VIDEO_CONTENT.products.flatMap(p=>VIDEO_CONTENT.modes.flatMap(m=>(['original','licensed'] as const).map(material=>({id:`sample-${p.id}-${m.id}-${material}`,kind:'sample' as const,product:p.id,mode:m.id,material})))),...VIDEO_CONTENT.modes.flatMap(m=>(['original','licensed'] as const).map(material=>({id:`commission-${m.id}-${material}`,kind:'commission' as const,mode:m.id,material}))),...edges.map(id=>({id,kind:'edge' as const}))]
+check(cases.length===42&&new Set(cases.map(c=>c.id)).size===42,'CASE_REGISTRATION_MISMATCH')
+const sourcePaths=(dir:string):string[]=>readdirSync(join(root,dir),{withFileTypes:true}).flatMap(d=>d.isDirectory()?sourcePaths(dir+'/'+d.name):/\.(tsx?|css)$/.test(d.name)?[dir+'/'+d.name]:[])
+const sourceHashes=Object.fromEntries([...sourcePaths('src'),'scripts/collect_video_shape_evidence.ts','scripts/evidence-output.ts','scripts/video-shape-output.ts','package.json','package-lock.json'].map(p=>[p,sha(readFileSync(join(root,p)))]))
+save('registration.json',{scope:'T17 step5a video normal content matrix; counterfactual branches of six earned prefixes, not independent players, native browser or human tests',baseCommit:execFileSync('rtk',['proxy','git','rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),backgrounds,seeds,cases,total:backgrounds.length*seeds.length*cases.length,sourceHashes,policy:{creation:'normal',work:'2020 through 2024Q2; no WorkQuarter in 2024Q3 through branch end',applications:[['2024-07',1],['2024-10',1],['2025-01',1]],programOffsetsDays:{image_rights:0,video_access:7,ads:14,affiliate:21},maxPaidAttemptsPerProgram:3,branchAt:'2025-04-01',commercialNegotiation:'scope for image_assisted; price otherwise; only after actual revision beyond included terms',capacity:'actual next quarter when no points; no free refill',decisions:'only public projections, explicit result reads and rejected command reasons'},notCovered:['full Cartesian product of audience segment with every production parameter','course/relay/deepseek/world/story/life remainder of step5','browser persistence or visual QA','human timing or enjoyment','original three PNG','whole Q/X or T17 completion']})
+const progress=openSync(join(output,'progress.jsonl'),'wx'),results:unknown[]=[],prefixes:unknown[]=[]
+const journal=(v:unknown)=>{const line=JSON.stringify(v)+'\n';writeSync(progress,line);console.log(line.trim())}
+type Trace={kind:string;revision:number;date:string;cashFen:number;availableFen:number;actionPoints:number}
+class ObservedHarness extends StoryHarness {
+ readonly trace:Trace[]=[]
+ override sendAs(kind:string,payload:unknown,id:string){const run=super.sendAs(kind,payload,id);const f=accountFunds(run.economy.ledger,'personal');this.trace.push({kind,revision:run.revision,date:run.timeline.cursor.date,cashFen:f.cashFen,availableFen:f.availableFen,actionPoints:actionBudget(run.economy,run.timeline.cursor.date).available});return run}
+}
+const view=(h:StoryHarness)=>{const v=projectVideo(h.run,campaignVideo);check(v,'VIDEO_PROJECTION_REQUIRED');return v}
+const channelId=(h:StoryHarness)=>{const c=view(h).channels[0];check(c,'CHANNEL_REQUIRED');return c.id}
+const at=(h:StoryHarness,date:string)=>h.at(date,{work:false})
+function points(h:StoryHarness,n:number){for(let guard=0;actionBudget(h.run.economy,h.run.timeline.cursor.date).available<n;guard++){check(guard<4,'FINITE_CAPACITY_POLICY_EXHAUSTED');const next=quarterLimit(h.run.timeline.cursor.date);check(next<='2025-12-31','NO_FUTURE_FREE_ACTIONS');at(h,next)}}
+function probe(h:StoryHarness,kind:string,payload:unknown,rejected:boolean,expected?:string){const before=codec.export(h.run),r=evaluateCommand(h.run,h.command(kind,payload),h.codec.registry,'player');check(codec.export(h.run)===before,'PROBE_MUTATED_COMMITTED_RUN');check(rejected?r.status==='rejected':r.status==='proposed','UNEXPECTED_PROBE_RESULT:'+JSON.stringify(r));if(expected)check(r.status==='rejected'&&r.reasonCodes.includes(expected),'EXPECTED_REASON_MISSING:'+expected+JSON.stringify(r));return {kind,payload,status:r.status,...(r.status==='rejected'?{reasonCodes:r.reasonCodes}:{}),unchanged:true}}
+function finishWork(h:StoryHarness,id:string){let w=view(h).works.find(w=>w.id===id);check(w?.production,'WORK_PRODUCTION_REQUIRED');at(h,w.production.completeAt);w=view(h).works.find(w=>w.id===id)!;if(w.defectKnown&&w.corrections.length===0){points(h,1);h.send('ReworkVideo',{workId:id,resources:['player-production'],startAt:h.run.timeline.cursor.date});const correction=view(h).works.find(w=>w.id===id)!.corrections.at(-1);check(correction,'CORRECTION_JOB_REQUIRED');at(h,correction.completeAt)}w=view(h).works.find(w=>w.id===id)!;h.send('ReviewVideoOutput',{workId:id,disclosure:w.modeId==='manual'?'manual':w.modeId==='image_assisted'?'ai_assisted':'synthetic'})}
+function startSample(h:StoryHarness,product:string,mode:Mode,material:Material,requestedStartAt?:string){points(h,1);const startAt=requestedStartAt??h.run.timeline.cursor.date;h.send('StartVideoWork',{channelId:channelId(h),productId:product,modeId:mode,materialId:material,resources:['player-production'],startAt});const w=view(h).works.at(-1);check(w,'NEW_WORK_REQUIRED');return w.id}
+function accept(h:StoryHarness,mode:Mode,material:Material,requestedStartAt?:string){points(h,1);const startAt=requestedStartAt??h.run.timeline.cursor.date,c=view(h).channels[0]!,lead=c.leads[0];check(lead,'ACTUAL_QUALIFIED_LEAD_REQUIRED');h.send('AcceptVideoCommission',{channelId:c.id,cohortId:lead.cohortId,clientId:lead.personId,modeId:mode,materialId:material,resources:['player-production'],startAt});const contract=view(h).contracts.at(-1);check(contract,'ACCEPTED_CONTRACT_REQUIRED');return contract.id}
+function settleCommission(h:StoryHarness,id:string,negotiation:'price'|'scope'){
+ const initial=view(h).contracts.find(c=>c.id===id);check(initial,'CONTRACT_REQUIRED');finishWork(h,initial.workId)
+ for(let guard=0;guard<12;guard++){
+  const c=view(h).contracts.find(c=>c.id===id)!;const w=view(h).works.find(w=>w.id===c.workId)!
+  if(c.status==='settled'){check(c.paidCase,'PAID_CASE_REQUIRES_ACTUAL_SETTLEMENT');return}
+  if(c.status==='delivered'){check(c.paymentAt,'ACTUAL_PAYMENT_DATE_REQUIRED');at(h,c.paymentAt);continue}
+  if(c.status==='cancelled')return
+  if(c.status==='production'||c.status==='revision'){
+   if(c.status==='revision'&&c.revisions>=c.includedRevisions&&!c.negotiated){points(h,1);h.send('NegotiateVideoCommission',{contractId:id,proposal:negotiation,resources:['player-production'],startAt:h.run.timeline.cursor.date});const job=view(h).contracts.find(c=>c.id===id)!.negotiationJobId;check(job,'NEGOTIATION_JOB_REQUIRED');const end=h.run.operations!.jobs.find(j=>j.id===job)!.completeAt;at(h,end);continue}
+   if(c.status==='revision'&&!(c.negotiation==='scope'&&c.negotiationOutcome==='accepted')){points(h,1);h.send('ReworkVideo',{workId:w.id,resources:['player-production'],startAt:h.run.timeline.cursor.date});const job=view(h).works.find(x=>x.id===w.id)!.corrections.at(-1);check(job,'CLIENT_REVISION_JOB_REQUIRED');at(h,job.completeAt);const current=view(h).works.find(x=>x.id===w.id)!;h.send('ReviewVideoOutput',{workId:w.id,disclosure:current.disclosure??(current.modeId==='manual'?'manual':current.modeId==='image_assisted'?'ai_assisted':'synthetic')})}
+   h.send('SubmitVideoCommission',{contractId:id});const submitted=view(h).contracts.find(c=>c.id===id)!.submittedAt;check(submitted,'SUBMISSION_DATE_REQUIRED');at(h,addDays(submitted,2));continue
+  }
+  throw Error('UNHANDLED_PUBLIC_CONTRACT_STATUS:'+c.status)
+ }
+ throw Error('FINITE_COMMISSION_POLICY_EXHAUSTED')
+}
+type Prefix={name:string;h:ObservedHarness;early:GameRun;initialRaw:string;raw:string}
+let buildingPrefix:ObservedHarness|null=null
+function buildPrefix(backgroundId:string,seed:string):Prefix{
+ const name=backgroundId+'-'+seed,initial=createCampaignRun({runId:'t17-video-shapes-'+name,actorId:'player',commandId:'create',backgroundId,seed}),h=new ObservedHarness({priorRun:initial})
+ buildingPrefix=h;check(codec.export(h.initial)===codec.export(initial),'CREATION_INPUT_NOT_IDENTICAL')
+ h.send('WorkQuarter',{});h.send('OpenVideoChannel',{name:'正常生活中的AI观察',segment:'ai_learners'})
+ for(let i=0;i<2;i++){const id=startSample(h,'hotspot','manual','original');finishWork(h,id);h.send('PublishVideo',{workId:id,monetization:'none',label:false});const p=view(h).publications.at(-1)!;at(h,p.measureAt)}
+ const early=h.run;h.at('2024-06-30');at(h,'2024-07-01')
+ for(const month of ['2024-07','2024-10','2025-01']){
+  for(const [i,program]of VIDEO_CONTENT.programs.entries()){
+   const date=addDays(month+'-01',i*7);at(h,date)
+   // Decisions use explicit public approvals, after DecideVideoProgram below.
+   if(view(h).applications.some(a=>a.program===program.id&&a.approved===true&&a.resultRead&&a.expiresAt!==null&&a.expiresAt>'2025-04-01'))continue
+   h.send('ApplyVideoProgram',{channelId:channelId(h),program:program.id,resources:['player-production'],startAt:date});const a=view(h).applications.at(-1)!;check(a.job,'APPLICATION_JOB_REQUIRED');at(h,a.job.completeAt);h.send('DecideVideoProgram',{applicationId:a.id})
+  }
+ }
+ at(h,'2025-04-01');check(h.run.origin==='normal','NORMAL_ORIGIN_REQUIRED');check(actionBudget(h.run.economy,h.run.timeline.cursor.date).available===4,'FRESH_REAL_QUARTER_REQUIRED')
+ return {name,h,early,initialRaw:codec.export(initial),raw:codec.export(h.run)}
+}
+function audit(initial:GameRun,commands:readonly CommandEnvelope[],expected:string){let run=initial;for(const c of commands){const r=evaluateCommand(run,c,codec.registry,'player');check(r.status==='proposed','AUDIT_COMMAND_REJECTED:'+JSON.stringify({command:c,result:r}));run=codec.import(codec.export(r.nextRun))}check(codec.export(run)===expected,'EXACT_REPLAY_BYTES_MISMATCH');return run}
+function financial(h:StoryHarness){const c=view(h).channels[0]!;return {metrics:c.metrics,funds:accountFunds(h.run.economy.ledger,'personal'),budget:actionBudget(h.run.economy,h.run.timeline.cursor.date)}}
+function jobCost(h:StoryHarness,id:string){const w=view(h).works.find(w=>w.id===id)!;return [w.production,...w.corrections].reduce((sum,j)=>sum+(j&&['running','completed','interrupted'].includes(j.status)?VIDEO_JOBS.find(d=>d.id===j.definitionId)!.costFen:0),0)}
+function verifyPublication(h:StoryHarness,id:string,before:ReturnType<typeof financial>){const v=view(h),p=v.publications.find(p=>p.workId===id)!;check(p.measuredAt!==null,'PUBLICATION_MUST_ACTUALLY_MEASURE');const settlements=v.settlements.filter(s=>s.publicationId===p.id);check(settlements.every(s=>s.collectedAt!==null),'PLATFORM_MUST_ACTUALLY_COLLECT');const income=settlements.reduce((n,s)=>n+s.amountFen,0),fee=settlements.reduce((n,s)=>n+s.feeFen,0),after=financial(h);check(after.metrics.incomeFen-before.metrics.incomeFen===income,'PUBLICATION_REVENUE_MISMATCH');check(after.metrics.costFen-before.metrics.costFen===jobCost(h,id)+fee,'PUBLICATION_COST_MISMATCH');if(!p.qualified||p.monetization==='none')check(income===0,'EXPOSURE_IS_NOT_INCOME');if(p.qualified&&p.monetization==='ads')check(income===Math.floor(p.views/100)*100,'ACTUAL_AD_INCOME_MISMATCH');if(p.qualified&&p.monetization==='affiliate')check(settlements.every(s=>s.amountFen===s.retained*1000&&s.grossMerchandiseFen===(s.retained+s.returned)*10000),'GMV_IS_NOT_COMMISSION');return {publication:p,settlements,incomeFen:income,feeFen:fee,costFen:after.metrics.costFen-before.metrics.costFen}}
+function perform(h:ObservedHarness,c:Case){
+ const before=financial(h),probes:unknown[]=[]
+ if(c.kind==='sample'||c.kind==='commission'){
+  if(view(h).modes.find(m=>m.id===c.mode)!.reasonCodes.length){const payload=c.kind==='sample'?{channelId:channelId(h),productId:c.product,modeId:c.mode,materialId:c.material,resources:['player-production'],startAt:h.run.timeline.cursor.date}:{channelId:channelId(h),cohortId:view(h).channels[0]!.leads[0]!.cohortId,clientId:view(h).channels[0]!.leads[0]!.personId,modeId:c.mode,materialId:c.material,resources:['player-production'],startAt:h.run.timeline.cursor.date};probes.push(probe(h,c.kind==='sample'?'StartVideoWork':'AcceptVideoCommission',payload,true));return {status:'policy_refused',reason:'actual paid qualification policy did not grant access',publicMode:view(h).modes.find(m=>m.id===c.mode),probes}}
+  if(c.kind==='sample'){const id=startSample(h,c.product,c.mode,c.material);finishWork(h,id);h.send('PublishVideo',{workId:id,monetization:'none',label:false});at(h,addDays(view(h).publications.at(-1)!.measureAt,28));return {status:'completed',result:verifyPublication(h,id,before),probes}}
+  const id=accept(h,c.mode,c.material);settleCommission(h,id,c.mode==='image_assisted'?'scope':'price');const contract=view(h).contracts.find(x=>x.id===id)!,after=financial(h);check(contract.status==='settled','COMMISSION_EXPECTED_ACTUAL_SETTLEMENT:'+contract.status);const expectedFee=Math.floor(contract.priceFen*500/10000);check(after.metrics.incomeFen-before.metrics.incomeFen===contract.priceFen,'COMMISSION_PRICE_NOT_RECEIVED');check(after.metrics.costFen-before.metrics.costFen===jobCost(h,contract.workId)+expectedFee,'COMMISSION_COSTS_OR_FEE_MISMATCH');check(contract.paidCase,'NORMAL_PAID_CASE_REQUIRED');return {status:'completed',contract,incomeFen:contract.priceFen,costFen:after.metrics.costFen-before.metrics.costFen,probes}
+ }
+ const edge=c.id
+ if(edge==='audience-local_merchants'||edge==='audience-lifestyle'){
+  const segment=edge.slice('audience-'.length),oldMembers=new Set(h.run.video!.cohorts.flatMap(x=>x.members));h.send('OpenVideoChannel',{name:segment+'独立受众',segment});const ch=view(h).channels.at(-1)!;h.send('StartVideoMarketing',{channelId:ch.id,resources:['player-production'],startAt:h.run.timeline.cursor.date});at(h,addDays(h.run.timeline.cursor.date,7));const cohort=h.run.video!.cohorts.at(-1)!;check(cohort.segment===segment&&cohort.members.length===80&&cohort.members.every(x=>!oldMembers.has(x)),'AUDIENCE_POOLS_NOT_SEPARATE');check(financial(h).metrics.incomeFen===before.metrics.incomeFen,'MARKETING_IS_NOT_INCOME');return {status:'completed',cohort:{id:cohort.id,segment,members:cohort.members.length,qualified:cohort.qualifiedMembers.length},probes}
+ }
+ if(edge==='abandon-planned'||edge==='abandon-running'){
+  const id=startSample(h,'hotspot','manual','original',edge==='abandon-planned'?addDays(h.run.timeline.cursor.date,1):h.run.timeline.cursor.date);if(edge==='abandon-running')at(h,addDays(h.run.timeline.cursor.date,1));const when=h.run.timeline.cursor.date;h.send('AbandonVideoWork',{workId:id});at(h,addDays(when,10));const w=view(h).works.find(w=>w.id===id)!;check(w.abandonedAt!==null,'ABANDON_REQUIRED');check(financial(h).metrics.costFen-before.metrics.costFen===(edge==='abandon-planned'?0:60000),'ABANDON_COST_NOT_PRESERVED');return {status:'completed',work:w,probes}
+ }
+ if(edge==='exit-planned'||edge==='exit-running'||edge==='deadline'||edge==='wind-down'){
+  const id=accept(h,'manual','original',edge==='exit-planned'?addDays(h.run.timeline.cursor.date,1):h.run.timeline.cursor.date),accepted=view(h).contracts.find(x=>x.id===id)!
+  if(edge==='exit-running')at(h,addDays(h.run.timeline.cursor.date,1))
+  if(edge==='deadline')at(h,addDays(accepted.dueAt,1))
+  else{if(edge==='wind-down'){h.send('WindDownBusiness',{businessId:view(h).channels[0]!.businessId});check(view(h).contracts.find(x=>x.id===id)!.status!=='cancelled','WIND_DOWN_MUST_NOT_ERASE_CONTRACT');probes.push(probe(h,'CloseBusiness',{businessId:view(h).channels[0]!.businessId},true))}h.send('ExitVideoCommission',{contractId:id})}
+  const ended=view(h).contracts.find(x=>x.id===id)!;check(ended.status==='cancelled','FINITE_CANCEL_REQUIRED');const b=h.run.economy.ledger.contracts.find(x=>x.id===id)!;check(b.prepaidFen===0,'REFUND_MUST_SETTLE_OR_REMAIN_OBLIGATION');check(financial(h).metrics.incomeFen===before.metrics.incomeFen,'CANCEL_IS_NOT_REVENUE');probes.push(probe(h,'AcceptVideoCommission',{channelId:channelId(h),cohortId:ended.cohortId,clientId:ended.clientId,modeId:'manual',materialId:'original',resources:['player-production'],startAt:h.run.timeline.cursor.date},true));if(edge==='wind-down')h.send('CloseBusiness',{businessId:view(h).channels[0]!.businessId});return {status:'completed',contract:ended,probes}
+ }
+ if(edge==='paused-delivery'){const id=accept(h,'manual','original');h.send('PauseBusiness',{businessId:view(h).channels[0]!.businessId});probes.push(probe(h,'StartVideoWork',{channelId:channelId(h),productId:'hotspot',modeId:'manual',materialId:'original',resources:['player-production'],startAt:h.run.timeline.cursor.date},true,'VIDEO_NEW_WORK_PAUSED'));settleCommission(h,id,'price');check(view(h).contracts.find(c=>c.id===id)!.paidCase,'OLD_COMMISSION_MUST_REMAIN_DELIVERABLE');return {status:'completed',contract:view(h).contracts.find(c=>c.id===id),probes}}
+ if(edge==='zero-ap'){const ids:string[]=[];for(let n=0;n<4;n++){const id=startSample(h,'hotspot','manual','original');ids.push(id);const job=view(h).works.find(x=>x.id===id)!.production!;at(h,job.completeAt)}check(actionBudget(h.run.economy,h.run.timeline.cursor.date).available===0,'ACTUAL_ZERO_AP_REQUIRED');probes.push(probe(h,'StartVideoWork',{channelId:channelId(h),productId:'hotspot',modeId:'manual',materialId:'original',resources:['player-production'],startAt:h.run.timeline.cursor.date},true,'INSUFFICIENT_ACTION_POINTS'));h.send('AbandonVideoWork',{workId:ids[0]});check(actionBudget(h.run.economy,h.run.timeline.cursor.date).available===0,'NO_FREE_AP_AFTER_COMPLETED_WORK');return {status:'completed',cashFen:financial(h).funds.cashFen,remainingAP:0,probes}}
+ let mode:Mode='manual';if(edge==='label-before'||edge==='label-after'){mode='image_assisted';if(view(h).modes.find(m=>m.id===mode)!.reasonCodes.length)return {status:'policy_refused',reason:'image qualification not granted',publicMode:view(h).modes.find(m=>m.id===mode),probes}}
+ const id=startSample(h,'hotspot',mode,'original');finishWork(h,id)
+ if(edge==='label-before'||edge==='label-after')at(h,edge==='label-before'?'2025-08-31':'2025-09-01')
+ const monetization=edge==='ads'||edge.includes('qualification-ads')||edge==='unlist-before'||edge==='unlist-after'?'ads':edge==='affiliate'||edge.includes('qualification-affiliate')?'affiliate':'none'
+ if(edge==='label-after')probes.push(probe(h,'PublishVideo',{workId:id,monetization,label:false},true,'VIDEO_2025_LABEL_REQUIRED'))
+ h.send('PublishVideo',{workId:id,monetization,label:edge==='label-after'});const p=view(h).publications.at(-1)!
+ if(edge==='unlist-before')h.send('UnlistVideo',{publicationId:p.id})
+ if(edge==='unlist-after'){at(h,p.measureAt);h.send('UnlistVideo',{publicationId:p.id})}
+ at(h,addDays(p.measureAt,28));const result=verifyPublication(h,id,before)
+ if(edge.startsWith('no-qualification'))check(!result.publication.qualified&&result.incomeFen===0,'UNQUALIFIED_PUBLISH_MUST_NOT_EARN')
+ if(edge==='unlist-before')check(result.publication.views===0&&result.incomeFen===0,'UNLIST_BEFORE_WINDOW_MUST_STOP_EXPOSURE')
+ return {status:'completed',result,probes}
+}
+
+try{
+ for(const backgroundId of backgrounds)for(const seed of seeds){
+  const name=backgroundId+'-'+seed;journal({type:'prefix-start',name})
+  let prefix:Prefix
+  buildingPrefix=null
+  try{prefix=buildPrefix(backgroundId,seed)}catch(error){const failed=buildingPrefix as ObservedHarness|null;const state=failed?{snapshot:rawSave(name+'-failed-prefix.json',codec.export(failed.run)),commands:failed.commands,trace:failed.trace}:null;const record={type:'prefix-error',name,status:'error',error:String(error),state};save(name+'-failed-prefix-evidence.json',record);journal({type:'prefix-error',name,error:String(error)});prefixes.push(record);continue}
+  const dir=name;mkdirSync(join(output,dir));const prefixRaw=rawSave(dir+'/prefix.json',prefix.raw),initial=rawSave(dir+'/initial.json',prefix.initialRaw),earlyRaw=rawSave(dir+'/early-prefix.json',codec.export(prefix.early));const checkedPrefix=audit(prefix.h.initial,prefix.h.commands,prefix.raw);const earlyCount=prefix.early.receipts.length-1;const checkedEarly=audit(prefix.h.initial,prefix.h.commands.slice(0,earlyCount),codec.export(prefix.early))
+  const prefixMeta={name,status:'completed',backgroundId,seed,normal:true,initial,prefix:prefixRaw,early:earlyRaw,commands:prefix.h.commands,trace:prefix.h.trace,actualSalaryPayments:prefix.h.run.operations!.payroll.filter(p=>p.kind==='salary'&&p.amountFen>0).length,applications:view(prefix.h).applications,fromCreatePrefixByteEqual:true};prefixes.push(prefixMeta);save(dir+'/prefix-evidence.json',prefixMeta);journal({type:'prefix-ready',name,revision:checkedPrefix.revision,applications:view(prefix.h).applications.map(a=>({program:a.program,approved:a.approved,expiresAt:a.expiresAt}))})
+  for(const c of cases){
+   const early=c.kind==='edge'&&c.id.startsWith('no-qualification'),prior=early?prefix.early:prefix.h.run,checkedPrior=early?checkedEarly:checkedPrefix,h=new ObservedHarness({priorRun:prior}),prefixCommands=h.commands.length,startRaw=codec.export(h.run),before=financial(h);let observed:unknown,status='error',error:string|null=null
+   try{if(early)points(h,1);observed=perform(h,c);status=(observed as {status:string}).status}catch(e){error=String(e);observed={status:'error',error}}
+   const final=codec.export(h.run),suffix=h.commands.slice(prefixCommands);let byteEqual=false
+   try{audit(checkedPrior,suffix,final);byteEqual=true;check(codec.export(prior)===startRaw,'BRANCH_MUTATED_SHARED_PREFIX')}catch(e){status='error';error=(error?error+'; ':'')+String(e)}
+   const record={caseId:c.id,backgroundId,seed,origin:h.run.origin,status,error,prefixFile:early?earlyRaw.file:prefixRaw.file,prefixSha256:sha(startRaw),prefixCommandCount:prefixCommands,commands:suffix,trace:h.trace,observed,before,after:financial(h),final:rawSave(dir+'/'+c.id+'-final.json',final),validatedCreatePrefixPlusSuffixByteEqual:byteEqual,date:h.run.timeline.cursor.date,revision:h.run.revision};save(dir+'/'+c.id+'-evidence.json',record);results.push(record);journal({type:'case',name,caseId:c.id,status,error,suffixCommands:suffix.length,byteEqual})
+  }
+ }
+ for(const [p,hash]of Object.entries(sourceHashes))check(sha(readFileSync(join(root,p)))===hash,'SOURCE_DRIFT:'+p)
+ const rows=results as {caseId:string;status:string;validatedCreatePrefixPlusSuffixByteEqual:boolean}[],fatal=rows.filter(r=>r.status==='error').length+(6-prefixes.filter(p=>(p as {status:string}).status==='completed').length),coreCoverage=cases.filter(c=>c.kind!=='edge').map(c=>({id:c.id,completed:rows.filter(r=>r.caseId===c.id&&r.status==='completed').length,refused:rows.filter(r=>r.caseId===c.id&&r.status==='policy_refused').length,errors:rows.filter(r=>r.caseId===c.id&&r.status==='error').length})),summary={scope:'T17 step5a actual video execution. Six normal prehistories, counterfactual branches; shared prefix replayed from Create, each suffix independently re-evaluated and strict-codec byte compared. This is not six fresh players per case or browser/human proof.',registered:6*cases.length,recorded:rows.length,prefixCount:prefixes.length,completed:rows.filter(r=>r.status==='completed').length,policyRefused:rows.filter(r=>r.status==='policy_refused').length,fatal,allRecordedBytesEqual:rows.every(r=>r.validatedCreatePrefixPlusSuffixByteEqual),sourceHashes,coreCoverage,prefixes,results}
+ save('video-shape-results.json',summary);journal({type:'complete',registered:summary.registered,recorded:summary.recorded,completed:summary.completed,policyRefused:summary.policyRefused,fatal,allRecordedBytesEqual:summary.allRecordedBytesEqual});if(fatal||summary.recorded!==summary.registered||coreCoverage.some(r=>r.completed===0)||!summary.allRecordedBytesEqual)process.exitCode=1
+}finally{closeSync(progress)}

@@ -1,0 +1,196 @@
+{
+  "caseId": "sample-hotspot-manual-original",
+  "backgroundId": "technical_employee",
+  "seed": "t16-campaign-1",
+  "origin": "normal",
+  "status": "completed",
+  "error": null,
+  "prefixFile": "technical_employee-t16-campaign-1/prefix.json",
+  "prefixSha256": "96211c19a8afd0ba3aea93173d97690b7288d21b120b74633268ee09c4ac7096",
+  "prefixCommandCount": 99,
+  "commands": [
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-100",
+      "expectedRevision": 100,
+      "kind": "StartVideoWork",
+      "payload": {
+        "channelId": "vid:db752b97c3efb839694eaac333e9a77c",
+        "productId": "hotspot",
+        "modeId": "manual",
+        "materialId": "original",
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2025-04-01"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-101",
+      "expectedRevision": 101,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-04-08"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-102",
+      "expectedRevision": 102,
+      "kind": "ReviewVideoOutput",
+      "payload": {
+        "workId": "vid:7b503c4fdc95abf763a38d566104d261",
+        "disclosure": "manual"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-103",
+      "expectedRevision": 103,
+      "kind": "PublishVideo",
+      "payload": {
+        "workId": "vid:7b503c4fdc95abf763a38d566104d261",
+        "monetization": "none",
+        "label": false
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-104",
+      "expectedRevision": 104,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-05-13"
+      }
+    }
+  ],
+  "trace": [
+    {
+      "kind": "StartVideoWork",
+      "revision": 101,
+      "date": "2025-04-01",
+      "cashFen": 20250000,
+      "availableFen": 20250000,
+      "actionPoints": 3
+    },
+    {
+      "kind": "AdvanceTime",
+      "revision": 102,
+      "date": "2025-04-08",
+      "cashFen": 20250000,
+      "availableFen": 20250000,
+      "actionPoints": 3
+    },
+    {
+      "kind": "ReviewVideoOutput",
+      "revision": 103,
+      "date": "2025-04-08",
+      "cashFen": 20250000,
+      "availableFen": 20250000,
+      "actionPoints": 3
+    },
+    {
+      "kind": "PublishVideo",
+      "revision": 104,
+      "date": "2025-04-08",
+      "cashFen": 20250000,
+      "availableFen": 20250000,
+      "actionPoints": 3
+    },
+    {
+      "kind": "AdvanceTime",
+      "revision": 105,
+      "date": "2025-05-13",
+      "cashFen": 19850000,
+      "availableFen": 19850000,
+      "actionPoints": 3
+    }
+  ],
+  "observed": {
+    "status": "completed",
+    "result": {
+      "publication": {
+        "channelId": "vid:db752b97c3efb839694eaac333e9a77c",
+        "cohortId": "vid:19533e761b8d69c264e7c2db74eb6988",
+        "followers": 77,
+        "id": "vid:027b3d4221f0b3ef80dac3ecaee04bee",
+        "labelAttached": false,
+        "measureAt": "2025-04-15",
+        "measuredAt": "2025-04-15",
+        "monetization": "none",
+        "permissionId": null,
+        "publishedAt": "2025-04-08",
+        "qualified": false,
+        "qualifiedInquiries": 8,
+        "retentionBps": 5315,
+        "settlementId": null,
+        "unlistedAt": null,
+        "views": 22726,
+        "workId": "vid:7b503c4fdc95abf763a38d566104d261"
+      },
+      "settlements": [],
+      "incomeFen": 0,
+      "feeFen": 0,
+      "costFen": 60000
+    },
+    "probes": []
+  },
+  "before": {
+    "metrics": {
+      "costFen": 290000,
+      "incomeFen": 0,
+      "profitFen": -290000
+    },
+    "funds": {
+      "cashFen": 20310000,
+      "heldFen": 0,
+      "availableFen": 20310000,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0
+    },
+    "budget": {
+      "quarter": "2025-Q2",
+      "total": 4,
+      "spent": 0,
+      "reserved": 0,
+      "available": 4
+    }
+  },
+  "after": {
+    "metrics": {
+      "costFen": 350000,
+      "incomeFen": 0,
+      "profitFen": -350000
+    },
+    "funds": {
+      "cashFen": 19850000,
+      "heldFen": 0,
+      "availableFen": 19850000,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0
+    },
+    "budget": {
+      "quarter": "2025-Q2",
+      "total": 4,
+      "spent": 1,
+      "reserved": 0,
+      "available": 3
+    }
+  },
+  "final": {
+    "file": "technical_employee-t16-campaign-1/sample-hotspot-manual-original-final.json",
+    "bytes": 1250011,
+    "sha256": "a2527df518946a509ac2b5a9d82617e33d6940af98297e5e7b8afc9709e01ef3"
+  },
+  "validatedCreatePrefixPlusSuffixByteEqual": true,
+  "date": "2025-05-13",
+  "revision": 105
+}

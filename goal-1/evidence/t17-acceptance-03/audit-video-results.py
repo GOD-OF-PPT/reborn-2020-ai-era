@@ -1,0 +1,127 @@
+import hashlib
+import itertools
+import json
+from collections import Counter
+from pathlib import Path
+
+root = Path(__file__).resolve().parent
+repo = root.parents[2]
+output = root / 'video-aggregate-audit.json'
+if output.exists() or (root / 'sealed-evidence.json').exists():
+    raise RuntimeError('FRESH_AUDIT_OUTPUT_REQUIRED')
+
+def read(path):
+    return json.loads(path.read_text())
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def raw(base, record):
+    path = base / record['file']
+    assert sha(path) == record['sha256'], str(path)
+    assert path.stat().st_size == record['bytes'], str(path)
+    return read(path)['state']
+
+matrix_root = root / 'video-matrix-r1'
+matrix = read(matrix_root / 'video-shape-results.json')
+normal = read(root / 'normal-negotiation-r1/normal-negotiation-results.json')
+backgrounds = ['technical_employee', 'content_employee']
+seeds = ['t16-campaign-0', 't16-campaign-1', 't16-campaign-2']
+pairs = set(itertools.product(backgrounds, seeds))
+products = ['hotspot', 'original_series', 'commercial']
+modes = ['manual', 'image_assisted', 'generative_video']
+materials = ['original', 'licensed']
+cases = {'sample-' + '-'.join(x) for x in itertools.product(products, modes, materials)}
+cases |= {'commission-' + '-'.join(x) for x in itertools.product(modes, materials)}
+cases |= set('ads affiliate no-qualification-ads no-qualification-affiliate unlist-before unlist-after abandon-planned abandon-running exit-planned exit-running deadline paused-delivery wind-down zero-ap label-before label-after audience-local_merchants audience-lifestyle'.split())
+assert len(cases) == 42
+assert {(p['backgroundId'], p['seed']) for p in matrix['prefixes']} == pairs
+assert len(matrix['prefixes']) == 6
+prefixes = {}
+recorded_prefix_files = {}
+for prefix in matrix['prefixes']:
+    assert prefix['fromCreatePrefixByteEqual'] and prefix['normal']
+    initial = raw(matrix_root, prefix['initial'])
+    earned = raw(matrix_root, prefix['prefix'])
+    early = raw(matrix_root, prefix['early'])
+    assert initial['origin'] == earned['origin'] == 'normal'
+    assert initial['seed'] == earned['seed'] == prefix['seed']
+    assert initial['backgroundId'] == earned['backgroundId'] == prefix['backgroundId']
+    prefixes[(prefix['backgroundId'], prefix['seed'])] = earned
+    assert earned['receipts'][:len(early['receipts'])] == early['receipts']
+    recorded_prefix_files[prefix['prefix']['file']] = earned
+    recorded_prefix_files[prefix['early']['file']] = early
+
+def verify_suffix(state, prefix, commands):
+    assert state['origin'] == 'normal'
+    assert state['receipts'][:len(prefix['receipts'])] == prefix['receipts']
+    receipts = state['receipts'][len(prefix['receipts']):]
+    assert len(receipts) == len(commands)
+    for receipt, command in zip(receipts, commands):
+        actual = {**json.loads(receipt['payloadSignature']), 'commandId': receipt['commandId'], 'expectedRevision': receipt['revisionBefore']}
+        # commands.ts:123 explicitly inserts this schema default before signing.
+        expected = command
+        if command['kind'] == 'AdvanceTime' and 'phase' not in command['payload']:
+            expected = {**command, 'payload': {**command['payload'], 'phase': 'snapshot'}}
+        assert actual == expected, (actual, expected)
+
+matrix_counts = Counter((r['backgroundId'], r['seed'], r['caseId']) for r in matrix['results'])
+assert set(matrix_counts) == {(b, s, c) for b, s in pairs for c in cases}
+assert all(n == 1 for n in matrix_counts.values()) and len(matrix['results']) == 252
+for row in matrix['results']:
+    assert row['status'] == 'completed' and row['error'] is None
+    assert row['validatedCreatePrefixPlusSuffixByteEqual']
+    state = raw(matrix_root, row['final'])
+    assert row['prefixFile'] in recorded_prefix_files
+    assert sha(matrix_root / row['prefixFile']) == row['prefixSha256']
+    selected_prefix = recorded_prefix_files[row['prefixFile']]
+    assert (selected_prefix['backgroundId'], selected_prefix['seed']) == (row['backgroundId'], row['seed'])
+    verify_suffix(state, selected_prefix, row['commands'])
+    assert state['revision'] == row['revision'] and state['timeline']['cursor']['date'] == row['date']
+
+neg_counts = Counter((r['backgroundId'], r['seed'], r['marketingCount']) for r in normal['results'])
+assert set(neg_counts) == {(b, s, k) for b, s in pairs for k in range(1, 8)}
+assert all(n == 1 for n in neg_counts.values()) and len(normal['results']) == 42
+for row in normal['results']:
+    assert row['error'] is None and row['fromValidatedCreatePrefixPlusSuffixByteEqual']
+    state = raw(root / 'normal-negotiation-r1', row['final'])
+    verify_suffix(state, prefixes[(row['backgroundId'], row['seed'])], row['commands'])
+counts = Counter(r['status'] for r in normal['results'])
+assert counts == {'paid': 36, 'exited_after_actual_rejection': 6}, counts
+
+runtime = {}
+for name, value in normal['sourceHashes'].items():
+    if name.startswith(('src/core/', 'src/application/', 'src/content/', 'src/persistence/', 'src/testing/')) or name in ['package.json', 'package-lock.json']:
+        assert sha(repo / name) == value, name
+        runtime[name] = value
+executed = root / 'collector-executed-r1-source.txt'
+assert sha(executed) == matrix['sourceHashes']['scripts/collect_video_shape_evidence.ts']
+freeze = read(root / 'ui-source-freeze-r15.json')
+assert all(sha(repo / p) == value for p, value in freeze.items())
+legacy = read(root / 'original-video-normal-full-create-audit.json')
+assert legacy['normalCreations'] == 2
+assert all(r['fullCreateReplayByteEqual'] and r['qualityCorrectionJobs'] == 1 and len(r['publicCorrections']) == 1 for r in legacy['rows'])
+
+native_path = root / 'chrome-video-r15-a3/settled-saved-111.json'
+native = read(native_path)['state']
+assert native_path.read_bytes() == (root / 'chrome-video-r15-a3/settled-after-reload-111.json').read_bytes()
+contract = native['video']['contracts'][0]
+work = next(w for w in native['video']['works'] if w['id'] == contract['workId'])
+ledger = native['economy']['ledger']
+transactions = [t for t in ledger['transactions'] if t.get('contractId') == contract['id'] or t['id'] in {x for r in native['receipts'][-7:] for x in r['transactionIds']}]
+assert native['revision'] == 111 and contract['status'] == 'settled' and contract['feePosted']
+assert (contract['priceFen'], contract['prepaymentFen'], contract['feeBps']) == (300000, 90000, 500)
+report = {
+    'scope': 'Independent file bytes, fixed dimension completeness, unchanged runtime and exact receipt/payload audit. Does not rerun or replace the collectors actual strict-codec replays.',
+    'matrix': {'prefixes': 6, 'fixedBackgroundSeedPairs': sorted(pairs), 'casesPerPrefix': 42, 'actualRows': len(matrix_counts), 'eachExactlyOnce': True, 'fileBytesAndExactReceiptSuffixes': True},
+    'normalNegotiation': {'cadencesPerPrefix': list(range(1, 8)), 'actualRows': len(neg_counts), 'statuses': dict(counts), 'eachExactlyOnce': True, 'fileBytesAndExactReceiptSuffixes': True},
+    'additionalOriginalNormalQuality': legacy['rows'],
+    'unchangedRuntimeHashes': runtime,
+    'finalUISourceCount': len(freeze), 'finalUISourceEqual': True,
+    'executedMatrixCollectorSha256': sha(executed), 'currentGuardedCollectorSha256': sha(repo / 'scripts/collect_video_shape_evidence.ts'),
+    'native': {'sha256': sha(native_path), 'reloadByteEqual': True, 'revision': native['revision'], 'backgroundId': native['backgroundId'], 'seed': native['seed'], 'contract': contract, 'work': work, 'actualRelatedTransactions': transactions, 'actualNativeCommands105Through111': native['receipts'][-7:]},
+    'notProven': ['human fun/retention/balance', 'browser full2020-2025 play', 'original old3PNG bytes', 'whole step5/T17/QX', 'performance budget', 'mobile/real200percent/beforeunload'],
+}
+with output.open('x') as f:
+    json.dump(report, f, ensure_ascii=False, indent=2)
+print(json.dumps({'matrixRows':len(matrix_counts),'negotiation':dict(counts),'runtimeFilesEqual':len(runtime),'nativeRevision':native['revision'],'reloadExact':True}))

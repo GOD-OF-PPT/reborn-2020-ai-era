@@ -1,0 +1,340 @@
+{
+  "name": "content_employee-t16-campaign-1-marketing-1",
+  "backgroundId": "content_employee",
+  "seed": "t16-campaign-1",
+  "marketingCount": 1,
+  "status": "paid",
+  "error": null,
+  "observed": {
+    "status": "paid",
+    "contract": {
+      "acceptedAt": "2025-04-08",
+      "channelId": "vid:db752b97c3efb839694eaac333e9a77c",
+      "clientId": "vid:c97935a5bd2d09dfbb2fc500f22566f7",
+      "cohortId": "vid:244383f28b64b4a0007b913c53715634",
+      "dueAt": "2025-10-05",
+      "feeBps": 500,
+      "feePosted": true,
+      "id": "vid:06b9611eeec00100c5da2cc098615a63",
+      "includedRevisions": 1,
+      "negotiated": true,
+      "negotiation": "price",
+      "negotiationJobId": "vid:30ae314a98ccd5ebc488127f95ecddfc",
+      "negotiationOutcome": "accepted",
+      "paidCase": true,
+      "paymentAt": "2025-07-17",
+      "prepaymentFen": 90000,
+      "priceFen": 330000,
+      "productVersion": "commercial-v1",
+      "reviewSequence": 3,
+      "reviewedAt": "2025-07-10",
+      "revisions": 2,
+      "settledAt": "2025-07-17",
+      "status": "settled",
+      "submittedAt": "2025-07-08",
+      "submittedVersion": 3,
+      "workId": "vid:fb137adcfc3d8acd57c024b38ae9676f"
+    },
+    "before": {
+      "metrics": {
+        "costFen": 290000,
+        "incomeFen": 0,
+        "profitFen": -290000
+      },
+      "funds": {
+        "cashFen": 9510000,
+        "heldFen": 0,
+        "availableFen": 9510000,
+        "protectionRequiredFen": 0,
+        "protectionShortfallFen": 0,
+        "commitmentShortfallFen": 0
+      },
+      "budget": {
+        "quarter": "2025-Q2",
+        "total": 4,
+        "spent": 0,
+        "reserved": 0,
+        "available": 4
+      }
+    },
+    "after": {
+      "metrics": {
+        "costFen": 516500,
+        "incomeFen": 330000,
+        "profitFen": -186500
+      },
+      "funds": {
+        "cashFen": 8413500,
+        "heldFen": 0,
+        "availableFen": 8413500,
+        "protectionRequiredFen": 0,
+        "protectionShortfallFen": 0,
+        "commitmentShortfallFen": 0
+      },
+      "budget": {
+        "quarter": "2025-Q3",
+        "total": 4,
+        "spent": 1,
+        "reserved": 0,
+        "available": 3
+      }
+    },
+    "costFen": 226500
+  },
+  "commands": [
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-100",
+      "expectedRevision": 100,
+      "kind": "StartVideoMarketing",
+      "payload": {
+        "channelId": "vid:db752b97c3efb839694eaac333e9a77c",
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2025-04-01"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-101",
+      "expectedRevision": 101,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-04-08"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-102",
+      "expectedRevision": 102,
+      "kind": "AcceptVideoCommission",
+      "payload": {
+        "channelId": "vid:db752b97c3efb839694eaac333e9a77c",
+        "cohortId": "vid:244383f28b64b4a0007b913c53715634",
+        "clientId": "vid:c97935a5bd2d09dfbb2fc500f22566f7",
+        "modeId": "manual",
+        "materialId": "original",
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2025-04-08"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-103",
+      "expectedRevision": 103,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-04-22"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-104",
+      "expectedRevision": 104,
+      "kind": "ReviewVideoOutput",
+      "payload": {
+        "workId": "vid:fb137adcfc3d8acd57c024b38ae9676f",
+        "disclosure": "manual"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-105",
+      "expectedRevision": 105,
+      "kind": "SubmitVideoCommission",
+      "payload": {
+        "contractId": "vid:06b9611eeec00100c5da2cc098615a63"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-106",
+      "expectedRevision": 106,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-04-24"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-107",
+      "expectedRevision": 107,
+      "kind": "ReworkVideo",
+      "payload": {
+        "workId": "vid:fb137adcfc3d8acd57c024b38ae9676f",
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2025-04-24"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-108",
+      "expectedRevision": 108,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-05-01"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-109",
+      "expectedRevision": 109,
+      "kind": "ReviewVideoOutput",
+      "payload": {
+        "workId": "vid:fb137adcfc3d8acd57c024b38ae9676f",
+        "disclosure": "manual"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-110",
+      "expectedRevision": 110,
+      "kind": "SubmitVideoCommission",
+      "payload": {
+        "contractId": "vid:06b9611eeec00100c5da2cc098615a63"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-111",
+      "expectedRevision": 111,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-05-03"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-112",
+      "expectedRevision": 112,
+      "kind": "NegotiateVideoCommission",
+      "payload": {
+        "contractId": "vid:06b9611eeec00100c5da2cc098615a63",
+        "proposal": "price",
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2025-05-03"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-113",
+      "expectedRevision": 113,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-05-06"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-114",
+      "expectedRevision": 114,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-06-30"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-115",
+      "expectedRevision": 115,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-07-01"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-116",
+      "expectedRevision": 116,
+      "kind": "ReworkVideo",
+      "payload": {
+        "workId": "vid:fb137adcfc3d8acd57c024b38ae9676f",
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2025-07-01"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-117",
+      "expectedRevision": 117,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-07-08"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-118",
+      "expectedRevision": 118,
+      "kind": "ReviewVideoOutput",
+      "payload": {
+        "workId": "vid:fb137adcfc3d8acd57c024b38ae9676f",
+        "disclosure": "manual"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-119",
+      "expectedRevision": 119,
+      "kind": "SubmitVideoCommission",
+      "payload": {
+        "contractId": "vid:06b9611eeec00100c5da2cc098615a63"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-120",
+      "expectedRevision": 120,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-07-10"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-121",
+      "expectedRevision": 121,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-07-17"
+      }
+    }
+  ],
+  "final": {
+    "file": "content_employee-t16-campaign-1-marketing-1-final.json",
+    "bytes": 1331248,
+    "sha256": "f25e7eca1979c117efc6bc0b29a35cbb743a7d44e5b3d16f0bf7f934f2fbef90"
+  },
+  "fromValidatedCreatePrefixPlusSuffixByteEqual": true
+}

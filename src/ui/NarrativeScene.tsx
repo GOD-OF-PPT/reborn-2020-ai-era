@@ -12,6 +12,7 @@ import {SceneLifeMoment} from './SceneLifeMoment.tsx'
 import {sceneThreads} from './scene-thread-notes.ts'
 import {playableAdvanceDate} from '../application/playable-advance.ts'
 import {moneyText,playableThrough} from './game-text.ts'
+import {videoSceneProgress} from './video-scene-progress.ts'
 
 type Props=GamePanelProps&{
  screen:Screen;headingRef:Ref<HTMLHeadingElement>;personId:LifePerson
@@ -49,8 +50,8 @@ const closingStories:Record<Exclude<Screen,'room'|'routes'>,{title:string;open:s
 function Choice({title,line,label,onClick}:{title:string;line:string;label:string;onClick:()=>void}){
  return <button type="button" className="scene-choice" onClick={onClick} aria-label={label}><span className="scene-choice-overline">一个念头</span><strong data-book-chapter={title}>{title}</strong><span className="scene-choice-line">{line}</span><span className="scene-choice-end">{label}<span aria-hidden="true">↗</span></span></button>
 }
-function Action({p,kind,payload,title,line,label}:{p:GamePanelProps;kind:string;payload:unknown;title:string;line:string;label:string}){
- return <CommandButton {...p} kind={kind} payload={payload} label={label} confirm className="scene-action"><span className="scene-choice-overline">由你决定</span><strong data-book-chapter={title}>{title}</strong><span className="scene-choice-line">{line}</span><span className="scene-choice-end">{label}<span aria-hidden="true">→</span></span></CommandButton>
+function Action({p,kind,payload,title,line,label,confirm=true}:{p:GamePanelProps;kind:string;payload:unknown;title:string;line:string;label:string;confirm?:boolean}){
+ return <CommandButton {...p} kind={kind} payload={payload} label={label} confirm={confirm} className="scene-action"><span className="scene-choice-overline">由你决定</span><strong data-book-chapter={title}>{title}</strong><span className="scene-choice-line">{line}</span><span className="scene-choice-end">{label}<span aria-hidden="true">→</span></span></CommandButton>
 }
 
 /** The visible button owns every preview and guard; a number never submits a command directly. */
@@ -73,7 +74,7 @@ function chooseWithNumber(root:HTMLElement,event:KeyboardEvent){
 
 function sceneCommitmentCount(p:GamePanelProps){
  const f=p.features,w=f.workbench
- return sceneThreads(f).length+w.events.filter(e=>e.presentation!=='ordinary'||e.isBlocking).length+
+ return sceneThreads(f,p.view.date).length+w.events.filter(e=>e.presentation!=='ordinary'||e.isBlocking).length+
  w.finance.reduce((n,a)=>n+a.obligations.filter(o=>o.remainingFen>0&&o.date<=p.view.date).length+(a.protectionShortfallFen>0||a.commitmentShortfallFen>0?1:0),0)+(w.pause?1:0)
 }
 
@@ -96,7 +97,9 @@ export function NarrativeScene(p:Props){
  useEffect(()=>{const choose=(event:KeyboardEvent)=>{if(stage.current&&(event.target===document.body||event.target===document.getElementById('main-content')))chooseWithNumber(stage.current,event)};document.addEventListener('keydown',choose);return()=>document.removeEventListener('keydown',choose)},[])
  const {view,features:f}=p,w=f.workbench,first=f.firstOrder
  const screen=p.screen as Exclude<Screen,'room'|'routes'>,closing=view.phase!=='playing',archived=view.phase==='finished'
- const copy=closing?{...stories[screen],...closingStories[screen],overline:'原来的记录与边界',line:archived?'已经归档的经历和原账仍可以翻阅。若想继续实做，请回到住处明确继续旧事项；原回顾会保留。':'原合同、原资产与答应过的事，仍沿真实日期发生。尾声共用原四点，等候与收尾仍承担原来的费用。'}:stories[screen]
+ const videoProgress=!closing&&p.screen==='video'&&w.pause===null&&!w.progression.requiresDelivery?videoSceneProgress(f.video,view.date):null
+ const originalCopy=closing?{...stories[screen],...closingStories[screen],overline:'原来的记录与边界',line:archived?'已经归档的经历和原账仍可以翻阅。若想继续实做，请回到住处明确继续旧事项；原回顾会保留。':'原合同、原资产与答应过的事，仍沿真实日期发生。尾声共用原四点，等候与收尾仍承担原来的费用。'}:stories[screen]
+ const copy=videoProgress?{...originalCopy,title:videoProgress.title,line:videoProgress.line}:originalCopy
  const person=f.life.people.find(person=>person.id===p.personId)??f.life.people[0]!
  const canAdvance=!closing&&(view.date<playableThrough||view.date===playableThrough&&!w.atQuarterEnd)&&!w.progression.requiresDelivery&&w.pause===null
  const next=canAdvance?(w.progression.nextQuarterDate??playableAdvanceDate(w,view.date,w.progression.nextDate)):null
@@ -112,12 +115,12 @@ export function NarrativeScene(p:Props){
   <ScreenBook choiceNavigation key={p.screen+':'+view.phase+':'+view.date+':'+(p.screen==='life'?p.personId:'')+':'+(p.receipt&&p.receiptKind!=='AdvanceTime'?p.receipt:'choosing')} label="眼前的选择" className="scene-story-book">
 
   {p.screen==='life'?<><SceneLifeMoment p={p} person={person}/>{personalWork.map(j=><section className="scene-life-moment" key={j.id}><h2>{j.kind==='promise_keep'?'约定工作':f.life.work[j.kind].title}，还在进行。</h2><p>{j.startAt}—{j.completeAt} · 已付{moneyText(j.costFen)} / 已耗{j.actionPoints}点。实际完成后才改变生活记录与场景。</p><CommandButton {...p} kind="InterruptLifeWork" payload={{jobId:j.id}} label="停止这次生活工作，保留已付成本" confirm/></section>)}</>:null}
-  {p.screen==='life'&&sceneThreads(f).length>0?<section className="scene-person-voice"><h3>{person.name}在意的事</h3><p>{person.goal}</p><small>{person.boundary}</small></section>:null}
+  {p.screen==='life'&&sceneThreads(f,view.date).length>0?<section className="scene-person-voice"><h3>{person.name}在意的事</h3><p>{person.goal}</p><small>{person.boundary}</small></section>:null}
   {p.screen==='quarter'&&w.quarter==='2020-Q1'&&first.result.paymentFen>0?<aside className="scene-earned"><span>这笔小单，客户已经付了款。</span><strong>{moneyText(first.result.paymentFen)}</strong><p>实际制作成本{moneyText(first.result.directCostFen)} · 本单净额{moneyText(first.result.netOrderFen)}</p><small>工资和浮盈没有算进这笔净额。</small></aside>:null}
   <div className="scene-choices" aria-label="这一幕可以做的事">
    {closing?<><Choice title={archived?'翻看这条路的真实记录':'把原来的事项逐项收好'} line={copy.line} label={copy.open} onClick={()=>p.onOpen()}/><Choice title={archived?'回到已经记下的人生':'回到住处，再决定下一步'} line="原来的资产、账目与约定继续保留；回顾不会抹掉它们。" label="回到人生回顾" onClick={()=>p.onNavigate('room')}/></>:<>
    {p.screen==='quarter'&&w.atQuarterEnd?<><Choice title="回看这一季真实留下的记录" line="工作和经营的收入、实际成本与未结责任，各有自己的来处。" label="翻看本季实际记录" onClick={()=>p.onOpen('quarter')}/><Choice title="下一季，还想走哪条路？" line="可以继续，也可以调整。进入下一季不会自动替你接受工作、交易或融资。" label="再看看眼前的机会" onClick={()=>p.onNavigate('routes')}/></>:p.screen==='quarter'?<>{w.employment.some(plan=>plan.segments.some(segment=>segment.to===null))?<Choice title="把余下的时间，留给生活" line="本季工作已经确认。工资按真实在岗日到账，余下的行动仍由你安排。" label="看看生活里的人与事" onClick={()=>p.onNavigate('life')}/>:<Action p={p} kind="WorkQuarter" payload={{}} title="把这一季的工作留好" line="通常占本季2点。工资仍按实际在岗日期，在月末到账。" label="核对本季工作安排"/>}{firstChoice}<Choice title="给时间留另一种可能" line="学习、准备、已有经营与生活，可以按真实预算组合。" label={copy.open} onClick={()=>p.onOpen()}/></>:null}
-   {p.screen==='video'?<>{firstChoice}<Choice title="从一份作品开始" line={w.routes.find(r=>r.id==='ai_video')?.preparation??copy.line} label={copy.open} onClick={()=>p.onOpen()}/></>:null}
+   {p.screen==='video'?videoProgress?<>{videoProgress.command?<Action p={p} kind={videoProgress.command.kind} payload={videoProgress.command.payload} confirm={videoProgress.command.confirm} title={videoProgress.choice.title} line={videoProgress.choice.line} label={videoProgress.choice.label}/>:<Choice title={videoProgress.choice.title} line={videoProgress.choice.line} label={videoProgress.choice.label} onClick={()=>p.onOpen()}/>} {videoProgress.command?<Choice title="翻看全部视频安排" line="原作品、客户、素材、资源与退出选择，都保留在完整记录中。" label="细看原作品、客户与资源" onClick={()=>p.onOpen()}/>:null}{firstChoice}</>:<>{firstChoice}<Choice title="从一份作品开始" line={w.routes.find(r=>r.id==='ai_video')?.preparation??copy.line} label={copy.open} onClick={()=>p.onOpen()}/></>:null}
    {p.screen==='market'?<>{research&&!research.state?<Action p={p} kind="ResearchMarket" payload={{definitionId:research.id}} title="先把产业线索理一理" line={`${research.actionPoints}点 · ${moneyText(research.costFen)} · ${research.days}日。研究不揭示未来价格。`} label="核对公开研究安排"/>:null}<Choice title="再给判断一个仓位" line="查看模拟个股、委托与交收，再决定是否投入。看到新闻不能按旧价买入。" label={copy.open} onClick={()=>p.onOpen()}/></>:null}
    {p.screen==='life'?<>{personChoice}<Action p={p} kind="StartLifeWork" payload={{kind:'rest',personId:null,reference:null}} title="把七天留给自己" line={`个人${moneyText(f.life.work.rest.costFen)} · ${f.life.work.rest.points}点 · ${f.life.work.rest.days}日。休整不会返还行动或增加收益。`} label="核对这次休整"/><Choice title="翻看答应过的事" line="已接受的约定不会因为离开页面消失。也可以回看已经发生的年度记录。" label="打开人物与原约定" onClick={p.onPeople}/></>:null}
    {!['quarter','video','market','life'].includes(p.screen)?<><Choice title={p.screen==='course'?'先备好值得交付的课':p.screen==='relay'?'把一次服务认真安排好':p.screen==='deepseek'?'先看看实际合作的前提':p.screen==='memory'?'翻开那些模糊的片段':p.screen==='finance'?'摊开每一笔账':p.screen==='story'?'先把事实看清': '看看已经确认过的安排'} line={copy.line} label={copy.open} onClick={()=>p.onOpen()}/><Choice title="仍可以慢慢选择" line="回到自己的住处，再决定这一季把时间留给哪里。" label="回到住处想一想" onClick={()=>p.onNavigate('room')}/></>:null}

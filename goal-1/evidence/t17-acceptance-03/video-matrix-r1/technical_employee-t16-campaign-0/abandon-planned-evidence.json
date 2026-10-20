@@ -1,0 +1,162 @@
+{
+  "caseId": "abandon-planned",
+  "backgroundId": "technical_employee",
+  "seed": "t16-campaign-0",
+  "origin": "normal",
+  "status": "completed",
+  "error": null,
+  "prefixFile": "technical_employee-t16-campaign-0/prefix.json",
+  "prefixSha256": "debd3f33bb11940e602d1b2bdcea33808d7cf199081bed6d2746e464ff973e18",
+  "prefixCommandCount": 103,
+  "commands": [
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-0",
+      "actorId": "player",
+      "commandId": "t14-command-104",
+      "expectedRevision": 104,
+      "kind": "StartVideoWork",
+      "payload": {
+        "channelId": "vid:db752b97c3efb839694eaac333e9a77c",
+        "productId": "hotspot",
+        "modeId": "manual",
+        "materialId": "original",
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2025-04-02"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-0",
+      "actorId": "player",
+      "commandId": "t14-command-105",
+      "expectedRevision": 105,
+      "kind": "AbandonVideoWork",
+      "payload": {
+        "workId": "vid:1ff80399623b70ea8301f395e43f8ff2"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-0",
+      "actorId": "player",
+      "commandId": "t14-command-106",
+      "expectedRevision": 106,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-04-11"
+      }
+    }
+  ],
+  "trace": [
+    {
+      "kind": "StartVideoWork",
+      "revision": 105,
+      "date": "2025-04-01",
+      "cashFen": 20110000,
+      "availableFen": 20050000,
+      "actionPoints": 3
+    },
+    {
+      "kind": "AbandonVideoWork",
+      "revision": 106,
+      "date": "2025-04-01",
+      "cashFen": 20110000,
+      "availableFen": 20110000,
+      "actionPoints": 4
+    },
+    {
+      "kind": "AdvanceTime",
+      "revision": 107,
+      "date": "2025-04-11",
+      "cashFen": 20110000,
+      "availableFen": 20110000,
+      "actionPoints": 4
+    }
+  ],
+  "observed": {
+    "status": "completed",
+    "work": {
+      "abandonedAt": "2025-04-01",
+      "channelId": "vid:db752b97c3efb839694eaac333e9a77c",
+      "contractId": null,
+      "corrections": [],
+      "defectKnown": null,
+      "disclosure": null,
+      "id": "vid:1ff80399623b70ea8301f395e43f8ff2",
+      "materialId": "original",
+      "modeId": "manual",
+      "productId": "hotspot",
+      "production": {
+        "actionId": "vid:1d77632f45b815eddcd6d5ad4775795e",
+        "businessId": "ops:b87afd152bc329570e2f103515e96af5",
+        "completeAt": "2025-04-09",
+        "contractId": null,
+        "definitionId": "video-make-hotspot-manual-original",
+        "id": "vid:1d77632f45b815eddcd6d5ad4775795e",
+        "outputId": null,
+        "releasedAt": "2025-04-01",
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2025-04-02",
+        "status": "cancelled"
+      },
+      "reviewRequired": true,
+      "reviewedVersion": 0,
+      "version": 1
+    },
+    "probes": []
+  },
+  "before": {
+    "metrics": {
+      "costFen": 490000,
+      "incomeFen": 0,
+      "profitFen": -490000
+    },
+    "funds": {
+      "cashFen": 20110000,
+      "heldFen": 0,
+      "availableFen": 20110000,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0
+    },
+    "budget": {
+      "quarter": "2025-Q2",
+      "total": 4,
+      "spent": 0,
+      "reserved": 0,
+      "available": 4
+    }
+  },
+  "after": {
+    "metrics": {
+      "costFen": 490000,
+      "incomeFen": 0,
+      "profitFen": -490000
+    },
+    "funds": {
+      "cashFen": 20110000,
+      "heldFen": 0,
+      "availableFen": 20110000,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0
+    },
+    "budget": {
+      "quarter": "2025-Q2",
+      "total": 4,
+      "spent": 0,
+      "reserved": 0,
+      "available": 4
+    }
+  },
+  "final": {
+    "file": "technical_employee-t16-campaign-0/abandon-planned-final.json",
+    "bytes": 1252397,
+    "sha256": "a8fc2d3257d3981e49d44766389976eadeee0406a90d25d0cfcfbb262254b5f9"
+  },
+  "validatedCreatePrefixPlusSuffixByteEqual": true,
+  "date": "2025-04-11",
+  "revision": 107
+}

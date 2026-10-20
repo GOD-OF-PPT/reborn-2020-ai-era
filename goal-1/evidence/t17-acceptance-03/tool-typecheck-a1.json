@@ -1,0 +1,29 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "node",
+    "node_modules/typescript/bin/tsc",
+    "--ignoreConfig",
+    "--noEmit",
+    "--target",
+    "ES2022",
+    "--module",
+    "NodeNext",
+    "--moduleResolution",
+    "NodeNext",
+    "--allowImportingTsExtensions",
+    "--strict",
+    "--exactOptionalPropertyTypes",
+    "--noUncheckedIndexedAccess",
+    "--skipLibCheck",
+    "--types",
+    "node",
+    "scripts/collect_video_shape_evidence.ts"
+  ],
+  "exitCode": 2,
+  "wallSeconds": 13.300044973002514,
+  "stdout": "scripts/collect_video_shape_evidence.ts(142,1086): error TS1117: An object literal cannot have multiple properties with the same name.\nsrc/core/relay.ts(44,127): error TS2550: Property 'findLast' does not exist on type '{ id: string; businessId: string; supplierId: string; jobId: string; appliedAt: string; decisionAt: string; approved: boolean | null; expiresAt: string | null; factId: string; read: boolean; allowedSegments: (\"ai_learners\" | ... 1 more ... | \"lifestyle\")[]; purpose: \"licensed_service_aggregation\"; }[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.\nsrc/core/relay.ts(44,136): error TS7006: Parameter 'a' implicitly has an 'any' type.\nsrc/core/story-state.ts(14,121): error TS2550: Property 'findLast' does not exist on type '{ id: string; deploymentId: string; businessId: string; createdAt: string; expiresAt: string; level: \"approval\" | \"limited\" | \"cross_flow\"; scopes: (\"course_support\" | \"relay_support\" | \"external_service_commitments\")[]; cashLimitFen: number; externalDelegation: boolean; sourceCommandId: string; revokedAt: string | ...'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.\nsrc/core/story-state.ts(14,130): error TS7006: Parameter 'g' implicitly has an 'any' type.\n",
+  "stderr": "",
+  "priorTypecheck": "session80425 missing; no matching process; outcome not known, not counted as passed"
+}

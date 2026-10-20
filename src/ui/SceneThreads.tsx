@@ -8,7 +8,7 @@ import {sceneThreads} from './scene-thread-notes.ts'
 export function SceneThreads({p,onOpen}:{p:GamePanelProps;onOpen:(screen:Screen,personId?:LifePerson)=>void}){
  const [open,setOpen]=useState(false),[selected,setSelected]=useState(0)
  const pocket=useRef<HTMLElement>(null)
- const notes=sceneThreads(p.features)
+ const notes=sceneThreads(p.features,p.view.date)
  const current=notes[Math.min(selected,notes.length-1)]
  useLayoutEffect(()=>{
   const node=pocket.current,stage=node?.closest<HTMLElement>('.game-app');if(!node||!stage)return

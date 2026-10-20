@@ -1,0 +1,136 @@
+{
+  "caseId": "audience-lifestyle",
+  "backgroundId": "content_employee",
+  "seed": "t16-campaign-1",
+  "origin": "normal",
+  "status": "completed",
+  "error": null,
+  "prefixFile": "content_employee-t16-campaign-1/prefix.json",
+  "prefixSha256": "1c876865112a708ddf4be54ab40bd906c2fbf8ffa64559eae3b61763ac6f22f6",
+  "prefixCommandCount": 99,
+  "commands": [
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-100",
+      "expectedRevision": 100,
+      "kind": "OpenVideoChannel",
+      "payload": {
+        "name": "lifestyle独立受众",
+        "segment": "lifestyle"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-101",
+      "expectedRevision": 101,
+      "kind": "StartVideoMarketing",
+      "payload": {
+        "channelId": "vid:8894a8815b169c4c733ca5769c1f6fe6",
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2025-04-01"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-content_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-102",
+      "expectedRevision": 102,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-04-08"
+      }
+    }
+  ],
+  "trace": [
+    {
+      "kind": "OpenVideoChannel",
+      "revision": 101,
+      "date": "2025-04-01",
+      "cashFen": 9510000,
+      "availableFen": 9510000,
+      "actionPoints": 4
+    },
+    {
+      "kind": "StartVideoMarketing",
+      "revision": 102,
+      "date": "2025-04-01",
+      "cashFen": 9450000,
+      "availableFen": 9450000,
+      "actionPoints": 3
+    },
+    {
+      "kind": "AdvanceTime",
+      "revision": 103,
+      "date": "2025-04-08",
+      "cashFen": 9450000,
+      "availableFen": 9450000,
+      "actionPoints": 3
+    }
+  ],
+  "observed": {
+    "status": "completed",
+    "cohort": {
+      "id": "vid:0766705d330c3d6cc9a5fedbd6285c6c",
+      "segment": "lifestyle",
+      "members": 80,
+      "qualified": 3
+    },
+    "probes": []
+  },
+  "before": {
+    "metrics": {
+      "costFen": 290000,
+      "incomeFen": 0,
+      "profitFen": -290000
+    },
+    "funds": {
+      "cashFen": 9510000,
+      "heldFen": 0,
+      "availableFen": 9510000,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0
+    },
+    "budget": {
+      "quarter": "2025-Q2",
+      "total": 4,
+      "spent": 0,
+      "reserved": 0,
+      "available": 4
+    }
+  },
+  "after": {
+    "metrics": {
+      "costFen": 350000,
+      "incomeFen": 0,
+      "profitFen": -350000
+    },
+    "funds": {
+      "cashFen": 9450000,
+      "heldFen": 0,
+      "availableFen": 9450000,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0
+    },
+    "budget": {
+      "quarter": "2025-Q2",
+      "total": 4,
+      "spent": 1,
+      "reserved": 0,
+      "available": 3
+    }
+  },
+  "final": {
+    "file": "content_employee-t16-campaign-1/audience-lifestyle-final.json",
+    "bytes": 1233404,
+    "sha256": "47830a748c18a0a2dd2bdab8f033b0b525999368cb17f85fc8d18a4ecca9bcff"
+  },
+  "validatedCreatePrefixPlusSuffixByteEqual": true,
+  "date": "2025-04-08",
+  "revision": 103
+}

@@ -1,0 +1,211 @@
+{
+  "caseId": "ads",
+  "backgroundId": "technical_employee",
+  "seed": "t16-campaign-1",
+  "origin": "normal",
+  "status": "completed",
+  "error": null,
+  "prefixFile": "technical_employee-t16-campaign-1/prefix.json",
+  "prefixSha256": "96211c19a8afd0ba3aea93173d97690b7288d21b120b74633268ee09c4ac7096",
+  "prefixCommandCount": 99,
+  "commands": [
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-100",
+      "expectedRevision": 100,
+      "kind": "StartVideoWork",
+      "payload": {
+        "channelId": "vid:db752b97c3efb839694eaac333e9a77c",
+        "productId": "hotspot",
+        "modeId": "manual",
+        "materialId": "original",
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2025-04-01"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-101",
+      "expectedRevision": 101,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-04-08"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-102",
+      "expectedRevision": 102,
+      "kind": "ReviewVideoOutput",
+      "payload": {
+        "workId": "vid:7b503c4fdc95abf763a38d566104d261",
+        "disclosure": "manual"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-103",
+      "expectedRevision": 103,
+      "kind": "PublishVideo",
+      "payload": {
+        "workId": "vid:7b503c4fdc95abf763a38d566104d261",
+        "monetization": "ads",
+        "label": false
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-1",
+      "actorId": "player",
+      "commandId": "t14-command-104",
+      "expectedRevision": 104,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2025-05-13"
+      }
+    }
+  ],
+  "trace": [
+    {
+      "kind": "StartVideoWork",
+      "revision": 101,
+      "date": "2025-04-01",
+      "cashFen": 20250000,
+      "availableFen": 20250000,
+      "actionPoints": 3
+    },
+    {
+      "kind": "AdvanceTime",
+      "revision": 102,
+      "date": "2025-04-08",
+      "cashFen": 20250000,
+      "availableFen": 20250000,
+      "actionPoints": 3
+    },
+    {
+      "kind": "ReviewVideoOutput",
+      "revision": 103,
+      "date": "2025-04-08",
+      "cashFen": 20250000,
+      "availableFen": 20250000,
+      "actionPoints": 3
+    },
+    {
+      "kind": "PublishVideo",
+      "revision": 104,
+      "date": "2025-04-08",
+      "cashFen": 20250000,
+      "availableFen": 20250000,
+      "actionPoints": 3
+    },
+    {
+      "kind": "AdvanceTime",
+      "revision": 105,
+      "date": "2025-05-13",
+      "cashFen": 19871565,
+      "availableFen": 19871565,
+      "actionPoints": 3
+    }
+  ],
+  "observed": {
+    "status": "completed",
+    "result": {
+      "publication": {
+        "channelId": "vid:db752b97c3efb839694eaac333e9a77c",
+        "cohortId": "vid:19533e761b8d69c264e7c2db74eb6988",
+        "followers": 77,
+        "id": "vid:027b3d4221f0b3ef80dac3ecaee04bee",
+        "labelAttached": false,
+        "measureAt": "2025-04-15",
+        "measuredAt": "2025-04-15",
+        "monetization": "ads",
+        "permissionId": "vid:6cd4e9df9fdfe1bd53461457bd52e54f",
+        "publishedAt": "2025-04-08",
+        "qualified": true,
+        "qualifiedInquiries": 8,
+        "retentionBps": 5315,
+        "settlementId": "vid:a0b73dcbaedf81be13435a0ba5492877",
+        "unlistedAt": null,
+        "views": 22726,
+        "workId": "vid:7b503c4fdc95abf763a38d566104d261"
+      },
+      "settlements": [
+        {
+          "amountFen": 22700,
+          "channelId": "vid:db752b97c3efb839694eaac333e9a77c",
+          "collectedAt": "2025-04-29",
+          "confirmedAt": "2025-04-15",
+          "dueAt": "2025-04-29",
+          "feeFen": 1135,
+          "grossMerchandiseFen": 0,
+          "id": "vid:a0b73dcbaedf81be13435a0ba5492877",
+          "kind": "ads",
+          "publicationId": "vid:027b3d4221f0b3ef80dac3ecaee04bee",
+          "retained": 0,
+          "returned": 0
+        }
+      ],
+      "incomeFen": 22700,
+      "feeFen": 1135,
+      "costFen": 61135
+    },
+    "probes": []
+  },
+  "before": {
+    "metrics": {
+      "costFen": 290000,
+      "incomeFen": 0,
+      "profitFen": -290000
+    },
+    "funds": {
+      "cashFen": 20310000,
+      "heldFen": 0,
+      "availableFen": 20310000,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0
+    },
+    "budget": {
+      "quarter": "2025-Q2",
+      "total": 4,
+      "spent": 0,
+      "reserved": 0,
+      "available": 4
+    }
+  },
+  "after": {
+    "metrics": {
+      "costFen": 351135,
+      "incomeFen": 22700,
+      "profitFen": -328435
+    },
+    "funds": {
+      "cashFen": 19871565,
+      "heldFen": 0,
+      "availableFen": 19871565,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0
+    },
+    "budget": {
+      "quarter": "2025-Q2",
+      "total": 4,
+      "spent": 1,
+      "reserved": 0,
+      "available": 3
+    }
+  },
+  "final": {
+    "file": "technical_employee-t16-campaign-1/ads-final.json",
+    "bytes": 1257542,
+    "sha256": "795c66f10b12a0f7db0c28f51092b9f0519e38ce057d7decf7a95ba5db6789c4"
+  },
+  "validatedCreatePrefixPlusSuffixByteEqual": true,
+  "date": "2025-05-13",
+  "revision": 105
+}

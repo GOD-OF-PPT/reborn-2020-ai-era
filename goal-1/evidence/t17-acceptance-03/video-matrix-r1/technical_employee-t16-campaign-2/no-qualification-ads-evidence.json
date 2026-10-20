@@ -1,0 +1,269 @@
+{
+  "caseId": "no-qualification-ads",
+  "backgroundId": "technical_employee",
+  "seed": "t16-campaign-2",
+  "origin": "normal",
+  "status": "completed",
+  "error": null,
+  "prefixFile": "technical_employee-t16-campaign-2/early-prefix.json",
+  "prefixSha256": "1806dc826cc95b401a1953b836374edd490fb35c46abfcfb64b3f1e34d40edd3",
+  "prefixCommandCount": 14,
+  "commands": [
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-2",
+      "actorId": "player",
+      "commandId": "t14-command-15",
+      "expectedRevision": 15,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2020-03-31"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-2",
+      "actorId": "player",
+      "commandId": "t14-command-16",
+      "expectedRevision": 16,
+      "kind": "ChooseEvent",
+      "payload": {
+        "instanceId": "event:2f88c8b815f5eea01cf56576af196a85",
+        "choiceId": "defer"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-2",
+      "actorId": "player",
+      "commandId": "t14-command-17",
+      "expectedRevision": 17,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2020-03-31"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-2",
+      "actorId": "player",
+      "commandId": "t14-command-18",
+      "expectedRevision": 18,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2020-04-01"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-2",
+      "actorId": "player",
+      "commandId": "t14-command-19",
+      "expectedRevision": 19,
+      "kind": "StartVideoWork",
+      "payload": {
+        "channelId": "vid:db752b97c3efb839694eaac333e9a77c",
+        "productId": "hotspot",
+        "modeId": "manual",
+        "materialId": "original",
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2020-04-01"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-2",
+      "actorId": "player",
+      "commandId": "t14-command-20",
+      "expectedRevision": 20,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2020-04-08"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-2",
+      "actorId": "player",
+      "commandId": "t14-command-21",
+      "expectedRevision": 21,
+      "kind": "ReviewVideoOutput",
+      "payload": {
+        "workId": "vid:294f8a8c2d8b450dcd944bd59b6f05b6",
+        "disclosure": "manual"
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-2",
+      "actorId": "player",
+      "commandId": "t14-command-22",
+      "expectedRevision": 22,
+      "kind": "PublishVideo",
+      "payload": {
+        "workId": "vid:294f8a8c2d8b450dcd944bd59b6f05b6",
+        "monetization": "ads",
+        "label": false
+      }
+    },
+    {
+      "runId": "t17-video-shapes-technical_employee-t16-campaign-2",
+      "actorId": "player",
+      "commandId": "t14-command-23",
+      "expectedRevision": 23,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2020-05-13"
+      }
+    }
+  ],
+  "trace": [
+    {
+      "kind": "AdvanceTime",
+      "revision": 16,
+      "date": "2020-02-01",
+      "cashFen": 3280000,
+      "availableFen": 3280000,
+      "actionPoints": 0
+    },
+    {
+      "kind": "ChooseEvent",
+      "revision": 17,
+      "date": "2020-02-01",
+      "cashFen": 3280000,
+      "availableFen": 3280000,
+      "actionPoints": 0
+    },
+    {
+      "kind": "AdvanceTime",
+      "revision": 18,
+      "date": "2020-03-31",
+      "cashFen": 4080000,
+      "availableFen": 4080000,
+      "actionPoints": 0
+    },
+    {
+      "kind": "AdvanceTime",
+      "revision": 19,
+      "date": "2020-04-01",
+      "cashFen": 3680000,
+      "availableFen": 3680000,
+      "actionPoints": 4
+    },
+    {
+      "kind": "StartVideoWork",
+      "revision": 20,
+      "date": "2020-04-01",
+      "cashFen": 3620000,
+      "availableFen": 3620000,
+      "actionPoints": 3
+    },
+    {
+      "kind": "AdvanceTime",
+      "revision": 21,
+      "date": "2020-04-08",
+      "cashFen": 3620000,
+      "availableFen": 3620000,
+      "actionPoints": 3
+    },
+    {
+      "kind": "ReviewVideoOutput",
+      "revision": 22,
+      "date": "2020-04-08",
+      "cashFen": 3620000,
+      "availableFen": 3620000,
+      "actionPoints": 3
+    },
+    {
+      "kind": "PublishVideo",
+      "revision": 23,
+      "date": "2020-04-08",
+      "cashFen": 3620000,
+      "availableFen": 3620000,
+      "actionPoints": 3
+    },
+    {
+      "kind": "AdvanceTime",
+      "revision": 24,
+      "date": "2020-05-13",
+      "cashFen": 3220000,
+      "availableFen": 3220000,
+      "actionPoints": 3
+    }
+  ],
+  "observed": {
+    "status": "completed",
+    "result": {
+      "publication": {
+        "channelId": "vid:db752b97c3efb839694eaac333e9a77c",
+        "cohortId": "vid:999283f0d5bf2b2c3eecb1b186f50a52",
+        "followers": 80,
+        "id": "vid:6b9f739ee3c5ec564292b50bee2b6067",
+        "labelAttached": false,
+        "measureAt": "2020-04-15",
+        "measuredAt": "2020-04-15",
+        "monetization": "ads",
+        "permissionId": null,
+        "publishedAt": "2020-04-08",
+        "qualified": false,
+        "qualifiedInquiries": 8,
+        "retentionBps": 5039,
+        "settlementId": null,
+        "unlistedAt": null,
+        "views": 22211,
+        "workId": "vid:294f8a8c2d8b450dcd944bd59b6f05b6"
+      },
+      "settlements": [],
+      "incomeFen": 0,
+      "feeFen": 0,
+      "costFen": 60000
+    },
+    "probes": []
+  },
+  "before": {
+    "metrics": {
+      "costFen": 120000,
+      "incomeFen": 0,
+      "profitFen": -120000
+    },
+    "funds": {
+      "cashFen": 2480000,
+      "heldFen": 0,
+      "availableFen": 2480000,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0
+    },
+    "budget": {
+      "quarter": "2020-Q1",
+      "total": 4,
+      "spent": 4,
+      "reserved": 0,
+      "available": 0
+    }
+  },
+  "after": {
+    "metrics": {
+      "costFen": 180000,
+      "incomeFen": 0,
+      "profitFen": -180000
+    },
+    "funds": {
+      "cashFen": 3220000,
+      "heldFen": 0,
+      "availableFen": 3220000,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0
+    },
+    "budget": {
+      "quarter": "2020-Q2",
+      "total": 4,
+      "spent": 1,
+      "reserved": 0,
+      "available": 3
+    }
+  },
+  "final": {
+    "file": "technical_employee-t16-campaign-2/no-qualification-ads-final.json",
+    "bytes": 289263,
+    "sha256": "3126d2a3f3133b9bb9ebb4327ecfa3580aa0cd9ee692820f451679dd8e46ce0c"
+  },
+  "validatedCreatePrefixPlusSuffixByteEqual": true,
+  "date": "2020-05-13",
+  "revision": 24
+}
