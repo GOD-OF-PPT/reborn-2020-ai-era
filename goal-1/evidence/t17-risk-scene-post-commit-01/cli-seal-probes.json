@@ -1,0 +1,40 @@
+{
+  "probes": [
+    {
+      "entry": "normalInput",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "--experimental-transform-types",
+        "goal-1/evidence/t17-acceptance-07/prepare-normal-input.ts"
+      ],
+      "exitCode": 1,
+      "rejectedBeforeOutput": true,
+      "stdout": "",
+      "stderr": "(node:19103) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\nfile:///Users/gordon/githome/reborn-2020-ai-era/scripts/browser_evidence_guard.mjs:14\n  if(lstatSync(join(current,'sealed-evidence.json'),{throwIfNoEntry:false}))throw Error('EVIDENCE_SEALED_USE_NEW_ROOT');\n                                                                                  ^\n\nError: EVIDENCE_SEALED_USE_NEW_ROOT\n    at assertBrowserEvidenceWritable (file:///Users/gordon/githome/reborn-2020-ai-era/scripts/browser_evidence_guard.mjs:14:83)\n    at ensureDestination (/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-07/prepare-normal-input.ts:27:5)\n    at <anonymous> (/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-07/prepare-normal-input.ts:43:1)\n    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)\n\nNode.js v22.12.0\n"
+    },
+    {
+      "entry": "checkRunner",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "goal-1/evidence/t17-acceptance-07/run_check.py",
+        "sealed-probe",
+        "rtk",
+        "proxy",
+        "node",
+        "-e",
+        "throw Error(\"DELEGATION_SHOULD_NOT_RUN\")"
+      ],
+      "exitCode": 1,
+      "rejectedBeforeOutput": true,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-07/run_check.py\", line 10, in <module>\n    guard()\n    ~~~~~^^\n  File \"/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-07/run_check.py\", line 7, in guard\n    if (d/'sealed-evidence.json').exists():raise Exception('EVIDENCE_SEALED_USE_NEW_ROOT')\n                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nException: EVIDENCE_SEALED_USE_NEW_ROOT\n"
+    }
+  ],
+  "sealedFilesUnchanged": 86,
+  "fileSetUnchanged": true
+}

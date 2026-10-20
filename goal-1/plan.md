@@ -184,3 +184,6 @@ P2原288结果/工具已本地提交0679d645da0a41cb1d84551ed638dcae44a38f52；[
 ## T17 P2-S1优先电影风险互动
 
 按[本轮计划](evidence/t17-acceptance-07/plan.md)先补公开预警—真实付费核查—完成回信—明确判断的场景互动，再新同级根实际执行72委托补充。原288结果不替换，十二委托正向/90关键/P4及完整5b/T17继续待办。当前明确禁止任何页面兼容开发和测试；现有Chrome窗口只验实际画面和规则/保存功能。
+
+
+P2-S1电影风险互动已本地提交ab99c88b793fcc5bb5a636f55b77cbd3d75c437c，完整Create/160命令/5原文与实际付费—等待—回信—确认在限定范围通过，见[验证](evidence/t17-acceptance-07/validation.md)及[提交后保护](evidence/t17-risk-scene-post-commit-01/acceptance-summary.json)。下一新同级根执行真实72委托补充，不将本UI当完整P2正向；其后原90/P4及全部原T17/M01/T18不减。当前兼容开发/测试仍禁止，goal保持active。
