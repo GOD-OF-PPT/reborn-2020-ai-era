@@ -342,6 +342,8 @@ T15原轮内部顺序（记录保留；现先执行D03，移动专项后置M01�
 - 步骤5b正常前提P1限定完成：[当前验证](evidence/t17-acceptance-05/validation.md)与[摘要](evidence/t17-acceptance-05/acceptance-summary.json)记录六固定正常背景/种子完整执行，878原命令、150真实里程碑从Create逐字同；独立readiness6/6核真实毕业/非空研究、同公司课程素材许可、原首单+付费视频两案例及approval辅助成效。图像毕业均20/需求按seed16、13、15；视频毕业16、19、20/需求12、12、13，两个背景分别保持原工资/生活/维护。全部实际视频2023Aug1已付、素材Jan2—9完成；R3晚批与晚回款情景未命中不称通过。只改正常验证工具/新helper和本轮文档，不改规则/版本/依赖或界面，不做兼容、新Chrome或人测。
 - P1只有六共同前史，原288核心+90关键仍0执行，下一新同级根继续P2/P3，P4累计及完整5b/T17/goal不勾；source原Node22参数属性/TS命令红测保留，独立类型与项目typecheck通过，未重跑旧UI/529当新执行。[杠精审查] P1限定通过，REPEAT复用原harness/codec/输出与保护并补独立readiness，无新全局Skill/自动化或外部资源。准确本地提交与Git/字节保护随后记录，未推送/部署，当前兼容任务继续停止。
 
+- P1实际检查点已本地提交4be5b8f9f7cf5d7703ec9fc459490401a7dff69b，共204文件；[提交后实核](evidence/t17-course-prefix-post-commit-01/postcommit-byte-and-source-check.json)证明204个Git blob/磁盘逐字一致、197封存文件及文件集/冻结源/独立readiness输入保持、6/6实际前提就绪。[四入口实拒写](evidence/t17-course-prefix-post-commit-01/immutable-guard-results.json)确认原目录和已提交父目录下的新子目录均拒绝，未执行场景或改写旧档；当前5302的44原构建资源仍等磁盘/原SHA，PUBLIC远端main仍9bf4399，未推送。完成记录/保护随后单独提交。本轮止于P1；下一新同级根从Create核定所用前史后实际执行P2原288核心形态，再P3原90关键/P4全面检查，完整5b/T17/goal未完成，页面兼容开发测试继续停止。
+
 ### M01 兼容性集中收尾（最低实施优先级）
 
 - 实际工作：
