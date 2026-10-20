@@ -1,0 +1,15 @@
+{
+  "failure": "HARNESS_COMMANDS_DISAGREE_WITH_ACTUAL_RECEIPTS",
+  "actualFirstBranch": {
+    "acceptedCommands": 15,
+    "actualClosed": true,
+    "independentSuffixReplayVerified": false
+  },
+  "cause": "CommandRegistry.normalize fills original schema defaults (AdvanceTime phase=snapshot; CreateCourseAudience resources=[]). Raw attempted commands correctly omit defaults; receipt payloads correctly include defaults. Comparing these without original registry normalization was a collector error.",
+  "correction": "Retain exact raw attempts and full receipts; normalize payloads only through unchanged authoritative codec.registry.normalize for command-sequence equality. Independent execution replays exact original attempted envelopes and still compares entire raw milestones/final bytes. No ID/field stripping, no money/date/rule changes.",
+  "originalCollector": {
+    "file": "goal-1/evidence/t17-acceptance-06/tool-history/collect-course-shape-r1.ts",
+    "sha256": "2ee047a1c97a2c9c398882543e9224c578a4d581c9c682aabcaec705e8c948cd"
+  },
+  "oldRun": "matrix-r1 retained unchanged; 1 fatal,287 unexecuted rows. New full run uses matrix-r2."
+}

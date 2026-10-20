@@ -1,0 +1,23 @@
+# P2 执行前有限策略 R1
+
+固定顺序：technical_employee再content_employee，各t16-campaign-0/1/2；产品intro_recorded/practical_cohort/enterprise_training，主题image_workflows/video_workflows，edition foundation/advanced，支持self_small/guided_group/assisted_group/delegated_group。完整288注册先于执行。未知拒绝为fatal，后续原行保留未执行；不得把未知reason宽泛当有限拒绝。
+
+每分支从已Create逐字核定P1真实基点开始。所有日期推进work:false，未另登记不接受工作。用两个实际已付案例/同公司独立课程素材许可/实际对应研究定义新课。先按当前实际许可最早可行日完成样课（花目录原钱/1点/14或21日）；进阶明确predecessor/study，基础保持同知识去重。
+
+有限许可：没有有效资格才付费申请；不得提前续办。图像沿P1首轮，必要第二轮不早Apr8、第三轮不早Jul7且距实际上次90日；视频沿原有效到Jun13许可，实际到期续办，拒绝后90日再申，续办本周期最多3次。每次申请与7日实际审批都保留费用/AP/真实结果。样课已完成可保留等续办，不能把未来批准作为当前资格。若到年底无完整合法窗口，结果记有限日历受阻而非通过。
+
+样课后建立video_referral受众，基准价199/999/2999元，不换价或seed。排程从当前次日起按日期升序有限搜索，首段开班日开始，次段从首段结束起按日期升序，班末覆盖次段且不早原至少max(21,两段时长)、不晚开班90日；支持从班末起按日期升序、不晚班末90日。全程原AP按开工季度计且含原预留，每季度最多4；原资源不能重叠；样课/两教学完整资格按原公开capability核，支持本身不额外要求工具许可。限制完整支持反馈/7日退款窗/次日费用结算在2025Dec31内。若当前许可不能覆盖合法两段且尚未过期，等真正过期再续办，按实际结果重算，不招生后才赌许可。
+
+每次搜索只用当前公开事实/原确定规则，不读取代理profile/helpRoll等隐藏结果。Plan按真实支持容量（self20/20/5，其他200/40/20）和现有公开eligible人数取最多；实际报名仍只取新cohort.availablePeople，0人保留真实无新需求。Plan先预留自有支持钱/AP。两阶段按实际安排/完成逐次提交并断言，禁止先认收入。
+
+delegated在样课/排程准备后、实际Plan前单独明确SetHengxingAuthority cross_flow，scopes course_support+external_service_commitments、5000元期限2025Dec31、externalDelegation/consent true。此后风险默认仅Acknowledge解除提示，不免费处置；原scope/额度/风险/停权/欠费若阻断保留实际拒绝或中断。assisted继续原approval。原授权守卫已列明确有限拒绝：AGENT_INDEPENDENT_RISK_PENDING/AGENT_NOT_READY_FOR_BUSINESS/AGENT_SERVICE_FEE_OVERDUE/AGENT_CASH_LIMIT_EXCEEDED/AGENT_SCOPE_NOT_AUTHORIZED/AGENT_AUTHORITY_REQUIRED/AGENT_SUPPORT_UNAVAILABLE及真实原授权其他reason在首轮若未知须调查，不能隐式添加白名单。
+
+实际原支持完成后记录真实helped/needs_recovery；本核心策略仅对实际paidRemaining>0且needs_recovery在原窗口0AP退款，不新增补支持/免费调查/自动停止抹债。推进原refundUntil+1，记录实际费/关闭/未结。有限可预期原业务拒绝只包括已登记的许可三拒、无新学生、真实授权风险、原资金/AP/资源受阻及2025日历无解；任何未预见代码错误fatal保留。
+
+逐命令严格codec，各分支完整原文从核定前史独立重放后缀相同；六身份各自再从Create重放，不载入赠资格。样课、报名、安排、半交付、双交付、反馈、实际退款、闭窗均核独立整数账本/保护/费用和真实资金负债/AP。班期关闭不宣称企业清债或安全恢复。
+
+本策略不执行P3原90关键、不做任何兼容开发测试/浏览器/真人；不表示所有48必然正向、平衡或最终通过。失败原文完整保留，修工具后仅新输出全范围重新执行。
+
+执行前存储补充：现场仅3.9GiB可用；新完整原文采用内置gzip无损保存，元数据同时记录原文bytes/SHA和存储bytes/SHA，回读gunzip逐字核对。保留全部字段/ID/命令/里程碑，不压缩改写旧证据、不删除文件，不把压缩时间当游戏性能。
+
+执行前源码精确核对：资源不足的原码是INSUFFICIENT_CAPACITY，授权委托未扩权为AGENT_EXPANSION_NOT_AUTHORIZED；不是不存在的RESOURCE_UNAVAILABLE。样课/教学未知未完成均fatal，支持未完成须原失败reason或实际绑定停止证据，未闭窗须真实未付班期债务，否则fatal。此为首次模拟前分类校准，不把未知错误变成通过。
