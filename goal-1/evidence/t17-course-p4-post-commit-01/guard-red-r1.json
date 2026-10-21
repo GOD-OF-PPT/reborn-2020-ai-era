@@ -1,0 +1,34 @@
+{
+  "scope": "Observed real Node targeted test result before fix; original CLI red violation separately preserved",
+  "command": [
+    "rtk",
+    "proxy",
+    "env",
+    "KEEP_EVIDENCE_OUTPUT_FIXTURES=1",
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "--test-name-pattern=untracked sealed ancestor",
+    "scripts/evidence-output.test.mjs"
+  ],
+  "exitCode": 1,
+  "executedTests": 1,
+  "passed": 0,
+  "failed": 1,
+  "failure": "Missing expected exception.",
+  "fixtureRoot": "/private/var/folders/3k/n29mw0rj05jbbw6smtpn5rth0000gn/T/reborn-p4-evidence-guard-KOu5ts",
+  "fixturesRetained": true,
+  "sources": {
+    "scripts/evidence-output.ts": {
+      "bytes": 1504,
+      "sha256": "b70695b15e7cf4f615ad263a9e2f361b847edb6203d844e8c73e3c940e486026"
+    },
+    "scripts/evidence-output.test.mjs": {
+      "bytes": 4976,
+      "sha256": "0f07c93da25a8a82333103a4c883f2bef7847abe6114c657e8e716c64bb1affc"
+    }
+  },
+  "gameCommandsExecutedByThisUnit": 0,
+  "compatibilityTests": 0
+}

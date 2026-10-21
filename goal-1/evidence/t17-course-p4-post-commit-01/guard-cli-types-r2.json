@@ -1,0 +1,29 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "npx",
+    "--no-install",
+    "tsc",
+    "--ignoreConfig",
+    "--noEmit",
+    "--strict",
+    "--noUncheckedIndexedAccess",
+    "--noUnusedLocals",
+    "--noUnusedParameters",
+    "--types",
+    "node",
+    "--module",
+    "nodenext",
+    "--target",
+    "es2023",
+    "--allowImportingTsExtensions",
+    "--skipLibCheck",
+    "scripts/evidence-output.ts"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 2.802014112472534,
+  "sourceSha256": "f16d0d209946822daa44340307eb4fd5766a9b82b1548ef535346b202e01697d",
+  "prior": "guard-cli-types-r1.json",
+  "priorFailureCause": "Standalone --ignoreConfig omitted explicit --types node. Installed @types/node already present; no source/dependency/assertion change."
+}

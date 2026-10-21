@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-10/coverage-verifier.py", line 622, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-10/coverage-verifier.py", line 538, in main
+    require(current.is_dir() and not current.is_symlink() and not os.path.lexists(current / "sealed-evidence.json"), "OUTPUT_PARENT_SEALED_OR_LINK")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-10/coverage-verifier.py", line 24, in require
+    raise RuntimeError(code)
+RuntimeError: OUTPUT_PARENT_SEALED_OR_LINK

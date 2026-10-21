@@ -1,0 +1,53 @@
+TAP version 13
+# (node:46933) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Retained owned fixtures: /private/var/folders/3k/n29mw0rj05jbbw6smtpn5rth0000gn/T/reborn-p4-evidence-guard-4DN0iT
+# Subtest: rejects an untracked existing marker including an empty failed report
+not ok 1 - rejects an untracked existing marker including an empty failed report
+  ---
+  duration_ms: 257.994377
+  location: '/Users/gordon/githome/reborn-2020-ai-era/scripts/evidence-output.test.mjs:31:1'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected exception.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  operator: 'throws'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/gordon/githome/reborn-2020-ai-era/scripts/evidence-output.test.mjs:31:231)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:934:25)
+    Test.start (node:internal/test_runner/test:833:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: rejects a partial snapshot before an absent summary can be rewritten
+not ok 2 - rejects a partial snapshot before an absent summary can be rewritten
+  ---
+  duration_ms: 241.672254
+  location: '/Users/gordon/githome/reborn-2020-ai-era/scripts/evidence-output.test.mjs:32:1'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected exception.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  operator: 'throws'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/gordon/githome/reborn-2020-ai-era/scripts/evidence-output.test.mjs:32:243)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:934:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:633:18)
+    Test.postRun (node:internal/test_runner/test:1045:19)
+    Test.run (node:internal/test_runner/test:973:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 845.768979
+(node:46930) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

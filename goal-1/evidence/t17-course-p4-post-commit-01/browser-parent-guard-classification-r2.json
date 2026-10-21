@@ -1,0 +1,36 @@
+{
+  "prior": "browser-parent-guard-results.json",
+  "priorFalseCause": "R1 classifier incorrectly expected the CLI error string. Actual browser parent guard intentionally throws EVIDENCE_SEALED_USE_NEW_ROOT for every sealed ancestor. All four threw before delegation; raw false preserved.",
+  "results": [
+    {
+      "name": "click",
+      "rejected": false,
+      "error": "Error: EVIDENCE_SEALED_USE_NEW_ROOT",
+      "actualRejected": true,
+      "r1ClassifierMatched": false
+    },
+    {
+      "name": "journal",
+      "rejected": false,
+      "error": "Error: EVIDENCE_SEALED_USE_NEW_ROOT",
+      "actualRejected": true,
+      "r1ClassifierMatched": false
+    },
+    {
+      "name": "exportRaw",
+      "rejected": false,
+      "error": "Error: EVIDENCE_SEALED_USE_NEW_ROOT",
+      "actualRejected": true,
+      "r1ClassifierMatched": false
+    },
+    {
+      "name": "importText",
+      "rejected": false,
+      "error": "Error: EVIDENCE_SEALED_USE_NEW_ROOT",
+      "actualRejected": true,
+      "r1ClassifierMatched": false
+    }
+  ],
+  "allFourActuallyRejected": true,
+  "gameOrBrowserMutationsDelegated": 0
+}

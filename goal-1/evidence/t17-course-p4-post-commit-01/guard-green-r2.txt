@@ -1,0 +1,70 @@
+TAP version 13
+# (node:47131) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Retained owned fixtures: /private/var/folders/3k/n29mw0rj05jbbw6smtpn5rth0000gn/T/reborn-p4-evidence-guard-T3GchQ
+# Subtest: allows a new sibling and missing nested parents in an unregistered task
+ok 1 - allows a new sibling and missing nested parents in an unregistered task
+  ---
+  duration_ms: 236.004596
+  ...
+# Subtest: preserves unrelated files in an existing unregistered output directory
+ok 2 - preserves unrelated files in an existing unregistered output directory
+  ---
+  duration_ms: 222.574913
+  ...
+# Subtest: rejects an untracked sealed ancestor before mkdir or caller work
+ok 3 - rejects an untracked sealed ancestor before mkdir or caller work
+  ---
+  duration_ms: 118.77593
+  ...
+# Subtest: rejects a dangling seal marker without following it
+ok 4 - rejects a dangling seal marker without following it
+  ---
+  duration_ms: 135.591579
+  ...
+# Subtest: rejects a directory symlink before creating an external child
+ok 5 - rejects a directory symlink before creating an external child
+  ---
+  duration_ms: 116.010237
+  ...
+# Subtest: rejects a file masquerading as an output parent
+ok 6 - rejects a file masquerading as an output parent
+  ---
+  duration_ms: 134.753573
+  ...
+# Subtest: rejects a new child of registered evidence even without a seal file
+ok 7 - rejects a new child of registered evidence even without a seal file
+  ---
+  duration_ms: 189.460008
+  ...
+# Subtest: keeps the original committed-marker rejection at the evidence container
+ok 8 - keeps the original committed-marker rejection at the evidence container
+  ---
+  duration_ms: 303.464753
+  ...
+# Subtest: keeps malformed argument rejection before any output is created
+ok 9 - keeps malformed argument rejection before any output is created
+  ---
+  duration_ms: 115.202053
+  ...
+# Subtest: rejects an untracked existing marker including an empty failed report
+ok 10 - rejects an untracked existing marker including an empty failed report
+  ---
+  duration_ms: 197.85393
+  ...
+# Subtest: rejects a partial snapshot before an absent summary can be rewritten
+ok 11 - rejects a partial snapshot before an absent summary can be rewritten
+  ---
+  duration_ms: 199.164185
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2300.274796
+(node:47130) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

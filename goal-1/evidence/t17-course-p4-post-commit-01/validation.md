@@ -1,0 +1,15 @@
+# P4提交后真实核验与守卫补正
+
+本限定任务完成；原root10封存前tasks/summary仍是提交前快照，不原地改写，主goal的P4完成记录给出真实终态。feature9b0907ccf47b2c4dcecffbde6c2b9c9b34d6b3c3的253条暂存/commit/物理bytes及mode均经同字节已验证工具核定；guardfix9e540ef7e3d22e82fb98de6416c75ed28a3a049d的2条亦实际核定。post本身和主记录再整体封存/record提交，最后精确字节核验保存在本机.delivery/p4-record-verification中，避免向已封存post追加。
+
+四浏览器入口已真实拒写；初R1仅因错误匹配CLI错误字符串而记录false，其原错误EVIDENCE_SEALED_USE_NEW_ROOT确实来自祖先保护，R2分类补正不覆盖旧报告。coverage CLI原本就拒绝父封存。通用browser-audit输出helper则真实未拒绝，完成了意外107命令重审；这不是绿色拒写，未计新的样本/游戏验收。新子目录及完整报告被整体移至本post/unexpected-sealed-child-r1，原241文件和marker始终原字节，当前根集合同，marker仍950c7ae0bd44a50d01a6c7856e131990caa713d0a1bf293d1d1f7368e1ea30cf。
+
+按先写计划的同一P4步骤6修缮通用helper，在mkdir/调用方业务前拒绝封存祖先、目录链接/非目录、已有Git登记的任务根，并保留原committed marker保护，另拒绝已存在的命名marker/snapshots（包括空失败文件）。正常新任务、缺失多层目录、已有无关文件保持可用。真实红1→9绿、两新增红2→最终11绿，项目类型0；独立CLI R1因缺显式Node types真实2保留，R2仅补已装--types node后0，无依赖/规则改变。修复后两个真实CLI正确父封存错误、目标未建、0游戏委派；四真实浏览器拒写不需要再次操作游戏。独立复核见guard-independent-review-r1.md。
+
+本修复仅改变旧125审计绑定中的1个输出工具源，122个实际campaign/codec/config闭包及前台逐字保持；旧R2审核是当时原125源的真实16原文/4输入/1Create107命令通过，不改旧源记录或把输出守卫变化说成引擎变化，不重复长游戏矩阵/UI/build。36个直接consumer中的未显式登记动态partial仍依赖原fresh目录/各专用writer，不能由此声称全部动态文件都受通用命名条件保护。
+
+原9份交付400资源/9首页与新R2 44资源/首页原字节保持；本post再实际核10份磁盘/首页、PUBLIC owner/defaultmain与远端README原Git blob，远端仍9bf4399，未push/deploy。feature默认whitespace2只4份实际Vite/npm stdout，其他暂存路径0；本post的真实stdout空白同样保留，不改写日志，record检查在最终本机核验中单列。
+
+当前游戏和证据角色、失败、写真帧及动态partial边界均如实保留；不将新导入89/意外重审算新游玩，不将UI或Node/HTTP当真人/兼容/全仓通过。当前课程P4/5b限定完成，后续5c—5f/6及7—15、完整T17/goal、旧PNG0/3/新A三案3/3/真人0、M01须人类明确恢复及T18继续未完成。所有页面兼容开发测试0；本轮不进入下一任务。
+
+[杠精审查] 限定完成通过，实际写入保护缺口已按红绿和真实入口修复，不省略或删除失败；最后record与精确Git核验仍须实际执行，不用本报告冒充其未知SHA。

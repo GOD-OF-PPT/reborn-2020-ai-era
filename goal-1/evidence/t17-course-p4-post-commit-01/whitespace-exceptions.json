@@ -1,0 +1,26 @@
+{
+  "defaultExitCode": 2,
+  "exactExceptions": [
+    "goal-1/evidence/t17-acceptance-10/checks-r1/build/console.txt",
+    "goal-1/evidence/t17-acceptance-10/checks-r1/typecheck/console.txt",
+    "goal-1/evidence/t17-acceptance-10/checks-r2/build/console.txt",
+    "goal-1/evidence/t17-acceptance-10/checks-r2/typecheck/console.txt"
+  ],
+  "reason": "Original Vite plugin stdout trailing space and npm typecheck terminal blank lines preserved as executed evidence; no source normalized or check weakened",
+  "allOtherStagedPathsExitCode": 0,
+  "output": "",
+  "command": [
+    "rtk",
+    "proxy",
+    "git",
+    "diff",
+    "--cached",
+    "--check",
+    "--",
+    ".",
+    ":(exclude)goal-1/evidence/t17-acceptance-10/checks-r1/build/console.txt",
+    ":(exclude)goal-1/evidence/t17-acceptance-10/checks-r1/typecheck/console.txt",
+    ":(exclude)goal-1/evidence/t17-acceptance-10/checks-r2/build/console.txt",
+    ":(exclude)goal-1/evidence/t17-acceptance-10/checks-r2/typecheck/console.txt"
+  ]
+}

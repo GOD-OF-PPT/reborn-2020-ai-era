@@ -1,0 +1,26 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "env",
+    "KEEP_EVIDENCE_OUTPUT_FIXTURES=1",
+    "node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/evidence-output.test.mjs"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 1.9077470302581787,
+  "sources": {
+    "scripts/evidence-output.ts": {
+      "bytes": 2493,
+      "sha256": "07cef01effae2d13027b2de54e3488ce77cce0cb68f3cd113b976f64f51b9065"
+    },
+    "scripts/evidence-output.test.mjs": {
+      "bytes": 4976,
+      "sha256": "0f07c93da25a8a82333103a4c883f2bef7847abe6114c657e8e716c64bb1affc"
+    }
+  },
+  "scope": "Real isolated Git/filesystem output guard fixtures only; no game/UI/compatibility execution"
+}

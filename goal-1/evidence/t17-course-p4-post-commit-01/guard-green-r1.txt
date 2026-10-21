@@ -1,0 +1,60 @@
+TAP version 13
+# (node:46234) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Retained owned fixtures: /private/var/folders/3k/n29mw0rj05jbbw6smtpn5rth0000gn/T/reborn-p4-evidence-guard-R0cSO5
+# Subtest: allows a new sibling and missing nested parents in an unregistered task
+ok 1 - allows a new sibling and missing nested parents in an unregistered task
+  ---
+  duration_ms: 197.35735
+  ...
+# Subtest: preserves unrelated files in an existing unregistered output directory
+ok 2 - preserves unrelated files in an existing unregistered output directory
+  ---
+  duration_ms: 175.068299
+  ...
+# Subtest: rejects an untracked sealed ancestor before mkdir or caller work
+ok 3 - rejects an untracked sealed ancestor before mkdir or caller work
+  ---
+  duration_ms: 126.149505
+  ...
+# Subtest: rejects a dangling seal marker without following it
+ok 4 - rejects a dangling seal marker without following it
+  ---
+  duration_ms: 108.288415
+  ...
+# Subtest: rejects a directory symlink before creating an external child
+ok 5 - rejects a directory symlink before creating an external child
+  ---
+  duration_ms: 109.743034
+  ...
+# Subtest: rejects a file masquerading as an output parent
+ok 6 - rejects a file masquerading as an output parent
+  ---
+  duration_ms: 105.613408
+  ...
+# Subtest: rejects a new child of registered evidence even without a seal file
+ok 7 - rejects a new child of registered evidence even without a seal file
+  ---
+  duration_ms: 188.221293
+  ...
+# Subtest: keeps the original committed-marker rejection at the evidence container
+ok 8 - keeps the original committed-marker rejection at the evidence container
+  ---
+  duration_ms: 241.607968
+  ...
+# Subtest: keeps malformed argument rejection before any output is created
+ok 9 - keeps malformed argument rejection before any output is created
+  ---
+  duration_ms: 109.034387
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1696.095885
+(node:46233) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
