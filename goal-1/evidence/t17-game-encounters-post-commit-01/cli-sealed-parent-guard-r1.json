@@ -1,0 +1,45 @@
+{
+  "scope": "Actual 2 CLI and4 browser entry rejection before collection/replay/delegation; root14 exact immutable bytes/set unchanged",
+  "results": [
+    {
+      "name": "relay-collector",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "--experimental-transform-types",
+        "scripts/collect_relay_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-14/must-not-create-relay-collector"
+      ],
+      "exitCode": 1,
+      "expectedErrorMatched": true,
+      "targetCreated": false
+    },
+    {
+      "name": "normal-browser-audit",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "--experimental-transform-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-14/must-not-create-normal-browser-audit"
+      ],
+      "exitCode": 1,
+      "expectedErrorMatched": true,
+      "targetCreated": false
+    }
+  ],
+  "allRejectedBeforeWork": true,
+  "sealedOriginalRegularFiles": 480,
+  "markerSha256": "8017926d56f8735832329f6428ff8078f1d50a691f28787ad34177dc7d83074d",
+  "allOriginalBytesAndSetEqualBeforeAfter": true,
+  "browserMethodsRejected": 4,
+  "browserReadOnlySceneBeforeAfterEqual": true,
+  "gameCommandsExecuted": 0,
+  "compatibilityDevelopmentTests": 0
+}

@@ -1,0 +1,94 @@
+{
+  "scope": "Correct exact evidence classification only; no code/log bytes changed",
+  "originalClassificationFalsePreserved": true,
+  "reason": "Initial classifier missed basename stdout/stderr and actual Chrome AX list bullet trailing space",
+  "defaultExitCode": 2,
+  "exactOriginalExceptionPaths": [
+    "goal-1/evidence/t17-acceptance-14/checks-r10/build/console.txt",
+    "goal-1/evidence/t17-acceptance-14/checks-r10/typecheck/console.txt",
+    "goal-1/evidence/t17-acceptance-14/checks-r11/build/console.txt",
+    "goal-1/evidence/t17-acceptance-14/checks-r12/build/console.txt",
+    "goal-1/evidence/t17-acceptance-14/checks-r2/typecheck/console.txt",
+    "goal-1/evidence/t17-acceptance-14/checks-r4/typecheck/console.txt",
+    "goal-1/evidence/t17-acceptance-14/checks-r5/build/console.txt",
+    "goal-1/evidence/t17-acceptance-14/checks-r5/typecheck/console.txt",
+    "goal-1/evidence/t17-acceptance-14/checks-r6/game-ui/console.txt",
+    "goal-1/evidence/t17-acceptance-14/checks-r7/build/console.txt",
+    "goal-1/evidence/t17-acceptance-14/checks-r7/typecheck/console.txt",
+    "goal-1/evidence/t17-acceptance-14/checks-r8/build/console.txt",
+    "goal-1/evidence/t17-acceptance-14/checks-r8/typecheck/console.txt",
+    "goal-1/evidence/t17-acceptance-14/chrome-deepseek-r11/eco-wait-cross-month-original-outflows-r77-ax.txt",
+    "goal-1/evidence/t17-acceptance-14/chrome-deepseek-r8/eco-customer1-explicit-original-preview-r70-ax.txt",
+    "goal-1/evidence/t17-acceptance-14/life-check-r1/stderr.txt",
+    "goal-1/evidence/t17-acceptance-14/life-check-r1/stdout.txt",
+    "goal-1/evidence/t17-acceptance-14/life-check-r2/stdout.txt",
+    "goal-1/evidence/t17-acceptance-14/life-check-r3/stdout.txt",
+    "goal-1/evidence/t17-acceptance-14/life-check-r4/stdout.txt"
+  ],
+  "consoleOrStdoutStderrFiles": 18,
+  "axProviderRawFiles": 2,
+  "details": [
+    {
+      "file": "goal-1/evidence/t17-acceptance-14/chrome-deepseek-r11/eco-wait-cross-month-original-outflows-r77-ax.txt",
+      "exactLines": [
+        34,
+        41
+      ],
+      "rawLineRepresentation": [
+        "'\\t\\t\\t\\t\\t\\t\\t32 AXListMarker • '",
+        "'\\t\\t\\t\\t\\t\\t\\t39 AXListMarker • '"
+      ]
+    },
+    {
+      "file": "goal-1/evidence/t17-acceptance-14/chrome-deepseek-r11/eco-wait-cross-month-original-outflows-r77-ax.txt",
+      "kind": "actual Chrome AXListMarker bullet includes one trailing space; no text edited",
+      "sha256": "6d7efaf2affd2f466ac9b289dbf962524143da242757fdcb77425487d6424174"
+    },
+    {
+      "file": "goal-1/evidence/t17-acceptance-14/chrome-deepseek-r8/eco-customer1-explicit-original-preview-r70-ax.txt",
+      "exactLines": [
+        21,
+        24
+      ],
+      "rawLineRepresentation": [
+        "'\\t\\t\\t\\t\\t\\t\\t\\t19 AXListMarker • '",
+        "'\\t\\t\\t\\t\\t\\t\\t\\t22 AXListMarker • '"
+      ]
+    },
+    {
+      "file": "goal-1/evidence/t17-acceptance-14/chrome-deepseek-r8/eco-customer1-explicit-original-preview-r70-ax.txt",
+      "kind": "actual Chrome AXListMarker bullet includes one trailing space; no text edited",
+      "sha256": "bb188bdbaa1b73ebcfab1ea1a209979bafd37cdcfac71b1cf9284c2c603e5b91"
+    },
+    {
+      "file": "goal-1/evidence/t17-acceptance-14/life-check-r1/stderr.txt",
+      "kind": "actual original npm stdout/stderr; terminal blank line",
+      "sha256": "0cb69c004fa18fc08995ce065166f253845749ba4ca028b7ff4edd01c6ce2ff2"
+    },
+    {
+      "file": "goal-1/evidence/t17-acceptance-14/life-check-r1/stdout.txt",
+      "kind": "actual original npm stdout/stderr; terminal blank line",
+      "sha256": "533e9abd358be1c1be56659de720b6c21b9ca944398a5e4cccbe474c8fea9a9d"
+    },
+    {
+      "file": "goal-1/evidence/t17-acceptance-14/life-check-r2/stdout.txt",
+      "kind": "actual original npm stdout/stderr; terminal blank line",
+      "sha256": "b74fbd4e42f576490854254dfd2707c113064a652d361e57d55ca14a8a3f85c8"
+    },
+    {
+      "file": "goal-1/evidence/t17-acceptance-14/life-check-r3/stdout.txt",
+      "kind": "actual original npm stdout/stderr; terminal blank line",
+      "sha256": "c1d494063ac149ea6ae001b004cc7ccb7edab3cd0c1cc6f54d78cc45bca48f76"
+    },
+    {
+      "file": "goal-1/evidence/t17-acceptance-14/life-check-r4/stdout.txt",
+      "kind": "actual original npm stdout/stderr; terminal blank line",
+      "sha256": "75dbac9e6ccbe8c6489df5d54718080d00c7ad7e25583b711678c7386f743d88"
+    }
+  ],
+  "otherPaths": 491,
+  "otherExitCode": 0,
+  "allSourceAndOtherTaskPathsPass": true,
+  "rawExceptionBytesMatchFeatureManifest": true,
+  "passed": true
+}
