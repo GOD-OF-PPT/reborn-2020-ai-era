@@ -257,3 +257,10 @@ D09实现bc8660b/完成记录58fee36为实际progress。现按[evidence/t17-acce
 - C-D10分层结果：R5全108/720实际689pass/4fail/27hook未执行保留；最终R6全部UI30/221全过、原3历史超时在原20/60/120秒通过，另21未选不算新通过，原引擎/核心测试未改，不称单次720全绿或通用提速。类型/77工具/内容/tsc生产0；5Create160不同完整命令/21公开原文（5buffer/16非buffer）全字节同，125源/28输入再核同。四浏览器/两CLI实际封存父目录均在委派或输出前拒绝，295物理文件/35目录及marker保持；首次配对DOM读取deadline单列，不作新UI前后验收。
 - 保全/限制：16970原条目16945同/25允许/异常0，19原链接仅字面、五旧封存保持。四份44HTTP/磁盘及完整args/cwd/PID保全，最终5325 R6与旧5323/5321/5318保留；中间自有/DEV核身份后退役143，不删DB/构建。docs实际1仅旧六项及三原图提示，新增0；plan/competitive0。默认空白2仅六份原compiler/npm console，其他314任务路径0，原日志不改。PUBLIC远端main与README活读仍9bf4399，未push/deploy；本完成记录和post另行提交，准确record身份见Git及最终交回。
 - [杠精审查] D10限定完成通过，确定问题均实修复核，全部原功能/责任/断言/限时/隔离和红档保留；REPEAT复用既有Game Studio/UI/Playtest、取证/守卫/完整Create/严格Git工具，没有新增全局Skill/自动化/依赖/外部资源。全部兼容开发/测试0，book-layout两多宽/M01暂停且须人类明确恢复；旧PNG0/3、新三案3/3、真人0、原六身份/288/62/22执行0及完整5c—5f/6/7—15/T17/goal/T18保持。下一轮恢复原5c-P1，不新增无限D11或提前结束整个目标；本轮止于D10。
+
+
+## D11 用户再次要求的交互研究与优化限定完成
+
+用户再次明确的竞品研究→AGENTS→实际优化覆盖旧D10后自动恢复P1的顺序。本轮D11已本地实现e1ca9b75bba4819d5a11deb20d65a1bda3240be9，157条Git blob/磁盘/SHA/mode同；[root16限定验证](evidence/t17-acceptance-16/validation.md)及[真实提交](evidence/t17-d11-ui-post-commit-01/feature-commit-readback.json)分列研究、当前Chrome、原子Node、测试与完整Create。课程直接资本/执笔人/日期/实际大纲/另行启用、辅助素材准备保草稿、视频同对象实际翻页完成；最终R9 tsc/build0、R12相关29过，原11raw与追加1raw完整Create各自0/全字节同，原失败/超时/错误判断保留。
+
+root16封存139普通文件+marker，SHA1b99aae2bef1fa140a6a920d527adfa65301c72f4ad2caae7e0e22850bee546d；步骤6为提交前快照，master完成记录确认实际本地提交，旧根不回写。376最终源、44生产HTTP、原7marker/211规则等blob/原输入保持。未push/deploy，PUBLIC远端main实读仍9bf4399。下一原5c-P1六正常前史，再原288/62/22及其余T17责任；美术持续优先、全兼容开发测试0/M01暂停且需用户恢复、旧PNG0/3/新三案3/3/真人0/T18及完整goal不提前完成。
