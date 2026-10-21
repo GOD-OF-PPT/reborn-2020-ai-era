@@ -1,10 +1,14 @@
 import type {CommandEnvelope} from '../core/run-types.ts'
 import type {CourseProjection} from '../core/course-projection.ts'
 import type {WorkerInstance} from '../core/operations-types.ts'
+import type {CommandPreview} from '../core/commands.ts'
+import type {PlayingView} from './game-types.ts'
 import {courseResourceLabel} from './course-resource-labels.ts'
+import {CourseRefundDetails} from './CourseRefundDetails.tsx'
 
 /** The original confirmation identifies the actual class and stage from its captured public snapshot. */
-export function CourseCommandDetails({command,course,workers}:{command:CommandEnvelope;course:CourseProjection;workers?:readonly WorkerInstance[]}){
+export function CourseCommandDetails({command,course,workers,view,confirm,accountName}:{command:CommandEnvelope;course:CourseProjection;workers?:readonly WorkerInstance[];view?:PlayingView|undefined;confirm?:CommandPreview|undefined;accountName?:((id:string)=>string)|undefined}){
+ if(command.kind==='RefundCourseLearners')return <CourseRefundDetails command={command} course={course} view={view} confirm={confirm} accountName={accountName}/>
  if(command.kind!=='StartCourseStage'||!course||!command.payload||typeof command.payload!=='object')return null
  const payload=command.payload as {cohortId?:unknown;index?:unknown;resources?:unknown}
  if(typeof payload.cohortId!=='string'||payload.index!==0&&payload.index!==1)return null

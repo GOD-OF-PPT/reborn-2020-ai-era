@@ -1,0 +1,234 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts --maxWorkers=1 --reporter=default --reporter=json --outputFile.json=goal-1/evidence/t17-acceptance-10/refund-fix-red-r1/vitest.json src/ui/CourseRefundDetails.test.tsx src/ui/confirmation-money.test.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/CourseRefundDetails.test.tsx (33 tests | 33 failed) 387ms
+   × renders the captured before refund as the original whole obligation, not a zero operation fee 24ms
+   × renders the captured half refund as the original whole obligation, not a zero operation fee 6ms
+   × renders the captured after refund as the original whole obligation, not a zero operation fee 4ms
+   × uses original odd-fen delivered and already refunded fields without charging the same unearned part again 4ms
+   × uses the same original command for multiple selected people and all remaining learners 4ms
+   × refuses the entire empty selection or context instead of filtering it into zero or a smaller quote 4ms
+   × refuses the entire duplicate selection or context instead of filtering it into zero or a smaller quote 5ms
+   × refuses the entire unknown-mixed selection or context instead of filtering it into zero or a smaller quote 3ms
+   × refuses the entire enrollment-id selection or context instead of filtering it into zero or a smaller quote 9ms
+   × refuses the entire refunded selection or context instead of filtering it into zero or a smaller quote 7ms
+   × refuses the entire cohort selection or context instead of filtering it into zero or a smaller quote 5ms
+   × refuses the entire course selection or context instead of filtering it into zero or a smaller quote 5ms
+   × refuses the entire product selection or context instead of filtering it into zero or a smaller quote 4ms
+   × refuses the entire price selection or context instead of filtering it into zero or a smaller quote 4ms
+   × refuses the entire business selection or context instead of filtering it into zero or a smaller quote 3ms
+   × refuses the entire account selection or context instead of filtering it into zero or a smaller quote 4ms
+   × refuses the entire missing-account selection or context instead of filtering it into zero or a smaller quote 3ms
+   × refuses the entire duplicate-student selection or context instead of filtering it into zero or a smaller quote 4ms
+   × refuses the entire negative selection or context instead of filtering it into zero or a smaller quote 5ms
+   × refuses the entire fraction selection or context instead of filtering it into zero or a smaller quote 5ms
+   × refuses the entire overflow selection or context instead of filtering it into zero or a smaller quote 5ms
+   × refuses the entire inconsistent-paid selection or context instead of filtering it into zero or a smaller quote 5ms
+   × refuses the entire inconsistent-refunded selection or context instead of filtering it into zero or a smaller quote 5ms
+   × refuses the entire excess-stage-refund selection or context instead of filtering it into zero or a smaller quote 3ms
+   × refuses the entire excess-unearned selection or context instead of filtering it into zero or a smaller quote 3ms
+   × refuses the entire run selection or context instead of filtering it into zero or a smaller quote 3ms
+   × refuses the entire revision selection or context instead of filtering it into zero or a smaller quote 4ms
+   × refuses the entire readonly selection or context instead of filtering it into zero or a smaller quote 4ms
+   × refuses the entire candidate selection or context instead of filtering it into zero or a smaller quote 5ms
+   × refuses the entire denied selection or context instead of filtering it into zero or a smaller quote 3ms
+   × rejects an aggregate beyond the original money limit even when each public amount is individually valid 2ms
+   × keeps the original obligation readable with a public cash shortfall without inventing a payment result 4ms
+   × is wired through the actual CommandDetails captured course and business even when the viewed personal account differs 225ms
+ ❯ src/ui/confirmation-money.test.ts (7 tests | 1 failed) 25ms
+   ✓ shows actual owner capital when the rule correctly reports zero expense 3ms
+   ✓ does not silently replace missing transfer information with a zero cost 0ms
+   ✓ keeps a scheduled first-order reservation distinct from already incurred cost 0ms
+   ✓ a normal calendar advance labels only the instruction cost, with original dated costs reviewed separately 1ms
+   ✓ keeps explicit zero follow-on participation visible as an investment decision 1ms
+   ✓ separates a zero-new-cost stop from original earned service fees 2ms
+   × keeps the original zero refund operation fee separate from the student refund obligation 15ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 34 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/CourseRefundDetails.test.tsx > renders the captured before refund as the original whole obligation, not a zero operation fee
+ FAIL  src/ui/CourseRefundDetails.test.tsx > renders the captured half refund as the original whole obligation, not a zero operation fee
+ FAIL  src/ui/CourseRefundDetails.test.tsx > renders the captured after refund as the original whole obligation, not a zero operation fee
+AssertionError: expected '' to contain '这次为1位学员退还学费¥999'
+
+- Expected
++ Received
+
+- 这次为1位学员退还学费¥999
+
+ ❯ src/ui/CourseRefundDetails.test.tsx:33:133
+     31|  const c=context();selected(c).delivered=[...delivered]
+     32|  const before=JSON.stringify(c),html=render(c)
+     33|  for(const text of ['这次为1位学员退还学费¥999','从真实交付案例开始的图像实作','2023-01-18班','…
+       |                                                                                                                                     ^
+     34|  expect(JSON.stringify(c)).toBe(before);expect(codec.export(run)).toBe…
+     35| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/34]⎯
+
+ FAIL  src/ui/CourseRefundDetails.test.tsx > uses original odd-fen delivered and already refunded fields without charging the same unearned part again
+AssertionError: expected '' to contain '退还学费¥499.51'
+
+- Expected
++ Received
+
+- 退还学费¥499.51
+
+ ❯ src/ui/CourseRefundDetails.test.tsx:40:79
+     38|  co.priceFen=99901;s.priceFen=99901;s.delivered=[49951,0];s.refundedUn…
+     39|  const html=render(c)
+     40|  for(const text of ['退还学费¥499.51','尚未交付的原预款¥0','已交付收入冲减¥499.51'])expec…
+       |                                                                               ^
+     41|  s.refundedDelivered=[1,0];s.refundedFen=49951;s.paidRemainingFen=49950
+     42|  expect(render(c)).toContain('退还学费¥499.50')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/34]⎯
+
+ FAIL  src/ui/CourseRefundDetails.test.tsx > uses the same original command for multiple selected people and all remaining learners
+AssertionError: expected '' to contain '这次为2位学员退还学费¥1,998'
+
+- Expected
++ Received
+
+- 这次为2位学员退还学费¥1,998
+
+ ❯ src/ui/CourseRefundDetails.test.tsx:46:72
+     44| it('uses the same original command for multiple selected people and al…
+     45|  const c=context(),co=c.course.cohorts[0]!
+     46|  choose(c,co.students.slice(0,2).map(s=>s.personId));expect(render(c))…
+       |                                                                        ^
+     47|  choose(c,co.students.filter(s=>s.paidRemainingFen>0).map(s=>s.personI…
+     48|  Object.assign(selected(c),{refundedUnearned:99900,refundedFen:99900,p…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/34]⎯
+
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire empty selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire duplicate selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire unknown-mixed selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire enrollment-id selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire refunded selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire cohort selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire course selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire product selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire price selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire business selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire account selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire missing-account selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire duplicate-student selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire negative selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire fraction selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire overflow selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire inconsistent-paid selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire inconsistent-refunded selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire excess-stage-refund selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire excess-unearned selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire run selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire revision selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire readonly selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire candidate selection or context instead of filtering it into zero or a smaller quote
+ FAIL  src/ui/CourseRefundDetails.test.tsx > refuses the entire denied selection or context instead of filtering it into zero or a smaller quote
+AssertionError: expected '' to contain '没有取得这次原退款明细，请返回重新选择'
+
+- Expected
++ Received
+
+- 没有取得这次原退款明细，请返回重新选择
+
+ ❯ src/ui/CourseRefundDetails.test.tsx:79:15
+     77|  if(variant==='denied')c.confirm.allowed=false
+     78|  const before=JSON.stringify(c),html=render(c)
+     79|  expect(html).toContain('没有取得这次原退款明细，请返回重新选择')
+       |               ^
+     80|  expect(html).not.toContain('退还学费¥');expect(JSON.stringify(c)).toBe(be…
+     81| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/34]⎯
+
+ FAIL  src/ui/CourseRefundDetails.test.tsx > rejects an aggregate beyond the original money limit even when each public amount is individually valid
+AssertionError: expected '' to contain '没有取得这次原退款明细，请返回重新选择'
+
+- Expected
++ Received
+
+- 没有取得这次原退款明细，请返回重新选择
+
+ ❯ src/ui/CourseRefundDetails.test.tsx:87:20
+     85|  for(const s of co.students.slice(0,2)){s.priceFen=MONEY_LIMIT;s.paidR…
+     86|  choose(c,co.students.slice(0,2).map(s=>s.personId))
+     87|  expect(render(c)).toContain('没有取得这次原退款明细，请返回重新选择')
+       |                    ^
+     88| })
+     89| it('keeps the original obligation readable with a public cash shortfal…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/34]⎯
+
+ FAIL  src/ui/CourseRefundDetails.test.tsx > keeps the original obligation readable with a public cash shortfall without inventing a payment result
+AssertionError: expected '' to contain '退还学费¥999'
+
+- Expected
++ Received
+
+- 退还学费¥999
+
+ ❯ src/ui/CourseRefundDetails.test.tsx:93:15
+     91|  b.funds={...b.funds,cashFen:0,availableFen:0,protectionShortfallFen:1…
+     92|  const html=render(c)
+     93|  expect(html).toContain('退还学费¥999');expect(html).toContain('缺款继续保留应付和保…
+       |               ^
+     94|  expect(html).toContain('不等于学员已经到账')
+     95|  expect(html).not.toMatch(/退款已经到账|学员已全部到账|已全部付清|实际支付¥0|新增应付¥0|保护释放¥999…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/34]⎯
+
+ FAIL  src/ui/CourseRefundDetails.test.tsx > is wired through the actual CommandDetails captured course and business even when the viewed personal account differs
+AssertionError: expected '<p class="field-help">本次只按你核对的内容提交。开始…' to contain '退还学费¥999'
+
+Expected: "退还学费¥999"
+Received: "<p class="field-help">本次只按你核对的内容提交。开始、实际履约、确认收入与到账分别发生，已发生成本及旧义务不会因切换页面消失。</p>"
+
+ ❯ src/ui/CourseRefundDetails.test.tsx:100:87
+     98|  const c=context(),features={...c.view.features,course:c.course} as Pl…
+     99|  const html=renderToStaticMarkup(<CommandDetails command={c.command} c…
+    100|  for(const text of ['退还学费¥999','企业账户 · AI卖课','尚未交付的原预款¥999','不等于学员已经到账…
+       |                                                                                       ^
+    101|  expect(codec.export(run)).toBe(before)
+    102| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/34]⎯
+
+ FAIL  src/ui/confirmation-money.test.ts > keeps the original zero refund operation fee separate from the student refund obligation
+AssertionError: expected { label: '本次确定费用', amountFen: +0 } to deeply equal { label: '本次新增操作费用（学员退款另列）', …(1) }
+
+- Expected
++ Received
+
+  {
+    "amountFen": 0,
+-   "label": "本次新增操作费用（学员退款另列）",
++   "label": "本次确定费用",
+  }
+
+ ❯ src/ui/confirmation-money.test.ts:29:17
+     27| it('keeps the original zero refund operation fee separate from the stu…
+     28|  const result=confirmationMoney(command('RefundCourseLearners',{cohort…
+     29|  expect(result).toEqual({label:'本次新增操作费用（学员退款另列）',amountFen:0})
+       |                 ^
+     30| })
+     31|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/34]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  34 failed | 6 passed (40)
+   Start at  09:18:08
+   Duration  3.17s (import 57%, transform 24%, tests 18%, worker 1%)
+
+    Isolate  2 workers spawned · ~269ms startup each (spawn + environment, per file)
+             at least ~269ms faster with isolate: false — reuses workers across files instead of one per file
+
+JSON report written to /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-10/refund-fix-red-r1/vitest.json

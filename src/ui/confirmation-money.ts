@@ -1,6 +1,7 @@
 import type {CommandEnvelope} from '../core/run-types.ts'
 import type {CommandPreview} from '../core/commands.ts'
 export function confirmationMoney(command:CommandEnvelope,preview:CommandPreview){
+ if(command.kind==='RefundCourseLearners')return {label:'本次新增操作费用（学员退款另列）',amountFen:preview.upfrontCostFen}
  const p=typeof command.payload==='object'&&command.payload!==null?command.payload as Record<string,unknown>:{}
  const amount=(key:string)=>typeof p[key]==='number'&&Number.isSafeInteger(p[key])&&(p[key] as number)>=0?p[key] as number:null
  if(command.kind==='StartLifeWork'||command.kind==='FulfillLifePromise')return {label:'现在从个人账户实际支付的生活成本',amountFen:preview.upfrontCostFen}

@@ -24,3 +24,7 @@ it('keeps explicit zero follow-on participation visible as an investment decisio
 })
 
 it('separates a zero-new-cost stop from original earned service fees',()=>{const p={...preview,accruedServiceFeeFen:1333};expect(confirmationMoney(command('StopHengxingAuthority',{deploymentId:'old'}),p)).toMatchObject({amountFen:0});expect(confirmationMoney(command('StartRiskTask',{incidentId:'case',kind:'isolate'}),{...p,upfrontCostFen:41333})).toMatchObject({amountFen:40000})})
+it('keeps the original zero refund operation fee separate from the student refund obligation',()=>{
+ const result=confirmationMoney(command('RefundCourseLearners',{cohortId:'original-class',personIds:['original-person'],reason:'按原款退款'}),preview)
+ expect(result).toEqual({label:'本次新增操作费用（学员退款另列）',amountFen:0})
+})

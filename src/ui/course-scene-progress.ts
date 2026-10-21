@@ -1,7 +1,7 @@
 import {quarterOf} from '../core/calendar.ts'
 import {dayBefore} from '../core/operations-calendar.ts'
 import type {CourseProjection} from '../core/course-projection.ts'
-import {playableThrough} from './game-text.ts'
+import {moneyText,playableThrough} from './game-text.ts'
 
 export interface CourseSceneStage{
  readonly cohortId:string
@@ -74,7 +74,7 @@ export function courseSceneProgress(course:CourseProjection,date:string):CourseS
   return scene('答应的内容交出后，还要留一点余地。','这期仍在原支持、退款或结算窗口中。','等这堂课真正收好',`${identity}的退款窗口至${cohort.refundUntil}，实际费用按原账结算；此刻还没有完整结清。`,'查看本班窗口与原账')
  }
  const currentBusiness=(id:string)=>course.businesses.some(b=>b.id===id&&b.lifecycle!=='closed')
- if(course.businesses.length&&!course.businesses.some(b=>b.lifecycle!=='closed'))return scene('这里的课，已经留在原记录里。','工作室已经收尾，原学生、学习与退款记录继续保留。','回看曾经认真交付过的课','历史收入与旧成本不会变成本季新回款；新工作室与新承诺仍需另外明确选择。','翻看已收尾课程与原账')
+ if(course.businesses.length&&!course.businesses.some(b=>b.lifecycle!=='closed'))return scene('这里的课，已经留在原记录里。','工作室已经收尾，原学生、学习与退款记录继续保留。','回看原课程与交付记录','历史收入与旧成本不会变成本季新回款；新工作室与新承诺仍需另外明确选择。','翻看已收尾课程与原账')
  const unfinished=course.courses.find(c=>currentBusiness(c.businessId)&&(c.status==='draft'||c.status==='building'))
  if(unfinished){
   const job=unfinished.job
@@ -86,7 +86,12 @@ export function courseSceneProgress(course:CourseProjection,date:string):CourseS
  const completedStudy=course.studies.findLast(s=>currentBusiness(s.businessId)&&s.completedAt!==null&&quarterOf(s.completedAt)===quarterOf(date)&&!course.courses.some(c=>c.studyId===s.id))
  if(completedStudy)return scene(completedStudy.members.length?'新需求已经留下记录，下一堂课仍要认真准备。':'这次调查，还没有留下新的实际需求。','进阶仍需要独立样课与交付，维护修订不等于新产品。','看清原学员的实际新需求',`${completedStudy.members.length}名实际需求成员已经记录；新方案、资源与投入仍由你核对。`,'核对真实新需求与进阶方案')
  const closed=course.cohorts.filter(c=>c.closedAt!==null&&quarterOf(c.closedAt)===quarterOf(date)).at(-1)
- if(closed)return scene('这期的承诺，已经认真收好。',`${closed.closedAt}按原窗口实际结清，学习与退款记录仍然保留。`,'再想想下一堂值得交付的课','旧学员和同一知识产品的购买身份仍在；新的需求、样课与交付都要重新核对。','翻看本期结果与下一份准备')
+ if(closed){
+  const refunded=closed.students.filter(s=>s.refundedFen>0),retained=closed.students.filter(s=>s.paidRemainingFen>0),refundFen=refunded.reduce((sum,s)=>sum+s.refundedFen,0)
+  const title=!closed.students.length?'这期没有等来学员。':refunded.length&&!retained.length?'这堂课，最终以退款收场。':refunded.length?'这堂课，留下了学习，也留下退款。':closed.students.every(s=>s.outcome==='helped')?'这期的承诺，已经认真收好。':'这期的原账，已经收尾。'
+  const line=!closed.students.length?`${closed.closedAt}收尾时没有实际报名，原安排与已花成本仍留在账上。`:refunded.length?`${closed.closedAt}按原窗口收尾，${retained.length}名学员留在本班、${refunded.length}名学员有退款记录。退款处理合计${moneyText(refundFen)}，实际付款仍看原账。`:`${closed.closedAt}按原窗口实际结清，${retained.length}名学员的学习与原账记录仍然保留。`
+  return scene(title,line,'再想想下一堂值得交付的课','旧学员和同一知识产品的购买身份仍在；新的需求、样课与交付都要重新核对。','翻看本期结果与下一份准备')
+ }
  const ready=course.courses.find(c=>currentBusiness(c.businessId)&&c.status==='ready')
  if(ready)return scene(ready.unresolvedUpdates.length?'旧课的工具前提，值得再看一遍。':'先听听，谁真的需要这堂课。','样课与实际需求、招生和最终学习效果，是不同的事情。','把价格、班额与支持想清楚',`${ready.name}的原样课和记录都在；新班仍需真实受众、支持资源与保护资金。`,'核对课程受众、班额与原承诺')
  const outline=course.outlines.find(o=>o.job&&(o.job.status==='planned'||o.job.status==='running'))

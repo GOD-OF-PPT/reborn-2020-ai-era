@@ -1,0 +1,17 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {unpackArchive,sha} from '../../../scripts/course-critical-evidence.ts';
+import {createCampaignCodec} from '../../../src/application/campaign.ts';
+const base='goal-1/evidence/t17-acceptance-09/matrix-r3/technical_employee-t16-campaign-0/critical-45';
+const index=JSON.parse(readFileSync(base+'/case-index.json','utf8'));
+const members=unpackArchive(base+'/'+index.archive.file,index.archive);
+const record=JSON.parse(members.get('case-record.json'));
+const raw=members.get(record.source.member);
+if(!raw||Buffer.byteLength(raw)!==record.source.bytes||sha(raw)!==record.source.sha256)throw Error('EXACT_SEALED_R73_SOURCE_REQUIRED');
+const codec=createCampaignCodec(),parsed=codec.import(raw);
+if(codec.export(parsed)!==raw)throw Error('CURRENT_CODEC_ROUNDTRIP_CHANGED_ORIGINAL');
+if(parsed.origin!=='normal'||parsed.revision!==73||parsed.backgroundId!=='technical_employee'||parsed.seed!=='t16-campaign-0')throw Error('ORIGINAL_NORMAL_IDENTITY_REQUIRED');
+const output='goal-1/evidence/t17-acceptance-10/browser-input-r2/technical-image-r73.json';
+writeFileSync(output,raw,{flag:'wx'});
+const report={scope:'Extracted unmodified complete normal r73 actually earned and independently replayed from Create in sealed P3R3. This extraction strictly imports/exports the original codec envelope only to inspect identity; no new Create or game commands, and not new prefix evidence.',sourceCaseIndex:base+'/case-index.json',sourceArchive:index.archive.file,sourceMember:record.source,output,bytes:Buffer.byteLength(raw),sha256:sha(raw),revision:parsed.revision,date:parsed.timeline.cursor.date,backgroundId:parsed.backgroundId,seed:parsed.seed,fullPriorCommands:parsed.receipts.length-1};
+writeFileSync('goal-1/evidence/t17-acceptance-10/browser-input-r2/provenance.json',JSON.stringify(report,null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify(report));

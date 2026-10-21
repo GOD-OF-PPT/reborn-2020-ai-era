@@ -1,0 +1,51 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts --maxWorkers=1 --reporter=default --reporter=json --outputFile.json=/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-10/checks-r1/core-economy/vitest.json src/core/money.test.ts src/core/calendar.test.ts src/core/ledger.test.ts src/core/operating-ledger.test.ts src/core/economy.test.ts src/core/economic-time.test.ts src/core/timeline.test.ts src/core/commands.test.ts src/core/record-dispatch.test.ts src/application/operations.test.ts src/application/employment.test.ts src/application/workbench-projection.test.ts src/application/cash-forecast.test.ts src/application/clock-commitments.test.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ✓ src/core/ledger.test.ts (17 tests) 44ms
+ ✓ src/application/operations.test.ts (9 tests) 5950ms
+   ✓ keeps contracts, shared employee capacity, physical completion, acceptance and payment distinct 1632ms
+   ✓ cancels a reserved contract without spending its action and never turns a prepayment into profit 555ms
+   ✓ reschedules planned capacity atomically and ignores old timers after actual completion 418ms
+   ✓ keeps running-job costs, refunds protected deposits and blocks closing until old duties are addressed 509ms
+   ✓ keeps rejected customer work unpaid and makes the prior protected deposit refundable 540ms
+   ✓ shares the player production pool with world preparation instead of granting a second personal resource 780ms
+   ✓ does not duplicate an employee when another owned business accepts overlapping work 705ms
+   ✓ interrupts completion after an unpaid wage without gifting a delivered contract 603ms
+ ✓ src/core/economy.test.ts (10 tests) 28ms
+ ✓ src/application/clock-commitments.test.ts (5 tests) 7074ms
+   ✓ normal clock review shows the actual500 start payment and original reservation without executing either 2013ms
+   ✓ a selected next-quarter horizon includes its4000 living bill while the ordinary quarter forecast stays unchanged 1147ms
+   ✓ an early within-day target does not present a later same-day living bill as already inside the selected interval 1227ms
+   ✓ clock queries reject stale/non-clock/out-of-range requests and never publish private notes or hidden state 1422ms
+   ✓ another read-only session cannot use the new query to bypass the installed preview guard 1262ms
+ ✓ src/core/commands.test.ts (3 tests) 73ms
+ ✓ src/core/timeline.test.ts (6 tests) 16ms
+ ✓ src/core/economic-time.test.ts (4 tests) 44ms
+ ✓ src/application/workbench-projection.test.ts (4 tests) 1941ms
+   ✓ includes earned unbilled employee costs without deducting cash or mixing the company with its owner 863ms
+   ✓ finishes remaining June phases and now permits July without changing the original S01 result 317ms
+   ✓ can partially then fully pay a command-created cash gap and release only the resolved pause 509ms
+ ✓ src/application/employment.test.ts (4 tests) 3044ms
+   ✓ settles actual monthly employment for technical_employee after a single two-point quarterly commitment 1398ms
+   ✓ settles actual monthly employment for content_employee after a single two-point quarterly commitment 1117ms
+   ✓ prorates earned wages through resignation, resumes without refunding or recharging the quarterly commitment 382ms
+ ✓ src/core/record-dispatch.test.ts (1 test) 1165ms
+   ✓ preserves strict union acceptance and canonical output for actual journals and corrupted discriminator payloads 1163ms
+ ✓ src/core/operating-ledger.test.ts (1 test) 9ms
+ ✓ src/application/cash-forecast.test.ts (1 test) 219ms
+ ✓ src/core/calendar.test.ts (7 tests) 14ms
+ ✓ src/core/money.test.ts (13 tests) 15ms
+
+ Test Files  14 passed (14)
+      Tests  85 passed (85)
+   Start at  07:55:26
+   Duration  27.35s (tests 83%, import 14%, transform 3%)
+
+    Isolate  14 workers spawned · ~260ms startup each (spawn + environment, per file)
+             at least ~3.38s faster with isolate: false — reuses workers across files instead of one per file
+
+JSON report written to /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-10/checks-r1/core-economy/vitest.json

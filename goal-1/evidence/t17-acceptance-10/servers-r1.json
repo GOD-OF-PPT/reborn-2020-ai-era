@@ -1,0 +1,35 @@
+{
+  "production": {
+    "port": 5312,
+    "sessionId": 18572,
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "preview",
+      "--",
+      "--port",
+      "5312",
+      "--outDir",
+      ".delivery/t17-course-p4-r1"
+    ]
+  },
+  "dev": {
+    "port": 5313,
+    "sessionId": 51328,
+    "command": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "dev",
+      "--",
+      "--port",
+      "5313"
+    ],
+    "faultQuery": "storageTest=abort-course",
+    "database": "reborn-2020-t11-course-abort-validation"
+  },
+  "scope": "New task-owned loopback preview/DEV services; no old service or DB restarted/replaced, no deployment."
+}

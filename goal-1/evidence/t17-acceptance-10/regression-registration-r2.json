@@ -1,0 +1,73 @@
+{
+  "scope": "P4 current UI-only refund/closed-scene correction R2. Original R1 raw/registration/runner remain unchanged. Current applicable UI20 includes new refund semantic test; compatibility2 paused.",
+  "groups": {
+    "core-economy": [
+      "src/core/money.test.ts",
+      "src/core/calendar.test.ts",
+      "src/core/ledger.test.ts",
+      "src/core/operating-ledger.test.ts",
+      "src/core/economy.test.ts",
+      "src/core/economic-time.test.ts",
+      "src/core/timeline.test.ts",
+      "src/core/commands.test.ts",
+      "src/core/record-dispatch.test.ts",
+      "src/application/operations.test.ts",
+      "src/application/employment.test.ts",
+      "src/application/workbench-projection.test.ts",
+      "src/application/cash-forecast.test.ts",
+      "src/application/clock-commitments.test.ts"
+    ],
+    "course-save": [
+      "src/persistence/codec.test.ts",
+      "src/persistence/codec-encoding.test.ts",
+      "src/persistence/operations-codec.test.ts",
+      "src/persistence/indexeddb.test.ts",
+      "src/persistence/writer-lock.test.ts",
+      "src/persistence/library.test.ts",
+      "src/application/session.test.ts",
+      "src/application/game-controller.test.ts",
+      "src/application/preview-binding.test.ts",
+      "src/application/course.test.ts",
+      "src/application/course-atomic.test.ts",
+      "src/persistence/course-codec.test.ts"
+    ],
+    "history-agency": [
+      "src/application/story-history.test.ts",
+      "src/application/story-agency.test.ts",
+      "src/application/story-combined.test.ts",
+      "src/application/story-routine.test.ts",
+      "src/application/story-risk.test.ts",
+      "src/application/story-risk-modes.test.ts"
+    ],
+    "active-ui": [
+      "src/ui/App.test.tsx",
+      "src/ui/CinematicRoom.test.tsx",
+      "src/ui/NarrativeScene.test.tsx",
+      "src/ui/ResourceSelect.test.tsx",
+      "src/ui/RiskSceneChoice.test.tsx",
+      "src/ui/clock-advance.test.tsx",
+      "src/ui/clock-command-details.test.tsx",
+      "src/ui/confirmation-money.test.ts",
+      "src/ui/continuation.test.ts",
+      "src/ui/course-scene-progress.test.ts",
+      "src/ui/ending-stage.test.tsx",
+      "src/ui/equity-exit-history.test.tsx",
+      "src/ui/risk-scene-save.test.tsx",
+      "src/ui/scene-play.test.tsx",
+      "src/ui/story-scene-progress.test.ts",
+      "src/ui/video-command-details.test.tsx",
+      "src/ui/video-scene-progress.test.ts",
+      "src/ui/video-threads.test.ts",
+      "src/ui/work-visibility.test.ts",
+      "src/ui/CourseRefundDetails.test.tsx"
+    ]
+  },
+  "paused": [
+    {
+      "file": "src/ui/book-layout.test.ts",
+      "staticCases": 2,
+      "reason": "Multiple width pagination math retained paused under current no page compatibility/size checks. No deletion, execution or passed claim."
+    }
+  ],
+  "unchangedTestSemantics": "Original assertions/default and explicit timeouts, forks/isolate retained; only CLI maxWorkers=1."
+}

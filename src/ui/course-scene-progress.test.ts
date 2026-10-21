@@ -13,12 +13,12 @@ function path(options:Parameters<typeof prepareCourseF03>[0]={}){
  const {h,course}=prepareCourseF03(options)
  const view=()=>projectCourse(h.run,h.course)!
  const progress=()=>courseSceneProgress(view(),h.run.timeline.cursor.date)!
- function enroll(){
+ function enroll(takePayment=true){
   h.send('BuildCourseSample',{courseId:course.id,resources:['player-production'],startAt:'2023-01-01'});h.send('AdvanceTime',{date:'2023-01-15'})
   h.send('CreateCourseAudience',{courseId:course.id,mode:'paid',priceFen:19900,resources:['player-production'],startAt:'2023-01-15'});h.send('AdvanceTime',{date:'2023-01-22'})
   h.send('PlanCourseCohort',{courseId:course.id,audienceId:h.run.course!.audiences[0]!.id,startAt:'2023-01-24',endAt:'2023-02-28',supportStartAt:'2023-04-01',seatLimit:20,supportMode:'guided_group',resources:['player-production'],promise:'clear_scope'})
   const co=h.run.course!.cohorts[0]!,people=h.run.course!.audiences[0]!.eligibleMembers.slice(0,20)
-  h.send('EnrollCourseAudience',{cohortId:co.id,personIds:people})
+  if(takePayment)h.send('EnrollCourseAudience',{cohortId:co.id,personIds:people})
   return {co,people}
  }
  function teach(){
@@ -60,6 +60,39 @@ it('keeps original support and the refund window after both actual teaching stag
  expect(p.progress().title).toContain('余地');expect(p.progress().choice.line).toContain('2023-04-15')
  p.h.send('AdvanceTime',{date:'2023-04-16'});expect(p.progress().title).toContain('认真收好')
  expect(courseSceneProgress(p.view(),'2023-07-01')?.title).not.toContain('认真收好')
+})
+it('shows an all-refund ending as the actual consequence rather than a successful learning promise',()=>{
+ const p=path(),{co,people}=p.teach()
+ p.h.send('RefundCourseLearners',{cohortId:co.id,personIds:people,reason:'按原阶段处理全班退款'})
+ p.h.send('AdvanceTime',{date:'2023-04-16'})
+ expect(p.view().cohorts[0]!.closedAt).toBe('2023-04-16')
+ const raw=p.h.codec.export(p.h.run),publicBefore=JSON.stringify(p.view()),result=p.progress()
+ expect(result.title).toContain('以退款收场');expect(result.title).not.toContain('认真收好')
+ expect(result.line).toContain('20名');expect(result.line).toContain('¥3,980');expect(result.line).toContain('实际付款仍看原账')
+ expect(result.choice.label).toBe('翻看本期结果与下一份准备')
+ expect(JSON.stringify(p.view())).toBe(publicBefore);expect(p.h.codec.export(p.h.run)).toBe(raw)
+})
+it('keeps both retained learners and partial refunds visible after the actual class closes',()=>{
+ const p=path(),{co,people}=p.teach()
+ p.h.send('RefundCourseLearners',{cohortId:co.id,personIds:[people[0]!],reason:'保留一人的原退款记录'})
+ p.h.send('AdvanceTime',{date:'2023-04-16'})
+ expect(p.view().cohorts[0]!.closedAt).toBe('2023-04-16')
+ const result=p.progress()
+ expect(result.title).toContain('也留下退款');expect(result.line).toContain('19名学员留在本班')
+ expect(result.line).toContain('1名学员有退款记录');expect(result.line).toContain('¥199')
+ expect(result.line).not.toContain('已经到账');expect(result.stage).toBeUndefined()
+})
+it('does not describe an actual empty closed class as teaching success or a refunded class',()=>{
+ const p=path();p.enroll(false);p.h.send('AdvanceTime',{date:'2023-04-16'})
+ expect(p.view().cohorts[0]!.closedAt).toBe('2023-04-16')
+ expect(p.view().cohorts[0]!.students).toHaveLength(0)
+ const result=p.progress()
+ expect(result.title).toContain('没有等来学员');expect(result.title).not.toContain('退款收场')
+ expect(result.line).toContain('没有实际报名');expect(result.stage).toBeUndefined()
+ const business=p.h.run.operations!.businesses.find(b=>b.route==='ai_course')!
+ p.h.send('WindDownBusiness',{businessId:business.id});p.h.send('CloseBusiness',{businessId:business.id})
+ expect(p.progress().choice.title).toBe('回看原课程与交付记录')
+ expect(p.progress().choice.title).not.toContain('曾经认真交付')
 })
 it('uses real publicly revealed learning problems for the support/refund choice without auto-authorizing recovery',()=>{
  const p=path({parameters:{matchBps:10000,helpedBps:0,feeBps:500}});p.teach();p.h.send('AdvanceTime',{date:'2023-04-08'})
