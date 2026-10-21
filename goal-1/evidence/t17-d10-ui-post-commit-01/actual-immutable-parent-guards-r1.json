@@ -1,0 +1,44 @@
+{
+  "scope": "Actual four browser method and two CLI parent-seal rejections, then exact immutable root15 physical bytes/path/dir readback; no game/compatibility acceptance added.",
+  "passed": true,
+  "cli": [
+    {
+      "entry": "scripts/verify_normal_browser_exports.ts",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "--experimental-transform-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-15/forbidden-audit-probe-r1"
+      ],
+      "actualExit": 1,
+      "expectedParentSealRefusal": true,
+      "outputDirectoryCreated": false
+    },
+    {
+      "entry": "scripts/collect_first_order_evidence.ts",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "--experimental-transform-types",
+        "scripts/collect_first_order_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-15/forbidden-collector-probe-r1"
+      ],
+      "actualExit": 1,
+      "expectedParentSealRefusal": true,
+      "outputDirectoryCreated": false
+    }
+  ],
+  "browserProof": "actual-browser-parent-refusals-r2.json",
+  "unchangedRegularFilesIncludingMarker": 295,
+  "unchangedDirectories": 35,
+  "markerSha256": "4a6346a31a15b4fa58232a79786d1f5df0fc7e251696d40c5435dd3331d9de81",
+  "exactBeforeAfterEqual": true,
+  "pairedDomObservation": "prior attempt timed out, not counted as successful before/after UI readback"
+}
