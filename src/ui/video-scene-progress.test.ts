@@ -5,12 +5,13 @@ import {addDays} from '../core/calendar.ts'
 import {videoSceneProgress} from './video-scene-progress.ts'
 
 /** Real fixture commands supply public UI stages; these are not normal-opening proofs. */
-function path(revisions=0,accept=true){
+function path(revisions=0,accept=true,emptyFirstChannel=false){
  const f=createVideoFixture({parameters:{...VIDEO_FIXTURE_PARAMETERS,revisionCount:revisions,commercial:{...VIDEO_FIXTURE_PARAMETERS.commercial,prepaymentFen:90000}}})
  let run=f.run
  const send=(kind:string,payload:unknown)=>{run=f.apply(run,kind,payload)}
+ if(emptyFirstChannel)send('OpenVideoChannel',{name:'没有这份委托的原账号',segment:'local_merchants'})
  send('OpenVideoChannel',{name:'一份普通作品',segment:'local_merchants'})
- const channel=run.video!.channels[0]!
+ const channel=run.video!.channels.at(-1)!
  send('StartVideoMarketing',{channelId:channel.id,resources:['player-production'],startAt:'2020-01-01'});send('AdvanceTime',{date:'2020-01-08'})
  if(accept){const cohort=run.video!.cohorts[0]!;send('AcceptVideoCommission',{channelId:channel.id,cohortId:cohort.id,clientId:cohort.qualifiedMembers[0],modeId:'manual',materialId:'original',resources:['player-production'],startAt:run.timeline.cursor.date})}
  return {f,send,get run(){return run},view:()=>projectVideo(run,f.video)!,progress:()=>videoSceneProgress(projectVideo(run,f.video),run.timeline.cursor.date),complete:()=>{const work=run.video!.works.at(-1)!;send('AdvanceTime',{date:run.operations!.jobs.find(j=>j.id===work.jobId)!.completeAt})}}
@@ -62,4 +63,22 @@ it('identifies the owning channel when several accounts have a work with the sam
  expect(h.progress()!.choice.line).toContain('一份普通作品 / 作品1')
  h.complete();expect(h.progress()!.choice.label).toContain('一份普通作品 / 作品1')
  expect(h.progress()!.command?.payload).toEqual({workId:h.run.video!.works[0]!.id,disclosure:'manual'})
+})
+it('keeps the second channel and original work/contract as the target through an actual client revision',()=>{
+ const h=path(3,true,true),work=h.run.video!.works[0]!,contract=h.run.video!.contracts[0]!,target={channelId:contract.channelId,workId:work.id,contractId:contract.id}
+ expect(contract.channelId).not.toBe(h.run.video!.channels[0]!.id)
+ expect(h.progress()!.target).toEqual(target)
+ h.complete();h.send('ReviewVideoOutput',{workId:work.id,disclosure:'manual'});h.send('SubmitVideoCommission',{contractId:contract.id});h.send('AdvanceTime',{date:addDays(h.run.timeline.cursor.date,2)})
+ const before=h.f.codec.export(h.run)
+ expect(h.progress()!.title).toContain('客户回话');expect(h.progress()!.target).toEqual(target)
+ expect(h.progress()!.command).toBeUndefined();expect(h.f.codec.export(h.run)).toBe(before)
+})
+it('points an actual unmeasured publication to its own channel and feedback chapter',()=>{
+ const h=path(0,false,true),channel=h.run.video!.channels.at(-1)!
+ h.send('StartVideoWork',{channelId:channel.id,productId:'hotspot',modeId:'manual',materialId:'original',resources:['player-production'],startAt:h.run.timeline.cursor.date})
+ h.complete();const work=h.run.video!.works[0]!
+ h.send('ReviewVideoOutput',{workId:work.id,disclosure:'manual'});h.send('PublishVideo',{workId:work.id,monetization:'none',label:false})
+ const before=h.f.codec.export(h.run)
+ expect(h.progress()!.title).toContain('回应还在路上');expect(h.progress()!.target).toEqual({channelId:channel.id,workId:work.id,section:'publications'})
+ expect(h.progress()!.command).toBeUndefined();expect(h.f.codec.export(h.run)).toBe(before)
 })

@@ -21,7 +21,11 @@ export interface CourseSceneProgress{
  readonly line:string
  readonly choice:{readonly title:string;readonly line:string;readonly label:string}
  readonly stage?:CourseSceneStage
+ readonly preparation?:CoursePreparationStep
+ readonly waitDate?:string
+ readonly recordId?:string
 }
+export interface CoursePreparationStep{readonly phase:'fund'|'outline'|'waiting'|'activate';readonly businessId?:string;readonly jobId?:string}
 function scene(title:string,line:string,choiceTitle:string,choiceLine:string,label:string):CourseSceneProgress{
  return {title,line,choice:{title:choiceTitle,line:choiceLine,label}}
 }
@@ -94,8 +98,16 @@ export function courseSceneProgress(course:CourseProjection,date:string):CourseS
  }
  const ready=course.courses.find(c=>currentBusiness(c.businessId)&&c.status==='ready')
  if(ready)return scene(ready.unresolvedUpdates.length?'旧课的工具前提，值得再看一遍。':'先听听，谁真的需要这堂课。','样课与实际需求、招生和最终学习效果，是不同的事情。','把价格、班额与支持想清楚',`${ready.name}的原样课和记录都在；新班仍需真实受众、支持资源与保护资金。`,'核对课程受众、班额与原承诺')
- const outline=course.outlines.find(o=>o.job&&(o.job.status==='planned'||o.job.status==='running'))
- if(outline?.job)return scene('先把这堂课的骨架认真写好。','大纲仍在实际准备中，营业准备没有代替样课或招生。','给教学准备留足真正的时间',`${outline.job.startAt}—${outline.job.completeAt}实际补齐大纲；原成本与后续条件继续核对。`,'查看教学大纲与原工作室准备')
+ const outline=course.outlines.find(o=>currentBusiness(o.businessId)&&o.job&&(o.job.status==='planned'||o.job.status==='running'))
+ if(outline?.job){const planned=outline.job.status==='planned';return {...scene(planned?'给这份大纲，留好了真正的日子。':'先把这堂课的骨架认真写好。',planned?'安排已经记下，尚未开始。原资金与注意力先为这段日子留好。':'写作已经开始，仍要等到实际完成。大纲不会代替样课或招生。',planned?'等到这份大纲真正开工':'给教学准备留足真正的时间',`${outline.job.startAt}—${outline.job.completeAt}实际补齐大纲；原成本与后续条件继续核对。`,'等这份大纲真正写好'),preparation:{phase:'waiting',businessId:outline.businessId,jobId:outline.job.id},waitDate:planned?outline.job.startAt:outline.job.completeAt}}
+ const preparing=course.businesses.find(b=>b.lifecycle==='preparing')
+ if(preparing){
+  if(preparing.prepared&&course.outlines.some(o=>o.businessId===preparing.id&&o.job?.status==='completed'))return {...scene('第一份大纲，已经认真写完。','准备只是开始；案例、样课和招生各有自己的前提。','决定是否启用这间教室','启用前仍核对原资格、初始产能与自有资金；此刻没有学生、预款或教学收入。','核对条件，启用这间教室'),preparation:{phase:'activate',businessId:preparing.id}}
+  return {...scene('一间小小的教室，先写好第一份教案。','教室分账已经建立。接下来，亲自决定谁来写、哪天开始。','把值得教的事认真理一遍','大纲准备需要¥100、1点和7日，实际完成后再决定下一步。','选择执笔人和开工日'),preparation:{phase:'outline',businessId:preparing.id}}
+ }
+ const firstPlan=course.businesses.find(b=>b.lifecycle==='operating'&&!course.courses.some(c=>c.businessId===b.id)&&course.outlines.some(o=>o.businessId===b.id&&o.job?.status==='completed'))
+ if(firstPlan)return {...scene('第一份教案留下了，想想谁会需要它。','教室已经启用；接下来选一个真正做过的案例，构思第一堂课。','从自己的真实经历开始','选择案例、形式与主题，再核对素材使用范围。方案不等于样课，更没有自动招生或收费。','挑选案例，构思第一堂课'),recordId:firstPlan.id+'-define'}
  if(course.businesses.length)return scene('一间小小的教室，先从准备开始。','资金、案例、大纲、样课和工具资格，各有自己的前提。','翻看已经做过的准备','已有工作室与历史原账继续保留；新的课和学员仍需你明确选择。','核对课程准备、案例与原账')
+ if(date>=course.catalog.availableAt)return {...scene('把做过的事，变成值得教的一堂课。','先给一间小教室留出余地，不急着向任何人收费。','给教室留一笔自己的钱','自选转入资本，再安排真实大纲；样课、招生和收入都还没有发生。','决定给教室留多少钱'),preparation:{phase:'fund'}}
  return null
 }

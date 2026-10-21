@@ -1,0 +1,30 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/ui/course-preparation.test.tsx src/ui/course-scene-progress.test.ts --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/course-preparation.test.tsx (5 tests | 5 skipped) 20941ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/course-preparation.test.tsx [ src/ui/course-preparation.test.tsx ]
+Error: Hook timed out in 20000ms.
+If this is a long-running hook, pass a timeout value as the last argument or configure it globally with "hookTimeout".
+ ❯ src/ui/course-preparation.test.tsx:20:1
+     18|
+     19| let beforeStudio:GameRun
+     20| beforeAll(()=>{
+       | ^
+     21|  const codec=createCampaignCodec(),original=codec.import(source),first…
+     22|  let run=createCampaignRun({runId:original.runId,actorId:original.acto…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  16 passed | 5 skipped (21)
+   Start at  05:26:52
+   Duration  48.28s (tests 95%, import 4%, transform 1%)
+

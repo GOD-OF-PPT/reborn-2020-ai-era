@@ -1,7 +1,7 @@
 import {courseNeedsRecovery} from './course-scene-progress.ts'
 import {AgentSupportChoice,agentSupportMode,supportModeText,type SupportSelection} from './AgentSupportChoice.tsx'
 import {ResourceSelect} from './ResourceSelect.tsx'
-import { useState } from 'react';
+import { useEffect,useRef,useState } from 'react';
 import {BusinessLedger,WorkflowOverview} from './BusinessLedger.tsx';
 import type { GamePanelProps } from './game-types.ts';
 import { CommandButton } from './CommandButton.tsx';
@@ -9,11 +9,19 @@ import { moneyText, reasonText, lifecycleText } from './game-text.ts';
 import { parseMoneyInput } from './money-input.ts';
 import { addDays } from '../core/calendar.ts';
 import { quarterLimit } from '../core/operations-calendar.ts';
+import {revealBookTarget} from './ScreenBook.tsx';
 const products: Record<string, string> = { intro_recorded: '入门录播 · 规模与基础目标', practical_cohort: '垂直实操班 · 案例与作业', enterprise_training: '企业内训 · 深交付与客户关系' };
 const stateText: Record<string, string> = { draft: '待制作样课', building: '样课制作中', ready: '可安排教学', retired: '已停售', open: '报名中', teaching: '分阶段交付中', remedy: '需要补支持或退款', winding_down: '旧承诺收尾中', settling: '费用/退款待结清', closed: '班期已结清', pending: '待交付与反馈', helped: '学习目标已兑现', needs_recovery: '需要补交付', refunded: '已退款', partial: '已退未交付部分', planned: '已预留，尚未开始', running: '进行中', completed: '已实际完成', interrupted: '已中断', cancelled: '已取消' };
 const blocked = (p: GamePanelProps) => p.view.busy || p.view.readOnly || p.view.hasCandidate || p.view.saveStatus === 'conflict';
-export function CoursePanel(props: GamePanelProps) { const v = props.features.course, [capital, setCapital] = useState('20000'); if (!v)
-    return <p>当前存档没有课程经营。</p>; const business = v.businesses.find(b => b.lifecycle !== 'closed') ?? v.businesses[0]; return <div className="stack-lg route-workspace course-workspace"><div className="route-introduction"><p className="eyebrow">知识产品与履约 · 本局虚构模拟</p><h2>课程与学员</h2><p>真实案例、工具资格和样课先到位，再决定价格、班额与答疑。预售收款全额受保护，实际教学阶段完成后才确认收入。</p><details className="route-boundaries"><summary>课程权利、维护与本局模拟边界</summary><p className="field-help">不接现实招生或支付。维护修订免费惠及原承诺学员，同一知识产品不能向同一人重复收费；新进阶产品须另有需求研究和交付。</p></details></div>{!business || business.lifecycle === 'closed' ? <section className="panel"><h3>准备课程工作室</h3><label className="field">个人投入的自有资金（元）<input inputMode="decimal" value={capital} onChange={e => setCapital(e.target.value)}/></label><p>公司账户独立记账，至少2000元启动。资金转移不是费用或收入；每月100元维护按实际日期发生。课程从2022-11-30公开工具节点后准备，具体使用工具仍需本局访问资格。</p><CommandButton {...props} kind="OpenCourseStudio" payload={{ capitalFen: parseMoneyInput(capital) ?? 0 }} label="以自有资金准备课程工作室" confirm primary/></section> : <CourseBusiness key={business.id} {...props} businessId={business.id}/>}<CourseArchive {...props}/></div>; }
+export function CoursePanel(props: GamePanelProps&{initialFocusId?:string}) {
+ const v=props.features.course,[capital,setCapital]=useState('20000'),panel=useRef<HTMLDivElement>(null),focus=useRef<HTMLAnchorElement>(null)
+ useEffect(()=>{const id=props.initialFocusId,target=id?document.getElementById(id):null;if(id&&target&&panel.current?.contains(target)&&focus.current)revealBookTarget(focus.current,id)},[props.initialFocusId])
+ if(!v)return <p>当前存档没有课程经营。</p>
+ const business=v.businesses.find(b=>b.lifecycle!=='closed')??v.businesses[0]
+ return <div ref={panel} className="stack-lg route-workspace course-workspace"><div className="route-introduction"><p className="eyebrow">知识产品与履约 · 本局虚构模拟</p><h2>课程与学员</h2><p>真实案例、工具资格和样课先到位，再决定价格、班额与答疑。预售收款全额受保护，实际教学阶段完成后才确认收入。</p><details className="route-boundaries"><summary>课程权利、维护与本局模拟边界</summary><p className="field-help">不接现实招生或支付。维护修订免费惠及原承诺学员，同一知识产品不能向同一人重复收费；新进阶产品须另有需求研究和交付。</p></details></div>
+ {props.initialFocusId?<a ref={focus} className="scene-text-action" href={'#'+encodeURIComponent(props.initialFocusId)}>翻到这次准备的案例与课程方案 ↗</a>:null}
+ {!business||business.lifecycle==='closed'?<section className="panel"><h3>准备课程工作室</h3><label className="field">个人投入的自有资金（元）<input inputMode="decimal" value={capital} onChange={e=>setCapital(e.target.value)}/></label><p>公司账户独立记账，至少2000元启动。资金转移不是费用或收入；每月100元维护按实际日期发生。课程从2022-11-30公开工具节点后准备，具体使用工具仍需本局访问资格。</p><CommandButton {...props} kind="OpenCourseStudio" payload={{capitalFen:parseMoneyInput(capital)??0}} label="以自有资金准备课程工作室" confirm primary/></section>:<CourseBusiness key={business.id} {...props} businessId={business.id}/>}<CourseArchive {...props}/></div>
+}
 function CourseArchive(props:GamePanelProps){const v=props.features.course!,closed=v.businesses.filter(b=>b.lifecycle==='closed');return closed.length?<details className="panel business-archive"><summary>已收尾课程企业的历史（{closed.length}）</summary>{closed.map(b=><article key={b.id}><h3>{b.company?'课程企业':'课程分账'} · {b.id.slice(-6)}</h3><p>原业务累计确认收入{moneyText(b.metrics.incomeFen)}，累计成本{moneyText(b.metrics.costFen)}；这是历史账目，不是本季新增回款。</p>{v.cohorts.filter(co=>v.courses.some(c=>c.id===co.courseId&&c.businessId===b.id)).map(co=><p key={co.id}>{co.startAt}班期 · {stateText[co.status]} · 原学员{co.students.length}人 · 支持约定{co.supportCompleteAt}。</p>)}</article>)}</details>:null}
 
 function CourseBusiness(props: GamePanelProps & {

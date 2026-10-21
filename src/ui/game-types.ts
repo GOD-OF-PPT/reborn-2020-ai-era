@@ -14,11 +14,12 @@ import type { GameController,GameSnapshot } from '../application/game-controller
 import type { WorkbenchProjection } from '../application/workbench-projection.ts'
 import type { projectFirstOrder } from '../application/first-order.ts'
 import type { projectMarket } from '../core/market-projection.ts'
+import type {VideoSceneTarget} from './video-scene-progress.ts'
 export type PlayingView=NonNullable<GameSnapshot['view']>
 export interface PlayFeatures {readonly journey?:(NonNullable<ReturnType<typeof projectJourney>>&{ending?:EndingProjection|null})|null;readonly life:LifeProjection;readonly story:StoryProjection;readonly deepseek:DeepseekProjection;readonly relay:RelayProjection;readonly routines:RoutineProjection;readonly course:CourseProjection;readonly video:VideoProjection;readonly firstOrder:ReturnType<typeof projectFirstOrder>;readonly market:NonNullable<ReturnType<typeof projectMarket>>;readonly workbench:WorkbenchProjection}
 export type RequestCommand=(kind:string,payload:unknown,label:string,confirm?:boolean)=>void
 export type LifeSceneMode='person'|'rest'|'workspace'
-export interface SceneTarget {accountId?:string;personId?:LifePerson;lifeSelection?:LifeSceneMode;deepseekPane?:'ecosystem'|'equity';recordId?:string}
+export interface SceneTarget {accountId?:string;personId?:LifePerson;lifeSelection?:LifeSceneMode;deepseekPane?:'ecosystem'|'equity';recordId?:string;videoTarget?:VideoSceneTarget}
 export type NavigateScene=(screen:Screen,target?:SceneTarget)=>void
 export interface GamePanelProps {readonly controller:GameController;readonly view:PlayingView;readonly features:PlayFeatures;readonly request:RequestCommand;readonly accountId:string;readonly textOnly?:boolean}
 export interface ConfirmIntent {readonly command:CommandEnvelope;readonly label:string}

@@ -1,0 +1,1 @@
+我感觉现在最大的问题是交互不清晰，不像一个游戏，像一个软件任务， [$game-studio:game-studio](/Users/gordon/.codex/plugins/cache/openai-curated-remote/game-studio/0.1.2/skills/game-studio/SKILL.md) 调研竞品游戏的交互/UI/TA形成可以指导的经验写入agentmd，然后实施优化

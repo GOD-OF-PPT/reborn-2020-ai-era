@@ -5,6 +5,11 @@ const GAP=48
 const controls='button,a[href],input,select,textarea,summary,[tabindex]'
 type Chapter={title:string;page:number;choice:boolean}
 
+/** A descendant requests original-page navigation even when its link is off-page and inert. */
+export function revealBookTarget(from:HTMLElement,id:string){
+ from.closest('.screen-book')?.dispatchEvent(new CustomEvent('book-reveal-target',{detail:id}))
+}
+
 /** Original children stay mounted: turning a page never discards a form draft. */
 export function ScreenBook({children,label='这一册',className='',choiceNavigation=false}:{children:ReactNode;label?:string;className?:string;choiceNavigation?:boolean}){
  const viewport=useRef<HTMLDivElement>(null),flow=useRef<HTMLDivElement>(null),frame=useRef<HTMLDivElement>(null)
@@ -65,13 +70,9 @@ export function ScreenBook({children,label='这一册',className='',choiceNaviga
   if(target.closest('input,textarea,select,[contenteditable=true]'))return
   if(event.key==='PageDown'||event.key==='PageUp'){event.preventDefault();turn(pageRef.current+(event.key==='PageDown'?1:-1),true)}
  }
- const followAnchor=(event:MouseEvent<HTMLDivElement>)=>{
-  if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return
-  const anchor=event.target instanceof Element?event.target.closest<HTMLAnchorElement>('a[href^="#"]'):null,content=flow.current
-  if(!anchor||!content)return
-  let id:string;try{id=decodeURIComponent(anchor.getAttribute('href')!.slice(1))}catch{return}
+ const revealTarget=useCallback((id:string)=>{
+  const content=flow.current;if(!content)return
   const target=document.getElementById(id);if(!target||!content.contains(target))return
-  event.preventDefault()
   for(let parent:HTMLElement|null=target;parent&&parent!==content;parent=parent.parentElement)if(parent instanceof HTMLDetailsElement)parent.open=true
   const rect=target.getClientRects()[0],window=viewport.current!.getBoundingClientRect();if(!rect)return
   const next={width:window.width,height:window.height,pages:bookPageCount(content.scrollWidth,window.width,GAP)}
@@ -83,6 +84,29 @@ export function ScreenBook({children,label='这一册',className='',choiceNaviga
    target.tabIndex=-1;if(!tabs.current.get(target)!.inert)target.inert=false
    target.focus({preventScroll:true})
   })
+ },[turn])
+ useLayoutEffect(()=>{
+  const book=frame.current!;let scheduled=0
+  const reveal=(event:Event)=>{
+   if(event.target!==book||!(event instanceof CustomEvent)||typeof event.detail!=='string')return
+   const id=event.detail,target=document.getElementById(id),content=flow.current
+   if(!target||!content?.contains(target))return
+   for(let parent:HTMLElement|null=target;parent&&parent!==content;parent=parent.parentElement)if(parent instanceof HTMLDetailsElement)parent.open=true
+   cancelAnimationFrame(scheduled)
+   // Opening a section changes its columns. Let the existing book measurement
+   // commit before resolving the target page, rather than using its closed page.
+   scheduled=requestAnimationFrame(()=>{scheduled=requestAnimationFrame(()=>{if(target.isConnected&&flow.current?.contains(target))revealTarget(id)})})
+  }
+  book.addEventListener('book-reveal-target',reveal)
+  return()=>{book.removeEventListener('book-reveal-target',reveal);cancelAnimationFrame(scheduled)}
+ },[revealTarget])
+ const followAnchor=(event:MouseEvent<HTMLDivElement>)=>{
+  if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return
+  const anchor=event.target instanceof Element?event.target.closest<HTMLAnchorElement>('a[href^="#"]'):null
+  if(!anchor)return
+  let id:string;try{id=decodeURIComponent(anchor.getAttribute('href')!.slice(1))}catch{return}
+  const target=document.getElementById(id);if(!target||!flow.current?.contains(target))return
+  event.preventDefault();revealTarget(id)
  }
  const choices=chapters.filter(chapter=>chapter.choice)
  const decisionHint=choices.length===1?'按 1 核对这个念头':choices.length>1?`按 1—${choices.length} 选择，先看清再决定`:'选择一个念头，先看清再决定'

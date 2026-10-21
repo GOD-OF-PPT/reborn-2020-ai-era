@@ -1,0 +1,45 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/ui/course-preparation.test.tsx src/ui/course-scene-progress.test.ts --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/course-scene-progress.test.ts (16 tests | 2 failed) 40012ms
+   × shows an all-refund ending as the actual consequence rather than a successful learning promise 9538ms
+   × keeps both retained learners and partial refunds visible after the actual class closes 5477ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/course-scene-progress.test.ts > shows an all-refund ending as the actual consequence rather than a successful learning promise
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/course-scene-progress.test.ts:64:1
+     62|  expect(courseSceneProgress(p.view(),'2023-07-01')?.title).not.toConta…
+     63| })
+     64| it('shows an all-refund ending as the actual consequence rather than a…
+       | ^
+     65|  const p=path(),{co,people}=p.teach()
+     66|  p.h.send('RefundCourseLearners',{cohortId:co.id,personIds:people,reas…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/ui/course-scene-progress.test.ts > keeps both retained learners and partial refunds visible after the actual class closes
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/course-scene-progress.test.ts:75:1
+     73|  expect(JSON.stringify(p.view())).toBe(publicBefore);expect(p.h.codec.…
+     74| })
+     75| it('keeps both retained learners and partial refunds visible after the…
+       | ^
+     76|  const p=path(),{co,people}=p.teach()
+     77|  p.h.send('RefundCourseLearners',{cohortId:co.id,personIds:[people[0]!…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  2 failed | 19 passed (21)
+   Start at  05:31:25
+   Duration  46.82s (tests 97%, import 2%, transform 1%)
+

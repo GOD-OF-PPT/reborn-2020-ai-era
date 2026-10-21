@@ -1,0 +1,79 @@
+{
+  "scope": "D11 App-only auxiliary preparation retention handoff. No commit, browser/compatibility or broad checks by this agent.",
+  "state": "ready_for_root_App_video_target_integration",
+  "ownedSource": [
+    {
+      "path": "src/ui/App.tsx",
+      "bytes": 32250,
+      "sha256": "6720338976240e278320289db3fbe78530ee80f732bbdd80eec423fa2135bf61"
+    },
+    {
+      "path": "src/ui/App.preparation-save.test.tsx",
+      "bytes": 9501,
+      "sha256": "6994fc9124ad6cacc76f22fbf97b6bea4722da97b4fa186f3eca493ff85af9d6"
+    }
+  ],
+  "unchangedSmoke": {
+    "path": "src/ui/App.test.tsx",
+    "bytes": 541,
+    "sha256": "c8dc4ff78a47bf7a5d1e0dbe373e5aa05df2ac78a1909901cedf3d92139fdb25"
+  },
+  "policy": {
+    "actualCommand": "LicenseCourseMaterials",
+    "nonexistentExample": "GrantCourseMaterials",
+    "screen": "course",
+    "onlyAfterAtomicSaved": true,
+    "sameRunScreenAccountAndOpenBook": true,
+    "originalBookMustStillBeOpen": true,
+    "uiEpochPreventsClosedReopenedOrAccountRoundTripRetaining": true,
+    "readOnlyCandidateSavingUnsavedConflictDuplicateRejectedDoNotRetain": true,
+    "otherSuccessfulCommandsKeepOriginalCloseBehavior": true,
+    "whitelistDoesNotAuthorizeOrExecuteAnyNextStep": true
+  },
+  "implementation": [
+    "Command confirmation stores the original UI workspace context; direct and confirmed submissions use the same captured context.",
+    "Only the whitelisted saved licence preparation can keep an already-open original book. Original same-run/new-revision/saved/no-candidate committedEcho gate remains.",
+    "The saved handler has no global account/epoch early return. Source account/epoch only decide retention; ordinary successful feedback keeps the original run/screen/committedEcho path.",
+    "Failure/conflict still closes the workspace and keeps the original candidate/error handling. Retry explicitly cannot reopen a book; its original saved echo is still available.",
+    "The keyed scene-workspace-content remains stable when the conditional saved-preparation status appears, preserving CoursePanel/CourseBusiness local draft state.",
+    "The in-book saved status displays the original sceneReceipt text and says preparation is arranged, the filled content remains, and the licence task still needs its scheduled completion."
+  ],
+  "verification": {
+    "finalTerminal": {
+      "path": "goal-1/evidence/t17-acceptance-16/app-preparation-check-r2/complete.json",
+      "bytes": 450,
+      "sha256": "abc68652eae697ef8faf3151cba0e4b69cb11518873b1e9c371e3a37eb47ceb2"
+    },
+    "finalVitest": {
+      "path": "goal-1/evidence/t17-acceptance-16/app-preparation-check-r2/vitest.json",
+      "bytes": 2635,
+      "sha256": "e15b475106c8f1c2365e51291d151119fddf0649aa8294b8451269e3571d5a56"
+    },
+    "finalConsole": {
+      "path": "goal-1/evidence/t17-acceptance-16/app-preparation-check-r2/console.txt",
+      "bytes": 882,
+      "sha256": "6f4a6984013e1a7cee064a9ca9ec2f63f864361d9c7dc0c80d8447e56b2e6e19"
+    },
+    "actualExitCode": 0,
+    "files": 2,
+    "assertions": 5,
+    "passed": 5,
+    "other": 0,
+    "elapsedSeconds": 4.75,
+    "watchedSourcesUnchanged": true,
+    "fixtureBoundary": "The focused test earns a paid licensed video case and course preparation through original commands in the existing isolated course fixture. Its wages/living/maintenance and funds are fixture preconditions; this is not a normal campaign or Chrome acceptance.",
+    "actualChecks": [
+      "Original LicenseCourseMaterials preview1point/30000fen, actual one-time cash/AP change, runningJan1—Jan8 licence task, no automatic DefineCourse.",
+      "Strict command allowlist and run/screen/account/open/epoch/readOnly/candidate/save-status boundaries.",
+      "Actual head.put-success/transaction.abort leaves physical old bytes and old visible budget/accounts; original candidate retry saves exact candidate and resubmission is duplicate without another charge.",
+      "After retry the book remains closed while committedEcho/savedSceneResult remain available, including stale-retention contexts."
+    ],
+    "priorRound": "R1 was also5/5, then code review removed the overbroad saved account/epoch early return. R1 original output remains unchanged; R2 is the final result for this handoff."
+  },
+  "rootFollowup": [
+    "Root now owns App.tsx again and can append videoTarget wiring. Keep the stable workspace-content key and captured workspace origins in both confirmation/direct/retry paths.",
+    "Root owns NarrativeScene/CoursePanel/game-types and corresponding stable course preparation key, and will run final type/build after integration.",
+    "Actual typed form mount/value/focus preservation and visible in-book saved feedback still need root current-window Chrome verification. Component policy and real transaction tests do not replace it."
+  ],
+  "changesOutsideOwnership": "Only the two listed source files and fresh root16 evidence were written. App.test.tsx, core/application/content/persistence/schema/dependencies and old evidence were not changed by this agent."
+}

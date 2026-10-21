@@ -1,0 +1,39 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/ui/course-preparation.test.tsx --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/course-preparation.test.tsx (5 tests | 1 failed) 16862ms
+   × shows picking as picking, never a completed outline or a default money/resource commitment 63ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/course-preparation.test.tsx > shows picking as picking, never a completed outline or a default money/resource commitment
+TypeError: Cannot read properties of undefined (reading 'journey')
+ ❯ journeyIntent src/ui/journey-intent.ts:5:56
+      3| /** A task's far deadline cannot skip the intervening costs of finite …
+      4| export function journeyIntent(view:PlayingView,kind:string,payload:unk…
+      5|  const next=(view.features as unknown as PlayFeatures).journey?.nextTa…
+       |                                                        ^
+      6|  if(view.phase==='epilogue'&&kind==='AdvanceTime'&&next){
+      7|   const target=typeof payload==='object'&&payload!==null&&'date' in pa…
+ ❯ CommandButton src/ui/CommandButton.tsx:6:15
+ ❯ Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:10371:18
+ ❯ renderWithHooks node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:5361:19
+ ❯ renderElement node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:5796:23
+ ❯ retryNode node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:6783:21
+ ❯ renderNodeDestructive node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:6717:11
+ ❯ renderNode node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:7268:18
+ ❯ renderChildrenArray node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:7029:11
+ ❯ retryNode node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:6796:13
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 passed (5)
+   Start at  05:13:55
+   Duration  18.43s (tests 94%, import 4%, transform 2%)
+
