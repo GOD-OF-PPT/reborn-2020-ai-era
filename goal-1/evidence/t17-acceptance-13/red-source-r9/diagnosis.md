@@ -1,0 +1,1 @@
+R9真实26文件171中170过/1新用例失败：原signal155仍有真实STORY_RISK_DECISION_PENDING，UI正确优先attention，测试未进入欲验证的非暂停风险fallback。修复测试前提：先断言真实暂停保留，再通过原AcknowledgeStoryPause实际提交（不推进日期/不解决风险/不扩大权限），刷新当前snapshot后验证active风险路径及明确有界历史排序。不是仅放宽期望为attention、改生产或删风险断言。原红源/日志保持。

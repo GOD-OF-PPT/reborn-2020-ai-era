@@ -55,10 +55,10 @@ const closingStories:Record<Exclude<Screen,'room'|'routes'>,{title:string;open:s
 }
 
 function Choice({title,line,label,onClick,secondary=false,caption}:{title:string;line:string;label:string;onClick:()=>void;secondary?:boolean;caption?:string}){
- return <button type="button" className={'scene-choice'+(secondary?' scene-choice-secondary':'')} onClick={onClick} aria-label={label}><span className="scene-choice-overline">一个念头</span><strong data-book-chapter={title}>{title}</strong><span className="scene-choice-line">{line}</span><span className="scene-choice-end">{caption??label}<span aria-hidden="true">↗</span></span></button>
+ return <button type="button" className={'scene-choice'+(secondary?' scene-choice-secondary':'')} data-interaction="inspect" onClick={onClick} aria-label={label}><span className="scene-choice-overline">查看与翻阅</span><strong data-book-chapter={title}>{title}</strong><span className="scene-choice-line">{line}</span><span className="scene-choice-end">{caption??label}<span aria-hidden="true">↗</span></span></button>
 }
 function Action({p,kind,payload,title,line,label,confirm=true}:{p:GamePanelProps;kind:string;payload:unknown;title:string;line:string;label:string;confirm?:boolean}){
- return <CommandButton {...p} kind={kind} payload={payload} label={label} confirm={confirm} className="scene-action"><span className="scene-choice-overline">由你决定</span><strong data-book-chapter={title}>{title}</strong><span className="scene-choice-line">{line}</span><span className="scene-choice-end">{label}<span aria-hidden="true">→</span></span></CommandButton>
+ return <CommandButton {...p} kind={kind} payload={payload} label={label} confirm={confirm} className="scene-action"><span className="scene-choice-overline" data-interaction="decide">作出决定</span><strong data-book-chapter={title}>{title}</strong><span className="scene-choice-line">{line}</span><span className="scene-choice-end">{label}<span aria-hidden="true">→</span></span></CommandButton>
 }
 
 /** The visible button owns every preview and guard; a number never submits a command directly. */

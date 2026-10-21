@@ -20,14 +20,16 @@ it('renders a read-only room without advancing, including delivery and end-of-ra
   const navigate=()=>{throw Error('UI_RENDER_MUST_NOT_NAVIGATE')}
   const common={controller,request,accountId:'personal',headingRef:null,notice:null,onNavigate:navigate,onPeople:navigate,onYear:navigate}
   const initial=renderToStaticMarkup(<CinematicRoom {...common} view={view} features={features}/>)
-  expect(initial).toContain('电脑 · 经营')
+  expect(initial).toContain('眼前这一幕')
+  expect(initial).toContain('环顾房间')
   expect(initial).toContain('2020-01-01')
-  expect(initial).toContain('推进下一节点')
+  expect(initial).toContain('接下这笔手工单')
+  expect(initial).not.toContain('推进下一节点')
   expect(initial).not.toContain('林舟</strong>')
   // These are explicit UI projections, not fabricated normal campaign completion evidence.
   const delivery={...features,workbench:{...features.workbench,progression:{...features.workbench.progression,requiresDelivery:true}}}
   const waiting=renderToStaticMarkup(<CinematicRoom {...common} view={view} features={delivery}/>)
-  expect(waiting).toContain('处理这份交付')
+  expect(waiting).toContain('查看这份待交付的作品')
   expect(waiting).not.toContain('推进下一节点')
   const ended={...features,workbench:{...features.workbench,atQuarterEnd:true}}
   const final=renderToStaticMarkup(<CinematicRoom {...common} view={{...view,date:'2025-12-31'}} features={ended}/>)

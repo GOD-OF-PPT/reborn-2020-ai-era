@@ -1,4 +1,5 @@
-import {useEffect,useState,type Ref,type ReactNode} from 'react'
+import {useEffect,useRef,useState,type Ref,type ReactNode} from 'react'
+import {RoomMoment} from './RoomMoment.tsx'
 import {SceneJournal} from './SceneJournal.tsx'
 import {sceneSeason,sceneShortcut} from './scene-season.ts'
 import {Dialog} from './Dialog.tsx'
@@ -25,7 +26,8 @@ const inspection:Record<Spot,{speaker:string;line:string;hint:string}>={
 }
 
 export function CinematicRoom(p:Props){
- const [responsibilities,setResponsibilities]=useState(false)
+ const [responsibilities,setResponsibilities]=useState(false),[exploring,setExploring]=useState(false)
+ const momentRoot=useRef<HTMLDivElement>(null)
  const [hovered,setHovered]=useState<Spot|null>(null),[focused,setFocused]=useState<Spot|null>(null)
  const inspected=hovered??focused,spot=spots.find(([screen])=>screen===inspected),look=inspected?inspection[inspected]:null
  const {view,features:f}=p,w=f.workbench
@@ -33,12 +35,17 @@ export function CinematicRoom(p:Props){
  useEffect(()=>{
   const key=(event:KeyboardEvent)=>{
    const target=event.target instanceof Element?event.target:null
-   if(event.defaultPrevented||event.repeat||!target?.closest('#main-content'))return
+   if(event.defaultPrevented||event.repeat||event.isComposing||!target?.closest('#main-content'))return
    const destination=sceneShortcut(event.key,!!target.closest('input,textarea,select,[contenteditable]:not([contenteditable=false])'),!!document.querySelector('dialog[open]'),event.ctrlKey||event.altKey||event.metaKey||event.shiftKey)
-   if(destination){event.preventDefault();p.onNavigate(destination)}
+   if(exploring&&destination){event.preventDefault();p.onNavigate(destination);return}
+   if(!exploring&&/^[1-3]$/.test(event.key)&&destination){
+    const buttons=momentRoot.current?.querySelectorAll<HTMLButtonElement>('.moment-decisions>.command>button,.moment-decisions>button,.moment-wait .clock-main>button')
+    const button=buttons?.[Number(event.key)-1]
+    if(button&&!button.disabled&&!button.inert&&!button.closest('[inert]')){event.preventDefault();button.click()}
+   }
   }
   document.addEventListener('keydown',key);return()=>document.removeEventListener('keydown',key)
- },[p.onNavigate])
+ },[p.onNavigate,exploring])
  const forced=w.events.filter(e=>e.presentation!=='ordinary'||e.isBlocking)
  const debts=w.finance.flatMap(a=>a.obligations.filter(o=>o.remainingFen>0&&o.date<=view.date))
  const shortages=w.finance.filter(a=>a.protectionShortfallFen>0||a.commitmentShortfallFen>0)
@@ -54,17 +61,15 @@ export function CinematicRoom(p:Props){
   ...(f.deepseek?.agreements??[]).map(a=>({id:a.id,screen:'deepseek' as const,text:`明确架空股权 · ${a.shares}/${a.totalShares}股 · 锁定至${a.lockUntil} · ${a.followDecision==='pending'?'跟投待决定，默认不付款':'估值不是可花现金'}`})),
   ...(f.routines?.plans??[]).filter(r=>r.status==='paused'||r.status==='confirmed').map(r=>({id:r.id,screen:'routines' as const,text:`例行计划 · ${r.name} · ${r.status==='paused'?'未来步骤已暂停':'已确认，仍待逐项执行'}`})),
  ]
- return <div className="cinematic-home">
-  <section className="cinematic-stage" aria-label="可探索的住处">
+ return <div ref={momentRoot} className="cinematic-home">
+  <section className="cinematic-stage clarity-stage" data-exploring={exploring?'true':'false'} aria-label="可探索的住处">
    {!p.textOnly?<RoomBackdrop improved={f.life.scene.workspaceCompleted}/>:null}
    <div className="room-vignette" aria-hidden="true"/>
    {spot?<div className="room-attention" aria-hidden="true" style={{left:spot[3]+'%',top:spot[4]+'%'}}/>:null}
-   <header className="room-chapter"><p className="eyebrow">{w.quarter} / 第{season.chapter??'—'}幕</p><h1 ref={p.headingRef} tabIndex={-1}>{view.date==='2020-01-01'?<>如果人生，<br/>可以再来一次。</>:season.thought}</h1><p className="room-exploration-guide">{season.title}</p></header>
-   <SceneJournal p={p} onNavigate={p.onNavigate}/>
-   <nav className="room-objects" aria-label="探索住处">{spots.map(([screen,label,hint,x,y])=><button type="button" className="room-hotspot" key={screen} style={{left:x+'%',top:y+'%'}} aria-label={label} aria-describedby={inspected===screen?'room-inspection-copy':undefined} data-inspected={inspected===screen?'true':undefined} onPointerEnter={()=>setHovered(screen)} onPointerLeave={()=>setHovered(null)} onFocus={()=>{setFocused(screen);setHovered(null)}} onBlur={()=>setFocused(null)} onClick={()=>p.onNavigate(screen)}><span className="hotspot-diamond" aria-hidden="true"/><span><strong>{label}</strong><small>{hint}</small></span></button>)}</nav>
-   <nav className="room-pocket" aria-label="随身记录">{p.onJourney?<button type="button" onClick={p.onJourney}><span aria-hidden="true">◈</span>篇章</button>:null}<button type="button" onClick={()=>p.onPeople()}><span aria-hidden="true">♧</span>人物</button><button type="button" onClick={p.onYear}><span aria-hidden="true">▤</span>年度</button><button type="button" onClick={()=>setResponsibilities(true)}><span aria-hidden="true">◷</span>桌上待办{urgent+commitmentRows.length>0?<b>{urgent+commitmentRows.length}</b>:null}</button></nav>
-   {p.timeEcho?<p className="room-action-note room-time-note">{p.timeEcho}</p>:p.notice?<p className="room-action-note" role="status">{p.notice}</p>:null}
-   <footer className="room-narrative" data-inspecting={look?'true':undefined}><div id="room-inspection-copy"><span className="narrative-speaker">{look?.speaker??'你 · 内心独白'}</span><p>{look?.line??(f.life.scene.workspaceCompleted?'桌椅与照明已经改善，投入成了每天用得上的东西。':view.date==='2020-01-01'?'你在旧房间醒来。电脑还亮着，日历回到了2020年。':season.line)}</p><small>{w.pause?'有一件需要先面对的事。看看桌上待办，再决定如何继续。':w.progression.requiresDelivery?'作品已经完成。下一步，仍要由你决定是否提交。':look?.hint??(w.atQuarterEnd?'这一季留下了自己的结果，旧承诺仍会延续。':'一切，都从眼前的一个选择开始。')}</small><nav className="room-intentions" aria-label="此刻的四个念头">{([['quarter','安排日子'],['routes','试试另一条路'],['life','见见在意的人'],['memory','翻翻旧记忆']] as const).map(([screen,label],i)=><button type="button" key={screen} onClick={()=>p.onNavigate(screen)}><kbd>{i+1}</kbd>{label}</button>)}</nav></div><div className="room-next"><button type="button" className="primary" onClick={()=>p.onNavigate('quarter')}>{w.progression.requiresDelivery?'处理这份交付':'安排本季的生活'} <span aria-hidden="true">→</span></button>{canAdvance?<ClockAdvance p={p} date={nextDate!} label={(w.progression.nextQuarterDate?'进入下一季 · ':'推进下一节点 · ')+nextDate} room/>:null}</div></footer>
+   {exploring?<><header className="room-chapter"><p className="eyebrow">{w.quarter} / 第{season.chapter??'—'}幕</p><h1 ref={p.headingRef} tabIndex={-1}>房间里，还有别的可能。</h1><p className="room-exploration-guide">走近一件物品，看看它带你去哪里。</p></header>
+   <nav className="room-objects" aria-label="探索住处">{spots.map(([screen,label,hint,x,y])=><button type="button" className="room-hotspot" key={screen} style={{left:x+'%',top:y+'%'}} aria-label={label} aria-describedby={inspected===screen?'room-inspection-copy':undefined} data-inspected={inspected===screen?'true':undefined} onPointerEnter={()=>setHovered(screen)} onPointerLeave={()=>setHovered(null)} onFocus={()=>{setFocused(screen);setHovered(null)}} onBlur={()=>setFocused(null)} onClick={()=>p.onNavigate(screen)}><span className="hotspot-diamond" aria-hidden="true"/><span><strong>{label}</strong><small>{hint}</small></span></button>)}</nav></>:<RoomMoment p={p} headingRef={p.headingRef} feedback={p.timeEcho??p.notice} onNavigate={p.onNavigate} onExplore={()=>setExploring(true)}/>}
+   <nav className="room-pocket" aria-label="随身记录"><SceneJournal p={p} onNavigate={p.onNavigate} compact/>{p.onJourney?<button type="button" onClick={p.onJourney}><span aria-hidden="true">◈</span>篇章</button>:null}<button type="button" onClick={()=>p.onPeople()}><span aria-hidden="true">♧</span>人物</button><button type="button" onClick={p.onYear}><span aria-hidden="true">▤</span>年度</button><button type="button" onClick={()=>setResponsibilities(true)}><span aria-hidden="true">◷</span>桌上待办{urgent+commitmentRows.length>0?<b>{urgent+commitmentRows.length}</b>:null}</button></nav>
+   {exploring?<footer className="room-narrative" data-inspecting={look?'true':undefined}><div id="room-inspection-copy"><span className="narrative-speaker">{look?.speaker??'你 · 眼前的房间'}</span><p>{look?.line??'电脑、门外、书架和床边，连接着四种不同的日子。'}</p><small>{look?.hint??'这里是自由探索。翻看不花钱，也不替你接受承诺。'}</small></div><div className="room-next"><button type="button" className="primary" onClick={()=>setExploring(false)}>回到眼前这件事 →</button>{canAdvance?<ClockAdvance p={p} date={nextDate!} label={'继续原来的日子 · '+nextDate} room/>:null}</div></footer>:null}
    <p className="room-caption"><span>{f.life.scene.workspaceCompleted?'已改善的住处':'普通出租屋'} · {view.date}</span><span>模拟市场 / 明确架空股权</span></p>
   </section>
   {responsibilities?<Dialog title="桌上的牵挂" onClose={()=>setResponsibilities(false)} className="responsibility-book"><section id="room-responsibilities" className="room-responsibilities" aria-label="桌上全部待办与持续责任"><header className="section-heading"><div><p className="eyebrow">别忘了，已经答应的事</p><h2>桌上，还有这些牵挂。</h2></div><button type="button" onClick={()=>p.onNavigate('quarter')}>打开本季安排 →</button></header>

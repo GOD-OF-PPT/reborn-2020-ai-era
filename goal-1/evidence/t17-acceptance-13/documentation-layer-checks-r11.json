@@ -1,0 +1,344 @@
+{
+  "scope": "Documentation/specification checks and preservation-evidence layering only; not engine, Chrome, compatibility, visuals, user understanding, full business or publication acceptance. No audit started.",
+  "startedAt": "2026-10-21T10:47:12.855709+00:00",
+  "completedAt": "2026-10-21T10:48:42.647561+00:00",
+  "repositoryReadbackBeforeWrites": {
+    "head": "18d8ce3d0b462d417e0737e079904503ff1873a6",
+    "branch": "main",
+    "origin": "https://github.com/GOD-OF-PPT/reborn-2020-ai-era.git",
+    "repository": {
+      "defaultBranchRef": {
+        "name": "main"
+      },
+      "nameWithOwner": "GOD-OF-PPT/reborn-2020-ai-era",
+      "url": "https://github.com/GOD-OF-PPT/reborn-2020-ai-era",
+      "visibility": "PUBLIC"
+    }
+  },
+  "checks": [
+    {
+      "id": "docs",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_docs.py",
+        "--text-only"
+      ],
+      "exitCode": 1,
+      "elapsedSeconds": 83.33069205284119,
+      "stdout": {
+        "path": "goal-1/evidence/t17-acceptance-13/documentation-docs-r11.stdout.txt",
+        "bytes": 181,
+        "sha256": "e9dcd279faaa9a4ca3b69b856b8617ced073a36b57b5489365a9e9877d20786f",
+        "ancestorGuardPassed": true
+      },
+      "stderr": {
+        "path": "goal-1/evidence/t17-acceptance-13/documentation-docs-r11.stderr.txt",
+        "bytes": 1090,
+        "sha256": "2b05b8fdc5cd47adc93d6cedcf6f8eac006ed75dc9acb7f0ce1cc9bc8457daac",
+        "ancestorGuardPassed": true
+      },
+      "stdoutUtf8": "PENDING ORIGINAL ASSET: assets/concepts/style-01-anime.png\nPENDING ORIGINAL ASSET: assets/concepts/style-02-pixel.png\nPENDING ORIGINAL ASSET: assets/concepts/style-03-cinematic.png\n",
+      "stderrUtf8": "goal-1/evidence/t17-acceptance-13/input.md: broken local link /Users/gordon/.codex/plugins/cache/openai-curated-remote/game-studio/0.1.2/skills/game-studio/SKILL.md\ngoal-1/evidence/t17-acceptance-08/diagnosis-r1/transport-payload.json: invalid JSON (Expecting value: line 1 column 1 (char 0))\ngoal-1/evidence/t17-acceptance-08/matrix-r1/technical_employee-t16-campaign-0/shape-28/recovery-members.json: invalid JSON (Expecting value: line 1 column 1 (char 0))\ngoal-1/evidence/t17-acceptance-08/project-types-r3.json: invalid JSON (Expecting value: line 1 column 1 (char 0))\ngoal-1/evidence/t17-acceptance-09/matrix-r9009/owned-sealed/sealed-evidence.json: invalid JSON ([Errno 2] No such file or directory: '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9009/owned-sealed/sealed-evidence.json')\ngoal-1/evidence/t17-acceptance-09/matrix-r9109/owned-sealed/sealed-evidence.json: invalid JSON ([Errno 2] No such file or directory: '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9109/owned-sealed/sealed-evidence.json')\n"
+    },
+    {
+      "id": "plan",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_plan.py"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.2450110912322998,
+      "stdout": {
+        "path": "goal-1/evidence/t17-acceptance-13/documentation-plan-r11.stdout.txt",
+        "bytes": 281,
+        "sha256": "d6f824acd6fb0127b45e642b6191f00f76ce21c3047d66ae22a6c75b9c60009c",
+        "ancestorGuardPassed": true
+      },
+      "stderr": {
+        "path": "goal-1/evidence/t17-acceptance-13/documentation-plan-r11.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "ancestorGuardPassed": true
+      },
+      "stdoutUtf8": "PASS specification checks: {\"tasks\": 22, \"cases\": 40, \"slices\": 5, \"cash_examples\": 10, \"equity_examples\": 2}\nPASS matrix references and documented course-example structure.\nNot game execution, production-content reachability, browser tests, asset validation or release readiness.\n",
+      "stderrUtf8": ""
+    },
+    {
+      "id": "competitive",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_competitive_design.py"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.27962398529052734,
+      "stdout": {
+        "path": "goal-1/evidence/t17-acceptance-13/documentation-competitive-r11.stdout.txt",
+        "bytes": 208,
+        "sha256": "3968c99b58fce523d7784455ecc2720cb1c5218bd398b07ba3ea30e409cdff03",
+        "ancestorGuardPassed": true
+      },
+      "stderr": {
+        "path": "goal-1/evidence/t17-acceptance-13/documentation-competitive-r11.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "ancestorGuardPassed": true
+      },
+      "stdoutUtf8": "PASS specification checks: {\"sources\": 9, \"decisions\": 10, \"acceptance_cases\": 14, \"work_packages\": 6, \"cash_flows\": 8}\nNot game execution, competitor playtesting, UI validation, or publication verification.\n",
+      "stderrUtf8": ""
+    }
+  ],
+  "classification": {
+    "historicalEmptyJson": [],
+    "historicalNegativeDanglingMarkers": [],
+    "otherOrNewErrors": [
+      "goal-1/evidence/t17-acceptance-13/input.md: broken local link /Users/gordon/.codex/plugins/cache/openai-curated-remote/game-studio/0.1.2/skills/game-studio/SKILL.md",
+      "goal-1/evidence/t17-acceptance-08/diagnosis-r1/transport-payload.json: invalid JSON (Expecting value: line 1 column 1 (char 0))",
+      "goal-1/evidence/t17-acceptance-08/matrix-r1/technical_employee-t16-campaign-0/shape-28/recovery-members.json: invalid JSON (Expecting value: line 1 column 1 (char 0))",
+      "goal-1/evidence/t17-acceptance-08/project-types-r3.json: invalid JSON (Expecting value: line 1 column 1 (char 0))",
+      "goal-1/evidence/t17-acceptance-09/matrix-r9009/owned-sealed/sealed-evidence.json: invalid JSON ([Errno 2] No such file or directory: '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9009/owned-sealed/sealed-evidence.json')",
+      "goal-1/evidence/t17-acceptance-09/matrix-r9109/owned-sealed/sealed-evidence.json: invalid JSON ([Errno 2] No such file or directory: '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9109/owned-sealed/sealed-evidence.json')"
+    ],
+    "planOrCompetitiveFailures": [],
+    "oldEmptyJsonExpectedCount": 3,
+    "oldNegativeMarkersExpectedCount": 2,
+    "classificationRequiresExactIdentityConfirmation": true
+  },
+  "auditCliReadOnlyReview": {
+    "executed": false,
+    "wrapper": "goal-1/evidence/t17-acceptance-13/run-browser-audit-r1.py",
+    "inputDirectory": "goal-1/evidence/t17-acceptance-13",
+    "environmentKey": "NATIVE_EXPORT_INPUT_DIRECTORY",
+    "requiredOutput": "goal-1/evidence/t17-acceptance-13/current-chrome-audit-r1",
+    "command": [
+      "rtk",
+      "proxy",
+      "node",
+      "--experimental-strip-types",
+      "--experimental-transform-types",
+      "scripts/verify_normal_browser_exports.ts",
+      "--output-dir",
+      "goal-1/evidence/t17-acceptance-13/current-chrome-audit-r1"
+    ],
+    "policy": "Wrapper verifies project CWD, rejects sealed/linked enclosing task path and existing fresh output; intent/console/complete exclusively created. Verifier requires explicit input and exactly --output-dir <dir>; selects only root13 top-level chrome-* folders with exports.jsonl, reconstructs all recorded public exports from normal Create, validates literal bytes, source/input stability and folder set. evidenceDirectory refuses ancestor seals/links, tracked evidence roots, committed/existing markers; report flag wx.",
+    "scopeLimit": "Byte replay audits source-labeled exports; import buffers are not fresh saved outcomes; neither browsing/visuals nor human/business acceptance."
+  },
+  "sourceHashes": {
+    "scripts/check_docs.py": "171b555dc9d69afdc5ca55be83e49f2b9fd7e29ab328f7eb25279abfb6ad74b2",
+    "scripts/check_plan.py": "adcf2f90c4c311dc5baf2c99dd4cfe4331dc0c167231d049177360d07a2a56ee",
+    "scripts/check_competitive_design.py": "dc271698a91e36e9ceca6da10cce424a7335862a79afa60edb57042b576cb43b",
+    "goal-1/evidence/t17-acceptance-13/run-browser-audit-r1.py": "319e4a0b1a7b20851d66d016ebce6519e8a669a4a85c0e540a38961c2492d18c",
+    "scripts/verify_normal_browser_exports.ts": "68e7c16c6280c86060686c48554f4dc20481307f5988f972a11e390c03520f87",
+    "scripts/evidence-output.ts": "f16d0d209946822daa44340307eb4fd5766a9b82b1548ef535346b202e01697d"
+  },
+  "existingEvidenceReview": {
+    "old-tree-preservation-final-r10.json": {
+      "bytes": 30490,
+      "sha256": "e0c4bb3828a183756510ad565bc5e0cc6fb8cb2899b8129fd366efbe1d9fddf8",
+      "checked": 16150,
+      "same": 16140,
+      "allowedChangedCount": 10,
+      "unexpectedCount": 0,
+      "baselineGitBlobIntegrityErrors": [],
+      "sealedCollections": [
+        {
+          "root": "goal-1/evidence/t17-acceptance-11",
+          "markerSha256": "afc6c09121f2587dd2379aac0ffcc523ae2f57a1eb14dd6c7df789fbb7c771c1",
+          "expectedMarkerSha256": "afc6c09121f2587dd2379aac0ffcc523ae2f57a1eb14dd6c7df789fbb7c771c1",
+          "markerBytes": 65829,
+          "markerHashMatches": true,
+          "expectedRegularFileCountExcludingMarker": 395,
+          "actualRegularFileCountExcludingMarker": 395,
+          "actualSymlinkCount": 0,
+          "actualDirectoryCount": 50,
+          "selfExcluded": [
+            "sealed-evidence.json"
+          ],
+          "missingFiles": [],
+          "extraFiles": [],
+          "fileByteMismatches": [],
+          "missingSymlinks": [],
+          "extraSymlinks": [],
+          "symlinkMismatches": [],
+          "missingDirectories": [],
+          "extraDirectories": [],
+          "actualHardlinkGroups": [],
+          "expectedHardlinkGroups": [],
+          "otherPhysicalEntries": [],
+          "allPreserved": true
+        },
+        {
+          "root": "goal-1/evidence/t17-relay-ui-post-commit-01",
+          "markerSha256": "be99f6355252a2a62097848f5f5c5202660a4cb1dcfe74d3fbe1b36ec672bf99",
+          "expectedMarkerSha256": "be99f6355252a2a62097848f5f5c5202660a4cb1dcfe74d3fbe1b36ec672bf99",
+          "markerBytes": 2977,
+          "markerHashMatches": true,
+          "expectedRegularFileCountExcludingMarker": 17,
+          "actualRegularFileCountExcludingMarker": 17,
+          "actualSymlinkCount": 0,
+          "actualDirectoryCount": 0,
+          "selfExcluded": [
+            "sealed-evidence.json"
+          ],
+          "missingFiles": [],
+          "extraFiles": [],
+          "fileByteMismatches": [],
+          "missingSymlinks": [],
+          "extraSymlinks": [],
+          "symlinkMismatches": [],
+          "missingDirectories": [],
+          "extraDirectories": [],
+          "actualHardlinkGroups": [],
+          "expectedHardlinkGroups": [],
+          "otherPhysicalEntries": [],
+          "allPreserved": true
+        }
+      ],
+      "method": {
+        "regular": "Each baseline Git blob is read using git cat-file --batch and directly byte-compared to complete physical file. Every parent directory and final regular file is opened O_NOFOLLOW, physical kind and Git executable mode checked.",
+        "symlinks": "Literal readlink bytes only; never follow a referent. All parent directories opened O_NOFOLLOW.",
+        "modeLimit": "Baseline stores Git modes. All physical Git-mode matches and actual permission modes for differences and symlinks are recorded.",
+        "observationManifestSha256": "328992dcbdee13836a4b4de6f539508392dfa18386081c7219859b8aa50bbbcd",
+        "observationManifestEncoding": "Baseline-order observation JSON, sorted keys, compact separators, UTF-8, one LF; digest only for unchanged rows."
+      },
+      "recordedBaselineSha256": "678f39e04ccdadc6a9c537e56b26e09bfec898b0733bb7e1cd2001ba3217a522",
+      "currentSourceSha256": {
+        "src/main.tsx": "667b9259900688413225d7e43a579ae825d4377eefcace6a172e3aae5b0502c6",
+        "src/ui/CinematicRoom.test.tsx": "ec77098628608f5b9b65deb11cf19472e6cf7fada2c8f3612b0a331691f4fcdb",
+        "src/ui/CinematicRoom.tsx": "bbace9b6025078a3c3eda651c26237fece5353037ce93f0f18e14ac084ceaec7",
+        "src/ui/NarrativeScene.tsx": "886fc10827497ed7e16fc7b08be98de7bfd0c704d16b0a7548398fbfd0a37ac8",
+        "src/ui/SceneEcho.tsx": "58a439cbf7f540dfc62d21de638149608394938c32bcecf68b530b4f1c27dd7c",
+        "src/ui/SceneJournal.tsx": "55b05e8aee90cdb08fa167cb8a37a48ab989fe246882742b5e32609a5e34d5b7"
+      },
+      "sourceDifferencesSinceR10": [],
+      "r10ScopeLimit": "Existing direct physical/Git-blob preservation report is valid for its recorded R10 observation. Current R11 source hashes are read here; changed R11 sources require the separately run R11 type/UI/build bridge, not an R10 claim."
+    },
+    "remote-readback-before-commit-r10.json": {
+      "bytes": 11000,
+      "sha256": "c0d43ea5d5ab4862f0e4f1c6f8cdd98804a3354325086477bdd733ad06a98053",
+      "comparisons": {
+        "remoteBytesEqualHead": false,
+        "remoteBytesEqualOpeningBaseline": false,
+        "localHeadMatchesOpeningBaseline": true,
+        "remoteMainEqualsLocalHead": false,
+        "remoteMainMatchesExpected": true,
+        "repositoryMatchesExpected": true
+      },
+      "endReadback": {
+        "localHead": "18d8ce3d0b462d417e0737e079904503ff1873a6",
+        "remoteMainLsRemoteRaw": "9bf4399a5cf50997dbf522a578f1168c5532acbf\trefs/heads/main",
+        "localHeadUnchanged": true,
+        "remoteMainUnchanged": true
+      },
+      "scopeLimit": "Historical before-commit readback at recorded time; not proof of later local commit or remote delivery."
+    }
+  },
+  "pausedRoot12": {
+    "registrationSha256": "c2c535c03cd1832bf4c36153dd9314a07de54d271b3f5a0d1399a02ebb919abe",
+    "registrationStatus": "not_executed",
+    "registrationIsBusinessAcceptance": false,
+    "registrationCounts": {
+      "identities": {
+        "count": 6,
+        "statuses": {
+          "not_executed": 6
+        }
+      },
+      "coreCases": {
+        "count": 288,
+        "statuses": {
+          "not_executed": 288
+        }
+      },
+      "additionalKeyChecks": {
+        "count": 62,
+        "statuses": {
+          "not_executed": 62
+        }
+      },
+      "routineChecks": {
+        "count": 22,
+        "statuses": {
+          "not_executed": 22
+        }
+      },
+      "layers": {
+        "count": 5,
+        "statuses": {
+          "not_executed": 5
+        }
+      }
+    },
+    "handoffSha256": "c58b49fa9359817d44b7f059c4c3b37dc20b1392a1cecb8ac41e2b4200222692",
+    "formerTask": "5c-P1, no game/test/typecheck/matrix/audit executed",
+    "draft": {
+      "path": "goal-1/evidence/t17-acceptance-12/draft/relay-matrix-prefix.ts.snapshot",
+      "bytes": 12943,
+      "sha256": "20567b14dbec8a40010111acef75ed1223a069c9fd31a65e9532064c7078bbfb",
+      "matchesHandoff": true,
+      "originalSourcePathAbsent": true
+    },
+    "scope": "Preserved paused registration/draft only. No compilation, game, test, matrix or independent audit execution."
+  },
+  "writeProtection": {
+    "exclusiveCreate": true,
+    "ancestorChecks": [
+      {
+        "path": "/",
+        "kind": "directory",
+        "mode": "0o755",
+        "sealedEvidenceMarkerPresent": false
+      },
+      {
+        "path": "/Users",
+        "kind": "directory",
+        "mode": "0o755",
+        "sealedEvidenceMarkerPresent": false
+      },
+      {
+        "path": "/Users/gordon",
+        "kind": "directory",
+        "mode": "0o755",
+        "sealedEvidenceMarkerPresent": false
+      },
+      {
+        "path": "/Users/gordon/githome",
+        "kind": "directory",
+        "mode": "0o777",
+        "sealedEvidenceMarkerPresent": false
+      },
+      {
+        "path": "/Users/gordon/githome/reborn-2020-ai-era",
+        "kind": "directory",
+        "mode": "0o755",
+        "sealedEvidenceMarkerPresent": false
+      },
+      {
+        "path": "/Users/gordon/githome/reborn-2020-ai-era/goal-1",
+        "kind": "directory",
+        "mode": "0o755",
+        "sealedEvidenceMarkerPresent": false
+      },
+      {
+        "path": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence",
+        "kind": "directory",
+        "mode": "0o755",
+        "sealedEvidenceMarkerPresent": false
+      },
+      {
+        "path": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-13",
+        "kind": "directory",
+        "mode": "0o755",
+        "sealedEvidenceMarkerPresent": false
+      }
+    ]
+  }
+}
