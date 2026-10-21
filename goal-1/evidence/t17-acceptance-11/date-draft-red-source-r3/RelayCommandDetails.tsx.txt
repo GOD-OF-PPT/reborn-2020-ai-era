@@ -1,0 +1,24 @@
+import type {CommandEnvelope} from '../core/run-types.ts'
+import type {RelayProjection} from '../core/relay-projection.ts'
+import type {WorkerInstance} from '../core/operations-types.ts'
+import {RELAY_JOBS} from '../content/relay.ts'
+import {relayAuditCompletion} from './relay-audit-dates.ts'
+import {relayAuditableMeters} from './relay-scene-progress.ts'
+import {courseResourceLabel} from './course-resource-labels.ts'
+import {moneyText} from './game-text.ts'
+
+/** The caller supplies the same captured public snapshot as the original confirmation. */
+export function RelayCommandDetails({command,relay,workers,accountName}:{command:CommandEnvelope;relay:RelayProjection;workers:readonly WorkerInstance[];accountName:(id:string)=>string}){
+ if(!relay||command.kind!=='StartRelayAudit')return null
+ const payload=command.payload as {periodId?:string;meterId?:string;resources:string[];startAt:string}
+ const meter=payload.meterId?relay.meters.find(m=>m.id===payload.meterId):undefined
+ const period=relay.periods.find(p=>p.id===(payload.periodId??meter?.periodId)),business=relay.businesses.find(b=>b.id===period?.businessId)
+ if(!period||!business)return null
+ const eligible=relayAuditableMeters(relay,period.id).filter(m=>!payload.meterId||m.id===payload.meterId),job=RELAY_JOBS.find(j=>j.id==='relay-meter-audit')!
+ return <section className="confirmation-context relay-audit-terms">
+  <h3>只查这一段已经发生的原账</h3>
+  <p>{period.from}—{period.to}原服务 · {accountName(business.accountId)}支付{moneyText(job.costFen)}。本次覆盖{eligible.length}条已发生且可复核的计量，后续请求不会自动纳入。</p>
+  <p>{payload.resources.map(id=>id==='player-production'?'本人实际维护时间':courseResourceLabel(id,relay.resources,workers)).join('、')} · {payload.startAt}—{relayAuditCompletion(payload.startAt,job.durationDays)??'完成日期待核对'} · 原{job.actionPoints}点与{job.durationDays}日。原工资、服务和支持排程仍继续计算。</p>
+  <p>完成之前不揭示实计用量；完成之后仍要另行确认差额更正。原账保留，更正不等于客户到账，也不把未消费充值或供应贷项变成利润。</p>
+ </section>
+}

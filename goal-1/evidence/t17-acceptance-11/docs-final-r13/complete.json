@@ -1,0 +1,39 @@
+[
+  {
+    "name": "docs",
+    "command": [
+      "rtk",
+      "proxy",
+      "python3",
+      "-B",
+      "scripts/check_docs.py",
+      "--text-only"
+    ],
+    "exitCode": 1,
+    "seconds": 66.32555603981018
+  },
+  {
+    "name": "plan",
+    "command": [
+      "rtk",
+      "proxy",
+      "python3",
+      "-B",
+      "scripts/check_plan.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.1076359748840332
+  },
+  {
+    "name": "competitive",
+    "command": [
+      "rtk",
+      "proxy",
+      "python3",
+      "-B",
+      "scripts/check_competitive_design.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.12503623962402344
+  }
+]

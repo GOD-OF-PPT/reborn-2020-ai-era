@@ -1,0 +1,19 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "node",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "vitest.config.ts",
+    "--maxWorkers",
+    "1",
+    "src/ui/relay-scene-result.test.ts"
+  ],
+  "exitCode": 1,
+  "wallSeconds": 2.8414108753204346,
+  "stdout": "\n RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era\n\n ❯ src/ui/relay-scene-result.test.ts (12 tests | 12 skipped) 577ms\n\n Test Files  1 failed (1)\n      Tests  12 skipped (12)\n   Start at  11:47:40\n   Duration  1.99s (import 37%, tests 34%, transform 28%)\n\n",
+  "stderr": "\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/ui/relay-scene-result.test.ts [ src/ui/relay-scene-result.test.ts ]\nError: {\"kind\":\"RechargeRelayCustomer\",\"payload\":{\"customerId\":\"rly:d9e587b87810a29360466d38d327d20b\",\"amountFen\":100000},\"result\":{\"status\":\"rejected\",\"reasonCodes\":[\"RELAY_RECHARGE_LIMIT\"]}}\n ❯ Object.send src/testing/relay-fixture.ts:22:163\n\n ❯ displayFrames src/ui/relay-scene-result.test.ts:26:4\n ❯ src/ui/relay-scene-result.test.ts:44:23\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n",
+  "scope": "Single small public-relay receipt display test file only; no normal long replay, browser or compatibility."
+}

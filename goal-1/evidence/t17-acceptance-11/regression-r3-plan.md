@@ -1,0 +1,3 @@
+# 中转场景有意义的等待
+
+当前Chrome真实DEV开工r93后观察到原ordinaryNext为次日，逐日用量节点需要过多重复点击。仅前台默认目标采用当前公开任务的反馈日，调用原playableAdvanceDate限制quarterTarget、交付决策、下一季和2025边界，不修改原AdvanceTime内核、日期过程、钱/AP/随机/权限。新scene-clock两边界测试先验，最终24个适用UI文件（161项预计，实际以结果为准）及build重新执行，8文件49原规则/保存当前源同字节桥接；book-layout两多宽测试仍paused，兼容0。正式Chrome最终验证阶段日期与完整Create重放必须实际执行。

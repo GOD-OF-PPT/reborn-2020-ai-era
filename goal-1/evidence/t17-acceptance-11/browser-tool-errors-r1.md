@@ -1,0 +1,7 @@
+# 当前Chrome取证工具过程原错误
+
+浏览器5启动时未绑定browser变量，命名调用ReferenceError后使用文档中agent.browsers.get(5)取得同一连接并命名，未发游戏命令。首次文本填入48000/0，实际textarea在原册另一页且inert；未提交导入。文件选择器实际因扩展未开启fileURL访问拒绝，不更改其权限。第一次粘贴在inert控件上因焦点失败，翻到文本页后一次粘贴遇native pipe closed，完成状态未知；后续browser5明确unavailable。未据错误重复游戏命令。
+
+新库存实际browser6；原标签get明确Debugger unattached，先恢复变量的代码亦ReferenceError，随后在同Chrome现有binding建新标签成功，没有切浏览器或尺寸。新r2正常通过原公开文本框分段填入1152869字，公开原文导出1159691B/SHA d2a42c34932414c5473d04c5415af88e0604b944ec3bc0d4aabeaeccf85fbea6逐字同，再检查/导入独立r92并实际进入relay场景。r1旧标签未确认粘贴结果，不声称其原缓冲当前完全相同；无已保存新经营命令。旧r2成功输入与基线截图/AX/journal另存，未覆盖旧本机course人生。
+
+以上为工具/定位错误与连接恢复，不声称产品缺陷、兼容结论、真人或业务新分支通过。

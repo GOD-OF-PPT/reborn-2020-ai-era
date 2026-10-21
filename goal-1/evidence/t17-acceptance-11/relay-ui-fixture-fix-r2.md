@@ -1,0 +1,3 @@
+# 首轮展示夹具日期补正
+
+R1实际23文件155项，154通过，1条新增RelaySceneChoice公共展示组合在render原ClockAdvance时CANNOT_REWIND_TIME。原因是view.date给2025Feb6，而初始workbench.progression.nextDate仍2020Jan；只将该展示fixture的季度、起止、nextDate与其实际展示日期保持一致，未改生产clock/规则/断言/时限。旧R1 test完整文本由唯一逆向替换重建，已按执行时source-freeze的bytes/SHA验证完全一致，单列reconstructed原身份；R1失败报告/stdout不改。R2重新完整23文件155项，不拼接绿项。兼容开发测试0。

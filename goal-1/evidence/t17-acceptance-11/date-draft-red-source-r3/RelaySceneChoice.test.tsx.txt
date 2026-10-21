@@ -1,0 +1,83 @@
+import {expect,it} from 'vitest'
+import {renderToStaticMarkup} from 'react-dom/server'
+import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
+import {createCampaignRun,createCampaignCodec,campaignRelay} from '../application/campaign.ts'
+import {projectRelay,type RelayProjection} from '../core/relay-projection.ts'
+import {accountPosition,metricsFor} from '../core/ledger.ts'
+import type {CommandEnvelope} from '../core/run-types.ts'
+import {GameController} from '../application/game-controller.ts'
+import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
+import type {PlayFeatures} from './game-types.ts'
+import {relaySceneProgress} from './relay-scene-progress.ts'
+import {RelayCommandDetails} from './RelayCommandDetails.tsx'
+import {RelayServiceLetter} from './RelaySceneChoice.tsx'
+import {CommandDetails} from './CommandDetails.tsx'
+import {NarrativeScene} from './NarrativeScene.tsx'
+import {relayAuditCompletion} from './relay-audit-dates.ts'
+
+type Relay=NonNullable<RelayProjection>
+// Public display variants, never a game save or a claimed normal history.
+function display():Relay{
+ const run=createCampaignRun({runId:'relay-paper-display',actorId:'player',commandId:'create',backgroundId:'technical_employee',seed:'relay-paper-display'})
+ const r=projectRelay(run,campaignRelay)!,position=accountPosition(run.economy.ledger,'personal')
+ r.businesses=[{id:'relay-business',definitionId:'relay-station',route:'api_relay',accountId:'relay-account',company:true,lifecycle:'operating',prepared:true,activeFrom:'2025-01-01',stoppedAt:null,distributedFen:0,monthlyMaintenanceFen:30000,history:[],funds:position,metrics:{...metricsFor(run.economy.ledger,'personal','relay-business'),accruedCostFen:0}}]
+ r.periods=[{id:'old-period',businessId:'relay-business',customerIds:['customer'],supplierIds:['cedar-direct'],createdAt:'2025-01-01',from:'2025-01-02',to:'2025-01-30',jobId:'service',supportJobId:'support',supportMode:'guided',maxUnits:300000,maxSupplierCostFen:1200000,feeQuotes:[],status:'closed',feePostedAt:'2025-02-06',compensatedAt:'2025-02-06',stoppedAt:null,job:null,supportJob:null,reportedUnits:100,observedDays:1,failedDays:1,meterCount:1,auditedMeters:0,knownCorrections:0}]
+ r.meters=[{id:'meter-original',periodId:'old-period',customerId:'customer',date:'2025-01-02',reportedUnits:100,unitPriceFen:6,termsId:'terms-original',supplierId:'cedar-direct',rateId:'cedar-v3',unitCostFen:3,supplierBilling:'postpaid',reason:null,deliveryIds:[],costOperationId:'cost-original',supplierDueAt:'2025-01-09',correctionId:null,auditedUnits:null}]
+ return r
+}
+const auditCommand:CommandEnvelope={runId:'display',actorId:'player',commandId:'audit',expectedRevision:1,kind:'StartRelayAudit',payload:{periodId:'old-period',resources:['player-production'],startAt:'2025-02-06'}}
+const noWrite=()=>{throw Error('PUBLIC_RENDER_MUST_NOT_WRITE')}
+
+it('keeps invalid or extreme date drafts editable until the original preview rejects them',()=>{
+ expect(relayAuditCompletion('2024-02-27',3)).toBe('2024-03-01')
+ expect(relayAuditCompletion('2025-12-31',3)).toBe('2026-01-03')
+ for(const input of ['', '2025-02-30','10000-01-01','9999-12-31'])expect(relayAuditCompletion(input,3)).toBeNull()
+ const relay=display(),html=renderToStaticMarkup(<RelayCommandDetails command={{...auditCommand,payload:{...auditCommand.payload as object,startAt:'9999-12-31'}}} relay={relay} workers={[]} accountName={()=>'原中转企业'}/>)
+ expect(html).toContain('完成日期待核对');expect(html).toContain('9999-12-31')
+})
+
+it('captured confirmation names the actual payer, resource, days and already occurred eligible meters',()=>{
+ const relay=display(),before=JSON.stringify(relay)
+ const html=renderToStaticMarkup(<RelayCommandDetails command={auditCommand} relay={relay} workers={[]} accountName={id=>id==='relay-account'?'原中转企业':'个人账户'}/>)
+ expect(html).toContain('原中转企业支付¥100');expect(html).toContain('本次覆盖1条');expect(html).toContain('本人实际维护时间')
+ expect(html).toContain('2025-02-06—2025-02-09');expect(html).toContain('后续请求不会自动纳入')
+ expect(html).toContain('完成之前不揭示实计用量');expect(html).toContain('更正不等于客户到账')
+ expect(JSON.stringify(relay)).toBe(before)
+ expect(renderToStaticMarkup(<RelayCommandDetails command={{...auditCommand,kind:'CorrectRelayPeriod'}} relay={relay} workers={[]} accountName={()=>'原账'}/>)).toBe('')
+})
+
+it('does not silently replace a missing resource and preserves a single-meter confirmation scope',()=>{
+ const relay=display(),meter=relay.meters[0]!
+ relay.meters.push({...meter,id:'second-original'})
+ const command={...auditCommand,payload:{meterId:meter.id,resources:['no-longer-employed'],startAt:'2025-02-06'}}
+ const html=renderToStaticMarkup(<RelayCommandDetails command={command} relay={relay} workers={[]} accountName={()=>'原企业'}/>)
+ expect(html).toContain('本次覆盖1条');expect(html).toContain('原资源现不可用（no-longer-employed）');expect(html).not.toContain('本人实际维护时间')
+ const unrelated={...auditCommand,payload:{periodId:'missing',resources:['player-production'],startAt:'2025-02-06'}}
+ expect(renderToStaticMarkup(<RelayCommandDetails command={unrelated} relay={relay} workers={[]} accountName={()=>'原企业'}/>)).toBe('')
+})
+
+it('renders reported days, interrupted support and only still uncorrected public differences as facts',async()=>{
+ const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'relay-public-paper'})
+ let id=0;const controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=>`relay-paper-${++id}`})
+ try{
+  await controller.initialize();await controller.newLife({backgroundId:'technical_employee',playerProfile:{wishId:'autonomy',approach:'free'},seed:'relay-public-paper'})
+  const view=controller.snapshot.view!,base=view.features as unknown as PlayFeatures,relay=display(),raw=controller.exportSaved()
+  const original=relay.meters[0]!,period=relay.periods[0]!
+  relay.meters=[{...original,auditedUnits:80},{...original,id:'already-corrected',auditedUnits:80,correctionId:'prior-correction'},{...original,id:'equal',auditedUnits:100}]
+  relay.periods=[{...period,supportJob:{id:'support',businessId:'relay-business',definitionId:'relay-support-guided',contractId:null,actionId:'support-action',resources:['player-production'],startAt:'2025-01-30',completeAt:'2025-02-06',releasedAt:'2025-02-01',status:'interrupted',outputId:null}},{...period,id:'another-period',from:'2025-02-07',to:'2025-03-07'}]
+  const features={...base,relay,workbench:{...base.workbench,quarter:'2025-Q1',quarterStart:'2025-01-01',quarterEnd:'2025-03-31',progression:{...base.workbench.progression,nextDate:'2025-02-07',quarterTarget:'2025-03-31'}}},p={controller,view:{...view,date:'2025-02-06'},features,request:noWrite,accountId:'personal'},progress=relaySceneProgress(relay,p.view.date)!
+  const letter=renderToStaticMarkup(<RelayServiceLetter p={p} progress={progress} onNext={noWrite} onFullRecord={noWrite}/>)
+  expect(letter).toContain('已记录1/28日');expect(letter).toContain('报告用量100');expect(letter).toContain('支持已经中断')
+  expect(letter).toContain('1条已复核差额尚待更正');expect(letter).toContain('翻到另一段原服务');expect(letter).toContain('1 / 2');expect(letter).not.toContain('成功服务')
+  const scene={...p,screen:'relay' as const,headingRef:null,personId:'tang-ying' as const,onPerson:noWrite,onOpen:noWrite,onPeople:noWrite,onYear:noWrite,onNavigate:noWrite,receipt:null}
+  for(const blocked of [{readOnly:true},{hasCandidate:true,saveStatus:'unsaved' as const}]){
+   const html=renderToStaticMarkup(<NarrativeScene {...scene} view={{...p.view,...blocked}}/>)
+   expect(html.match(/<button[^>]*aria-label="核对并更正本期原账"[^>]*>/)?.[0]).toContain('disabled=""')
+   expect(html).toContain('翻看全部中转、客户与原安排');expect(html).not.toContain('把一次服务认真安排好')
+  }
+  const confirm=renderToStaticMarkup(<CommandDetails command={auditCommand} confirm={{allowed:true,reasonCodes:[],actionPoints:1,upfrontCostFen:10000,releasedFen:0}} features={features} view={p.view} accountName={()=>'原中转企业'} clock={null}/>)
+  expect(confirm).toContain('只查这一段已经发生的原账');expect(confirm).toContain('原中转企业支付¥100')
+  expect(controller.exportSaved()).toBe(raw)
+ }finally{await controller.close();await store.close()}
+},20000)

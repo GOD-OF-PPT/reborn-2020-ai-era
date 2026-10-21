@@ -1,0 +1,3 @@
+# 原应收到账的清晰选择
+
+当前Chrome DEV真实跨完整28日服务到Feb25/r94，原3点实际消耗、1点可用，支持已按原安排开始，未到期应收仍在。实际收款确认原画面只显示执行成本0而没有客户编号与收款额（AX保留），本轮取消原确认尚未收款。现仅用已有captured公开projection把客户N/原已到期金额写进choice/确认标题及合同上下文，并以receivable.collectedFen新增额+原公司真实cash增额相同+本客recognizedIncome不变才显示到账回响。原CollectRelayDue payload/命令/钱数不改。小型真实prepaid/postpaid两隔离夹具验证，不冒充正常玩家/样本；最终24UI/预计164项、严格build与当前Chrome实际收款/支持/复核/更正/重载+完整Create。当前无页面兼容开发或测试，原两book宽度用例paused。

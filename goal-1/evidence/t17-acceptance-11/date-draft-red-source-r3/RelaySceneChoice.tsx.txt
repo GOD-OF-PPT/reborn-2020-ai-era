@@ -1,0 +1,45 @@
+import {useState,type ReactNode} from 'react'
+import type {GamePanelProps} from './game-types.ts'
+import type {RelaySceneProgress} from './relay-scene-progress.ts'
+import {RELAY_JOBS} from '../content/relay.ts'
+import {relayAuditCompletion} from './relay-audit-dates.ts'
+import {Dialog} from './Dialog.tsx'
+import {ResourceSelect} from './ResourceSelect.tsx'
+import {CommandButton} from './CommandButton.tsx'
+import {courseResourceLabel} from './course-resource-labels.ts'
+import {moneyText,playableThrough} from './game-text.ts'
+
+/** An original service ticket keeps stopped and old periods reachable without changing a contract. */
+export function RelayServiceLetter({p,progress,onNext,onFullRecord}:{p:GamePanelProps;progress:RelaySceneProgress;onNext:()=>void;onFullRecord:()=>void}){
+ const relay=p.features.relay,period=relay?.periods.find(c=>c.id===progress.periodId)
+ if(!relay||!period)return null
+ const pending=relay.meters.filter(m=>m.periodId===period.id&&m.auditedUnits!==null&&m.auditedUnits!==m.reportedUnits&&m.correctionId===null).length
+ const support=period.supportJob
+ const supportLine=support?.status==='completed'?'原支持已实际完成':support?.status==='running'?`原支持仍在进行，${support.completeAt}预计完成`:support?.status==='planned'?`原支持留在${support.startAt}—${support.completeAt}`:support?'原支持已经中断，仍须核对赔付与旧承诺':'原支持记录仍待核对'
+ return <aside className="risk-scene-letter relay-service-letter" aria-label="灯下这段原服务">
+  <div className="risk-letter-heading"><span>灯下的服务单 / 本局虚构</span><span>{progress.periodIndex+1} / {progress.periodIds.length}</span></div>
+  <h2>{period.from}—{period.to}</h2>
+  <p>{period.customerIds.length}位原客户 · {period.supplierIds.map(id=>relay.catalog.suppliers.find(s=>s.id===id)?.label??'原供应').join(' → ')}</p>
+  <p>已记录{period.observedDays}/{relay.catalog.serviceDays}日 · 报告用量{period.reportedUnits} · 有停止或不足原因{period.failedDays}日。报告不代替独立复核。</p>
+  <p>{supportLine}；{pending?`${pending}条已复核差额尚待更正`:`已实际复核${period.auditedMeters}条计量`}。客户未消费余额与应收应付仍在原账。</p>
+  <div className="risk-letter-links"><button type="button" onClick={onFullRecord}>核对这段服务、客户与原账 ↗</button>{progress.periodIds.length>1?<button type="button" onClick={onNext}>翻到另一段原服务 →</button>:null}</div>
+ </aside>
+}
+
+/** The original command owns availability, money, capacity and saving; editing this draft does nothing. */
+export function RelayAuditChoice({p,audit,onFullRecord,children}:{p:GamePanelProps;audit:NonNullable<RelaySceneProgress['audit']>;onFullRecord:()=>void;children:(open:()=>void)=>ReactNode}){
+ const [open,setOpen]=useState(false),[resource,setResource]=useState('player-production')
+ const [date,setDate]=useState({source:p.view.date,value:p.view.date})
+ const relay=p.features.relay,period=relay?.periods.find(c=>c.id===audit.periodId),job=RELAY_JOBS.find(j=>j.id==='relay-meter-audit')!
+ const startAt=date.source===p.view.date?date.value:p.view.date
+ const completeAt=relayAuditCompletion(startAt,job.durationDays)
+ const resources=relay?.resources.map(r=>({...r,label:r.id==='player-production'?'由我留出这几天':courseResourceLabel(r.id,relay.resources,p.view.operations?.workers)}))??[]
+ return <>{children(()=>setOpen(true))}{open&&relay&&period?<Dialog title="灯下，把已经发生的账查清" className="course-stage-choice relay-audit-choice" onClose={()=>setOpen(false)}>
+  <p className="risk-letter-heading">原服务单 / {period.from}—{period.to}</p>
+  <h3>让原记录回答，先不替它下结论。</h3>
+  <p>复核需要原中转站的{moneyText(job.costFen)}、{job.actionPoints}点及所选资源{job.durationDays}日。{completeAt?`计划从${startAt}开始，预计${completeAt}完成。`:'日期尚未有效填写，预计完成日待核对。'}</p>
+  <div className="lesson-plan-fields"><fieldset><legend>谁留出这几天</legend><label className="field">实际复核资源<ResourceSelect options={resources} value={resource} onChange={setResource}/></label><p>本人时间与在岗同事共用原排程，原工资继续计算。原资源失效时，需要你重新选择。</p></fieldset><fieldset><legend>在日历上留一天</legend><label className="field">实际复核开工日期<input type="date" min={p.view.date} max={playableThrough} value={startAt} onChange={e=>setDate({source:p.view.date,value:e.currentTarget.value})}/></label><p>这里只安排截至确认时已经发生、尚可复核的计量。后来发生的请求仍要另行核对。</p></fieldset></div>
+  <p>实际复核完成后才揭示实计用量。发现差额仍需另行确认，按原记录追加更正；这一步不会收取客户应收，也不会把预充值变成利润。</p>
+  <div className="lesson-plan-actions"><CommandButton {...p} kind="StartRelayAudit" payload={{periodId:period.id,resources:[resource],startAt}} label="核对这份计量复核委托" confirm primary/><button type="button" onClick={()=>{setOpen(false);onFullRecord()}}>翻看全部原计量、资源与责任</button></div>
+ </Dialog>:null}</>
+}

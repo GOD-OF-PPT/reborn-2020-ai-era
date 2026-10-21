@@ -1,0 +1,38 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts --maxWorkers=1 --reporter=default --reporter=json --outputFile.json=/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-11/checks-r3/date-draft/vitest.json src/ui/RelaySceneChoice.test.tsx
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/RelaySceneChoice.test.tsx (4 tests | 1 failed) 1208ms
+   × keeps invalid or extreme date drafts editable until the original preview rejects them 12ms
+   ✓ captured confirmation names the actual payer, resource, days and already occurred eligible meters 200ms
+   ✓ does not silently replace a missing resource and preserves a single-meter confirmation scope 68ms
+   ✓ renders reported days, interrupted support and only still uncorrected public differences as facts 924ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/RelaySceneChoice.test.tsx > keeps invalid or extreme date drafts editable until the original preview rejects them
+RuleError: INVALID_DATE
+ ❯ requireRule src/core/errors.ts:12:25
+     10|
+     11| export function requireRule(condition: unknown, code: string): asserts…
+     12|   if (!condition) throw new RuleError(code)
+       |                         ^
+     13| }
+     14|
+ ❯ isoDate src/core/calendar.ts:11:3
+ ❯ addDays src/core/calendar.ts:24:3
+ ❯ relayAuditCompletion src/ui/relay-audit-dates.ts:5:9
+ ❯ src/ui/RelaySceneChoice.test.tsx:35:74
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 passed (4)
+   Start at  13:21:58
+   Duration  3.15s (tests 43%, transform 30%, import 27%)
+
+JSON report written to /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-11/checks-r3/date-draft/vitest.json

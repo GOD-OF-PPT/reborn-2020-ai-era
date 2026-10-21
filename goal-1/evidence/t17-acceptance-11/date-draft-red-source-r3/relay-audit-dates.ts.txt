@@ -1,0 +1,6 @@
+import {addDays} from '../core/calendar.ts'
+
+/** An estimate for a draft, never a replacement for the original command's date checks. */
+export function relayAuditCompletion(startAt:string,days:number):string|null{
+ return addDays(startAt,days)
+}

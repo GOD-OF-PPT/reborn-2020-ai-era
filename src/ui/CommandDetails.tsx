@@ -4,6 +4,7 @@ import {JourneyCommandDetails} from './JourneyCommandDetails.tsx'
 import {ClockCommandDetails} from './ClockCommandDetails.tsx'
 import {VideoCommandDetails} from './VideoCommandDetails.tsx'
 import {CourseCommandDetails} from './CourseCommandDetails.tsx'
+import {RelayCommandDetails} from './RelayCommandDetails.tsx'
 import type {ClockCommitmentProjection} from '../core/clock-projection-types.ts'
 import type {CommandEnvelope} from '../core/run-types.ts'
 import type {CommandPreview} from '../core/commands.ts'
@@ -24,6 +25,7 @@ export function CommandDetails({command,confirm,features,view,accountName,clock}
  <LifeCommandDetails command={command} confirm={confirm} features={features} view={view}/>
  <VideoCommandDetails command={command} video={features.video}/>
  <CourseCommandDetails command={command} course={features.course} workers={view.operations?.workers??[]} view={view} confirm={confirm} accountName={accountName}/>
+ <RelayCommandDetails command={command} relay={features.relay} workers={view.operations?.workers??[]} accountName={accountName}/>
  {command.kind==='FundBusiness'||command.kind==='DistributeProfit'?<section className="confirmation-context"><h3>本次转账不产生一份新利润</h3><p>{command.kind==='FundBusiness'?'个人账户 → '+(business?accountName(business.accountId):'指定企业账户'):(business?accountName(business.accountId):'指定企业账户')+' → 个人账户'}，实际金额{moneyText(typeof p.amountFen==='number'?p.amountFen:null)}。转入资金不计业务收入，已确认利润也不等于当前可分配现金。</p></section>:null}
  {opening?<section className="confirmation-context"><h3>资本转入之后，还要实际准备和经营</h3><p>由个人转入新{opening.name}账户{moneyText(typeof p.capitalFen==='number'?p.capitalFen:null)}，不是收入或费用。每月维护基准{moneyText(opening.requirements.monthlyMaintenanceFen)}按实际日期发生，工资、资格、产能和原义务另行核对。</p></section>:null}
  {command.kind==='WorkQuarter'?<section className="confirmation-context"><h3>现在不会提前收到工资</h3><p>本季度全月在岗基准{moneyText(features.workbench.employmentMonthlySalaryFen)}，按实际在岗日期在月末到账。当前确认只安排本季，不自动接受下一季工作或其他业务。</p></section>:null}
