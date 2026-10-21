@@ -57,7 +57,7 @@ it('also leaves work directly available after accepting the order first, with th
   expect((await controller.submit(controller.prepare('StartFirstOrder',{}))).status).toBe('saved')
   const view=controller.snapshot.view!,features=view.features as unknown as PlayFeatures,before=controller.exportSaved()
   const html=renderToStaticMarkup(<RoomMoment p={{controller,view,features,accountId:'personal',request:()=>{throw Error('RENDER_MUST_NOT_SUBMIT')}}} headingRef={null} onNavigate={()=>{}} onExplore={()=>{}}/>)
-  expect(html).toContain('先保留这一季的工作');expect(html).toContain('可以和小单一起安排');expect(controller.exportSaved()).toBe(before)
+  expect(html).toContain('先保留这一季的工作');expect(html).toContain('可与小单一起安排');expect(controller.exportSaved()).toBe(before)
   expect((await controller.submit(controller.prepare('WorkQuarter',{}))).status).toBe('saved')
   expect(controller.snapshot.view!.budget).toMatchObject({available:1,reserved:1})
   expect((controller.snapshot.view!.features as unknown as PlayFeatures).firstOrder.status).toBe('planned')

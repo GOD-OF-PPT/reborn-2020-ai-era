@@ -17,3 +17,34 @@
 .cinema-app .scene-wait-decision>p{margin:14px 0 0}
 /* The obligation letter sits over scenery, clear of all five route selectors. */
 .game-app[data-screen=routes]>.thread-pocket{top:143px;bottom:auto}
+
+/* The decision reads as a verb, its cost and a clear next step; full text stays in the book. */
+.cinema-app .scene-story-book .scene-choices strong{max-width:none;font-size:20px;letter-spacing:.5px}
+.cinema-app .scene-story-book .scene-choice-line{font-size:14px;line-height:1.8}
+.cinema-app .scene-story-book .scene-choice-end{position:static;max-width:none;align-self:flex-start;padding-top:3px;font:500 14px/1.65 var(--serif);color:#f0d399}
+.cinema-app .scene-story-book .scene-action>.reason{font-size:14px;line-height:1.8}
+.cinema-app .scene-time-note{font:14px/1.8 var(--serif);gap:4px 12px;align-items:baseline}
+.cinema-app .scene-time-result,.cinema-app .echo-result{white-space:pre-line}
+.cinema-app .scene-time-note time{font-size:12px}
+.cinema-app .scene-time-note>button{font-size:13px}
+.cinema-app .life-reference-choice .encounter-source summary{cursor:pointer;color:#ecd4a1;font:15px/1.8 var(--serif)}
+.cinema-app .life-reference-choice .encounter-source article{padding:8px 0;border-top:1px solid #b8a16c55}
+.cinema-app .life-reference-choice .encounter-source article h3{font:16px/1.8 var(--serif);color:#efdfb8;margin:6px 0}
+.cinema-app .room-commitment-list>h3{font:500 18px/1.7 var(--serif);color:#536047;letter-spacing:1px}
+
+/* Logical navigation stays beside the paper, independent of its reading page. */
+.cinema-app .market-scene-choice>.encounter-fixed-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;flex:none;margin:10px 24px 0;padding-top:12px;border-top:1px solid #c9af7266}
+.cinema-app .market-scene-choice>.encounter-fixed-actions>button.primary{background:#e6c991;color:#203e32;border-color:#f0d9ac}
+.cinema-app :is(.market-scene-choice,.life-reference-choice)>.dialog-heading h2{color:#f1e0b9}
+.cinema-app :is(.market-scene-choice,.life-reference-choice)>.dialog-heading>button{color:#ead8ad}
+.cinema-app :is(.market-scene-choice,.life-reference-choice) .book-flow>p{color:#e0deca}
+.cinema-app :is(.market-scene-choice,.life-reference-choice) .book-pagination button{color:#ead5a9;border-color:#c9af7266}
+.cinema-app :is(.market-scene-choice,.life-reference-choice) .book-pagination button:disabled{opacity:.45}
+
+/* Read the whole thought across pages; its original command stays a short, separate control. */
+.cinema-app .scene-story-book .scene-choices>.scene-action-card{counter-increment:scene-thought;position:relative;padding:13px 16px 13px 64px;margin:0 0 8px;border-left:1px solid #bea36a55;border-bottom:1px solid #bea36a33;background:linear-gradient(90deg,#09262bd9,#17382e9c 72%,#17382e22);break-inside:auto}
+.scene-action-card:before{content:counter(scene-thought,decimal-leading-zero);position:absolute;left:14px;top:15px;font:25px/1.3 Georgia;color:#d5ba80;letter-spacing:1px}
+.cinema-app .scene-action-card>.scene-choice-line{margin:6px 0 12px}
+.cinema-app .scene-action-card .scene-decision-main>button{display:inline-flex;align-items:center;gap:12px;min-height:40px;padding:9px 14px;background:#e5cea0;color:var(--encounter-ink);border-color:#e9d3a5;font:14px/1.6 var(--serif);white-space:normal}
+.cinema-app .scene-action-card .scene-decision-main>button:hover:not(:disabled){background:#f0dab0;color:#203c30;border-color:#f7e4bc}
+.cinema-app .scene-action-card .reason{margin:6px 0;color:#f3d3ab;font-size:14px;line-height:1.8}

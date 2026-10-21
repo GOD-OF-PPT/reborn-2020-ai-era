@@ -68,13 +68,13 @@ it('shows actual free one-point public research completion and a separate paid i
  const h=await normal('research-loop')
  try{
   const before=h.view(),cash=before.accounts.find(row=>row.accountId==='personal')!.cashFen,started=await h.send('ResearchMarket',{definitionId:'market-overview'})
-  expect(started.text).toContain('原模拟市场研究已实际开始');expect(started.text).toContain('2020-01-01—2020-01-02');expect(started.text).toContain('尚未完成')
+  expect(started.text).toContain('市场研究已开始');expect(started.text).toContain('2020-01-01—2020-01-02');expect(started.text).toContain('尚未完成')
   expect(h.view().accounts.find(row=>row.accountId==='personal')!.cashFen).toBe(cash);expect(h.view().budget.spent).toBe(before.budget.spent+1)
   const completed=await h.send('AdvanceTime',{date:'2020-01-02'})
-  expect(completed.text).toContain('原模拟市场研究已实际完成');expect(completed.text).toContain('不是未来价格');expect(features(h.view()).market.orders).toHaveLength(0)
+  expect(completed.text).toContain('市场研究已完成');expect(completed.text).toContain('不是未来价格');expect(features(h.view()).market.orders).toHaveLength(0)
   await h.send('ResearchMarket',{definitionId:'market-foundation-course'})
   const paid=h.view(),job=features(paid).market.researches.at(-1)!,stopped=await h.send('StopMarketResearch',{researchId:job.id})
-  expect(stopped.text).toContain('原模拟市场研究已中断');expect(stopped.text).toContain('不因中断退款或返还行动')
+  expect(stopped.text).toContain('市场研究已中断');expect(stopped.text).toContain('不因中断退款或返还行动')
   expect(h.view().accounts.find(row=>row.accountId==='personal')!.cashFen).toBe(paid.accounts.find(row=>row.accountId==='personal')!.cashFen);expect(h.view().budget.spent).toBe(paid.budget.spent)
   const later=await h.send('AdvanceTime',{date:job.completeAt})
   expect(features(h.view()).market.researches.at(-1)!.status).toBe('interrupted');expect(later.text).toBeNull()
@@ -95,7 +95,7 @@ it('separates a normal actual buy, settled shares, actual sale fees and later nu
   const settlement=features(h.view()).market.settlements.find(row=>row.kind==='sale')!
   expect(settlement.paidAt).toBeNull()
   const paid=await h.send('AdvanceTime',{date:settlement.dueAt})
-  expect(paid.text).toContain('1笔原模拟卖款交收实际到账');expect(paid.text).toContain('仅这些已付款记录成为现金')
+  expect(paid.text).toContain('1笔模拟卖款交收实际到账');expect(paid.text).toContain('仅这些已付款记录成为现金')
   expect(domainSceneResult('AdvanceTime',paid.current,{...paid.current,revision:paid.current.revision+1})).toBeNull()
  }finally{await h.close()}
 })
@@ -105,11 +105,39 @@ it('reports a zero-lag normal sale only from its actual fill and original settle
  try{
   await h.send('PlaceStockOrder',order(h.view()));await h.advance('2020-01-11')
   await h.send('PlaceStockOrder',order(h.view(),'sell'));const result=await h.send('AdvanceTime',{date:'2020-01-20'})
-  expect(result.text).toContain('按原零延迟规则实际入账');expect(result.text).toContain('已经扣除这些成交的原费用')
+  expect(result.text).toContain('按零延迟规则实际入账');expect(result.text).toContain('已经扣除这些成交的费用')
   const beforeCash=result.before.accounts.find(row=>row.accountId==='personal')!.cashFen,afterCash=result.current.accounts.find(row=>row.accountId==='personal')!.cashFen,fill=features(result.current).market.fills.at(-1)!
   expect(fill.receivableId).toBeNull();expect(afterCash-beforeCash).toBe(fill.grossFen-fill.feeFen)
  }finally{await h.close()}
 })
+
+it('names the real personal and business owners separately when both buy the same public stock in one clock span',async()=>{
+ const h=await normal('market-two-owners',ecoRaw)
+ try{
+  const original=features(h.view()),business=original.deepseek!.businesses.find(row=>row.company&&row.lifecycle==='operating')!
+  expect(business).toBeDefined()
+  const accounts=['personal',business.accountId],originalOrders=new Set(original.market.orders.map(row=>row.id))
+  for(const accountId of accounts){
+   const payload={...order(h.view()),accountId}
+   expect(h.controller.preview(h.controller.prepare('PlaceStockOrder',payload)).allowed).toBe(true)
+   await h.send('PlaceStockOrder',payload)
+  }
+  const before=h.view(),market=features(before).market,created=market.orders.filter(row=>!originalOrders.has(row.id))
+  expect(created).toHaveLength(2)
+  await h.advance(market.matchingCalendar[0]!.date)
+  const current=h.view(),after=features(current),actual=after.market.fills.filter(fill=>created.some(row=>row.id===fill.orderId)),raw=h.controller.exportSaved()
+  expect(actual).toHaveLength(2)
+  const text=domainSceneResult('AdvanceTime',before,current),stock=after.market.stocks.find(row=>row.symbol===created[0]!.symbol)!,route=after.workbench.routes.find(row=>row.id===business.route)!
+  for(const accountId of accounts){
+   const orderRow=created.find(row=>row.accountId===accountId)!,fill=actual.find(row=>row.orderId===orderRow.id)!,owner=accountId==='personal'?'个人账户':'企业账户 · '+route.name
+   expect(fill.quantity).toBe(100)
+   expect(text).toContain(owner+' · '+stock.name+'：模拟买入实际成交100股，成交额'+moneyText(fill.grossFen)+'、费用'+moneyText(fill.feeFen))
+   expect(after.market.positions.find(row=>row.accountId===accountId&&row.symbol===stock.symbol)!.quantity).toBe(100)
+  }
+  expect(text).not.toContain('模拟买入实际成交200股')
+  expect(h.controller.exportSaved()).toBe(raw)
+ }finally{await h.close()}
+},20000)
 
 it('keeps real partial fills, original fees and outstanding shares when cancelling the unfilled remainder',async()=>{
  const h=await normal('partial-market',ecoRaw)
@@ -118,9 +146,9 @@ it('keeps real partial fills, original fees and outstanding shares when cancelli
   await h.send('PlaceStockOrder',{accountId:'personal',symbol:stock.symbol,side:'buy',quantity:10000,limitPriceFen:stock.priceFen!*2,quoteId:market.quoteId!,validUntil:market.matchingCalendar[1]!.id})
   const result=await h.send('AdvanceTime',{date:market.matchingCalendar[0]!.date}),current=features(h.view()).market,original=current.orders.at(-1)!,filled=current.fills.at(-1)!
   expect(original.status).toBe('partially_filled');expect(filled.quantity).toBe(2000);expect(original.remaining).toBe(8000)
-  expect(result.text).toContain('模拟买入实际成交2,000股');expect(result.text).toContain('相关原委托仍有8,000股未成交')
+  expect(result.text).toContain('模拟买入实际成交2,000股');expect(result.text).toContain('相关委托仍有8,000股未成交')
   const cash=h.view().accounts.find(row=>row.accountId==='personal')!.cashFen,cancelled=await h.send('CancelStockOrder',{orderId:original.id})
-  expect(cancelled.text).toContain('未成交部分已撤回');expect(cancelled.text).toContain('原已成交部分不撤销')
+  expect(cancelled.text).toContain('未成交部分已撤回');expect(cancelled.text).toContain('已经成交的部分不撤销')
   expect(h.view().accounts.find(row=>row.accountId==='personal')!.cashFen).toBe(cash);expect(features(h.view()).market.fills).toEqual(current.fills);expect(features(h.view()).market.positions[0]!.quantity).toBe(2000)
  }finally{await h.close()}
 })
@@ -132,7 +160,7 @@ it('reports a zero-volume original order expiring with a real release, never a c
   await h.send('PlaceStockOrder',{accountId:'personal',symbol:'SIM-AI05',side:'buy',quantity:100,limitPriceFen:900,quoteId:market.quoteId!,validUntil:market.matchingCalendar[0]!.id})
   const before=h.view(),held=features(before).market.orders[0]!.cashHeldFen,result=await h.send('AdvanceTime',{date:'2020-01-10'})
   expect(features(result.current).market.fills).toHaveLength(0);expect(features(result.current).market.orders[0]).toMatchObject({status:'expired',remaining:100,cashHeldFen:0})
-  expect(result.text).toContain('原模拟委托已到期结束');expect(result.text).toContain('未成交余量100股');expect(result.text).toContain('释放资金占用');expect(result.text).toContain('释放占用不是收入')
+  expect(result.text).toContain('模拟委托已到期结束');expect(result.text).toContain('未成交余量100股');expect(result.text).toContain('释放资金占用');expect(result.text).toContain('释放占用不是收入')
   const old=before.accounts.find(row=>row.accountId==='personal')!,current=result.current.accounts.find(row=>row.accountId==='personal')!
   expect(current.cashFen).toBe(old.cashFen);expect(current.availableFen-old.availableFen).toBe(held)
  }finally{await h.close()}
@@ -174,16 +202,18 @@ beforeAll(async()=>{
 })
 
 it('uses a sealed current-schema normal ecosystem history and distinguishes production, submission and public review',()=>{
- expect(eco.accepted.text).toContain('客户预款¥6,000受原保护');expect(eco.accepted.text).toContain('预款不是利润')
- expect(eco.produced.text).toContain('已实际制作完成');expect(eco.produced.text).not.toContain('客户复核通过');expect(eco.produced.text).not.toContain('确认收入')
+ expect(eco.accepted.text).toContain('客户预款¥6,000受保护');expect(eco.accepted.text).toContain('预款不是利润')
+ expect(eco.produced.text).toContain('已制作完成');expect(eco.produced.text).not.toContain('客户复核通过');expect(eco.produced.text).not.toContain('确认收入')
  expect(eco.submitted.text).toContain('已亲手提交');expect(eco.submitted.text).toContain('提交不等于通过或到账')
- expect(eco.reviewed.text).toContain('客户复核通过');expect(eco.reviewed.text).toContain('生产80%阶段本次确认收入¥9,600');expect(eco.reviewed.text).toContain('抵用预款¥6,000、形成原应收¥3,600')
- expect(eco.supported.text).toContain('原生态支持已实际完成');expect(eco.supported.text).toContain('支持20%阶段本次确认收入¥2,400');expect(eco.supported.text).toContain('确认收入不等于新增现金到账')
+ expect(eco.reviewed.text).toContain('客户复核通过');expect(eco.reviewed.text).toContain('生产80%阶段本次确认收入¥9,600');expect(eco.reviewed.text).toContain('抵用预款¥6,000、形成应收¥3,600')
+ expect(eco.supported.text).toContain('支持已完成');expect(eco.supported.text).toContain('支持20%阶段本次确认收入¥2,400');expect(eco.supported.text).toContain('确认收入不等于新增现金到账')
 })
 
 it('reports only the original ecosystem receivable actually collected, without recognizing income twice or replaying old stages',()=>{
- expect(eco.collected.text).toContain('原生态应收实际到账¥3,600');expect(eco.collected.text).toContain('不重复确认原80%／20%收入')
+ expect(eco.collected.text).toContain('笔应收实际到账¥3,600');expect(eco.collected.text).toContain('不重复确认80%／20%收入')
  const before=features(eco.collected.before).deepseek!,after=features(eco.collected.current).deepseek!
+ const contract=after.contracts[0]!,customer=after.leads.findIndex(row=>row.personId===contract.personId)+1,business=after.businesses.find(row=>row.id===contract.businessId)!,route=features(eco.collected.current).workbench.routes.find(row=>row.id===business.route)!
+ expect(eco.collected.text).toContain('企业账户 · '+route.name+' · 客户'+customer+'的部署合作')
  expect(after.contracts[0]!.balance!.recognizedIncomeFen).toBe(before.contracts[0]!.balance!.recognizedIncomeFen)
  expect(after.businesses[0]!.funds.cashFen-before.businesses[0]!.funds.cashFen).toBe(360000)
  expect(domainSceneResult('AdvanceTime',eco.supported.current,{...eco.supported.current,revision:eco.supported.current.revision+1})).toBeNull()
@@ -198,7 +228,7 @@ it.each(['across-production','after-production'])('reports a missed original rev
   if(stage==='after-production')await h.advance(contract.productionJob!.completeAt)
   const result=await h.send('AdvanceTime',{date:contract.reviewAt!}),after=features(result.current).deepseek!
   expect(after.contracts[0]!.status).toBe('cancelled');expect(after.refunds.at(-1)!.amountFen).toBe(600000)
-  expect(result.text).toContain('原生态订单已实际取消');expect(result.text).toContain('已实际退回原客户款¥6,000');expect(result.text).not.toContain('仍须亲手提交');expect(result.text).not.toContain('客户复核通过')
+  expect(result.text).toContain('部署合作已取消');expect(result.text).toContain('已实际退回原客户款¥6,000');expect(result.text).not.toContain('仍须亲手提交');expect(result.text).not.toContain('客户复核通过')
   const attempt=await h.controller.submit(h.controller.prepare('SubmitEcoDelivery',{contractId:contract.id}))
   expect(attempt.status).toBe('rejected')
  }finally{await h.close()}
@@ -222,9 +252,9 @@ it('merges normal market, ecosystem and personal completion from one real clock 
   const before=h.view(),completion=features(before).deepseek!.contracts[0]!.productionJob!.completeAt
   await h.advance(completion)
   const text=domainSceneResult('AdvanceTime',before,h.view())
-  expect(text).toContain('模拟买入实际成交');expect(text).toContain('原生态作品已实际制作完成');expect(text).toContain('原休整已实际结束')
+  expect(text).toContain('模拟买入实际成交');expect(text).toContain('作品已制作完成');expect(text).toContain('休整已经结束')
   const combined=savedSceneResult('AdvanceTime','让日子向前',before,h.view())
-  expect(combined).toContain('模拟买入实际成交');expect(combined).toContain('原生态作品已实际制作完成');expect(combined).toContain('原休整已实际结束')
+  expect(combined).toContain('模拟买入实际成交');expect(combined).toContain('作品已制作完成');expect(combined).toContain('休整已经结束')
  }finally{await h.close()}
 })
 
@@ -235,9 +265,9 @@ it('keeps the real current pause when one actual advance also settles market and
   const before=h.view();await h.send('AdvanceTime',{date:'2020-12-31'});const after=h.view()
   expect(features(after).workbench.pause).not.toBeNull()
   const text=domainSceneResult('AdvanceTime',before,after)
-  expect(text).toContain('模拟买入实际成交');expect(text).toContain('原休整已实际结束');expect(text).toMatch(/日程仍停在|原暂停仍需处理/)
+  expect(text).toContain('模拟买入实际成交');expect(text).toContain('休整已经结束');expect(text).toMatch(/日程仍停在|原暂停仍需处理/)
   const combined=savedSceneResult('AdvanceTime','让日子向前',before,after)
-  expect(combined).toContain('模拟买入实际成交');expect(combined).toContain('原休整已实际结束');expect(combined.match(/日程仍停在|原暂停仍需处理/g)).toHaveLength(1)
+  expect(combined).toContain('模拟买入实际成交');expect(combined).toContain('休整已经结束');expect(combined.match(/日程仍停在|原暂停仍需处理/g)).toHaveLength(1)
   expect(combined).not.toContain('日子在这里停了一下')
  }finally{await h.close()}
 })
@@ -314,11 +344,11 @@ it('isolates the original sealed fixture to check transfer receivable and partia
   expect(sale.collectedFen).toBe(0);expect(features(view()).deepseek!.agreements[0]!.shares).toBe(agreement.shares-100)
   await send('AdvanceTime',{date:sale.dueAt!})
   const partial=Math.floor(sale.receivable!.remainingFen/2),collected=await send('CollectEquityExit',{exitId:sale.id,amountFen:partial})
-  expect(collected.text).toContain('股权转让款实际到账');expect(collected.text).toContain('原未收余额仍在');expect(collected.text).toContain('未把估值当收益')
+  expect(collected.text).toContain('股权转让款实际到账');expect(collected.text).toContain('未收余额仍在');expect(collected.text).toContain('未把估值当收益')
   expect(features(view()).deepseek!.exits[0]!.receivable!.remainingFen).toBe(sale.receivable!.amountFen-partial)
   const remaining=features(view()).deepseek!.exits[0]!.receivable!.remainingFen,full=await send('CollectEquityExit',{exitId:sale.id,amountFen:remaining})
   expect(features(view()).deepseek!.exits[0]!.receivable!.remainingFen).toBe(0)
-  expect(full.text).toContain('本次对应原转让应收已收清');expect(full.text).not.toContain('原未收余额仍在');expect(full.text).toContain('未把估值当收益')
+  expect(full.text).toContain('本次对应转让应收已收清');expect(full.text).not.toContain('未收余额仍在');expect(full.text).toContain('未把估值当收益')
  }finally{await controller.close();await store.close()}
 })
 
@@ -328,18 +358,18 @@ it('keeps real invitation, acceptance, paid fulfillment, actual completion and a
   const started=await h.send('StartLifeWork',{kind:'friend_visit',personId:'tang-ying',reference:null})
   expect(started.text).toContain('唐萤');expect(started.text).toContain('支付¥200、使用1点');expect(started.text).toContain('现在还没有完成')
   const visited=await h.send('AdvanceTime',{date:'2020-01-04'})
-  expect(visited.text).toContain('原共同活动已实际完成');expect(visited.text).toContain('新邀请已出现')
+  expect(visited.text).toContain('共同活动已完成');expect(visited.text).toContain('新邀请已出现')
   const promise=features(h.view()).life.promises[0]!
   const accepted=await h.send('AcceptLifePromise',{promiseId:promise.id,consent:true})
-  expect(accepted.text).toContain('原约定已接受');expect(accepted.text).toContain('兑现仍须另行安排')
+  expect(accepted.text).toContain('约定已接受');expect(accepted.text).toContain('兑现仍须另行安排')
   const working=await h.send('FulfillLifePromise',{promiseId:promise.id})
-  expect(working.text).toContain('支付¥300、使用1点');expect(working.text).not.toContain('已通过原工作实际兑现')
+  expect(working.text).toContain('支付¥300、使用1点');expect(working.text).not.toContain('约定已兑现')
   const kept=await h.send('AdvanceTime',{date:features(h.view()).life.jobs.at(-1)!.completeAt})
-  expect(kept.text).toContain('已通过原工作实际兑现')
+  expect(kept.text).toContain('约定已兑现')
   const improving=await h.send('StartLifeWork',{kind:'workspace',personId:null,reference:null})
   expect(improving.text).not.toContain('改善已实际完成')
   const improved=await h.send('AdvanceTime',{date:features(h.view()).life.jobs.at(-1)!.completeAt})
-  expect(improved.text).toContain('原工作空间改善已实际完成')
+  expect(improved.text).toContain('桌椅与照明已经改善')
  }finally{await h.close()}
 })
 
@@ -348,7 +378,7 @@ it('retains real player refusal without calling it a missed promise',async()=>{
  try{
   await declined.send('StartLifeWork',{kind:'friend_visit',personId:'tang-ying',reference:null});await declined.advance('2020-01-04')
   const result=await declined.send('DeclineLifePromise',{promiseId:features(declined.view()).life.promises[0]!.id})
-  expect(result.text).toContain('原约定已婉拒');expect(result.text).not.toContain('失约')
+  expect(result.text).toContain('约定已婉拒');expect(result.text).not.toContain('失约')
  }finally{await declined.close()}
 })
 it('retains real NPC withdrawal as the other person’s own decision',async()=>{
@@ -361,7 +391,7 @@ it('retains a real accepted promise missed on its original deadline',async()=>{
 })
 it('retains real completion on the original deadline as fulfillment',async()=>{
  const deadline=await normal('deadline-life',deadlineRaw)
- try{const result=await deadline.send('AdvanceTime',{date:'2020-02-18'});expect(result.text).toContain('已通过原工作实际兑现');expect(result.text).not.toContain('已到期未实际完成')}finally{await deadline.close()}
+ try{const result=await deadline.send('AdvanceTime',{date:'2020-02-18'});expect(result.text).toContain('约定已兑现');expect(result.text).not.toContain('已到期未实际完成')}finally{await deadline.close()}
 })
 
 it('keeps an invitation that really appears and expires inside one clock span distinct from acceptance',async()=>{
@@ -370,7 +400,7 @@ it('keeps an invitation that really appears and expires inside one clock span di
   await h.send('StartLifeWork',{kind:'friend_visit',personId:'tang-ying',reference:null})
   const before=h.view(),result=await h.send('AdvanceTime',{date:'2020-01-22'})
   expect(features(before).life.promises).toHaveLength(0);expect(features(result.current).life.promises[0]!.status).toBe('expired')
-  expect(result.text).toContain('原共同活动已实际完成');expect(result.text).toContain('原未接受邀请已到期');expect(result.text).toContain('没有自动接受、付款或完成')
+  expect(result.text).toContain('共同活动已完成');expect(result.text).toContain('尚未接受的邀请已到期');expect(result.text).toContain('没有自动接受、付款或完成')
  }finally{await h.close()}
 })
 

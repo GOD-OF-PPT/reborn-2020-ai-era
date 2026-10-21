@@ -42,7 +42,13 @@ export function ScreenBook({children,label='这一册',className='',choiceNaviga
    const found=[...content.querySelectorAll<HTMLElement>('h2,h3,summary,[data-book-chapter]')].filter(node=>{
     const closed=node.closest('details:not([open])')
     return !node.classList.contains('sr-only')&&node.getClientRects().length&&node.offsetHeight>0&&(!closed||closed.querySelector(':scope > summary')===node&&!closed.parentElement?.closest('details:not([open])'))
-   }).map(node=>({title:node.textContent?.trim()??'',page:bookPageAt(node.getClientRects()[0]!.left-start,width,GAP,pages),choice:node.hasAttribute('data-book-chapter')})).filter(c=>c.title)
+   }).map(node=>{
+    const choice=node.hasAttribute('data-book-chapter')
+    // A long thought can span pages; its shortcut must reveal the actual action.
+    const action=choiceNavigation&&choice?node.closest('.scene-wait-decision,.scene-action-card')?.querySelector<HTMLElement>('.clock-main>button,.scene-decision-main>button'):null
+    const target=action?[...action.getClientRects()].find(rect=>rect.width>0&&rect.height>0):null
+    return {title:node.textContent?.trim()??'',page:bookPageAt((target??node.getClientRects()[0]!).left-start,width,GAP,pages),choice}
+   }).filter(c=>c.title)
    setChapters(old=>JSON.stringify(old)===JSON.stringify(found)?old:found)
    updateFocus()
   }
@@ -52,7 +58,7 @@ export function ScreenBook({children,label='这一册',className='',choiceNaviga
   content.addEventListener('toggle',schedule,true);content.addEventListener('load',schedule,true)
   measure()
   return()=>{resize.disconnect();changes.disconnect();content.removeEventListener('toggle',schedule,true);content.removeEventListener('load',schedule,true);cancelAnimationFrame(scheduled);for(const [node,original] of tabs.current){if(original.tab===null)node.removeAttribute('tabindex');else node.setAttribute('tabindex',original.tab);node.inert=original.inert}tabs.current.clear()}
- },[turn,updateFocus])
+ },[turn,updateFocus,choiceNavigation])
  useLayoutEffect(()=>{updateFocus()},[page,layout,updateFocus])
  const keyboard=(event:KeyboardEvent<HTMLDivElement>)=>{
   const target=event.target as HTMLElement

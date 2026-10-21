@@ -1,0 +1,115 @@
+{
+  "scope": "D10 assigned nine-file player-facing progress/result implementation handoff. Ready for root-owned verification; no tests or type/build/browser/compatibility execution by this agent.",
+  "openingHead": "58fee36f9b124ae07d8ccb8559f7c67dff771244",
+  "files": [
+    {
+      "path": "src/ui/scene-domain-results.ts",
+      "bytes": 27397,
+      "sha256": "84aa04562f40f1db05ad8157b7a89dae06446ea53bf2a60849f99f3bfde44436",
+      "mode": "100644"
+    },
+    {
+      "path": "src/ui/scene-domain-results.test.ts",
+      "bytes": 35617,
+      "sha256": "f45efde88df689371a56ff8ebe7b6000cfb6932a9c863a0fdf8ba4aea338273f",
+      "mode": "100644"
+    },
+    {
+      "path": "src/ui/market-scene-progress.ts",
+      "bytes": 7161,
+      "sha256": "5cb676e933b48b2ff7b36c7d1e2834630b257cf9588c8d5bf8cb4b19506f3152",
+      "mode": "100644"
+    },
+    {
+      "path": "src/ui/market-scene-progress.test.tsx",
+      "bytes": 8729,
+      "sha256": "9f8d2d645139b8bd7f81e3c495d5e1d245b298b536a334d5400f9e1a03857196",
+      "mode": "100644"
+    },
+    {
+      "path": "src/ui/deepseek-scene-progress.ts",
+      "bytes": 19908,
+      "sha256": "6f40eca4df8ddc9b5bc5bc199f0331a36d547cf19060529e7778d309b21afb4f",
+      "mode": "100644"
+    },
+    {
+      "path": "src/ui/deepseek-scene-progress.test.ts",
+      "bytes": 13969,
+      "sha256": "a399afc1f5b811f204f5d347491419eb61fd1afc6116513fe1d748ba07f48717",
+      "mode": "100644"
+    },
+    {
+      "path": "src/ui/life-scene-progress.ts",
+      "bytes": 15024,
+      "sha256": "909b2c5736f56c0215a81432d9155801ba7a9de341afc32d63a46c0745ecc453",
+      "mode": "100644"
+    },
+    {
+      "path": "src/ui/life-scene-progress.test.ts",
+      "bytes": 16288,
+      "sha256": "57e852d677ce3b3671eae55c8ab5931075ea384b8367a746d3348708ab28360b",
+      "mode": "100644"
+    },
+    {
+      "path": "src/ui/game-text.ts",
+      "bytes": 37694,
+      "sha256": "af2a163ebb678928681ee4cfb5da29cfc70e8c903e4a2a39ebb8d8bd6ce923e4",
+      "mode": "100644"
+    }
+  ],
+  "implemented": [
+    "Market receipts grouped by actual public account, stock and buy/sell direction, including fills/fees/partial remainder/cancel/expiry release/zero-lag cash/later settlement; no cross-account financial merge.",
+    "Ecosystem production/submission/review/support/income/receivable/cancellation/refund results bind the public customer contract and business account; all80/20/prepayment/credit/cash figures and original saved/unchanged-income/cash-delta guards retained.",
+    "Equity payment and transfer receipts name the payer/business account, retain counterfactual labels, locked dates, shares, receivable and actual collected balances.",
+    "Market/DeepSeek/life stage text is more direct; inspection labels explicitly say查看/翻阅; planned ecosystem production title does not claim running work.",
+    "Life reference summary uses public type+date; original references objects, ID/kind/date keys and command reference payload remain unchanged, full source expansion belongs to peer LifeReferenceChoice.",
+    "Translated player-facing cohort and返AP wording; preserved the public DeepSeek R1 model release identity."
+  ],
+  "staticChecks": {
+    "ownedFilesGitDiffCheck": {
+      "command": "rtk proxy git diff --check -- [the nine owned files]",
+      "actualExitCode": 0
+    },
+    "progressAstBoundary": {
+      "method": "Read opening Git source through rtk proxy git show; TypeScript AST-print selected property initializers and compare. This parses source only, does not execute tests or game code.",
+      "marketProperties": 15,
+      "deepseekProperties": 31,
+      "lifeProperties": 28,
+      "selectedFields": [
+        "command",
+        "secondaryCommand",
+        "payload",
+        "confirm",
+        "nextDate",
+        "waitDate",
+        "entityId",
+        "entityIds",
+        "entityIndex",
+        "sourceId",
+        "priority",
+        "publicDueAt"
+      ],
+      "sameAsOpening": true
+    }
+  },
+  "tests": {
+    "executed": 0,
+    "updated": "Only exact player wording assertions changed. Existing numerical finance, resources, identity, hidden-result, no-mutation, candidate-abort/retry, deadline, partial-fill and cash-state assertions retained.",
+    "added": "One real normal current-schema history case places separate personal/company orders for the same public stock, waits through the original clock, and asserts two100-share source-bound receipts with their actual gross/fees/positions rather than one200-share merged receipt. This case has not yet executed.",
+    "additionalAssertions": "Existing ecosystem real-collection case now requires the actual public customer and business account. Planned ecosystem case requires future-planned wording. Life reference case requires first-layer absence of raw ID while the complete original reference remains in references."
+  },
+  "rootIntegrationNotes": [
+    "scene-result.ts is not owned/modified by this agent. Its actual strict current-date comma/period prefixes must be coordinated with root SceneTimeNarrative without stripping historical milestone dates.",
+    "Market plan primary label is now提交这份模拟委托; waiting sale-cash label is等这笔款交收. Root-owned Narrative/Room assertions may need their corresponding wording updated, retaining disabled/read-only checks.",
+    "SceneEcho reservation fields and date framing, root Narrative/Room/Cinematic/styles and peer MarketSceneChoice/LifeReferenceChoice remain separately owned.",
+    "No claim that tests pass yet; no full C-D10/5c/T17/goal completion, human fun/clarity acceptance or compatibility acceptance."
+  ],
+  "parentControls": {
+    "noSourceOutsideNineFiles": true,
+    "noCoreApplicationContentPersistenceSchemaDependencyEdits": true,
+    "noOldEvidenceOrRuntimeMutation": true,
+    "noBrowserActions": true,
+    "noCompatibilityDevelopmentTests": true,
+    "noTestExecutionUntilRootSchedules": true
+  }
+}

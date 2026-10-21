@@ -20,6 +20,6 @@ it('time controls expose the original500 and optional review without rendering o
   const stale=renderToStaticMarkup(<ClockAdvance p={{controller,view:{...view,date:'2020-02-01'},features,accountId:'personal',request:()=>{throw Error('RENDER_MUST_NOT_ADVANCE')}}} date="2020-01-05" label="旧界面的日期"/>)
   expect(stale).toContain('原支出待核对');expect(stale).not.toContain('个人已知待付¥500')
   const notice=renderToStaticMarkup(<SceneTimeNotice date={view.date} text="原实际记录" frame={null} onClose={()=>{throw Error('RENDER_MUST_NOT_DISMISS')}} accountName={()=>'个人账户'}/>)
-  expect(notice).toContain('查看回响');expect(notice).not.toContain('<dialog');expect(controller.exportSaved()).toBe(before)
+  expect(notice).toContain('细看回响');expect(notice).not.toContain('<dialog');expect(controller.exportSaved()).toBe(before)
  }finally{await controller.close();await store.close()}
 })

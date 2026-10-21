@@ -1,0 +1,7 @@
+# 当前已有公开原文全创建审核R1
+
+只预备，尚未执行。复用D09原R1 driver完整原字节与共享scripts/verify_normal_browser_exports.ts，不用其LF边界R2变体。所有当前可读取Chrome导出均为canonical，仍以原完整bytes/SHA和真实审核终态为准。
+
+输入本root下所有chrome-*目录的exports.jsonl及其逐条完整原文；import_buffer按原origin单列，不计新保存。市场17三个读取文本、新技术自由6的实际首单原文及重载、生态74输入缓冲均纳入，实际数量以共享审核器报告为准；生态75只有真实图/AX，完整导出因连接中断没有写成文件，不能纳入或冒称已审。后来连接恢复后新增原文将另开新审核轮，不能向已完成R1写日志补数或把它说成最终全部Chrome验收。
+
+审核必须在当前全108检查终态之后独立串行执行，运行期间不新增chrome目录或追加其journal/raw。输出新current-chrome-audit-r1，原目录封存guard与fresh输出不绕过；原模块/旧证据不改。预备不算运行/通过，不计真人、兼容、原PNG、整个T17或goal。

@@ -1,0 +1,99 @@
+import {useCallback,useId,useLayoutEffect,useRef,useState,type CSSProperties,type KeyboardEvent,type MouseEvent,type ReactNode} from 'react'
+import {bookPageAt,bookPageCount} from './book-layout.ts'
+
+const GAP=48
+const controls='button,a[href],input,select,textarea,summary,[tabindex]'
+type Chapter={title:string;page:number;choice:boolean}
+
+/** Original children stay mounted: turning a page never discards a form draft. */
+export function ScreenBook({children,label='这一册',className='',choiceNavigation=false}:{children:ReactNode;label?:string;className?:string;choiceNavigation?:boolean}){
+ const viewport=useRef<HTMLDivElement>(null),flow=useRef<HTMLDivElement>(null),frame=useRef<HTMLDivElement>(null)
+ const pageRef=useRef(0),metrics=useRef({width:1,height:1,pages:1})
+ const tabs=useRef(new Map<HTMLElement,{tab:string|null;inert:boolean}>())
+ const [layout,setLayout]=useState({width:1,height:1,pages:1}),[page,setPage]=useState(0),[chapters,setChapters]=useState<Chapter[]>([])
+ const id=useId()
+ const updateFocus=useCallback(()=>{
+  const content=flow.current,window=viewport.current;if(!content||!window)return
+  const bounds=window.getBoundingClientRect()
+  for(const node of content.querySelectorAll<HTMLElement>(controls)){
+   if(!tabs.current.has(node))tabs.current.set(node,{tab:node.getAttribute('tabindex'),inert:node.inert})
+   const closed=node.closest('details:not([open])')
+   const visible=(!closed||closed.querySelector(':scope > summary')===node&&!closed.parentElement?.closest('details:not([open])'))&&[...node.getClientRects()].some(r=>r.width>0&&r.height>0&&r.left>=bounds.left-1&&r.right<=bounds.right+1&&r.top>=bounds.top-1&&r.bottom<=bounds.bottom+1)
+   const original=tabs.current.get(node)!
+   if(visible){if(original.tab===null)node.removeAttribute('tabindex');else node.setAttribute('tabindex',original.tab);node.inert=original.inert}else{node.tabIndex=-1;node.inert=true}
+  }
+  for(const node of tabs.current.keys())if(!node.isConnected)tabs.current.delete(node)
+ },[])
+ const turn=useCallback((next:number,focus=false)=>{
+  const selected=Math.max(0,Math.min(metrics.current.pages-1,next));pageRef.current=selected;setPage(selected)
+  if(focus)frame.current?.focus({preventScroll:true})
+ },[])
+ useLayoutEffect(()=>{
+  const window=viewport.current!,content=flow.current!;let scheduled=0
+  const measure=()=>{
+   scheduled=0
+   const {width,height}=window.getBoundingClientRect();if(!width||!height)return
+   content.style.setProperty('--book-width',width+'px');content.style.setProperty('--book-height',height+'px')
+   const pages=bookPageCount(content.scrollWidth,width,GAP),next={width,height,pages}
+   metrics.current=next
+   setLayout(old=>old.width===width&&old.height===height&&old.pages===pages?old:next)
+   if(pageRef.current>=pages)turn(pages-1)
+   const start=content.getBoundingClientRect().left
+   const found=[...content.querySelectorAll<HTMLElement>('h2,h3,summary,[data-book-chapter]')].filter(node=>{
+    const closed=node.closest('details:not([open])')
+    return !node.classList.contains('sr-only')&&node.getClientRects().length&&node.offsetHeight>0&&(!closed||closed.querySelector(':scope > summary')===node&&!closed.parentElement?.closest('details:not([open])'))
+   }).map(node=>{
+    const choice=node.hasAttribute('data-book-chapter')
+    // A long thought can span pages; its shortcut must reveal the actual waiting action.
+    const action=choiceNavigation&&choice?node.closest('.scene-wait-decision')?.querySelector<HTMLElement>('.clock-main>button'):null
+    const target=action?[...action.getClientRects()].find(rect=>rect.width>0&&rect.height>0):null
+    return {title:node.textContent?.trim()??'',page:bookPageAt((target??node.getClientRects()[0]!).left-start,width,GAP,pages),choice}
+   }).filter(c=>c.title)
+   setChapters(old=>JSON.stringify(old)===JSON.stringify(found)?old:found)
+   updateFocus()
+  }
+  const schedule=()=>{if(!scheduled)scheduled=requestAnimationFrame(measure)}
+  const resize=new ResizeObserver(schedule);resize.observe(window)
+  const changes=new MutationObserver(schedule);changes.observe(content,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['open','hidden','class','disabled']})
+  content.addEventListener('toggle',schedule,true);content.addEventListener('load',schedule,true)
+  measure()
+  return()=>{resize.disconnect();changes.disconnect();content.removeEventListener('toggle',schedule,true);content.removeEventListener('load',schedule,true);cancelAnimationFrame(scheduled);for(const [node,original] of tabs.current){if(original.tab===null)node.removeAttribute('tabindex');else node.setAttribute('tabindex',original.tab);node.inert=original.inert}tabs.current.clear()}
+ },[turn,updateFocus,choiceNavigation])
+ useLayoutEffect(()=>{updateFocus()},[page,layout,updateFocus])
+ const keyboard=(event:KeyboardEvent<HTMLDivElement>)=>{
+  const target=event.target as HTMLElement
+  if(target.closest('input,textarea,select,[contenteditable=true]'))return
+  if(event.key==='PageDown'||event.key==='PageUp'){event.preventDefault();turn(pageRef.current+(event.key==='PageDown'?1:-1),true)}
+ }
+ const followAnchor=(event:MouseEvent<HTMLDivElement>)=>{
+  if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return
+  const anchor=event.target instanceof Element?event.target.closest<HTMLAnchorElement>('a[href^="#"]'):null,content=flow.current
+  if(!anchor||!content)return
+  let id:string;try{id=decodeURIComponent(anchor.getAttribute('href')!.slice(1))}catch{return}
+  const target=document.getElementById(id);if(!target||!content.contains(target))return
+  event.preventDefault()
+  for(let parent:HTMLElement|null=target;parent&&parent!==content;parent=parent.parentElement)if(parent instanceof HTMLDetailsElement)parent.open=true
+  const rect=target.getClientRects()[0],window=viewport.current!.getBoundingClientRect();if(!rect)return
+  const next={width:window.width,height:window.height,pages:bookPageCount(content.scrollWidth,window.width,GAP)}
+  metrics.current=next;setLayout(next)
+  turn(bookPageAt(rect.left-content.getBoundingClientRect().left,window.width,GAP,next.pages),true)
+  queueMicrotask(()=>{
+   if(!target.isConnected)return
+   if(!tabs.current.has(target))tabs.current.set(target,{tab:target.getAttribute('tabindex'),inert:target.inert})
+   target.tabIndex=-1;if(!tabs.current.get(target)!.inert)target.inert=false
+   target.focus({preventScroll:true})
+  })
+ }
+ const choices=chapters.filter(chapter=>chapter.choice)
+ const decisionHint=choices.length===1?'按 1 核对这个念头':choices.length>1?`按 1—${choices.length} 选择，先看清再决定`:'选择一个念头，先看清再决定'
+ return <div ref={frame} tabIndex={-1} className={'screen-book '+className} role="region" aria-label={label+' · 翻页阅读'} data-page={page+1} data-pages={layout.pages} onKeyDown={keyboard}>
+  <div className="book-index">{choiceNavigation&&choices.length&&layout.pages>1?<nav className="book-decisions" aria-label="现在想做什么">{choices.map((choice,i)=><button type="button" key={i} aria-label={'看看选择：'+choice.title} aria-current={page===choice.page?'page':undefined} onClick={()=>turn(choice.page,true)}><span aria-hidden="true">{String(i+1).padStart(2,'0')}</span>{choice.title}</button>)}</nav>:<><span className="book-binding" aria-hidden="true">{choiceNavigation?label:'LONG DAY / '+label}</span>{!choiceNavigation&&chapters.length>1?<label>翻到<select aria-label={label+'章节'} value="" onChange={event=>{turn(Number(event.target.value));event.currentTarget.value=''}}><option value="" disabled>选择一个片段 · {chapters.length}</option>{chapters.map((chapter,i)=><option key={i} value={chapter.page}>{String(chapter.page+1).padStart(2,'0')} · {chapter.title}</option>)}</select></label>:<span className="book-hint">{choiceNavigation?decisionHint:'无需滚动 · 一页一页，慢慢决定'}</span>}</>}</div>
+  <div ref={viewport} className="book-viewport" id={id}>
+   <div ref={flow} className="book-flow" onClickCapture={followAnchor} style={{transform:`translateX(${-page*(layout.width+GAP)}px)`,animationName:page%2?'book-ink-odd':'book-ink-even','--book-gap':GAP+'px'} as CSSProperties} onFocusCapture={event=>{
+    const node=event.target as HTMLElement,bounds=viewport.current!.getBoundingClientRect(),r=node.getBoundingClientRect()
+    if(r.left<bounds.left-1||r.right>bounds.right+1)turn(bookPageAt(r.left-flow.current!.getBoundingClientRect().left,layout.width,GAP,layout.pages))
+   }}>{children}</div>
+  </div>
+  {!choiceNavigation||layout.pages>1?<nav className="book-pagination" aria-label={label+'翻页'}><button type="button" disabled={page===0} onClick={()=>turn(page-1,true)} aria-controls={id}>← 上一页</button><span className="book-page-counter"><label><input aria-label={label+'页码'} type="number" min={1} max={layout.pages} value={page+1} onChange={event=>{const next=Number(event.target.value);if(Number.isSafeInteger(next))turn(next-1)}}/><span aria-hidden="true"> / {String(layout.pages).padStart(2,'0')}</span></label><span role="status" aria-live="polite" className="sr-only">第{page+1}页，共{layout.pages}页</span><small>PageUp / PageDown</small></span><button type="button" disabled={page>=layout.pages-1} onClick={()=>turn(page+1,true)} aria-controls={id}>下一页 →</button></nav>:null}
+ </div>
+}

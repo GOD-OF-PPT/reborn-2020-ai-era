@@ -28,8 +28,8 @@ it('scene choices are read-only and keep delivery, end-of-range and read-only ac
  const h=await normalScene(),before=h.controller.exportSaved()
  try{
   const first=renderToStaticMarkup(<NarrativeScene {...h.p}/>)
-  expect(first).toContain('核对本季工作安排')
-  expect(first).toContain('核对这笔手工第一单')
+  expect(first).toContain('查看这季的工作安排')
+  expect(first).toContain('查看报价，决定是否接单')
   expect(first).toContain('让日子向前')
   // Explicit UI projections exercise presentation guards; these are not completed campaigns.
   const delivery={...h.features,workbench:{...h.features.workbench,progression:{...h.features.workbench.progression,requiresDelivery:true}}}
@@ -39,7 +39,7 @@ it('scene choices are read-only and keep delivery, end-of-range and read-only ac
   const ended={...h.features,workbench:{...h.features.workbench,atQuarterEnd:true}}
   expect(renderToStaticMarkup(<NarrativeScene {...h.p} view={{...h.view,date:'2025-12-31'}} features={ended}/>)).not.toContain('走进下一季')
   const readOnly=renderToStaticMarkup(<NarrativeScene {...h.p} view={{...h.view,readOnly:true}}/>)
-  expect(readOnly.match(/<button[^>]*aria-label="核对本季工作安排"[^>]*>/)?.[0]).toContain('disabled=""')
+  expect(readOnly.match(/<button[^>]*aria-label="查看这季的工作安排"[^>]*>/)?.[0]).toContain('disabled=""')
   expect(h.controller.exportSaved()).toBe(before)
  }finally{await h.controller.close();await h.store.close()}
 },20000)
@@ -67,8 +67,8 @@ it('an actually accepted promise is named with its deadline outside the operatio
   const unavailableBusinesses={...features,course:null,relay:null,deepseek:null,routines:null}
   expect(renderToStaticMarkup(<SceneThreads p={{...h.p,view,features:unavailableBusinesses}} onOpen={h.p.onNavigate}/>)).toContain(offered.deadline)
   const scene=renderToStaticMarkup(<NarrativeScene {...h.p} view={view} features={features} screen="life"/>)
-  expect(scene).toContain('安排实际兑现工作');expect(scene).toContain('接受没有替代实际工作');expect(scene).toContain(offered.deadline);expect(scene).toContain('个人¥300')
-  expect(scene).not.toContain('已经实际做到');expect(h.controller.exportSaved()).toBe(before)
+  expect(scene).toContain('开始兑现这项约定');expect(scene).toContain('还需要留出时间去做');expect(scene).toContain(offered.deadline);expect(scene).toContain('个人¥300')
+  expect(scene).not.toContain('已经实际做到');expect(scene).not.toContain('你做到了');expect(h.controller.exportSaved()).toBe(before)
  }finally{await h.controller.close();await h.store.close()}
 },20000)
 
@@ -78,8 +78,8 @@ it('an invitation remains separate from accepting and completing it, and can be 
   await h.controller.submit(h.controller.prepare('StartLifeWork',{kind:'friend_visit',personId:'tang-ying',reference:null}));await h.controller.submit(h.controller.prepare('AdvanceTime',{date:'2020-01-04'}))
   const view=h.controller.snapshot.view!,features=view.features as unknown as PlayFeatures,before=h.controller.exportSaved()
   const html=renderToStaticMarkup(<NarrativeScene {...h.p} view={view} features={features} screen="life"/>)
-  expect(html).toContain('唐萤提出了一项有限邀约');expect(html).toContain('核对条款后接受这项约定');expect(html).toContain('婉拒唐萤的邀请');expect(html).toContain('以后仍需个人¥300')
-  expect(html).not.toContain('你已经接受');expect(h.controller.exportSaved()).toBe(before)
+  expect(html).toContain('唐萤有一件事，想请你一起做');expect(html).toContain('看清约定后答应');expect(html).toContain('婉拒唐萤的邀请');expect(html).toContain('以后仍需个人¥300')
+  expect(html).not.toContain('你已经接受');expect(html).not.toContain('你已答应');expect(h.controller.exportSaved()).toBe(before)
  }finally{await h.controller.close();await h.store.close()}
 },20000)
 
@@ -155,7 +155,7 @@ it('a quarter result has its own scene and does not reannounce an old first orde
   expect(html).toContain('这一季，你留下了什么')
   expect(html).toContain('翻看本季实际记录')
   expect(html).not.toContain('这笔小单，客户已经付了款')
-  expect(html).not.toContain('核对本季工作安排')
+  expect(html).not.toContain('查看这季的工作安排')
   expect(h.controller.exportSaved()).toBe(before)
  }finally{await h.controller.close();await h.store.close()}
 },20000)

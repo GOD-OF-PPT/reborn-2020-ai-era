@@ -95,7 +95,7 @@ export function savedSceneResult(kind:string,label:string,previous:PlayingView|n
  const f=current.features as unknown as PlayFeatures,before=previous?.features as unknown as PlayFeatures|undefined,first=f.firstOrder
  const domain=domainSceneResult(kind,previous,current)
  if(kind==='WorkQuarter')return `这一季的工作已经安排好。月末才按实际在岗日期发薪；你还留着${current.budget.available}点，可以做自己的选择。`
- if(kind==='StartFirstOrder')return `你接下了这份手工小单。${first.dates.startAt}开工，${first.dates.submitBy}前完成并提交。客户的钱还没有到账。`
+ if(kind==='StartFirstOrder')return `你接下了这份手工小单。${first.dates.startAt}开工，${first.dates.submitBy}前完成并提交。${first.status==='planned'?`本次预留制作费${moneyText(first.terms.costFen)}和${first.terms.actionPoints}点，开工时才实际使用。`:first.status==='running'?`制作已经开工，已付制作费${moneyText(first.result.directCostFen)}，使用${first.terms.actionPoints}点。`:''}客户的钱还没有到账。`
  if(kind==='SubmitDelivery')return '作品交出去了。接下来，等客户真正复核；验收和到账还会留下各自的日期。'
  if(kind==='AcknowledgeStoryPause')return '你收下了这封来信。原期限仍在；这一步没有调查、付款或撤回外部权限。'
  if(kind==='StartRiskTask'){

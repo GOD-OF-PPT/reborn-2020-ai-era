@@ -1,0 +1,58 @@
+{
+  "mode": "retry-core-timeouts",
+  "round": "r6",
+  "started": 1792610480.847392,
+  "driverPid": 9929,
+  "scope": "One C-D10 registered check; no compatibility or browser execution by this runner.",
+  "dependencies": [
+    "r6:game-ui"
+  ],
+  "serialSchedulingConfirmed": true,
+  "freeBytesBeforeLaunch": 217343500288,
+  "dependencyReadback": [
+    {
+      "reference": "r6:game-ui",
+      "terminal": {
+        "bytes": 2935,
+        "sha256": "e29957da8f8c7bfb4b2e9dd3747a41f16b57263a49a7680544ae52b81e3220da",
+        "physicalIdentity": [
+          16777223,
+          229267367,
+          33188,
+          2935,
+          1792610459477980791,
+          1792610459477980791
+        ]
+      }
+    }
+  ],
+  "identityBefore": {
+    "head": "58fee36f9b124ae07d8ccb8559f7c67dff771244",
+    "branch": "main",
+    "origin": "https://github.com/GOD-OF-PPT/reborn-2020-ai-era.git"
+  },
+  "repositoryBefore": {
+    "defaultBranchRef": {
+      "name": "main"
+    },
+    "nameWithOwner": "GOD-OF-PPT/reborn-2020-ai-era",
+    "url": "https://github.com/GOD-OF-PPT/reborn-2020-ai-era",
+    "visibility": "PUBLIC"
+  },
+  "command": [
+    "rtk",
+    "proxy",
+    "npm",
+    "run",
+    "test:unit",
+    "--",
+    "--maxWorkers=1",
+    "--reporter=default",
+    "--reporter=json",
+    "--outputFile.json=/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-15/checks-r6/retry-core-timeouts/vitest.json",
+    "--testNamePattern=^(?:advances every historical anchor without opening news, while keeping missing access and unpaid duties|reaches actual zero cash available and zero AP with paid hires, keeps old debt, and can stop and enter the next quarter|a fixed ordinary-fault seed is independently disproved without granting free full recovery)$",
+    "src/application/campaign.test.ts",
+    "src/application/story-agency.test.ts",
+    "src/application/story-risk-modes.test.ts"
+  ]
+}

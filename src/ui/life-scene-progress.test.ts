@@ -128,7 +128,7 @@ it('sorts actual unstarted commitments without mutating their records and preser
   await h.send('AdvanceTime',{date:'2020-01-19'})
   const first=(h.view().features as unknown as PlayFeatures).firstOrder;await h.send('SubmitDelivery',{contractId:first.contractId});await h.send('AdvanceTime',{date:'2020-01-20'});await h.send('AdvanceTime',{date:'2020-01-21'})
   const partner=lifeSceneProgress(h.life(),h.view().date,'chen-yu'),reference=partner.references[0]!
-  expect(partner.choice.line).toContain(reference.date);expect(partner.choice.line).toContain(reference.id);expect(partner.choice.line).toContain('已付履约案例')
+  expect(partner.choice.line).toContain(reference.date);expect(partner.choice.line).not.toContain(reference.id);expect(partner.references).toContainEqual(reference);expect(partner.choice.line).toContain('已付履约案例')
   await h.send(partner.command!.kind,partner.command!.payload)
   expect(sceneWorks({view:h.view(),features:h.view().features as unknown as PlayFeatures}).find(work=>work.id===h.life().jobs.at(-1)!.id)).toMatchObject({screen:'life',accountId:'personal',personId:'chen-yu',lifeSelection:'person'})
   await h.send('AdvanceTime',{date:'2020-01-28'})
@@ -161,7 +161,7 @@ it('requires a material choice when a current normal life has multiple real elig
   expect(scene.references.length).toBeGreaterThan(1)
   expect(new Set(scene.references.map(r=>r.kind))).toEqual(new Set(['paid_case','course_delivery']))
   expect(scene).toMatchObject({stage:'ready',command:null,referenceRequired:true})
-  expect(scene.choice.line).toContain('需明确选择本次原依据')
+  expect(scene.choice.line).toContain('请选择这次要一起看的那一份')
   const unrelatedCooperation=lifeSceneProgress(h.life(),h.view().date,'linzhou')
   expect(unrelatedCooperation).toMatchObject({stage:'unavailable',command:null,referenceRequired:false,references:[]})
   expect(unrelatedCooperation.choice.line).toContain('钱或关系不能代替真实履约及对方同意')

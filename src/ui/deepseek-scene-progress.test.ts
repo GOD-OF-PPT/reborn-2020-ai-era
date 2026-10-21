@@ -36,7 +36,8 @@ it('connects real isolated service production, personal submission, customer rev
  expect(project().leads.some(row=>row.status==='open'&&row.id!==lead.id)).toBe(true)
  expect(deepseekSceneProgress(project(),h.run.timeline.cursor.date)).toMatchObject({phase:'working',entityId:contractId})
  expect(scene()).toMatchObject({phase:'working',active:true,nextDate:'2024-07-02'});expect(scene().command).toBeUndefined()
- expect(scene().choice.line).toContain('80%收入来自实际验收，20%来自完成支持')
+ expect(scene().title).toContain('给制作留好了日子');expect(scene().title).not.toContain('正在认真做')
+ expect(scene().choice.line).toContain('验收确认80%收入，完成支持再确认20%')
  const first=h.run.deepseek!.contracts[0]!,production=h.run.operations!.jobs.find(j=>j.id===first.productionJobId)!
  h.send('AdvanceTime',{date:production.completeAt})
  const ready=scene(),beforeSubmission=h.codec.export(h.run)
@@ -96,8 +97,8 @@ it('keeps an actual unfinished negotiation ahead of its already-read invitation 
  expect(projection.invitations.find(i=>i.id===invitation.id)!.status).toBe('open')
  const current=deepseekSceneProgress(projection,h.run.timeline.cursor.date)!
  expect(current).toMatchObject({phase:'terms',entityId:negotiation.id,active:true,nextDate:negotiation.job!.completeAt})
- expect(current.choice.line).toContain('任务基础成本')
- expect(current.choice.line).toContain('原工资、维护和其他已承诺的支持另列')
+ expect(current.choice.line).toContain('基础支出')
+ expect(current.choice.line).toContain('工资、维护和已经答应的支持另列')
  expect(current.entityIds).toContain(invitation.id)
  expect(deepseekSceneProgress(projection,h.run.timeline.cursor.date,invitation.id)!.active).toBe(false)
  expect(h.codec.export(h.run)).toBe(before)
