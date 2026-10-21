@@ -1,6 +1,7 @@
 import type {PlayingView,PlayFeatures} from './game-types.ts'
 import {moneyText} from './game-text.ts'
 import {RELAY_JOBS} from '../content/relay.ts'
+import {domainSceneResult} from './scene-domain-results.ts'
 
 function committedRelayChange(previous:PlayingView|null,current:PlayingView){
  if(!previous||previous.runId!==current.runId||current.revision<=previous.revision||current.saveStatus!=='saved'||current.hasCandidate)return null
@@ -90,7 +91,9 @@ function relayTimeResult(previous:PlayingView|null,current:PlayingView):string|n
 
 /** Called only after the controller reports a complete saved transaction. */
 export function savedSceneResult(kind:string,label:string,previous:PlayingView|null,current:PlayingView){
+ if(!previous||previous.runId!==current.runId||current.saveStatus!=='saved'||current.hasCandidate||current.revision<=previous.revision)return '尚未核定新的完整保存，眼前仍以上一次完整提交为准。'
  const f=current.features as unknown as PlayFeatures,before=previous?.features as unknown as PlayFeatures|undefined,first=f.firstOrder
+ const domain=domainSceneResult(kind,previous,current)
  if(kind==='WorkQuarter')return `这一季的工作已经安排好。月末才按实际在岗日期发薪；你还留着${current.budget.available}点，可以做自己的选择。`
  if(kind==='StartFirstOrder')return `你接下了这份手工小单。${first.dates.startAt}开工，${first.dates.submitBy}前完成并提交。客户的钱还没有到账。`
  if(kind==='SubmitDelivery')return '作品交出去了。接下来，等客户真正复核；验收和到账还会留下各自的日期。'
@@ -103,13 +106,17 @@ export function savedSceneResult(kind:string,label:string,previous:PlayingView|n
  const relayCommand=relayCommandResult(kind,previous,current)
  if(relayCommand)return relayCommand
  if(kind==='AdvanceTime'){
-  if(first.result.paymentFen>0&&(before?.firstOrder.result.paymentFen??0)===0)return `${current.date}，客户实际付来了${moneyText(first.result.paymentFen)}。制作成本${moneyText(first.result.directCostFen)}，这一单净得${moneyText(first.result.netOrderFen)}。`
-  if(first.status==='awaiting_submission')return `${current.date}，这份作品已经做完。下一步，要由你亲手交给客户。`
-  if(f.workbench.pause)return `${current.date}，日子在这里停了一下。${f.workbench.progression.barrierLabel??'有一件需要你面对的事。'}`
-  if(f.story.jobs.some(j=>j.kind==='investigate'&&j.status==='completed'&&!before?.story.jobs.some(old=>old.id===j.id&&old.status==='completed')))return `${current.date}，独立回信到了。工作已经实际完成，仍要由你对照记录并另行确认。`
+  const parts:string[]=[]
+  if(first.result.paymentFen>0&&(before?.firstOrder.result.paymentFen??0)===0)parts.push(`${current.date}，客户实际付来了${moneyText(first.result.paymentFen)}。制作成本${moneyText(first.result.directCostFen)}，这一单净得${moneyText(first.result.netOrderFen)}。`)
+  if(first.status==='awaiting_submission'&&before?.firstOrder.status!=='awaiting_submission')parts.push(`${current.date}，这份作品已经做完。下一步，要由你亲手交给客户。`)
+  if(f.workbench.pause&&!domain)parts.push(`${current.date}，日子在这里停了一下。${f.workbench.progression.barrierLabel??'有一件需要你面对的事。'}`)
+  if(f.story.jobs.some(j=>j.kind==='investigate'&&j.status==='completed'&&!before?.story.jobs.some(old=>old.id===j.id&&old.status==='completed')))parts.push(`${current.date}，独立回信到了。工作已经实际完成，仍要由你对照记录并另行确认。`)
   const relayTime=relayTimeResult(previous,current)
-  if(relayTime)return relayTime
+  if(relayTime)parts.push(relayTime)
+  if(domain)parts.push(current.date+'，'+domain)
+  if(parts.length)return parts.join(' ')
   return `${current.date}。已经确认的安排按真实日期发生，眼前又多了一次选择。`
  }
+ if(domain)return domain
  return `${label}，已经记进这段人生。实际结果请看眼前的记录；未完成的承诺仍会延续。`
 }

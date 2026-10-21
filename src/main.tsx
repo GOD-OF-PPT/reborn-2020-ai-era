@@ -10,6 +10,7 @@ import './ui/scene-play.css'
 import './ui/journey.css'
 import './ui/scene-decisions.css'
 import './ui/game-clarity.css'
+import './ui/scene-encounters.css'
 
 const root = document.getElementById('root')
 if (!root) throw new Error('Application root is missing')

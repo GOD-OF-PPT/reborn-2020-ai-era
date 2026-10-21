@@ -1,10 +1,9 @@
 import {useEffect,useRef,useState,type Ref,type ReactNode} from 'react'
 import {RoomMoment} from './RoomMoment.tsx'
-import {SceneJournal} from './SceneJournal.tsx'
+import {SceneJournal,lifeWorkTarget} from './SceneJournal.tsx'
 import {sceneSeason,sceneShortcut} from './scene-season.ts'
 import {Dialog} from './Dialog.tsx'
-import type {GamePanelProps} from './game-types.ts'
-import type {Screen} from './Navigation.tsx'
+import type {GamePanelProps,NavigateScene} from './game-types.ts'
 import type {LifePerson} from '../core/life-schema.ts'
 import {RoomBackdrop} from './RoomBackdrop.tsx'
 import {StoryQueue} from './StoryQueue.tsx'
@@ -15,7 +14,7 @@ import {ClockAdvance} from './ClockAdvance.tsx'
 import {playableAdvanceDate} from '../application/playable-advance.ts'
 import {moneyText,playableThrough} from './game-text.ts'
 
-type Props=GamePanelProps&{headingRef:Ref<HTMLHeadingElement>;notice:string|null;timeEcho?:ReactNode;onNavigate:(screen:Screen)=>void;onPeople:(id?:LifePerson)=>void;onYear:()=>void;onJourney?:()=>void}
+type Props=GamePanelProps&{headingRef:Ref<HTMLHeadingElement>;notice:string|null;timeEcho?:ReactNode;onNavigate:NavigateScene;onPeople:(id?:LifePerson)=>void;onYear:()=>void;onJourney?:()=>void}
 const spots=[['routes','电脑 · 经营','新的机会，都从一次尝试开始。',76,49],['quarter','门外 · 安排','工作与时间，仍由你决定。',37,40],['memory','书架 · 记忆','记得趋势，不是答案。',22,48],['life','床边 · 生活','也留一些时间，给自己。',21,65]] as const
 type Spot=typeof spots[number][0]
 const inspection:Record<Spot,{speaker:string;line:string;hint:string}>={
@@ -78,7 +77,7 @@ export function CinematicRoom(p:Props){
    {debts.length?<Obligations props={p} debts={debts}/>:null}
    <StoryQueue p={p} onOpen={()=>p.onNavigate('story')}/><LifeQueue p={p} onOpen={p.onPeople}/>
    {forced.map(event=><EventCard key={event.id} event={event} props={p}/>)}
-   {f.life.jobs.filter(j=>j.status==='running').map(j=><article className="room-running-life" key={j.id}><strong>{j.kind==='promise_keep'?'兑现约定':f.life.work[j.kind].title} · 实际进行中</strong><p>{j.startAt}—{j.completeAt} · 已付{moneyText(j.costFen)} / {j.actionPoints}点，尚未完成。</p><button type="button" onClick={()=>p.onNavigate('life')}>查看原生活记录</button></article>)}
+   {f.life.jobs.filter(j=>j.status==='running').map(j=><article className="room-running-life" key={j.id}><strong>{j.kind==='promise_keep'?'兑现约定':f.life.work[j.kind].title} · 实际进行中</strong><p>{j.startAt}—{j.completeAt} · 已付{moneyText(j.costFen)} / {j.actionPoints}点，尚未完成。</p><button type="button" onClick={()=>p.onNavigate('life',lifeWorkTarget(j))}>查看原生活记录</button></article>)}
    {commitmentRows.length?<div className="room-commitment-list">{commitmentRows.map(c=><article key={c.id}><p>{c.text}</p><button type="button" onClick={()=>p.onNavigate(c.screen)}>继续处理 →</button></article>)}</div>:null}
    {w.finance.filter(a=>a.forecast.earliestGap!==null).map(a=><p className="warning-box" key={a.accountId}>{a.accountId==='personal'?'个人':'企业'}{a.forecast.earliestGap!.certainty==='conditional'?'预算情景下可能不足':'按当前承诺预计不足'} · {a.forecast.earliestGap!.date} · 差额{moneyText(a.forecast.earliestGap!.shortfallFen)}。未来未知收入没有用于偿付。<button type="button" onClick={()=>p.onNavigate('finance')}>查看现金情景</button></p>)}
    {urgent===0&&commitmentRows.length===0?<p className="room-quiet">此刻，没有尚待处理的强制事项。工作、记忆和生活，都可以慢慢安排。</p>:null}

@@ -1,0 +1,83 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "node",
+    "--input-type=module",
+    "-e",
+    "import ts from 'typescript';\nconst config=ts.readConfigFile('tsconfig.app.json',ts.sys.readFile);\nif(config.error)throw Error(ts.flattenDiagnosticMessageText(config.error.messageText,'\\n'));\nconst parsed=ts.parseJsonConfigFileContent(config.config,ts.sys,process.cwd());\nconst roots=['src/ui/scene-domain-results.ts','src/ui/scene-domain-results.test.ts'];\nconst program=ts.createProgram(roots,parsed.options);\nconst diagnostics=[...parsed.errors,...ts.getPreEmitDiagnostics(program)];\nconst host={getCanonicalFileName:p=>p,getCurrentDirectory:()=>process.cwd(),getNewLine:()=> '\\n'};\nif(diagnostics.length)process.stdout.write(ts.formatDiagnostics(diagnostics,host));\nprocess.stdout.write(JSON.stringify({rootNames:roots,diagnostics:diagnostics.length,errors:diagnostics.filter(d=>d.category===ts.DiagnosticCategory.Error).length,optionsSource:'tsconfig.app.json unchanged'})+'\\n');\nprocess.exitCode=diagnostics.some(d=>d.category===ts.DiagnosticCategory.Error)?1:0;\n"
+  ],
+  "sources": {
+    "src/ui/scene-domain-results.ts": {
+      "bytes": 25033,
+      "sha256": "7eba60f0484eac95b79645b2962564e5eb8f3dc96d1f468d2ed418b79fb7cf89"
+    },
+    "src/ui/scene-domain-results.test.ts": {
+      "bytes": 32564,
+      "sha256": "48432784dbeddfdf1ecfe79cdef212f7515bfaeb9dbd24c834cbf2a9c5dfbf65"
+    },
+    "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-beforeContract.json": {
+      "bytes": 1000082,
+      "sha256": "7171bcf87e60fb63607836e22f17624fa744dc94517641db9aa587c0ad3d9d40",
+      "origin": "normal",
+      "schemaVersion": 13,
+      "rulesVersion": "rules-t16-journey-v1"
+    },
+    "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-beforeEquitySign.json": {
+      "bytes": 1235698,
+      "sha256": "32f26a50f4be38fb7500988415990e818a6fc80009e06849ad9a7ab88de83741",
+      "origin": "normal",
+      "schemaVersion": 13,
+      "rulesVersion": "rules-t16-journey-v1"
+    },
+    "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-signed.json": {
+      "bytes": 1242505,
+      "sha256": "5ee2c1fdc5cbb9999edaad1871d677ade51f7aba3f2e2d4571dce5a424d16120",
+      "origin": "normal",
+      "schemaVersion": 13,
+      "rulesVersion": "rules-t16-journey-v1"
+    },
+    "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-content_employee-beforeEquitySign.json": {
+      "bytes": 1257185,
+      "sha256": "02c2ba0f083cbb6ff83e3b600fefb71d870f12abdec5e26c4346763d9c6063da",
+      "origin": "normal",
+      "schemaVersion": 13,
+      "rulesVersion": "rules-t16-journey-v1"
+    },
+    "goal-1/evidence/t16-c16-final-a1/life/t15-promise-fulfilled-on-deadline-working.json": {
+      "bytes": 184024,
+      "sha256": "d9db01e6ebfe82192a6a293b1004b985a2dda426e1b8c51b5f11bff449437dba",
+      "origin": "normal",
+      "schemaVersion": 13,
+      "rulesVersion": "rules-t16-journey-v1"
+    },
+    "goal-1/evidence/t16-c16-final-a1/life/t15-promise-missed-accepted.json": {
+      "bytes": 155171,
+      "sha256": "bafe76dc1e0dbbde3e2de4a379afe3297acb9b50c2f2604b9997d7ea7c091827",
+      "origin": "normal",
+      "schemaVersion": 13,
+      "rulesVersion": "rules-t16-journey-v1"
+    },
+    "goal-1/evidence/t16-c16-final-a1/life/t15-npc-own-calendar-offered.json": {
+      "bytes": 222704,
+      "sha256": "5fd29beaf62409cedc3f61f243614695c92597e909ef884e62f3342898738f12",
+      "origin": "normal",
+      "schemaVersion": 13,
+      "rulesVersion": "rules-t16-journey-v1"
+    },
+    "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-private-partial-exit-offer.json": {
+      "bytes": 81883,
+      "sha256": "c5ebbd286fff22bf0965104f27a75fc27b96b0621bfa9348cfee6e69e84a0b73",
+      "origin": "fixture",
+      "schemaVersion": 13,
+      "rulesVersion": "rules-t13-fixture-v1"
+    },
+    "tsconfig.app.json": {
+      "bytes": 726,
+      "sha256": "e8691b4a5c64ab8c74e40e73bd89f2744986934ed5f7170ce54f113467b15d8f"
+    }
+  },
+  "started": 1792584733.434301,
+  "scope": "Only new domain result file group. Original normal branches preserve actual refusals; one original fixture explicitly isolated for positive exit phrasing. Original timeouts/assertions retained, no new timeout override. No full suite/browser/compatibility run.",
+  "sourceEditingStopped": true
+}

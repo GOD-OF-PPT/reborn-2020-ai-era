@@ -1,0 +1,242 @@
+import type {PlayFeatures,PlayingView} from './game-types.ts'
+
+type Market=PlayFeatures['market']
+type Deepseek=NonNullable<PlayFeatures['deepseek']>
+type Life=PlayFeatures['life']
+const index=<T extends {readonly id:string}>(rows:readonly T[])=>new Map(rows.map(row=>[row.id,row]))
+const sum=<T>(rows:readonly T[],value:(row:T)=>number)=>rows.reduce((total,row)=>total+BigInt(value(row)),0n)
+const count=(value:bigint)=>value.toLocaleString('zh-CN')
+function money(value:bigint){
+ const negative=value<0n,absolute=negative?-value:value,fraction=absolute%100n
+ return `${negative?'-':''}¥${count(absolute/100n)}${fraction?'.'+String(fraction).padStart(2,'0'):''}`
+}
+const amount=(value:number)=>money(BigInt(value))
+const activeOrder=(status:string)=>['planned','pending','partially_filled'].includes(status)
+const domainKinds=new Set(['PlanStockOrder','PlaceStockOrder','SubmitStockOrder','CancelStockOrder','AmendStockOrder','ResearchMarket','StopMarketResearch','AcceptEcoContract','SubmitEcoDelivery','StartEcoRemediation','CancelEcoContract','CollectEcoReceivable','SignEquityAgreement','FollowEquityRound','AcceptEquityExit','CollectEquityExit','StartLifeWork','FulfillLifePromise','AcceptLifePromise','DeclineLifePromise','InterruptLifeWork','AdvanceTime'])
+
+function marketResults(kind:string,before:Market,after:Market,date:string):string[]{
+ if(!before||!after)return []
+ const oldOrders=index(before.orders),orders=index(after.orders),researches=index(before.researches),parts:string[]=[]
+ const orderTitle=(order:Market['orders'][number])=>`${after.stocks.find(stock=>stock.symbol===order.symbol)?.name??order.symbol}的模拟${order.side==='buy'?'买入':'卖出'}委托`
+ if(kind==='PlanStockOrder'||kind==='PlaceStockOrder'){
+  const added=after.orders.filter(row=>!oldOrders.has(row.id)&&row.replacesId===null&&row.status===(kind==='PlanStockOrder'?'planned':'pending'))
+  if(added.length===1){
+   const row=added[0]!,held=row.side==='buy'?`资金预留${amount(row.cashHeldFen)}`:`原持仓预留${row.remaining}股`
+   parts.push(`${orderTitle(row)}${row.status==='planned'?'已记为计划，尚未提交':'已提交，等待下一撮合点'}：${row.quantity}股、限价${amount(row.limitPriceFen)}，${held}，尚未成交或新增到账`)
+  }
+ }
+ if(kind==='SubmitStockOrder'){
+  const submitted=after.orders.filter(row=>oldOrders.get(row.id)?.status==='planned'&&row.status==='pending')
+  if(submitted.length===1){const row=submitted[0]!;parts.push(`${orderTitle(row)}已从计划转为提交：${row.remaining}股等待原撮合，${row.side==='buy'?`原资金占用${amount(row.cashHeldFen)}`:'原持仓预留'}继续保留，尚未成交`)}
+ }
+ if(kind==='CancelStockOrder'){
+  const cancelled=after.orders.filter(row=>row.status==='cancelled'&&activeOrder(oldOrders.get(row.id)?.status??''))
+  if(cancelled.length){
+   const released=sum(cancelled,row=>Math.max(0,oldOrders.get(row.id)!.cashHeldFen-row.cashHeldFen)),shares=sum(cancelled.filter(row=>row.side==='sell'),row=>oldOrders.get(row.id)!.remaining)
+   parts.push(`${cancelled.length}笔原模拟委托的未成交部分已撤回${released?`，释放资金占用${money(released)}`:''}${shares?`，释放${count(shares)}股预留`:''}；原已成交部分不撤销，释放占用不是收入`)
+  }
+ }
+ if(kind==='AmendStockOrder'){
+  const replacements=after.orders.filter(row=>!oldOrders.has(row.id)&&row.replacesId!==null&&activeOrder(row.status)&&activeOrder(oldOrders.get(row.replacesId)?.status??'')&&orders.get(row.replacesId)?.status==='cancelled')
+  if(replacements.length===1){const row=replacements[0]!,old=oldOrders.get(row.replacesId!)!;parts.push(`${orderTitle(row)}未成交部分已改为${row.quantity}股、限价${amount(row.limitPriceFen)}${row.side==='buy'?`，原资金占用${amount(old.cashHeldFen)}改为${amount(row.cashHeldFen)}`:''}；仍须等待撮合，改价和预留变化不是收益`)}
+ }
+ if(kind==='ResearchMarket'){
+  const started=after.researches.filter(row=>!researches.has(row.id)&&row.status==='running'&&row.startAt<=date)
+  if(started.length)parts.push(`${started.length}项原模拟市场研究已实际开始${started.length===1?`，${started[0]!.startAt}—${started[0]!.completeAt}`:''}；原费用与行动按这次安排记录，尚未完成，研究不揭示未来价格或代你交易`)
+ }
+ if(kind==='StopMarketResearch'){
+  const stopped=after.researches.filter(row=>researches.get(row.id)?.status==='running'&&row.status==='interrupted')
+  if(stopped.length)parts.push(`${stopped.length}项原模拟市场研究已中断，已付费用与已用行动保留，不记完成，不因中断退款或返还行动`)
+ }
+ if(kind!=='AdvanceTime')return parts
+ const studied=after.researches.filter(row=>researches.get(row.id)?.status==='running'&&row.status==='completed'&&row.completeAt<=date)
+ if(studied.length)parts.push(`${studied.length}项原模拟市场研究已实际完成，只整理已公开线索；这不是未来价格，也没有替你下委托`)
+ const oldFills=index(before.fills),fills=after.fills.filter(fill=>!oldFills.has(fill.id)&&fill.date<=date&&orders.has(fill.orderId))
+ for(const side of ['buy','sell'] as const){
+  const actual=fills.filter(fill=>orders.get(fill.orderId)!.side===side)
+  if(!actual.length)continue
+  const touched=new Set(actual.map(fill=>fill.orderId)),remaining=sum(after.orders.filter(row=>touched.has(row.id)&&activeOrder(row.status)),row=>row.remaining),ended=sum(after.orders.filter(row=>touched.has(row.id)&&!activeOrder(row.status)),row=>row.remaining)
+  parts.push(`模拟${side==='buy'?'买入':'卖出'}实际成交${count(sum(actual,row=>row.quantity))}股，成交额${money(sum(actual,row=>row.grossFen))}、费用${money(sum(actual,row=>row.feeFen))}${remaining?`，相关原委托仍有${count(remaining)}股未成交`:''}${ended?`，另有${count(ended)}股未成交余量已按原状态结束`:''}${side==='sell'?'；卖出成交与卖款交收分别记录，成交额不能直接当作到账额':''}`)
+  if(side==='sell'){
+   const immediate=actual.filter(fill=>fill.receivableId===null&&after.stocks.find(stock=>stock.symbol===orders.get(fill.orderId)!.symbol)?.rule?.cashLagDays===0)
+   if(immediate.length)parts.push(`${immediate.length}笔原模拟卖款按原零延迟规则实际入账${money(sum(immediate,row=>row.grossFen-row.feeFen))}，已经扣除这些成交的原费用`)
+  }
+ }
+ const expired=after.orders.filter(row=>row.status==='expired'&&activeOrder(oldOrders.get(row.id)?.status??''))
+ if(expired.length){
+  const consumed=new Map<string,bigint>()
+  for(const fill of fills)if(orders.get(fill.orderId)!.side==='buy')consumed.set(fill.orderId,(consumed.get(fill.orderId)??0n)+BigInt(fill.grossFen)+BigInt(fill.feeFen))
+  const released=expired.reduce((total,row)=>total+BigInt(oldOrders.get(row.id)!.cashHeldFen)-BigInt(row.cashHeldFen)-(consumed.get(row.id)??0n),0n),shares=sum(expired.filter(row=>row.side==='sell'),row=>row.remaining)
+  parts.push(`${expired.length}笔原模拟委托已到期结束，未成交余量${count(sum(expired,row=>row.remaining))}股${released>0n?`，释放资金占用${money(released)}`:''}${shares?`，释放${count(shares)}股预留`:''}；释放占用不是收入，原已成交与原费用仍保留`)
+ }
+ const oldSettlements=index(before.settlements)
+ const paid=after.settlements.filter(row=>row.paidAt!==null&&row.paidAt<=date&&(oldSettlements.get(row.id)?.paidAt??null)===null)
+ for(const kind of ['sale','dividend'] as const){
+  const actual=paid.filter(row=>row.kind===kind)
+  if(actual.length)parts.push(`${actual.length}笔原模拟${kind==='sale'?'卖款交收':'分红'}实际到账${money(sum(actual,row=>row.amountFen))}，仅这些已付款记录成为现金`)
+ }
+ return parts
+}
+
+function ecosystemResults(kind:string,before:Deepseek,after:Deepseek,date:string,workbench:PlayFeatures['workbench']|undefined):string[]{
+ const contracts=index(before.contracts),deliveries=index(before.deliveries),parts:string[]=[]
+ if(kind==='AcceptEcoContract'){
+  const added=after.contracts.filter(row=>!contracts.has(row.id)&&row.productionJob&&['planned','running'].includes(row.productionJob.status))
+  if(added.length===1){const row=added[0]!,job=row.productionJob!;parts.push(`原生态订单已接下：${row.scope==='pilot'?'试点':'标准'}范围，生产安排${job.startAt}—${job.completeAt}；客户预款${amount(row.prepaymentFen)}受原保护，制作尚未完成，预款不是利润`)}
+ }
+ if(kind==='SubmitEcoDelivery'){
+  const submitted=after.contracts.filter(row=>{
+   const old=contracts.get(row.id)
+   return old&&row.submittedAt!==null&&row.submittedAt<=date&&row.status==='review'&&(row.submittedAt!==old.submittedAt||old.status!=='review')&&(row.remediationJob??row.productionJob)?.status==='completed'
+  })
+  if(submitted.length)parts.push(`${submitted.length}份原生态作品已亲手提交，等待客户按原日期复核${submitted.length===1&&submitted[0]!.reviewAt?`（${submitted[0]!.reviewAt}）`:''}，提交不等于通过或到账`)
+ }
+ if(kind==='StartEcoRemediation'){
+  const added=after.contracts.filter(row=>row.remediationJob&&contracts.get(row.id)?.remediationJobId!==row.remediationJobId&&['planned','running'].includes(row.remediationJob.status))
+  if(added.length)parts.push(`${added.length}份原生态作品已安排补正，仍需实际制作、亲手提交和客户复核，尚未完成`)
+ }
+ if(kind==='CancelEcoContract'||kind==='AdvanceTime'){
+  const cancelled=after.contracts.filter(row=>row.cancelledAt!==null&&row.cancelledAt<=date&&contracts.get(row.id)?.cancelledAt===null&&row.status==='cancelled')
+  if(cancelled.length){
+   const cancelledIds=new Set(cancelled.map(row=>row.id)),oldRefunds=index(before.refunds),refunds=after.refunds.filter(row=>!oldRefunds.has(row.id)&&row.date<=date&&cancelledIds.has(row.contractId)),requested=sum(refunds,row=>row.amountFen)
+   let refundText=''
+   if(requested&&workbench){
+    const operations=new Set(refunds.map(row=>row.operationId)),owed=sum(workbench.finance.flatMap(row=>row.obligations).filter(row=>row.kind==='refund_undelivered'&&operations.has(row.originOperationId)),row=>row.remainingFen),paid=requested-owed
+    refundText=`${paid>0n?`，已实际退回原客户款${money(paid)}`:''}${owed>0n?`，原退款仍欠${money(owed)}`:''}`
+   }else if(requested)refundText=`，原退款已登记${money(requested)}，实际付款仍须看原账`
+   parts.push(`${cancelled.length}份原生态订单已实际取消${refundText}；原已发生成本与未结责任继续保留，不是结清或收益`)
+  }
+ }
+ if(kind==='CollectEcoReceivable'){
+  const changed=after.deliveries.flatMap(row=>{
+   const old=deliveries.get(row.id)
+   return old&&old.contractId===row.contractId&&old.creditFen===row.creditFen&&row.dueAt<=date&&row.remainingFen<old.remainingFen?[{row,delta:old.remainingFen-row.remainingFen}]:[]
+  })
+  if(changed.length){
+   const oldBusinesses=index(before.businesses),newBusinesses=index(after.businesses),newContracts=index(after.contracts),totals=new Map<string,bigint>()
+   let valid=true
+   for(const {row,delta}of changed){
+    const contract=newContracts.get(row.contractId),old=contracts.get(row.contractId)
+    if(!contract||!old||!contract.balance||!old.balance||contract.balance.recognizedIncomeFen!==old.balance.recognizedIncomeFen){valid=false;break}
+    totals.set(contract.businessId,(totals.get(contract.businessId)??0n)+BigInt(delta))
+   }
+   for(const [businessId,total]of totals){const old=oldBusinesses.get(businessId),current=newBusinesses.get(businessId);if(!old||!current||BigInt(current.funds.cashFen)-BigInt(old.funds.cashFen)!==total)valid=false}
+   if(valid)parts.push(`${changed.length}笔原生态应收实际到账${money(sum(changed,row=>row.delta))}，进入原业务账户；这次回款不重复确认原80%／20%收入`)
+  }
+ }
+ if(kind!=='AdvanceTime')return parts
+ const finished=(job:Deepseek['contracts'][number]['productionJob'],old:Deepseek['contracts'][number]['productionJob'])=>job?.status==='completed'&&job.completeAt<=date&&old?.id===job.id&&(old.status==='planned'||old.status==='running')
+ const produced=after.contracts.filter(row=>finished(row.productionJob,contracts.get(row.id)?.productionJob??null))
+ const remediated=after.contracts.filter(row=>finished(row.remediationJob,contracts.get(row.id)?.remediationJob??null))
+ const supported=after.contracts.filter(row=>finished(row.supportJob,contracts.get(row.id)?.supportJob??null))
+ if(produced.length)parts.push(`${produced.length}份原生态作品已实际制作完成${produced.every(row=>row.status==='production'&&row.submittedAt===null)?'，交付仍须亲手提交':''}`)
+ if(remediated.length)parts.push(`${remediated.length}份原生态补正已实际做完${remediated.every(row=>row.status==='production'&&row.submittedAt===null)?'，仍须重新提交':''}`)
+ if(supported.length)parts.push(`${supported.length}段原生态支持已实际完成`)
+ const accepted=after.contracts.filter(row=>row.accepted===true&&contracts.get(row.id)?.accepted===null&&row.reviewAt!==null&&row.reviewAt<=date)
+ const rejected=after.contracts.filter(row=>row.accepted===false&&contracts.get(row.id)?.accepted===null&&row.reviewAt!==null&&row.reviewAt<=date)
+ if(accepted.length)parts.push(`${accepted.length}份原生态作品本次客户复核通过，支持与实际回款仍各有原日期`)
+ if(rejected.length)parts.push(`${rejected.length}份原生态作品本次客户未接受，原补正与退款责任仍在`)
+ const posted=after.deliveries.filter(row=>!deliveries.has(row.id)&&row.date<=date&&contracts.has(row.contractId))
+ for(const stage of ['production','support'] as const){
+  const rows=posted.filter(row=>row.stage===stage)
+  if(rows.length)parts.push(`${stage==='production'?'生产80%':'支持20%'}阶段本次确认收入${money(sum(rows,row=>row.amountFen))}（${rows.length}笔），其中抵用预款${money(sum(rows,row=>row.prepaidFen))}、形成原应收${money(sum(rows,row=>row.creditFen))}，确认收入不等于新增现金到账`)
+ }
+ return parts
+}
+
+function equityResults(kind:string,before:Deepseek,after:Deepseek,date:string):string[]{
+ const agreements=index(before.agreements),invitations=index(before.invitations),negotiations=index(before.negotiations),exits=index(before.exits),parts:string[]=[]
+ if(kind==='SignEquityAgreement'){
+  const added=after.agreements.filter(row=>!agreements.has(row.id)&&row.classification==='counterfactual'&&negotiations.get(row.negotiationId)?.accepted===true&&row.signedAt<=date&&row.shares===row.initialShares)
+  if(added.length===1){const row=added[0]!;parts.push(`明确架空协议已签：实际投入${amount(row.initialCostFen)}，取得${row.shares}股，原锁定至${row.lockUntil}；投资和估值不是现金收入`)}
+ }
+ if(kind==='FollowEquityRound'){
+  const decided=after.agreements.filter(row=>agreements.get(row.id)?.followDecision==='pending'&&row.followAt!==null&&row.followAt<=date)
+  for(const row of decided){
+   const old=agreements.get(row.id)!
+   if(row.followDecision==='declined'&&row.followAmountFen===0&&row.shares===old.shares)parts.push('这次明确架空跟投已选择放弃（¥0），没有新增投入、股份或收益')
+   else if(row.followDecision==='participated'&&row.followAmountFen>0&&row.shares>old.shares)parts.push(`明确架空跟投实际投入${amount(row.followAmountFen)}，新增${row.shares-old.shares}股，现持有${row.shares}股；股份和估值仍不是现金`)
+  }
+ }
+ if(kind==='AcceptEquityExit'){
+  const sold=after.exits.filter(row=>exits.get(row.id)?.operationId===null&&row.operationId!==null&&row.soldShares>0&&row.receivable!==null&&row.dueAt!==null)
+  if(sold.length)parts.push(`明确架空股权实际转让${count(sum(sold,row=>row.soldShares))}股，扣原费用后形成转让应收${money(sum(sold,row=>row.receivable!.amountFen))}${sold.length===1?`，原到期日${sold[0]!.dueAt}`:''}；股份已扣减，当前原未收余额${money(sum(sold,row=>row.receivable!.remainingFen))}，应收不当作已到账`)
+ }
+ if(kind==='CollectEquityExit'){
+  const collected=after.exits.flatMap(row=>{const old=exits.get(row.id);return old&&old.receivableId===row.receivableId&&row.receivable&&old.receivable&&row.dueAt!==null&&row.dueAt<=date&&row.collectedFen>old.collectedFen&&old.receivable.remainingFen-row.receivable.remainingFen===row.collectedFen-old.collectedFen?[{row,delta:row.collectedFen-old.collectedFen}]:[]})
+  const oldBusinesses=index(before.businesses),businesses=index(after.businesses),totals=new Map<string,bigint>()
+  for(const {row,delta}of collected)totals.set(row.businessId,(totals.get(row.businessId)??0n)+BigInt(delta))
+  const actual=collected.length>0&&[...totals].every(([id,total])=>{const old=oldBusinesses.get(id),current=businesses.get(id);return old&&current&&BigInt(current.funds.cashFen)-BigInt(old.funds.cashFen)===total})
+  if(actual){const remaining=sum(collected,row=>row.row.receivable!.remainingFen);parts.push(`原明确架空股权转让款实际到账${money(sum(collected,row=>row.delta))}（${collected.length}笔），进入原账户；${remaining?`原未收余额仍在（${money(remaining)}）`:'本次对应原转让应收已收清'}，未把估值当收益`)}
+ }
+ if(kind!=='AdvanceTime')return parts
+ const reports=after.invitations.filter(row=>row.reportAt!==null&&row.reportAt<=date&&invitations.get(row.id)?.reportAt===null&&row.authority!==null&&row.financingConsent!==null)
+ if(reports.length)parts.push(`${reports.length}份明确架空邀请的独立回信已揭示，${reports.filter(row=>row.authority&&row.financingConsent).length}份同时有本次授权与融资同意；原资格与签约仍须另行完成`)
+ const replies=after.negotiations.filter(row=>row.respondedAt!==null&&row.respondedAt<=date&&negotiations.get(row.id)?.respondedAt===null&&row.accepted!==null)
+ if(replies.length)parts.push(`${replies.length}份明确架空谈判已有回信：同意${replies.filter(row=>row.accepted).length}份、未同意${replies.filter(row=>!row.accepted).length}份；回信没有自动签约或投入`)
+ const quotes=after.exits.filter(row=>row.responseAt!==null&&row.responseAt<=date&&exits.get(row.id)?.responseAt===null&&row.buyerWilling!==null)
+ if(quotes.length)parts.push(`${quotes.length}份明确架空转让询价已有回信，${quotes.filter(row=>row.buyerWilling).length}份有愿买方；已揭示报价仍不是出售或现金`)
+ const opened=after.agreements.filter(row=>row.followDecision==='pending'&&agreements.has(row.id)&&agreements.get(row.id)!.followDecision!==row.followDecision)
+ if(opened.length)parts.push(`明确架空跟投窗口已打开${opened.length===1?`，原期限${opened[0]!.followDeadline}`:''}；是否投入仍由你另行决定`)
+ const defaulted=after.agreements.filter(row=>row.followDecision==='defaulted'&&row.followAmountFen===0&&agreements.has(row.id)&&agreements.get(row.id)!.followDecision!=='defaulted')
+ if(defaulted.length)parts.push(`${defaulted.length}份原明确架空跟投已到期未参与，没有新增投入或股份；持有比例按原新股本记录，不是投资收益`)
+ return parts
+}
+
+function lifeResults(kind:string,before:Life,after:Life,date:string):string[]{
+ if(!before||!after)return []
+ const jobs=index(before.jobs),promises=index(before.promises),people=index(after.people),parts:string[]=[]
+ const person=(id:string)=>{const row=people.get(id);return row?.known?row:null}
+ const promiseName=(rows:readonly Life['promises'][number][])=>rows.length===1&&person(rows[0]!.personId)?`与${person(rows[0]!.personId)!.name}的原约定`:`${rows.length}项原人物约定`
+ if(kind==='StartLifeWork'||kind==='FulfillLifePromise'){
+  const added=after.jobs.filter(row=>!jobs.has(row.id)&&row.status==='running'&&row.startAt<=date)
+  if(added.length===1){
+   const row=added[0]!,who=row.personId?person(row.personId):null,title=row.kind==='promise_keep'?who?.promiseTerms.title:after.work[row.kind].title
+   if(title)parts.push(`${who?who.name+' · ':''}${title}已实际开始：支付${amount(row.costFen)}、使用${row.actionPoints}点，原完成日${row.completeAt}；现在还没有完成`)
+  }
+ }
+ if(kind==='AcceptLifePromise'){
+  const accepted=after.promises.filter(row=>promises.get(row.id)?.status==='offered'&&row.status==='accepted'&&row.acceptedAt!==null&&row.acceptedAt<=date)
+  if(accepted.length)parts.push(`${promiseName(accepted)}已接受${accepted.length===1?`，原期限${accepted[0]!.deadline}`:''}；具体工作、费用与兑现仍须另行安排`)
+ }
+ if(kind==='DeclineLifePromise'){
+  const declined=after.promises.filter(row=>promises.get(row.id)?.status==='offered'&&row.status==='declined'&&row.acceptedAt===null&&row.resolvedAt!==null&&row.resolvedAt<=date)
+  if(declined.length)parts.push(`${promiseName(declined)}已婉拒，没有把未接受的邀请记作开工或完成`)
+ }
+ if(kind==='InterruptLifeWork'){
+  const interrupted=after.jobs.filter(row=>jobs.get(row.id)?.status==='running'&&row.status==='interrupted'&&row.releasedAt!==null&&row.releasedAt<=date)
+  if(interrupted.length)parts.push(`${interrupted.length}项原生活工作已中断，已发生成本${money(sum(interrupted,row=>row.costFen))}和已用行动保留，不记完成`)
+ }
+ if(kind!=='AdvanceTime')return parts
+ const completed=after.jobs.filter(row=>row.status==='completed'&&row.completeAt<=date&&jobs.get(row.id)?.status==='running')
+ const workspace=completed.filter(row=>row.result==='workspace_ready'&&after.scene.workspaceCompleted&&after.scene.workspaceJobId===row.id)
+ const rest=completed.filter(row=>row.result==='rested'),shared=completed.filter(row=>row.result==='shared_experience')
+ if(workspace.length)parts.push('原工作空间改善已实际完成，眼前的改善来自这次已完成工作，原花费仍保留')
+ if(rest.length)parts.push(`${rest.length}次原休整已实际结束，原行动与花费照账保留`)
+ if(shared.length)parts.push(`${shared.length}项原共同活动已实际完成${shared.length===1&&shared[0]!.personId&&person(shared[0]!.personId)?`（${person(shared[0]!.personId)!.name}）`:''}`)
+ const completedJobs=index(completed)
+ const fulfilled=after.promises.filter(row=>{const job=row.completionJobId?completedJobs.get(row.completionJobId):null;return row.status==='fulfilled'&&row.resolvedAt!==null&&row.resolvedAt<=date&&promises.get(row.id)?.status==='accepted'&&job?.promiseId===row.id&&job.result==='promise_fulfilled'})
+ if(fulfilled.length)parts.push(`${promiseName(fulfilled)}已通过原工作实际兑现，实际费用与其他旧义务保留`)
+ const offered=after.promises.filter(row=>!promises.has(row.id)&&row.offeredAt<=date&&row.status==='offered'&&person(row.personId))
+ if(offered.length)parts.push(`${offered.length}份基于实际共同经历的新邀请已出现，是否接受仍由你决定`)
+ const newlyOffered=(row:Life['promises'][number])=>!promises.has(row.id)&&completedJobs.get(row.sharedJobId)?.result==='shared_experience'
+ const withdrawn=after.promises.filter(row=>row.status==='npc_declined'&&row.acceptedAt===null&&row.resolvedAt!==null&&row.resolvedAt<=date&&(promises.get(row.id)?.status==='offered'||newlyOffered(row)))
+ if(withdrawn.length)parts.push(`${promiseName(withdrawn)}由对方按自己的安排撤回尚未接受的邀请，不记玩家失约`)
+ const missed=after.promises.filter(row=>row.status==='missed'&&row.resolvedAt!==null&&row.resolvedAt<=date&&promises.get(row.id)?.status==='accepted')
+ if(missed.length)parts.push(`${promiseName(missed)}已到期未实际完成，保留失约记录与已付成本`)
+ const expired=after.promises.filter(row=>row.status==='expired'&&row.resolvedAt!==null&&row.resolvedAt<=date&&(promises.get(row.id)?.status==='offered'||newlyOffered(row)))
+ if(expired.length)parts.push(`${expired.length}份原未接受邀请已到期，没有自动接受、付款或完成`)
+ return parts
+}
+
+/** Public before/after facts only. The caller composes first-order, risk and relay receipts. */
+export function domainSceneResult(kind:string,previous:PlayingView|null,current:PlayingView):string|null{
+ if(!domainKinds.has(kind)||!previous||previous.runId!==current.runId||current.revision<=previous.revision||current.saveStatus!=='saved'||current.hasCandidate)return null
+ const before=previous.features as unknown as PlayFeatures,after=current.features as unknown as PlayFeatures
+ const parts=[...marketResults(kind,before.market,after.market,current.date)]
+ if(before.deepseek&&after.deepseek)parts.push(...ecosystemResults(kind,before.deepseek,after.deepseek,current.date,after.workbench),...equityResults(kind,before.deepseek,after.deepseek,current.date))
+ parts.push(...lifeResults(kind,before.life,after.life,current.date))
+ if(!parts.length)return null
+ if(kind==='AdvanceTime'&&after.workbench.pause)parts.push(after.workbench.progression.barrierLabel?`日程仍停在：${after.workbench.progression.barrierLabel}`:'原暂停仍需处理，以上实际变化没有解除它')
+ return parts.join('；')+'。'
+}

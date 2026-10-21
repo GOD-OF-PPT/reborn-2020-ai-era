@@ -1,0 +1,8 @@
+
+> reborn-2020-ai-era@0.1.0 typecheck
+> tsc -b
+
+src/ui/DeepseekPanel.tsx(19,74): error TS2375: Type '{ assignment: { resources: string[]; startAt: string; }; initialFocusId: string | undefined; controller: GameController; view: { features: Readonly<Record<string, unknown>>; ... 18 more ...; operations: { ...; } | null; }; ... 4 more ...; initialPane?: "equity" | "ecosystem"; }' is not assignable to type '{ assignment: DeepseekAssignment; initialFocusId?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'initialFocusId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.

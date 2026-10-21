@@ -1,0 +1,13 @@
+# D09 原R5/R6与新R7修缮记录
+
+R5完整30UI真实218=216通过/2默认5000ms超时，236.5097秒。原relay合并/全局保存门槛/Risk显示夹具与拆开四个life情境均已实际通过。两个超时分别原明确架空签约+跟投多命令与technical正常短锁拒绝多命令，原失败/默认5000和源码均留，不改规则/时限/样本。
+
+只移除新domain测试normal helper在controller.importNew之前额外一次codec.import：原controller内部inspectImport、store.importSave与RunSession绑定依旧完整验证，本轮没有减少生产或导入校验、缓存跨局或加载前制run。改为导入后核实际view.origin与exported schema13，并额外比原字节。
+
+R6完整30UI真实218=192通过/26未过，165.209秒；26全部因beforeAll首次导入的额外字节断言失败，不能称26游戏重新执行失败或已通过。C16原raw真实1000082B带一个末尾换行，controller原canonical导出1000081B同JSON/checksum；原新增断言错要求换行保留，已明确只去来源文件的一个末尾LF后比完整原文，不改原raw/导入业务/字段或内容。R6巨长原console/失败保留，不覆盖。性能原因没有据此下唯一归因或提速结论；新的完整UI R7仍待终态。
+
+原DS helper open lead priority32会在真实接合同后抢过working40/review35。已改lead70，仍保留可选全部需求/期限/实体，既有合作/任务/原应收优先；原prepareEco真实接受后存在其他open lead，默认无preferredId须仍为该contract，提交后仍默认review，两断言R6实际通过。未改任何经营规则或收益。
+
+实际Chrome发现新功能问题：R5正常人生r3/Jan4/25800/AP3，唐萤邀约的首个按钮有可见文字但inert/tabindex-1，两次仅预览点击都无dialog且原rev3不动；截图/完整DOM/actualjournal归档，不算接受成功。旧life155px最小卡片空白与新时间回响并存，故末尾针对life卡片取消min-height，保全部原字/字号/分页/控件，不裁切/缩字/改ScreenBook守卫/加断点。修后Chrome尚未执行。此为当前窗口已复现按钮功能修复，不做任何尺寸、zoom、跨浏览器/兼容检查。
+
+R5真实原r3已公开完整导出154648B SHA80fa935e2793eadca279f88fb7c5552fa7111c5c7c210b7f2691c382dee9f66b，实际保存退出Home；未接受/中断/改旧D08或root11交付人生。R7类型/生产构建/当前新Chrome仍待，不提前称D09完成。

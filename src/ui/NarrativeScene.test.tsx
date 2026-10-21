@@ -67,8 +67,8 @@ it('an actually accepted promise is named with its deadline outside the operatio
   const unavailableBusinesses={...features,course:null,relay:null,deepseek:null,routines:null}
   expect(renderToStaticMarkup(<SceneThreads p={{...h.p,view,features:unavailableBusinesses}} onOpen={h.p.onNavigate}/>)).toContain(offered.deadline)
   const scene=renderToStaticMarkup(<NarrativeScene {...h.p} view={view} features={features} screen="life"/>)
-  expect(scene).toContain('核对并兑现与唐萤的约定');expect(scene).toContain('你已经接受，仍要用实际工作兑现')
-  expect(scene).not.toContain('答应过的事，已经实际做到');expect(h.controller.exportSaved()).toBe(before)
+  expect(scene).toContain('安排实际兑现工作');expect(scene).toContain('接受没有替代实际工作');expect(scene).toContain(offered.deadline);expect(scene).toContain('个人¥300')
+  expect(scene).not.toContain('已经实际做到');expect(h.controller.exportSaved()).toBe(before)
  }finally{await h.controller.close();await h.store.close()}
 },20000)
 
@@ -78,7 +78,7 @@ it('an invitation remains separate from accepting and completing it, and can be 
   await h.controller.submit(h.controller.prepare('StartLifeWork',{kind:'friend_visit',personId:'tang-ying',reference:null}));await h.controller.submit(h.controller.prepare('AdvanceTime',{date:'2020-01-04'}))
   const view=h.controller.snapshot.view!,features=view.features as unknown as PlayFeatures,before=h.controller.exportSaved()
   const html=renderToStaticMarkup(<NarrativeScene {...h.p} view={view} features={features} screen="life"/>)
-  expect(html).toContain('这是一项邀请，还没有接受');expect(html).toContain('核对唐萤的邀请');expect(html).toContain('婉拒唐萤的邀请');expect(html).toContain('以后仍需个人¥300')
+  expect(html).toContain('唐萤提出了一项有限邀约');expect(html).toContain('核对条款后接受这项约定');expect(html).toContain('婉拒唐萤的邀请');expect(html).toContain('以后仍需个人¥300')
   expect(html).not.toContain('你已经接受');expect(h.controller.exportSaved()).toBe(before)
  }finally{await h.controller.close();await h.store.close()}
 },20000)

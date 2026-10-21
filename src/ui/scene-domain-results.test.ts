@@ -1,0 +1,386 @@
+import {beforeAll,expect,it} from 'vitest'
+import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
+import {createCampaignCodec,createCampaignRun,campaignMarket} from '../application/campaign.ts'
+import {projectWorkbench} from '../application/workbench-projection.ts'
+import {projectDeepseek} from '../core/deepseek-projection.ts'
+import {GameController} from '../application/game-controller.ts'
+import {RunSession} from '../application/session.ts'
+import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
+import {abortAfterHeadWrite} from '../testing/abort-after-write.ts'
+import {createDeepseekFixture} from '../testing/deepseek-fixture.ts'
+import type {PlayingView,PlayFeatures} from './game-types.ts'
+import {domainSceneResult} from './scene-domain-results.ts'
+import {savedSceneResult} from './scene-result.ts'
+import {moneyText} from './game-text.ts'
+import ecoRaw from '../../goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-beforeContract.json?raw'
+import signRaw from '../../goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-beforeEquitySign.json?raw'
+import signedRaw from '../../goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-signed.json?raw'
+import contentSignRaw from '../../goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-content_employee-beforeEquitySign.json?raw'
+import deadlineRaw from '../../goal-1/evidence/t16-c16-final-a1/life/t15-promise-fulfilled-on-deadline-working.json?raw'
+import missedRaw from '../../goal-1/evidence/t16-c16-final-a1/life/t15-promise-missed-accepted.json?raw'
+import npcRaw from '../../goal-1/evidence/t16-c16-final-a1/life/t15-npc-own-calendar-offered.json?raw'
+import isolatedExitRaw from '../../goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-private-partial-exit-offer.json?raw'
+
+const features=(view:PlayingView)=>view.features as unknown as PlayFeatures
+async function normal(id:string,raw?:string){
+ const codec=createCampaignCodec(),factory=new IDBFactory(),store=new IndexedDbRunStore({codec,factory,keyRange:IDBKeyRange,name:'d09-domain-result-'+id})
+ let sequence=0
+ const controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=>`d09-domain-${id}-${++sequence}`})
+ await controller.initialize()
+ if(raw){await controller.importNew(raw);expect(controller.snapshot.view!.origin).toBe('normal');const saved=controller.exportSaved();expect(JSON.parse(saved).schemaVersion).toBe(13);expect(saved).toBe(raw.endsWith('\n')?raw.slice(0,-1):raw)}
+ else await controller.newLife({backgroundId:'technical_employee',playerProfile:{wishId:'autonomy',approach:'free'},seed:'d09-domain-'+id})
+ const view=()=>controller.snapshot.view!
+ const send=async(kind:string,payload:unknown)=>{const before=view(),result=await controller.submit(controller.prepare(kind,payload));expect(result.status,JSON.stringify({kind,payload,result})).toBe('saved');const current=view();return {before,current,text:domainSceneResult(kind,before,current)}}
+ const advance=async(date:string)=>{for(let i=0;i<20;i++){
+  if(view().date>=date)return
+  const workbench=features(view()).workbench
+  if(workbench.pause){
+   if(workbench.pause.reason!=='CONTENT_DECISION_PENDING')throw Error('D09_DOMAIN_CLOCK_PAUSED:'+JSON.stringify(workbench.pause))
+   const event=workbench.events.find(row=>row.isBlocking)!,choice=event.choices.find(row=>row.isDefault)!
+   expect(choice).toMatchObject({actionPoints:0,costFen:0});await send('ChooseEvent',{instanceId:event.id,choiceId:choice.id});continue
+  }
+  const previous=view();await send('AdvanceTime',{date});if(view().date===previous.date&&!features(view()).workbench.pause)throw Error('D09_DOMAIN_CLOCK_STOPPED')
+ }throw Error('D09_DOMAIN_CLOCK_GUARD')}
+ return {codec,controller,store,view,send,advance,close:async()=>{await controller.close();await store.close()}}
+}
+const order=(view:PlayingView,side:'buy'|'sell'='buy',symbol='SIM-AI01')=>{const market=features(view).market,stock=market.stocks.find(row=>row.symbol===symbol)!;return {accountId:'personal',symbol:stock.symbol,side,quantity:100,limitPriceFen:side==='buy'?stock.upperFen!:stock.lowerFen!,quoteId:market.quoteId!,validUntil:market.matchingCalendar[0]!.id}}
+
+it('keeps a real normal plan, submission, replacement and cancellation distinct from fills, income and cash',async()=>{
+ const h=await normal('orders')
+ try{
+  const planned=await h.send('PlanStockOrder',order(h.view()))
+  expect(planned.text).toContain('已记为计划，尚未提交');expect(planned.text).toContain('资金预留');expect(planned.text).toContain('尚未成交或新增到账')
+  const original=features(h.view()).market.orders[0]!
+  const submitted=await h.send('SubmitStockOrder',{orderId:original.id,quoteId:features(h.view()).market.quoteId})
+  expect(submitted.text).toContain('已从计划转为提交');expect(submitted.text).toContain('尚未成交')
+  const amended=await h.send('AmendStockOrder',{orderId:original.id,quantity:100,limitPriceFen:original.limitPriceFen,quoteId:features(h.view()).market.quoteId,validUntil:features(h.view()).market.matchingCalendar[0]!.id})
+  expect(amended.text).toContain('未成交部分已改为100股');expect(amended.text).toContain('预留变化不是收益')
+  const replacement=features(h.view()).market.orders.find(row=>row.replacesId===original.id)!
+  const cancelled=await h.send('CancelStockOrder',{orderId:replacement.id})
+  expect(cancelled.text).toContain('未成交部分已撤回');expect(cancelled.text).toContain('释放资金占用');expect(cancelled.text).toContain('释放占用不是收入')
+  expect(features(h.view()).market.fills).toEqual([])
+  expect(domainSceneResult('CancelStockOrder',h.view(),{...h.view(),revision:h.view().revision+1})).toBeNull()
+ }finally{await h.close()}
+})
+
+it('shows actual free one-point public research completion and a separate paid interruption without refund or future prices',async()=>{
+ const h=await normal('research-loop')
+ try{
+  const before=h.view(),cash=before.accounts.find(row=>row.accountId==='personal')!.cashFen,started=await h.send('ResearchMarket',{definitionId:'market-overview'})
+  expect(started.text).toContain('原模拟市场研究已实际开始');expect(started.text).toContain('2020-01-01—2020-01-02');expect(started.text).toContain('尚未完成')
+  expect(h.view().accounts.find(row=>row.accountId==='personal')!.cashFen).toBe(cash);expect(h.view().budget.spent).toBe(before.budget.spent+1)
+  const completed=await h.send('AdvanceTime',{date:'2020-01-02'})
+  expect(completed.text).toContain('原模拟市场研究已实际完成');expect(completed.text).toContain('不是未来价格');expect(features(h.view()).market.orders).toHaveLength(0)
+  await h.send('ResearchMarket',{definitionId:'market-foundation-course'})
+  const paid=h.view(),job=features(paid).market.researches.at(-1)!,stopped=await h.send('StopMarketResearch',{researchId:job.id})
+  expect(stopped.text).toContain('原模拟市场研究已中断');expect(stopped.text).toContain('不因中断退款或返还行动')
+  expect(h.view().accounts.find(row=>row.accountId==='personal')!.cashFen).toBe(paid.accounts.find(row=>row.accountId==='personal')!.cashFen);expect(h.view().budget.spent).toBe(paid.budget.spent)
+  const later=await h.send('AdvanceTime',{date:job.completeAt})
+  expect(features(h.view()).market.researches.at(-1)!.status).toBe('interrupted');expect(later.text).toBeNull()
+ }finally{await h.close()}
+})
+
+it('separates a normal actual buy, settled shares, actual sale fees and later null-to-paid cash settlement',async()=>{
+ const h=await normal('market-cash')
+ try{
+  expect((await h.send('PlaceStockOrder',order(h.view(),'buy','SIM-AI02'))).text).toContain('已提交，等待下一撮合点')
+  const buy=await h.send('AdvanceTime',{date:'2020-01-10'})
+  expect(buy.text).toContain('模拟买入实际成交100股');expect(buy.text).toContain('费用');expect(buy.text).not.toContain('卖款交收实际到账')
+  await h.advance('2020-01-11')
+  expect(features(h.view()).market.positions[0]!.settledQuantity).toBe(100)
+  await h.send('PlaceStockOrder',order(h.view(),'sell','SIM-AI02'))
+  const sold=await h.send('AdvanceTime',{date:'2020-01-20'})
+  expect(sold.text).toContain('模拟卖出实际成交100股');expect(sold.text).toContain('成交额不能直接当作到账额');expect(sold.text).not.toContain('卖款交收实际到账')
+  const settlement=features(h.view()).market.settlements.find(row=>row.kind==='sale')!
+  expect(settlement.paidAt).toBeNull()
+  const paid=await h.send('AdvanceTime',{date:settlement.dueAt})
+  expect(paid.text).toContain('1笔原模拟卖款交收实际到账');expect(paid.text).toContain('仅这些已付款记录成为现金')
+  expect(domainSceneResult('AdvanceTime',paid.current,{...paid.current,revision:paid.current.revision+1})).toBeNull()
+ }finally{await h.close()}
+})
+
+it('reports a zero-lag normal sale only from its actual fill and original settlement rule, after fees',async()=>{
+ const h=await normal('market-immediate')
+ try{
+  await h.send('PlaceStockOrder',order(h.view()));await h.advance('2020-01-11')
+  await h.send('PlaceStockOrder',order(h.view(),'sell'));const result=await h.send('AdvanceTime',{date:'2020-01-20'})
+  expect(result.text).toContain('按原零延迟规则实际入账');expect(result.text).toContain('已经扣除这些成交的原费用')
+  const beforeCash=result.before.accounts.find(row=>row.accountId==='personal')!.cashFen,afterCash=result.current.accounts.find(row=>row.accountId==='personal')!.cashFen,fill=features(result.current).market.fills.at(-1)!
+  expect(fill.receivableId).toBeNull();expect(afterCash-beforeCash).toBe(fill.grossFen-fill.feeFen)
+ }finally{await h.close()}
+})
+
+it('keeps real partial fills, original fees and outstanding shares when cancelling the unfilled remainder',async()=>{
+ const h=await normal('partial-market',ecoRaw)
+ try{
+  const market=features(h.view()).market,stock=market.stocks.find(row=>row.symbol==='SIM-AI05')!
+  await h.send('PlaceStockOrder',{accountId:'personal',symbol:stock.symbol,side:'buy',quantity:10000,limitPriceFen:stock.priceFen!*2,quoteId:market.quoteId!,validUntil:market.matchingCalendar[1]!.id})
+  const result=await h.send('AdvanceTime',{date:market.matchingCalendar[0]!.date}),current=features(h.view()).market,original=current.orders.at(-1)!,filled=current.fills.at(-1)!
+  expect(original.status).toBe('partially_filled');expect(filled.quantity).toBe(2000);expect(original.remaining).toBe(8000)
+  expect(result.text).toContain('模拟买入实际成交2,000股');expect(result.text).toContain('相关原委托仍有8,000股未成交')
+  const cash=h.view().accounts.find(row=>row.accountId==='personal')!.cashFen,cancelled=await h.send('CancelStockOrder',{orderId:original.id})
+  expect(cancelled.text).toContain('未成交部分已撤回');expect(cancelled.text).toContain('原已成交部分不撤销')
+  expect(h.view().accounts.find(row=>row.accountId==='personal')!.cashFen).toBe(cash);expect(features(h.view()).market.fills).toEqual(current.fills);expect(features(h.view()).market.positions[0]!.quantity).toBe(2000)
+ }finally{await h.close()}
+})
+
+it('reports a zero-volume original order expiring with a real release, never a cash income',async()=>{
+ const h=await normal('zero-volume-expiry')
+ try{
+  const market=features(h.view()).market
+  await h.send('PlaceStockOrder',{accountId:'personal',symbol:'SIM-AI05',side:'buy',quantity:100,limitPriceFen:900,quoteId:market.quoteId!,validUntil:market.matchingCalendar[0]!.id})
+  const before=h.view(),held=features(before).market.orders[0]!.cashHeldFen,result=await h.send('AdvanceTime',{date:'2020-01-10'})
+  expect(features(result.current).market.fills).toHaveLength(0);expect(features(result.current).market.orders[0]).toMatchObject({status:'expired',remaining:100,cashHeldFen:0})
+  expect(result.text).toContain('原模拟委托已到期结束');expect(result.text).toContain('未成交余量100股');expect(result.text).toContain('释放资金占用');expect(result.text).toContain('释放占用不是收入')
+  const old=before.accounts.find(row=>row.accountId==='personal')!,current=result.current.accounts.find(row=>row.accountId==='personal')!
+  expect(current.cashFen).toBe(old.cashFen);expect(current.availableFen-old.availableFen).toBe(held)
+ }finally{await h.close()}
+})
+
+it('separates a partial expiry actual purchase cost from the original unspent reservation released',async()=>{
+ const h=await normal('partial-expiry',ecoRaw)
+ try{
+  const market=features(h.view()).market,stock=market.stocks.find(row=>row.symbol==='SIM-AI05')!
+  await h.send('PlaceStockOrder',{accountId:'personal',symbol:stock.symbol,side:'buy',quantity:10000,limitPriceFen:stock.priceFen!*2,quoteId:market.quoteId!,validUntil:market.matchingCalendar[0]!.id})
+  const before=h.view(),result=await h.send('AdvanceTime',{date:market.matchingCalendar[0]!.date}),current=features(result.current).market,fill=current.fills.at(-1)!
+  expect(current.orders.at(-1)).toMatchObject({status:'expired',remaining:8000,cashHeldFen:0})
+  const old=before.accounts.find(row=>row.accountId==='personal')!,after=result.current.accounts.find(row=>row.accountId==='personal')!,released=after.availableFen-old.availableFen
+  expect(old.cashFen-after.cashFen).toBe(fill.grossFen+fill.feeFen)
+  expect(released).toBe(features(before).market.orders.at(-1)!.cashHeldFen-fill.grossFen-fill.feeFen)
+  expect(result.text).toContain('模拟买入实际成交2,000股');expect(result.text).toContain('未成交余量8,000股');expect(result.text).toContain('释放资金占用'+moneyText(released));expect(result.text).toContain('释放占用不是收入')
+ }finally{await h.close()}
+})
+
+type EcoFrames={accepted:{before:PlayingView;current:PlayingView;text:string|null};produced:{before:PlayingView;current:PlayingView;text:string|null};submitted:{before:PlayingView;current:PlayingView;text:string|null};reviewed:{before:PlayingView;current:PlayingView;text:string|null};supported:{before:PlayingView;current:PlayingView;text:string|null};collected:{before:PlayingView;current:PlayingView;text:string|null}}
+let eco:EcoFrames
+beforeAll(async()=>{
+ const h=await normal('eco-stages',ecoRaw)
+ try{
+  const lead=features(h.view()).deepseek!.leads.find(row=>row.status==='open'&&row.productId==='deployment'&&row.maxPriceFen>=1200000)!
+  expect(lead).toBeDefined()
+  const accepted=await h.send('AcceptEcoContract',{leadId:lead.id,scope:'standard',resources:['player-production'],startAt:'2024-07-02'})
+  const contract=features(h.view()).deepseek!.contracts[0]!
+  const produced=await h.send('AdvanceTime',{date:contract.productionJob!.completeAt})
+  const submitted=await h.send('SubmitEcoDelivery',{contractId:contract.id})
+  const reviewed=await h.send('AdvanceTime',{date:features(h.view()).deepseek!.contracts[0]!.reviewAt!})
+  expect(features(h.view()).deepseek!.contracts[0]!.accepted).toBe(true)
+  const supported=await h.send('AdvanceTime',{date:features(h.view()).deepseek!.contracts[0]!.supportJob!.completeAt})
+  const delivery=features(h.view()).deepseek!.deliveries.find(row=>row.stage==='production')!
+  await h.advance(delivery.dueAt)
+  const collected=await h.send('CollectEcoReceivable',{deliveryId:delivery.id,amountFen:delivery.remainingFen})
+  eco={accepted,produced,submitted,reviewed,supported,collected}
+ }finally{await h.close()}
+})
+
+it('uses a sealed current-schema normal ecosystem history and distinguishes production, submission and public review',()=>{
+ expect(eco.accepted.text).toContain('客户预款¥6,000受原保护');expect(eco.accepted.text).toContain('预款不是利润')
+ expect(eco.produced.text).toContain('已实际制作完成');expect(eco.produced.text).not.toContain('客户复核通过');expect(eco.produced.text).not.toContain('确认收入')
+ expect(eco.submitted.text).toContain('已亲手提交');expect(eco.submitted.text).toContain('提交不等于通过或到账')
+ expect(eco.reviewed.text).toContain('客户复核通过');expect(eco.reviewed.text).toContain('生产80%阶段本次确认收入¥9,600');expect(eco.reviewed.text).toContain('抵用预款¥6,000、形成原应收¥3,600')
+ expect(eco.supported.text).toContain('原生态支持已实际完成');expect(eco.supported.text).toContain('支持20%阶段本次确认收入¥2,400');expect(eco.supported.text).toContain('确认收入不等于新增现金到账')
+})
+
+it('reports only the original ecosystem receivable actually collected, without recognizing income twice or replaying old stages',()=>{
+ expect(eco.collected.text).toContain('原生态应收实际到账¥3,600');expect(eco.collected.text).toContain('不重复确认原80%／20%收入')
+ const before=features(eco.collected.before).deepseek!,after=features(eco.collected.current).deepseek!
+ expect(after.contracts[0]!.balance!.recognizedIncomeFen).toBe(before.contracts[0]!.balance!.recognizedIncomeFen)
+ expect(after.businesses[0]!.funds.cashFen-before.businesses[0]!.funds.cashFen).toBe(360000)
+ expect(domainSceneResult('AdvanceTime',eco.supported.current,{...eco.supported.current,revision:eco.supported.current.revision+1})).toBeNull()
+})
+
+it.each(['across-production','after-production'])('reports a missed original review deadline and actual automatic refund ($0)',async(stage)=>{
+ const h=await normal('eco-auto-cancel-'+stage,ecoRaw)
+ try{
+  const lead=features(h.view()).deepseek!.leads.find(row=>row.status==='open'&&row.productId==='deployment'&&row.maxPriceFen>=1200000)!
+  await h.send('AcceptEcoContract',{leadId:lead.id,scope:'standard',resources:['player-production'],startAt:'2024-07-02'})
+  const contract=features(h.view()).deepseek!.contracts[0]!
+  if(stage==='after-production')await h.advance(contract.productionJob!.completeAt)
+  const result=await h.send('AdvanceTime',{date:contract.reviewAt!}),after=features(result.current).deepseek!
+  expect(after.contracts[0]!.status).toBe('cancelled');expect(after.refunds.at(-1)!.amountFen).toBe(600000)
+  expect(result.text).toContain('原生态订单已实际取消');expect(result.text).toContain('已实际退回原客户款¥6,000');expect(result.text).not.toContain('仍须亲手提交');expect(result.text).not.toContain('客户复核通过')
+  const attempt=await h.controller.submit(h.controller.prepare('SubmitEcoDelivery',{contractId:contract.id}))
+  expect(attempt.status).toBe('rejected')
+ }finally{await h.close()}
+})
+
+it('binds the domain result to the same saved newer life and keeps the public inputs byte-stable',()=>{
+ const {before,current}=eco.reviewed,raw=JSON.stringify({before,current})
+ for(const blocked of [{...current,runId:'other-life'},{...current,revision:before.revision},{...current,saveStatus:'saving' as const},{...current,hasCandidate:true},{...current,saveStatus:'unsaved' as const}])expect(domainSceneResult('AdvanceTime',before,blocked)).toBeNull()
+ expect(domainSceneResult('AdvanceTime',null,current)).toBeNull();expect(domainSceneResult('UnrelatedReading',before,current)).toBeNull()
+ expect(domainSceneResult('AdvanceTime',before,current)).toBe(eco.reviewed.text)
+ expect(JSON.stringify({before,current})).toBe(raw)
+})
+
+it('merges normal market, ecosystem and personal completion from one real clock span',async()=>{
+ const h=await normal('combined',ecoRaw)
+ try{
+  const lead=features(h.view()).deepseek!.leads.find(row=>row.status==='open'&&row.productId==='deployment'&&row.maxPriceFen>=1200000)!
+  await h.send('AcceptEcoContract',{leadId:lead.id,scope:'standard',resources:['player-production'],startAt:'2024-07-09'})
+  await h.send('StartLifeWork',{kind:'rest',personId:null,reference:null})
+  await h.send('PlaceStockOrder',order(h.view()))
+  const before=h.view(),completion=features(before).deepseek!.contracts[0]!.productionJob!.completeAt
+  await h.advance(completion)
+  const text=domainSceneResult('AdvanceTime',before,h.view())
+  expect(text).toContain('模拟买入实际成交');expect(text).toContain('原生态作品已实际制作完成');expect(text).toContain('原休整已实际结束')
+  const combined=savedSceneResult('AdvanceTime','让日子向前',before,h.view())
+  expect(combined).toContain('模拟买入实际成交');expect(combined).toContain('原生态作品已实际制作完成');expect(combined).toContain('原休整已实际结束')
+ }finally{await h.close()}
+})
+
+it('keeps the real current pause when one actual advance also settles market and life work',async()=>{
+ const h=await normal('paused')
+ try{
+  await h.send('StartLifeWork',{kind:'rest',personId:null,reference:null});await h.send('PlaceStockOrder',order(h.view()))
+  const before=h.view();await h.send('AdvanceTime',{date:'2020-12-31'});const after=h.view()
+  expect(features(after).workbench.pause).not.toBeNull()
+  const text=domainSceneResult('AdvanceTime',before,after)
+  expect(text).toContain('模拟买入实际成交');expect(text).toContain('原休整已实际结束');expect(text).toMatch(/日程仍停在|原暂停仍需处理/)
+  const combined=savedSceneResult('AdvanceTime','让日子向前',before,after)
+  expect(combined).toContain('模拟买入实际成交');expect(combined).toContain('原休整已实际结束');expect(combined.match(/日程仍停在|原暂停仍需处理/g)).toHaveLength(1)
+  expect(combined).not.toContain('日子在这里停了一下')
+ }finally{await h.close()}
+})
+
+it('distinguishes a real counterfactual signature and positive follow-round shares from income',async()=>{
+ const h=await normal('equity-follow',signRaw)
+ try{
+  const negotiation=features(h.view()).deepseek!.negotiations.find(row=>row.accepted===true&&row.closedAt===null)!
+  const signed=await h.send('SignEquityAgreement',{negotiationId:negotiation.id})
+  expect(signed.text).toContain('明确架空协议已签');expect(signed.text).toContain('实际投入¥20,000，取得2500股');expect(signed.text).toContain('投资和估值不是现金收入')
+  const opened=await h.send('AdvanceTime',{date:'2025-09-01'})
+  expect(opened.text).toContain('明确架空跟投窗口已打开')
+  const agreement=features(h.view()).deepseek!.agreements[0]!
+  expect(agreement.preemptive).toBe(true);expect(agreement.followMaxFen).toBeGreaterThanOrEqual(800)
+  const followed=await h.send('FollowEquityRound',{agreementId:agreement.id,amountFen:800})
+  expect(followed.text).toContain('实际投入¥8，新增1股，现持有2501股');expect(followed.text).toContain('不是现金')
+ }finally{await h.close()}
+})
+
+it('makes an explicit zero follow-round refusal without claiming acquired shares or returns',async()=>{
+ const h=await normal('equity-zero',signedRaw)
+ try{
+  await h.advance('2025-09-01');const agreement=features(h.view()).deepseek!.agreements[0]!
+  const zero=await h.send('FollowEquityRound',{agreementId:agreement.id,amountFen:0})
+  expect(zero.text).toContain('选择放弃（¥0）');expect(zero.text).toContain('没有新增投入、股份或收益')
+  expect(features(h.view()).deepseek!.agreements[0]!.shares).toBe(agreement.shares)
+ }finally{await h.close()}
+})
+
+it('retains a real normal short-lock refusal without inventing a signature or shares',async()=>{
+ const h=await normal('equity-exit',signRaw)
+ try{
+  const original=features(h.view()).deepseek!.negotiations.find(row=>row.accepted===true&&row.closedAt===null)!
+  await h.send('DeclineEquityTerms',{negotiationId:original.id})
+  await h.send('StartEquityNegotiation',{invitationId:original.invitationId,acquisitionKind:'new_capital',termsId:'liquidity',amountFen:800000,resources:['player-production'],startAt:h.view().date})
+  const negotiation=features(h.view()).deepseek!.negotiations.at(-1)!
+  const response=await h.send('AdvanceTime',{date:negotiation.job!.completeAt})
+  expect(response.text).toContain('明确架空谈判已有回信');expect(response.text).toContain('同意0份、未同意1份');expect(features(h.view()).deepseek!.negotiations.at(-1)!.accepted).toBe(false)
+  const before=h.view(),refused=await h.controller.submit(h.controller.prepare('SignEquityAgreement',{negotiationId:negotiation.id}))
+  expect(refused.status).toBe('rejected');expect(domainSceneResult('SignEquityAgreement',before,h.view())).toBeNull();expect(features(h.view()).deepseek!.agreements).toHaveLength(0)
+ }finally{await h.close()}
+})
+
+it('retains the other registered normal background actual short-lock refusal without changing its willingness',async()=>{
+ const h=await normal('equity-exit-content',contentSignRaw)
+ try{
+  const original=features(h.view()).deepseek!.negotiations.find(row=>row.accepted===true&&row.closedAt===null)!
+  await h.send('DeclineEquityTerms',{negotiationId:original.id})
+  await h.send('StartEquityNegotiation',{invitationId:original.invitationId,acquisitionKind:'new_capital',termsId:'liquidity',amountFen:800000,resources:['player-production'],startAt:h.view().date})
+  const negotiation=features(h.view()).deepseek!.negotiations.at(-1)!
+  const before=h.view();await h.advance(negotiation.job!.completeAt)
+  expect(features(h.view()).deepseek!.negotiations.at(-1)!.accepted).toBe(false)
+  expect(domainSceneResult('AdvanceTime',before,h.view())).toContain('同意0份、未同意1份')
+  expect(features(h.view()).deepseek!.agreements).toHaveLength(0)
+ }finally{await h.close()}
+})
+
+it('isolates the original sealed fixture to check transfer receivable and partial cash phrasing, never as a normal positive path',async()=>{
+ // This original fixture owns its declared parameters/funds. No values are changed or called normal play.
+ const fixture=createDeepseekFixture(),codec=fixture.codec,original=codec.import(isolatedExitRaw)
+ expect(original.origin).toBe('fixture');expect(original.versions.schemaVersion).toBe(13)
+ const store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'d09-domain-isolated-exit'})
+ let sequence=0
+ const controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=>`d09-isolated-exit-${++sequence}`})
+ await controller.initialize();await controller.importNew(isolatedExitRaw)
+ const view=():PlayingView=>{const saved=codec.import(controller.exportSaved());return {...controller.snapshot.view!,features:{...controller.snapshot.view!.features,deepseek:projectDeepseek(saved,fixture.deepseek),workbench:projectWorkbench(saved,fixture.runtime,fixture.operations.catalog,campaignMarket.catalog)}}}
+ const send=async(kind:string,payload:unknown)=>{const before=view();expect((await controller.submit(controller.prepare(kind,payload))).status).toBe('saved');const current=view();return {before,current,text:domainSceneResult(kind,before,current)}}
+ try{
+  const quote=features(view()).deepseek!.exits[0]!,agreement=features(view()).deepseek!.agreements[0]!
+  expect(quote.buyerWilling).toBe(true)
+  const sold=await send('AcceptEquityExit',{exitId:quote.id,shares:100})
+  expect(sold.text).toContain('明确架空股权实际转让100股');expect(sold.text).toContain('形成转让应收');expect(sold.text).toContain('应收不当作已到账')
+  const sale=features(view()).deepseek!.exits[0]!
+  expect(sale.collectedFen).toBe(0);expect(features(view()).deepseek!.agreements[0]!.shares).toBe(agreement.shares-100)
+  await send('AdvanceTime',{date:sale.dueAt!})
+  const partial=Math.floor(sale.receivable!.remainingFen/2),collected=await send('CollectEquityExit',{exitId:sale.id,amountFen:partial})
+  expect(collected.text).toContain('股权转让款实际到账');expect(collected.text).toContain('原未收余额仍在');expect(collected.text).toContain('未把估值当收益')
+  expect(features(view()).deepseek!.exits[0]!.receivable!.remainingFen).toBe(sale.receivable!.amountFen-partial)
+  const remaining=features(view()).deepseek!.exits[0]!.receivable!.remainingFen,full=await send('CollectEquityExit',{exitId:sale.id,amountFen:remaining})
+  expect(features(view()).deepseek!.exits[0]!.receivable!.remainingFen).toBe(0)
+  expect(full.text).toContain('本次对应原转让应收已收清');expect(full.text).not.toContain('原未收余额仍在');expect(full.text).toContain('未把估值当收益')
+ }finally{await controller.close();await store.close()}
+})
+
+it('keeps real invitation, acceptance, paid fulfillment, actual completion and a completed improvement separate',async()=>{
+ const h=await normal('life-loop')
+ try{
+  const started=await h.send('StartLifeWork',{kind:'friend_visit',personId:'tang-ying',reference:null})
+  expect(started.text).toContain('唐萤');expect(started.text).toContain('支付¥200、使用1点');expect(started.text).toContain('现在还没有完成')
+  const visited=await h.send('AdvanceTime',{date:'2020-01-04'})
+  expect(visited.text).toContain('原共同活动已实际完成');expect(visited.text).toContain('新邀请已出现')
+  const promise=features(h.view()).life.promises[0]!
+  const accepted=await h.send('AcceptLifePromise',{promiseId:promise.id,consent:true})
+  expect(accepted.text).toContain('原约定已接受');expect(accepted.text).toContain('兑现仍须另行安排')
+  const working=await h.send('FulfillLifePromise',{promiseId:promise.id})
+  expect(working.text).toContain('支付¥300、使用1点');expect(working.text).not.toContain('已通过原工作实际兑现')
+  const kept=await h.send('AdvanceTime',{date:features(h.view()).life.jobs.at(-1)!.completeAt})
+  expect(kept.text).toContain('已通过原工作实际兑现')
+  const improving=await h.send('StartLifeWork',{kind:'workspace',personId:null,reference:null})
+  expect(improving.text).not.toContain('改善已实际完成')
+  const improved=await h.send('AdvanceTime',{date:features(h.view()).life.jobs.at(-1)!.completeAt})
+  expect(improved.text).toContain('原工作空间改善已实际完成')
+ }finally{await h.close()}
+})
+
+it('retains real player refusal without calling it a missed promise',async()=>{
+ const declined=await normal('decline-life')
+ try{
+  await declined.send('StartLifeWork',{kind:'friend_visit',personId:'tang-ying',reference:null});await declined.advance('2020-01-04')
+  const result=await declined.send('DeclineLifePromise',{promiseId:features(declined.view()).life.promises[0]!.id})
+  expect(result.text).toContain('原约定已婉拒');expect(result.text).not.toContain('失约')
+ }finally{await declined.close()}
+})
+it('retains real NPC withdrawal as the other person’s own decision',async()=>{
+ const npc=await normal('npc-withdraw',npcRaw)
+ try{const result=await npc.send('AdvanceTime',{date:'2020-07-01'});expect(result.text).toContain('对方按自己的安排撤回');expect(result.text).toContain('不记玩家失约')}finally{await npc.close()}
+})
+it('retains a real accepted promise missed on its original deadline',async()=>{
+ const missed=await normal('missed-life',missedRaw)
+ try{const before=missed.view();await missed.advance(features(missed.view()).life.promises[0]!.deadline);const text=domainSceneResult('AdvanceTime',before,missed.view());expect(text).toContain('已到期未实际完成');expect(text).not.toContain('实际兑现')}finally{await missed.close()}
+})
+it('retains real completion on the original deadline as fulfillment',async()=>{
+ const deadline=await normal('deadline-life',deadlineRaw)
+ try{const result=await deadline.send('AdvanceTime',{date:'2020-02-18'});expect(result.text).toContain('已通过原工作实际兑现');expect(result.text).not.toContain('已到期未实际完成')}finally{await deadline.close()}
+})
+
+it('keeps an invitation that really appears and expires inside one clock span distinct from acceptance',async()=>{
+ const h=await normal('offer-expiry-span')
+ try{
+  await h.send('StartLifeWork',{kind:'friend_visit',personId:'tang-ying',reference:null})
+  const before=h.view(),result=await h.send('AdvanceTime',{date:'2020-01-22'})
+  expect(features(before).life.promises).toHaveLength(0);expect(features(result.current).life.promises[0]!.status).toBe('expired')
+  expect(result.text).toContain('原共同活动已实际完成');expect(result.text).toContain('原未接受邀请已到期');expect(result.text).toContain('没有自动接受、付款或完成')
+ }finally{await h.close()}
+})
+
+it('publishes no candidate result after a real atomic abort and announces the original order only after the same candidate saves',async()=>{
+ const codec=createCampaignCodec(),run=createCampaignRun({runId:'d09-domain-atomic',actorId:'player',commandId:'create',backgroundId:'technical_employee',seed:'d09-domain-atomic'}),factory=new IDBFactory(),name='d09-domain-atomic',store=new IndexedDbRunStore({codec,factory,keyRange:IDBKeyRange,name})
+ await store.importSave(codec.export(run),{mode:'create',importId:'d09-domain-import',actorId:'player'})
+ const fault=abortAfterHeadWrite(factory,name),failing=new IndexedDbRunStore({codec,factory:fault.factory,keyRange:IDBKeyRange,name}),session=await RunSession.open({codec,registry:codec.registry,store:failing,locks:new MemoryWriterAccess(),runId:run.runId,actorId:'player'})
+ try{
+  const before=session.view,command={runId:run.runId,actorId:'player',commandId:'d09-domain-place',expectedRevision:before.revision,kind:'PlaceStockOrder',payload:order(before)}
+  expect((await session.submit(command)).status).toBe('unsaved');expect(domainSceneResult(command.kind,before,session.view)).toBeNull();expect((await store.load(run.runId))!.run).toEqual(run)
+  expect((await session.retry()).status).toBe('saved');expect(domainSceneResult(command.kind,before,session.view)).toContain('已提交，等待下一撮合点')
+ }finally{await session.close();await failing.close();await store.close()}
+})

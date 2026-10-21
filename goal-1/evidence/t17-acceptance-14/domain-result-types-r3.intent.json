@@ -1,0 +1,16 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "node",
+    "--input-type=module",
+    "-e",
+    "import ts from 'typescript';\nconst config=ts.readConfigFile('tsconfig.app.json',ts.sys.readFile);\nif(config.error)throw Error(ts.flattenDiagnosticMessageText(config.error.messageText,'\\n'));\nconst parsed=ts.parseJsonConfigFileContent(config.config,ts.sys,process.cwd());\nconst roots=['src/ui/scene-domain-results.ts','src/ui/scene-domain-results.test.ts'];\nconst program=ts.createProgram(roots,parsed.options);\nconst diagnostics=[...parsed.errors,...ts.getPreEmitDiagnostics(program)];\nconst host={getCanonicalFileName:p=>p,getCurrentDirectory:()=>process.cwd(),getNewLine:()=> '\\n'};\nif(diagnostics.length)process.stdout.write(ts.formatDiagnostics(diagnostics,host));\nprocess.stdout.write(JSON.stringify({rootNames:roots,diagnostics:diagnostics.length,errors:diagnostics.filter(d=>d.category===ts.DiagnosticCategory.Error).length,optionsSource:'tsconfig.app.json unchanged'})+'\\n');\nprocess.exitCode=diagnostics.some(d=>d.category===ts.DiagnosticCategory.Error)?1:0;\n"
+  ],
+  "sourceSha256": {
+    "src/ui/scene-domain-results.ts": "29b7f09886fc161c1e26172220886d11e1384bff880ff42e26459ba31dacfb89",
+    "src/ui/scene-domain-results.test.ts": "33f43016aa106d24828118f6c5a4ff21ad14b1668c5b1bafc3caf719377dc5c3",
+    "tsconfig.app.json": "e8691b4a5c64ab8c74e40e73bd89f2744986934ed5f7170ce54f113467b15d8f"
+  },
+  "scope": "Only the two new rootNames, with unchanged canonical app compiler options; no full project root set, emit or tests."
+}

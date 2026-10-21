@@ -1,0 +1,42 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts --maxWorkers=1 --reporter=default --reporter=json --outputFile.json=goal-1/evidence/t17-acceptance-14/deepseek-targeted-r2/vitest.json src/ui/deepseek-scene-progress.test.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/deepseek-scene-progress.test.ts (5 tests | 1 failed) 4560ms
+   ✓ lets a real fresh normal life inspect participation without creating an ecosystem or enabling counterfactual equity 1652ms
+   × connects real isolated service production, personal submission, customer review, support and due collection without inventing income 726ms
+   ✓ keeps real diligence, accepted terms, locked shares and later follow consent distinct and never signs or follows automatically 592ms
+   ✓ reveals a buyer quote only after the original completed response, leaves shares to the player, and collects only a real due transfer 814ms
+   ✓ keeps the original visible collection scene on real transaction abort and advances it only after retrying that exact candidate 773ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/deepseek-scene-progress.test.ts > connects real isolated service production, personal submission, customer review, support and due collection without inventing income
+AssertionError: expected { source: 'ecosystem', …(13) } to match object { phase: 'receivable', …(1) }
+(22 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "nextDate": "2024-07-19",
+-   "phase": "receivable",
++   "nextDate": null,
++   "phase": "collection",
+  }
+
+ ❯ src/ui/deepseek-scene-progress.test.ts:52:78
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 passed (5)
+   Start at  19:35:08
+   Duration  6.26s (tests 77%, import 12%, transform 10%)
+
+JSON report written to /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-14/deepseek-targeted-r2/vitest.json

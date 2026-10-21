@@ -1,0 +1,27 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "npx",
+    "vitest",
+    "run",
+    "src/ui/scene-domain-results.test.ts",
+    "--testNamePattern",
+    "zero-volume|missed original review|isolates the original sealed fixture",
+    "--reporter=json",
+    "--outputFile",
+    "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-14/domain-result-boundaries-red-r4.json",
+    "--maxWorkers=1",
+    "--no-file-parallelism"
+  ],
+  "sourceSha256": {
+    "src/ui/scene-domain-results.ts": "29b7f09886fc161c1e26172220886d11e1384bff880ff42e26459ba31dacfb89",
+    "src/ui/scene-domain-results.test.ts": "ae7772fb4ea807fdbe7fc658ceeb7b7017cf10ff984c3e9364153790fc2814bf"
+  },
+  "expectedRedBoundaries": [
+    "unfilled expiry",
+    "automatic unsubmitted cancellation across/after production",
+    "full original exit collection"
+  ],
+  "scope": "Only four newly added exact boundary cases in the new file; old R3 implementation preserved to prove the three review findings."
+}

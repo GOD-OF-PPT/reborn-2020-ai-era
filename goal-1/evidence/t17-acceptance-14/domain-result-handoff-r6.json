@@ -1,0 +1,525 @@
+{
+  "task": "D09 internal step 3 domain result helper only",
+  "completedAt": "2026-10-21T12:17:20.670684+00:00",
+  "interface": "domainSceneResult(kind:string, previous:PlayingView|null, current:PlayingView):string|null",
+  "sourceEditingStopped": true,
+  "sources": {
+    "src/ui/scene-domain-results.ts": {
+      "bytes": 25033,
+      "sha256": "7eba60f0484eac95b79645b2962564e5eb8f3dc96d1f468d2ed418b79fb7cf89"
+    },
+    "src/ui/scene-domain-results.test.ts": {
+      "bytes": 32564,
+      "sha256": "48432784dbeddfdf1ecfe79cdef212f7515bfaeb9dbd24c834cbf2a9c5dfbf65"
+    }
+  },
+  "finalSourceSnapshots": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-14/domain-result-source-final-r6-scene-domain-results.ts.txt",
+      "bytes": 25033,
+      "sha256": "7eba60f0484eac95b79645b2962564e5eb8f3dc96d1f468d2ed418b79fb7cf89"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-14/domain-result-source-final-r6-scene-domain-results.test.ts.txt",
+      "bytes": 32564,
+      "sha256": "48432784dbeddfdf1ecfe79cdef212f7515bfaeb9dbd24c834cbf2a9c5dfbf65"
+    }
+  ],
+  "rawInputs": {
+    "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-beforeContract.json": {
+      "bytes": 1000082,
+      "sha256": "7171bcf87e60fb63607836e22f17624fa744dc94517641db9aa587c0ad3d9d40",
+      "origin": "normal",
+      "schemaVersion": 13,
+      "rulesVersion": "rules-t16-journey-v1",
+      "matchesOriginalSeal": true
+    },
+    "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-beforeEquitySign.json": {
+      "bytes": 1235698,
+      "sha256": "32f26a50f4be38fb7500988415990e818a6fc80009e06849ad9a7ab88de83741",
+      "origin": "normal",
+      "schemaVersion": 13,
+      "rulesVersion": "rules-t16-journey-v1",
+      "matchesOriginalSeal": true
+    },
+    "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-signed.json": {
+      "bytes": 1242505,
+      "sha256": "5ee2c1fdc5cbb9999edaad1871d677ade51f7aba3f2e2d4571dce5a424d16120",
+      "origin": "normal",
+      "schemaVersion": 13,
+      "rulesVersion": "rules-t16-journey-v1",
+      "matchesOriginalSeal": true
+    },
+    "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-content_employee-beforeEquitySign.json": {
+      "bytes": 1257185,
+      "sha256": "02c2ba0f083cbb6ff83e3b600fefb71d870f12abdec5e26c4346763d9c6063da",
+      "origin": "normal",
+      "schemaVersion": 13,
+      "rulesVersion": "rules-t16-journey-v1",
+      "matchesOriginalSeal": true
+    },
+    "goal-1/evidence/t16-c16-final-a1/life/t15-promise-fulfilled-on-deadline-working.json": {
+      "bytes": 184024,
+      "sha256": "d9db01e6ebfe82192a6a293b1004b985a2dda426e1b8c51b5f11bff449437dba",
+      "origin": "normal",
+      "schemaVersion": 13,
+      "rulesVersion": "rules-t16-journey-v1",
+      "matchesOriginalSeal": true
+    },
+    "goal-1/evidence/t16-c16-final-a1/life/t15-promise-missed-accepted.json": {
+      "bytes": 155171,
+      "sha256": "bafe76dc1e0dbbde3e2de4a379afe3297acb9b50c2f2604b9997d7ea7c091827",
+      "origin": "normal",
+      "schemaVersion": 13,
+      "rulesVersion": "rules-t16-journey-v1",
+      "matchesOriginalSeal": true
+    },
+    "goal-1/evidence/t16-c16-final-a1/life/t15-npc-own-calendar-offered.json": {
+      "bytes": 222704,
+      "sha256": "5fd29beaf62409cedc3f61f243614695c92597e909ef884e62f3342898738f12",
+      "origin": "normal",
+      "schemaVersion": 13,
+      "rulesVersion": "rules-t16-journey-v1",
+      "matchesOriginalSeal": true
+    },
+    "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-private-partial-exit-offer.json": {
+      "bytes": 81883,
+      "sha256": "c5ebbd286fff22bf0965104f27a75fc27b96b0621bfa9348cfee6e69e84a0b73",
+      "origin": "fixture",
+      "schemaVersion": 13,
+      "rulesVersion": "rules-t13-fixture-v1",
+      "matchesOriginalSeal": true
+    }
+  },
+  "originalSeal": {
+    "path": "goal-1/evidence/t16-c16-final-a1/sealed-evidence.json",
+    "sha256": "05c9c330fec532edb12f03e96430ef95186ea0799d56c79ffffd1ab2a72ca567",
+    "allEightInputsMatch": true
+  },
+  "finalVerification": {
+    "singleFile": {
+      "id": "domain-result-tests-r6",
+      "exitCode": 0,
+      "tests": 23,
+      "passed": 23,
+      "failed": 0,
+      "pending": 0,
+      "sourceUnchanged": true
+    },
+    "targetedStrict": {
+      "id": "domain-result-types-r5",
+      "exitCode": 0,
+      "sourceUnchanged": true,
+      "options": "Unchanged tsconfig.app.json via TypeScript API, rootNames only the two new files; no full project root set or emit."
+    },
+    "scope": "No whole-suite, browser, compatibility or normal positive-transfer acceptance. No code outside the two new files changed by this subtask; no commit."
+  },
+  "retainedRuns": [
+    {
+      "id": "domain-result-tests-r1",
+      "report": {
+        "path": "goal-1/evidence/t17-acceptance-14/domain-result-tests-r1.json",
+        "bytes": 7354,
+        "sha256": "719755f9ed72d5b4a08e18f8e473d534ae671d3a43605b8735b663b73c4599f9"
+      },
+      "complete": {
+        "exitCode": 1,
+        "seconds": 33.84860897064209,
+        "sourcesUnchanged": true
+      },
+      "counts": {
+        "numTotalTests": 13,
+        "numPassedTests": 8,
+        "numFailedTests": 5,
+        "numPendingTests": 0,
+        "success": false
+      },
+      "suiteMessages": [],
+      "failedAssertions": [
+        {
+          "title": "separates a normal actual buy, settled shares, actual sale fees and later null-to-paid cash settlement",
+          "status": "failed",
+          "messages": [
+            "TypeError: Cannot read properties of undefined (reading 'paidAt')\n    at /Users/gordon/githome/reborn-2020-ai-era/src/ui/scene-domain-results.test.ts:63:21\n    at async file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vitest/dist/chunks/run.BPv-BBRv.js:2801:20"
+          ]
+        },
+        {
+          "title": "merges normal market, ecosystem and personal completion from one real clock span",
+          "status": "failed",
+          "messages": [
+            "AssertionError: expected 'rejected' to be 'saved' // Object.is equality\n    at Object.send (/Users/gordon/githome/reborn-2020-ai-era/src/ui/scene-domain-results.test.ts:27:157)\n    at /Users/gordon/githome/reborn-2020-ai-era/src/ui/scene-domain-results.test.ts:120:3\n    at async file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vitest/dist/chunks/run.BPv-BBRv.js:2801:20"
+          ]
+        },
+        {
+          "title": "uses actual short-lock normal negotiations, a revealed buyer, transfer receivable and later cash collection",
+          "status": "failed",
+          "messages": [
+            "AssertionError: expected false to be true // Object.is equality\n    at /Users/gordon/githome/reborn-2020-ai-era/src/ui/scene-domain-results.test.ts:173:116\n    at async file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vitest/dist/chunks/run.BPv-BBRv.js:2801:20"
+          ]
+        },
+        {
+          "title": "keeps real invitation, acceptance, paid fulfillment, actual completion and a completed improvement separate",
+          "status": "failed",
+          "messages": [
+            "AssertionError: expected '唐萤 · 安排一次见面已实际开始：支付¥200、使用1点，原完成日2020…' to contain '唐莹'\n    at /Users/gordon/githome/reborn-2020-ai-era/src/ui/scene-domain-results.test.ts:194:24\n    at async file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vitest/dist/chunks/run.BPv-BBRv.js:2801:20"
+          ]
+        },
+        {
+          "title": "retains real player refusal, NPC withdrawal, a missed accepted promise and deadline completion as different facts",
+          "status": "failed",
+          "messages": [
+            "AssertionError: the given combination of arguments (null and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string\n    at Proxy.<anonymous> (file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vitest/dist/chunks/index.aTZaPVhf.js:2093:15)\n    at Proxy.<anonymous> (file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vitest/dist/chunks/index.aTZaPVhf.js:1958:14)\n    at Proxy.methodWrapper (file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/chai/index.js:1737:25)\n    at /Users/gordon/githome/reborn-2020-ai-era/src/ui/scene-domain-results.test.ts:221:130\n    at async file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vitest/dist/chunks/run.BPv-BBRv.js:2801:20"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain-result-tests-r2",
+      "report": {
+        "path": "goal-1/evidence/t17-acceptance-14/domain-result-tests-r2.json",
+        "bytes": 6235,
+        "sha256": "4c0ffc54c41954fe64f0deafde0c7f568aa2386bc3ca9f3e92d19b2bdedc6d91"
+      },
+      "complete": {
+        "exitCode": 1,
+        "seconds": 41.50460124015808,
+        "sourcesUnchanged": true
+      },
+      "counts": {
+        "numTotalTests": 15,
+        "numPassedTests": 14,
+        "numFailedTests": 1,
+        "numPendingTests": 0,
+        "success": false
+      },
+      "suiteMessages": [],
+      "failedAssertions": [
+        {
+          "title": "uses the other sealed normal background for an actual short-lock agreement, buyer and eventual original exit cash",
+          "status": "failed",
+          "messages": [
+            "AssertionError: expected false to be true // Object.is equality\n    at /Users/gordon/githome/reborn-2020-ai-era/src/ui/scene-domain-results.test.ts:208:70\n    at async file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vitest/dist/chunks/run.BPv-BBRv.js:2801:20"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain-result-tests-r3",
+      "report": {
+        "path": "goal-1/evidence/t17-acceptance-14/domain-result-tests-r3.json",
+        "bytes": 7047,
+        "sha256": "ad30c50583cb817d58fcae06e119fa81878d89dbe9a04e8fc2504d3b6e391385"
+      },
+      "complete": {
+        "exitCode": 0,
+        "seconds": 54.237874031066895,
+        "sourcesUnchanged": true
+      },
+      "counts": {
+        "numTotalTests": 18,
+        "numPassedTests": 18,
+        "numFailedTests": 0,
+        "numPendingTests": 0,
+        "success": true
+      },
+      "suiteMessages": [],
+      "failedAssertions": []
+    },
+    {
+      "id": "domain-result-boundaries-red-r4",
+      "report": {
+        "path": "goal-1/evidence/t17-acceptance-14/domain-result-boundaries-red-r4.json",
+        "bytes": 9854,
+        "sha256": "90d9a8741cc99478bf4702b7a1424093e18343ebb470c903d28433443b291086"
+      },
+      "complete": {
+        "exitCode": 1,
+        "seconds": 20.7534601688385,
+        "sourceUnchanged": true
+      },
+      "counts": {
+        "numTotalTests": 21,
+        "numPassedTests": 0,
+        "numFailedTests": 4,
+        "numPendingTests": 17,
+        "success": false
+      },
+      "suiteMessages": [],
+      "failedAssertions": [
+        {
+          "title": "reports a zero-volume original order expiring with a real release, never a cash income",
+          "status": "failed",
+          "messages": [
+            "AssertionError: the given combination of arguments (null and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string\n    at Proxy.<anonymous> (file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vitest/dist/chunks/index.aTZaPVhf.js:2093:15)\n    at Proxy.<anonymous> (file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vitest/dist/chunks/index.aTZaPVhf.js:1958:14)\n    at Proxy.methodWrapper (file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/chai/index.js:1737:25)\n    at /Users/gordon/githome/reborn-2020-ai-era/src/ui/scene-domain-results.test.ts:116:23\n    at async file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vitest/dist/chunks/run.BPv-BBRv.js:2801:20"
+          ]
+        },
+        {
+          "title": "reports a missed original review deadline and actual automatic refund (across-production)",
+          "status": "failed",
+          "messages": [
+            "AssertionError: expected '1份原生态作品已实际制作完成，交付仍须亲手提交。' to contain '原生态订单已实际取消'\n    at /Users/gordon/githome/reborn-2020-ai-era/src/ui/scene-domain-results.test.ts:168:23\n    at async file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vitest/dist/chunks/run.BPv-BBRv.js:2801:20"
+          ]
+        },
+        {
+          "title": "reports a missed original review deadline and actual automatic refund (after-production)",
+          "status": "failed",
+          "messages": [
+            "AssertionError: the given combination of arguments (null and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string\n    at Proxy.<anonymous> (file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vitest/dist/chunks/index.aTZaPVhf.js:2093:15)\n    at Proxy.<anonymous> (file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vitest/dist/chunks/index.aTZaPVhf.js:1958:14)\n    at Proxy.methodWrapper (file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/chai/index.js:1737:25)\n    at /Users/gordon/githome/reborn-2020-ai-era/src/ui/scene-domain-results.test.ts:168:23\n    at async file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vitest/dist/chunks/run.BPv-BBRv.js:2801:20"
+          ]
+        },
+        {
+          "title": "isolates the original sealed fixture to check transfer receivable and partial cash phrasing, never as a normal positive path",
+          "status": "failed",
+          "messages": [
+            "AssertionError: expected '原明确架空股权转让款实际到账¥327.38（1笔），进入原账户；原未收余额…' to contain '本次对应原转让应收已收清'\n    at /Users/gordon/githome/reborn-2020-ai-era/src/ui/scene-domain-results.test.ts:283:21\n    at async file:///Users/gordon/githome/reborn-2020-ai-era/node_modules/vitest/dist/chunks/run.BPv-BBRv.js:2801:20"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain-result-tests-r5",
+      "report": {
+        "path": "goal-1/evidence/t17-acceptance-14/domain-result-tests-r5.json",
+        "bytes": 8251,
+        "sha256": "7a53b34ae3cbbddaf28b668f51eaf1daa9dcadaf080d172a396d6e27aeabd7c8"
+      },
+      "complete": {
+        "exitCode": 1,
+        "seconds": 16.049288272857666,
+        "sourcesUnchanged": true,
+        "sourceSha256": {
+          "src/ui/scene-domain-results.ts": "7eba60f0484eac95b79645b2962564e5eb8f3dc96d1f468d2ed418b79fb7cf89",
+          "src/ui/scene-domain-results.test.ts": "48432784dbeddfdf1ecfe79cdef212f7515bfaeb9dbd24c834cbf2a9c5dfbf65",
+          "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-beforeContract.json": "7171bcf87e60fb63607836e22f17624fa744dc94517641db9aa587c0ad3d9d40",
+          "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-beforeEquitySign.json": "32f26a50f4be38fb7500988415990e818a6fc80009e06849ad9a7ab88de83741",
+          "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-signed.json": "5ee2c1fdc5cbb9999edaad1871d677ade51f7aba3f2e2d4571dce5a424d16120",
+          "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-content_employee-beforeEquitySign.json": "02c2ba0f083cbb6ff83e3b600fefb71d870f12abdec5e26c4346763d9c6063da",
+          "goal-1/evidence/t16-c16-final-a1/life/t15-promise-fulfilled-on-deadline-working.json": "d9db01e6ebfe82192a6a293b1004b985a2dda426e1b8c51b5f11bff449437dba",
+          "goal-1/evidence/t16-c16-final-a1/life/t15-promise-missed-accepted.json": "bafe76dc1e0dbbde3e2de4a379afe3297acb9b50c2f2604b9997d7ea7c091827",
+          "goal-1/evidence/t16-c16-final-a1/life/t15-npc-own-calendar-offered.json": "5fd29beaf62409cedc3f61f243614695c92597e909ef884e62f3342898738f12",
+          "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-private-partial-exit-offer.json": "c5ebbd286fff22bf0965104f27a75fc27b96b0621bfa9348cfee6e69e84a0b73",
+          "tsconfig.app.json": "e8691b4a5c64ab8c74e40e73bd89f2744986934ed5f7170ce54f113467b15d8f"
+        }
+      },
+      "counts": {
+        "numTotalTests": 23,
+        "numPassedTests": 0,
+        "numFailedTests": 0,
+        "numPendingTests": 23,
+        "success": false
+      },
+      "suiteMessages": [
+        "Hook timed out in 10000ms.\nIf this is a long-running hook, pass a timeout value as the last argument or configure it globally with \"hookTimeout\"."
+      ],
+      "failedAssertions": []
+    },
+    {
+      "id": "domain-result-tests-r6",
+      "report": {
+        "path": "goal-1/evidence/t17-acceptance-14/domain-result-tests-r6.json",
+        "bytes": 8748,
+        "sha256": "f2b7e905583fa31bf8bb3a16a0abe7cfb3940c541703a0cb65daec07d479f837"
+      },
+      "complete": {
+        "exitCode": 0,
+        "seconds": 53.88973903656006,
+        "sourcesUnchanged": true
+      },
+      "counts": {
+        "numTotalTests": 23,
+        "numPassedTests": 23,
+        "numFailedTests": 0,
+        "numPendingTests": 0,
+        "success": true
+      },
+      "suiteMessages": [],
+      "failedAssertions": []
+    }
+  ],
+  "retainedTypeRuns": [
+    {
+      "id": "domain-result-types-r1",
+      "complete": {
+        "exitCode": 1,
+        "seconds": 1.4101049900054932,
+        "sourcesUnchanged": true
+      },
+      "stdout": {
+        "path": "goal-1/evidence/t17-acceptance-14/domain-result-types-r1.stdout.txt",
+        "sha256": "5b766b55df5bc15c215149742c8fe88d72a584cb45f5422c7edca1594b6d0cb5",
+        "bytes": 142,
+        "text": "error TS5112: tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.\n"
+      },
+      "stderr": {
+        "path": "goal-1/evidence/t17-acceptance-14/domain-result-types-r1.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "text": ""
+      }
+    },
+    {
+      "id": "domain-result-types-r2",
+      "complete": {
+        "exitCode": 2,
+        "seconds": 19.61775827407837,
+        "sourcesUnchanged": true
+      },
+      "stdout": {
+        "path": "goal-1/evidence/t17-acceptance-14/domain-result-types-r2.stdout.txt",
+        "sha256": "ef388d863626fd879475ea6ae8f482c95b7c52d6251eb761af6c5f54301d0368",
+        "bytes": 1350,
+        "text": "src/core/relay.ts(44,127): error TS2550: Property 'findLast' does not exist on type '{ id: string; businessId: string; supplierId: string; jobId: string; appliedAt: string; decisionAt: string; approved: boolean | null; expiresAt: string | null; factId: string; read: boolean; allowedSegments: (\"ai_learners\" | ... 1 more ... | \"lifestyle\")[]; purpose: \"licensed_service_aggregation\"; }[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.\nsrc/core/relay.ts(44,136): error TS7006: Parameter 'a' implicitly has an 'any' type.\nsrc/core/story-state.ts(14,121): error TS2550: Property 'findLast' does not exist on type '{ id: string; deploymentId: string; businessId: string; createdAt: string; expiresAt: string; level: \"approval\" | \"limited\" | \"cross_flow\"; scopes: (\"course_support\" | \"relay_support\" | \"external_service_commitments\")[]; cashLimitFen: number; externalDelegation: boolean; sourceCommandId: string; revokedAt: string | ...'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.\nsrc/core/story-state.ts(14,130): error TS7006: Parameter 'g' implicitly has an 'any' type.\nsrc/persistence/codec.ts(136,141): error TS2532: Object is possibly 'undefined'.\nsrc/persistence/codec.ts(139,486): error TS2532: Object is possibly 'undefined'.\n"
+      },
+      "stderr": {
+        "path": "goal-1/evidence/t17-acceptance-14/domain-result-types-r2.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "text": ""
+      }
+    },
+    {
+      "id": "domain-result-types-r3",
+      "complete": {
+        "exitCode": 0,
+        "seconds": 18.504425287246704,
+        "sourcesUnchanged": true
+      },
+      "stdout": {
+        "path": "goal-1/evidence/t17-acceptance-14/domain-result-types-r3.stdout.txt",
+        "sha256": "ba081a41de21114539d0c88f99a106969c8db9c6aafa33c19c058c33b0353f4c",
+        "bytes": 160,
+        "text": "{\"rootNames\":[\"src/ui/scene-domain-results.ts\",\"src/ui/scene-domain-results.test.ts\"],\"diagnostics\":0,\"errors\":0,\"optionsSource\":\"tsconfig.app.json unchanged\"}\n"
+      },
+      "stderr": {
+        "path": "goal-1/evidence/t17-acceptance-14/domain-result-types-r3.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "text": ""
+      }
+    },
+    {
+      "id": "domain-result-types-r5",
+      "complete": {
+        "exitCode": 0,
+        "seconds": 22.69318199157715,
+        "sourcesUnchanged": true,
+        "sourceSha256": {
+          "src/ui/scene-domain-results.ts": "7eba60f0484eac95b79645b2962564e5eb8f3dc96d1f468d2ed418b79fb7cf89",
+          "src/ui/scene-domain-results.test.ts": "48432784dbeddfdf1ecfe79cdef212f7515bfaeb9dbd24c834cbf2a9c5dfbf65",
+          "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-beforeContract.json": "7171bcf87e60fb63607836e22f17624fa744dc94517641db9aa587c0ad3d9d40",
+          "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-beforeEquitySign.json": "32f26a50f4be38fb7500988415990e818a6fc80009e06849ad9a7ab88de83741",
+          "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-signed.json": "5ee2c1fdc5cbb9999edaad1871d677ade51f7aba3f2e2d4571dce5a424d16120",
+          "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-content_employee-beforeEquitySign.json": "02c2ba0f083cbb6ff83e3b600fefb71d870f12abdec5e26c4346763d9c6063da",
+          "goal-1/evidence/t16-c16-final-a1/life/t15-promise-fulfilled-on-deadline-working.json": "d9db01e6ebfe82192a6a293b1004b985a2dda426e1b8c51b5f11bff449437dba",
+          "goal-1/evidence/t16-c16-final-a1/life/t15-promise-missed-accepted.json": "bafe76dc1e0dbbde3e2de4a379afe3297acb9b50c2f2604b9997d7ea7c091827",
+          "goal-1/evidence/t16-c16-final-a1/life/t15-npc-own-calendar-offered.json": "5fd29beaf62409cedc3f61f243614695c92597e909ef884e62f3342898738f12",
+          "goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-private-partial-exit-offer.json": "c5ebbd286fff22bf0965104f27a75fc27b96b0621bfa9348cfee6e69e84a0b73",
+          "tsconfig.app.json": "e8691b4a5c64ab8c74e40e73bd89f2744986934ed5f7170ce54f113467b15d8f"
+        }
+      },
+      "stdout": {
+        "path": "goal-1/evidence/t17-acceptance-14/domain-result-types-r5.stdout.txt",
+        "sha256": "ba081a41de21114539d0c88f99a106969c8db9c6aafa33c19c058c33b0353f4c",
+        "bytes": 160,
+        "text": "{\"rootNames\":[\"src/ui/scene-domain-results.ts\",\"src/ui/scene-domain-results.test.ts\"],\"diagnostics\":0,\"errors\":0,\"optionsSource\":\"tsconfig.app.json unchanged\"}\n"
+      },
+      "stderr": {
+        "path": "goal-1/evidence/t17-acceptance-14/domain-result-types-r5.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "text": ""
+      }
+    }
+  ],
+  "failureClassification": {
+    "r1": "8/13 passed. Five incorrect test/normal-path assumptions retained: zero-lag AI01 does not create a deferred receivable; overlapping original production/rest capacity is rejected; public name is 唐萤; the original content pause blocks a deadline advance until an explicit original public default choice; technical normal short-lock terms actually refused. Test scenarios corrected without changing original rules or hidden facts.",
+    "r2": "14/15 passed; independent registered content normal short-lock terms also actually refused. Both actual refusals now remain separate bounded assertions; no new seed/willingness search.",
+    "r3": "18/18 passed but independent read-only review found three untested public-fact boundaries. Original two source byte snapshots retained.",
+    "r4": "Four selected boundary cases actually failed before implementation fixes: zero-fill expiry, cancellation spanning production, cancellation after production, full original exit collection; 17 other cases explicitly skipped.",
+    "r5": "Canonical targeted strict passed; concurrent single-file beforeAll hit unchanged original 10000ms hook timeout. 23 pending, zero asserted passes/failures; this is not a pass. Cause beyond concurrent execution is not proven.",
+    "r6": "Same final source/input bytes reran standalone, original timeout/assertion/worker settings unchanged; 23/23 passed.",
+    "typeR1": "CLI TS5112 required --ignoreConfig; semantic checking did not occur.",
+    "typeR2": "Hand-written ES2022/library/options produced old imported dependency errors; not classified as a new-source failure.",
+    "typeR3AndR5": "Read unchanged canonical app options and restricted rootNames; each had 0 diagnostics. R5 covers final sources."
+  },
+  "reviewFixes": [
+    {
+      "id": "AUTO_CANCEL",
+      "fixed": "AdvanceTime identifies newly cancelled original contracts; production/remediation submission prompts require current production state. Original refund requests are separated from actual paid versus outstanding obligations using public finance.",
+      "actualTests": "Normal original sample cancels/refunds both across and after production, and original submit remains rejected."
+    },
+    {
+      "id": "FULL_EXIT_CASH",
+      "fixed": "Original exit collections report exact remaining balance when positive and corresponding receivable fully collected at zero.",
+      "actualTests": "Single original sealed fixture performs partial then remaining collection through Controller; no altered balances/parameters and no normal positive-coverage claim."
+    },
+    {
+      "id": "UNFILLED_EXPIRY",
+      "fixed": "Active-to-expired original orders report unfilled shares and released original reservations; new actual buy gross/fees are deducted before computing release.",
+      "actualTests": "Normal zero-volume expiry and normal 2000-filled/8000-unfilled expiry, plus existing partial cancellation."
+    },
+    {
+      "id": "RESEARCH",
+      "fixed": "Original ResearchMarket, StopMarketResearch and actual running-to-completed transitions; no future prices, refund or returned AP invented.",
+      "actualTests": "Normal zero-fee/one-point/one-day completion, separate paid research interruption retaining original cash/AP."
+    }
+  ],
+  "r4ExactTestSourceRecovered": {
+    "path": "goal-1/evidence/t17-acceptance-14/domain-result-source-r4-scene-domain-results.test.ts.txt",
+    "bytes": 29500,
+    "sha256": "ae7772fb4ea807fdbe7fc658ceeb7b7017cf10ff984c3e9364153790fc2814bf",
+    "recovery": "Literal final source minus two later-added tests/import; digest equals the immutable pre-red R4 intent. R4 implementation equals the separately retained R3 implementation snapshot."
+  },
+  "remainingResponsibilities": [
+    "Normal technical/content short-lock negotiations both refused; the positive transfer phrasing check is an explicitly isolated original fixture only.",
+    "DS preparation/adaptation/outreach-specific completion narration is not expanded in this helper; parent retains the existing generic receipt and full records.",
+    "Parent owns scene-result integration, first/risk/relay composition, full-source freeze, whole-project type/UI/build, browser/atomic/read-only integration and complete Create audit.",
+    "All original T17/goal/full business/matrix, human, original PNG, compatibility and remote publication obligations remain outside this helper."
+  ],
+  "GJ": "Bounded pass after three concrete independent findings were reproduced, fixed and verified under original limits; prior green/red/timeouts/config invocation failures retained. No placeholder, rule/money/random/schema changes or fabricated normal positive outcome.",
+  "writeProtection": {
+    "exclusiveCreate": true,
+    "ancestorChecks": [
+      {
+        "path": "/",
+        "mode": "drwxr-xr-x",
+        "sealedMarkerPresent": false
+      },
+      {
+        "path": "/Users",
+        "mode": "drwxr-xr-x",
+        "sealedMarkerPresent": false
+      },
+      {
+        "path": "/Users/gordon",
+        "mode": "drwxr-xr-x",
+        "sealedMarkerPresent": false
+      },
+      {
+        "path": "/Users/gordon/githome",
+        "mode": "drwxrwxrwx",
+        "sealedMarkerPresent": false
+      },
+      {
+        "path": "/Users/gordon/githome/reborn-2020-ai-era",
+        "mode": "drwxr-xr-x",
+        "sealedMarkerPresent": false
+      },
+      {
+        "path": "/Users/gordon/githome/reborn-2020-ai-era/goal-1",
+        "mode": "drwxr-xr-x",
+        "sealedMarkerPresent": false
+      },
+      {
+        "path": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence",
+        "mode": "drwxr-xr-x",
+        "sealedMarkerPresent": false
+      },
+      {
+        "path": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-14",
+        "mode": "drwxr-xr-x",
+        "sealedMarkerPresent": false
+      }
+    ]
+  }
+}

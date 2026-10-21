@@ -1,0 +1,119 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts --maxWorkers=1 --reporter=default --reporter=json --outputFile.json=goal-1/evidence/t17-acceptance-14/deepseek-targeted-r1/vitest.json src/ui/deepseek-scene-progress.test.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/deepseek-scene-progress.test.ts (5 tests | 4 failed) 3192ms
+   × lets a real fresh normal life inspect participation without creating an ecosystem or enabling counterfactual equity 1043ms
+   × connects real isolated service production, personal submission, customer review, support and due collection without inventing income 489ms
+   × keeps real diligence, accepted terms, locked shares and later follow consent distinct and never signs or follows automatically 311ms
+   × reveals a buyer quote only after the original completed response, leaves shares to the player, and collects only a real due transfer 521ms
+   ✓ keeps the original visible collection scene on real transaction abort and advances it only after retrying that exact candidate 824ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/deepseek-scene-progress.test.ts > lets a real fresh normal life inspect participation without creating an ecosystem or enabling counterfactual equity
+AssertionError: expected { source: 'ecosystem', …(12) } to match object { phase: 'opening', …(4) }
+(12 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "active": false,
+-   "command": undefined,
+    "entityId": null,
+    "entityIds": [],
+    "phase": "opening",
+  }
+
+ ❯ src/ui/deepseek-scene-progress.test.ts:22:17
+     20|   const raw=controller.exportSaved(),projection=projectDeepseek(codec.…
+     21|   const scene=deepseekSceneProgress(projection,controller.snapshot.vie…
+     22|   expect(scene).toMatchObject({phase:'opening',active:false,command:un…
+       |                 ^
+     23|   expect(scene!.choice.line).toContain('不自动开公司、投资或取得权限')
+     24|   expect(controller.exportSaved()).toBe(raw)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/ui/deepseek-scene-progress.test.ts > connects real isolated service production, personal submission, customer review, support and due collection without inventing income
+AssertionError: expected { source: 'ecosystem', …(12) } to match object { Object (phase, active, ...) }
+(17 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "active": true,
+-   "command": undefined,
+    "nextDate": "2024-07-02",
+    "phase": "working",
+  }
+
+ ❯ src/ui/deepseek-scene-progress.test.ts:36:18
+     34|  const project=()=>projectDeepseek(h.run,h.deepseek)!
+     35|  const scene=()=>deepseekSceneProgress(project(),h.run.timeline.cursor…
+     36|  expect(scene()).toMatchObject({phase:'working',active:true,command:un…
+       |                  ^
+     37|  expect(scene().choice.line).toContain('80%收入来自实际验收，20%来自完成支持')
+     38|  const first=h.run.deepseek!.contracts[0]!,production=h.run.operations…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/ui/deepseek-scene-progress.test.ts > keeps real diligence, accepted terms, locked shares and later follow consent distinct and never signs or follows automatically
+AssertionError: expected { …(13) } to match object { …(4) }
+(17 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "active": true,
+-   "command": undefined,
+    "phase": "terms",
+    "source": "counterfactual-equity",
+  }
+
+ ❯ src/ui/deepseek-scene-progress.test.ts:68:16
+     66|  const project=()=>projectDeepseek(h.run,h.deepseek)!
+     67|  const before=h.codec.export(h.run),terms=deepseekSceneProgress(projec…
+     68|  expect(terms).toMatchObject({source:'counterfactual-equity',phase:'te…
+       |                ^
+     69|  expect(terms.line).toContain('实际支付并签约，仍必须由你明确确认')
+     70|  expect(deepseekSceneProgress(project(),h.run.timeline.cursor.date,inv…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/ui/deepseek-scene-progress.test.ts > reveals a buyer quote only after the original completed response, leaves shares to the player, and collects only a real due transfer
+AssertionError: expected { …(13) } to match object { phase: 'exit-quote', …(2) }
+(18 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "active": true,
+-   "command": undefined,
+    "phase": "exit-quote",
+  }
+
+ ❯ src/ui/deepseek-scene-progress.test.ts:89:16
+     87|  const {h,exit}=offeredEquityExit(),project=()=>projectDeepseek(h.run,…
+     88|  const quote=deepseekSceneProgress(project(),h.run.timeline.cursor.dat…
+     89|  expect(quote).toMatchObject({phase:'exit-quote',active:true,command:u…
+       |                ^
+     90|  expect(quote.line).toContain('实际股数仍由你填写')
+     91|  // A bounded public-display stress case: frozen fields must not leak …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 1 passed (5)
+   Start at  19:33:57
+   Duration  4.62s (tests 74%, transform 14%, import 12%)
+
+JSON report written to /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-14/deepseek-targeted-r1/vitest.json

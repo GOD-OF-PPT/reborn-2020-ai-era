@@ -1,0 +1,43 @@
+{
+  "time": 1792584187.07286,
+  "sourceSnapshots": [
+    {
+      "source": "src/ui/scene-domain-results.ts",
+      "snapshot": "goal-1/evidence/t17-acceptance-14/domain-result-source-r3-scene-domain-results.ts.txt",
+      "bytes": 21996,
+      "sha256": "29b7f09886fc161c1e26172220886d11e1384bff880ff42e26459ba31dacfb89"
+    },
+    {
+      "source": "src/ui/scene-domain-results.test.ts",
+      "snapshot": "goal-1/evidence/t17-acceptance-14/domain-result-source-r3-scene-domain-results.test.ts.txt",
+      "bytes": 26647,
+      "sha256": "33f43016aa106d24828118f6c5a4ff21ad14b1668c5b1bafc3caf719377dc5c3"
+    }
+  ],
+  "reviewer": "read-only child domain_result_review",
+  "scope": "Three concrete public-fact differences only; no reviewer mutation, tests, browser or compatibility run.",
+  "findings": [
+    {
+      "priority": 2,
+      "id": "AUTO_CANCEL",
+      "problem": "AdvanceTime can complete production and then automatically cancel a never-submitted ecosystem contract; wording still requests submission and misses actual cancellation/refund.",
+      "evidence": "src/core/deepseek.ts auto-cancel at original reviewAt when submittedAt is null.",
+      "repair": "Detect newly cancelledAt in AdvanceTime, report actual public refund deltas, restrict submission prompts to currently submittable states."
+    },
+    {
+      "priority": 2,
+      "id": "FULL_EXIT_CASH",
+      "problem": "Full collection incorrectly says original unpaid balance remains.",
+      "evidence": "src/core/equity.ts permits collection of full remainingFen.",
+      "repair": "Report exact current remainingFen or actual full collection; test same original fixture remaining payment."
+    },
+    {
+      "priority": 2,
+      "id": "UNFILLED_EXPIRY",
+      "problem": "Zero-fill active order expiration and real held-fund release return no domain result.",
+      "evidence": "Original SIM-AI05 2020-01-10 public matching produces zero volume and expiration.",
+      "repair": "Detect active-to-expired, actual cash-held/share release, no income; test original normal rule."
+    }
+  ],
+  "originalR3Result": "18/18 passed; lacked these explicit boundaries. All originals retained."
+}

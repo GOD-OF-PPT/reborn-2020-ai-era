@@ -1,0 +1,147 @@
+{
+  "scope": "Original documentation/specification checks only; not an all-repository green, game, native UI, compatibility, source acceptance or commit proof.",
+  "startedAt": "2026-10-21T14:12:47.730071+00:00",
+  "completedAt": "2026-10-21T14:14:10.854396+00:00",
+  "commands": [
+    {
+      "label": "docs",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_docs.py",
+        "--text-only"
+      ],
+      "exitCode": 1,
+      "seconds": 74.73845720291138,
+      "console": {
+        "path": "goal-1/evidence/t17-acceptance-14/docs-readback-r11/docs.console.txt",
+        "bytes": 1271,
+        "sha256": "e5cd87404a611d9542a3b3f39b0209131f71fccc4beafe11f1114867b7e54816"
+      }
+    },
+    {
+      "label": "plan",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_plan.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.13471674919128418,
+      "console": {
+        "path": "goal-1/evidence/t17-acceptance-14/docs-readback-r11/plan.console.txt",
+        "bytes": 281,
+        "sha256": "d6f824acd6fb0127b45e642b6191f00f76ce21c3047d66ae22a6c75b9c60009c"
+      }
+    },
+    {
+      "label": "competitive",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_competitive_design.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.1533801555633545,
+      "console": {
+        "path": "goal-1/evidence/t17-acceptance-14/docs-readback-r11/competitive.console.txt",
+        "bytes": 208,
+        "sha256": "3968c99b58fce523d7784455ecc2720cb1c5218bd398b07ba3ea30e409cdff03"
+      }
+    }
+  ],
+  "sourceBefore": {
+    "path": "goal-1/evidence/t17-acceptance-14/docs-readback-r11/source-before.json",
+    "bytes": 109659,
+    "sha256": "59711243c7712c1febc57953d9b9049333c50de1492d5786c152bbf24c9e8337"
+  },
+  "sourceAfter": {
+    "path": "goal-1/evidence/t17-acceptance-14/docs-readback-r11/source-after.json",
+    "bytes": 109359,
+    "sha256": "fe968270b51877e0a0af5b6b7c58c54b7cb3f41042a3f21cc6d5061c10195410"
+  },
+  "sourceChangesDuringChecks": [],
+  "classification": {
+    "historicalReference": {
+      "path": "goal-1/evidence/t17-acceptance-13/documentation-docs-r11.stderr.txt",
+      "sha256": "2b05b8fdc5cd47adc93d6cedcf6f8eac006ed75dc9acb7f0ce1cc9bc8457daac",
+      "count": 6
+    },
+    "historicalErrors": [
+      "goal-1/evidence/t17-acceptance-13/input.md: broken local link /Users/gordon/.codex/plugins/cache/openai-curated-remote/game-studio/0.1.2/skills/game-studio/SKILL.md",
+      "goal-1/evidence/t17-acceptance-08/diagnosis-r1/transport-payload.json: invalid JSON (Expecting value: line 1 column 1 (char 0))",
+      "goal-1/evidence/t17-acceptance-08/matrix-r1/technical_employee-t16-campaign-0/shape-28/recovery-members.json: invalid JSON (Expecting value: line 1 column 1 (char 0))",
+      "goal-1/evidence/t17-acceptance-08/project-types-r3.json: invalid JSON (Expecting value: line 1 column 1 (char 0))",
+      "goal-1/evidence/t17-acceptance-09/matrix-r9009/owned-sealed/sealed-evidence.json: invalid JSON ([Errno 2] No such file or directory: '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9009/owned-sealed/sealed-evidence.json')",
+      "goal-1/evidence/t17-acceptance-09/matrix-r9109/owned-sealed/sealed-evidence.json: invalid JSON ([Errno 2] No such file or directory: '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9109/owned-sealed/sealed-evidence.json')"
+    ],
+    "newErrors": [],
+    "missingHistoricalErrors": [],
+    "historicalErrorCount": 6,
+    "newErrorCount": 0,
+    "pendingOriginalAssets": [
+      "PENDING ORIGINAL ASSET: assets/concepts/style-01-anime.png",
+      "PENDING ORIGINAL ASSET: assets/concepts/style-02-pixel.png",
+      "PENDING ORIGINAL ASSET: assets/concepts/style-03-cinematic.png"
+    ],
+    "historicalPhysicalReadbacks": [
+      {
+        "path": "goal-1/evidence/t17-acceptance-08/diagnosis-r1/transport-payload.json",
+        "kind": "regular",
+        "gitMode": "100644",
+        "permissionMode": "0o644",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "error": "goal-1/evidence/t17-acceptance-08/diagnosis-r1/transport-payload.json: invalid JSON (Expecting value: line 1 column 1 (char 0))"
+      },
+      {
+        "path": "goal-1/evidence/t17-acceptance-08/matrix-r1/technical_employee-t16-campaign-0/shape-28/recovery-members.json",
+        "kind": "regular",
+        "gitMode": "100644",
+        "permissionMode": "0o644",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "error": "goal-1/evidence/t17-acceptance-08/matrix-r1/technical_employee-t16-campaign-0/shape-28/recovery-members.json: invalid JSON (Expecting value: line 1 column 1 (char 0))"
+      },
+      {
+        "path": "goal-1/evidence/t17-acceptance-08/project-types-r3.json",
+        "kind": "regular",
+        "gitMode": "100644",
+        "permissionMode": "0o644",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "error": "goal-1/evidence/t17-acceptance-08/project-types-r3.json: invalid JSON (Expecting value: line 1 column 1 (char 0))"
+      },
+      {
+        "path": "goal-1/evidence/t17-acceptance-09/matrix-r9009/owned-sealed/sealed-evidence.json",
+        "kind": "symlink",
+        "gitMode": "120000",
+        "permissionMode": "0o755",
+        "bytes": 128,
+        "sha256": "4c5949ef039995194781bfd8fd1ab98fa4af31c6f0f2c4213f1feb17fd6cb29a",
+        "error": "goal-1/evidence/t17-acceptance-09/matrix-r9009/owned-sealed/sealed-evidence.json: invalid JSON ([Errno 2] No such file or directory: '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9009/owned-sealed/sealed-evidence.json')",
+        "literalReadlinkBase64": "L1VzZXJzL2dvcmRvbi9naXRob21lL3JlYm9ybi0yMDIwLWFpLWVyYS9nb2FsLTEvZXZpZGVuY2UvdDE3LWFjY2VwdGFuY2UtMDkvbWF0cml4LXI5MDA5L293bmVkLXNlYWxlZC9vd25lZC1taXNzaW5nLW1hcmtlci10YXJnZXQ=",
+        "referentFollowed": false
+      },
+      {
+        "path": "goal-1/evidence/t17-acceptance-09/matrix-r9109/owned-sealed/sealed-evidence.json",
+        "kind": "symlink",
+        "gitMode": "120000",
+        "permissionMode": "0o755",
+        "bytes": 128,
+        "sha256": "aa4d8bb1300ae8ac3ace13f688239f550fcf1508430bcf52908a7934ba3cfd3b",
+        "error": "goal-1/evidence/t17-acceptance-09/matrix-r9109/owned-sealed/sealed-evidence.json: invalid JSON ([Errno 2] No such file or directory: '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-09/matrix-r9109/owned-sealed/sealed-evidence.json')",
+        "literalReadlinkBase64": "L1VzZXJzL2dvcmRvbi9naXRob21lL3JlYm9ybi0yMDIwLWFpLWVyYS9nb2FsLTEvZXZpZGVuY2UvdDE3LWFjY2VwdGFuY2UtMDkvbWF0cml4LXI5MTA5L293bmVkLXNlYWxlZC9vd25lZC1taXNzaW5nLW1hcmtlci10YXJnZXQ=",
+        "referentFollowed": false
+      }
+    ],
+    "planOrCompetitiveNonzero": []
+  },
+  "interpretation": "Docs exit1 remains a real non-pass. Historical six are retained verbatim: 3 ENOSPC empty JSON, 2 deliberate dangling negative markers, 1 immutable root13 original input outside-repository skill link. New errors are listed independently for controller action; no old file repaired."
+}

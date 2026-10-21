@@ -1,0 +1,47 @@
+{
+  "startedAt": "2026-10-21T14:12:47.730071+00:00",
+  "commands": [
+    [
+      "rtk",
+      "proxy",
+      "python3",
+      "-B",
+      "scripts/check_docs.py",
+      "--text-only"
+    ],
+    [
+      "rtk",
+      "proxy",
+      "python3",
+      "-B",
+      "scripts/check_plan.py"
+    ],
+    [
+      "rtk",
+      "proxy",
+      "python3",
+      "-B",
+      "scripts/check_competitive_design.py"
+    ]
+  ],
+  "capture": "Each original command runs with stderr redirected into stdout; console.txt preserves the complete merged raw stream, without generated separators. Exit and duration saved separately.",
+  "sourceBefore": {
+    "path": "goal-1/evidence/t17-acceptance-14/docs-readback-r11/source-before.json",
+    "bytes": 109659,
+    "sha256": "59711243c7712c1febc57953d9b9049333c50de1492d5786c152bbf24c9e8337"
+  },
+  "localIdentityBeforeWrites": {
+    "head": "538032efc898705e4ea155c71df4caa899de5120",
+    "branch": "main",
+    "origin": "https://github.com/GOD-OF-PPT/reborn-2020-ai-era.git",
+    "repository": {
+      "defaultBranchRef": {
+        "name": "main"
+      },
+      "nameWithOwner": "GOD-OF-PPT/reborn-2020-ai-era",
+      "url": "https://github.com/GOD-OF-PPT/reborn-2020-ai-era",
+      "visibility": "PUBLIC"
+    }
+  },
+  "scope": "Documentation/specification and read-only remote identity observations only. No full unit suite/browser/compatibility/HTTP or remote mutation."
+}

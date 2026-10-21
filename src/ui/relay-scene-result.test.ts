@@ -207,18 +207,29 @@ it('does not report cancelled or interrupted support as completed',()=>{
  }
 })
 
-it('keeps first-order, pause and independent story-letter priorities ahead of relay completions',()=>{
+it('retains first-order, pause and story letters alongside simultaneous relay completions',()=>{
  const paid=changed(frames.auditDone,f=>({...f,firstOrder:{...f.firstOrder,result:{...f.firstOrder.result,paymentFen:130000,directCostFen:50000,netOrderFen:80000}}}))
  expect(receipt('AdvanceTime',frames.auditRunning,paid)).toContain('客户实际付来了¥1,300')
+ expect(receipt('AdvanceTime',frames.auditRunning,paid)).toContain('28条原计量')
  const awaiting=changed(frames.auditDone,f=>({...f,firstOrder:{...f.firstOrder,status:'awaiting_submission'}}))
  expect(receipt('AdvanceTime',frames.auditRunning,awaiting)).toContain('由你亲手交给客户')
+ expect(receipt('AdvanceTime',frames.auditRunning,awaiting)).toContain('28条原计量')
  const paused=changed(frames.auditDone,f=>({...f,workbench:{...f.workbench,
   pause:{instanceId:'public-pause',reason:'CASH_SHORTFALL',source:'command'},progression:{...f.workbench.progression,barrierLabel:'原现金缺口仍待核对'}}}))
  expect(receipt('AdvanceTime',frames.auditRunning,paused)).toContain('日子在这里停了一下。原现金缺口仍待核对')
+ expect(receipt('AdvanceTime',frames.auditRunning,paused)).toContain('28条原计量')
+ expect(receipt('AdvanceTime',frames.auditRunning,paused).match(/日子在这里停了一下/g)).toHaveLength(1)
  const job={...createPublicRiskInvestigation({status:'completed'}),entityId:'public-incident',actionId:'public-investigation',releasedAt:null}
  const letter=changed(frames.auditDone,f=>({...f,story:{...f.story,jobs:[job]}}))
  expect(receipt('AdvanceTime',frames.auditRunning,letter)).toContain('独立回信到了')
- expect(receipt('AdvanceTime',frames.auditRunning,letter)).not.toContain('28条原计量')
+ expect(receipt('AdvanceTime',frames.auditRunning,letter)).toContain('28条原计量')
+})
+
+it('requires a committed newer snapshot for every success text, including first-order and risk feedback',()=>{
+ for(const kind of ['WorkQuarter','StartFirstOrder','SubmitDelivery','StartRiskTask','ConfirmRiskAssessment','AdvanceTime']){
+  for(const current of [{...frames.planned,runId:'another-life'},{...frames.planned,revision:frames.beforePeriod.revision},{...frames.planned,saveStatus:'saving' as const},{...frames.planned,saveStatus:'unsaved' as const,hasCandidate:true}])expect(receipt(kind,frames.beforePeriod,current)).toBe('尚未核定新的完整保存，眼前仍以上一次完整提交为准。')
+  expect(receipt(kind,null,frames.planned)).toBe('尚未核定新的完整保存，眼前仍以上一次完整提交为准。')
+ }
 })
 
 it('uses only public reported data and leaves the display inputs and original fixture bytes untouched',()=>{

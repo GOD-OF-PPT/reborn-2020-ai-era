@@ -1,0 +1,65 @@
+{
+  "results": [
+    {
+      "name": "docs",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_docs.py",
+        "--text-only"
+      ],
+      "exitCode": 1,
+      "elapsedSeconds": 62.21432709693909
+    },
+    {
+      "name": "plan",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_plan.py"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.11887168884277344
+    },
+    {
+      "name": "competitive",
+      "command": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_competitive_design.py"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.17670226097106934
+    }
+  ],
+  "trackedDocsBefore": {
+    "goal-1/input.md": "20c73f8fec1a17a39606fc854126c59f949cddc6f8342ec2d55eb999c10a70b1",
+    "goal-1/plan.md": "566f03a567ae2fc85bd15f0163f31563117fee3f4033c172063325f526087551",
+    "goal-1/t17-plan.md": "a43dc91eed557d2e050467ba53b0b296c9dfc2e6ead6f7c344502a522a6838a2",
+    "goal-1/tasks.md": "a53edcd57af61365999d7bac18ab5ca5c445dd86abd22d3d5cfcc12ab989c903",
+    "AGENTS.md": "da5d889fbcdece202ad83dc4a4f50a0b470cc9a5bae7a84941684ed661bff9f4",
+    "README.md": "3c4e35924418835d24f1dfd2588e7776bdacae69302f4d28b7c2362d0e9b8643",
+    "package.json": "f6d163c6a9e886094295935e21a52fa334a21a8fadcc356a798ef326886188b1",
+    "package-lock.json": "096fd07ea9a5ac837d12495d23f67b4c0ccbb61d36d308ef689d8041e0ec2bb4",
+    "goal-1/evidence/t17-acceptance-14/plan.md": "b9a2dcfa97992e5f0b4951f644f65c344973a8ba7db21703e992bc954db89254"
+  },
+  "trackedDocsAfter": {
+    "goal-1/input.md": "20c73f8fec1a17a39606fc854126c59f949cddc6f8342ec2d55eb999c10a70b1",
+    "goal-1/plan.md": "566f03a567ae2fc85bd15f0163f31563117fee3f4033c172063325f526087551",
+    "goal-1/t17-plan.md": "a43dc91eed557d2e050467ba53b0b296c9dfc2e6ead6f7c344502a522a6838a2",
+    "goal-1/tasks.md": "a53edcd57af61365999d7bac18ab5ca5c445dd86abd22d3d5cfcc12ab989c903",
+    "AGENTS.md": "da5d889fbcdece202ad83dc4a4f50a0b470cc9a5bae7a84941684ed661bff9f4",
+    "README.md": "3c4e35924418835d24f1dfd2588e7776bdacae69302f4d28b7c2362d0e9b8643",
+    "package.json": "f6d163c6a9e886094295935e21a52fa334a21a8fadcc356a798ef326886188b1",
+    "package-lock.json": "096fd07ea9a5ac837d12495d23f67b4c0ccbb61d36d308ef689d8041e0ec2bb4",
+    "goal-1/evidence/t17-acceptance-14/plan.md": "b9a2dcfa97992e5f0b4951f644f65c344973a8ba7db21703e992bc954db89254"
+  },
+  "allReadInputsUnchanged": true,
+  "scope": "Documentation only; preserves known historical six errors, no unit/browser/compatibility execution"
+}

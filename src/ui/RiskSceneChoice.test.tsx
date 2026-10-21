@@ -44,8 +44,10 @@ it('keeps the viewed personal account separate from a real bound business and re
   const six=createPublicRiskSceneFixture(Array.from({length:6},(_,i)=>createPublicRiskIncident({id:'letter-'+i,businessIds:[channel.businessId]})))
   for(const c of six.incidents){const html=renderToStaticMarkup(<RiskLetter p={{...p,features:{...features,story:six}}} incident={c} index={six.incidents.indexOf(c)} count={6} onNext={noAction}/>);expect(html).toContain('翻到下一封来信');expect(html).toContain(`${six.incidents.indexOf(c)+1} / 6`)}
   const jobs=createPublicRiskSceneFixture([]);jobs.jobs=[{...createPublicRiskInvestigation(),entityId:'public-case',actionId:'public-action',releasedAt:null}]
-  const resultView={...view,features:{...features,story:jobs}}
+  // Public display fixture: a newly committed revision is required even when the facts differ.
+  const resultView={...view,revision:view.revision+1,features:{...features,story:jobs}}
   expect(savedSceneResult('StartRiskTask','独立委托',view,resultView)).toContain('实际支付¥100、使用1点')
+  expect(savedSceneResult('StartRiskTask','独立委托',view,{...resultView,revision:view.revision})).not.toContain('实际支付')
   expect(controller.exportSaved()).toBe(before)
  }finally{await controller.close();await store.close()}
 },20000)

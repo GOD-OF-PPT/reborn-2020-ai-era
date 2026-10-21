@@ -1,0 +1,97 @@
+TAP version 13
+# (node:66692) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: canonical export remains exact and cannot use an import binding
+ok 1 - canonical export remains exact and cannot use an import binding
+  ---
+  duration_ms: 3.718791
+  ...
+# Subtest: product, candidate, physical and reload roles never accept terminal LF
+ok 2 - product, candidate, physical and reload roles never accept terminal LF
+  ---
+  duration_ms: 0.424843
+  ...
+# Subtest: canonical import is source-bound with byte length computed as UTF8
+ok 3 - canonical import is source-bound with byte length computed as UTF8
+  ---
+  duration_ms: 0.91394
+  ...
+# Subtest: one genuine source terminal LF is kept as a separate non-equal byte outcome
+ok 4 - one genuine source terminal LF is kept as a separate non-equal byte outcome
+  ---
+  duration_ms: 0.832531
+  ...
+# Subtest: an unknown binding or missing original source is rejected
+ok 5 - an unknown binding or missing original source is rejected
+  ---
+  duration_ms: 1.686774
+  ...
+# Subtest: folder, file and origin identities cannot be relabelled
+ok 6 - folder, file and origin identities cannot be relabelled
+  ---
+  duration_ms: 0.488677
+  ...
+# Subtest: the actual original hash and bytes are required independently of the row
+ok 7 - the actual original hash and bytes are required independently of the row
+  ---
+  duration_ms: 0.524971
+  ...
+# Subtest: a changed browser buffer cannot borrow the intact source binding
+ok 8 - a changed browser buffer cannot borrow the intact source binding
+  ---
+  duration_ms: 0.358893
+  ...
+# Subtest: CRLF and double LF are rejected even with matching source hashes
+ok 9 - CRLF and double LF are rejected even with matching source hashes
+  ---
+  duration_ms: 0.77767
+  ...
+# Subtest: manifest terminal LF must describe the source exactly
+ok 10 - manifest terminal LF must describe the source exactly
+  ---
+  duration_ms: 0.976335
+  ...
+# Subtest: leading space, trailing space, reordered keys and changed values are not normalized
+ok 11 - leading space, trailing space, reordered keys and changed values are not normalized
+  ---
+  duration_ms: 0.73354
+  ...
+# Subtest: malformed metadata and absent source paths fail closed
+ok 12 - malformed metadata and absent source paths fail closed
+  ---
+  duration_ms: 0.458076
+  ...
+# Subtest: actual source-bound input buffer: chrome-deepseek-r8/eco-normal-c16-r70-text-before-import.json
+ok 13 - actual source-bound input buffer: chrome-deepseek-r8/eco-normal-c16-r70-text-before-import.json
+  ---
+  duration_ms: 761.446468
+  ...
+# Subtest: actual source-bound input buffer: chrome-equity-r11/normal-c16-signed-equity-r94-text-before-import.json
+ok 14 - actual source-bound input buffer: chrome-equity-r11/normal-c16-signed-equity-r94-text-before-import.json
+  ---
+  duration_ms: 672.969157
+  ...
+# Subtest: actual source-bound input buffer: chrome-deepseek-r10/eco-real-original-backup74-restore-text-before-import.json
+ok 15 - actual source-bound input buffer: chrome-deepseek-r10/eco-real-original-backup74-restore-text-before-import.json
+  ---
+  duration_ms: 439.966753
+  ...
+# Subtest: actual source-bound input buffer: chrome-deepseek-r11/eco-real-original-backup75-restore-text-before-import.json
+ok 16 - actual source-bound input buffer: chrome-deepseek-r11/eco-real-original-backup75-restore-text-before-import.json
+  ---
+  duration_ms: 419.582254
+  ...
+# Subtest: actual source-bound input buffer: chrome-life-npc-r11/normal-c16-npc-offered-r12-text-before-import.json
+ok 17 - actual source-bound input buffer: chrome-life-npc-r11/normal-c16-npc-offered-r12-text-before-import.json
+  ---
+  duration_ms: 232.826305
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4212.04231

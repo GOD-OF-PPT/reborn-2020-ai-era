@@ -1,0 +1,13 @@
+# D09 原公开原文审核R2边界补正
+
+原R1实际exit1/82.434秒，首先在chrome-deepseek-r8生态70导入缓冲失败FULL_CREATE_PREFIX_BYTE_MISMATCH，原console/terminal/输入/journal全部保留，不复用其局部前缀作完整通过。原共享verify_normal_browser_exports.ts、运行时、所有旧证据和raw不改。
+
+这是输入角色格式边界：五份buffer原字节均与其实际来源逐字同，其中原C16生态70和签署94两份各自只有一个末尾LF，游戏codec规范导出无LF。其余3份buffer与规范导出一致。来源白名单逐份明确folder/file/origin/sourceFile/完整bytes/SHA/terminalLf；不准凭row.origin或任意文本trim通融。
+
+R2在本root另存原完整Create审核器的工具副本，仅重定向相对import/root并接严格角色比较器、额外冻结本工具/绑定/来源与准确报告。正常创建、完整命令/幂等/registry/canonicalJson/hash/codec、所有原版本/随机/金额/日期/状态断言完全不变。所有非buffer（实际产品/候选/物理/重载）必须原字节同；buffer必须首先与白名单source实际原字节同，且只能等于完整Create规范原文或明确绑定规范原文+一个LF。CRLF/双LF/空白/前缀/任意内容或角色改写必须拒绝。所有5绑定均必须消费、不漏不多。
+
+报告不能声称全部原字节相等：allByteEqual=false；allCanonicalReplayMatches与allNonBufferBytesEqual及allInputBufferOriginalSourcesEqual独立为true才passed；两原LF逐份列原始SHA/bytes、规范SHA/bytes和差异，不把buffer算新已保存业务。当前新helper按真实正负边界定向核验，不能冒充再次执行游戏。完整R2必须从Create新执行，不拼R1局部。
+
+兼容开发测试0。实际R2全量审核通过后才步骤5结项/封存/Git；若发现新业务/字节问题先保全再修，不伪造通过。
+
+独立fork复核补正：原初版只在首读核source路径无链接，终态统一SHA会跟随新同字节链接。未执行初版已完整另存；当前仅补bound source初末所有父链/普通文件guard、O_NOFOLLOW文件描述符和dev/ino/mode/size/mtime/ctime前中后身份，终检再比原hash不覆盖。未做并发替换race注入，不把静态修缮或17字符串边界用例冒称race测试。

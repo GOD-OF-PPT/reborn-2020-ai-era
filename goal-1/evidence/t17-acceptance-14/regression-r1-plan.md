@@ -1,0 +1,1 @@
+D09：先仓库原typecheck与current-scenes定向调试，修实际问题后当前全部30适用UI、原20相关规则/原子保存/codec文件和fresh生产构建。保持原测试/时限/fork隔离、oneworker；book-layout原两多宽暂停，不运行默认含兼容文件的整套check。每次freeze包含全src TS/TSX/CSS、public、配置/锁、AGENTS/README、原26/31/34合同、当前input/plan/登记/runner和所有源码静态json?raw输入；运行时不改源。原red与fixture身份保留，绿色测试不作原矩阵/真人/兼容或整体验收。

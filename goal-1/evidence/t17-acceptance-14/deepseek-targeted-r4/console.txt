@@ -1,0 +1,51 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts --maxWorkers=1 --reporter=default --reporter=json --outputFile.json=goal-1/evidence/t17-acceptance-14/deepseek-targeted-r4/vitest.json src/ui/deepseek-scene-progress.test.ts
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/deepseek-scene-progress.test.ts (6 tests | 1 failed) 4847ms
+   ✓ lets a real fresh normal life inspect participation without creating an ecosystem or enabling counterfactual equity 1122ms
+   ✓ connects real isolated service production, personal submission, customer review, support and due collection without inventing income 833ms
+   ✓ keeps real diligence, accepted terms, locked shares and later follow consent distinct and never signs or follows automatically 707ms
+   × keeps an actual unfinished negotiation ahead of its already-read invitation while preserving that original invitation for inspection 361ms
+   ✓ reveals a buyer quote only after the original completed response, leaves shares to the player, and collects only a real due transfer 723ms
+   ✓ keeps the original visible collection scene on real transaction abort and advances it only after retrying that exact candidate 1099ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/deepseek-scene-progress.test.ts > keeps an actual unfinished negotiation ahead of its already-read invitation while preserving that original invitation for inspection
+AssertionError: expected { …(13) } to match object { phase: 'terms', …(3) }
+(16 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "active": true,
+-   "entityId": "dsk:8da6d74d2db611cd62cbd83c88d7bb0d",
+-   "nextDate": "2025-07-08",
+-   "phase": "terms",
++   "entityId": "dsk:c2447208006e12ad4de3086671ac7b6c",
++   "nextDate": null,
++   "phase": "invitation",
+  }
+
+ ❯ src/ui/deepseek-scene-progress.test.ts:95:18
+     93|  expect(projection.invitations.find(i=>i.id===invitation.id)!.status).…
+     94|  const current=deepseekSceneProgress(projection,h.run.timeline.cursor.…
+     95|  expect(current).toMatchObject({phase:'terms',entityId:negotiation.id,…
+       |                  ^
+     96|  expect(current.choice.line).toContain('任务基础成本')
+     97|  expect(current.choice.line).toContain('原工资、维护和其他已承诺的支持另列')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 5 passed (6)
+   Start at  19:44:12
+   Duration  6.67s (tests 77%, import 13%, transform 11%)
+
+JSON report written to /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-14/deepseek-targeted-r4/vitest.json
