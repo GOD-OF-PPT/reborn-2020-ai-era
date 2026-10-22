@@ -351,3 +351,12 @@ D11实现e1ca9b7/记录a7a45f5为真实完成progress，按[evidence/t17-accepta
 ## 5c-P1六正常前提自主核验完成，提交前收口
 
 [限定验证](evidence/t17-acceptance-17/validation.md)已核六正常Create/619命令/219完整里程碑/6原预览；独立audit-r2真实exit0、6/6 verified_ready，463源/输入与147执行源+快照实读同。原草稿R1 adapter在preparing企业拒绝的完整74成功/1拒和5未执行保留，policy-r3有据前移唯一Activate并真实支付早开业维护后全六重新Create，不拼接旧批。正period费不等现金或盈利、未消费充值/旧账保留。当前只余最终资料/封存/真实Git本地提交，准确SHA随后记；原288核心/62关键/22例行、5c—5f/6/7—15/完整T17与goal仍未完成。全部页面兼容开发测试0/M01暂停，原图/真人/T18责任不减。
+
+
+## 5c-P1 六正常中转前提限定完成
+
+- [x] 本具体任务（含root17步骤6）实际完成：本地实现4c0d6acfb4abcb180af879942cf98a3f1f485580，662任务路径逐Git blob/暂存/磁盘/SHA/mode核同；root17封存652普通文件+marker，SHA099aa7b2a877b28d34f1f81f29c91d2438ea2a67d43ef6c46df0b0e323e0bf5c。root17的step6/summary为提交前不可改快照，本条与[新同级实核](evidence/t17-relay-prefix-post-commit-01/feature-commit-readback.json)记录真实完成，不回写原根。
+- 独立审核：R2全六正常Create/619接受/219完整里程碑/6原preview/1244journal，独审exit0、6/6 verified_ready，463输入/运行源初末及147执行源+快照实核同。真实readyAt均Jan1，许可余99—189日；正period费464.29/500元、原维护/生活/工资/代理费、205.71/192.87/0.02元客户保护与负利润保留，不冒称已关闭、盈利或已授权委托。原R1实际BUSINESS_NOT_ACTIVE fatal/74接受+1拒/5未执行及所有红档永久保留，R3合法前移唯一Activate后全六重新创建，不拼接旧批。
+- 最终限定检查：helper7/readiness2分别通过，严格CLI/项目R4均0；docs实际1仅原7错误/3缺图提示，plan/competitive0。17,441旧条目17,438同/3允许记录/异常0、19字面链接保持；D11 44HTTP原字节保持，只是保全而非新Chrome。两CLI封存父目录实际拒写、653原文件集合/字节保持。默认空白2仅4原console，初次仅stdout分类漏stderr的false另保留，其余658feature路径0；原console未裁改。
+- [杠精审查] P1限定通过；真实失败/静态漏审与有据修复均披露，不削原规则/数值/固定seed/资源/日期/权限。REPEAT复用项目codec/harness/守卫/独立重放，无新全局Skill/自动化/外部资源。未push/deploy，PUBLIC远端main与README活读仍9bf4399；本完成记录和post将另本地提交，最终准确record身份见Git和交回。
+- 下一具体任务恢复原5c-P2的288核心形态，再62关键/22例行及原其余5c—5f/6/7—15；本轮止于P1，不越序开下一任务。全部页面兼容开发测试0、book-layout两多宽/M01暂停且须用户明确恢复；完整T17/goal、旧PNG0/3/新A三案3/3/真人0/T18与原全部后续继续保留。

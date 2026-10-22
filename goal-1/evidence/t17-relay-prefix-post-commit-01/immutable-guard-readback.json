@@ -1,0 +1,38 @@
+{
+  "rows": [
+    {
+      "kind": "collector",
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_relay_prefix_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-17/must-not-create-post-collector"
+      ],
+      "exitCode": 1,
+      "targetAbsent": true,
+      "refusedBeforeExecutionOrOutput": true
+    },
+    {
+      "kind": "auditor",
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_relay_prefix_readiness.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-17/must-not-create-post-auditor"
+      ],
+      "exitCode": 1,
+      "targetAbsent": true,
+      "refusedBeforeExecutionOrOutput": true
+    }
+  ],
+  "exactFileCount": 653,
+  "exactSetAndBytesUnchanged": true,
+  "productionOrGameExecution": 0,
+  "allProtectedFilesUnchanged": true
+}
