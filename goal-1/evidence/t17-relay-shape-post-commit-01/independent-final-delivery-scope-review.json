@@ -1,0 +1,128 @@
+{
+  "scope": "Independent final delivery scope, complete on-disk bytes and modes, root18 seal set, frozen identities and existing completed reports. Read-only; no game/test/Chrome/compat execution, no stage/commit. Parent independently handles staged Git blobs and remote/post delivery.",
+  "observedAt": "2026-10-22T23:24:53.642687+00:00",
+  "passed": true,
+  "issues": [],
+  "manifest": {
+    "file": ".delivery/t17-relay-shape-proof/feature-manifest.json",
+    "bytes": 432608,
+    "sha256": "bca4124d7aaadfcf409b3938be8bbb0c857613f8b9377d26518d026048225ced",
+    "regularFiles": 1921,
+    "symlinks": 0,
+    "rootFilesIncludingMarker": 1906,
+    "masterRecords": 3,
+    "scripts": 5,
+    "testingModulesAndTests": 7,
+    "outsideRootExactPaths": [
+      "goal-1/plan.md",
+      "goal-1/t17-plan.md",
+      "goal-1/tasks.md",
+      "scripts/collect_relay_shape_evidence.ts",
+      "scripts/relay-shape-evidence.ts",
+      "scripts/relay-shape-prefix.ts",
+      "scripts/relay-shape-run.ts",
+      "scripts/verify_relay_shape_evidence.ts",
+      "src/testing/relay-shape-assertions.test.ts",
+      "src/testing/relay-shape-assertions.ts",
+      "src/testing/relay-shape-scenario.test.ts",
+      "src/testing/relay-shape-scenario.ts",
+      "src/testing/relay-shape-types.ts",
+      "src/testing/relay-shape-violation-proof.test.ts",
+      "src/testing/relay-shape-violation-proof.ts"
+    ],
+    "completeBytesAndGitModesSame": true
+  },
+  "rootSeal": {
+    "marker": "goal-1/evidence/t17-acceptance-18/sealed-evidence.json",
+    "sha256": "3b39e3478898199b5a85664b3d2692c18228b5828f6849b4f5264bc6d1261727",
+    "regularFilesExcludingSelf": 1905,
+    "regularFilesIncludingSelf": 1906,
+    "contentBytesExcludingSelf": 277720700,
+    "directoriesExcludingRoot": 396,
+    "links": [],
+    "specialFiles": [],
+    "exactFileDirectorySetsAndPhysicalModes": true
+  },
+  "freeze": {
+    "sources": 151,
+    "inputs": 247,
+    "sourceSnapshots": 151,
+    "allFullBytesSame": true,
+    "originalInputBytes": 61,
+    "originalInputSha256": "20c73f8fec1a17a39606fc854126c59f949cddc6f8342ec2d55eb999c10a70b1"
+  },
+  "existingActualAudit": {
+    "audited": 288,
+    "positive": 264,
+    "verifiedLimited": 24,
+    "invalidOrUnproven": 0,
+    "positiveShapes": 48,
+    "all288Positive": false,
+    "prefixes": 6,
+    "completeProofReferencesRead": 294,
+    "completeObservedInputReferencesRead": 886,
+    "suffixCounts": {
+      "accepted": 3496,
+      "rejected": 0,
+      "candidates": 3496,
+      "previews": 264,
+      "milestones": 3408,
+      "journalEvents": 7256
+    },
+    "byIdentity": {
+      "technical_employee-t16-campaign-0": {
+        "positive": 48
+      },
+      "technical_employee-t16-campaign-1": {
+        "positive": 36,
+        "limited": 12
+      },
+      "technical_employee-t16-campaign-2": {
+        "positive": 48
+      },
+      "content_employee-t16-campaign-0": {
+        "positive": 48
+      },
+      "content_employee-t16-campaign-1": {
+        "positive": 36,
+        "limited": 12
+      },
+      "content_employee-t16-campaign-2": {
+        "positive": 48
+      }
+    },
+    "allRowsRetainTenOriginalCheckpoints": true,
+    "unpackedArchivesOrGameReexecutedThisReview": false
+  },
+  "knownValidationLimits": {
+    "docsExitCode": 1,
+    "existingDocsErrors": 7,
+    "existingOriginalAssetPending": 3,
+    "planExitCode": 0,
+    "competitiveExitCode": 0,
+    "defaultWhitespaceNotAllGreen": "Root reports6 raw console EOF blanks and2 identical source/snapshot EOF style blanks; preserved executed hashes, no logic/runtime effect; this readonly scope review did not rerun whitespace.",
+    "wholeT17GoalComplete": false,
+    "critical62Complete": false,
+    "routine22Complete": false,
+    "originalPNGComplete": false,
+    "humanPlaytestComplete": false,
+    "M01CompatibilityPaused": true,
+    "T18Complete": false,
+    "newBrowserAcceptance": false,
+    "noPushDeployOrExternalResources": true
+  },
+  "credentialReview": {
+    "patterns": [
+      "private_key_header",
+      "github_token",
+      "github_finegrained",
+      "aws_access_key",
+      "openai_project_key"
+    ],
+    "hits": [],
+    "limits": "Bounded recognizable private-key/API-token byte-pattern scan of authorized manifest files plus exact path allowlist. No secret values printed; does not establish a universal semantic credential detector."
+  },
+  "bytesReadForUniqueHashPaths": 519862788,
+  "uniqueCompleteHashPaths": 2309,
+  "gj": "限定通过。完整288与48覆盖未缩水，24有限仍非正向，全部旧后续责任保留；不把字节/类型/HTTP/封存替代新游戏、画面或人类验收。"
+}

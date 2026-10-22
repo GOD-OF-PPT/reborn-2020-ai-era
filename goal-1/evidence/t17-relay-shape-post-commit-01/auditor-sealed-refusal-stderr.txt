@@ -1,0 +1,16 @@
+(node:26309) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+file:///Users/gordon/githome/reborn-2020-ai-era/scripts/video-shape-output.ts:11
+ if(execFileSync('rtk',['proxy','git','ls-files','-z','--',taskRoot],{cwd:root}).length)throw Error('IMMUTABLE_EVIDENCE_PARENT_USE_NEW_SIBLING')
+                                                                                              ^
+
+Error: IMMUTABLE_EVIDENCE_PARENT_USE_NEW_SIBLING
+    at assertFreshVideoEvidencePath (file:///Users/gordon/githome/reborn-2020-ai-era/scripts/video-shape-output.ts:11:95)
+    at new RelayShapeEvidenceWriter (file:///Users/gordon/githome/reborn-2020-ai-era/scripts/relay-shape-evidence.ts:168:20)
+    at verifyRelayShapeEvidence (file:///Users/gordon/githome/reborn-2020-ai-era/scripts/verify_relay_shape_evidence.ts:222:15)
+    at file:///Users/gordon/githome/reborn-2020-ai-era/scripts/verify_relay_shape_evidence.ts:314:96
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+
+Node.js v22.12.0

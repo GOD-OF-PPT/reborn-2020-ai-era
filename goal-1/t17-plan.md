@@ -295,3 +295,13 @@ P2独立全量审核已实际exit0/3974.632秒：重新六Create619/219后原288
 
 
 P2最终提交前限定检查已齐：完整独审288/48及root原文/字节/原树保全通过，资料R2 docs1仍仅原7错误/3原PNG提示，plan/competitive0。原5328已无监听，原构建恢复同端口后44HTTP原字节同，非新Chrome/兼容验收。当前正封总root并准备本地feature/Git逐blob/mode/post，准确完成SHA另写；不提前勾步骤6或上层，原后续责任不减。
+
+
+## 5c-P2 原288核心限定任务完成（2026-10-23）
+
+- [x] 本具体任务（含root18步骤6）实际完成：本地实现 **881bcbac5423542ca977068d0981627f195fa320**，1921任务路径的暂存/commit blob/磁盘完整字节与Gitmode一致；root18封存1905普通文件+自排除marker（SHA3b39e347…），开工原18116项保全核定为18113同/3授权记录/异常0，19字面链接保持。root18的step6仍是不可回写提交前快照，本条及[同级提交后实据](evidence/t17-relay-shape-post-commit-01/acceptance-summary.json)记录实际完成；post完成记录随后另本地提交，不回写封存根。
+- 实际业务证据：[限定验证](evidence/t17-acceptance-18/validation.md)记录原六正常Create/619接受/219里程碑与readiness后全部288实际采集，独立再次从六Create与每原suffix完整重放，288/288核定＝264正向＋24真实独立violation有限，invalid/errors/漏执行0、全部48形态都有实际正向。3496接受/0拒、3496候选/264预览/3408里程碑/7256journal逐完整原文同；8056完整归档成员无损保留，root294proof/886输入/398源输入初末实核同。有限停止不是经营成功或外部恢复，未清预款保护、旧客户、供应资产或后续责任。
+- 最终限定检查：两组件各5边界、6纯来源链和2受控serializer故障保全通过，strict CLI/project R5均0；writer/fault夹具红、类型R4红及静态异常保全/自动Stop来源缺口与修复都原样留存。最终交叉代码/范围/交付审查无当前确定阻断；docs1仅原7错误/3旧PNG提示，plan/competitive0，不称整仓绿。默认whitespace2为6原console与纯helper/同字节snapshot各1个EOF空行；初次只按console分类的false保留，原源/快照/日志未改，其余1913路径0。
+- 提交后两CLI确在游戏/输出之前被IMMUTABLE父目录守卫拒绝，1906原文件集合/字节保持；首次classifier漏IMMUTABLE的false亦保留。5328两次实际无监听且原因未知，恢复原D11构建到同端口（当前独立文件日志进程）后原44HTTP字节及提交后首页实读同，非新Chrome/视觉/真人或兼容验收。PUBLIC远端main/README活读仍9bf4399；未push/deploy/建外部资源、依赖或权限变更。
+- [杠精审查] 本P2具体任务限定完成通过；不以绿色汇总/哈希/类型/HTTP替代完整业务或画面、真人。REPEAT复用项目codec/harness/guard/XZ/receipt及原Git逐blob工具，无新全局Skill、应用automation或通用框架。当前生产游戏规则/金额/日期/AP/权限/存档格式/前台源码均未改。
+- 下一具体任务是原5c-P3的62关键分支，再原22例行/其余5c—5f/6/7—15；完整T17/goal、旧PNG0/3/新A三案3/3/真人0、M01暂停且须用户明确恢复、T18全部保留。本轮止于P2，不越序开始下一项，持续A长日重启美术与交互方向不回退，全部页面兼容开发测试0。

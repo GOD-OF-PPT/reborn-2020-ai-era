@@ -1,0 +1,37 @@
+{
+  "scope": "Actual committed-parent refusals, no extra game/compatibility test.",
+  "featureCommit": "881bcbac5423542ca977068d0981627f195fa320",
+  "passed": true,
+  "rows": [
+    {
+      "name": "collector",
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_relay_shape_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-18/matrix-r101"
+      ],
+      "exitCode": 1,
+      "actualGuard": "IMMUTABLE_EVIDENCE_PARENT_USE_NEW_SIBLING",
+      "newOutputNotCreated": true
+    },
+    {
+      "name": "auditor",
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_relay_shape_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-18/audit-r101"
+      ],
+      "exitCode": 1,
+      "actualGuard": "IMMUTABLE_EVIDENCE_PARENT_USE_NEW_SIBLING",
+      "newOutputNotCreated": true
+    }
+  ]
+}
