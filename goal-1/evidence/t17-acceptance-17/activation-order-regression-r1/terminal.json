@@ -1,0 +1,116 @@
+{
+  "originalInput": {
+    "file": "technical_employee-t16-campaign-0/prefix-final.json",
+    "bytes": 971495,
+    "sha256": "85eaf13b8c1994ecf3b27b4b792f72047139074ce94a7bdd40eab0671f0a2c47"
+  },
+  "originalRejected": {
+    "status": "rejected",
+    "reasonCodes": [
+      "BUSINESS_NOT_ACTIVE"
+    ]
+  },
+  "accepted": [
+    {
+      "command": {
+        "runId": "normal-relay-matrix-technical_employee-ee9cb440",
+        "actorId": "player",
+        "commandId": "relay-prefix-75",
+        "expectedRevision": 75,
+        "kind": "ActivateBusiness",
+        "payload": {
+          "businessId": "ops:0c171e937e30a2c2554d7e8c750ea44a"
+        }
+      },
+      "preview": {
+        "allowed": true,
+        "reasonCodes": [],
+        "actionPoints": 0,
+        "upfrontCostFen": 0,
+        "releasedFen": 0
+      },
+      "revision": 76,
+      "bytes": 978837,
+      "sha256": "8c66104d07fe12b106e19a48c2793649f07d7e106494064f26033ec3ff7d7a8f"
+    },
+    {
+      "command": {
+        "runId": "normal-relay-matrix-technical_employee-ee9cb440",
+        "actorId": "player",
+        "commandId": "relay-prefix-76",
+        "expectedRevision": 76,
+        "kind": "StartRelayAdapter",
+        "payload": {
+          "businessId": "ops:0c171e937e30a2c2554d7e8c750ea44a",
+          "supplierId": "cedar-reseller",
+          "resources": [
+            "player-production"
+          ],
+          "startAt": "2024-04-23"
+        }
+      },
+      "preview": {
+        "allowed": true,
+        "reasonCodes": [],
+        "actionPoints": 1,
+        "upfrontCostFen": 100000,
+        "releasedFen": 0
+      },
+      "revision": 77,
+      "bytes": 985722,
+      "sha256": "33821bf2f385192c107c79d4b5bf8c38b03596b32c7cc0e785aeefc6a8ec5e19"
+    }
+  ],
+  "scope": "Two-command regression from exact original fatal r75; not a new normal six-prefix result or full Create audit.",
+  "business": {
+    "accountId": "ops:8210a6ae0c99217c8d99a824661a0dc4",
+    "activeFrom": "2024-04-23",
+    "company": true,
+    "definitionId": "relay-station",
+    "distributedFen": 0,
+    "funds": {
+      "availableFen": 2590000,
+      "cashFen": 2590000,
+      "commitmentShortfallFen": 0,
+      "heldFen": 0,
+      "investmentValueFen": 0,
+      "netAssetsFen": 2590000,
+      "payableFen": 0,
+      "prepaidLiabilityFen": 0,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "receivableFen": 0,
+      "supplierPrepaidFen": 0
+    },
+    "history": [
+      {
+        "date": "2024-01-02",
+        "sourceId": "relay-prefix-59:discover",
+        "state": "discovered"
+      },
+      {
+        "date": "2024-01-02",
+        "sourceId": "relay-prefix-59:prepare",
+        "state": "preparing"
+      },
+      {
+        "date": "2024-04-23",
+        "sourceId": "relay-prefix-75",
+        "state": "operating"
+      }
+    ],
+    "id": "ops:0c171e937e30a2c2554d7e8c750ea44a",
+    "lifecycle": "operating",
+    "metrics": {
+      "accruedCostFen": 1000,
+      "costFen": 411000,
+      "incomeFen": 0,
+      "profitFen": -411000
+    },
+    "monthlyMaintenanceFen": 30000,
+    "prepared": true,
+    "route": "api_relay",
+    "stoppedAt": null
+  },
+  "productionRulesChanged": false
+}

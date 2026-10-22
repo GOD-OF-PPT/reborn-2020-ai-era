@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "oldFiles": 10,
+  "unchanged": true,
+  "rows": [
+    {
+      "kind": "collector",
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_relay_prefix_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-12/must-not-create-collector-root17"
+      ],
+      "exitCode": 1,
+      "targetAbsent": true,
+      "parentRefusal": true
+    },
+    {
+      "kind": "auditor",
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_relay_prefix_readiness.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-12/must-not-create-auditor-root17"
+      ],
+      "exitCode": 1,
+      "targetAbsent": true,
+      "parentRefusal": true
+    }
+  ]
+}

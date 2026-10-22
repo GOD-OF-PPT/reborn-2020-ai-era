@@ -1,0 +1,77 @@
+import {expect,it} from 'vitest'
+import {createCampaignRun} from '../application/campaign.ts'
+import {buildRelayMatrixPrefix,inspectRelayPrefixSlot,isRelayPrefixFiniteRejection,RelayPrefixHarness,RelayPrefixPolicyRefusal,relayPrefixSlotReadiness} from './relay-matrix-prefix.ts'
+import type {CommandEnvelope,GameRun} from '../core/run-types.ts'
+import type {CommandPreview} from '../core/commands.ts'
+
+const available={startAt:'2024-10-10',serviceAvailablePoints:2,supportAvailablePoints:2,serviceCapacity:1,supportCapacity:1,availableFen:400000}
+const initial=()=>createCampaignRun({runId:'relay-prefix-boundary',actorId:'player',commandId:'create',backgroundId:'technical_employee',seed:'t16-campaign-0'})
+
+it('requires one original seed and background before starting any prefix work',()=>{
+ const attempted:CommandEnvelope[]=[]
+ expect(()=>buildRelayMatrixPrefix('technical_employee','a-better-seed',{attempted:command=>attempted.push(command)})).toThrow('ORIGINAL_RELAY_SEED_REQUIRED')
+ expect(()=>buildRelayMatrixPrefix('another-background','t16-campaign-0',{attempted:command=>attempted.push(command)})).toThrow('ORIGINAL_RELAY_BACKGROUND_REQUIRED')
+ expect(attempted).toEqual([])
+})
+
+it('reserves both fixed jobs in the same quarter and uses own available cash, not a gross or prepaid balance',()=>{
+ const result=relayPrefixSlotReadiness(available)
+ expect(result).toMatchObject({allowed:true,reasonCodes:[],startAt:'2024-10-10',to:'2024-11-07',supportCompleteAt:'2024-11-11',sameQuarter:true,requiredFen:400000,
+  service:{actionPoints:1,costFen:300000},support:{actionPoints:1,costFen:100000}})
+ expect(relayPrefixSlotReadiness({...available,serviceAvailablePoints:1}).reasonCodes).toEqual(['INSUFFICIENT_ACTION_POINTS'])
+ expect(relayPrefixSlotReadiness({...available,availableFen:399999}).reasonCodes).toEqual(['INSUFFICIENT_AVAILABLE_FUNDS'])
+ expect(relayPrefixSlotReadiness({...available,serviceAvailablePoints:0,supportAvailablePoints:0,availableFen:0}).reasonCodes).toEqual(['INSUFFICIENT_ACTION_POINTS','INSUFFICIENT_AVAILABLE_FUNDS'])
+})
+
+it('checks the support quarter separately when service and support start across a year boundary',()=>{
+ const cross={...available,startAt:'2024-12-10',serviceAvailablePoints:1,supportAvailablePoints:1}
+ expect(relayPrefixSlotReadiness(cross)).toMatchObject({allowed:true,sameQuarter:false,to:'2025-01-07',supportCompleteAt:'2025-01-11'})
+ expect(relayPrefixSlotReadiness({...cross,supportAvailablePoints:0}).reasonCodes).toEqual(['INSUFFICIENT_ACTION_POINTS'])
+ expect(relayPrefixSlotReadiness({...cross,serviceAvailablePoints:0,supportAvailablePoints:4}).reasonCodes).toEqual(['INSUFFICIENT_ACTION_POINTS'])
+})
+
+it('keeps service and support occupancy separate and rejects noninteger public facts',()=>{
+ expect(relayPrefixSlotReadiness({...available,serviceCapacity:0}).reasonCodes).toEqual(['INSUFFICIENT_CAPACITY'])
+ expect(relayPrefixSlotReadiness({...available,supportCapacity:0}).reasonCodes).toEqual(['INSUFFICIENT_CAPACITY'])
+ expect(relayPrefixSlotReadiness({...available,serviceCapacity:0,supportCapacity:-1,availableFen:0}).reasonCodes).toEqual(['INSUFFICIENT_CAPACITY','INSUFFICIENT_AVAILABLE_FUNDS'])
+ expect(()=>relayPrefixSlotReadiness({...available,supportAvailablePoints:Number.NaN})).toThrow('PUBLIC_RELAY_SLOT_INTEGER_FACTS_REQUIRED')
+ const h=new RelayPrefixHarness(initial(),{}),raw=h.codec.export(h.run)
+ expect(()=>inspectRelayPrefixSlot(h.run,'not-a-public-business','2024-10-10')).toThrow('PUBLIC_RELAY_BUSINESS_REQUIRED')
+ expect(h.codec.export(h.run)).toBe(raw)
+})
+
+it('classifies only registered nonempty precondition refusals as finite and keeps unexpected errors fatal',()=>{
+ for(const reason of ['INSUFFICIENT_ACTION_POINTS','INSUFFICIENT_AVAILABLE_FUNDS','INSUFFICIENT_CAPACITY','OVERDUE_OBLIGATION','AGENT_SCOPE_NOT_AUTHORIZED','AGENT_CASH_LIMIT_EXCEEDED','AGENT_NOT_READY_FOR_BUSINESS','RELAY_SUPPLY_NOT_READY'])expect(isRelayPrefixFiniteRejection([reason]),reason).toBe(true)
+ expect(isRelayPrefixFiniteRejection(['INSUFFICIENT_CAPACITY','INSUFFICIENT_ACTION_POINTS'])).toBe(true)
+ for(const reasons of [[],['INVALID_PAYLOAD'],['UNKNOWN_COMMAND'],['INSUFFICIENT_CAPACITY','SOMETHING_UNEXPECTED']])expect(isRelayPrefixFiniteRejection(reasons)).toBe(false)
+})
+
+it('records actual insufficient-AP rejection without changing the last complete run or adding an accepted command',()=>{
+ const rejected:{command:CommandEnvelope;reasons:readonly string[];run:GameRun}[]=[],h=new RelayPrefixHarness(initial(),{rejected:(command,reasons,run)=>rejected.push({command,reasons,run})})
+ h.send('WorkQuarter',{})
+ h.send('StartFirstOrder',{})
+ h.send('StartLifeWork',{kind:'rest',personId:null,reference:null})
+ const raw=h.codec.export(h.run),accepted=h.commands.length,run=h.run
+ expect(()=>h.send('ResearchMarket',{definitionId:'market-overview'})).toThrow(RelayPrefixPolicyRefusal)
+ expect(rejected).toHaveLength(1)
+ expect(rejected[0]).toMatchObject({command:{kind:'ResearchMarket',commandId:'relay-prefix-'+run.revision,expectedRevision:run.revision},reasons:['INSUFFICIENT_ACTION_POINTS']})
+ expect(rejected[0]!.run).toBe(run)
+ expect(h.codec.export(rejected[0]!.run)).toBe(raw)
+ expect(h.codec.export(h.run)).toBe(raw)
+ expect(h.commands).toHaveLength(accepted)
+})
+
+it('records the real service preview and rejection in order without concealing an unknown business as a finite success',()=>{
+ const events:string[]=[],previews:{command:CommandEnvelope;preview:CommandPreview;run:GameRun}[]=[],rejections:(readonly string[])[]=[]
+ const h=new RelayPrefixHarness(initial(),{attempted:()=>events.push('attempted'),previewed:(command,preview,run)=>{events.push('previewed');previews.push({command,preview,run})},rejected:(_command,reasons)=>{events.push('rejected');rejections.push([...reasons])},committed:()=>events.push('committed')})
+ const raw=h.codec.export(h.run)
+ expect(()=>h.send('StartRelayServicePeriod',{businessId:'not-controlled',customerIds:['missing-customer'],supplierIds:['cedar-direct'],maxUnits:300000,maxSupplierCostFen:1200000,supportMode:'assisted',deploymentId:'missing-deployment',resources:['player-production'],startAt:'2020-01-02'})).toThrow('UNEXPECTED_RELAY_PREFIX_COMMAND_REFUSAL')
+ expect(events).toEqual(['attempted','previewed','rejected'])
+ expect(previews).toHaveLength(1)
+ expect(previews[0]!.preview.allowed).toBe(false)
+ expect(previews[0]!.preview.reasonCodes).toEqual(rejections[0])
+ expect(isRelayPrefixFiniteRejection(rejections[0]!)).toBe(false)
+ expect(h.codec.export(previews[0]!.run)).toBe(raw)
+ expect(h.codec.export(h.run)).toBe(raw)
+ expect(h.commands).toEqual([])
+})

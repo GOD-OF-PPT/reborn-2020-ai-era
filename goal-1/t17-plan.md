@@ -264,3 +264,8 @@ D09实现bc8660b/完成记录58fee36为实际progress。现按[evidence/t17-acce
 用户再次明确的竞品研究→AGENTS→实际优化覆盖旧D10后自动恢复P1的顺序。本轮D11已本地实现e1ca9b75bba4819d5a11deb20d65a1bda3240be9，157条Git blob/磁盘/SHA/mode同；[root16限定验证](evidence/t17-acceptance-16/validation.md)及[真实提交](evidence/t17-d11-ui-post-commit-01/feature-commit-readback.json)分列研究、当前Chrome、原子Node、测试与完整Create。课程直接资本/执笔人/日期/实际大纲/另行启用、辅助素材准备保草稿、视频同对象实际翻页完成；最终R9 tsc/build0、R12相关29过，原11raw与追加1raw完整Create各自0/全字节同，原失败/超时/错误判断保留。
 
 root16封存139普通文件+marker，SHA1b99aae2bef1fa140a6a920d527adfa65301c72f4ad2caae7e0e22850bee546d；步骤6为提交前快照，master完成记录确认实际本地提交，旧根不回写。376最终源、44生产HTTP、原7marker/211规则等blob/原输入保持。未push/deploy，PUBLIC远端main实读仍9bf4399。下一原5c-P1六正常前史，再原288/62/22及其余T17责任；美术持续优先、全兼容开发测试0/M01暂停且需用户恢复、旧PNG0/3/新三案3/3/真人0/T18及完整goal不提前完成。
+
+
+## 5c-P1六正常前提自主核验完成，提交前收口
+
+[限定验证](evidence/t17-acceptance-17/validation.md)已核六正常Create/619命令/219完整里程碑/6原预览；独立audit-r2真实exit0、6/6 verified_ready，463源/输入与147执行源+快照实读同。原草稿R1 adapter在preparing企业拒绝的完整74成功/1拒和5未执行保留，policy-r3有据前移唯一Activate并真实支付早开业维护后全六重新Create，不拼接旧批。正period费不等现金或盈利、未消费充值/旧账保留。当前只余最终资料/封存/真实Git本地提交，准确SHA随后记；原288核心/62关键/22例行、5c—5f/6/7—15/完整T17与goal仍未完成。全部页面兼容开发测试0/M01暂停，原图/真人/T18责任不减。

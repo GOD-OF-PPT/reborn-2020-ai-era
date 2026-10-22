@@ -1,0 +1,51 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/testing/relay-matrix-prefix.test.ts > reserves both fixed jobs in the same quarter and uses own available cash, not a gross or prepaid balance
+ReferenceError: startAt is not defined
+ ❯ relayPrefixSlotReadiness src/testing/relay-matrix-prefix.ts:55:54
+     53|   if(input.serviceCapacity<1||input.supportCapacity<1)reasonCodes.push…
+     54|   if(input.availableFen<requiredFen)reasonCodes.push('INSUFFICIENT_AVA…
+     55|   return {allowed:reasonCodes.length===0,reasonCodes,startAt,to,suppor…
+       |                                                      ^
+     56|     service:{actionPoints:service.actionPoints,costFen:service.costFen…
+     57|     support:{actionPoints:support.actionPoints,costFen:support.costFen…
+ ❯ src/testing/relay-matrix-prefix.test.ts:18:15
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/testing/relay-matrix-prefix.test.ts > checks the support quarter separately when service and support start across a year boundary
+ReferenceError: startAt is not defined
+ ❯ relayPrefixSlotReadiness src/testing/relay-matrix-prefix.ts:55:54
+     53|   if(input.serviceCapacity<1||input.supportCapacity<1)reasonCodes.push…
+     54|   if(input.availableFen<requiredFen)reasonCodes.push('INSUFFICIENT_AVA…
+     55|   return {allowed:reasonCodes.length===0,reasonCodes,startAt,to,suppor…
+       |                                                      ^
+     56|     service:{actionPoints:service.actionPoints,costFen:service.costFen…
+     57|     support:{actionPoints:support.actionPoints,costFen:support.costFen…
+ ❯ src/testing/relay-matrix-prefix.test.ts:28:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/testing/relay-matrix-prefix.test.ts > keeps service and support occupancy separate and rejects noninteger public facts
+ReferenceError: startAt is not defined
+ ❯ relayPrefixSlotReadiness src/testing/relay-matrix-prefix.ts:55:54
+     53|   if(input.serviceCapacity<1||input.supportCapacity<1)reasonCodes.push…
+     54|   if(input.availableFen<requiredFen)reasonCodes.push('INSUFFICIENT_AVA…
+     55|   return {allowed:reasonCodes.length===0,reasonCodes,startAt,to,suppor…
+       |                                                      ^
+     56|     service:{actionPoints:service.actionPoints,costFen:service.costFen…
+     57|     support:{actionPoints:support.actionPoints,costFen:support.costFen…
+ ❯ src/testing/relay-matrix-prefix.test.ts:34:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/testing/relay-matrix-prefix.test.ts > records actual insufficient-AP rejection without changing the last complete run or adding an accepted command
+RelayPrefixPolicyRefusal: actual_public_command_precondition_refused
+ ❯ RelayPrefixHarness.sendAs src/testing/relay-matrix-prefix.ts:83:91
+
+ ❯ RelayPrefixHarness.send src/testing/story-harness.ts:15:48
+ ❯ src/testing/relay-matrix-prefix.test.ts:53:4
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+

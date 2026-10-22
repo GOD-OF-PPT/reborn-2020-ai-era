@@ -1,0 +1,32 @@
+{
+  "name": "cli-type",
+  "argv": [
+    "rtk",
+    "proxy",
+    "node",
+    "node_modules/typescript/bin/tsc",
+    "--ignoreConfig",
+    "--noEmit",
+    "--target",
+    "ES2023",
+    "--module",
+    "ESNext",
+    "--moduleResolution",
+    "bundler",
+    "--allowImportingTsExtensions",
+    "--strict",
+    "--noUncheckedIndexedAccess",
+    "--exactOptionalPropertyTypes",
+    "--noUnusedLocals",
+    "--noUnusedParameters",
+    "--skipLibCheck",
+    "--types",
+    "node",
+    "--lib",
+    "ES2023,DOM",
+    "scripts/collect_relay_prefix_evidence.ts",
+    "scripts/verify_relay_prefix_readiness.ts"
+  ],
+  "exitCode": 0,
+  "wallSeconds": 16.17004704475403
+}

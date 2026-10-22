@@ -1,0 +1,56 @@
+{
+  "name": "reborn-2020-ai-era",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
+  },
+  "packageManager": "npm@10.9.0",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --strictPort",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 127.0.0.1 --strictPort",
+    "typecheck": "tsc -b",
+    "test:unit": "vitest run --config vitest.config.ts",
+    "evidence:kernel": "node --experimental-strip-types scripts/collect_kernel_evidence.ts",
+    "evidence:save": "node --experimental-strip-types scripts/collect_save_evidence.ts",
+    "validate:content": "node --experimental-strip-types scripts/validate_content.ts",
+    "evidence:world": "node --experimental-strip-types scripts/collect_world_evidence.ts",
+    "evidence:operations": "node --experimental-strip-types scripts/collect_operations_evidence.ts",
+    "evidence:first-order": "node --experimental-strip-types scripts/collect_first_order_evidence.ts",
+    "test:docs": "python3 -B -m unittest discover -s scripts -p 'test_*.py'",
+    "check:docs": "python3 -B scripts/check_docs.py --text-only && python3 -B scripts/check_plan.py && python3 -B scripts/check_competitive_design.py",
+    "check": "npm run typecheck && npm run test:unit && npm run test:docs && npm run validate:content && npm run check:docs && npm run build",
+    "evidence:market": "node --experimental-strip-types scripts/collect_market_evidence.ts",
+    "evidence:playable": "node --experimental-strip-types scripts/collect_playable_evidence.ts",
+    "evidence:browser-audit": "node --experimental-strip-types scripts/verify_browser_evidence.ts",
+    "evidence:video": "node --experimental-strip-types scripts/collect_video_evidence.ts",
+    "evidence:video-browser-audit": "node --experimental-strip-types scripts/verify_video_browser_evidence.ts",
+    "evidence:course": "node --experimental-strip-types scripts/collect_course_evidence.ts",
+    "evidence:course-browser-audit": "node --experimental-strip-types scripts/verify_course_browser_evidence.ts",
+    "evidence:relay": "node --experimental-strip-types scripts/collect_relay_evidence.ts",
+    "evidence:relay-browser-audit": "node --experimental-strip-types scripts/verify_relay_browser_evidence.ts",
+    "evidence:deepseek": "node --experimental-strip-types scripts/collect_deepseek_evidence.ts",
+    "evidence:deepseek-browser-audit": "node --experimental-strip-types scripts/verify_deepseek_browser_evidence.ts",
+    "evidence:route-diversity": "node --experimental-strip-types scripts/collect_route_diversity_evidence.ts",
+    "evidence:story": "node --experimental-strip-types scripts/collect_story_evidence.ts",
+    "evidence:story-browser-audit": "node --experimental-strip-types scripts/verify_story_browser_evidence.ts"
+  },
+  "dependencies": {
+    "@noble/hashes": "2.4.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "fake-indexeddb": "6.2.5",
+    "typescript": "6.0.2",
+    "vite": "8.3.4",
+    "vitest": "5.0.5"
+  }
+}
