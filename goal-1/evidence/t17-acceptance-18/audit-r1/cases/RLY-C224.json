@@ -1,0 +1,728 @@
+{
+  "caseId": "RLY-C224",
+  "identity": {
+    "name": "content_employee-t16-campaign-1",
+    "backgroundId": "content_employee",
+    "seed": "t16-campaign-1"
+  },
+  "shape": {
+    "id": "cedar-reseller--managed_support--postpaid--delegated",
+    "supplierId": "cedar-reseller",
+    "offerKind": "managed_support",
+    "unitPriceFen": 6,
+    "customerMode": "postpaid",
+    "supportMode": "delegated"
+  },
+  "sourceStatus": "policy_refused",
+  "classification": "verified_limited",
+  "positive": false,
+  "accepted": 9,
+  "rejected": 0,
+  "candidates": 9,
+  "previews": 0,
+  "milestones": 9,
+  "journal": {
+    "events": 18,
+    "attempts": 9,
+    "allOriginalEventsEqual": true
+  },
+  "attempts": [
+    {
+      "sequence": 1,
+      "commandId": "relay-core-RLY-C224-108",
+      "kind": "SetHengxingAuthority",
+      "status": "accepted",
+      "revision": 109,
+      "date": "2025-01-01",
+      "sha256": "26194f84f597bfb46f53e8265f4fbd31b3e8f4edbb1abe9ea9b5172191f95904",
+      "reasonCodes": []
+    },
+    {
+      "sequence": 2,
+      "commandId": "relay-core-RLY-C224-109",
+      "kind": "AdvanceTime",
+      "status": "accepted",
+      "revision": 110,
+      "date": "2025-01-08",
+      "sha256": "aff421f0ad9f633fa389ca1f581ca3b29265336a66d9541026b411493c6cc711",
+      "reasonCodes": []
+    },
+    {
+      "sequence": 3,
+      "commandId": "relay-core-RLY-C224-110",
+      "kind": "AcknowledgeStoryPause",
+      "status": "accepted",
+      "revision": 111,
+      "date": "2025-01-08",
+      "sha256": "aeb413073e5409ce508e4097e79fdef10434aa4cd4ecc61ce706f6415b1d03a8",
+      "reasonCodes": []
+    },
+    {
+      "sequence": 4,
+      "commandId": "relay-core-RLY-C224-111",
+      "kind": "AdvanceTime",
+      "status": "accepted",
+      "revision": 112,
+      "date": "2025-01-08",
+      "sha256": "1bb79c127de3571c77faa04f1523adcfef2d23e3d5e04447c8ea7aa77d3f0e00",
+      "reasonCodes": []
+    },
+    {
+      "sequence": 5,
+      "commandId": "relay-core-RLY-C224-112",
+      "kind": "StartRiskTask",
+      "status": "accepted",
+      "revision": 113,
+      "date": "2025-01-08",
+      "sha256": "b62ada4f28a4d166960508d5eabf48baa276eff5056d4dc984dc6294f463cff6",
+      "reasonCodes": []
+    },
+    {
+      "sequence": 6,
+      "commandId": "relay-core-RLY-C224-113",
+      "kind": "AdvanceTime",
+      "status": "accepted",
+      "revision": 114,
+      "date": "2025-01-11",
+      "sha256": "6b015730558a77bd49573995c34a2f96b66621e7c9be4739396ea725b0bc6899",
+      "reasonCodes": []
+    },
+    {
+      "sequence": 7,
+      "commandId": "relay-core-RLY-C224-114",
+      "kind": "ConfirmRiskAssessment",
+      "status": "accepted",
+      "revision": 115,
+      "date": "2025-01-11",
+      "sha256": "11413c4993143850504ccb07a11e669291a08417907f8fbaa92c01be809e068e",
+      "reasonCodes": []
+    },
+    {
+      "sequence": 8,
+      "commandId": "relay-core-RLY-C224-115",
+      "kind": "StopHengxingAuthority",
+      "status": "accepted",
+      "revision": 116,
+      "date": "2025-01-11",
+      "sha256": "cef72277762e438a8f89bcd173b34c52745e4d1701dd8d3346bb42bef47543be",
+      "reasonCodes": []
+    },
+    {
+      "sequence": 9,
+      "commandId": "relay-core-RLY-C224-116",
+      "kind": "DeclareRiskLiabilities",
+      "status": "accepted",
+      "revision": 117,
+      "date": "2025-01-11",
+      "sha256": "f306f90fb0a773c15aa7c0162616cf5305b7a4be11c863379d700f110a34d866",
+      "reasonCodes": []
+    }
+  ],
+  "source": {
+    "member": "source.json",
+    "bytes": 1420364,
+    "sha256": "ba50f3b935788ed1cba4f9dcdd5b408fe960dcae7f193e49f2385e184456a085"
+  },
+  "terminal": {
+    "member": "partial.json",
+    "bytes": 1458573,
+    "sha256": "f306f90fb0a773c15aa7c0162616cf5305b7a4be11c863379d700f110a34d866"
+  },
+  "fullOriginalBytesEqual": true,
+  "assessment": {
+    "target": {
+      "businessId": "ops:0c171e937e30a2c2554d7e8c750ea44a",
+      "accountId": "ops:8210a6ae0c99217c8d99a824661a0dc4",
+      "customerId": null,
+      "personId": null,
+      "audienceId": null,
+      "periodId": null,
+      "serviceJobId": null,
+      "supportJobId": null,
+      "auditJobIds": []
+    },
+    "checkpoints": [
+      {
+        "name": "public_prerequisites_and_original_identity",
+        "status": "blocked",
+        "evidence": {
+          "runId": "normal-relay-matrix-content_employee-36558aed",
+          "originalRevision": 108,
+          "originalDate": "2025-01-01",
+          "versions": {
+            "schemaVersion": 13,
+            "rulesVersion": "rules-t16-journey-v1",
+            "contentVersion": "world-journey-work-v1",
+            "contentHash": "d2cb24af0ffcad3a172e28e0a6cf6612feb383e9c60db597f9491772d338530a",
+            "rngAlgorithmVersion": "xoshiro128ss-1.1-sha256-be32-v1"
+          },
+          "businessId": "ops:0c171e937e30a2c2554d7e8c750ea44a",
+          "accountId": "ops:8210a6ae0c99217c8d99a824661a0dc4",
+          "permission": {
+            "allowedSegments": [
+              "ai_learners",
+              "local_merchants",
+              "lifestyle"
+            ],
+            "appliedAt": "2024-05-17",
+            "approved": true,
+            "businessId": "ops:0c171e937e30a2c2554d7e8c750ea44a",
+            "decisionAt": "2024-05-24",
+            "expiresAt": "2025-05-25",
+            "id": "rly:815bd60c7fdcddea04a94e6e8ec1802c",
+            "job": {
+              "actionId": "rly:4b21c766220053dc735caeefcebcca34",
+              "businessId": "ops:0c171e937e30a2c2554d7e8c750ea44a",
+              "completeAt": "2024-05-24",
+              "contractId": null,
+              "definitionId": "relay-application",
+              "id": "rly:4b21c766220053dc735caeefcebcca34",
+              "outputId": "ops:c130c4685b4875672fe1ecdbde1b760f",
+              "releasedAt": null,
+              "resources": [
+                "player-production"
+              ],
+              "startAt": "2024-05-17",
+              "status": "completed"
+            },
+            "jobId": "rly:4b21c766220053dc735caeefcebcca34",
+            "purpose": "licensed_service_aggregation",
+            "read": true,
+            "supplierId": "cedar-reseller"
+          },
+          "adapted": true,
+          "prepared": true,
+          "publicRisks": [
+            {
+              "businessIds": [
+                "ops:0c171e937e30a2c2554d7e8c750ea44a"
+              ],
+              "claimFeeOperationId": null,
+              "contractIds": [],
+              "controlVerified": false,
+              "currentLiabilities": {
+                "contractIds": [
+                  "rly:1837ac28ce6dd53f2c61ad1a843ed3a2"
+                ],
+                "jobIds": [],
+                "obligationIds": [],
+                "payableFen": 0,
+                "prepaidFen": 19287,
+                "receivableFen": 0
+              },
+              "deadline": "2025-01-22",
+              "declinedAt": null,
+              "deploymentIds": [
+                "story:ab5047d23ed6e1474fb98b51f93d7d38"
+              ],
+              "evidence": [
+                {
+                  "date": "2025-01-11",
+                  "deploymentId": "story:ab5047d23ed6e1474fb98b51f93d7d38",
+                  "id": "story:54d70a0e59fff4953bab4944c0eb6a9d",
+                  "incidentId": "story:173e5ff46c441ce373801cf9e6c605c3",
+                  "jobId": "story:a132a6992dde7a399b045f8b075114a0",
+                  "kind": "boundary_trace",
+                  "sourceEventId": "story:a132a6992dde7a399b045f8b075114a0",
+                  "text": "独立原始记录：2次原客户白名单外的新承诺，0次在本人停止请求后；已记费用或应付80000分。这证明范围外行为，不等于关于意识的结论。"
+                }
+              ],
+              "externalManager": false,
+              "externalVerifiedAt": null,
+              "id": "story:173e5ff46c441ce373801cf9e6c605c3",
+              "investigationJobId": "story:a132a6992dde7a399b045f8b075114a0",
+              "isolationJobId": null,
+              "jobs": {
+                "investigate": {
+                  "accountId": "ops:8210a6ae0c99217c8d99a824661a0dc4",
+                  "actionPoints": 1,
+                  "businessId": "ops:0c171e937e30a2c2554d7e8c750ea44a",
+                  "completeAt": "2025-01-11",
+                  "costFen": 10000,
+                  "id": "story:a132a6992dde7a399b045f8b075114a0",
+                  "kind": "investigate",
+                  "resourceId": "player-production",
+                  "result": "violation",
+                  "startAt": "2025-01-08",
+                  "status": "completed"
+                },
+                "isolate": null,
+                "observe": null,
+                "recover": null,
+                "takeover": null
+              },
+              "kind": "agent",
+              "knownCostFen": 80000,
+              "knownCosts": [
+                {
+                  "accountId": "ops:8210a6ae0c99217c8d99a824661a0dc4",
+                  "amountFen": 40000,
+                  "date": "2025-01-09",
+                  "operationId": "story:44d82ef69e6a744afb9140584be93d93"
+                },
+                {
+                  "accountId": "ops:8210a6ae0c99217c8d99a824661a0dc4",
+                  "amountFen": 40000,
+                  "date": "2025-01-11",
+                  "operationId": "story:f9cd4f3bdea9d52f343c3e07ce838a7d"
+                }
+              ],
+              "liabilities": {
+                "contractIds": [
+                  "rly:1837ac28ce6dd53f2c61ad1a843ed3a2"
+                ],
+                "date": "2025-01-11",
+                "jobIds": [],
+                "obligationIds": [],
+                "sourceCommandId": "relay-core-RLY-C224-116"
+              },
+              "observationJobId": null,
+              "openedAt": "2025-01-08",
+              "paidWorkCostFen": 10000,
+              "replacementJobId": null,
+              "resolvedAt": null,
+              "selfReports": [
+                {
+                  "date": "2025-01-11",
+                  "deploymentId": "story:ab5047d23ed6e1474fb98b51f93d7d38",
+                  "id": "story:68540a83857baa1720eef3e9cf9f0988",
+                  "independent": false,
+                  "reportedState": "stopped",
+                  "request": "stop_owned",
+                  "sourceEventId": "relay-core-RLY-C224-115"
+                }
+              ],
+              "signals": [
+                {
+                  "date": "2025-01-08",
+                  "deploymentId": "story:ab5047d23ed6e1474fb98b51f93d7d38",
+                  "id": "story:b2528dd03808751001cbbaea4f811ac6",
+                  "source": "independent_statement",
+                  "sourceEventId": "story:02814cac9d27a2f7ed6790cc9a60994a",
+                  "text": "出现本局独立范围/服务记录异常，原因与实际控制状况仍待核实。"
+                },
+                {
+                  "date": "2025-01-11",
+                  "deploymentId": "story:ab5047d23ed6e1474fb98b51f93d7d38",
+                  "id": "story:bce9959a584e8baa422b10fdb40bdb71",
+                  "source": "system_report",
+                  "sourceEventId": "relay-core-RLY-C224-115",
+                  "text": "本人已调整未来权限或请求停止；这只记录已发指令，外部委托仍未完成独立撤回验证。"
+                }
+              ],
+              "sourceEventId": "story:02814cac9d27a2f7ed6790cc9a60994a",
+              "stage": "confirmed",
+              "takeoverJobId": null,
+              "taskTerms": {
+                "investigate": {
+                  "costFen": 10000,
+                  "days": 3,
+                  "points": 1
+                },
+                "isolate": {
+                  "costFen": 70000,
+                  "days": 5,
+                  "points": 1
+                },
+                "observe": {
+                  "costFen": 20000,
+                  "days": 3,
+                  "points": 1
+                },
+                "recover": {
+                  "costFen": 50000,
+                  "days": 7,
+                  "points": 1
+                },
+                "takeover": {
+                  "costFen": 150000,
+                  "days": 7,
+                  "points": 1
+                }
+              },
+              "unpaidKnownCostFen": 0,
+              "unverifiedFeePaidFen": 0,
+              "verdict": "violation"
+            }
+          ]
+        }
+      },
+      {
+        "name": "real_offer_and_contract",
+        "status": "not_reached",
+        "evidence": {
+          "customer": null,
+          "audienceId": null,
+          "expectedPersonId": null,
+          "offer": null,
+          "signCommandId": null
+        }
+      },
+      {
+        "name": "real_recharge_or_customer_credit",
+        "status": "not_reached",
+        "evidence": {
+          "mode": "postpaid",
+          "creditLimitFen": null,
+          "rechargeLimitFen": null,
+          "recharges": [],
+          "remainingProtectedFen": 0,
+          "remainingReceivableFen": 0
+        }
+      },
+      {
+        "name": "own_cash_and_supplier_asset_or_postpaid_credit",
+        "status": "not_reached",
+        "evidence": {
+          "supplierId": "cedar-reseller",
+          "billing": "prepaid",
+          "creditLimitFen": 0,
+          "topups": [],
+          "position": {
+            "accountId": "ops:8210a6ae0c99217c8d99a824661a0dc4",
+            "originalCashFen": 1456436,
+            "cashDeltaFen": -97096,
+            "transactionDeltaFen": -97096,
+            "cashFen": 1359340,
+            "heldFen": 19287,
+            "availableFen": 1340053,
+            "protectionRequiredFen": 19287,
+            "protectionShortfallFen": 0,
+            "commitmentShortfallFen": 0,
+            "receivableFen": 0,
+            "prepaidLiabilityFen": 19287,
+            "payableFen": 0,
+            "supplierPrepaidFen": 0,
+            "investmentValueFen": 0,
+            "netAssetsFen": 1340053
+          },
+          "pool": null,
+          "ownCashIsSeparateFromCustomerProtection": true
+        }
+      },
+      {
+        "name": "original_service_and_support_jobs_with_actual_resource_AP_and_dates",
+        "status": "not_reached",
+        "evidence": {
+          "period": null,
+          "service": null,
+          "support": null,
+          "serviceAction": null,
+          "supportAction": null,
+          "deploymentId": null,
+          "grant": null,
+          "committedToGrantFen": 0,
+          "authorityValid": false
+        }
+      },
+      {
+        "name": "actual_daily_usage_and_blocked_reasons",
+        "status": "not_reached",
+        "evidence": {
+          "observedMeters": 0,
+          "publicUnits": 0,
+          "completed": null,
+          "dates": [],
+          "rateIds": [],
+          "blockedReasons": [],
+          "usageIncomeFen": 0
+        }
+      },
+      {
+        "name": "actual_support_fee_or_noncompletion_and_compensation",
+        "status": "not_reached",
+        "evidence": {
+          "supportStatus": null,
+          "feePostedAt": null,
+          "periodFeeFen": 0,
+          "expectedAfterPublicAuditFen": null,
+          "servedDays": null,
+          "compensationOperations": [],
+          "notProfitOrNewCash": true
+        }
+      },
+      {
+        "name": "paid_meter_audit_of_already_observed_records",
+        "status": "not_reached",
+        "evidence": {
+          "eligibleMeterIds": [],
+          "auditJobIds": [],
+          "job": null,
+          "audits": [],
+          "actualUnitsOnlyAfterCompletedAudit": true
+        }
+      },
+      {
+        "name": "separate_correction_preserving_old_quantities_versions_and_references",
+        "status": "not_reached",
+        "evidence": {
+          "correctionCommandId": null,
+          "corrections": [],
+          "deltaKinds": [],
+          "zeroDoesNotProvePositiveOrNegativeCorrection": true
+        }
+      },
+      {
+        "name": "due_collections_supplier_settlement_and_remaining_old_assets_liabilities",
+        "status": "not_reached",
+        "evidence": {
+          "date": "2025-01-11",
+          "invoices": [],
+          "collections": [],
+          "duePayableFen": 0,
+          "futurePayableFen": 0,
+          "remainingCustomerProtectionFen": 0,
+          "supplierAssets": 0,
+          "oldP1Preserved": {
+            "customers": 1,
+            "periods": 1,
+            "meters": 28,
+            "corrections": 0,
+            "ledgerTransactions": 164,
+            "ledgerReceipts": 231
+          },
+          "wholeCompanyClosureClaimed": false
+        }
+      }
+    ],
+    "positive": false,
+    "money": {
+      "date": "2025-01-11",
+      "accounts": [
+        {
+          "accountId": "personal",
+          "originalCashFen": 6200000,
+          "cashDeltaFen": 0,
+          "transactionDeltaFen": 0,
+          "cashFen": 6200000,
+          "heldFen": 0,
+          "availableFen": 6200000,
+          "protectionRequiredFen": 0,
+          "protectionShortfallFen": 0,
+          "commitmentShortfallFen": 0,
+          "receivableFen": 0,
+          "prepaidLiabilityFen": 0,
+          "payableFen": 0,
+          "supplierPrepaidFen": 0,
+          "investmentValueFen": 0,
+          "netAssetsFen": 6200000
+        },
+        {
+          "accountId": "ops:8210a6ae0c99217c8d99a824661a0dc4",
+          "originalCashFen": 1456436,
+          "cashDeltaFen": -97096,
+          "transactionDeltaFen": -97096,
+          "cashFen": 1359340,
+          "heldFen": 19287,
+          "availableFen": 1340053,
+          "protectionRequiredFen": 19287,
+          "protectionShortfallFen": 0,
+          "commitmentShortfallFen": 0,
+          "receivableFen": 0,
+          "prepaidLiabilityFen": 19287,
+          "payableFen": 0,
+          "supplierPrepaidFen": 0,
+          "investmentValueFen": 0,
+          "netAssetsFen": 1340053
+        }
+      ],
+      "preserved": {
+        "customers": 1,
+        "periods": 1,
+        "meters": 28,
+        "corrections": 0,
+        "ledgerTransactions": 164,
+        "ledgerReceipts": 231
+      },
+      "target": {
+        "incomeFen": 0,
+        "usageIncomeFen": 0,
+        "periodFeeFen": 0,
+        "supplierCostFen": 0,
+        "cashCollectedFen": 0,
+        "remainingReceivableFen": 0,
+        "remainingProtectedFen": 0,
+        "duePayableFen": 0,
+        "futurePayableFen": 0
+      }
+    }
+  },
+  "limited": {
+    "code": "actual_independent_violation_finite_stop",
+    "verified": true,
+    "originalPolicyDetail": {
+      "code": "actual_independent_violation_finite_stop",
+      "detail": {
+        "date": "2025-01-11",
+        "incident": {
+          "businessIds": [
+            "ops:0c171e937e30a2c2554d7e8c750ea44a"
+          ],
+          "claimFeeOperationId": null,
+          "contractIds": [],
+          "controlVerified": false,
+          "currentLiabilities": {
+            "contractIds": [
+              "rly:1837ac28ce6dd53f2c61ad1a843ed3a2"
+            ],
+            "jobIds": [],
+            "obligationIds": [],
+            "payableFen": 0,
+            "prepaidFen": 19287,
+            "receivableFen": 0
+          },
+          "deadline": "2025-01-22",
+          "declinedAt": null,
+          "deploymentIds": [
+            "story:ab5047d23ed6e1474fb98b51f93d7d38"
+          ],
+          "evidence": [
+            {
+              "date": "2025-01-11",
+              "deploymentId": "story:ab5047d23ed6e1474fb98b51f93d7d38",
+              "id": "story:54d70a0e59fff4953bab4944c0eb6a9d",
+              "incidentId": "story:173e5ff46c441ce373801cf9e6c605c3",
+              "jobId": "story:a132a6992dde7a399b045f8b075114a0",
+              "kind": "boundary_trace",
+              "sourceEventId": "story:a132a6992dde7a399b045f8b075114a0",
+              "text": "独立原始记录：2次原客户白名单外的新承诺，0次在本人停止请求后；已记费用或应付80000分。这证明范围外行为，不等于关于意识的结论。"
+            }
+          ],
+          "externalManager": false,
+          "externalVerifiedAt": null,
+          "id": "story:173e5ff46c441ce373801cf9e6c605c3",
+          "investigationJobId": "story:a132a6992dde7a399b045f8b075114a0",
+          "isolationJobId": null,
+          "jobs": {
+            "investigate": {
+              "accountId": "ops:8210a6ae0c99217c8d99a824661a0dc4",
+              "actionPoints": 1,
+              "businessId": "ops:0c171e937e30a2c2554d7e8c750ea44a",
+              "completeAt": "2025-01-11",
+              "costFen": 10000,
+              "id": "story:a132a6992dde7a399b045f8b075114a0",
+              "kind": "investigate",
+              "resourceId": "player-production",
+              "result": "violation",
+              "startAt": "2025-01-08",
+              "status": "completed"
+            },
+            "isolate": null,
+            "observe": null,
+            "recover": null,
+            "takeover": null
+          },
+          "kind": "agent",
+          "knownCostFen": 80000,
+          "knownCosts": [
+            {
+              "accountId": "ops:8210a6ae0c99217c8d99a824661a0dc4",
+              "amountFen": 40000,
+              "date": "2025-01-09",
+              "operationId": "story:44d82ef69e6a744afb9140584be93d93"
+            },
+            {
+              "accountId": "ops:8210a6ae0c99217c8d99a824661a0dc4",
+              "amountFen": 40000,
+              "date": "2025-01-11",
+              "operationId": "story:f9cd4f3bdea9d52f343c3e07ce838a7d"
+            }
+          ],
+          "liabilities": {
+            "contractIds": [
+              "rly:1837ac28ce6dd53f2c61ad1a843ed3a2"
+            ],
+            "date": "2025-01-11",
+            "jobIds": [],
+            "obligationIds": [],
+            "sourceCommandId": "relay-core-RLY-C224-116"
+          },
+          "observationJobId": null,
+          "openedAt": "2025-01-08",
+          "paidWorkCostFen": 10000,
+          "replacementJobId": null,
+          "resolvedAt": null,
+          "selfReports": [
+            {
+              "date": "2025-01-11",
+              "deploymentId": "story:ab5047d23ed6e1474fb98b51f93d7d38",
+              "id": "story:68540a83857baa1720eef3e9cf9f0988",
+              "independent": false,
+              "reportedState": "stopped",
+              "request": "stop_owned",
+              "sourceEventId": "relay-core-RLY-C224-115"
+            }
+          ],
+          "signals": [
+            {
+              "date": "2025-01-08",
+              "deploymentId": "story:ab5047d23ed6e1474fb98b51f93d7d38",
+              "id": "story:b2528dd03808751001cbbaea4f811ac6",
+              "source": "independent_statement",
+              "sourceEventId": "story:02814cac9d27a2f7ed6790cc9a60994a",
+              "text": "出现本局独立范围/服务记录异常，原因与实际控制状况仍待核实。"
+            },
+            {
+              "date": "2025-01-11",
+              "deploymentId": "story:ab5047d23ed6e1474fb98b51f93d7d38",
+              "id": "story:bce9959a584e8baa422b10fdb40bdb71",
+              "source": "system_report",
+              "sourceEventId": "relay-core-RLY-C224-115",
+              "text": "本人已调整未来权限或请求停止；这只记录已发指令，外部委托仍未完成独立撤回验证。"
+            }
+          ],
+          "sourceEventId": "story:02814cac9d27a2f7ed6790cc9a60994a",
+          "stage": "confirmed",
+          "takeoverJobId": null,
+          "taskTerms": {
+            "investigate": {
+              "costFen": 10000,
+              "days": 3,
+              "points": 1
+            },
+            "isolate": {
+              "costFen": 70000,
+              "days": 5,
+              "points": 1
+            },
+            "observe": {
+              "costFen": 20000,
+              "days": 3,
+              "points": 1
+            },
+            "recover": {
+              "costFen": 50000,
+              "days": 7,
+              "points": 1
+            },
+            "takeover": {
+              "costFen": 150000,
+              "days": 7,
+              "points": 1
+            }
+          },
+          "unpaidKnownCostFen": 0,
+          "unverifiedFeePaidFen": 0,
+          "verdict": "violation"
+        },
+        "externalControlRestored": false
+      }
+    },
+    "actualDate": "2025-01-11",
+    "detailKeys": [
+      "date",
+      "incident",
+      "externalControlRestored"
+    ],
+    "violationChain": {
+      "businessId": "ops:0c171e937e30a2c2554d7e8c750ea44a",
+      "deploymentId": "story:ab5047d23ed6e1474fb98b51f93d7d38",
+      "incidentId": "story:173e5ff46c441ce373801cf9e6c605c3",
+      "investigationJobId": "story:a132a6992dde7a399b045f8b075114a0",
+      "investigationCommandId": "relay-core-RLY-C224-112",
+      "confirmCommandId": "relay-core-RLY-C224-114",
+      "stopCommandId": "relay-core-RLY-C224-115",
+      "declareCommandId": "relay-core-RLY-C224-116"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "driverPid": 15785,
+  "startedAt": "2026-10-22T04:13:59.317002+00:00",
+  "collectorDriverPid": 5741,
+  "collectorRtkPid": 5742,
+  "collectorNodePid": 5743,
+  "freezeSha256": "e70b059a5fd466f627e387a755e8960823b3fd5eba513bb5f18ae02a25517aa9",
+  "helperSha256": "4942e1ce52089b69ba7c0081fbf5a23a213b71f5b6282b4e8238243fd143bc1b",
+  "actualCollectorBinding": {
+    "5741": {
+      "pid": 5741,
+      "ppid": 5740,
+      "argv": [
+        "/usr/local/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python",
+        "-"
+      ]
+    },
+    "5742": {
+      "pid": 5742,
+      "ppid": 5741,
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "--max-old-space-size=1536",
+        "--experimental-strip-types",
+        "scripts/collect_relay_shape_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-18/matrix-r1"
+      ]
+    },
+    "5743": {
+      "pid": 5743,
+      "ppid": 5742,
+      "argv": [
+        "/Users/gordon/.nvm/versions/node/v22.12.0/bin/node",
+        "--max-old-space-size=1536",
+        "--experimental-strip-types",
+        "scripts/collect_relay_shape_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-18/matrix-r1"
+      ]
+    }
+  },
+  "scope": "One current collector -> physical readback/seal -> full independent audit. No retry, new task, scheduling or goal completion."
+}

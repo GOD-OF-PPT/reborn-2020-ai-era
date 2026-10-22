@@ -1,0 +1,49 @@
+{
+  "driverPid": 15785,
+  "startedAt": "2026-10-22T04:13:59.317002+00:00",
+  "endedAt": "2026-10-22T06:37:42.836260+00:00",
+  "wallSeconds": 8623.662068344012,
+  "exitCode": 0,
+  "error": null,
+  "phases": [
+    {
+      "phase": "matrix-readback-and-seal",
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "goal-1/evidence/t17-acceptance-18/matrix-r1-readback-and-seal.mjs"
+      ],
+      "driverPid": 15785,
+      "rtkPid": 26174,
+      "startedAt": "2026-10-22T05:31:19.838882+00:00",
+      "freezeSha256": "e70b059a5fd466f627e387a755e8960823b3fd5eba513bb5f18ae02a25517aa9",
+      "exitCode": 0,
+      "endedAt": "2026-10-22T05:31:27.396483+00:00",
+      "wallSeconds": 7.55760849500075,
+      "metadataErrors": []
+    },
+    {
+      "phase": "full-independent-audit",
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "--max-old-space-size=1536",
+        "--experimental-strip-types",
+        "scripts/verify_relay_shape_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-18/audit-r1"
+      ],
+      "driverPid": 15785,
+      "rtkPid": 26205,
+      "startedAt": "2026-10-22T05:31:27.681631+00:00",
+      "freezeSha256": "e70b059a5fd466f627e387a755e8960823b3fd5eba513bb5f18ae02a25517aa9",
+      "exitCode": 0,
+      "endedAt": "2026-10-22T06:37:42.159804+00:00",
+      "wallSeconds": 3974.631931717973,
+      "metadataErrors": []
+    }
+  ],
+  "scope": "Execution pipeline only; final review, Git delivery, parent tasks and entire goal are not complete."
+}

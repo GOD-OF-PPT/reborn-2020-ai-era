@@ -1,0 +1,108 @@
+{
+  "passed": true,
+  "rows": [
+    {
+      "mode": "candidate-before-old-guard",
+      "passed": true,
+      "injected": 2,
+      "accepted": 0,
+      "candidateRevision": 101,
+      "lastVerifiedRevision": 100,
+      "attempts": 1,
+      "milestones": 1,
+      "members": 3,
+      "recovery": {
+        "file": "probes/candidate-before-old-guard/probe-recovery.json",
+        "bytes": 9705203,
+        "sha256": "211a52e5f7a3d7ade1b22e474e200bf2040b1bdc0966fc09419abd58ec3e12a5"
+      },
+      "archives": [
+        {
+          "encoding": "xz",
+          "file": "failure-originals-part-001.xz",
+          "storedBytes": 83496,
+          "storedSha256": "f8fce277998baee667830a63351b638298b6421c674f334a3d9da2ccd1d48909",
+          "containerBytes": 4851425,
+          "containerSha256": "1f6dc3a0bb8852d826cedae094d19a942c41160165d8fae904db912938b9a3ff",
+          "members": [
+            {
+              "name": "source.json",
+              "bytes": 1400429,
+              "sha256": "e4c72789f76683c66f72558e04ad7746864dbd0149bfac13f2196bc3842c7550"
+            },
+            {
+              "name": "milestone-001.json",
+              "bytes": 1400429,
+              "sha256": "e4c72789f76683c66f72558e04ad7746864dbd0149bfac13f2196bc3842c7550"
+            },
+            {
+              "name": "candidate-00001.json",
+              "bytes": 1404021,
+              "sha256": "20068bdbe67e91866a4a760de07b2f6d416d31e6c7aa7c04c8bca19ef54b67ec"
+            }
+          ]
+        }
+      ],
+      "secondaryErrors": [
+        {
+          "stage": "attempt-after-fingerprint",
+          "error": "Error: CONTROLLED_SERIALIZER_FAILURE_candidate-before-old-guard"
+        },
+        {
+          "stage": "branch-finalization",
+          "error": "Error: RELAY_SHAPE_EXCEPTION_REQUIRES_FAILURE_SNAPSHOT"
+        }
+      ],
+      "unverifiedCount": 2
+    },
+    {
+      "mode": "after-first-accepted-result",
+      "passed": true,
+      "injected": 2,
+      "accepted": 1,
+      "candidateRevision": 101,
+      "lastVerifiedRevision": 101,
+      "attempts": 1,
+      "milestones": 1,
+      "members": 3,
+      "recovery": {
+        "file": "probes/after-first-accepted-result/probe-recovery.json",
+        "bytes": 8102528,
+        "sha256": "20cfdac6650b20a5d05d1c2ab730f7ecd51444e0928d24148878bb4223329669"
+      },
+      "archives": [
+        {
+          "encoding": "xz",
+          "file": "failure-originals-part-001.xz",
+          "storedBytes": 83496,
+          "storedSha256": "f8fce277998baee667830a63351b638298b6421c674f334a3d9da2ccd1d48909",
+          "containerBytes": 4851425,
+          "containerSha256": "1f6dc3a0bb8852d826cedae094d19a942c41160165d8fae904db912938b9a3ff",
+          "members": [
+            {
+              "name": "source.json",
+              "bytes": 1400429,
+              "sha256": "e4c72789f76683c66f72558e04ad7746864dbd0149bfac13f2196bc3842c7550"
+            },
+            {
+              "name": "milestone-001.json",
+              "bytes": 1400429,
+              "sha256": "e4c72789f76683c66f72558e04ad7746864dbd0149bfac13f2196bc3842c7550"
+            },
+            {
+              "name": "candidate-00001.json",
+              "bytes": 1404021,
+              "sha256": "20068bdbe67e91866a4a760de07b2f6d416d31e6c7aa7c04c8bca19ef54b67ec"
+            }
+          ]
+        }
+      ],
+      "secondaryErrors": [],
+      "unverifiedCount": 1
+    }
+  ],
+  "formalCoreBranchesAccepted": 0,
+  "newCreateReplays": 0,
+  "compatibilityDevelopmentTests": 0,
+  "scope": "Only controlled failure-path preservation; original game/source codec file never modified."
+}

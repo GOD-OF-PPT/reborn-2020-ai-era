@@ -1,0 +1,16 @@
+{
+  "scope": "Controlled probe R1 setup failure, not a production/game preservation defect or formal matrix.",
+  "actualExitCode": 1,
+  "actualError": "ENRICHED_BRANCH_FAILURE_REQUIRED_candidate-before-old-guard",
+  "observations": {
+    "createdFiles": [
+      "matrix-r9903/failure-probe-registration.json"
+    ],
+    "createdProbeParent": false,
+    "gameAttemptJournalFiles": 0
+  },
+  "cause": "Probe used probes/<mode> but omitted creation of fresh probes parent; writer mkdir uses nonrecursive mkdir. Inner branch setup became fatal return before a game command; driver then expected the injected Failure and failed. This is a static diagnosis supported by missing parent/no journal, not reconstructed original runtime record.",
+  "correction": "Fresh driver-R2 creates owned probes parent before scenarios and preserves unexpected normal-return record/members before assertion. No game/tool source change. R1 unchanged.",
+  "originalDriverSha256": "ffad5a8f8985ddf133a182f1c5ff8e113deb4a26779673d3fcd3caba31cb939d",
+  "formalCoreBranchesAccepted": 0
+}

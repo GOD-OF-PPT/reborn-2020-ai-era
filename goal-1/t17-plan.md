@@ -278,3 +278,20 @@ root16封存139普通文件+marker，SHA1b99aae2bef1fa140a6a920d527adfa65301c72f
 - 最终限定检查：helper7/readiness2分别通过，严格CLI/项目R4均0；docs实际1仅原7错误/3缺图提示，plan/competitive0。17,441旧条目17,438同/3允许记录/异常0、19字面链接保持；D11 44HTTP原字节保持，只是保全而非新Chrome。两CLI封存父目录实际拒写、653原文件集合/字节保持。默认空白2仅4原console，初次仅stdout分类漏stderr的false另保留，其余658feature路径0；原console未裁改。
 - [杠精审查] P1限定通过；真实失败/静态漏审与有据修复均披露，不削原规则/数值/固定seed/资源/日期/权限。REPEAT复用项目codec/harness/守卫/独立重放，无新全局Skill/自动化/外部资源。未push/deploy，PUBLIC远端main与README活读仍9bf4399；本完成记录和post将另本地提交，最终准确record身份见Git和交回。
 - 下一具体任务恢复原5c-P2的288核心形态，再62关键/22例行及原其余5c—5f/6/7—15；本轮止于P1，不越序开下一任务。全部页面兼容开发测试0、book-layout两多宽/M01暂停且须用户明确恢复；完整T17/goal、旧PNG0/3/新A三案3/3/真人0/T18与原全部后续继续保留。
+
+
+## 当前5c-P2原288核心（2026-10-22）
+
+上一P1实现4c0d6ac/完成记录4d014b3为真实progress，工作树clean后在[evidence/t17-acceptance-18/plan.md](evidence/t17-acceptance-18/plan.md)建立新三文件和执行前policy-r1。保留C001—C288/六身份/48tuple/十原checkpoint及62关键/22例行全部范围。现新增专用公开策略、独立账务检查、写前日志/候选完整XZ和suffix审核代码，严格集成type R1实际0；组件5+5小检查各原身份保留，formal288/新六Create仍0。正做五项预登记pilot以核四支持/三供应和第二身份，pilot不替代原正式全量。所有兼容开发测试0，M01仍须用户明确恢复，原图/真人/T18和完整T17/goal不减。
+
+
+P2正式R1已进入实际执行：debug1修后type-R5 CLI/项目0、来源链6纯项与2实际serializer故障保全通过，fresh五pilot-R3 exit0/4positive+1真实violation有限，140完整成员/201526134原字节与R2全同；所有旧红档保留。151实际源/247原输入及完整源snapshot冻结后，唯一matrix-r1于2026-10-22T03:21:57Z启动（exec74387/Python5741/RTK5742/Node5743），先完整六Create再原288。当前仅第一前史已写index、第二前史执行中，formal case0/独审未启/无终态，不提前称全量通过或提交；接续见[evidence/t17-acceptance-18/live-matrix-r1-handoff.md](evidence/t17-acceptance-18/live-matrix-r1-handoff.md)。观察超时不重启，活root不stage/commit/seal；原62/22及整个T17/goal/原图真人/M01暂停/T18不减，全部兼容开发测试0。
+
+
+P2采集正式R1已于05:31:18Z真实exit0（7761.427秒）：原六Create/619接受/219里程碑先行，原288全执行264正向/24真实violation有限/fatal0/漏执行0，原输入/源末核同。885物理文件+自排除marker已seal（SHAe5152fce…），root再完整读回190261256B/296目录/模式/集合及398源输入保持。唯一连续driver90756/Python15785已自动启动fresh独立audit-r1（RTK26205/Node26206，05:31:27Z），独立六Create已完成，288suffix审核仍在执行；总终态/全量报告未出，不预勾P2/5c/T17/goal。当前接续见[evidence/t17-acceptance-18/live-audit-r1-handoff.md](evidence/t17-acceptance-18/live-audit-r1-handoff.md)；原74387已终态不重启，不stage/commit/seal活audit或总root。全部原后续及兼容禁令保持，无push/deploy。
+
+
+P2独立全量审核已实际exit0/3974.632秒：重新六Create619/219后原288全核定，264正向/24真实violation有限、invalid/errors0，48形态均有正向。root294proof/886输入/398源输入完整原文读回同，audit308普通文件+marker封存。当前仅余步骤6资料/总封存与真实本地Git/post交付收口，准确SHA随后记录；不提前报已提交或关闭5c/T17/goal。见[evidence/t17-acceptance-18/validation.md](evidence/t17-acceptance-18/validation.md)。原62关键/22例行与全部后续、旧PNG/真人/M01暂停/T18保持，全部兼容开发测试0，无push/deploy。
+
+
+P2最终提交前限定检查已齐：完整独审288/48及root原文/字节/原树保全通过，资料R2 docs1仍仅原7错误/3原PNG提示，plan/competitive0。原5328已无监听，原构建恢复同端口后44HTTP原字节同，非新Chrome/兼容验收。当前正封总root并准备本地feature/Git逐blob/mode/post，准确完成SHA另写；不提前勾步骤6或上层，原后续责任不减。

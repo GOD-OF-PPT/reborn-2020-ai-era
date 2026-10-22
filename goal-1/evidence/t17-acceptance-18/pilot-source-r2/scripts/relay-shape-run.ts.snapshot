@@ -1,0 +1,101 @@
+import {readFileSync} from 'node:fs'
+import {createCampaignCodec,campaignRelay,campaignStory,campaignRuntime,campaignOperations,campaignMarket} from '../src/application/campaign.ts'
+import {evaluateCommand,previewCommand} from '../src/core/commands.ts'
+import {projectRelay} from '../src/core/relay-projection.ts'
+import {projectStory} from '../src/core/story-projection.ts'
+import {projectWorkbench} from '../src/application/workbench-projection.ts'
+import {StoryHarness} from '../src/testing/story-harness.ts'
+import {runRelayShape,RelayShapePolicyRefusal} from '../src/testing/relay-shape-scenario.ts'
+import {assertRelayShapeMoney,assessRelayShape} from '../src/testing/relay-shape-assertions.ts'
+import type {RelayCoreCase,RelayShape} from '../src/testing/relay-shape-types.ts'
+import type {GameRun,CommandEnvelope} from '../src/core/run-types.ts'
+import {RelayShapeEvidenceWriter,putMember,commandsOf,check,equal,sha,type RelayShapeFingerprint,type RelayShapeAttempt,type RelayShapeMilestone,type RelayShapeRecord,type FileRef} from './relay-shape-evidence.ts'
+
+/** Every generated proposal is retained before import, commitment, journals or accounting can fail. */
+class RecordingHarness extends StoryHarness {
+ readonly attempts:RelayShapeAttempt[]=[]
+ readonly members:Map<string,string>;readonly original:GameRun;readonly shape:RelayShape
+ readonly writer:RelayShapeEvidenceWriter;readonly folder:string;readonly caseId:string
+ constructor(sourceRaw:string,row:RelayCoreCase,writer:RelayShapeEvidenceWriter,members:Map<string,string>){
+  const codec=createCampaignCodec(),source=codec.import(sourceRaw);super({priorRun:source})
+  this.members=members;this.original=source;this.shape=row.shape;this.writer=writer;this.folder=row.folder;this.caseId=row.id
+ }
+ fingerprint():RelayShapeFingerprint{return {revision:this.run.revision,date:this.run.timeline.cursor.date,sha256:sha(this.codec.export(this.run))}}
+ override command(kind:string,payload:unknown):CommandEnvelope{return {...super.command(kind,payload),commandId:'relay-core-'+this.caseId+'-'+this.run.revision}}
+ #attempt(kind:string,payload:unknown,commandId:string,expectedRejection=false){
+  const command={...this.command(kind,payload),commandId},before=this.run,beforeRaw=this.codec.export(before)
+  const fingerprint={revision:before.revision,date:before.timeline.cursor.date,sha256:sha(beforeRaw)}
+  const attempt:RelayShapeAttempt={sequence:this.attempts.length+1,command,before:fingerprint,status:'attempted',after:fingerprint,reasonCodes:[],error:null,proposedCandidate:null,preview:null,money:{before:null,after:null},...(expectedRejection?{expectedRejection:true}:{})}
+  this.attempts.push(attempt);this.writer.append(this.folder+'/requests.jsonl',{type:'attempted',...attempt})
+  try{
+   attempt.money.before=assertRelayShapeMoney(this.original,before,this.shape)
+   if(kind==='StartRelayServicePeriod'){
+    const value=previewCommand(before,command,this.codec.registry,before.actorId),afterSha256=sha(this.codec.export(before))
+    check(afterSha256===fingerprint.sha256,'RELAY_SHAPE_PREVIEW_CHANGED_COMPLETE_OLD_RAW')
+    attempt.preview={value,beforeSha256:fingerprint.sha256,afterSha256};this.writer.append(this.folder+'/requests.jsonl',{type:'previewed',sequence:attempt.sequence,command,preview:attempt.preview})
+   }
+   const result=evaluateCommand(before,command,this.codec.registry,before.actorId)
+   check(this.run===before&&this.codec.export(before)===beforeRaw,'RELAY_SHAPE_EVALUATION_CHANGED_OLD_RAW')
+   if(result.status==='rejected'){
+    attempt.status='rejected';attempt.reasonCodes=[...result.reasonCodes];attempt.money.after=assertRelayShapeMoney(this.original,this.run,this.shape)
+    this.writer.append(this.folder+'/requests.jsonl',{type:'result',...attempt})
+    if(expectedRejection)return result.reasonCodes
+    throw Error(JSON.stringify({date:before.timeline.cursor.date,kind,payload,result}))
+   }
+   check(result.status==='proposed','RELAY_SHAPE_UNEXPECTED_EXISTING_RECEIPT')
+   const candidateRaw=this.codec.export(result.nextRun)
+   attempt.proposedCandidate=putMember(this.members,'candidate-'+String(attempt.sequence).padStart(5,'0')+'.json',candidateRaw)
+   if(expectedRejection)throw Error('RELAY_SHAPE_EXPECTED_REJECTION_WAS_PROPOSED')
+   const decoded=this.codec.import(candidateRaw);check(this.codec.export(decoded)===candidateRaw,'RELAY_SHAPE_PROPOSAL_STRICT_IMPORT_CHANGED')
+   this.run=decoded;this.commands.push(command);attempt.status='accepted'
+   attempt.after={revision:decoded.revision,date:decoded.timeline.cursor.date,sha256:sha(candidateRaw)}
+   attempt.money.after=assertRelayShapeMoney(this.original,this.run,this.shape)
+   this.writer.append(this.folder+'/requests.jsonl',{type:'result',...attempt})
+   return this.run
+  }catch(caught){
+   if(attempt.status!=='rejected'){attempt.error=String(caught);attempt.status=this.run.revision>before.revision?'committed_with_exception':'exception'}
+   attempt.after=this.fingerprint()
+   // Failure of this append is caught by the case-level recovery with all in-memory members.
+   if(attempt.status!=='rejected')this.writer.append(this.folder+'/requests.jsonl',{type:'exception',...attempt})
+   throw caught
+  }
+ }
+ override sendAs(kind:string,payload:unknown,commandId:string):GameRun{const value=this.#attempt(kind,payload,commandId);check('runId' in value,'RELAY_SHAPE_SEND_RETURNED_REJECTION');return value}
+ override reject(kind:string,payload:unknown):readonly string[]{const value=this.#attempt(kind,payload,this.command(kind,payload).commandId,true);check(Array.isArray(value),'RELAY_SHAPE_REJECT_RETURNED_ACCEPTANCE');return value}
+}
+
+/** One registered branch only. Importing this module never starts a matrix. */
+export function runRelayShapeBranch(row:RelayCoreCase,sourceRaw:string,writer:RelayShapeEvidenceWriter,progress:(value:unknown)=>void=()=>{}){
+ const codec=createCampaignCodec(),members=new Map<string,string>(),milestones:RelayShapeMilestone[]=[],names=new Set<string>()
+ const source=putMember(members,'source.json',sourceRaw),h=new RecordingHarness(sourceRaw,row,writer,members)
+ const sourceCommands=commandsOf(h.original)
+ let status:RelayShapeRecord['status']='completed',error:string|null=null,policyDetail:unknown=null,assessment:RelayShapeRecord['assessment']=null,outputError:string|null=null
+ try{
+  writer.requireSpace();writer.mkdir(row.folder);writer.text(row.folder+'/requests.jsonl','')
+  progress({type:'case-start',caseId:row.id,identity:row.identity.name,shape:row.shape})
+  runRelayShape(h,row.shape,{milestone(name,run){
+   check(!names.has(name),'DUPLICATE_RELAY_SHAPE_MILESTONE_NAME');names.add(name)
+   const raw=codec.export(run),ref=putMember(members,'milestone-'+String(milestones.length+1).padStart(3,'0')+'.json',raw)
+   milestones.push({name,revision:run.revision,date:run.timeline.cursor.date,raw:ref,money:assertRelayShapeMoney(h.original,run,row.shape)})
+  }})
+ }catch(caught){error=String(caught);if(caught instanceof RelayShapePolicyRefusal){status='policy_refused';policyDetail={code:caught.code,detail:caught.detail}}else status='fatal'}
+ const actual=h.run,raw=codec.export(actual)
+ try{
+  assessment=assessRelayShape(h.original,actual,row.shape)
+  if(status==='completed')check(assessment.positive&&assessment.checkpoints.length===10&&assessment.checkpoints.every(c=>c.status==='passed'),'COMPLETED_RELAY_SHAPE_MISSING_POSITIVE_OR_ORIGINAL_CHECKPOINTS')
+ }catch(caught){status='fatal';error=(error?error+'; ':'')+String(caught)}
+ const full=commandsOf(actual),suffix=full.slice(sourceCommands.length)
+ try{
+  equal(full.slice(0,sourceCommands.length),sourceCommands,'RELAY_SHAPE_REWROTE_P1_RECEIPTS')
+  equal(suffix,h.attempts.filter(a=>a.status==='accepted'||a.status==='committed_with_exception').map(a=>({...a.command,payload:codec.registry.normalize(a.command.kind,a.command.payload)})),'RELAY_SHAPE_ACCEPTED_SUFFIX_RECEIPTS_MISMATCH')
+  check(codec.export(h.original)===sourceRaw,'RELAY_SHAPE_MUTATED_ORIGINAL_SOURCE')
+ }catch(caught){status='fatal';error=(error?error+'; ':'')+String(caught)}
+ const terminal=putMember(members,status==='completed'?'final.json':'partial.json',raw)
+ const record:RelayShapeRecord={caseId:row.id,identity:row.identity,shape:row.shape,status,error,policyDetail,source,terminal,attempts:h.attempts,milestones,
+  publicRelay:projectRelay(actual,campaignRelay),publicStory:projectStory(actual,campaignStory),publicWorkbench:projectWorkbench(actual,campaignRuntime,campaignOperations.catalog,campaignMarket.catalog),assessment,suffixCommands:suffix}
+ let journal:FileRef|null=null
+ try{const text=readFileSync(writer.path(row.folder+'/requests.jsonl'),'utf8');journal={file:row.folder+'/requests.jsonl',bytes:Buffer.byteLength(text),sha256:sha(text)};putMember(members,'requests.jsonl',text)}catch(caught){outputError=String(caught)}
+ putMember(members,'case-record.json',JSON.stringify(record,null,2)+'\n')
+ return {record,members,run:actual,raw,journal,outputError}
+}
+export type RelayShapeBranchExecution=ReturnType<typeof runRelayShapeBranch>

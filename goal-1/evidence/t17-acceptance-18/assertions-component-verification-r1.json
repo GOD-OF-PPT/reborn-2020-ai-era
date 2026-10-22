@@ -1,0 +1,192 @@
+{
+  "schema": "relay-shape-component-verification-v1",
+  "recordedAt": "2026-10-22T02:20:28.112Z",
+  "cwd": "/Users/gordon/githome/reborn-2020-ai-era",
+  "sources": [
+    {
+      "path": "src/testing/relay-shape-assertions.ts",
+      "bytes": 33830,
+      "sha256": "2b9737ba0568c2e3c35860d236da6b640ff668db5b6f44d05b9ed95a7318ce53"
+    },
+    {
+      "path": "src/testing/relay-shape-assertions.test.ts",
+      "bytes": 7932,
+      "sha256": "79c2feb0997c609f6a45f89f5c2a14d3adc6324a620be4008889728d4064c9d7"
+    }
+  ],
+  "executionEvidence": {
+    "consoleStorage": "Original console output exists only in the online tool transcript. No stdout/stderr file was saved. This metadata records observed results; it does not reconstruct or replace original console logs.",
+    "redSourceSnapshot": "The pre-fix red source was not separately snapshotted; its hash is not reconstructed.",
+    "runs": [
+      {
+        "stage": "red_supplier_paid_postpaid_credit_boundary",
+        "command": "rtk proxy npm run test:unit -- src/testing/relay-shape-assertions.test.ts --maxWorkers=1",
+        "argv": [
+          "rtk",
+          "proxy",
+          "npm",
+          "run",
+          "test:unit",
+          "--",
+          "src/testing/relay-shape-assertions.test.ts",
+          "--maxWorkers=1"
+        ],
+        "expandedNpmScript": [
+          "vitest",
+          "run",
+          "--config",
+          "vitest.config.ts",
+          "src/testing/relay-shape-assertions.test.ts",
+          "--maxWorkers=1"
+        ],
+        "sessionId": 92510,
+        "exitCode": 1,
+        "testFiles": {
+          "failed": 1,
+          "passed": 0
+        },
+        "tests": {
+          "passed": 4,
+          "failed": 1,
+          "total": 5
+        },
+        "reportedDurationSeconds": 3.09,
+        "failure": "RELAY_SHAPE_SUPPLIER_ASSET_COST_PAYABLE_IDENTITY:boundary-postpaid-credit"
+      },
+      {
+        "stage": "final_strict_owned_module",
+        "command": "rtk proxy node node_modules/typescript/bin/tsc --ignoreConfig --noEmit --target ES2023 --module ESNext --moduleResolution bundler --allowImportingTsExtensions --strict --noUncheckedIndexedAccess --exactOptionalPropertyTypes --noUnusedLocals --noUnusedParameters --skipLibCheck --types node --lib ES2023,DOM src/testing/relay-shape-assertions.ts",
+        "argv": [
+          "rtk",
+          "proxy",
+          "node",
+          "node_modules/typescript/bin/tsc",
+          "--ignoreConfig",
+          "--noEmit",
+          "--target",
+          "ES2023",
+          "--module",
+          "ESNext",
+          "--moduleResolution",
+          "bundler",
+          "--allowImportingTsExtensions",
+          "--strict",
+          "--noUncheckedIndexedAccess",
+          "--exactOptionalPropertyTypes",
+          "--noUnusedLocals",
+          "--noUnusedParameters",
+          "--skipLibCheck",
+          "--types",
+          "node",
+          "--lib",
+          "ES2023,DOM",
+          "src/testing/relay-shape-assertions.ts"
+        ],
+        "sessionId": 52996,
+        "exitCode": 0,
+        "stdout": "No diagnostics were returned."
+      },
+      {
+        "stage": "final_green_owned_boundaries",
+        "command": "rtk proxy npm run test:unit -- src/testing/relay-shape-assertions.test.ts --maxWorkers=1",
+        "argv": [
+          "rtk",
+          "proxy",
+          "npm",
+          "run",
+          "test:unit",
+          "--",
+          "src/testing/relay-shape-assertions.test.ts",
+          "--maxWorkers=1"
+        ],
+        "expandedNpmScript": [
+          "vitest",
+          "run",
+          "--config",
+          "vitest.config.ts",
+          "src/testing/relay-shape-assertions.test.ts",
+          "--maxWorkers=1"
+        ],
+        "sessionId": 28047,
+        "exitCode": 0,
+        "testFiles": {
+          "passed": 1,
+          "failed": 0
+        },
+        "tests": {
+          "passed": 5,
+          "failed": 0,
+          "total": 5
+        },
+        "reportedDurationSeconds": 3.64
+      }
+    ]
+  },
+  "input": {
+    "path": "goal-1/evidence/t17-acceptance-17/prefix-r2/technical_employee-t16-campaign-0/prefix-final.json",
+    "bytes": 1400429,
+    "sha256": "e4c72789f76683c66f72558e04ad7746864dbd0149bfac13f2196bc3842c7550",
+    "origin": "normal",
+    "identity": "technical_employee / t16-campaign-0",
+    "usage": "Strict codec import of the existing independently audited P1 final raw. This component test does not replay its CreateRun history."
+  },
+  "setup": {
+    "commands": 3,
+    "timeoutMilliseconds": 20000,
+    "steps": [
+      {
+        "kind": "AdvanceTime",
+        "payload": {
+          "date": "2025-01-11"
+        }
+      },
+      {
+        "kind": "SignRelayCustomers",
+        "selection": "First publicly visible audience member not already a relay customer; existing low_margin offer.",
+        "payload": {
+          "businessId": "derived original relay business id",
+          "audienceId": "derived original audience id",
+          "offerId": "derived existing low_margin offer id",
+          "personIds": [
+            "derived first eligible person id"
+          ],
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "creditLimitFen": 0
+        }
+      },
+      {
+        "kind": "RechargeRelayCustomer",
+        "payload": {
+          "customerId": "newly committed customer id",
+          "amountFen": "the original public customer.rechargeLimitFen"
+        }
+      }
+    ],
+    "persistence": "Each proposed setup command is exported and strictly imported through the original campaign codec; no external store or browser save is exercised."
+  },
+  "coverage": [
+    "Untouched P1 cannot supply this shape customer, period, period fee or positive result.",
+    "Only this business and this period income source can count as its period fee; meter, old P1, other business and future entries are excluded.",
+    "Bounded original ledger operations permit a prepaid customer correction receivable and a prepaid supplier correction payable while leaving the business-chain result nonpositive.",
+    "Changed P1 meter evidence and unexplained account cash are rejected without mutating the original.",
+    "Correcting an already paid postpaid supplier invoice can legitimately create a supplier credit asset."
+  ],
+  "accountingFixtures": {
+    "method": "Original applyLedger operations assembled as bounded accounting windows after the three-command setup.",
+    "notClaimed": [
+      "These accounting windows were not codec-exported as complete relay game histories.",
+      "No real service/support/audit/correction chain is claimed by these ledger-only fixtures.",
+      "No full Create replay, pilot, fixed 288 cases, six-identity positive coverage, independent batch audit, browser, compatibility, performance or whole-project acceptance is inferred."
+    ]
+  },
+  "fix": "Verify supplier acquired-asset history by remaining assets plus documented disposal minus restored prepaid consumption; preserve the independent cash-paid = net-cost + unused-assets - unpaid-invoices identity. Do not require paidFen to consist only of cash top-ups.",
+  "boundaries": {
+    "productionEdits": false,
+    "official288Run": false,
+    "browserActions": false,
+    "compatibilityDevelopmentOrTests": false,
+    "commit": false,
+    "consoleRecreated": false
+  }
+}

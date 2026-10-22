@@ -1,0 +1,353 @@
+import {closeSync,constants,fstatSync,lstatSync,openSync,readFileSync,readdirSync,type Stats} from 'node:fs'
+import {basename,dirname,isAbsolute,join,relative,resolve,sep} from 'node:path'
+import {fileURLToPath} from 'node:url'
+import {createCampaignCodec,campaignRelay,campaignStory,campaignRuntime,campaignOperations,campaignMarket} from '../src/application/campaign.ts'
+import {evaluateCommand,previewCommand} from '../src/core/commands.ts'
+import {canonicalJson} from '../src/core/identity.ts'
+import {projectRelay} from '../src/core/relay-projection.ts'
+import {projectStory} from '../src/core/story-projection.ts'
+import {storyId} from '../src/core/story-state.ts'
+import {projectWorkbench} from '../src/application/workbench-projection.ts'
+import type {CommandEnvelope,GameRun} from '../src/core/run-types.ts'
+import {assertRelayShapeMoney,assessRelayShape} from '../src/testing/relay-shape-assertions.ts'
+import {RELAY_CORE_CHECKPOINTS,type RelayCoreCase} from '../src/testing/relay-shape-types.ts'
+import {loadRelayShapeAuthority,replayRelayShapePrefix} from './relay-shape-prefix.ts'
+import {ROOT,TASK,POLICY_FILE,RelayShapeEvidenceWriter,archiveMembers,unpackArchive,memberRaw,
+ check,equal,object,sha,guardHashes,commandsOf,strict,putMember,
+ type FileRef,type RelayShapeCaseIndex,type RelayShapeRecord,type RelayShapeSummary,type RelayShapeArchive,type RelayShapeAttempt} from './relay-shape-evidence.ts'
+
+const finiteReasons=new Set(['INSUFFICIENT_ACTION_POINTS','INSUFFICIENT_AVAILABLE_FUNDS','INSUFFICIENT_CAPACITY','OVERDUE_OBLIGATION',
+ 'AGENT_INDEPENDENT_RISK_PENDING','AGENT_NOT_READY_FOR_BUSINESS','AGENT_SERVICE_FEE_OVERDUE','AGENT_CASH_LIMIT_EXCEEDED',
+ 'AGENT_SCOPE_NOT_AUTHORIZED','AGENT_DEPLOYMENT_NOT_ACTIVE','AGENT_EXPANSION_NOT_AUTHORIZED',
+ 'RELAY_SUPPLY_NOT_READY','RELAY_SUPPLY_PERMISSION_REQUIRED','RELAY_CUSTOMER_CONTRACT_EXPIRED','RELAY_TRAFFIC_PAUSED','RELAY_NEW_CONTRACTS_PAUSED'])
+const allowedKinds=new Set(['AdvanceTime','ChooseEvent','AcknowledgeCashGap','AcknowledgeStoryPause',
+ 'SetHengxingAuthority','StartRiskTask','ConfirmRiskAssessment','StopHengxingAuthority','DeclareRiskLiabilities',
+ 'SignRelayCustomers','RechargeRelayCustomer','TopUpRelaySupplier','StartRelayServicePeriod','StartRelayAudit','CorrectRelayPeriod','CollectRelayDue'])
+
+function fingerprint(run:GameRun,raw:string){return {revision:run.revision,date:run.timeline.cursor.date,sha256:sha(raw)}}
+function publicViews(run:GameRun){return {publicRelay:projectRelay(run,campaignRelay),publicStory:projectStory(run,campaignStory),publicWorkbench:projectWorkbench(run,campaignRuntime,campaignOperations.catalog,campaignMarket.catalog)}}
+
+/** Validate the frozen policy against the recorded request, without executing the policy. */
+function fixedRequest(row:RelayCoreCase,original:GameRun,before:GameRun,command:CommandEnvelope,accepted:readonly CommandEnvelope[]){
+ check(command.runId===original.runId&&command.actorId===original.actorId&&command.expectedRevision===before.revision&&
+  command.commandId==='relay-core-'+row.id+'-'+before.revision,'ORIGINAL_CORE_COMMAND_ID_OR_CONTEXT_CHANGED')
+ check(allowedKinds.has(command.kind),'COMMAND_OUTSIDE_REGISTERED_RELAY_CORE_POLICY:'+command.kind)
+ const p=object(command.payload,'CORE_OBJECT_PAYLOAD_REQUIRED'),date=before.timeline.cursor.date
+ check(date>='2025-01-01'&&date<='2025-03-14','CORE_COMMAND_OUTSIDE_FIXED_WINDOW')
+ const relay=projectRelay(before,campaignRelay),start=projectRelay(original,campaignRelay)
+ check(relay&&start,'CORE_PUBLIC_RELAY_REQUIRED')
+ const business=start.businesses.find(b=>b.definitionId==='relay-station'),deployment=projectStory(before,campaignStory).deployments.find(d=>d.businessId===business?.id)
+ check(business&&deployment,'CORE_ORIGINAL_BUSINESS_AND_DEPLOYMENT_REQUIRED')
+ const oldCustomers=new Set(start.customers.map(c=>c.id)),oldPeriods=new Set(start.periods.map(c=>c.id))
+ const customer=relay.customers.find(c=>!oldCustomers.has(c.id)),period=relay.periods.find(c=>!oldPeriods.has(c.id))
+ if(command.kind==='AdvanceTime')check(typeof p.date==='string'&&p.date>=date&&p.date<='2025-03-14','CORE_FIXED_ADVANCE_DATE_CHANGED')
+ if(command.kind==='ChooseEvent'){
+  const instance=before.world?.instances.find(i=>i.id===p.instanceId)
+  check(instance&&p.choiceId===campaignRuntime.definition(instance.definitionId).defaultChoiceId,'CORE_CLOCK_DEFAULT_CHOICE_CHANGED')
+ }
+ if(command.kind==='AcknowledgeCashGap'||command.kind==='AcknowledgeStoryPause')
+  check(p.instanceId===before.timeline.pause?.instanceId,'CORE_ACK_MUST_MATCH_ACTUAL_PAUSE')
+ if(command.kind==='SetHengxingAuthority'){
+  check(row.shape.supportMode==='delegated'&&date==='2025-01-01'&&!accepted.some(c=>c.kind==='SetHengxingAuthority'),
+   'CORE_SINGLE_DELEGATED_EXPANSION_MUST_PRECEDE_SERVICE')
+  check(p.businessId===business.id&&p.deploymentId===deployment.id&&p.level==='cross_flow'&&p.cashLimitFen===500000&&
+   p.expiresAt==='2025-12-31'&&p.externalDelegation===true&&p.consent===true,'CORE_EXPLICIT_AUTHORITY_TERMS_CHANGED')
+  equal(p.scopes,['relay_support','external_service_commitments'],'CORE_AUTHORITY_SCOPES_CHANGED')
+ }
+ if(['StartRiskTask','ConfirmRiskAssessment','StopHengxingAuthority','DeclareRiskLiabilities'].includes(command.kind)){
+  check(row.shape.supportMode==='delegated','CORE_NONDELEGATED_RISK_ACTION_OUTSIDE_POLICY')
+  const story=projectStory(before,campaignStory)
+  const incident=story.incidents.find(i=>i.id===p.incidentId&&i.businessIds.includes(business.id)&&i.deploymentIds.includes(deployment.id))
+  if(command.kind==='StartRiskTask')check(date==='2025-01-08'&&p.kind==='investigate'&&p.accountId===business.accountId&&p.resourceId==='player-production'&&
+   incident?.signals.some(s=>s.source!=='system_report'&&s.date<=date),'CORE_INDEPENDENT_INVESTIGATION_WITHOUT_PUBLIC_SIGNAL_OR_FIXED_RESOURCE')
+  if(command.kind==='ConfirmRiskAssessment')check(date==='2025-01-11'&&incident?.jobs.investigate?.status==='completed'&&incident.jobs.investigate.result!==null,'CORE_ASSESSMENT_BEFORE_REAL_INDEPENDENT_RESULT')
+  if(command.kind==='StopHengxingAuthority')check(p.deploymentId===deployment.id&&story.incidents.some(i=>i.businessIds.includes(business.id)&&i.deploymentIds.includes(deployment.id)&&i.verdict==='violation'),'CORE_STOP_WITHOUT_PUBLIC_VIOLATION')
+  if(command.kind==='DeclareRiskLiabilities'){
+   check(incident?.verdict==='violation'&&deployment.stoppedAt!==null,'CORE_LIABILITY_DECLARATION_MUST_FOLLOW_PUBLIC_VIOLATION_AND_STOP')
+   const {contractIds,obligationIds,jobIds}=incident.currentLiabilities
+   equal(p.snapshot,{contractIds,obligationIds,jobIds},'CORE_ORIGINAL_PUBLIC_LIABILITY_SNAPSHOT_CHANGED')
+  }
+ }
+ if(command.kind==='SignRelayCustomers'){
+  check(date==='2025-01-11'&&!customer&&p.businessId===business.id&&p.termEnd==='2025-03-31'&&p.mode===row.shape.customerMode&&
+   p.creditLimitFen===(row.shape.customerMode==='postpaid'?2000000:0),'CORE_ORIGINAL_CUSTOMER_TERMS_CHANGED')
+  const audience=relay.audiences.find(a=>a.id===p.audienceId&&a.businessId===business.id&&a.mode==='paid'&&a.segment==='local_merchants'&&a.completedAt!==null)
+  const person=audience?.members.find(id=>!relay.customers.some(c=>c.personId===id))
+  check(person,'CORE_NO_ORIGINAL_UNUSED_PUBLIC_PERSON');equal(p.personIds,[person],'CORE_FIRST_UNUSED_PERSON_CHANGED')
+  check(relay.offers.some(o=>o.id===p.offerId&&o.businessId===business.id&&o.offerId===row.shape.offerKind&&o.unitPriceFen===row.shape.unitPriceFen&&o.serviceFeeFen===(row.shape.offerKind==='low_margin'?0:50000)),'CORE_ORIGINAL_OFFER_CHANGED')
+ }
+ if(command.kind==='RechargeRelayCustomer')check(date==='2025-01-11'&&row.shape.customerMode==='prepaid'&&customer&&p.customerId===customer.id&&
+  p.amountFen===customer.rechargeLimitFen&&p.amountFen===(row.shape.offerKind==='low_margin'?800000:530000)&&!accepted.some(c=>c.kind==='RechargeRelayCustomer'),'CORE_REAL_PREPAYMENT_QUOTA_CHANGED')
+ if(command.kind==='TopUpRelaySupplier')check(date==='2025-01-11'&&row.shape.supplierId==='cedar-reseller'&&p.businessId===business.id&&p.supplierId==='cedar-reseller'&&p.amountFen===400000&&!accepted.some(c=>c.kind==='TopUpRelaySupplier'),'CORE_SUPPLIER_OWN_CASH_TOPUP_CHANGED')
+ if(command.kind==='StartRelayServicePeriod'){
+  check(date==='2025-01-11'&&customer&&p.businessId===business.id&&p.startAt==='2025-01-12'&&p.maxUnits===300000&&p.maxSupplierCostFen===1200000&&p.supportMode===row.shape.supportMode&&!period,'CORE_SERVICE_TERMS_OR_DATES_CHANGED')
+  equal(p.customerIds,[customer.id],'CORE_SINGLE_NEW_CUSTOMER_REQUIRED');equal(p.supplierIds,[row.shape.supplierId],'CORE_SINGLE_ORIGINAL_SUPPLIER_REQUIRED')
+  check(p.deploymentId===(['assisted','delegated'].includes(row.shape.supportMode)?deployment.id:null),'CORE_SUPPORT_DEPLOYMENT_CHANGED')
+ }
+ if(command.kind==='StartRelayAudit')check(date==='2025-02-24'&&p.startAt==='2025-02-24'&&period&&p.periodId===period.id&&p.meterId===undefined&&!accepted.some(c=>c.kind==='StartRelayAudit'),'CORE_ORIGINAL_PERIOD_AUDIT_SCOPE_OR_DATE_CHANGED')
+ if(command.kind==='CorrectRelayPeriod')check(date==='2025-02-27'&&period&&p.periodId===period.id&&!accepted.some(c=>c.kind==='CorrectRelayPeriod'),'CORE_ORIGINAL_APPEND_CORRECTION_OR_DATE_CHANGED')
+ if(command.kind==='CollectRelayDue')check(date==='2025-03-14'&&customer&&p.customerId===customer.id&&customer.dueReceivableFen>0,'CORE_COLLECTION_WITHOUT_ORIGINAL_DUE_TARGET')
+ if(['StartRelayServicePeriod','StartRelayAudit'].includes(command.kind))equal(p.resources,['player-production'],'CORE_PLAYER_RESOURCE_CHANGED')
+}
+
+export interface RelayShapeViolationChain{
+ readonly businessId:string;readonly deploymentId:string;readonly incidentId:string;readonly investigationJobId:string
+ readonly investigationCommandId:string;readonly confirmCommandId:string;readonly stopCommandId:string;readonly declareCommandId:string
+}
+
+/** A final stopped state can come from the deadline; require the player's actual source commands. */
+export function relayShapeExplicitViolationChain(attempts:readonly RelayShapeAttempt[],story:ReturnType<typeof projectStory>,businessId:string,deploymentId:string):RelayShapeViolationChain|null{
+ const payload=(a:RelayShapeAttempt)=>a.command.payload!==null&&typeof a.command.payload==='object'&&!Array.isArray(a.command.payload)?a.command.payload as Record<string,unknown>:null
+ const accepted=(a:RelayShapeAttempt)=>a.status==='accepted'&&a.proposedCandidate!==null&&a.proposedCandidate.bytes>0&&a.proposedCandidate.sha256===a.after.sha256
+  &&a.command.expectedRevision===a.before.revision&&a.after.revision===a.before.revision+1&&a.after.date===a.before.date
+ const ordered=(a:RelayShapeAttempt,b:RelayShapeAttempt)=>a.sequence<b.sequence&&a.after.revision<=b.before.revision&&a.command.runId===b.command.runId&&a.command.actorId===b.command.actorId
+ const deployment=story.deployments.find(d=>d.id===deploymentId&&d.businessId===businessId)
+ if(!deployment||deployment.stoppedAt===null)return null
+ for(const incident of story.incidents){
+  const job=incident.jobs.investigate,liabilities=incident.liabilities
+  if(incident.kind!=='agent'||incident.verdict!=='violation'||!incident.businessIds.includes(businessId)||!incident.deploymentIds.includes(deploymentId)
+   ||!job||job.status!=='completed'||job.result!=='violation'||job.kind!=='investigate'||job.businessId!==businessId||job.accountId!==deployment.accountId
+   ||job.resourceId!=='player-production'||job.costFen!==10000||job.actionPoints!==1||!liabilities
+   ||!incident.evidence.some(e=>e.kind==='boundary_trace'&&e.jobId===job.id&&e.incidentId===incident.id&&e.deploymentId===deploymentId&&e.date===job.completeAt))continue
+  const investigation=attempts.find(a=>accepted(a)&&a.command.kind==='StartRiskTask'&&payload(a)?.incidentId===incident.id&&payload(a)?.kind==='investigate'
+   &&payload(a)?.accountId===deployment.accountId&&payload(a)?.resourceId==='player-production'&&a.before.date===job.startAt&&job.id===storyId('job','investigate',a.command.commandId,incident.id))
+  if(!investigation)continue
+  for(const declaration of attempts){
+   const p=payload(declaration)
+   if(!accepted(declaration)||declaration.command.kind!=='DeclareRiskLiabilities'||p?.incidentId!==incident.id||p.snapshot===undefined
+    ||liabilities.sourceCommandId!==declaration.command.commandId||liabilities.date!==declaration.before.date
+    ||canonicalJson(p.snapshot)!==canonicalJson({contractIds:liabilities.contractIds,obligationIds:liabilities.obligationIds,jobIds:liabilities.jobIds}))continue
+   const stop=attempts.find(a=>accepted(a)&&a.command.kind==='StopHengxingAuthority'&&payload(a)?.deploymentId===deploymentId&&ordered(a,declaration)
+    &&a.before.date===deployment.stoppedAt&&a.before.date===declaration.before.date
+    &&incident.selfReports.some(r=>r.deploymentId===deploymentId&&r.request==='stop_owned'&&r.reportedState==='stopped'&&r.sourceEventId===a.command.commandId&&r.date===a.before.date))
+   if(!stop)continue
+   const confirmation=attempts.find(a=>accepted(a)&&a.command.kind==='ConfirmRiskAssessment'&&payload(a)?.incidentId===incident.id&&ordered(investigation,a)&&ordered(a,stop)
+    &&a.before.date>=job.completeAt&&a.before.date===stop.before.date)
+   if(confirmation)return {businessId,deploymentId,incidentId:incident.id,investigationJobId:job.id,investigationCommandId:investigation.command.commandId,
+    confirmCommandId:confirmation.command.commandId,stopCommandId:stop.command.commandId,declareCommandId:declaration.command.commandId}
+  }
+ }
+ return null
+}
+
+function finiteProof(record:RelayShapeRecord,original:GameRun,run:GameRun){
+ const policy=object(record.policyDetail,'FINITE_POLICY_DETAIL_REQUIRED'),code=policy.code
+ check(typeof code==='string','FINITE_POLICY_CODE_REQUIRED')
+ const detail=object(policy.detail,'FINITE_ORIGINAL_DETAIL_REQUIRED'),relay=projectRelay(run,campaignRelay),old=projectRelay(original,campaignRelay),story=projectStory(run,campaignStory)
+ check(relay&&old,'FINITE_PUBLIC_RELAY_REQUIRED')
+ const oldCustomers=new Set(old.customers.map(c=>c.id)),oldPeriods=new Set(old.periods.map(p=>p.id))
+ const customer=relay.customers.find(c=>!oldCustomers.has(c.id)),period=relay.periods.find(p=>!oldPeriods.has(p.id)),last=record.attempts.at(-1),date=run.timeline.cursor.date
+ let verified=false,violationChain:RelayShapeViolationChain|null=null
+ if(code==='actual_public_command_precondition_refused')verified=last?.status==='rejected'&&last.reasonCodes.length>0&&last.reasonCodes.every(r=>finiteReasons.has(r))
+ if(code==='actual_independent_violation_finite_stop'){
+  const business=old.businesses.find(b=>b.definitionId==='relay-station'),deployment=story.deployments.find(d=>d.businessId===business?.id)
+  if(record.shape.supportMode==='delegated'&&!customer&&business&&deployment)violationChain=relayShapeExplicitViolationChain(record.attempts,story,business.id,deployment.id)
+  verified=violationChain!==null
+ }
+ if(code==='actual_public_risk_not_cleared'||code==='actual_public_risk_no_fixed_investigation_window')verified=record.shape.supportMode==='delegated'&&!customer&&story.incidents.some(i=>i.resolvedAt===null&&i.signals.some(s=>s.source!=='system_report')&&i.stage!=='normal')&&date>='2025-01-08'&&date<='2025-01-11'
+ if(code==='actual_no_unused_public_relay_customer')verified=relay.audiences.some(a=>a.mode==='paid'&&a.segment==='local_merchants'&&a.members.every(id=>relay.customers.some(c=>c.personId===id)))
+ if(code==='actual_no_full_read_supplier_permission_window')verified=!relay.applications.some(a=>a.supplierId===record.shape.supplierId&&a.read&&a.approved===true&&a.decisionAt<='2025-01-12'&&a.expiresAt!==null&&a.expiresAt>='2025-02-09')
+ if(code==='actual_relay_service_not_completed')verified=!!period&&date>='2025-02-09'&&['interrupted','cancelled'].includes(period.job?.status??'')
+ if(code==='actual_relay_support_not_completed')verified=!!period&&period.supportJob!==null&&period.supportJob!==undefined&&date>=period.supportJob.completeAt&&['interrupted','cancelled'].includes(period.supportJob.status)
+ if(code==='actual_no_supplied_meters_to_audit')verified=!!period&&date==='2025-02-24'&&relay.meters.some(m=>m.periodId===period.id)&&relay.meters.filter(m=>m.periodId===period.id).every(m=>m.supplierId===null)
+ if(code==='actual_relay_audit_not_completed')verified=!!period&&date==='2025-02-27'&&relay.audits.some(a=>relay.meters.some(m=>m.periodId===period.id&&m.id===a.meterId)&&relay.auditJobs.some(j=>j.jobId===a.jobId&&['interrupted','cancelled'].includes(j.job?.status??'')))
+ if(code==='actual_target_relay_due_receivable_remains')verified=!!customer&&date==='2025-03-14'&&relay.receivables.some(r=>r.customerId===customer.id&&r.dueAt<=date&&r.amountFen>r.collectedFen+r.reversedFen)
+ if(code==='actual_relay_due_or_protection_shortfall_remains'){
+  const finance=projectWorkbench(run,campaignRuntime,campaignOperations.catalog,campaignMarket.catalog).finance.find(f=>f.accountId===old.businesses.find(b=>b.definitionId==='relay-station')?.accountId)
+  verified=date==='2025-03-14'&&!!finance&&(finance.protectionShortfallFen>0||finance.commitmentShortfallFen>0||finance.obligations.some(o=>o.date<=date&&o.remainingFen>0))
+ }
+ return {code,verified,originalPolicyDetail:record.policyDetail,actualDate:date,detailKeys:Object.keys(detail),...(code==='actual_independent_violation_finite_stop'?{violationChain}: {})}
+}
+
+function verifyJournal(record:RelayShapeRecord,text:string){
+ const lines=text.split('\n');check(lines.pop()===''&&lines.every(line=>line.length>0),'COMPLETE_CASE_REQUEST_JOURNAL_REQUIRED')
+ const rows=lines.map(line=>JSON.parse(line) as unknown);let cursor=0
+ for(const attempt of record.attempts){
+  const start={...attempt,status:'attempted',after:attempt.before,reasonCodes:[],error:null,proposedCandidate:null,preview:null,money:{before:null,after:null}}
+  equal(rows[cursor++],{type:'attempted',...start},'ORIGINAL_CASE_ATTEMPT_WRITE_AHEAD_CHANGED')
+  if(attempt.preview)equal(rows[cursor++],{type:'previewed',sequence:attempt.sequence,command:attempt.command,preview:attempt.preview},'ORIGINAL_CASE_PREVIEW_JOURNAL_CHANGED')
+  if(attempt.status==='accepted'||attempt.status==='rejected')equal(rows[cursor++],{type:'result',...attempt,error:attempt.status==='rejected'?null:attempt.error},'ORIGINAL_CASE_RESULT_JOURNAL_CHANGED')
+  else if(attempt.status==='exception'||attempt.status==='committed_with_exception')equal(rows[cursor++],{type:'exception',...attempt},'ORIGINAL_CASE_EXCEPTION_JOURNAL_CHANGED')
+  else throw Error('UNFINISHED_CORE_ATTEMPT_CANNOT_BE_VERIFIED')
+ }
+ check(cursor===rows.length,'EXTRA_OR_MISSING_CORE_JOURNAL_EVENT')
+ return {events:rows.length,attempts:record.attempts.length,allOriginalEventsEqual:true}
+}
+
+/** Independent execution of original suffix envelopes, never a scenario/builder call. */
+export function replayRelayShapeCase(row:RelayCoreCase,sourceRaw:string,index:RelayShapeCaseIndex,members:ReadonlyMap<string,string>,journalText:string){
+ const record=index.record,codec=createCampaignCodec(),original=codec.import(sourceRaw)
+ equal(record.identity,row.identity,'CORE_RECORD_IDENTITY_CHANGED');equal(record.shape,row.shape,'CORE_RECORD_SHAPE_CHANGED')
+ check(record.caseId===row.id&&memberRaw(members,record.source)===sourceRaw,'CORE_SOURCE_NOT_THE_NEWLY_REPLAYED_NORMAL_PREFIX')
+ check(codec.export(original)===sourceRaw,'CORE_SOURCE_CANONICAL_BYTES_REQUIRED')
+ const journal=verifyJournal(record,journalText)
+ let state=strict(codec.import(sourceRaw),codec),accepted=0,rejected=0,candidates=0,previews=0
+ const acceptedCommands:CommandEnvelope[]=[],seenMilestones=new Set<number>(),attemptRows:unknown[]=[]
+ const inspect=()=>record.milestones.forEach((m,n)=>{
+  if(m.revision!==state.run.revision)return
+  check(m.date===state.run.timeline.cursor.date&&memberRaw(members,m.raw)===state.raw,'CORE_FULL_MILESTONE_BYTES_CHANGED:'+m.name)
+  equal(assertRelayShapeMoney(original,state.run,row.shape),m.money,'CORE_MILESTONE_ACCOUNTING_CHANGED:'+m.name);seenMilestones.add(n)
+ })
+ inspect()
+ for(const [n,attempt]of record.attempts.entries()){
+  check(attempt.sequence===n+1&&!attempt.expectedRejection,'ORIGINAL_CORE_ATTEMPT_SEQUENCE_CHANGED')
+  equal(attempt.before,fingerprint(state.run,state.raw),'CORE_ATTEMPT_BEFORE_CHANGED')
+  fixedRequest(row,original,state.run,attempt.command,acceptedCommands)
+  const before=state.run,beforeRaw=state.raw,moneyBefore=assertRelayShapeMoney(original,before,row.shape)
+  equal(attempt.money.before,moneyBefore,'CORE_ATTEMPT_BEFORE_MONEY_CHANGED')
+  check((attempt.command.kind==='StartRelayServicePeriod')===(attempt.preview!==null),'EXACT_ORIGINAL_SERVICE_PREVIEW_REQUIRED')
+  if(attempt.preview){
+   check(attempt.preview.beforeSha256===sha(beforeRaw)&&attempt.preview.afterSha256===sha(beforeRaw),'CORE_PREVIEW_CHANGED_ORIGINAL_STATE')
+   equal(previewCommand(before,attempt.command,codec.registry,before.actorId),attempt.preview.value,'CORE_ORIGINAL_PREVIEW_CHANGED')
+   check(codec.export(before)===beforeRaw,'CORE_PREVIEW_MUTATED_SOURCE');previews++
+  }
+  const result=evaluateCommand(before,attempt.command,codec.registry,before.actorId)
+  check(codec.export(before)===beforeRaw,'CORE_EVALUATION_MUTATED_OLD_STATE')
+  if(result.status==='proposed'){
+   const candidateRaw=codec.export(result.nextRun)
+   check(attempt.proposedCandidate&&memberRaw(members,attempt.proposedCandidate)===candidateRaw,'CORE_FULL_GENERATED_CANDIDATE_BYTES_CHANGED');candidates++
+   if(attempt.status==='accepted'||attempt.status==='committed_with_exception'){
+    const decoded=codec.import(candidateRaw)
+    check(codec.export(decoded)===candidateRaw,'RELAY_SHAPE_STRICT_RAW_ROUNDTRIP_CHANGED')
+    state={run:decoded,raw:candidateRaw};accepted++;acceptedCommands.push(attempt.command)
+   }else check(attempt.status==='exception'&&record.status==='fatal','CORE_PROPOSED_ATTEMPT_CLASSIFICATION_CHANGED')
+  }else{
+   check(result.status==='rejected'&&attempt.status==='rejected'&&attempt.proposedCandidate===null,'CORE_ACTUAL_REJECTION_NOT_REPRODUCED')
+   equal(result.reasonCodes,attempt.reasonCodes,'CORE_EXACT_REJECTION_REASON_CHANGED');rejected++
+  }
+  equal(attempt.after,fingerprint(state.run,state.raw),'CORE_ATTEMPT_AFTER_CHANGED')
+  if(attempt.status==='accepted'||attempt.status==='rejected')equal(assertRelayShapeMoney(original,state.run,row.shape),attempt.money.after,'CORE_ATTEMPT_AFTER_MONEY_CHANGED')
+  inspect();attemptRows.push({sequence:attempt.sequence,commandId:attempt.command.commandId,kind:attempt.command.kind,status:attempt.status,revision:state.run.revision,date:state.run.timeline.cursor.date,sha256:sha(state.raw),reasonCodes:attempt.reasonCodes})
+ }
+ check(seenMilestones.size===record.milestones.length,'UNREACHED_CORE_MILESTONE')
+ check(memberRaw(members,record.terminal)===state.raw,'CORE_FULL_TERMINAL_BYTES_CHANGED')
+ const originalCommands=commandsOf(original),fullCommands=commandsOf(state.run),normalized=acceptedCommands.map(c=>({...c,payload:codec.registry.normalize(c.kind,c.payload)}))
+ equal(fullCommands.slice(0,originalCommands.length),originalCommands,'CORE_REWROTE_ORIGINAL_NORMAL_PREFIX_RECEIPTS')
+ equal(fullCommands.slice(originalCommands.length),normalized,'CORE_ACCEPTED_SUFFIX_NOT_EXPLAINED_BY_ORIGINAL_REQUESTS');equal(normalized,record.suffixCommands,'CORE_RECORDED_NORMALIZED_SUFFIX_CHANGED')
+ equal(publicViews(state.run),{publicRelay:record.publicRelay,publicStory:record.publicStory,publicWorkbench:record.publicWorkbench},'CORE_PUBLIC_FINAL_VIEWS_CHANGED')
+ const assessment=assessRelayShape(original,state.run,row.shape)
+ equal(assessment,record.assessment,'CORE_INDEPENDENT_CHECKPOINT_OR_ACCOUNTING_CHANGED')
+ equal(assessment.checkpoints.map(c=>c.name),RELAY_CORE_CHECKPOINTS,'ALL_TEN_ORIGINAL_CORE_CHECKPOINTS_REQUIRED')
+ check(codec.export(original)===sourceRaw,'CORE_BRANCH_MUTATED_SHARED_NORMAL_PREFIX')
+ const limited=record.status==='policy_refused'?finiteProof(record,original,state.run):null
+ const positive=record.status==='completed'&&assessment.positive&&assessment.checkpoints.every(c=>c.status==='passed')&&state.run.timeline.cursor.date==='2025-03-14'
+ const classification=positive?'verified_positive':record.status==='policy_refused'&&limited?.verified?'verified_limited':'invalid_or_unproven'
+ return {caseId:row.id,identity:row.identity,shape:row.shape,sourceStatus:record.status,classification,positive,accepted,rejected,candidates,previews,milestones:seenMilestones.size,
+  journal,attempts:attemptRows,source:record.source,terminal:record.terminal,fullOriginalBytesEqual:true,assessment,limited}
+}
+
+export function verifyRelayShapeEvidence(){
+ const argument=process.env.RELAY_SHAPE_INPUT_DIRECTORY
+ check(argument&&process.argv.length===4&&process.argv[2]==='--output-dir','EXPLICIT_RELAY_SHAPE_INPUT_OUTPUT_REQUIRED')
+ const input=resolve(ROOT,argument),inputName=relative(ROOT,input).split(sep).join('/')
+ check(new RegExp('^'+TASK+'/matrix-r[1-9][0-9]*$').test(inputName),'FIXED_ROOT18_MATRIX_INPUT_REQUIRED')
+ const observations=new Map<string,{bytes:number;sha256:string;identity:string}>()
+ const safeName=(name:string)=>{check(typeof name==='string'&&name.length>0&&!isAbsolute(name)&&!/[\\\0\r\n]/.test(name)&&name.split('/').every(p=>p!==''&&p!=='.'&&p!=='..'),'CANONICAL_RELAY_INPUT_PATH_REQUIRED');return name}
+ function observe(path:string){
+  check(path.startsWith(ROOT+sep),'RELAY_AUDIT_PROJECT_INPUT_REQUIRED')
+  for(let p=dirname(path);;p=dirname(p)){const s=lstatSync(p);check(s.isDirectory()&&!s.isSymbolicLink(),'RELAY_AUDIT_INPUT_PARENT_LINK');if(dirname(p)===p)break}
+  const id=(s:Stats)=>canonicalJson([s.dev,s.ino,s.mode,s.size,s.mtimeMs,s.ctimeMs]),before=lstatSync(path)
+  check(before.isFile()&&!before.isSymbolicLink(),'RELAY_AUDIT_REGULAR_NOFOLLOW_INPUT_REQUIRED')
+  const identity=id(before),previous=observations.get(path);check(!previous||previous.identity===identity,'RELAY_AUDIT_PHYSICAL_INPUT_CHANGED')
+  const fd=openSync(path,constants.O_RDONLY|constants.O_NOFOLLOW|constants.O_NONBLOCK);let bytes:Buffer
+  try{check(id(fstatSync(fd))===identity,'RELAY_AUDIT_INPUT_CHANGED_BEFORE_READ');bytes=readFileSync(fd);check(id(fstatSync(fd))===identity,'RELAY_AUDIT_INPUT_CHANGED_DURING_READ')}finally{closeSync(fd)}
+  check(id(lstatSync(path))===identity,'RELAY_AUDIT_PATH_CHANGED_AFTER_READ');const row={bytes:bytes.length,sha256:sha(bytes),identity}
+  if(previous)equal(row,previous,'RELAY_AUDIT_FROZEN_INPUT_BYTES_CHANGED');else observations.set(path,row)
+  return bytes
+ }
+ const readInput=(name:string)=>observe(join(input,safeName(name)))
+ function originalFile(ref:FileRef){check(ref&&typeof ref.bytes==='number'&&Number.isSafeInteger(ref.bytes)&&ref.bytes>=0&&/^[0-9a-f]{64}$/.test(ref.sha256),'ORIGINAL_RELAY_FILE_REFERENCE_REQUIRED');const raw=readInput(ref.file);check(raw.length===ref.bytes&&sha(raw)===ref.sha256,'ORIGINAL_RELAY_FILE_BYTES_CHANGED:'+ref.file);return raw.toString('utf8')}
+ function inputFiles(directory:string):string[]{return readdirSync(directory,{withFileTypes:true}).flatMap(e=>{check(!e.isSymbolicLink(),'RELAY_INPUT_TREE_LINK_REFUSED');const path=join(directory,e.name);return e.isDirectory()?inputFiles(path):[relative(input,path).split(sep).join('/')] }).sort()}
+ const writer=new RelayShapeEvidenceWriter('audit','relay-shape-audit.json'),authority=loadRelayShapeAuthority()
+ writer.requireSpace();writer.mkdir('prefixes');writer.mkdir('cases');writer.text('progress.jsonl','')
+ const progress=(value:unknown)=>{writer.append('progress.jsonl',value);console.log(JSON.stringify(value))}
+ const errors:string[]=[],rows:unknown[]=[],prefixes:unknown[]=[]
+ const prefixRaw=new Map<string,string>(),initialInputNames=inputFiles(input)
+ let summary:RelayShapeSummary|null=null,collectorPassed:unknown=null,collectorFinalGuardError:unknown=null
+ try{
+  for(const name of initialInputNames)readInput(name)
+  const registration=object(JSON.parse(readInput('registration.json').toString('utf8')),'ORIGINAL_CORE_REGISTRATION_REQUIRED')
+  equal(registration.cases,authority.cases,'ORIGINAL_288_CORE_REGISTRATION_CHANGED');equal(registration.identities,authority.identities,'ORIGINAL_SIX_IDENTITIES_CHANGED')
+  equal(registration.originalCases,authority.originalCases,'ORIGINAL_CORE_METADATA_OR_CHECKPOINTS_CHANGED')
+  equal(registration.requiredCheckpoints,RELAY_CORE_CHECKPOINTS,'ORIGINAL_CORE_CHECKPOINT_REGISTRATION_CHANGED')
+  check(registration.policyFile===POLICY_FILE,'ORIGINAL_CORE_POLICY_FILE_CHANGED')
+  check(registration.policyText===readFileSync(join(ROOT,POLICY_FILE),'utf8'),'ORIGINAL_CORE_POLICY_TEXT_CHANGED')
+  const originalSummary=object(JSON.parse(readInput('relay-shape-results.json').toString('utf8')),'ORIGINAL_COLLECTOR_TERMINAL_SUMMARY_REQUIRED')
+  collectorPassed=originalSummary.passed;collectorFinalGuardError=originalSummary.finalGuardError
+  check(collectorPassed===true&&collectorFinalGuardError===null,'ORIGINAL_COLLECTOR_FINAL_SOURCE_GUARD_OR_COMPLETION_NOT_VERIFIED')
+  summary=originalSummary as unknown as RelayShapeSummary
+  check(summary.registered===288&&summary.recorded===288&&Array.isArray(summary.results)&&summary.results.length===288,'COMPLETE_ORIGINAL_288_ROWS_REQUIRED')
+  check(Array.isArray(summary.prefixProofs)&&summary.prefixProofs.length===6,'ALL_SIX_ACTUAL_COLLECTOR_PREFIX_PROOFS_REQUIRED')
+  equal(summary.sourceHashes,registration.sourceHashes,'CORE_COLLECTOR_SOURCE_FREEZES_DISAGREE');equal(summary.inputHashes,registration.inputHashes,'CORE_COLLECTOR_INPUT_FREEZES_DISAGREE')
+  equal(summary.sourceHashes,authority.sourceHashes,'CORE_CURRENT_EXECUTION_SOURCE_BINDING_CHANGED');equal(summary.inputHashes,authority.inputHashes,'CORE_ORIGINAL_INPUT_BINDING_CHANGED')
+  guardHashes(summary.sourceHashes);guardHashes(summary.inputHashes)
+  for(const identity of authority.identities){
+   const folder='prefixes/'+identity.name;writer.mkdir(folder);writer.text(folder+'/requests.jsonl','')
+   const prefix=replayRelayShapePrefix(authority,identity,value=>{writer.append(folder+'/requests.jsonl',value);progress(value)})
+   putMember(prefix.members,'requests.jsonl',readFileSync(writer.path(folder+'/requests.jsonl'),'utf8'))
+   const archives=archiveMembers(writer,folder+'/prefix-evidence.xz',prefix.members)
+   const own=writer.json(folder+'/prefix-proof.json',{identity,record:prefix.record,archives});prefixes.push({identity,status:prefix.status,proof:own})
+   check(prefix.status==='verified'&&prefix.raw!==null&&prefix.run!==null,'INDEPENDENT_CORE_NORMAL_PREFIX_NOT_VERIFIED:'+identity.name)
+   prefixRaw.set(identity.name,prefix.raw)
+   const sourceProofs=summary.prefixProofs.map(p=>object(p,'COLLECTOR_PREFIX_PROOF_REQUIRED')).filter(p=>object(p.identity,'COLLECTOR_PREFIX_IDENTITY_REQUIRED').name===identity.name)
+   check(sourceProofs.length===1&&sourceProofs[0]!.status==='verified','ONE_ACTUAL_COLLECTOR_PREFIX_PER_IDENTITY_REQUIRED')
+   const ref=sourceProofs[0]!.index as FileRef,record=object(JSON.parse(originalFile(ref)),'COLLECTOR_PREFIX_INDEX_REQUIRED')
+   equal(record.identity,identity,'COLLECTOR_PREFIX_IDENTITY_CHANGED');equal(record.record,prefix.record,'COLLECTOR_AND_INDEPENDENT_FULL_PREFIX_PROOFS_DISAGREE')
+   const prefixJournal=record.journal as FileRef
+   check(prefixJournal.file===folder+'/requests.jsonl','COLLECTOR_PREFIX_JOURNAL_SCOPE_CHANGED')
+   check(originalFile(prefixJournal)===readFileSync(writer.path(folder+'/requests.jsonl'),'utf8'),'ALL_COLLECTOR_PREFIX_WRITE_AHEAD_EVENTS_CHANGED')
+   check(Array.isArray(record.archives)&&record.archives.length>0,'COLLECTOR_FULL_PREFIX_ARCHIVES_REQUIRED')
+   const originalMembers=new Map<string,string>()
+   for(const [n,archive]of (record.archives as RelayShapeArchive[]).entries()){
+    check(archive.file==='prefix-evidence-part-'+String(n+1).padStart(3,'0')+'.xz','ORDERED_COLLECTOR_PREFIX_PART_REQUIRED')
+    const name=dirname(ref.file)+'/'+archive.file;readInput(name)
+    for(const [member,raw]of unpackArchive(inputName+'/'+name,archive)){check(!originalMembers.has(member),'DUPLICATE_PREFIX_MEMBER');originalMembers.set(member,raw)}
+   }
+   equal([...originalMembers],[...prefix.members],'ALL_COLLECTOR_PREFIX_MEMBERS_CHANGED')
+   progress({type:'independent-prefix-complete',identity:identity.name,accepted:prefix.record.acceptedCommands.length,milestones:prefix.record.matchedOriginalMilestones.length})
+  }
+  for(const [n,row]of authority.cases.entries()){
+   try{
+    writer.requireSpace();const registered=summary.results[n]!
+    check(registered.caseId===row.id&&registered.identity===row.identity.name&&registered.shapeId===row.shape.id,'CORE_SUMMARY_ORDER_IDENTITY_OR_TUPLE_CHANGED')
+    check(registered.index,'CORE_CASE_NOT_EXECUTED_OR_MISSING:'+registered.status)
+    const index=JSON.parse(originalFile(registered.index)) as RelayShapeCaseIndex
+    check(index.caseId===row.id&&index.record.caseId===row.id&&index.record.status===registered.status,'CORE_INDEX_STATUS_OR_ID_CHANGED')
+    equal(index.identity,row.identity,'CORE_INDEX_IDENTITY_CHANGED');equal(index.shape,row.shape,'CORE_INDEX_SHAPE_CHANGED')
+    check(Array.isArray(index.archives)&&index.archives.length>0,'FULL_CORE_ARCHIVE_SET_REQUIRED')
+    const members=new Map<string,string>()
+    for(const [part,archive]of index.archives.entries()){
+     check(archive.file==='case-evidence-part-'+String(part+1).padStart(3,'0')+'.xz'&&basename(archive.file)===archive.file,'ORDERED_FULL_CORE_ARCHIVE_PART_REQUIRED')
+     const name=dirname(registered.index.file)+'/'+archive.file;readInput(name)
+     for(const [member,raw]of unpackArchive(inputName+'/'+name,archive)){check(!members.has(member),'DUPLICATE_CORE_MEMBER_ACROSS_ARCHIVES');members.set(member,raw)}
+    }
+    check(members.get('case-record.json')===JSON.stringify(index.record,null,2)+'\n','ORIGINAL_ARCHIVED_CASE_RECORD_CHANGED')
+    const journalText=originalFile(index.journal);check(members.get('requests.jsonl')===journalText,'ARCHIVED_AND_PHYSICAL_CORE_JOURNAL_CHANGED')
+    const source=prefixRaw.get(row.identity.name);check(source,'NEWLY_REPLAYED_ORIGINAL_PREFIX_REQUIRED')
+    const proof=replayRelayShapeCase(row,source,index,members,journalText)
+    check(registered.positive===proof.positive,'CORE_POSITIVE_COVERAGE_FLAG_CHANGED')
+    if(proof.classification==='invalid_or_unproven')errors.push(row.id+':STATUS_OR_POSITIVE_OR_FINITE_RESULT_UNPROVEN')
+    const saved=writer.json('cases/'+row.id+'.json',proof);rows.push({...proof,proof:saved})
+    progress({type:'independent-case-result',caseId:row.id,classification:proof.classification,positive:proof.positive,accepted:proof.accepted,rejected:proof.rejected,fullRawMembers:members.size})
+   }catch(caught){const error=String(caught);errors.push(row.id+':'+error);const proof={caseId:row.id,identity:row.identity,shape:row.shape,classification:'invalid_or_unproven',positive:false,error};writer.json('cases/'+row.id+'-invalid.json',proof);rows.push(proof);progress({type:'independent-case-result',...proof})}
+  }
+  const count=(status:string)=>summary!.results.filter(r=>r.status===status).length
+  check(summary.closed===count('completed')&&summary.finite===count('policy_refused')&&summary.fatal===count('fatal')&&summary.notExecuted===count('not_executed')&&summary.executed===288-count('not_executed')&&summary.positive===summary.results.filter(r=>r.positive).length,'ORIGINAL_CORE_SUMMARY_COUNTS_CHANGED')
+ }catch(caught){errors.push(String(caught))}
+ try{
+  equal(inputFiles(input),initialInputNames,'COMPLETE_CORE_INPUT_SET_CHANGED_DURING_AUDIT')
+  for(const name of [...observations.keys()])observe(name)
+  guardHashes(authority.sourceHashes);guardHashes(authority.inputHashes)
+ }catch(caught){errors.push(String(caught))}
+ const objects=rows.map(row=>object(row,'AUDIT_CORE_RESULT_OBJECT_REQUIRED')),positive=objects.filter(r=>r.classification==='verified_positive').length,limited=objects.filter(r=>r.classification==='verified_limited').length
+ const byShape=authority.cases.slice(0,48).map(c=>({shape:c.shape,registered:authority.cases.filter(r=>r.shape.id===c.shape.id).length,positive:objects.filter(r=>object(r.shape,'AUDIT_SHAPE_REQUIRED').id===c.shape.id&&r.classification==='verified_positive').length,limited:objects.filter(r=>object(r.shape,'AUDIT_SHAPE_REQUIRED').id===c.shape.id&&r.classification==='verified_limited').length}))
+ const report={scope:'Original 288 fixed relay core IDs, independent six Create histories and exact recorded suffixes. Finite outcomes remain nonpositive. Not 62 key/22 routine, Chrome, compatibility, human or whole T17/goal acceptance.',
+  inputDirectory:inputName,registered:288,audited:rows.length,positive,verifiedLimited:limited,invalidOrUnproven:288-positive-limited,allRowsIndependentlyVerified:errors.length===0&&rows.length===288&&positive+limited===288,
+  all288Positive:errors.length===0&&positive===288,positiveShapes:byShape.filter(s=>s.positive>0).length,missingPositiveShapes:byShape.filter(s=>s.positive===0),byShape,errors,prefixes,rows,
+  sourceHashes:authority.sourceHashes,inputHashes:authority.inputHashes,allObservedInputBytes:Object.fromEntries([...observations].map(([path,{bytes,sha256}])=>[relative(ROOT,path).split(sep).join('/'),{bytes,sha256}])),
+  collectorPassed,collectorFinalGuardError,sourceAndInputPhysicalIdentityChecked:true,scenarioOrBuilderCalled:false,compatibilityDevelopmentTests:0,complete5cOrGoal:false}
+ writer.json('relay-shape-audit.json',report);progress({type:'complete',registered:288,audited:rows.length,positive,limited,allRowsIndependentlyVerified:report.allRowsIndependentlyVerified,errors})
+ return report.allRowsIndependentlyVerified?0:1
+}
+
+if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url))process.exitCode=verifyRelayShapeEvidence()

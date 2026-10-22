@@ -1,0 +1,46 @@
+import {expect,it} from 'vitest'
+import source from '../../goal-1/evidence/t17-acceptance-18/matrix-r9002/cases/RLY-C224/case-index.json?raw'
+import {relayShapeExplicitViolationChain} from './relay-shape-violation-proof.ts'
+
+// These are pure provenance checks of an existing sealed pilot record. No
+// CreateRun, evaluateCommand, suffix replay or new game history runs here.
+type ProofInput=Parameters<typeof relayShapeExplicitViolationChain>
+const record=(JSON.parse(source) as {record:{status:string;shape:{supportMode:string};attempts:ProofInput[0];publicStory:ProofInput[1]}}).record
+const story=record.publicStory,deployment=story.deployments[0]!,businessId=deployment.businessId
+const proof=(attempts=record.attempts,publicStory=story)=>relayShapeExplicitViolationChain(attempts,publicStory,businessId,deployment.id)
+
+it('recognizes the real C224 investigation, confirmation, explicit stop and liability declaration sources',()=>{
+ expect(record.status).toBe('policy_refused');expect(record.shape.supportMode).toBe('delegated')
+ expect(proof()).toEqual({businessId,deploymentId:deployment.id,incidentId:story.incidents[0]!.id,
+  investigationJobId:story.incidents[0]!.jobs.investigate!.id,investigationCommandId:'relay-core-RLY-C224-112',
+  confirmCommandId:'relay-core-RLY-C224-114',stopCommandId:'relay-core-RLY-C224-115',declareCommandId:'relay-core-RLY-C224-116'})
+})
+
+it('does not replace the player stop with a final stopped state and a deadline stop report',()=>{
+ const attempts=record.attempts.filter(a=>a.command.kind!=='StopHengxingAuthority')
+ const automatic={...story,incidents:story.incidents.map(i=>({...i,selfReports:i.selfReports.map(r=>({...r,sourceEventId:'automatic-incident-deadline'}))}))}
+ expect(automatic.incidents.some(i=>i.verdict==='violation')).toBe(true)
+ expect(automatic.deployments[0]!.stoppedAt).not.toBeNull()
+ expect(attempts.some(a=>a.status==='accepted'&&a.command.kind==='DeclareRiskLiabilities')).toBe(true)
+ expect(proof(attempts,automatic)).toBeNull()
+})
+
+it('requires the accepted stop proposal rather than an invented accepted label',()=>{
+ expect(proof(record.attempts.map(a=>a.command.kind==='StopHengxingAuthority'?{...a,proposedCandidate:null}:a))).toBeNull()
+})
+
+it('requires the same incident confirmation before the stop',()=>{
+ expect(proof(record.attempts.map(a=>a.command.kind==='ConfirmRiskAssessment'?{...a,command:{...a.command,payload:{incidentId:'another-public-incident'}}}:a))).toBeNull()
+ const confirmation=record.attempts.find(a=>a.command.kind==='ConfirmRiskAssessment')!
+ expect(proof(record.attempts.map(a=>a.command.kind==='StopHengxingAuthority'?{...a,sequence:confirmation.sequence-1}:a))).toBeNull()
+})
+
+it('requires the explicit stop of the same deployment and its original report source',()=>{
+ expect(proof(record.attempts.map(a=>a.command.kind==='StopHengxingAuthority'?{...a,command:{...a.command,payload:{deploymentId:'another-deployment'}}}:a))).toBeNull()
+ expect(proof(record.attempts,{...story,incidents:story.incidents.map(i=>({...i,selfReports:i.selfReports.map(r=>({...r,sourceEventId:'another-stop-command'}))}))})).toBeNull()
+})
+
+it('requires the declaration source and its exact recorded liability snapshot',()=>{
+ expect(proof(record.attempts,{...story,incidents:story.incidents.map(i=>({...i,liabilities:i.liabilities?{...i.liabilities,sourceCommandId:'another-declaration'}:null}))})).toBeNull()
+ expect(proof(record.attempts.map(a=>a.command.kind==='DeclareRiskLiabilities'?{...a,command:{...a.command,payload:{incidentId:story.incidents[0]!.id,snapshot:{contractIds:[],obligationIds:[],jobIds:[]}}}}:a))).toBeNull()
+})

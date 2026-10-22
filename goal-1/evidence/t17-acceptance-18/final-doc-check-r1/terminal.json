@@ -1,0 +1,42 @@
+{
+  "scope": "Final documentation/plan checks only; not engine/browser/compatibility acceptance.",
+  "rows": [
+    {
+      "name": "docs",
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_docs.py",
+        "--text-only"
+      ],
+      "exitCode": 1,
+      "wallSeconds": 62.13117422600044
+    },
+    {
+      "name": "plan",
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_plan.py"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.13451125397114083
+    },
+    {
+      "name": "competitive",
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_competitive_design.py"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.11790977598866448
+    }
+  ]
+}

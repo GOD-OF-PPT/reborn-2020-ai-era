@@ -1,0 +1,50 @@
+{
+  "scope": "Owned filesystem and archive fixtures only; no game/Create/pilot/core execution or compatibility. Temporary links/fixture seal removed after refusal; original writer/sentinel restored.",
+  "passed": true,
+  "results": [
+    {
+      "name": "513-member-count-split-and-full-readback",
+      "passed": true,
+      "parts": 2,
+      "members": 513,
+      "allOriginalBytesEqual": true
+    },
+    {
+      "name": "changed-stored-archive-descriptor",
+      "expectedRefusal": "AUDIT_RELAY_SHAPE_ARCHIVE_BYTES_CHANGED",
+      "actual": "Error: AUDIT_RELAY_SHAPE_ARCHIVE_BYTES_CHANGED",
+      "passed": true
+    },
+    {
+      "name": "nonflat-member",
+      "expectedRefusal": "UNIQUE_FLAT_RELAY_SHAPE_MEMBER_REQUIRED",
+      "actual": "Error: UNIQUE_FLAT_RELAY_SHAPE_MEMBER_REQUIRED:../escape.json",
+      "passed": true
+    },
+    {
+      "name": "oversized-member-before-packing",
+      "expectedRefusal": "RELAY_SHAPE_MEMBER_LIMIT",
+      "actual": "Error: RELAY_SHAPE_MEMBER_LIMIT:oversized.json",
+      "passed": true
+    },
+    {
+      "name": "append-leaf-symlink",
+      "expectedRefusal": "OUTPUT_LINK_OR_NONREGULAR",
+      "actual": "Error: OUTPUT_LINK_OR_NONREGULAR",
+      "passed": true
+    },
+    {
+      "name": "sealed-ancestor-before-write",
+      "expectedRefusal": "EVIDENCE_PARENT_SEALED_USE_NEW_SIBLING",
+      "actual": "Error: EVIDENCE_PARENT_SEALED_USE_NEW_SIBLING",
+      "passed": true
+    }
+  ],
+  "driverSha256": "601686201b954250630ddbedc0ce004066c04b396b224071196645c3332d4945",
+  "notExercised": [
+    "256MiB container byte-split with a large actual payload",
+    "actual ENOSPC/EIO or system crash"
+  ],
+  "compatibilityDevelopmentTests": 0,
+  "gameExecutions": 0
+}

@@ -1,0 +1,32 @@
+{
+  "name": "cli",
+  "argv": [
+    "rtk",
+    "proxy",
+    "node",
+    "node_modules/typescript/bin/tsc",
+    "--ignoreConfig",
+    "--noEmit",
+    "--target",
+    "ES2023",
+    "--module",
+    "ESNext",
+    "--moduleResolution",
+    "bundler",
+    "--allowImportingTsExtensions",
+    "--strict",
+    "--noUncheckedIndexedAccess",
+    "--exactOptionalPropertyTypes",
+    "--noUnusedLocals",
+    "--noUnusedParameters",
+    "--skipLibCheck",
+    "--types",
+    "node",
+    "--lib",
+    "ES2023,DOM",
+    "scripts/collect_relay_shape_evidence.ts",
+    "scripts/verify_relay_shape_evidence.ts"
+  ],
+  "exitCode": 0,
+  "wallSeconds": 12.604663375008386
+}

@@ -1,0 +1,37 @@
+{
+  "scope": "Actual CLI0/project2 after provenance test imported Node audit tool into app TypeScript graph; no dependency/config/production change. Preserve originals before pure helper extraction.",
+  "sources": [
+    {
+      "file": "src/testing/relay-shape-violation-proof.test.ts",
+      "bytes": 3561,
+      "sha256": "b6987dc866517341891e9018d0cac80c3879134a54f17b4e1edd769cb3d20639",
+      "snapshot": "type-r4-source-snapshot/src/testing/relay-shape-violation-proof.test.ts.snapshot"
+    },
+    {
+      "file": "scripts/verify_relay_shape_evidence.ts",
+      "bytes": 37513,
+      "sha256": "7719248924e161a4179b7907c127de6d38e3ce51bd1eff700fd556f2d59f3f17",
+      "snapshot": "type-r4-source-snapshot/scripts/verify_relay_shape_evidence.ts.snapshot"
+    },
+    {
+      "file": "scripts/relay-shape-run.ts",
+      "bytes": 13326,
+      "sha256": "18816ff9fcf89f33c345fa15ac147f7e06f0918deab021e2f031a4836852d31d",
+      "snapshot": "type-r4-source-snapshot/scripts/relay-shape-run.ts.snapshot"
+    },
+    {
+      "file": "scripts/collect_relay_shape_evidence.ts",
+      "bytes": 8134,
+      "sha256": "af36bb784b64054ffc35273fef261d75471a671fcc80001e576106ab77178f27",
+      "snapshot": "type-r4-source-snapshot/scripts/collect_relay_shape_evidence.ts.snapshot"
+    },
+    {
+      "file": "scripts/relay-shape-evidence.ts",
+      "bytes": 19470,
+      "sha256": "7519daf15b6054a4cef68e2d32bdeb6104cc1120e8f9f4280c5eebfcca2b8f70",
+      "snapshot": "type-r4-source-snapshot/scripts/relay-shape-evidence.ts.snapshot"
+    }
+  ],
+  "minimalFix": "Keep semantic chain check in pure src/testing helper, test imports pure helper only; verifier imports/reexports helper, source freeze adds helper.",
+  "formalCoreBranchesAccepted": 0
+}

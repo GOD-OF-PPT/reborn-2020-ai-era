@@ -1,0 +1,16 @@
+# P2 原288核心固定政策 R1（正式执行前）
+
+注册来源root12/registration-r1.json C001—C288；六身份顺序技术0/1/2、内容0/1/2，原t16-campaign-0/1/2和P1runId不变。每身份48独立反事实分支，三供应目录顺序/两offer/两客户账期/四支持按原登记逐项核，C001—C288不删。case commandId固定relay-core-{caseId}-{当前revision}，Create/P1前史仍原receipt IDs；不更换命令ID试种子。
+
+1. 使用root17/prefix-r2和audit-r2，绑定P1实现4c0d6ac。采集与独立审核分别从六Create真实重放原619/219/末档，原六当前readiness，源/输入初末核。48个分支各从对应同一canonical P1末档严格导入；旧客户/保护/费用/人口/计量不删，跨分支不累计。仅依据公开projection、已读许可、已完成独立核查与原preview决策，不读profile/roll/未来fault/未审actualUnits。
+2. Jan1开始；仅delegated显式SetHengxingAuthority：同business/deployment、cross_flow、scopes relay_support+external_service_commitments、cashLimitFen500000、expiresAt2025Dec31、externalDelegation/consent true。Jan8真实authority_check前不安排长服务；原h.at默认ACK仅已读，非处置。若有公开signal/可investigate则本人/原企业账户真实StartRiskTask investigate（100元/1AP/3日），等待原job完成另Confirm。normal/ordinary按原仍有效grant继续，不再次Set触发新7日检查。violation则StopHengxingAuthority及按当时公开currentLiabilities DeclareRiskLiabilities后有限拒绝，不称外部已撤回；未有signal不编造调查。任何调查/权限/外部未解不转guided、不换部署/seed/雇人/免费恢复，留原有限结果。
+3. 可继续各项统一Jan11实际选择同企业paid/local_merchants audience第一个原顺序未签/未转换人口，区别P1客。选择已有原low_margin10分/managed_support6分（服务费0/50000分）offer，不改报价。新termEnd2025Mar31，prepaid信用0，postpaid显式2000000分信用。预付按签后公开原rechargeLimitFen全额充值：low800000分、managed530000分；先核其来源等于原60000单位×unitPrice×4/3+fee，不按故障/隐藏需求或失败结果改金额。额度/客户保护/未来应收都不是自有资金。
+4. 青桥仅原TopUpRelaySupplier400000分自有资金，保供应预付资产，不把1200000费用上限误作必充值；杉木/港湾原后付不充值。单选对应供应，无备供/替换。Start原服务周期resources[player-production]、startAtJan12、maxUnits300000/maxSupplierCostFen1200000，customerIds仅本项新客，supportMode原维度，assisted/delegated同原deployment，其余null。真实preview在真实客户与资金条件已建立后计算，前后canonical不变；原完整权限/日期/现金/两job与同Q1AP照原evaluate。服务至Feb9；guided支持Feb9—16、self至Feb23、assisted至Feb13、delegated至Feb11。
+5. 固定排程计原service1AP，加support guided/assisted/delegated1或self2，再一次audit1；self=4，delegated若调查=4。不续工作/营销/学习/许可/雇人或其他AP准备，不免费资源。h.at保每实际暂停/费用/义务/反馈，不能跳中间结算。若实际job未完成/现金/许可/预算/产能/风险受阻，有据有限留原状态；未知/策略顺序错是fatal，不加入finite掩盖。
+6. Feb24在本人空闲且原AP/自有资金真实足够时StartRelayAudit(periodId仅新period)，100元/1AP/3日，审的分母取当时已存在、supplierId非空且尚无有效audit的meter，原blocked/P1旧meter仍保留但不混审。Feb27等待实际audit完成才用公开auditedUnits，原CorrectRelayPeriod追加每个已有引用（包括零差），不改原reported数量/费率/版本。无实际可审记录保有据有限，不能编造28份审计或用预览当执行。
+7. Mar14最终推进并对新客户公开已到期未收款原CollectRelayDue；原供应7日到期结算保真实现金/供应贷项路径。Feb27更正的新客户应收最迟Mar13、供应应付Mar6；预付客户也可合法产生追加应收，青桥正更正也可生成7日应付，不误禁。核目标period的用量收入/支持费/审计/更正/实付/收款与剩余款，P1旧客户和全企业分别列。新旧客户剩余保护、供方资产、后续费用/义务不退款/Close清理。截止Mar31，不越年/倒退/借钱补款调参。
+8. 每项十原checkpoint按实际到达/独审/正向覆盖分列：baseline身份与公开前提、原offer合同、客户充值/信用、供应资产/信用及自有钱、原service/support排程、逐日meter/阻断/版本、原support费/未完成/赔付、实际付费audit、独立追加correction、原到期收付与旧责任。low真实用量和全链才正向，服务费0正确；managed只认本项period正费。任何正费不等盈利/现金或企业关闭；零更正不证明正负更正，两者缺命中仍交原P3。
+9. 完整记录每原attempt、exact拒绝、preview与旧态不变、异常proposal full raw（如生成过）、每已存accepted candidate/milestone/末raw、原费用/AP/日期及公开结果。规范raw不附LF；XZ仅无损压缩，原course-evidence-bundle-v1是格式名非课程证据。先完整长度/SHA framing再archive、逐member解包对原字节；超限拆有序包不删member。写前日志同步，恢复也失败则明确保全失败/停止余项，不许保证磁盘故障下不丢任何字节。
+10. 2GiB真实可用空间启动/每prefix/每case门槛（当前约197GiB，不清理/COW），不是总RSS/未来磁盘保证。有限继续固定余项；fatal原批保全并余项未执行，修复fresh全288重跑而非拼接成功。先small边界、严格CLI/项目、必要pilot单列，再冻结源/政策后正式全部288；独审完整六Create+每原suffix/fullraw，不调用builder/policy另生成替代前史。
+
+P2真实闭环/有限/正向覆盖分别报告，unproven不勾。全部原62关键/22例行/P5及其他T17/goal、旧PNG0/3/新A三案3/3/真人0、M01暂停须用户恢复、T18保留。所有兼容开发测试0；无新真实API/外部资源/推送/部署。本政策只能以新版本和失败原档公开有据修正，不能运行中偷改参数。
