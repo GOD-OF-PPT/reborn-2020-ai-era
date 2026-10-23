@@ -11,4 +11,4 @@
 
 浏览器动作/截图/AX写入前使用原browser_evidence_guard，所有本轮输出在新同级root26；旧封存不写。新分镜不是原缺三PNG，真人0，没有证明理解、可玩性、收益或六年整体验收；DOM道具的平面接触感留到正式原创资产接线。全部页面兼容开发/测试0。
 
-当前限定设计检查已齐，待选择性本地提交与实际Git读回。无push/deploy。原P3正式62=0/22例行、R1/R2/R3/C-S4-R、生态合同/架空权益、S5/T17/原PNG/真人/暂停M01/T18和完整goal均不关闭。
+本地设计提交为a350e4c7496c524d6b7bf3de0bfa4a5fe837cf0a，86任务路径逐blob字节/SHA/Git模式与父提交已实际核对；3master只含HEAD加自己的后缀，原P3工作树保留，index空。见feature-commit-readback.json；远端main实读仍9bf4399a5cf50997dbf522a578f1168c5532acbf，无push/deploy。本完成记录/封存随后独立本地提交，实际record SHA由Git交回，不预写自身哈希。原P3正式62=0/22例行、R1/R2/R3/C-S4-R、生态合同/架空权益、S5/T17/原PNG/真人/暂停M01/T18和完整goal均不关闭。
