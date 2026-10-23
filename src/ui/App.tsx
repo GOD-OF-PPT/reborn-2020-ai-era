@@ -1,12 +1,14 @@
 import {savedSceneResult} from './scene-result.ts'
 import {journeyIntent} from './journey-intent.ts'
 import {rememberViewedLife} from './continuation.ts'
-import {openingFocusAfterSave,playerThread,type OpeningFocus} from './player-thread.ts'
+import {playerThread,type OpeningFocus} from './player-thread.ts'
+import {seasonFocusAfterSave} from './season-thread.ts'
+import {loadSeasonFocusPreference,saveSeasonFocusPreference,type SeasonFocusPreferenceStorage} from './season-focus-preference.ts'
 import type {ReactNode} from 'react'
 import {CommandDetails} from './CommandDetails.tsx'
 import {confirmationMoney} from './confirmation-money.ts'
 import type {CommandPreview} from '../core/commands.ts'
-import { useEffect,useRef,useState,useSyncExternalStore,lazy,Suspense } from 'react'
+import { useEffect,useMemo,useRef,useState,useSyncExternalStore,lazy,Suspense } from 'react'
 import type { GameController } from '../application/game-controller.ts'
 import { INITIAL_GAME_SNAPSHOT } from '../application/game-snapshot.ts'
 import type { ConfirmIntent,PlayFeatures,PlayingView,RequestCommand,SceneTarget } from './game-types.ts'
@@ -41,6 +43,10 @@ const noSubscribe=()=>()=>{}
 type Tab=Screen
 export type PreparationWorkspaceContext={readonly runId:string;readonly screen:Screen;readonly accountId:string;readonly open:boolean;readonly epoch:number}
 type Modal={kind:'command';intent:ConfirmIntent;details:ReactNode;workspace:PreparationWorkspaceContext}|{kind:'storage';text:string;source:string}|{kind:'settings'}|{kind:'exit'}|{kind:'reload'}
+type LocalSeasonFocus={runId:string;quarter:string;focus:OpeningFocus|null;notice:string|null;requiresChoice:boolean}
+// Access can fail even before getItem. The preference boundary catches both reads and writes.
+const seasonFocusStorage:SeasonFocusPreferenceStorage={getItem:key=>localStorage.getItem(key),setItem:(key,value)=>localStorage.setItem(key,value)}
+const focusIdentity=(focus:OpeningFocus|null)=>focus===null?null:JSON.stringify([focus.runId,focus.kind,focus.accountId,focus.entityId,focus.businessId??null,focus.kind==='market'?focus.entityKind??null:null,focus.kind==='life'?focus.selection:null])
 /** Retaining a draft never submits the next step or treats a planned licence as completed. */
 export function keepPreparationWorkspace(status:string,kind:string,previous:PlayingView|null,current:PlayingView,origin:PreparationWorkspaceContext,active:PreparationWorkspaceContext){
  return status==='saved'&&kind==='LicenseCourseMaterials'&&origin.screen==='course'&&origin.open&&active.open
@@ -51,7 +57,7 @@ export function keepPreparationWorkspace(status:string,kind:string,previous:Play
 }
 function savedLabel(status:string){return ({saved:'已保存',saving:'正在保存…',unsaved:'未保存',conflict:'存档冲突',read_only:'只读',closed:'已关闭'} as Record<string,string>)[status]??status}
 function readSettings(){try{const value=JSON.parse(localStorage.getItem('reborn-2020-display')??'{}') as Record<string,unknown>;return {textOnly:value.textOnly===true,reducedMotion:value.reducedMotion===true,hiddenGuides:Array.isArray(value.hiddenGuides)?value.hiddenGuides.filter((id):id is string=>typeof id==='string'):[]}}catch{return {textOnly:false,reducedMotion:false,hiddenGuides:[] as string[]}}}
-export default function App({controller=null,startupError=null,diagnostics=null}:{controller?:GameController|null;startupError?:string|null;diagnostics?:{name:string;trace:{writeSucceeded:boolean;abortIssued:boolean}}|null}){
+export default function App({controller=null,startupError=null,diagnostics=null,focusPreferenceStorage=seasonFocusStorage}:{controller?:GameController|null;startupError?:string|null;diagnostics?:{name:string;trace:{writeSucceeded:boolean;abortIssued:boolean}}|null;focusPreferenceStorage?:SeasonFocusPreferenceStorage}){
  const state=useSyncExternalStore(controller?.subscribe??noSubscribe,()=>controller?.snapshot??INITIAL_GAME_SNAPSHOT,()=>INITIAL_GAME_SNAPSHOT),view=state.view
  const [entryKey,setEntryKey]=useState(0)
  const [storyIncidentId,setStoryIncidentId]=useState<string|null>(null)
@@ -61,7 +67,8 @@ export default function App({controller=null,startupError=null,diagnostics=null}
  const [lifeSceneMode,setLifeSceneMode]=useState<'person'|'rest'|'workspace'>('person')
  const [deepseekTarget,setDeepseekTarget]=useState<{pane:'ecosystem'|'equity';recordId?:string}>({pane:'ecosystem'})
  const [videoTarget,setVideoTarget]=useState<SceneTarget['videoTarget']>(undefined),[courseRecordId,setCourseRecordId]=useState<string|null>(null)
- const [openingFocus,setOpeningFocus]=useState<OpeningFocus|null>(null)
+ const [focusChoice,setFocusChoice]=useState<LocalSeasonFocus|null>(null)
+ const currentFocus=useRef<LocalSeasonFocus|null>(null)
  const [marketRecordId,setMarketRecordId]=useState<string|null>(null),[quarterRecordId,setQuarterRecordId]=useState<string|null>(null),[lifeRecordId,setLifeRecordId]=useState<string|null>(null)
  const [workspaceOpen,setWorkspaceOpen]=useState(false),[sceneReceipt,setSceneReceipt]=useState<{runId:string;screen:Screen;revision:number;kind:string;text:string;frame:EchoFrame|null;workspace:PreparationWorkspaceContext|null}|null>(null)
  const failedScene=useRef<{runId:string;screen:Screen;label:string;kind:string;payload:unknown;workspace:PreparationWorkspaceContext}|null>(null)
@@ -76,7 +83,15 @@ export default function App({controller=null,startupError=null,diagnostics=null}
  const onSubmission=(status:string,runId:string,screen:Screen,label:string,kind:string,workspace:PreparationWorkspaceContext,payload:unknown)=>{
   const current=controller?.snapshot.view
   if(!current||current.runId!==runId)return
-  if(status==='saved'&&view&&view.runId===runId){setOpeningFocus(previous=>openingFocusAfterSave({view,features:view.features as unknown as PlayFeatures},{view:current,features:current.features as unknown as PlayFeatures},kind,payload,previous));failedScene.current=null}
+  if(status==='saved'&&view&&view.runId===runId){
+   if(!focusRequiresChoice){
+    const remembered=currentFocus.current?.runId===runId?currentFocus.current:null
+    const next=seasonFocusAfterSave({view,features:view.features as unknown as PlayFeatures},{view:current,features:current.features as unknown as PlayFeatures},kind,payload,remembered?.focus??null,remembered!==null)
+    const previousTarget=remembered?.focus?playerThread({view,features:view.features as unknown as PlayFeatures},remembered.focus,remembered.quarter):null
+    if(next!==null&&next!==remembered?.focus&&focusIdentity(next)!==focusIdentity(previousTarget?.focus??remembered?.focus??null))rememberFocus(next,current)
+   }
+   failedScene.current=null
+  }
   if(status==='unsaved'||status==='conflict')failedScene.current={runId,screen,label,kind,payload,workspace}
   if(activeTab.current!==screen)return
   if(status==='saved'){
@@ -91,7 +106,7 @@ export default function App({controller=null,startupError=null,diagnostics=null}
  const heading=useRef<HTMLHeadingElement>(null),unsavedHeading=useRef<HTMLElement>(null)
  useEffect(()=>{if(!modal&&(view?.saveStatus==='unsaved'||view?.saveStatus==='conflict'))unsavedHeading.current?.focus()},[view?.saveStatus,modal?.kind])
  useEffect(()=>{if(view?.readOnly||view?.saveStatus==='conflict'||view?.saveStatus==='unsaved')setWorkspaceOpen(false)},[view?.readOnly,view?.saveStatus])
- useEffect(()=>{failedScene.current=null;setJourneyOpen(false);setLifeYear(null);setWorkspaceOpen(false);setSceneReceipt(null);setTab('room');setAccountId('personal');setLifePane('today');setLifePerson('tang-ying');setLifeSceneMode('person');setDeepseekTarget({pane:'ecosystem'});setVideoTarget(undefined);setCourseRecordId(null);setMarketRecordId(null);setQuarterRecordId(null);setLifeRecordId(null);setOpeningFocus(null);setStoryIncidentId(null);if(view?.runId)rememberViewedLife(view.runId)},[view?.runId])
+ useEffect(()=>{failedScene.current=null;setJourneyOpen(false);setLifeYear(null);setWorkspaceOpen(false);setSceneReceipt(null);setTab('room');setAccountId('personal');setLifePane('today');setLifePerson('tang-ying');setLifeSceneMode('person');setDeepseekTarget({pane:'ecosystem'});setVideoTarget(undefined);setCourseRecordId(null);setMarketRecordId(null);setQuarterRecordId(null);setLifeRecordId(null);setFocusChoice(null);setStoryIncidentId(null);if(view?.runId)rememberViewedLife(view.runId)},[view?.runId])
  useEffect(()=>{if(view?.runId){heading.current?.focus({preventScroll:true});window.scrollTo(0,0)}},[tab,view?.runId])
  useEffect(()=>{if(!view)return;queueMicrotask(()=>{if(document.querySelector('dialog[open]'))return;const active=document.activeElement;if(active===document.body||active===document.getElementById('main-content'))heading.current?.focus({preventScroll:true})})},[view?.runId,view?.revision,modal?.kind,sceneReceipt,workspaceOpen,journeyOpen,tab])
  const fail=(error:unknown)=>setLocalError(reasonText(error instanceof Error?error.message:'LOCAL_STORAGE_FAILED'))
@@ -100,9 +115,37 @@ export default function App({controller=null,startupError=null,diagnostics=null}
  const exportOriginal=(runId:string,backup=false)=>{if(controller)void controller.exportStored(runId,backup).then(text=>openStorage(text,backup?'backup':'raw')).catch(fail)}
  const request:RequestCommand=(kind,payload,label,force=false)=>{if(!controller)return;setLocalError(null);setSceneReceipt(null);try{const context=controller.snapshot.view;if(!context)throw Error('RUN_NOT_PLAYING');const workspace={...activeWorkspace.current};const intent=journeyIntent(context,kind,payload,label,force),command=controller.prepare(intent.kind,intent.payload),preview=controller.preview(command);if(!preview.allowed){setLocalError(reasonText(preview.reasonCodes[0]??'INVALID_PAYLOAD'));return}if(intent.confirm||preview.actionPoints>0||preview.upfrontCostFen>0){const contextFeatures=context.features as unknown as PlayFeatures,clock=command.kind==='AdvanceTime'?controller.clockCommitments(command):null;setModal({kind:'command',workspace,intent:{command,label:intent.label},details:<CommandDetails command={command} confirm={preview} features={contextFeatures} view={context} clock={clock} accountName={id=>id==='personal'?'个人账户':(contextFeatures.workbench.routes.find(r=>r.accountId===id)?.name??'企业账户')+' · '+id.slice(-6)}/>})}else void controller.submit(command).then(result=>onSubmission(result.status,command.runId,workspace.screen,intent.label,intent.kind,workspace,command.payload)).catch(fail)}catch(error){fail(error)}}
  const features=view?.features as PlayFeatures|undefined,props=controller&&view&&features?{controller,view,features,request,accountId,textOnly:settings.textOnly}:null
- const openingRoom=!!view&&view.phase==='playing'&&features?.workbench.quarter==='2020-Q1'&&tab==='room'
- const openingThread=openingRoom&&props?playerThread(props,openingFocus):null
- const displayAccountId=openingThread&&openingThread.focusStatus!=='invalid'?openingThread.focus.accountId:accountId
+ const rememberedFocus=useMemo(()=>view?.phase==='playing'&&features?loadSeasonFocusPreference(focusPreferenceStorage,{runId:view.runId,quarter:features.workbench.quarter}):null,[view?.runId,view?.phase,features?.workbench.quarter,focusPreferenceStorage])
+ const loadedChoice=rememberedFocus?.status==='loaded'?{...rememberedFocus.record,notice:rememberedFocus.quarterStatus==='previous'?rememberedFocus.message:null,requiresChoice:false}:null
+ const selectedFocus=focusChoice?.runId===view?.runId?focusChoice:loadedChoice
+ currentFocus.current=selectedFocus
+ const openingFocus=selectedFocus?.focus??null,openingFocusQuarter=selectedFocus?.quarter??null
+ const selectedThread=props&&view?.phase==='playing'&&openingFocus?playerThread(props,openingFocus,openingFocusQuarter??undefined):null
+ const openingFocusNotice=selectedFocus?selectedFocus.notice:rememberedFocus?.status==='invalid'||rememberedFocus?.status==='unavailable'?rememberedFocus.message:null
+ const focusRequiresChoice=selectedThread?.focusStatus==='invalid'||selectedFocus?.requiresChoice===true||!(focusChoice!==null&&focusChoice.runId===view?.runId&&focusChoice.focus!==null)&&(rememberedFocus?.status==='invalid'||rememberedFocus?.status==='unavailable')
+ const rememberFocus=(focus:OpeningFocus|null,source:PlayingView|null=controller?.snapshot.view??null)=>{
+  if(!source||source.phase!=='playing')return
+  const quarter=(source.features as unknown as PlayFeatures).workbench.quarter
+  const chosen=focus??{runId:source.runId,kind:'free' as const,accountId:'personal',entityId:null}
+  const matched=playerThread({view:source,features:source.features as unknown as PlayFeatures},chosen,quarter)
+  if(matched.focusStatus==='invalid'){
+   const previous=currentFocus.current?.runId===source.runId?currentFocus.current:null
+   setFocusChoice({runId:source.runId,quarter:previous?.quarter??quarter,focus:previous?.focus??null,notice:matched.invalidReason??'原关注已不可达，请重新选择。',requiresChoice:previous===null||previous.focus===null||previous.requiresChoice})
+   return
+  }
+  const result=saveSeasonFocusPreference(focusPreferenceStorage,{version:1,runId:source.runId,quarter,focus:matched.focus},{runId:source.runId,quarter,saveStatus:source.saveStatus,hasCandidate:source.hasCandidate,busy:source.busy})
+  if(result.status==='blocked'||result.status==='invalid'){
+   const previous=currentFocus.current?.runId===source.runId?currentFocus.current:null
+   setFocusChoice({runId:source.runId,quarter:previous?.quarter??quarter,focus:previous?.focus??null,notice:result.message,requiresChoice:previous===null||previous.focus===null||previous.requiresChoice})
+   return
+  }
+  const next={runId:source.runId,quarter,focus:matched.focus,notice:result.status==='saved'?null:result.message,requiresChoice:false}
+  currentFocus.current=next
+  setFocusChoice(next)
+ }
+ const openingRoom=!!view&&view.phase==='playing'&&tab==='room'
+ const openingThread=openingRoom&&props?(selectedThread??playerThread(props,openingFocus,openingFocusQuarter??undefined)):null
+ const displayAccountId=openingThread&&!focusRequiresChoice&&openingThread.focusStatus!=='invalid'?openingThread.focus.accountId:accountId
  const openWorkspace=(screen:Screen=tab,target?:SceneTarget)=>{
   const lifeMode=target?.lifeSelection??(screen===tab?lifeSceneMode:'person')
   const recordId=target?.recordId??(screen===tab?(screen==='market'?marketRecordId:screen==='quarter'?quarterRecordId:screen==='life'?lifeRecordId:null):null)
@@ -146,7 +189,7 @@ export default function App({controller=null,startupError=null,diagnostics=null}
  {journeyOpen?<Dialog title="你走过的篇章" className="journey-dialog" onClose={()=>setJourneyOpen(false)}><Suspense fallback={<p role="status">正在翻开这段人生…</p>}><JourneyPanel p={props} onYear={year=>{setJourneyOpen(false);showYear(year)}} onChoose={()=>{setJourneyOpen(false);navigate('quarter')}}/></Suspense></Dialog>:null}
  <SceneAttention p={props} onStoryScene={id=>{setStoryIncidentId(id);navigate('story')}} onOpen={(screen,accountId)=>{if(accountId)setAccountId(accountId);navigate(screen,true)}}/>
  {tab==='room'&&!openingRoom&&!modal&&sceneReceipt?.kind!=='AdvanceTime'&&sceneReceipt?.runId===view.runId&&sceneReceipt.screen===tab&&sceneReceipt.revision===view.revision?<SceneEcho text={sceneReceipt.text} frame={sceneReceipt.frame} onClose={()=>setSceneReceipt(null)} accountName={accountName}/>:null}
- <div className="workbench-layout"><main id="main-content" tabIndex={-1} className="workbench-main">{tab==='room'&&features!.journey?.ending&&(view.phase!=='playing'||features!.journey.canEnterEpilogue)?<Suspense fallback={<p className="scene-loading" role="status">正在回看这段人生…</p>}><EndingStage key={view.runId+':'+view.phase} p={props} headingRef={heading} onOpen={screen=>navigate(screen,true)} onJourney={()=>setJourneyOpen(true)} onNewLife={()=>{if(controller?.needsUnsavedWarning)setModal({kind:'exit'});else void controller?.home().catch(fail)}}/></Suspense>:tab==='room'?<CinematicRoom {...props} openingFocus={openingFocus} onOpeningFocus={setOpeningFocus} notice={openingRoom&&view.revision===1?null:state.notice?activityText(state.notice):null} timeEcho={!modal&&sceneReceipt&&(openingRoom||sceneReceipt.kind==='AdvanceTime')&&sceneReceipt.runId===view.runId&&sceneReceipt.screen===tab&&sceneReceipt.revision===view.revision?<SceneTimeNotice compact={openingRoom} key={view.revision} date={view.date} text={sceneReceipt.text} frame={sceneReceipt.frame} onClose={()=>setSceneReceipt(null)} accountName={accountName}/>:null} headingRef={heading} onJourney={()=>setJourneyOpen(true)} onNavigate={(screen,target)=>{if((screen==='quarter'||screen==='life')&&target?.recordId){openWorkspace(screen,target);return}if(target?.accountId)setAccountId(target.accountId);if(target?.personId)setLifePerson(target.personId);navigate(screen);if(screen==='market')setMarketRecordId(target?.recordId??null);if(target?.lifeSelection)setLifeSceneMode(target.lifeSelection)}} onPeople={personId=>showPeople(personId??'tang-ying')} onYear={()=>showYear()}/>:tab==='routes'?<Suspense fallback={<p className="scene-loading" role="status">新的路，正在眼前展开…</p>}><RoutesPanel {...props} headingRef={heading} onRoute={id=>navigate(screenForRoute(id))}/></Suspense>:<NarrativeScene {...props} marketRecordId={marketRecordId} onStoryIncident={id=>{setStoryIncidentId(id);setSceneReceipt(null)}} storyIncidentId={storyIncidentId} screen={tab} headingRef={heading} personId={lifePerson} lifeMode={lifeSceneMode} onLifeMode={setLifeSceneMode} onPerson={id=>{setLifeRecordId(null);setLifePerson(id);setLifeSceneMode('person');setSceneReceipt(null)}} onNavigate={navigate} onOpen={openWorkspace} onPeople={()=>showPeople(lifePerson,true)} onYear={()=>showYear()} onDismissReceipt={()=>setSceneReceipt(null)} receiptKind={!preparationReceipt&&sceneReceipt?.runId===view.runId&&sceneReceipt.screen===tab&&sceneReceipt.revision===view.revision?sceneReceipt.kind:null} echoFrame={!preparationReceipt&&sceneReceipt?.runId===view.runId&&sceneReceipt.revision===view.revision?sceneReceipt.frame:null} receipt={!preparationReceipt&&sceneReceipt?.runId===view.runId&&sceneReceipt.screen===tab&&sceneReceipt.revision===view.revision?sceneReceipt.text:null}/>}</main></div>
+ <div className="workbench-layout"><main id="main-content" tabIndex={-1} className="workbench-main">{tab==='room'&&features!.journey?.ending&&(view.phase!=='playing'||features!.journey.canEnterEpilogue)?<Suspense fallback={<p className="scene-loading" role="status">正在回看这段人生…</p>}><EndingStage key={view.runId+':'+view.phase} p={props} headingRef={heading} onOpen={screen=>navigate(screen,true)} onJourney={()=>setJourneyOpen(true)} onNewLife={()=>{if(controller?.needsUnsavedWarning)setModal({kind:'exit'});else void controller?.home().catch(fail)}}/></Suspense>:tab==='room'?<CinematicRoom {...props} openingFocus={openingFocus} focusQuarter={openingFocusQuarter} focusNotice={openingFocusNotice} focusRequiresChoice={focusRequiresChoice} onOpeningFocus={focus=>rememberFocus(focus)} notice={openingRoom&&view.revision===1?null:state.notice?activityText(state.notice):null} timeEcho={!modal&&sceneReceipt&&(openingRoom||sceneReceipt.kind==='AdvanceTime')&&sceneReceipt.runId===view.runId&&sceneReceipt.screen===tab&&sceneReceipt.revision===view.revision?<SceneTimeNotice compact={openingRoom} key={view.revision} date={view.date} text={sceneReceipt.text} frame={sceneReceipt.frame} onClose={()=>setSceneReceipt(null)} accountName={accountName}/>:null} headingRef={heading} onJourney={()=>setJourneyOpen(true)} onNavigate={(screen,target)=>{if((screen==='quarter'||screen==='life')&&target?.recordId){openWorkspace(screen,target);return}if(target?.accountId)setAccountId(target.accountId);if(target?.personId)setLifePerson(target.personId);navigate(screen);if(screen==='market')setMarketRecordId(target?.recordId??null);if(target?.lifeSelection)setLifeSceneMode(target.lifeSelection)}} onPeople={personId=>showPeople(personId??'tang-ying')} onYear={()=>showYear()}/>:tab==='routes'?<Suspense fallback={<p className="scene-loading" role="status">新的路，正在眼前展开…</p>}><RoutesPanel {...props} headingRef={heading} onRoute={id=>navigate(screenForRoute(id))}/></Suspense>:<NarrativeScene {...props} marketRecordId={marketRecordId} onStoryIncident={id=>{setStoryIncidentId(id);setSceneReceipt(null)}} storyIncidentId={storyIncidentId} screen={tab} headingRef={heading} personId={lifePerson} lifeMode={lifeSceneMode} onLifeMode={setLifeSceneMode} onPerson={id=>{setLifeRecordId(null);setLifePerson(id);setLifeSceneMode('person');setSceneReceipt(null)}} onNavigate={navigate} onOpen={openWorkspace} onPeople={()=>showPeople(lifePerson,true)} onYear={()=>showYear()} onDismissReceipt={()=>setSceneReceipt(null)} receiptKind={!preparationReceipt&&sceneReceipt?.runId===view.runId&&sceneReceipt.screen===tab&&sceneReceipt.revision===view.revision?sceneReceipt.kind:null} echoFrame={!preparationReceipt&&sceneReceipt?.runId===view.runId&&sceneReceipt.revision===view.revision?sceneReceipt.frame:null} receipt={!preparationReceipt&&sceneReceipt?.runId===view.runId&&sceneReceipt.screen===tab&&sceneReceipt.revision===view.revision?sceneReceipt.text:null}/>}</main></div>
  {tab!=='room'?<SceneThreads p={props} onOpen={(screen,personId,incidentId)=>{if(screen==='story'&&incidentId){setStoryIncidentId(incidentId);navigate('story')}else navigate(screen,true);if(screen==='life'&&personId){setLifePane('people');setLifePerson(personId)}}}/>:null}
  {workspaceOpen&&tab!=='room'&&tab!=='routes'?<Dialog title={screens.find(s=>s[0]===tab)![1]} className={'scene-workspace workspace-'+tab} onClose={()=>setWorkspaceOpen(false)}><p className="scene-sheet-caption">{view.phase==='playing'?'把接下来的日子安排仔细。合上这一页，回到眼前的生活。':'翻看原来的记录与责任。合上这一页，回到这段人生。'}</p><SectionNavigation screen={tab} onNavigate={screen=>navigate(screen,true)}/><label className="scene-sheet-account">查看哪一份账与安排<select value={accountId} onChange={event=>setAccountId(event.target.value)}>{view.accounts.map(account=><option key={account.accountId} value={account.accountId}>{accountName(account.accountId)}</option>)}</select></label>{preparationReceipt?<p key="preparation-feedback" className="scene-sheet-caption" role="status"><strong>素材使用范围的准备已安排。</strong> {preparationReceipt.text}<br/><span>继续准备，已填内容仍在。授权任务仍要按约定日期完成。</span></p>:null}<div key="workspace-content" className="scene-workspace-content"><Suspense fallback={<p className="loading-panel" role="status">正在翻开这段生活…</p>}>{tab==='quarter'?<QuarterPanel {...props} initialRecordId={quarterRecordId} initialPhase="plan" onLife={()=>{setLifePane('today');setLifeSceneMode('person');setTab('life')}} onPeople={personId=>showPeople(personId??'tang-ying',true)} onDeepseek={()=>setTab('deepseek')} onCourse={()=>setTab('course')} onRelay={()=>setTab('relay')} onRoutines={()=>setTab('routines')} onStory={()=>setTab('story')} onMarket={()=>setTab('market')} guideHidden={settings.hiddenGuides.includes(view.runId)} onHideGuide={()=>saveSettings({...settings,hiddenGuides:[...new Set([...settings.hiddenGuides,view.runId])].slice(-100)})}/>:tab==='life'?<LifePanel key={view.runId} {...props} initialRecordId={lifeRecordId} initialPane={lifePane} initialPersonId={lifePerson} initialYear={lifeYear}/>:tab==='story'?<StoryPanel {...props}/>:tab==='market'?<MarketPanel key={accountId+':'+(marketRecordId??'')} {...props} initialRecordId={marketRecordId}/>:tab==='video'?<VideoPanel {...props} {...(videoTarget?{initialTarget:videoTarget}:{})}/>:tab==='course'?<CoursePanel {...props} {...(courseRecordId?{initialFocusId:courseRecordId}:{})}/>:tab==='relay'?<Suspense fallback={<p role="status">正在打开中转站…</p>}><RelayPanel {...props}/></Suspense>:tab==='routines'?<Suspense fallback={<p role="status">正在载入例行计划…</p>}><RoutinesPanel {...props}/></Suspense>:tab==='deepseek'?<Suspense fallback={<p role="status">正在载入DeepSeek机会…</p>}><DeepseekPanel {...props} initialPane={deepseekTarget.pane} {...(deepseekTarget.recordId?{initialFocusId:deepseekTarget.recordId}:{})}/></Suspense>:tab==='memory'?<MemoryPanel {...props}/>:<FinancePanel key={accountId} {...props} onStorage={()=>openStorage()} onExport={()=>exportCurrent()} onBackup={()=>exportOriginal(view.runId,true)}/>}</Suspense></div></Dialog>:null}</>:<div className="entry-wrap"><Home key={entryKey} controller={controller} state={state} onStorage={()=>openStorage()} onExport={id=>exportOriginal(id)}/></div>}
  <footer className="site-footer">本机人生 · 模拟市场 / 明确架空股权</footer>

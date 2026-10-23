@@ -1,0 +1,1 @@
+S2 我选的第一季。负责player-thread.ts/tests及新season-thread.ts/tests，纯公开模型；不改App/OpeningMoment/RoomMoment/CinematicRoom/CSS/prefs。新增seasonFocusChoices/focusCandidates与seasonRecollection；原主线可跨季保留具体对象，主动工作/生活/投资/原首单，后期原业务pending保legacy fallback，不引入规则、钱、AP或schema。S3–S5不提前实施；兼容0；原P3 WIP保持。

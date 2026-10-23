@@ -1,0 +1,1 @@
+R1新增案例直接AdvanceTime到Apr1被原正常跨季门槛拒绝，旧6项通过。R2只修新driver：沿公开quarterTarget先完成Q1的真实结算点，再在atQuarterEnd走原nextQuarterDate；不改规则、数值或断言。本次只重验这一新增案例，另6项不算新执行。

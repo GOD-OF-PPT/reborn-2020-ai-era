@@ -1,0 +1,90 @@
+{
+  "checkedAt": "2026-10-23T07:01:16.119Z",
+  "scope": "S2 UI source/type/focused regression",
+  "ownedFiles": [
+    {
+      "file": "src/ui/OpeningMoment.tsx",
+      "sha256": "74f244847c36d52546d34deade9769992a03fd60d5c4ad41989a34452b4f56b2"
+    },
+    {
+      "file": "src/ui/RoomMoment.tsx",
+      "sha256": "97b923562a3ee2998b1913d384de070f742389999f05de26ae07b3fe3edf9457"
+    },
+    {
+      "file": "src/ui/CinematicRoom.tsx",
+      "sha256": "ca48734483b43a6e9aed492715931b0c7368e66e7e3e6fb23b2f40696ed77b94"
+    },
+    {
+      "file": "src/ui/SeasonRecollection.tsx",
+      "sha256": "4d1c4637865d466e3c4f7f3642fe9a150bee3d30a8f676f8d64bed1890f32b15"
+    },
+    {
+      "file": "src/ui/opening-play.css",
+      "sha256": "af89285f1de2be0bd7eb69bf629f6c994702b29726c535e552a14b43ff5a8f70"
+    },
+    {
+      "file": "src/ui/MarketSceneChoice.tsx",
+      "sha256": "d7a77c8119836296fe23a5a55a50d19a8a0f2c879b23e0b3e23198007f0bb29a"
+    },
+    {
+      "file": "src/ui/SeasonRecollection.test.tsx",
+      "sha256": "6f45e081042f7d34135f17b3a0ff8241fcea042976203dbfdf2283366e536a2f"
+    }
+  ],
+  "checks": {
+    "strictTypes": {
+      "passed": true,
+      "log": "types-r4.log",
+      "noEmit": true,
+      "strict": true,
+      "noUnused": true
+    },
+    "focusedUI": {
+      "passed": true,
+      "files": 4,
+      "tests": 17,
+      "log": "ui-tests-r3.log"
+    },
+    "css": {
+      "parsed": true,
+      "mediaQueries": "prefers-reduced-motion only",
+      "contentCropping": false
+    }
+  },
+  "retainedFailures": [
+    {
+      "source": "initial isolated TypeScript tool result",
+      "error": "RoomMoment.tsx(77,16) TS2367: playing comparison after all-playing early return narrowed branch to epilogue or finished",
+      "fix": "nonplaying legacy branch retains no playing advance; remove impossible comparison"
+    },
+    {
+      "source": "ui-tests-r1.log",
+      "failures": 3,
+      "fixes": [
+        "specialized fallback no longer advertises unavailable employment at zero AP",
+        "end-of-range leaf wording does not imply another normal season",
+        "historical assertion uses explicit history scope and current accurate copy"
+      ]
+    },
+    {
+      "source": "types-r2.log and types-r3.log",
+      "passed": true
+    },
+    {
+      "source": "ui-tests-r2.log",
+      "passed": 12
+    }
+  ],
+  "additionalReviewFixes": [
+    "unknown bookmark blocks stale decline/skip child controls",
+    "MarketSceneChoice blockedReason synchronously locks submission and closes open UI without clearing draft",
+    "no duplicate seasonal bookmark/leaf action in main thoughts at quarter end"
+  ],
+  "limits": [
+    "No browser or visual acceptance",
+    "No resize, geometry or compatibility checks",
+    "No App changes, Git, new assets or sound",
+    "Business rules, raw schema, money/AP/date/permissions untouched",
+    "Model modules are owned and validated separately by the model agent"
+  ]
+}

@@ -1,0 +1,70 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ✓ src/ui/RoomMoment.test.tsx > makes the actual first-order commitment, delivery and cash separate playable moments without mutating on render 3430ms
+ ✓ src/ui/RoomMoment.test.tsx > keeps a real readonly current moment from submitting while its original information remains present 471ms
+ ✓ src/ui/RoomMoment.test.tsx > also leaves work directly available after accepting the order first, with the same actual combined budget 1031ms
+ ✓ src/ui/RoomMoment.test.tsx > keeps a separate due-money responsibility ahead of a focused completed first-order delivery 979ms
+ × src/ui/RoomMoment.test.tsx > prioritises actual old relay responsibilities at zero AP over offering unavailable employment 2548ms
+   → expected '<link rel="preload" as="image" href="…' not to contain '保留这一季的工作'
+ ✓ src/ui/RoomMoment.test.tsx > presents an actual public risk without assuming a business-choice interface, and keeps resolved history behind current obligations 3305ms
+ ✓ src/ui/RoomMoment.test.tsx > lets an actually completed unread supplier letter be read from the room through its original free command 1451ms
+ ✓ src/ui/SeasonRecollection.test.tsx > requires an explicit bookmark after an unavailable preference without exposing a default offer command 605ms
+ × src/ui/SeasonRecollection.test.tsx > renders an explicitly selected old completed life as history in a later playing season 1879ms
+   → expected '<link rel="preload" as="image" href="…' to contain '不是本季新增结果'
+ ✓ src/ui/SeasonRecollection.test.tsx > keeps real delivery responsibility ahead of an unread bookmark without claiming a replacement focus 904ms
+ ✓ src/ui/SeasonRecollection.test.tsx > reads actual payroll references in the quarter leaf while preserving the live run and its unfinished season 1153ms
+ × src/ui/CinematicRoom.test.tsx > renders a read-only room without advancing, including delivery and end-of-range UI projections 564ms
+   → expected '<link rel="preload" as="image" href="…' not to contain '进入下一季'
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/CinematicRoom.test.tsx > renders a read-only room without advancing, including delivery and end-of-range UI projections
+AssertionError: expected '<link rel="preload" as="image" href="…' not to contain '进入下一季'
+
+Expected: "进入下一季"
+Received: "<link rel="preload" as="image" href="/assets/ui-redesign/cinematic/room-ordinary-v1.jpg"/><link rel="preload" as="image" href="/assets/ui-redesign/cinematic/props/first-attempt-v1.png"/><div class="cinematic-home"><section class="cinematic-stage clarity-stage opening-room" data-exploring="false" aria-label="可探索的住处"><div class="room-backdrop" aria-hidden="true" style="background-image:url(/assets/ui-redesign/cinematic/room-ordinary-v1.jpg)"><img src="/assets/ui-redesign/cinematic/room-ordinary-v1.jpg" alt="" class=""/></div><div class="room-vignette" aria-hidden="true"></div><p class="opening-room-intention"><span>我想保持生活自主</span><span>把这一季留给自己愿意承担的安排。</span><button type="button">调整本季书签 ↗</button><button type="button">翻本季留页 ↗</button></p><section class="room-current-moment opening-current-moment" data-stage="choose" aria-label="眼前这一幕"><header class="moment-heading"><p>2020-Q1 / 今天尚未写满的日历</p><h1 tabindex="-1">这一次，先决定怎样过日子。</h1></header><p class="opening-room-stage">眼前这件事 · 由你决定</p><div class="moment-story" aria-label="眼前的情况"><p class="moment-line">不必立刻接单或买股。可以保留工作、看看生活，也可以暂不新增承诺。</p><p class="moment-terms">阅读与探索不消耗行动；原生活费用和已经答应的事仍照日历继续。</p></div><div class="moment-decisions"><button type="button" class="moment-decision moment-primary"><b aria-hidden="true">01</b><span>看看这一季，真实留下了什么<small>翻阅不会进入下一季，旧约定仍保留</small></span><i aria-hidden="true">↗</i></button><button type="button" class="moment-decision"><b aria-hidden="true">02</b><span>下一季，还想把什么放在桌面<small>只调整书签，不接受新安排</small></span><i aria-hidden="true">↗</i></button><button type="button" class="moment-explore">环顾房间，想想别的可能 <span aria-hidden="true">↗</span></button></div></section><button type="button" class="opening-object" data-kind="calendar" data-text-only="false" aria-labelledby="_R_1n1_-title _R_1n1_-action" aria-describedby="_R_1n1_-stage _R_1n1_-detail"><span class="opening-object-art" aria-hidden="true"><img src="/assets/ui-redesign/cinematic/props/first-attempt-v1.png" alt="" width="1280" height="1280" decoding="async"/><span class="opening-object-mark"><svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M8 5v6m16-6v6M5 12h22M6 8h20v20H6zM11 17h3m5 0h3m-11 6h3m5 0h3"></path></svg></span></span><span class="opening-object-copy"><span id="_R_1n1_-stage" class="opening-object-stage">眼前这件事 · 由你决定</span><strong id="_R_1n1_-title" class="opening-object-title">今天尚未写满的日历</strong><span id="_R_1n1_-detail" class="opening-object-detail">翻开，看清这次选择</span><span id="_R_1n1_-action" class="opening-object-action">走近这件事<span aria-hidden="true">↗</span></span></span></button><nav class="room-pocket" aria-label="随身记录"><button type="button"><span aria-hidden="true">▤</span>翻开随身册</button><button type="button"><span aria-hidden="true">◷</span>牵挂与日历</button></nav><p class="room-caption"><span>普通出租屋 · 2025-12-31</span><span>模拟市场 / 明确架空股权</span></p></section></div>"
+
+ ❯ src/ui/CinematicRoom.test.tsx:39:21
+     37|   const final=renderToStaticMarkup(<CinematicRoom {...common} view={{.…
+     38|   expect(final).not.toContain('推进下一节点')
+     39|   expect(final).not.toContain('进入下一季')
+       |                     ^
+     40|   expect(controller.exportSaved()).toBe(original)
+     41|  }finally{await controller.close();await store.close()}
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/ui/RoomMoment.test.tsx > prioritises actual old relay responsibilities at zero AP over offering unavailable employment
+AssertionError: expected '<link rel="preload" as="image" href="…' not to contain '保留这一季的工作'
+
+Expected: "保留这一季的工作"
+Received: "<link rel="preload" as="image" href="/assets/ui-redesign/cinematic/props/first-attempt-v1.png"/><p class="opening-room-intention"><span>我想保持生活自主</span><span>原来的经营事项，还在继续。</span><button type="button">调整本季书签 ↗</button><button type="button">翻本季留页 ↗</button></p><section class="room-current-moment opening-current-moment" data-stage="commitment" aria-label="眼前这一幕"><header class="moment-heading"><p>2025-Q1 / 答应过的事，还在继续</p><h1 tabindex="-1">这期已经留下记录，原账还没有收好。</h1></header><p class="opening-room-stage">原业务仍按原约定继续</p><div class="moment-story" aria-label="眼前的情况"><p class="moment-line">停止请求、任务中断或服务结束，都不会免费补齐支持、清除应收应付或客户保护。</p><p class="moment-terms">2025-01-28—2025-02-25这期服务的支持、费用与原账逐项保留；未到期应收不能提前取用，已揭示差额仍须独立更正。</p></div><div class="moment-decisions"><button type="button" class="moment-decision moment-primary"><b aria-hidden="true">01</b><span>查看这件事的下一步<small>翻开同一件事的原记录</small></span><i aria-hidden="true">↗</i></button><div class="command moment-decision"><button type="button" class="" aria-label="先保留这一季的工作" disabled=""><b aria-hidden="true">02</b><span>先保留这一季的工作<small>共享本季2点 · 按实际在岗日领工资，可与副业组合</small></span><i aria-hidden="true">→</i></button><small class="reason">本季行动点已不足。阅读、撤回未执行安排和推进时间仍然免费。</small></div><button type="button" class="moment-explore">环顾房间，想想别的可能 <span aria-hidden="true">↗</span></button></div></section><button type="button" class="opening-object" data-kind="portfolio" data-text-only="false" aria-labelledby="_R_r_-title _R_r_-action" aria-describedby="_R_r_-stage _R_r_-detail"><span class="opening-object-art" aria-hidden="true"><img src="/assets/ui-redesign/cinematic/props/first-attempt-v1.png" alt="" width="1280" height="1280" decoding="async"/><span class="opening-object-mark"></span></span><span class="opening-object-copy"><span id="_R_r_-stage" class="opening-object-stage">原业务仍按原约定继续</span><strong id="_R_r_-title" class="opening-object-title">答应过的事，还在继续</strong><span id="_R_r_-detail" class="opening-object-detail">沿原业务记录继续</span><span id="_R_r_-action" class="opening-object-action">走近这件事<span aria-hidden="true">↗</span></span></span></button>"
+
+ ❯ src/ui/RoomMoment.test.tsx:96:58
+     94|   expect(roomMoment(p)).toMatchObject({stage:'commitment',inspect:{scr…
+     95|   const html=renderToStaticMarkup(<RoomMoment p={p} headingRef={null} …
+     96|   expect(html).toContain('未到期应收不能提前取用');expect(html).not.toContain('保留…
+       |                                                          ^
+     97|  }finally{await controller.close();await store.close()}
+     98| },20000)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/ui/SeasonRecollection.test.tsx > renders an explicitly selected old completed life as history in a later playing season
+AssertionError: expected '<link rel="preload" as="image" href="…' to contain '不是本季新增结果'
+
+Expected: "不是本季新增结果"
+Received: "<link rel="preload" as="image" href="/assets/ui-redesign/cinematic/props/first-attempt-v1.png"/><p class="opening-room-intention"><span>我想保持生活自主</span><span>把真实的日子留给生活。</span><button type="button">调整本季书签 ↗</button><button type="button">翻本季留页 ↗</button></p><section class="room-current-moment opening-current-moment" data-stage="life-completed" aria-label="眼前这一幕"><header class="moment-heading"><p>2020-Q2 / 2020-Q1 / 原来的生活安排</p><h1 tabindex="-1">这次安排，已经留下真实经历。</h1></header><p class="opening-room-stage">历史回看 · 2020-Q1</p><div class="moment-story" aria-label="眼前的情况"><p class="moment-line">这是2020-Q1的原记录，旧收支不会重记为本季收入。完成不返还行动或增加收益；新的邀请与下一次安排，仍需另行决定。</p><p class="moment-terms">回看与继续安排分别选择，不因回看改写关系。</p></div><div class="moment-decisions"><button type="button" class="moment-decision moment-primary"><b aria-hidden="true">01</b><span>查看这次生活安排与原记录<small>翻开同一件事的原记录</small></span><i aria-hidden="true">↗</i></button><div class="command moment-decision"><button type="button" class="" aria-label="先保留这一季的工作"><b aria-hidden="true">02</b><span>先保留这一季的工作<small>共享本季2点 · 按实际在岗日领工资，可与副业组合</small></span><i aria-hidden="true">→</i></button></div><button type="button" class="moment-explore">环顾房间，想想别的可能 <span aria-hidden="true">↗</span></button></div></section><button type="button" class="opening-object" data-kind="receipt" data-text-only="false" aria-labelledby="_R_r_-title _R_r_-action" aria-describedby="_R_r_-stage _R_r_-detail"><span class="opening-object-art" aria-hidden="true"><img src="/assets/ui-redesign/cinematic/props/first-attempt-v1.png" alt="" width="1280" height="1280" decoding="async"/><span class="opening-object-mark"></span></span><span class="opening-object-copy"><span id="_R_r_-stage" class="opening-object-stage">历史回看 · 2020-Q1</span><strong id="_R_r_-title" class="opening-object-title">2020-Q1 / 原来的生活安排</strong><span id="_R_r_-detail" class="opening-object-detail">回响已有实际记录</span><span id="_R_r_-action" class="opening-object-action">走近这件事<span aria-hidden="true">↗</span></span></span></button>"
+
+ ❯ src/ui/SeasonRecollection.test.tsx:47:81
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  3 failed (3)
+      Tests  3 failed | 9 passed (12)
+   Start at  14:45:23
+   Duration  21.74s (tests 87%, import 9%, transform 4%)
+

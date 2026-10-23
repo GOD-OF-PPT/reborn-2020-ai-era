@@ -29,6 +29,10 @@ export function QuarterPanel(props:QuarterProps){
  const panel=useRef<HTMLDivElement>(null),targetLink=useRef<HTMLAnchorElement>(null),located=useRef<string|null>(null)
  useEffect(()=>{const node=targetFocusId?document.getElementById(targetFocusId):null;if(targetFocusId&&node&&panel.current?.contains(node)&&targetLink.current&&located.current!==recordContext){located.current=recordContext;revealBookTarget(targetLink.current,targetFocusId)}},[recordContext,targetFocusId,phase])
  if(recordId!==null&&recordId!==undefined&&!targetFocusId)return <section className="warning-box" role="status"><p>这份本季记录已失效，或不属于当前账户的原手工单/工作安排。请重新选择原记录；没有代你换到另一份安排。</p><button type="button" onClick={()=>setDismissedRecord(recordContext)}>重新选择本季记录</button></section>
+ if(employmentTarget&&employmentTarget.quarter!==w.quarter){
+  const payroll=view.operations?.payroll.filter(row=>row.kind==='salary'&&row.entityId===employmentTarget.id&&row.through<=view.date)??[]
+  return <div ref={panel} className="quarter-experience"><section className="panel" id="quarter-work" tabIndex={-1} aria-label="原季度工作记录" data-record-id={employmentTarget.id}><p className="eyebrow">{employmentTarget.quarter} · 历史原记录</p><h2>这段工作，仍按原日期留着。</h2><p>当前已是{w.quarter}。这里只翻阅原工作，不是本季新在岗安排，也不会重新发薪。</p><p>原安排边界：{employmentTarget.limit}；实际在岗片段：{employmentTarget.segments.map(segment=>segment.from+'—'+(segment.to??'原安排边界')).join('；')}。</p><h3>这份原工作实际留下的工资</h3>{payroll.length?payroll.map(row=><article key={row.id}><p>{row.through} · 实际工资{moneyText(row.amountFen)}</p></article>):<p>截至当前没有这份原工作的工资记录；没有按新的工作卡猜测金额。</p>}<p>原工资与行动记录保留，下一季的工作仍需你独立选择。</p><button type="button" onClick={()=>setDismissedRecord(recordContext)}>明确转看{w.quarter}的本季安排</button></section></div>
+ }
  const selectPhase=(next:Phase)=>setChoice({context,phase:next})
  const paused=w.pause!==null,blocked=view.busy||view.readOnly||view.hasCandidate||view.saveStatus==='conflict'
  const advance=(date:string,label:string)=>props.request('AdvanceTime',{date:playableAdvanceDate(w,view.date,date)},label)

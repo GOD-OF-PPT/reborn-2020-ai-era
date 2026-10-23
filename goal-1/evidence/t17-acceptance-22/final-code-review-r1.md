@@ -1,0 +1,25 @@
+# S2最终源码独立复核 R1
+
+结论：当前R4限定S2源码未发现新的确定缺陷。审阅App焦点/偏好、saved映射、季度回响、旧对象定位及工资/历史工作文案，并核原规则边界。只读源与已有证据，未修改src、未运行测试/游戏/浏览器/Git；本文件不替代实际窗口或真人验收。
+
+来源身份：本次读取并逐一比较build-r4/source-after.json的415文件，当前SHA256及mode均相同（0漂移）。与root22/source-baseline.json的408原文件相比，12处原UI/相关测试变动、7个新增UI/测试；core/application/persistence/content及原规则包原文件哈希未变。该基线已保留原P3 WIP；此处不把S2或旧P3、62关键/22例行、整体goal混称完成。
+
+1. App焦点与偏好：playing阶段才按run/季度读取独立sidecar，memory override先按run隔离。新增selectedThread在当前公开投影上匹配，public-invalid与parse-invalid/读取失败均进入focusRequiresChoice；离开room时也不借saved旁路接管坏pin。显选另以controller最新source重匹配，再经候选/busy/conflict gate。失败分支保旧身份、旧quarter及notice，无原关注置重选门槛；pref不可写时有效选择仅当前窗口生效，不篡改游戏saveStatus。读取、render、memo没有setItem；写入只在显选或真实saved回调。
+2. 保存映射：R2修缮仍在。onSubmission先核同run、saved与重选门槛，前态规范化后比较完整身份；同对象结构不rememberFocus，seasonFocusAfterSave同ID返existing，并拒绝从public-invalid旧pin推断新关注。AdvanceTime/阅读/普通消息不在对象转移白名单。重试沿failedScene原kind/payload及原候选，只有真实saved后才尝试映射。原季度标签不随状态更新或推进改写。
+3. 季度回响：seasonRecollection按原chapter范围与当前已发生日期筛事实，closed须原closeSourceId；payroll、首单正向原款、生活完成/失约、fill与paid settlement分别列原ID/日期，不用余额差或浮盈补收入。精选最多3个，全部节点及当前未完责任仍可翻阅；阅读不关闭季度、不抹责任。下一季出口用原nextQuarterDate与ClockAdvance，2025-Q4不许诺新季/AP。
+4. 旧对象与责任：玩家书签与责任中断分开；原交付/风险/资金缺口置前后，原关注仍在。未知焦点不露默认首单/工作或陈旧市场近景提交，MarketSceneChoice以blockedReason同步拦提交且不清草稿。历史work原册只读旧employment/payroll，显式转看本季后才能进入本季操作；life/market/首单继续按同账户与原record身份翻阅。后续复杂五路线用原册与全部责任去向保留，未冒称已完成S3/S4专用呈现。
+5. R2后两项copy：workScene只对同period.id、positive salary且through不晚于今天求实收合计，列最近原日期/金额；不把预测工资当到账，旧Q1工作到Q2仍标原季，未自动安排新工作。OpeningMoment的history+work标签仅由thread.focusQuarter派生“翻看2020-Q1的原工作记录”，inspect screen/target/account/recordId及原命令未变。
+
+已有证据只作引用：build-r4/handoff.md记录strict/build退出0；payroll-copy-r1/handoff.md记录原正常工资case 1/1；history-label-r1/result.json记录原Jan31工资/Apr1历史链case 1/1及raw不变。以上都非本轮新执行；App.season-focus.test明确是替换server snapshot的受限SSR，不运行effects/点击/原生持久化，不能据此声称完整App交互、StrictMode异步竞态或真人理解通过。
+
+剩余边界：本轮未检查实际动画/焦点顺序/分页可操作性、真实存储例外后的当前窗口体验，亦不据类型/截图推断趣味性；由根既定Chrome与失败恢复证据分别交回。坏/未来UI记录preserved后显选只在窗口生效，重进需重选是已约定合同，不代造修复流程。全部页面兼容开发/测试0；原PNG/真人、P3与S3—S5/M01暂停/T18及goal剩余责任保持。
+
+本次主要源码SHA256：
+```text
+App.tsx 45e4df359c0140fe913853c012fb7059b8defe5dab7b0b027f0e4d3c6da4e144
+season-focus-preference.ts 7f4f06b6cee959e62c7c1470757e6ebc81fad295fe0d7b031397edce6235d340
+player-thread.ts 03b78ee3bb52b0910e48d1981f8f01a3b9c11e1cdce03487ae10b4bc859657ab
+season-thread.ts 7a811c0303f380cfb473d72978a921f97bf969d8a1775c79361608fe5bfe72c8
+OpeningMoment.tsx 59343ba013f1a5ff0d7df162187a7690f69028bbafa2530987c1880c40083994
+SeasonRecollection.tsx 4d1c4637865d466e3c4f7f3642fe9a150bee3d30a8f676f8d64bed1890f32b15
+```

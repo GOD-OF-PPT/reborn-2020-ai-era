@@ -1,0 +1,66 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/season-thread.test.ts (7 tests | 3 failed) 11128ms
+   × closes a real working quarter before offering the original next-quarter date and keeps old salary historical 2323ms
+   × uses actual fills and later cash settlement separately while a primary order follows only its own amendment 1536ms
+   × preserves original later-business pending and its complete responsibility set without stealing an explicit S2 focus 2182ms
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  3 failed | 32 passed (35)
+   Start at  14:51:45
+   Duration  44.56s (tests 97%, import 2%, transform 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/season-thread.test.ts > closes a real working quarter before offering the original next-quarter date and keeps old salary historical
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/ui/season-thread.test.ts:49:103
+     47|   expect(echo.closeSourceId).toBeTruthy();expect(echo.nodes.length).to…
+     48|   expect(echo.allNodes.filter(n=>n.sourceRefs[0]?.kind==='payroll')).t…
+     49|   expect(seasonFocusChoices(h.p()).some(c=>c.focus.entityId===focus.en…
+       |                                                                                                       ^
+     50|   expect(h.controller.exportSaved()).toBe(before)
+     51|   await h.advance('2020-04-01')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/ui/season-thread.test.ts > uses actual fills and later cash settlement separately while a primary order follows only its own amendment
+AssertionError: expected undefined to be truthy
+
+- Expected:
+true
+
++ Received:
+undefined
+
+ ❯ src/ui/season-thread.test.ts:116:22
+    114|   await h.advance(h.p().features.market.matchingCalendar[0]!.date)
+    115|   const settlement=h.p().features.market.settlements.find(s=>s.kind===…
+    116|   expect(settlement).toBeTruthy();expect(settlement.paidAt).toBeNull()
+       |                      ^
+    117|   echo=seasonRecollection(h.p())!
+    118|   expect(echo.remaining.some(r=>r.focus?.entityId===settlement.id)).to…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/ui/season-thread.test.ts > preserves original later-business pending and its complete responsibility set without stealing an explicit S2 focus
+AssertionError: expected 3 to be greater than 3
+ ❯ src/ui/season-thread.test.ts:172:33
+    170|   expect(echo.remaining.some(r=>r.sourceRefs.some(ref=>ref.kind==='obl…
+    171|   expect(echo.nodes.length).toBeLessThanOrEqual(3)
+    172|   expect(echo.remaining.length).toBeGreaterThan(3)
+       |                                 ^
+    173|   expect(h.controller.exportSaved()).toBe(before)
+    174|  }finally{await h.close()}
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+

@@ -15,18 +15,27 @@ export function marketDraftPayload(draft:MarketSceneDraft,p:Pick<GamePanelProps,
  return {accountId:draft.accountId,symbol:stock.symbol,side:draft.side,quantity,limitPriceFen:price,quoteId:draft.quoteId,validUntil:draft.expiry}
 }
 
-export function MarketSceneChoice({p,onFullRecord,children}:{p:GamePanelProps;onFullRecord:()=>void;children:(open:()=>void)=>ReactNode}){
+/** A UI bookmark gate never replaces the game's real permission and quote checks. */
+export function marketSceneSubmissionLock(p:GamePanelProps,symbol:string,blockedReason?:string|null):string|null{
+ if(blockedReason)return blockedReason
+ const stock=p.features.market.stocks.find(s=>s.symbol===symbol)
+ if(!stock||!stock.qualified||stock.status!=='open'||stock.priceFen===null||!stock.rule)return '这只股票的交易状态、公开报价、本局资格或交易规则尚不满足提交条件。'
+ if(p.view.busy||p.controller.snapshot.busy||p.view.readOnly||p.view.hasCandidate||p.view.saveStatus==='conflict'||p.view.date>=playableThrough)return '当前只读、有未保存操作、正在保存或已到年代边界，不能提交新的交易。'
+ return null
+}
+
+export function MarketSceneChoice({p,onFullRecord,children,blockedReason=null}:{p:GamePanelProps;onFullRecord:()=>void;children:(open:()=>void)=>ReactNode;blockedReason?:string|null}){
  const [open,setOpen]=useState(false),[page,setPage]=useState<'stock'|'terms'>('stock')
  const [draft,setDraft]=useState<MarketSceneDraft>({accountId:'',symbol:'',side:'',quantity:'',price:'',expiry:'',quoteId:p.features.market.quoteId})
  const openedRevision=useRef(p.view.revision),m=p.features.market
  useEffect(()=>{if(open&&(p.view.hasCandidate||p.view.saveStatus==='conflict'||p.view.revision!==openedRevision.current&&p.view.saveStatus==='saved'))setOpen(false)},[open,p.view.revision,p.view.saveStatus,p.view.hasCandidate])
+ useEffect(()=>{if(blockedReason)setOpen(false)},[blockedReason])
  const stock=m.stocks.find(s=>s.symbol===draft.symbol),position=m.positions.find(s=>s.accountId===draft.accountId&&s.symbol===draft.symbol)
  const payload=marketDraftPayload(draft,p),quoteChanged=draft.quoteId!==m.quoteId
- const stockUnavailable=!stock||!stock.qualified||stock.status!=='open'||stock.priceFen===null||!stock.rule
- const locked=p.view.busy||p.controller.snapshot.busy||p.view.readOnly||p.view.hasCandidate||p.view.saveStatus==='conflict'||p.view.date>=playableThrough||stockUnavailable
+ const lockReason=marketSceneSubmissionLock(p,draft.symbol,blockedReason),locked=lockReason!==null
  const accountName=(id:string)=>id==='personal'?'个人账户':p.features.workbench.routes.find(r=>r.accountId===id)?.name??'经营账户'
  const edit=<K extends keyof MarketSceneDraft>(key:K,value:MarketSceneDraft[K])=>setDraft(old=>({...old,[key]:value}))
- return <>{children(()=>{openedRevision.current=p.view.revision;setOpen(true)})}{open?<Dialog key={page} title={page==='stock'?'选择股票与账户':'填写这次买卖的条件'} className="market-scene-choice" onClose={()=>setOpen(false)} footer={page==='stock'?<div className="encounter-actions encounter-fixed-actions"><button type="button" className="primary" disabled={!stock||!draft.accountId} onClick={()=>setPage('terms')}>填写买卖条件 →</button><button type="button" onClick={()=>{setOpen(false);onFullRecord()}}>查看全部行情、委托与持仓</button></div>:undefined}>
+ return <>{children(()=>{if(blockedReason)return;openedRevision.current=p.view.revision;setOpen(true)})}{open?<Dialog key={page} title={page==='stock'?'选择股票与账户':'填写这次买卖的条件'} className="market-scene-choice" onClose={()=>setOpen(false)} footer={page==='stock'?<div className="encounter-actions encounter-fixed-actions"><button type="button" className="primary" disabled={!!blockedReason||!stock||!draft.accountId} onClick={()=>setPage('terms')}>填写买卖条件 →</button><button type="button" onClick={()=>{setOpen(false);onFullRecord()}}>查看全部行情、委托与持仓</button></div>:undefined}>
   <p className="encounter-overline">虚构个股 · 简化模拟市场 · 非历史实盘</p>
   <p>报价截至{m.asOf}。限价由你填写，成交还要等后续撮合；填写和返回都不会下单。</p>
   {quoteChanged?<section className="warning-box"><p>报价已经更新，股数和限价草稿仍保留。请重新核对当前公开报价与到期日期。</p><button type="button" onClick={()=>edit('quoteId',m.quoteId)}>核对这次新报价</button></section>:null}
@@ -42,7 +51,7 @@ export function MarketSceneChoice({p,onFullRecord,children}:{p:GamePanelProps;on
    {stock.rule?<p>交易单位{stock.rule.lotSize}股；佣金{stock.rule.commissionBps/100}%、最低{moneyText(stock.rule.minimumCommissionFen)}。买后{stock.rule.shareLagDays}个日历日可售，卖款{stock.rule.cashLagDays}日交收；下一步会核对实际费用、资金与行动点。</p>:<p className="warning-box">当前交易规则未知，不能提交。</p>}
    {!payload?<p className="field-help">请选择账户、股票和买卖方向，填写正整数股数、正限价与到期日期。填完前不会下单。</p>:null}
    <div className="encounter-actions">{payload&&!locked?<><CommandButton {...p} kind="PlaceStockOrder" payload={payload} label={'核对并提交'+(draft.side==='sell'?'卖单':'买单')} confirm primary/><CommandButton {...p} kind="PlanStockOrder" payload={payload} label="只预留为计划，暂不下单" confirm/></>:<button type="button" disabled>{locked?'当前不能提交交易':'请先填完买卖条件'}</button>}<button type="button" onClick={()=>setPage('stock')}>返回选择账户或股票</button></div>
-   {locked?<p className="warning-box">{stockUnavailable?'这只股票的交易状态、公开报价、本局资格或交易规则尚不满足提交条件。':'当前只读、有未保存操作、正在保存或已到年代边界，不能提交新的交易。'}草稿可以保留，提交仍须通过交易规则核对。</p>:null}
+   {locked?<p className="warning-box">{lockReason}草稿可以保留，提交仍须通过交易规则核对。</p>:null}
   </section>:null}
  </Dialog>:null}</>
 }

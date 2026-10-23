@@ -1,0 +1,120 @@
+import {expect,it} from 'vitest'
+import {renderToStaticMarkup} from 'react-dom/server'
+import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
+import {createCampaignCodec} from '../application/campaign.ts'
+import {GameController} from '../application/game-controller.ts'
+import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
+import type {GamePanelProps,PlayFeatures} from './game-types.ts'
+import {RoomMoment} from './RoomMoment.tsx'
+import {SeasonRecollection} from './SeasonRecollection.tsx'
+import type {OpeningFocus} from './player-thread.ts'
+import {marketDraftPayload,marketSceneSubmissionLock,type MarketSceneDraft} from './MarketSceneChoice.tsx'
+
+async function normal(name:string,approach:'first_order'|'free'='free'){
+ const store=new IndexedDbRunStore({codec:createCampaignCodec(),factory:new IDBFactory(),keyRange:IDBKeyRange,name:'s2-ui-'+name})
+ let count=0
+ const controller=new GameController({codec:createCampaignCodec(),store,locks:new MemoryWriterAccess(),id:()=>`s2-ui-${name}-${++count}`})
+ await controller.initialize();await controller.newLife({backgroundId:'technical_employee',playerProfile:{wishId:'autonomy',approach},seed:'s2-ui-'+name})
+ const p=():GamePanelProps=>{const view=controller.snapshot.view!;return {controller,view,features:view.features as unknown as PlayFeatures,accountId:'personal',request:()=>{throw Error('RENDER_MUST_NOT_EXECUTE')}}}
+ const send=async(kind:string,payload:unknown)=>expect((await controller.submit(controller.prepare(kind,payload))).status).toBe('saved')
+ const advance=async(date:string)=>{for(let i=0;i<40;i++){
+  const w=p().features.workbench
+  if(w.pause){const event=w.events.find(e=>e.isBlocking),choice=event?.choices.find(c=>c.isDefault);expect(choice).toMatchObject({costFen:0,actionPoints:0});await send('ChooseEvent',{instanceId:event!.id,choiceId:choice!.id});continue}
+  if(p().view.date>=date)return
+  await send('AdvanceTime',{date})
+ }throw Error('S2_UI_CLOCK_LIMIT')}
+ return {controller,p,send,advance,close:async()=>{await controller.close();await store.close()}}
+}
+
+it('requires an explicit bookmark after an unavailable preference without exposing a default offer command',async()=>{
+ const h=await normal('unread','first_order')
+ try{
+  const before=h.controller.exportSaved(),html=renderToStaticMarkup(<RoomMoment p={h.p()} headingRef={null} focusRequiresChoice focusNotice="原关注未能读取，请重新选择" onNavigate={()=>{throw Error('RENDER_NAVIGATED')}} onExplore={()=>{}}/>)
+  expect(html).toContain('先选回这一季在意的事');expect(html).toContain('原来的关注尚未读出');expect(html).toContain('重新选择原关注')
+  expect(html).not.toContain('aria-label="接下这笔手工单"');expect(html).not.toContain('aria-label="把七天留给自己"')
+  expect(h.controller.exportSaved()).toBe(before)
+ }finally{await h.close()}
+},20000)
+
+it('renders an explicitly selected old completed life as history in a later playing season',async()=>{
+ const h=await normal('history')
+ try{
+  await h.send('StartLifeWork',{kind:'rest',personId:null,reference:null})
+  const job=h.p().features.life.jobs[0]!,focus:OpeningFocus={runId:h.p().view.runId,kind:'life',selection:'rest',accountId:'personal',entityId:job.id}
+  await h.advance('2020-04-01')
+  expect(h.p().features.workbench.quarter).toBe('2020-Q2')
+  const before=h.controller.exportSaved(),html=renderToStaticMarkup(<RoomMoment p={h.p()} headingRef={null} openingFocus={focus} focusQuarter="2020-Q1" onOpeningFocus={()=>{}} onNavigate={()=>{}} onExplore={()=>{}}/>)
+  expect(html).toContain('历史回看');expect(html).toContain('2020-Q1');expect(html).toContain('data-focus-scope="history"');expect(html).toContain('旧收支不会重记为本季收入')
+  expect(html).not.toContain('aria-label="接下这笔手工单"');expect(h.controller.exportSaved()).toBe(before)
+ }finally{await h.close()}
+},30000)
+
+it('keeps real delivery responsibility ahead of an unread bookmark without claiming a replacement focus',async()=>{
+ const h=await normal('delivery','first_order')
+ try{
+  await h.send('StartFirstOrder',{});await h.advance('2020-01-19')
+  expect(h.p().features.firstOrder.status).toBe('awaiting_submission')
+  const before=h.controller.exportSaved(),html=renderToStaticMarkup(<RoomMoment p={h.p()} headingRef={null} focusRequiresChoice onNavigate={()=>{}} onExplore={()=>{}} onResponsibilities={()=>{}}/>)
+  expect(html).toContain('先面对这项原责任');expect(html).toContain('原关注尚待读出');expect(html).toContain('翻看全部原责任与牵挂')
+  expect(html).not.toContain('书签留着：');expect(h.controller.exportSaved()).toBe(before)
+ }finally{await h.close()}
+},30000)
+
+it('reads actual payroll references and names the same historical work by its original quarter after rollover',async()=>{
+ const h=await normal('payroll')
+ try{
+  await h.send('WorkQuarter',{});await h.advance('2020-01-31')
+  const salary=h.p().view.operations!.payroll.find(row=>row.kind==='salary')!
+  expect(salary.amountFen).toBeGreaterThan(0)
+  const before=h.controller.exportSaved(),html=renderToStaticMarkup(<SeasonRecollection p={h.p()} onClose={()=>{}} onNavigate={()=>{throw Error('RENDER_NAVIGATED')}}/>)
+  expect(html).toContain('按实际在岗日，工资已经收到');expect(html).toContain(salary.id);expect(html).toContain('日子还在继续')
+  expect(html).not.toContain('核对旧约定，进入下一季');expect(h.controller.exportSaved()).toBe(before)
+  await h.advance('2020-04-01')
+  const focus:OpeningFocus={runId:h.p().view.runId,kind:'work',accountId:'personal',entityId:salary.entityId},beforeHistory=h.controller.exportSaved()
+  const history=renderToStaticMarkup(<RoomMoment p={h.p()} headingRef={null} openingFocus={focus} focusQuarter="2020-Q1" onOpeningFocus={()=>{}} onNavigate={()=>{}} onExplore={()=>{}}/>)
+  expect(history).toContain('翻看2020-Q1的原工作记录');expect(history).not.toContain('查看本季工作与原日历');expect(h.controller.exportSaved()).toBe(beforeHistory)
+ }finally{await h.close()}
+},30000)
+
+it('blocks an otherwise valid real simulated order while its bookmark is unread, without changing its draft or game',async()=>{
+ const h=await normal('market-gate')
+ try{
+  const p=h.p(),stock=p.features.market.stocks.find(s=>s.qualified&&s.status==='open'&&s.priceFen!==null&&s.rule)!
+  const draft:MarketSceneDraft={accountId:'personal',symbol:stock.symbol,side:'buy',quantity:String(stock.rule!.lotSize),price:String(stock.priceFen!/100),expiry:p.features.market.matchingCalendar[0]!.id,quoteId:p.features.market.quoteId}
+  const before=h.controller.exportSaved(),draftBefore=JSON.stringify(draft),payload=marketDraftPayload(draft,p)!
+  expect(h.controller.preview(h.controller.prepare('PlaceStockOrder',payload)).allowed).toBe(true)
+  expect(marketSceneSubmissionLock(p,stock.symbol)).toBeNull()
+  expect(marketSceneSubmissionLock(p,stock.symbol,'原关注未读出，请先重选')).toBe('原关注未读出，请先重选')
+  expect(marketDraftPayload(draft,p)).toEqual(payload);expect(JSON.stringify(draft)).toBe(draftBefore)
+  expect(marketSceneSubmissionLock(p,stock.symbol,null)).toBeNull();expect(h.controller.exportSaved()).toBe(before)
+ }finally{await h.close()}
+},20000)
+
+it('offers the original clock directly after an actual rest result without creating another arrangement',async()=>{
+ const h=await normal('rest-continue')
+ try{
+  await h.send('StartLifeWork',{kind:'rest',personId:null,reference:null});await h.advance('2020-01-08')
+  const job=h.p().features.life.jobs.find(row=>row.kind==='rest')!,focus:OpeningFocus={runId:h.p().view.runId,kind:'life',selection:'rest',accountId:'personal',entityId:job.id}
+  expect(job.status).toBe('completed')
+  const before=h.controller.exportSaved(),html=renderToStaticMarkup(<RoomMoment p={h.p()} headingRef={null} openingFocus={focus} onOpeningFocus={()=>{}} onNavigate={()=>{}} onExplore={()=>{}}/>)
+  expect(html).toContain('不新增安排，让原日子继续');expect(html).toContain('clock-main');expect(html).toContain('查看这次生活安排与原记录')
+  expect(html).not.toContain('aria-label="先保留这一季的工作"');expect(h.controller.exportSaved()).toBe(before)
+ }finally{await h.close()}
+},20000)
+
+it('keeps an original advance exit when zero real AP cannot start the chosen free rest',async()=>{
+ const h=await normal('zero-ap-continue')
+ try{
+  await h.send('WorkQuarter',{});await h.send('ResearchMarket',{definitionId:'market-overview'});await h.advance('2020-01-08')
+  await h.send('ResearchMarket',{definitionId:'market-foundation-course'})
+  const p=h.p(),focus:OpeningFocus={runId:p.view.runId,kind:'free',accountId:'personal',entityId:null}
+  expect(p.view.budget.available).toBe(0)
+  expect(h.controller.preview(h.controller.prepare('StartLifeWork',{kind:'rest',personId:null,reference:null})).allowed).toBe(false)
+  const before=h.controller.exportSaved(),html=renderToStaticMarkup(<RoomMoment p={p} headingRef={null} openingFocus={focus} onOpeningFocus={()=>{}} onNavigate={()=>{}} onExplore={()=>{}}/>)
+  expect(html).toContain('不新增安排，让原日子继续')
+  const clock=html.match(/<button[^>]*aria-label="不新增安排，让原日子继续[^\"]*"[^>]*>/)?.[0]
+  expect(clock).toBeDefined();expect(clock).not.toContain('disabled')
+  expect(h.controller.exportSaved()).toBe(before);expect(h.p().view.budget.available).toBe(0)
+ }finally{await h.close()}
+},30000)

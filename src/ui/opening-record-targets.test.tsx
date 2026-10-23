@@ -16,12 +16,37 @@ async function normal(name:string){
  const controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=>`s1-record-${name}-${++sequence}`})
  await controller.initialize();await controller.newLife({backgroundId:'technical_employee',playerProfile:{wishId:'autonomy',approach:'free'},seed:'s1-record-'+name})
  const p=():GamePanelProps=>{const view=controller.snapshot.view!;return {controller,view,features:view.features as unknown as PlayFeatures,accountId:'personal',request:()=>{throw Error('READING_AN_ORIGINAL_RECORD_MUST_NOT_SUBMIT')}}}
- const send=async(kind:string,payload:unknown)=>expect((await controller.submit(controller.prepare(kind,payload))).status,kind).toBe('saved')
+ const send=async(kind:string,payload:unknown)=>{const result=await controller.submit(controller.prepare(kind,payload));expect(result.status,kind+' '+result.reasonCodes.join(',')).toBe('saved')}
  const company=async()=>{await send('DiscoverBusiness',{definitionId:'course-studio'});return p().view.operations!.businesses.find(b=>b.definitionId==='course-studio')!.accountId}
  return {controller,p,send,company,close:async()=>{await controller.close();await store.close()}}
 }
 const noAction=()=>{throw Error('SERVER_RENDER_MUST_NOT_NAVIGATE')}
 function quarter(p:GamePanelProps,initialRecordId:string,initialPhase:'brief'|'plan'='brief'){return <QuarterPanel {...p} initialRecordId={initialRecordId} initialPhase={initialPhase} guideHidden={false} onHideGuide={noAction} onLife={noAction} onPeople={noAction} onMarket={noAction} onDeepseek={noAction} onCourse={noAction} onRelay={noAction} onRoutines={noAction} onStory={noAction}/>}
+
+it('shows a real prior-quarter employment record without silently opening the new quarter work commands',async()=>{
+ const h=await normal('prior-quarter-work')
+ try{
+  await h.send('WorkQuarter',{})
+  const period=h.p().view.operations!.employment[0]!
+  for(let count=0;h.p().view.date<'2020-04-01'&&count<30;count++){
+   const w=h.p().features.workbench
+   const decision=w.events.find(event=>event.isBlocking)
+   if(decision){await h.send('DeferEventDecision',{instanceId:decision.id});continue}
+   await h.send('AdvanceTime',{date:w.atQuarterEnd?w.progression.nextQuarterDate!:w.progression.quarterTarget})
+  }
+  const p=h.p(),before=h.controller.exportSaved()
+  expect(p.features.workbench.quarter).toBe('2020-Q2')
+  const html=renderToStaticMarkup(quarter(p,period.id))
+  expect(html).toContain('data-record-id="'+period.id+'"')
+  expect(html).toContain('2020-Q1 · 历史原记录')
+  expect(html).toContain('当前已是2020-Q2')
+  expect(html).toContain('实际工资')
+  expect(html).toContain('明确转看2020-Q2的本季安排')
+  expect(html).not.toContain('安排本季工作 · 2点')
+  expect(html).not.toContain('停止后续在岗安排')
+  expect(h.controller.exportSaved()).toBe(before)
+ }finally{await h.close()}
+},40000)
 
 it('opens the requested original order while preserving other orders and rejects a real different account',async()=>{
  const h=await normal('orders')

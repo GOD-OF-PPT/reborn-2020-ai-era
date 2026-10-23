@@ -1,0 +1,1 @@
+R1 10文件47项实际43通过/新App4项未进入目标场景，原log保持；因App real serverSnapshot固定入口，R2只在隔离render测试stub useSyncExternalStore的来源为controller当前公开snapshot，实际effect/click/persistence仍待Chrome，不改生产SSR默认合同。另增加loaded但public invalid entry门槛回归、原手工单planned/running日历合同ID断言。R2仅这两个受影响文件，另九文件旧43项不算新执行。模型invalid-existing保存回归另有原5秒1项通过。

@@ -1,0 +1,23 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "npm",
+    "run",
+    "test:unit",
+    "--",
+    "src/ui/App.test.tsx",
+    "src/ui/App.season-focus.test.tsx",
+    "src/ui/App.preparation-save.test.tsx",
+    "src/ui/RoomMoment.test.tsx",
+    "src/ui/CinematicRoom.test.tsx",
+    "src/ui/SeasonRecollection.test.tsx",
+    "src/ui/opening-record-targets.test.tsx",
+    "src/ui/life-scene-progress.test.ts",
+    "src/ui/market-scene-progress.test.tsx",
+    "src/ui/scene-play.test.tsx",
+    "--maxWorkers=1",
+    "--reporter=verbose"
+  ],
+  "scope": "Current affected S2 UI integration, actual core commands/save from normal Create where tests define them; no compatibility tests, no timeout override"
+}

@@ -1,0 +1,1 @@
+R1只记录AdvanceTime rejected，唯一原因未核；R2实际明确DECISION_PENDING。此前R2说明把R1唯一归于跨季门槛的判断过强，保留旧说明并以此补正。R3沿公开blocking event显式DeferEventDecision后，再按quarterTarget/真实atQuarterEnd进入Q2；不省原决定、钱、日期/AP或原断言，仅核这一新增历史案例。

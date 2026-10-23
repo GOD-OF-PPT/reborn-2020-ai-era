@@ -38,6 +38,7 @@ it('actual production remains planned, running, then awaiting submission; browsi
   expect((await controller.submit(controller.prepare('StartFirstOrder',{}))).status).toBe('saved')
   let p=snapshot(),works=sceneWorks(p),frame=committedEcho(initial.view,p.view)
   expect(works.some(w=>w.status==='已经安排，等待实际开工')).toBe(true)
+  expect(works.find(w=>w.id===p.features.firstOrder.jobId)).toMatchObject({screen:'quarter',accountId:'personal',recordId:p.features.firstOrder.contractId})
   expect(frame?.pointsAfter).toBe(p.view.budget.available)
   expect(frame?.accounts[0]?.before).toBe(2600000)
   const old=controller.exportSaved();expect(renderToStaticMarkup(<SceneJournal p={p} onNavigate={()=>{throw Error('READ_MUST_NOT_NAVIGATE')}}/>)).toContain('等待实际开工');expect(controller.exportSaved()).toBe(old)
@@ -46,8 +47,10 @@ it('actual production remains planned, running, then awaiting submission; browsi
   expect(renderToStaticMarkup(<SceneEcho text="尚未实际到账" frame={frame} accountName={()=>'个人账户'} onClose={()=>{}}/>)).toContain('尚未实际到账')
   expect((await controller.submit(controller.prepare('AdvanceTime',{date:'2020-01-05'}))).status).toBe('saved')
   p=snapshot();expect(sceneWorks(p).some(w=>w.status==='进行中，完成后仍需核对交付')).toBe(true)
+  expect(sceneWorks(p).find(w=>w.id===p.features.firstOrder.jobId)).toMatchObject({screen:'quarter',accountId:'personal',recordId:p.features.firstOrder.contractId})
   expect((await controller.submit(controller.prepare('AdvanceTime',{date:'2020-01-19'}))).status).toBe('saved')
   p=snapshot();works=sceneWorks(p);expect(works.some(w=>w.status==='作品已完成，等待你亲手提交')).toBe(true)
+  expect(works.find(w=>w.id==='first-order-feedback')).toMatchObject({screen:'quarter',accountId:'personal',recordId:p.features.firstOrder.contractId})
   expect(p.features.firstOrder.result.paymentFen).toBe(0)
   expect(controller.snapshot.view!.date).toBe('2020-01-19')
  }finally{await controller.close();await store.close()}

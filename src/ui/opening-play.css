@@ -37,6 +37,44 @@
 .cinema-app .command-review>.dialog-actions{display:flex;align-items:center;justify-content:flex-end;gap:16px;flex:none;padding:16px 0 0;margin:12px 0 0;border-top:1px solid #ad986466}
 .cinema-app .command-review>.dialog-actions>button{padding:11px 20px;min-height:42px;font:16px/1.7 var(--serif)}
 
+/* S2 bookmarks and seasonal leaves describe public records, never a task-completion score. */
+.cinema-app .opening-room .opening-room-intention{flex-wrap:wrap;row-gap:2px}
+.opening-room .opening-room-stage[data-interrupted=true]{padding-left:12px;border-left:2px solid #b97859;color:#ebc09b}
+.opening-room .season-return-bookmark{margin:0 0 10px;padding:8px 0 8px 12px;border-left:1px dashed #c8b786;color:#d1d4b8;font:13px/1.8 var(--serif)}
+.opening-room .season-focus-notice{margin:0 0 10px;padding:8px 12px;border-left:2px solid #bb9b61;color:#e2ceaa;font:13px/1.85 var(--serif);background:#1f3b333d}
+.season-focus-book .season-focus-choice{display:flex;align-items:flex-start;gap:14px;padding:17px 4px;border-bottom:1px solid #a69c6f66;cursor:pointer;break-inside:avoid}
+.season-focus-book .season-focus-choice>input{flex:none;margin-top:8px;width:17px;height:17px;accent-color:#526b48}
+.season-focus-book .season-focus-choice>span{display:flex;flex-direction:column;gap:7px;min-width:0}
+.season-focus-book .season-focus-choice strong{font:400 21px/1.6 var(--serif);color:#354f3e}
+.season-focus-book .season-focus-choice span>span{font:14px/1.85 var(--serif);color:#56674d}
+.season-focus-book .season-focus-choice .season-choice-origin{color:#85774f;font-size:12px}
+.season-focus-book .season-focus-choice .season-choice-date{color:#657749}
+.season-focus-book .season-focus-choice[data-selected=true]{border-left:2px solid #8e9864;padding-left:13px;background:#8c9a6b0d}
+.season-focus-book .season-focus-choice:focus-within{outline:2px solid #7b8962;outline-offset:3px}
+.season-focus-book .season-selection-note{padding:12px 0;color:#596d4e;font:14px/1.85 var(--serif)}
+.season-focus-book .season-focus-notice{padding:10px 13px;border-left:2px solid #a07b50;color:#79613e;background:#9c81570a}
+.cinema-app .dialog>.season-focus-actions,
+.cinema-app .dialog>.season-recollection-actions{display:flex;align-items:center;justify-content:flex-end;gap:14px;flex:none;margin-top:12px;padding-top:15px;border-top:1px solid #ad986466}
+.season-focus-actions>button,
+.season-recollection-actions>button{padding:10px 14px;font:15px/1.7 var(--serif)}
+.season-recollection .season-leaf-heading{padding:7px 0 16px;border-bottom:1px solid #a69c6f55}
+.season-recollection .season-echo-leaf{padding:18px 0;border-bottom:1px solid #a69c6f55;break-inside:avoid}
+.season-recollection .season-echo-leaf:not(:first-child){break-before:column}
+.season-recollection time{display:block;color:#82794f;font:13px/1.8 Georgia,var(--serif);letter-spacing:1px}
+.season-recollection .season-echo-leaf h3{color:#3b5943;font:400 26px/1.6 var(--serif)}
+.season-recollection .season-echo-leaf>p{font:16px/1.95 var(--serif);color:#465f45}
+.season-recollection :is(.season-all-echoes,.season-remaining,.season-next-question){padding:19px 0;border-top:1px solid #a69c6f66}
+.season-recollection .season-remaining>article{margin:12px 0;padding:12px 0 12px 14px;border-left:1px solid #a3a47b;break-inside:avoid}
+.season-recollection .season-remaining>article[data-urgent=true]{border-left:3px solid #a7684a}
+.season-recollection .season-remaining-label{color:#81754e;font:12px/1.8 var(--serif)}
+.season-recollection .season-remaining>article[data-urgent=true] .season-remaining-label{color:#945c43}
+.season-recollection .season-next-question h3{font:400 25px/1.7 var(--serif);color:#405c43}
+.season-recollection details{margin:12px 0;font:13px/1.85 var(--serif);color:#677455}
+.season-recollection details code{display:block;overflow-wrap:anywhere;color:#788063;font:12px/1.8 system-ui}
+.season-recollection-actions .clock-advance{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+.season-recollection-actions .clock-main>button{padding:10px 14px;font:15px/1.75 var(--serif)}
+.season-recollection-actions .clock-review>button{padding:8px 0;border:0;border-bottom:1px solid #9c9e7055;background:none;color:#60734b;font:13px/1.8 var(--serif)}
+
 .cinema-app.opening-scene-active .site-header{
  gap:24px;
  border:0;
@@ -227,6 +265,7 @@
 .opening-room .opening-room-hud strong{font:22px/1.5 Georgia,var(--opening-serif);color:#f0ddb5}
 .opening-room:not([data-exploring=true]) .room-pocket,
 .opening-room:not([data-exploring=true]) .opening-room-records{top:auto;right:6%;bottom:70px;display:flex;align-items:flex-end;gap:18px;justify-items:normal;max-width:43%}
+.opening-room:not([data-exploring=true]) .room-pocket{z-index:4}
 .opening-room:not([data-exploring=true]) .room-pocket>button,
 .opening-room:not([data-exploring=true]) .room-pocket>.scene-journal-object,
 .opening-room:not([data-exploring=true]) .opening-room-records>button{display:flex;align-items:center;gap:7px;min-width:0;min-height:34px;padding:4px 0;font:12px/1.8 var(--opening-serif)}
@@ -262,14 +301,23 @@
  cursor:pointer;
 }
 .opening-room>.opening-object,
-.opening-room .opening-room-object{position:absolute;left:65%;top:29%;z-index:3;width:300px;max-width:28%;margin:0}
-.opening-room .opening-room-object>.opening-object{width:100%;max-width:none}
+.opening-room .opening-room-object{position:absolute;left:65%;top:29%;bottom:132px;z-index:3;width:300px;max-width:28%;margin:0}
+/* The full label keeps its natural height; the illustration shares the remaining space. */
+.opening-room>.opening-object,
+.opening-room .opening-room-object>.opening-object{display:grid;grid-template-rows:minmax(0,1fr) auto;gap:14px}
+.opening-room .opening-room-object>.opening-object{width:100%;max-width:none;height:100%}
 .opening-object-art{position:relative;display:block;width:100%;pointer-events:none;filter:drop-shadow(4px 13px 13px #00151d77)}
 .opening-object-art>img{display:block;width:100%;height:auto}
+.opening-room>.opening-object>.opening-object-art,
+.opening-room .opening-room-object>.opening-object>.opening-object-art{min-height:0;height:100%;width:auto;max-width:100%;aspect-ratio:1;justify-self:center}
+.opening-room>.opening-object>.opening-object-art>img,
+.opening-room .opening-room-object>.opening-object>.opening-object-art>img{width:100%;height:100%;object-fit:contain}
 .opening-object-mark{position:absolute;right:15%;top:27%;display:grid;place-items:center;width:30px;height:30px;border:1px solid #96774f;background:#e9ddbdc9;border-radius:50%;color:#566c4f}
 .opening-object-mark>svg{width:27px;height:27px;stroke:currentColor;stroke-width:1.5}
 .opening-object-mark:empty{width:13px;height:13px;right:18%;top:28%;background:#92603e;border:1px solid #b78058}
 .opening-object-copy{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:8px;width:100%;min-width:0;margin-top:-21px;padding:12px 15px 11px;border-left:1px solid var(--object-accent);background:linear-gradient(90deg,#0c272de8,#0c272d70);transform:rotate(3deg)}
+.opening-room>.opening-object>.opening-object-copy,
+.opening-room .opening-room-object>.opening-object>.opening-object-copy{margin-top:0}
 .opening-object-stage{color:#d6c393;font:12px/1.7 var(--serif,"Songti SC",serif);letter-spacing:1px}
 .opening-object-title{color:#f1e4c7;font:400 23px/1.5 var(--serif,"Songti SC",serif);letter-spacing:1px}
 .opening-object-detail{color:#cbd0b8;font:13px/1.75 var(--serif,"Songti SC",serif)}
@@ -300,6 +348,10 @@
 .text-mode .opening-object{transform:none;box-shadow:none}
 .opening-object[data-text-only=true] .opening-object-art,
 .text-mode .opening-object .opening-object-art{display:none}
+.opening-room>.opening-object[data-text-only=true],
+.opening-room .opening-room-object>.opening-object[data-text-only=true],
+.text-mode .opening-room>.opening-object,
+.text-mode .opening-room .opening-room-object>.opening-object{grid-template-rows:auto;align-content:start;gap:0}
 .opening-object[data-text-only=true] .opening-object-copy,
 .text-mode .opening-object .opening-object-copy{margin-top:0;transform:none;background:#153338;border:1px solid #c7b282;padding:16px 18px}
 .opening-object[data-text-only=true]:disabled .opening-object-copy,

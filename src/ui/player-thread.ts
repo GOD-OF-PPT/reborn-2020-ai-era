@@ -6,6 +6,8 @@ import {marketSceneProgress} from './market-scene-progress.ts'
 import {moneyText,wishes} from './game-text.ts'
 import {marketId} from '../core/market.ts'
 import {operatingId} from '../core/operations-calendar.ts'
+import {quarterOf} from '../core/calendar.ts'
+import {sceneThreads} from './scene-thread-notes.ts'
 
 type Input=Pick<GamePanelProps,'view'|'features'>
 type Identity={readonly runId:string;readonly accountId:string;readonly entityId:string|null;readonly businessId?:string}
@@ -23,6 +25,9 @@ export interface PlayerThreadView{
  readonly attempt:string
  readonly focus:OpeningFocus
  readonly focusStatus:'default'|'valid'|'invalid'
+ readonly focusQuarter:string|null
+ readonly focusScope:'entry'|'current'|'carry'|'history'|'invalid'
+ readonly legacyFallbackRequired:boolean
  readonly invalidReason:string|null
  readonly stage:string
  readonly object:string
@@ -67,17 +72,19 @@ function invalidFocus(p:Input,f:OpeningFocus):string|null{
  if(f.runId!==p.view.runId)return '这项关注来自另一段人生，请重新选择。'
  if(!p.view.accounts.some(a=>a.accountId===f.accountId))return '原账户已不可达，请重新选择；没有切换到账户。'
  if(f.kind!=='market'&&f.accountId!=='personal')return '这项个人安排与原账户不匹配，请重新选择。'
+ if(['life','work','free'].includes(f.kind)&&f.businessId)return '这项个人关注不绑定企业业务，请重新选择。'
  if(f.kind==='first-order'){
   const first=p.features.firstOrder
   if(f.entityId!==null&&![first.offerId,first.contractId,first.jobId].includes(f.entityId))return '原首单对象不存在，没有换成另一份委托。'
   if(f.businessId&&f.businessId!==first.businessId)return '原首单业务身份已失效，请重新选择。'
  }
+ if(f.kind==='market'&&f.entityKind&&(!['order','settlement','position','research'].includes(f.entityKind)||f.entityId===null))return '原投资种类缺少匹配的实际对象，请重新选择。'
  if(f.kind==='market'&&f.entityId!==null){
   const entity=marketEntity(p,f.entityId)
   if(!entity)return '原投资对象不存在或已不在公开记录中，请重新选择。'
   if(entity.accountId!==f.accountId||f.entityKind&&entity.entityKind!==f.entityKind)return '原投资对象的账户或种类不匹配，没有替换委托。'
  }
- if(f.kind==='market'&&f.businessId&&!p.view.operations?.businesses.some(b=>b.id===f.businessId&&b.accountId===f.accountId))return '原投资主体与账户不匹配，请重新选择。'
+ if(f.kind==='market'&&f.businessId&&(f.accountId==='personal'||!p.view.operations?.businesses.some(b=>b.company&&b.id===f.businessId&&b.accountId===f.accountId)))return '原投资主体与账户不匹配；个人模拟投资不绑定手工或其他业务，请重新选择。'
  if(f.kind==='work'&&f.entityId!==null&&!p.view.operations?.employment.some(e=>e.id===f.entityId))return '原工作安排不存在，请重新选择。'
  if(f.kind==='free'&&f.entityId!==null)return '自由入口不属于这份业务对象，请重新选择。'
  if(f.kind==='life'){
@@ -101,7 +108,7 @@ function resolvedFocus(p:Input,f:OpeningFocus):OpeningFocus{
   const progress=marketSceneProgress(accountMarket(p,f.accountId),p.view.date,f.accountId,f.entityId)
   const id=f.entityId??progress.entityId,entity=id?marketEntity(p,id):null
   // Research belongs to the player even when another account's empty market is inspected.
-  const business=p.view.operations?.businesses.find(b=>b.accountId===f.accountId)
+  const business=f.accountId==='personal'?undefined:p.view.operations?.businesses.find(b=>b.company&&b.accountId===f.accountId)
   const owner=business?{businessId:business.id}:{}
   if(entity&&entity.accountId===f.accountId)return {...f,...owner,entityId:id,entityKind:entity.entityKind}
   return {...f,...owner,entityId:null}
@@ -187,8 +194,62 @@ function recoveredFocus(p:Input):Recovery|null{
 function defaultFocus(p:Input):Recovery{
  const base={runId:p.view.runId,accountId:'personal',entityId:null}
  const recovered=recoveredFocus(p);if(recovered)return recovered
- const focus:OpeningFocus=p.view.playerProfile.approach==='investment'?{...base,kind:'market'}:p.view.playerProfile.approach==='first_order'?{...base,kind:'first-order'}:{...base,kind:'free'}
+ const opening=p.features.workbench.quarter==='2020-Q1'
+ const focus:OpeningFocus=opening&&p.view.playerProfile.approach==='investment'?{...base,kind:'market'}:opening&&p.view.playerProfile.approach==='first_order'?{...base,kind:'first-order'}:{...base,kind:'free'}
  return {focus:resolvedFocus(p,focus),needsReview:false,count:0}
+}
+
+function focusEntry(p:Input,f:OpeningFocus){
+ if(f.kind==='free'||f.entityId===null)return true
+ if(f.kind==='life')return f.entityId===f.selection&&!p.features.life.jobs.some(j=>j.id===f.entityId)&&!p.features.life.promises.some(o=>o.id===f.entityId)
+ return f.kind==='first-order'&&p.features.firstOrder.status==='available'&&p.features.firstOrder.contractId===null
+}
+function originQuarter(p:Input,f:OpeningFocus):string|null{
+ const id=f.entityId
+ if(focusEntry(p,f))return p.features.workbench.quarter
+ if(f.kind==='work')return p.view.operations?.employment.find(e=>e.id===id)?.quarter??null
+ if(f.kind==='first-order')return '2020-Q1'
+ if(f.kind==='life'){
+  const job=p.features.life.jobs.find(j=>j.id===id),promise=p.features.life.promises.find(o=>o.id===id)
+  return job?quarterOf(job.startAt):promise?quarterOf(promise.offeredAt):null
+ }
+ if(f.kind==='market'){
+  const m=p.features.market,order=m.orders.find(o=>o.id===id),research=m.researches.find(r=>r.id===id),settlement=m.settlements.find(s=>s.id===id)
+  if(order)return quarterOf(order.submittedAt)
+  if(research)return quarterOf(research.startAt)
+  if(settlement){const fill=m.fills.find(x=>x.id===settlement.sourceId);return fill?quarterOf(fill.date):quarterOf(settlement.dueAt)}
+  const position=m.positions.find(x=>x.id===id),orders=position?new Set(m.orders.filter(o=>o.accountId===position.accountId&&o.symbol===position.symbol).map(o=>o.id)):null
+  const first=orders?m.fills.filter(x=>orders.has(x.orderId)).map(x=>x.date).sort()[0]:null
+  return first?quarterOf(first):null
+ }
+ return null
+}
+function focusOpen(p:Input,f:OpeningFocus){
+ const id=f.entityId
+ if(f.kind==='first-order')return ['planned','running','awaiting_submission','review','delivered'].includes(String(p.features.firstOrder.status))
+ if(f.kind==='work')return p.features.workbench.employment.some(e=>e.id===id&&e.segments.some(s=>s.to===null))
+ if(f.kind==='life')return p.features.life.jobs.some(j=>j.id===id&&j.status==='running')||p.features.life.promises.some(o=>o.id===id&&['offered','accepted'].includes(o.status))
+ if(f.kind==='market'){
+  const m=p.features.market
+  return m.orders.some(o=>o.id===id&&['planned','pending','partially_filled'].includes(o.status))||m.researches.some(r=>r.id===id&&r.status==='running')||m.settlements.some(s=>s.id===id&&s.paidAt===null)||m.positions.some(x=>x.id===id&&x.quantity>0)
+   ||m.fills.some(fill=>fill.orderId===id&&m.settlements.some(s=>s.sourceId===fill.id&&s.paidAt===null))
+ }
+ return false
+}
+function focusResultDate(p:Input,f:OpeningFocus):string|null{
+ const id=f.entityId
+ if(f.kind==='first-order'){const c=p.view.operations?.contracts.find(c=>c.id===p.features.firstOrder.contractId);return c?.settledAt??c?.reviewedAt??null}
+ if(f.kind==='work')return p.view.operations?.payroll.filter(x=>x.entityId===id&&x.kind==='salary'&&x.amountFen>0).map(x=>x.through).sort().at(-1)??null
+ if(f.kind==='life'){const j=p.features.life.jobs.find(j=>j.id===id),o=p.features.life.promises.find(o=>o.id===id);return j?.status==='completed'?j.completeAt:j?.releasedAt??o?.resolvedAt??null}
+ if(f.kind==='market'){const m=p.features.market,r=m.researches.find(r=>r.id===id),s=m.settlements.find(s=>s.id===id);return r?.status==='completed'?r.completeAt:s?.paidAt??m.fills.filter(x=>x.orderId===id).map(x=>x.date).sort().at(-1)??null}
+ return null
+}
+function legacyPending(p:Input){
+ const f=p.features
+ return sceneThreads(f,p.view.date).some(t=>['video','course','relay','deepseek','routines','story'].includes(t.screen))
+  ||(p.view.operations?.jobs.some(j=>j.id!==f.firstOrder.jobId&&['planned','running'].includes(j.status))??false)
+  ||f.story.jobs.some(j=>j.status==='running')
+  ||!!f.video?.works.some(w=>w.contractId===null&&w.abandonedAt===null&&!f.video!.publications.some(pub=>pub.workId===w.id))
 }
 
 function firstScene(p:Input):Scene{
@@ -258,7 +319,11 @@ function workScene(p:Input,f:OpeningFocus):Scene{
  const payroll=p.view.operations?.payroll.filter(row=>row.kind==='salary'&&row.entityId===period.id&&row.amountFen>0&&row.through<=p.view.date)??[]
  const active=period.quarter===w.quarter&&period.segments.some(s=>s.to===null)
  const next=w.finance.find(a=>a.accountId==='personal')?.forecast.flows.find(flow=>flow.sourceId===period.id&&flow.amountFen>0&&flow.date>p.view.date&&flow.date<period.limit)
- return {stage:payroll.length?'work-paid':active?'work-scheduled':'work-ended',object:'这一季留好的工作',title:payroll.length?'按实际在岗日，工资留下了记录。':active?'这一季的工作，已经留好。':'这段原工作安排，已经结束。',line:active?'工作照原日历继续，余下的时间仍可留给生活或自己的尝试。':'原工资、在岗日期与已耗行动保留；下一季仍须重新决定。',detail:'工资与经营收入分别核对；查看不会补发工资或恢复行动。',outcome:payroll.length?'actual':active?'pending':'none',inspect,resultRefs:payroll.map(row=>({kind:'payroll',id:row.id,date:row.through})),...(active&&next?{wait:{date:next.date,label:'等下一次原工作日历反馈'}}:{})}
+ const latest=[...payroll].sort((a,b)=>b.through.localeCompare(a.through)||b.id.localeCompare(a.id))[0]
+ const totalFen=payroll.reduce((total,row)=>total+row.amountFen,0)
+ const line=latest?`截至${p.view.date}，${period.quarter}这段工作已实收工资合计${moneyText(totalFen)}；最近一笔是${latest.through}的${moneyText(latest.amountFen)}。`:active?'这段工作已经留好，工资仍须等原日历实际结算。':'原在岗日期与已耗行动保留；截至今天没有这段工作的工资实收记录。'
+ const calendar=period.quarter!==w.quarter?'这里回看原季度工作；当前季度的工作仍须另行决定。':w.atQuarterEnd?'本季日历已结算，下一季工作仍要另行决定。':active?'工作照原日历继续'+(next?'，下一次原反馈为'+next.date:'')+'；余下时间仍可留给生活或自己的尝试。':'这段原工作安排已结束，后续工作仍须另行决定。'
+ return {stage:payroll.length?'work-paid':active?'work-scheduled':'work-ended',object:'这一季留好的工作',title:payroll.length?'按实际在岗日，工资留下了记录。':active?'这一季的工作，已经留好。':'这段原工作安排，已经结束。',line,detail:calendar+'工资与经营收入分别核对；查看不会补发工资或恢复行动。',outcome:payroll.length?'actual':active?'pending':'none',inspect,resultRefs:payroll.map(row=>({kind:'payroll',id:row.id,date:row.through})),...(active&&next?{wait:{date:next.date,label:'等下一次原工作日历反馈'}}:{})}
 }
 
 function freeScene():Scene{
@@ -266,13 +331,18 @@ function freeScene():Scene{
 }
 
 /** Pure S1 presentation: never previews, executes, saves, samples randomness or reads hidden run state. */
-export function playerThread(p:Input,requested?:OpeningFocus|null):PlayerThreadView{
- const recovery=requested?null:defaultFocus(p),focus=requested??recovery!.focus,reason=invalidFocus(p,focus)
- const common={wish:{id:p.view.playerProfile.wishId,label:wishes[p.view.playerProfile.wishId]},approach:p.view.playerProfile.approach,yearQuestion:questions[Number(p.view.date.slice(0,4))-2020]??'原来的事，想怎样收好？',attempt:attempt[focus.kind],responsibilityOverrideNeeded:responsibility(p)}
+export function playerThread(p:Input,requested?:OpeningFocus|null,requestedQuarter?:string|null):PlayerThreadView{
+ const recovery=requested?null:defaultFocus(p),focus=requested??recovery!.focus
+ const quarter=p.features.workbench.quarter,entry=focusEntry(p,focus)
+ const reason=invalidFocus(p,focus)??(requestedQuarter&&(!/^202[0-5]-Q[1-4]$/.test(requestedQuarter)||requestedQuarter>quarter)?'这份关注的季度无效或尚未到来，请重新选择。':requestedQuarter&&requestedQuarter<quarter&&entry?'上季只留下了一个方向，本季仍需重新选择；没有自动安排新的工作。':null)
+ const resolved=reason?focus:resolvedFocus(p,focus)
+ const resultDate=focusResultDate(p,resolved)
+ const focusQuarter=originQuarter(p,resolved),scope:PlayerThreadView['focusScope']=reason?'invalid':focusEntry(p,resolved)?'entry':focusQuarter&&focusQuarter<quarter?focusOpen(p,resolved)?'carry':resultDate&&resultDate>=p.features.workbench.quarterStart?'current':'history':'current'
+ const common={wish:{id:p.view.playerProfile.wishId,label:wishes[p.view.playerProfile.wishId]},approach:p.view.playerProfile.approach,yearQuestion:questions[Number(p.view.date.slice(0,4))-2020]??'原来的事，想怎样收好？',attempt:attempt[focus.kind],responsibilityOverrideNeeded:responsibility(p),focusQuarter,focusScope:scope,legacyFallbackRequired:!requested&&legacyPending(p)}
  if(reason)return {...common,focus,focusStatus:'invalid',invalidReason:reason,stage:'unavailable',object:'原来的关注对象',title:'先找回刚才那件事。',line:reason,detail:'没有自动接受、换主体或替换对象。请明确选择下一件事。',outcome:'none',inspect:{screen:'routes',label:'重新选择眼前的方向'},resultRefs:[]}
  if(recovery?.needsReview)return {...common,focus,focusStatus:'default',invalidReason:null,stage:'review-choice',object:'本季已经留下的安排',title:'有几件真实的事，可以先回看。',line:`本季有${recovery.count}项实际安排。请先选择想继续看哪一件。`,detail:'原记录都保留，尚未替你选定一件；翻阅不会重新安排或付费。',attempt:'先回看本季已经安排的事，再决定把注意力留给哪里。',outcome:'none',inspect:{screen:'quarter',label:'翻看本季实际安排，选择一件继续',target:{accountId:'personal'}},resultRefs:[]}
- const resolved=resolvedFocus(p,focus)
- const scene=resolved.kind==='first-order'?firstScene(p):resolved.kind==='market'?marketScene(p,resolved):resolved.kind==='life'?lifeScene(p,resolved):resolved.kind==='work'?workScene(p,resolved):freeScene()
+ let scene=resolved.kind==='first-order'?firstScene(p):resolved.kind==='market'?marketScene(p,resolved):resolved.kind==='life'?lifeScene(p,resolved):resolved.kind==='work'?workScene(p,resolved):freeScene()
+ if(focusQuarter&&focusQuarter<quarter)scene={...scene,object:focusQuarter+' / '+scene.object,line:(scope==='history'?'这是'+focusQuarter+'的原记录，旧收支不会重记为本季收入。':scope==='carry'?'这件事从'+focusQuarter+'留下，仍按原约定继续。':'这项安排始于'+focusQuarter+'，本季出现以下实际反馈。')+scene.line}
  return {...common,...scene,focus:resolved,focusStatus:requested?'valid':'default',invalidReason:null}
 }
 
@@ -282,7 +352,7 @@ const payloadRecord=(payload:unknown):Record<string,unknown>|null=>payload!==nul
 export function openingFocusAfterSave(previous:Input,current:Input,kind:string,payload:unknown,existing:OpeningFocus|null):OpeningFocus|null{
  const before=previous.view,view=current.view,last=view.receipts.at(-1)
  if(before.runId!==view.runId||view.revision!==before.revision+1||view.saveStatus!=='saved'||view.hasCandidate||view.readOnly
-  ||view.phase!=='playing'||current.features.workbench.quarter!=='2020-Q1'
+  ||view.phase!=='playing'||!/^202[0-5]-Q[1-4]$/.test(current.features.workbench.quarter)
   ||last?.kind!==kind||last.revisionAfter!==view.revision)return existing
  const body=payloadRecord(payload);if(!body)return existing
  const id=(key:string)=>typeof body[key]==='string'?body[key]:null

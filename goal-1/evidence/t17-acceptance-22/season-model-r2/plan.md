@@ -1,0 +1,3 @@
+# 修复方案
+
+先记录源身份；helper在推断candidate之前验证existing的previous公开投影，失效则不自动补对象。测试真实正常Create/StartFirstOrder生成manual-content，构造字段形状合法但业务错绑的个人market entry，经真实PlaceStockOrder提交后仍严格返回原引用；不改余额、时限或断言。只跑新增精确项与两文件严格类型；保红档，源前后匹配后冻结。

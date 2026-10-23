@@ -1,0 +1,58 @@
+{
+  "checkedAt": "2026-10-23T08:14:37.077Z",
+  "scope": "history work label only",
+  "before": [
+    {
+      "file": "src/ui/OpeningMoment.tsx",
+      "sha256": "6b77a2771428a127ebbbd083dc04d4dbf151e2e34bdbb5b51c7bd33125d369bd"
+    },
+    {
+      "file": "src/ui/SeasonRecollection.test.tsx",
+      "sha256": "8b9e79e54be7ce755f92704ee8c2bb5d18b247eaece14743a1f7a20b825805b6"
+    }
+  ],
+  "after": [
+    {
+      "file": "src/ui/OpeningMoment.tsx",
+      "sha256": "59343ba013f1a5ff0d7df162187a7690f69028bbafa2530987c1880c40083994"
+    },
+    {
+      "file": "src/ui/SeasonRecollection.test.tsx",
+      "sha256": "8c63be4fb35e6235bb9bfcc1e9932adaef72dd53c9dbb86e5a1e4e60cc27885d"
+    }
+  ],
+  "condition": {
+    "focusScope": "history",
+    "focusKind": "work",
+    "focusQuarter": "non-null validated projection"
+  },
+  "label": "翻看${thread.focusQuarter}的原工作记录",
+  "unchanged": [
+    "player-thread model",
+    "view",
+    "inspect screen/target/account/recordId",
+    "commands and payloads",
+    "AP/date/money/save"
+  ],
+  "checks": {
+    "strict": {
+      "exitCode": 0,
+      "log": "strict.log"
+    },
+    "targetedNormalCase": {
+      "exitCode": 0,
+      "passed": 1,
+      "skipped": 6,
+      "log": "targeted-test.log",
+      "existingTimeoutUnchanged": true,
+      "reusesSameWorkQuarterAndJan31SalaryChain": true,
+      "assertsApr1OriginalEmploymentLabel": true,
+      "renderDoesNotAlterRaw": true
+    }
+  },
+  "frozen": true,
+  "limits": [
+    "No browser/compatibility/geometry/Git/service operation",
+    "Build R4 and source bridge are a separate step"
+  ]
+}
