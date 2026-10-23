@@ -1,0 +1,149 @@
+{
+  "owned": [
+    {
+      "path": "src/ui/course-stage-wait.ts",
+      "bytes": 1081,
+      "sha256": "21ad99a1fbf9b3f3c78b2fb53df4e87a1c36ce00043f8a8b1145ca930a02e0db",
+      "mode": "644"
+    },
+    {
+      "path": "src/ui/OpeningMoment.tsx",
+      "bytes": 29078,
+      "sha256": "38a99b063aa23e56c25410c96de2e4f63e48441bbf06efcdfb52700458deadfe",
+      "mode": "644"
+    },
+    {
+      "path": "src/ui/CourseTeachingChoice.tsx",
+      "bytes": 45626,
+      "sha256": "df4103ddae2679a4d3d32b7537fa4493dce4d633485bbe4b1d9fdd82bc3c3875",
+      "mode": "644"
+    },
+    {
+      "path": "src/ui/CourseTeachingChoice.test.tsx",
+      "bytes": 21611,
+      "sha256": "9ea0700ed9e7773a745341a38c2164cc1d2cfffa7a2d448f366680fade9debaf",
+      "mode": "644"
+    }
+  ],
+  "beforeToFinalChanges": [
+    "src/ui/OpeningMoment.tsx",
+    "src/ui/CourseTeachingChoice.tsx",
+    "src/ui/CourseTeachingChoice.test.tsx"
+  ],
+  "added": "src/ui/course-stage-wait.ts",
+  "unchangedOriginalMainWaitTest": {
+    "path": "src/ui/OpeningMoment.course-wait.test.tsx",
+    "bytes": 5835,
+    "sha256": "cf5c644397fefbe79cb2f9003f1fee0a889e3a3556268d1c51fa7c41b3362980",
+    "mode": "644"
+  },
+  "verification": {
+    "red": {
+      "exitCode": 1,
+      "selectedFailed": 1,
+      "skipped": 5,
+      "durationMs": 3075,
+      "note": "actual92 stage0→record produced Jan31 instead of Jan30; not a timeout"
+    },
+    "green": {
+      "exitCode": 0,
+      "files": 2,
+      "passed": 8,
+      "total": 8,
+      "vitestDurationSeconds": 11.68,
+      "terminalDurationMs": 12241
+    },
+    "strictOwned": {
+      "exitCode": 0,
+      "terminalDurationMs": 14281,
+      "fullProjectTypecheck": false
+    },
+    "allRunSourceBeforeAfterEqual": true
+  },
+  "retention": {
+    "openingMechanicalMoveOnly": true,
+    "helperFunctionTextIdentical": true,
+    "originalMainWaitTestFileByteIdentical": true,
+    "originalChoiceCaseTitles": [
+      "uses actual capital and paid-audience handlers without spending on browsing, defaulting fields or borrowing the capital draft",
+      "keeps consecutive real enrollment/refund checkbox edits and exact selected IDs instead of slicing or overwriting arrays",
+      "keeps owner, candidate, read-only, blocked and original-job gates synchronous while the original record remains inspectable",
+      "explicitly fills a real five-seat draft while retaining existing picks, then keeps all original people and original confirmation reachable",
+      "leaves stale, duplicate and oversized drafts untouched and counts only retained tuition toward the existing class limit"
+    ],
+    "currentChoiceCaseTitles": [
+      "uses actual capital and paid-audience handlers without spending on browsing, defaulting fields or borrowing the capital draft",
+      "keeps consecutive real enrollment/refund checkbox edits and exact selected IDs instead of slicing or overwriting arrays",
+      "keeps owner, candidate, read-only, blocked and original-job gates synchronous while the original record remains inspectable",
+      "explicitly fills a real five-seat draft while retaining existing picks, then keeps all original people and original confirmation reachable",
+      "leaves stale, duplicate and oversized drafts untouched and counts only retained tuition toward the existing class limit",
+      "keeps the actual92 first-stage draft when returning to its deadline-bounded record"
+    ],
+    "originalChoiceAssertionLines": 61,
+    "missingOriginalAssertionLines": [],
+    "originalTimeoutLines": [
+      "},20000)",
+      "},20000)",
+      "},20000)",
+      "},20000)"
+    ],
+    "currentTimeoutLines": [
+      "},20000)",
+      "},20000)",
+      "},20000)",
+      "},20000)"
+    ],
+    "note": "Static retention check, not a test result"
+  },
+  "boundary": "Only shared UI wait policy/Choice record and mechanical Opening import/re-export. No core, rule, Clock, raw, browser, compatibility, full-suite/build or Git mutation.",
+  "diffCommands": [
+    {
+      "argv": [
+        "rtk",
+        "proxy",
+        "diff",
+        "-u",
+        "/dev/null",
+        "src/ui/course-stage-wait.ts"
+      ],
+      "exitCode": 1,
+      "note": "exit1 is the expected diff change indicator, not a test failure"
+    },
+    {
+      "argv": [
+        "rtk",
+        "proxy",
+        "diff",
+        "-u",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-25/r5-record-wait-fix-r1/OpeningMoment.tsx.before.txt",
+        "src/ui/OpeningMoment.tsx"
+      ],
+      "exitCode": 1,
+      "note": "exit1 is the expected diff change indicator, not a test failure"
+    },
+    {
+      "argv": [
+        "rtk",
+        "proxy",
+        "diff",
+        "-u",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-25/r5-record-wait-fix-r1/CourseTeachingChoice.tsx.before.txt",
+        "src/ui/CourseTeachingChoice.tsx"
+      ],
+      "exitCode": 1,
+      "note": "exit1 is the expected diff change indicator, not a test failure"
+    },
+    {
+      "argv": [
+        "rtk",
+        "proxy",
+        "diff",
+        "-u",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-25/r5-record-wait-fix-r1/CourseTeachingChoice.test.tsx.before.txt",
+        "src/ui/CourseTeachingChoice.test.tsx"
+      ],
+      "exitCode": 1,
+      "note": "exit1 is the expected diff change indicator, not a test failure"
+    }
+  ]
+}

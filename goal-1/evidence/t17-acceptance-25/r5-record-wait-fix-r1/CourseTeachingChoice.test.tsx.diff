@@ -1,0 +1,46 @@
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-25/r5-record-wait-fix-r1/CourseTeachingChoice.test.tsx.before.txt	2026-10-24 04:39:45
++++ src/ui/CourseTeachingChoice.test.tsx	2026-10-24 04:40:29
+@@ -11,10 +11,12 @@
+ import {CourseTeachingChoice,courseTeachingDraftCommand,courseEnrollmentBatch,type CourseTeachingIntent} from './CourseTeachingChoice.tsx'
+ import {createCourseTeachingDraftMemory,emptyCourseTeachingDraft,type CourseTeachingDraftScope} from './course-teaching-draft.ts'
+ import {CommandButton} from './CommandButton.tsx'
++import {ClockAdvance} from './ClockAdvance.tsx'
+ import ready from '../../goal-1/evidence/t17-acceptance-24/chrome-final-r5/course-r5-final-physical-86.json?raw'
+ import beforeClass from '../../goal-1/evidence/t17-acceptance-10/chrome-physical-r1/r74-physical-after-candidate-retry.json?raw'
+ 
+ import plannedEnrollment from '../../goal-1/evidence/t17-acceptance-25/chrome-r3/c2-saved91-planned-cohort.json?raw'
++import enrolled92 from '../../goal-1/evidence/t17-acceptance-25/chrome-r3/c2-saved92-enrolled-protected.json?raw'
+ 
+ // Invoke actual UI handlers with stable hooks; no DOM/effect/browser behaviour is claimed.
+ const hooks=vi.hoisted(()=>({values:[] as unknown[],index:0}))
+@@ -197,3 +199,30 @@
+  expect(courseEnrollmentBatch({...co,availablePeople:many},[])).toMatchObject({remainingSeats:5,addCount:5,issue:null})
+  expect(JSON.stringify(co)).toBe(before)
+ })
++
++it('keeps the actual92 first-stage draft when returning to its deadline-bounded record',async()=>{
++ const h=await setup(enrolled92,'teaching-record-wait92')
++ try{
++  const p=h.p(),co=p.features.course!.cohorts.find(co=>co.startAt==='2023-01-26')!,lesson=p.features.course!.courses.find(c=>c.id===co.courseId)!,target:CourseSceneTarget={kind:'cohort',businessId:lesson.businessId,courseId:lesson.id,cohortId:co.id},d=driver(h,target),before=h.controller.exportSaved()
++  expect(p.view).toMatchObject({origin:'normal',revision:92,date:'2023-01-24'});expect(p.features.workbench.progression.nextDate).toBe('2023-01-31')
++  d.open('stage:0')
++  const date=elements(component(d.named('DateField'))).find(e=>e.type==='input'&&e.props.type==='date')
++  act(date,'onChange',{target:{value:'2023-01-26'}});d.render()
++  const scope:CourseTeachingDraftScope={accountId:p.accountId,businessId:lesson.businessId,courseId:lesson.id,audienceId:co.audienceId,cohortId:co.id,slot:'stage:0'},draft=h.memory.read(p.view.runId,scope)
++  expect(draft).toMatchObject({startAt:'2023-01-26',resources:[]})
++  d.click('返回这份原记录')
++  const clock=()=>d.all().find(e=>e.type===ClockAdvance)
++  expect(clock()?.props.date).toBe('2023-01-30')
++  expect(h.memory.read(p.view.runId,scope)).toEqual(draft)
++  // UI policy boundaries only: these dates/budgets are not newly accepted game histories.
++  for(const available of [0,1]){
++   d.override({view:{...p.view,date:'2023-01-30',budget:{...p.view.budget,available}}})
++   expect(clock()).toBeUndefined()
++  }
++  d.override({view:{...p.view,readOnly:true}});expect(clock()).toBeUndefined()
++  d.override({view:{...p.view,hasCandidate:true,saveStatus:'unsaved'}});expect(clock()).toBeUndefined()
++  d.override({view:p.view});expect(clock()?.props.date).toBe('2023-01-30')
++  d.click('翻开同对象');expect(h.inspect).toHaveBeenLastCalledWith(target,undefined)
++  expect(h.chosen).not.toHaveBeenCalled();expect(h.requests).not.toHaveBeenCalled();expect(h.controller.exportSaved()).toBe(before)
++ }finally{await h.close()}
++})

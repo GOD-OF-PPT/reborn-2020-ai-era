@@ -1,0 +1,107 @@
+--- goal-1/evidence/t17-acceptance-25/refresh-state-r1/before/course-scene-progress.ts	2026-10-24 02:48:08
++++ src/ui/course-scene-progress.ts	2026-10-24 02:52:38
+@@ -4,7 +4,7 @@
+ import {moneyText,playableThrough} from './game-text.ts'
+ import type {ProductionJob} from '../core/operations-types.ts'
+ import {COURSE_JOBS} from '../content/course.ts'
+-import {courseCohortTargetReason,courseCohortProgress} from './course-cohort-progress.ts'
++import {courseCohortTargetReason,courseCohortProgress,courseRefreshProgress} from './course-cohort-progress.ts'
+ 
+ export type CourseSceneTarget=
+  |{readonly kind:'studio';readonly businessId:string}
+@@ -214,6 +214,7 @@
+  if(job?.status==='completed')refs.push({kind:'job',id:job.id,date:job.completeAt})
+  if(historical&&job)return {...originalJob('sample',job,c.name,refs),historical:true}
+  if(job&&['planned','running','interrupted','cancelled'].includes(job.status))return originalJob('sample',job,c.name,refs)
++ const refresh=courseRefreshProgress(course,date,target,context);if(refresh)return refresh
+  if(closed||c.status==='retired'||stopped)return make(closed?'course-closed':'course-retired','这份原课程，已经停止新安排。',c.name+'的原样课与版本仍保留。','原学生、退款、更新与费用继续按原记录处理；本次查看不会恢复招生。','翻看原课程与全部旧责任','non-success',refs)
+  if(c.unresolvedUpdates.length)return {...make('course-update-required','样课记录还在，工具前提需要更新。',`${c.name}有原更新责任，期限${c.unresolvedUpdates.map(u=>u.dueAt).sort()[0]}。`,'原更新须实际投入并完成；新获客、班额与支持仍另行决定，不把更新记作新产品或收入。','翻看原更新与课程记录',c.status==='ready'?'actual':'pending',refs),teachingIntent:'refresh'}
+  const pendingRights=course.licenses.filter(l=>l.businessId===b.id&&c.cases.some(ref=>ref.id===l.caseId)&&l.job&&['planned','running'].includes(l.job.status)).sort((a,b)=>(a.job!.status==='planned'?a.job!.startAt:a.job!.completeAt).localeCompare(b.job!.status==='planned'?b.job!.startAt:b.job!.completeAt)||a.id.localeCompare(b.id))[0]
+--- goal-1/evidence/t17-acceptance-25/refresh-state-r1/before/course-cohort-progress.ts	2026-10-24 02:48:08
++++ src/ui/course-cohort-progress.ts	2026-10-24 02:52:38
+@@ -12,6 +12,23 @@
+ const id=(value:unknown):value is string=>typeof value==='string'&&value.length>0&&value.length<=512&&value.trim().length>0&&!/[\u0000-\u001f\u007f]/.test(value)
+ const active=(job:ProductionJob|null|undefined)=>job?.status==='planned'||job?.status==='running'
+ 
++/** A saved update is already arranged; its original job supplies the next visible wait. */
++export function courseRefreshProgress(course:View,date:string,target:Extract<CourseSceneTarget,{kind:'course'|'audience'|'cohort'}>,context?:CourseSceneContext):CourseSceneProgress|null{
++ const lesson=course.courses.find(c=>c.id===target.courseId&&c.businessId===target.businessId)
++ if(!lesson)return null
++ const rows=lesson.refreshes.filter(refresh=>!refresh.applied&&active(refresh.job))
++ if(!rows.length)return null
++ const refresh=rows[0]!,jobs=context?.operations?.jobs.filter(job=>job.id===refresh.jobId)??(refresh.job?[refresh.job]:[]),job=jobs[0]
++ const refs:CourseSceneResultRef[]=[{kind:'course',id:lesson.id,date:lesson.createdAt}]
++ if(target.kind==='audience'){const a=course.audiences.find(a=>a.id===target.audienceId);if(a)refs.push({kind:'audience',id:a.id,date:a.createdAt})}
++ if(target.kind==='cohort'){const co=course.cohorts.find(co=>co.id===target.cohortId);if(co)refs.push({kind:'cohort',id:co.id,date:co.createdAt})}
++ if(rows.length!==1||jobs.length!==1||!job||!active(job)||job.businessId!==target.businessId||job.definitionId!==`course-refresh-${lesson.productId}-${lesson.topicId}`)return {phase:'course-refresh-unavailable',title:'先核对这门课的原更新。',line:lesson.name+'的原更新任务身份暂不可核对，没有另排一次。',choice:{title:'核对原更新',line:'原课程、学员和任务保留；请翻看本课程的实际更新记录。',label:'翻看本课程原更新记录'},target,invalidReason:'原更新任务不能唯一匹配，请核对原记录。',outcome:'none',resultRefs:refs}
++ const definition=COURSE_JOBS.find(d=>d.id===job.definitionId)!,planned=job.status==='planned',at=planned?job.startAt:job.completeAt,waitDate=at<date?date:at
++ refs.push({kind:'job',id:job.id,date:job.startAt})
++ const resources=job.resources.map(id=>course.resources.find(r=>r.id===id)?.label??'原安排的教学成员').join('、')
++ return {phase:planned?'course-refresh-planned':'course-refresh-running',title:planned?'这份旧课更新，已经留在日历。':'这份旧课，正在实际更新。',line:`${lesson.name} · ${job.startAt}—${job.completeAt}。`,choice:{title:'等这份原更新真正完成',line:`${resources} · ${moneyText(definition.costFen)} / ${definition.actionPoints}点 / ${definition.durationDays}日；${planned?'已预留，尚未实付或使用行动。':'已开工，成本与行动已按原账承担。'}实际完成后才覆盖本次绑定的更新；旧教学、支持和退款期限照常。`,label:'翻看这份已安排的原更新'},target,recordId:job.id,invalidReason:null,outcome:'pending',resultRefs:refs,...(waitDate<=playableThrough?{waitDate,wait:{date:waitDate,label:planned?'等这份原更新实际开工':'等这份原更新实际完成'}}:{})}
++}
++
+ /** Only an original member of this cohort may resolve a dated teaching/support attempt. */
+ export function courseCohortJob(course:View,co:Cohort,jobId:string,context?:CourseSceneContext):ProductionJob|null{
+  const matches=course.cohorts.flatMap(row=>[...row.stageJobs.flat().filter(j=>j?.id===jobId).map(job=>({cohort:row.id,job})),...row.supportJobs.filter(s=>s.jobId===jobId).map(s=>({cohort:row.id,job:s.job}))])
+@@ -62,6 +79,7 @@
+   refs.push({kind:'audience',id:a.id,date:a.createdAt})
+   if(a.job&&active(a.job))return jobScene(a.job,'audience',c.name+' · 本次原报价'+moneyText(a.priceFen))
+   if(a.completedAt===null)return make('course-audience-stopped','这次获客，没有实际完成。',c.name+'的这份报价与原投入仍保留。','没有把中断记成受众或收入；可另行明确获客，原班责任继续。','翻看原获客与有限退出',undefined,'non-success')
++  const refresh=courseRefreshProgress(course,date,target,context);if(refresh)return refresh
+   if(c.unresolvedUpdates.length)return make('course-cohort-update-required','工具已经变了，先看清原更新。',`${c.name}更新期限${c.unresolvedUpdates.map(u=>u.dueAt).sort()[0]}。`,'原更新实际完成后再决定新班，旧班教学与退款仍须处理。','核对这门课的原更新','refresh')
+   if(c.status!=='ready'||c.paused||b.lifecycle!=='operating'||c.qualificationReasons.length)return make('course-audience-blocked','这份实际受众还在，新班条件需要核对。',`${c.name} · 原报价${moneyText(a.priceFen)}。`,'原暂停、工具资格与经营控制没有因获客完成而解除；不自动开班或收费。','查看原条件与这份受众')
+   return make(a.eligibleMembers.length?'course-audience-ready':'course-audience-empty',a.eligibleMembers.length?'先听清需要，再把承诺定下来。':'这次报价，没有留下实际意向。',`${c.name} · ${a.completedAt}实际覆盖${a.members.length}人，基础意向${a.eligibleMembers.length}人。`,`${moneyText(a.priceFen)}是本次原报价；购买身份与所选承诺仍须重新核对，不保证报名。${a.eligibleMembers.length?'显选班额、日期、支持和资源，先预留自有资金与行动。':'原投入不退，是否另作报价或停止由你决定。'}`,a.eligibleMembers.length?'明确本班期限与真实支持':'翻看本次原受众与报价',a.eligibleMembers.length?'plan':undefined,a.eligibleMembers.length?'actual':'non-success')
+@@ -72,6 +90,7 @@
+  const ledger=`冻结单价${moneyText(co.priceFen)} · 留存${paid.length}/${co.seatLimit}人；退款窗口至${co.refundUntil}。`
+  if(co.closedAt!==null){const refunded=co.students.some(s=>s.refundedFen>0);return make('course-cohort-closed',!co.students.length?'这期没有等来学员。':!paid.length?'这堂课，以原退款收场。':refunded?'这堂课留下学习，也留下退款。':'这期的承诺与原账，已经收好。',`${identity} · ${co.closedAt}实际收尾。`,`${ledger}原结算费${moneyText(co.feeFen)}；学习、退款及购买身份保留，不是新的现金或重复收费资格。`,'翻看本班学习与原账',undefined,co.students.length&&!paid.length?'non-success':'actual')}
+  if(co.feePostedAt!==null)return make('course-cohort-settling','课程窗口已过，原账仍待付清。',identity,`${ledger} ${co.feePostedAt}登记结算费${moneyText(co.feeFen)}；入账不是实付，原退款应付与费用必须继续核对。`,'翻看原费用与未付责任')
++ const refresh=courseRefreshProgress(course,date,target,context);if(refresh)return refresh
+  if(c.unresolvedUpdates.length)return make('course-cohort-update-required','工具已经变了，旧学员还在等。',`${identity} · 更新期限${c.unresolvedUpdates.map(u=>u.dueAt).sort()[0]}。`,`${ledger}更新不创造新购买资格；原教学、支持与退款继续，不能因新准备隐藏。`,'安排原更新或翻看旧责任','refresh')
+  if(co.teachingCancelled)return wait(make('course-teaching-cancelled','原教学停下了，未交付与退款仍在。',identity,`${ledger}未按期完成的教学不会免费补完；原退款记录可能仍有应付，任务与成本须另核。`,'核对原学员退款与安排',date<=co.refundUntil&&paid.length?'refund':undefined,'non-success'),addDays(co.refundUntil,1),'等原退款窗口后的结算，沿途责任照常')
+  if(!paid.length){
+--- goal-1/evidence/t17-acceptance-25/refresh-state-r1/before/course-cohort-progress.test.ts	2026-10-24 02:48:08
++++ src/ui/course-cohort-progress.test.ts	2026-10-24 02:50:27
+@@ -86,7 +86,26 @@
+   await h.advance('2023-03-14')
+   expect(h.p().features.course!.courses[0]!.unresolvedUpdates.length).toBeGreaterThan(0)
+   expect(playerThread(h.p(),cf).stage).toBe('course-cohort-update-required')
+-  await h.send('StartCourseRefresh',{courseId:c.id,resources:['player-production'],startAt:'2023-03-14'});await h.advance('2023-03-21')
++  const refreshPayload={courseId:c.id,resources:['player-production'],startAt:'2023-03-14'},refresh=await h.send('StartCourseRefresh',refreshPayload),refreshJob=h.p().features.course!.courses.find(row=>row.id===c.id)!.refreshes.at(-1)!.job!
++  const targets:CourseSceneTarget[]=[cf.courseTarget!,{kind:'course',businessId:c.businessId,courseId:c.id},{kind:'audience',businessId:c.businessId,courseId:c.id,audienceId:a.id}]
++  for(const target of targets){
++   const progress=courseSceneProgress(h.p().features.course,h.p().view.date,target,courseSceneContext(h.p()))!
++   expect(progress).toMatchObject({phase:'course-refresh-running',target,outcome:'pending',wait:{date:'2023-03-21'}})
++   expect(progress.teachingIntent).toBeUndefined();expect(progress.choice.line).toContain('¥2,000 / 1点 / 7日')
++   expect(progress.resultRefs.some(ref=>ref.kind==='job'&&ref.id===refreshJob.id)).toBe(true)
++  }
++  expect(courseFocusFromSaved(refresh.previous,refresh.current,'StartCourseRefresh',refreshPayload,cf)).toBe(cf)
++  expect(seasonFocusAfterSave(refresh.previous,refresh.current,'StartCourseRefresh',refreshPayload,cf)).toBe(cf)
++  expect(courseTeachingSceneResult('StartCourseRefresh',refresh.previous.view,refresh.current.view)).toContain('尚未完成')
++  for(const view of [{...refresh.current.view,saveStatus:'unsaved' as const,hasCandidate:true},{...refresh.current.view,readOnly:true}])expect(courseTeachingSceneResult('StartCourseRefresh',refresh.previous.view,view)).toBeNull()
++  expect(playerThread(refresh.previous,cf).stage).toBe('course-cohort-update-required')
++  expect(playerThread(h.p(),jf).stage).toBe('course-stage-completed')
++  await h.advance('2023-03-21')
++  expect(h.p().features.course!.courses.find(row=>row.id===c.id)!.refreshes.at(-1)).toMatchObject({applied:true,job:{id:refreshJob.id,status:'completed'}})
++  expect(playerThread(h.p(),cf).stage).toBe('course-stage-needed')
++  expect(playerThread(h.p(),courseFocusFor(h.p(),targets[1]!)).stage).toBe('course-ready')
++  expect(playerThread(h.p(),af).stage).toBe('course-audience-ready')
++  expect(h.frames.some(frame=>frame.kind==='AdvanceTime'&&courseTeachingSceneResult(frame.kind,frame.previous.view,frame.current.view)?.includes('本次绑定的材料已实际更新'))).toBe(true)
+   await h.advance('2023-04-01')
+   expect(playerThread(h.p(),cf).focusQuarter).toBe('2023-Q1')
+   expect(playerThread(h.p(),cf).focusScope).toBe('carry')
+@@ -171,5 +190,15 @@
+   const invalidRaw=raw
+   expect(loadSeasonFocusPreference(storage,{runId:h.p().view.runId,quarter:'2023-Q1'}).status).toBe('invalid')
+   expect(raw).toBe(invalidRaw);expect(h.controller.exportSaved()).toBe(saved)
++  await h.advance('2023-03-14')
++  expect(playerThread(h.p(),pin).stage).toBe('course-cohort-update-required')
++  const maintenance={courseId:c.id,resources:['player-production'],startAt:'2023-03-15'}
++  await h.send('StartCourseRefresh',maintenance)
++  const refreshJob=h.p().features.course!.courses.find(row=>row.id===c.id)!.refreshes.at(-1)!.job!
++  const targets:CourseSceneTarget[]=[target,{kind:'course',businessId:c.businessId,courseId:c.id},{kind:'audience',businessId:c.businessId,courseId:c.id,audienceId:a.id}]
++  for(const selected of targets){const progress=courseSceneProgress(h.p().features.course,h.p().view.date,selected,courseSceneContext(h.p()))!;expect(progress).toMatchObject({phase:'course-refresh-planned',target:selected,outcome:'pending',wait:{date:'2023-03-15'}});expect(progress.teachingIntent).toBeUndefined();expect(progress.choice.line).toContain('已预留，尚未实付或使用行动')}
++  expect(playerThread(h.p(),old).stage).toBe('course-stage-cancelled')
++  await h.advance('2023-03-15')
++  for(const selected of targets){const progress=courseSceneProgress(h.p().features.course,h.p().view.date,selected,courseSceneContext(h.p()))!;expect(progress).toMatchObject({phase:'course-refresh-running',target:selected,wait:{date:'2023-03-22'}});expect(progress.resultRefs.some(ref=>ref.kind==='job'&&ref.id===refreshJob.id)).toBe(true)}
+  }finally{await h.close()}
+ },30000)

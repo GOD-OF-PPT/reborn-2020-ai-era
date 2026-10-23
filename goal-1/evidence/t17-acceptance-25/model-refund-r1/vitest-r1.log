@@ -1,0 +1,33 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/course-refund-result.test.ts (1 test | 1 failed) 2069ms
+   × keeps an actual F05 earned-refund debt protected, then closes only after original wages and PayObligation really settle it 2068ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/course-refund-result.test.ts > keeps an actual F05 earned-refund debt protected, then closes only after original wages and PayObligation really settle it
+AssertionError: expected 500000 to be 800000 // Object.is equality
+
+- Expected
++ Received
+
+- 800000
++ 500000
+
+ ❯ src/ui/course-refund-result.test.ts:40:16
+     38|   const obligations=finance.obligations.filter(o=>o.contractId===co.id…
+     39|   expect(refund).toMatchObject({undeliveredFen:500000,deliveredFen:500…
+     40|   expect(paid).toBe(800000);expect(owed).toBe(200000);expect(paid+owed…
+       |                ^
+     41|   const result=courseTeachingSceneResult('RefundCourseLearners',refund…
+     42|   expect(result).toContain('应退¥10,000');expect(result).toContain('未交付部…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  02:32:12
+   Duration  3.28s (tests 68%, import 16%, transform 15%)
+

@@ -1,0 +1,5 @@
+# 同Chrome原档接续
+
+原387928093在实际AdvanceTime后driver30s超时/reset，未重复命令。重连后相同extension由逻辑browser5映为1；原tab两次read、close和user.claimTab均Debugger unattached，旧tab未核定关闭，保留原库/构建。新同Chrome387928096真实只读物理95（Feb5）与完整原文967985B/SHA17b69837d53fcff4f3f7eb3ec6f11bef832f47624d86132043953e9c724e929a已通过产品原文归档。第一段实际交付、公司可花10420.09/现金15917.59/保护2497.50+支持预留3000/余1点均public核定。
+
+为继续已授权教学循环，新5352复用同R3构建，在同Chrome经原可见编辑器导入这份原95，完整字节保留，不修改原5350物理存档或清锁。新origin只是独立产品恢复副本，不冒称接管原写标签或新正常Create；后续原命令从此95继续，最终完整Create审核涵盖每个source标签。所有兼容开发测试0，不做尺寸/缩放/离页专项；临时原tabcleanup失败不作为原生离页验证。后续真正保存与读回单列。

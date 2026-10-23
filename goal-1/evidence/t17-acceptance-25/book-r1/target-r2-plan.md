@@ -1,0 +1,1 @@
+target-r1四项已过；strict-r2红仅新测试helper返回宽union及unused import。收窄target返回cohort类型，移除未用导入，不改断言。另补原册实际Plan submit和Enroll/Refund实际handler，因为Intake/Class已从FormData/本地state改共享稿，须直接验证完整原载荷与原人员，不拿Stage往返替代这些新接缝。生产保持同源。

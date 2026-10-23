@@ -1,0 +1,19 @@
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-25/r5-record-wait-fix-r1/CourseTeachingChoice.tsx.before.txt	2026-10-24 04:39:45
++++ src/ui/CourseTeachingChoice.tsx	2026-10-24 04:41:47
+@@ -5,6 +5,7 @@
+ import {Dialog} from './Dialog.tsx'
+ import {CommandButton} from './CommandButton.tsx'
+ import {ClockAdvance} from './ClockAdvance.tsx'
++import {courseStageWaitDate} from './course-stage-wait.ts'
+ import {courseCohortFinancials} from './CourseTeachingDetails.tsx'
+ import {COURSE_JOBS} from '../content/course.ts'
+ import {addDays,isoDate} from '../core/calendar.ts'
+@@ -172,7 +173,7 @@
+   const preview=p.controller.preview({runId:p.view.runId,actorId:'player',commandId:'course-enrollment-display',expectedRevision:p.view.revision,kind:command.kind,payload:command.payload})
+   if(preview.allowed&&typeof preview.receivedPrepaymentFen==='number'&&typeof preview.protectedIncreaseFen==='number')enrollmentQuote={receivedFen:preview.receivedPrepaymentFen,protectedFen:preview.protectedIncreaseFen}
+  }catch{/* The original confirmation still owns eligibility and payment. */}
+- const ordinaryDate=progress?.wait?.date??p.features.workbench.progression.nextQuarterDate??p.features.workbench.progression.nextDate,safeDate=p.features.workbench.pause===null&&!p.features.workbench.progression.requiresDelivery?playableAdvanceDate(p.features.workbench,p.view.date,ordinaryDate):null
++ const ordinaryDate=progress?.wait?.date??p.features.workbench.progression.nextQuarterDate??p.features.workbench.progression.nextDate,safeDate=progress?.phase==='course-stage-needed'?courseStageWaitDate(p.features.workbench,p.view.date,progress):p.features.workbench.pause===null&&!p.features.workbench.progression.requiresDelivery?playableAdvanceDate(p.features.workbench,p.view.date,ordinaryDate):null
+  const stoppedJob=stop?.source===JSON.stringify(current)?p.view.operations?.jobs.find(j=>j.id===stop.jobId&&j.businessId===s?.business.id&&['planned','running'].includes(j.status)):undefined
+  const records:CourseSceneTarget[]=p.features.course?[...p.features.course.courses.filter(c=>c.status==='ready').map(c=>({kind:'course' as const,businessId:c.businessId,courseId:c.id})),...p.features.course.audiences.map(a=>({kind:'audience' as const,businessId:p.features.course!.courses.find(c=>c.id===a.courseId)!.businessId,courseId:a.courseId,audienceId:a.id})),...p.features.course.cohorts.map(co=>({kind:'cohort' as const,businessId:p.features.course!.courses.find(c=>c.id===co.courseId)!.businessId,courseId:co.courseId,cohortId:co.id}))].filter(t=>courseTargetReason(p.features.course,t,context(p))===null):[]
+  const originalJobs=[...(co?[...co.stageJobs.flat().filter(j=>j!==null),...co.supportJobs.flatMap(slot=>slot.job?[slot.job]:[])]:a?.job?[a.job]:[]),...(s?.lesson.refreshes.flatMap(refresh=>refresh.job?[refresh.job]:[])??[])]

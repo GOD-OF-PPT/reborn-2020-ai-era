@@ -1,0 +1,11 @@
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-25/refresh-navigation-r1/CoursePanel.tsx.before.txt	2026-10-24 03:01:58
++++ src/ui/CoursePanel.tsx	2026-10-24 03:01:58
+@@ -117,7 +117,7 @@
+  if(target.kind==='studio')return true
+  if(target.kind==='outline')return record.kind==='outline'&&record.outlineId===target.outlineId
+  if(target.kind==='license')return record.kind==='license'&&record.licenseId===target.licenseId
+- if(target.kind==='audience')return record.kind==='audience'&&record.audienceId===target.audienceId
++ if(target.kind==='audience')return record.kind==='audience'?record.audienceId===target.audienceId:record.kind==='course'&&record.courseId===target.courseId&&record.sampleJobId===undefined
+  if(target.kind==='cohort')return record.kind==='cohort'?record.cohortId===target.cohortId&&(target.jobId===undefined||record.jobId===undefined||record.jobId===target.jobId):record.kind==='course'&&record.courseId===target.courseId&&record.sampleJobId===undefined
+  return 'courseId' in record&&record.courseId===target.courseId&&(target.sampleJobId===undefined||record.kind==='course'&&(record.sampleJobId===undefined||record.sampleJobId===target.sampleJobId))
+ }

@@ -1,0 +1,3 @@
+# 未应用候选
+
+仅OpeningMoment局部：新增公开stage等待日期pure helper，复用courseStageLatestStart和playableAdvanceDate；仅当前有效cohort尚待教学时扩canContinue及其独立date。保primary与原工作入口。新两项回归候选从已登记实际95/92完整原文导入取得公开视图，SSR核两按钮及原raw无变；日期/invalid/锁是显式UI边界输入，不伪称正常新命令链。所有内容只写此目录；不apply、不执行类型/测试/游戏/browser。Root在原fullunit终态后决定集成。

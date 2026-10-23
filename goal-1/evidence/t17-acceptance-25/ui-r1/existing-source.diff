@@ -1,0 +1,67 @@
+--- goal-1/evidence/t17-acceptance-25/ui-r1/OpeningObject.tsx.before	2026-10-24 02:17:14
++++ src/ui/OpeningObject.tsx	2026-10-24 02:19:37
+@@ -1,13 +1,18 @@
+ import {useId} from 'react'
++import {moneyText} from './game-text.ts'
+ import firstAttempt from '../../assets/ui-redesign/cinematic/props/first-attempt-v1.png'
+ import videoMakingKit from '../../assets/ui-redesign/cinematic/props/video-making-kit-v1.png'
+ import coursePreparationKit from '../../assets/ui-redesign/cinematic/props/course-preparation-kit-v1.png'
+ 
++export type CoursePaperStage='pending'|'planned'|'running'|'completed'|'stopped'
++export interface CoursePaperState{stages:readonly[CoursePaperStage,CoursePaperStage];protectedFen:number;needsHelp:number;refundDueFen:number;supportUnmet:boolean;closedAt:string|null}
++
+ export type OpeningObjectKind='letter'|'calendar'|'work'|'waiting'|'receipt'|'portfolio'
+ 
+ export type OpeningObjectProps={
+  kind:OpeningObjectKind
+  title:string
++ displayTitle?:string
+  detail:string
+  stageLabel:string
+  onActivate:()=>void
+@@ -15,12 +20,13 @@
+  disabled:boolean
+  textOnly?:boolean
+  appearance?:'video'|'course'
++ teaching?:CoursePaperState
+ }
+ 
+ /** The parent supplies committed facts and owns the action; the object adds no business state. */
+-export function OpeningObject({kind,title,detail,stageLabel,onActivate,actionLabel,disabled,textOnly=false,appearance}:OpeningObjectProps){
++export function OpeningObject({kind,title,displayTitle,detail,stageLabel,onActivate,actionLabel,disabled,textOnly=false,appearance,teaching}:OpeningObjectProps){
+  const id=useId(),titleId=id+'-title',detailId=id+'-detail',stageId=id+'-stage',actionId=id+'-action'
+- return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-text-only={textOnly?'true':'false'} disabled={disabled} onClick={onActivate} aria-labelledby={titleId+' '+actionId} aria-describedby={stageId+' '+detailId}>
++ return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-text-only={textOnly?'true':'false'} disabled={disabled} onClick={onActivate} aria-label={displayTitle===undefined?undefined:title+' '+actionLabel} aria-labelledby={displayTitle===undefined?titleId+' '+actionId:undefined} aria-describedby={stageId+' '+detailId}>
+   {!textOnly?<span className="opening-object-art" aria-hidden="true">
+    <img src={appearance==='course'?coursePreparationKit:appearance==='video'?videoMakingKit:firstAttempt} alt="" width={appearance==='course'?1536:appearance==='video'?1254:1280} height={appearance==='course'?1024:appearance==='video'?1254:1280} decoding="async"/>
+    <span className="opening-object-mark">
+@@ -29,7 +35,8 @@
+   </span>:null}
+   <span className="opening-object-copy">
+    <span id={stageId} className="opening-object-stage">{disabled?'暂不可操作 · ':null}{stageLabel}</span>
+-   <strong id={titleId} className="opening-object-title">{title}</strong>
++   <strong id={titleId} className="opening-object-title">{displayTitle??title}</strong>
++   {teaching?<span className="course-teaching-slips" aria-label="本班实际教学与责任"><span className="course-stage-tabs">{teaching.stages.map((state,index)=><span key={index} className="course-stage-tab" data-state={state}>第{index+1}段 · {{pending:'待安排',planned:'已安排',running:'进行中',completed:'已交付',stopped:'已停止'}[state]}</span>)}</span><span className="course-money-folds">{teaching.protectedFen>0?<span className="course-protected-band">保护中 {moneyText(teaching.protectedFen)}</span>:null}{teaching.needsHelp>0?<span className="course-responsibility-fold">{teaching.needsHelp}人待帮助</span>:null}{teaching.refundDueFen>0?<span className="course-responsibility-fold">退款待付 {moneyText(teaching.refundDueFen)}</span>:null}{teaching.supportUnmet?<span className="course-support-fold">原支持待履行</span>:null}{teaching.closedAt?<span className="course-closed-slip">本班结清 {teaching.closedAt}</span>:null}</span></span>:null}
+    <span id={detailId} className="opening-object-detail">{detail}</span>
+    <span id={actionId} className="opening-object-action">{actionLabel}<span aria-hidden="true">{disabled?'—':'↗'}</span></span>
+   </span>
+--- goal-1/evidence/t17-acceptance-25/ui-r1/course-play.css.before	2026-10-24 02:17:14
++++ src/ui/course-play.css	2026-10-24 02:17:14
+@@ -41,3 +41,17 @@
+ 
+ /* Place the folio on the visible desk, clear of the seated person. */
+ .opening-room>.opening-object[data-appearance=course]{left:73%}
++
++/* Committed cohort paper slips stay inside the existing object label and its native button. */
++.opening-object[data-appearance=course] .course-teaching-slips{display:grid;gap:6px;width:100%;font:14px/1.8 var(--serif);color:#dfd1ad}
++.opening-object[data-appearance=course] .course-stage-tabs{display:flex;flex-wrap:wrap;gap:8px 14px}
++.opening-object[data-appearance=course] .course-stage-tab{padding:2px 0;border-bottom:1px dashed #c6ae7e}
++.opening-object[data-appearance=course] .course-stage-tab[data-state=running]{border-bottom-style:solid;color:#efd9a8}
++.opening-object[data-appearance=course] .course-stage-tab[data-state=completed]{border-bottom:3px double #d2ba87}
++.opening-object[data-appearance=course] .course-stage-tab[data-state=stopped]{border-bottom-style:solid;color:#dba997}
++.opening-object[data-appearance=course] .course-money-folds{display:flex;flex-wrap:wrap;gap:5px 10px}
++.opening-object[data-appearance=course] .course-protected-band{padding:1px 6px;border:1px solid #c0a478;background:#bba06916;color:#e7d5ad}
++.opening-object[data-appearance=course] .course-responsibility-fold{padding-left:6px;border-left:2px solid #c78a70;color:#ecc0a9}
++.opening-object[data-appearance=course] .course-support-fold{border-bottom:1px dashed #bca87f;color:#d3c8a6}
++.opening-object[data-appearance=course] .course-closed-slip{border-bottom:3px double #d4bd8c;color:#ead5aa}
++.opening-room>.opening-object[data-appearance=course]>.opening-object-art,.opening-room .opening-room-object>.opening-object[data-appearance=course]>.opening-object-art{filter:drop-shadow(0 4px 3px #00151b80)}

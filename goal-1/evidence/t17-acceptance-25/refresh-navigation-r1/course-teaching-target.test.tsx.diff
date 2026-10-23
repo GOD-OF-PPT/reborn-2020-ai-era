@@ -1,0 +1,23 @@
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-25/refresh-navigation-r1/course-teaching-target.test.tsx.before.txt	2026-10-24 03:01:58
++++ src/ui/course-teaching-target.test.tsx	2026-10-24 03:01:58
+@@ -196,13 +196,18 @@
+ it('keeps a real course refresh job reachable from the calendar and the same class without replacing its teaching identity',async()=>{
+  const before=h.p()
+  await h.send('StartCourseRefresh',{courseId,resources:['player-production'],startAt:'2023-02-07'})
+- const p=h.p(),c=p.features.course!.courses.find(c=>c.id===courseId)!,job=c.refreshes.at(-1)!.job!,raw=h.controller.exportSaved(),courseTarget:CourseSceneTarget={kind:'course',businessId,courseId}
++ const original=h.p().features.course!.courses.find(c=>c.id===courseId)!
++ await h.send('DefineCourse',{businessId,name:'只核对原记录归属的另一份方案',productId:'intro_recorded',topicId:'image_workflows',edition:'foundation',segment:'ai_learners',cases:original.cases,consent:true})
++ const p=h.p(),c=p.features.course!.courses.find(c=>c.id===courseId)!,other=p.features.course!.courses.at(-1)!,job=c.refreshes.at(-1)!.job!,raw=h.controller.exportSaved(),courseTarget:CourseSceneTarget={kind:'course',businessId,courseId},audienceTarget:CourseSceneTarget={kind:'audience',businessId,courseId,audienceId}
++ expect(other.id).not.toBe(courseId)
+  expect(job.status).toBe('planned');expect(p.view.budget.spent).toBe(before.view.budget.spent)
+  expect(courseWorkTarget(p,job.id,businessId)).toEqual({accountId:p.accountId,courseTarget,recordId:job.id})
+  expect(sceneWorks(p).find(row=>row.id===job.id)).toMatchObject({accountId:p.accountId,courseTarget,recordId:job.id})
+- for(const currentTarget of [courseTarget,target()]){
++ for(const currentTarget of [courseTarget,target(),audienceTarget]){
+   const book=renderToStaticMarkup(<CoursePanel {...p} initialTarget={currentTarget} initialFocusId={job.id}/>)
+   expect(book).toContain('href="#'+encodeURIComponent(job.id)+'"');expect(book).toContain('id="'+job.id+'"')
+  }
++ const wrongCourse=renderToStaticMarkup(<CoursePanel {...p} initialTarget={{kind:'course',businessId,courseId:other.id}} initialFocusId={job.id}/>),wrongAudienceRecord=renderToStaticMarkup(<CoursePanel {...p} initialTarget={audienceTarget} initialFocusId={other.id+'-course'}/>),wrongAudience=renderToStaticMarkup(<CoursePanel {...p} initialTarget={{...audienceTarget,kind:'audience',businessId,courseId:other.id,audienceId}} initialFocusId={job.id}/>)
++ for(const rejected of [wrongCourse,wrongAudienceRecord,wrongAudience]){expect(rejected).toContain('先找回原来的课程准备');expect(rejected).not.toContain('从实际未购买意向中选择人数')}
+  expect(h.controller.exportSaved()).toBe(raw)
+ })

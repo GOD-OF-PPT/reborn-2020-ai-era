@@ -1,0 +1,1 @@
+先消费固定target/progress/shared draft接缝。每页一问题、fixed footer；所有模式无默认、原命令/preview/confirm权威；同对象资金/受众/班期/人数/任务/退款逐项重匹配，草稿跨页/日期稳定且数组patch走最新functional setter。实际状态与预款/收入/退款实付应付/费用/closed分开，原册常可达。以现教案+原生纸签，先交互不生成资产。单worker小批真实handler、payload原preview与确认SSR/数组更新边界；保红/终态hash，Root生产/Chrome另验。回滚只本代理新增文件。

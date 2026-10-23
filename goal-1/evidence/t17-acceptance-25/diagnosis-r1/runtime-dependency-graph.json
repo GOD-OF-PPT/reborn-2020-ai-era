@@ -1,0 +1,3229 @@
+{
+  "roots": [
+    "src/ui/player-thread.test.ts",
+    "src/ui/season-thread.test.ts"
+  ],
+  "edges": [
+    {
+      "from": "src/ui/player-thread.test.ts",
+      "to": "src/application/campaign.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/ending-projection.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/ending-projection.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/ledger.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/calendar.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/ledger.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/ledger.ts",
+      "to": "src/core/identity.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/identity.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/ledger.ts",
+      "to": "src/core/money.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/money.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/ending-projection.ts",
+      "to": "src/core/operations-accrual.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations-accrual.ts",
+      "to": "src/core/story-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-state.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-state.ts",
+      "to": "src/core/operations-calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations-calendar.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations-calendar.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/hash.ts",
+      "to": "src/core/identity.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-state.ts",
+      "to": "src/content/story.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-state.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-state.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations-accrual.ts",
+      "to": "src/core/operations-calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations-accrual.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/ending-projection.ts",
+      "to": "src/core/market-projection.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market-projection.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/json-input.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/json-input.ts",
+      "to": "src/core/identity.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market-projection.ts",
+      "to": "src/core/market-math.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market-math.ts",
+      "to": "src/core/money.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market-math.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/ending-projection.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/economy.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/economy.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/economy.ts",
+      "to": "src/core/identity.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/economy.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/economy.ts",
+      "to": "src/core/money.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/ending-projection.ts",
+      "to": "src/core/money.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/ending-projection.ts",
+      "to": "src/core/ending-ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/ending-ledger.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/ending-ledger.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/record-schemas.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/record-schemas.ts",
+      "to": "src/core/money.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/record-schemas.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/record-schemas.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/ending-ledger.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/ending-projection.ts",
+      "to": "src/content/bootstrap.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/content/bootstrap.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/content/bootstrap.ts",
+      "to": "src/core/random.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/random.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/random.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/ending-projection.ts",
+      "to": "src/content/first-order.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/application/clock-commitments.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/clock-commitments.ts",
+      "to": "src/application/cash-forecast.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/cash-forecast.ts",
+      "to": "src/core/story-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/cash-forecast.ts",
+      "to": "src/core/money.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/cash-forecast.ts",
+      "to": "src/content/operations.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/content/operations.ts",
+      "to": "src/content/deepseek.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/content/operations.ts",
+      "to": "src/content/relay.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/content/operations.ts",
+      "to": "src/content/course.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/content/operations.ts",
+      "to": "src/content/video.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/content/operations.ts",
+      "to": "src/content/first-order.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/content/operations.ts",
+      "to": "src/content/bootstrap.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/cash-forecast.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/cash-forecast.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/cash-forecast.ts",
+      "to": "src/core/operations-calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/cash-forecast.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/cash-forecast.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/timeline.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/timeline.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/timeline.ts",
+      "to": "src/core/identity.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/clock-commitments.ts",
+      "to": "src/core/operations-accrual.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/clock-commitments.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/application/journey-commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/journey-commands.ts",
+      "to": "src/core/commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/commands.ts",
+      "to": "src/core/relay-knowledge.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/commands.ts",
+      "to": "src/core/journey.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/journey.ts",
+      "to": "src/core/tail-cost-preview.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/tail-cost-preview.ts",
+      "to": "src/content/operations.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/tail-cost-preview.ts",
+      "to": "src/core/tail-billing.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/tail-billing.ts",
+      "to": "src/content/bootstrap.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/tail-billing.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/tail-billing.ts",
+      "to": "src/core/operations-calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/tail-billing.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/tail-billing.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/tail-cost-preview.ts",
+      "to": "src/core/operations-accrual.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/journey.ts",
+      "to": "src/content/journey.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/content/journey.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/journey.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/journey.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/journey.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/journey.ts",
+      "to": "src/core/journey-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/journey-schema.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/journey.ts",
+      "to": "src/core/epilogue.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/epilogue.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/epilogue.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/epilogue.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/epilogue.ts",
+      "to": "src/core/operations-calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/epilogue.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/epilogue.ts",
+      "to": "src/core/ending-ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/epilogue.ts",
+      "to": "src/content/campaign.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/journey.ts",
+      "to": "src/core/tail-billing.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/commands.ts",
+      "to": "src/core/player-profile.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/commands.ts",
+      "to": "src/core/market-projection.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/commands.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/commands.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/commands.ts",
+      "to": "src/core/economic-time.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/economic-time.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/economic-time.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/economic-time.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/economic-time.ts",
+      "to": "src/core/content-types.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/commands.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/commands.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/commands.ts",
+      "to": "src/core/command-identity.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/command-identity.ts",
+      "to": "src/core/identity.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/command-identity.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/command-identity.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/commands.ts",
+      "to": "src/core/facts.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/facts.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/facts.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/facts.ts",
+      "to": "src/core/identity.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/facts.ts",
+      "to": "src/core/random.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/commands.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/commands.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/commands.ts",
+      "to": "src/core/run.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/run.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/run.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/run.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/run.ts",
+      "to": "src/core/command-identity.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/run.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/run.ts",
+      "to": "src/core/facts.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/run.ts",
+      "to": "src/core/random.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/run.ts",
+      "to": "src/core/identity.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/run.ts",
+      "to": "src/core/player-profile.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/commands.ts",
+      "to": "src/core/versions.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/versions.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/commands.ts",
+      "to": "src/core/operations-accrual.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/journey-commands.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/journey-commands.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/journey-commands.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/journey-commands.ts",
+      "to": "src/core/epilogue.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/journey-commands.ts",
+      "to": "src/core/tail-billing.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/journey-commands.ts",
+      "to": "src/core/ending-ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/journey-commands.ts",
+      "to": "src/core/journey-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/epilogue.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/journey.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/life.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life.ts",
+      "to": "src/core/life-work.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-work.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-work.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-work.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-work.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-work.ts",
+      "to": "src/core/operations.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations.ts",
+      "to": "src/core/operations-calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations.ts",
+      "to": "src/core/facts.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations.ts",
+      "to": "src/core/operations-calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations.ts",
+      "to": "src/core/operations-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations-schema.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations-schema.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations-schema.ts",
+      "to": "src/core/content-types.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations-schema.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations-schema.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations.ts",
+      "to": "src/core/operations-accrual.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations.ts",
+      "to": "src/core/operations-validation.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations-validation.ts",
+      "to": "src/core/operations-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations-validation.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations-validation.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations-validation.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations-validation.ts",
+      "to": "src/core/operations-calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations-validation.ts",
+      "to": "src/core/operations-accrual.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/operations.ts",
+      "to": "src/core/operations-calendar.ts",
+      "kind": "value-export"
+    },
+    {
+      "from": "src/core/life-work.ts",
+      "to": "src/core/life-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-state.ts",
+      "to": "src/content/life.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-state.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-state.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-state.ts",
+      "to": "src/core/life-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-schema.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-state.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-state.ts",
+      "to": "src/core/operations-calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life.ts",
+      "to": "src/core/life-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life.ts",
+      "to": "src/core/life-validation.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-validation.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-validation.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-validation.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-validation.ts",
+      "to": "src/core/operations.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-validation.ts",
+      "to": "src/core/life-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-validation.ts",
+      "to": "src/core/life-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/application/life-commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/life-commands.ts",
+      "to": "src/core/commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/life-commands.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/life-commands.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/life-commands.ts",
+      "to": "src/core/life-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/life-projection.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-projection.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-projection.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-projection.ts",
+      "to": "src/core/money.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-projection.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-projection.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/life-projection.ts",
+      "to": "src/core/life-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/story.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story.ts",
+      "to": "src/core/story-validation-context.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story.ts",
+      "to": "src/core/story-risk.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk.ts",
+      "to": "src/content/story.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk.ts",
+      "to": "src/core/facts.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk.ts",
+      "to": "src/core/story-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk.ts",
+      "to": "src/core/story-work.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-work.ts",
+      "to": "src/core/story-validation-context.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-work.ts",
+      "to": "src/content/story.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-work.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-work.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-work.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-work.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-work.ts",
+      "to": "src/core/operations.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-work.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-work.ts",
+      "to": "src/core/story-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk.ts",
+      "to": "src/core/story-agency.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-agency.ts",
+      "to": "src/core/story-validation-context.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-agency.ts",
+      "to": "src/core/course.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course.ts",
+      "to": "src/core/story-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course.ts",
+      "to": "src/core/story-support.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-support.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-support.ts",
+      "to": "src/core/story-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-support.ts",
+      "to": "src/core/story-work.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course.ts",
+      "to": "src/core/story-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course.ts",
+      "to": "src/core/money.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course.ts",
+      "to": "src/content/course.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course.ts",
+      "to": "src/core/course-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course-schema.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course.ts",
+      "to": "src/core/course-validation.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course-validation.ts",
+      "to": "src/core/story-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course-validation.ts",
+      "to": "src/core/course-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course-validation.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course-validation.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course-validation.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course-validation.ts",
+      "to": "src/core/money.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course-validation.ts",
+      "to": "src/core/course.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-agency.ts",
+      "to": "src/core/relay.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay.ts",
+      "to": "src/core/story-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay.ts",
+      "to": "src/core/story-support.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay.ts",
+      "to": "src/core/money.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay.ts",
+      "to": "src/core/facts.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay.ts",
+      "to": "src/content/relay.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay.ts",
+      "to": "src/core/relay-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay-schema.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay.ts",
+      "to": "src/core/relay-validation.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay-validation.ts",
+      "to": "src/core/relay-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay-validation.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay-validation.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay-validation.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay-validation.ts",
+      "to": "src/core/money.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay-validation.ts",
+      "to": "src/core/relay.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-agency.ts",
+      "to": "src/content/story.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-agency.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-agency.ts",
+      "to": "src/core/facts.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-agency.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-agency.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-agency.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-agency.ts",
+      "to": "src/core/story-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-agency.ts",
+      "to": "src/core/story-work.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story.ts",
+      "to": "src/core/story-risk-validation.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk-validation.ts",
+      "to": "src/core/story-validation-context.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk-validation.ts",
+      "to": "src/content/story.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk-validation.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk-validation.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk-validation.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk-validation.ts",
+      "to": "src/core/story-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk-validation.ts",
+      "to": "src/core/story-work.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk-validation.ts",
+      "to": "src/core/story-agency.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-risk-validation.ts",
+      "to": "src/core/story-risk.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story.ts",
+      "to": "src/core/story-boundary.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-boundary.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story.ts",
+      "to": "src/content/story.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story.ts",
+      "to": "src/core/story-agency.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story.ts",
+      "to": "src/core/story-support.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story.ts",
+      "to": "src/core/story-work.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story.ts",
+      "to": "src/core/story-history.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-history.ts",
+      "to": "src/core/story-validation-context.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-history.ts",
+      "to": "src/content/story.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-history.ts",
+      "to": "src/content/campaign.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-history.ts",
+      "to": "src/core/story-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-schema.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-schema.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-history.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-history.ts",
+      "to": "src/core/facts.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-history.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-history.ts",
+      "to": "src/core/story-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-history.ts",
+      "to": "src/core/story-work.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story.ts",
+      "to": "src/core/story-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story.ts",
+      "to": "src/core/facts.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/application/story-commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/story-commands.ts",
+      "to": "src/core/commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/story-commands.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/story-commands.ts",
+      "to": "src/core/story-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/story-projection.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-projection.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-projection.ts",
+      "to": "src/core/story-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-projection.ts",
+      "to": "src/core/story-work.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-projection.ts",
+      "to": "src/core/story-risk.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/story-projection.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/deepseek.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek.ts",
+      "to": "src/content/deepseek.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek.ts",
+      "to": "src/core/deepseek-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek-schema.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek.ts",
+      "to": "src/core/equity.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/equity.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/equity.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/equity.ts",
+      "to": "src/core/money.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/equity.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/equity.ts",
+      "to": "src/content/deepseek.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/equity.ts",
+      "to": "src/core/deepseek-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek-state.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek-state.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek-state.ts",
+      "to": "src/core/facts.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek-state.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek-state.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek.ts",
+      "to": "src/core/deepseek-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek.ts",
+      "to": "src/core/deepseek-validation.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek-validation.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek-validation.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek-validation.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek-validation.ts",
+      "to": "src/core/money.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek-validation.ts",
+      "to": "src/core/deepseek-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek-validation.ts",
+      "to": "src/core/deepseek-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/application/deepseek-commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/deepseek-commands.ts",
+      "to": "src/core/commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/deepseek-commands.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/deepseek-commands.ts",
+      "to": "src/core/deepseek-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/deepseek-projection.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek-projection.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek-projection.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek-projection.ts",
+      "to": "src/core/operations-accrual.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/deepseek-projection.ts",
+      "to": "src/core/deepseek-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/relay-projection.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay-projection.ts",
+      "to": "src/core/relay-knowledge.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay-projection.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay-projection.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay-projection.ts",
+      "to": "src/core/operations-accrual.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/relay-projection.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/routine-projection.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/routine-projection.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/routines.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/routines.ts",
+      "to": "src/core/relay-knowledge.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/routines.ts",
+      "to": "src/core/story-state.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/routines.ts",
+      "to": "src/core/story-boundary.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/routines.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/routines.ts",
+      "to": "src/core/operations-calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/routines.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/routines.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/routines.ts",
+      "to": "src/core/facts.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/routines.ts",
+      "to": "src/core/routine-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/routine-schema.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/routines.ts",
+      "to": "src/content/routines.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/application/routine-commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/routine-commands.ts",
+      "to": "src/core/commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/routine-commands.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/routine-commands.ts",
+      "to": "src/core/routine-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/relay.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/application/relay-commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/relay-commands.ts",
+      "to": "src/core/commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/relay-commands.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/relay-commands.ts",
+      "to": "src/core/relay-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/course.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/application/course-commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/course-commands.ts",
+      "to": "src/core/commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/course-commands.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/course-commands.ts",
+      "to": "src/core/course-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/course-projection.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course-projection.ts",
+      "to": "src/core/operations-accrual.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course-projection.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course-projection.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/course-projection.ts",
+      "to": "src/core/course.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/video.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video.ts",
+      "to": "src/core/facts.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video.ts",
+      "to": "src/content/video.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video.ts",
+      "to": "src/core/video-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video-schema.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video.ts",
+      "to": "src/core/video-validation.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video-validation.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video-validation.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video-validation.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video-validation.ts",
+      "to": "src/core/video-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video-validation.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video-validation.ts",
+      "to": "src/core/video.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/application/video-commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/video-commands.ts",
+      "to": "src/core/commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/video-commands.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/video-commands.ts",
+      "to": "src/core/video-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/video-projection.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video-projection.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/video-projection.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/application/bootstrap.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/bootstrap.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/bootstrap.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/bootstrap.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/bootstrap.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/bootstrap.ts",
+      "to": "src/core/economic-time.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/bootstrap.ts",
+      "to": "src/core/run.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/bootstrap.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/bootstrap.ts",
+      "to": "src/content/bootstrap.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/content/bootstrap.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/content/campaign.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/world.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world.ts",
+      "to": "src/core/content-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/content-schema.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/content-schema.ts",
+      "to": "src/core/random.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/content-schema.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/content-schema.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/content-schema.ts",
+      "to": "src/core/content-types.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world.ts",
+      "to": "src/core/money.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world.ts",
+      "to": "src/core/economic-time.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world.ts",
+      "to": "src/core/facts.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world.ts",
+      "to": "src/core/content-types.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world.ts",
+      "to": "src/core/world-validation.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world-validation.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world-validation.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world-validation.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world-validation.ts",
+      "to": "src/core/world-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world-schema.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world-schema.ts",
+      "to": "src/core/content-types.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/run.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/persistence/codec.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/codec.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/codec.ts",
+      "to": "src/core/identity.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/codec.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/codec.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/codec.ts",
+      "to": "src/core/run.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/codec.ts",
+      "to": "src/core/versions.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/codec.ts",
+      "to": "src/core/command-identity.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/codec.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/codec.ts",
+      "to": "src/core/content-types.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/codec.ts",
+      "to": "src/persistence/schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/schemas.ts",
+      "to": "src/core/journey-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/schemas.ts",
+      "to": "src/core/life-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/schemas.ts",
+      "to": "src/core/story-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/schemas.ts",
+      "to": "src/core/deepseek-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/schemas.ts",
+      "to": "src/core/routine-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/schemas.ts",
+      "to": "src/core/relay-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/schemas.ts",
+      "to": "src/core/course-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/schemas.ts",
+      "to": "src/core/video-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/schemas.ts",
+      "to": "src/core/player-profile.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/schemas.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/schemas.ts",
+      "to": "src/core/random.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/schemas.ts",
+      "to": "src/core/world-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/schemas.ts",
+      "to": "src/core/market-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market-schema.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market-schema.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market-schema.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/schemas.ts",
+      "to": "src/core/operations-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/schemas.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/schemas.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-export"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/content/operations.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/operations.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/application/first-order.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/first-order.ts",
+      "to": "src/content/first-order.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/first-order.ts",
+      "to": "src/core/commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/first-order.ts",
+      "to": "src/core/first-order.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/first-order.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/first-order.ts",
+      "to": "src/core/operations.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/first-order.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/first-order.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/content/first-order.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/application/operations-commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/operations-commands.ts",
+      "to": "src/core/commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/operations-commands.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/market.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market.ts",
+      "to": "src/core/market-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market.ts",
+      "to": "src/core/money.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market.ts",
+      "to": "src/core/market-math.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market.ts",
+      "to": "src/core/random.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market.ts",
+      "to": "src/core/economy.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market.ts",
+      "to": "src/core/market-validation.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market-validation.ts",
+      "to": "src/core/market-schema.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market-validation.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market-validation.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market-validation.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market-validation.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market-validation.ts",
+      "to": "src/core/market-math.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/market-validation.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/content/market.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/content/market.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/application/market-commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/market-commands.ts",
+      "to": "src/core/commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/market-commands.ts",
+      "to": "src/core/record-schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/core/market-projection.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/campaign.ts",
+      "to": "src/application/workbench-projection.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/workbench-projection.ts",
+      "to": "src/core/relay-knowledge.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/workbench-projection.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/workbench-projection.ts",
+      "to": "src/core/ledger.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/workbench-projection.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/workbench-projection.ts",
+      "to": "src/core/operations-calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/workbench-projection.ts",
+      "to": "src/core/market-projection.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/workbench-projection.ts",
+      "to": "src/core/world-projection.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world-projection.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/core/world-projection.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/workbench-projection.ts",
+      "to": "src/application/cash-forecast.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/workbench-projection.ts",
+      "to": "src/application/first-order.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/workbench-projection.ts",
+      "to": "src/core/operations-accrual.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/player-thread.test.ts",
+      "to": "src/application/game-controller.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/game-controller.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/game-controller.ts",
+      "to": "src/application/campaign.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/game-controller.ts",
+      "to": "src/application/session.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/session.ts",
+      "to": "src/core/commands.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/session.ts",
+      "to": "src/core/command-identity.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/session.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/session.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/session.ts",
+      "to": "src/persistence/codec.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/session.ts",
+      "to": "src/core/timeline.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/game-controller.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/game-controller.ts",
+      "to": "src/application/playable-advance.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/playable-advance.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/playable-advance.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/game-controller.ts",
+      "to": "src/core/json-input.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/application/game-controller.ts",
+      "to": "src/application/game-snapshot.ts",
+      "kind": "value-export"
+    },
+    {
+      "from": "src/application/game-controller.ts",
+      "to": "src/application/game-snapshot.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/player-thread.test.ts",
+      "to": "src/application/session.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/player-thread.test.ts",
+      "to": "src/persistence/indexeddb.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/indexeddb.ts",
+      "to": "src/core/errors.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/indexeddb.ts",
+      "to": "src/core/identity.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/indexeddb.ts",
+      "to": "src/core/command-identity.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/indexeddb.ts",
+      "to": "src/core/hash.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/indexeddb.ts",
+      "to": "src/persistence/codec.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/persistence/indexeddb.ts",
+      "to": "src/persistence/schemas.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/player-thread.test.ts",
+      "to": "src/testing/memory-writer-access.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/player-thread.test.ts",
+      "to": "src/testing/abort-after-write.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/player-thread.test.ts",
+      "to": "src/ui/player-thread.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/player-thread.ts",
+      "to": "src/ui/life-scene-progress.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/life-scene-progress.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/life-scene-progress.ts",
+      "to": "src/ui/game-text.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/game-text.ts",
+      "to": "src/application/playable-advance.ts",
+      "kind": "value-export"
+    },
+    {
+      "from": "src/ui/player-thread.ts",
+      "to": "src/ui/market-scene-progress.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/market-scene-progress.ts",
+      "to": "src/ui/game-text.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/player-thread.ts",
+      "to": "src/ui/game-text.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/player-thread.ts",
+      "to": "src/core/market.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/player-thread.ts",
+      "to": "src/core/operations-calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/player-thread.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/player-thread.ts",
+      "to": "src/ui/scene-thread-notes.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/scene-thread-notes.ts",
+      "to": "src/ui/game-text.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/scene-thread-notes.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/player-thread.ts",
+      "to": "src/ui/video-player-thread.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/video-player-thread.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/video-player-thread.ts",
+      "to": "src/ui/video-scene-progress.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/video-scene-progress.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/video-scene-progress.ts",
+      "to": "src/ui/game-text.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/player-thread.ts",
+      "to": "src/ui/course-player-thread.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/course-player-thread.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/course-player-thread.ts",
+      "to": "src/ui/course-scene-progress.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/course-scene-progress.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/course-scene-progress.ts",
+      "to": "src/core/operations-calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/course-scene-progress.ts",
+      "to": "src/ui/game-text.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/course-scene-progress.ts",
+      "to": "src/content/course.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/course-scene-progress.ts",
+      "to": "src/ui/course-cohort-progress.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/course-cohort-progress.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/course-cohort-progress.ts",
+      "to": "src/core/operations-calendar.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/course-cohort-progress.ts",
+      "to": "src/content/course.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/course-cohort-progress.ts",
+      "to": "src/ui/game-text.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/course-player-thread.ts",
+      "to": "src/ui/course-cohort-progress.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.test.ts",
+      "to": "src/application/campaign.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.test.ts",
+      "to": "src/application/game-controller.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.test.ts",
+      "to": "src/application/session.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.test.ts",
+      "to": "src/persistence/indexeddb.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.test.ts",
+      "to": "src/testing/memory-writer-access.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.test.ts",
+      "to": "src/testing/abort-after-write.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.test.ts",
+      "to": "src/ui/player-thread.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.test.ts",
+      "to": "src/ui/season-thread.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.ts",
+      "to": "src/ui/Navigation.tsx",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/Navigation.tsx",
+      "to": "src/ui/RouteMark.tsx",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.ts",
+      "to": "src/ui/game-text.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.ts",
+      "to": "src/ui/scene-thread-notes.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.ts",
+      "to": "src/ui/player-thread.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.ts",
+      "to": "src/ui/video-player-thread.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.ts",
+      "to": "src/ui/course-player-thread.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.ts",
+      "to": "src/ui/course-scene-progress.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.test.ts",
+      "to": "goal-1/evidence/t17-acceptance-11/chrome-production-r12/r105-audit-correction-real-cash-saved.json",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.test.ts",
+      "to": "src/ui/scene-thread-notes.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.test.ts",
+      "to": "src/ui/season-focus-preference.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.test.ts",
+      "to": "src/ui/game-text.ts",
+      "kind": "value-import"
+    },
+    {
+      "from": "src/ui/season-thread.test.ts",
+      "to": "src/core/calendar.ts",
+      "kind": "value-import"
+    }
+  ],
+  "assets": [
+    "goal-1/evidence/t17-acceptance-11/chrome-production-r12/r105-audit-correction-real-cash-saved.json"
+  ],
+  "packages": [
+    {
+      "specifier": "vitest",
+      "entry": "node_modules/vitest/index.cjs",
+      "name": "vitest",
+      "version": "5.0.5",
+      "packageJson": "node_modules/vitest/package.json"
+    },
+    {
+      "specifier": "fake-indexeddb",
+      "entry": "node_modules/fake-indexeddb/build/cjs/index.js",
+      "packageJson": "node_modules/fake-indexeddb/build/cjs/package.json"
+    },
+    {
+      "specifier": "@noble/hashes/sha2.js",
+      "entry": "node_modules/@noble/hashes/sha2.js",
+      "name": "@noble/hashes",
+      "version": "2.4.0",
+      "packageJson": "node_modules/@noble/hashes/package.json"
+    },
+    {
+      "specifier": "@noble/hashes/utils.js",
+      "entry": "node_modules/@noble/hashes/utils.js",
+      "name": "@noble/hashes",
+      "version": "2.4.0",
+      "packageJson": "node_modules/@noble/hashes/package.json"
+    },
+    {
+      "specifier": "zod",
+      "entry": "node_modules/zod/index.cjs",
+      "name": "zod",
+      "version": "4.6.7",
+      "packageJson": "node_modules/zod/package.json"
+    },
+    {
+      "specifier": "react/jsx-runtime",
+      "entry": "node_modules/react/jsx-runtime.js",
+      "name": "react",
+      "version": "19.3.1",
+      "packageJson": "node_modules/react/package.json"
+    }
+  ],
+  "typeOnlyExcluded": true,
+  "limitation": "Literal relative runtime imports only; package lock, installed versions/entries captured. V8 profiles later identify actually sampled package files.",
+  "excludedConcurrentUI": [
+    {
+      "path": "src/ui/OpeningMoment.tsx",
+      "inClosure": false
+    },
+    {
+      "path": "src/ui/CourseTeachingChoice.tsx",
+      "inClosure": false
+    },
+    {
+      "path": "src/ui/VideoSceneChoice.tsx",
+      "inClosure": false
+    }
+  ]
+}

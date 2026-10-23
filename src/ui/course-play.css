@@ -41,3 +41,17 @@
 
 /* Place the folio on the visible desk, clear of the seated person. */
 .opening-room>.opening-object[data-appearance=course]{left:73%}
+
+/* Committed cohort paper slips stay inside the existing object label and its native button. */
+.opening-object[data-appearance=course] .course-teaching-slips{display:grid;gap:6px;width:100%;font:14px/1.8 var(--serif);color:#dfd1ad}
+.opening-object[data-appearance=course] .course-stage-tabs{display:flex;flex-wrap:wrap;gap:8px 14px}
+.opening-object[data-appearance=course] .course-stage-tab{padding:2px 0;border-bottom:1px dashed #c6ae7e}
+.opening-object[data-appearance=course] .course-stage-tab[data-state=running]{border-bottom-style:solid;color:#efd9a8}
+.opening-object[data-appearance=course] .course-stage-tab[data-state=completed]{border-bottom:3px double #d2ba87}
+.opening-object[data-appearance=course] .course-stage-tab[data-state=stopped]{border-bottom-style:solid;color:#dba997}
+.opening-object[data-appearance=course] .course-money-folds{display:flex;flex-wrap:wrap;gap:5px 10px}
+.opening-object[data-appearance=course] .course-protected-band{padding:1px 6px;border:1px solid #c0a478;background:#bba06916;color:#e7d5ad}
+.opening-object[data-appearance=course] .course-responsibility-fold{padding-left:6px;border-left:2px solid #c78a70;color:#ecc0a9}
+.opening-object[data-appearance=course] .course-support-fold{border-bottom:1px dashed #bca87f;color:#d3c8a6}
+.opening-object[data-appearance=course] .course-closed-slip{border-bottom:3px double #d4bd8c;color:#ead5aa}
+.opening-room>.opening-object[data-appearance=course]>.opening-object-art,.opening-room .opening-room-object>.opening-object[data-appearance=course]>.opening-object-art{filter:drop-shadow(0 4px 3px #00151b80)}

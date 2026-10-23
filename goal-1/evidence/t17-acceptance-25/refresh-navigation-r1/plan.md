@@ -1,0 +1,3 @@
+# 同课更新原记录导航补正
+
+只扩audience同course无sample的原记录校验，与cohort现语义一致。原实际refresh case增加audience原job href/id，另以真实原DefineCourse建立不同course用于错归属拒绝，并核错audience/不同kind记录不被借用；不创建伪造晚档、不动模型或规则。保原7case和原时限，singleworker仅本7项；有新生产改动后做owned strict并保存终态/源前后。Root另补recordId传播与新进度等待，独立归属。

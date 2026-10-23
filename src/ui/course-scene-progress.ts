@@ -4,14 +4,17 @@ import type {CourseProjection} from '../core/course-projection.ts'
 import {moneyText,playableThrough} from './game-text.ts'
 import type {ProductionJob} from '../core/operations-types.ts'
 import {COURSE_JOBS} from '../content/course.ts'
+import {courseCohortTargetReason,courseCohortProgress,courseRefreshProgress} from './course-cohort-progress.ts'
 
 export type CourseSceneTarget=
  |{readonly kind:'studio';readonly businessId:string}
  |{readonly kind:'outline';readonly businessId:string;readonly outlineId:string}
  |{readonly kind:'license';readonly businessId:string;readonly licenseId:string}
  |{readonly kind:'course';readonly businessId:string;readonly courseId:string;readonly sampleJobId?:string}
+ |{readonly kind:'audience';readonly businessId:string;readonly courseId:string;readonly audienceId:string}
+ |{readonly kind:'cohort';readonly businessId:string;readonly courseId:string;readonly cohortId:string;readonly jobId?:string}
 export interface CourseSceneContext{readonly preparationReady?:boolean;readonly operations?:{readonly jobs:readonly ProductionJob[]}|null}
-export type CourseSceneResultRef={readonly kind:'job'|'course'|'outline'|'license'|'business';readonly id:string;readonly date:string|null}
+export type CourseSceneResultRef={readonly kind:'job'|'course'|'outline'|'license'|'business'|'audience'|'cohort'|'enrollment'|'refund'|'operation';readonly id:string;readonly date:string|null}
 
 export interface CourseSceneStage{
  readonly cohortId:string
@@ -42,6 +45,7 @@ export interface CourseSceneProgress{
  readonly preparation?:CoursePreparationStep
  readonly waitDate?:string
  readonly recordId?:string
+ readonly teachingIntent?:'audience'|'plan'|'enroll'|'stage:0'|'stage:1'|'recovery'|'refund'|'refresh'
 }
 export interface CoursePreparationStep{readonly phase:'fund'|'outline'|'waiting'|'activate';readonly businessId?:string;readonly jobId?:string}
 function scene(title:string,line:string,choiceTitle:string,choiceLine:string,label:string):CourseSceneProgress{
@@ -131,18 +135,19 @@ function legacyCourseSceneProgress(course:CourseProjection,date:string):CourseSc
 }
 
 const targetId=(value:unknown):value is string=>typeof value==='string'&&value.length>0&&value.length<=512&&value.trim().length>0&&!/[\u0000-\u001f\u007f]/.test(value)
-export const courseTargetEntity=(t:CourseSceneTarget):string=>t.kind==='course'?t.sampleJobId??t.courseId:t.kind==='license'?t.licenseId:t.kind==='outline'?t.outlineId:t.businessId
+export const courseTargetEntity=(t:CourseSceneTarget):string=>t.kind==='course'?t.sampleJobId??t.courseId:t.kind==='license'?t.licenseId:t.kind==='outline'?t.outlineId:t.kind==='audience'?t.audienceId:t.kind==='cohort'?t.jobId??t.cohortId:t.businessId
 function sampleJob(course:NonNullable<CourseProjection>,target:Extract<CourseSceneTarget,{kind:'course'}>,context?:CourseSceneContext){
  const c=course.courses.find(c=>c.id===target.courseId),id=target.sampleJobId??c?.sampleJobId
  return id?(context?.operations?.jobs.find(j=>j.id===id)??(context?.operations?undefined:c?.job?.id===id?c.job:undefined)):undefined
 }
 /** Exact supplied identities are checked, never repaired into another draft or attempt. */
 export function courseTargetReason(course:CourseProjection,target:CourseSceneTarget,context?:CourseSceneContext):string|null{
- if(!course||!target||typeof target!=='object'||Array.isArray(target)||!['studio','outline','license','course'].includes(target.kind)||!targetId(target.businessId))return '原课程目标身份不完整，请明确重新选择。'
- const keys=target.kind==='studio'?['kind','businessId']:target.kind==='outline'?['kind','businessId','outlineId']:target.kind==='license'?['kind','businessId','licenseId']:['kind','businessId','courseId','sampleJobId']
+ if(!course||!target||typeof target!=='object'||Array.isArray(target)||!['studio','outline','license','course','audience','cohort'].includes(target.kind)||!targetId(target.businessId))return '原课程目标身份不完整，请明确重新选择。'
+ const keys=target.kind==='studio'?['kind','businessId']:target.kind==='outline'?['kind','businessId','outlineId']:target.kind==='license'?['kind','businessId','licenseId']:target.kind==='audience'?['kind','businessId','courseId','audienceId']:target.kind==='cohort'?['kind','businessId','courseId','cohortId','jobId']:['kind','businessId','courseId','sampleJobId']
  if(Object.keys(target).some(key=>!keys.includes(key)))return '原课程目标含有冲突字段，没有换到另一项准备。'
  const business=course.businesses.filter(b=>b.id===target.businessId)
  if(business.length!==1||business[0]!.route!=='ai_course')return '原课程工作室不存在或身份重复，请重新选择。'
+ if(target.kind==='audience'||target.kind==='cohort')return courseCohortTargetReason(course,target,context)
  const checkJob=(job:ProductionJob|null|undefined,id:string)=>{
   const rows=context?.operations?.jobs.filter(j=>j.id===id)??(job?[job]:[])
   return rows.length===1&&rows[0]!.id===id&&rows[0]!.businessId===target.businessId
@@ -169,10 +174,11 @@ export function courseTargetReason(course:CourseProjection,target:CourseSceneTar
  return null
 }
 
-function focusedCourseScene(course:NonNullable<CourseProjection>,_date:string,target:CourseSceneTarget,context?:CourseSceneContext):CourseSceneProgress{
+function focusedCourseScene(course:NonNullable<CourseProjection>,date:string,target:CourseSceneTarget,context?:CourseSceneContext):CourseSceneProgress{
  const reason=courseTargetReason(course,target,context)
  const make=(phase:string,title:string,line:string,terms:string,label:string,outcome:CourseSceneProgress['outcome']='none',refs:readonly CourseSceneResultRef[]=[]):CourseSceneProgress=>({...scene(title,line,title,terms,label),phase,outcome,resultRefs:refs,target})
  if(reason)return {...make('course-invalid','先找回原来的这份教学准备。',reason,'原大纲、课程、学生和费用继续保留；请明确重新选择。','重新选择原课程对象'),invalidReason:reason}
+ if(target.kind==='audience'||target.kind==='cohort')return courseCohortProgress(course,date,target,context)
  const b=course.businesses.find(b=>b.id===target.businessId)!,closed=b.lifecycle==='closed',stopped=['winding_down','closed'].includes(b.lifecycle)
  const globalOutline=context?.preparationReady??course.outlines.some(o=>o.businessId===b.id&&o.job?.status==='completed')
  const canActivate=b.lifecycle==='preparing'&&b.prepared&&globalOutline
@@ -208,15 +214,16 @@ function focusedCourseScene(course:NonNullable<CourseProjection>,_date:string,ta
  if(job?.status==='completed')refs.push({kind:'job',id:job.id,date:job.completeAt})
  if(historical&&job)return {...originalJob('sample',job,c.name,refs),historical:true}
  if(job&&['planned','running','interrupted','cancelled'].includes(job.status))return originalJob('sample',job,c.name,refs)
+ const refresh=courseRefreshProgress(course,date,target,context);if(refresh)return refresh
  if(closed||c.status==='retired'||stopped)return make(closed?'course-closed':'course-retired','这份原课程，已经停止新安排。',c.name+'的原样课与版本仍保留。','原学生、退款、更新与费用继续按原记录处理；本次查看不会恢复招生。','翻看原课程与全部旧责任','non-success',refs)
- if(c.unresolvedUpdates.length)return make('course-update-required','样课记录还在，工具前提需要更新。',`${c.name}有原更新责任，期限${c.unresolvedUpdates.map(u=>u.dueAt).sort()[0]}。`,'原更新须实际投入并完成；新获客、班额与支持仍另行决定，不把更新记作新产品或收入。','翻看原更新与课程记录',c.status==='ready'?'actual':'pending',refs)
+ if(c.unresolvedUpdates.length)return {...make('course-update-required','样课记录还在，工具前提需要更新。',`${c.name}有原更新责任，期限${c.unresolvedUpdates.map(u=>u.dueAt).sort()[0]}。`,'原更新须实际投入并完成；新获客、班额与支持仍另行决定，不把更新记作新产品或收入。','翻看原更新与课程记录',c.status==='ready'?'actual':'pending',refs),teachingIntent:'refresh'}
  const pendingRights=course.licenses.filter(l=>l.businessId===b.id&&c.cases.some(ref=>ref.id===l.caseId)&&l.job&&['planned','running'].includes(l.job.status)).sort((a,b)=>(a.job!.status==='planned'?a.job!.startAt:a.job!.completeAt).localeCompare(b.job!.status==='planned'?b.job!.startAt:b.job!.completeAt)||a.id.localeCompare(b.id))[0]
  if(pendingRights?.job)return originalJob('license',pendingRights.job,c.name+' · 原案例的课程使用范围',[...refs,{kind:'license',id:pendingRights.id,date:pendingRights.job.startAt}])
  const missingRights=c.cases.some(ref=>{const info=course.cases.find(r=>r.kind===ref.kind&&r.id===ref.id);return !info||info.licensed&&!course.licenses.some(l=>l.businessId===b.id&&l.caseId===ref.id&&l.job?.status==='completed')})
  if(missingRights)return make('course-rights-required','先把这门课的原案例使用范围看清。',c.name+'的案例或课程素材权利仍待核对。','已付案例和本单授权不是同一件事。需要的课程使用范围按原¥300、1点、7日实际完成；不自动授权。','核对这门课的实际案例与课程权利',c.status==='ready'?'actual':'none',refs)
  if(c.qualificationReasons.length)return make('course-tool-required','这门课的工具前提，需要先确认。',c.name+'的当前公开工具资格尚不齐全。','沿原申请和阅读动作核对；样课制作期每一日仍须通过原资格预览，不编批准或延长期限。','查看原工具资格与课程准备',c.status==='ready'?'actual':'none',refs)
  if(c.paused||b.lifecycle==='paused')return make('course-paused','这份课程暂不接受新的安排。',c.name+'的原样课与版本仍在。','恢复仍须原条件与独立决定；旧班责任、更新和费用没有消失。','核对原暂停与恢复条件',c.status==='ready'?'actual':'none',refs)
- if(c.status==='ready')return make('course-ready','这一份样课，已经真正准备好。',`${c.name}的样课已实际完成，${course.cohorts.some(co=>co.courseId===c.id)?'已有班期与学员记录继续保留。':'尚未招生。'}`,'当前案例权利与工具前提可核；新的获客、价格、班额、支持和实际报名仍须另行决定，本次查看没有新增学费或教学收入。','翻看这门原课，再决定是否迈向下一步','actual',refs)
+ if(c.status==='ready')return {...make('course-ready','这一份样课，已经真正准备好。',`${c.name}的样课已实际完成，${course.cohorts.some(co=>co.courseId===c.id)?'已有班期与学员记录继续保留。':'尚未招生。'}`,'当前案例权利与工具前提可核；新的获客、价格、班额、支持和实际报名仍须另行决定，本次查看没有新增学费或教学收入。','翻看这门原课，再决定是否迈向下一步','actual',refs),teachingIntent:'audience'}
  if(job?.status==='completed')return originalJob('sample',job,c.name,refs)
  const definition=COURSE_JOBS.find(d=>d.id===`course-sample-${c.productId}-${c.topicId}`)
  return make('course-draft','课程方案留下了，样课还须亲手做出来。',c.name+'仍是方案，没有把定义当作样课完成。',`${definition?`本门样课${moneyText(definition.costFen)}、${definition.actionPoints}点、${definition.durationDays}日；`:''}显选实际资源与日期，再核对制作期资格；未来学费不能支付当前制作。`,'选择这门课样课的资源与开工日','none',refs)

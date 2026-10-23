@@ -58,13 +58,13 @@ function parseFocus(value:unknown):{focus:OpeningFocus}|{reason:SeasonFocusPrefe
  if(f.kind==='course'){
   if(f.courseTarget===null)return f.entityId===null&&f.accountId==='personal'&&f.businessId===undefined?{focus:{...identity,kind:'course',courseTarget:null}}:{reason:'invalid-record'}
   const t=object(f.courseTarget)
-  if(!t||!['studio','outline','license','course'].includes(String(t.kind))||!id(t.businessId)||t.businessId!==f.businessId)return {reason:'invalid-record'}
-  const allowed=t.kind==='studio'?['kind','businessId']:t.kind==='outline'?['kind','businessId','outlineId']:t.kind==='license'?['kind','businessId','licenseId']:['kind','businessId','courseId','sampleJobId']
-  const required=t.kind==='studio'?['kind','businessId']:t.kind==='outline'?['kind','businessId','outlineId']:t.kind==='license'?['kind','businessId','licenseId']:['kind','businessId','courseId']
+  if(!t||!['studio','outline','license','course','audience','cohort'].includes(String(t.kind))||!id(t.businessId)||t.businessId!==f.businessId)return {reason:'invalid-record'}
+  const allowed=t.kind==='studio'?['kind','businessId']:t.kind==='outline'?['kind','businessId','outlineId']:t.kind==='license'?['kind','businessId','licenseId']:t.kind==='audience'?['kind','businessId','courseId','audienceId']:t.kind==='cohort'?['kind','businessId','courseId','cohortId','jobId']:['kind','businessId','courseId','sampleJobId']
+  const required=t.kind==='studio'?['kind','businessId']:t.kind==='outline'?['kind','businessId','outlineId']:t.kind==='license'?['kind','businessId','licenseId']:t.kind==='audience'?['kind','businessId','courseId','audienceId']:t.kind==='cohort'?['kind','businessId','courseId','cohortId']:['kind','businessId','courseId']
   if(!exactKeys(t,allowed,required))return {reason:'invalid-record'}
-  for(const key of ['outlineId','licenseId','courseId','sampleJobId'])if(t[key]!==undefined&&!id(t[key]))return {reason:'invalid-record'}
-  const values=[t.businessId,t.outlineId,t.licenseId,t.courseId,t.sampleJobId].filter(x=>x!==undefined)
-  if(new Set(values).size!==values.length||f.entityId!==(t.sampleJobId??t.courseId??t.licenseId??t.outlineId??t.businessId))return {reason:'invalid-record'}
+  for(const key of ['outlineId','licenseId','courseId','sampleJobId','audienceId','cohortId','jobId'])if(t[key]!==undefined&&!id(t[key]))return {reason:'invalid-record'}
+  const values=[t.businessId,t.outlineId,t.licenseId,t.courseId,t.sampleJobId,t.audienceId,t.cohortId,t.jobId].filter(x=>x!==undefined)
+  if(new Set(values).size!==values.length||f.entityId!==(t.jobId??t.cohortId??t.audienceId??t.sampleJobId??t.courseId??t.licenseId??t.outlineId??t.businessId))return {reason:'invalid-record'}
   return {focus:{...identity,kind:'course',courseTarget:{...t} as unknown as CourseSceneTarget}}
  }
  if(f.kind==='video'){

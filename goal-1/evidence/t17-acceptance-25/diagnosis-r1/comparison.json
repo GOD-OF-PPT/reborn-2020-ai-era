@@ -1,0 +1,57 @@
+{
+  "dependencyCount": 153,
+  "sourceDrift": [],
+  "originalTestsUnchanged": true,
+  "profileCommandExit": 0,
+  "controlCommandExit": 0,
+  "original5SecondTestPassClaim": false,
+  "scenarios": [
+    {
+      "name": "technical-first",
+      "profile": {
+        "wallMs": 3576.706792,
+        "cpuMs": 4297.134,
+        "uiMs": 18.933550000001105,
+        "viewMs": 202.6171340000019,
+        "validateRunMs": 2517.8033889999992,
+        "validationCalls": 26
+      },
+      "control": {
+        "wallMs": 2731.071359,
+        "cpuMs": 3327.793,
+        "uiMs": 14.068247000000383,
+        "viewMs": 174.4854140000009,
+        "validateRunMs": 1862.0999720000004,
+        "validationCalls": 26
+      },
+      "sameFinalRawSha256": true,
+      "rawSha256": "fe03a5dad59693be888f0074fb45f08eb517eb413e6c98aafc26d34720f98330",
+      "rawBytes": 197560,
+      "allCopiedOriginalAssertionsPassed": true
+    },
+    {
+      "name": "legacy-raw",
+      "profile": {
+        "wallMs": 4171.123463999999,
+        "cpuMs": 4485.735,
+        "uiMs": 22.86039299999902,
+        "viewMs": 55.412937000000966,
+        "validateRunMs": 2968.8615180000015,
+        "validationCalls": 7
+      },
+      "control": {
+        "wallMs": 2340.8879979999997,
+        "cpuMs": 2910.717,
+        "uiMs": 15.429395000000113,
+        "viewMs": 47.539921000000504,
+        "validateRunMs": 1601.8892019999985,
+        "validationCalls": 7
+      },
+      "sameFinalRawSha256": true,
+      "rawSha256": "478f312b634050e97dd87900f2e8c6d1e6a238af18426faa75c0fa35b5b1f4f9",
+      "rawBytes": 2856590,
+      "allCopiedOriginalAssertionsPassed": true
+    }
+  ],
+  "note": "Diagnostic long timer not original test acceptance. CPU process time includes worker threads/GC; profile and control differ in profiler overhead and host state, no unique host-cause attribution."
+}

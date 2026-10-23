@@ -1,0 +1,7 @@
+# active-refresh原档可用性结论
+
+Root明确决定不再为唯一fixture原档扩展UI测试。本目录完整保留原三文件、测试前像、before-source、found-raw、campaign-import及可用性说明。唯一active原raw是F05独立fixture，createCampaignCodec实际拒绝INCOMPATIBLE_RULES_VERSION；其余已找到更新raw是completed，不假造中间帧。
+
+本轮测试编辑0/执行0，production编辑0。原CourseTeachingChoice.test.tsx 13093B/SHA b4e36461f9333c6b94c82d37bf3708c97f2d5c423463eac23471cab03e533223，前后逐字相同（final-readback.json）。拒绝探针仅模块/codec读取，不是game/unit测试，不称handler通过。
+
+Root继续模型正常三目标回归的独立原身份及当前自然窗口实际更新循环；待真实图后独立艺术/TA目检。没有服务/浏览器/Git/兼容/几何动作，旧sealed未写。

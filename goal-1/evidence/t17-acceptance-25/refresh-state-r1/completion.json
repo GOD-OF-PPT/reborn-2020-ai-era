@@ -1,0 +1,32 @@
+{
+  "status": "model-fix-delivered",
+  "frozen": true,
+  "noDrift": true,
+  "productionFiles": 2,
+  "testFiles": 1,
+  "testCaseCountUnchanged": 5,
+  "newTargetKind": false,
+  "coreChanged": false,
+  "checks": {
+    "r1": "expected real refresh-state red preserved",
+    "r2": {
+      "newNormalCases": 5,
+      "newNormalPassed": 5,
+      "oldProgressCases": 20,
+      "oldProgressPassed": 17,
+      "oldSSRFailed": 3,
+      "exit": 1
+    },
+    "r3": {
+      "files": 1,
+      "tests": 5,
+      "passed": 5,
+      "durationSeconds": 31.31,
+      "exit": 0
+    },
+    "typeR1": {
+      "exit": 0
+    }
+  },
+  "residual": "Root preserves old display-only Stage confirmation without view and owns exact old/UI cumulative rerun; C-S3 stopped R1 never declared passed"
+}

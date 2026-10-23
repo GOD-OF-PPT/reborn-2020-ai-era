@@ -1,0 +1,1 @@
+继续同一 S3-C2 只读最终模型/安全/状态审查。正式原2 Vitest 原5秒已2/2 PASS，unit-cs3-original-retries-r2，不再诊断或profile。R4全适用 UI58/380PASS、type0。请只读活源 course targets/player/result/financials/refund/paper/advance wait 与 App同稿隔离，核真实因果/现金/候选/只读/旧职责/未知结果不泄露。不要改源/运行长测/浏览器/触P3，输出 fresh root25/r4-final-model-review-r1 守卫目录。发现确定bug立刻报告，不把静态当Chrome。

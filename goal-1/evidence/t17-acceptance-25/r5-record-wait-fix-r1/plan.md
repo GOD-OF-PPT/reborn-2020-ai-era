@@ -1,0 +1,3 @@
+# 同课原记录页等待期限
+
+原92输入通过真实GameController.importNew取得公开视图，实际handler打开stage0并返回record，先记录原date Jan31越Jan30的红。只将Opening既有pure helper机械搬到course-stage-wait.ts保原exportAPI，Choice phase stage-needed使用同helper/null不回退，其它wait完全不动。现CourseTeachingChoice.test追加1原92事件case，保原2主幕测试/所有case时限断言。新定向singleworker跑原2+新case，相关Choice整文件仅新改理由需要则一次，owned严格类型读回。无core/rule/P3/raw/browser/兼容/Git或全仓构建。

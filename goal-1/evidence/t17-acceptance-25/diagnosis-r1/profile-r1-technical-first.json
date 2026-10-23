@@ -1,0 +1,216 @@
+{
+  "tag": "profile-r1",
+  "name": "technical-first",
+  "diagnosticOnly": true,
+  "originalTimeoutMs": 5000,
+  "originalTestsUnmodified": true,
+  "profileEnabled": true,
+  "wallMs": 3576.706792,
+  "cpuMs": 4297.134,
+  "cpuToWall": 1.2014219364056835,
+  "overOriginalBudget": false,
+  "failure": null,
+  "rawSha256": "fe03a5dad59693be888f0074fb45f08eb517eb413e6c98aafc26d34720f98330",
+  "rawBytes": 197560,
+  "hostBefore": {
+    "at": "2026-10-23T20:00:27.173Z",
+    "pid": 96479,
+    "node": "v22.12.0",
+    "loadavg": [
+      4.18798828125,
+      9.84765625,
+      13.9482421875
+    ],
+    "availableParallelism": 8,
+    "cpuCount": 8,
+    "cpuModel": "Intel(R) Core(TM) i5-1038NG7 CPU @ 2.00GHz",
+    "freeMemory": 101433344,
+    "totalMemory": 17179869184
+  },
+  "hostAfter": {
+    "at": "2026-10-23T20:00:30.927Z",
+    "pid": 96479,
+    "node": "v22.12.0",
+    "loadavg": [
+      4.2529296875,
+      9.76708984375,
+      13.8955078125
+    ],
+    "availableParallelism": 8,
+    "cpuCount": 8,
+    "cpuModel": "Intel(R) Core(TM) i5-1038NG7 CPU @ 2.00GHz",
+    "freeMemory": 37044224,
+    "totalMemory": 17179869184
+  },
+  "resourceUsageBefore": {
+    "userCPUTime": 1040591,
+    "systemCPUTime": 190065,
+    "maxRSS": 168944,
+    "sharedMemorySize": 0,
+    "unsharedDataSize": 0,
+    "unsharedStackSize": 0,
+    "minorPageFault": 44424,
+    "majorPageFault": 195,
+    "swappedOut": 0,
+    "fsRead": 0,
+    "fsWrite": 0,
+    "ipcSent": 147,
+    "ipcReceived": 162,
+    "signalsCount": 0,
+    "voluntaryContextSwitches": 223,
+    "involuntaryContextSwitches": 3481
+  },
+  "resourceUsageAfter": {
+    "userCPUTime": 5159714,
+    "systemCPUTime": 434186,
+    "maxRSS": 202528,
+    "sharedMemorySize": 0,
+    "unsharedDataSize": 0,
+    "unsharedStackSize": 0,
+    "minorPageFault": 81658,
+    "majorPageFault": 215,
+    "swappedOut": 0,
+    "fsRead": 0,
+    "fsWrite": 0,
+    "ipcSent": 148,
+    "ipcReceived": 164,
+    "signalsCount": 2519,
+    "voluntaryContextSwitches": 224,
+    "involuntaryContextSwitches": 16682
+  },
+  "boundaries": {
+    "store.listRuns": {
+      "calls": 2,
+      "wallMs": 99.18042400000058,
+      "cpuMs": 106.258,
+      "maxWallMs": 91.28994700000021
+    },
+    "controller.initialize": {
+      "calls": 1,
+      "wallMs": 8.282952000000023,
+      "cpuMs": 10.446,
+      "maxWallMs": 8.282952000000023
+    },
+    "runtime.validate": {
+      "calls": 38,
+      "wallMs": 515.5562239999972,
+      "cpuMs": 642.9689999999999,
+      "maxWallMs": 32.54216799999995
+    },
+    "codec.validateRun": {
+      "calls": 26,
+      "wallMs": 2517.8033889999992,
+      "cpuMs": 2942.914,
+      "maxWallMs": 167.25292999999965
+    },
+    "codec.seal": {
+      "calls": 13,
+      "wallMs": 1412.9404990000012,
+      "cpuMs": 1623.642,
+      "maxWallMs": 172.7057249999998
+    },
+    "store.create": {
+      "calls": 1,
+      "wallMs": 177.70301100000006,
+      "cpuMs": 246.171,
+      "maxWallMs": 177.70301100000006
+    },
+    "codec.readEnvelope": {
+      "calls": 9,
+      "wallMs": 868.9199140000005,
+      "cpuMs": 990.299,
+      "maxWallMs": 117.73967600000014
+    },
+    "store.load": {
+      "calls": 2,
+      "wallMs": 201.82071399999995,
+      "cpuMs": 233.577,
+      "maxWallMs": 110.69740299999967
+    },
+    "runtime.project": {
+      "calls": 28,
+      "wallMs": 191.41249299999845,
+      "cpuMs": 248.63500000000002,
+      "maxWallMs": 33.31589800000029
+    },
+    "session.view": {
+      "calls": 28,
+      "wallMs": 202.6171340000019,
+      "cpuMs": 262.89,
+      "maxWallMs": 34.845388000000185
+    },
+    "controller.newLife": {
+      "calls": 1,
+      "wallMs": 580.827589,
+      "cpuMs": 768.776,
+      "maxWallMs": 580.827589
+    },
+    "ui.playerThread": {
+      "calls": 7,
+      "wallMs": 18.73392300000114,
+      "cpuMs": 19.064,
+      "maxWallMs": 14.98673000000008
+    },
+    "controller.prepare": {
+      "calls": 6,
+      "wallMs": 36.66213499999958,
+      "cpuMs": 53.704,
+      "maxWallMs": 9.105133999999452
+    },
+    "store.commit": {
+      "calls": 6,
+      "wallMs": 1288.403753,
+      "cpuMs": 1447.912,
+      "maxWallMs": 242.71732000000065
+    },
+    "controller.submit": {
+      "calls": 6,
+      "wallMs": 2330.999725,
+      "cpuMs": 2735.5910000000003,
+      "maxWallMs": 421.90695099999994
+    },
+    "ui.openingFocusFor": {
+      "calls": 1,
+      "wallMs": 0.19962699999996403,
+      "cpuMs": 0.198,
+      "maxWallMs": 0.19962699999996403
+    },
+    "codec.export": {
+      "calls": 2,
+      "wallMs": 239.78021399999943,
+      "cpuMs": 293.603,
+      "maxWallMs": 151.20247300000028
+    },
+    "controller.exportSaved": {
+      "calls": 2,
+      "wallMs": 239.91885300000013,
+      "cpuMs": 293.738,
+      "maxWallMs": 151.23768000000018
+    },
+    "controller.home": {
+      "calls": 1,
+      "wallMs": 97.35158700000011,
+      "cpuMs": 102.475,
+      "maxWallMs": 97.35158700000011
+    },
+    "controller.continueLife": {
+      "calls": 1,
+      "wallMs": 232.17930699999943,
+      "cpuMs": 266.029,
+      "maxWallMs": 232.17930699999943
+    },
+    "store.close": {
+      "calls": 2,
+      "wallMs": 0.38792300000022806,
+      "cpuMs": 0.424,
+      "maxWallMs": 0.3823320000001331
+    },
+    "controller.close": {
+      "calls": 1,
+      "wallMs": 5.617318000000523,
+      "cpuMs": 5.801,
+      "maxWallMs": 5.617318000000523
+    }
+  },
+  "note": "Boundary timings are inclusive and overlap; do not sum them. Long diagnostic time does not pass an original 5s test."
+}

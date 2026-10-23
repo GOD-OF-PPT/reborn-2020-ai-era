@@ -1,0 +1,3 @@
+# Root C2接线
+
+CourseCommandDetails只接一次新教学确认，退款保原组件。App同run唯一教学草稿Map；SceneTarget新slot贯通场景/原册/旧StageChoice。Opening终态原job先显选回同班，不默换attempt；paper取真实deliveredAt、合同与退款应付active保护、公开学习反馈和closedAt。实际初次Room替换段匹配失败发生在前两文件已写后，已读现场修正Room类型与真实handler；未改变规则或重放来源。Root新paper首次类型TS2532保留在ui/type-r2，已按不存在阶段不显示完成修正。新工具仅本片过程/源/终态捕获，不改项目检查配置与旧时限。

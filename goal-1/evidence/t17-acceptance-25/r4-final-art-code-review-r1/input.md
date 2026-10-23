@@ -1,0 +1,1 @@
+继续同一 S3-C2，只读复核 R4 代码，不改源不占浏览器。已完成名单清除/详细名单按钮前移、cohort/audience 余<2AP 或只读候选不可工作旁路改为同对象查看，R4 type0、新12项及全适用 UI58/380通过。请核实际活源和旧两发现是否实修，另从玩家动词/信息层次/钱与阶段表现找确定缺陷。输出 fresh root25/r4-final-art-code-review-r1（先父guard、禁止写oldsealed），不提前当新Chrome实图通过。我即将 build R4 和继续正常Chrome。

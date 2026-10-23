@@ -1,0 +1,180 @@
+{
+  "origin": "fixture",
+  "projection": "RunSession.view + official projectCourse + projectWorkbench; partial fixture features only",
+  "prefixCommandCount": 29,
+  "newActualSavedCommands": 7,
+  "rawHashesSameAsR3": true,
+  "states": [
+    {
+      "label": "F05-original-half-delivery",
+      "date": "2023-01-12",
+      "revision": 30,
+      "sha256": "70269506fa7ab14a5ab9824ccbb48cd756f9eb8a9d24107d32b32cdee4e27bc3",
+      "finances": {
+        "receivedFen": 1000000,
+        "protectedFen": 500000,
+        "unearnedFen": 500000,
+        "recognizedFen": 500000,
+        "refundRegisteredFen": 0,
+        "refundPaidFen": 0,
+        "refundDueFen": 0,
+        "feePostedFen": 0,
+        "feePaidFen": 0,
+        "feeDueFen": 0,
+        "totalDueFen": 0
+      },
+      "paper": {
+        "stages": [
+          "completed",
+          "pending"
+        ],
+        "protectedFen": 500000,
+        "needsHelp": 0,
+        "refundDueFen": 0,
+        "supportUnmet": false,
+        "closedAt": null
+      },
+      "cashFen": 800000
+    },
+    {
+      "label": "refund-original-paid-500000-owed-500000",
+      "date": "2023-01-12",
+      "revision": 31,
+      "sha256": "063fe93d7a8bd98df1193a0742dc5659fded139e09779624c585ed2c7008fdd1",
+      "finances": {
+        "receivedFen": 1000000,
+        "protectedFen": 500000,
+        "unearnedFen": 0,
+        "recognizedFen": 0,
+        "refundRegisteredFen": 1000000,
+        "refundPaidFen": 500000,
+        "refundDueFen": 500000,
+        "feePostedFen": 0,
+        "feePaidFen": 0,
+        "feeDueFen": 0,
+        "totalDueFen": 500000
+      },
+      "paper": {
+        "stages": [
+          "completed",
+          "pending"
+        ],
+        "protectedFen": 500000,
+        "needsHelp": 0,
+        "refundDueFen": 500000,
+        "supportUnmet": false,
+        "closedAt": null
+      },
+      "cashFen": 300000
+    },
+    {
+      "label": "explicit-partial-payment-300000-remaining-200000",
+      "date": "2023-01-12",
+      "revision": 32,
+      "sha256": "0319d35e06f9bd2ccc6fe12fe6dd1904318f6121d4b2bf1f66e117f78f07695f",
+      "finances": {
+        "receivedFen": 1000000,
+        "protectedFen": 200000,
+        "unearnedFen": 0,
+        "recognizedFen": 0,
+        "refundRegisteredFen": 1000000,
+        "refundPaidFen": 800000,
+        "refundDueFen": 200000,
+        "feePostedFen": 0,
+        "feePaidFen": 0,
+        "feeDueFen": 0,
+        "totalDueFen": 200000
+      },
+      "paper": {
+        "stages": [
+          "completed",
+          "pending"
+        ],
+        "protectedFen": 200000,
+        "needsHelp": 0,
+        "refundDueFen": 200000,
+        "supportUnmet": false,
+        "closedAt": null
+      },
+      "cashFen": 0
+    },
+    {
+      "label": "fee-window-with-original-unpaid-debt",
+      "date": "2023-04-23",
+      "revision": 34,
+      "sha256": "e2a29f29ec42f3877d45c75887e360ad4ebda49c73f4c6e6543624d2038c1710",
+      "finances": {
+        "receivedFen": 1000000,
+        "protectedFen": 200000,
+        "unearnedFen": 0,
+        "recognizedFen": 0,
+        "refundRegisteredFen": 1000000,
+        "refundPaidFen": 800000,
+        "refundDueFen": 200000,
+        "feePostedFen": 0,
+        "feePaidFen": 0,
+        "feeDueFen": 0,
+        "totalDueFen": 200000
+      },
+      "paper": {
+        "stages": [
+          "completed",
+          "pending"
+        ],
+        "protectedFen": 200000,
+        "needsHelp": 0,
+        "refundDueFen": 200000,
+        "supportUnmet": false,
+        "closedAt": null
+      },
+      "cashFen": 0
+    },
+    {
+      "label": "original-wages-then-final-debt-payment-and-close",
+      "date": "2023-05-31",
+      "revision": 37,
+      "sha256": "96c9744673d379f713bad6c194841a1193b8edc773ec8e819e5cfb0167f5c217",
+      "finances": {
+        "receivedFen": 1000000,
+        "protectedFen": 0,
+        "unearnedFen": 0,
+        "recognizedFen": 0,
+        "refundRegisteredFen": 1000000,
+        "refundPaidFen": 1000000,
+        "refundDueFen": 0,
+        "feePostedFen": 0,
+        "feePaidFen": 0,
+        "feeDueFen": 0,
+        "totalDueFen": 0
+      },
+      "paper": {
+        "stages": [
+          "completed",
+          "pending"
+        ],
+        "protectedFen": 0,
+        "needsHelp": 0,
+        "refundDueFen": 0,
+        "supportUnmet": false,
+        "closedAt": "2023-05-31"
+      },
+      "cashFen": 813333
+    }
+  ],
+  "newTest": {
+    "path": "src/ui/course-refund-result.test.ts",
+    "bytes": 9410,
+    "sha256": "d834b7a5c96768eee26c65a162a88e78ed4c71a888294473ed34d549eb1f2834"
+  },
+  "vitest": {
+    "round": "R4",
+    "files": 1,
+    "tests": 1,
+    "exit": 0,
+    "durationSeconds": 6.19
+  },
+  "type": {
+    "round": "R2",
+    "exit": 0
+  }
+}

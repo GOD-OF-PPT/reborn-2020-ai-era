@@ -1,0 +1,11 @@
+# R5 同班原记录等待期限交回
+
+已修Choice从stage页返回原记录可越最晚开工日的确定缺陷。courseStageWaitDate函数原文搬至course-stage-wait.ts；Opening仅机械import/re-export，旧API/全部其它R4逻辑逐字保持；Choice仅course-stage-needed使用共享cap/null，其它等待原表达式未变。
+
+原92真实handler红：返回record得Jan31，期望Jan30，1fail5skip（terminal3.075秒，非超时）。新case保同班stage0日期稿，验证0/1AP期限当天无便利Clock、readonly/candidate锁、恢复原日正确目标、inspect同target及原raw不变。模型日期/预算覆盖明确为UI边界，不冒称正常新命令链。
+
+随后原主幕2+原Choice5+新1：2files8/8，Vitest11.68秒/terminal12.241秒。owned严格类型exit0，14.281秒。原5Choice测试/61原expect行/全部原20秒时限保留，原主幕2test文件逐字不动；新case使用原默认5秒。三轮绑定源/输入各前后同；精确hash/diff在final-source.json与四.diff，最终全文均.final.txt。
+
+生产/测试冻结：helper1081B SHA21ad99a1fbf9b3f3c78b2fb53df4e87a1c36ce00043f8a8b1145ca930a02e0db；Opening29078B SHA38a99b063aa23e56c25410c96de2e4f63e48441bbf06efcdfb52700458deadfe；Choice45626B SHAdf4103ddae2679a4d3d32b7537fa4493dce4d633485bbe4b1d9fdd82bc3c3875；Choice-test21611B SHA9ea0700ed9e7773a745341a38c2164cc1d2cfffa7a2d448f366680fade9debaf。
+
+无规则/钱/AP/原Clock/core/P3/raw/Git/旧sealed变更，无全套/build/browser/兼容执行。Root继续R5受影响检查/生产构建及同95实际Chrome等候/确认取消/保存重进；这里组件和类型不证明整C2或人类体验。

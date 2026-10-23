@@ -1,0 +1,21 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/course-scene-progress.test.ts > identifies the actual class, stage and original windows in confirmation, while rendering does not charge or deliver
+AssertionError: expected '<p class="warning-box">这次教学承诺的对象或条件已变…' to be '' // Object.is equality
+
+- Expected
++ Received
+
++ <p class="warning-box">这次教学承诺的对象或条件已变化，请返回逐项重新核对。</p>
+
+ ❯ src/ui/course-scene-progress.test.ts:152:135
+    150|  for(const text of ['图像工具入门','2023-01-24班','第1段教学','2023-02-07','实际授课资…
+    151|  expect(p.h.codec.export(p.h.run)).toBe(saved)
+    152|  expect(renderToStaticMarkup(createElement(CourseCommandDetails,{comma…
+       |                                                                                                                                       ^
+    153| })
+    154| it('confirms the actual hired teaching resources and keeps dismissed o…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

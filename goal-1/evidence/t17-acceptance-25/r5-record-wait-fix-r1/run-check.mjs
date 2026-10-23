@@ -1,0 +1,14 @@
+import {readFileSync,writeFileSync,lstatSync} from 'node:fs';
+import {resolve,join} from 'node:path';
+import {createHash} from 'node:crypto';
+import {spawn} from 'node:child_process';
+import {assertBrowserEvidenceWritable} from '../../../../scripts/browser_evidence_guard.mjs';
+const root=resolve(import.meta.dirname),[name,...argv]=process.argv.slice(2);
+if(!/^[a-z0-9-]+$/.test(name)||argv[0]!=='rtk')throw Error('EXPLICIT_RTK_COMMAND_REQUIRED');
+assertBrowserEvidenceWritable(root);
+const paths=['src/ui/OpeningMoment.tsx','src/ui/CourseTeachingChoice.tsx','src/ui/CourseTeachingChoice.test.tsx','src/ui/OpeningMoment.course-wait.test.tsx','src/ui/course-stage-wait.ts','src/ui/course-scene-progress.ts','src/ui/ClockAdvance.tsx','src/ui/CommandButton.tsx','goal-1/evidence/t17-acceptance-25/chrome-r3/c2-saved92-enrolled-protected.json','goal-1/evidence/t17-acceptance-25/chrome-recover-r3/c2-physical-readonly95-stage1.json'];
+const identity=()=>paths.map(path=>{const st=lstatSync(path,{throwIfNoEntry:false});if(!st)return {path,exists:false};const b=readFileSync(path);return {path,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')}});
+const source=identity(),start=Date.now();let stdout='',stderr='';const proc=spawn(argv[0],argv.slice(1),{stdio:['ignore','pipe','pipe']});
+proc.stdout.on('data',b=>{stdout+=b});proc.stderr.on('data',b=>{stderr+=b});
+proc.on('error',e=>{stderr+=String(e)});
+proc.on('close',(code,signal)=>{const result={argv,code,signal,durationMs:Date.now()-start,source,sourceAfter:identity()};assertBrowserEvidenceWritable(root);writeFileSync(join(root,name+'-stdout.txt'),stdout);writeFileSync(join(root,name+'-stderr.txt'),stderr);writeFileSync(join(root,name+'-terminal.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));process.stdout.write(stdout);process.stderr.write(stderr);process.exitCode=code??1});

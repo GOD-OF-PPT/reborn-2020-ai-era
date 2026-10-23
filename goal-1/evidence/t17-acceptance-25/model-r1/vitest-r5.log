@@ -1,0 +1,26 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/course-cohort-progress.test.ts (5 tests | 1 failed) 21915ms
+   × keeps two real cohorts and a cancelled original teaching attempt distinct, including bookmarks and partial refunds 3452ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/course-cohort-progress.test.ts > keeps two real cohorts and a cancelled original teaching attempt distinct, including bookmarks and partial refunds
+AssertionError: {"kind":"PlanCourseCohort","date":"2023-01-24","result":{"status":"rejected","reasonCodes":["COURSE_INVALID_SCHEDULE"]}}: expected 'rejected' to be 'saved' // Object.is equality
+
+Expected: "saved"
+Received: "rejected"
+
+ ❯ Object.send src/ui/course-cohort-progress.test.ts:21:210
+
+ ❯ src/ui/course-cohort-progress.test.ts:120:104
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 passed (5)
+   Start at  02:05:27
+   Duration  23.10s (tests 96%, import 2%, transform 2%)
+

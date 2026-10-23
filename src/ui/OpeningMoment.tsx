@@ -9,7 +9,10 @@ import {Dialog} from './Dialog.tsx'
 import {MarketSceneChoice} from './MarketSceneChoice.tsx'
 import {VideoSceneChoice,type VideoChoiceAction} from './VideoSceneChoice.tsx'
 import {CourseSceneChoice,type CourseChoiceIntent} from './CourseSceneChoice.tsx'
-import type {CourseSceneTarget} from './course-scene-progress.ts'
+import {courseSceneProgress,type CourseSceneTarget} from './course-scene-progress.ts'
+import {courseStageWaitDate} from './course-stage-wait.ts'
+import {courseSceneContext} from './course-player-thread.ts'
+import {courseTeachingPaper} from './course-teaching-paper.ts'
 import {playableAdvanceDate} from '../application/playable-advance.ts'
 import {moneyText,playableThrough} from './game-text.ts'
 import {seasonFocusChoices} from './season-thread.ts'
@@ -40,7 +43,7 @@ function stageLabel(thread:PlayerThreadView){
  if(thread.focus.kind==='course'){
   if(thread.stage==='course-unavailable')return '尚未开放 · 没有接受教学承诺'
   if(thread.stage.endsWith('-planned'))return '已经安排 · 尚未实际开工'
-  if(thread.stage.endsWith('-running'))return '正在准备 · 尚未实际完成'
+  if(thread.stage.endsWith('-running'))return thread.stage==='course-stage-running'?'正在教学 · 尚未实际交付':thread.stage==='course-support-running'||thread.stage==='course-recovery-running'?'正在支持 · 仍待实际反馈':thread.stage==='course-audience-running'?'推广正在进行 · 尚未实际完成':thread.stage==='course-refresh-running'?'正在更新 · 尚未实际完成':'正在准备 · 尚未实际完成'
   if(thread.stage==='course-ready')return '样课已经完成 · 招生仍另行决定'
   if(thread.stage==='course-outline-completed')return '大纲已经完成 · 样课仍另行准备'
   if(thread.stage==='course-license-completed')return '课程使用范围已准备 · 样课仍另行准备'
@@ -57,6 +60,8 @@ function stageLabel(thread:PlayerThreadView){
  if(thread.wait)return '已经答应 · 仍在等待'
  return '眼前这件事 · 由你决定'
 }
+
+export {courseStageWaitDate}
 
 /** A scene reads the original public thread; every action still uses the original command flow. */
 export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter,focusNotice,focusRequiresChoice=false,onFocus,onNavigate,onExplore,onResponsibilities,onRecollection}:Props){
@@ -79,14 +84,17 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const legacy=!interrupted&&!requiresChoice&&thread.legacyFallbackRequired
  const unread:Moment={stage:'choose-focus',object:'原来的关注尚未读出',title:'先选回这一季在意的事。',line:'还没有替你换成其他对象。请先翻看公开原记录，再明确放到桌面。',detail:'重新选择只调整书签；原合同、工作、费用与责任保留。'}
  const moment=interrupted?attention:requiresChoice?unread:legacy?fallback:thread
+ const previousFocusNotice=!!thread.focusQuarter&&thread.focusQuarter<w.quarter&&focusNotice===`这份关注来自${thread.focusQuarter}，当前是${w.quarter}；可明确回看或继续原对象，不会自动改成本季关注。`
+ const originPrefix=thread.focusQuarter&&thread.focusScope==='carry'?'这件事从'+thread.focusQuarter+'留下，仍按原约定继续。':thread.focusQuarter&&thread.focusScope==='history'?'这是'+thread.focusQuarter+'的原记录，旧收支不会重记为本季收入。':''
+ const sceneLine=!interrupted&&!requiresChoice&&!legacy&&originPrefix&&moment.line.startsWith(originPrefix)?moment.line.slice(originPrefix.length):moment.line
  const openDirections=()=>{setDraftId(null);setDirections(true)}
  const openRecollection=()=>{setObjectOpen(false);if(onRecollection)onRecollection();else setRecollectionOpen(true)}
  const inspectFocus=()=>{setObjectOpen(false);onNavigate(thread.inspect.screen,['video','course'].includes(thread.inspect.screen)?{...thread.inspect.target,openRecord:true}:thread.inspect.target)}
  const inspect=()=>{
   setObjectOpen(false)
-  if(interrupted){const target=attention.inspect;onNavigate(target?.screen??'quarter',target?{...(target.accountId?{accountId:target.accountId}:{}),...(target.personId?{personId:target.personId}:{}),...(target.lifeSelection?{lifeSelection:target.lifeSelection}:{}),...(target.recordId?{recordId:target.recordId}:{}),...(target.videoTarget?{videoTarget:target.videoTarget}:{}),...(target.courseTarget!==undefined?{courseTarget:target.courseTarget}:{}),...(target.courseDraftSlot?{courseDraftSlot:target.courseDraftSlot}:{}),...(['video','course'].includes(target.screen)?{openRecord:true}:{})}:undefined)}
+  if(interrupted){const target=attention.inspect;onNavigate(target?.screen??'quarter',target?{...(target.accountId?{accountId:target.accountId}:{}),...(target.personId?{personId:target.personId}:{}),...(target.lifeSelection?{lifeSelection:target.lifeSelection}:{}),...(target.recordId?{recordId:target.recordId}:{}),...(target.videoTarget?{videoTarget:target.videoTarget}:{}),...(target.courseTarget!==undefined?{courseTarget:target.courseTarget}:{}),...(target.courseDraftSlot?{courseDraftSlot:target.courseDraftSlot}:{}),...(target.courseTeachingSlot?{courseTeachingSlot:target.courseTeachingSlot}:{}),...(['video','course'].includes(target.screen)?{openRecord:true}:{})}:undefined)}
   else if(requiresChoice)onNavigate('quarter',{accountId:p.accountId})
-  else if(legacy){const target=fallback.inspect;if(target)onNavigate(target.screen,{...(target.accountId?{accountId:target.accountId}:{}),...(target.personId?{personId:target.personId}:{}),...(target.lifeSelection?{lifeSelection:target.lifeSelection}:{}),...(target.recordId?{recordId:target.recordId}:{}),...(target.videoTarget?{videoTarget:target.videoTarget}:{}),...(target.courseTarget!==undefined?{courseTarget:target.courseTarget}:{}),...(target.courseDraftSlot?{courseDraftSlot:target.courseDraftSlot}:{}),...(['video','course'].includes(target.screen)?{openRecord:true}:{})});else onNavigate('quarter')}
+  else if(legacy){const target=fallback.inspect;if(target)onNavigate(target.screen,{...(target.accountId?{accountId:target.accountId}:{}),...(target.personId?{personId:target.personId}:{}),...(target.lifeSelection?{lifeSelection:target.lifeSelection}:{}),...(target.recordId?{recordId:target.recordId}:{}),...(target.videoTarget?{videoTarget:target.videoTarget}:{}),...(target.courseTarget!==undefined?{courseTarget:target.courseTarget}:{}),...(target.courseDraftSlot?{courseDraftSlot:target.courseDraftSlot}:{}),...(target.courseTeachingSlot?{courseTeachingSlot:target.courseTeachingSlot}:{}),...(['video','course'].includes(target.screen)?{openRecord:true}:{})});else onNavigate('quarter')}
   else onNavigate(thread.inspect.screen,['video','course'].includes(thread.inspect.screen)?{...thread.inspect.target,openRecord:true}:thread.inspect.target)
  }
  const canWait=p.view.phase==='playing'&&!w.atQuarterEnd&&!w.progression.requiresDelivery&&w.pause===null
@@ -97,6 +105,10 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const terminal=p.view.date>=playableThrough
  const market=thread.focus.kind==='market',free=thread.focus.kind==='free',video=thread.focus.kind==='video',course=thread.focus.kind==='course'
  const courseTarget=thread.focus.kind==='course'?thread.focus.courseTarget:null
+ const courseProgress=course&&!unknownFocus?courseSceneProgress(p.features.course,p.view.date,courseTarget,courseSceneContext(p)):null
+ const courseHistory=courseTarget?.kind==='cohort'&&courseTarget.jobId!==undefined&&courseProgress?.historical===true
+ const teachingPaper=!interrupted&&!unknownFocus&&!legacy&&course?courseTeachingPaper(p,courseTarget):undefined
+ const courseDisplayTitle=courseTarget?.kind==='cohort'?courseHistory?'这份原任务记录':'这一班的约定':courseTarget?.kind==='audience'?'这次受众的回信':undefined
  const chooseCourseTarget=(target:CourseSceneTarget|null)=>{
   if(focusLocked||unknownFocus||!course)return
   const owner=p.features.course?.businesses.find(b=>b.id===target?.businessId)
@@ -118,8 +130,10 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  if(primaryIntent)try{primaryAllowed=p.controller.preview({runId:p.view.runId,actorId:'player',commandId:'display-preview',expectedRevision:p.view.revision,kind:primaryIntent.kind,payload:primaryIntent.payload}).allowed}catch{primaryAllowed=false}
  const resultWithoutNext=!moment.command&&!moment.wait&&(thread.outcome==='actual'||thread.outcome==='non-success')
  const noAvailableNewAction=p.view.budget.available===0&&!primaryAllowed&&!moment.wait
- const canContinue=!interrupted&&!unknownFocus&&!legacy&&!w.atQuarterEnd&&canWait&&safeDate!==null&&(resultWithoutNext||noAvailableNewAction)
- const continuation=()=> <div className="moment-wait moment-continue"><ClockAdvance p={p} date={safeDate!} label={'不新增安排，让原日子继续 · '+safeDate} room/></div>
+ const optionalCourseDate=!interrupted&&!unknownFocus&&!legacy&&canWait&&!moment.wait&&course?courseStageWaitDate(w,p.view.date,courseProgress):null
+ const continueDate=courseProgress?.phase==='course-stage-needed'?optionalCourseDate:safeDate
+ const canContinue=!interrupted&&!unknownFocus&&!legacy&&!w.atQuarterEnd&&canWait&&continueDate!==null&&(resultWithoutNext||noAvailableNewAction||optionalCourseDate!==null)
+ const continuation=()=> <div className="moment-wait moment-continue"><ClockAdvance p={p} date={continueDate!} label={'不新增安排，让原日子继续 · '+continueDate} room/></div>
  const research=w.researches.find(r=>r.id==='market-overview')
  const closeRequest:GamePanelProps['request']=(...args)=>{setObjectOpen(false);setDirections(false);p.request(...args)}
  const nearProps={...p,accountId:video||course?thread.focus.accountId:p.accountId,request:closeRequest}
@@ -133,22 +147,23 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
   if(moment.command)return <CommandButton {...current} {...moment.command} confirm={moment.command.confirm??true} className="moment-decision moment-primary"><b aria-hidden="true">01</b><span>{moment.command.label}<small>看清投入，再由你确认</small></span><i aria-hidden="true">→</i></CommandButton>
   if(moment.wait&&safeDate)return <div className="moment-wait moment-primary"><ClockAdvance p={current} date={safeDate} label={waitLabel+' · '+safeDate} room/></div>
   if(!interrupted&&!legacy&&video&&openVideo)return action('01',thread.stage==='video-entry'?'选择账号，开始这次视频尝试':thread.stage==='video-marketing-completed'?'看看谁真正需要这份作品':thread.stage==='video-settled'?'保留这笔回执，选择下一次尝试':thread.stage==='video-channel'?(videoChannel?.leads.length?'回应一位真实询价的客户':'先认识这批具体受众'):thread.stage==='video-ready-to-publish'?'为这份作品选择发布方式':thread.stage==='video-revision'?'看清修改，选择怎样回应':'走近这份原作品与约定','先选择和核对；真正投入仍由你最后确认',()=>{setObjectOpen(false);openVideo(thread.stage==='video-ready-to-publish'?'publish':videoAction)})
-  if(!interrupted&&!legacy&&course&&openCourse)return action('01',thread.stage==='course-ready'?'回看这份样课，再决定下一步':thread.outcome==='actual'?'带着这份教学准备，核对下一步':'走近这份教案，准备眼前一步','案例、权利与样课分别核对；招生另定，原责任继续',()=>{setObjectOpen(false);openCourse()})
+  if(!interrupted&&!legacy&&courseHistory&&courseTarget.kind==='cohort')return action('01','回到这一班，看看接下来的约定','只回到同班当前安排；这份原任务记录仍保留',()=>{setObjectOpen(false);chooseCourseTarget({kind:'cohort',businessId:courseTarget.businessId,courseId:courseTarget.courseId,cohortId:courseTarget.cohortId})})
+  if(!interrupted&&!legacy&&course&&openCourse)return action('01',courseTarget?.kind==='audience'||courseTarget?.kind==='cohort'?thread.inspect.label:thread.stage==='course-ready'?'看看谁真正需要这堂课':thread.outcome==='actual'?'带着这份教学准备，核对下一步':'走近这份教案，准备眼前一步',courseTarget?.kind==='audience'||courseTarget?.kind==='cohort'?courseProgress?.teachingIntent?'看清这次实际投入与下一处反馈，再由你确认':'翻看同一对象的实际记录，不新增安排':thread.stage==='course-ready'?'自选报价与真实受众；开班和报名仍各自决定':'案例、权利与样课分别核对；招生另定，原责任继续',()=>{setObjectOpen(false);openCourse()})
   if(!interrupted&&!legacy&&free&&thread.stage==='choose')return <CommandButton {...current} kind="StartLifeWork" payload={{kind:'rest',personId:null,reference:null}} label="把七天留给自己" confirm className="moment-decision moment-primary"><b aria-hidden="true">01</b><span>把七天留给自己<small>个人0元 · 本季1点 · 七日后看到实际结果</small></span><i aria-hidden="true">→</i></CommandButton>
   if(!interrupted&&!legacy&&thread.focus.kind==='first-order'&&thread.stage==='paid')return action('01','看看这份手艺，还能用在哪里','了解眼下可做的作品，不自动接下一单',()=>{setObjectOpen(false);onNavigate('video',{accountId:'personal'})})
   return action('01',interrupted?attention.inspect?.label??'先面对眼前的事':legacy?fallback.inspect?.label??'翻看原业务':inspectLabel,'翻开同一件事的原记录',inspect)
  }
  const label=interrupted?'先面对这项原责任':requiresChoice?'尚未改变关注':legacy?'原业务仍按原约定继续':stageLabel(thread)
- return <MarketSceneChoice p={p} onFullRecord={inspect} blockedReason={unknownFocus?'原来的关注尚未读出，请先重新选择；原委托草稿仍保留。':null}>{openOrder=><VideoSceneChoice p={video?{...p,accountId:thread.focus.accountId}:p} {...(videoTarget?{target:videoTarget}:{})} onTargetChange={chooseVideoTarget} blockedReason={unknownFocus?"原来的关注尚待读出，请先明确重新选择。":interrupted?"先回应日历里的原责任；原视频草稿仍保留。":null} onInspect={target=>{setObjectOpen(false);onNavigate('video',target?{openRecord:true,videoTarget:target,...(p.features.video?.channels.find(c=>c.id===target.channelId)?{accountId:p.features.video.channels.find(c=>c.id===target.channelId)!.accountId}:{})}:{openRecord:true,accountId:video?thread.focus.accountId:p.accountId})}}>{openVideo=><CourseSceneChoice p={course?{...p,accountId:thread.focus.accountId}:p} target={courseTarget} onTarget={chooseCourseTarget} blockedReason={unknownFocus?'原关注尚待读出，请先明确重新选择。':interrupted?'先回应日历里的原责任；这份教案仍保留。':null} onInspect={(target,slot)=>{setObjectOpen(false);const owner=p.features.course?.businesses.find(b=>b.id===target?.businessId);onNavigate('course',{openRecord:true,courseTarget:target,accountId:owner?.accountId??'personal',...(slot?{courseDraftSlot:slot}:{})})}}>{openCourse=><><p className="opening-room-intention"><span>我想{thread.wish.label}</span><span>{unknownFocus?'先选回原来的关注，原安排仍保留。':legacy?'原来的经营事项，还在继续。':thread.attempt}</span>{!unknownFocus&&!w.atQuarterEnd?<button type="button" onClick={openDirections}>调整本季书签 ↗</button>:null}{!w.atQuarterEnd?<button type="button" onClick={openRecollection}>翻本季留页 ↗</button>:null}</p>
+ return <MarketSceneChoice p={p} onFullRecord={inspect} blockedReason={unknownFocus?'原来的关注尚未读出，请先重新选择；原委托草稿仍保留。':null}>{openOrder=><VideoSceneChoice p={video?{...p,accountId:thread.focus.accountId}:p} {...(videoTarget?{target:videoTarget}:{})} onTargetChange={chooseVideoTarget} blockedReason={unknownFocus?"原来的关注尚待读出，请先明确重新选择。":interrupted?"先回应日历里的原责任；原视频草稿仍保留。":null} onInspect={target=>{setObjectOpen(false);onNavigate('video',target?{openRecord:true,videoTarget:target,...(p.features.video?.channels.find(c=>c.id===target.channelId)?{accountId:p.features.video.channels.find(c=>c.id===target.channelId)!.accountId}:{})}:{openRecord:true,accountId:video?thread.focus.accountId:p.accountId})}}>{openVideo=><CourseSceneChoice p={course?{...p,accountId:thread.focus.accountId}:p} target={courseTarget} onTarget={chooseCourseTarget} blockedReason={unknownFocus?'原关注尚待读出，请先明确重新选择。':interrupted?'先回应日历里的原责任；这份教案仍保留。':null} onInspect={(target,slot,teachingSlot)=>{setObjectOpen(false);const owner=p.features.course?.businesses.find(b=>b.id===target?.businessId),recordId=!slot&&!teachingSlot?courseSceneProgress(p.features.course,p.view.date,target,courseSceneContext(p))?.recordId:undefined;onNavigate('course',{openRecord:true,courseTarget:target,accountId:owner?.accountId??'personal',...(recordId?{recordId}:{}),...(slot?{courseDraftSlot:slot}:{}),...(teachingSlot?{courseTeachingSlot:teachingSlot}:{})})}}>{openCourse=><><p className="opening-room-intention"><span>我想{thread.wish.label}</span><span>{unknownFocus?'先选回原来的关注，原安排仍保留。':legacy?'原来的经营事项，还在继续。':thread.attempt}</span>{!unknownFocus&&!w.atQuarterEnd?<button type="button" onClick={openDirections}>调整本季书签 ↗</button>:null}{!w.atQuarterEnd?<button type="button" onClick={openRecollection}>翻本季留页 ↗</button>:null}</p>
  <section className="room-current-moment opening-current-moment" data-stage={moment.stage} data-focus-scope={thread.focusScope} aria-label="眼前这一幕">
   <header className="moment-heading"><p>{w.quarter} / {moment.object}</p><h1 ref={headingRef} tabIndex={-1}>{moment.title}</h1></header>
-  <p className="opening-room-stage" data-interrupted={interrupted?'true':undefined}>{label}{interrupted?<span> · 原来的关注仍保留</span>:null}</p>
+  <p className="opening-room-stage" data-interrupted={interrupted?'true':undefined}>{label}{interrupted?<span> · 原来的关注仍保留</span>:previousFocusNotice?<span> · 原书签未变</span>:null}</p>
   <div className="moment-story" aria-label="眼前的情况">
    {interrupted?<p className="season-return-bookmark">{unknownFocus?'原关注尚待读出。先面对原责任，再明确重选；没有换成另一项安排。':'书签留着：'+thread.object+'。原责任处理后，回来核对这件事的当前状态。'}</p>:null}
-   {focusNotice?<p className="season-focus-notice" role="status">{focusNotice}</p>:null}
+   {focusNotice&&!previousFocusNotice?<p className="season-focus-notice" role="status">{focusNotice}</p>:null}
    {thread.focusScope==='invalid'&&thread.invalidReason?<p className="season-focus-notice" role="status">{thread.invalidReason}</p>:null}
    {feedback?<div className={typeof feedback==='string'?'moment-status':'moment-feedback'} role={typeof feedback==='string'?'status':undefined}>{feedback}</div>:null}
-   <p className="moment-line">{moment.line}</p><p className="moment-terms">{moment.detail}</p>
+   <p className="moment-line">{sceneLine}</p><p className="moment-terms">{moment.detail}</p>
   </div>
   <div className="moment-decisions">
    {originalAction(false,openOrder,openVideo,openCourse)}
@@ -158,13 +173,14 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
     :canContinue&&!thread.secondaryCommand?continuation()
     :!legacy&&thread.secondaryCommand?<CommandButton {...p} {...thread.secondaryCommand} className="moment-decision"><b aria-hidden="true">02</b><span>{thread.secondaryCommand.label}<small>按原记录核对这次决定</small></span><i aria-hidden="true">→</i></CommandButton>
     :!interrupted&&canChooseOrder&&research&&!research.state?<CommandButton {...p} kind="ResearchMarket" payload={{definitionId:research.id}} label="先把公开产业线索理一理" confirm className="moment-decision"><b aria-hidden="true">02</b><span>先把公开产业线索理一理<small>个人{moneyText(research.costFen)} · {research.actionPoints}点 · {research.days}日，不代你买股</small></span><i aria-hidden="true">→</i></CommandButton>
+    :!interrupted&&!legacy&&course&&(courseTarget?.kind==='cohort'||courseTarget?.kind==='audience')&&(p.view.budget.available<2||p.view.readOnly||p.view.hasCandidate)?action('02',courseTarget.kind==='cohort'?'翻看这一班的原记录':'翻看这次受众的原记录','只翻阅，不改变原安排与日期',inspectFocus)
     :!interrupted&&!legacy&&!employed&&!market&&moment.command?.kind!=='WorkQuarter'?<CommandButton {...p} kind="WorkQuarter" payload={{}} label="先保留这一季的工作" confirm className="moment-decision"><b aria-hidden="true">02</b><span>先保留这一季的工作<small>共享本季2点 · 按实际在岗日领工资，可与副业组合</small></span><i aria-hidden="true">→</i></CommandButton>
     :action('02',!legacy&&thread.outcome==='actual'?'给接下来的日子，留一点余地':'等候时，也看看生活','只翻阅休整与相识的人，不改变本季书签',()=>onNavigate('life',{accountId:'personal'}))}
    {canContinue&&thread.secondaryCommand?continuation():<button type="button" className="moment-explore" onClick={interrupted?(onResponsibilities??onExplore):onExplore}>{interrupted?'翻看全部原责任与牵挂':'环顾房间，想想别的可能'} <span aria-hidden="true">↗</span></button>}
   </div>
  </section>
-  <OpeningObject {...(!interrupted&&!requiresChoice&&(video||course)?{appearance:course?'course' as const:'video' as const}:{})} kind={interrupted||requiresChoice?'calendar':legacy?(moment.wait?'waiting':'portfolio'):objectKind(thread)} title={moment.object} detail={moment.wait?moment.wait.date+' · '+moment.wait.label:interrupted?'这项责任仍需你回应':requiresChoice?'原记录与责任都保留，先明确重新选择':legacy?'沿原业务记录继续':thread.outcome==='actual'?'回响已有实际记录':'翻开，看清这次选择'} stageLabel={label} actionLabel={requiresChoice?'重新选择原关注':'走近这件事'} disabled={p.view.busy} textOnly={p.textOnly===true} onActivate={requiresChoice?openDirections:()=>setObjectOpen(true)}/>
-  {objectOpen?<Dialog title={moment.object} className="opening-paper" onClose={()=>setObjectOpen(false)}><p className="opening-paper-date">{p.view.date} · {label}</p><h3>{moment.title}</h3><p>{moment.line}</p><p className="opening-paper-terms">{moment.detail}</p>{originalAction(true,openOrder,openVideo,openCourse)}{!interrupted&&!unknownFocus&&!legacy&&thread.stage==='offer'?<div className="opening-paper-alternatives"><CommandButton {...nearProps} kind="DeclineOffer" payload={{offerId:first.offerId}} label="婉拒这笔报价" confirm/><CommandButton {...nearProps} kind="SkipOffer" payload={{offerId:first.offerId}} label="先跳过这次小单" confirm/></div>:null}<button type="button" className="scene-text-action" onClick={inspect}>{unknownFocus?'翻看本季已有记录':'翻看同一件事的全部原记录'} ↗</button></Dialog>:null}
+  <OpeningObject {...(!interrupted&&!requiresChoice&&(video||course)?{appearance:course?'course' as const:'video' as const}:{})} {...(!interrupted&&!requiresChoice&&courseDisplayTitle?{displayTitle:courseDisplayTitle}:{})} {...(teachingPaper?{teaching:teachingPaper}:{})} kind={interrupted||requiresChoice?'calendar':legacy?(moment.wait?'waiting':'portfolio'):objectKind(thread)} title={moment.object} detail={moment.wait?moment.wait.date+' · '+moment.wait.label:interrupted?'这项责任仍需你回应':requiresChoice?'原记录与责任都保留，先明确重新选择':legacy?'沿原业务记录继续':thread.outcome==='actual'?'回响已有实际记录':'翻开，看清这次选择'} stageLabel={label} actionLabel={requiresChoice?'重新选择原关注':'走近这件事'} disabled={p.view.busy} textOnly={p.textOnly===true} onActivate={requiresChoice?openDirections:()=>setObjectOpen(true)}/>
+  {objectOpen?<Dialog title={moment.object} className="opening-paper" onClose={()=>setObjectOpen(false)}><p className="opening-paper-date">{p.view.date} · {label}</p>{previousFocusNotice?<p className="season-focus-notice" role="status">{focusNotice}</p>:null}<h3>{moment.title}</h3><p>{moment.line}</p><p className="opening-paper-terms">{moment.detail}</p>{originalAction(true,openOrder,openVideo,openCourse)}{!interrupted&&!unknownFocus&&!legacy&&thread.stage==='offer'?<div className="opening-paper-alternatives"><CommandButton {...nearProps} kind="DeclineOffer" payload={{offerId:first.offerId}} label="婉拒这笔报价" confirm/><CommandButton {...nearProps} kind="SkipOffer" payload={{offerId:first.offerId}} label="先跳过这次小单" confirm/></div>:null}<button type="button" className="scene-text-action" onClick={inspect}>{unknownFocus?'翻看本季已有记录':'翻看同一件事的全部原记录'} ↗</button></Dialog>:null}
   {directions?<Dialog title="这一季，先把哪件事放在桌面？" className="opening-paper season-focus-book" onClose={()=>setDirections(false)} footer={<div className="season-focus-actions"><button type="button" onClick={()=>setDirections(false)}>仍留原来的书签</button><button type="button" className="primary" disabled={!picked||picked.disabledReason!==null||focusLocked} onClick={()=>{if(!picked||picked.disabledReason!==null||focusLocked)return;chooseFocus(picked.focus);if(!onFocus)setLocalQuarter(picked.originQuarter??w.quarter);setDirections(false);setDraftId(null)}}>把这件事放到桌面</button></div>}>
    <p>你想{thread.wish.label}。{thread.yearQuestion} 先翻看具体对象，再决定调整书签；不接受合同、工作、交易或新权限。</p>
    <p className="opening-paper-date">当前{w.quarter} · {p.view.date} · 本季共享四点保持原数</p>

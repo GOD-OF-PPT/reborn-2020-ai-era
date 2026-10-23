@@ -1,0 +1,1 @@
+补最后一张真正素材齐的R6 running状态，仅只读 fresh root25/r6-running-art-readback-r1：chrome-half-r5/r6-08-running110-assets-loaded.png/同名DOM 与r6-physical-reentry-bridge.json。这是同一半退款分支 Apr2/110/company7720.59/AP2预留1/保护1998，实际R6新控制器重进完整公开原文与已有half-saved110-refund.json逐字同（原b1ea9e26…），不新增exports分母。图片现在完整教案主体已实看/DOM naturalWidth1536 complete；复核阶段/钱/操作位置对应，旧01早帧仍排除，不改原review和源/浏览器。写一个限定readback报告即停止。

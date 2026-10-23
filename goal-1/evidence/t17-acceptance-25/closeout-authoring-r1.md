@@ -1,0 +1,3 @@
+# 提交前作者工具拒绝保留
+
+validation与当前任务完成到步骤8已合法写入未封存root25。随后错误地将evidence基目录本身交给仅接受具体子根的guard，实际BROWSER_EVIDENCE_ROOT_REQUIRED退出1；post当时未创建，Git/封存未执行。R2复用root25 guard已检查到共同evidence父目录的事实，先确认fresh sibling不存在再mkdir并guard具体新post，不放宽guard或覆盖原文件。

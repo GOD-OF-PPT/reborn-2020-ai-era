@@ -1,0 +1,1 @@
+Root授权C2：只新增CourseTeachingChoice.tsx/CourseTeachingDetails.tsx/course-teaching.css及有意义handler/确认tests。严格root25 interfaces-r1的props/helper/draft字段与canonical scope；ready→真实资金/受众→班期支持预留→显选IDs预售→两教学→原支持反馈→补救退款→窗口结算。不得改Root/他属主生产/core/P3/旧sealed，不新Chrome/兼容/全矩阵/commit。

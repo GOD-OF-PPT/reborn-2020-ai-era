@@ -1,0 +1,5 @@
+# 原P3块定位补正
+
+首轮result.json false完整保留。错误在本审查脚本把C1 post的headBytes（完整HEAD长度）当P3插入offset；P3其实在更早的正文中，后面已有12569B已提交叙述。三个master开工全前缀、原26路径及old seal从首轮就全部一致。
+
+R2只读从sealed C1 post各intended文本剥离新增后缀，恢复原HEAD，与root24 master-baseline.text求单一插入差异：removed0B、added2304B、14个换行；三处SHA均d6d2ae77cb0e8dadcee47df146d712a82dbfa4a278a2de9cec3a3a5564610655。再按各真实offset核root25开工与当前原块，原R1不是生产改动。

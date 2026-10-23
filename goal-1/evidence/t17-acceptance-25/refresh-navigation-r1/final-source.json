@@ -1,0 +1,144 @@
+{
+  "scope": "audience same-course public refresh-record navigation only",
+  "owned": [
+    {
+      "path": "src/ui/CoursePanel.tsx",
+      "bytes": 66101,
+      "sha256": "ef26577cc3eafbc93054503f93bf4a63af18362f3cf9e08c8d1f7d3c9a472b64"
+    },
+    {
+      "path": "src/ui/course-teaching-target.test.tsx",
+      "bytes": 24008,
+      "sha256": "6b354ee9122b4badfa24bf2ef60099b9d2520db69e5f6a2d14f1277c3978c5cb"
+    }
+  ],
+  "tests": {
+    "targetVitest": {
+      "exitCode": 0,
+      "files": 1,
+      "passed": 7,
+      "total": 7,
+      "vitestDurationSeconds": 21.25,
+      "terminalDurationMs": 22008
+    },
+    "strictOwned": {
+      "exitCode": 0,
+      "terminalDurationMs": 16843,
+      "fullProject": false
+    }
+  },
+  "sourceBindings": [
+    {
+      "terminal": "target-vitest-r1-terminal.json",
+      "sourceBeforeEqualsAfter": true,
+      "source": [
+        {
+          "path": "src/ui/CoursePanel.tsx",
+          "bytes": 66101,
+          "sha256": "ef26577cc3eafbc93054503f93bf4a63af18362f3cf9e08c8d1f7d3c9a472b64"
+        },
+        {
+          "path": "src/ui/course-teaching-target.test.tsx",
+          "bytes": 24008,
+          "sha256": "6b354ee9122b4badfa24bf2ef60099b9d2520db69e5f6a2d14f1277c3978c5cb"
+        },
+        {
+          "path": "src/ui/course-scene-progress.ts",
+          "bytes": 33715,
+          "sha256": "f181ce216b834d18de4461b560ece14de5162b98e4d9a151378cda9a1cf52b23"
+        },
+        {
+          "path": "src/ui/course-cohort-progress.ts",
+          "bytes": 17312,
+          "sha256": "2dd79e8989274bc9212500f8c311f0e3f946dfb85cd2ae47c04491dbff20cb47"
+        },
+        {
+          "path": "src/ui/game-types.ts",
+          "bytes": 3014,
+          "sha256": "e482b2e8116ce11c7d38c30ae159bc9524e313e0f6d33dd594625ad9d24d2a53"
+        }
+      ]
+    },
+    {
+      "terminal": "strict-owned-r1-terminal.json",
+      "sourceBeforeEqualsAfter": true,
+      "source": [
+        {
+          "path": "src/ui/CoursePanel.tsx",
+          "bytes": 66101,
+          "sha256": "ef26577cc3eafbc93054503f93bf4a63af18362f3cf9e08c8d1f7d3c9a472b64"
+        },
+        {
+          "path": "src/ui/course-teaching-target.test.tsx",
+          "bytes": 24008,
+          "sha256": "6b354ee9122b4badfa24bf2ef60099b9d2520db69e5f6a2d14f1277c3978c5cb"
+        },
+        {
+          "path": "src/ui/course-scene-progress.ts",
+          "bytes": 33715,
+          "sha256": "f181ce216b834d18de4461b560ece14de5162b98e4d9a151378cda9a1cf52b23"
+        },
+        {
+          "path": "src/ui/course-cohort-progress.ts",
+          "bytes": 17312,
+          "sha256": "2dd79e8989274bc9212500f8c311f0e3f946dfb85cd2ae47c04491dbff20cb47"
+        },
+        {
+          "path": "src/ui/game-types.ts",
+          "bytes": 3014,
+          "sha256": "e482b2e8116ce11c7d38c30ae159bc9524e313e0f6d33dd594625ad9d24d2a53"
+        }
+      ]
+    }
+  ],
+  "preservation": {
+    "caseTitlesUnchanged": true,
+    "caseCount": 7,
+    "caseTitles": [
+      "locates the real audience, classes and every original attempt, including legacy IDs and cross-class rejection",
+      "maps actual paid marketing and original teaching/support jobs into complete same-account calendar targets",
+      "keeps class-specific plan, teaching and refund drafts, including a past date that must be explicitly reselected",
+      "passes the actual teaching-editor fields into the same book slot and reads back a book edit without submitting",
+      "submits the complete original class plan from shared book fields without changing its frozen audience price",
+      "keeps explicit real enrolment and refund people in their own class slots and original confirmation requests",
+      "keeps a real course refresh job reachable from the calendar and the same class without replacing its teaching identity"
+    ],
+    "originalAssertionLines": 53,
+    "missingOriginalAssertionLines": [],
+    "explicitTimeoutLinesUnchanged": true,
+    "explicitTimeoutLines": [
+      "},30000)",
+      "},20000)",
+      "},20000)"
+    ]
+  },
+  "diffs": [
+    {
+      "path": "src/ui/CoursePanel.tsx",
+      "argv": [
+        "rtk",
+        "proxy",
+        "diff",
+        "-u",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-25/refresh-navigation-r1/CoursePanel.tsx.before.txt",
+        "src/ui/CoursePanel.tsx"
+      ],
+      "exitCode": 1,
+      "note": "diff exit 1 records expected changes, not a test failure"
+    },
+    {
+      "path": "src/ui/course-teaching-target.test.tsx",
+      "argv": [
+        "rtk",
+        "proxy",
+        "diff",
+        "-u",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-25/refresh-navigation-r1/course-teaching-target.test.tsx.before.txt",
+        "src/ui/course-teaching-target.test.tsx"
+      ],
+      "exitCode": 1,
+      "note": "diff exit 1 records expected changes, not a test failure"
+    }
+  ],
+  "boundary": "No browser, compatibility, whole-C2 acceptance, engine/rule/raw changes or Git operations. Root owns progress recordId propagation and final production browser proof."
+}

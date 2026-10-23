@@ -1,0 +1,26 @@
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-25/r5-record-wait-fix-r1/OpeningMoment.tsx.before.txt	2026-10-24 04:39:45
++++ src/ui/OpeningMoment.tsx	2026-10-24 04:41:47
+@@ -9,7 +9,8 @@
+ import {MarketSceneChoice} from './MarketSceneChoice.tsx'
+ import {VideoSceneChoice,type VideoChoiceAction} from './VideoSceneChoice.tsx'
+ import {CourseSceneChoice,type CourseChoiceIntent} from './CourseSceneChoice.tsx'
+-import {courseSceneProgress,courseStageLatestStart,type CourseSceneProgress,type CourseSceneTarget} from './course-scene-progress.ts'
++import {courseSceneProgress,type CourseSceneTarget} from './course-scene-progress.ts'
++import {courseStageWaitDate} from './course-stage-wait.ts'
+ import {courseSceneContext} from './course-player-thread.ts'
+ import {courseTeachingPaper} from './course-teaching-paper.ts'
+ import {playableAdvanceDate} from '../application/playable-advance.ts'
+@@ -60,12 +61,7 @@
+  return '眼前这件事 · 由你决定'
+ }
+ 
+-/** An optional pause in arranging teaching cannot cross its already public last start day. */
+-export function courseStageWaitDate(w:GamePanelProps['features']['workbench'],date:string,progress:CourseSceneProgress|null):string|null{
+- const target=progress?.target,stage=progress?.stage
+- if(w.atQuarterEnd||w.pause!==null||w.progression.requiresDelivery||progress?.phase!=='course-stage-needed'||progress.invalidReason!==null||progress.historical||progress.wait||target?.kind!=='cohort'||target.jobId!==undefined||!stage||stage.cohortId!==target.cohortId||stage.courseId!==target.courseId||!Number.isSafeInteger(stage.days)||stage.days<=0)return null
+- try{const next=playableAdvanceDate(w,date,w.progression.nextDate),latest=courseStageLatestStart(stage.dueAt,stage.days),targetDate=next<latest?next:latest;return targetDate>date?targetDate:null}catch{return null}
+-}
++export {courseStageWaitDate}
+ 
+ /** A scene reads the original public thread; every action still uses the original command flow. */
+ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter,focusNotice,focusRequiresChoice=false,onFocus,onNavigate,onExplore,onResponsibilities,onRecollection}:Props){

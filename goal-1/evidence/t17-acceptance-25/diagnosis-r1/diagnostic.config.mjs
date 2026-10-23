@@ -1,0 +1,1 @@
+import {defineConfig} from 'vitest/config';export default defineConfig({test:{environment:'node',include:['goal-1/evidence/t17-acceptance-25/diagnosis-r1/harness.test.ts'],maxWorkers:1,isolate:true,clearMocks:true,restoreMocks:true}})

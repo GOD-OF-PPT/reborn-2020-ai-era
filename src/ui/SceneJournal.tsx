@@ -37,15 +37,25 @@ function workTarget(work:SceneWork):SceneWorkTarget{
 }
 
 /** A calendar job names its original course record, including an old sample attempt. */
-export function courseWorkTarget(p:Pick<GamePanelProps,'view'|'features'>,jobId:string,businessId:string):{accountId:string;courseTarget:CourseSceneTarget}|null{
+export function courseWorkTarget(p:Pick<GamePanelProps,'view'|'features'>,jobId:string,businessId:string):{accountId:string;courseTarget:CourseSceneTarget;recordId?:string}|null{
  const course=p.features.course,operations=p.view.operations,businesses=course?.businesses.filter(b=>b.id===businessId)??[]
  if(!course||businesses.length!==1||!p.view.accounts.some(a=>a.accountId===businesses[0]!.accountId)||operations?.jobs.filter(j=>j.id===jobId&&j.businessId===businessId).length!==1)return null
  const targets:CourseSceneTarget[]=[]
  for(const o of course.outlines.filter(o=>o.businessId===businessId&&o.jobId===jobId))targets.push({kind:'outline',businessId,outlineId:o.id})
  for(const l of course.licenses.filter(l=>l.businessId===businessId&&l.jobId===jobId))targets.push({kind:'license',businessId,licenseId:l.id})
  for(const c of course.courses.filter(c=>c.businessId===businessId&&c.sampleAttempts.includes(jobId)))targets.push({kind:'course',businessId,courseId:c.id,sampleJobId:jobId})
+ for(const a of course.audiences.filter(a=>a.jobId===jobId)){
+  const c=course.courses.find(c=>c.id===a.courseId&&c.businessId===businessId)
+  if(c)targets.push({kind:'audience',businessId,courseId:c.id,audienceId:a.id})
+ }
+ for(const co of course.cohorts){
+  const c=course.courses.find(c=>c.id===co.courseId&&c.businessId===businessId)
+  if(c&&(co.stages.some(stage=>stage.attempts.some(a=>a.jobId===jobId))||co.supportJobs.some(slot=>slot.jobId===jobId)))targets.push({kind:'cohort',businessId,courseId:c.id,cohortId:co.id,jobId})
+ }
+ const originalJob=operations.jobs.find(j=>j.id===jobId)!,recordCourses=course.courses.filter(c=>c.businessId===businessId&&(c.refreshJobs.some(r=>r.jobId===jobId)&&originalJob.definitionId==='course-refresh-'+c.productId+'-'+c.topicId||course.studies.some(s=>s.businessId===businessId&&s.predecessorId===c.id&&s.jobId===jobId&&originalJob.definitionId==='course-demand-study')))
+ for(const c of recordCourses)targets.push({kind:'course',businessId,courseId:c.id})
  const valid=targets.filter(target=>courseTargetReason(course,target,{operations})===null)
- return valid.length===1?{accountId:businesses[0]!.accountId,courseTarget:valid[0]!}:null
+ return valid.length===1?{accountId:businesses[0]!.accountId,courseTarget:valid[0]!,...(recordCourses.length?{recordId:jobId}:{})}:null
 }
 
 export function sceneWorks(p:Pick<GamePanelProps,'view'|'features'>):SceneWork[]{

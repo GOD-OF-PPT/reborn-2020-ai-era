@@ -1,6 +1,7 @@
 import type {PlayFeatures,PlayingView} from './game-types.ts'
 import type {ProductionJob} from '../core/operations-types.ts'
 import {moneyText} from './game-text.ts'
+import {courseTeachingSceneResult} from './course-teaching-result.ts'
 
 const active=(job:ProductionJob|null|undefined)=>job?.status==='planned'||job?.status==='running'
 const completed=(before:ProductionJob|null|undefined,after:ProductionJob|null|undefined,date:string)=>!!before&&!!after&&before.id===after.id&&active(before)&&after.status==='completed'&&after.completeAt<=date
@@ -11,6 +12,7 @@ export function courseSceneResult(kind:string,previous:PlayingView|null,current:
  if(!previous||previous.runId!==current.runId||current.revision<=previous.revision||current.saveStatus!=='saved'||current.hasCandidate)return null
  const before=(previous.features as unknown as PlayFeatures).course,after=(current.features as unknown as PlayFeatures).course
  if(!before||!after)return null
+ const teaching=courseTeachingSceneResult(kind,previous,current)
  if(kind==='OpenCourseStudio'){
   const added=after.businesses.filter(b=>!before.businesses.some(old=>old.id===b.id))
   if(added.length===1)return `课程分账已建立，转入自有资本${moneyText(added[0]!.funds.cashFen)}。这是个人资金转入，不是经营收入；大纲、启用和样课仍各自决定。`
@@ -35,7 +37,7 @@ export function courseSceneResult(kind:string,previous:PlayingView|null,current:
   const changed=after.courses.filter(c=>active(c.job)&&before.courses.some(old=>old.id===c.id&&old.sampleJobId!==c.sampleJobId))
   if(changed.length===1)return `「${changed[0]!.name}」的这次样课${scheduled(changed[0]!.job!)}。制作、完成和招生分别记录，尚未产生学费收入。`
  }
- if(kind!=='AdvanceTime')return null
+ if(kind!=='AdvanceTime')return teaching
  const facts:string[]=[]
  for(const outline of after.outlines){
   if(completed(before.outlines.find(o=>o.id===outline.id)?.job,outline.job,current.date))facts.push('这份大纲已实际完成，启用仍须独立核对原工作室条件')
@@ -47,5 +49,6 @@ export function courseSceneResult(kind:string,previous:PlayingView|null,current:
   const old=before.courses.find(c=>c.id===course.id)
   if(old&&old.status!=='ready'&&course.status==='ready'&&completed(old.job,course.job,current.date))facts.push(`「${course.name}」的样课已实际完成；当前工具资格、素材范围与更新条件仍须核对，尚未因此招生或确认学费收入`)
  }
+ if(teaching)facts.push(teaching.replace(/。$/,''))
  return facts.length?facts.join('；')+'。':null
 }

@@ -1,0 +1,84 @@
+{
+  "scope": "Syntax-only parsing and pure empty-blob/path helper checks; no candidate Git/seal/probe phase invoked",
+  "checks": [
+    {
+      "cmd": "rtk proxy node --check goal-1/evidence/t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs",
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "7845ff",
+        "wall_time_seconds": 0.195205973,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    },
+    {
+      "cmd": "rtk proxy node --check goal-1/evidence/t17-acceptance-25/closeout-preparation-r1/seal-root25.candidate.mjs",
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "d3d16b",
+        "wall_time_seconds": 0.194004022,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    },
+    {
+      "cmd": "rtk proxy node --check goal-1/evidence/t17-acceptance-25/closeout-preparation-r1/feature-stage.candidate.mjs",
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "43b572",
+        "wall_time_seconds": 0.188598028,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    },
+    {
+      "cmd": "rtk proxy node --check goal-1/evidence/t17-acceptance-25/closeout-preparation-r1/record-masters.candidate.mjs",
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "e47cd2",
+        "wall_time_seconds": 0.196279139,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    },
+    {
+      "cmd": "rtk proxy node --check goal-1/evidence/t17-acceptance-25/closeout-preparation-r1/cli-guards.candidate.mjs",
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "78734b",
+        "wall_time_seconds": 0.186304722,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    },
+    {
+      "cmd": "rtk proxy node --input-type=module -e 'import {blobOid,safe} from \"./goal-1/evidence/t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs\"; if(blobOid(Buffer.alloc(0))!==\"e69de29bb2d1d6434b8b29ae775ad8c2e48c5391\")throw Error(\"GIT_EMPTY_BLOB_IDENTITY\"); for(const p of [\"../x\",\"a/../x\",\"/tmp/x\",\"a\\\\b\",\"a\"+String.fromCharCode(0)+\"b\"]){let refused=false;try{safe(p)}catch{refused=true}if(!refused)throw Error(\"UNSAFE_PATH:\"+p)};process.stdout.write(JSON.stringify({pureBlobAndPathChecks:true,gitCalls:0,indexWrites:0,sealWrites:0,childProcesses:0})+\"\\n\")'",
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "d37588",
+        "wall_time_seconds": 0.19935789,
+        "exit_code": 0,
+        "original_token_count": 24,
+        "output": "{\"pureBlobAndPathChecks\":true,\"gitCalls\":0,\"indexWrites\":0,\"sealWrites\":0,\"childProcesses\":0}\n"
+      }
+    }
+  ],
+  "browserSnippet": {
+    "cmd": "rtk proxy node --check --input-type=module < goal-1/evidence/t17-acceptance-25/closeout-preparation-r1/browser-guard.snippet.js.txt",
+    "exit_code": 0,
+    "wall_time_seconds": 0.093566643
+  },
+  "actions": {
+    "gitCalls": 0,
+    "indexWrites": 0,
+    "sealWrites": 0,
+    "browserCalls": 0,
+    "applicationProcessChanges": 0,
+    "gameOrUnitTests": 0
+  }
+}

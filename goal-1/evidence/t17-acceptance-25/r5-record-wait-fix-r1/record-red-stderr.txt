@@ -1,0 +1,19 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/CourseTeachingChoice.test.tsx > keeps the actual92 first-stage draft when returning to its deadline-bounded record
+AssertionError: expected '2023-01-31' to be '2023-01-30' // Object.is equality
+
+Expected: "2023-01-30"
+Received: "2023-01-31"
+
+ ❯ src/ui/CourseTeachingChoice.test.tsx:215:31
+    213|   d.click('返回这份原记录')
+    214|   const clock=()=>d.all().find(e=>e.type===ClockAdvance)
+    215|   expect(clock()?.props.date).toBe('2023-01-30')
+       |                               ^
+    216|   expect(h.memory.read(p.view.runId,scope)).toEqual(draft)
+    217|   // UI policy boundaries only: these dates/budgets are not newly acce…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

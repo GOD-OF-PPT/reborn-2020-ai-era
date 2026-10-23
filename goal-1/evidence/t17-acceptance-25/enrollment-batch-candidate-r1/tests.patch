@@ -1,0 +1,102 @@
+--- a/src/ui/CourseTeachingChoice.test.tsx
++++ b/src/ui/CourseTeachingChoice.test.tsx
+@@ -8,12 +8,14 @@
+ import {addDays} from '../core/calendar.ts'
+ import type {GamePanelProps,PlayFeatures} from './game-types.ts'
+ import type {CourseSceneTarget} from './course-scene-progress.ts'
+-import {CourseTeachingChoice,courseTeachingDraftCommand,type CourseTeachingIntent} from './CourseTeachingChoice.tsx'
++import {CourseTeachingChoice,courseTeachingDraftCommand,courseEnrollmentBatch,type CourseTeachingIntent} from './CourseTeachingChoice.tsx'
+ import {createCourseTeachingDraftMemory,emptyCourseTeachingDraft,type CourseTeachingDraftScope} from './course-teaching-draft.ts'
+ import {CommandButton} from './CommandButton.tsx'
+ import ready from '../../goal-1/evidence/t17-acceptance-24/chrome-final-r5/course-r5-final-physical-86.json?raw'
+ import beforeClass from '../../goal-1/evidence/t17-acceptance-10/chrome-physical-r1/r74-physical-after-candidate-retry.json?raw'
+ 
++import plannedEnrollment from '../../goal-1/evidence/t17-acceptance-25/chrome-r3/c2-saved91-planned-cohort.json?raw'
++
+ // Invoke actual UI handlers with stable hooks; no DOM/effect/browser behaviour is claimed.
+ const hooks=vi.hoisted(()=>({values:[] as unknown[],index:0}))
+ vi.mock('react',async importOriginal=>{
+@@ -83,7 +85,7 @@
+  const h=await setup(beforeClass,'teaching-class-handlers')
+  try{
+   const p=h.p(),co=p.features.course!.cohorts[0]!,lesson=p.features.course!.courses.find(c=>c.id===co.courseId)!,target:CourseSceneTarget={kind:'cohort',businessId:lesson.businessId,courseId:lesson.id,cohortId:co.id},d=driver(h,target),before=h.controller.exportSaved()
+-  d.open('enroll')
++  d.open('enroll');d.click('逐位翻全部')
+   const people=d.all().filter(e=>e.type==='input'&&e.props.type==='checkbox');expect(people.length).toBeGreaterThanOrEqual(2)
+   act(people[0],'onChange',{target:{checked:true}});act(people[1],'onChange',{target:{checked:true}});d.render()
+   const scope:CourseTeachingDraftScope={...basicScope(p,lesson.id,lesson.businessId,'enroll'),audienceId:co.audienceId,cohortId:co.id}
+@@ -124,3 +126,74 @@
+   expect(h.requests).not.toHaveBeenCalled();expect(h.chosen).not.toHaveBeenCalled()
+  }finally{await h.close()}
+ },20000)
++
++
++it('explicitly fills a real five-seat draft while retaining existing picks, then keeps all original people and original confirmation reachable',async()=>{
++ const h=await setup(plannedEnrollment,'teaching-five-seat-batch')
++ try{
++  const p=h.p(),co=p.features.course!.cohorts.find(row=>row.seatLimit===5&&row.students.length===0)!,lesson=p.features.course!.courses.find(row=>row.id===co.courseId)!,a=p.features.course!.audiences.find(row=>row.id===co.audienceId)!,target:CourseSceneTarget={kind:'cohort',businessId:lesson.businessId,courseId:lesson.id,cohortId:co.id},d=driver(h,target),before=h.controller.exportSaved()
++  const scope:CourseTeachingDraftScope={...basicScope(p,lesson.id,lesson.businessId,'enroll'),audienceId:co.audienceId,cohortId:co.id}
++  expect(p.view.date).toBe('2023-01-24');expect(co.availablePeople).toHaveLength(167);expect(co.priceFen).toBe(99900)
++  d.open('enroll')
++  expect(d.all().filter(e=>e.type==='input'&&e.props.type==='checkbox')).toHaveLength(0)
++  expect(d.text()).toContain('班额余5席');expect(d.text()).toContain('本稿已选0人');expect(h.requests).not.toHaveBeenCalled()
++  d.click('按原记录先选5位')
++  const firstFive=co.availablePeople.slice(0,5)
++  expect(firstFive.map(id=>a.members.indexOf(id)+1)).toEqual([2,3,4,6,7])
++  expect(h.memory.read(p.view.runId,scope)?.personIds).toEqual(firstFive)
++  expect(d.text()).toContain('拟收学员预款¥4,995');expect(d.text()).toContain('拟增加保护¥4,995');expect(d.text()).toContain('本次教学收入为¥0')
++  d.click('原受众意向4 · 移除')
++  const kept=firstFive.filter(id=>a.members.indexOf(id)+1!==4)
++  expect(h.memory.read(p.view.runId,scope)?.personIds).toEqual(kept)
++  d.click('保留已选4位，再按原记录补1位')
++  expect(h.memory.read(p.view.runId,scope)?.personIds).toEqual([...kept,firstFive[2]!])
++  // A second mounted consumer may update the same Map before this button's next event.
++  d.click('明确清除本稿名单')
++  const batchButton=d.all().find(e=>e.type==='button'&&text(e.props.children).includes('按原记录先选5位')),oldPick=co.availablePeople[10]!
++  h.memory.write(p.view.runId,scope,{...emptyCourseTeachingDraft(),personIds:[oldPick]})
++  act(batchButton,'onClick');d.render()
++  const retained=h.memory.read(p.view.runId,scope)!.personIds
++  expect(retained).toEqual([oldPick,...firstFive.slice(0,4)])
++  d.click('逐位翻全部167')
++  const people=d.all().filter(e=>e.type==='input'&&e.props.type==='checkbox')
++  expect(people).toHaveLength(167);expect(people.filter(e=>e.props.checked)).toHaveLength(5)
++  d.click('全选原列表的167人')
++  expect(h.memory.read(p.view.runId,scope)?.personIds).toEqual(co.availablePeople)
++  const excessive=d.all().find(e=>e.type===CommandButton&&e.props.kind==='EnrollCourseAudience'),excessiveButton=elements(component(excessive)).find(e=>e.type==='button')
++  expect(excessiveButton?.props.disabled).toBe(true);expect(h.requests).not.toHaveBeenCalled()
++  d.click('返回本班名单')
++  expect(d.text()).toContain('超过班额余5席');expect(h.memory.read(p.view.runId,scope)?.personIds).toHaveLength(167)
++  expect(d.all().filter(e=>e.type==='input'&&e.props.type==='checkbox')).toHaveLength(0)
++  h.memory.write(p.view.runId,scope,{...emptyCourseTeachingDraft(),personIds:[firstFive[0]!,firstFive[0]!]});d.render()
++  expect(h.memory.read(p.view.runId,scope)?.personIds).toEqual([firstFive[0],firstFive[0]])
++  d.click('原受众意向2 · 移除')
++  expect(h.memory.read(p.view.runId,scope)?.personIds).toEqual([firstFive[0]])
++  d.click('明确清除本稿名单');d.click('按原记录先选5位')
++  d.click('翻开同对象');expect(h.inspect).toHaveBeenLastCalledWith(target,'enroll')
++  d.open('enroll');expect(h.memory.read(p.view.runId,scope)?.personIds).toEqual(firstFive)
++  const offer=d.all().find(e=>e.type===CommandButton&&e.props.kind==='EnrollCourseAudience'),native=elements(component(offer)).find(e=>e.type==='button')
++  expect(offer?.props.payload).toEqual({cohortId:co.id,personIds:firstFive});expect(native?.props.disabled).toBe(false)
++  act(native,'onClick');d.render()
++  expect(h.requests).toHaveBeenCalledExactlyOnceWith('EnrollCourseAudience',{cohortId:co.id,personIds:firstFive},expect.any(String),true)
++  expect(h.chosen).not.toHaveBeenCalled();expect(h.controller.exportSaved()).toBe(before)
++ }finally{await h.close()}
++},20000)
++
++it('leaves stale, duplicate and oversized drafts untouched and counts only retained tuition toward the existing class limit',()=>{
++ const codec=createCampaignCodec(),run=codec.import(plannedEnrollment),features=codec.registry.runtime!.project!(run) as unknown as PlayFeatures,co=features.course!.cohorts.find(row=>row.seatLimit===5&&row.students.length===0)!,before=JSON.stringify(co),ids=co.availablePeople
++ const old=[ids[10]!,ids[11]!],batch=courseEnrollmentBatch(co,old)
++ expect(batch).toMatchObject({remainingSeats:5,addCount:3,issue:null});expect(batch.personIds).toEqual([...old,...ids.slice(0,3)]);expect(old).toEqual([ids[10],ids[11]])
++ for(const selected of [[ids[0]!,ids[0]!],[ids[0]!,'unknown-person'],ids.slice(0,6)]){
++  const unchanged=[...selected],invalid=courseEnrollmentBatch(co,selected)
++  expect(invalid.issue).not.toBeNull();expect(invalid.personIds).toBeNull();expect(invalid.addCount).toBe(0);expect(selected).toEqual(unchanged)
++ }
++ // Pure boundary inputs only: these are not forged accepted game views or enrollment records.
++ const partial=courseEnrollmentBatch({...co,students:[{paidRemainingFen:100},{paidRemainingFen:0}]},[])
++ expect(partial).toMatchObject({remainingSeats:4,addCount:4,issue:null})
++ const full=courseEnrollmentBatch({...co,students:Array.from({length:5},()=>({paidRemainingFen:100}))},[])
++ expect(full).toMatchObject({remainingSeats:0,addCount:0,issue:null,personIds:[]})
++ expect(courseEnrollmentBatch({...co,availablePeople:ids.slice(0,2)},[])).toMatchObject({remainingSeats:5,addCount:2,personIds:ids.slice(0,2)})
++ const many=[...ids,...Array.from({length:300},(_,index)=>'pure-extra-'+index)]
++ expect(courseEnrollmentBatch({...co,availablePeople:many},[])).toMatchObject({remainingSeats:5,addCount:5,issue:null})
++ expect(JSON.stringify(co)).toBe(before)
++})

@@ -23,7 +23,7 @@ export type OpeningFocus=Identity&(
  |{readonly kind:'course';readonly courseTarget:CourseSceneTarget|null}
 )
 export type ThreadCommand={readonly kind:string;readonly payload:unknown;readonly label:string;readonly confirm:boolean}
-export type ThreadResultRef={readonly kind:'job'|'contract'|'payment'|'fill'|'settlement'|'research'|'payroll'|'promise'|'marketing'|'publication'|'course'|'outline'|'license'|'business';readonly id:string;readonly date:string|null}
+export type ThreadResultRef={readonly kind:'job'|'contract'|'payment'|'fill'|'settlement'|'research'|'payroll'|'promise'|'marketing'|'publication'|'course'|'outline'|'license'|'business'|'audience'|'cohort'|'enrollment'|'refund'|'operation';readonly id:string;readonly date:string|null}
 export interface PlayerThreadView{
  readonly wish:{readonly id:Input['view']['playerProfile']['wishId'];readonly label:string}
  readonly approach:Input['view']['playerProfile']['approach']

@@ -1,0 +1,1 @@
+这个收紧必要，请保留已交r1原补丁不覆写，另交明确final-r2补丁/sha与handoff使用哪份。需要同时cap0AP回退，最多保证当前公开stage latestStart前的便利等待；过期/当日原册仍可明确处理，不静默取消或免责任。其余原类型/UIprops不扩大。current fullunit源487仍保持，不apply。
