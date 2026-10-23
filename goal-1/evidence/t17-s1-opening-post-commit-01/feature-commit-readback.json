@@ -1,0 +1,48 @@
+{
+  "at": "2026-10-23T06:02:17.012Z",
+  "commit": "89e74dd5c7662df7c4c4ac229bd2040b414cd1d5",
+  "files": 298,
+  "allCommitBlobsMatchStaged": true,
+  "gitModes": true,
+  "sealedOrdinaryFiles": 269,
+  "sealedMarkerSha256": "7f25848035e6fd076b9644e80048e296100daeb66389775bd44693b9f45a7f6e",
+  "sealSetAndBytesAfterGuard": true,
+  "sourceFilesUnchanged": 408,
+  "cliRefusals": [
+    {
+      "name": "collector",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_first_order_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-21/sealed-collector-probe"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "rejected": true,
+      "outputCreated": false
+    },
+    {
+      "name": "verifier",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-21/sealed-verifier-probe"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "rejected": true,
+      "outputCreated": false
+    }
+  ],
+  "originalInputSha256": "20c73f8fec1a17a39606fc854126c59f949cddc6f8342ec2d55eb999c10a70b1",
+  "pushed": false,
+  "scope": "S1 committed; three master files deliberately exclude unrelated P3 working-tree text"
+}
