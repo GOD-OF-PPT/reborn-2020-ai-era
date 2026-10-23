@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-23T08:56:20.452Z",
+  "rows": [
+    {
+      "id": "collector",
+      "executable": "rtk",
+      "args": [
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_first_order_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-22/refused-collector"
+      ],
+      "exitCode": 1,
+      "errorMatches": true,
+      "outputCreated": false
+    },
+    {
+      "id": "verifier",
+      "executable": "rtk",
+      "args": [
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-22",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-22/refused-verifier"
+      ],
+      "exitCode": 1,
+      "errorMatches": true,
+      "outputCreated": false
+    }
+  ],
+  "sealedFilesUnchanged": 364,
+  "markerSha256": "b511dbd378951e43118122616c9d783f83d1f4b0fc3524a38477ee56d3dbec9c"
+}
