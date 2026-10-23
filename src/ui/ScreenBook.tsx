@@ -7,7 +7,10 @@ type Chapter={title:string;page:number;choice:boolean}
 
 /** A descendant requests original-page navigation even when its link is off-page and inert. */
 export function revealBookTarget(from:HTMLElement,id:string){
- from.closest('.screen-book')?.dispatchEvent(new CustomEvent('book-reveal-target',{detail:id}))
+ const book=from.closest('.screen-book')
+ // An eager child can request its record before the enclosing modal installs
+ // its layout listener. Deliver after that commit, while the same book lives.
+ requestAnimationFrame(()=>{if(from.isConnected&&book?.isConnected)book.dispatchEvent(new CustomEvent('book-reveal-target',{detail:id}))})
 }
 
 /** Original children stay mounted: turning a page never discards a form draft. */

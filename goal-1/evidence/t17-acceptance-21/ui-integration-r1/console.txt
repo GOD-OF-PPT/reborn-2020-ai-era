@@ -1,0 +1,63 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/CinematicRoom.test.tsx (1 test | 1 failed) 1218ms
+   × renders a read-only room without advancing, including delivery and end-of-range UI projections 1216ms
+ ❯ src/ui/RoomMoment.test.tsx (6 tests | 3 failed) 11098ms
+   × makes the actual first-order commitment, delivery and cash separate playable moments without mutating on render 1197ms
+   × keeps a real readonly current moment from submitting while its original information remains present 471ms
+   × also leaves work directly available after accepting the order first, with the same actual combined budget 733ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/CinematicRoom.test.tsx > renders a read-only room without advancing, including delivery and end-of-range UI projections
+AssertionError: expected '<link rel="preload" as="image" href="…' to contain '接下这笔手工单'
+
+Expected: "接下这笔手工单"
+Received: "<link rel="preload" as="image" href="/assets/ui-redesign/cinematic/room-ordinary-v1.jpg"/><link rel="preload" as="image" href="/assets/ui-redesign/cinematic/props/first-attempt-v1.png"/><div class="cinematic-home"><section class="cinematic-stage clarity-stage opening-room" data-exploring="false" aria-label="可探索的住处"><div class="room-backdrop" aria-hidden="true" style="background-image:url(/assets/ui-redesign/cinematic/room-ordinary-v1.jpg)"><img src="/assets/ui-redesign/cinematic/room-ordinary-v1.jpg" alt="" class=""/></div><div class="room-vignette" aria-hidden="true"></div><p class="opening-room-intention"><span>我想保持生活自主</span><span>把这一季留给自己愿意承担的安排。</span><button type="button">换个念头 ↗</button></p><section class="room-current-moment opening-current-moment" data-stage="choose" aria-label="眼前这一幕"><header class="moment-heading"><p>2020-Q1 / 今天尚未写满的日历</p><h1 tabindex="-1">这一次，先决定怎样过日子。</h1></header><p class="opening-room-stage">眼前这件事 · 由你决定</p><div class="moment-story" aria-label="眼前的情况"><p class="moment-line">不必立刻接单或买股。可以保留工作、看看生活，也可以暂不新增承诺。</p><p class="moment-terms">阅读与探索不消耗行动；原生活费用和已经答应的事仍照日历继续。</p></div><div class="moment-decisions"><div class="command moment-decision moment-primary"><button type="button" class="" aria-label="把七天留给自己"><b aria-hidden="true">01</b><span>把七天留给自己<small>个人0元 · 本季1点 · 七日后看到实际结果</small></span><i aria-hidden="true">→</i></button></div><div class="command moment-decision"><button type="button" class="" aria-label="先保留这一季的工作"><b aria-hidden="true">02</b><span>先保留这一季的工作<small>共享本季2点 · 按实际在岗日领工资，可与副业组合</small></span><i aria-hidden="true">→</i></button></div><button type="button" class="moment-explore">环顾房间，想想别的可能 <span aria-hidden="true">↗</span></button></div></section><button type="button" class="opening-object" data-kind="calendar" data-text-only="false" aria-labelledby="_R_dh_-title _R_dh_-action" aria-describedby="_R_dh_-stage _R_dh_-detail"><span class="opening-object-art" aria-hidden="true"><img src="/assets/ui-redesign/cinematic/props/first-attempt-v1.png" alt="" width="1280" height="1280" decoding="async"/><span class="opening-object-mark"><svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M8 5v6m16-6v6M5 12h22M6 8h20v20H6zM11 17h3m5 0h3m-11 6h3m5 0h3"></path></svg></span></span><span class="opening-object-copy"><span id="_R_dh_-stage" class="opening-object-stage">眼前这件事 · 由你决定</span><strong id="_R_dh_-title" class="opening-object-title">今天尚未写满的日历</strong><span id="_R_dh_-detail" class="opening-object-detail">翻开，看清这次选择</span><span id="_R_dh_-action" class="opening-object-action">走近这件事<span aria-hidden="true">↗</span></span></span></button><nav class="room-pocket" aria-label="随身记录"><button type="button"><span aria-hidden="true">▤</span>翻开随身册</button><button type="button"><span aria-hidden="true">◷</span>牵挂与日历</button></nav><p class="room-caption"><span>普通出租屋 · 2020-01-01</span><span>模拟市场 / 明确架空股权</span></p></section></div>"
+
+ ❯ src/ui/CinematicRoom.test.tsx:26:19
+     24|   expect(initial).toContain('环顾房间')
+     25|   expect(initial).toContain('2020-01-01')
+     26|   expect(initial).toContain('接下这笔手工单')
+       |                   ^
+     27|   expect(initial).not.toContain('推进下一节点')
+     28|   expect(initial).not.toContain('林舟</strong>')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/ui/RoomMoment.test.tsx > makes the actual first-order commitment, delivery and cash separate playable moments without mutating on render
+AssertionError: expected '<link rel="preload" as="image" href="…' to contain '接下这笔手工单'
+
+Expected: "接下这笔手工单"
+Received: "<link rel="preload" as="image" href="/assets/ui-redesign/cinematic/props/first-attempt-v1.png"/><p class="opening-room-intention"><span>我想保持生活自主</span><span>把这一季留给自己愿意承担的安排。</span><button type="button">换个念头 ↗</button></p><section class="room-current-moment opening-current-moment" data-stage="choose" aria-label="眼前这一幕"><header class="moment-heading"><p>2020-Q1 / 今天尚未写满的日历</p><h1 tabindex="-1">这一次，先决定怎样过日子。</h1></header><p class="opening-room-stage">眼前这件事 · 由你决定</p><div class="moment-story" aria-label="眼前的情况"><p class="moment-line">不必立刻接单或买股。可以保留工作、看看生活，也可以暂不新增承诺。</p><p class="moment-terms">阅读与探索不消耗行动；原生活费用和已经答应的事仍照日历继续。</p></div><div class="moment-decisions"><div class="command moment-decision moment-primary"><button type="button" class="" aria-label="把七天留给自己"><b aria-hidden="true">01</b><span>把七天留给自己<small>个人0元 · 本季1点 · 七日后看到实际结果</small></span><i aria-hidden="true">→</i></button></div><div class="command moment-decision"><button type="button" class="" aria-label="先保留这一季的工作"><b aria-hidden="true">02</b><span>先保留这一季的工作<small>共享本季2点 · 按实际在岗日领工资，可与副业组合</small></span><i aria-hidden="true">→</i></button></div><button type="button" class="moment-explore">环顾房间，想想别的可能 <span aria-hidden="true">↗</span></button></div></section><button type="button" class="opening-object" data-kind="calendar" data-text-only="false" aria-labelledby="_R_d_-title _R_d_-action" aria-describedby="_R_d_-stage _R_d_-detail"><span class="opening-object-art" aria-hidden="true"><img src="/assets/ui-redesign/cinematic/props/first-attempt-v1.png" alt="" width="1280" height="1280" decoding="async"/><span class="opening-object-mark"><svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M8 5v6m16-6v6M5 12h22M6 8h20v20H6zM11 17h3m5 0h3m-11 6h3m5 0h3"></path></svg></span></span><span class="opening-object-copy"><span id="_R_d_-stage" class="opening-object-stage">眼前这件事 · 由你决定</span><strong id="_R_d_-title" class="opening-object-title">今天尚未写满的日历</strong><span id="_R_d_-detail" class="opening-object-detail">翻开，看清这次选择</span><span id="_R_d_-action" class="opening-object-action">走近这件事<span aria-hidden="true">↗</span></span></span></button>"
+
+ ❯ src/ui/RoomMoment.test.tsx:25:71
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/ui/RoomMoment.test.tsx > keeps a real readonly current moment from submitting while its original information remains present
+AssertionError: the given combination of arguments (undefined and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string
+ ❯ src/ui/RoomMoment.test.tsx:47:69
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/ui/RoomMoment.test.tsx > also leaves work directly available after accepting the order first, with the same actual combined budget
+AssertionError: expected '<link rel="preload" as="image" href="…' to contain '可与小单一起安排'
+
+Expected: "可与小单一起安排"
+Received: "<link rel="preload" as="image" href="/assets/ui-redesign/cinematic/props/first-attempt-v1.png"/><p class="opening-room-intention"><span>我想保持生活自主</span><span>用一笔真实交付，试试自己的手艺。</span><button type="button">换个念头 ↗</button></p><section class="room-current-moment opening-current-moment" data-stage="planned" aria-label="眼前这一幕"><header class="moment-heading"><p>2020-Q1 / 电脑里的手工委托</p><h1 tabindex="-1">答应了，就给它留出日子。</h1></header><p class="opening-room-stage">已安排 · 尚未开工</p><div class="moment-story" aria-label="眼前的情况"><p class="moment-line">已预留制作费与1点；2020-01-05才开工实际使用。还没有交付或回款。</p><p class="moment-terms">个人制作成本¥500 · 1点 · 2020-01-05—2020-01-19</p></div><div class="moment-decisions"><div class="moment-wait moment-primary"><div class="clock-advance clock-advance-room"><div class="command clock-review"><button type="button" class="" aria-label="核对后推进 · 2020-01-05"><span>先核对 ↗</span></button></div><div class="command clock-main"><button type="button" class="" aria-label="等这份作品开工 · 2020-01-05 · 个人已知待付¥500"><span>等这份作品开工 · 2020-01-05</span><kbd aria-hidden="true">Space</kbd><small>个人已知待付¥500</small></button></div></div></div><div class="command moment-decision"><button type="button" class="" aria-label="先保留这一季的工作"><b aria-hidden="true">02</b><span>先保留这一季的工作<small>共享本季2点 · 按实际在岗日领工资，可与副业组合</small></span><i aria-hidden="true">→</i></button></div><button type="button" class="moment-explore">环顾房间，想想别的可能 <span aria-hidden="true">↗</span></button></div></section><button type="button" class="opening-object" data-kind="calendar" data-text-only="false" aria-labelledby="_R_d_-title _R_d_-action" aria-describedby="_R_d_-stage _R_d_-detail"><span class="opening-object-art" aria-hidden="true"><img src="/assets/ui-redesign/cinematic/props/first-attempt-v1.png" alt="" width="1280" height="1280" decoding="async"/><span class="opening-object-mark"><svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M8 5v6m16-6v6M5 12h22M6 8h20v20H6zM11 17h3m5 0h3m-11 6h3m5 0h3"></path></svg></span></span><span class="opening-object-copy"><span id="_R_d_-stage" class="opening-object-stage">已安排 · 尚未开工</span><strong id="_R_d_-title" class="opening-object-title">电脑里的手工委托</strong><span id="_R_d_-detail" class="opening-object-detail">2020-01-05 · 等这份作品开工</span><span id="_R_d_-action" class="opening-object-action">走近这件事<span aria-hidden="true">↗</span></span></span></button>"
+
+ ❯ src/ui/RoomMoment.test.tsx:60:52
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  2 failed | 1 passed (3)
+      Tests  4 failed | 4 passed (8)
+   Start at  12:18:16
+   Duration  13.67s (tests 71%, transform 18%, import 11%)
+

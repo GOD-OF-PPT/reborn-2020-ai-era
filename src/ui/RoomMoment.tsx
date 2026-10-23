@@ -14,9 +14,11 @@ import {storySceneProgress} from './story-scene-progress.ts'
 import {lifeSceneProgress,pendingLifePromises} from './life-scene-progress.ts'
 import {marketSceneProgress} from './market-scene-progress.ts'
 import {deepseekSceneProgress} from './deepseek-scene-progress.ts'
+import {OpeningMoment} from './OpeningMoment.tsx'
+import type {OpeningFocus} from './player-thread.ts'
 
-type Props={p:GamePanelProps;headingRef:Ref<HTMLHeadingElement>;feedback?:ReactNode;onNavigate:NavigateScene;onExplore:()=>void}
-type Moment={stage:string;object:string;title:string;line:string;detail:string;command?:{kind:string;payload:unknown;label:string;confirm?:boolean};wait?:{date:string;label:string};inspect?:{screen:Screen;label:string;accountId?:string;personId?:LifePerson;lifeSelection?:LifeSceneMode}}
+type Props={p:GamePanelProps;headingRef:Ref<HTMLHeadingElement>;feedback?:ReactNode;onNavigate:NavigateScene;onExplore:()=>void;openingFocus?:OpeningFocus|null|undefined;onOpeningFocus?:((focus:OpeningFocus|null)=>void)|undefined}
+export type Moment={stage:string;object:string;title:string;line:string;detail:string;command?:{kind:string;payload:unknown;label:string;confirm?:boolean};wait?:{date:string;label:string};inspect?:{screen:Screen;label:string;accountId?:string;personId?:LifePerson;lifeSelection?:LifeSceneMode}}
 
 /** Current public commitments select a scene, never a command or an outcome. */
 export function roomMoment(p:Pick<GamePanelProps,'view'|'features'>):Moment{
@@ -68,7 +70,8 @@ export function roomMoment(p:Pick<GamePanelProps,'view'|'features'>):Moment{
  return {stage:'quiet',object:'眼前的生活',title:w.atQuarterEnd?'这一季，留下了怎样的日子？':'还有一些时间，属于你自己。',line:w.atQuarterEnd?'看一眼已经发生的事，再决定下一季怎么过。':'工作与已经答应的事照原日历继续。可以探索新的路，也可以留给在意的人。',detail:'阅读与探索不消耗行动，不会替你接受交易、合同或权限。',inspect:{screen:w.atQuarterEnd?'quarter':'routes',label:w.atQuarterEnd?'回看这一季的经历':'探索五条不同的人生路线'}}
 }
 
-export function RoomMoment({p,headingRef,feedback,onNavigate,onExplore}:Props){
+export function RoomMoment({p,headingRef,feedback,onNavigate,onExplore,openingFocus,onOpeningFocus}:Props){
+ if(p.view.phase==='playing'&&p.features.workbench.quarter==='2020-Q1')return <OpeningMoment p={p} headingRef={headingRef} feedback={feedback} fallback={roomMoment(p)} focus={openingFocus} onFocus={onOpeningFocus} onNavigate={onNavigate} onExplore={onExplore}/>
  const moment=roomMoment(p),w=p.features.workbench
  const employed=w.employment.some(e=>e.segments.some(s=>s.to===null))
  const canWait=p.view.phase==='playing'&&(p.view.date<playableThrough||p.view.date===playableThrough&&!w.atQuarterEnd)&&!w.progression.requiresDelivery&&w.pause===null

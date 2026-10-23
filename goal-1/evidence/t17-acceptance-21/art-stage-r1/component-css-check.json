@@ -1,0 +1,62 @@
+{
+  "checkedAt": "2026-10-23T03:56:31.190Z",
+  "sourceFiles": [
+    {
+      "file": "src/ui/OpeningObject.tsx",
+      "sha256": "05443dd43eaeecaa312eb0b7d0b1eb11c012b798c0f11c29c54710f9253b4bc7"
+    },
+    {
+      "file": "src/ui/opening-play.css",
+      "sha256": "c4b4297ef73857c12402de6583078df4d2225148d8ccb5b802340d110e7fd72b"
+    },
+    {
+      "file": "assets/ui-redesign/cinematic/props/first-attempt-v1.png",
+      "sha256": "a3453ceca39911cd5b2f2a3fd11fa35279bf6bf94e95c8553415c98c7c560462"
+    }
+  ],
+  "componentSSR": {
+    "frames": 24,
+    "kinds": 6,
+    "disabledAndTextOnly": true,
+    "oneNativeButton": true,
+    "ariaTextReferences": true,
+    "escapedText": true
+  },
+  "cssParse": {
+    "valid": true,
+    "scope": "opening classes",
+    "media": "reduced motion only",
+    "contentCropping": false
+  },
+  "earlierCheckFailures": [
+    {
+      "kind": "TypeScript CLI invocation",
+      "cause": "TS6 requires --ignoreConfig when explicit source files are passed",
+      "fix": "rerun with --ignoreConfig"
+    },
+    {
+      "kind": "CSS scope checker",
+      "cause": "naive comma split incorrectly split :is(button,a)",
+      "fix": "use postcss.list.comma to respect functional selector parentheses"
+    }
+  ],
+  "limits": [
+    "No browser or interaction check",
+    "No geometry or compatibility check",
+    "No save or business acceptance",
+    "Image URL substituted during isolated SSR; actual file existence and hash separately checked"
+  ],
+  "typecheck": {
+    "command": "node node_modules/typescript/bin/tsc --ignoreConfig --noEmit --jsx react-jsx --module esnext --moduleResolution bundler --target es2023 --lib es2023,dom --strict --noUncheckedIndexedAccess --exactOptionalPropertyTypes --allowArbitraryExtensions --skipLibCheck --types vite/client src/ui/OpeningObject.tsx",
+    "exitCode": 0
+  },
+  "finalCssReview": {
+    "textModeKeepsWaitingAndReceiptOutlines": true,
+    "reducedMotionRemovesTransforms": true,
+    "explorationPocketUnchanged": true,
+    "openingHeaderAndRunBarScoped": true,
+    "cashAPSaveNotHidden": true,
+    "recordsInlineOrStageChild": true,
+    "onlyDecorativeImageHiddenInTextMode": true
+  }
+}

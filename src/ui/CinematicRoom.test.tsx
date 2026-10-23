@@ -23,7 +23,9 @@ it('renders a read-only room without advancing, including delivery and end-of-ra
   expect(initial).toContain('眼前这一幕')
   expect(initial).toContain('环顾房间')
   expect(initial).toContain('2020-01-01')
-  expect(initial).toContain('接下这笔手工单')
+  expect(initial).toContain('把七天留给自己')
+  expect(initial).not.toContain('接下这笔手工单')
+  expect(initial).toContain('翻开随身册')
   expect(initial).not.toContain('推进下一节点')
   expect(initial).not.toContain('林舟</strong>')
   // These are explicit UI projections, not fabricated normal campaign completion evidence.

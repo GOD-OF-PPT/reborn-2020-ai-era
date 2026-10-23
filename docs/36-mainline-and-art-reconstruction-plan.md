@@ -1,6 +1,6 @@
 # 36｜主线与系统美术交互重构方案
 
-2026-10-23，D12 设计方案。沿 A「长日重启」，采用 Game Studio 的 Shared → game-ui-frontend / web-game-foundations / game-playtest 路径，继续现有 React / TypeScript / Vite。**本页是待实施设计；交互分镜不连接正式存档，不能视作体验已改善。** 经济02、内容15、各业务合同及原子保存仍为规则权威。所有页面兼容开发和测试暂停。
+2026-10-23，D12 设计方案。沿 A「长日重启」，采用 Game Studio 的 Shared → game-ui-frontend / web-game-foundations / game-playtest 路径，继续现有 React / TypeScript / Vite。**S1已接入正式运行时，实际验证与范围见[实施记录](../goal-1/evidence/t17-acceptance-21/validation.md)；S2—S5仍待实施。** 原独立交互分镜不连接存档，不能替代正式运行时或真人体验验收。经济02、内容15、各业务合同及原子保存仍为规则权威。所有页面兼容开发和测试暂停。
 
 ## 1. 诊断：有许多正确步骤，却缺少连续的玩家目的
 

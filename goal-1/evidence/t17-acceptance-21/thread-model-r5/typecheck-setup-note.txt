@@ -1,0 +1,1 @@
+The first evidence writer was correctly rejected because it ran before the parallel directory-creation step completed (ENOENT at ancestor guard). No compiler ran and no evidence file was written by that rejected invocation. Directory creation is now complete; this sequential invocation performs the actual targeted typecheck.

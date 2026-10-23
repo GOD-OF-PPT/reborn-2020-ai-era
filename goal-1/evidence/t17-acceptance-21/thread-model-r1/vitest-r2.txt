@@ -1,0 +1,30 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/player-thread.test.ts (20 tests | 1 failed) 19067ms
+   × lets a free life retain real work and salary without making it exclusive with the manual order 1560ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 19 passed (20)
+   Start at  11:58:01
+   Duration  20.16s (tests 96%, import 2%, transform 2%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/player-thread.test.ts > lets a free life retain real work and salary without making it exclusive with the manual order
+AssertionError: expected 'work-scheduled' to be 'work-paid' // Object.is equality
+
+Expected: "work-paid"
+Received: "work-scheduled"
+
+ ❯ src/ui/player-thread.test.ts:173:24
+    171|   await h.send('AdvanceTime',{date:'2020-01-31'})
+    172|   thread=playerThread(h.p(),focus)
+    173|   expect(thread.stage).toBe('work-paid')
+       |                        ^
+    174|   expect(thread.resultRefs.some(ref=>ref.kind==='payroll'&&h.p().view.…
+    175|   expect(thread.focus.entityId).toBe(focus.entityId)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

@@ -1,0 +1,9 @@
+# S1 model recovery r5
+
+Only src/ui/player-thread.ts and player-thread.test.ts changed. Default focus now reconstructs the current quarter's real arrangements from public life origin/response/interruption command IDs, the runtime's pure market/operations ID relations, and complete public command receipts. It never reads a rule model, private facts, random state or a recent-summary window. Explicit input focus always takes precedence, including its original invalid reason. WorkQuarter keeps the same non-stealing semantics as openingFocusAfterSave; AdvanceTime and automatic new invitations do not select another object. Completed and non-success results retain their actual object and outcome. No UI sidecar or schema change was added.
+
+When multiple actual arrangements have no reliable order or unique compatible source, the output is neutral focus.kind=free with stage=review-choice, no command, and an explicit inspect entry to current records. Integration must limit its free-opening direct rest shortcut to thread.stage===choose so review-choice is not replaced by another rest command. Other exported interfaces are unchanged.
+
+Validation: vitest-r5 passed all 27 targeted model tests. Seven new cases include real saved/home/continue recovery for completed/interrupted free life and filled/cancelled free market, multiple actual arrangements with different last explicit intents and automatic invitations, plus a real quarter transition. Existing first-order and investment scenarios also now reopen. Missing-order fallback uses a clearly bounded display copy with actual records but no ordering receipts; it is not imported or called a valid normal save. Strict targeted TypeScript passed without emitting files. Source hashes match source-r5.json. No full suite/build/browser/compatibility/Git actions ran. Original thread-model-r1 r4 logs and hashes remain unchanged.
+
+[杠精审查] 通过：没有把普通新邀请、日期推进或未来机会当玩家上次选择；没有猜未知来源；重进恢复不等于S2持久偏好，也不证明UI浏览器/真人验收。

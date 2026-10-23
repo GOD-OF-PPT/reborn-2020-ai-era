@@ -17,7 +17,7 @@ it('makes the actual first-order commitment, delivery and cash separate playable
  const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'d08-first-moment'})
  let id=0
  const controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=>`d08-${++id}`})
- await controller.initialize();await controller.newLife({backgroundId:'technical_employee',playerProfile:{wishId:'autonomy',approach:'free'},seed:'d08-first-moment'})
+ await controller.initialize();await controller.newLife({backgroundId:'technical_employee',playerProfile:{wishId:'autonomy',approach:'first_order'},seed:'d08-first-moment'})
  const snapshot=()=>{const view=controller.snapshot.view!;return {controller,view,features:view.features as unknown as PlayFeatures,accountId:'personal',request:()=>{throw Error('RENDER_MUST_NOT_SUBMIT')}}}
  const send=async(kind:string,payload:unknown)=>expect((await controller.submit(controller.prepare(kind,payload))).status).toBe('saved')
  const render=()=>{const p=snapshot(),before=controller.exportSaved(),html=renderToStaticMarkup(<RoomMoment p={p} headingRef={null} onNavigate={()=>{throw Error('RENDER_MUST_NOT_NAVIGATE')}} onExplore={()=>{throw Error('RENDER_MUST_NOT_EXPLORE')}}/>);expect(controller.exportSaved()).toBe(before);return html}
@@ -25,10 +25,10 @@ it('makes the actual first-order commitment, delivery and cash separate playable
   expect(roomMoment(snapshot()).stage).toBe('offer');expect(render()).toContain('接下这笔手工单');expect(render()).toContain('先保留这一季的工作')
   await send('WorkQuarter',{});await send('StartFirstOrder',{})
   expect(roomMoment(snapshot())).toMatchObject({stage:'planned',wait:{date:'2020-01-05'}});expect(snapshot().features.firstOrder.result.paymentFen).toBe(0)
-  expect(render()).not.toContain('先保留这一季的工作');expect(render()).toContain('此刻还没有交付和回款')
+  expect(render()).not.toContain('先保留这一季的工作');expect(render()).toContain('还没有交付或回款')
   await send('AdvanceTime',{date:'2020-01-19'})
   expect(roomMoment(snapshot())).toMatchObject({stage:'delivery',command:{kind:'SubmitDelivery',payload:{contractId:snapshot().features.firstOrder.contractId}}})
-  expect(render()).toContain('把作品交给客户');expect(snapshot().features.firstOrder.result.paymentFen).toBe(0)
+  expect(render()).toContain('把这份作品交给客户');expect(snapshot().features.firstOrder.result.paymentFen).toBe(0)
   await send('SubmitDelivery',{contractId:snapshot().features.firstOrder.contractId});expect(roomMoment(snapshot()).stage).toBe('waiting')
   await send('AdvanceTime',{date:'2020-01-20'})
   expect(roomMoment(snapshot()).stage).toBe('paid');expect(snapshot().features.firstOrder.result).toMatchObject({paymentFen:130000,directCostFen:50000,netOrderFen:80000})
@@ -40,11 +40,11 @@ it('keeps a real readonly current moment from submitting while its original info
  const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'d08-readonly-moment'})
  let id=0
  const controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=>`d08-read-${++id}`})
- await controller.initialize();await controller.newLife({backgroundId:'content_employee',playerProfile:{wishId:'autonomy',approach:'free'},seed:'d08-readonly-moment'})
+ await controller.initialize();await controller.newLife({backgroundId:'content_employee',playerProfile:{wishId:'autonomy',approach:'first_order'},seed:'d08-readonly-moment'})
  try{
   const saved=controller.exportSaved(),view=controller.snapshot.view!,features=view.features as unknown as PlayFeatures
   const html=renderToStaticMarkup(<RoomMoment p={{controller,view:{...view,readOnly:true},features,accountId:'personal',request:()=>{throw Error('READ_ONLY_RENDER_MUST_NOT_SUBMIT')}}} headingRef={null} onNavigate={()=>{}} onExplore={()=>{}}/>)
-  expect(html.match(/<button[^>]*aria-label="接下这笔手工单"[^>]*>/)?.[0]).toContain('disabled=""');expect(html).toContain('¥500');expect(html).toContain('这一季，四份时间');expect(controller.exportSaved()).toBe(saved)
+  expect(html.match(/<button[^>]*aria-label="接下这笔手工单"[^>]*>/)?.[0]).toContain('disabled=""');expect(html).toContain('¥500');expect(html).toContain('个人制作成本¥500 · 1点');expect(controller.exportSaved()).toBe(saved)
  }finally{await controller.close();await store.close()}
 },20000)
 
@@ -57,10 +57,28 @@ it('also leaves work directly available after accepting the order first, with th
   expect((await controller.submit(controller.prepare('StartFirstOrder',{}))).status).toBe('saved')
   const view=controller.snapshot.view!,features=view.features as unknown as PlayFeatures,before=controller.exportSaved()
   const html=renderToStaticMarkup(<RoomMoment p={{controller,view,features,accountId:'personal',request:()=>{throw Error('RENDER_MUST_NOT_SUBMIT')}}} headingRef={null} onNavigate={()=>{}} onExplore={()=>{}}/>)
-  expect(html).toContain('先保留这一季的工作');expect(html).toContain('可与小单一起安排');expect(controller.exportSaved()).toBe(before)
+  expect(html).toContain('先保留这一季的工作');expect(html).toContain('可与副业组合');expect(controller.exportSaved()).toBe(before)
   expect((await controller.submit(controller.prepare('WorkQuarter',{}))).status).toBe('saved')
   expect(controller.snapshot.view!.budget).toMatchObject({available:1,reserved:1})
   expect((controller.snapshot.view!.features as unknown as PlayFeatures).firstOrder.status).toBe('planned')
+ }finally{await controller.close();await store.close()}
+},20000)
+
+it('keeps a separate due-money responsibility ahead of a focused completed first-order delivery',async()=>{
+ const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'s1-delivery-attention'})
+ let id=0;const controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=>`s1-attention-${++id}`})
+ await controller.initialize();await controller.newLife({backgroundId:'technical_employee',playerProfile:{wishId:'autonomy',approach:'first_order'},seed:'s1-delivery-attention'})
+ try{
+  expect((await controller.submit(controller.prepare('StartFirstOrder',{}))).status).toBe('saved')
+  expect((await controller.submit(controller.prepare('AdvanceTime',{date:'2020-01-19'}))).status).toBe('saved')
+  const view=controller.snapshot.view!,features=view.features as unknown as PlayFeatures,before=controller.exportSaved()
+  expect(features.firstOrder.status).toBe('awaiting_submission')
+  // This bounded public display projection tests priority; it is not saved as a normal financial history.
+  const attention={...features,workbench:{...features.workbench,finance:features.workbench.finance.map(a=>a.accountId==='personal'?{...a,protectionShortfallFen:1}:a)}}
+  const html=renderToStaticMarkup(<RoomMoment p={{controller,view,features:attention,accountId:'personal',request:()=>{throw Error('DISPLAY_MUST_NOT_SUBMIT')}}} headingRef={null} onNavigate={()=>{}} onExplore={()=>{}}/>)
+  expect(html).toContain('核对原账与到期责任');expect(html).toContain('原来的关注仍保留')
+  expect(html).not.toContain('aria-label="把这份作品交给客户"')
+  expect(controller.exportSaved()).toBe(before);expect(features.firstOrder.result.paymentFen).toBe(0)
  }finally{await controller.close();await store.close()}
 },20000)
 

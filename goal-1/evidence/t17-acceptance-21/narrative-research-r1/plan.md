@@ -1,0 +1,5 @@
+# 已成立的问题与修复边界
+
+NarrativeScene把有效完成/中断研究recordId传给只支持running研究的marketSceneProgress，后者静默选另一订单/持仓/opening。以现playerThread的同ID公开研究结果显示标题与事实，并给明确携accountId/recordId的原册入口；原pause/交付屏障、只读/候选和错误目标保护保留。仅改NarrativeScene及独立小测试，不改规则或其他UI。
+
+验证：正常CreateRun实际研究完成/中断、同账户另有委托时仍不换对象、只读/候选只读旧事实；SSR内容检查只用于接线回归，不冒浏览器/人类验收。运行新测试、现NarrativeScene及市场场景定向测试和严格定向TS。原r4原件保留，修后需根重建R5及补受影响Chrome目标路径。回滚以单独UI修复提交恢复表现层，不改存档。

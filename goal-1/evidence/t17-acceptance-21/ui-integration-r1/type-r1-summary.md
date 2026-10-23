@@ -1,0 +1,3 @@
+# 初次集成类型检查
+
+实际npm run typecheck退出2：三Panel新增initialRecordId尚未交回，另OpeningMoment/CinematicRoom/RoomMoment的exactOptional传值报错。发生于当前并行接线期间，非正式冻结版本。原工具完整输出保留在当前聊天，后续新批次保留独立console；不把本次失败计通过。textOnly布尔已修，其余prop/target修缮后另重验。
