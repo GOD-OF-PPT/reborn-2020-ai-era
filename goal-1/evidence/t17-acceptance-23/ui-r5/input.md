@@ -1,0 +1,1 @@
+Root App/NarrativeScene interface integration now present; retry strict only, preserving R4 red. No repeat of already-passing2 targeted tests. Afterwards read-only review of App/OpeningMoment/NarrativeScene/RoomMoment; no parent source edits.

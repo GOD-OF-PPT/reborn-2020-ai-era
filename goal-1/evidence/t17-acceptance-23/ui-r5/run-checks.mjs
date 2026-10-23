@@ -1,0 +1,9 @@
+import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import {spawn} from 'node:child_process';import {assertBrowserEvidenceWritable} from '../../../../scripts/browser_evidence_guard.mjs';
+const root=path.resolve('goal-1/evidence/t17-acceptance-23/ui-r5'),owned=['src/ui/VideoSceneChoice.tsx','src/ui/VideoSceneChoice.test.tsx','src/ui/OpeningObject.tsx','src/ui/video-play.css'];
+const write=(n,d)=>{assertBrowserEvidenceWritable(root);fs.writeFileSync(path.join(root,n),typeof d==='string'?d:JSON.stringify(d,null,2)+'\n')};
+const index=()=>owned.map(path=>{const d=fs.readFileSync(path);return {path,bytes:d.length,sha256:crypto.createHash('sha256').update(d).digest('hex')}});
+const before=index(),results=[];write('owned-check-before.json',before);
+for(const [id,command] of [['strict',['rtk','proxy','node','node_modules/typescript/bin/tsc','-b','--force']]]){
+ write(id+'-command.json',command);write(id+'-console.txt','');const start=Date.now();console.log(id+' started');const result=await new Promise(resolve=>{const c=spawn(command[0],command.slice(1),{stdio:['ignore','pipe','pipe']});const log=d=>{assertBrowserEvidenceWritable(root);fs.appendFileSync(path.join(root,id+'-console.txt'),d)};c.stdout.on('data',log);c.stderr.on('data',log);c.on('close',(exitCode,signal)=>resolve({exitCode,signal}));c.on('error',error=>resolve({exitCode:null,error:String(error)}))});const row={id,...result,elapsedMs:Date.now()-start};results.push(row);write(id+'-result.json',row);console.log(JSON.stringify(row));
+}
+const after=index();write('owned-check-after.json',after);write('checks-result.json',{results,ownedUnchanged:JSON.stringify(before)===JSON.stringify(after),browser:false,compatibility:0});if(results.some(r=>r.exitCode!==0)||JSON.stringify(before)!==JSON.stringify(after))process.exitCode=1;

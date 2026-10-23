@@ -1,0 +1,3 @@
+# 根任务原话
+
+root23三文件与415基线已先于源码完成。请正式在fresh root23/normal-prefix-r1 guard建输入/plan/tasks/source绑定后，沿原同Create原完整封套从Create重挣到rev53（52非Create/末Decide原图像批准），另至原59完整raw核778801B/SHA5abe...。不改core/content/规则/原后缀源/旧证据，不加载预制晚档反删。可只新增root23内脚本复用原harness+codec+原source commands，无需改src/testing；所有shell/subprocess rtk前缀。记录全部接受/拒绝原文/公开投影/资源(AP/现金/资格有效期)/输入输出完整bytesSHA、原Createreplay和source前后（UI其他owner在改，不freeze UI；只冻结真实126engine及用到testing/原输入）。原raw若新源canonical与旧不同请保原差异不强称同；新prefix从Create真实有效可另作为Chrome输入并清楚source。原schema13/rules/currentP3保持，固定原背景/seed/commandIds，不为正向换seed。保存早期rev53与原59各自原文，最早从rev53后由公开AP/日期决定继续，不预看隐藏客户/未来结果。另只读详解可见空导入textarea整档与追加规则给根（不跑浏览器/扩展设置）。完整正常AI辅助小循环本轮Chrome必验；原2020manual另由根直接新局。不要全矩阵/Git/资产/兼容。

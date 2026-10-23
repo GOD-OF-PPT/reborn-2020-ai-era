@@ -1,0 +1,7 @@
+# 视频原册与日历身份接缝
+
+同步核initialTarget整链与当前账户，复用videoTargetReason/canonicalVideoTarget；无效时仅公开目标显选/确认或取消，不渲染默认账号执行表单，也不由effect自动补目标。VideoPanel可选onTargetChange仅显选确认；run/account/完整target做组件scope key，同scope修订保持draft，不同scope隔离。营销记录真实id作为原册anchor。
+
+日历纯videoWorkTarget按实际public jobId唯一匹配production/corrections、contract negotiationJobId、marketing.job.id并核channel/account/business；target完整关联work/contract，marketing独立互斥。原首单专门quarter不变，其余路线保原。
+
+先保存改前4文件前像与源身份，再只改授权UI/相关测试/可选纯mapping。用正常Create真实保存链核推广/制作及实际修改/谈判关联、失效/错主体的首次SSR无表单、显选/取消不执行命令且raw不变；能力限制如SSR不跑hooks交互须明示，不冒充Chrome。原时限保留，定向/strict与126协议源/139原prefix绑定不改核定后交回冻结。根负责App/近景实际Chrome及最终全源验收。

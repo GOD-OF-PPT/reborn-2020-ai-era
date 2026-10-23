@@ -1,0 +1,1 @@
+仅按build-production-r6.mjs原流程复制R7固定路径并实际构建.delivery/t17-s3-v1-r7；只累计VideoSceneChoice.test.tsx、video-scene-draft.test.ts、video-target.test.tsx，原配置/限时不变，不含book-layout兼容、不合并旧166或owner新event5项。HTTP待根统一换服务后实绑；不停止/切换5340 R6、5341 DEV；不操作浏览器/数据库/Git/stage/commit。运行中DEV已因必要R7 UI修缮有活动源码/HMR身份变化，初始身份保留。

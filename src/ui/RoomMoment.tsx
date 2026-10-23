@@ -1,5 +1,5 @@
 import type {Ref,ReactNode} from 'react'
-import type {GamePanelProps,NavigateScene,LifeSceneMode} from './game-types.ts'
+import type {GamePanelProps,NavigateScene,LifeSceneMode,SceneTarget} from './game-types.ts'
 import type {LifePerson} from '../core/life-schema.ts'
 import type {Screen} from './Navigation.tsx'
 import {CommandButton} from './CommandButton.tsx'
@@ -18,7 +18,7 @@ import {OpeningMoment} from './OpeningMoment.tsx'
 import type {OpeningFocus} from './player-thread.ts'
 
 type Props={p:GamePanelProps;headingRef:Ref<HTMLHeadingElement>;feedback?:ReactNode;onNavigate:NavigateScene;onExplore:()=>void;openingFocus?:OpeningFocus|null|undefined;focusQuarter?:string|null|undefined;focusNotice?:string|null|undefined;focusRequiresChoice?:boolean|undefined;onOpeningFocus?:((focus:OpeningFocus|null)=>void)|undefined;onResponsibilities?:(()=>void)|undefined;onRecollection?:(()=>void)|undefined}
-export type Moment={stage:string;object:string;title:string;line:string;detail:string;command?:{kind:string;payload:unknown;label:string;confirm?:boolean};wait?:{date:string;label:string};inspect?:{screen:Screen;label:string;accountId?:string;personId?:LifePerson;lifeSelection?:LifeSceneMode}}
+export type Moment={stage:string;object:string;title:string;line:string;detail:string;command?:{kind:string;payload:unknown;label:string;confirm?:boolean};wait?:{date:string;label:string};inspect?:{screen:Screen;label:string;accountId?:string;personId?:LifePerson;lifeSelection?:LifeSceneMode;recordId?:string;videoTarget?:SceneTarget['videoTarget']}}
 
 /** Current public commitments select a scene, never a command or an outcome. */
 export function roomMoment(p:Pick<GamePanelProps,'view'|'features'>):Moment{
@@ -52,15 +52,17 @@ export function roomMoment(p:Pick<GamePanelProps,'view'|'features'>):Moment{
  const ecoOwner=ecosystem?.entity?(ecosystem.entity.accountId==='personal'?'个人账户':w.routes.find(r=>r.accountId===ecosystem.entity!.accountId)?.name??'原生态企业账户')+' · ':''
  if(ecosystem?.active&&ecosystem.priority<=22)return {stage:'commitment',object:ecosystem.source==='counterfactual-equity'?'明确架空 · 投资约定':'合作到了需要回应的日子',title:ecosystem.title,line:ecosystem.line,detail:ecoOwner+ecosystem.choice.line,...(ecosystem.command?{command:{...ecosystem.command,label:ecosystem.choice.label}}:{}),inspect:{screen:'deepseek',label:ecosystem.choice.label}}
  const current=sceneWorks(p)[0]
- if(current)return {stage:'ongoing',object:'你已经答应的事',title:current.title,line:current.status,detail:`${current.start}—${current.end} · ${current.cost}`,inspect:{screen:current.screen,label:'查看这件事的下一步',...(current.accountId?{accountId:current.accountId}:{}),...(current.personId?{personId:current.personId}:{}),...(current.lifeSelection?{lifeSelection:current.lifeSelection}:{})}}
+ if(current)return {stage:'ongoing',object:'你已经答应的事',title:current.title,line:current.status,detail:`${current.start}—${current.end} · ${current.cost}`,inspect:{screen:current.screen,label:'查看这件事的下一步',...(current.accountId?{accountId:current.accountId}:{}),...(current.personId?{personId:current.personId}:{}),...(current.lifeSelection?{lifeSelection:current.lifeSelection}:{}),...(current.recordId?{recordId:current.recordId}:{}),...(current.videoTarget?{videoTarget:current.videoTarget}:{})}}
  const pending=[
   {screen:'video' as const,value:f.video&&(f.video.contracts.some(c=>!['settled','cancelled'].includes(c.status))||f.video.works.some(w=>w.contractId===null&&w.abandonedAt===null&&!f.video!.publications.some(p=>p.workId===w.id))||f.video.publications.some(p=>p.measuredAt===null)||f.video.settlements.some(s=>s.collectedAt===null))?videoSceneProgress(f.video,view.date):null},
   {screen:'course' as const,value:f.course&&(f.course.cohorts.some(c=>c.closedAt===null)||f.course.courses.some(c=>c.unresolvedUpdates.length>0))?courseSceneProgress(f.course,view.date):null},
   {screen:'relay' as const,value:f.relay&&(f.relay.applications.some(a=>!a.read&&a.job?.status==='completed')||f.relay.periods.some(p=>['planned','running','support','settling'].includes(p.status))||f.relay.customers.some(c=>c.closedAt===null)||f.relay.meters.some(m=>m.auditedUnits!==null&&m.auditedUnits!==m.reportedUnits&&m.correctionId===null)||f.relay.businesses.some(b=>b.funds.payableFen>0||b.funds.receivableFen>0||b.funds.prepaidLiabilityFen>0||b.funds.supplierPrepaidFen>0))?relaySceneProgress(f.relay,view.date):null},
  ].find(item=>item.value!==null)
+ const pendingVideoTarget=pending?.screen==='video'&&pending.value&&'target' in pending.value?pending.value.target:undefined
+ const pendingVideoOwner=f.video?.channels.find(c=>c.id===pendingVideoTarget?.channelId)
  if(pending?.value){
   const direct='command' in pending.value?pending.value.command:null
-  return {stage:'commitment',object:'答应过的事，还在继续',title:pending.value.title,line:pending.value.line,detail:pending.value.choice.line,...(direct?{command:{kind:direct.kind,payload:direct.payload,label:pending.value.choice.label,confirm:direct.confirm}}:{}),inspect:{screen:pending.screen,label:'查看这件事的下一步'}}
+  return {stage:'commitment',object:'答应过的事，还在继续',title:pending.value.title,line:pending.value.line,detail:pending.value.choice.line,...(direct?{command:{kind:direct.kind,payload:direct.payload,label:pending.value.choice.label,confirm:direct.confirm}}:{}),inspect:{screen:pending.screen,label:'查看这件事的下一步',...(pendingVideoTarget?{videoTarget:pendingVideoTarget,...(pendingVideoOwner?{accountId:pendingVideoOwner.accountId}:{})}:{})}}
  }
  if(ecosystem?.active)return {stage:'commitment',object:ecosystem.source==='counterfactual-equity'?'明确架空 · 投资约定':'还在继续的生态合作',title:ecosystem.title,line:ecosystem.line,detail:ecoOwner+ecosystem.choice.line,...(ecosystem.command?{command:{...ecosystem.command,label:ecosystem.choice.label}}:{}),...(ecosystem.nextDate?{wait:{date:ecosystem.nextDate,label:'等这份合作的下一次回信'}}:{}),inspect:{screen:'deepseek',label:ecosystem.choice.label}}
  if(marketMoment)return marketMoment

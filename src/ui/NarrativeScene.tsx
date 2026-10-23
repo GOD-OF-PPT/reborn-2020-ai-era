@@ -3,7 +3,7 @@ import {Dialog} from './Dialog.tsx'
 import {SceneEcho,SceneTimeNotice,type EchoFrame} from './SceneEcho.tsx'
 import {ClockAdvance} from './ClockAdvance.tsx'
 import {ScreenBook} from './ScreenBook.tsx'
-import type {GamePanelProps,LifeSceneMode,SceneTarget} from './game-types.ts'
+import type {GamePanelProps,LifeSceneMode,SceneTarget,NavigateScene} from './game-types.ts'
 import type {Screen} from './Navigation.tsx'
 import type {LifePerson} from '../core/life-schema.ts'
 import {CommandButton} from './CommandButton.tsx'
@@ -11,14 +11,15 @@ import {PersonPortrait} from './PersonPortrait.tsx'
 import {lifeSceneProgress,type LifeSceneSelection} from './life-scene-progress.ts'
 import {LifeReferenceChoice} from './LifeReferenceChoice.tsx'
 import {marketSceneProgress} from './market-scene-progress.ts'
-import {playerThread} from './player-thread.ts'
+import {openingFocusFor,playerThread} from './player-thread.ts'
 import {MarketSceneChoice} from './MarketSceneChoice.tsx'
 import {deepseekSceneProgress} from './deepseek-scene-progress.ts'
 import {MarketRecordSwitch,DeepseekRecordSwitch} from './SceneRecordSwitch.tsx'
 import {sceneThreads} from './scene-thread-notes.ts'
 import {playableAdvanceDate} from '../application/playable-advance.ts'
 import {moneyText,playableThrough} from './game-text.ts'
-import {videoSceneProgress} from './video-scene-progress.ts'
+import {videoSceneProgress,type VideoSceneTarget} from './video-scene-progress.ts'
+import {VideoSceneChoice} from './VideoSceneChoice.tsx'
 import {courseSceneProgress} from './course-scene-progress.ts'
 import {CourseStageChoice} from './CourseStageChoice.tsx'
 import {CoursePreparation,CoursePreparationTrail} from './CoursePreparation.tsx'
@@ -33,7 +34,8 @@ type Props=GamePanelProps&{
  onPerson:(id:LifePerson)=>void;onOpen:(screen?:Screen,target?:SceneTarget)=>void
  lifeMode?:LifeSceneMode;onLifeMode?:(mode:LifeSceneMode)=>void
  marketRecordId?:string|null
- onPeople:()=>void;onYear:()=>void;onNavigate:(screen:Screen)=>void
+ videoTarget?:VideoSceneTarget|undefined;onVideoTargetChange?:((target:VideoSceneTarget)=>void)|undefined
+ onPeople:()=>void;onYear:()=>void;onNavigate:NavigateScene
  storyIncidentId?:string|null;onStoryIncident?:(id:string)=>void;receipt:string|null;receiptKind?:string|null;echoFrame?:EchoFrame|null;onDismissReceipt?:()=>void
 }
 const stories:Record<Exclude<Screen,'room'|'routes'>,{overline:string;title:string;line:string;open:string}>={
@@ -124,7 +126,10 @@ export function NarrativeScene(p:Props){
  useEffect(()=>{const choose=(event:KeyboardEvent)=>{if(stage.current&&(event.target===document.body||event.target===document.getElementById('main-content')))chooseWithNumber(stage.current,event)};document.addEventListener('keydown',choose);return()=>document.removeEventListener('keydown',choose)},[])
  const {view,features:f}=p,w=f.workbench,first=f.firstOrder
  const screen=p.screen as Exclude<Screen,'room'|'routes'>,closing=view.phase!=='playing',archived=view.phase==='finished'
- const videoProgress=!closing&&p.screen==='video'&&w.pause===null&&!w.progression.requiresDelivery?videoSceneProgress(f.video,view.date):null
+ const videoFocus=p.screen==='video'?openingFocusFor(p,'video',{accountId:p.accountId,...(p.videoTarget?{videoTarget:p.videoTarget}:{})}):null
+ const videoThread=videoFocus?playerThread(p,videoFocus):null
+ const rawVideoProgress=!closing&&p.screen==='video'&&w.pause===null&&!w.progression.requiresDelivery?videoSceneProgress(f.video,view.date,p.videoTarget??null):null
+ const videoProgress=rawVideoProgress&&videoThread?.focusStatus==='invalid'?{...rawVideoProgress,title:videoThread.title,line:videoThread.line,command:undefined,wait:undefined,invalidReason:videoThread.invalidReason}:rawVideoProgress
  const courseProgress=!closing&&p.screen==='course'&&w.pause===null&&!w.progression.requiresDelivery?courseSceneProgress(f.course,view.date):null
  const relayProgress=!closing&&p.screen==='relay'&&w.pause===null&&!w.progression.requiresDelivery?relaySceneProgress(f.relay,view.date,selectedRelayPeriod):null
  const marketContext=view.runId+'|'+p.accountId+'|'+(p.marketRecordId??''),deepseekContext=view.runId
@@ -143,16 +148,15 @@ export function NarrativeScene(p:Props){
  const person=f.life.people.find(person=>person.id===p.personId)??f.life.people[0]!
  const canAdvance=!closing&&(view.date<playableThrough||view.date===playableThrough&&!w.atQuarterEnd)&&!w.progression.requiresDelivery&&w.pause===null
  const ordinaryNext=canAdvance?(w.progression.nextQuarterDate??playableAdvanceDate(w,view.date,w.progression.nextDate)):null
- const encounterWait=lifeProgress?.waitDate??marketProgress?.nextDate??deepseekProgress?.nextDate??courseProgress?.waitDate
+ const encounterWait=videoThread?.focusStatus!=='invalid'&&p.screen==='video'?videoThread?.wait?.date:lifeProgress?.waitDate??marketProgress?.nextDate??deepseekProgress?.nextDate??courseProgress?.waitDate
  const sceneNext=storyProgress?.phase==='waiting'?storyProgress.completeAt:relayProgress?.nextDate??encounterWait
  const next=relayProgress?relaySceneAdvanceDate(relayProgress,w,view.date,ordinaryNext):sceneNext&&sceneNext>view.date&&ordinaryNext&&sceneNext<ordinaryNext?sceneNext:ordinaryNext
  const waitAt=canAdvance&&encounterWait&&encounterWait>=view.date?playableAdvanceDate(w,view.date,encounterWait):null
- const waitLabel=waitAt&&waitAt!==encounterWait?'先到日历上的这一日':marketProgress?.waitLabel??(courseProgress?.preparation?'等这份大纲的下一处反馈':lifeProgress?.person?'等和'+lifeProgress.person.name+'约好的这段时间结束':lifeProgress?'等这次生活安排完成':deepseekProgress?.source==='counterfactual-equity'?'等这份架空投资的回信':'等这份合作的回信')
+ const waitLabel=waitAt&&waitAt!==encounterWait?'先到日历上的这一日':videoThread?.wait?.label??marketProgress?.waitLabel??(courseProgress?.preparation?'等这份大纲的下一处反馈':lifeProgress?.person?'等和'+lifeProgress.person.name+'约好的这段时间结束':lifeProgress?'等这次生活安排完成':deepseekProgress?.source==='counterfactual-equity'?'等这份架空投资的回信':'等这份合作的回信')
  const research=w.researches.find(r=>r.id==='market-overview')
  const commitmentCount=sceneCommitmentCount(p)
  const encounterScreen=['market','deepseek','life'].includes(p.screen)
  const bookContext=p.screen==='course'&&courseProgress?.preparation?view.runId+':course-preparation:'+(courseProgress.preparation.businessId??'new')+':'+courseProgress.preparation.phase:encounterScreen?view.runId+':'+view.revision+':'+(lifeProgress?.selection??marketResearchTarget?.focus.entityId??marketProgress?.entityId??deepseekProgress?.entityId??''):p.receipt&&p.receiptKind!=='AdvanceTime'?p.receipt:'choosing'
- const openVideo=()=>p.onOpen('video',videoProgress?.target?{videoTarget:videoProgress.target}:undefined)
  const openCourse=()=>p.onOpen('course',courseProgress?.recordId?{recordId:courseProgress.recordId}:undefined)
  const openDeepseek=()=>p.onOpen('deepseek',{deepseekPane:deepseekProgress?.source==='counterfactual-equity'?'equity':'ecosystem',...(deepseekProgress?.active&&deepseekProgress.entity?{recordId:deepseekProgress.entity.kind==='business'?(deepseekProgress.source==='counterfactual-equity'?'equity-preparation':deepseekProgress.entity.businessId+'-prepare'):deepseekProgress.entity.id}:{})})
  const recordLabels:Partial<Record<Screen,string>>={video:'细看原作品、客户与资源',course:'翻看全部课程、学员与原安排',relay:'翻看全部中转、客户与原安排',story:'翻看原授权、全部风险与责任',market:'翻看全部模拟行情、委托与交收',deepseek:'翻看全部生态合作与明确架空权益',life:lifeMode==='person'?'打开人物与全部原约定':'翻看全部生活工作与年度原记录'}
@@ -164,14 +168,16 @@ export function NarrativeScene(p:Props){
   {p.screen==='life'&&lifeMode==='person'&&(!p.receipt||p.receiptKind==='AdvanceTime')?<figure className="scene-person-focus"><PersonPortrait personId={person.id} name={person.name} revealed={person.known} textOnly={p.textOnly===true} feature/><figcaption><strong>{person.name}</strong><span>{person.known?person.role:'这段联系，还没有实际前提。'}</span><p>{person.goal}</p><small>{person.boundary}</small></figcaption></figure>:null}
   {marketProgress?<MarketRecordSwitch p={p} progress={marketProgress} onSelect={id=>setMarketSelection({context:marketContext,id})}/>:null}
   {deepseekProgress?<DeepseekRecordSwitch p={p} progress={deepseekProgress} onSelect={id=>setDeepseekSelection({context:deepseekContext,id})}/>:null}
-  <ScreenBook choiceNavigation key={p.screen+':'+view.phase+':'+view.date+':'+(p.screen==='life'?lifeSelection:relayProgress?.periodId??marketProgress?.entityId??deepseekProgress?.entityId??'')+':'+bookContext} label="眼前的选择" className="scene-story-book">
+  <ScreenBook choiceNavigation key={p.screen==='video'?view.runId+':video:'+view.phase:p.screen+':'+view.phase+':'+view.date+':'+(p.screen==='life'?lifeSelection:relayProgress?.periodId??marketProgress?.entityId??deepseekProgress?.entityId??'')+':'+bookContext} label="眼前的选择" className="scene-story-book">
   {p.screen==='quarter'&&w.quarter==='2020-Q1'&&first.result.paymentFen>0?<aside className="scene-earned"><span>这笔小单，客户已经付了款。</span><strong>{moneyText(first.result.paymentFen)}</strong><p>实际制作成本{moneyText(first.result.directCostFen)} · 本单净额{moneyText(first.result.netOrderFen)}</p><small>工资和浮盈没有算进这笔净额。</small></aside>:null}
   {storyProgress?<RiskLetter key={storyProgress.incident.id} p={p} incident={storyProgress.incident} count={f.story.incidents.length} index={f.story.incidents.findIndex(c=>c.id===storyProgress.incident.id)} onNext={()=>{const index=f.story.incidents.findIndex(c=>c.id===storyProgress.incident.id);const id=f.story.incidents[(index+1)%f.story.incidents.length]!.id;if(p.onStoryIncident)p.onStoryIncident(id);else setSelectedLetter({source:p.storyIncidentId??null,id})}}/>:null}
   {relayProgress?.periodId?<RelayServiceLetter p={p} progress={relayProgress} onFullRecord={()=>p.onOpen()} onNext={()=>setRelayPeriod(relayProgress.periodIds[(relayProgress.periodIndex+1)%relayProgress.periodIds.length]!)} />:null}
   <div className="scene-choices" aria-label="这一幕可以做的事">
    {closing?<><Choice title={archived?'翻看这条路的真实记录':'把原来的事项逐项收好'} line={copy.line} label={copy.open} onClick={()=>p.onOpen()}/><Choice title={archived?'回到已经记下的人生':'回到住处，再决定下一步'} line="原来的资产、账目与约定继续保留；回顾不会抹掉它们。" label="回到人生回顾" onClick={()=>p.onNavigate('room')}/></>:<>
    {p.screen==='quarter'&&w.atQuarterEnd?<><Choice title="回看这一季真实留下的记录" line="工作和经营的收入、实际成本与未结责任，各有自己的来处。" label="翻看本季实际记录" onClick={()=>p.onOpen('quarter')}/><Choice title="下一季，还想走哪条路？" line="可以继续，也可以调整。进入下一季不会自动替你接受工作、交易或融资。" label="再看看眼前的机会" onClick={()=>p.onNavigate('routes')}/></>:p.screen==='quarter'?<>{w.employment.some(plan=>plan.segments.some(segment=>segment.to===null))?<Choice title="把余下的时间，留给生活" line="本季工作已经确认。工资按真实在岗日到账，余下的行动仍由你安排。" label="看看生活里的人与事" onClick={()=>p.onNavigate('life')}/>:<Action p={p} kind="WorkQuarter" payload={{}} title="把这一季的工作留好" line="通常占本季2点。工资仍按实际在岗日期，在月末到账。" label="查看这季的工作安排"/>}{firstChoice}<Choice title="给时间留另一种可能" line="学习、经营和生活，可以用这一季的四份时间来安排。" label={copy.open} onClick={()=>p.onOpen()}/></>:null}
-   {p.screen==='video'?videoProgress?<>{videoProgress.command?<Action p={p} kind={videoProgress.command.kind} payload={videoProgress.command.payload} confirm={videoProgress.command.confirm} title={videoProgress.choice.title} line={videoProgress.choice.line} label={videoProgress.choice.label}/>:<Choice title={videoProgress.choice.title} line={videoProgress.choice.line} label={videoProgress.choice.label} onClick={openVideo}/>} {firstChoice}</>:<>{firstChoice}<Choice title="从一份作品开始" line={w.routes.find(r=>r.id==='ai_video')?.preparation??copy.line} label={copy.open} onClick={openVideo}/></>:null}
+   {p.screen==='video'?w.progression.requiresDelivery?(first.status==='awaiting_submission'?firstChoice:<Choice title="先把答应过的交付看清" line="这份制作与原客户责任仍在；先处理交付，再回到视频尝试。" label="先面对这份交付" onClick={()=>p.onOpen('quarter')}/>):w.pause!==null?<Choice title="日历里，有件事需要先回应" line={w.progression.barrierLabel??'先看清已经发生的事，再回到这份视频尝试。'} label="先回应日历里的这件事" onClick={()=>p.onOpen(w.pause?.reason==='STORY_RISK_DECISION_PENDING'?'story':'quarter')}/>:<VideoSceneChoice p={p} {...(p.videoTarget?{target:p.videoTarget}:{})} {...(p.onVideoTargetChange?{onTargetChange:p.onVideoTargetChange}:{})} blockedReason={w.pause!==null||w.progression.requiresDelivery?'先回应日历里的原责任；视频草稿和原约定仍保留。':null} onInspect={target=>p.onOpen('video',target?{accountId:p.accountId,videoTarget:target}:undefined)}>{open=><>
+    {videoProgress?.command&&!videoProgress.invalidReason?<Action p={p} kind={videoProgress.command.kind} payload={videoProgress.command.payload} confirm={videoProgress.command.confirm} title={videoProgress.choice.title} line={videoProgress.choice.line} label={videoProgress.choice.label}/>:waitAt&&videoProgress&&!videoProgress.invalidReason?<WaitChoice p={p} date={waitAt} title={videoProgress.choice.title} line={videoProgress.choice.line} label={waitLabel}/>:<Choice intent="plan" title={videoProgress?.choice.title??'先选一个具体的内容账号'} line={videoProgress?.invalidReason??videoProgress?.choice.line??'从手工制作开始，受众、作品和客户反馈分别发生。'} label={videoProgress?.invalidReason?'明确重新选择原视频对象':videoProgress?.choice.label??'选择账号与这次尝试'} caption={videoProgress?.invalidReason?'重新选择，不替换原记录':'先选择，再核对真正的投入'} onClick={()=>open(videoProgress?.stage==='video-ready-to-publish'?'publish':['video-channel','video-marketing-completed','video-settled','video-published'].includes(videoProgress?.stage??'')?(f.video?.channels.find(c=>c.id===p.videoTarget?.channelId)?.leads.length?'commission':'marketing'):undefined)}/>}
+   </>}</VideoSceneChoice>:null}
    {p.screen==='course'&&courseProgress?<>{courseProgress.preparation?.phase==='fund'||courseProgress.preparation?.phase==='outline'?<CoursePreparation key={view.runId+':'+(courseProgress.preparation.businessId??'new')} p={p} step={courseProgress.preparation}/>:courseProgress.preparation?.phase==='waiting'&&waitAt?<><CoursePreparationTrail step={courseProgress.preparation}/><WaitChoice p={p} date={waitAt} title={courseProgress.choice.title} line={courseProgress.choice.line} label={waitLabel}/></>:courseProgress.preparation?.phase==='activate'?<><CoursePreparationTrail step={courseProgress.preparation}/><Action p={p} kind="ActivateBusiness" payload={{businessId:courseProgress.preparation.businessId}} title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label}/></>:courseProgress.stage?<CourseStageChoice key={courseProgress.stage.cohortId+':'+courseProgress.stage.index} p={p} stage={courseProgress.stage} onFullRecord={()=>p.onOpen()}>{open=><Choice title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label} caption="选择资源与日期" onClick={open}/>}</CourseStageChoice>:<Choice title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label} onClick={openCourse}/>}</>:null}
    {p.screen==='relay'&&relayProgress?<>{relayProgress.audit?<RelayAuditChoice key={view.runId+':'+relayProgress.audit.periodId} p={p} audit={relayProgress.audit} onFullRecord={()=>p.onOpen()}>{open=><Choice title={relayProgress.choice.title} line={relayProgress.choice.line} label={relayProgress.choice.label} caption="留出钱与时间" onClick={open}/>}</RelayAuditChoice>:relayProgress.command?<Action p={p} kind={relayProgress.command.kind} payload={relayProgress.command.payload} confirm={relayProgress.command.confirm} title={relayProgress.choice.title} line={relayProgress.choice.line} label={relayProgress.choice.label}/>:<Choice title={relayProgress.choice.title} line={relayProgress.choice.line} label={relayProgress.choice.label} onClick={()=>p.onOpen()}/>}</>:null}
    {storyProgress?<>

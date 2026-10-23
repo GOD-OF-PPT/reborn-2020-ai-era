@@ -4,6 +4,7 @@ import {screenForRoute} from './Navigation.tsx'
 import {moneyText,reasonText,wishes} from './game-text.ts'
 import {sceneThreads} from './scene-thread-notes.ts'
 import {openingFocusAfterSave,playerThread,type OpeningFocus} from './player-thread.ts'
+import {videoTargetEntity} from './video-player-thread.ts'
 
 export type SeasonInput=Pick<GamePanelProps,'view'|'features'>
 type Inspect={screen:Screen;label:string;target?:SceneTarget}
@@ -38,6 +39,10 @@ export function seasonFocusChoices(p:SeasonInput):readonly SeasonFocusChoice[]{
  for(const person of f.life.people.filter(x=>x.known))add({...base,kind:'life',selection:person.id},null,'与'+person.name+'的原安排')
  for(const account of view.accounts)add({...base,kind:'market',accountId:account.accountId},null,(account.accountId==='personal'?'自己的':'原经营账户的')+'投资判断')
  add({...base,kind:'first-order',entityId:f.firstOrder.contractId??f.firstOrder.offerId},f.firstOrder.dates.startAt,'那份手工单与实际结果')
+ add({...base,kind:'video',videoTarget:null},null,'从一个真实账号与视频尝试开始')
+ for(const channel of f.video?.channels??[])add({...base,kind:'video',accountId:channel.accountId,businessId:channel.businessId,entityId:channel.id,videoTarget:{channelId:channel.id}},channel.createdAt,channel.name+' · 原视频账号')
+ for(const work of f.video?.works??[]){const channel=f.video!.channels.find(c=>c.id===work.channelId);if(channel){const t={channelId:channel.id,workId:work.id,...(work.contractId?{contractId:work.contractId}:{})};add({...base,kind:'video',accountId:channel.accountId,businessId:channel.businessId,entityId:videoTargetEntity(t),videoTarget:t},work.production?.startAt??null)}}
+ for(const marketing of f.video?.marketing??[]){const channel=f.video!.channels.find(c=>c.id===marketing.channelId);if(channel)add({...base,kind:'video',accountId:channel.accountId,businessId:channel.businessId,entityId:marketing.id,videoTarget:{channelId:channel.id,marketingId:marketing.id}},marketing.job?.startAt??null)}
  for(const period of view.operations?.employment??[])add({...base,kind:'work',entityId:period.id},period.segments[0]?.from??null,period.quarter+' · 原工作安排')
  for(const job of f.life.jobs)add({...base,kind:'life',selection:job.personId??(job.kind==='workspace'?'workspace':'rest'),entityId:job.id},job.startAt)
  for(const promise of f.life.promises)add({...base,kind:'life',selection:promise.personId,entityId:promise.id},promise.offeredAt)
@@ -59,6 +64,14 @@ export function seasonFocusAfterSave(previous:SeasonInput,current:SeasonInput,ki
  if(existing.kind==='life'&&(candidate.kind!=='life'||existing.selection!==candidate.selection))return existing
  // Refreshing the outcome of the same object is not a new primary selection or quarter.
  if(candidate.entityId===existing.entityId)return existing
+ if(existing.kind==='video'&&candidate.kind==='video'){
+  const old=existing.videoTarget,next=candidate.videoTarget
+  if(old===null)return candidate
+  if(next?.channelId!==old.channelId)return existing
+  if(!old.workId&&!old.contractId&&!old.marketingId)return candidate
+  if(old.marketingId&&kind==='AcceptVideoCommission'&&current.features.video?.marketing.some(m=>m.id===old.marketingId&&m.cohortId===current.features.video!.contracts.find(c=>c.id===next.contractId)?.cohortId))return candidate
+  return existing
+ }
  const entry=existing.entityId===null||existing.kind==='life'&&existing.entityId===existing.selection
  const firstEntry=existing.kind==='first-order'&&previous.features.firstOrder.contractId===null&&existing.entityId===previous.features.firstOrder.offerId
  if(entry||firstEntry)return candidate
@@ -86,6 +99,13 @@ function remainingItems(p:SeasonInput):SeasonPendingItem[]{
  }
  for(const settlement of f.market.settlements.filter(s=>s.paidAt===null))object({...base,kind:'market',accountId:settlement.accountId,entityId:settlement.id,entityKind:'settlement'},settlement.dueAt,{kind:'settlement',id:settlement.id,date:settlement.dueAt})
  for(const research of f.market.researches.filter(r=>r.status==='running'))object({...base,kind:'market',entityId:research.id,entityKind:'research'},research.completeAt,{kind:'research',id:research.id,date:research.startAt})
+ for(const c of f.video?.contracts.filter(c=>c.status!=='cancelled'&&(c.status!=='settled'||!c.paidCase))??[]){const channel=f.video!.channels.find(x=>x.id===c.channelId);if(channel){const focus:OpeningFocus={...base,kind:'video',accountId:channel.accountId,businessId:channel.businessId,entityId:c.id,videoTarget:{channelId:channel.id,workId:c.workId,contractId:c.id}},thread=playerThread(p,focus);add({id:'video-contract:'+c.id,title:thread.title,line:thread.line+' '+thread.detail+` 原报价${moneyText(c.priceFen)}、原预款${moneyText(c.prepaymentFen)}不是利润，原最晚提交${c.dueAt}；当前保护、应收与未付费用以原账为准。`,dueAt:c.status==='delivered'?c.paymentAt:c.dueAt,accountId:channel.accountId,urgent:c.dueAt<view.date,sourceRefs:[{kind:'contract',id:c.id,date:c.acceptedAt}],focus,inspect:thread.inspect})}}
+ for(const choice of seasonFocusChoices(p).filter(choice=>choice.focus.kind==='video')){
+  const focus=choice.focus;if(focus.kind!=='video'||focus.videoTarget===null)continue
+  const t=focus.videoTarget,work=f.video!.works.find(w=>w.id===t.workId),marketing=f.video!.marketing.find(m=>m.id===t.marketingId),contract=f.video!.contracts.find(c=>c.id===t.contractId)
+  const jobs=[...(work?[work.production,...work.corrections]:[]),marketing?.job,...(contract?.negotiationJobId?[view.operations?.jobs.find(j=>j.id===contract.negotiationJobId)]:[])]
+  for(const job of jobs)if(job&&['planned','running'].includes(job.status)){const thread=playerThread(p,focus);add({id:'operation-job:'+job.id,title:thread.title,line:`${job.startAt}—${job.completeAt}；原资源、成本和行动保留，尚未完成。`,dueAt:job.completeAt,accountId:focus.accountId,urgent:false,sourceRefs:[{kind:'job',id:job.id,date:job.startAt}],focus,inspect:thread.inspect})}
+ }
  for(const job of w.preparationJobs.filter(j=>j.status==='running'))add({id:'preparation:'+job.id,title:job.title,line:`原准备从${job.startAt}至${job.completeAt}，仍未完成；下一步沿原日历与准备记录。`,dueAt:job.completeAt,accountId:job.accountId,urgent:false,sourceRefs:[{kind:'preparation',id:job.id,date:job.startAt}],focus:null,inspect:{screen:'quarter',label:'翻看这项原准备',target:{accountId:job.accountId}}})
  for(const job of view.operations?.jobs.filter(j=>j.id!==first.jobId&&['planned','running'].includes(j.status))??[]){
   const business=view.operations?.businesses.find(b=>b.id===job.businessId)
@@ -123,6 +143,12 @@ export function seasonRecollection(p:SeasonInput,quarter=p.features.workbench.qu
  }
  for(const settlement of f.market.settlements)if(settlement.paidAt)add({id:settlement.id,date:settlement.paidAt,title:settlement.kind==='sale'?'模拟卖款已实际交收':'模拟分红已实际到账',line:`${moneyText(settlement.amountFen)}已进入原账户；它不是新的免费本金或额外行动。`,sourceRefs:[{kind:'settlement',id:settlement.id,date:settlement.paidAt}],inspect:{screen:'market',label:'翻看这笔原交收',target:{accountId:settlement.accountId,recordId:settlement.id}}})
  for(const research of f.market.researches)if(research.status==='completed')add({id:'research-result:'+research.id,date:research.completeAt,title:'公开研究已实际完成',line:'整理完成的是原公开资料；没有替你买股，也没有揭示未来价格。',sourceRefs:[{kind:'research',id:research.id,date:research.completeAt}],inspect:{screen:'market',label:'翻看这项原研究',target:{accountId:'personal',recordId:research.id}}})
+ for(const work of f.video?.works??[]){const channel=f.video!.channels.find(c=>c.id===work.channelId);if(!channel)continue;const t={channelId:channel.id,workId:work.id,...(work.contractId?{contractId:work.contractId}:{})};for(const job of [work.production,...work.corrections])if(job?.status==='completed')add({id:'video-job:'+job.id,date:job.completeAt,title:'这份视频的原制作实际完成',line:'实际完成的是原制作或返工；人工核对、客户验收与回款仍分别发生。',sourceRefs:[{kind:'job',id:job.id,date:job.completeAt},{kind:'work',id:work.id,date:job.completeAt}],inspect:{screen:'video',label:'翻看原作品与制作资源',target:{accountId:channel.accountId,videoTarget:t}}})}
+ for(const m of f.video?.marketing??[]){const channel=f.video!.channels.find(c=>c.id===m.channelId);if(m.completedAt&&channel)add({id:'video-marketing:'+m.id,date:m.completedAt,title:'这份原视频推广已实际结束',line:'结束的是原推广任务；实际询价仍须核对、显选，不记作客户成交或收入。',sourceRefs:[{kind:'marketing',id:m.id,date:m.completedAt},{kind:'job',id:m.jobId,date:m.completedAt}],inspect:{screen:'video',label:'翻看这份原推广与询价',target:{accountId:channel.accountId,videoTarget:{channelId:channel.id,marketingId:m.id}}}})}
+ for(const c of f.video?.contracts??[]){const channel=f.video!.channels.find(x=>x.id===c.channelId);if(!channel)continue;const target={accountId:channel.accountId,videoTarget:{channelId:channel.id,workId:c.workId,contractId:c.id}}
+  if(c.reviewedAt)add({id:'video-review:'+c.id+':'+c.reviewedAt,date:c.reviewedAt,title:'原视频商单留下客户复核记录',line:'复核日期来自原合同；提交、认可、应收和实际回款没有合并。',sourceRefs:[{kind:'contract',id:c.id,date:c.reviewedAt}],inspect:{screen:'video',label:'翻看原客户反馈与条款',target}})
+  if(c.settledAt){const payments=w.finance.find(a=>a.accountId===channel.accountId)?.transactions.filter(tx=>tx.date===c.settledAt&&tx.amountFen>0&&(tx.contractId===c.id||tx.sourceId===c.id))??[];add({id:'video-paid:'+c.id,date:c.settledAt,title:'这份视频商单已登记实际结算',line:payments.length?`本次原收款流水合计${moneyText(payments.reduce((n,tx)=>n+tx.amountFen,0))}；原预款、制作成本及费用另列。${c.paidCase?'':'原账仍有未付责任。'}`:'原合同已记录结算；实际预款、余款及费用逐项以原账核对，不按余额差补收入。',sourceRefs:[{kind:'contract',id:c.id,date:c.settledAt},...payments.map(tx=>({kind:'payment',id:tx.id,date:tx.date}))],inspect:{screen:'video',label:'翻看这份原单的结算与费用',target}})}
+ }
  allNodes.sort((a,b)=>b.date.localeCompare(a.date)||a.id.localeCompare(b.id))
  const nodes:SeasonEchoNode[]=[],kinds=new Set<string>()
  for(const node of allNodes){const kind=node.sourceRefs[0]?.kind??node.id;if(!kinds.has(kind)){nodes.push(node);kinds.add(kind)}if(nodes.length===3)break}

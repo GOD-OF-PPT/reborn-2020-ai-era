@@ -1,0 +1,44 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/VideoSceneChoice.reselect.test.tsx (1 test | 1 failed) 1380ms
+   × keeps the confirmed account and both drafts until a different account is explicitly chosen 1378ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  20:13:00
+   Duration  2.71s (tests 58%, import 24%, transform 19%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/VideoSceneChoice.reselect.test.tsx > keeps the confirmed account and both drafts until a different account is explicitly chosen
+AssertionError: expected { …(12) } to deeply equal { …(12) }
+
+- Expected
++ Received
+
+@@ -1,9 +1,9 @@
+  {
+-   "channelId": "vid:e9e077883ea29ef6fc0c7355135dadfd",
+-   "clientId": "unsubmitted-client-a",
+-   "cohortId": "unsubmitted-cohort-a",
++   "channelId": "vid:d1113b59eb1a30a12dd6f366dfee95bb",
++   "clientId": "",
++   "cohortId": "",
+    "label": true,
+    "materialId": "original",
+    "modeId": "manual",
+    "monetization": "none",
+    "name": "甲草稿",
+
+ ❯ src/ui/VideoSceneChoice.reselect.test.tsx:74:55
+     72|   render();click('翻开视频制作与客户约定');click('重新选择账号');previewB()
+     73|   expect(chosen).toEqual([])
+     74|   expect(memory.read(view.runId,a.accountId,targetA)).toEqual(draftA)
+       |                                                       ^
+     75|   expect(memory.read(view.runId,b.accountId,targetB)).toEqual(draftB)
+     76|   click('先合上，保留草稿');click('翻开视频制作与客户约定')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

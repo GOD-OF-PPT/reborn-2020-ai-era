@@ -1,0 +1,1 @@
+纯模型范围：video-scene-progress及测试、player-thread及测试、season-thread及测试、season-focus-preference及测试，可新增video-player-thread模块；不改App或art UI，不改core/schema。明确run/account/business/channel/work/contract和marketing身份，targeted与legacy分开，保存/坏原文/旧v1保留；strict与定向回归，无Git/浏览器/兼容。

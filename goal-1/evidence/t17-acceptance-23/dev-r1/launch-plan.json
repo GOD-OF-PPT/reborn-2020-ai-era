@@ -1,0 +1,42 @@
+{
+  "at": "2026-10-23T12:13:00.941Z",
+  "cwd": "/Users/gordon/githome/reborn-2020-ai-era",
+  "port": 5341,
+  "host": "127.0.0.1",
+  "executable": "rtk",
+  "argv": [
+    "proxy",
+    "npm",
+    "run",
+    "dev",
+    "--",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "5341",
+    "--strictPort"
+  ],
+  "log": "/Users/gordon/githome/reborn-2020-ai-era/.delivery/t17-s3-v1-dev-r1-http.log",
+  "portBefore": {
+    "command": [
+      "rtk",
+      "proxy",
+      "lsof",
+      "-nP",
+      "-iTCP:5341",
+      "-sTCP:LISTEN"
+    ],
+    "exitCode": 1,
+    "stdout": "",
+    "interpretation": "no listener observed"
+  },
+  "seam": {
+    "source": "src/application/browser-game.ts",
+    "devOnly": true,
+    "query": "storageTest=abort-video",
+    "database": "reborn-2020-t10-video-abort-validation",
+    "predicate": "saved.video.works.length > 0",
+    "fault": "one shot after heads.put success; actual readwrite transaction abort",
+    "note": "rev53 already contains a manual work, so importing it may consume this seam; no database operation was performed by this launch preparation"
+  }
+}

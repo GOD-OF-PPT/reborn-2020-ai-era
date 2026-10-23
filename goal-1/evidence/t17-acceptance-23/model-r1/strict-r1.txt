@@ -1,0 +1,20 @@
+[96msrc/ui/video-player-thread.ts[0m:[93m46[0m:[93m8[0m - [91merror[0m[90m TS2322: [0mType '{ readonly kind: "settlement" | "marketing" | "contract" | "job" | "payment" | "publication"; readonly id: string; readonly date: string | null; }[]' is not assignable to type 'ThreadResultRef[]'.
+  Type '{ readonly kind: "settlement" | "marketing" | "contract" | "job" | "payment" | "publication"; readonly id: string; readonly date: string | null; }' is not assignable to type 'ThreadResultRef'.
+    Types of property 'kind' are incompatible.
+      Type '"settlement" | "marketing" | "contract" | "job" | "payment" | "publication"' is not assignable to type '"settlement" | "fill" | "promise" | "research" | "contract" | "job" | "payroll" | "payment"'.
+        Type '"marketing"' is not assignable to type '"settlement" | "fill" | "promise" | "research" | "contract" | "job" | "payroll" | "payment"'.
+
+[7m46[0m  const resultRefs:PlayerThreadView['resultRefs'][number][]=progress.resultRefs.filter((r):r is PlayerThreadView['resultRefs'][number]=>['job','contract','payment','settlement'].includes(r.kind))
+[7m  [0m [91m       ~~~~~~~~~~[0m
+[96msrc/ui/video-player-thread.ts[0m:[93m46[0m:[93m96[0m - [91merror[0m[90m TS2677: [0mA type predicate's type must be assignable to its parameter's type.
+  Type 'ThreadResultRef' is not assignable to type '{ readonly kind: "settlement" | "marketing" | "contract" | "job" | "payment" | "publication"; readonly id: string; readonly date: string | null; }'.
+    Types of property 'kind' are incompatible.
+      Type '"settlement" | "fill" | "promise" | "research" | "contract" | "job" | "payroll" | "payment"' is not assignable to type '"settlement" | "marketing" | "contract" | "job" | "payment" | "publication"'.
+        Type '"fill"' is not assignable to type '"settlement" | "marketing" | "contract" | "job" | "payment" | "publication"'.
+
+[7m46[0m  const resultRefs:PlayerThreadView['resultRefs'][number][]=progress.resultRefs.filter((r):r is PlayerThreadView['resultRefs'][number]=>['job','contract','payment','settlement'].includes(r.kind))
+[7m  [0m [91m                                                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/ui/video-scene-progress.ts[0m:[93m111[0m:[93m50[0m - [91merror[0m[90m TS6133: [0m'date' is declared but its value is never read.
+
+[7m111[0m function focusedVideoScene(video:VideoProjection,date:string,target:VideoSceneTarget):VideoSceneProgress{
+[7m   [0m [91m                                                 ~~~~[0m

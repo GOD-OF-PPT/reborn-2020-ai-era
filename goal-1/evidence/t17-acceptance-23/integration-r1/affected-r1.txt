@@ -1,0 +1,34 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/ui/App.test.tsx src/ui/App.preparation-save.test.tsx src/ui/App.season-focus.test.tsx src/ui/App.video-focus.test.tsx src/ui/opening-record-targets.test.tsx src/ui/RoomMoment.test.tsx src/ui/CinematicRoom.test.tsx src/ui/NarrativeScene.test.tsx src/ui/SceneEcho.test.tsx src/ui/SeasonRecollection.test.tsx src/ui/scene-play.test.tsx src/ui/video-target.test.tsx src/ui/video-threads.test.ts src/ui/VideoSceneChoice.test.tsx src/ui/video-command-details.test.tsx src/ui/confirmation-money.test.ts src/ui/scene-domain-results.test.ts src/ui/player-thread.test.ts src/ui/season-focus-preference.test.ts src/ui/season-thread.test.ts src/ui/video-scene-progress.test.ts --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/NarrativeScene.test.tsx (11 tests | 1 failed) 10285ms
+   × keeps actual first-order delivery ahead of video review and preserves read-only guards on the new scene action 1679ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/NarrativeScene.test.tsx > keeps actual first-order delivery ahead of video review and preserves read-only guards on the new scene action
+AssertionError: expected '<section class="narrative-scene narra…' to contain '核对并提交这份作品'
+
+Expected: "核对并提交这份作品"
+Received: "<section class="narrative-scene narrative-video" aria-label="场景中的选择"><header class="scene-title"><p class="scene-overline">2020-Q1 / 街角 / 有人需要的作品</p><h1 tabindex="-1">让一个念头，被人看见。</h1><p>2020年的第一步可以只是手工剪辑。制作、交付和客户回款，各有自己的时刻。</p></header><div tabindex="-1" class="screen-book scene-story-book" role="region" aria-label="眼前的选择 · 翻页阅读" data-page="1" data-pages="1"><div class="book-index"><span class="book-binding" aria-hidden="true">眼前的选择</span><span class="book-hint">选择一个念头，先看清再决定</span></div><div class="book-viewport" id="_R_7_"><div class="book-flow" style="transform:translateX(0px);animation-name:book-ink-even;--book-gap:48px"><div class="scene-choices" aria-label="这一幕可以做的事"><button type="button" class="scene-choice" data-interaction="plan" aria-label="选择账号与这次尝试"><span class="scene-choice-overline">准备这次选择</span><strong data-book-chapter="先选一个具体的内容账号">先选一个具体的内容账号</strong><span class="scene-choice-line">从手工制作开始，受众、作品和客户反馈分别发生。</span><span class="scene-choice-end">先选择，再核对真正的投入<span aria-hidden="true">→</span></span></button></div></div></div></div><footer class="scene-turn"><div><button type="button" class="scene-text-action">日历上的牵挂 ↗</button><button type="button" class="scene-text-action" aria-label="细看原作品、客户与资源">作品与客户 ↗</button></div><button type="button">先面对这份交付</button></footer></section>"
+
+ ❯ src/ui/NarrativeScene.test.tsx:176:20
+    174|   expect(features.workbench.progression.requiresDelivery).toBe(true)
+    175|   const priority=renderToStaticMarkup(<NarrativeScene {...h.p} view={v…
+    176|   expect(priority).toContain('核对并提交这份作品');expect(priority).not.toConta…
+       |                    ^
+    177|   expect((await h.controller.submit(h.controller.prepare('SubmitDelive…
+    178|   view=h.controller.snapshot.view!;features=view.features as unknown a…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 20 passed (21)
+      Tests  1 failed | 161 passed (162)
+   Start at  18:29:37
+   Duration  204.41s (tests 93%, import 6%, transform 1%)
+

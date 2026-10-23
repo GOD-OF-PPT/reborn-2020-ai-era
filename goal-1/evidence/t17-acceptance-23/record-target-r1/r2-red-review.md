@@ -1,0 +1,5 @@
+# R2保留与范围收口
+
+R2两文件6项：5过；新增124非Create历史整链case超出原30秒（实际同步52.8秒），只保红，不改时限。strict2为新测试把projectRun公共投影当完整PlayingView，缺features/saveStatus/busy/readOnly等7项；未硬断言或降strict。
+
+按根本轮尽快冻结指示，历史case通过实际GameController.importNew读取已审核完整Create的正常原整档，得到真实完整session view；只核其真实已完成返工/谈判job关联/原册与raw保持，不复活工作、不称本轮active日历或新的完整Create重放已过。active日历推广/制作及实际零修改正常结算另由新Create链已核。active返工/谈判两阶段仍明示待Chrome/后续实际公共过程核，不把0轮样本充覆盖。原52.8秒/TS红档保留，未重跑旧90/252矩阵。

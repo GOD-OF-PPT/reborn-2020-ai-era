@@ -1,0 +1,49 @@
+{
+  "at": "2026-10-23T12:47:26.439Z",
+  "authorization": "Explicit parent follow-up permits this read-only git cat-file; prior result remains unchanged.",
+  "argv": [
+    "rtk",
+    "proxy",
+    "git",
+    "cat-file",
+    "blob",
+    "f3633eedbbeba45fb8818afca89d744df3cbfaa7:goal-1/evidence/t17-s2-season-post-commit-01/sealed-evidence.json"
+  ],
+  "exitCode": 0,
+  "signal": null,
+  "durationMs": 76,
+  "openingCommit": "f3633eedbbeba45fb8818afca89d744df3cbfaa7",
+  "baseline": {
+    "path": "goal-1/evidence/t17-acceptance-23/source-baseline.json",
+    "bytes": 76131,
+    "sha256": "e7e604e2db20f25476c46341d3519875c4d33bd2b5a2efa4c9e1f7d6f1b10f2f",
+    "headMatches": true
+  },
+  "markerPath": "goal-1/evidence/t17-s2-season-post-commit-01/sealed-evidence.json",
+  "blob": {
+    "bytes": 4356,
+    "sha256": "e0c8d3fa7b3b540862995cd9ff115bbfaf157a17d65557a01694ee6bfd9bd75c",
+    "gitBlobOid": "9af4b1e0d1ea62da553ca6465f306193ec114742",
+    "expectedParentObservedOid": "9af4b1e0d1ea62da553ca6465f306193ec114742",
+    "oidMatches": true
+  },
+  "disk": {
+    "bytes": 4356,
+    "sha256": "e0c8d3fa7b3b540862995cd9ff115bbfaf157a17d65557a01694ee6bfd9bd75c",
+    "mode": 420
+  },
+  "rawBlobEqualsDisk": true,
+  "diskStableDuringRead": true,
+  "originalResult": {
+    "path": "goal-1/evidence/t17-acceptance-23/preservation-r2/result.json",
+    "bytes": 377011,
+    "sha256": "f056887a2c3e5e7debd91bc8eea90b4451b351e38def80980a482f7dd5472dca",
+    "unchanged": true
+  },
+  "limits": [
+    "Proves equality to the explicitly named S3 opening commit blob and to disk now, not all unobserved moments since seal creation.",
+    "No staging/commit/index/tree mutation. No other Git commands used by this addendum.",
+    "Git file mode is not a full historical filesystem permission record; disk mode is only observed."
+  ],
+  "passed": true
+}

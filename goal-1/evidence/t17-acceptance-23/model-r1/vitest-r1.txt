@@ -1,0 +1,89 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/season-thread.test.ts (13 tests | 2 failed) 65703ms
+   × keeps a normal earned video commission through real marketing, side work, client responses and separate collection 7006ms
+   × preserves original later-business pending and its complete responsibility set without stealing an explicit S2 focus 7647ms
+ ❯ src/ui/player-thread.test.ts (28 tests | 4 failed) 94523ms
+   × keeps the technical_employee actual first-order stages and atomic payment tied to one original contract 5153ms
+   × keeps the content_employee actual first-order stages and atomic payment tied to one original contract 5123ms
+   × lets a free life retain real work and salary without making it exclusive with the manual order 5603ms
+   × follows explicit saved first-order choices while work and time do not steal another intended object 5138ms
+
+ Test Files  2 failed | 2 passed (4)
+      Tests  6 failed | 59 passed (65)
+   Start at  17:35:17
+   Duration  96.56s (tests 96%, import 3%, transform 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/player-thread.test.ts > keeps the technical_employee actual first-order stages and atomic payment tied to one original contract
+ FAIL  src/ui/player-thread.test.ts > keeps the content_employee actual first-order stages and atomic payment tied to one original contract
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/player-thread.test.ts:53:60
+     51| })
+     52|
+     53| it.each(['technical_employee','content_employee'] as const)('keeps the…
+       |                                                            ^
+     54|  const h=await normal('first-'+background,'first_order',background)
+     55|  try{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  src/ui/player-thread.test.ts > lets a free life retain real work and salary without making it exclusive with the manual order
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/player-thread.test.ts:196:1
+    194| })
+    195|
+    196| it('lets a free life retain real work and salary without making it exc…
+       | ^
+    197|  const h=await normal('work')
+    198|  try{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  src/ui/player-thread.test.ts > follows explicit saved first-order choices while work and time do not steal another intended object
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/player-thread.test.ts:231:1
+    229| })
+    230|
+    231| it('follows explicit saved first-order choices while work and time do …
+       | ^
+    232|  const h=await normal('saved-focus')
+    233|  try{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  src/ui/season-thread.test.ts > keeps a normal earned video commission through real marketing, side work, client responses and separate collection
+AssertionError: expected 'production' to be 'settled' // Object.is equality
+
+Expected: "settled"
+Received: "production"
+
+ ❯ src/ui/season-thread.test.ts:80:23
+     78|   }
+     79|   const done=h.p().features.video!.contracts.find(c=>c.id===original.i…
+     80|   expect(done.status).toBe('settled');expect(done.paidCase).toBe(true)
+       |                       ^
+     81|   const raw=h.controller.exportSaved(),thread=playerThread(h.p(),focus…
+     82|   expect(thread).toMatchObject({stage:'video-settled',outcome:'actual'…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  src/ui/season-thread.test.ts > preserves original later-business pending and its complete responsibility set without stealing an explicit S2 focus
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/season-thread.test.ts:329:1
+    327| },20000)
+    328|
+    329| it('preserves original later-business pending and its complete respons…
+       | ^
+    330|  const h=await normal('legacy',retainedRelayRaw)
+    331|  try{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+

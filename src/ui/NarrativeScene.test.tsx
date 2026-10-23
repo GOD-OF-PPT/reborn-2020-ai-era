@@ -172,14 +172,15 @@ it('keeps actual first-order delivery ahead of video review and preserves read-o
   expect((await h.controller.submit(h.controller.prepare('AdvanceTime',{date:'2020-01-19'}))).status).toBe('saved')
   view=h.controller.snapshot.view!;features=view.features as unknown as PlayFeatures
   expect(features.workbench.progression.requiresDelivery).toBe(true)
-  const priority=renderToStaticMarkup(<NarrativeScene {...h.p} view={view} features={features} screen="video"/>)
-  expect(priority).toContain('核对并提交这份作品');expect(priority).not.toContain('人工核对作品1与使用说明')
+  const work=features.video!.works.find(work=>work.channelId===channel.id)!,videoTarget={channelId:channel.id,workId:work.id}
+  const priority=renderToStaticMarkup(<NarrativeScene {...h.p} view={view} features={features} screen="video" videoTarget={videoTarget}/>)
+  expect(priority).toContain('核对并提交这份作品');expect(priority).not.toContain('人工核对这一版')
   expect((await h.controller.submit(h.controller.prepare('SubmitDelivery',{contractId:features.firstOrder.contractId}))).status).toBe('saved')
   view=h.controller.snapshot.view!;features=view.features as unknown as PlayFeatures;const before=h.controller.exportSaved()
-  const actionable=renderToStaticMarkup(<NarrativeScene {...h.p} view={view} features={features} screen="video"/>)
-  expect(actionable).toContain('人工核对作品1与使用说明')
-  const readonly=renderToStaticMarkup(<NarrativeScene {...h.p} view={{...view,readOnly:true}} features={features} screen="video"/>)
-  expect(readonly.match(/<button[^>]*aria-label="人工核对作品1与使用说明"[^>]*>/)?.[0]).toContain('disabled=""')
+  const actionable=renderToStaticMarkup(<NarrativeScene {...h.p} view={view} features={features} screen="video" videoTarget={videoTarget}/>)
+  expect(actionable).toContain('人工核对这一版')
+  const readonly=renderToStaticMarkup(<NarrativeScene {...h.p} view={{...view,readOnly:true}} features={features} screen="video" videoTarget={videoTarget}/>)
+  expect(readonly.match(/<button[^>]*aria-label="人工核对这一版"[^>]*>/)?.[0]).toContain('disabled=""')
   expect(h.controller.exportSaved()).toBe(before)
  }finally{await h.controller.close();await h.store.close()}
 },20000)

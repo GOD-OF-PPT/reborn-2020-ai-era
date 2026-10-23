@@ -1,0 +1,48 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/video-scene-progress.test.ts (14 tests | 1 failed) 6314ms
+   × keeps an explicitly selected paid original contract after another real commission and a new quarter 847ms
+ ❯ src/ui/VideoSceneChoice.test.tsx (2 tests | 1 failed) 8619ms
+   × requires explicit current client, rights, resource and date, and keeps a real second-channel order through completion and exit 8611ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/VideoSceneChoice.test.tsx > requires explicit current client, rights, resource and date, and keeps a real second-channel order through completion and exit
+AssertionError: expected '<div class="command "><button type="b…' to contain '阅读与撤回未执行安排不另耗行动；推进本身不另耗行动，途中原费用照常发生'
+
+Expected: "阅读与撤回未执行安排不另耗行动；推进本身不另耗行动，途中原费用照常发生"
+Received: "<div class="command "><button type="button" class="" disabled="">核对这份作品的制作安排</button><small class="reason">本季行动点已不足。阅读、撤回未执行安排和推进时间仍然免费。</small></div>"
+
+ ❯ src/ui/VideoSceneChoice.test.tsx:81:58
+     79|   expect(denied.allowed).toBe(false);expect(denied.reasonCodes[0]).toB…
+     80|   const budget=renderToStaticMarkup(<CommandButton {...p()} {...sample…
+     81|   expect(budget).toContain('disabled=""');expect(budget).toContain('阅读…
+       |                                                          ^
+     82|   expect(budget).not.toContain('推进时间仍然免费');expect(controller.exportSav…
+     83|  }finally{await controller.close();await store.close()}
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/ui/video-scene-progress.test.ts > keeps an explicitly selected paid original contract after another real commission and a new quarter
+AssertionError: expected '2020-01-31登记原结算；报价¥3,000，原预款与余款分别入账。' to contain '原预款¥900'
+
+Expected: "原预款¥900"
+Received: "2020-01-31登记原结算；报价¥3,000，原预款与余款分别入账。"
+
+ ❯ src/ui/video-scene-progress.test.ts:99:17
+     97|  expect(p).toMatchObject({stage:'video-settled',outcome:'actual',targe…
+     98|  expect(h.view().contracts.find(row=>row.id===c.id)).toMatchObject({pr…
+     99|  expect(p.line).toContain('原预款¥900');expect(p.line).toContain('本次余款¥2,…
+       |                 ^
+    100|  expect(p.choice.line).toContain('原费用¥150');expect(p.choice.line).toCo…
+    101|  // Only the public unpaid flag differs; this is a display boundary, n…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  2 failed | 14 passed (16)
+   Start at  20:47:09
+   Duration  10.95s (tests 81%, import 10%, transform 8%)
+

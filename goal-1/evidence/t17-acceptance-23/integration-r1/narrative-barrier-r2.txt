@@ -1,0 +1,34 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/ui/NarrativeScene.test.tsx --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/NarrativeScene.test.tsx (11 tests | 1 failed) 10602ms
+   × keeps actual first-order delivery ahead of video review and preserves read-only guards on the new scene action 2227ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/NarrativeScene.test.tsx > keeps actual first-order delivery ahead of video review and preserves read-only guards on the new scene action
+AssertionError: expected '<section class="narrative-scene narra…' to contain '人工核对作品1与使用说明'
+
+Expected: "人工核对作品1与使用说明"
+Received: "<section class="narrative-scene narrative-video" aria-label="场景中的选择"><header class="scene-title"><p class="scene-overline">2020-Q1 / 街角 / 有人需要的作品</p><h1 tabindex="-1">先选一个具体的账号和受众。</h1><p>新客户必须来自真实形成的受众，不能由入口创造。</p></header><div tabindex="-1" class="screen-book scene-story-book" role="region" aria-label="眼前的选择 · 翻页阅读" data-page="1" data-pages="1"><div class="book-index"><span class="book-binding" aria-hidden="true">眼前的选择</span><span class="book-hint">选择一个念头，先看清再决定</span></div><div class="book-viewport" id="_R_7_"><div class="book-flow" style="transform:translateX(0px);animation-name:book-ink-even;--book-gap:48px"><div class="scene-choices" aria-label="这一幕可以做的事"><button type="button" class="scene-choice" data-interaction="plan" aria-label="选择视频账号与准备"><span class="scene-choice-overline">准备这次选择</span><strong data-book-chapter="准备这一份真实视频尝试">准备这一份真实视频尝试</strong><span class="scene-choice-line">账号、受众、制作方式、素材、资源与日期仍由你选择；原资格沿真实年代与批准。</span><span class="scene-choice-end">先选择，再核对真正的投入<span aria-hidden="true">→</span></span></button></div></div></div></div><footer class="scene-turn"><div><button type="button" class="scene-text-action">日历上的牵挂 ↗</button><button type="button" class="scene-text-action" aria-label="细看原作品、客户与资源">作品与客户 ↗</button></div><div class="clock-advance"><div class="command clock-review"><button type="button" class="" aria-label="核对后推进 · 2020-01-20"><span>先核对 ↗</span></button></div><div class="command clock-main"><button type="button" class="" aria-label="让日子向前 · 2020-01-20"><span>让日子向前 · 2020-01-20</span><kbd aria-hidden="true">Space</kbd></button></div></div></footer></section>"
+
+ ❯ src/ui/NarrativeScene.test.tsx:180:22
+    178|   view=h.controller.snapshot.view!;features=view.features as unknown a…
+    179|   const actionable=renderToStaticMarkup(<NarrativeScene {...h.p} view=…
+    180|   expect(actionable).toContain('人工核对作品1与使用说明')
+       |                      ^
+    181|   const readonly=renderToStaticMarkup(<NarrativeScene {...h.p} view={{…
+    182|   expect(readonly.match(/<button[^>]*aria-label="人工核对作品1与使用说明"[^>]*>/)…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 10 passed (11)
+   Start at  18:34:40
+   Duration  12.89s (tests 85%, transform 8%, import 7%)
+

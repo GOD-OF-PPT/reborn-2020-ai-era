@@ -1,0 +1,7 @@
+# S2post marker开工提交锚补充
+
+根追加明确只读Git授权后，实际执行原开工提交 f3633eedbbeba45fb8818afca89d744df3cbfaa7:goal-1/evidence/t17-s2-season-post-commit-01/sealed-evidence.json 的 git cat-file blob，exit0。
+
+该原提交blob为4356B，SHA256 e0c8d3fa7b3b540862995cd9ff115bbfaf157a17d65557a01694ee6bfd9bd75c，原Git blob OID 9af4b1e0d1ea62da553ca6465f306193ec114742，与根所读9af4b1e0d1ea62da553ca6465f306193ec114742一致；输出完整原字节已保存s2-post-opening-commit-marker.json。Buffer.equals实核该blob与当前磁盘全字节相同，磁盘本次前后也同。
+
+因此当前marker可准确说“与S3开工已提交blob一致”。原result/readback关于当时尚未找到独立锚的结论与SHA保持原身份，未改写；本追加使用新提供的提交历史锚闭合开工时点身份，不扩称其他未采证时刻都已核。没有stage/commit或任何Git变更；磁盘mode420仅当前观察，不将Git100644冒作完整历史filesystem mode。

@@ -1,0 +1,1 @@
+R3 final owned UI check after same-channel explicit new-attempt bookmark transfer and stale-view/resource copy. R1 failed source/log retained; R2 original completion condition correction passed2/2 with unchanged30s test timeout. Root owns integration and actual Chrome.

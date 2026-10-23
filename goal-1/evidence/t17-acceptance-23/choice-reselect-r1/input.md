@@ -1,0 +1,1 @@
+请尽快确认 A→B 未确认重选的 bug；如独立读已确认，授权你只对 VideoSceneChoice.tsx/相应测试做必要最小修复，先保留 R6 原源/红 reproducer 于 root23/choice-reselect-r1（guard），不得改 rules 等；原修饰和所有草稿功能保留。写新绿+严格类型日志，报告全部变化/限制，不 stage/commit。我同时继续当前5340 R6已保存54的AI新单；后续会统一R7构建实际复验。

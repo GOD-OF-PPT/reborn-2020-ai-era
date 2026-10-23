@@ -1,0 +1,103 @@
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-23/reading-r1/before/CommandButton.tsx	2026-10-23 20:45:32
++++ /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-23/reading-r1/after/CommandButton.tsx	2026-10-23 20:49:23
+@@ -2,8 +2,8 @@
+ import type {ReactNode} from 'react'
+ import { reasonText } from './game-text.ts'
+ import {journeyIntent} from './journey-intent.ts'
+-export function CommandButton({controller,view,request,kind,payload,label,confirm=false,primary=false,children,className='',showReason=true}:{controller:GamePanelProps['controller'];view:GamePanelProps['view'];request:GamePanelProps['request'];kind:string;payload:unknown;label:string;confirm?:boolean;primary?:boolean;children?:ReactNode;className?:string;showReason?:boolean}){
++export function CommandButton({controller,view,request,kind,payload,label,confirm=false,primary=false,children,className='',showReason=true,reasonText:displayReason=reasonText}:{controller:GamePanelProps['controller'];view:GamePanelProps['view'];request:GamePanelProps['request'];kind:string;payload:unknown;label:string;confirm?:boolean;primary?:boolean;children?:ReactNode;className?:string;showReason?:boolean;reasonText?:(code:string)=>string}){
+  const intent=journeyIntent(view,kind,payload,label,confirm),preview=controller.preview({runId:view.runId,actorId:'player',commandId:'display-preview',expectedRevision:view.revision,kind:intent.kind,payload:intent.payload})
+  const disabled=!preview.allowed||view.busy||view.hasCandidate||view.readOnly||view.saveStatus==='conflict'
+- return <div className={'command '+className}><button type="button" className={primary?'primary':''} aria-label={children?intent.label:undefined} disabled={disabled} onClick={()=>request(intent.kind,intent.payload,intent.label,intent.confirm)}>{children??intent.label}</button>{showReason&&!preview.allowed&&preview.reasonCodes[0]?<small className="reason">{reasonText(preview.reasonCodes[0])}</small>:null}</div>
++ return <div className={'command '+className}><button type="button" className={primary?'primary':''} aria-label={children?intent.label:undefined} disabled={disabled} onClick={()=>request(intent.kind,intent.payload,intent.label,intent.confirm)}>{children??intent.label}</button>{showReason&&!preview.allowed&&preview.reasonCodes[0]?<small className="reason">{displayReason(preview.reasonCodes[0])}</small>:null}</div>
+ }
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-23/reading-r1/before/VideoSceneChoice.tsx	2026-10-23 20:44:52
++++ /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-23/reading-r1/after/VideoSceneChoice.tsx	2026-10-23 20:49:23
+@@ -9,7 +9,7 @@
+ import {playableAdvanceDate} from '../application/playable-advance.ts'
+ import {addDays,isoDate} from '../core/calendar.ts'
+ import {VIDEO_JOBS} from '../content/video.ts'
+-import {moneyText,playableThrough,lifecycleText} from './game-text.ts'
++import {moneyText,playableThrough,lifecycleText,reasonText} from './game-text.ts'
+ import './video-play.css'
+ 
+ export type VideoChoiceAction='channel'|'marketing'|'sample'|'commission'|'rework'|'price'|'scope'|'publish'
+@@ -20,6 +20,11 @@
+ const segments=[['ai_learners','学习AI的普通人'],['local_merchants','本地商家'],['lifestyle','生活方式受众']] as const
+ const actions:Record<VideoChoiceAction,string>={channel:'创建这个内容账号',marketing:'核对这次受众调研与推广',sample:'核对这份作品的制作安排',commission:'核对并接下这位客户的委托',rework:'核对这一版的校正或返工',price:'核对额外报价谈判',scope:'核对缩小范围谈判',publish:'核对本次发布'}
+ 
++/** Only presentation changes; the original error code and command guard remain intact. */
++export function videoSceneReasonText(code:string):string{
++ return code==='INSUFFICIENT_ACTION_POINTS'?'本季行动点已不足。阅读与撤回未执行安排不另耗行动；推进本身不另耗行动，途中原费用照常发生。':reasonText(code)
++}
++
+ /** Browsing a tool is not a failed command; describe only its already public prerequisites. */
+ export function videoModeCaption(reasonCodes:readonly string[]):string{
+  const era=reasonCodes.some(code=>code==='CAPABILITY_NOT_YET_AVAILABLE'||code==='WORLD_RELEASE_NOT_OCCURRED')
+@@ -146,7 +151,7 @@
+  }
+  const inspect=()=>{setOpen(false);onInspect?.(currentTarget)}
+  const request:GamePanelProps['request']=(kind,payload,label,confirm)=>{if(videoSceneSubmissionLock(p,blockedReason)||videoSceneContextReason(p,currentTarget)||progress?.invalidReason)return;setOpen(false);p.request(kind,payload,label,confirm)}
+- const submit=(command:VideoChoiceCommand)=>lock?<button type="button" disabled>{command.label}</button>:<CommandButton {...p} request={request} {...command} primary/>
++ const submit=(command:VideoChoiceCommand)=>lock?<button type="button" disabled>{command.label}</button>:<CommandButton {...p} request={request} {...command} reasonText={videoSceneReasonText} primary/>
+  const selectAction=(next:VideoChoiceAction,nextPage:Page)=>{if(channel&&(next==='sample'||next==='marketing')&&!chooseTarget({channelId:channel.id,section:'making'},true))return;setAction(next);setPage(nextPage)}
+  const next=()=>{if(page==='clients'&&channel&&!chooseTarget({channelId:channel.id,section:'leads'},true))return;setPage(page==='product'||page==='clients'?'mode':page==='mode'?'material':'schedule')}
+  const validClient=channel?.leads.some(l=>l.personId===draft.clientId&&l.cohortId===draft.cohortId)
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-23/reading-r1/before/video-scene-progress.ts	2026-10-23 20:44:52
++++ /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-23/reading-r1/after/video-scene-progress.ts	2026-10-23 20:49:23
+@@ -124,7 +124,11 @@
+  }
+  const work=v.works.find(w=>w.id===t.workId),contract=v.contracts.find(c=>c.id===t.contractId)
+  if(contract?.status==='cancelled')return result(scene('video-cancelled','这份原商单，已经退出。','原作品、实际成本和退款/欠款仍按原账保留。','退出不是客户验收或成功回款；下一份作品仍须新投入。','翻看原退出与费用','non-success'))
+- if(contract?.status==='settled')return result({...scene('video-settled','这笔原商单，已经实际结算。',`${contract.settledAt}登记原结算；报价${moneyText(contract.priceFen)}，原预款与余款分别入账。`,contract.paidCase?'原费用已有依据；下一次选择仍由你决定，不会自动换成另一单。':'款项已结算，原账仍有未付费用；不能把这项责任藏在成功提示后。','翻看这份原单的实际结算','actual'),resultRefs:[{kind:'contract',id:contract.id,date:contract.settledAt}]})
++ if(contract?.status==='settled'){
++  const feeFen=Number(BigInt(contract.priceFen)*BigInt(contract.feeBps)/10000n)
++  const feeState=!contract.feePosted?'费用尚未登记，须核对原账，不能说已经付清。':contract.paidCase?'本单费用已付，已形成已付案例。':'原账仍有未付费用；不能把这项责任藏在结算提示后。'
++  return result({...scene('video-settled','这笔原商单，已经实际结算。',`原预款${moneyText(contract.prepaymentFen)}于${contract.acceptedAt}入账；本次余款${moneyText(contract.priceFen-contract.prepaymentFen)}于${contract.settledAt}实际收取（原报价${moneyText(contract.priceFen)}）。`,`原费用${moneyText(feeFen)}（${contract.feeBps/100}%）${contract.feePosted?'已登记':'尚待登记'}。${feeState}下一次选择仍由你决定，不会自动换成另一单。`,'翻看这份原单的实际结算','actual'),resultRefs:[{kind:'contract',id:contract.id,date:contract.settledAt}]})
++ }
+  if(contract?.status==='review')return wait(scene('video-client-review','这一版已发出，等客户真实回答。','亲手提交与客户验收分别发生。',`${contract.submittedAt}已提交；报价、预款保护及原费用仍按原账。`,'查看原提交与条款','pending'),addDays(contract.submittedAt!,v.catalog.commercial.reviewDays),'等这份原商单的客户反馈')
+  if(contract?.status==='delivered')return wait(scene('video-payment-wait','客户验收了，余款仍在路上。','实际验收已经发生，尚未把应收当作可花现金。',`原付款日${contract.paymentAt}；原${contract.feeBps/100}%费用按本单条款与原账核对。`,'翻看本单验收与应收','pending'),contract.paymentAt!,'等这份原商单的实际回款')
+  if(contract?.status==='negotiating')return result(scene('video-negotiating','条件已提出，等原谈判任务反馈。','谈判可能失败，旧义务没有消失。','原资源、日期和已耗行动继续保留，实际完成日沿原任务。','查看原谈判任务','pending'))
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-23/reading-r1/before/VideoSceneChoice.test.tsx	2026-10-23 20:44:52
++++ /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-23/reading-r1/after/VideoSceneChoice.test.tsx	2026-10-23 20:49:23
+@@ -6,7 +6,8 @@
+ import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+ import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
+ import type {GamePanelProps,PlayFeatures} from './game-types.ts'
+-import {VideoSceneChoice,VideoSceneRecord,videoDraftCommand,videoSceneSubmissionLock,videoSceneBookmarkLock,videoSceneContextReason,type VideoSceneDraft} from './VideoSceneChoice.tsx'
++import {VideoSceneChoice,VideoSceneRecord,videoDraftCommand,videoSceneSubmissionLock,videoSceneBookmarkLock,videoSceneContextReason,videoSceneReasonText,type VideoSceneDraft} from './VideoSceneChoice.tsx'
++import {CommandButton} from './CommandButton.tsx'
+ import {OpeningObject} from './OpeningObject.tsx'
+ 
+ const noWrite=()=>{throw Error('VIDEO_DISPLAY_MUST_NOT_WRITE')}
+@@ -71,6 +72,14 @@
+   await send('ExitVideoCommission',{contractId:contract.id})
+   const exitedBefore=controller.exportSaved(),exited=renderToStaticMarkup(<VideoSceneRecord p={p()} target={workTarget}/>)
+   expect(exited).toContain('本单已经退出');expect(exited).toContain('退款责任与口碑变化');expect(exited).not.toContain('已形成已付案例');expect(controller.exportSaved()).toBe(exitedBefore)
++  await send('WorkQuarter',{})
++  const exhaustedBefore=controller.exportSaved(),sample=videoDraftCommand(p(),{...draft,startAt:p().view.date,productId:'hotspot'},'sample',{channelId:channel.id,section:'making'})!
++  expect(sample).not.toBeNull()
++  const denied=controller.preview(controller.prepare(sample.kind,sample.payload))
++  expect(denied.allowed).toBe(false);expect(denied.reasonCodes[0]).toBe('INSUFFICIENT_ACTION_POINTS')
++  const budget=renderToStaticMarkup(<CommandButton {...p()} {...sample} reasonText={videoSceneReasonText}/>)
++  expect(budget).toContain('disabled=""');expect(budget).toContain('阅读与撤回未执行安排不另耗行动；推进本身不另耗行动，途中原费用照常发生')
++  expect(budget).not.toContain('推进时间仍然免费');expect(controller.exportSaved()).toBe(exhaustedBefore)
+  }finally{await controller.close();await store.close()}
+ },30000)
+ 
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-23/reading-r1/before/video-scene-progress.test.ts	2026-10-23 20:44:52
++++ /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-23/reading-r1/after/video-scene-progress.test.ts	2026-10-23 20:49:23
+@@ -95,6 +95,13 @@
+  h.send('AcceptVideoCommission',{channelId:channel.id,cohortId:cohort.id,clientId:cohort.qualifiedMembers[0],modeId:'manual',materialId:'original',resources:['player-production'],startAt:h.run.timeline.cursor.date})
+  const raw=h.f.codec.export(h.run),p=videoSceneProgress(h.view(),'2020-04-01',target)!
+  expect(p).toMatchObject({stage:'video-settled',outcome:'actual',target,resultRefs:[{kind:'contract',id:c.id,date:paymentAt}]})
++ expect(h.view().contracts.find(row=>row.id===c.id)).toMatchObject({priceFen:300000,prepaymentFen:90000,feeBps:500,feePosted:true,paidCase:true})
++ expect(p.line).toContain('原预款¥900');expect(p.line).toContain('本次余款¥2,100');expect(p.line).toContain(paymentAt)
++ expect(p.choice.line).toContain('原费用¥150');expect(p.choice.line).toContain('5%');expect(p.choice.line).toContain('已登记');expect(p.choice.line).toContain('已付案例')
++ // Only the public unpaid flag differs; this is a display boundary, not a fabricated saved history.
++ const unpaid={...h.view(),contracts:h.view().contracts.map(row=>row.id===c.id?{...row,paidCase:false}:row)}
++ const pendingFee=videoSceneProgress(unpaid,'2020-04-01',target)!
++ expect(pendingFee.choice.line).toContain('未付费用');expect(pendingFee.choice.line).not.toContain('已付案例');expect(pendingFee.choice.line).not.toContain('全部付清')
+  expect(p.command).toBeUndefined();expect(p.wait).toBeUndefined();expect(h.progress()!.target?.channelId).toBe(channel.id);expect(h.f.codec.export(h.run)).toBe(raw)
+ })
+ 

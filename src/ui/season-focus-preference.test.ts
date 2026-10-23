@@ -35,6 +35,25 @@ it('keeps run-separated UI identity records without storing game amounts, previe
  expect(raw).not.toMatch(/amount|cost|preview|receipt|result|stage/)
 })
 
+it('loads original v1 text unchanged and stores only a strict complete video identity in the same UI version',()=>{
+ const storage=new MemoryPreferences(),key=seasonFocusPreferenceKey(scope.runId),oldRaw=JSON.stringify(preference(),null,2)
+ storage.values.set(key,oldRaw);expect(loadSeasonFocusPreference(storage,scope)).toMatchObject({status:'loaded',raw:oldRaw});expect(storage.writes).toBe(0);expect(storage.values.get(key)).toBe(oldRaw)
+ const video:OpeningFocus={kind:'video',runId:scope.runId,accountId:'personal',businessId:'original-business',entityId:'original-contract',videoTarget:{channelId:'original-channel',workId:'original-work',contractId:'original-contract'}}
+ expect(saveSeasonFocusPreference(storage,preference({focus:video}),gate())).toMatchObject({status:'saved',record:{focus:video}})
+ expect(loadSeasonFocusPreference(storage,scope)).toMatchObject({status:'loaded',record:{focus:video}})
+ expect(saveSeasonFocusPreference(storage,preference({focus:{kind:'video',runId:scope.runId,accountId:'personal',entityId:null,videoTarget:null}}),gate()).status).toBe('saved')
+})
+
+it('preserves malformed video chains instead of completing them into another work or overwriting their text',()=>{
+ const storage=new MemoryPreferences(),key=seasonFocusPreferenceKey(scope.runId)
+ const video={kind:'video',runId:scope.runId,accountId:'personal',businessId:'business',entityId:'contract',videoTarget:{channelId:'channel',workId:'work',contractId:'contract'}}
+ for(const bad of [{...video,entityId:'work'},{...video,businessId:undefined},{...video,videoTarget:{channelId:'channel',contractId:'contract'}},{...video,videoTarget:{...video.videoTarget,amountFen:1}},{...video,videoTarget:{channelId:'',workId:'work',contractId:'contract'}},{...video,videoTarget:{...video.videoTarget,marketingId:'marketing'}},{...video,videoTarget:{channelId:'channel',workId:'contract',contractId:'contract'}}]){
+  const raw=JSON.stringify(preference({focus:bad as OpeningFocus}));storage.values.set(key,raw)
+  expect(loadSeasonFocusPreference(storage,scope)).toMatchObject({status:'invalid',reason:'invalid-record',raw});expect(saveSeasonFocusPreference(storage,preference(),gate())).toMatchObject({status:'preserved',raw});expect(storage.values.get(key)).toBe(raw)
+ }
+ expect(storage.writes).toBe(0)
+})
+
 it('rejects unsupported or nonidentity fields and preserves each original string without cleanup or overwrite',()=>{
  const storage=new MemoryPreferences(),key=seasonFocusPreferenceKey(scope.runId)
  const records=[

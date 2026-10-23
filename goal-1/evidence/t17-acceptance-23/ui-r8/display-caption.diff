@@ -1,0 +1,58 @@
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-23/ui-r8/VideoSceneChoice.before.tsx	2026-10-23 18:53:39
++++ src/ui/VideoSceneChoice.tsx	2026-10-23 18:57:55
+@@ -5,8 +5,9 @@
+ import {ClockAdvance} from './ClockAdvance.tsx'
+ import {videoSceneProgress,type VideoSceneTarget} from './video-scene-progress.ts'
+ import {playableAdvanceDate} from '../application/playable-advance.ts'
+-import {isoDate} from '../core/calendar.ts'
+-import {moneyText,playableThrough,reasonText,lifecycleText} from './game-text.ts'
++import {addDays,isoDate} from '../core/calendar.ts'
++import {VIDEO_JOBS} from '../content/video.ts'
++import {moneyText,playableThrough,lifecycleText} from './game-text.ts'
+ import './video-play.css'
+ 
+ export type VideoChoiceAction='channel'|'marketing'|'sample'|'commission'|'rework'|'price'|'scope'|'publish'
+@@ -19,6 +20,31 @@
+ const segments=[['ai_learners','学习AI的普通人'],['local_merchants','本地商家'],['lifestyle','生活方式受众']] as const
+ const actions:Record<VideoChoiceAction,string>={channel:'创建这个内容账号',marketing:'核对这次受众调研与推广',sample:'核对这份作品的制作安排',commission:'核对并接下这位客户的委托',rework:'核对这一版的校正或返工',price:'核对额外报价谈判',scope:'核对缩小范围谈判',publish:'核对本次发布'}
+ 
++/** Browsing a tool is not a failed command; describe only its already public prerequisites. */
++export function videoModeCaption(reasonCodes:readonly string[]):string{
++ const era=reasonCodes.some(code=>code==='CAPABILITY_NOT_YET_AVAILABLE'||code==='WORLD_RELEASE_NOT_OCCURRED')
++ const access=reasonCodes.some(code=>code.startsWith('MISSING_ENTITLEMENT:'))
++ const unknown=reasonCodes.some(code=>code!=='CAPABILITY_NOT_YET_AVAILABLE'&&code!=='WORLD_RELEASE_NOT_OCCURRED'&&!code.startsWith('MISSING_ENTITLEMENT:'))
++ const lines:string[]=[]
++ if(era)lines.push('这项工具在当前年代尚未开放')
++ if(access)lines.push('使用前需先取得对应访问资格')
++ if(unknown)lines.push('其他使用条件请查看完整记录')
++ return lines.length?lines.join('；')+'。':'下一步核对资格、资源与开工日期。'
++}
++
++/** An estimate reads the selected original job; it never schedules or completes work. */
++export function videoScheduleCaption(draft:VideoSceneDraft,action:VideoChoiceAction,currentDate:string):string{
++ const jobId=action==='marketing'?'video-marketing':action==='rework'?'video-rework':action==='price'||action==='scope'?'video-negotiate':action==='commission'||action==='sample'?`video-make-${action==='commission'?'commercial':draft.productId}-${draft.modeId}-${draft.materialId}`:null
++ const job=VIDEO_JOBS.find(item=>item.id===jobId)
++ if(!job)return '请先选择本次制作方式与素材，再核对这次投入和预计完成日。'
++ if(!draft.resource||!draft.startAt)return '请先选择本次实际资源与开工日，再核对这次投入和预计完成日。'
++ let completeAt:string
++ try{isoDate(draft.startAt);if(draft.startAt<currentDate)return '草稿里的开工日已经过去，请先重新选择日期。';completeAt=addDays(draft.startAt,job.durationDays)}catch{return '请先选择有效的开工日期，再核对这次投入与预计完成日。'}
++ const label=action==='marketing'?'本次推广':action==='rework'?'本次校正或返工':action==='price'?'本次额外报价谈判':action==='scope'?'本次缩小范围谈判':'本次制作'
++ const boundary=action==='marketing'?'预计不等于实际完成；推广完成后才看询价，询价不是订单或收入。':action==='rework'?'素材校正与客户包含修改轮次分开计算。预计不等于实际完成；做完还须人工核对，验收与到账另记。':action==='price'||action==='scope'?'预计不等于实际完成；谈判可能失败，交付期限与已有费用继续。':'预计不等于实际完成；做完仍须人工核对，商单的客户验收、应收与实收分别发生。'
++ return `${label}直接成本${moneyText(job.costFen)} · ${job.actionPoints}点 · ${job.durationDays}日，预计${completeAt}完成。${draft.materialId==='licensed'&&(action==='commission'||action==='sample')?'已含本单授权素材费用。':''}${boundary}`
++}
++
+ /** A display gate supplements the original preview; it never grants a resource or permission. */
+ export function videoSceneBookmarkLock(p:GamePanelProps,blockedReason?:string|null):string|null{
+  if(blockedReason)return blockedReason
+@@ -153,9 +179,9 @@
+   {page==='objects'?<fieldset className="video-paper-choices"><legend>翻看已有作品与推广，不新增安排</legend>{records.map((r,i)=><label key={JSON.stringify(r)}><input type="radio" name={name+'record'} checked={JSON.stringify(recordPick)===JSON.stringify(r)} onChange={()=>setRecordPick(r)}/><span>{r.contractId?'商单及关联作品':r.marketingId?'受众推广':'样片'} {i+1}<small>{r.contractId?'接单日 '+(v?.contracts.find(contract=>contract.id===r.contractId)?.acceptedAt??'待核对'):r.marketingId?'安排日 '+(v?.marketing.find(marketing=>marketing.id===r.marketingId)?.job?.startAt??'待核对'):'开工日 '+(v?.works.find(work=>work.id===r.workId)?.production?.startAt??'待核对')}</small></span></label>)}{!records.length?<p>这个账号还没有作品或推广记录，可以返回选择第一次尝试。</p>:null}</fieldset>:null}
+   {page==='clients'?<><p>约定报价{moneyText(v?.catalog.commercial.priceFen??0)}；预款{moneyText(v?.catalog.commercial.prepaymentFen??0)}受保护，当期收入仍为¥0。条款包含{v?.catalog.commercial.includedRevisions}轮修改，验收与实收分别发生。</p><fieldset className="video-paper-choices"><legend>这次回应哪份询价</legend>{channel?.leads.map((lead,index)=><label key={lead.personId}><input type="radio" name={name+'client'} checked={draft.clientId===lead.personId&&draft.cohortId===lead.cohortId} onChange={()=>edit({clientId:lead.personId,cohortId:lead.cohortId})}/><span>客户询价 {index+1}<small>这份询价来自已有受众；接下后先安排制作，再等待客户反馈。</small></span></label>)}</fieldset>{!channel?.leads.length?<p>暂时没有可接的询价，可以先制作样片或了解受众需求。</p>:null}</>:null}
+   {page==='product'?<fieldset className="video-paper-choices"><legend>这一份样片的方向</legend>{[['hotspot','热点样片','较少制作投入，偏向曝光。'],['original_series','原创系列','较长制作，积累定向受众与原创作品。'],['commercial','商家样片','先做一份给商家看的样片；有询价后再决定接单。']].map(([id,label,line])=><label key={id}><input type="radio" name={name+'product'} checked={draft.productId===id} onChange={()=>edit({productId:id!})}/><span><strong>{label}</strong><small>{line}</small></span></label>)}</fieldset>:null}
+-  {page==='mode'?<fieldset className="video-paper-choices"><legend>选择制作方式，核对开放日期与所需权限</legend>{v?.modes.map(mode=><label key={mode.id}><input type="radio" name={name+'mode'} checked={draft.modeId===mode.id} onChange={()=>edit({modeId:mode.id})}/><span><strong>{mode.label}</strong><small>{mode.from}起；{mode.reasonCodes.length?mode.reasonCodes.map(reasonText).join('；'):'下一步核对资格、资源与开工日期。'}</small></span></label>)}</fieldset>:null}
++  {page==='mode'?<fieldset className="video-paper-choices"><legend>选择制作方式，核对开放日期与所需权限</legend>{v?.modes.map(mode=><label key={mode.id}><input type="radio" name={name+'mode'} checked={draft.modeId===mode.id} onChange={()=>edit({modeId:mode.id})}/><span><strong>{mode.label}</strong><small>{mode.from}起；{videoModeCaption(mode.reasonCodes)}</small></span></label>)}</fieldset>:null}
+   {page==='material'?<fieldset className="video-paper-choices"><legend>明确本次素材与权利来源</legend><label><input type="radio" name={name+'material'} checked={draft.materialId==='original'} onChange={()=>edit({materialId:'original'})}/><span>自行制作并保留来源<small>完成后仍须人工核对本版素材、权利与使用说明。</small></span></label><label><input type="radio" name={name+'material'} checked={draft.materialId==='licensed'} onChange={()=>edit({materialId:'licensed'})}/><span>购买本单授权素材<small>额外¥300；不赠与其他作品或未来用途授权。</small></span></label></fieldset>:null}
+-  {page==='schedule'?<><p className="video-paper-terms">{action==='marketing'?'推广¥600 · 1点 · 7日，结束才有实际受众反馈。':action==='rework'?'本次校正或返工¥300 · 1点 · 7日；素材校正与客户包含修改轮次分开计算。':action==='price'||action==='scope'?'本次谈判1点 · 3日，结果可能失败；交付约定与期限继续。':'手工热点¥600/7日，其余手工¥900/14日；图像辅助¥700/7日，生成视频¥600/5日，每次制作1点。所选本单授权另¥300。'}</p><label className="field">由谁留出实际制作时间<select value={draft.resource} onChange={e=>edit({resource:e.target.value})}><option value="">请明确选择本人或已有员工</option>{v?.resources.map(r=><option key={r.id} value={r.id}>{r.label}</option>)}</select></label>{draft.resource&&!v?.resources.some(r=>r.id===draft.resource)?<p className="video-paper-warning">之前选的制作资源已不可用，请重新选择谁来制作。</p>:null}<label className="field">这次从哪天开始<input type="date" min={p.view.date} max={p.view.phase==='epilogue'?p.view.date:playableThrough} value={draft.startAt} onChange={e=>edit({startAt:e.target.value})}/></label><button type="button" className="video-paper-direction" onClick={()=>edit({startAt:p.view.date})}>明确从今天 {p.view.date} 开始</button>{draft.startAt&&draft.startAt<p.view.date?<p className="video-paper-warning">草稿里的开工日已经过去，请重新选择日期。</p>:null}<p>{channel?.accountId==='personal'?'个人账户':p.features.workbench.routes.find(route=>route.accountId===channel?.accountId)?.name??'经营账户'}承担这次费用。继续前会核对资源是否冲突、共享四点、所需资格和完成日期。</p></>:null}
++  {page==='schedule'?<><p className="video-paper-terms">{videoScheduleCaption(draft,action,p.view.date)}</p><label className="field">由谁留出实际制作时间<select value={draft.resource} onChange={e=>edit({resource:e.target.value})}><option value="">请明确选择本人或已有员工</option>{v?.resources.map(r=><option key={r.id} value={r.id}>{r.label}</option>)}</select></label>{draft.resource&&!v?.resources.some(r=>r.id===draft.resource)?<p className="video-paper-warning">之前选的制作资源已不可用，请重新选择谁来制作。</p>:null}<label className="field">这次从哪天开始<input type="date" min={p.view.date} max={p.view.phase==='epilogue'?p.view.date:playableThrough} value={draft.startAt} onChange={e=>edit({startAt:e.target.value})}/></label><button type="button" className="video-paper-direction" onClick={()=>edit({startAt:p.view.date})}>明确从今天 {p.view.date} 开始</button>{draft.startAt&&draft.startAt<p.view.date?<p className="video-paper-warning">草稿里的开工日已经过去，请重新选择日期。</p>:null}<p>{channel?.accountId==='personal'?'个人账户':p.features.workbench.routes.find(route=>route.accountId===channel?.accountId)?.name??'经营账户'}承担这次费用。继续前会核对资源是否冲突、共享四点、所需资格和完成日期。</p></>:null}
+   {page==='publish'?<><fieldset className="video-paper-choices"><legend>明确本次发布方式</legend>{[['none','积累受众'],['ads','平台分成（需本次已有资格）'],['affiliate','带货（需本次已有资格）']].map(([id,label])=><label key={id}><input type="radio" name={name+'publish'} checked={draft.monetization===id} onChange={()=>edit({monetization:id!})}/><span>{label}</span></label>)}</fieldset><label className="video-paper-check"><input type="checkbox" checked={draft.label} onChange={e=>edit({label:e.target.checked})}/>为AI生成内容附合成标识；2025-09-01起按要求核对。</label><p>发布7日后才统计实际反馈。播放、询价、收入资格、应收和实际到账分别记录；发布不提前加钱。</p></>:null}
+   {page==='record'&&currentTarget?<><VideoSceneRecord p={p} target={currentTarget}/><div className="video-paper-directions">
+    {(work?.defectKnown===true&&work.corrections.length===0||contract?.status==='revision')?<button type="button" onClick={()=>selectAction('rework','schedule')}>安排有代价的校正或返工<small>¥300 · 1点 · 7日，再核对新的版本。</small></button>:null}

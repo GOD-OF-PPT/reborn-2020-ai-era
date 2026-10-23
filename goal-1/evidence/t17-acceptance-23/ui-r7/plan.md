@@ -1,0 +1,1 @@
+只改玩家可见文本与匿名询价序号/记录日期显示，原identity保在key/checked/onChange/payload。逐函数与执行属性实核桥接，保R6原绿与全部红档；运行必要轻量渲染，不重复normalchain。

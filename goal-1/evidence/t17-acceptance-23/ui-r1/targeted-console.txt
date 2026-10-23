@@ -1,0 +1,31 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/VideoSceneChoice.test.tsx (2 tests | 1 failed) 10494ms
+   × requires explicit current client, rights, resource and date, and keeps a real second-channel order through completion and exit 10480ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/VideoSceneChoice.test.tsx > requires explicit current client, rights, resource and date, and keeps a real second-channel order through completion and exit
+AssertionError: expected 'rejected' to be 'saved' // Object.is equality
+
+Expected: "saved"
+Received: "rejected"
+
+ ❯ send src/ui/VideoSceneChoice.test.tsx:18:124
+     16|  let id=0;const controller=new GameController({codec,store,locks:new M…
+     17|  const p=():GamePanelProps=>{const view=controller.snapshot.view!;retu…
+     18|  const send=async(kind:string,payload:unknown)=>expect((await controll…
+       |                                                                                                                            ^
+     19|  const advance=async(date:string)=>{for(let i=0;i<20;i++){
+     20|   const w=p().features.workbench
+ ❯ src/ui/VideoSceneChoice.test.tsx:53:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  17:35:43
+   Duration  14.69s (tests 74%, transform 14%, import 11%)
+

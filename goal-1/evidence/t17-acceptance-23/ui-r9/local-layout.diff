@@ -1,0 +1,49 @@
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-23/ui-r9/VideoSceneChoice.tsx.before	2026-10-23 19:09:35
++++ src/ui/VideoSceneChoice.tsx	2026-10-23 19:10:32
+@@ -170,7 +170,7 @@
+  </div>
+  return <>{children?children(activate):<button type="button" className="video-scene-open" onClick={()=>activate()}>翻开视频制作与客户约定 ↗</button>}{open?<Dialog title={title} className="opening-paper video-choice-paper" onClose={()=>setOpen(false)} footer={footer}>
+   <p className="video-paper-kicker">{p.view.date} · {channel?.name??'尚未选择账号'}</p>
+-  <p>先选好这次安排，再核对费用、时间与责任。翻页、填写和合上都不会接单或开工。</p>
++  <p className="video-paper-hint">填写、翻页和合上都不接单；投入仍需最后确认。</p>
+   {(action==='commission'||action==='sample')&&['mode','material','schedule'].includes(page)?<p className="video-paper-kicker">{action==='commission'?(validClient?'待确认 · 客户询价 '+((channel?.leads.findIndex(lead=>lead.personId===draft.clientId&&lead.cohortId===draft.cohortId)??-1)+1):'请重新选择询价客户'):'待确认样片 · '+(v?.catalog.products.find(product=>product.id===draft.productId)?.label??'尚未选择方向')}{draft.modeId?' · '+(v?.modes.find(mode=>mode.id===draft.modeId)?.label??'制作方式待核对'):''}{draft.materialId?' · '+(draft.materialId==='licensed'?'本单授权素材':'自行制作并保留来源'):''}</p>:null}
+   {lock?<p role="status" className="video-paper-warning">{lock}</p>:null}
+   {contextReason&&contextReason!==lock?<p className="video-paper-warning">{contextReason}</p>:null}
+@@ -182,7 +182,21 @@
+   {page==='product'?<fieldset className="video-paper-choices"><legend>这一份样片的方向</legend>{[['hotspot','热点样片','较少制作投入，偏向曝光。'],['original_series','原创系列','较长制作，积累定向受众与原创作品。'],['commercial','商家样片','先做一份给商家看的样片；有询价后再决定接单。']].map(([id,label,line])=><label key={id}><input type="radio" name={name+'product'} checked={draft.productId===id} onChange={()=>edit({productId:id!})}/><span><strong>{label}</strong><small>{line}</small></span></label>)}</fieldset>:null}
+   {page==='mode'?<fieldset className="video-paper-choices"><legend>选择制作方式，核对开放日期与所需权限</legend>{v?.modes.map(mode=><label key={mode.id}><input type="radio" name={name+'mode'} checked={draft.modeId===mode.id} onChange={()=>edit({modeId:mode.id})}/><span><strong>{mode.label}</strong><small>{mode.from}起；{videoModeCaption(mode.reasonCodes)}</small></span></label>)}</fieldset>:null}
+   {page==='material'?<fieldset className="video-paper-choices"><legend>明确本次素材与权利来源</legend><label><input type="radio" name={name+'material'} checked={draft.materialId==='original'} onChange={()=>edit({materialId:'original'})}/><span>自行制作并保留来源<small>完成后仍须人工核对本版素材、权利与使用说明。</small></span></label><label><input type="radio" name={name+'material'} checked={draft.materialId==='licensed'} onChange={()=>edit({materialId:'licensed'})}/><span>购买本单授权素材<small>额外¥300；不赠与其他作品或未来用途授权。</small></span></label></fieldset>:null}
+-  {page==='schedule'?<><p className="video-paper-terms">{videoScheduleCaption(draft,action,p.view.date)}</p><label className="field">由谁留出实际制作时间<select value={draft.resource} onChange={e=>edit({resource:e.target.value})}><option value="">请明确选择本人或已有员工</option>{v?.resources.map(r=><option key={r.id} value={r.id}>{r.label}</option>)}</select></label>{draft.resource&&!v?.resources.some(r=>r.id===draft.resource)?<p className="video-paper-warning">之前选的制作资源已不可用，请重新选择谁来制作。</p>:null}<label className="field">这次从哪天开始<input type="date" min={p.view.date} max={p.view.phase==='epilogue'?p.view.date:playableThrough} value={draft.startAt} onChange={e=>edit({startAt:e.target.value})}/></label><button type="button" className="video-paper-direction" onClick={()=>edit({startAt:p.view.date})}>明确从今天 {p.view.date} 开始</button>{draft.startAt&&draft.startAt<p.view.date?<p className="video-paper-warning">草稿里的开工日已经过去，请重新选择日期。</p>:null}<p>{channel?.accountId==='personal'?'个人账户':p.features.workbench.routes.find(route=>route.accountId===channel?.accountId)?.name??'经营账户'}承担这次费用。继续前会核对资源是否冲突、共享四点、所需资格和完成日期。</p></>:null}
++  {page==='schedule'?<>
++   <p className="video-paper-terms">{videoScheduleCaption(draft,action,p.view.date)}</p>
++   <div className="video-schedule-fields">
++    <div className="video-resource-field">
++     <label className="field">由谁留出实际制作时间<select value={draft.resource} onChange={e=>edit({resource:e.target.value})}><option value="">请明确选择本人或已有员工</option>{v?.resources.map(r=><option key={r.id} value={r.id}>{r.label}</option>)}</select></label>
++     {draft.resource&&!v?.resources.some(r=>r.id===draft.resource)?<p className="video-paper-warning">之前选的制作资源已不可用，请重新选择谁来制作。</p>:null}
++    </div>
++    <div className="video-date-field">
++     <label className="field">这次从哪天开始<input type="date" min={p.view.date} max={p.view.phase==='epilogue'?p.view.date:playableThrough} value={draft.startAt} onChange={e=>edit({startAt:e.target.value})}/></label>
++     <button type="button" className="video-paper-direction" onClick={()=>edit({startAt:p.view.date})}>明确从今天 {p.view.date} 开始</button>
++     {draft.startAt&&draft.startAt<p.view.date?<p className="video-paper-warning">草稿里的开工日已经过去，请重新选择日期。</p>:null}
++    </div>
++   </div>
++   <p className="video-schedule-account">{channel?.accountId==='personal'?'个人账户':p.features.workbench.routes.find(route=>route.accountId===channel?.accountId)?.name??'经营账户'}承担这次费用；继续前核对资源冲突、共享四点、资格与完成日期。</p>
++  </>:null}
+   {page==='publish'?<><fieldset className="video-paper-choices"><legend>明确本次发布方式</legend>{[['none','积累受众'],['ads','平台分成（需本次已有资格）'],['affiliate','带货（需本次已有资格）']].map(([id,label])=><label key={id}><input type="radio" name={name+'publish'} checked={draft.monetization===id} onChange={()=>edit({monetization:id!})}/><span>{label}</span></label>)}</fieldset><label className="video-paper-check"><input type="checkbox" checked={draft.label} onChange={e=>edit({label:e.target.checked})}/>为AI生成内容附合成标识；2025-09-01起按要求核对。</label><p>发布7日后才统计实际反馈。播放、询价、收入资格、应收和实际到账分别记录；发布不提前加钱。</p></>:null}
+   {page==='record'&&currentTarget?<><VideoSceneRecord p={p} target={currentTarget}/><div className="video-paper-directions">
+    {(work?.defectKnown===true&&work.corrections.length===0||contract?.status==='revision')?<button type="button" onClick={()=>selectAction('rework','schedule')}>安排有代价的校正或返工<small>¥300 · 1点 · 7日，再核对新的版本。</small></button>:null}
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-23/ui-r9/video-play.css.before	2026-10-23 19:09:35
++++ src/ui/video-play.css	2026-10-23 19:10:32
+@@ -16,6 +16,12 @@
+ .video-choice-paper .video-paper-warning{padding:10px 12px;border-left:2px solid #a56a45;background:#a07d510a;color:#7b5636;font:14px/1.85 var(--serif)}
+ .video-choice-paper .video-paper-receipt{padding:12px 0 12px 14px;border-left:3px double #8b8e59;color:#4f6245;font:15px/1.9 var(--serif)}
+ .video-choice-paper .video-paper-check{display:flex;align-items:flex-start;gap:12px;font:15px/1.9 var(--serif);color:#516449}
++.video-choice-paper .video-paper-hint{margin:6px 0}
++.video-choice-paper .video-schedule-fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px 24px;align-items:start;break-inside:avoid}
++.video-choice-paper .video-schedule-fields>div{min-width:0}
++.video-choice-paper .video-schedule-fields .field{margin:0}
++.video-choice-paper .video-date-field>.video-paper-direction{margin-top:6px;padding-block:7px}
++.video-choice-paper .video-schedule-account{margin:12px 0}
+ .cinema-app .video-choice-paper>.video-choice-footer{flex:none;display:flex;align-items:center;gap:12px 20px;flex-wrap:wrap;padding-top:14px;margin-top:12px;border-top:1px solid #ad986466}
+ .video-choice-footer>button,.video-choice-footer .command>button{padding:10px 14px;font:15px/1.8 var(--serif)}
+ .video-choice-footer .video-record-link{color:#4a6548;border:0;border-bottom:1px solid #9b9b6b;background:none;padding-inline:0}

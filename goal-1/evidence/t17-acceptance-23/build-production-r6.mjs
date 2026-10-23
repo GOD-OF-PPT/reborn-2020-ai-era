@@ -1,0 +1,22 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {createHash} from 'node:crypto';
+import {execFileSync,spawn} from 'node:child_process';
+import {assertBrowserEvidenceWritable} from '../../../scripts/browser_evidence_guard.mjs';
+const project=process.cwd(),parent=path.resolve('goal-1/evidence/t17-acceptance-23'),out=path.join(parent,'build-r6');
+assertBrowserEvidenceWritable(parent);await fs.mkdir(out);assertBrowserEvidenceWritable(out);
+const base=JSON.parse(await fs.readFile(path.join(parent,'source-baseline.json'),'utf8'));
+const paths=[...new Set([...base.files.map(f=>f.path),...execFileSync('rtk',['proxy','rg','--files','src'],{encoding:'utf8'}).trim().split('\n'),'assets/ui-redesign/cinematic/props/video-making-kit-v1.png'])].sort();
+const collect=async()=>{const rows=[];for(const p of paths){const stat=await fs.lstat(p);if(!stat.isFile()||stat.isSymbolicLink())throw Error('SOURCE_NOT_REGULAR:'+p);const raw=await fs.readFile(p);rows.push({path:p,bytes:raw.length,mode:stat.mode&511,sha256:createHash('sha256').update(raw).digest('hex')})}return rows};
+const before=await collect();
+await fs.writeFile(path.join(out,'source-before.json'),JSON.stringify({at:new Date().toISOString(),preexistingP3WorktreeIncluded:true,compatibilityDevelopmentOrTesting:0,files:before},null,2),{flag:'wx'});
+const delivery='.delivery/t17-s3-v1-r6';try{await fs.lstat(delivery);throw Error('DELIVERY_ALREADY_EXISTS')}catch(e){if(e.code!=='ENOENT')throw e}
+const args=['proxy','npm','run','build','--','--outDir',delivery];
+await fs.writeFile(path.join(out,'input.json'),JSON.stringify({cwd:project,argv:['rtk',...args],delivery,notes:'Current S3 source with retained uncommitted P3; not a committed whole-engine release'},null,2),{flag:'wx'});
+const stdout=await fs.open(path.join(out,'stdout.txt'),'wx'),stderr=await fs.open(path.join(out,'stderr.txt'),'wx');
+const start=Date.now(),child=spawn('rtk',args,{cwd:project,stdio:['ignore',stdout.fd,stderr.fd]});
+const terminal=await new Promise((resolve,reject)=>{child.on('error',reject);child.on('exit',(code,signal)=>resolve({code,signal}))});await stdout.close();await stderr.close();
+const after=await collect(),equal=JSON.stringify(before)===JSON.stringify(after);
+await fs.writeFile(path.join(out,'source-after.json'),JSON.stringify({at:new Date().toISOString(),files:after,equal},null,2),{flag:'wx'});
+await fs.writeFile(path.join(out,'terminal.json'),JSON.stringify({argv:['rtk',...args],pid:child.pid,durationMs:Date.now()-start,...terminal,sourceEqual:equal},null,2),{flag:'wx'});
+console.log({files:before.length,...terminal,sourceEqual:equal});if(terminal.code!==0||!equal)process.exitCode=1;

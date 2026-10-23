@@ -1,0 +1,56 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/video-target.test.tsx (2 tests | 2 failed) 13955ms
+   × opens the original second video channel and work while keeping every account and saved byte 3261ms
+   × maps real normal marketing, production, correction and negotiation jobs back to one public video object 10690ms
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  2 failed | 3 passed (5)
+   Start at  17:58:27
+   Duration  20.65s (tests 88%, import 8%, transform 4%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/video-target.test.tsx > opens the original second video channel and work while keeping every account and saved byte
+AssertionError: expected '<div class="stack-lg route-workspace …' not to contain ' selected=""'
+
+Expected: " selected="""
+Received: "<div class="stack-lg route-workspace video-workspace"><div class="route-introduction"><p class="eyebrow">内容与生意 · 本局模拟</p><h2>视频工作室</h2><p>先选择受众和产品，再投入制作、人工校正与权利核对。播放、询价、客户验收和实际到账分别记录。</p><details class="route-boundaries"><summary>年代、资格与本局模拟说明</summary><p class="field-help">2020年先做手工剪辑；图像辅助和生成视频按真实发布节点及本局资格开放。申请结果、客户、平台条款和收益都是虚构模拟，无现实账户或收入保证。</p></details></div><details class="panel"><summary>新建内容账号</summary><div class="form-grid"><label class="field">账号名称<input maxLength="60" value="我的内容账号"/></label><label class="field">受众<select><option value="ai_learners" selected="">学习AI的普通人</option><option value="local_merchants">本地商家</option><option value="lifestyle">生活方式受众</option></select></label></div><div class="command "><button type="button" class="primary">创建并启用内容账号</button></div><small>个人经营沿用同一账户和制作时间；新账号不会刷新同一批受众的购买资格。</small></details><fieldset><legend>选择当前账户已经公开的账号或原对象</legend><label class="radio-line"><input type="radio" name="_R_0_"/>原账号甲 · 账号原册</label><label class="radio-line"><input type="radio" name="_R_0_"/>场景作品所属乙 · 账号原册</label><label class="radio-line"><input type="radio" name="_R_0_"/>场景作品所属乙 · 作品1 / 第1版</label><div class="button-row"><button type="button">取消这次重选</button><button type="button" disabled="">选回这份原记录</button></div><p>预看和取消不会执行命令；明确选回后才打开原册。</p></fieldset></div>"
+
+ ❯ src/ui/video-target.test.tsx:68:64
+     66|   expect(videoPanelContext(view.runId,'personal',{channelId:channels[0…
+     67|   const generic=renderToStaticMarkup(<VideoPanel {...p}/>)
+     68|   expect(generic).not.toContain('安排一件新作品');expect(generic).not.toConta…
+       |                                                                ^
+     69|   expect(videoTargetLocation(features.video,{...target,contractId:'ano…
+     70|   const readonly=renderToStaticMarkup(<VideoPanel {...p} view={{...vie…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/ui/video-target.test.tsx > maps real normal marketing, production, correction and negotiation jobs back to one public video object
+AssertionError: expected { marketing: true, …(3) } to deeply equal { marketing: true, …(3) }
+
+- Expected
++ Received
+
+  {
+-   "correction": true,
++   "correction": false,
+    "marketing": true,
+-   "negotiation": true,
++   "negotiation": false,
+    "production": true,
+  }
+
+ ❯ src/ui/video-target.test.tsx:135:16
+    133|    await send('SubmitVideoCommission',{contractId:c.id})
+    134|   }
+    135|   expect(seen).toEqual({marketing:true,production:true,correction:true…
+       |                ^
+    136|   expect(p().features.video!.contracts.find(c=>c.id===original.id)!.st…
+    137|   const raw=controller.exportSaved();expect(videoWorkTarget(p().featur…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

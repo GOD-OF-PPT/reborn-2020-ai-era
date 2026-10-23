@@ -1,0 +1,7 @@
+# 首轮红档与修缮
+
+strict0；5项3过/2红保vitest-r1-console/result。一个新增generic无target断言把新建账号的受众默认selected也当成默认原账号，改为仅判实际channel option不得自动selected；原invalid同步无任何执行表单断言保留。
+
+一个新增正常链假设固定seed一定会发生修改/谈判，实际客户直接接受（0修改/0谈判）；该事实保留且现在明确断言，不强改seed。仅新增一份已有历史公开原谈判拒绝normal案例的完整Create重放来核真实correction/negotiation job映射，并保原拒绝后退出的最终字节。不是新矩阵或正向seed筛选。
+
+自审发现内部显选target而父未提供onTargetChange时，新建账号name/segment草稿仍在外层；将原表单抽到按完整targetContext key的私有子组件，保取消时原对象草稿、换target隔离。无规则/原source/原时限变化。

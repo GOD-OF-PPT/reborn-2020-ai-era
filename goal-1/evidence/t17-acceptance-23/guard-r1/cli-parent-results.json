@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-23T12:46:27.507Z",
+  "rows": [
+    {
+      "id": "collector",
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_first_order_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-22/refused-s3-v1-collector"
+      ],
+      "status": 1,
+      "signal": null,
+      "error": "",
+      "refused": true,
+      "outputCreated": false
+    },
+    {
+      "id": "verifier",
+      "argv": [
+        "rtk",
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-23",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-22/refused-s3-v1-verifier"
+      ],
+      "status": 1,
+      "signal": null,
+      "error": "",
+      "refused": true,
+      "outputCreated": false
+    }
+  ],
+  "oldFiles": 364,
+  "changed": [],
+  "markerSame": true,
+  "markerSha256": "b511dbd378951e43118122616c9d783f83d1f4b0fc3524a38477ee56d3dbec9c",
+  "compatibilityDevelopmentOrTesting": 0
+}

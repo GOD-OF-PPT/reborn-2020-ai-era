@@ -1,0 +1,1 @@
+授权你仅VideoPanel.tsx补无target未知account同步早返（在VideoChannelOpening前）和原video-target.test.tsx现有失效显示case补无target未知账户不露创建/不执行回调/raw不变断言，保持有可见原账户重选指引（App workspace已有账户下拉）。parent guard新root23/record-target-r2三文件/前像，确定小修之后定向仅原该case/strict-owned或等根统一type，无需重复normalchain/原124复放/6全套。不动App/GameTypes/Chooser/cache/原engine/compat。完成精确hash冻结，根R4统一。

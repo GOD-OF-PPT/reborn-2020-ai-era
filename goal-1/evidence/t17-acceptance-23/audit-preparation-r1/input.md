@@ -1,0 +1,1 @@
+模型已接收冻结。另请只读准备本轮实际Chrome原文审核的最小调用合同：读scripts/verify_normal_browser_exports.ts及root22已通过audit调用记录，核root23 normal-prefix-r1的rev53来源身份；列出新Chrome exports.jsonl的准确字段、origin=input_buffer与saved/candidate差异、指定source绑定和完整Create原文审核命令。先不执行审核、不改全局工具、不碰浏览器/Git/compat。写root23/audit-preparation-r1三文件及handoff（父guard先检查后建新目录）；如工具存在原参数边界就具体指出。root稍后Chrome小循环结束再授权实际审核。

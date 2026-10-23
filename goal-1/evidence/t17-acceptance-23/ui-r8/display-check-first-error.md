@@ -1,0 +1,1 @@
+First helper-only runner stopped before assertions with ERR_UNSUPPORTED_RESOLVE_REQUEST: a data URL module cannot resolve absolute filesystem imports. Production source was unaffected; the same emitted helper module is retained in display-helpers.check.mjs. Follow-up imports that saved module with pathToFileURL. No game command or browser ran.

@@ -15,6 +15,7 @@ import retainedRelayRaw from '../../goal-1/evidence/t17-acceptance-11/chrome-pro
 import {sceneThreads} from './scene-thread-notes.ts'
 import {loadSeasonFocusPreference} from './season-focus-preference.ts'
 import {moneyText} from './game-text.ts'
+import {addDays} from '../core/calendar.ts'
 
 const input=(view:PlayingView):SeasonInput=>({view,features:view.features as unknown as PlayFeatures})
 async function normal(name:string,raw?:string){
@@ -35,6 +36,59 @@ async function normal(name:string,raw?:string){
  return {codec,controller,p,send,advance,close:async()=>{await controller.close();await store.close()}}
 }
 const marketPayload=(p:SeasonInput,symbol='SIM-AI01')=>{const m=p.features.market,q=m.stocks.find(q=>q.symbol===symbol)!;return {accountId:'personal',symbol:q.symbol,side:'buy',quantity:100,limitPriceFen:q.upperFen!,quoteId:m.quoteId!,validUntil:m.matchingCalendar[0]!.id}}
+
+it('keeps a normal earned video commission through real marketing, side work, client responses and separate collection',async()=>{
+ const h=await normal('s3-video')
+ try{
+  let focus=openingFocusFor(h.p(),'video')!
+  expect(focus).toMatchObject({kind:'video',entityId:null,videoTarget:null});expect(playerThread(h.p(),focus).stage).toBe('video-entry')
+  expect(openingFocusFor(h.p(),'video',{recordId:h.p().features.firstOrder.offerId})?.kind).toBe('first-order')
+  const act=async(kind:string,payload:unknown)=>{const step=await h.send(kind,payload);const next=seasonFocusAfterSave(step.previous,step.current,kind,payload,focus,true)!;focus=next;return next}
+  const finishAt=async(date:string,done:()=>boolean)=>{for(let n=0;n<12&&!done();n++){await h.advance(date);if(!done())await h.send('AdvanceTime',{date})}expect(done(),'original public event must actually finish at '+date).toBe(true)}
+  await act('OpenVideoChannel',{name:'正常这一份商单',segment:'local_merchants'})
+  const channel=h.p().features.video!.channels[0]!
+  await act('StartVideoMarketing',{channelId:channel.id,resources:['player-production'],startAt:h.p().view.date})
+  const marketing=h.p().features.video!.marketing[0]!
+  expect(playerThread(h.p(),focus).wait?.date).toBe(marketing.job!.completeAt)
+  await finishAt(marketing.job!.completeAt,()=>h.p().features.video!.marketing[0]!.completedAt!==null)
+  const lead=h.p().features.video!.channels.find(c=>c.id===channel.id)!.leads[0]!
+  expect(lead).toBeTruthy()
+  await act('AcceptVideoCommission',{channelId:channel.id,cohortId:lead.cohortId,clientId:lead.personId,modeId:'manual',materialId:'original',resources:['player-production'],startAt:h.p().view.date})
+  const original=h.p().features.video!.contracts[0]!,pin=focus
+  expect(pin).toMatchObject({kind:'video',accountId:channel.accountId,businessId:channel.businessId,entityId:original.id,videoTarget:{channelId:channel.id,workId:original.workId,contractId:original.id}})
+  const responsibility=seasonRecollection(h.p())!.remaining.find(r=>r.id==='video-contract:'+original.id)!
+  expect(responsibility.line).toContain(moneyText(original.priceFen));expect(responsibility.line).toContain(moneyText(original.prepaymentFen));expect(responsibility.inspect.target?.videoTarget).toMatchObject({channelId:channel.id,workId:original.workId,contractId:original.id})
+  await act('OpenVideoChannel',{name:'只看另一账号',segment:'lifestyle'});expect(focus).toBe(pin)
+  await act('WorkQuarter',{});expect(focus).toBe(pin)
+  for(let guard=0;guard<24;guard++){
+   const v=h.p().features.video!,c=v.contracts.find(c=>c.id===original.id)!,w=v.works.find(w=>w.id===original.workId)!,thread=playerThread(h.p(),focus,'2020-Q1')
+   expect(thread.focusStatus).toBe('valid');expect(thread.inspect.target?.videoTarget).toMatchObject({channelId:channel.id,workId:original.workId,contractId:original.id})
+   if(c.status==='settled')break
+   if(c.status==='delivered'){
+    expect(thread).toMatchObject({stage:'video-payment-wait',outcome:'pending',wait:{date:c.paymentAt}})
+    expect(seasonRecollection(h.p())!.allNodes.some(n=>n.id==='video-paid:'+c.id)).toBe(false)
+    await finishAt(c.paymentAt!,()=>h.p().features.video!.contracts.find(x=>x.id===c.id)!.status==='settled');continue
+   }
+   if(c.status==='review'){expect(thread.wait?.date).toBe(addDays(c.submittedAt!,2));await finishAt(thread.wait!.date,()=>h.p().features.video!.contracts.find(x=>x.id===c.id)!.status!=='review');continue}
+   const active=[w.production,...w.corrections].find(j=>j&&['planned','running'].includes(j.status))
+   if(active){expect(thread.wait?.date).toBe(active.status==='planned'?active.startAt:active.completeAt);await finishAt(active.completeAt,()=>h.p().view.operations!.jobs.find(j=>j.id===active.id)!.status==='completed');continue}
+   if(c.status==='revision'){
+    if(h.p().view.budget.available===0){await h.advance('2020-03-31');await h.advance('2020-04-01')}
+    await act('ReworkVideo',{workId:w.id,resources:['player-production'],startAt:h.p().view.date});expect(focus).toBe(pin);continue
+   }
+   if(w.reviewedVersion!==w.version){expect(thread.command?.kind).toBe('ReviewVideoOutput');await act('ReviewVideoOutput',{workId:w.id,disclosure:'manual'});expect(focus).toBe(pin)}
+   await act('SubmitVideoCommission',{contractId:c.id});expect(focus).toBe(pin)
+  }
+  const done=h.p().features.video!.contracts.find(c=>c.id===original.id)!
+  expect(done.status).toBe('settled');expect(done.paidCase).toBe(true)
+  const raw=h.controller.exportSaved(),thread=playerThread(h.p(),focus,'2020-Q1'),reel=seasonRecollection(h.p())!
+  expect(thread).toMatchObject({stage:'video-settled',outcome:'actual',focusQuarter:'2020-Q1'});expect(thread.command).toBeUndefined();expect(thread.wait).toBeUndefined()
+  expect(thread.resultRefs.some(r=>r.kind==='payment')).toBe(true);expect(reel.allNodes.find(n=>n.id==='video-paid:'+original.id)?.sourceRefs.some(r=>r.kind==='payment')).toBe(true)
+  expect(seasonFocusChoices(h.p()).some(c=>c.focus.kind==='video'&&c.focus.entityId===original.id)).toBe(true)
+  const wrong:OpeningFocus={...pin,kind:'video',videoTarget:{channelId:h.p().features.video!.channels[1]!.id,workId:original.workId,contractId:original.id}}
+  expect(playerThread(h.p(),wrong).focusStatus).toBe('invalid');expect(h.controller.exportSaved()).toBe(raw)
+ }finally{await h.close()}
+},30000)
 
 it('closes a real working quarter before offering the original next-quarter date and keeps old salary historical',async()=>{
  const h=await normal('work')

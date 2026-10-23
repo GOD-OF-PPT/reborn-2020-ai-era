@@ -1,0 +1,1 @@
+我刚实际只读 git ls-files --stage：S2post/sealed-evidence.json 是 tracked100644 blob9af4b1e0d1ea62da553ca6465f306193ec114742。可补以当前开工HEAD f3633eed...:该路径的 git cat-file blob 与磁盘全字节核对作为提交历史锚（只读Git已授权）；不要改刚result，写额外addendum保留原缺锚结论身份。若HEAD存在且同，可说与开工已提交blob一致，不能说其他没有原采证的时刻都已核。

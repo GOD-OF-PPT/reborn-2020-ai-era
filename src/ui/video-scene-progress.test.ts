@@ -82,3 +82,60 @@ it('points an actual unmeasured publication to its own channel and feedback chap
  expect(h.progress()!.title).toContain('回应还在路上');expect(h.progress()!.target).toEqual({channelId:channel.id,workId:work.id,section:'publications'})
  expect(h.progress()!.command).toBeUndefined();expect(h.f.codec.export(h.run)).toBe(before)
 })
+
+it('keeps an explicitly selected paid original contract after another real commission and a new quarter',()=>{
+ const h=path(),c=h.run.video!.contracts[0]!,target={channelId:c.channelId,workId:c.workId,contractId:c.id}
+ h.complete();h.send('ReviewVideoOutput',{workId:c.workId,disclosure:'manual'});h.send('SubmitVideoCommission',{contractId:c.id});h.send('AdvanceTime',{date:addDays(h.run.timeline.cursor.date,2)})
+ const paymentAt=h.run.video!.contracts[0]!.paymentAt!
+ expect(videoSceneProgress(h.view(),h.run.timeline.cursor.date,target)).toMatchObject({stage:'video-payment-wait',wait:{date:paymentAt},outcome:'pending',target})
+ h.send('AdvanceTime',{date:paymentAt});h.send('OpenVideoChannel',{name:'另一个真实账号',segment:'local_merchants'})
+ const channel=h.run.video!.channels.at(-1)!
+ h.send('StartVideoMarketing',{channelId:channel.id,resources:['player-production'],startAt:h.run.timeline.cursor.date});h.send('AdvanceTime',{date:addDays(h.run.timeline.cursor.date,7)})
+ const cohort=h.run.video!.cohorts.at(-1)!
+ h.send('AcceptVideoCommission',{channelId:channel.id,cohortId:cohort.id,clientId:cohort.qualifiedMembers[0],modeId:'manual',materialId:'original',resources:['player-production'],startAt:h.run.timeline.cursor.date})
+ const raw=h.f.codec.export(h.run),p=videoSceneProgress(h.view(),'2020-04-01',target)!
+ expect(p).toMatchObject({stage:'video-settled',outcome:'actual',target,resultRefs:[{kind:'contract',id:c.id,date:paymentAt}]})
+ expect(h.view().contracts.find(row=>row.id===c.id)).toMatchObject({priceFen:300000,prepaymentFen:90000,feeBps:500,feePosted:true,paidCase:true})
+ expect(p.line).toContain('原预款¥900');expect(p.line).toContain('本次余款¥2,100');expect(p.line).toContain(paymentAt)
+ expect(p.choice.line).toContain('原费用¥150');expect(p.choice.line).toContain('5%');expect(p.choice.line).toContain('已登记');expect(p.choice.line).toContain('已付案例')
+ // Only the public unpaid flag differs; this is a display boundary, not a fabricated saved history.
+ const unpaid={...h.view(),contracts:h.view().contracts.map(row=>row.id===c.id?{...row,paidCase:false}:row)}
+ const pendingFee=videoSceneProgress(unpaid,'2020-04-01',target)!
+ expect(pendingFee.choice.line).toContain('未付费用');expect(pendingFee.choice.line).not.toContain('已付案例');expect(pendingFee.choice.line).not.toContain('全部付清')
+ expect(p.command).toBeUndefined();expect(p.wait).toBeUndefined();expect(h.progress()!.target?.channelId).toBe(channel.id);expect(h.f.codec.export(h.run)).toBe(raw)
+})
+
+it('does not repair a wrong, empty, repeated or expired explicit video target using the global recommendation',()=>{
+ const h=path(0,true,true),v=h.view(),c=v.contracts[0]!,target={channelId:c.channelId,workId:c.workId,contractId:c.id},raw=h.f.codec.export(h.run)
+ expect(videoSceneProgress(v,h.run.timeline.cursor.date,null)).toMatchObject({stage:'video-entry',outcome:'none',resultRefs:[]});expect(videoSceneProgress(v,h.run.timeline.cursor.date,null)?.target).toBeUndefined()
+ for(const bad of [{...target,channelId:v.channels[0]!.id},{...target,workId:''},{...target,contractId:'missing-contract'},{channelId:c.channelId,marketingId:'missing-marketing'},{...target,workId:c.id}]){
+  const p=videoSceneProgress(v,h.run.timeline.cursor.date,bad)!
+  expect(p.stage).toBe('video-invalid');expect(p.invalidReason).toBeTruthy();expect(p.command).toBeUndefined();expect(p.wait).toBeUndefined()
+ }
+ const duplicated={...v,contracts:[...v.contracts,c]}
+ expect(videoSceneProgress(duplicated,h.run.timeline.cursor.date,target)?.invalidReason).toBeTruthy();expect(h.f.codec.export(h.run)).toBe(raw)
+})
+
+it('names the original marketing task and distinguishes its planned start, completion and real inquiry outcome',()=>{
+ const h=path(0,false),v=h.view(),channel=v.channels[0]!
+ h.send('StartVideoMarketing',{channelId:channel.id,resources:['player-production'],startAt:'2020-01-10'})
+ const m=h.view().marketing.at(-1)!,target={channelId:channel.id,marketingId:m.id}
+ expect(videoSceneProgress(h.view(),h.run.timeline.cursor.date,target)).toMatchObject({stage:'video-marketing-planned',outcome:'pending',wait:{date:'2020-01-10'}})
+ h.send('AdvanceTime',{date:'2020-01-10'})
+ expect(videoSceneProgress(h.view(),h.run.timeline.cursor.date,target)).toMatchObject({stage:'video-marketing-running',wait:{date:'2020-01-17'}})
+ h.send('AdvanceTime',{date:'2020-01-17'})
+ expect(videoSceneProgress(h.view(),h.run.timeline.cursor.date,target)).toMatchObject({stage:'video-marketing-completed',outcome:'actual',resultRefs:[{kind:'marketing',id:m.id,date:'2020-01-17'}]})
+})
+
+it('offers the original same-version submission after an actual accepted scope negotiation',()=>{
+ const h=path(3),c=h.run.video!.contracts[0]!,target={channelId:c.channelId,workId:c.workId,contractId:c.id}
+ const submit=()=>{h.send('ReviewVideoOutput',{workId:c.workId,disclosure:'manual'});h.send('SubmitVideoCommission',{contractId:c.id});h.send('AdvanceTime',{date:addDays(h.run.timeline.cursor.date,2)})}
+ h.complete();submit();h.send('ReworkVideo',{workId:c.workId,resources:['player-production'],startAt:h.run.timeline.cursor.date});h.send('AdvanceTime',{date:addDays(h.run.timeline.cursor.date,7)});submit()
+ const version=h.view().works[0]!.version
+ h.send('NegotiateVideoCommission',{contractId:c.id,proposal:'scope',resources:['player-production'],startAt:h.run.timeline.cursor.date});h.send('AdvanceTime',{date:addDays(h.run.timeline.cursor.date,3)})
+ expect(h.view().contracts[0]!.negotiationOutcome).toBe('accepted')
+ const p=videoSceneProgress(h.view(),h.run.timeline.cursor.date,target)!
+ expect(p).toMatchObject({stage:'video-submit',command:{kind:'SubmitVideoCommission',payload:{contractId:c.id},confirm:true},target,outcome:'pending'})
+ h.send(p.command!.kind,p.command!.payload);h.send('AdvanceTime',{date:addDays(h.run.timeline.cursor.date,2)})
+ expect(h.view().contracts[0]!.status).toBe('delivered');expect(h.view().works[0]!.version).toBe(version)
+})

@@ -1,0 +1,1 @@
+R1 red test/source retained. R2 checks original due-job completion explicitly before stopping on the target calendar date, preserves original 30s timeout, adds original preview reason diagnostics. UI adds only stale committed-view lock and missing-resource explanation. No core/rule change.

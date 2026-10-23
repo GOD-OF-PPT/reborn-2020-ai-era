@@ -1,0 +1,194 @@
+{
+  "at": "2026-10-23T12:48:34.140Z",
+  "method": "Read-only JSON whitelisted public contract fields and original ledger lines/obligations only; no hidden facts, no replay/import, no balance-delta inference, no database.",
+  "files": [
+    {
+      "file": "chrome-r3/manual-saved-12-r6.json",
+      "bytes": 223793,
+      "sha256": "b3f070983efc2771235cdf566db9bf956020f79c306a929b1147e49b61aadda3",
+      "revision": 12,
+      "runId": "life-d0fd7bda-aea4-4585-a9b3-673e60436c62",
+      "date": "2020-01-31",
+      "sourceJournal": "chrome-r3/exports.jsonl",
+      "sourceRecords": [
+        {
+          "file": "manual-saved-12-r6.json",
+          "origin": "saved",
+          "source": "product_export_visible_pre",
+          "bytes": 223793,
+          "sha256": "b3f070983efc2771235cdf566db9bf956020f79c306a929b1147e49b61aadda3",
+          "runId": "life-d0fd7bda-aea4-4585-a9b3-673e60436c62",
+          "revision": 12
+        }
+      ],
+      "contracts": [
+        {
+          "id": "vid:9e638b4a970ff5ddd2cf44a824fe625f",
+          "channelId": "vid:45c5e0e73022d8edfd914d881306b3d7",
+          "workId": "vid:32beab6a84e47aa936b8bb1b64a850f6",
+          "priceFen": 300000,
+          "prepaymentFen": 90000,
+          "feeBps": 500,
+          "status": "settled",
+          "feePosted": true,
+          "acceptedAt": "2020-01-08",
+          "settledAt": "2020-01-31",
+          "publicPaidCase": true,
+          "expected": {
+            "prepaymentFen": 90000,
+            "remainderFen": 210000,
+            "feeFen": 15000
+          },
+          "transactions": [
+            {
+              "id": "vid:94307b56a7fc4be8fb302095f6e0ac5d",
+              "date": "2020-01-08",
+              "lines": [
+                {
+                  "accountId": "world",
+                  "deltaFen": -90000
+                },
+                {
+                  "accountId": "personal",
+                  "deltaFen": 90000
+                }
+              ]
+            },
+            {
+              "id": "vid:307e685c67362b12266419d4134ed1bc",
+              "date": "2020-01-31",
+              "lines": [
+                {
+                  "accountId": "world",
+                  "deltaFen": -210000
+                },
+                {
+                  "accountId": "personal",
+                  "deltaFen": 210000
+                }
+              ]
+            },
+            {
+              "id": "vid:3b0cd66679207e51878218589b4db9ad",
+              "date": "2020-01-31",
+              "lines": [
+                {
+                  "accountId": "personal",
+                  "deltaFen": -15000
+                },
+                {
+                  "accountId": "world",
+                  "deltaFen": 15000
+                }
+              ]
+            }
+          ],
+          "obligations": [
+            {
+              "id": "vid:0e44cdf7aecedc1155639fdbb134caf1",
+              "amountFen": 15000,
+              "remainingFen": 0,
+              "date": "2020-01-31"
+            }
+          ],
+          "transactionAmountsEqual": true
+        }
+      ],
+      "rawUnchanged": true
+    },
+    {
+      "file": "chrome-r6/ai-saved-70-paid-r6.json",
+      "bytes": 803880,
+      "sha256": "51cf79fd0ec17294a947c6d518284f6a7178c24e22bb733de66e465045ae5250",
+      "revision": 70,
+      "runId": "normal-course-content_employee-453bb7c2",
+      "date": "2022-10-22",
+      "sourceJournal": "chrome-r6/exports.jsonl",
+      "sourceRecords": [
+        {
+          "file": "ai-saved-70-paid-r6.json",
+          "origin": "saved",
+          "source": "product_export_visible_pre",
+          "bytes": 803880,
+          "sha256": "51cf79fd0ec17294a947c6d518284f6a7178c24e22bb733de66e465045ae5250",
+          "runId": null,
+          "revision": null
+        }
+      ],
+      "contracts": [
+        {
+          "id": "vid:05ccd9f89da3f63a998c1b2307bcf1d6",
+          "channelId": "vid:1b8b8b648df6353c25412860736670c9",
+          "workId": "vid:01c1e94b003afd17b9e4423f78ccc7b9",
+          "priceFen": 300000,
+          "prepaymentFen": 90000,
+          "feeBps": 500,
+          "status": "settled",
+          "feePosted": true,
+          "acceptedAt": "2022-08-29",
+          "settledAt": "2022-10-22",
+          "publicPaidCase": true,
+          "expected": {
+            "prepaymentFen": 90000,
+            "remainderFen": 210000,
+            "feeFen": 15000
+          },
+          "transactions": [
+            {
+              "id": "vid:b15380cbb1bed35e80eb2e5f7145969d",
+              "date": "2022-08-29",
+              "lines": [
+                {
+                  "accountId": "world",
+                  "deltaFen": -90000
+                },
+                {
+                  "accountId": "personal",
+                  "deltaFen": 90000
+                }
+              ]
+            },
+            {
+              "id": "vid:e7729bc2fb2e2cc537773101c13ab8c9",
+              "date": "2022-10-22",
+              "lines": [
+                {
+                  "accountId": "world",
+                  "deltaFen": -210000
+                },
+                {
+                  "accountId": "personal",
+                  "deltaFen": 210000
+                }
+              ]
+            },
+            {
+              "id": "vid:a365fe68f984dde251f0b50c27e72110",
+              "date": "2022-10-22",
+              "lines": [
+                {
+                  "accountId": "personal",
+                  "deltaFen": -15000
+                },
+                {
+                  "accountId": "world",
+                  "deltaFen": 15000
+                }
+              ]
+            }
+          ],
+          "obligations": [
+            {
+              "id": "vid:07b23e05f8e6e003b84885143eb8ee1b",
+              "amountFen": 15000,
+              "remainingFen": 0,
+              "date": "2022-10-22"
+            }
+          ],
+          "transactionAmountsEqual": true
+        }
+      ],
+      "rawUnchanged": true
+    }
+  ]
+}

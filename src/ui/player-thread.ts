@@ -8,6 +8,8 @@ import {marketId} from '../core/market.ts'
 import {operatingId} from '../core/operations-calendar.ts'
 import {quarterOf} from '../core/calendar.ts'
 import {sceneThreads} from './scene-thread-notes.ts'
+import type {VideoSceneTarget} from './video-scene-progress.ts'
+import {resolveVideoFocus,videoTargetEntity,videoFocusQuarter,videoFocusOpen,videoFocusResultDate,videoPlayerScene,videoFocusFromSaved} from './video-player-thread.ts'
 
 type Input=Pick<GamePanelProps,'view'|'features'>
 type Identity={readonly runId:string;readonly accountId:string;readonly entityId:string|null;readonly businessId?:string}
@@ -15,9 +17,10 @@ export type OpeningFocus=Identity&(
  |{readonly kind:'first-order'|'work'|'free'}
  |{readonly kind:'market';readonly entityKind?:'order'|'settlement'|'position'|'research'}
  |{readonly kind:'life';readonly selection:LifeSceneSelection}
+ |{readonly kind:'video';readonly videoTarget:VideoSceneTarget|null}
 )
 export type ThreadCommand={readonly kind:string;readonly payload:unknown;readonly label:string;readonly confirm:boolean}
-export type ThreadResultRef={readonly kind:'job'|'contract'|'payment'|'fill'|'settlement'|'research'|'payroll'|'promise';readonly id:string;readonly date:string|null}
+export type ThreadResultRef={readonly kind:'job'|'contract'|'payment'|'fill'|'settlement'|'research'|'payroll'|'promise'|'marketing'|'publication';readonly id:string;readonly date:string|null}
 export interface PlayerThreadView{
  readonly wish:{readonly id:Input['view']['playerProfile']['wishId'];readonly label:string}
  readonly approach:Input['view']['playerProfile']['approach']
@@ -48,6 +51,7 @@ const questions=['怎样先站稳？','什么值得继续？','什么值得准�
 const attempt={
  'first-order':'用一笔真实交付，试试自己的手艺。',market:'先保留生活储备，再验证一份模拟投资判断。',
  work:'保留工作，也为自己的生活留出余地。',life:'把真实的日子留给生活。',free:'把这一季留给自己愿意承担的安排。',
+ video:'让同一份作品经过真实制作、交付和回款，再决定下一次投入。',
 } as const
 
 function responsibility(p:Input){
@@ -69,6 +73,7 @@ function marketEntity(p:Input,id:string){
 const accountMarket=(p:Input,accountId:string)=>accountId==='personal'?p.features.market:{...p.features.market,researches:[]}
 
 function invalidFocus(p:Input,f:OpeningFocus):string|null{
+ if(f.kind==='video')return resolveVideoFocus(p,f).reason
  if(f.runId!==p.view.runId)return '这项关注来自另一段人生，请重新选择。'
  if(!p.view.accounts.some(a=>a.accountId===f.accountId))return '原账户已不可达，请重新选择；没有切换到账户。'
  if(f.kind!=='market'&&f.accountId!=='personal')return '这项个人安排与原账户不匹配，请重新选择。'
@@ -100,6 +105,7 @@ function invalidFocus(p:Input,f:OpeningFocus):string|null{
 }
 
 function resolvedFocus(p:Input,f:OpeningFocus):OpeningFocus{
+ if(f.kind==='video')return resolveVideoFocus(p,f).focus
  if(f.kind==='first-order'){
   const first=p.features.firstOrder
   return {...f,entityId:first.contractId??first.offerId,...(first.businessId?{businessId:first.businessId}:{})}
@@ -128,7 +134,10 @@ export function openingFocusFor(p:Input,screen:Screen,target?:SceneTarget):Openi
  if(screen==='market')focus={...base,kind:'market'}
  else if(screen==='life')focus={...base,kind:'life',selection:target?.lifeSelection==='rest'||target?.lifeSelection==='workspace'?target.lifeSelection:target?.personId??'tang-ying'}
  else if(screen==='quarter')focus={...base,kind:base.entityId!==null&&[p.features.firstOrder.offerId,p.features.firstOrder.contractId,p.features.firstOrder.jobId].includes(base.entityId)?'first-order':'work'}
- else if(screen==='video'&&p.features.firstOrder.status==='available')focus={...base,kind:'first-order'}
+ else if(screen==='video'){
+  if(base.entityId!==null&&[p.features.firstOrder.offerId,p.features.firstOrder.contractId,p.features.firstOrder.jobId].includes(base.entityId))focus={...base,kind:'first-order'}
+  else {const t=target?.videoTarget??null,channel=p.features.video?.channels.find(c=>c.id===t?.channelId);focus={...base,kind:'video',accountId:target?.accountId??channel?.accountId??'personal',entityId:t?videoTargetEntity(t):null,videoTarget:t,...(channel?{businessId:channel.businessId}:{})}}
+ }
  else return null
  return invalidFocus(p,focus)?focus:resolvedFocus(p,focus)
 }
@@ -200,11 +209,13 @@ function defaultFocus(p:Input):Recovery{
 }
 
 function focusEntry(p:Input,f:OpeningFocus){
+ if(f.kind==='video')return f.videoTarget===null||f.videoTarget.workId===undefined&&f.videoTarget.contractId===undefined&&f.videoTarget.marketingId===undefined
  if(f.kind==='free'||f.entityId===null)return true
  if(f.kind==='life')return f.entityId===f.selection&&!p.features.life.jobs.some(j=>j.id===f.entityId)&&!p.features.life.promises.some(o=>o.id===f.entityId)
  return f.kind==='first-order'&&p.features.firstOrder.status==='available'&&p.features.firstOrder.contractId===null
 }
 function originQuarter(p:Input,f:OpeningFocus):string|null{
+ if(f.kind==='video')return videoFocusQuarter(p,f)
  const id=f.entityId
  if(focusEntry(p,f))return p.features.workbench.quarter
  if(f.kind==='work')return p.view.operations?.employment.find(e=>e.id===id)?.quarter??null
@@ -225,6 +236,7 @@ function originQuarter(p:Input,f:OpeningFocus):string|null{
  return null
 }
 function focusOpen(p:Input,f:OpeningFocus){
+ if(f.kind==='video')return videoFocusOpen(p,f)
  const id=f.entityId
  if(f.kind==='first-order')return ['planned','running','awaiting_submission','review','delivered'].includes(String(p.features.firstOrder.status))
  if(f.kind==='work')return p.features.workbench.employment.some(e=>e.id===id&&e.segments.some(s=>s.to===null))
@@ -237,6 +249,7 @@ function focusOpen(p:Input,f:OpeningFocus){
  return false
 }
 function focusResultDate(p:Input,f:OpeningFocus):string|null{
+ if(f.kind==='video')return videoFocusResultDate(p,f)
  const id=f.entityId
  if(f.kind==='first-order'){const c=p.view.operations?.contracts.find(c=>c.id===p.features.firstOrder.contractId);return c?.settledAt??c?.reviewedAt??null}
  if(f.kind==='work')return p.view.operations?.payroll.filter(x=>x.entityId===id&&x.kind==='salary'&&x.amountFen>0).map(x=>x.through).sort().at(-1)??null
@@ -341,7 +354,7 @@ export function playerThread(p:Input,requested?:OpeningFocus|null,requestedQuart
  const common={wish:{id:p.view.playerProfile.wishId,label:wishes[p.view.playerProfile.wishId]},approach:p.view.playerProfile.approach,yearQuestion:questions[Number(p.view.date.slice(0,4))-2020]??'原来的事，想怎样收好？',attempt:attempt[focus.kind],responsibilityOverrideNeeded:responsibility(p),focusQuarter,focusScope:scope,legacyFallbackRequired:!requested&&legacyPending(p)}
  if(reason)return {...common,focus,focusStatus:'invalid',invalidReason:reason,stage:'unavailable',object:'原来的关注对象',title:'先找回刚才那件事。',line:reason,detail:'没有自动接受、换主体或替换对象。请明确选择下一件事。',outcome:'none',inspect:{screen:'routes',label:'重新选择眼前的方向'},resultRefs:[]}
  if(recovery?.needsReview)return {...common,focus,focusStatus:'default',invalidReason:null,stage:'review-choice',object:'本季已经留下的安排',title:'有几件真实的事，可以先回看。',line:`本季有${recovery.count}项实际安排。请先选择想继续看哪一件。`,detail:'原记录都保留，尚未替你选定一件；翻阅不会重新安排或付费。',attempt:'先回看本季已经安排的事，再决定把注意力留给哪里。',outcome:'none',inspect:{screen:'quarter',label:'翻看本季实际安排，选择一件继续',target:{accountId:'personal'}},resultRefs:[]}
- let scene=resolved.kind==='first-order'?firstScene(p):resolved.kind==='market'?marketScene(p,resolved):resolved.kind==='life'?lifeScene(p,resolved):resolved.kind==='work'?workScene(p,resolved):freeScene()
+ let scene=resolved.kind==='video'?videoPlayerScene(p,resolved):resolved.kind==='first-order'?firstScene(p):resolved.kind==='market'?marketScene(p,resolved):resolved.kind==='life'?lifeScene(p,resolved):resolved.kind==='work'?workScene(p,resolved):freeScene()
  if(focusQuarter&&focusQuarter<quarter)scene={...scene,object:focusQuarter+' / '+scene.object,line:(scope==='history'?'这是'+focusQuarter+'的原记录，旧收支不会重记为本季收入。':scope==='carry'?'这件事从'+focusQuarter+'留下，仍按原约定继续。':'这项安排始于'+focusQuarter+'，本季出现以下实际反馈。')+scene.line}
  return {...common,...scene,focus:resolved,focusStatus:requested?'valid':'default',invalidReason:null}
 }
@@ -355,6 +368,7 @@ export function openingFocusAfterSave(previous:Input,current:Input,kind:string,p
   ||view.phase!=='playing'||!/^202[0-5]-Q[1-4]$/.test(current.features.workbench.quarter)
   ||last?.kind!==kind||last.revisionAfter!==view.revision)return existing
  const body=payloadRecord(payload);if(!body)return existing
+ const video=videoFocusFromSaved(previous,current,kind,body);if(video)return video
  const id=(key:string)=>typeof body[key]==='string'?body[key]:null
  const base={runId:view.runId,accountId:'personal',entityId:null}
  const first=current.features.firstOrder
