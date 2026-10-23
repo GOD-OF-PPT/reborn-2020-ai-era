@@ -1,0 +1,48 @@
+{
+  "at": "2026-10-23T17:26:53.958Z",
+  "results": [
+    {
+      "name": "collector",
+      "started": "2026-10-23T17:26:52.629Z",
+      "finished": "2026-10-23T17:26:53.834Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_course_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-24/guard-collector-probe"
+      ],
+      "exit": 1,
+      "signal": null,
+      "rejectedBeforeOutput": true,
+      "targetAbsent": true
+    },
+    {
+      "name": "auditor",
+      "started": "2026-10-23T17:26:52.635Z",
+      "finished": "2026-10-23T17:26:53.848Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-24",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-24/guard-auditor-probe"
+      ],
+      "exit": 1,
+      "signal": null,
+      "rejectedBeforeOutput": true,
+      "targetAbsent": true
+    }
+  ],
+  "sealedOrdinaryFiles": 453,
+  "plusSelfMarker": true,
+  "markerSha256": "4a8df0ad352a063f00432c1d1120d6d85010300aa4353f45ef91ab6fcc54d891",
+  "exactFileAndDirectorySetUnchanged": true,
+  "allOriginalBytesAndModeSame": true
+}
