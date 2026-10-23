@@ -1,0 +1,23 @@
+--- goal-1/evidence/t17-acceptance-24/book-bridge-r2/course-target-before.test.tsx	2026-10-24 00:44:18
++++ src/ui/course-target.test.tsx	2026-10-24 00:44:41
+@@ -197,11 +197,18 @@
+   const p:GamePanelProps={...current,accountId:b.accountId,courseDraftMemory:memory},raw=h.controller.exportSaved(),captured:{target:CourseSceneTarget|null|undefined;slot:CourseSceneDraftSlot|undefined}={target:undefined,slot:undefined}
+   eventHooks.enabled=true;eventHooks.values=[]
+   let tree:ReturnType<typeof CourseSceneChoice>|null=null
+-  const render=()=>{eventHooks.index=0;tree=CourseSceneChoice({p,target,onInspect:(next,step)=>{captured.target=next;captured.slot=step}})}
++  const chosen:(CourseSceneTarget|null)[]=[]
++  const render=()=>{eventHooks.index=0;tree=CourseSceneChoice({p,target,onTarget:next=>{chosen.push(next)},onInspect:(next,step)=>{captured.target=next;captured.slot=step}})}
+   const click=(label:string)=>{const button=elements(tree).find(e=>e.type==='button'&&text(e.props.children).includes(label)),handler=button?.props.onClick;if(typeof handler!=='function')throw Error('VISIBLE_STEP_BUTTON_REQUIRED:'+label);handler();render()}
+-  render();click('走近这份教案');click('核对案例1的课程使用范围')
++  render();click('走近这份教案')
++  expect(elements(tree).find(e=>typeof e.type==='function'&&e.type.name==='Dialog')?.props.title).toBe('这份案例，能用于这一堂课吗？')
++  expect(text(tree)).toContain('案例1 · '+source.label)
+   const fields=elements(tree).find(e=>typeof e.type==='function'&&e.type.name==='ScheduleFields')
+   expect(fields?.props.draft).toEqual(draft)
++  expect(fields?.props.p).toBe(p)
++  expect(elements(tree).find(e=>e.props.kind==='LicenseCourseMaterials')?.props.payload).toEqual({businessId:b.id,caseKind:'video',caseId:ref.id,resources:['player-production'],startAt:future})
++  expect(chosen).toEqual([])
++  expect(h.p().view.accounts).toEqual(current.view.accounts);expect(h.p().view.budget).toEqual(current.view.budget);expect(h.p().view.revision).toBe(current.view.revision);expect(h.controller.exportSaved()).toBe(raw)
+   click('翻看课程、资金与全部责任')
+   expect(captured).toEqual({target,slot})
+   eventHooks.enabled=false

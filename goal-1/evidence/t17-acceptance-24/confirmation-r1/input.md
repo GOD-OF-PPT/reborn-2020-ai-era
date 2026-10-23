@@ -1,0 +1,1 @@
+Chrome确定P1：DefineCourse确认只有企业/0AP/0元/date，没有课程名/形式/主题/受众/案例。授权新增CoursePreparationDetails.tsx/test，仅CourseCommandDetails接一次；补Define实际载荷和公开case、outline/license/sample同对象/资源/开工预计完成及课程Activate原维护；不重复OpenStudio资本，不改规则/费用/已冻结其它源。单worker小批验证，不浏览器/Git/兼容。

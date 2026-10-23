@@ -1,0 +1,8 @@
+{
+  "source": "src/core/operations.ts:123",
+  "sha256": "02e55e3524b8ac9c65719ad64f2145f34a73662f1bd6510e0ac2395ef3e0d0a5",
+  "originalBranch": " #interrupt(m:OperatingModel,j:ProductionJob,date:string):OperatingModel{if(j.status!=='planned'&&j.status!=='running')return m;let current=this.#post(m,{id:operatingId('interrupt',j.id),date,sourceEventId:j.id,kind:j.status==='planned'?'cancel_action':'interrupt_action',actionId:j.actionId});return this.#patch(current,{jobs:stateOf(current).jobs.map(old=>old.id===j.id?{...old,status:j.status==='planned'?'cancelled':'interrupted',releasedAt:date}:old)})}",
+  "economySource": "src/core/economy.ts:183",
+  "economySha256": "ebe32344d6124f6aab607761831f4e74e07c9e3a15ec59abe4d7a96d847722d4",
+  "meaning": "For these original operations jobs, planned interruption calls cancel_action and sets cancelled. cancel_action only accepts draft/reserved and releases reservation. Running interruption calls interrupt_action and sets interrupted; spent direct cost/AP remain. No startedAt/paidCostFen field invented. No core edit."
+}

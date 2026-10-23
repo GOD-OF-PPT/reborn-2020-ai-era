@@ -1,6 +1,7 @@
 import type {SaveStatus} from '../application/session.ts'
 import type {OpeningFocus} from './player-thread.ts'
 import type {VideoSceneTarget} from './video-scene-progress.ts'
+import type {CourseSceneTarget} from './course-scene-progress.ts'
 
 export const SEASON_FOCUS_PREFERENCE_VERSION=1 as const
 export const SEASON_FOCUS_PREFERENCE_MAX_TEXT_LENGTH=16_384
@@ -25,7 +26,7 @@ type RecordValue=Record<string,unknown>
 type Parsed={record:SeasonFocusPreference}|{reason:SeasonFocusPreferenceInvalidReason}
 const personSelections=new Set(['tang-ying','linzhou','xu-cheng','chen-yu','rest','workspace'])
 const marketKinds=new Set(['order','settlement','position','research'])
-const focusKinds=new Set(['first-order','work','free','market','life','video'])
+const focusKinds=new Set(['first-order','work','free','market','life','video','course'])
 const messages:Record<SeasonFocusPreferenceInvalidReason,string>={
  'invalid-scope':'当前关注上下文不完整，未读取或记下本机关注。',
  'too-large':'本机关注记录过长，未采用；原文保留，可在本窗口重新选择。',
@@ -51,9 +52,21 @@ function parseFocus(value:unknown):{focus:OpeningFocus}|{reason:SeasonFocusPrefe
  const f=object(value)
  if(!f||typeof f.kind!=='string')return {reason:'invalid-record'}
  if(!focusKinds.has(f.kind))return {reason:'unsupported-focus-kind'}
- const common=['kind','runId','accountId','entityId','businessId'],allowed=f.kind==='market'?[...common,'entityKind']:f.kind==='life'?[...common,'selection']:f.kind==='video'?[...common,'videoTarget']:common
+ const common=['kind','runId','accountId','entityId','businessId'],allowed=f.kind==='market'?[...common,'entityKind']:f.kind==='life'?[...common,'selection']:f.kind==='video'?[...common,'videoTarget']:f.kind==='course'?[...common,'courseTarget']:common
  if(!exactKeys(f,allowed,['kind','runId','accountId','entityId'])||!id(f.runId)||!id(f.accountId)||f.entityId!==null&&!id(f.entityId)||f.businessId!==undefined&&!id(f.businessId))return {reason:'invalid-record'}
  const identity={runId:f.runId,accountId:f.accountId,entityId:f.entityId as string|null,...(f.businessId!==undefined?{businessId:f.businessId as string}:{})}
+ if(f.kind==='course'){
+  if(f.courseTarget===null)return f.entityId===null&&f.accountId==='personal'&&f.businessId===undefined?{focus:{...identity,kind:'course',courseTarget:null}}:{reason:'invalid-record'}
+  const t=object(f.courseTarget)
+  if(!t||!['studio','outline','license','course'].includes(String(t.kind))||!id(t.businessId)||t.businessId!==f.businessId)return {reason:'invalid-record'}
+  const allowed=t.kind==='studio'?['kind','businessId']:t.kind==='outline'?['kind','businessId','outlineId']:t.kind==='license'?['kind','businessId','licenseId']:['kind','businessId','courseId','sampleJobId']
+  const required=t.kind==='studio'?['kind','businessId']:t.kind==='outline'?['kind','businessId','outlineId']:t.kind==='license'?['kind','businessId','licenseId']:['kind','businessId','courseId']
+  if(!exactKeys(t,allowed,required))return {reason:'invalid-record'}
+  for(const key of ['outlineId','licenseId','courseId','sampleJobId'])if(t[key]!==undefined&&!id(t[key]))return {reason:'invalid-record'}
+  const values=[t.businessId,t.outlineId,t.licenseId,t.courseId,t.sampleJobId].filter(x=>x!==undefined)
+  if(new Set(values).size!==values.length||f.entityId!==(t.sampleJobId??t.courseId??t.licenseId??t.outlineId??t.businessId))return {reason:'invalid-record'}
+  return {focus:{...identity,kind:'course',courseTarget:{...t} as unknown as CourseSceneTarget}}
+ }
  if(f.kind==='video'){
   if(f.videoTarget===null)return f.entityId===null&&f.accountId==='personal'&&f.businessId===undefined?{focus:{...identity,kind:'video',videoTarget:null}}:{reason:'invalid-record'}
   const t=object(f.videoTarget)

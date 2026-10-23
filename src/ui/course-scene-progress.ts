@@ -2,6 +2,16 @@ import {quarterOf} from '../core/calendar.ts'
 import {dayBefore} from '../core/operations-calendar.ts'
 import type {CourseProjection} from '../core/course-projection.ts'
 import {moneyText,playableThrough} from './game-text.ts'
+import type {ProductionJob} from '../core/operations-types.ts'
+import {COURSE_JOBS} from '../content/course.ts'
+
+export type CourseSceneTarget=
+ |{readonly kind:'studio';readonly businessId:string}
+ |{readonly kind:'outline';readonly businessId:string;readonly outlineId:string}
+ |{readonly kind:'license';readonly businessId:string;readonly licenseId:string}
+ |{readonly kind:'course';readonly businessId:string;readonly courseId:string;readonly sampleJobId?:string}
+export interface CourseSceneContext{readonly preparationReady?:boolean;readonly operations?:{readonly jobs:readonly ProductionJob[]}|null}
+export type CourseSceneResultRef={readonly kind:'job'|'course'|'outline'|'license'|'business';readonly id:string;readonly date:string|null}
 
 export interface CourseSceneStage{
  readonly cohortId:string
@@ -17,6 +27,14 @@ export function courseStageLatestStart(dueAt:string,days:number):string{
  return date
 }
 export interface CourseSceneProgress{
+ readonly phase:string
+ readonly invalidReason:string|null
+ readonly outcome:'none'|'pending'|'actual'|'non-success'
+ readonly resultRefs:readonly CourseSceneResultRef[]
+ readonly target?:CourseSceneTarget
+ readonly historical?:boolean
+ readonly command?:{readonly kind:'ActivateBusiness';readonly payload:{readonly businessId:string};readonly confirm:boolean}
+ readonly wait?:{readonly date:string;readonly label:string}
  readonly title:string
  readonly line:string
  readonly choice:{readonly title:string;readonly line:string;readonly label:string}
@@ -27,7 +45,7 @@ export interface CourseSceneProgress{
 }
 export interface CoursePreparationStep{readonly phase:'fund'|'outline'|'waiting'|'activate';readonly businessId?:string;readonly jobId?:string}
 function scene(title:string,line:string,choiceTitle:string,choiceLine:string,label:string):CourseSceneProgress{
- return {title,line,choice:{title:choiceTitle,line:choiceLine,label}}
+ return {title,line,choice:{title:choiceTitle,line:choiceLine,label},phase:'legacy',invalidReason:null,outcome:'none',resultRefs:[]}
 }
 
 /** A past remedy flag alone does not contradict actual completed learning support. */
@@ -36,7 +54,7 @@ export function courseNeedsRecovery(co:NonNullable<CourseProjection>['cohorts'][
 }
 
 /** Committed public teaching facts. Selecting a resource/date and the original command still belong to the player. */
-export function courseSceneProgress(course:CourseProjection,date:string):CourseSceneProgress|null{
+function legacyCourseSceneProgress(course:CourseProjection,date:string):CourseSceneProgress|null{
  if(!course)return null
  const attention=(co:NonNullable<CourseProjection>['cohorts'][number])=>{
   const lesson=course.courses.find(c=>c.id===co.courseId),update=lesson?.unresolvedUpdates.map(u=>u.dueAt).sort()[0]
@@ -110,4 +128,107 @@ export function courseSceneProgress(course:CourseProjection,date:string):CourseS
  if(course.businesses.length)return scene('一间小小的教室，先从准备开始。','资金、案例、大纲、样课和工具资格，各有自己的前提。','翻看已经做过的准备','已有工作室与历史原账继续保留；新的课和学员仍需你明确选择。','核对课程准备、案例与原账')
  if(date>=course.catalog.availableAt)return {...scene('把做过的事，变成值得教的一堂课。','先给一间小教室留出余地，不急着向任何人收费。','给教室留一笔自己的钱','自选转入资本，再安排真实大纲；样课、招生和收入都还没有发生。','决定给教室留多少钱'),preparation:{phase:'fund'}}
  return null
+}
+
+const targetId=(value:unknown):value is string=>typeof value==='string'&&value.length>0&&value.length<=512&&value.trim().length>0&&!/[\u0000-\u001f\u007f]/.test(value)
+export const courseTargetEntity=(t:CourseSceneTarget):string=>t.kind==='course'?t.sampleJobId??t.courseId:t.kind==='license'?t.licenseId:t.kind==='outline'?t.outlineId:t.businessId
+function sampleJob(course:NonNullable<CourseProjection>,target:Extract<CourseSceneTarget,{kind:'course'}>,context?:CourseSceneContext){
+ const c=course.courses.find(c=>c.id===target.courseId),id=target.sampleJobId??c?.sampleJobId
+ return id?(context?.operations?.jobs.find(j=>j.id===id)??(context?.operations?undefined:c?.job?.id===id?c.job:undefined)):undefined
+}
+/** Exact supplied identities are checked, never repaired into another draft or attempt. */
+export function courseTargetReason(course:CourseProjection,target:CourseSceneTarget,context?:CourseSceneContext):string|null{
+ if(!course||!target||typeof target!=='object'||Array.isArray(target)||!['studio','outline','license','course'].includes(target.kind)||!targetId(target.businessId))return '原课程目标身份不完整，请明确重新选择。'
+ const keys=target.kind==='studio'?['kind','businessId']:target.kind==='outline'?['kind','businessId','outlineId']:target.kind==='license'?['kind','businessId','licenseId']:['kind','businessId','courseId','sampleJobId']
+ if(Object.keys(target).some(key=>!keys.includes(key)))return '原课程目标含有冲突字段，没有换到另一项准备。'
+ const business=course.businesses.filter(b=>b.id===target.businessId)
+ if(business.length!==1||business[0]!.route!=='ai_course')return '原课程工作室不存在或身份重复，请重新选择。'
+ const checkJob=(job:ProductionJob|null|undefined,id:string)=>{
+  const rows=context?.operations?.jobs.filter(j=>j.id===id)??(job?[job]:[])
+  return rows.length===1&&rows[0]!.id===id&&rows[0]!.businessId===target.businessId
+ }
+ if(target.kind==='outline'){
+  if(!targetId(target.outlineId)||target.outlineId===target.businessId)return '原大纲身份为空或冲突，请重新选择。'
+  const rows=course.outlines.filter(o=>o.id===target.outlineId),o=rows[0]
+  if(rows.length!==1||o!.businessId!==target.businessId||!checkJob(o!.job,o!.jobId)||o!.job?.definitionId!=='course-outline')return '原大纲或任务不属于这间工作室，没有换成另一份大纲。'
+ }
+ if(target.kind==='license'){
+  if(!targetId(target.licenseId)||target.licenseId===target.businessId)return '原课程素材许可身份为空或冲突，请重新选择。'
+  const rows=course.licenses.filter(l=>l.id===target.licenseId),l=rows[0]
+  if(rows.length!==1||l!.businessId!==target.businessId||!checkJob(l!.job,l!.jobId)||l!.job?.definitionId!=='course-material-license')return '原课程使用范围或任务不属于这间工作室，没有替换许可。'
+ }
+ if(target.kind==='course'){
+  if(!targetId(target.courseId)||target.courseId===target.businessId||target.sampleJobId!==undefined&&(!targetId(target.sampleJobId)||[target.businessId,target.courseId].includes(target.sampleJobId)))return '原课程或样课任务身份为空或冲突，请重新选择。'
+  const rows=course.courses.filter(c=>c.id===target.courseId),c=rows[0]
+  if(rows.length!==1||c!.businessId!==target.businessId)return '原课程不属于这间工作室，没有换成另一门课。'
+  if(target.sampleJobId!==undefined){
+   const j=sampleJob(course,target,context)
+   if(c!.sampleAttempts.filter(id=>id===target.sampleJobId).length!==1||!checkJob(j,target.sampleJobId)||j?.definitionId!==`course-sample-${c!.productId}-${c!.topicId}`)return '原样课尝试已不可匹配，没有改成最新样课；请重新选择。'
+  }
+ }
+ return null
+}
+
+function focusedCourseScene(course:NonNullable<CourseProjection>,_date:string,target:CourseSceneTarget,context?:CourseSceneContext):CourseSceneProgress{
+ const reason=courseTargetReason(course,target,context)
+ const make=(phase:string,title:string,line:string,terms:string,label:string,outcome:CourseSceneProgress['outcome']='none',refs:readonly CourseSceneResultRef[]=[]):CourseSceneProgress=>({...scene(title,line,title,terms,label),phase,outcome,resultRefs:refs,target})
+ if(reason)return {...make('course-invalid','先找回原来的这份教学准备。',reason,'原大纲、课程、学生和费用继续保留；请明确重新选择。','重新选择原课程对象'),invalidReason:reason}
+ const b=course.businesses.find(b=>b.id===target.businessId)!,closed=b.lifecycle==='closed',stopped=['winding_down','closed'].includes(b.lifecycle)
+ const globalOutline=context?.preparationReady??course.outlines.some(o=>o.businessId===b.id&&o.job?.status==='completed')
+ const canActivate=b.lifecycle==='preparing'&&b.prepared&&globalOutline
+ const activation={kind:'ActivateBusiness' as const,payload:{businessId:b.id},confirm:true}
+ const originalJob=(kind:'outline'|'license'|'sample',job:ProductionJob,identity:string,refs:readonly CourseSceneResultRef[]):CourseSceneProgress=>{
+  const waiting=job.status==='planned'||job.status==='running',complete=job.status==='completed',name=kind==='outline'?'大纲':kind==='license'?'课程素材使用范围':'样课'
+  const shortName=kind==='license'?'素材':name,definition=COURSE_JOBS.find(d=>d.id===job.definitionId),terms=definition?`${moneyText(definition.costFen)} / ${definition.actionPoints}点 / ${definition.durationDays}日；`:''
+  const status=job.status==='planned'?'已预留，尚未实付或使用行动。':job.status==='running'?'已开工，成本与行动已按原账承担。':complete?'已实际完成，已耗成本与行动保留。':job.status==='cancelled'?'未开工安排已取消，预留按原账释放。':'已中断，尚未完成；已耗成本与行动保留。'
+  const p=make(`course-${kind}-${job.status}`,waiting?job.status==='planned'?`这份${shortName}，已经排进日历。`:`这份${shortName}，正在准备。`:complete?`这份${shortName}，已经完成。`:`这份${shortName}，已经停下。`,`${identity} · ${job.startAt}—${job.completeAt}。`,`${job.resources.map(id=>course.resources.find(r=>r.id===id)?.label??'原安排的制作成员').join('、')} · ${terms}${status}${stopped?'工作室已停；':''}资格与旧责任仍须核对；${kind==='sample'?'样课不等于招生。':'样课与招生另定。'}`,`翻看这份原${name}与安排`,waiting?'pending':complete?'actual':'non-success',refs)
+  return waiting?{...p,wait:{date:job.status==='planned'?job.startAt:job.completeAt,label:`等这份原${name}${job.status==='planned'?'实际开工':'实际完成'}`},waitDate:job.status==='planned'?job.startAt:job.completeAt}:p
+ }
+ if(target.kind==='outline'){
+  const o=course.outlines.find(o=>o.id===target.outlineId)!,j=o.job!,p=originalJob('outline',j,'这间工作室的原大纲',[{kind:'outline',id:o.id,date:j.startAt},...(j.status==='completed'?[{kind:'job' as const,id:j.id,date:j.completeAt}]:[])])
+  return canActivate&&j.status==='completed'?{...p,command:activation,preparation:{phase:'activate',businessId:b.id},choice:{title:'决定是否启用这间教室',line:'大纲与营业准备已经存在；仍须独立核对原资金、资格和初始产能，此刻没有学生或学费。',label:'核对条件，启用这间教室'}}:p
+ }
+ if(target.kind==='license'){
+  const l=course.licenses.find(l=>l.id===target.licenseId)!,j=l.job!
+  return originalJob('license',j,'本工作室这份案例的原课程使用范围',[{kind:'license',id:l.id,date:j.startAt},...(j.status==='completed'?[{kind:'job' as const,id:j.id,date:j.completeAt}]:[])])
+ }
+ if(target.kind==='studio'){
+  if(closed)return make('course-closed','这间原教室，已经收尾。','原课程、大纲、案例与旧班记录仍在。','新工作室与新付费承诺须另外明确选择，不把历史成果当成本季新增收入。','翻看这间原工作室的记录','actual')
+  if(stopped||b.lifecycle==='paused')return make('course-paused','先把这间原教室的安排看清。','工作室已经暂停或进入收尾。','停止新安排不清除原任务、维护、更新或旧学生责任。','翻看原工作室与有限收尾','non-success')
+  if(canActivate)return {...make('course-activate','大纲与营业准备都已留下。','已有公开准备可以复用，不需要为进入下一步再写一次大纲。','启用仍独立核对原资格、可花至少¥2,000与初始产能；启用后按实际在营日承担原月维护。','核对条件，启用这间教室'),preparation:{phase:'activate',businessId:b.id},command:activation}
+  if(b.lifecycle==='preparing'){
+   const active=course.outlines.filter(o=>o.businessId===b.id&&o.job&&['planned','running'].includes(o.job.status))
+   if(active.length===1){const o=active[0]!,p=originalJob('outline',o.job!,'这间工作室的大纲',[{kind:'outline',id:o.id,date:o.job!.startAt}]);return {...p,preparation:{phase:'waiting',businessId:b.id,jobId:o.job!.id}}}
+   return {...make('course-outline-needed','先把教学准备真正写出来。',globalOutline?'原全局大纲已经存在；本工作室的营业准备仍须按原记录核对。':'全局教学大纲与本工作室准备各有自己的原条件。','可安排原大纲任务¥100、1点、7日；已有合法准备路线继续可用，不会重复收取一笔强制准备费。','选择原执笔资源与日期'),preparation:{phase:'outline',businessId:b.id}}
+  }
+  return make('course-define','这间教室已启用，再明确想教什么。','已有课程与案例仍保留；没有替你选择第一份草稿。','选择实际已付案例、形式、主题、受众和使用同意，再独立定义这门课；此刻没有招生。','构思新课或明确翻选已有课程')
+ }
+ const c=course.courses.find(c=>c.id===target.courseId)!,job=sampleJob(course,target,context),historical=target.sampleJobId!==undefined&&target.sampleJobId!==c.sampleJobId
+ const refs:CourseSceneResultRef[]=[{kind:'course',id:c.id,date:c.createdAt}]
+ if(job?.status==='completed')refs.push({kind:'job',id:job.id,date:job.completeAt})
+ if(historical&&job)return {...originalJob('sample',job,c.name,refs),historical:true}
+ if(job&&['planned','running','interrupted','cancelled'].includes(job.status))return originalJob('sample',job,c.name,refs)
+ if(closed||c.status==='retired'||stopped)return make(closed?'course-closed':'course-retired','这份原课程，已经停止新安排。',c.name+'的原样课与版本仍保留。','原学生、退款、更新与费用继续按原记录处理；本次查看不会恢复招生。','翻看原课程与全部旧责任','non-success',refs)
+ if(c.unresolvedUpdates.length)return make('course-update-required','样课记录还在，工具前提需要更新。',`${c.name}有原更新责任，期限${c.unresolvedUpdates.map(u=>u.dueAt).sort()[0]}。`,'原更新须实际投入并完成；新获客、班额与支持仍另行决定，不把更新记作新产品或收入。','翻看原更新与课程记录',c.status==='ready'?'actual':'pending',refs)
+ const pendingRights=course.licenses.filter(l=>l.businessId===b.id&&c.cases.some(ref=>ref.id===l.caseId)&&l.job&&['planned','running'].includes(l.job.status)).sort((a,b)=>(a.job!.status==='planned'?a.job!.startAt:a.job!.completeAt).localeCompare(b.job!.status==='planned'?b.job!.startAt:b.job!.completeAt)||a.id.localeCompare(b.id))[0]
+ if(pendingRights?.job)return originalJob('license',pendingRights.job,c.name+' · 原案例的课程使用范围',[...refs,{kind:'license',id:pendingRights.id,date:pendingRights.job.startAt}])
+ const missingRights=c.cases.some(ref=>{const info=course.cases.find(r=>r.kind===ref.kind&&r.id===ref.id);return !info||info.licensed&&!course.licenses.some(l=>l.businessId===b.id&&l.caseId===ref.id&&l.job?.status==='completed')})
+ if(missingRights)return make('course-rights-required','先把这门课的原案例使用范围看清。',c.name+'的案例或课程素材权利仍待核对。','已付案例和本单授权不是同一件事。需要的课程使用范围按原¥300、1点、7日实际完成；不自动授权。','核对这门课的实际案例与课程权利',c.status==='ready'?'actual':'none',refs)
+ if(c.qualificationReasons.length)return make('course-tool-required','这门课的工具前提，需要先确认。',c.name+'的当前公开工具资格尚不齐全。','沿原申请和阅读动作核对；样课制作期每一日仍须通过原资格预览，不编批准或延长期限。','查看原工具资格与课程准备',c.status==='ready'?'actual':'none',refs)
+ if(c.paused||b.lifecycle==='paused')return make('course-paused','这份课程暂不接受新的安排。',c.name+'的原样课与版本仍在。','恢复仍须原条件与独立决定；旧班责任、更新和费用没有消失。','核对原暂停与恢复条件',c.status==='ready'?'actual':'none',refs)
+ if(c.status==='ready')return make('course-ready','这一份样课，已经真正准备好。',`${c.name}的样课已实际完成，${course.cohorts.some(co=>co.courseId===c.id)?'已有班期与学员记录继续保留。':'尚未招生。'}`,'当前案例权利与工具前提可核；新的获客、价格、班额、支持和实际报名仍须另行决定，本次查看没有新增学费或教学收入。','翻看这门原课，再决定是否迈向下一步','actual',refs)
+ if(job?.status==='completed')return originalJob('sample',job,c.name,refs)
+ const definition=COURSE_JOBS.find(d=>d.id===`course-sample-${c.productId}-${c.topicId}`)
+ return make('course-draft','课程方案留下了，样课还须亲手做出来。',c.name+'仍是方案，没有把定义当作样课完成。',`${definition?`本门样课${moneyText(definition.costFen)}、${definition.actionPoints}点、${definition.durationDays}日；`:''}显选实际资源与日期，再核对制作期资格；未来学费不能支付当前制作。`,'选择这门课样课的资源与开工日','none',refs)
+}
+
+/** Undefined keeps the original recommendation; null explicitly selects no existing object. */
+export function courseSceneProgress(course:CourseProjection,date:string,target?:CourseSceneTarget|null,context?:CourseSceneContext):CourseSceneProgress|null{
+ if(target===undefined)return legacyCourseSceneProgress(course,date)
+ if(target===null){
+  const available=!!course&&date>=course.catalog.availableAt
+  return {...scene(available?'先选这次想认真准备的那一堂课。':'这间教室，还没有到可以筹备的日子。',available?'明确选择已有工作室或课程；也可在原规则允许时筹备，不会自动接管旧班。':course?`课程筹备的公开可用日是${course.catalog.availableAt}；当前尚未到达，不能提前建立工作室。`:'当前没有可核对的课程筹备记录。','先明确这一次教学准备',available?'资金、案例、大纲、课程权利与样课分别核对；本次选择不会招生或收款。':'现在可以先积累真实已付案例、保留生活与自有资金；到可用日仍须核对原工具资格、大纲和实际样课，不会因等待自动获得许可。',available?'明确选择课程准备对象':'查看已付案例与原资格边界'),phase:available?'course-entry':'course-unavailable',...(!available&&course&&date<course.catalog.availableAt?{outcome:'pending' as const,waitDate:course.catalog.availableAt,wait:{date:course.catalog.availableAt,label:'保留准备，等到公开可用日'}}:{})}
+ }
+ if(!course)return {...scene('原课程记录暂不可达。','没有换到另一门课。','重新选择原对象','原记录保留，当前不执行任何准备。','重新选择课程对象'),phase:'course-invalid',invalidReason:'当前公开课程记录不可达，请重新选择。',target}
+ return focusedCourseScene(course,date,target,context)
 }

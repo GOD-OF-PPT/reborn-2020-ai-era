@@ -1,0 +1,1 @@
+只改originalJob的title/line/terms显示文本，保phase/outcome/target/resultRefs/wait/commands/旧legacy推荐逐段相同；复用已有normal许可loop加强planned/running/completed精确语义断言先红后绿。保原所有断言和时限。留完整src初末身份及两owned前后像，Root独立R5构建和实际当前窗口/原79planned复验；不以组件测试冒称布局解决。无规则/AP/日期/价格/层级/CSS/字体/其他production/兼容/Git改动。

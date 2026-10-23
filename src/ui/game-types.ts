@@ -16,11 +16,13 @@ import type { projectFirstOrder } from '../application/first-order.ts'
 import type { projectMarket } from '../core/market-projection.ts'
 import type {VideoSceneTarget} from './video-scene-progress.ts'
 import type {VideoSceneDraftMemory} from './video-scene-draft.ts'
+import type {CourseSceneTarget} from './course-scene-progress.ts'
+import type {CourseSceneDraftMemory,CourseSceneDraftSlot} from './course-scene-draft.ts'
 export type PlayingView=NonNullable<GameSnapshot['view']>
 export interface PlayFeatures {readonly journey?:(NonNullable<ReturnType<typeof projectJourney>>&{ending?:EndingProjection|null})|null;readonly life:LifeProjection;readonly story:StoryProjection;readonly deepseek:DeepseekProjection;readonly relay:RelayProjection;readonly routines:RoutineProjection;readonly course:CourseProjection;readonly video:VideoProjection;readonly firstOrder:ReturnType<typeof projectFirstOrder>;readonly market:NonNullable<ReturnType<typeof projectMarket>>;readonly workbench:WorkbenchProjection}
 export type RequestCommand=(kind:string,payload:unknown,label:string,confirm?:boolean)=>void
 export type LifeSceneMode='person'|'rest'|'workspace'
-export interface SceneTarget {accountId?:string;personId?:LifePerson;lifeSelection?:LifeSceneMode;deepseekPane?:'ecosystem'|'equity';recordId?:string;videoTarget?:VideoSceneTarget;openRecord?:boolean}
+export interface SceneTarget {accountId?:string;personId?:LifePerson;lifeSelection?:LifeSceneMode;deepseekPane?:'ecosystem'|'equity';recordId?:string;videoTarget?:VideoSceneTarget;courseTarget?:CourseSceneTarget|null;courseDraftSlot?:CourseSceneDraftSlot;openRecord?:boolean}
 export type NavigateScene=(screen:Screen,target?:SceneTarget)=>void
-export interface GamePanelProps {readonly controller:GameController;readonly view:PlayingView;readonly features:PlayFeatures;readonly request:RequestCommand;readonly accountId:string;readonly textOnly?:boolean;readonly videoDraftMemory?:VideoSceneDraftMemory}
+export interface GamePanelProps {readonly controller:GameController;readonly view:PlayingView;readonly features:PlayFeatures;readonly request:RequestCommand;readonly accountId:string;readonly textOnly?:boolean;readonly videoDraftMemory?:VideoSceneDraftMemory;readonly courseDraftMemory?:CourseSceneDraftMemory}
 export interface ConfirmIntent {readonly command:CommandEnvelope;readonly label:string}

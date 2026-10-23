@@ -1,4 +1,5 @@
 import {expect,it} from 'vitest'
+import {createCourseFixture} from '../testing/course-fixture.ts'
 import {prepareCourseF03} from '../testing/course-scenarios.ts'
 import {projectCourse} from '../core/course-projection.ts'
 import {courseSceneProgress,courseNeedsRecovery} from './course-scene-progress.ts'
@@ -183,4 +184,51 @@ it('uses the actual second-stage deadline and preserves an already delivered fir
  const command:CommandEnvelope={runId:p.h.run.runId,actorId:'player',commandId:'inspect-stage-original',expectedRevision:p.h.run.revision,kind:'StartCourseStage',payload:{cohortId:co.id,index:1,resources:['player-production'],startAt:'2023-02-07'}}
  const html=renderToStaticMarkup(createElement(CourseCommandDetails,{command,course:p.view()}))
  expect(html).toContain('第2段教学');expect(html).toContain('2023-02-28');expect(html).toContain('2023-02-07实际交付本段');expect(html).not.toContain('不提前确认本段教学收入')
+})
+it('keeps an explicit original sample attempt through a real interruption and later retry, without following another draft',()=>{
+ const p=path(),business=p.h.run.operations!.businesses.find(b=>b.id===p.course.businessId)!
+ p.h.send('BuildCourseSample',{courseId:p.course.id,resources:['player-production'],startAt:'2023-01-02'})
+ const first=p.view().courses.find(c=>c.id===p.course.id)!.sampleJobId!
+ const target={kind:'course' as const,businessId:business.id,courseId:p.course.id,sampleJobId:first}
+ expect(courseSceneProgress(p.view(),p.h.run.timeline.cursor.date,target,{operations:p.h.run.operations})).toMatchObject({phase:'course-sample-planned',wait:{date:'2023-01-02'},target})
+ p.h.send('AdvanceTime',{date:'2023-01-02'});p.h.send('InterruptJob',{jobId:first})
+ p.h.send('BuildCourseSample',{courseId:p.course.id,resources:['player-production'],startAt:'2023-01-03'})
+ p.h.send('DefineCourse',{businessId:business.id,name:'另一份真实草稿',productId:'intro_recorded',topicId:'image_workflows',edition:'foundation',segment:'ai_learners',cases:p.course.cases,consent:true})
+ const raw=p.h.codec.export(p.h.run),progress=courseSceneProgress(p.view(),p.h.run.timeline.cursor.date,target,{operations:p.h.run.operations})!
+ expect(progress).toMatchObject({phase:'course-sample-interrupted',outcome:'non-success',target});expect(progress.wait).toBeUndefined()
+ expect(progress.line+' '+progress.choice.line).not.toContain('另一份真实草稿');expect(p.h.codec.export(p.h.run)).toBe(raw)
+ expect(courseSceneProgress(p.view(),p.h.run.timeline.cursor.date,{...target,sampleJobId:'missing-original-job'},{operations:p.h.run.operations})?.invalidReason).toBeTruthy()
+ expect(courseSceneProgress(p.view(),p.h.run.timeline.cursor.date,{...target,businessId:'another-business'},{operations:p.h.run.operations})?.invalidReason).toBeTruthy()
+})
+
+it('distinguishes an explicit new entry from a selected ready course and keeps qualification and update boundaries visible',()=>{
+ const p=path(),target={kind:'course' as const,businessId:p.course.businessId,courseId:p.course.id}
+ p.h.send('BuildCourseSample',{courseId:p.course.id,resources:['player-production'],startAt:'2023-01-01'});p.h.send('AdvanceTime',{date:'2023-01-15'})
+ const v=p.view(),raw=p.h.codec.export(p.h.run),context={operations:p.h.run.operations}
+ expect(courseSceneProgress(v,'2023-01-15',null,context)).toMatchObject({phase:'course-entry',outcome:'none'})
+ const ready=courseSceneProgress(v,'2023-01-15',target,context)!
+ expect(ready).toMatchObject({phase:'course-ready',outcome:'actual',target});expect(ready.line+' '+ready.choice.line).toContain('尚未招生')
+ // Qualification is an already public reason; it never rewrites the accepted fixture history.
+ const unavailable={...v,courses:v.courses.map(c=>c.id===p.course.id?{...c,qualificationReasons:['MISSING_ENTITLEMENT:local_model_rights_and_hardware']}:c)}
+ expect(courseSceneProgress(unavailable,'2023-01-15',target,context)).toMatchObject({phase:'course-tool-required',outcome:'actual'})
+ expect(p.h.codec.export(p.h.run)).toBe(raw)
+})
+
+it('keeps a real old class visible without claiming no enrollment or replacing a selected new draft',()=>{
+ const p=path(),{co}=p.enroll(),original={kind:'course' as const,businessId:p.course.businessId,courseId:p.course.id},context={operations:p.h.run.operations}
+ const old=courseSceneProgress(p.view(),p.h.run.timeline.cursor.date,original,context)!
+ expect(old.phase).toBe('course-ready');expect(old.line).toContain('已有班期与学员记录');expect(old.line).not.toContain('尚未招生')
+ p.h.send('DefineCourse',{businessId:p.course.businessId,name:'正在准备的新草稿',productId:'practical_cohort',topicId:'image_workflows',edition:'foundation',segment:'ai_learners',cases:p.course.cases,consent:true})
+ const fresh=p.view().courses.at(-1)!,target={kind:'course' as const,businessId:fresh.businessId,courseId:fresh.id},raw=p.h.codec.export(p.h.run)
+ const current=courseSceneProgress(p.view(),p.h.run.timeline.cursor.date,target,{operations:p.h.run.operations})!
+ expect(current).toMatchObject({phase:'course-draft',target,outcome:'none'});expect(current.line).toContain(fresh.name);expect(current.choice.line).toContain('¥2,500、1点、14日')
+ expect(p.view().cohorts.find(c=>c.id===co.id)?.students).toHaveLength(20);expect(p.h.codec.export(p.h.run)).toBe(raw)
+})
+
+it('keeps the original command clock reachable while waiting for the public course opening date',()=>{
+ const h=createCourseFixture(),before=h.codec.export(h.run),view=projectCourse(h.run,h.course)!
+ const progress=courseSceneProgress(view,h.run.timeline.cursor.date,null)
+ expect(progress).toMatchObject({phase:'course-unavailable',outcome:'pending',waitDate:view.catalog.availableAt,wait:{date:view.catalog.availableAt,label:'保留准备，等到公开可用日'}})
+ expect(progress?.command).toBeUndefined();expect(progress?.stage).toBeUndefined()
+ expect(h.codec.export(h.run)).toBe(before)
 })

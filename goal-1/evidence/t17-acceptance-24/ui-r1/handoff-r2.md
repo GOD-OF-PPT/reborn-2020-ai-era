@@ -1,0 +1,1 @@
+根最后必要修缮已补：存在未closed studio时，objects新建按钮禁用并明示先选择/按原册收尾；open fund回objects、payload helper同步null，闭旧再开仍可。复用正常已有studio反例targeted-r4 2/2；前轮源及红type日志保持，不覆盖。最终四文件见final-source-r2.json，TSX语法0/CSS解析40节点。冻结本代理源，根接线/type/build/Chrome仍独立待根完成。

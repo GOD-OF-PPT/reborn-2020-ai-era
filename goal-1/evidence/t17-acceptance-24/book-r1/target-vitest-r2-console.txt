@@ -1,0 +1,41 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/course-target.test.tsx (7 tests | 1 failed | 5 skipped) 17191ms
+   × carries the pending licence step from the actual scene handler to the original book without borrowing the sample draft 3151ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed | 5 skipped (7)
+   Start at  23:24:16
+   Duration  19.56s (tests 90%, transform 5%, import 5%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/course-target.test.tsx > carries the pending licence step from the actual scene handler to the original book without borrowing the sample draft
+AssertionError: expected undefined to match object { …(5) }
+
+- Expected:
+{
+  "businessId": "ops:6b1fbedd3e88f5d918759df76852860e",
+  "caseId": "vid:8a6530eb3426885201e1312851e02b96",
+  "caseKind": "video",
+  "resources": [
+    "player-production",
+  ],
+  "startAt": "2023-01-20",
+}
+
++ Received:
+undefined
+
+ ❯ src/ui/course-target.test.tsx:205:27
+    203|   eventHooks.enabled=false
+    204|   const parsed=courseDraftCommand(p,draft,'license',target,ref)
+    205|   expect(parsed?.payload).toMatchObject({businessId:b.id,caseKind:'vid…
+       |                           ^
+    206|   const book=renderToStaticMarkup(<CoursePanel {...p} initialTarget={t…
+    207|   const anchor=b.id+'-license-draft-video-'+ref.id
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

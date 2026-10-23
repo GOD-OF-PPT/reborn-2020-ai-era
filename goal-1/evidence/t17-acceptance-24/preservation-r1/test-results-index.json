@@ -1,0 +1,2466 @@
+{
+  "at": "2026-10-23T17:04:39.437Z",
+  "scope": "Snapshot of all existing result/terminal/validation/checks JSON and relevant original console logs under root24; preservation root excluded. No new tests executed.",
+  "recordCount": 37,
+  "records": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/app-legacy-review-r1/vitest-r1-terminal.json",
+      "bytes": 2563,
+      "sha256": "4d213ba38900da41e202666ee4a7c31c416b243bd1a9f0a9dd48a100723fdbfb",
+      "keys": [
+        "argv",
+        "code",
+        "signal",
+        "durationMs",
+        "source",
+        "sourceAfter"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": 4704,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "src/ui/App.preparation-save.test.tsx",
+        "--maxWorkers",
+        "1"
+      ],
+      "sourceRecords": [
+        {
+          "path": "src/ui/App.tsx",
+          "bytes": 45500,
+          "sha256": "af9bc0df327ba2c5438911ceaa1706c4692bef65b9b8dcf3d750f766fcaa7c87"
+        },
+        {
+          "path": "src/ui/App.preparation-save.test.tsx",
+          "bytes": 9501,
+          "sha256": "6994fc9124ad6cacc76f22fbf97b6bea4722da97b4fa186f3eca493ff85af9d6"
+        },
+        {
+          "path": "src/ui/CoursePanel.tsx",
+          "bytes": 47741,
+          "sha256": "3874c2cb4810a35e238122cfede959135b32b267dbc26a87d69cf2ceb10ce9eb"
+        },
+        {
+          "path": "src/ui/course-scene-draft.ts",
+          "bytes": 2954,
+          "sha256": "12773457d1229761de3003d614e289b1469d6198c2269c293565f0119fd92ef3"
+        },
+        {
+          "path": "src/ui/course-player-thread.ts",
+          "bytes": 9075,
+          "sha256": "8e573b821738ecc9600ff092cc21da6e5f99bc602ffa71428baf16adb9756620"
+        },
+        {
+          "path": "src/ui/SceneEcho.tsx",
+          "bytes": 4420,
+          "sha256": "1b25165e2ecc31e2e4034a2d6e5293da41c6f175ff9cf17b5a56f3d5825a097f"
+        },
+        {
+          "path": "src/testing/course-fixture.ts",
+          "bytes": 5224,
+          "sha256": "41bd9d201fbeaa8bfdf8e3851606fd916bd269a09bb4915b7da3b391027dfc54"
+        }
+      ],
+      "sourceCount": 7,
+      "sourceBeforeAfterRecorded": true,
+      "sourceBeforeAfterEqual": true,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-bridge-r2/integration-r5-result.json",
+      "bytes": 646,
+      "sha256": "965e8a3b3fafe26ed7025bc0f7fe372dbb304d4282319cfad3c53a39823465d8",
+      "keys": [
+        "started",
+        "finished",
+        "exit",
+        "signal",
+        "argv",
+        "sourceFiles",
+        "changes"
+      ],
+      "code": 1,
+      "status": null,
+      "durationMs": null,
+      "started": "2026-10-23T16:40:25.151Z",
+      "finished": "2026-10-23T16:42:21.179Z",
+      "argv": [
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "src/ui/CoursePreparationDetails.test.tsx",
+        "src/ui/CourseRefundDetails.test.tsx",
+        "src/ui/CourseSceneChoice.license.test.tsx",
+        "src/ui/CourseSceneChoice.reselect.test.tsx",
+        "src/ui/course-player-thread.test.ts",
+        "src/ui/course-scene-choice.test.tsx",
+        "src/ui/course-scene-progress.test.ts",
+        "src/ui/course-target.test.tsx",
+        "src/ui/scene-play.test.tsx",
+        "--maxWorkers=1"
+      ],
+      "sourceRecords": null,
+      "sourceCount": 168,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": [],
+      "kind": "copy of original integration-r5 result, not another run"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-bridge-r2/vitest-r1-terminal.json",
+      "bytes": 1685,
+      "sha256": "36467fa49b228b910aeacbfa6e5e1da68fd068cd26a1f3817d51e62989b8a4b5",
+      "keys": [
+        "argv",
+        "code",
+        "signal",
+        "durationMs",
+        "source",
+        "sourceAfter"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": 15066,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "src/ui/course-target.test.tsx",
+        "--maxWorkers",
+        "1",
+        "-t",
+        "carries the pending licence step from the actual scene handler"
+      ],
+      "sourceRecords": [
+        {
+          "path": "src/ui/course-target.test.tsx",
+          "bytes": 23075,
+          "sha256": "165aeb5d7c960864b20cf222dc5ee3620ddaf2721284a0c7bc8c20fed51c9263"
+        },
+        {
+          "path": "src/ui/CourseSceneChoice.tsx",
+          "bytes": 28756,
+          "sha256": "bc39257c7e712cbd389b6f71d020b0003626939ee81760ade7406f99d22d26c1"
+        },
+        {
+          "path": "src/ui/CoursePanel.tsx",
+          "bytes": 47741,
+          "sha256": "3874c2cb4810a35e238122cfede959135b32b267dbc26a87d69cf2ceb10ce9eb"
+        },
+        {
+          "path": "src/ui/course-scene-draft.ts",
+          "bytes": 2954,
+          "sha256": "12773457d1229761de3003d614e289b1469d6198c2269c293565f0119fd92ef3"
+        }
+      ],
+      "sourceCount": 4,
+      "sourceBeforeAfterRecorded": true,
+      "sourceBeforeAfterEqual": true,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/draft-vitest-r1-terminal.json",
+      "bytes": 616,
+      "sha256": "4501dc55ee55f2011fc65d0cead1c4633d817be4b14c2f431cd6c45e4f48464f",
+      "keys": [
+        "argv",
+        "code",
+        "signal",
+        "durationMs",
+        "source"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": 1106,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "src/ui/course-scene-draft.test.ts",
+        "--maxWorkers",
+        "1"
+      ],
+      "sourceRecords": [
+        {
+          "path": "src/ui/course-scene-draft.ts",
+          "bytes": 2720,
+          "sha256": "5d3cf2100aab41c7e5ff14a599882caa020783462866e61c8642d30926d15716"
+        },
+        {
+          "path": "src/ui/course-scene-draft.test.ts",
+          "bytes": 3669,
+          "sha256": "bc7e131d3779001ff695de90ffc29cb8cb682e0be843e7bc21c50005f3f74e63"
+        }
+      ],
+      "sourceCount": 2,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/draft-vitest-r2-red-terminal.json",
+      "bytes": 616,
+      "sha256": "75e75eb087ca5425d7ec574338a82350277a2402ff7799b677ce3d15e9a34f20",
+      "keys": [
+        "argv",
+        "code",
+        "signal",
+        "durationMs",
+        "source"
+      ],
+      "code": 1,
+      "status": null,
+      "durationMs": 2162,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "src/ui/course-scene-draft.test.ts",
+        "--maxWorkers",
+        "1"
+      ],
+      "sourceRecords": [
+        {
+          "path": "src/ui/course-scene-draft.ts",
+          "bytes": 2720,
+          "sha256": "5d3cf2100aab41c7e5ff14a599882caa020783462866e61c8642d30926d15716"
+        },
+        {
+          "path": "src/ui/course-scene-draft.test.ts",
+          "bytes": 5121,
+          "sha256": "a0879f3bf38129162469875b955698bb3030d60e0fad34361681773da161d71c"
+        }
+      ],
+      "sourceCount": 2,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/draft-vitest-r3-red-terminal.json",
+      "bytes": 616,
+      "sha256": "7adcba6c7abd2b1d43f2f75da04c21e25657e067838c0bc102123dbcaabc18ab",
+      "keys": [
+        "argv",
+        "code",
+        "signal",
+        "durationMs",
+        "source"
+      ],
+      "code": 1,
+      "status": null,
+      "durationMs": 1686,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "src/ui/course-scene-draft.test.ts",
+        "--maxWorkers",
+        "1"
+      ],
+      "sourceRecords": [
+        {
+          "path": "src/ui/course-scene-draft.ts",
+          "bytes": 2749,
+          "sha256": "1fa268ba49ece15c329f3f9665af981f2c4c10dfd94c0963a49240a3596d249c"
+        },
+        {
+          "path": "src/ui/course-scene-draft.test.ts",
+          "bytes": 6115,
+          "sha256": "976a6ec4a88fa8287f47f818800ef70d92deff20ad01f34210117d7c6439f860"
+        }
+      ],
+      "sourceCount": 2,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/draft-vitest-r4-green-terminal.json",
+      "bytes": 616,
+      "sha256": "f89168f610e26e71195600b4ea4a0a0fc4d8f272774d3e1ccd520f45eeecd455",
+      "keys": [
+        "argv",
+        "code",
+        "signal",
+        "durationMs",
+        "source"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": 1613,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "src/ui/course-scene-draft.test.ts",
+        "--maxWorkers",
+        "1"
+      ],
+      "sourceRecords": [
+        {
+          "path": "src/ui/course-scene-draft.ts",
+          "bytes": 2954,
+          "sha256": "12773457d1229761de3003d614e289b1469d6198c2269c293565f0119fd92ef3"
+        },
+        {
+          "path": "src/ui/course-scene-draft.test.ts",
+          "bytes": 6192,
+          "sha256": "e4d998f065d1b2cd58ba59b1bf82305a419f9c501f8022541c674b9199c07118"
+        }
+      ],
+      "sourceCount": 2,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/strict-owned-r1-terminal.json",
+      "bytes": 1786,
+      "sha256": "e0b6d8d95cca294931b9d2ea6222c64339d73c7acd8128983e64c4940fa7826d",
+      "keys": [
+        "argv",
+        "code",
+        "signal",
+        "durationMs",
+        "source"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": 40028,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--ignoreConfig",
+        "--noEmit",
+        "--allowImportingTsExtensions",
+        "--allowArbitraryExtensions",
+        "--skipLibCheck",
+        "--strict",
+        "--noUncheckedIndexedAccess",
+        "--exactOptionalPropertyTypes",
+        "--noUnusedLocals",
+        "--noUnusedParameters",
+        "--moduleResolution",
+        "bundler",
+        "--module",
+        "esnext",
+        "--target",
+        "es2023",
+        "--jsx",
+        "react-jsx",
+        "--types",
+        "vite/client,node",
+        "src/ui/CoursePanel.tsx",
+        "src/ui/SceneJournal.tsx",
+        "src/ui/course-scene-draft.ts",
+        "src/ui/course-scene-draft.test.ts",
+        "src/ui/course-target.test.tsx",
+        "src/ui/scene-play.test.tsx"
+      ],
+      "sourceRecords": [
+        {
+          "path": "src/ui/CoursePanel.tsx",
+          "bytes": 43784,
+          "sha256": "3606b4724db0b2f0d602b4c2f35ce1c2c2a68403cf7d0ef7cc9c1a86bbc262f9"
+        },
+        {
+          "path": "src/ui/SceneJournal.tsx",
+          "bytes": 8706,
+          "sha256": "66caf37fa7b7002ca40a9a7133e6551e467b4ddbddadbeb72d6272450173252c"
+        },
+        {
+          "path": "src/ui/course-scene-draft.ts",
+          "bytes": 2954,
+          "sha256": "12773457d1229761de3003d614e289b1469d6198c2269c293565f0119fd92ef3"
+        },
+        {
+          "path": "src/ui/course-scene-draft.test.ts",
+          "bytes": 6192,
+          "sha256": "e4d998f065d1b2cd58ba59b1bf82305a419f9c501f8022541c674b9199c07118"
+        },
+        {
+          "path": "src/ui/course-target.test.tsx",
+          "bytes": 15371,
+          "sha256": "e0a5fc02db9df906f843f534358d87b2c20804a0a2719408e01f93a459e6f363"
+        },
+        {
+          "path": "src/ui/scene-play.test.tsx",
+          "bytes": 4771,
+          "sha256": "00f48b95ebc369c54673db01dec9912716b47c7e470585e49063663ef9901a12"
+        }
+      ],
+      "sourceCount": 6,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/strict-owned-r2-terminal.json",
+      "bytes": 2782,
+      "sha256": "faba5ce7a2536b0c7bdf0d491d1f98dd7b6e3704b4329490655f3895a1d95b5e",
+      "keys": [
+        "argv",
+        "code",
+        "signal",
+        "durationMs",
+        "source",
+        "sourceAfter"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": 25348,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--ignoreConfig",
+        "--noEmit",
+        "--allowImportingTsExtensions",
+        "--allowArbitraryExtensions",
+        "--skipLibCheck",
+        "--strict",
+        "--noUncheckedIndexedAccess",
+        "--exactOptionalPropertyTypes",
+        "--noUnusedLocals",
+        "--noUnusedParameters",
+        "--moduleResolution",
+        "bundler",
+        "--module",
+        "esnext",
+        "--target",
+        "es2023",
+        "--jsx",
+        "react-jsx",
+        "--types",
+        "vite/client,node",
+        "src/ui/CoursePanel.tsx",
+        "src/ui/SceneJournal.tsx",
+        "src/ui/course-scene-draft.ts",
+        "src/ui/course-scene-draft.test.ts",
+        "src/ui/course-target.test.tsx",
+        "src/ui/scene-play.test.tsx"
+      ],
+      "sourceRecords": [
+        {
+          "path": "src/ui/CoursePanel.tsx",
+          "bytes": 47746,
+          "sha256": "bf30a623d4dcb20dbfcfc5a37da4f78dbc9769836ded9591be34cb4b770182f1"
+        },
+        {
+          "path": "src/ui/SceneJournal.tsx",
+          "bytes": 8706,
+          "sha256": "66caf37fa7b7002ca40a9a7133e6551e467b4ddbddadbeb72d6272450173252c"
+        },
+        {
+          "path": "src/ui/course-scene-draft.ts",
+          "bytes": 2954,
+          "sha256": "12773457d1229761de3003d614e289b1469d6198c2269c293565f0119fd92ef3"
+        },
+        {
+          "path": "src/ui/course-scene-draft.test.ts",
+          "bytes": 6192,
+          "sha256": "e4d998f065d1b2cd58ba59b1bf82305a419f9c501f8022541c674b9199c07118"
+        },
+        {
+          "path": "src/ui/course-target.test.tsx",
+          "bytes": 21822,
+          "sha256": "53e467a1312b3c3d6b1ed3a0f706cbc7a59d745f3e97f0f50d8a20486e5f63a5"
+        },
+        {
+          "path": "src/ui/scene-play.test.tsx",
+          "bytes": 4771,
+          "sha256": "00f48b95ebc369c54673db01dec9912716b47c7e470585e49063663ef9901a12"
+        }
+      ],
+      "sourceCount": 6,
+      "sourceBeforeAfterRecorded": true,
+      "sourceBeforeAfterEqual": true,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/strict-owned-r3-terminal.json",
+      "bytes": 2782,
+      "sha256": "8e7c495c8c96fca95b759d97374e319927b03dd8c41bc9dd12054edab4b48ce7",
+      "keys": [
+        "argv",
+        "code",
+        "signal",
+        "durationMs",
+        "source",
+        "sourceAfter"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": 23690,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--ignoreConfig",
+        "--noEmit",
+        "--allowImportingTsExtensions",
+        "--allowArbitraryExtensions",
+        "--skipLibCheck",
+        "--strict",
+        "--noUncheckedIndexedAccess",
+        "--exactOptionalPropertyTypes",
+        "--noUnusedLocals",
+        "--noUnusedParameters",
+        "--moduleResolution",
+        "bundler",
+        "--module",
+        "esnext",
+        "--target",
+        "es2023",
+        "--jsx",
+        "react-jsx",
+        "--types",
+        "vite/client,node",
+        "src/ui/CoursePanel.tsx",
+        "src/ui/SceneJournal.tsx",
+        "src/ui/course-scene-draft.ts",
+        "src/ui/course-scene-draft.test.ts",
+        "src/ui/course-target.test.tsx",
+        "src/ui/scene-play.test.tsx"
+      ],
+      "sourceRecords": [
+        {
+          "path": "src/ui/CoursePanel.tsx",
+          "bytes": 47741,
+          "sha256": "3874c2cb4810a35e238122cfede959135b32b267dbc26a87d69cf2ceb10ce9eb"
+        },
+        {
+          "path": "src/ui/SceneJournal.tsx",
+          "bytes": 8706,
+          "sha256": "66caf37fa7b7002ca40a9a7133e6551e467b4ddbddadbeb72d6272450173252c"
+        },
+        {
+          "path": "src/ui/course-scene-draft.ts",
+          "bytes": 2954,
+          "sha256": "12773457d1229761de3003d614e289b1469d6198c2269c293565f0119fd92ef3"
+        },
+        {
+          "path": "src/ui/course-scene-draft.test.ts",
+          "bytes": 6192,
+          "sha256": "e4d998f065d1b2cd58ba59b1bf82305a419f9c501f8022541c674b9199c07118"
+        },
+        {
+          "path": "src/ui/course-target.test.tsx",
+          "bytes": 22357,
+          "sha256": "5d1cf32174ed5dc5dcb01c25c6fe4812a815ce910300283197b9c7a6bac89089"
+        },
+        {
+          "path": "src/ui/scene-play.test.tsx",
+          "bytes": 4771,
+          "sha256": "00f48b95ebc369c54673db01dec9912716b47c7e470585e49063663ef9901a12"
+        }
+      ],
+      "sourceCount": 6,
+      "sourceBeforeAfterRecorded": true,
+      "sourceBeforeAfterEqual": true,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/target-vitest-r1-terminal.json",
+      "bytes": 1330,
+      "sha256": "213116f72d44710439e5b0e7f815f467129ba24ffeecf06f7a9f281f4c9c75d2",
+      "keys": [
+        "argv",
+        "code",
+        "signal",
+        "durationMs",
+        "source"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": 41547,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "src/ui/course-target.test.tsx",
+        "src/ui/course-scene-draft.test.ts",
+        "src/ui/scene-play.test.tsx",
+        "--maxWorkers",
+        "1"
+      ],
+      "sourceRecords": [
+        {
+          "path": "src/ui/CoursePanel.tsx",
+          "bytes": 43784,
+          "sha256": "3606b4724db0b2f0d602b4c2f35ce1c2c2a68403cf7d0ef7cc9c1a86bbc262f9"
+        },
+        {
+          "path": "src/ui/SceneJournal.tsx",
+          "bytes": 8706,
+          "sha256": "66caf37fa7b7002ca40a9a7133e6551e467b4ddbddadbeb72d6272450173252c"
+        },
+        {
+          "path": "src/ui/course-scene-draft.ts",
+          "bytes": 2954,
+          "sha256": "12773457d1229761de3003d614e289b1469d6198c2269c293565f0119fd92ef3"
+        },
+        {
+          "path": "src/ui/course-scene-draft.test.ts",
+          "bytes": 6192,
+          "sha256": "e4d998f065d1b2cd58ba59b1bf82305a419f9c501f8022541c674b9199c07118"
+        },
+        {
+          "path": "src/ui/course-target.test.tsx",
+          "bytes": 15371,
+          "sha256": "e0a5fc02db9df906f843f534358d87b2c20804a0a2719408e01f93a459e6f363"
+        },
+        {
+          "path": "src/ui/scene-play.test.tsx",
+          "bytes": 4771,
+          "sha256": "00f48b95ebc369c54673db01dec9912716b47c7e470585e49063663ef9901a12"
+        }
+      ],
+      "sourceCount": 6,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/target-vitest-r2-terminal.json",
+      "bytes": 2311,
+      "sha256": "d367bd5ae1834354ef311db64a58aacee1480d7e81e327e62932a5b33fd47901",
+      "keys": [
+        "argv",
+        "code",
+        "signal",
+        "durationMs",
+        "source",
+        "sourceAfter"
+      ],
+      "code": 1,
+      "status": null,
+      "durationMs": 20506,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "src/ui/course-target.test.tsx",
+        "--maxWorkers",
+        "1",
+        "-t",
+        "current sample record|pending licence step"
+      ],
+      "sourceRecords": [
+        {
+          "path": "src/ui/CoursePanel.tsx",
+          "bytes": 47746,
+          "sha256": "bf30a623d4dcb20dbfcfc5a37da4f78dbc9769836ded9591be34cb4b770182f1"
+        },
+        {
+          "path": "src/ui/SceneJournal.tsx",
+          "bytes": 8706,
+          "sha256": "66caf37fa7b7002ca40a9a7133e6551e467b4ddbddadbeb72d6272450173252c"
+        },
+        {
+          "path": "src/ui/course-scene-draft.ts",
+          "bytes": 2954,
+          "sha256": "12773457d1229761de3003d614e289b1469d6198c2269c293565f0119fd92ef3"
+        },
+        {
+          "path": "src/ui/course-scene-draft.test.ts",
+          "bytes": 6192,
+          "sha256": "e4d998f065d1b2cd58ba59b1bf82305a419f9c501f8022541c674b9199c07118"
+        },
+        {
+          "path": "src/ui/course-target.test.tsx",
+          "bytes": 21822,
+          "sha256": "53e467a1312b3c3d6b1ed3a0f706cbc7a59d745f3e97f0f50d8a20486e5f63a5"
+        },
+        {
+          "path": "src/ui/scene-play.test.tsx",
+          "bytes": 4771,
+          "sha256": "00f48b95ebc369c54673db01dec9912716b47c7e470585e49063663ef9901a12"
+        }
+      ],
+      "sourceCount": 6,
+      "sourceBeforeAfterRecorded": true,
+      "sourceBeforeAfterEqual": true,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/target-vitest-r3-terminal.json",
+      "bytes": 2333,
+      "sha256": "608ef1e248b3b72b688772f5189f88f289b96bc576c89a17dfadbe62c91effe5",
+      "keys": [
+        "argv",
+        "code",
+        "signal",
+        "durationMs",
+        "source",
+        "sourceAfter"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": 20216,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "src/ui/course-target.test.tsx",
+        "--maxWorkers",
+        "1",
+        "-t",
+        "maps original outline|current sample record|pending licence step"
+      ],
+      "sourceRecords": [
+        {
+          "path": "src/ui/CoursePanel.tsx",
+          "bytes": 47741,
+          "sha256": "3874c2cb4810a35e238122cfede959135b32b267dbc26a87d69cf2ceb10ce9eb"
+        },
+        {
+          "path": "src/ui/SceneJournal.tsx",
+          "bytes": 8706,
+          "sha256": "66caf37fa7b7002ca40a9a7133e6551e467b4ddbddadbeb72d6272450173252c"
+        },
+        {
+          "path": "src/ui/course-scene-draft.ts",
+          "bytes": 2954,
+          "sha256": "12773457d1229761de3003d614e289b1469d6198c2269c293565f0119fd92ef3"
+        },
+        {
+          "path": "src/ui/course-scene-draft.test.ts",
+          "bytes": 6192,
+          "sha256": "e4d998f065d1b2cd58ba59b1bf82305a419f9c501f8022541c674b9199c07118"
+        },
+        {
+          "path": "src/ui/course-target.test.tsx",
+          "bytes": 22357,
+          "sha256": "5d1cf32174ed5dc5dcb01c25c6fe4812a815ce910300283197b9c7a6bac89089"
+        },
+        {
+          "path": "src/ui/scene-play.test.tsx",
+          "bytes": 4771,
+          "sha256": "00f48b95ebc369c54673db01dec9912716b47c7e470585e49063663ef9901a12"
+        }
+      ],
+      "sourceCount": 6,
+      "sourceBeforeAfterRecorded": true,
+      "sourceBeforeAfterEqual": true,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/build-r1/result.json",
+      "bytes": 323,
+      "sha256": "1bf197b34e343276df8a71a06580e38466b0ac6866c508c2ae518529c925352a",
+      "keys": [
+        "started",
+        "finished",
+        "exit",
+        "signal",
+        "argv",
+        "dist",
+        "sourceFiles",
+        "changes"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": null,
+      "started": "2026-10-23T15:07:43.626Z",
+      "finished": "2026-10-23T15:08:37.562Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        ".delivery/t17-s3-c1-r1"
+      ],
+      "sourceRecords": null,
+      "sourceCount": 437,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": [],
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/build-r2/result.json",
+      "bytes": 323,
+      "sha256": "c1ea57c9bd7bf61c4de8dccce44484abb21748e3c8d997d0fb632cd48c7ec523",
+      "keys": [
+        "started",
+        "finished",
+        "exit",
+        "signal",
+        "argv",
+        "dist",
+        "sourceFiles",
+        "changes"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": null,
+      "started": "2026-10-23T15:28:19.813Z",
+      "finished": "2026-10-23T15:29:14.497Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        ".delivery/t17-s3-c1-r2"
+      ],
+      "sourceRecords": null,
+      "sourceCount": 438,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": [],
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/build-r3/result.json",
+      "bytes": 323,
+      "sha256": "7f50b34744970fdb187f02fa1f2f191038181d673faacbba0732a4e3ca192677",
+      "keys": [
+        "started",
+        "finished",
+        "exit",
+        "signal",
+        "argv",
+        "dist",
+        "sourceFiles",
+        "changes"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": null,
+      "started": "2026-10-23T15:47:48.857Z",
+      "finished": "2026-10-23T15:48:39.307Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        ".delivery/t17-s3-c1-r3"
+      ],
+      "sourceRecords": null,
+      "sourceCount": 438,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": [],
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/build-r4/result.json",
+      "bytes": 311,
+      "sha256": "5186fc807352f65ad211ba16ad24671d7c1e57734a3ece43dc794bcd5bdccafa",
+      "keys": [
+        "started",
+        "finished",
+        "exit",
+        "signal",
+        "argv",
+        "dist",
+        "sourceFiles",
+        "changes"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": null,
+      "started": "2026-10-23T16:40:42.006Z",
+      "finished": "2026-10-23T16:41:38.929Z",
+      "argv": [
+        "proxy",
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        ".delivery/t17-s3-c1-r4"
+      ],
+      "sourceRecords": null,
+      "sourceCount": 441,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": [],
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/build-r5/result.json",
+      "bytes": 311,
+      "sha256": "4c79ebd0db61d734e20981ff6bd584257ee02d342e0418136dc9fece66318eb6",
+      "keys": [
+        "started",
+        "finished",
+        "exit",
+        "signal",
+        "argv",
+        "dist",
+        "sourceFiles",
+        "changes"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": null,
+      "started": "2026-10-23T16:57:06.584Z",
+      "finished": "2026-10-23T16:57:53.886Z",
+      "argv": [
+        "proxy",
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        ".delivery/t17-s3-c1-r5"
+      ],
+      "sourceRecords": null,
+      "sourceCount": 441,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": [],
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/choice-license-r1/types-owned-r1-terminal.json",
+      "bytes": 3450,
+      "sha256": "01f6ac4647739fc75f119673458b7edcec4bc797f92e526c6f38eefdf2106e55",
+      "keys": [
+        "argv",
+        "code",
+        "signal",
+        "durationMs",
+        "source",
+        "sourceAfter"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": 21869,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--ignoreConfig",
+        "--noEmit",
+        "--allowImportingTsExtensions",
+        "--allowArbitraryExtensions",
+        "--skipLibCheck",
+        "--strict",
+        "--noUncheckedIndexedAccess",
+        "--exactOptionalPropertyTypes",
+        "--noUnusedLocals",
+        "--noUnusedParameters",
+        "--moduleResolution",
+        "bundler",
+        "--module",
+        "esnext",
+        "--target",
+        "es2023",
+        "--jsx",
+        "react-jsx",
+        "--types",
+        "vite/client,node",
+        "src/ui/CourseSceneChoice.license.test.tsx"
+      ],
+      "sourceRecords": [
+        {
+          "path": "src/ui/CourseSceneChoice.tsx",
+          "bytes": 28756,
+          "sha256": "bc39257c7e712cbd389b6f71d020b0003626939ee81760ade7406f99d22d26c1"
+        },
+        {
+          "path": "src/ui/course-scene-progress.ts",
+          "bytes": 32624,
+          "sha256": "d39323b527e955a6ebb1039338c2eda71a79bb8e98e11510623a3edc26fb2405"
+        },
+        {
+          "path": "src/ui/course-scene-draft.ts",
+          "bytes": 2954,
+          "sha256": "12773457d1229761de3003d614e289b1469d6198c2269c293565f0119fd92ef3"
+        },
+        {
+          "path": "src/ui/CommandButton.tsx",
+          "bytes": 1386,
+          "sha256": "ac5eeec24edc5d9d6316e157fa5a5eca33d7d0da6870761e22d8c0a4093d9f4f"
+        },
+        {
+          "path": "src/ui/CourseSceneChoice.reselect.test.tsx",
+          "bytes": 6094,
+          "sha256": "53dec0f6c8ab90929d1a075cb01b03128d10627c7169dd676ba3fb772791bf68"
+        },
+        {
+          "path": "src/ui/VideoSceneChoice.reselect.test.tsx",
+          "bytes": 5948,
+          "sha256": "74b84ef3407bc789236a905df72299e811ca1af19ea4281e89d1da1c6b5e9493"
+        },
+        {
+          "path": "goal-1/evidence/t17-acceptance-24/chrome-r4/course-physical-78.json",
+          "bytes": 857141,
+          "sha256": "7ecc2f4bdb7d7f63b84e2693fd033ee0267e5ea9bb0afef218ff088b3856bacb"
+        },
+        {
+          "path": "src/ui/CourseSceneChoice.license.test.tsx",
+          "bytes": 12202,
+          "sha256": "37ee3064031dd5f45c0015a18f4a390c0374078c4c1273aa138f4ca147b22269"
+        }
+      ],
+      "sourceCount": 8,
+      "sourceBeforeAfterRecorded": true,
+      "sourceBeforeAfterEqual": true,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/choice-license-r1/vitest-r1-terminal.json",
+      "bytes": 3091,
+      "sha256": "c64d2db5cd8f0dfb3ba0c34ce70c29c4604b2ff8193e6fe8c9b3853bebab6115",
+      "keys": [
+        "argv",
+        "code",
+        "signal",
+        "durationMs",
+        "source",
+        "sourceAfter"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": 11712,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "src/ui/CourseSceneChoice.license.test.tsx",
+        "--maxWorkers",
+        "1"
+      ],
+      "sourceRecords": [
+        {
+          "path": "src/ui/CourseSceneChoice.tsx",
+          "bytes": 28756,
+          "sha256": "bc39257c7e712cbd389b6f71d020b0003626939ee81760ade7406f99d22d26c1"
+        },
+        {
+          "path": "src/ui/course-scene-progress.ts",
+          "bytes": 32624,
+          "sha256": "d39323b527e955a6ebb1039338c2eda71a79bb8e98e11510623a3edc26fb2405"
+        },
+        {
+          "path": "src/ui/course-scene-draft.ts",
+          "bytes": 2954,
+          "sha256": "12773457d1229761de3003d614e289b1469d6198c2269c293565f0119fd92ef3"
+        },
+        {
+          "path": "src/ui/CommandButton.tsx",
+          "bytes": 1386,
+          "sha256": "ac5eeec24edc5d9d6316e157fa5a5eca33d7d0da6870761e22d8c0a4093d9f4f"
+        },
+        {
+          "path": "src/ui/CourseSceneChoice.reselect.test.tsx",
+          "bytes": 6094,
+          "sha256": "53dec0f6c8ab90929d1a075cb01b03128d10627c7169dd676ba3fb772791bf68"
+        },
+        {
+          "path": "src/ui/VideoSceneChoice.reselect.test.tsx",
+          "bytes": 5948,
+          "sha256": "74b84ef3407bc789236a905df72299e811ca1af19ea4281e89d1da1c6b5e9493"
+        },
+        {
+          "path": "goal-1/evidence/t17-acceptance-24/chrome-r4/course-physical-78.json",
+          "bytes": 857141,
+          "sha256": "7ecc2f4bdb7d7f63b84e2693fd033ee0267e5ea9bb0afef218ff088b3856bacb"
+        },
+        {
+          "path": "src/ui/CourseSceneChoice.license.test.tsx",
+          "bytes": 12202,
+          "sha256": "37ee3064031dd5f45c0015a18f4a390c0374078c4c1273aa138f4ca147b22269"
+        }
+      ],
+      "sourceCount": 8,
+      "sourceBeforeAfterRecorded": true,
+      "sourceBeforeAfterEqual": true,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/choice-reselect-r1/green.result.json",
+      "bytes": 227,
+      "sha256": "5cf57069d437c983a6cdcdbd42ff190ca853cd22ed26174be5e0d02723f691f5",
+      "keys": [
+        "exit",
+        "signal",
+        "args"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": null,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "src/ui/CourseSceneChoice.reselect.test.tsx",
+        "src/ui/course-scene-choice.test.tsx",
+        "--maxWorkers=1"
+      ],
+      "sourceRecords": null,
+      "sourceCount": null,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/choice-reselect-r1/red.result.json",
+      "bytes": 184,
+      "sha256": "00800c4d6a45ac514591ce6aa87a16bf81bd4e2f6f8bd12a43217374795a8e3a",
+      "keys": [
+        "exit",
+        "signal",
+        "args"
+      ],
+      "code": 1,
+      "status": null,
+      "durationMs": null,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "src/ui/CourseSceneChoice.reselect.test.tsx",
+        "--maxWorkers=1"
+      ],
+      "sourceRecords": null,
+      "sourceCount": null,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/final-model-review-r1/result.json",
+      "bytes": 1957,
+      "sha256": "512cf1a1b8b96f79baa1354290b0fe2242b5aa639dd92cbd970d8904de45c8f1",
+      "keys": [
+        "at",
+        "status",
+        "sourceCount",
+        "sourceBeforeAfterEqual",
+        "productionChangesSinceR3",
+        "oldR1Findings",
+        "newTestsExecuted",
+        "browserActions",
+        "gitActions",
+        "compatibilityDevelopmentOrTesting",
+        "full344UiRepeated",
+        "evidence",
+        "remaining"
+      ],
+      "code": null,
+      "status": "no-new-confirmed-defect-in-reviewed-scope",
+      "durationMs": null,
+      "started": null,
+      "finished": null,
+      "argv": null,
+      "sourceRecords": null,
+      "sourceCount": 17,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "read-only review, zero new tests"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/integration-r1/type-result.json",
+      "bytes": 122,
+      "sha256": "022fbffc440a70ca307fbb27614dd02d25b24ac7dd6b321068489563527fbccc",
+      "keys": [
+        "exit",
+        "command",
+        "note"
+      ],
+      "code": 2,
+      "status": null,
+      "durationMs": null,
+      "started": null,
+      "finished": null,
+      "argv": "rtk proxy npm run typecheck",
+      "sourceRecords": null,
+      "sourceCount": null,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/integration-r2/type-result.json",
+      "bytes": 78,
+      "sha256": "7938d11c22b38429f4b1660db749d1484cb1e8e8f873eb6764e2026cfc661588",
+      "keys": [
+        "exit",
+        "signal",
+        "command"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": null,
+      "started": null,
+      "finished": null,
+      "argv": "rtk proxy npm run typecheck",
+      "sourceRecords": null,
+      "sourceCount": null,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/integration-r3/result.json",
+      "bytes": 456,
+      "sha256": "94dd9db370df13ee6e619a76d82a16fd1376715ebb55200eab5162553b8b31e0",
+      "keys": [
+        "started",
+        "finished",
+        "exit",
+        "signal",
+        "args",
+        "compatibilityDevelopmentOrTesting",
+        "excluded",
+        "unchangedLimitsAndAssertions"
+      ],
+      "code": 1,
+      "status": null,
+      "durationMs": null,
+      "started": "2026-10-23T15:35:31.171Z",
+      "finished": "2026-10-23T15:42:07.224Z",
+      "argv": [
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "src/ui",
+        "--exclude",
+        "src/ui/book-layout.test.ts",
+        "--maxWorkers=1"
+      ],
+      "sourceRecords": null,
+      "sourceCount": null,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/integration-r4/course-clock-art.result.json",
+      "bytes": 415,
+      "sha256": "49f06a7d2ff55905d39d2f8a9ddccfdcb21fbf575c1100670e6ee52fd25b1457",
+      "keys": [
+        "exit",
+        "signal",
+        "args",
+        "scope"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": null,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "src/ui/course-scene-progress.test.ts",
+        "src/ui/course-player-thread.test.ts",
+        "src/ui/course-scene-choice.test.tsx",
+        "src/ui/CourseSceneChoice.reselect.test.tsx",
+        "--maxWorkers=1"
+      ],
+      "sourceRecords": null,
+      "sourceCount": null,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/integration-r4/original-timeout-retest.result.json",
+      "bytes": 381,
+      "sha256": "1077760d825035c6fe8e63c56492a2befd0ce1813cff5a9060716f8e8a3bb6d1",
+      "keys": [
+        "exit",
+        "signal",
+        "args",
+        "limitChanged",
+        "scope"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": null,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "src/ui/player-thread.test.ts",
+        "--testNamePattern",
+        "lets a free life retain real work and salary without making it exclusive with the manual order",
+        "--maxWorkers=1"
+      ],
+      "sourceRecords": null,
+      "sourceCount": null,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/integration-r5/result.json",
+      "bytes": 646,
+      "sha256": "965e8a3b3fafe26ed7025bc0f7fe372dbb304d4282319cfad3c53a39823465d8",
+      "keys": [
+        "started",
+        "finished",
+        "exit",
+        "signal",
+        "argv",
+        "sourceFiles",
+        "changes"
+      ],
+      "code": 1,
+      "status": null,
+      "durationMs": null,
+      "started": "2026-10-23T16:40:25.151Z",
+      "finished": "2026-10-23T16:42:21.179Z",
+      "argv": [
+        "proxy",
+        "npm",
+        "run",
+        "test:unit",
+        "--",
+        "src/ui/CoursePreparationDetails.test.tsx",
+        "src/ui/CourseRefundDetails.test.tsx",
+        "src/ui/CourseSceneChoice.license.test.tsx",
+        "src/ui/CourseSceneChoice.reselect.test.tsx",
+        "src/ui/course-player-thread.test.ts",
+        "src/ui/course-scene-choice.test.tsx",
+        "src/ui/course-scene-progress.test.ts",
+        "src/ui/course-target.test.tsx",
+        "src/ui/scene-play.test.tsx",
+        "--maxWorkers=1"
+      ],
+      "sourceRecords": null,
+      "sourceCount": 168,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": [],
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/model-r1/license-wait-red-terminal.json",
+      "bytes": 204,
+      "sha256": "056c566ee04f958f2a11df9ecaecd387a21ab5dfa3c841fecb3cc013ebab5829",
+      "keys": [
+        "argv",
+        "code",
+        "durationMs"
+      ],
+      "code": 1,
+      "status": null,
+      "durationMs": 9981,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "npx",
+        "vitest",
+        "run",
+        "src/ui/course-player-thread.test.ts",
+        "-t",
+        "keeps a saved course materials"
+      ],
+      "sourceRecords": null,
+      "sourceCount": null,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/model-r1/model-r1-terminal.json",
+      "bytes": 38,
+      "sha256": "33ba54ff1c0518455d8ece72f313677a2816549952736f29604202f2315a0c43",
+      "keys": [
+        "code",
+        "durationMs"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": 25835,
+      "started": null,
+      "finished": null,
+      "argv": null,
+      "sourceRecords": null,
+      "sourceCount": null,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/model-r1/model-r2-terminal.json",
+      "bytes": 38,
+      "sha256": "59c103e9106fef8dea34341c94397f9b94bb7aee178e85c44864f2415abc28ed",
+      "keys": [
+        "code",
+        "durationMs"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": 84990,
+      "started": null,
+      "finished": null,
+      "argv": null,
+      "sourceRecords": null,
+      "sourceCount": null,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/model-r1/model-r3-terminal.json",
+      "bytes": 38,
+      "sha256": "892e0da0c161593274fa2ae305a6736a3d3472a85a533e2ba0c2642c26452080",
+      "keys": [
+        "code",
+        "durationMs"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": 40669,
+      "started": null,
+      "finished": null,
+      "argv": null,
+      "sourceRecords": null,
+      "sourceCount": null,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/model-r1/progress-red-terminal.json",
+      "bytes": 158,
+      "sha256": "e2f14f148f245e159a4b6dddaf5c6dc4fd5947e2a0a498ca2990127091be137d",
+      "keys": [
+        "argv",
+        "code",
+        "durationMs"
+      ],
+      "code": 1,
+      "status": null,
+      "durationMs": 24687,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "npx",
+        "vitest",
+        "run",
+        "src/ui/course-scene-progress.test.ts"
+      ],
+      "sourceRecords": null,
+      "sourceCount": null,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/model-r1/validation.json",
+      "bytes": 823,
+      "sha256": "8204c99807bb566d8ba6ea5ef4da24edaa3b10b5ed2508fc9ea5550ad51183e8",
+      "keys": [
+        "at",
+        "sourceFrozen",
+        "legacyRecommendationBodyEqualAfterFunctionRename",
+        "legacyAdditiveMetadata",
+        "red",
+        "green",
+        "timeoutsChanged",
+        "fullMatrix",
+        "compatibilityDevelopmentOrTesting",
+        "strict",
+        "sourceCount",
+        "changedCount",
+        "externalCourseResultSame"
+      ],
+      "code": null,
+      "status": null,
+      "durationMs": null,
+      "started": null,
+      "finished": null,
+      "argv": null,
+      "sourceRecords": null,
+      "sourceCount": 10,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "aggregate, not another run"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/reading-r5/green-terminal.json",
+      "bytes": 38,
+      "sha256": "f4d200b11972a6ebe3ab89827b1e9392188e6fe531700d30369bd9fa317ea011",
+      "keys": [
+        "code",
+        "durationMs"
+      ],
+      "code": 0,
+      "status": null,
+      "durationMs": 30914,
+      "started": null,
+      "finished": null,
+      "argv": null,
+      "sourceRecords": null,
+      "sourceCount": null,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/reading-r5/red-terminal.json",
+      "bytes": 240,
+      "sha256": "ab01de1f55dd8a7a693edd51905692ae28fe507ed4cf9f8b52538175b00cb9c6",
+      "keys": [
+        "argv",
+        "code",
+        "durationMs",
+        "originalTimeoutUnchanged"
+      ],
+      "code": 1,
+      "status": null,
+      "durationMs": 9358,
+      "started": null,
+      "finished": null,
+      "argv": [
+        "rtk",
+        "proxy",
+        "npx",
+        "vitest",
+        "run",
+        "src/ui/course-player-thread.test.ts",
+        "-t",
+        "keeps a saved course materials"
+      ],
+      "sourceRecords": null,
+      "sourceCount": null,
+      "sourceBeforeAfterRecorded": false,
+      "sourceBeforeAfterEqual": null,
+      "changes": null,
+      "kind": "original stored terminal/result"
+    }
+  ],
+  "logCount": 56,
+  "logs": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/app-legacy-review-r1/vitest-r1-console.txt",
+      "bytes": 190,
+      "sha256": "e1c43337024ad7c4e2c45916e19ced5ce101a59b22a66bd38216f8d8f4a25f4b",
+      "summaryLines": [
+        " Test Files  1 passed (1)",
+        "      Tests  4 passed (4)",
+        "   Start at  00:39:45",
+        "   Duration  4.05s (tests 45%, transform 35%, import 19%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-bridge-r2/vitest-r1-console.txt",
+      "bytes": 201,
+      "sha256": "aa79836677afacdda53c6056a0d7fe24e0de57f938a63192cdab7032a07bd6e7",
+      "summaryLines": [
+        " Test Files  1 passed (1)",
+        "      Tests  1 passed | 6 skipped (7)",
+        "   Start at  00:45:04",
+        "   Duration  14.41s (tests 86%, transform 8%, import 6%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/draft-vitest-r1-console.txt",
+      "bytes": 200,
+      "sha256": "963fddc88d8ae4710722a33411a1b0cb2dc313586e17a011c5b140a1384c5c40",
+      "summaryLines": [
+        " Test Files  1 passed (1)",
+        "      Tests  4 passed (4)",
+        "   Start at  22:37:24",
+        "   Duration  414ms (transform 58%, import 26%, tests 9%, worker 7%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/draft-vitest-r2-red-console.txt",
+      "bytes": 1289,
+      "sha256": "e639e852cce388afd4ab5c1ecb3f8361c6c0990752edef625eaa0ce45692d7ac",
+      "summaryLines": [
+        " Test Files  1 failed (1)",
+        "      Tests  1 failed | 4 passed (5)",
+        "   Start at  22:41:34",
+        "   Duration  791ms (transform 52%, import 26%, tests 17%, worker 5%)",
+        " FAIL  src/ui/course-scene-draft.test.ts > reads original-book edits when the still-mounted scene returns, without resetting the chosen date"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/draft-vitest-r3-red-console.txt",
+      "bytes": 1229,
+      "sha256": "21911dbc37dabba2f0d3d7e1473ee53631c9948325d48ed2bdb07bc4b5680c4b",
+      "summaryLines": [
+        " Test Files  1 failed (1)",
+        "      Tests  1 failed | 5 passed (6)",
+        "   Start at  22:54:46",
+        "   Duration  673ms (transform 55%, import 24%, tests 16%, worker 5%)",
+        " FAIL  src/ui/course-scene-draft.test.ts > applies consecutive functional edits to the latest draft, including another mounted consumer edit"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/draft-vitest-r4-green-console.txt",
+      "bytes": 200,
+      "sha256": "b1743292b710179dd3bb78edc8110f4ac6a3a4578829d79aa1e173205413b8f5",
+      "summaryLines": [
+        " Test Files  1 passed (1)",
+        "      Tests  6 passed (6)",
+        "   Start at  22:55:16",
+        "   Duration  629ms (transform 61%, import 26%, tests 9%, worker 4%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/strict-owned-r1-console.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": true
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/strict-owned-r2-console.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": true
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/strict-owned-r3-console.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": true
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/target-vitest-r1-console.txt",
+      "bytes": 191,
+      "sha256": "46bcb9bd8fe917278012b46f757d15ed72bbe90268e141d1f35050767755261b",
+      "summaryLines": [
+        " Test Files  3 passed (3)",
+        "      Tests  14 passed (14)",
+        "   Start at  23:05:09",
+        "   Duration  40.59s (tests 89%, import 7%, transform 5%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/target-vitest-r2-console.txt",
+      "bytes": 1444,
+      "sha256": "ed228cab6f27b8df2aca913770e761afae3e31d93638d2f0ac0a1f4e30ea38dd",
+      "summaryLines": [
+        " Test Files  1 failed (1)",
+        "      Tests  1 failed | 1 passed | 5 skipped (7)",
+        "   Start at  23:24:16",
+        "   Duration  19.56s (tests 90%, transform 5%, import 5%)",
+        " FAIL  src/ui/course-target.test.tsx > carries the pending licence step from the actual scene handler to the original book without borrowing the sample draft"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/book-r1/target-vitest-r3-console.txt",
+      "bytes": 201,
+      "sha256": "55a26f27aa00cdc3ea7ca71c11b06e7117cb6a5f9b5b8704d63778f1c0db175d",
+      "summaryLines": [
+        " Test Files  1 passed (1)",
+        "      Tests  3 passed | 4 skipped (7)",
+        "   Start at  23:26:25",
+        "   Duration  19.39s (tests 90%, transform 5%, import 5%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/build-r1/stderr.txt",
+      "bytes": 360,
+      "sha256": "351b524197fb492920789369e7f1a271420c757633fbb553b280a181ac4c31a4",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/build-r1/stdout.txt",
+      "bytes": 4486,
+      "sha256": "80292cd6400c235ac8246f3cc693ebba828c2521a43e2a9474ce0e8ef97d6b6d",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/build-r2/stderr.txt",
+      "bytes": 360,
+      "sha256": "351b524197fb492920789369e7f1a271420c757633fbb553b280a181ac4c31a4",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/build-r2/stdout.txt",
+      "bytes": 4486,
+      "sha256": "3a85317c486e5128cfdcf5bad5a359e34edd6f906c1d63565f4d49ab170918f7",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/build-r3/stderr.txt",
+      "bytes": 360,
+      "sha256": "351b524197fb492920789369e7f1a271420c757633fbb553b280a181ac4c31a4",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/build-r3/stdout.txt",
+      "bytes": 4486,
+      "sha256": "8285947bc9737782cca2b0ad1246738ee7d4529348d2cd0ca5f615b3abdc1da9",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/build-r4/stderr.txt",
+      "bytes": 360,
+      "sha256": "351b524197fb492920789369e7f1a271420c757633fbb553b280a181ac4c31a4",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/build-r4/stdout.txt",
+      "bytes": 4486,
+      "sha256": "2be394f8e41b381778bebfcb8b05cdde7c2740184be444cf130e1a757133dbbd",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/build-r5/stderr.txt",
+      "bytes": 360,
+      "sha256": "351b524197fb492920789369e7f1a271420c757633fbb553b280a181ac4c31a4",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/build-r5/stdout.txt",
+      "bytes": 4486,
+      "sha256": "1867be0f4fe2ccd472ba22707707367da1a090d1963eb7d67deb485e517a96b1",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/choice-license-r1/types-owned-r1-console.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": true
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/choice-license-r1/vitest-r1-console.txt",
+      "bytes": 189,
+      "sha256": "a25f4378980642beee9a29276829efc850c0104c50deebe5db5612c7df48ada9",
+      "summaryLines": [
+        " Test Files  1 passed (1)",
+        "      Tests  2 passed (2)",
+        "   Start at  00:22:49",
+        "   Duration  10.75s (tests 85%, import 8%, transform 7%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/choice-reselect-r1/green.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": true
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/choice-reselect-r1/green.stdout.txt",
+      "bytes": 362,
+      "sha256": "864cec89fcd14ae81a5b6fb46870c647966046223f60770ccb784da91882b299",
+      "summaryLines": [
+        " Test Files  2 passed (2)",
+        "      Tests  3 passed (3)",
+        "   Start at  23:18:37",
+        "   Duration  15.56s (tests 83%, import 12%, transform 5%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/choice-reselect-r1/red.stderr.txt",
+      "bytes": 982,
+      "sha256": "bf92bb3a45f2f073260283a81145778ed690bd5b8a5ba32140326163d4ccacb4",
+      "summaryLines": [
+        " FAIL  src/ui/CourseSceneChoice.reselect.test.tsx > returns to externally selected course A after choosing B without reviving a stale local target"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/choice-reselect-r1/red.stdout.txt",
+      "bytes": 509,
+      "sha256": "1946b8b349d657d5955274225509b9666a1453797fea84066143e3d89c243245",
+      "summaryLines": [
+        " Test Files  1 failed (1)",
+        "      Tests  1 failed (1)",
+        "   Start at  23:14:47",
+        "   Duration  8.32s (tests 80%, import 10%, transform 10%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/confirmation-r1/type-r1.log",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/confirmation-r1/type-r2.log",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/confirmation-r1/unit-r1.log",
+      "bytes": 734,
+      "sha256": "fd5a0f9e1e8b97f2a1d3793d6bcf233707c3ff24bb417d27a4c12eeb69043335",
+      "summaryLines": [
+        " Test Files  1 failed (1)",
+        "      Tests  4 skipped (4)",
+        "   Start at  00:14:44",
+        "   Duration  3.33s (import 46%, tests 32%, transform 21%)",
+        " FAIL  src/ui/CoursePreparationDetails.test.tsx [ src/ui/CoursePreparationDetails.test.tsx ]"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/confirmation-r1/unit-r2.log",
+      "bytes": 191,
+      "sha256": "08f31490e85347ef9bc44f52e04f2720605e597e44e81bd618e4898225d2c7b9",
+      "summaryLines": [
+        " Test Files  1 passed (1)",
+        "      Tests  4 passed (4)",
+        "   Start at  00:16:38",
+        "   Duration  4.76s (tests 63%, import 24%, transform 13%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/confirmation-r1/unit-r3.log",
+      "bytes": 191,
+      "sha256": "2e7c09a5976a1f79c473214826e19c7756a357710cfb454a53654f94a347839b",
+      "summaryLines": [
+        " Test Files  1 passed (1)",
+        "      Tests  4 passed (4)",
+        "   Start at  00:18:32",
+        "   Duration  7.60s (tests 65%, import 24%, transform 10%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/confirmation-r2/type-r1.log",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/confirmation-r2/unit-r1.log",
+      "bytes": 192,
+      "sha256": "673a2257ea0c7c8326e66c0f1dbd483a8bc8b65813ed94c71c9c89d42b2924ca",
+      "summaryLines": [
+        " Test Files  1 passed (1)",
+        "      Tests  4 passed (4)",
+        "   Start at  00:26:40",
+        "   Duration  11.28s (tests 62%, import 21%, transform 17%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/integration-r3/stderr.txt",
+      "bytes": 638,
+      "sha256": "1a57f918043b56b25f460d62aba4dabd5ee203828100ed099e625e2ee981addb",
+      "summaryLines": [
+        " FAIL  src/ui/player-thread.test.ts > lets a free life retain real work and salary without making it exclusive with the manual order",
+        "Error: Test timed out in 5000ms."
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/integration-r3/stdout.txt",
+      "bytes": 728,
+      "sha256": "fe4936046b7e0bbd4dc7a403a9176d2ea549a0966a1e370643f67c52242f37bc",
+      "summaryLines": [
+        " Test Files  1 failed | 48 passed (49)",
+        "      Tests  1 failed | 343 passed (344)",
+        "   Start at  23:35:32",
+        "   Duration  394.59s (tests 92%, import 7%, transform 1%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/integration-r4/course-clock-art.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": true
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/integration-r4/course-clock-art.stdout.txt",
+      "bytes": 436,
+      "sha256": "f113b7c0dc867763564eaa699b3cda1c3d0c21057c802c89ce611510c7f191d1",
+      "summaryLines": [
+        " Test Files  4 passed (4)",
+        "      Tests  26 passed (26)",
+        "   Start at  23:45:43",
+        "   Duration  61.04s (tests 94%, import 4%, transform 1%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/integration-r4/original-timeout-retest.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summaryLines": [],
+      "tsDiagnostics": 0,
+      "empty": true
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/integration-r4/original-timeout-retest.stdout.txt",
+      "bytes": 439,
+      "sha256": "2df287137cbf54523ec007daae3f3cd9a4309b352b8172545b15692072d78e15",
+      "summaryLines": [
+        " Test Files  1 passed (1)",
+        "      Tests  1 passed | 27 skipped (28)",
+        "   Start at  23:44:52",
+        "   Duration  6.59s (tests 78%, import 12%, transform 10%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/integration-r5/stderr.txt",
+      "bytes": 465,
+      "sha256": "8446e3872c084c816b41d2aa5f75439f55a9f1e4ac83abbac21e8e238a846d1d",
+      "summaryLines": [
+        " FAIL  src/ui/course-target.test.tsx > carries the pending licence step from the actual scene handler to the original book without borrowing the sample draft",
+        "Error: VISIBLE_STEP_BUTTON_REQUIRED:核对案例1的课程使用范围"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/integration-r5/stdout.txt",
+      "bytes": 831,
+      "sha256": "c210ed7a3f747984ec777fe81551df1dedfdc20507db96c895c7f9064ac84b8e",
+      "summaryLines": [
+        " Test Files  1 failed | 8 passed (9)",
+        "      Tests  1 failed | 74 passed (75)",
+        "   Start at  00:40:26",
+        "   Duration  114.68s (tests 93%, import 6%, transform 1%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/model-r1/license-wait-red.txt",
+      "bytes": 1536,
+      "sha256": "af5fc06cc4b2f5b876c145df84114b426903a59176b0885bd46a3352fec295e9",
+      "summaryLines": [
+        " FAIL  src/ui/course-player-thread.test.ts > keeps a saved course materials task attached to its actual licensed course and waits for the original completion",
+        " Test Files  1 failed (1)",
+        "      Tests  1 failed | 2 skipped (3)",
+        "   Start at  22:51:17",
+        "   Duration  8.12s (tests 86%, transform 7%, import 7%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/model-r1/model-r1.txt",
+      "bytes": 191,
+      "sha256": "b6ba872fda337a73958e65e14bed730dbcda729d239934c3699d6ed984b0bae4",
+      "summaryLines": [
+        " Test Files  3 passed (3)",
+        "      Tests  32 passed (32)",
+        "   Start at  22:47:37",
+        "   Duration  23.81s (tests 93%, import 4%, transform 3%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/model-r1/model-r2.txt",
+      "bytes": 191,
+      "sha256": "c26d06bdb8cbc928fcc3d08c22da6f1fbb247325400f268b3cbbea0042c4f017",
+      "summaryLines": [
+        " Test Files  5 passed (5)",
+        "      Tests  74 passed (74)",
+        "   Start at  22:54:03",
+        "   Duration  82.44s (tests 97%, import 2%, transform 1%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/model-r1/model-r3.txt",
+      "bytes": 191,
+      "sha256": "1326cbf9711c55645ef2c9825a46f5d3c946afabba592f8404e4782367f0ee3d",
+      "summaryLines": [
+        " Test Files  2 passed (2)",
+        "      Tests  22 passed (22)",
+        "   Start at  22:58:25",
+        "   Duration  38.33s (tests 94%, transform 3%, import 3%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/model-r1/progress-red.txt",
+      "bytes": 3759,
+      "sha256": "4a8d878c7efb5e5776e69c6d1dc01ffe37c13d7f8e06166cbef9088b38446eff",
+      "summaryLines": [
+        " FAIL  src/ui/course-scene-progress.test.ts > keeps an explicit original sample attempt through a real interruption and later retry, without following another draft",
+        " FAIL  src/ui/course-scene-progress.test.ts > distinguishes an explicit new entry from a selected ready course and keeps qualification and update boundaries visible",
+        " Test Files  1 failed (1)",
+        "      Tests  2 failed | 16 passed (18)",
+        "   Start at  22:34:03",
+        "   Duration  22.79s (tests 96%, import 2%, transform 2%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/reading-r5/green.txt",
+      "bytes": 191,
+      "sha256": "624118676bb1a154ccc7fa3632d3cc1604e4000225fa5249b485a24977a55bd2",
+      "summaryLines": [
+        " Test Files  2 passed (2)",
+        "      Tests  23 passed (23)",
+        "   Start at  00:54:57",
+        "   Duration  28.75s (tests 96%, import 2%, transform 2%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/reading-r5/red.txt",
+      "bytes": 1043,
+      "sha256": "ff1011f30288f7ff5ba6c9db2baf73e2f15df40620e20d75b64e63fab8cf69e8",
+      "summaryLines": [
+        " FAIL  src/ui/course-player-thread.test.ts > keeps a saved course materials task attached to its actual licensed course and waits for the original completion",
+        " Test Files  1 failed (1)",
+        "      Tests  1 failed | 2 skipped (3)",
+        "   Start at  00:53:40",
+        "   Duration  7.41s (tests 84%, import 8%, transform 7%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/ui-r1/targeted-r1.log",
+      "bytes": 192,
+      "sha256": "589c8b64a2f9bcb06e343470c9798fd3e3bd20b8b8f4edcb6dcb976becedf004",
+      "summaryLines": [
+        " Test Files  2 passed (2)",
+        "      Tests  7 passed (7)",
+        "   Start at  22:46:08",
+        "   Duration  12.52s (tests 80%, import 10%, transform 10%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/ui-r1/targeted-r2.log",
+      "bytes": 189,
+      "sha256": "94879f26f1aeb49e391fb4d51616113c35393c8b65b12eb4de17a947474bb35e",
+      "summaryLines": [
+        " Test Files  1 passed (1)",
+        "      Tests  2 passed (2)",
+        "   Start at  22:50:27",
+        "   Duration  8.25s (tests 84%, import 9%, transform 7%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/ui-r1/targeted-r3.log",
+      "bytes": 190,
+      "sha256": "1532bf75d0e2f9ed58e2e0081910558aa5bd19cdbfd01f4d5f986f61d187ab6b",
+      "summaryLines": [
+        " Test Files  1 passed (1)",
+        "      Tests  2 passed (2)",
+        "   Start at  22:53:12",
+        "   Duration  5.59s (tests 82%, import 10%, transform 8%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/ui-r1/targeted-r4.log",
+      "bytes": 190,
+      "sha256": "5873bd2f69df1db21f529d1fa8f15ed1a18a45ad72c4571588df5c38dbda1ffb",
+      "summaryLines": [
+        " Test Files  1 passed (1)",
+        "      Tests  2 passed (2)",
+        "   Start at  22:56:15",
+        "   Duration  10.75s (tests 85%, import 8%, transform 8%)"
+      ],
+      "tsDiagnostics": 0,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/ui-r1/type-r1.log",
+      "bytes": 2574,
+      "sha256": "d6d0d935e6afc0c9c6c818f0c7f70ce6353a9ec1ea303fc666a06748843f123b",
+      "summaryLines": [
+        "src/ui/course-player-thread.ts(9,64): error TS2375: Type '{ operations: { employment: readonly EmploymentPeriod[]; businesses: readonly BusinessInstance[]; workers: readonly WorkerInstance[]; jobs: readonly ProductionJob[]; contracts: { ...; }[]; payroll: readonly PayrollRecord[]; loans: readonly OperatingLoan[]; unbilledAccruals: { ...; }[]; } | null; preparationReady: bo...' is not assignable to type 'CourseSceneContext' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.",
+        "src/ui/course-scene-progress.ts(171,66): error TS6133: 'date' is declared but its value is never read.",
+        "src/ui/CoursePanel.tsx(2,9): error TS6133: 'courseSceneDraftKey' is declared but its value is never read.",
+        "src/ui/CoursePanel.tsx(2,76): error TS6133: 'CourseSceneDraftScope' is declared but its value is never read.",
+        "src/ui/CoursePanel.tsx(2,103): error TS6133: 'CourseSceneDraft' is declared but its value is never read.",
+        "src/ui/CoursePanel.tsx(75,217): error TS2375: Type '{ businessId: string; target: CourseSceneTarget | undefined; legacyInitial: boolean; controller: GameController; view: { features: Readonly<Record<string, unknown>>; ... 18 more ...; operations: { ...; } | null; }; ... 9 more ...; key: string; }' is not assignable to type 'IntrinsicAttributes & GamePanelProps & { businessId: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.",
+        "src/ui/CoursePanel.tsx(75,350): error TS2375: Type '{ businessId: string; target: CourseSceneTarget | undefined; legacyInitial: boolean; controller: GameController; view: { features: Readonly<Record<string, unknown>>; ... 18 more ...; operations: { ...; } | null; }; ... 9 more ...; key: string; }' is not assignable to type 'IntrinsicAttributes & GamePanelProps & { businessId: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.",
+        "src/ui/RoomMoment.tsx(55,506): error TS2339: Property 'courseTarget' does not exist on type 'SceneWork'.",
+        "src/ui/RoomMoment.tsx(55,553): error TS2339: Property 'courseTarget' does not exist on type 'SceneWork'."
+      ],
+      "tsDiagnostics": 9,
+      "empty": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/ui-r1/type-r2.log",
+      "bytes": 3170,
+      "sha256": "c900110d86a7c8ca456751a27429646263936d8b714a137b921a6567a5402089",
+      "summaryLines": [
+        "src/ui/course-player-thread.test.ts(64,10): error TS18047: 'reel' is possibly 'null'.",
+        "src/ui/course-player-thread.ts(9,64): error TS2375: Type '{ operations: { employment: readonly EmploymentPeriod[]; businesses: readonly BusinessInstance[]; workers: readonly WorkerInstance[]; jobs: readonly ProductionJob[]; contracts: { ...; }[]; payroll: readonly PayrollRecord[]; loans: readonly OperatingLoan[]; unbilledAccruals: { ...; }[]; } | null; preparationReady: bo...' is not assignable to type 'CourseSceneContext' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.",
+        "src/ui/course-scene-progress.ts(171,66): error TS6133: 'date' is declared but its value is never read.",
+        "src/ui/CoursePanel.tsx(89,136): error TS2322: Type '\"definition\" | \"outline\" | \"sample\" | `license:${any}:${string}`' is not assignable to type 'CourseSceneDraftSlot'.",
+        "src/ui/CoursePanel.tsx(89,201): error TS2551: Property 'caseKind' does not exist on type '{ job: ProductionJob | null; id: string; businessId: string; caseId: string; jobId: string; }'. Did you mean 'caseId'?",
+        "src/ui/CoursePanel.tsx(94,11): error TS6133: 'toggleCase' is declared but its value is never read.",
+        "src/ui/CoursePanel.tsx(94,174): error TS2345: Argument of type '(previous: CourseSceneDraft) => { cases: { kind: string; id: string; }[]; capital: string; name: string; productId: string; topicId: string; segment: string; consent: boolean; resources: string[]; startAt: string; }' is not assignable to parameter of type 'SetStateAction<CourseSceneDraft>'.",
+        "src/ui/CoursePanel.tsx(95,11): error TS6133: 'licenseRequest' is declared but its value is never read.",
+        "src/ui/CoursePanel.tsx(107,1224): error TS2304: Cannot find name 'setCases'.",
+        "src/ui/RoomMoment.tsx(55,506): error TS2339: Property 'courseTarget' does not exist on type 'SceneWork'.",
+        "src/ui/RoomMoment.tsx(55,553): error TS2339: Property 'courseTarget' does not exist on type 'SceneWork'."
+      ],
+      "tsDiagnostics": 11,
+      "empty": false
+    }
+  ],
+  "duplicates": [
+    {
+      "sha256": "965e8a3b3fafe26ed7025bc0f7fe372dbb304d4282319cfad3c53a39823465d8",
+      "paths": [
+        "goal-1/evidence/t17-acceptance-24/book-bridge-r2/integration-r5-result.json",
+        "goal-1/evidence/t17-acceptance-24/integration-r5/result.json"
+      ],
+      "countAsIndependentRuns": false
+    }
+  ],
+  "limits": [
+    "Counts remain per-run/source identity; no union or cumulative green total is inferred.",
+    "Copied integration-r5 result and aggregate validation/review records are not extra runs.",
+    "Empty type logs without persisted terminal code are not promoted to exit0.",
+    "This is a filesystem snapshot; later executions or document edits are not included."
+  ],
+  "replayAudits": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/prefix-audit-r1/normal-browser-export-audit.json",
+      "bytes": 14296,
+      "sha256": "f7e29a42d3c5a7dee3c2883871a9470e9e2c4c47a8de3fe751a0a9c03beac13d",
+      "scope": "Current engine full creation replay of individually source-labeled public Chrome exports. This audits bytes, not the browser interaction or visual evidence. Input buffers are not new saved outcomes.",
+      "head": "f980fa90a8214565ea4ec6bd39edb5995e665aaa",
+      "creations": 1,
+      "executedUniqueCommands": 69,
+      "files": 1,
+      "inputBuffers": 1,
+      "allByteEqual": true,
+      "sourceCount": 126,
+      "inputCount": 2,
+      "notCovered": [
+        "human playtest",
+        "original three PNG",
+        "real200percent/native beforeunload/mobile acceptance",
+        "whole Q/X or whole goal completion"
+      ],
+      "exitCodeIndependentlyRecorded": null
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-24/prepared-prefix-audit-r1/normal-browser-export-audit.json",
+      "bytes": 14305,
+      "sha256": "cb4216c6c142e7fcc6e3dc1658a1a830ea7567119a4bee95fd8ac56366573629",
+      "scope": "Current engine full creation replay of individually source-labeled public Chrome exports. This audits bytes, not the browser interaction or visual evidence. Input buffers are not new saved outcomes.",
+      "head": "f980fa90a8214565ea4ec6bd39edb5995e665aaa",
+      "creations": 1,
+      "executedUniqueCommands": 77,
+      "files": 1,
+      "inputBuffers": 1,
+      "allByteEqual": true,
+      "sourceCount": 126,
+      "inputCount": 2,
+      "notCovered": [
+        "human playtest",
+        "original three PNG",
+        "real200percent/native beforeunload/mobile acceptance",
+        "whole Q/X or whole goal completion"
+      ],
+      "exitCodeIndependentlyRecorded": null
+    }
+  ],
+  "latestReadingToBuildBindings": {
+    "buildResult": {
+      "path": "goal-1/evidence/t17-acceptance-24/build-r5/result.json",
+      "bytes": 311,
+      "sha256": "4c79ebd0db61d734e20981ff6bd584257ee02d342e0418136dc9fece66318eb6"
+    },
+    "buildExit": 0,
+    "buildSourceFiles": 441,
+    "buildChanges": [],
+    "selected": [
+      {
+        "current": {
+          "path": "src/ui/course-scene-progress.ts",
+          "bytes": 32606,
+          "sha256": "f40c6c38e488dd005af9473b4f97bba9cf71b21317052dbbecd32eb803bb6354"
+        },
+        "readingR5": {
+          "path": "src/ui/course-scene-progress.ts",
+          "bytes": 32606,
+          "mode": 420,
+          "sha256": "f40c6c38e488dd005af9473b4f97bba9cf71b21317052dbbecd32eb803bb6354"
+        },
+        "buildR5": {
+          "path": "src/ui/course-scene-progress.ts",
+          "bytes": 32606,
+          "sha256": "f40c6c38e488dd005af9473b4f97bba9cf71b21317052dbbecd32eb803bb6354"
+        },
+        "currentMatchesBuild": true,
+        "readingMatchesBuild": true
+      },
+      {
+        "current": {
+          "path": "src/ui/course-player-thread.test.ts",
+          "bytes": 14407,
+          "sha256": "a492d0b51d5f7cb0e9285c60977a3d17104a3eaa564dfbca6e05b17a2a19e2ff"
+        },
+        "readingR5": {
+          "path": "src/ui/course-player-thread.test.ts",
+          "bytes": 14407,
+          "mode": 420,
+          "sha256": "a492d0b51d5f7cb0e9285c60977a3d17104a3eaa564dfbca6e05b17a2a19e2ff"
+        },
+        "buildR5": {
+          "path": "src/ui/course-player-thread.test.ts",
+          "bytes": 14407,
+          "sha256": "a492d0b51d5f7cb0e9285c60977a3d17104a3eaa564dfbca6e05b17a2a19e2ff"
+        },
+        "currentMatchesBuild": true,
+        "readingMatchesBuild": true
+      },
+      {
+        "current": {
+          "path": "src/ui/course-target.test.tsx",
+          "bytes": 23075,
+          "sha256": "165aeb5d7c960864b20cf222dc5ee3620ddaf2721284a0c7bc8c20fed51c9263"
+        },
+        "readingR5": {
+          "path": "src/ui/course-target.test.tsx",
+          "bytes": 23075,
+          "mode": 420,
+          "sha256": "165aeb5d7c960864b20cf222dc5ee3620ddaf2721284a0c7bc8c20fed51c9263"
+        },
+        "buildR5": {
+          "path": "src/ui/course-target.test.tsx",
+          "bytes": 23075,
+          "sha256": "165aeb5d7c960864b20cf222dc5ee3620ddaf2721284a0c7bc8c20fed51c9263"
+        },
+        "currentMatchesBuild": true,
+        "readingMatchesBuild": true
+      },
+      {
+        "current": {
+          "path": "src/ui/App.tsx",
+          "bytes": 45500,
+          "sha256": "af9bc0df327ba2c5438911ceaa1706c4692bef65b9b8dcf3d750f766fcaa7c87"
+        },
+        "readingR5": {
+          "path": "src/ui/App.tsx",
+          "bytes": 45500,
+          "mode": 420,
+          "sha256": "af9bc0df327ba2c5438911ceaa1706c4692bef65b9b8dcf3d750f766fcaa7c87"
+        },
+        "buildR5": {
+          "path": "src/ui/App.tsx",
+          "bytes": 45500,
+          "sha256": "af9bc0df327ba2c5438911ceaa1706c4692bef65b9b8dcf3d750f766fcaa7c87"
+        },
+        "currentMatchesBuild": true,
+        "readingMatchesBuild": true
+      }
+    ],
+    "limits": "Source hash binding only; no new tests/build/browser actions and no union of per-run counts."
+  }
+}

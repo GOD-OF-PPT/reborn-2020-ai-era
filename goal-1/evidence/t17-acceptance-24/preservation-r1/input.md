@@ -1,0 +1,1 @@
+同一C1新增只读收尾协作：请依据root24/source-baseline.json、git-baseline.json/master-baseline.json，对416开工src核分类：仅本C1 UI路径允许变化；所有非UI src/P3既有blob/原input61B、旧root23与post sealed marker/文件集合完整核定（可复用marker entries但lstat/no symlink，报告实际套数与未知，不写旧目录）。写root24/preservation-r1经guard，保red记录。不改生产，不Git stage/commit。另帮清点root24现有所有测试result身份数字/旧红别合成绿，可写简要测试索引。现R5只会model agent改progress及test，允许准确列变化。禁止兼容/广测。

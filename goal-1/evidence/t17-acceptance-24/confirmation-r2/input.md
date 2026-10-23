@@ -1,0 +1,1 @@
+Root限定修缮：Define与sample按payload/lesson已选refs的局部顺序编号；独立License没有courseId，不猜局部编号，显示本次素材案例。paidCase实际ID重匹配/coreCases/规则不变；反序/子集断言，单worker仅当前新详情测试+strict，保前SHA历史。

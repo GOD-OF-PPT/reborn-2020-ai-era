@@ -1,0 +1,5 @@
+仅修三处显示编号：Define按payload所选refs顺序index+1，sample按lesson.cases顺序index+1；独立License没有courseId，改为本次素材案例+public label。paidCase的kind/id重匹配、coreCases、原命令/费用/日期/权限均未改，CourseCommandDetails接缝未改。
+
+原4cases单worker4/4、11.28s；strict0，终态hash与两检查输入逐项同。复用同一fixture，以原手工首单实际完成/付款补第二public case，已有视频单仍由原命令实际付费完成；反序Define的原preview/proposal通过、原proposal.nextRun的lesson.cases顺序与原payload同（没有新增持久保存），样课亦同顺序；视频子集从案例1开始，独立许可不出现局部编号。只为测试构造实际fixture状态，不称正常Create或本轮Chrome。原正常手工case与stage/refund等四case仍保留；没有扩大矩阵。
+
+前SHA5e92055e504b3a01901ffd7e652f6874d8d154581f7e6ca33b48f66f357e8e0f为confirmation-r1历史，前像/哈希在本目录before-source及before文件；新源见final-source，旧R1未改。当前源冻结，Root R4生产实际案例2许可确认另验。无浏览器/Git/兼容/几何/资产改动。

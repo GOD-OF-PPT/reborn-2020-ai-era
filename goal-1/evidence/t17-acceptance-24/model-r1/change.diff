@@ -1,0 +1,452 @@
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-24/model-r1/before/course-scene-progress.ts	2026-10-23 22:32:50
++++ /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-24/model-r1/after/course-scene-progress.ts	2026-10-23 23:02:06
+@@ -2,7 +2,17 @@
+ import {dayBefore} from '../core/operations-calendar.ts'
+ import type {CourseProjection} from '../core/course-projection.ts'
+ import {moneyText,playableThrough} from './game-text.ts'
++import type {ProductionJob} from '../core/operations-types.ts'
++import {COURSE_JOBS} from '../content/course.ts'
+ 
++export type CourseSceneTarget=
++ |{readonly kind:'studio';readonly businessId:string}
++ |{readonly kind:'outline';readonly businessId:string;readonly outlineId:string}
++ |{readonly kind:'license';readonly businessId:string;readonly licenseId:string}
++ |{readonly kind:'course';readonly businessId:string;readonly courseId:string;readonly sampleJobId?:string}
++export interface CourseSceneContext{readonly preparationReady?:boolean;readonly operations?:{readonly jobs:readonly ProductionJob[]}|null}
++export type CourseSceneResultRef={readonly kind:'job'|'course'|'outline'|'license'|'business';readonly id:string;readonly date:string|null}
++
+ export interface CourseSceneStage{
+  readonly cohortId:string
+  readonly courseId:string
+@@ -17,6 +27,14 @@
+  return date
+ }
+ export interface CourseSceneProgress{
++ readonly phase:string
++ readonly invalidReason:string|null
++ readonly outcome:'none'|'pending'|'actual'|'non-success'
++ readonly resultRefs:readonly CourseSceneResultRef[]
++ readonly target?:CourseSceneTarget
++ readonly historical?:boolean
++ readonly command?:{readonly kind:'ActivateBusiness';readonly payload:{readonly businessId:string};readonly confirm:boolean}
++ readonly wait?:{readonly date:string;readonly label:string}
+  readonly title:string
+  readonly line:string
+  readonly choice:{readonly title:string;readonly line:string;readonly label:string}
+@@ -27,7 +45,7 @@
+ }
+ export interface CoursePreparationStep{readonly phase:'fund'|'outline'|'waiting'|'activate';readonly businessId?:string;readonly jobId?:string}
+ function scene(title:string,line:string,choiceTitle:string,choiceLine:string,label:string):CourseSceneProgress{
+- return {title,line,choice:{title:choiceTitle,line:choiceLine,label}}
++ return {title,line,choice:{title:choiceTitle,line:choiceLine,label},phase:'legacy',invalidReason:null,outcome:'none',resultRefs:[]}
+ }
+ 
+ /** A past remedy flag alone does not contradict actual completed learning support. */
+@@ -36,7 +54,7 @@
+ }
+ 
+ /** Committed public teaching facts. Selecting a resource/date and the original command still belong to the player. */
+-export function courseSceneProgress(course:CourseProjection,date:string):CourseSceneProgress|null{
++function legacyCourseSceneProgress(course:CourseProjection,date:string):CourseSceneProgress|null{
+  if(!course)return null
+  const attention=(co:NonNullable<CourseProjection>['cohorts'][number])=>{
+   const lesson=course.courses.find(c=>c.id===co.courseId),update=lesson?.unresolvedUpdates.map(u=>u.dueAt).sort()[0]
+@@ -111,3 +129,105 @@
+  if(date>=course.catalog.availableAt)return {...scene('把做过的事，变成值得教的一堂课。','先给一间小教室留出余地，不急着向任何人收费。','给教室留一笔自己的钱','自选转入资本，再安排真实大纲；样课、招生和收入都还没有发生。','决定给教室留多少钱'),preparation:{phase:'fund'}}
+  return null
+ }
++
++const targetId=(value:unknown):value is string=>typeof value==='string'&&value.length>0&&value.length<=512&&value.trim().length>0&&!/[\u0000-\u001f\u007f]/.test(value)
++export const courseTargetEntity=(t:CourseSceneTarget):string=>t.kind==='course'?t.sampleJobId??t.courseId:t.kind==='license'?t.licenseId:t.kind==='outline'?t.outlineId:t.businessId
++function sampleJob(course:NonNullable<CourseProjection>,target:Extract<CourseSceneTarget,{kind:'course'}>,context?:CourseSceneContext){
++ const c=course.courses.find(c=>c.id===target.courseId),id=target.sampleJobId??c?.sampleJobId
++ return id?(context?.operations?.jobs.find(j=>j.id===id)??(context?.operations?undefined:c?.job?.id===id?c.job:undefined)):undefined
++}
++/** Exact supplied identities are checked, never repaired into another draft or attempt. */
++export function courseTargetReason(course:CourseProjection,target:CourseSceneTarget,context?:CourseSceneContext):string|null{
++ if(!course||!target||typeof target!=='object'||Array.isArray(target)||!['studio','outline','license','course'].includes(target.kind)||!targetId(target.businessId))return '原课程目标身份不完整，请明确重新选择。'
++ const keys=target.kind==='studio'?['kind','businessId']:target.kind==='outline'?['kind','businessId','outlineId']:target.kind==='license'?['kind','businessId','licenseId']:['kind','businessId','courseId','sampleJobId']
++ if(Object.keys(target).some(key=>!keys.includes(key)))return '原课程目标含有冲突字段，没有换到另一项准备。'
++ const business=course.businesses.filter(b=>b.id===target.businessId)
++ if(business.length!==1||business[0]!.route!=='ai_course')return '原课程工作室不存在或身份重复，请重新选择。'
++ const checkJob=(job:ProductionJob|null|undefined,id:string)=>{
++  const rows=context?.operations?.jobs.filter(j=>j.id===id)??(job?[job]:[])
++  return rows.length===1&&rows[0]!.id===id&&rows[0]!.businessId===target.businessId
++ }
++ if(target.kind==='outline'){
++  if(!targetId(target.outlineId)||target.outlineId===target.businessId)return '原大纲身份为空或冲突，请重新选择。'
++  const rows=course.outlines.filter(o=>o.id===target.outlineId),o=rows[0]
++  if(rows.length!==1||o!.businessId!==target.businessId||!checkJob(o!.job,o!.jobId)||o!.job?.definitionId!=='course-outline')return '原大纲或任务不属于这间工作室，没有换成另一份大纲。'
++ }
++ if(target.kind==='license'){
++  if(!targetId(target.licenseId)||target.licenseId===target.businessId)return '原课程素材许可身份为空或冲突，请重新选择。'
++  const rows=course.licenses.filter(l=>l.id===target.licenseId),l=rows[0]
++  if(rows.length!==1||l!.businessId!==target.businessId||!checkJob(l!.job,l!.jobId)||l!.job?.definitionId!=='course-material-license')return '原课程使用范围或任务不属于这间工作室，没有替换许可。'
++ }
++ if(target.kind==='course'){
++  if(!targetId(target.courseId)||target.courseId===target.businessId||target.sampleJobId!==undefined&&(!targetId(target.sampleJobId)||[target.businessId,target.courseId].includes(target.sampleJobId)))return '原课程或样课任务身份为空或冲突，请重新选择。'
++  const rows=course.courses.filter(c=>c.id===target.courseId),c=rows[0]
++  if(rows.length!==1||c!.businessId!==target.businessId)return '原课程不属于这间工作室，没有换成另一门课。'
++  if(target.sampleJobId!==undefined){
++   const j=sampleJob(course,target,context)
++   if(c!.sampleAttempts.filter(id=>id===target.sampleJobId).length!==1||!checkJob(j,target.sampleJobId)||j?.definitionId!==`course-sample-${c!.productId}-${c!.topicId}`)return '原样课尝试已不可匹配，没有改成最新样课；请重新选择。'
++  }
++ }
++ return null
++}
++
++function focusedCourseScene(course:NonNullable<CourseProjection>,_date:string,target:CourseSceneTarget,context?:CourseSceneContext):CourseSceneProgress{
++ const reason=courseTargetReason(course,target,context)
++ const make=(phase:string,title:string,line:string,terms:string,label:string,outcome:CourseSceneProgress['outcome']='none',refs:readonly CourseSceneResultRef[]=[]):CourseSceneProgress=>({...scene(title,line,title,terms,label),phase,outcome,resultRefs:refs,target})
++ if(reason)return {...make('course-invalid','先找回原来的这份教学准备。',reason,'原大纲、课程、学生和费用继续保留；请明确重新选择。','重新选择原课程对象'),invalidReason:reason}
++ const b=course.businesses.find(b=>b.id===target.businessId)!,closed=b.lifecycle==='closed',stopped=['winding_down','closed'].includes(b.lifecycle)
++ const globalOutline=context?.preparationReady??course.outlines.some(o=>o.businessId===b.id&&o.job?.status==='completed')
++ const canActivate=b.lifecycle==='preparing'&&b.prepared&&globalOutline
++ const activation={kind:'ActivateBusiness' as const,payload:{businessId:b.id},confirm:true}
++ const originalJob=(kind:'outline'|'license'|'sample',job:ProductionJob,identity:string,refs:readonly CourseSceneResultRef[]):CourseSceneProgress=>{
++  const waiting=job.status==='planned'||job.status==='running',complete=job.status==='completed',name=kind==='outline'?'大纲':kind==='license'?'课程素材使用范围':'样课'
++  const definition=COURSE_JOBS.find(d=>d.id===job.definitionId),terms=definition?`原任务基准${moneyText(definition.costFen)}、${definition.actionPoints}点、${definition.durationDays}日；实际预留、支出与已耗行动分别看原账。`:''
++  const p=make(`course-${kind}-${job.status}`,waiting?job.status==='planned'?`给这份${name}，留好了真正的日子。`:`这份${name}，正在认真准备。`:complete?`这份原${name}任务，已经实际完成。`:`这份原${name}安排，已经停下。`,`${identity} · ${job.startAt}—${job.completeAt}。${waiting?'已安排或开工，尚未实际完成。':complete?'原任务已完成；没有因此招生或确认教学收入。':'已耗成本与行动保留，未完成部分没有补作成功。'}`,`${job.resources.map(id=>course.resources.find(r=>r.id===id)?.label??'原安排的制作成员').join('、')}。${terms}${stopped?'原工作室已停止经营，记录与旧责任继续保留。':'原资金、资格和共享排程仍按原规则核对。'}${kind==='sample'?'样课、获客、班额、支持和实际报名分别决定。':'这一步不会代替样课、招生或教学收入。'}`,`翻看这份原${name}与安排`,waiting?'pending':complete?'actual':'non-success',refs)
++  return waiting?{...p,wait:{date:job.status==='planned'?job.startAt:job.completeAt,label:`等这份原${name}${job.status==='planned'?'实际开工':'实际完成'}`},waitDate:job.status==='planned'?job.startAt:job.completeAt}:p
++ }
++ if(target.kind==='outline'){
++  const o=course.outlines.find(o=>o.id===target.outlineId)!,j=o.job!,p=originalJob('outline',j,'这间工作室的原大纲',[{kind:'outline',id:o.id,date:j.startAt},...(j.status==='completed'?[{kind:'job' as const,id:j.id,date:j.completeAt}]:[])])
++  return canActivate&&j.status==='completed'?{...p,command:activation,preparation:{phase:'activate',businessId:b.id},choice:{title:'决定是否启用这间教室',line:'大纲与营业准备已经存在；仍须独立核对原资金、资格和初始产能，此刻没有学生或学费。',label:'核对条件，启用这间教室'}}:p
++ }
++ if(target.kind==='license'){
++  const l=course.licenses.find(l=>l.id===target.licenseId)!,j=l.job!
++  return originalJob('license',j,'本工作室这份案例的原课程使用范围',[{kind:'license',id:l.id,date:j.startAt},...(j.status==='completed'?[{kind:'job' as const,id:j.id,date:j.completeAt}]:[])])
++ }
++ if(target.kind==='studio'){
++  if(closed)return make('course-closed','这间原教室，已经收尾。','原课程、大纲、案例与旧班记录仍在。','新工作室与新付费承诺须另外明确选择，不把历史成果当成本季新增收入。','翻看这间原工作室的记录','actual')
++  if(stopped||b.lifecycle==='paused')return make('course-paused','先把这间原教室的安排看清。','工作室已经暂停或进入收尾。','停止新安排不清除原任务、维护、更新或旧学生责任。','翻看原工作室与有限收尾','non-success')
++  if(canActivate)return {...make('course-activate','大纲与营业准备都已留下。','已有公开准备可以复用，不需要为进入下一步再写一次大纲。','启用仍独立核对原资格、可花至少¥2,000与初始产能；启用后按实际在营日承担原月维护。','核对条件，启用这间教室'),preparation:{phase:'activate',businessId:b.id},command:activation}
++  if(b.lifecycle==='preparing'){
++   const active=course.outlines.filter(o=>o.businessId===b.id&&o.job&&['planned','running'].includes(o.job.status))
++   if(active.length===1){const o=active[0]!,p=originalJob('outline',o.job!,'这间工作室的大纲',[{kind:'outline',id:o.id,date:o.job!.startAt}]);return {...p,preparation:{phase:'waiting',businessId:b.id,jobId:o.job!.id}}}
++   return {...make('course-outline-needed','先把教学准备真正写出来。',globalOutline?'原全局大纲已经存在；本工作室的营业准备仍须按原记录核对。':'全局教学大纲与本工作室准备各有自己的原条件。','可安排原大纲任务¥100、1点、7日；已有合法准备路线继续可用，不会重复收取一笔强制准备费。','选择原执笔资源与日期'),preparation:{phase:'outline',businessId:b.id}}
++  }
++  return make('course-define','这间教室已启用，再明确想教什么。','已有课程与案例仍保留；没有替你选择第一份草稿。','选择实际已付案例、形式、主题、受众和使用同意，再独立定义这门课；此刻没有招生。','构思新课或明确翻选已有课程')
++ }
++ const c=course.courses.find(c=>c.id===target.courseId)!,job=sampleJob(course,target,context),historical=target.sampleJobId!==undefined&&target.sampleJobId!==c.sampleJobId
++ const refs:CourseSceneResultRef[]=[{kind:'course',id:c.id,date:c.createdAt}]
++ if(job?.status==='completed')refs.push({kind:'job',id:job.id,date:job.completeAt})
++ if(historical&&job)return {...originalJob('sample',job,c.name,refs),historical:true}
++ if(job&&['planned','running','interrupted','cancelled'].includes(job.status))return originalJob('sample',job,c.name,refs)
++ if(closed||c.status==='retired'||stopped)return make(closed?'course-closed':'course-retired','这份原课程，已经停止新安排。',c.name+'的原样课与版本仍保留。','原学生、退款、更新与费用继续按原记录处理；本次查看不会恢复招生。','翻看原课程与全部旧责任','non-success',refs)
++ if(c.unresolvedUpdates.length)return make('course-update-required','样课记录还在，工具前提需要更新。',`${c.name}有原更新责任，期限${c.unresolvedUpdates.map(u=>u.dueAt).sort()[0]}。`,'原更新须实际投入并完成；新获客、班额与支持仍另行决定，不把更新记作新产品或收入。','翻看原更新与课程记录',c.status==='ready'?'actual':'pending',refs)
++ const pendingRights=course.licenses.filter(l=>l.businessId===b.id&&c.cases.some(ref=>ref.id===l.caseId)&&l.job&&['planned','running'].includes(l.job.status)).sort((a,b)=>(a.job!.status==='planned'?a.job!.startAt:a.job!.completeAt).localeCompare(b.job!.status==='planned'?b.job!.startAt:b.job!.completeAt)||a.id.localeCompare(b.id))[0]
++ if(pendingRights?.job)return originalJob('license',pendingRights.job,c.name+' · 原案例的课程使用范围',[...refs,{kind:'license',id:pendingRights.id,date:pendingRights.job.startAt}])
++ const missingRights=c.cases.some(ref=>{const info=course.cases.find(r=>r.kind===ref.kind&&r.id===ref.id);return !info||info.licensed&&!course.licenses.some(l=>l.businessId===b.id&&l.caseId===ref.id&&l.job?.status==='completed')})
++ if(missingRights)return make('course-rights-required','先把这门课的原案例使用范围看清。',c.name+'的案例或课程素材权利仍待核对。','已付案例和本单授权不是同一件事。需要的课程使用范围按原¥300、1点、7日实际完成；不自动授权。','核对这门课的实际案例与课程权利',c.status==='ready'?'actual':'none',refs)
++ if(c.qualificationReasons.length)return make('course-tool-required','这门课的工具前提，需要先确认。',c.name+'的当前公开工具资格尚不齐全。','沿原申请和阅读动作核对；样课制作期每一日仍须通过原资格预览，不编批准或延长期限。','查看原工具资格与课程准备',c.status==='ready'?'actual':'none',refs)
++ if(c.paused||b.lifecycle==='paused')return make('course-paused','这份课程暂不接受新的安排。',c.name+'的原样课与版本仍在。','恢复仍须原条件与独立决定；旧班责任、更新和费用没有消失。','核对原暂停与恢复条件',c.status==='ready'?'actual':'none',refs)
++ if(c.status==='ready')return make('course-ready','这一份样课，已经真正准备好。',`${c.name}的样课已实际完成，${course.cohorts.some(co=>co.courseId===c.id)?'已有班期与学员记录继续保留。':'尚未招生。'}`,'当前案例权利与工具前提可核；新的获客、价格、班额、支持和实际报名仍须另行决定，本次查看没有新增学费或教学收入。','翻看这门原课，再决定是否迈向下一步','actual',refs)
++ if(job?.status==='completed')return originalJob('sample',job,c.name,refs)
++ const definition=COURSE_JOBS.find(d=>d.id===`course-sample-${c.productId}-${c.topicId}`)
++ return make('course-draft','课程方案留下了，样课还须亲手做出来。',c.name+'仍是方案，没有把定义当作样课完成。',`${definition?`本门样课${moneyText(definition.costFen)}、${definition.actionPoints}点、${definition.durationDays}日；`:''}显选实际资源与日期，再核对制作期资格；未来学费不能支付当前制作。`,'选择这门课样课的资源与开工日','none',refs)
++}
++
++/** Undefined keeps the original recommendation; null explicitly selects no existing object. */
++export function courseSceneProgress(course:CourseProjection,date:string,target?:CourseSceneTarget|null,context?:CourseSceneContext):CourseSceneProgress|null{
++ if(target===undefined)return legacyCourseSceneProgress(course,date)
++ if(target===null){
++  const available=!!course&&date>=course.catalog.availableAt
++  return {...scene(available?'先选这次想认真准备的那一堂课。':'这间教室，还没有到可以筹备的日子。',available?'明确选择已有工作室或课程；也可在原规则允许时筹备，不会自动接管旧班。':course?`课程筹备的公开可用日是${course.catalog.availableAt}；当前尚未到达，不能提前建立工作室。`:'当前没有可核对的课程筹备记录。','先明确这一次教学准备',available?'资金、案例、大纲、课程权利与样课分别核对；本次选择不会招生或收款。':'现在可以先积累真实已付案例、保留生活与自有资金；到可用日仍须核对原工具资格、大纲和实际样课，不会因等待自动获得许可。',available?'明确选择课程准备对象':'查看已付案例与原资格边界'),phase:available?'course-entry':'course-unavailable'}
++ }
++ if(!course)return {...scene('原课程记录暂不可达。','没有换到另一门课。','重新选择原对象','原记录保留，当前不执行任何准备。','重新选择课程对象'),phase:'course-invalid',invalidReason:'当前公开课程记录不可达，请重新选择。',target}
++ return focusedCourseScene(course,date,target,context)
++}
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-24/model-r1/before/course-scene-progress.test.ts	2026-10-23 22:32:50
++++ /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-24/model-r1/after/course-scene-progress.test.ts	2026-10-23 23:02:06
+@@ -184,3 +184,42 @@
+  const html=renderToStaticMarkup(createElement(CourseCommandDetails,{command,course:p.view()}))
+  expect(html).toContain('第2段教学');expect(html).toContain('2023-02-28');expect(html).toContain('2023-02-07实际交付本段');expect(html).not.toContain('不提前确认本段教学收入')
+ })
++it('keeps an explicit original sample attempt through a real interruption and later retry, without following another draft',()=>{
++ const p=path(),business=p.h.run.operations!.businesses.find(b=>b.id===p.course.businessId)!
++ p.h.send('BuildCourseSample',{courseId:p.course.id,resources:['player-production'],startAt:'2023-01-02'})
++ const first=p.view().courses.find(c=>c.id===p.course.id)!.sampleJobId!
++ const target={kind:'course' as const,businessId:business.id,courseId:p.course.id,sampleJobId:first}
++ expect(courseSceneProgress(p.view(),p.h.run.timeline.cursor.date,target,{operations:p.h.run.operations})).toMatchObject({phase:'course-sample-planned',wait:{date:'2023-01-02'},target})
++ p.h.send('AdvanceTime',{date:'2023-01-02'});p.h.send('InterruptJob',{jobId:first})
++ p.h.send('BuildCourseSample',{courseId:p.course.id,resources:['player-production'],startAt:'2023-01-03'})
++ p.h.send('DefineCourse',{businessId:business.id,name:'另一份真实草稿',productId:'intro_recorded',topicId:'image_workflows',edition:'foundation',segment:'ai_learners',cases:p.course.cases,consent:true})
++ const raw=p.h.codec.export(p.h.run),progress=courseSceneProgress(p.view(),p.h.run.timeline.cursor.date,target,{operations:p.h.run.operations})!
++ expect(progress).toMatchObject({phase:'course-sample-interrupted',outcome:'non-success',target});expect(progress.wait).toBeUndefined()
++ expect(progress.line+' '+progress.choice.line).not.toContain('另一份真实草稿');expect(p.h.codec.export(p.h.run)).toBe(raw)
++ expect(courseSceneProgress(p.view(),p.h.run.timeline.cursor.date,{...target,sampleJobId:'missing-original-job'},{operations:p.h.run.operations})?.invalidReason).toBeTruthy()
++ expect(courseSceneProgress(p.view(),p.h.run.timeline.cursor.date,{...target,businessId:'another-business'},{operations:p.h.run.operations})?.invalidReason).toBeTruthy()
++})
++
++it('distinguishes an explicit new entry from a selected ready course and keeps qualification and update boundaries visible',()=>{
++ const p=path(),target={kind:'course' as const,businessId:p.course.businessId,courseId:p.course.id}
++ p.h.send('BuildCourseSample',{courseId:p.course.id,resources:['player-production'],startAt:'2023-01-01'});p.h.send('AdvanceTime',{date:'2023-01-15'})
++ const v=p.view(),raw=p.h.codec.export(p.h.run),context={operations:p.h.run.operations}
++ expect(courseSceneProgress(v,'2023-01-15',null,context)).toMatchObject({phase:'course-entry',outcome:'none'})
++ const ready=courseSceneProgress(v,'2023-01-15',target,context)!
++ expect(ready).toMatchObject({phase:'course-ready',outcome:'actual',target});expect(ready.line+' '+ready.choice.line).toContain('尚未招生')
++ // Qualification is an already public reason; it never rewrites the accepted fixture history.
++ const unavailable={...v,courses:v.courses.map(c=>c.id===p.course.id?{...c,qualificationReasons:['MISSING_ENTITLEMENT:local_model_rights_and_hardware']}:c)}
++ expect(courseSceneProgress(unavailable,'2023-01-15',target,context)).toMatchObject({phase:'course-tool-required',outcome:'actual'})
++ expect(p.h.codec.export(p.h.run)).toBe(raw)
++})
++
++it('keeps a real old class visible without claiming no enrollment or replacing a selected new draft',()=>{
++ const p=path(),{co}=p.enroll(),original={kind:'course' as const,businessId:p.course.businessId,courseId:p.course.id},context={operations:p.h.run.operations}
++ const old=courseSceneProgress(p.view(),p.h.run.timeline.cursor.date,original,context)!
++ expect(old.phase).toBe('course-ready');expect(old.line).toContain('已有班期与学员记录');expect(old.line).not.toContain('尚未招生')
++ p.h.send('DefineCourse',{businessId:p.course.businessId,name:'正在准备的新草稿',productId:'practical_cohort',topicId:'image_workflows',edition:'foundation',segment:'ai_learners',cases:p.course.cases,consent:true})
++ const fresh=p.view().courses.at(-1)!,target={kind:'course' as const,businessId:fresh.businessId,courseId:fresh.id},raw=p.h.codec.export(p.h.run)
++ const current=courseSceneProgress(p.view(),p.h.run.timeline.cursor.date,target,{operations:p.h.run.operations})!
++ expect(current).toMatchObject({phase:'course-draft',target,outcome:'none'});expect(current.line).toContain(fresh.name);expect(current.choice.line).toContain('¥2,500、1点、14日')
++ expect(p.view().cohorts.find(c=>c.id===co.id)?.students).toHaveLength(20);expect(p.h.codec.export(p.h.run)).toBe(raw)
++})
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-24/model-r1/before/player-thread.ts	2026-10-23 22:32:50
++++ /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-24/model-r1/after/player-thread.ts	2026-10-23 23:02:06
+@@ -10,6 +10,8 @@
+ import {sceneThreads} from './scene-thread-notes.ts'
+ import type {VideoSceneTarget} from './video-scene-progress.ts'
+ import {resolveVideoFocus,videoTargetEntity,videoFocusQuarter,videoFocusOpen,videoFocusResultDate,videoPlayerScene,videoFocusFromSaved} from './video-player-thread.ts'
++import type {CourseSceneTarget} from './course-scene-progress.ts'
++import {courseFocusFor,resolveCourseFocus,courseFocusQuarter,courseFocusOpen,courseFocusResultDate,coursePlayerScene,courseFocusFromSaved} from './course-player-thread.ts'
+ 
+ type Input=Pick<GamePanelProps,'view'|'features'>
+ type Identity={readonly runId:string;readonly accountId:string;readonly entityId:string|null;readonly businessId?:string}
+@@ -18,9 +20,10 @@
+  |{readonly kind:'market';readonly entityKind?:'order'|'settlement'|'position'|'research'}
+  |{readonly kind:'life';readonly selection:LifeSceneSelection}
+  |{readonly kind:'video';readonly videoTarget:VideoSceneTarget|null}
++ |{readonly kind:'course';readonly courseTarget:CourseSceneTarget|null}
+ )
+ export type ThreadCommand={readonly kind:string;readonly payload:unknown;readonly label:string;readonly confirm:boolean}
+-export type ThreadResultRef={readonly kind:'job'|'contract'|'payment'|'fill'|'settlement'|'research'|'payroll'|'promise'|'marketing'|'publication';readonly id:string;readonly date:string|null}
++export type ThreadResultRef={readonly kind:'job'|'contract'|'payment'|'fill'|'settlement'|'research'|'payroll'|'promise'|'marketing'|'publication'|'course'|'outline'|'license'|'business';readonly id:string;readonly date:string|null}
+ export interface PlayerThreadView{
+  readonly wish:{readonly id:Input['view']['playerProfile']['wishId'];readonly label:string}
+  readonly approach:Input['view']['playerProfile']['approach']
+@@ -52,6 +55,7 @@
+  'first-order':'用一笔真实交付，试试自己的手艺。',market:'先保留生活储备，再验证一份模拟投资判断。',
+  work:'保留工作，也为自己的生活留出余地。',life:'把真实的日子留给生活。',free:'把这一季留给自己愿意承担的安排。',
+  video:'让同一份作品经过真实制作、交付和回款，再决定下一次投入。',
++ course:'从真实案例准备同一堂课，样课完成后再决定是否承担学生的承诺。',
+ } as const
+ 
+ function responsibility(p:Input){
+@@ -73,6 +77,7 @@
+ const accountMarket=(p:Input,accountId:string)=>accountId==='personal'?p.features.market:{...p.features.market,researches:[]}
+ 
+ function invalidFocus(p:Input,f:OpeningFocus):string|null{
++ if(f.kind==='course')return resolveCourseFocus(p,f).reason
+  if(f.kind==='video')return resolveVideoFocus(p,f).reason
+  if(f.runId!==p.view.runId)return '这项关注来自另一段人生，请重新选择。'
+  if(!p.view.accounts.some(a=>a.accountId===f.accountId))return '原账户已不可达，请重新选择；没有切换到账户。'
+@@ -105,6 +110,7 @@
+ }
+ 
+ function resolvedFocus(p:Input,f:OpeningFocus):OpeningFocus{
++ if(f.kind==='course')return resolveCourseFocus(p,f).focus
+  if(f.kind==='video')return resolveVideoFocus(p,f).focus
+  if(f.kind==='first-order'){
+   const first=p.features.firstOrder
+@@ -132,6 +138,7 @@
+  const base={runId:p.view.runId,accountId:target?.accountId??'personal',entityId:target?.recordId??null}
+  let focus:OpeningFocus
+  if(screen==='market')focus={...base,kind:'market'}
++ else if(screen==='course')focus=courseFocusFor(p,target?.courseTarget??null,target?.accountId)
+  else if(screen==='life')focus={...base,kind:'life',selection:target?.lifeSelection==='rest'||target?.lifeSelection==='workspace'?target.lifeSelection:target?.personId??'tang-ying'}
+  else if(screen==='quarter')focus={...base,kind:base.entityId!==null&&[p.features.firstOrder.offerId,p.features.firstOrder.contractId,p.features.firstOrder.jobId].includes(base.entityId)?'first-order':'work'}
+  else if(screen==='video'){
+@@ -209,12 +216,14 @@
+ }
+ 
+ function focusEntry(p:Input,f:OpeningFocus){
++ if(f.kind==='course')return f.courseTarget===null
+  if(f.kind==='video')return f.videoTarget===null||f.videoTarget.workId===undefined&&f.videoTarget.contractId===undefined&&f.videoTarget.marketingId===undefined
+  if(f.kind==='free'||f.entityId===null)return true
+  if(f.kind==='life')return f.entityId===f.selection&&!p.features.life.jobs.some(j=>j.id===f.entityId)&&!p.features.life.promises.some(o=>o.id===f.entityId)
+  return f.kind==='first-order'&&p.features.firstOrder.status==='available'&&p.features.firstOrder.contractId===null
+ }
+ function originQuarter(p:Input,f:OpeningFocus):string|null{
++ if(f.kind==='course')return courseFocusQuarter(p,f)
+  if(f.kind==='video')return videoFocusQuarter(p,f)
+  const id=f.entityId
+  if(focusEntry(p,f))return p.features.workbench.quarter
+@@ -236,6 +245,7 @@
+  return null
+ }
+ function focusOpen(p:Input,f:OpeningFocus){
++ if(f.kind==='course')return courseFocusOpen(p,f)
+  if(f.kind==='video')return videoFocusOpen(p,f)
+  const id=f.entityId
+  if(f.kind==='first-order')return ['planned','running','awaiting_submission','review','delivered'].includes(String(p.features.firstOrder.status))
+@@ -249,6 +259,7 @@
+  return false
+ }
+ function focusResultDate(p:Input,f:OpeningFocus):string|null{
++ if(f.kind==='course')return courseFocusResultDate(p,f)
+  if(f.kind==='video')return videoFocusResultDate(p,f)
+  const id=f.entityId
+  if(f.kind==='first-order'){const c=p.view.operations?.contracts.find(c=>c.id===p.features.firstOrder.contractId);return c?.settledAt??c?.reviewedAt??null}
+@@ -354,7 +365,7 @@
+  const common={wish:{id:p.view.playerProfile.wishId,label:wishes[p.view.playerProfile.wishId]},approach:p.view.playerProfile.approach,yearQuestion:questions[Number(p.view.date.slice(0,4))-2020]??'原来的事，想怎样收好？',attempt:attempt[focus.kind],responsibilityOverrideNeeded:responsibility(p),focusQuarter,focusScope:scope,legacyFallbackRequired:!requested&&legacyPending(p)}
+  if(reason)return {...common,focus,focusStatus:'invalid',invalidReason:reason,stage:'unavailable',object:'原来的关注对象',title:'先找回刚才那件事。',line:reason,detail:'没有自动接受、换主体或替换对象。请明确选择下一件事。',outcome:'none',inspect:{screen:'routes',label:'重新选择眼前的方向'},resultRefs:[]}
+  if(recovery?.needsReview)return {...common,focus,focusStatus:'default',invalidReason:null,stage:'review-choice',object:'本季已经留下的安排',title:'有几件真实的事，可以先回看。',line:`本季有${recovery.count}项实际安排。请先选择想继续看哪一件。`,detail:'原记录都保留，尚未替你选定一件；翻阅不会重新安排或付费。',attempt:'先回看本季已经安排的事，再决定把注意力留给哪里。',outcome:'none',inspect:{screen:'quarter',label:'翻看本季实际安排，选择一件继续',target:{accountId:'personal'}},resultRefs:[]}
+- let scene=resolved.kind==='video'?videoPlayerScene(p,resolved):resolved.kind==='first-order'?firstScene(p):resolved.kind==='market'?marketScene(p,resolved):resolved.kind==='life'?lifeScene(p,resolved):resolved.kind==='work'?workScene(p,resolved):freeScene()
++ let scene=resolved.kind==='course'?coursePlayerScene(p,resolved):resolved.kind==='video'?videoPlayerScene(p,resolved):resolved.kind==='first-order'?firstScene(p):resolved.kind==='market'?marketScene(p,resolved):resolved.kind==='life'?lifeScene(p,resolved):resolved.kind==='work'?workScene(p,resolved):freeScene()
+  if(focusQuarter&&focusQuarter<quarter)scene={...scene,object:focusQuarter+' / '+scene.object,line:(scope==='history'?'这是'+focusQuarter+'的原记录，旧收支不会重记为本季收入。':scope==='carry'?'这件事从'+focusQuarter+'留下，仍按原约定继续。':'这项安排始于'+focusQuarter+'，本季出现以下实际反馈。')+scene.line}
+  return {...common,...scene,focus:resolved,focusStatus:requested?'valid':'default',invalidReason:null}
+ }
+@@ -368,6 +379,7 @@
+   ||view.phase!=='playing'||!/^202[0-5]-Q[1-4]$/.test(current.features.workbench.quarter)
+   ||last?.kind!==kind||last.revisionAfter!==view.revision)return existing
+  const body=payloadRecord(payload);if(!body)return existing
++ const course=courseFocusFromSaved(previous,current,kind,body,existing?.kind==='course'?existing:null);if(course)return course
+  const video=videoFocusFromSaved(previous,current,kind,body);if(video)return video
+  const id=(key:string)=>typeof body[key]==='string'?body[key]:null
+  const base={runId:view.runId,accountId:'personal',entityId:null}
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-24/model-r1/before/season-thread.ts	2026-10-23 22:32:50
++++ /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-24/model-r1/after/season-thread.ts	2026-10-23 23:02:06
+@@ -5,6 +5,8 @@
+ import {sceneThreads} from './scene-thread-notes.ts'
+ import {openingFocusAfterSave,playerThread,type OpeningFocus} from './player-thread.ts'
+ import {videoTargetEntity} from './video-player-thread.ts'
++import {courseFocusFor,courseSceneContext} from './course-player-thread.ts'
++import {courseTargetReason,type CourseSceneTarget} from './course-scene-progress.ts'
+ 
+ export type SeasonInput=Pick<GamePanelProps,'view'|'features'>
+ type Inspect={screen:Screen;label:string;target?:SceneTarget}
+@@ -40,6 +42,14 @@
+  for(const account of view.accounts)add({...base,kind:'market',accountId:account.accountId},null,(account.accountId==='personal'?'自己的':'原经营账户的')+'投资判断')
+  add({...base,kind:'first-order',entityId:f.firstOrder.contractId??f.firstOrder.offerId},f.firstOrder.dates.startAt,'那份手工单与实际结果')
+  add({...base,kind:'video',videoTarget:null},null,'从一个真实账号与视频尝试开始')
++ add({...base,kind:'course',courseTarget:null},null,'从一份明确的课程准备开始')
++ for(const business of f.course?.businesses??[])add(courseFocusFor(p,{kind:'studio',businessId:business.id}),business.history[0]?.date??null,'原课程工作室 · '+business.id.slice(-6))
++ for(const outline of f.course?.outlines??[])add(courseFocusFor(p,{kind:'outline',businessId:outline.businessId,outlineId:outline.id}),outline.job?.startAt??null,'这份原教学大纲')
++ for(const license of f.course?.licenses??[])add(courseFocusFor(p,{kind:'license',businessId:license.businessId,licenseId:license.id}),license.job?.startAt??null,'这份原课程素材使用范围')
++ for(const course of f.course?.courses??[]){
++  add(courseFocusFor(p,{kind:'course',businessId:course.businessId,courseId:course.id}),course.createdAt,course.name+' · 原课程方案')
++  for(const id of course.sampleAttempts){const job=view.operations?.jobs.find(j=>j.id===id);add(courseFocusFor(p,{kind:'course',businessId:course.businessId,courseId:course.id,sampleJobId:id}),job?.startAt??null,course.name+' · 原样课尝试')}
++ }
+  for(const channel of f.video?.channels??[])add({...base,kind:'video',accountId:channel.accountId,businessId:channel.businessId,entityId:channel.id,videoTarget:{channelId:channel.id}},channel.createdAt,channel.name+' · 原视频账号')
+  for(const work of f.video?.works??[]){const channel=f.video!.channels.find(c=>c.id===work.channelId);if(channel){const t={channelId:channel.id,workId:work.id,...(work.contractId?{contractId:work.contractId}:{})};add({...base,kind:'video',accountId:channel.accountId,businessId:channel.businessId,entityId:videoTargetEntity(t),videoTarget:t},work.production?.startAt??null)}}
+  for(const marketing of f.video?.marketing??[]){const channel=f.video!.channels.find(c=>c.id===marketing.channelId);if(channel)add({...base,kind:'video',accountId:channel.accountId,businessId:channel.businessId,entityId:marketing.id,videoTarget:{channelId:channel.id,marketingId:marketing.id}},marketing.job?.startAt??null)}
+@@ -60,6 +70,7 @@
+  if(existing!==null&&playerThread(previous,existing).focusStatus==='invalid')return existing
+  const candidate=openingFocusAfterSave(previous,current,kind,payload,existing)
+  if(!pinned||existing===null||candidate===existing||candidate===null)return candidate
++ if(existing.kind==='course'&&candidate.kind==='course'&&existing.runId===candidate.runId&&existing.courseTarget===null&&kind==='OpenCourseStudio')return candidate
+  if(existing.runId!==current.view.runId||candidate.kind!==existing.kind||candidate.accountId!==existing.accountId)return existing
+  if(existing.kind==='life'&&(candidate.kind!=='life'||existing.selection!==candidate.selection))return existing
+  // Refreshing the outcome of the same object is not a new primary selection or quarter.
+@@ -72,6 +83,19 @@
+   if(old.marketingId&&kind==='AcceptVideoCommission'&&current.features.video?.marketing.some(m=>m.id===old.marketingId&&m.cohortId===current.features.video!.contracts.find(c=>c.id===next.contractId)?.cohortId))return candidate
+   return existing
+  }
++ if(existing.kind==='course'&&candidate.kind==='course'){
++  const old=existing.courseTarget,next=candidate.courseTarget
++  if(!old||!next||old.businessId!==next.businessId)return existing
++  if(old.kind==='studio'&&['StartCourseOutline','DefineCourse','LicenseCourseMaterials'].includes(kind))return candidate
++  if(old.kind==='outline'&&next.kind==='studio'&&kind==='ActivateBusiness')return candidate
++  if(old.kind==='outline'&&next.kind==='course'&&kind==='DefineCourse')return candidate
++  if(old.kind==='license'&&next.kind==='course'&&kind==='DefineCourse'){
++   const license=previous.features.course?.licenses.find(l=>l.id===old.licenseId)
++   return current.features.course?.courses.some(c=>c.id===next.courseId&&c.cases.some(ref=>ref.id===license?.caseId))?candidate:existing
++  }
++  if(old.kind==='course'&&next.kind==='course'&&old.courseId===next.courseId&&kind==='BuildCourseSample')return candidate
++  return existing
++ }
+  const entry=existing.entityId===null||existing.kind==='life'&&existing.entityId===existing.selection
+  const firstEntry=existing.kind==='first-order'&&previous.features.firstOrder.contractId===null&&existing.entityId===previous.features.firstOrder.offerId
+  if(entry||firstEntry)return candidate
+@@ -106,6 +130,14 @@
+   const jobs=[...(work?[work.production,...work.corrections]:[]),marketing?.job,...(contract?.negotiationJobId?[view.operations?.jobs.find(j=>j.id===contract.negotiationJobId)]:[])]
+   for(const job of jobs)if(job&&['planned','running'].includes(job.status)){const thread=playerThread(p,focus);add({id:'operation-job:'+job.id,title:thread.title,line:`${job.startAt}—${job.completeAt}；原资源、成本和行动保留，尚未完成。`,dueAt:job.completeAt,accountId:focus.accountId,urgent:false,sourceRefs:[{kind:'job',id:job.id,date:job.startAt}],focus,inspect:thread.inspect})}
+  }
++ const courseObjects:{target:CourseSceneTarget;jobId:string}[]=[
++  ...(f.course?.outlines??[]).map(o=>({target:{kind:'outline' as const,businessId:o.businessId,outlineId:o.id},jobId:o.jobId})),
++  ...(f.course?.licenses??[]).map(l=>({target:{kind:'license' as const,businessId:l.businessId,licenseId:l.id},jobId:l.jobId})),
++  ...(f.course?.courses??[]).flatMap(c=>c.sampleAttempts.map(id=>({target:{kind:'course' as const,businessId:c.businessId,courseId:c.id,sampleJobId:id},jobId:id})))
++ ]
++ for(const {target,jobId} of courseObjects){const job=view.operations?.jobs.find(j=>j.id===jobId);if(!job||!['planned','running'].includes(job.status)||courseTargetReason(f.course,target,courseSceneContext(p)))continue;const focus=courseFocusFor(p,target),thread=playerThread(p,focus);add({id:'operation-job:'+job.id,title:thread.title,line:`${job.startAt}—${job.completeAt}；原课程准备尚未实际完成，没有招生或新增收入。`,dueAt:job.completeAt,accountId:focus.accountId,urgent:false,sourceRefs:[{kind:'job',id:job.id,date:job.startAt}],focus,inspect:thread.inspect})}
++ for(const update of f.course?.updates.filter(u=>u.resolvedAt===null)??[]){const c=f.course!.courses.find(c=>c.id===update.courseId);if(!c)continue;const focus=courseFocusFor(p,{kind:'course',businessId:c.businessId,courseId:c.id});add({id:'update:'+update.id,title:'原课程的工具前提仍待处理',line:`${c.name}更新期限${update.dueAt}；旧学生与新招生限制继续，未被新的准备对象隐藏。`,dueAt:update.dueAt,accountId:focus.accountId,urgent:update.dueAt<=view.date,sourceRefs:[{kind:'update',id:update.id,date:update.occurredAt}],focus,inspect:{screen:'course',label:'翻看原课程更新与旧承诺',target:{accountId:focus.accountId,courseTarget:focus.courseTarget,recordId:c.id+'-course',openRecord:true}}})}
++ for(const co of f.course?.cohorts.filter(co=>co.closedAt===null)??[]){const c=f.course!.courses.find(c=>c.id===co.courseId);if(!c)continue;const focus=courseFocusFor(p,{kind:'course',businessId:c.businessId,courseId:c.id});add({id:'cohort:'+co.id,title:co.startAt+'开班的原课程仍有责任',line:`${c.name}教学至${co.endAt}、支持至${co.supportCompleteAt}、退款窗口至${co.refundUntil}；新准备不会清除这期原学员与责任。`,dueAt:co.refundUntil,accountId:focus.accountId,urgent:false,sourceRefs:[{kind:'cohort',id:co.id,date:co.createdAt}],focus,inspect:{screen:'course',label:'翻看这期原学生、支持与退款',target:{accountId:focus.accountId,courseTarget:focus.courseTarget,recordId:co.id,openRecord:true}}})}
+  for(const job of w.preparationJobs.filter(j=>j.status==='running'))add({id:'preparation:'+job.id,title:job.title,line:`原准备从${job.startAt}至${job.completeAt}，仍未完成；下一步沿原日历与准备记录。`,dueAt:job.completeAt,accountId:job.accountId,urgent:false,sourceRefs:[{kind:'preparation',id:job.id,date:job.startAt}],focus:null,inspect:{screen:'quarter',label:'翻看这项原准备',target:{accountId:job.accountId}}})
+  for(const job of view.operations?.jobs.filter(j=>j.id!==first.jobId&&['planned','running'].includes(j.status))??[]){
+   const business=view.operations?.businesses.find(b=>b.id===job.businessId)
+@@ -143,6 +175,9 @@
+  }
+  for(const settlement of f.market.settlements)if(settlement.paidAt)add({id:settlement.id,date:settlement.paidAt,title:settlement.kind==='sale'?'模拟卖款已实际交收':'模拟分红已实际到账',line:`${moneyText(settlement.amountFen)}已进入原账户；它不是新的免费本金或额外行动。`,sourceRefs:[{kind:'settlement',id:settlement.id,date:settlement.paidAt}],inspect:{screen:'market',label:'翻看这笔原交收',target:{accountId:settlement.accountId,recordId:settlement.id}}})
+  for(const research of f.market.researches)if(research.status==='completed')add({id:'research-result:'+research.id,date:research.completeAt,title:'公开研究已实际完成',line:'整理完成的是原公开资料；没有替你买股，也没有揭示未来价格。',sourceRefs:[{kind:'research',id:research.id,date:research.completeAt}],inspect:{screen:'market',label:'翻看这项原研究',target:{accountId:'personal',recordId:research.id}}})
++ for(const o of f.course?.outlines??[])if(o.job?.status==='completed'){const focus=courseFocusFor(p,{kind:'outline',businessId:o.businessId,outlineId:o.id});add({id:'course-outline:'+o.id,date:o.job.completeAt,title:'这份原教学大纲已实际完成',line:'完成的是原大纲与准备；启用、样课和招生仍各自决定，没有教学收入。',sourceRefs:[{kind:'outline',id:o.id,date:o.job.completeAt},{kind:'job',id:o.job.id,date:o.job.completeAt}],inspect:{screen:'course',label:'翻看原大纲与投入',target:{accountId:focus.accountId,courseTarget:focus.courseTarget,openRecord:true}}})}
++ for(const l of f.course?.licenses??[])if(l.job?.status==='completed'){const focus=courseFocusFor(p,{kind:'license',businessId:l.businessId,licenseId:l.id});add({id:'course-license:'+l.id,date:l.job.completeAt,title:'原案例的课程使用范围已实际准备',line:'本工作室的课程素材任务实际完成；没有继承成另一主体权利、完成样课或招收学生。',sourceRefs:[{kind:'license',id:l.id,date:l.job.completeAt},{kind:'job',id:l.job.id,date:l.job.completeAt}],inspect:{screen:'course',label:'翻看这份原课程使用范围',target:{accountId:focus.accountId,courseTarget:focus.courseTarget,openRecord:true}}})}
++ for(const c of f.course?.courses??[]){const general=courseFocusFor(p,{kind:'course',businessId:c.businessId,courseId:c.id});add({id:'course-defined:'+c.id,date:c.createdAt,title:'这门原课程方案已经留下',line:c.name+'已有明确案例、形式与主题；方案没有代替实际样课或新增招生。',sourceRefs:[{kind:'course',id:c.id,date:c.createdAt}],inspect:{screen:'course',label:'翻看这门原课程方案',target:{accountId:general.accountId,courseTarget:general.courseTarget,openRecord:true}}});for(const id of c.sampleAttempts){const j=view.operations?.jobs.find(j=>j.id===id&&j.businessId===c.businessId);if(!j||!['completed','interrupted','cancelled'].includes(j.status))continue;const date=j.status==='completed'?j.completeAt:j.releasedAt;if(!date)continue;const target:CourseSceneTarget={kind:'course',businessId:c.businessId,courseId:c.id,sampleJobId:id};add({id:'course-sample:'+id,date,title:j.status==='completed'?'这份原样课已实际完成':'这份原样课安排已经停下',line:c.name+'的原样课任务按实际状态留存；成本、行动、权利与工具资格分别核对，未增加学费或教学收入。',sourceRefs:[{kind:'sample',id,date},{kind:'course',id:c.id,date}],inspect:{screen:'course',label:'翻看这份原样课尝试',target:{accountId:general.accountId,courseTarget:target,openRecord:true}}})}}
+  for(const work of f.video?.works??[]){const channel=f.video!.channels.find(c=>c.id===work.channelId);if(!channel)continue;const t={channelId:channel.id,workId:work.id,...(work.contractId?{contractId:work.contractId}:{})};for(const job of [work.production,...work.corrections])if(job?.status==='completed')add({id:'video-job:'+job.id,date:job.completeAt,title:'这份视频的原制作实际完成',line:'实际完成的是原制作或返工；人工核对、客户验收与回款仍分别发生。',sourceRefs:[{kind:'job',id:job.id,date:job.completeAt},{kind:'work',id:work.id,date:job.completeAt}],inspect:{screen:'video',label:'翻看原作品与制作资源',target:{accountId:channel.accountId,videoTarget:t}}})}
+  for(const m of f.video?.marketing??[]){const channel=f.video!.channels.find(c=>c.id===m.channelId);if(m.completedAt&&channel)add({id:'video-marketing:'+m.id,date:m.completedAt,title:'这份原视频推广已实际结束',line:'结束的是原推广任务；实际询价仍须核对、显选，不记作客户成交或收入。',sourceRefs:[{kind:'marketing',id:m.id,date:m.completedAt},{kind:'job',id:m.jobId,date:m.completedAt}],inspect:{screen:'video',label:'翻看这份原推广与询价',target:{accountId:channel.accountId,videoTarget:{channelId:channel.id,marketingId:m.id}}}})}
+  for(const c of f.video?.contracts??[]){const channel=f.video!.channels.find(x=>x.id===c.channelId);if(!channel)continue;const target={accountId:channel.accountId,videoTarget:{channelId:channel.id,workId:c.workId,contractId:c.id}}
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-24/model-r1/before/season-focus-preference.ts	2026-10-23 22:32:50
++++ /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-24/model-r1/after/season-focus-preference.ts	2026-10-23 23:02:06
+@@ -1,6 +1,7 @@
+ import type {SaveStatus} from '../application/session.ts'
+ import type {OpeningFocus} from './player-thread.ts'
+ import type {VideoSceneTarget} from './video-scene-progress.ts'
++import type {CourseSceneTarget} from './course-scene-progress.ts'
+ 
+ export const SEASON_FOCUS_PREFERENCE_VERSION=1 as const
+ export const SEASON_FOCUS_PREFERENCE_MAX_TEXT_LENGTH=16_384
+@@ -25,7 +26,7 @@
+ type Parsed={record:SeasonFocusPreference}|{reason:SeasonFocusPreferenceInvalidReason}
+ const personSelections=new Set(['tang-ying','linzhou','xu-cheng','chen-yu','rest','workspace'])
+ const marketKinds=new Set(['order','settlement','position','research'])
+-const focusKinds=new Set(['first-order','work','free','market','life','video'])
++const focusKinds=new Set(['first-order','work','free','market','life','video','course'])
+ const messages:Record<SeasonFocusPreferenceInvalidReason,string>={
+  'invalid-scope':'当前关注上下文不完整，未读取或记下本机关注。',
+  'too-large':'本机关注记录过长，未采用；原文保留，可在本窗口重新选择。',
+@@ -51,9 +52,21 @@
+  const f=object(value)
+  if(!f||typeof f.kind!=='string')return {reason:'invalid-record'}
+  if(!focusKinds.has(f.kind))return {reason:'unsupported-focus-kind'}
+- const common=['kind','runId','accountId','entityId','businessId'],allowed=f.kind==='market'?[...common,'entityKind']:f.kind==='life'?[...common,'selection']:f.kind==='video'?[...common,'videoTarget']:common
++ const common=['kind','runId','accountId','entityId','businessId'],allowed=f.kind==='market'?[...common,'entityKind']:f.kind==='life'?[...common,'selection']:f.kind==='video'?[...common,'videoTarget']:f.kind==='course'?[...common,'courseTarget']:common
+  if(!exactKeys(f,allowed,['kind','runId','accountId','entityId'])||!id(f.runId)||!id(f.accountId)||f.entityId!==null&&!id(f.entityId)||f.businessId!==undefined&&!id(f.businessId))return {reason:'invalid-record'}
+  const identity={runId:f.runId,accountId:f.accountId,entityId:f.entityId as string|null,...(f.businessId!==undefined?{businessId:f.businessId as string}:{})}
++ if(f.kind==='course'){
++  if(f.courseTarget===null)return f.entityId===null&&f.accountId==='personal'&&f.businessId===undefined?{focus:{...identity,kind:'course',courseTarget:null}}:{reason:'invalid-record'}
++  const t=object(f.courseTarget)
++  if(!t||!['studio','outline','license','course'].includes(String(t.kind))||!id(t.businessId)||t.businessId!==f.businessId)return {reason:'invalid-record'}
++  const allowed=t.kind==='studio'?['kind','businessId']:t.kind==='outline'?['kind','businessId','outlineId']:t.kind==='license'?['kind','businessId','licenseId']:['kind','businessId','courseId','sampleJobId']
++  const required=t.kind==='studio'?['kind','businessId']:t.kind==='outline'?['kind','businessId','outlineId']:t.kind==='license'?['kind','businessId','licenseId']:['kind','businessId','courseId']
++  if(!exactKeys(t,allowed,required))return {reason:'invalid-record'}
++  for(const key of ['outlineId','licenseId','courseId','sampleJobId'])if(t[key]!==undefined&&!id(t[key]))return {reason:'invalid-record'}
++  const values=[t.businessId,t.outlineId,t.licenseId,t.courseId,t.sampleJobId].filter(x=>x!==undefined)
++  if(new Set(values).size!==values.length||f.entityId!==(t.sampleJobId??t.courseId??t.licenseId??t.outlineId??t.businessId))return {reason:'invalid-record'}
++  return {focus:{...identity,kind:'course',courseTarget:{...t} as unknown as CourseSceneTarget}}
++ }
+  if(f.kind==='video'){
+   if(f.videoTarget===null)return f.entityId===null&&f.accountId==='personal'&&f.businessId===undefined?{focus:{...identity,kind:'video',videoTarget:null}}:{reason:'invalid-record'}
+   const t=object(f.videoTarget)
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-24/model-r1/before/season-focus-preference.test.ts	2026-10-23 22:32:50
++++ /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-24/model-r1/after/season-focus-preference.test.ts	2026-10-23 23:02:06
+@@ -20,6 +20,21 @@
+ const gate=(changes:Partial<SeasonFocusPreferenceGate>={}):SeasonFocusPreferenceGate=>({...scope,saveStatus:'saved',hasCandidate:false,busy:false,...changes})
+ const input=(view:PlayingView)=>({view,features:view.features as unknown as PlayFeatures})
+ 
++it('persists strict course and original sample identities without rewriting earlier v1 text or repairing a malformed chain',()=>{
++ const storage=new MemoryPreferences(),key=seasonFocusPreferenceKey(scope.runId),oldRaw=JSON.stringify(preference(),null,2)
++ storage.values.set(key,oldRaw);expect(loadSeasonFocusPreference(storage,scope)).toMatchObject({status:'loaded',raw:oldRaw});expect(storage.writes).toBe(0)
++ const course:OpeningFocus={kind:'course',runId:scope.runId,accountId:'course-account',businessId:'studio',entityId:'original-sample-job',courseTarget:{kind:'course',businessId:'studio',courseId:'original-course',sampleJobId:'original-sample-job'}}
++ expect(saveSeasonFocusPreference(storage,preference({focus:course}),gate())).toMatchObject({status:'saved',record:{focus:course}})
++ expect(loadSeasonFocusPreference(storage,scope)).toMatchObject({status:'loaded',record:{focus:course}})
++ const validRaw=storage.values.get(key)!
++ for(const invalid of [{...course,businessId:'other-studio'},{...course,entityId:'original-course'},{...course,courseTarget:{...course.courseTarget,sampleJobId:''}},{...course,courseTarget:{kind:'studio',businessId:'studio',courseId:'original-course'}},{...course,courseTarget:{kind:'course',businessId:'studio',courseId:'original-course',sampleJobId:'original-course'}}]){
++  const bad=JSON.stringify({...preference(),focus:invalid});storage.values.set(key,bad)
++  expect(loadSeasonFocusPreference(storage,scope)).toMatchObject({status:'invalid',raw:bad})
++  expect(saveSeasonFocusPreference(storage,preference({focus:course}),gate())).toMatchObject({status:'preserved',raw:bad});expect(storage.values.get(key)).toBe(bad)
++ }
++ storage.values.set(key,validRaw);expect(saveSeasonFocusPreference(storage,preference({focus:course}),gate({hasCandidate:true}))).toMatchObject({status:'blocked',reason:'candidate'});expect(storage.values.get(key)).toBe(validRaw)
++})
++
+ it('keeps run-separated UI identity records without storing game amounts, previews or results',()=>{
+  const storage=new MemoryPreferences(),record=preference()
+  expect(loadSeasonFocusPreference(storage,scope).status).toBe('missing');expect(storage.writes).toBe(0)

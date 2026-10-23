@@ -1,0 +1,48 @@
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-24/reading-r5/before/course-scene-progress.ts	2026-10-24 00:51:37
++++ /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-24/reading-r5/after/course-scene-progress.ts	2026-10-24 00:57:44
+@@ -179,8 +179,9 @@
+  const activation={kind:'ActivateBusiness' as const,payload:{businessId:b.id},confirm:true}
+  const originalJob=(kind:'outline'|'license'|'sample',job:ProductionJob,identity:string,refs:readonly CourseSceneResultRef[]):CourseSceneProgress=>{
+   const waiting=job.status==='planned'||job.status==='running',complete=job.status==='completed',name=kind==='outline'?'大纲':kind==='license'?'课程素材使用范围':'样课'
+-  const definition=COURSE_JOBS.find(d=>d.id===job.definitionId),terms=definition?`原任务基准${moneyText(definition.costFen)}、${definition.actionPoints}点、${definition.durationDays}日；实际预留、支出与已耗行动分别看原账。`:''
+-  const p=make(`course-${kind}-${job.status}`,waiting?job.status==='planned'?`给这份${name}，留好了真正的日子。`:`这份${name}，正在认真准备。`:complete?`这份原${name}任务，已经实际完成。`:`这份原${name}安排，已经停下。`,`${identity} · ${job.startAt}—${job.completeAt}。${waiting?'已安排或开工，尚未实际完成。':complete?'原任务已完成；没有因此招生或确认教学收入。':'已耗成本与行动保留，未完成部分没有补作成功。'}`,`${job.resources.map(id=>course.resources.find(r=>r.id===id)?.label??'原安排的制作成员').join('、')}。${terms}${stopped?'原工作室已停止经营，记录与旧责任继续保留。':'原资金、资格和共享排程仍按原规则核对。'}${kind==='sample'?'样课、获客、班额、支持和实际报名分别决定。':'这一步不会代替样课、招生或教学收入。'}`,`翻看这份原${name}与安排`,waiting?'pending':complete?'actual':'non-success',refs)
++  const shortName=kind==='license'?'素材':name,definition=COURSE_JOBS.find(d=>d.id===job.definitionId),terms=definition?`${moneyText(definition.costFen)} / ${definition.actionPoints}点 / ${definition.durationDays}日；`:''
++  const status=job.status==='planned'?'已预留，尚未实付或使用行动。':job.status==='running'?'已开工，成本与行动已按原账承担。':complete?'已实际完成，已耗成本与行动保留。':job.status==='cancelled'?'未开工安排已取消，预留按原账释放。':'已中断，尚未完成；已耗成本与行动保留。'
++  const p=make(`course-${kind}-${job.status}`,waiting?job.status==='planned'?`这份${shortName}，已经排进日历。`:`这份${shortName}，正在准备。`:complete?`这份${shortName}，已经完成。`:`这份${shortName}，已经停下。`,`${identity} · ${job.startAt}—${job.completeAt}。`,`${job.resources.map(id=>course.resources.find(r=>r.id===id)?.label??'原安排的制作成员').join('、')} · ${terms}${status}${stopped?'工作室已停；':''}资格与旧责任仍须核对；${kind==='sample'?'样课不等于招生。':'样课与招生另定。'}`,`翻看这份原${name}与安排`,waiting?'pending':complete?'actual':'non-success',refs)
+   return waiting?{...p,wait:{date:job.status==='planned'?job.startAt:job.completeAt,label:`等这份原${name}${job.status==='planned'?'实际开工':'实际完成'}`},waitDate:job.status==='planned'?job.startAt:job.completeAt}:p
+  }
+  if(target.kind==='outline'){
+--- /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-24/reading-r5/before/course-player-thread.test.ts	2026-10-24 00:51:37
++++ /Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-24/reading-r5/after/course-player-thread.test.ts	2026-10-24 00:57:44
+@@ -86,13 +86,27 @@
+   await h.send('DefineCourse',{businessId:b.id,name:'原授权案例的课程使用范围',productId:'intro_recorded',topicId:'image_workflows',edition:'foundation',segment:'ai_learners',cases:[{kind:ref.kind,id:ref.id}],consent:true})
+   const c=h.p().features.course!.courses[0]!,focus=courseFocusFor(h.p(),{kind:'course',businessId:b.id,courseId:c.id})
+   expect(playerThread(h.p(),focus).stage).toBe('course-rights-required')
+-  const payload={businessId:b.id,caseKind:ref.kind,caseId:ref.id,resources:['player-production'],startAt:'2022-12-08'},saved=await h.send('LicenseCourseMaterials',payload)
++  const payload={businessId:b.id,caseKind:ref.kind,caseId:ref.id,resources:['player-production'],startAt:'2022-12-08'}
++  expect(h.controller.preview(h.controller.prepare('LicenseCourseMaterials',payload))).toMatchObject({allowed:true,upfrontCostFen:30000,actionPoints:1})
++  const saved=await h.send('LicenseCourseMaterials',payload)
+   expect(courseFocusFromSaved(saved.previous,saved.current,'LicenseCourseMaterials',payload,focus)).toBe(focus)
+   expect(seasonFocusAfterSave(saved.previous,saved.current,'LicenseCourseMaterials',payload,focus)).toBe(focus)
+-  expect(courseFocusFromSaved(saved.previous,saved.current,'LicenseCourseMaterials',payload)?.courseTarget?.kind).toBe('license')
+-  expect(playerThread(h.p(),focus)).toMatchObject({stage:'course-license-planned',wait:{date:'2022-12-08'},outcome:'pending'})
+-  await h.advance('2022-12-08');expect(playerThread(h.p(),focus)).toMatchObject({stage:'course-license-running',wait:{date:'2022-12-15'}})
++  const licenseFocus=courseFocusFromSaved(saved.previous,saved.current,'LicenseCourseMaterials',payload)!
++  expect(licenseFocus.courseTarget?.kind).toBe('license')
++  const funds=(p:ReturnType<typeof h.p>)=>p.features.course!.businesses.find(row=>row.id===b.id)!.funds.cashFen
++  expect(funds(saved.current)).toBe(funds(saved.previous));expect(saved.current.view.budget.spent).toBe(saved.previous.view.budget.spent);expect(saved.current.view.budget.reserved).toBe(saved.previous.view.budget.reserved+1)
++  const planned=playerThread(h.p(),focus),resourceLabel=h.p().features.course!.resources.find(r=>r.id==='player-production')!.label
++  expect(planned).toMatchObject({stage:'course-license-planned',wait:{date:'2022-12-08'},outcome:'pending'})
++  expect(planned.title).toBe('这份素材，已经排进日历。');expect(planned.line).toContain(c.name);expect(planned.line).toContain('2022-12-08—2022-12-15')
++  expect(planned.detail).toContain(resourceLabel);expect(planned.detail).toContain('¥300 / 1点 / 7日');expect(planned.detail).toContain('已预留，尚未实付或使用行动');expect(planned.detail).toContain('资格与旧责任');expect(planned.detail).toContain('样课与招生另定');expect(planned.detail).not.toContain('已实际完成')
++  await h.advance('2022-12-08');const started=h.p(),running=playerThread(started,focus)
++  expect(running).toMatchObject({stage:'course-license-running',wait:{date:'2022-12-15'}});expect(running.title).toBe('这份素材，正在准备。')
++  expect(funds(started)).toBe(funds(saved.current)-30000);expect(started.view.budget.spent).toBe(saved.current.view.budget.spent+1);expect(started.view.budget.reserved).toBe(saved.current.view.budget.reserved-1)
++  expect(running.detail).toContain(resourceLabel);expect(running.detail).toContain('¥300 / 1点 / 7日');expect(running.detail).toContain('已开工，成本与行动已按原账承担');expect(running.detail).not.toContain('尚未实付');expect(running.detail).not.toContain('已实际完成')
+   await h.advance('2022-12-15');expect(playerThread(h.p(),focus).stage).toBe('course-draft')
++  const completed=playerThread(h.p(),licenseFocus)
++  expect(completed).toMatchObject({stage:'course-license-completed',outcome:'actual'});expect(completed.detail).toContain('已实际完成');expect(completed.detail).toContain('¥300 / 1点 / 7日');expect(completed.detail).toContain('资格与旧责任');expect(completed.detail).toContain('样课与招生另定');expect(completed.detail).not.toContain('尚未实付')
++  expect(h.p().view.budget.spent).toBe(started.view.budget.spent);expect(funds(h.p())).toBe(funds(started))
+   expect(h.p().features.course!.cohorts).toHaveLength(0);expect(h.p().features.course!.businesses.find(row=>row.id===b.id)!.metrics.incomeFen).toBe(0)
+  }finally{await h.close()}
+ },30000)

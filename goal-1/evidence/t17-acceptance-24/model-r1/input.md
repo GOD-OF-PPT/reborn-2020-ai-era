@@ -1,0 +1,1 @@
+root24 input/plan/tasks已建，现授权实施S3-C1纯目标模型接缝。独占course-scene-progress及tests、新course-player-thread及tests、player-thread及tests、season-thread/偏好纯模型及tests；不改App/Opening/Narrative/Room/game-types/原CoursePanel/UI组件。保持旧两参、null新入口、严格旧attempt、公开大纲复用、saved白名单/原责任/兼容0；不改core/schema/P3，不提交。

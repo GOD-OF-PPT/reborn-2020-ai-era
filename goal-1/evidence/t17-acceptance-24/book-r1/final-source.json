@@ -1,0 +1,127 @@
+{
+  "scope": "Owned original-book/shared draft/calendar UI seams only; production frozen after target-vitest-r3 and strict-owned-r3.",
+  "files": [
+    {
+      "path": "src/ui/CoursePanel.tsx",
+      "bytes": 47741,
+      "sha256": "3874c2cb4810a35e238122cfede959135b32b267dbc26a87d69cf2ceb10ce9eb",
+      "ownership": "owned"
+    },
+    {
+      "path": "src/ui/SceneJournal.tsx",
+      "bytes": 8706,
+      "sha256": "66caf37fa7b7002ca40a9a7133e6551e467b4ddbddadbeb72d6272450173252c",
+      "ownership": "owned"
+    },
+    {
+      "path": "src/ui/course-scene-draft.ts",
+      "bytes": 2954,
+      "sha256": "12773457d1229761de3003d614e289b1469d6198c2269c293565f0119fd92ef3",
+      "ownership": "owned"
+    },
+    {
+      "path": "src/ui/course-scene-draft.test.ts",
+      "bytes": 6192,
+      "sha256": "e4d998f065d1b2cd58ba59b1bf82305a419f9c501f8022541c674b9199c07118",
+      "ownership": "owned"
+    },
+    {
+      "path": "src/ui/course-target.test.tsx",
+      "bytes": 22357,
+      "sha256": "5d1cf32174ed5dc5dcb01c25c6fe4812a815ce910300283197b9c7a6bac89089",
+      "ownership": "owned"
+    },
+    {
+      "path": "src/ui/scene-play.test.tsx",
+      "bytes": 4771,
+      "sha256": "00f48b95ebc369c54673db01dec9912716b47c7e470585e49063663ef9901a12",
+      "ownership": "unchanged existing regression input"
+    }
+  ],
+  "validation": [
+    {
+      "path": "draft-vitest-r4-green-terminal.json",
+      "result": "6/6; hook sequential functional and mounted consumer reads; earlier source but draft module unchanged"
+    },
+    {
+      "path": "target-vitest-r1-terminal.json",
+      "result": "3 files14/14; earlier Panel before final record/slot additions"
+    },
+    {
+      "path": "target-vitest-r3-terminal.json",
+      "result": "final affected3/3,4skipped; original outline+older attempt/ready sample/pending-licence near-to-book"
+    },
+    {
+      "path": "strict-owned-r3-terminal.json",
+      "result": "final strict exit0"
+    }
+  ],
+  "invariants": {
+    "originalCommandKinds": [
+      "ActivateBusiness",
+      "BuildCourseSample",
+      "CloseBusiness",
+      "CreateCourseAudience",
+      "DefineCourse",
+      "DismissWorker",
+      "EnrollCourseAudience",
+      "FundBusiness",
+      "HireWorker",
+      "InterruptJob",
+      "LicenseCourseMaterials",
+      "OpenCourseStudio",
+      "PauseBusiness",
+      "PauseNewEnrollment",
+      "RefundCourseLearners",
+      "ResumeBusiness",
+      "ResumeCourseEnrollment",
+      "RetireCourse",
+      "StartCourseOutline",
+      "StartCourseRecovery",
+      "StartCourseRefresh",
+      "StartCourseStage",
+      "StopCourseSales",
+      "StudyAdvancedCourseDemand",
+      "WindDownBusiness"
+    ],
+    "currentCommandKinds": [
+      "ActivateBusiness",
+      "BuildCourseSample",
+      "CloseBusiness",
+      "CreateCourseAudience",
+      "DefineCourse",
+      "DismissWorker",
+      "EnrollCourseAudience",
+      "FundBusiness",
+      "HireWorker",
+      "InterruptJob",
+      "LicenseCourseMaterials",
+      "OpenCourseStudio",
+      "PauseBusiness",
+      "PauseNewEnrollment",
+      "RefundCourseLearners",
+      "ResumeBusiness",
+      "ResumeCourseEnrollment",
+      "RetireCourse",
+      "StartCourseOutline",
+      "StartCourseRecovery",
+      "StartCourseRefresh",
+      "StartCourseStage",
+      "StopCourseSales",
+      "StudyAdvancedCourseDemand",
+      "WindDownBusiness"
+    ],
+    "missingOriginalCommandKinds": [],
+    "originalCourseIntakeAndClassSuffixUnchanged": true,
+    "beforeSuffixSha": "7c71ad9c3182ea85252ecc467f5546f3421e384fe4b25fa342649f3a63367c9c",
+    "afterSuffixSha": "7c71ad9c3182ea85252ecc467f5546f3421e384fe4b25fa342649f3a63367c9c",
+    "unchangedScenePlayTest": true
+  },
+  "notClaimed": [
+    "Chrome rendering/geometry/current-window or physical browser storage",
+    "This agent independently replayed imported prefix from Create",
+    "Final whole-source freeze while other owners edited",
+    "Full game, C1, goal or human acceptance",
+    "Compatibility, enrolment, cohort teaching/support/refund new acceptance"
+  ]
+}

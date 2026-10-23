@@ -1,0 +1,41 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/course-player-thread.test.ts (3 tests | 1 failed | 2 skipped) 6766ms
+   × keeps a saved course materials task attached to its actual licensed course and waits for the original completion 6765ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/course-player-thread.test.ts > keeps a saved course materials task attached to its actual licensed course and waits for the original completion
+AssertionError: expected { …(19) } to match object { …(3) }
+(28 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "outcome": "pending",
+-   "stage": "course-license-planned",
+-   "wait": {
+-     "date": "2022-12-08",
+-   },
++   "outcome": "none",
++   "stage": "course-rights-required",
+  }
+
+ ❯ src/ui/course-player-thread.test.ts:86:37
+     84|   expect(seasonFocusAfterSave(saved.previous,saved.current,'LicenseCou…
+     85|   expect(courseFocusFromSaved(saved.previous,saved.current,'LicenseCou…
+     86|   expect(playerThread(h.p(),focus)).toMatchObject({stage:'course-licen…
+       |                                     ^
+     87|   await h.advance('2022-12-08');expect(playerThread(h.p(),focus)).toMa…
+     88|   await h.advance('2022-12-15');expect(playerThread(h.p(),focus).stage…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 skipped (3)
+   Start at  22:51:17
+   Duration  8.12s (tests 86%, transform 7%, import 7%)
+

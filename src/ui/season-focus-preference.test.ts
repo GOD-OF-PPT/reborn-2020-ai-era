@@ -20,6 +20,21 @@ const preference=(changes:Partial<SeasonFocusPreference>={}):SeasonFocusPreferen
 const gate=(changes:Partial<SeasonFocusPreferenceGate>={}):SeasonFocusPreferenceGate=>({...scope,saveStatus:'saved',hasCandidate:false,busy:false,...changes})
 const input=(view:PlayingView)=>({view,features:view.features as unknown as PlayFeatures})
 
+it('persists strict course and original sample identities without rewriting earlier v1 text or repairing a malformed chain',()=>{
+ const storage=new MemoryPreferences(),key=seasonFocusPreferenceKey(scope.runId),oldRaw=JSON.stringify(preference(),null,2)
+ storage.values.set(key,oldRaw);expect(loadSeasonFocusPreference(storage,scope)).toMatchObject({status:'loaded',raw:oldRaw});expect(storage.writes).toBe(0)
+ const course:OpeningFocus={kind:'course',runId:scope.runId,accountId:'course-account',businessId:'studio',entityId:'original-sample-job',courseTarget:{kind:'course',businessId:'studio',courseId:'original-course',sampleJobId:'original-sample-job'}}
+ expect(saveSeasonFocusPreference(storage,preference({focus:course}),gate())).toMatchObject({status:'saved',record:{focus:course}})
+ expect(loadSeasonFocusPreference(storage,scope)).toMatchObject({status:'loaded',record:{focus:course}})
+ const validRaw=storage.values.get(key)!
+ for(const invalid of [{...course,businessId:'other-studio'},{...course,entityId:'original-course'},{...course,courseTarget:{...course.courseTarget,sampleJobId:''}},{...course,courseTarget:{kind:'studio',businessId:'studio',courseId:'original-course'}},{...course,courseTarget:{kind:'course',businessId:'studio',courseId:'original-course',sampleJobId:'original-course'}}]){
+  const bad=JSON.stringify({...preference(),focus:invalid});storage.values.set(key,bad)
+  expect(loadSeasonFocusPreference(storage,scope)).toMatchObject({status:'invalid',raw:bad})
+  expect(saveSeasonFocusPreference(storage,preference({focus:course}),gate())).toMatchObject({status:'preserved',raw:bad});expect(storage.values.get(key)).toBe(bad)
+ }
+ storage.values.set(key,validRaw);expect(saveSeasonFocusPreference(storage,preference({focus:course}),gate({hasCandidate:true}))).toMatchObject({status:'blocked',reason:'candidate'});expect(storage.values.get(key)).toBe(validRaw)
+})
+
 it('keeps run-separated UI identity records without storing game amounts, previews or results',()=>{
  const storage=new MemoryPreferences(),record=preference()
  expect(loadSeasonFocusPreference(storage,scope).status).toBe('missing');expect(storage.writes).toBe(0)

@@ -2,6 +2,7 @@ import type {PlayingView,PlayFeatures} from './game-types.ts'
 import {moneyText} from './game-text.ts'
 import {RELAY_JOBS} from '../content/relay.ts'
 import {domainSceneResult} from './scene-domain-results.ts'
+import {courseSceneResult} from './course-scene-result.ts'
 
 function committedRelayChange(previous:PlayingView|null,current:PlayingView){
  if(!previous||previous.runId!==current.runId||current.revision<=previous.revision||current.saveStatus!=='saved'||current.hasCandidate)return null
@@ -94,6 +95,7 @@ export function savedSceneResult(kind:string,label:string,previous:PlayingView|n
  if(!previous||previous.runId!==current.runId||current.saveStatus!=='saved'||current.hasCandidate||current.revision<=previous.revision)return '尚未核定新的完整保存，眼前仍以上一次完整提交为准。'
  const f=current.features as unknown as PlayFeatures,before=previous?.features as unknown as PlayFeatures|undefined,first=f.firstOrder
  const domain=domainSceneResult(kind,previous,current)
+ const course=courseSceneResult(kind,previous,current)
  if(kind==='WorkQuarter')return `这一季的工作已经安排好。月末才按实际在岗日期发薪；你还留着${current.budget.available}点，可以做自己的选择。`
  if(kind==='StartFirstOrder')return `你接下了这份手工小单。${first.dates.startAt}开工，${first.dates.submitBy}前完成并提交。${first.status==='planned'?`本次预留制作费${moneyText(first.terms.costFen)}和${first.terms.actionPoints}点，开工时才实际使用。`:first.status==='running'?`制作已经开工，已付制作费${moneyText(first.result.directCostFen)}，使用${first.terms.actionPoints}点。`:''}客户的钱还没有到账。`
  if(kind==='SubmitDelivery')return '作品交出去了。接下来，等客户真正复核；验收和到账还会留下各自的日期。'
@@ -114,9 +116,11 @@ export function savedSceneResult(kind:string,label:string,previous:PlayingView|n
   const relayTime=relayTimeResult(previous,current)
   if(relayTime)parts.push(relayTime)
   if(domain)parts.push(current.date+'，'+domain)
+  if(course)parts.push(course)
   if(parts.length)return parts.join(' ')
   return `${current.date}。已经确认的安排按真实日期发生，眼前又多了一次选择。`
  }
  if(domain)return domain
+ if(course)return course
  return `${label}，已经记进这段人生。实际结果请看眼前的记录；未完成的承诺仍会延续。`
 }

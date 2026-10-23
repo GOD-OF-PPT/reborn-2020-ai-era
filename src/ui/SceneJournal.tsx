@@ -8,6 +8,7 @@ import {moneyText} from './game-text.ts'
 import {screenForRoute} from './Navigation.tsx'
 import {videoWorkTarget} from './video-work-target.ts'
 import type {VideoSceneTarget} from './video-scene-progress.ts'
+import {courseTargetReason,type CourseSceneTarget} from './course-scene-progress.ts'
 
 export interface SceneWorkTarget{
  readonly accountId?:string
@@ -15,6 +16,7 @@ export interface SceneWorkTarget{
  readonly lifeSelection?:'person'|'rest'|'workspace'
  readonly recordId?:string
  readonly videoTarget?:VideoSceneTarget
+ readonly courseTarget?:CourseSceneTarget
 }
 export interface SceneWork extends SceneWorkTarget{
  readonly id:string
@@ -31,7 +33,19 @@ export function lifeWorkTarget(job:Pick<GamePanelProps['features']['life']['jobs
  return {accountId:job.accountId,...(job.id?{recordId:job.id}:{}),...(job.personId!==null?{personId:job.personId,lifeSelection:'person' as const}:job.kind==='rest'||job.kind==='workspace'?{lifeSelection:job.kind}:{})}
 }
 function workTarget(work:SceneWork):SceneWorkTarget{
- return {...(work.accountId?{accountId:work.accountId}:{}),...(work.personId?{personId:work.personId}:{}),...(work.lifeSelection?{lifeSelection:work.lifeSelection}:{}),...(work.recordId?{recordId:work.recordId}:{}),...(work.videoTarget?{videoTarget:work.videoTarget}:{})}
+ return {...(work.accountId?{accountId:work.accountId}:{}),...(work.personId?{personId:work.personId}:{}),...(work.lifeSelection?{lifeSelection:work.lifeSelection}:{}),...(work.recordId?{recordId:work.recordId}:{}),...(work.videoTarget?{videoTarget:work.videoTarget}:{}),...(work.courseTarget?{courseTarget:work.courseTarget}:{})}
+}
+
+/** A calendar job names its original course record, including an old sample attempt. */
+export function courseWorkTarget(p:Pick<GamePanelProps,'view'|'features'>,jobId:string,businessId:string):{accountId:string;courseTarget:CourseSceneTarget}|null{
+ const course=p.features.course,operations=p.view.operations,businesses=course?.businesses.filter(b=>b.id===businessId)??[]
+ if(!course||businesses.length!==1||!p.view.accounts.some(a=>a.accountId===businesses[0]!.accountId)||operations?.jobs.filter(j=>j.id===jobId&&j.businessId===businessId).length!==1)return null
+ const targets:CourseSceneTarget[]=[]
+ for(const o of course.outlines.filter(o=>o.businessId===businessId&&o.jobId===jobId))targets.push({kind:'outline',businessId,outlineId:o.id})
+ for(const l of course.licenses.filter(l=>l.businessId===businessId&&l.jobId===jobId))targets.push({kind:'license',businessId,licenseId:l.id})
+ for(const c of course.courses.filter(c=>c.businessId===businessId&&c.sampleAttempts.includes(jobId)))targets.push({kind:'course',businessId,courseId:c.id,sampleJobId:jobId})
+ const valid=targets.filter(target=>courseTargetReason(course,target,{operations})===null)
+ return valid.length===1?{accountId:businesses[0]!.accountId,courseTarget:valid[0]!}:null
 }
 
 export function sceneWorks(p:Pick<GamePanelProps,'view'|'features'>):SceneWork[]{
@@ -39,7 +53,7 @@ export function sceneWorks(p:Pick<GamePanelProps,'view'|'features'>):SceneWork[]
  return [
   ...(['awaiting_submission','review','delivered'].includes(String(f.firstOrder.status))?[{id:'first-order-feedback',title:'那一份手工小单',start:f.firstOrder.dates.startAt,end:f.firstOrder.status==='awaiting_submission'?f.firstOrder.dates.submitBy:f.firstOrder.dates.earliestReviewAt,status:f.firstOrder.status==='awaiting_submission'?'作品已完成，等待你亲手提交':'已提交，客户复核与实际到账仍要分别发生',screen:'quarter' as Screen,accountId:'personal',...(f.firstOrder.contractId?{recordId:f.firstOrder.contractId}:{}),cost:`实际制作成本${moneyText(f.firstOrder.result.directCostFen)} · 尚未当作已经回款`}]:[]),
   ...f.life.jobs.filter(j=>j.status==='running').map(j=>({id:j.id,title:j.kind==='promise_keep'?'答应过的那件事':f.life.work[j.kind].title,start:j.startAt,end:j.completeAt,status:'进行中，尚未完成',screen:'life' as Screen,cost:`个人已付${moneyText(j.costFen)} · 已耗${j.actionPoints}点`,...lifeWorkTarget(j)})),
-  ...(p.view.operations?.jobs??[]).filter(j=>['planned','running'].includes(j.status)).map(j=>{const business=p.view.operations?.businesses.find(b=>b.id===j.businessId),route=f.workbench.routes.find(r=>r.id===business?.route),manual=j.id===f.firstOrder.jobId,video=manual?null:videoWorkTarget(f.video,j.id,j.businessId);return {id:j.id,title:manual?f.firstOrder.title:route?.name??'已确认的经营工作',start:j.startAt,end:j.completeAt,status:j.status==='planned'?'已经安排，等待实际开工':'进行中，完成后仍需核对交付',screen:manual?'quarter' as Screen:video?'video' as Screen:business?screenForRoute(business.route):'quarter' as Screen,...(manual?{accountId:'personal',recordId:f.firstOrder.contractId??j.id}:video??(business?{accountId:business.accountId}:{})),cost:'原资金预留与费用，仍按原安排发生'}}),
+  ...(p.view.operations?.jobs??[]).filter(j=>['planned','running'].includes(j.status)).map(j=>{const business=p.view.operations?.businesses.find(b=>b.id===j.businessId),route=f.workbench.routes.find(r=>r.id===business?.route),manual=j.id===f.firstOrder.jobId,video=manual?null:videoWorkTarget(f.video,j.id,j.businessId),course=manual||video?null:courseWorkTarget(p,j.id,j.businessId);return {id:j.id,title:manual?f.firstOrder.title:route?.name??'已确认的经营工作',start:j.startAt,end:j.completeAt,status:j.status==='planned'?'已经安排，等待实际开工':'进行中，完成后仍需核对交付',screen:manual?'quarter' as Screen:video?'video' as Screen:course?'course' as Screen:business?screenForRoute(business.route):'quarter' as Screen,...(manual?{accountId:'personal',recordId:f.firstOrder.contractId??j.id}:video??course??(business?{accountId:business.accountId}:{})),cost:'原资金预留与费用，仍按原安排发生'}}),
   ...f.workbench.preparationJobs.filter(j=>j.status==='running').map(j=>({id:j.id,title:j.title,start:j.startAt,end:j.completeAt,status:'准备进行中，资格尚待实际结果',screen:'quarter' as Screen,accountId:j.accountId,cost:'开始准备不等于已经取得资格'})),
   ...f.story.jobs.filter(j=>j.status==='running').map(j=>({id:j.id,title:'已确认的合作与核查',start:j.startAt,end:j.completeAt,status:'进行中，仍待实际完成记录',screen:'story' as Screen,accountId:j.accountId,cost:'停止与独立恢复，仍是两件事'})),
  ].sort((a,b)=>a.end.localeCompare(b.end)||a.id.localeCompare(b.id))

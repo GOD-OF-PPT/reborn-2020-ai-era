@@ -1,0 +1,80 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/course-scene-progress.test.ts (18 tests | 2 failed) 21527ms
+   × keeps an explicit original sample attempt through a real interruption and later retry, without following another draft 627ms
+   × distinguishes an explicit new entry from a selected ready course and keeps qualification and update boundaries visible 614ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/course-scene-progress.test.ts > keeps an explicit original sample attempt through a real interruption and later retry, without following another draft
+AssertionError: expected { title: '样课的日子，已经安排好。', …(2) } to match object { Object (phase, wait, ...) }
+(6 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "phase": "course-sample-planned",
+-   "target": {
+-     "businessId": "ops:daf7aeb1cdcce57785f41db7b93fa3ab",
+-     "courseId": "crs:dec613ee12b031d08a63a3a706890090",
+-     "kind": "course",
+-     "sampleJobId": "crs:4094f32c899ed3b42521af1a0815aa1e",
+-   },
+-   "wait": {
+-     "date": "2023-01-02",
++   "choice": {
++     "label": "查看样课、案例与实际资源",
++     "line": "图像工具入门安排在2023-01-02—2023-01-16；案例权利、工具资格与原投入分别保留。",
++     "title": "先把这一份样课做好",
+    },
++   "line": "样课完成之前，还不能开始向学员兑现教学。",
++   "title": "样课的日子，已经安排好。",
+  }
+
+ ❯ src/ui/course-scene-progress.test.ts:192:108
+    190|  const first=p.view().courses.find(c=>c.id===p.course.id)!.sampleJobId!
+    191|  const target={kind:'course' as const,businessId:business.id,courseId:…
+    192|  expect(courseSceneProgress(p.view(),p.h.run.timeline.cursor.date,targ…
+       |                                                                                                            ^
+    193|  p.h.send('AdvanceTime',{date:'2023-01-02'});p.h.send('InterruptJob',{…
+    194|  p.h.send('BuildCourseSample',{courseId:p.course.id,resources:['player…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/ui/course-scene-progress.test.ts > distinguishes an explicit new entry from a selected ready course and keeps qualification and update boundaries visible
+AssertionError: expected { title: '先听听，谁真的需要这堂课。', …(2) } to match object { phase: 'course-entry', …(1) }
+(6 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "outcome": "none",
+-   "phase": "course-entry",
++   "choice": {
++     "label": "核对课程受众、班额与原承诺",
++     "line": "图像工具入门的原样课和记录都在；新班仍需真实受众、支持资源与保护资金。",
++     "title": "把价格、班额与支持想清楚",
++   },
++   "line": "样课与实际需求、招生和最终学习效果，是不同的事情。",
++   "title": "先听听，谁真的需要这堂课。",
+  }
+
+ ❯ src/ui/course-scene-progress.test.ts:207:59
+    205|  p.h.send('BuildCourseSample',{courseId:p.course.id,resources:['player…
+    206|  const v=p.view(),raw=p.h.codec.export(p.h.run),context={operations:p.…
+    207|  expect(courseSceneProgress(v,'2023-01-15',null,context)).toMatchObjec…
+       |                                                           ^
+    208|  const ready=courseSceneProgress(v,'2023-01-15',target,context)!
+    209|  expect(ready).toMatchObject({phase:'course-ready',outcome:'actual',ta…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 16 passed (18)
+   Start at  22:34:03
+   Duration  22.79s (tests 96%, import 2%, transform 2%)
+

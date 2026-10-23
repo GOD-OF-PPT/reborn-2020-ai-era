@@ -1,0 +1,190 @@
+--- /dev/null	2026-10-24 00:19:59
++++ src/ui/CoursePreparationDetails.tsx	2026-10-24 00:18:29
+@@ -0,0 +1,73 @@
++import type {CommandEnvelope} from '../core/run-types.ts'
++import type {CourseProjection} from '../core/course-projection.ts'
++import type {WorkerInstance} from '../core/operations-types.ts'
++import type {PlayingView} from './game-types.ts'
++import {addDays,isoDate} from '../core/calendar.ts'
++import {COURSE_JOBS} from '../content/course.ts'
++import {courseResourceLabel} from './course-resource-labels.ts'
++import {moneyText} from './game-text.ts'
++
++type Props={command:CommandEnvelope;course:CourseProjection;workers?:readonly WorkerInstance[]|undefined;view?:PlayingView|undefined;accountName?:((id:string)=>string)|undefined}
++const kinds=new Set(['DefineCourse','StartCourseOutline','LicenseCourseMaterials','BuildCourseSample','ActivateBusiness'])
++const segments:Readonly<Record<string,string>>={ai_learners:'AI学习者',local_merchants:'本地商家',lifestyle:'生活方式受众'}
++const unique=<T,>(rows:readonly T[],match:(row:T)=>boolean)=>{const found=rows.filter(match);return found.length===1?found[0]:undefined}
++const record=(value:unknown):Record<string,unknown>|null=>value!==null&&typeof value==='object'&&!Array.isArray(value)?value as Record<string,unknown>:null
++const recheck=()=> <p className="warning-box">这次课程准备的对象或所选条件已不可核对，请返回重新选择。</p>
++
++/** Captured confirmation facts only: no command, fee calculation or future result is produced here. */
++export function CoursePreparationDetails({command,course,workers,view,accountName}:Props){
++ if(!kinds.has(command.kind))return null
++ const p=record(command.payload)
++ if(command.kind==='ActivateBusiness'&&!course?.businesses.some(b=>b.id===p?.businessId)&&!view?.operations?.businesses.some(b=>b.id===p?.businessId&&b.route==='ai_course'))return null
++ if(command.kind==='ActivateBusiness'&&p&&view){
++  const original=unique(view.operations?.businesses??[],b=>b.id===p.businessId)
++  if(original&&original.route!=='ai_course')return null
++ }
++ if(!p||!course||!view||command.runId!==view.runId||command.expectedRevision!==view.revision||view.readOnly||view.hasCandidate)return recheck()
++ const lesson=command.kind==='BuildCourseSample'&&typeof p.courseId==='string'?unique(course.courses,c=>c.id===p.courseId):undefined
++ const businessId=lesson?.businessId??p.businessId
++ if(typeof businessId!=='string')return recheck()
++ const business=unique(course.businesses,b=>b.id===businessId),original=unique(view.operations?.businesses??[],b=>b.id===businessId)
++ if(!business||!original||business.route!=='ai_course'||original.route!==business.route||business.definitionId!==original.definitionId||business.company!==original.company||business.accountId!==original.accountId||!unique(view.accounts,a=>a.accountId===business.accountId)||business.company&&business.accountId==='personal')return recheck()
++ const account=accountName?.(business.accountId)??(business.company?'这间教室的企业账户':'这间教室的经营分账')
++ const identity=<p>{account} · {business.history[0]?.date??'日期待核对'}筹备的课程工作室。</p>
++ const paidCase=(ref:unknown)=>{
++  const value=record(ref)
++  if(!value||value.kind!=='first_order'&&value.kind!=='video'||typeof value.id!=='string')return undefined
++  return unique(course.cases,c=>c.kind===value.kind&&c.id===value.id)
++ }
++ const rights=(ref:NonNullable<ReturnType<typeof paidCase>>)=>{
++  if(!ref.licensed)return '本案例不需另办这项课程素材许可；仍须保留来源与匿名化说明。'
++  const licenses=course.licenses.filter(l=>l.businessId===business.id&&l.caseId===ref.id&&l.job?.businessId===business.id&&l.job.definitionId==='course-material-license')
++  if(licenses.some(l=>l.job?.status==='completed'))return '本单授权与课程使用范围分别记录；本工作室的课程使用范围已实际完成。'
++  if(licenses.some(l=>l.job?.status==='planned'||l.job?.status==='running'))return '本单授权不直接授予课程使用范围；课程许可正在办理，尚未实际完成。'
++  return '本单授权不直接授予课程使用范围；还须另行安排并实际完成本工作室的课程许可。'
++ }
++ if(command.kind==='ActivateBusiness')return <section className="confirmation-context course-preparation-terms"><h3>启用这间教室之后</h3>{identity}<p>大纲与营业准备沿现有记录复用。启用后按实际在营日期承担每月{moneyText(business.monthlyMaintenanceFen)}维护，工资与已有义务另计。</p><p>启用不等于样课完成，也不替你招生或确认学费收入。</p></section>
++ if(command.kind==='DefineCourse'){
++  const product=typeof p.productId==='string'?unique(course.catalog.products,item=>item.id===p.productId):undefined,topic=typeof p.topicId==='string'?unique(course.catalog.topics,item=>item.id===p.topicId):undefined
++  const segment=typeof p.segment==='string'?segments[p.segment]:undefined,refs=Array.isArray(p.cases)?p.cases:[],cases=refs.map(paidCase)
++  if(typeof p.name!=='string'||!p.name.trim()||p.name.trim().length>80||!product||!topic||!segment||p.edition!=='foundation'&&p.edition!=='advanced'||p.consent!==true||refs.length<1||refs.length>3||product.id==='enterprise_training'&&refs.length<2||cases.some(c=>!c)||new Set(cases.map(c=>c!.id)).size!==cases.length)return recheck()
++  const predecessor=p.edition==='advanced'?unique(course.courses,c=>c.id===p.predecessorId):undefined
++  const study=p.edition==='advanced'?unique(course.studies,s=>s.id===p.studyId&&s.predecessorId===predecessor?.id&&s.completedAt!==null):undefined
++  if(p.edition==='advanced'&&(!predecessor||!study))return recheck()
++  return <section className="confirmation-context course-preparation-terms"><h3>这次留下的课程方案</h3><p><strong>{p.name}</strong> · {product.label} · {topic.label} · 面向{segment} · {p.edition==='advanced'?'进阶课程':'基础课程'}。</p>{identity}{cases.map(ref=>ref?<p key={ref.kind+ref.id}>案例{course.cases.findIndex(c=>c.kind===ref.kind&&c.id===ref.id)+1} · {ref.label}。{rights(ref)}</p>:null)}{predecessor?<p>衔接「{predecessor.name}」与已经完成的新需求研究；维护修订不产生再次收费资格。</p>:null}<p>你已同意只使用有权使用的案例和匿名化说明，不编造客户或教学资历。本次只定义方案，不制作样课、不招生、不收学费。</p></section>
++ }
++ const ref=command.kind==='LicenseCourseMaterials'?paidCase({kind:p.caseKind,id:p.caseId}):undefined
++ if(command.kind==='LicenseCourseMaterials'&&(!ref||!ref.licensed))return recheck()
++ if(command.kind==='BuildCourseSample'&&(!lesson||!unique(course.catalog.products,c=>c.id===lesson.productId)||!unique(course.catalog.topics,c=>c.id===lesson.topicId)))return recheck()
++ const refs=lesson?.cases.map(paidCase)??[]
++ if(lesson&&(!refs.length||refs.some(c=>!c)))return recheck()
++ const resources=p.resources
++ if(!Array.isArray(resources)||resources.length!==1||typeof resources[0]!=='string')return recheck()
++ const resource=resources[0]
++ if(!unique(course.resources,r=>r.id===resource))return recheck()
++ const resourceLabel=resource==='player-production'?command.kind==='StartCourseOutline'?'由我自己来写':command.kind==='BuildCourseSample'?'由我自己制作样课':'由我自己准备':courseResourceLabel(resource,course.resources,workers)
++ const jobId=command.kind==='StartCourseOutline'?'course-outline':command.kind==='LicenseCourseMaterials'?'course-material-license':lesson?`course-sample-${lesson.productId}-${lesson.topicId}`:''
++ const job=unique(COURSE_JOBS,item=>item.id===jobId)
++ if(!job||typeof p.startAt!=='string')return recheck()
++ let completeAt:string
++ try{isoDate(p.startAt);if(p.startAt<view.date)return recheck();completeAt=addDays(p.startAt,job.durationDays)}catch{return recheck()}
++ const title=command.kind==='StartCourseOutline'?'这次安排的教学大纲':command.kind==='LicenseCourseMaterials'?'这次安排的课程素材使用范围':'这次安排的实际样课'
++ return <section className="confirmation-context course-preparation-terms"><h3>{title}</h3>{lesson?<p><strong>{lesson.name}</strong> · {course.catalog.products.find(item=>item.id===lesson.productId)!.label} · {course.catalog.topics.find(item=>item.id===lesson.topicId)!.label}。</p>:null}{identity}{ref?<p>案例{course.cases.findIndex(c=>c.kind===ref.kind&&c.id===ref.id)+1} · {ref.label}。{rights(ref)}</p>:null}<p>{command.kind==='StartCourseOutline'?'执笔资源':'准备资源'}：{resourceLabel}。开工{p.startAt} → 预计{completeAt}完成（{job.durationDays}日）。</p>{refs.map(info=>info?<p key={info.kind+info.id}>案例{course.cases.findIndex(c=>c.kind===info.kind&&c.id===info.id)+1} · {info.label}。{rights(info)}</p>:null)}<p>预计日期不等于实际完成；资金与行动按上方本次确认预留或使用。{command.kind==='StartCourseOutline'?'大纲完成后，启用、案例与样课仍分别决定。':command.kind==='LicenseCourseMaterials'?'本次任务须实际完成才留下新的许可记录，既有许可仍保留。':'工具资格须覆盖每一天制作；样课完成不等于已经招生或取得学费收入。'}</p></section>
++}
+
+--- /dev/null	2026-10-24 00:19:59
++++ src/ui/CoursePreparationDetails.test.tsx	2026-10-24 00:18:29
+@@ -0,0 +1,91 @@
++import {beforeAll,expect,it} from 'vitest'
++import {renderToStaticMarkup} from 'react-dom/server'
++import {createCampaignCodec,campaignCourse} from '../application/campaign.ts'
++import {projectRun,previewCommand,evaluateCommand} from '../core/commands.ts'
++import {projectCourse} from '../core/course-projection.ts'
++import type {CommandEnvelope,GameRun} from '../core/run-types.ts'
++import type {RunCodec} from '../persistence/codec.ts'
++import type {PlayingView,PlayFeatures} from './game-types.ts'
++import {createCourseFixture} from '../testing/course-fixture.ts'
++import {CoursePreparationDetails} from './CoursePreparationDetails.tsx'
++import {CourseCommandDetails} from './CourseCommandDetails.tsx'
++import {CommandDetails} from './CommandDetails.tsx'
++import savedNormal from '../../goal-1/evidence/t17-acceptance-10/chrome-physical-r1/r74-physical-after-candidate-retry.json?raw'
++
++function viewOf(run:GameRun,codec:RunCodec):PlayingView{return {...projectRun(run),features:codec.registry.runtime?.project?.(run)??{},saveStatus:'saved',busy:false,readOnly:false,readOnlyReason:null,hasCandidate:false,pendingRevision:null}}
++function command(run:GameRun,kind:string,payload:unknown):CommandEnvelope{return {runId:run.runId,actorId:'player',commandId:'inspect-course-preparation-'+run.revision+'-'+kind,expectedRevision:run.revision,kind,payload}}
++const codec=createCampaignCodec(),normal=codec.import(savedNormal),normalView=viewOf(normal,codec),normalCourse=projectCourse(normal,campaignCourse)!
++const accountName=(id:string)=>id==='personal'?'个人账户':'企业账户 · AI卖课'
++const receipt=normal.receipts.find(row=>row.kind==='DefineCourse')!,definition=JSON.parse(receipt.payloadSignature).payload as Record<string,unknown>,define=command(normal,'DefineCourse',definition)
++function render(c:CommandEnvelope,course=normalCourse,view=normalView){return renderToStaticMarkup(<CoursePreparationDetails command={c} course={course} view={view} workers={view.operations?.workers??[]} accountName={accountName}/>)}
++
++it('puts the actual normally earned definition payload and paid handwork case into the original captured confirmation seam',()=>{
++ const before=codec.export(normal),snapshot=JSON.stringify(normalView),preview=previewCommand(normal,define,codec.registry,'player')
++ expect(normal.origin).toBe('normal');expect(preview.allowed).toBe(true)
++ const html=renderToStaticMarkup(<CommandDetails command={define} confirm={preview} features={normalView.features as unknown as PlayFeatures} view={normalView} accountName={accountName} clock={null}/>)
++ for(const text of ['这次留下的课程方案',String(definition.name),'垂直实操班','图像工具实作','面向AI学习者','基础课程','企业账户 · AI卖课','已付手工小单经验','匿名化说明','不制作样课、不招生、不收学费'])expect(html).toContain(text)
++ expect(html).not.toContain('已取得课程使用范围');expect(codec.export(normal)).toBe(before);expect(JSON.stringify(normalView)).toBe(snapshot)
++ expect(render({...define,kind:'OpenCourseStudio',payload:{capitalFen:500000}})).toBe('')
++})
++
++let fixture:ReturnType<typeof createCourseFixture>,outlineFrame:{command:CommandEnvelope;view:PlayingView;course:NonNullable<ReturnType<typeof projectCourse>>},activationFrame:typeof outlineFrame,licenseFrame:typeof outlineFrame,pendingFrame:typeof outlineFrame,sampleFrame:typeof outlineFrame
++beforeAll(()=>{
++ // Isolated real-command frames: they prove display identity/terms, not normal campaign financing.
++ const h=createCourseFixture();fixture=h
++ h.send('OpenVideoChannel',{name:'授权案例的实际来源',segment:'ai_learners'});const channel=h.run.video!.channels[0]!
++ h.send('StartVideoMarketing',{channelId:channel.id,resources:['player-production'],startAt:'2020-01-01'});h.send('AdvanceTime',{date:'2020-01-08'})
++ const audience=h.run.video!.cohorts[0]!
++ h.send('AcceptVideoCommission',{channelId:channel.id,cohortId:audience.id,clientId:audience.qualifiedMembers[0]!,modeId:'manual',materialId:'licensed',resources:['player-production'],startAt:'2020-01-08'})
++ const paid=h.run.video!.contracts[0]!
++ h.send('AdvanceTime',{date:'2020-01-22'});h.send('ReviewVideoOutput',{workId:paid.workId,disclosure:'manual'});h.send('SubmitVideoCommission',{contractId:paid.id});h.send('AdvanceTime',{date:'2020-01-31'})
++ h.send('AdvanceTime',{date:'2022-08-22'});h.send('ApplyVideoProgram',{channelId:channel.id,program:'image_rights',resources:['player-production'],startAt:'2022-08-22'});h.send('AdvanceTime',{date:'2022-08-29'});h.send('DecideVideoProgram',{applicationId:h.run.video!.applications[0]!.id})
++ h.send('AdvanceTime',{date:'2022-11-30'});h.send('DiscoverBusiness',{definitionId:'course-studio'});const b=h.run.operations!.businesses.find(b=>b.route==='ai_course')!;h.send('PrepareBusiness',{businessId:b.id})
++ const capture=(kind:string,payload:unknown)=>({command:command(h.run,kind,payload),view:viewOf(h.run,h.codec),course:projectCourse(h.run,h.course)!})
++ const outline={businessId:b.id,resources:['player-production'],startAt:'2022-11-30'}
++ outlineFrame=capture('StartCourseOutline',outline);expect(h.preview('StartCourseOutline',outline).allowed).toBe(true)
++ h.send('StartCourseOutline',outline);h.send('AdvanceTime',{date:'2022-12-07'})
++ activationFrame=capture('ActivateBusiness',{businessId:b.id});expect(h.preview('ActivateBusiness',{businessId:b.id}).allowed).toBe(true);h.send('ActivateBusiness',{businessId:b.id})
++ h.send('DefineCourse',{businessId:b.id,name:'授权案例的图像入门课',productId:'intro_recorded',topicId:'image_workflows',edition:'foundation',segment:'local_merchants',cases:[{kind:'video',id:paid.id}],consent:true})
++ const c=h.run.course!.courses[0]!,license={businessId:b.id,caseKind:'video',caseId:paid.id,resources:['player-production'],startAt:'2022-12-08'}
++ licenseFrame=capture('LicenseCourseMaterials',license);expect(h.preview('LicenseCourseMaterials',license).allowed).toBe(true);h.send('LicenseCourseMaterials',license)
++ const sample={courseId:c.id,resources:['player-production'],startAt:'2022-12-16'}
++ pendingFrame=capture('BuildCourseSample',sample);expect(h.preview('BuildCourseSample',sample).allowed).toBe(false)
++ h.send('AdvanceTime',{date:'2022-12-15'});sampleFrame=capture('BuildCourseSample',sample);expect(h.preview('BuildCourseSample',sample).allowed).toBe(true)
++},20000)
++function frameHtml(frame:typeof outlineFrame){return render(frame.command,frame.course,frame.view)}
++it('keeps the actual outline, activation, license and selected sample dates separate from completion or payment',()=>{
++ const before=fixture.codec.export(fixture.run)
++ for(const text of ['这次安排的教学大纲','执笔资源：由我自己来写','2022-11-30','2022-12-07','7日','预计日期不等于实际完成'])expect(frameHtml(outlineFrame)).toContain(text)
++ expect(frameHtml(activationFrame)).toContain('按实际在营日期承担每月¥0维护') // This fixture has no maintenance; production keeps its own public amount.
++ const videoBusiness=activationFrame.view.operations!.businesses.find(b=>b.route==='ai_video')!
++ expect(render({...activationFrame.command,payload:{businessId:videoBusiness.id}},activationFrame.course,activationFrame.view)).toBe('')
++ for(const text of ['这次安排的课程素材使用范围','已验收付款的视频案例','还须另行安排并实际完成','2022-12-08','2022-12-15'])expect(frameHtml(licenseFrame)).toContain(text)
++ expect(frameHtml(pendingFrame)).toContain('课程许可正在办理，尚未实际完成')
++ const sample=frameHtml(sampleFrame)
++ for(const text of ['授权案例的图像入门课','入门录播','图像工具实作','由我自己制作样课','2022-12-16','2022-12-30','14日','课程使用范围已实际完成','工具资格须覆盖每一天制作'])expect(sample).toContain(text)
++ expect(sample).not.toMatch(/已付¥|已实际支付|样课已经完成|本次已取得学费收入/)
++ expect(fixture.codec.export(fixture.run)).toBe(before)
++})
++it('requires the entire missing, stale or mismatched confirmation to be checked again instead of taking a first object or player resource',()=>{
++ const body=define.payload as Record<string,unknown>,before=codec.export(normal)
++ const invalid=[{...define,payload:{...body,cases:[...(body.cases as unknown[]),{kind:'video',id:'missing-case'}]}},{...define,payload:{...body,businessId:'missing-studio'}},{...define,payload:{...body,productId:'missing-product'}},{...define,payload:{...body,consent:false}},{...define,expectedRevision:define.expectedRevision-1}]
++ for(const c of invalid){const html=render(c);expect(html).toContain('返回重新选择');expect(html).not.toContain('这次留下的课程方案')}
++ const original=sampleFrame.command.payload as Record<string,unknown>
++ for(const patch of [{courseId:'missing-course'},{resources:['missing-resource']},{resources:['player-production','missing-resource']},{startAt:'2020-01-01'},{startAt:'2022-02-30'}]){
++  const html=render({...sampleFrame.command,payload:{...original,...patch}},sampleFrame.course,sampleFrame.view)
++  expect(html).toContain('返回重新选择');expect(html).not.toContain('由我自己制作样课')
++ }
++ expect(render(define,normalCourse,{...normalView,readOnly:true})).toContain('返回重新选择');expect(render(define,normalCourse,{...normalView,hasCandidate:true})).toContain('返回重新选择')
++ expect(codec.export(normal)).toBe(before)
++})
++it('retains the existing stage and refund confirmations while the new preparation seam remains display-only',()=>{
++ const co=normalCourse.cohorts[0]!,saved=codec.export(normal)
++ const stage=command(normal,'StartCourseStage',{cohortId:co.id,index:0,resources:['player-production'],startAt:co.startAt})
++ const teaching=renderToStaticMarkup(<CourseCommandDetails command={stage} course={normalCourse} view={normalView}/>)
++ expect(teaching).toContain('第1段教学');expect(teaching).toContain(co.stages[0]!.dueAt);expect(teaching).toContain('原支持、退款责任')
++ const refund=command(normal,'RefundCourseLearners',{cohortId:co.id,personIds:[co.students[0]!.personId],reason:'按原交付处理'})
++ const preview=previewCommand(normal,refund,codec.registry,'player'),html=renderToStaticMarkup(<CourseCommandDetails command={refund} course={normalCourse} view={normalView} confirm={preview} accountName={accountName}/>)
++ expect(preview.allowed).toBe(true);expect(html).toContain('退还学费¥');expect(html).toContain('不等于学员已经到账')
++ const proposal=evaluateCommand(normal,define,codec.registry,'player')
++ expect(proposal.status).toBe('proposed');expect(codec.export(normal)).toBe(saved)
++})
+
+--- goal-1/evidence/t17-acceptance-24/confirmation-r1/CourseCommandDetails.tsx.before	2026-10-24 00:05:34
++++ src/ui/CourseCommandDetails.tsx	2026-10-24 00:10:37
+@@ -5,11 +5,13 @@
+ import type {PlayingView} from './game-types.ts'
+ import {courseResourceLabel} from './course-resource-labels.ts'
+ import {CourseRefundDetails} from './CourseRefundDetails.tsx'
++import {CoursePreparationDetails} from './CoursePreparationDetails.tsx'
+ 
+ /** The original confirmation identifies the actual class and stage from its captured public snapshot. */
+ export function CourseCommandDetails({command,course,workers,view,confirm,accountName}:{command:CommandEnvelope;course:CourseProjection;workers?:readonly WorkerInstance[];view?:PlayingView|undefined;confirm?:CommandPreview|undefined;accountName?:((id:string)=>string)|undefined}){
+  if(command.kind==='RefundCourseLearners')return <CourseRefundDetails command={command} course={course} view={view} confirm={confirm} accountName={accountName}/>
+- if(command.kind!=='StartCourseStage'||!course||!command.payload||typeof command.payload!=='object')return null
++ if(command.kind!=='StartCourseStage')return <CoursePreparationDetails command={command} course={course} workers={workers} view={view} accountName={accountName}/>
++ if(!course||!command.payload||typeof command.payload!=='object')return null
+  const payload=command.payload as {cohortId?:unknown;index?:unknown;resources?:unknown}
+  if(typeof payload.cohortId!=='string'||payload.index!==0&&payload.index!==1)return null
+  const cohort=course.cohorts.find(c=>c.id===payload.cohortId),lesson=course.courses.find(c=>c.id===cohort?.courseId),stage=cohort?.stages[payload.index]
+

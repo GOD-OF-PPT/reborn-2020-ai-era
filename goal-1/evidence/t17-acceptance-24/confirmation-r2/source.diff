@@ -1,0 +1,68 @@
+--- goal-1/evidence/t17-acceptance-24/confirmation-r2/CoursePreparationDetails.tsx.before	2026-10-24 00:26:02
++++ src/ui/CoursePreparationDetails.tsx	2026-10-24 00:26:02
+@@ -51,7 +51,7 @@
+   const predecessor=p.edition==='advanced'?unique(course.courses,c=>c.id===p.predecessorId):undefined
+   const study=p.edition==='advanced'?unique(course.studies,s=>s.id===p.studyId&&s.predecessorId===predecessor?.id&&s.completedAt!==null):undefined
+   if(p.edition==='advanced'&&(!predecessor||!study))return recheck()
+-  return <section className="confirmation-context course-preparation-terms"><h3>这次留下的课程方案</h3><p><strong>{p.name}</strong> · {product.label} · {topic.label} · 面向{segment} · {p.edition==='advanced'?'进阶课程':'基础课程'}。</p>{identity}{cases.map(ref=>ref?<p key={ref.kind+ref.id}>案例{course.cases.findIndex(c=>c.kind===ref.kind&&c.id===ref.id)+1} · {ref.label}。{rights(ref)}</p>:null)}{predecessor?<p>衔接「{predecessor.name}」与已经完成的新需求研究；维护修订不产生再次收费资格。</p>:null}<p>你已同意只使用有权使用的案例和匿名化说明，不编造客户或教学资历。本次只定义方案，不制作样课、不招生、不收学费。</p></section>
++  return <section className="confirmation-context course-preparation-terms"><h3>这次留下的课程方案</h3><p><strong>{p.name}</strong> · {product.label} · {topic.label} · 面向{segment} · {p.edition==='advanced'?'进阶课程':'基础课程'}。</p>{identity}{cases.map((ref,index)=>ref?<p key={ref.kind+ref.id}>案例{index+1} · {ref.label}。{rights(ref)}</p>:null)}{predecessor?<p>衔接「{predecessor.name}」与已经完成的新需求研究；维护修订不产生再次收费资格。</p>:null}<p>你已同意只使用有权使用的案例和匿名化说明，不编造客户或教学资历。本次只定义方案，不制作样课、不招生、不收学费。</p></section>
+  }
+  const ref=command.kind==='LicenseCourseMaterials'?paidCase({kind:p.caseKind,id:p.caseId}):undefined
+  if(command.kind==='LicenseCourseMaterials'&&(!ref||!ref.licensed))return recheck()
+@@ -69,5 +69,5 @@
+  let completeAt:string
+  try{isoDate(p.startAt);if(p.startAt<view.date)return recheck();completeAt=addDays(p.startAt,job.durationDays)}catch{return recheck()}
+  const title=command.kind==='StartCourseOutline'?'这次安排的教学大纲':command.kind==='LicenseCourseMaterials'?'这次安排的课程素材使用范围':'这次安排的实际样课'
+- return <section className="confirmation-context course-preparation-terms"><h3>{title}</h3>{lesson?<p><strong>{lesson.name}</strong> · {course.catalog.products.find(item=>item.id===lesson.productId)!.label} · {course.catalog.topics.find(item=>item.id===lesson.topicId)!.label}。</p>:null}{identity}{ref?<p>案例{course.cases.findIndex(c=>c.kind===ref.kind&&c.id===ref.id)+1} · {ref.label}。{rights(ref)}</p>:null}<p>{command.kind==='StartCourseOutline'?'执笔资源':'准备资源'}：{resourceLabel}。开工{p.startAt} → 预计{completeAt}完成（{job.durationDays}日）。</p>{refs.map(info=>info?<p key={info.kind+info.id}>案例{course.cases.findIndex(c=>c.kind===info.kind&&c.id===info.id)+1} · {info.label}。{rights(info)}</p>:null)}<p>预计日期不等于实际完成；资金与行动按上方本次确认预留或使用。{command.kind==='StartCourseOutline'?'大纲完成后，启用、案例与样课仍分别决定。':command.kind==='LicenseCourseMaterials'?'本次任务须实际完成才留下新的许可记录，既有许可仍保留。':'工具资格须覆盖每一天制作；样课完成不等于已经招生或取得学费收入。'}</p></section>
++ return <section className="confirmation-context course-preparation-terms"><h3>{title}</h3>{lesson?<p><strong>{lesson.name}</strong> · {course.catalog.products.find(item=>item.id===lesson.productId)!.label} · {course.catalog.topics.find(item=>item.id===lesson.topicId)!.label}。</p>:null}{identity}{ref?<p>本次素材案例 · {ref.label}。{rights(ref)}</p>:null}<p>{command.kind==='StartCourseOutline'?'执笔资源':'准备资源'}：{resourceLabel}。开工{p.startAt} → 预计{completeAt}完成（{job.durationDays}日）。</p>{refs.map((info,index)=>info?<p key={info.kind+info.id}>案例{index+1} · {info.label}。{rights(info)}</p>:null)}<p>预计日期不等于实际完成；资金与行动按上方本次确认预留或使用。{command.kind==='StartCourseOutline'?'大纲完成后，启用、案例与样课仍分别决定。':command.kind==='LicenseCourseMaterials'?'本次任务须实际完成才留下新的许可记录，既有许可仍保留。':'工具资格须覆盖每一天制作；样课完成不等于已经招生或取得学费收入。'}</p></section>
+ }
+
+--- goal-1/evidence/t17-acceptance-24/confirmation-r2/CoursePreparationDetails.test.tsx.before	2026-10-24 00:26:02
++++ src/ui/CoursePreparationDetails.test.tsx	2026-10-24 00:26:02
+@@ -32,12 +32,13 @@
+ beforeAll(()=>{
+  // Isolated real-command frames: they prove display identity/terms, not normal campaign financing.
+  const h=createCourseFixture();fixture=h
++ h.send('StartFirstOrder',{});h.send('AdvanceTime',{date:'2020-01-19'});h.send('SubmitDelivery',{contractId:h.run.operations!.contracts[0]!.id});h.send('AdvanceTime',{date:'2020-01-20'})
+  h.send('OpenVideoChannel',{name:'授权案例的实际来源',segment:'ai_learners'});const channel=h.run.video!.channels[0]!
+- h.send('StartVideoMarketing',{channelId:channel.id,resources:['player-production'],startAt:'2020-01-01'});h.send('AdvanceTime',{date:'2020-01-08'})
++ h.send('StartVideoMarketing',{channelId:channel.id,resources:['player-production'],startAt:'2020-01-20'});h.send('AdvanceTime',{date:'2020-01-27'})
+  const audience=h.run.video!.cohorts[0]!
+- h.send('AcceptVideoCommission',{channelId:channel.id,cohortId:audience.id,clientId:audience.qualifiedMembers[0]!,modeId:'manual',materialId:'licensed',resources:['player-production'],startAt:'2020-01-08'})
++ h.send('AcceptVideoCommission',{channelId:channel.id,cohortId:audience.id,clientId:audience.qualifiedMembers[0]!,modeId:'manual',materialId:'licensed',resources:['player-production'],startAt:'2020-01-27'})
+  const paid=h.run.video!.contracts[0]!
+- h.send('AdvanceTime',{date:'2020-01-22'});h.send('ReviewVideoOutput',{workId:paid.workId,disclosure:'manual'});h.send('SubmitVideoCommission',{contractId:paid.id});h.send('AdvanceTime',{date:'2020-01-31'})
++ h.send('AdvanceTime',{date:'2020-02-10'});h.send('ReviewVideoOutput',{workId:paid.workId,disclosure:'manual'});h.send('SubmitVideoCommission',{contractId:paid.id});h.send('AdvanceTime',{date:'2020-02-19'})
+  h.send('AdvanceTime',{date:'2022-08-22'});h.send('ApplyVideoProgram',{channelId:channel.id,program:'image_rights',resources:['player-production'],startAt:'2022-08-22'});h.send('AdvanceTime',{date:'2022-08-29'});h.send('DecideVideoProgram',{applicationId:h.run.video!.applications[0]!.id})
+  h.send('AdvanceTime',{date:'2022-11-30'});h.send('DiscoverBusiness',{definitionId:'course-studio'});const b=h.run.operations!.businesses.find(b=>b.route==='ai_course')!;h.send('PrepareBusiness',{businessId:b.id})
+  const capture=(kind:string,payload:unknown)=>({command:command(h.run,kind,payload),view:viewOf(h.run,h.codec),course:projectCourse(h.run,h.course)!})
+@@ -64,6 +65,27 @@
+  const sample=frameHtml(sampleFrame)
+  for(const text of ['授权案例的图像入门课','入门录播','图像工具实作','由我自己制作样课','2022-12-16','2022-12-30','14日','课程使用范围已实际完成','工具资格须覆盖每一天制作'])expect(sample).toContain(text)
+  expect(sample).not.toMatch(/已付¥|已实际支付|样课已经完成|本次已取得学费收入/)
++ const licenseHtml=frameHtml(licenseFrame)
++ expect(licenseHtml).toContain('本次素材案例 · 已验收付款的视频案例');expect(licenseHtml).not.toMatch(/案例[12] ·/)
++ const selected=[...sampleFrame.course.cases].reverse().map(ref=>({kind:ref.kind,id:ref.id}))
++ expect(selected.map(ref=>ref.kind)).toEqual(['video','first_order'])
++ const body={businessId:sampleFrame.course.courses[0]!.businessId,name:'反序选择的课程',productId:'intro_recorded',topicId:'image_workflows',edition:'foundation',segment:'local_merchants',cases:selected,consent:true}
++ const reversed=command(fixture.run,'DefineCourse',body),selectionBefore=JSON.stringify(body)
++ expect(fixture.preview('DefineCourse',body).allowed).toBe(true)
++ const reverseHtml=render(reversed,sampleFrame.course,sampleFrame.view)
++ for(const text of ['案例1 · 已验收付款的视频案例','案例2 · 已付手工小单经验'])expect(reverseHtml).toContain(text)
++ expect(reverseHtml.indexOf('案例1 ·')).toBeLessThan(reverseHtml.indexOf('案例2 ·'))
++ const subset=render({...reversed,payload:{...body,cases:[selected[0]]}},sampleFrame.course,sampleFrame.view)
++ expect(subset).toContain('案例1 · 已验收付款的视频案例');expect(subset).not.toContain('案例2 ·')
++ const result=evaluateCommand(fixture.run,reversed,fixture.registry,'player')
++ if(result.status!=='proposed')throw Error('REVERSED_COURSE_DEFINITION_REJECTED')
++ const next=result.nextRun,nextCourse=projectCourse(next,fixture.course)!,lesson=nextCourse.courses.at(-1)!,nextView=viewOf(next,fixture.codec)
++ expect(lesson.cases).toEqual(selected)
++ const sampleCommand=command(next,'BuildCourseSample',{courseId:lesson.id,resources:['player-production'],startAt:'2022-12-16'})
++ expect(previewCommand(next,sampleCommand,fixture.registry,'player').allowed).toBe(true)
++ const reversedSample=render(sampleCommand,nextCourse,nextView)
++ for(const text of ['案例1 · 已验收付款的视频案例','案例2 · 已付手工小单经验'])expect(reversedSample).toContain(text)
++ expect(JSON.stringify(body)).toBe(selectionBefore)
+  expect(fixture.codec.export(fixture.run)).toBe(before)
+ })
+ it('requires the entire missing, stale or mismatched confirmation to be checked again instead of taking a first object or player resource',()=>{
+
+

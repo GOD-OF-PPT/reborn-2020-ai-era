@@ -1,0 +1,1 @@
+继续同一 S3-C1 任务，独立只读复核最新 App.tsx onSubmission 的 retainLegacyPreparation 条件（我刚增加，避免原 legacy CoursePanel 在辅助 License 保存后换目标丢稿）。核对 undefined/null/显式目标、打开原册/跨业务/候选失败/只读的身份及原 keepPreparationWorkspace 约定。可运行有意义的定向原 App.preparation-save 测试；所有 shell 以 rtk，证据只写 root24 新 sibling app-legacy-review-r1，经 browser guard。不要改 production，发现确定问题先报。禁止兼容测试，保 P3。

@@ -1,0 +1,1 @@
+同一 S3-C1 最终只读 review：最新 CourseSceneChoice unique missing license 自动打开许可步骤（保持同课程不自动提交），真实案例编号、course-player-thread/OpeningMoment 文案、同对象身份/日期/AP/权利/历史任务/候选和旧路径。看 root24 现有 model/ui evidence + latest production diff，复核确定风险，不做兼容。只读 production，报告写 root24/final-model-review-r1（guard）。我做 Chrome 后续 + R4 build。不要重复全 344 UI；需要新测试建议先报。

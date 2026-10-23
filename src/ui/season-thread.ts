@@ -5,6 +5,8 @@ import {moneyText,reasonText,wishes} from './game-text.ts'
 import {sceneThreads} from './scene-thread-notes.ts'
 import {openingFocusAfterSave,playerThread,type OpeningFocus} from './player-thread.ts'
 import {videoTargetEntity} from './video-player-thread.ts'
+import {courseFocusFor,courseSceneContext} from './course-player-thread.ts'
+import {courseTargetReason,type CourseSceneTarget} from './course-scene-progress.ts'
 
 export type SeasonInput=Pick<GamePanelProps,'view'|'features'>
 type Inspect={screen:Screen;label:string;target?:SceneTarget}
@@ -40,6 +42,14 @@ export function seasonFocusChoices(p:SeasonInput):readonly SeasonFocusChoice[]{
  for(const account of view.accounts)add({...base,kind:'market',accountId:account.accountId},null,(account.accountId==='personal'?'自己的':'原经营账户的')+'投资判断')
  add({...base,kind:'first-order',entityId:f.firstOrder.contractId??f.firstOrder.offerId},f.firstOrder.dates.startAt,'那份手工单与实际结果')
  add({...base,kind:'video',videoTarget:null},null,'从一个真实账号与视频尝试开始')
+ add({...base,kind:'course',courseTarget:null},null,'从一份明确的课程准备开始')
+ for(const business of f.course?.businesses??[])add(courseFocusFor(p,{kind:'studio',businessId:business.id}),business.history[0]?.date??null,'原课程工作室 · '+business.id.slice(-6))
+ for(const outline of f.course?.outlines??[])add(courseFocusFor(p,{kind:'outline',businessId:outline.businessId,outlineId:outline.id}),outline.job?.startAt??null,'这份原教学大纲')
+ for(const license of f.course?.licenses??[])add(courseFocusFor(p,{kind:'license',businessId:license.businessId,licenseId:license.id}),license.job?.startAt??null,'这份原课程素材使用范围')
+ for(const course of f.course?.courses??[]){
+  add(courseFocusFor(p,{kind:'course',businessId:course.businessId,courseId:course.id}),course.createdAt,course.name+' · 原课程方案')
+  for(const id of course.sampleAttempts){const job=view.operations?.jobs.find(j=>j.id===id);add(courseFocusFor(p,{kind:'course',businessId:course.businessId,courseId:course.id,sampleJobId:id}),job?.startAt??null,course.name+' · 原样课尝试')}
+ }
  for(const channel of f.video?.channels??[])add({...base,kind:'video',accountId:channel.accountId,businessId:channel.businessId,entityId:channel.id,videoTarget:{channelId:channel.id}},channel.createdAt,channel.name+' · 原视频账号')
  for(const work of f.video?.works??[]){const channel=f.video!.channels.find(c=>c.id===work.channelId);if(channel){const t={channelId:channel.id,workId:work.id,...(work.contractId?{contractId:work.contractId}:{})};add({...base,kind:'video',accountId:channel.accountId,businessId:channel.businessId,entityId:videoTargetEntity(t),videoTarget:t},work.production?.startAt??null)}}
  for(const marketing of f.video?.marketing??[]){const channel=f.video!.channels.find(c=>c.id===marketing.channelId);if(channel)add({...base,kind:'video',accountId:channel.accountId,businessId:channel.businessId,entityId:marketing.id,videoTarget:{channelId:channel.id,marketingId:marketing.id}},marketing.job?.startAt??null)}
@@ -60,6 +70,7 @@ export function seasonFocusAfterSave(previous:SeasonInput,current:SeasonInput,ki
  if(existing!==null&&playerThread(previous,existing).focusStatus==='invalid')return existing
  const candidate=openingFocusAfterSave(previous,current,kind,payload,existing)
  if(!pinned||existing===null||candidate===existing||candidate===null)return candidate
+ if(existing.kind==='course'&&candidate.kind==='course'&&existing.runId===candidate.runId&&existing.courseTarget===null&&kind==='OpenCourseStudio')return candidate
  if(existing.runId!==current.view.runId||candidate.kind!==existing.kind||candidate.accountId!==existing.accountId)return existing
  if(existing.kind==='life'&&(candidate.kind!=='life'||existing.selection!==candidate.selection))return existing
  // Refreshing the outcome of the same object is not a new primary selection or quarter.
@@ -70,6 +81,19 @@ export function seasonFocusAfterSave(previous:SeasonInput,current:SeasonInput,ki
   if(next?.channelId!==old.channelId)return existing
   if(!old.workId&&!old.contractId&&!old.marketingId)return candidate
   if(old.marketingId&&kind==='AcceptVideoCommission'&&current.features.video?.marketing.some(m=>m.id===old.marketingId&&m.cohortId===current.features.video!.contracts.find(c=>c.id===next.contractId)?.cohortId))return candidate
+  return existing
+ }
+ if(existing.kind==='course'&&candidate.kind==='course'){
+  const old=existing.courseTarget,next=candidate.courseTarget
+  if(!old||!next||old.businessId!==next.businessId)return existing
+  if(old.kind==='studio'&&['StartCourseOutline','DefineCourse','LicenseCourseMaterials'].includes(kind))return candidate
+  if(old.kind==='outline'&&next.kind==='studio'&&kind==='ActivateBusiness')return candidate
+  if(old.kind==='outline'&&next.kind==='course'&&kind==='DefineCourse')return candidate
+  if(old.kind==='license'&&next.kind==='course'&&kind==='DefineCourse'){
+   const license=previous.features.course?.licenses.find(l=>l.id===old.licenseId)
+   return current.features.course?.courses.some(c=>c.id===next.courseId&&c.cases.some(ref=>ref.id===license?.caseId))?candidate:existing
+  }
+  if(old.kind==='course'&&next.kind==='course'&&old.courseId===next.courseId&&kind==='BuildCourseSample')return candidate
   return existing
  }
  const entry=existing.entityId===null||existing.kind==='life'&&existing.entityId===existing.selection
@@ -106,6 +130,14 @@ function remainingItems(p:SeasonInput):SeasonPendingItem[]{
   const jobs=[...(work?[work.production,...work.corrections]:[]),marketing?.job,...(contract?.negotiationJobId?[view.operations?.jobs.find(j=>j.id===contract.negotiationJobId)]:[])]
   for(const job of jobs)if(job&&['planned','running'].includes(job.status)){const thread=playerThread(p,focus);add({id:'operation-job:'+job.id,title:thread.title,line:`${job.startAt}—${job.completeAt}；原资源、成本和行动保留，尚未完成。`,dueAt:job.completeAt,accountId:focus.accountId,urgent:false,sourceRefs:[{kind:'job',id:job.id,date:job.startAt}],focus,inspect:thread.inspect})}
  }
+ const courseObjects:{target:CourseSceneTarget;jobId:string}[]=[
+  ...(f.course?.outlines??[]).map(o=>({target:{kind:'outline' as const,businessId:o.businessId,outlineId:o.id},jobId:o.jobId})),
+  ...(f.course?.licenses??[]).map(l=>({target:{kind:'license' as const,businessId:l.businessId,licenseId:l.id},jobId:l.jobId})),
+  ...(f.course?.courses??[]).flatMap(c=>c.sampleAttempts.map(id=>({target:{kind:'course' as const,businessId:c.businessId,courseId:c.id,sampleJobId:id},jobId:id})))
+ ]
+ for(const {target,jobId} of courseObjects){const job=view.operations?.jobs.find(j=>j.id===jobId);if(!job||!['planned','running'].includes(job.status)||courseTargetReason(f.course,target,courseSceneContext(p)))continue;const focus=courseFocusFor(p,target),thread=playerThread(p,focus);add({id:'operation-job:'+job.id,title:thread.title,line:`${job.startAt}—${job.completeAt}；原课程准备尚未实际完成，没有招生或新增收入。`,dueAt:job.completeAt,accountId:focus.accountId,urgent:false,sourceRefs:[{kind:'job',id:job.id,date:job.startAt}],focus,inspect:thread.inspect})}
+ for(const update of f.course?.updates.filter(u=>u.resolvedAt===null)??[]){const c=f.course!.courses.find(c=>c.id===update.courseId);if(!c)continue;const focus=courseFocusFor(p,{kind:'course',businessId:c.businessId,courseId:c.id});add({id:'update:'+update.id,title:'原课程的工具前提仍待处理',line:`${c.name}更新期限${update.dueAt}；旧学生与新招生限制继续，未被新的准备对象隐藏。`,dueAt:update.dueAt,accountId:focus.accountId,urgent:update.dueAt<=view.date,sourceRefs:[{kind:'update',id:update.id,date:update.occurredAt}],focus,inspect:{screen:'course',label:'翻看原课程更新与旧承诺',target:{accountId:focus.accountId,courseTarget:focus.courseTarget,recordId:c.id+'-course',openRecord:true}}})}
+ for(const co of f.course?.cohorts.filter(co=>co.closedAt===null)??[]){const c=f.course!.courses.find(c=>c.id===co.courseId);if(!c)continue;const focus=courseFocusFor(p,{kind:'course',businessId:c.businessId,courseId:c.id});add({id:'cohort:'+co.id,title:co.startAt+'开班的原课程仍有责任',line:`${c.name}教学至${co.endAt}、支持至${co.supportCompleteAt}、退款窗口至${co.refundUntil}；新准备不会清除这期原学员与责任。`,dueAt:co.refundUntil,accountId:focus.accountId,urgent:false,sourceRefs:[{kind:'cohort',id:co.id,date:co.createdAt}],focus,inspect:{screen:'course',label:'翻看这期原学生、支持与退款',target:{accountId:focus.accountId,courseTarget:focus.courseTarget,recordId:co.id,openRecord:true}}})}
  for(const job of w.preparationJobs.filter(j=>j.status==='running'))add({id:'preparation:'+job.id,title:job.title,line:`原准备从${job.startAt}至${job.completeAt}，仍未完成；下一步沿原日历与准备记录。`,dueAt:job.completeAt,accountId:job.accountId,urgent:false,sourceRefs:[{kind:'preparation',id:job.id,date:job.startAt}],focus:null,inspect:{screen:'quarter',label:'翻看这项原准备',target:{accountId:job.accountId}}})
  for(const job of view.operations?.jobs.filter(j=>j.id!==first.jobId&&['planned','running'].includes(j.status))??[]){
   const business=view.operations?.businesses.find(b=>b.id===job.businessId)
@@ -143,6 +175,9 @@ export function seasonRecollection(p:SeasonInput,quarter=p.features.workbench.qu
  }
  for(const settlement of f.market.settlements)if(settlement.paidAt)add({id:settlement.id,date:settlement.paidAt,title:settlement.kind==='sale'?'模拟卖款已实际交收':'模拟分红已实际到账',line:`${moneyText(settlement.amountFen)}已进入原账户；它不是新的免费本金或额外行动。`,sourceRefs:[{kind:'settlement',id:settlement.id,date:settlement.paidAt}],inspect:{screen:'market',label:'翻看这笔原交收',target:{accountId:settlement.accountId,recordId:settlement.id}}})
  for(const research of f.market.researches)if(research.status==='completed')add({id:'research-result:'+research.id,date:research.completeAt,title:'公开研究已实际完成',line:'整理完成的是原公开资料；没有替你买股，也没有揭示未来价格。',sourceRefs:[{kind:'research',id:research.id,date:research.completeAt}],inspect:{screen:'market',label:'翻看这项原研究',target:{accountId:'personal',recordId:research.id}}})
+ for(const o of f.course?.outlines??[])if(o.job?.status==='completed'){const focus=courseFocusFor(p,{kind:'outline',businessId:o.businessId,outlineId:o.id});add({id:'course-outline:'+o.id,date:o.job.completeAt,title:'这份原教学大纲已实际完成',line:'完成的是原大纲与准备；启用、样课和招生仍各自决定，没有教学收入。',sourceRefs:[{kind:'outline',id:o.id,date:o.job.completeAt},{kind:'job',id:o.job.id,date:o.job.completeAt}],inspect:{screen:'course',label:'翻看原大纲与投入',target:{accountId:focus.accountId,courseTarget:focus.courseTarget,openRecord:true}}})}
+ for(const l of f.course?.licenses??[])if(l.job?.status==='completed'){const focus=courseFocusFor(p,{kind:'license',businessId:l.businessId,licenseId:l.id});add({id:'course-license:'+l.id,date:l.job.completeAt,title:'原案例的课程使用范围已实际准备',line:'本工作室的课程素材任务实际完成；没有继承成另一主体权利、完成样课或招收学生。',sourceRefs:[{kind:'license',id:l.id,date:l.job.completeAt},{kind:'job',id:l.job.id,date:l.job.completeAt}],inspect:{screen:'course',label:'翻看这份原课程使用范围',target:{accountId:focus.accountId,courseTarget:focus.courseTarget,openRecord:true}}})}
+ for(const c of f.course?.courses??[]){const general=courseFocusFor(p,{kind:'course',businessId:c.businessId,courseId:c.id});add({id:'course-defined:'+c.id,date:c.createdAt,title:'这门原课程方案已经留下',line:c.name+'已有明确案例、形式与主题；方案没有代替实际样课或新增招生。',sourceRefs:[{kind:'course',id:c.id,date:c.createdAt}],inspect:{screen:'course',label:'翻看这门原课程方案',target:{accountId:general.accountId,courseTarget:general.courseTarget,openRecord:true}}});for(const id of c.sampleAttempts){const j=view.operations?.jobs.find(j=>j.id===id&&j.businessId===c.businessId);if(!j||!['completed','interrupted','cancelled'].includes(j.status))continue;const date=j.status==='completed'?j.completeAt:j.releasedAt;if(!date)continue;const target:CourseSceneTarget={kind:'course',businessId:c.businessId,courseId:c.id,sampleJobId:id};add({id:'course-sample:'+id,date,title:j.status==='completed'?'这份原样课已实际完成':'这份原样课安排已经停下',line:c.name+'的原样课任务按实际状态留存；成本、行动、权利与工具资格分别核对，未增加学费或教学收入。',sourceRefs:[{kind:'sample',id,date},{kind:'course',id:c.id,date}],inspect:{screen:'course',label:'翻看这份原样课尝试',target:{accountId:general.accountId,courseTarget:target,openRecord:true}}})}}
  for(const work of f.video?.works??[]){const channel=f.video!.channels.find(c=>c.id===work.channelId);if(!channel)continue;const t={channelId:channel.id,workId:work.id,...(work.contractId?{contractId:work.contractId}:{})};for(const job of [work.production,...work.corrections])if(job?.status==='completed')add({id:'video-job:'+job.id,date:job.completeAt,title:'这份视频的原制作实际完成',line:'实际完成的是原制作或返工；人工核对、客户验收与回款仍分别发生。',sourceRefs:[{kind:'job',id:job.id,date:job.completeAt},{kind:'work',id:work.id,date:job.completeAt}],inspect:{screen:'video',label:'翻看原作品与制作资源',target:{accountId:channel.accountId,videoTarget:t}}})}
  for(const m of f.video?.marketing??[]){const channel=f.video!.channels.find(c=>c.id===m.channelId);if(m.completedAt&&channel)add({id:'video-marketing:'+m.id,date:m.completedAt,title:'这份原视频推广已实际结束',line:'结束的是原推广任务；实际询价仍须核对、显选，不记作客户成交或收入。',sourceRefs:[{kind:'marketing',id:m.id,date:m.completedAt},{kind:'job',id:m.jobId,date:m.completedAt}],inspect:{screen:'video',label:'翻看这份原推广与询价',target:{accountId:channel.accountId,videoTarget:{channelId:channel.id,marketingId:m.id}}}})}
  for(const c of f.video?.contracts??[]){const channel=f.video!.channels.find(x=>x.id===c.channelId);if(!channel)continue;const target={accountId:channel.accountId,videoTarget:{channelId:channel.id,workId:c.workId,contractId:c.id}}

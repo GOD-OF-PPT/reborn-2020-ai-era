@@ -1,0 +1,23 @@
+src/ui/course-player-thread.test.ts(64,10): error TS18047: 'reel' is possibly 'null'.
+src/ui/course-player-thread.ts(9,64): error TS2375: Type '{ operations: { employment: readonly EmploymentPeriod[]; businesses: readonly BusinessInstance[]; workers: readonly WorkerInstance[]; jobs: readonly ProductionJob[]; contracts: { ...; }[]; payroll: readonly PayrollRecord[]; loans: readonly OperatingLoan[]; unbilledAccruals: { ...; }[]; } | null; preparationReady: bo...' is not assignable to type 'CourseSceneContext' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'preparationReady' are incompatible.
+    Type 'boolean | undefined' is not assignable to type 'boolean'.
+      Type 'undefined' is not assignable to type 'boolean'.
+src/ui/course-scene-progress.ts(171,66): error TS6133: 'date' is declared but its value is never read.
+src/ui/CoursePanel.tsx(89,136): error TS2322: Type '"definition" | "outline" | "sample" | `license:${any}:${string}`' is not assignable to type 'CourseSceneDraftSlot'.
+  Type '`license:${any}:${string}`' is not assignable to type 'CourseSceneDraftSlot'.
+src/ui/CoursePanel.tsx(89,201): error TS2551: Property 'caseKind' does not exist on type '{ job: ProductionJob | null; id: string; businessId: string; caseId: string; jobId: string; }'. Did you mean 'caseId'?
+src/ui/CoursePanel.tsx(94,11): error TS6133: 'toggleCase' is declared but its value is never read.
+src/ui/CoursePanel.tsx(94,174): error TS2345: Argument of type '(previous: CourseSceneDraft) => { cases: { kind: string; id: string; }[]; capital: string; name: string; productId: string; topicId: string; segment: string; consent: boolean; resources: string[]; startAt: string; }' is not assignable to parameter of type 'SetStateAction<CourseSceneDraft>'.
+  Type '(previous: CourseSceneDraft) => { cases: { kind: string; id: string; }[]; capital: string; name: string; productId: string; topicId: string; segment: string; consent: boolean; resources: string[]; startAt: string; }' is not assignable to type '(prevState: CourseSceneDraft) => CourseSceneDraft'.
+    Call signature return types '{ cases: { kind: string; id: string; }[]; capital: string; name: string; productId: string; topicId: string; segment: string; consent: boolean; resources: string[]; startAt: string; }' and 'CourseSceneDraft' are incompatible.
+      The types of 'cases' are incompatible between these types.
+        Type '{ kind: string; id: string; }[]' is not assignable to type 'CourseDraftCase[]'.
+          Type '{ kind: string; id: string; }' is not assignable to type 'CourseDraftCase'.
+            Types of property 'kind' are incompatible.
+              Type 'string' is not assignable to type '"first_order" | "video"'.
+src/ui/CoursePanel.tsx(95,11): error TS6133: 'licenseRequest' is declared but its value is never read.
+src/ui/CoursePanel.tsx(107,1224): error TS2304: Cannot find name 'setCases'.
+src/ui/RoomMoment.tsx(55,506): error TS2339: Property 'courseTarget' does not exist on type 'SceneWork'.
+src/ui/RoomMoment.tsx(55,553): error TS2339: Property 'courseTarget' does not exist on type 'SceneWork'.
+

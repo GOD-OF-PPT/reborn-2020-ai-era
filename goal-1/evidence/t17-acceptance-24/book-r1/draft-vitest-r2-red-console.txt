@@ -1,0 +1,30 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/course-scene-draft.test.ts (5 tests | 1 failed) 38ms
+   × reads original-book edits when the still-mounted scene returns, without resetting the chosen date 22ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 passed (5)
+   Start at  22:41:34
+   Duration  791ms (transform 52%, import 26%, tests 17%, worker 5%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/course-scene-draft.test.ts > reads original-book edits when the still-mounted scene returns, without resetting the chosen date
+AssertionError: expected '从已做案例到一堂课' to be '原册中继续填的课程名' // Object.is equality
+
+Expected: "原册中继续填的课程名"
+Received: "从已做案例到一堂课"
+
+ ❯ src/ui/course-scene-draft.test.ts:73:24
+     71|  editBook(previous=>({...previous,name:'原册中继续填的课程名',resources:['worker…
+     72|  const [returned]=render(0)
+     73|  expect(returned.name).toBe('原册中继续填的课程名');expect(returned.resources).t…
+       |                        ^
+     74|  expect(returned.startAt).toBe('2023-03-21');expect(returned.cases).to…
+     75| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

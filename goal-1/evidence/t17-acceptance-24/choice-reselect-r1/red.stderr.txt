@@ -1,0 +1,19 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/CourseSceneChoice.reselect.test.tsx > returns to externally selected course A after choosing B without reviving a stale local target
+AssertionError: expected '2022-12-07 · 这间教室 · 经营中 · 另行查看的教案乙' to contain '重新选回的教案甲'
+
+Expected: "重新选回的教案甲"
+Received: "2022-12-07 · 这间教室 · 经营中 · 另行查看的教案乙"
+
+ ❯ src/ui/CourseSceneChoice.reselect.test.tsx:78:20
+     76|   click('明确翻看这一份');expect(target).toEqual(targetB);expect(kicker()).to…
+     77|   target=targetA;render()
+     78|   expect(kicker()).toContain(a.name);expect(kicker()).not.toContain(b.…
+       |                    ^
+     79|   expect(memory.read(view.runId,scope(a.id))).toEqual(draftA);expect(m…
+     80|   expect(controller.exportSaved()).toBe(before)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

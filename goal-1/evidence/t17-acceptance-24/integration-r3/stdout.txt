@@ -1,0 +1,18 @@
+
+> reborn-2020-ai-era@0.1.0 test:unit
+> vitest run --config vitest.config.ts src/ui --exclude src/ui/book-layout.test.ts --maxWorkers=1
+
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/player-thread.test.ts (28 tests | 1 failed) 54023ms
+   × lets a free life retain real work and salary without making it exclusive with the manual order 5269ms
+
+ Test Files  1 failed | 48 passed (49)
+      Tests  1 failed | 343 passed (344)
+   Start at  23:35:32
+   Duration  394.59s (tests 92%, import 7%, transform 1%)
+
+    Isolate  49 workers spawned · ~256ms startup each (spawn + environment, per file)
+             at least ~12.31s faster with isolate: false — reuses workers across files instead of one per file
+
