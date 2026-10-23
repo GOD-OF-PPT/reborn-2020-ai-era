@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>长日重启 · 一期服务的设计分镜</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./storyboard.js" defer></script>
+</head>
+<body>
+  <img class="room-image" src="../../../../assets/ui-redesign/cinematic/room-ordinary-v1.jpg" alt="">
+  <div class="room-shade" aria-hidden="true"></div>
+  <a class="skip-link" href="#scene-title">跳到眼前这一幕</a>
+
+  <header class="masthead">
+    <p class="wordmark">重生2020<span>长日重启 / 一期服务</span></p>
+    <p class="design-boundary"><strong>设计分镜 · 不连接存档</strong><span>复看不推进时间；没有真实余额、收入或回执。</span></p>
+    <button class="quiet-button" type="button" data-panel="settings">文字与动效 ↗</button>
+  </header>
+
+  <main class="stage" id="main-content">
+    <div class="intention"><span>同一主体 · 同一账期</span><span>服务别人，也守住承诺的边界。</span></div>
+    <section class="voice" aria-labelledby="scene-title">
+      <p class="chapter-label" id="chapter-label"></p>
+      <h1 id="scene-title" tabindex="-1"></h1>
+      <p class="state-label" id="state-label"></p>
+      <p class="scene-line" id="scene-line"></p>
+      <p class="scene-detail" id="scene-detail"></p>
+      <div class="thoughts" aria-label="这一幕的一个主念头与两个旁路" id="thoughts"></div>
+      <p class="feedback-date" id="feedback-date"></p>
+    </section>
+
+    <div class="object-place">
+      <button id="service-object" class="service-object" type="button" aria-describedby="object-state object-detail">
+        <span class="object-art" aria-hidden="true">
+          <span class="contact-shadow"></span>
+          <span class="connection-box"><i></i><i></i><i></i></span>
+          <span class="cable"></span>
+          <span class="paper-clip"></span>
+          <span class="ticket ticket-back"></span>
+          <span class="ticket ticket-front"></span>
+          <span class="state-mark" id="state-mark"></span>
+        </span>
+        <span class="object-copy">
+          <span id="object-state" class="object-state"></span>
+          <strong>这一期的服务单</strong>
+          <span id="object-detail" class="object-detail"></span>
+          <span class="object-action" id="object-action"></span>
+        </span>
+      </button>
+      <p class="object-note">DOM纸夹为分镜示意，非最终原创道具。</p>
+    </div>
+  </main>
+
+  <footer class="chapter-rail">
+    <div class="rail-caption"><span>六态设计复看</span><small>不接受承诺，不结算日历</small></div>
+    <button class="rail-arrow" id="previous-state" type="button" aria-label="复看上一设计状态">←</button>
+    <nav id="state-navigation" aria-label="复看六个设计状态，不推进时间"></nav>
+    <button class="rail-arrow" id="next-state" type="button" aria-label="复看下一设计状态">→</button>
+    <span id="state-number" class="state-number"></span>
+  </footer>
+
+  <dialog id="paper-dialog" aria-labelledby="paper-title" aria-describedby="paper-boundary">
+    <header class="paper-heading">
+      <div><p id="paper-kicker"></p><h2 id="paper-title"></h2></div>
+      <button class="close-paper" id="close-paper" type="button" aria-label="合上纸片，回到同一设计状态">收好 ×</button>
+    </header>
+    <section class="paper-body" id="paper-body" aria-live="polite"></section>
+    <footer class="paper-footer">
+      <span id="paper-page"></span>
+      <nav aria-label="设计纸片分页"><button id="previous-page" type="button">← 上一页</button><button id="next-page" type="button">下一页 →</button></nav>
+    </footer>
+    <p class="paper-boundary" id="paper-boundary">设计分镜 · 不连接存档。翻页、选择和合上均不会执行游戏命令。</p>
+  </dialog>
+  <p class="sr-only" id="announcement" role="status" aria-live="polite"></p>
+  <noscript><p class="no-script">请启用 JavaScript 翻阅此设计分镜。它不读取或保存游戏。</p></noscript>
+</body>
+</html>

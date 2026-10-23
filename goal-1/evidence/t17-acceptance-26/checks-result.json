@@ -1,0 +1,76 @@
+{
+  "scope": "S4-R0 design only; no gameplay or compatibility tests",
+  "results": [
+    {
+      "label": "script-syntax",
+      "args": [
+        "rtk",
+        "proxy",
+        "node",
+        "--check",
+        "goal-1/evidence/t17-acceptance-26/storyboard/storyboard.js"
+      ],
+      "started": "2026-10-23T22:15:02.133Z",
+      "ended": "2026-10-23T22:15:02.291Z",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "plan",
+      "args": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_plan.py"
+      ],
+      "started": "2026-10-23T22:15:02.291Z",
+      "ended": "2026-10-23T22:15:02.401Z",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "competitive",
+      "args": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_competitive_design.py"
+      ],
+      "started": "2026-10-23T22:15:02.401Z",
+      "ended": "2026-10-23T22:15:02.512Z",
+      "exit": 0,
+      "signal": null,
+      "error": null
+    },
+    {
+      "label": "docs",
+      "args": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_docs.py",
+        "--text-only"
+      ],
+      "started": "2026-10-23T22:15:02.512Z",
+      "ended": "2026-10-23T22:16:11.361Z",
+      "exit": 1,
+      "signal": null,
+      "error": null
+    }
+  ],
+  "docsComparison": {
+    "previousErrors": 16,
+    "currentErrors": 19,
+    "added": [
+      "goal-1/evidence/t17-acceptance-26/input.md: broken local link /Users/gordon/.codex/plugins/cache/openai-curated-remote/game-studio/0.1.2/skills/game-studio/SKILL.md",
+      "goal-1/evidence/t17-acceptance-26/master-appendix.md: broken local link ../docs/37-relay-play-and-art-contract.md",
+      "goal-1/evidence/t17-acceptance-26/master-appendix.md: broken local link evidence/t17-acceptance-26/plan.md"
+    ],
+    "removed": []
+  }
+}
