@@ -1,0 +1,45 @@
+{
+  "at": "2026-10-23T13:55:06.854Z",
+  "rows": [
+    {
+      "id": "collector",
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_first_order_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-23/refused-post-collector"
+      ],
+      "status": 1,
+      "signal": null,
+      "refused": true,
+      "outputCreated": false
+    },
+    {
+      "id": "verifier",
+      "argv": [
+        "rtk",
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-23",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-23/refused-post-verifier"
+      ],
+      "status": 1,
+      "signal": null,
+      "refused": true,
+      "outputCreated": false
+    }
+  ],
+  "regularFiles": 850,
+  "changed": [],
+  "markerSame": true,
+  "markerSha256": "eeae2185cbd10cfd4cb27db68aa0894f8f776183e26eb8ea0bf3c575562dd274",
+  "browserAdmission": "browser-parent-guard.json",
+  "compatibilityDevelopmentOrTesting": 0
+}
