@@ -1,0 +1,1 @@
+先等root25全部写入者结束并核定最终scope，再精确seal/四浏览器两CLI拒写。feature仅本片UI/证据/3master自有后缀；保P3未提交插入与全部旧文件。逐blob/mode实核后本地feature commit，追加真实主任务完成记录并独立record commit。最终再次读公开owner/远端main/原README与当前预览。无push/deploy；原缺口/兼容暂停不改。

@@ -1,0 +1,3 @@
+# R1分类错误保留
+
+原collector确实exit1，在scripts/evidence-output.ts抛IMMUTABLE_EVIDENCE_PARENT_USE_NEW_SIBLING，目标未建，游戏未执行。candidate错误要求浏览器guard的EVIDENCE_SEALED_USE_NEW_ROOT，于是CLI_GUARD_REJECTION_REQUIRED:collector，auditor未运行。原stdout/stderr保留，Root25原1042文件/107目录及marker再次核同。新post R2仅修正确切CLI错误名、两个日志前缀和当前相对import，重新两入口；不改旧sealed helper、共享guard或生产。
