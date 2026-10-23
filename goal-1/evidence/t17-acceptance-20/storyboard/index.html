@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>长日重启 · 交互分镜</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./storyboard.js" defer></script>
+</head>
+<body>
+  <img class="room-image" src="../../../../assets/ui-redesign/cinematic/room-ordinary-v1.jpg" alt="">
+  <div class="world-shade" aria-hidden="true"></div>
+  <a class="skip-link" href="#scene-title">跳到眼前这一幕</a>
+  <header class="masthead">
+    <a class="wordmark" href="./index.html">重生2020<span>长日重启 / 交互分镜</span></a>
+    <p class="design-label">设计分镜 · 不连接存档<span>数字为示例；翻场不结算时间，不执行游戏命令。</span></p>
+    <nav class="pockets" aria-label="翻阅与设置">
+      <button type="button" data-open="people">人物</button>
+      <button type="button" data-open="records">原记录</button>
+      <button type="button" data-open="years">六年提问</button>
+      <button type="button" data-open="settings" aria-label="文字与动效设置">设置</button>
+    </nav>
+  </header>
+
+  <main id="scene" aria-label="电影场景分镜">
+    <div class="status-line" aria-label="本分镜的日期与四点状态">
+      <time id="scene-date">2020 / 01 / 01</time>
+      <div class="four-times"><span>这一季，四份时间</span><ol id="ap-dots" aria-label="示例行动状态"></ol><span id="ap-caption"></span></div>
+    </div>
+    <p class="intention"><span>本季意图</span><span id="intention-text">先试一份手艺，也把生活留稳。</span><button type="button" data-open="intention">想一想 ↗</button></p>
+
+    <section class="scene-voice" aria-labelledby="scene-title">
+      <p class="scene-kicker" id="scene-kicker"></p>
+      <h1 id="scene-title" tabindex="-1"></h1>
+      <p class="scene-line" id="scene-line"></p>
+      <p class="scene-fact" id="scene-fact"></p>
+      <div class="thoughts" id="thoughts" aria-label="眼前的念头"></div>
+      <p id="stage-note" class="stage-note"></p>
+    </section>
+
+    <div class="object-space">
+      <span class="object-tether" aria-hidden="true"></span>
+      <button class="story-object" id="story-object" type="button" aria-describedby="object-caption">
+        <span class="object-fold" aria-hidden="true"></span><span class="object-seal" aria-hidden="true"></span>
+        <span class="object-overline" id="object-overline"></span>
+        <strong id="object-title"></strong><span class="object-detail" id="object-detail"></span>
+        <span class="object-action">走近，翻开这一件 ↗</span>
+      </button>
+      <p id="object-caption" class="object-caption"></p>
+    </div>
+
+    <nav class="opening-paths" aria-label="选择首幕分镜，不接受任何承诺">
+      <span>另一种起步</span>
+      <button type="button" data-branch="manual">一份手工小单</button>
+      <button type="button" data-branch="investment">先看投资</button>
+      <button type="button" data-branch="free">自由安排</button>
+    </nav>
+  </main>
+
+  <footer class="chapter-rail">
+    <div class="rail-title"><span>首季 · 一份手工小单</span><small>分镜复看，不结算时间</small></div>
+    <button id="previous-scene" class="rail-arrow" type="button" aria-label="复看上一幅手工单分镜">←</button>
+    <nav id="chapters" aria-label="复看手工单全部阶段"></nav>
+    <button id="next-scene" class="rail-arrow" type="button" aria-label="复看下一幅手工单分镜">→</button>
+    <span class="frame-number" id="frame-number"></span>
+  </footer>
+
+  <dialog id="paper-dialog" aria-labelledby="paper-title">
+    <div class="paper-edge" aria-hidden="true"></div>
+    <header class="paper-heading"><div><p id="paper-kicker">走近这一件</p><h2 id="paper-title"></h2></div><button id="close-dialog" type="button" aria-label="收好纸片，回到原分镜">收好 ×</button></header>
+    <div class="paper-body" id="paper-body"></div>
+    <footer class="paper-footer"><span id="paper-page"></span><div id="paper-actions"></div></footer>
+    <p class="paper-boundary">设计样稿 · 只翻阅分镜；不读取、支付或保存游戏。</p>
+  </dialog>
+  <div class="sr-only" id="announcement" role="status" aria-live="polite"></div>
+  <noscript><div class="no-script">请启用 JavaScript 查看可点击分镜。此文件只含设计样例，不连接存档。</div></noscript>
+</body>
+</html>
