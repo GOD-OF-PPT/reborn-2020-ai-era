@@ -1,0 +1,1 @@
+最后标签修复SeasonRecollection与test已冻结（mainline agent交回8/8）。请R3HTTP保留身份完成后，用现有run-step-r1按原方式执行 typecheck-r5 + build-r4 输出.delivery/t17-u2-r4，不改timeout/配置/测试。只顺序运行两步，保530源初末；不要切5366（我当前Native R3，之后切）。完成读实际终态。

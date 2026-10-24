@@ -26,11 +26,17 @@ export function marketSceneProgress(m:Market,date:string,accountId:string,prefer
   const name=m.stocks.find(q=>q.symbol===order.symbol)?.name??order.symbol
   const side=order.side==='buy'?'买入':'卖出',filled=order.quantity-order.remaining
   const terms=side+order.quantity+'股 · 限价'+moneyText(order.limitPriceFen)+' · 已成交'+filled+'股 / 余'+order.remaining+'股'
+  const fillIds=new Set(m.fills.filter(fill=>fill.orderId===order.id&&fill.date<=date).map(fill=>fill.id))
+  const ownUnpaid=unpaid.filter(settlement=>settlement.kind==='sale'&&settlement.symbol===order.symbol&&fillIds.has(settlement.sourceId)),originalSettlement=ownUnpaid[0]
+  const cashDate=originalSettlement?(originalSettlement.dueAt<date?date:originalSettlement.dueAt):undefined
+  const cashLine=originalSettlement?`另有${ownUnpaid.length}笔已成交原款仍待交收；最近一笔${moneyText(originalSettlement.amountFen)}于${originalSettlement.dueAt}交收，眼下仍不可花。`:''
    if(order.status==='planned')return {...base,order,active:true,phase:'planned',title:'这份判断，还只是一张计划。',line:name+'：'+terms+'。资金或股份仍在预留，委托还没有进入市场。',choice:{title:'把这份计划交进模拟市场',line:(order.side==='buy'?'已冻结'+moneyText(order.cashHeldFen):'已预留'+order.remaining+'股')+'，提交不会再占用一遍；只能从之后的撮合日尝试成交。',label:'提交这份模拟委托'},...(m.quoteId?{command:{kind:'SubmitStockOrder',payload:{orderId:order.id,quoteId:m.quoteId},confirm:true}}:{}),secondaryCommand:{kind:'CancelStockOrder',payload:{orderId:order.id},confirm:false}}
   if(order.status==='pending'||order.status==='partially_filled'){
-   const next=m.matchingCalendar.find(c=>c.date>=date)?.date
-    return {...base,order,active:true,phase:order.status==='pending'?'pending':'partial',title:filled?'只成交了一部分，余下仍由你决定。':'委托已经发出，等下一次撮合。',line:name+'：'+terms+'。'+(order.reason?'上次未继续成交：'+(lifecycleText[order.reason]??'当前成交条件未满足')+'。':'')+'挂单不保证成交，卖出委托也还不是到账。',choice:{title:'看看已成交多少，还有多少在等',line:(order.side==='buy'?'尚冻结'+moneyText(order.cashHeldFen):'尚预留'+order.remaining+'股')+'；撤回余量只释放这笔预留，不是收入，已经成交的股份和费用保留。',label:'查看这份委托与成交'},secondaryCommand:{kind:'CancelStockOrder',payload:{orderId:order.id},confirm:false},...(next?{nextDate:next,waitLabel:'等这份委托的下一次撮合'}:{})}
+   const matchingDate=m.matchingCalendar.find(c=>c.date>=date)?.date
+   const waitingForCash=cashDate!==undefined&&(matchingDate===undefined||cashDate<=matchingDate),next=waitingForCash?cashDate:matchingDate
+    return {...base,order,active:true,phase:order.status==='pending'?'pending':'partial',title:filled?'只成交了一部分，余下仍由你决定。':'委托已经发出，等下一次撮合。',line:name+'：'+terms+'。'+(order.reason?'上次未继续成交：'+(lifecycleText[order.reason]??'当前成交条件未满足')+'。':'')+'挂单不保证成交，卖出委托也还不是到账。'+cashLine,choice:{title:'看看已成交多少，还有多少在等',line:(order.side==='buy'?'尚冻结'+moneyText(order.cashHeldFen):'尚预留'+order.remaining+'股')+'；撤回余量只释放这笔预留，不是收入，已经成交的股份和费用保留。',label:'查看这份委托与成交'},secondaryCommand:{kind:'CancelStockOrder',payload:{orderId:order.id},confirm:false},...(next?{nextDate:next,waitLabel:waitingForCash?'等这份委托已成交原款交收':'等这份委托的下一次撮合'}:{})}
   }
+  if(originalSettlement)return {...base,order,settlement:originalSettlement,active:true,phase:'settlement',title:order.status==='filled'?'这份委托已成交，款项还在交收。':'委托余量已停止，原成交款仍待交收。',line:name+'：'+terms+'。'+cashLine,choice:{title:'沿原委托核对已成交的原款',line:'交收仍按原日期进入原账户；查看或撤回余量不会提前到账，也不会重做成交。',label:'查看这份委托与原交收'},nextDate:cashDate!,waitLabel:'等这份委托已成交原款交收'}
    return {...base,order,phase:'history',title:order.status==='filled'?'这份委托，已经成交。':'这份委托，已经停止等待。',line:name+'：'+terms+'。'+(lifecycleText[order.status]??order.status)+'；费用、余股和交收仍在账上。',choice:{title:'回看当时的委托与结果',line:'过去的成交不能重做；下一次买卖，仍由你重新决定。',label:'翻阅这份委托与成交记录'}}
  }
  const settlement=settlements.find(s=>s.id===selected)

@@ -1,0 +1,11 @@
+
+> reborn-2020-ai-era@0.1.0 typecheck
+> tsc -b
+
+src/ui/player-thread.test.ts(237,26): error TS2345: Argument of type '{ features: { workbench: { employment: readonly EmploymentPeriod[]; quarter: string; quarterStart: string; quarterEnd: string; atQuarterEnd: boolean; pause: { readonly instanceId: string; readonly reason: string; readonly source?: "command"; } | null; ... 11 more ...; evidence: { ...; }[]; }; ... 9 more ...; market:...' is not assignable to parameter of type 'Input'.
+  The types of 'features.workbench.employment' are incompatible between these types.
+    The type 'readonly EmploymentPeriod[]' is 'readonly' and cannot be assigned to the mutable type 'EmploymentPeriod[]'.
+src/ui/TodayScene.tsx(42,4): error TS2375: Type '{ kind: "calendar"; title: string; displayTitle: string; detail: string; stageLabel: string; actionLabel: string; onActivate: () => void; disabled: boolean; textOnly: boolean | undefined; dayPaper: { ...; }; protection: "readonly" | ... 1 more ... | undefined; }' is not assignable to type 'OpeningObjectProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'textOnly' are incompatible.
+    Type 'boolean | undefined' is not assignable to type 'boolean'.
+      Type 'undefined' is not assignable to type 'boolean'.

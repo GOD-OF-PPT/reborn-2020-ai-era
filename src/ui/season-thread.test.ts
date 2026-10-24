@@ -16,6 +16,7 @@ import {sceneThreads} from './scene-thread-notes.ts'
 import {loadSeasonFocusPreference} from './season-focus-preference.ts'
 import {moneyText} from './game-text.ts'
 import {addDays} from '../core/calendar.ts'
+import retainedWorkQ2Raw from '../../goal-1/evidence/t17-acceptance-22/chrome-production-r4/work-q2-r4-original-readback.json?raw'
 
 const input=(view:PlayingView):SeasonInput=>({view,features:view.features as unknown as PlayFeatures})
 async function normal(name:string,raw?:string){
@@ -36,6 +37,75 @@ async function normal(name:string,raw?:string){
  return {codec,controller,p,send,advance,close:async()=>{await controller.close();await store.close()}}
 }
 const marketPayload=(p:SeasonInput,symbol='SIM-AI01')=>{const m=p.features.market,q=m.stocks.find(q=>q.symbol===symbol)!;return {accountId:'personal',symbol:q.symbol,side:'buy',quantity:100,limitPriceFen:q.upperFen!,quoteId:m.quoteId!,validUntil:m.matchingCalendar[0]!.id}}
+
+it.each(['PlanStockOrder','PlaceStockOrder'] as const)('follows the explicitly selected real company account from an empty today calendar only after saved %s',async kind=>{
+ const h=await normal('company-today-'+kind)
+ try{
+  const initial=h.p(),initialPersonal=initial.view.accounts.find(account=>account.accountId==='personal')!.cashFen
+  await h.send('DiscoverBusiness',{definitionId:'course-studio'})
+  const business=h.p().view.operations!.businesses.find(business=>business.definitionId==='course-studio')!
+  expect(business).toMatchObject({company:true,lifecycle:'discovered'})
+  expect(h.p().view.accounts.some(account=>account.accountId===business.accountId)).toBe(true)
+  // A real owner transfer creates no income and does not grant teaching or other business access.
+  await h.send('FundBusiness',{businessId:business.id,amountFen:500000})
+  const previous=h.p(),empty:OpeningFocus={runId:previous.view.runId,kind:'free',accountId:'personal',entityId:null}
+  const personal=previous.view.accounts.find(account=>account.accountId==='personal')!,company=previous.view.accounts.find(account=>account.accountId===business.accountId)!
+  expect(personal.cashFen).toBe(initialPersonal-500000);expect(company.cashFen).toBe(500000)
+  const payload={...marketPayload(previous,'SIM-AI02'),accountId:business.accountId},raw=h.controller.exportSaved(),preview=h.controller.preview(h.controller.prepare(kind,payload))
+  expect(preview.allowed).toBe(true);expect(preview.actionPoints).toBe(0)
+  expect(seasonFocusAfterSave(previous,previous,kind,payload,empty,true)).toBe(empty)
+  expect(h.controller.exportSaved()).toBe(raw)
+  const saved=await h.send(kind,payload),order=saved.current.features.market.orders.find(order=>order.accountId===business.accountId)!,next=seasonFocusAfterSave(saved.previous,saved.current,kind,payload,empty,true)!
+  expect(next).toMatchObject({runId:previous.view.runId,kind:'market',accountId:business.accountId,businessId:business.id,entityId:order.id,entityKind:'order'})
+  expect(playerThread(saved.current,next)).toMatchObject({focusStatus:'valid',inspect:{target:{accountId:business.accountId,recordId:order.id}}})
+  expect(saved.current.view.budget).toEqual(previous.view.budget)
+  expect(saved.current.view.accounts.find(account=>account.accountId==='personal')!.cashFen).toBe(personal.cashFen)
+  expect(saved.current.view.accounts.find(account=>account.accountId===business.accountId)!.cashFen).toBe(company.cashFen)
+  const concrete=openingFocusFor(saved.previous,'quarter',{accountId:'personal',recordId:saved.previous.features.firstOrder.offerId})!
+  expect(seasonFocusAfterSave(saved.previous,saved.current,kind,payload,concrete,true)).toBe(concrete)
+  expect(seasonFocusAfterSave(saved.previous,saved.current,kind,{...payload,accountId:'personal'},empty,true)).toBe(empty)
+  const foreign={...empty,runId:'another-life'}
+  expect(seasonFocusAfterSave(saved.previous,saved.current,kind,payload,foreign,true)).toBe(foreign)
+  for(const blocked of [
+   {...saved.current,view:{...saved.current.view,hasCandidate:true,saveStatus:'unsaved' as const}},
+   {...saved.current,view:{...saved.current.view,readOnly:true,saveStatus:'read_only' as const}},
+   {...saved.current,view:{...saved.current.view,accounts:saved.current.view.accounts.filter(account=>account.accountId!==business.accountId)}},
+  ])expect(seasonFocusAfterSave(saved.previous,blocked,kind,payload,empty,true)).toBe(empty)
+  if(kind==='PlaceStockOrder'){
+   const research=await h.send('ResearchMarket',{definitionId:'market-overview'}),researchFocus=seasonFocusAfterSave(research.previous,research.current,'ResearchMarket',{definitionId:'market-overview'},empty,true)!
+   expect(researchFocus).toMatchObject({kind:'market',accountId:'personal',entityKind:'research'})
+   expect(seasonFocusAfterSave(research.previous,research.current,'ResearchMarket',{definitionId:'market-overview'},next,true)).toBe(next)
+  }
+ }finally{await h.close()}
+},20000)
+
+it.each(['WorkQuarter','StartLifeWork','ResearchMarket','PlanStockOrder','PlaceStockOrder'] as const)('follows only an explicitly chosen empty Q2 calendar after the actual saved %s, keeping preview and concrete pins intact',async kind=>{
+ const h=await normal('q2-empty-'+kind,retainedWorkQ2Raw)
+ try{
+  const previous=h.p(),empty:OpeningFocus={runId:previous.view.runId,kind:'free',accountId:'personal',entityId:null}
+  expect(previous.features.workbench.quarter).toBe('2020-Q2')
+  const oldPeriod=previous.view.operations!.employment.find(period=>period.quarter==='2020-Q1')!,historical:OpeningFocus={runId:previous.view.runId,kind:'work',accountId:'personal',entityId:oldPeriod.id}
+  const payload=kind==='WorkQuarter'?{}:kind==='StartLifeWork'?{kind:'rest',personId:null,reference:null}:kind==='ResearchMarket'?{definitionId:'market-overview'}:marketPayload(previous)
+  const raw=h.controller.exportSaved(),preview=h.controller.preview(h.controller.prepare(kind,payload))
+  expect(preview.allowed).toBe(true)
+  // Closing the original confirmation without submit has no saved receipt or focus transition.
+  expect(seasonFocusAfterSave(previous,previous,kind,payload,empty,true)).toBe(empty)
+  expect(h.controller.exportSaved()).toBe(raw)
+  const saved=await h.send(kind,payload),next=seasonFocusAfterSave(saved.previous,saved.current,kind,payload,empty,true)!
+  expect(next).toMatchObject({runId:empty.runId,accountId:'personal',kind:kind==='WorkQuarter'?'work':kind==='StartLifeWork'?'life':'market'})
+  expect(next.entityId).not.toBeNull()
+  expect(playerThread(saved.current,next).focusStatus).toBe('valid')
+  expect(seasonFocusAfterSave(saved.previous,saved.current,kind,payload,historical,true)).toBe(historical)
+  for(const blocked of [
+   {...saved.current,view:{...saved.current.view,hasCandidate:true,saveStatus:'unsaved' as const}},
+   {...saved.current,view:{...saved.current.view,readOnly:true,saveStatus:'read_only' as const}},
+   {...saved.current,view:{...saved.current.view,saveStatus:'conflict' as const}},
+  ])expect(seasonFocusAfterSave(saved.previous,blocked,kind,payload,empty,true)).toBe(empty)
+  const anotherQuarter={...saved.current,features:{...saved.current.features,workbench:{...saved.current.features.workbench,quarter:'2020-Q3'}}}
+  expect(seasonFocusAfterSave(saved.previous,anotherQuarter,kind,payload,empty,true)).toBe(empty)
+  expect(seasonFocusAfterSave(saved.previous,saved.current,'AdvanceTime',{},empty,true)).toBe(empty)
+ }finally{await h.close()}
+},20000)
 
 it('keeps a normal earned video commission through real marketing, side work, client responses and separate collection',async()=>{
  const h=await normal('s3-video')

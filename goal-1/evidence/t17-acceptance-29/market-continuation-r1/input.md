@@ -1,0 +1,3 @@
+root29 input/plan/tasks+baseline已建（520源/112旧marker，b1d8959），可以实施U2投资适配，独占 src/ui/market-scene-progress.ts、src/ui/player-thread.ts、对应market/player-thread tests。请先guard新root29/market-continuation-r1写具体三文件；修原order仍有同source fill未付settlement时返回其原dueAt等待（不换pin/账户/最新单）；已付后actualRefs/resultDate含同source settlement已付日期，避免Q2到账仍称只Q1历史。partial仍可撤余，等待交收不可隐去；跨日dueAt沿原Clock限界。保real payroll‘已有工资但工作仍继续’，不要把outcome actual统一当结束。写必要真实正常/反例测试并定向跑原时限，保红。不能改核心/P3/schema/原金额日期。交回源码identity与结果，不修改OpeningMoment/新today-thread/masters/Git/compat。
+
+再补一处today关键：player-thread resolvedFocus 当前work entityId===null用workbench.employment.at(-1)，新季无工作会落到旧季work，导致‘今天工作’仍历史。请核原语义/测试，改明确空工作入口只选当前quarter原employment（若无保持null，显选WorkQuarter原确认）；指定旧entity不变、未约定新季不续约。作为U2同一适配可纳你独占源，需反例和未改原账证明。

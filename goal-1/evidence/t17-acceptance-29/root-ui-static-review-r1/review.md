@@ -1,0 +1,19 @@
+# U2 Root UI 静态独审R1
+
+范围为TodayScene/DayThreadAction/OpeningMoment/CinematicRoom/RoomMoment/OpeningObject/SeasonRecollection，必要追App、shared-action、原MarketSceneChoice与seasonFocusAfterSave。只读源码；新测试/类型/浏览器/兼容执行均0，不能称实际体验或全链通过。Root在审查中修了P1，source-before/after分列两版，不冒称单一冻结源。
+
+## 确定问题及修缮状态
+
+1. P1 待亲手提交的首单能从留页进入普通Today，隐藏原Submit主焦点（已由Root修，静态复核闭合，原生待验）。修前CinematicRoom:40 showToday只做SharedAction来源检查并setTodayAt；OpeningMoment:99–102 ownDelivery令interrupted=false是为原提交主幕保留的特例，但原:204 Today条件仅day&&!interrupted&&!requiresChoice&&!legacy，没有另核requiresDelivery。Today只读模型wait虽为null，TodayScene又没有显示remaining/Submit，于是普通工作/生活/交易选择取代必需提交。Root现:OpeningMoment116在responsibility时只回原focus、204额外!thread.responsibilityOverrideNeeded；CinematicRoom40在pause/delivery清Today，SeasonRecollection28明确先回待交付作品；TodayScene30自身保护时只给返回责任。修复没有删原Submit，后续应实际走Jan19→随身册→留页→返回，仍显示同contract Submit且没有普通Today安排。
+
+2. P2 Today新增市场方向的企业账户保存不能接回实际新单（已即时报Root，当前待其处理）。TodayScene:21/24把准备primary设为personal/free；原MarketSceneChoice:43仍显选全部受控账户，Place/Plan载荷沿玩家实际accountId。若原企业账户合法下单，openingFocusAfterSave返回真实market/company candidate，但season-thread:106要求candidate.accountId===existing.accountId(personal)，107再跨kind返回existing，导致真实新企业单已保存而关注仍是空free。此结论是可达条件下的确定源码因果，没有把假主体夹具当正常Chrome复现。应保原账户能力，同时只让本次明确显选账户的原saved新对象接回；或明确本入口个人范围并保持原全账户入口，不能默认把企业单解释成个人。不得泛化成全部旁路保存抢primary。
+
+## 其余已核边界
+
+- Today本身使用CinematicRoom34/40与OpeningMoment90/116的runId:revision局部视角；只开Today/关闭/回原focus不调用onOpeningFocus。parent todayView有值时控制显示，本地localTodayAt仅用于无parent控制的接线。新revision/run不复活旧Today，来源门槛仍makeSharedAction当场核同snapshot/run/revision。
+- TodayScene23/24只有明确继续原对象或新life/market按钮才onFocus/onPrepare；directions和返回不执行命令。life/市场原提交仍CommandButton和原确认，取消不产生业务，原candidate/保存忙/冲突阻普通UI换向，稳定read_only可读UI但不能写游戏命令。显选方向后的free为明确UI准备，不声称原pin还没有改变。
+- DayThreadAction15先处理history/result导航；真正current/carry继续原command/wait，work-paid仍active不因首薪归档，position主操作为下一取舍而不说已收款。OpeningMoment172不为history生成continuation；219历史02只翻原记录，物件234绑定同primary/dayPrimary，不独立执行旧命令。历史留页canEnter仅当前季度已到真实季末，旧季没有进入下一季Clock。
+- SeasonRecollection13–16按run/显选季度读旧事实，32明确历史季与实际今天；37未完事项注明截至当前日期。onContinueFocus为显选，重新通过原public matching与偏好门槛；候选/旧闭包在按钮makeSharedAction与sourceLocked下不改变pin。查看原册仍传原record/entity，原五路线/人物/财务/日历继续可达。
+- openingObject本身只呈现已提交dayPaper/phase并调用父绑定，没有另设业务状态。艺术接触、纸签密度、保护轮廓和实际可点需原图/当前窗口验证，静态不能代替。
+
+[杠精审查] 未把首笔工资或正持仓当结束、未因显示Today自动续约/下单或清原责任；发现P1及时修缮但不以未跑SSR/静态读宣称Chrome通过。P2同账户回响仍须明确处理，不能静态无问题收口。除Root自修的文件外，本owner没有生产/测试/masters/Git/旧证据写入；不扩U3或兼容。

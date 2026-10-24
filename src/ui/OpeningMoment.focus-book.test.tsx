@@ -8,6 +8,7 @@ import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
 import type {GamePanelProps,PlayFeatures} from './game-types.ts'
 import {OpeningMoment} from './OpeningMoment.tsx'
 import {OpeningAttemptAction} from './OpeningAttemptAction.tsx'
+import {DayThreadAction} from './DayThreadAction.tsx'
 import {roomMoment} from './RoomMoment.tsx'
 import {playerThread} from './player-thread.ts'
 import {Dialog} from './Dialog.tsx'
@@ -22,7 +23,8 @@ import prefix from '../../goal-1/evidence/t17-acceptance-11/normal-input-r1/chro
 const hooks=vi.hoisted(()=>({values:[] as unknown[],index:0}))
 vi.mock('react',async importOriginal=>{
  const actual=await importOriginal<typeof import('react')>()
- return {...actual,useId:()=> 'focus-book-handler',useState:<T,>(initial:T|(()=>T))=>{
+ // This handler-only harness follows SSR effect semantics; mounted effects are checked in Chrome.
+ return {...actual,useId:()=> 'focus-book-handler',useEffect:()=>{},useState:<T,>(initial:T|(()=>T))=>{
   const index=hooks.index++
   if(!(index in hooks.values))hooks.values[index]=typeof initial==='function'?(initial as ()=>T)():initial
   return [hooks.values[index] as T,(value:T|((previous:T)=>T))=>{hooks.values[index]=typeof value==='function'?(value as (previous:T)=>T)(hooks.values[index] as T):value}]
@@ -33,7 +35,7 @@ const wrappers=new Set<unknown>([MarketSceneChoice,VideoSceneChoice,CourseSceneC
 function elements(value:unknown):Element[]{
  if(Array.isArray(value))return value.flatMap(elements)
  if(!isValidElement<Record<string,unknown>>(value))return []
- if(value.type===OpeningAttemptAction&&typeof value.props.children==='function')return elements(value.props.children(null))
+ if((value.type===OpeningAttemptAction||value.type===DayThreadAction)&&typeof value.props.children==='function')return elements(value.props.children(null))
  if(wrappers.has(value.type)&&typeof value.props.children==='function')return elements(value.props.children(()=>{}))
  return [value,...elements(value.props.children),...elements(value.props.footer)]
 }

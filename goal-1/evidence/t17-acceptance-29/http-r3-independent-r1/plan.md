@@ -1,0 +1,1 @@
+只读当前R3构建源/47产物，复用U1已封存HTTP/字节/marker检查helper作最小路径与单构建适配，不运行旧helper或修改它。捕获5366实际监听PID/argv/cwd，逐产物HTTP200与磁盘逐字节同、根入口同，扫描本root原exports runId及原DEV故障literal。绑定build-r3.source-after及extra身份前后；不改服务/数据库/源码/Git，不做浏览器/兼容/性能或游戏命令。

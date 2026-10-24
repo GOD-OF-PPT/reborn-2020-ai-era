@@ -1,0 +1,1 @@
+先读Git diff确认这2正式文档当前无并发未提交改动并保存原字节/模式/SHA；只加U2实施进展/规则22、docs36当前顺序与8.8阶段事实，不标U2完成，不把Native各版本混称R4全跑。引用Root已明确实测金额/日期/原revision，不计算净利润。正式链接只指已存在阶段证据。执行原plan/competitive/content与全仓text-only docs；不启动源码测试/build/性能/兼容，原23错误按原文skill引用身份保留，新增本次link/JSON必须实修。留全日志/真实exit、定向链接/JSON，主3/input/P3/530源前后只读保全；无stage/commit/seal。

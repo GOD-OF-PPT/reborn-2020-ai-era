@@ -1,0 +1,161 @@
+stderr | src/ui/OpeningMoment.focus-book.test.tsx > keeps a pending radio across groups, cancels without focus changes and confirms only the explicitly previewed original object
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 13 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/OpeningMoment.focus-book.test.tsx > keeps a pending radio across groups, cancels without focus changes and confirms only the explicitly previewed original object
+TypeError: Cannot read properties of null (reading 'useEffect')
+ ❯ process.env.NODE_ENV.exports.useEffect node_modules/react/cjs/react.development.js:1271:33
+ ❯ Module.OpeningMoment src/ui/OpeningMoment.tsx:92:2
+     90|  const [focusGroup,setFocusGroup]=useState<SeasonFocusGroup>('continue…
+     91|  const [localTodayAt,setLocalTodayAt]=useState<DayPerspective|null>(nu…
+     92|  useEffect(()=>{if(localTodayAt&&!dayPerspectiveCurrent(p.view,localTo…
+       |  ^
+     93|  const choiceName=useId(),candidates=seasonFocusChoices(p),picked=cand…
+     94|  const groupTitle=seasonFocusGroups.find(group=>group.id===focusGroup)…
+ ❯ render src/ui/OpeningMoment.focus-book.test.tsx:77:40
+ ❯ src/ui/OpeningMoment.focus-book.test.tsx:83:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/13]⎯
+
+ FAIL  src/ui/SeasonRecollection.test.tsx > reads actual payroll references and names the same historical work by its original quarter after rollover
+AssertionError: expected '<p class="opening-room-intention"><sp…' to contain '翻看2020-Q1的原工作记录'
+
+Expected: "翻看2020-Q1的原工作记录"
+Received: "<p class="opening-room-intention"><span>我想保持生活自主</span><span>保留工作，也为自己的生活留出余地。</span><button type="button">调整本季书签 ↗</button><button type="button">翻本季留页 ↗</button></p><section class="room-current-moment opening-current-moment" data-stage="work-paid" data-focus-scope="history" aria-label="眼前这一幕"><header class="moment-heading"><p>2020-Q2 / 2020-Q1 / 这一季留好的工作</p><h1 tabindex="-1">按实际在岗日，工资留下了记录。</h1></header><p class="opening-room-stage">历史回看 · 2020-Q1</p><div class="moment-story" aria-label="眼前的情况"><p class="season-focus-notice">正在回看2020-Q1，今天仍是2020-04-01。旧收支不会重记为本季收入。</p><p class="moment-line">截至2020-04-01，2020-Q1这段工作已实收工资合计¥24,000；最近一笔是2020-03-31的¥8,000。</p><p class="moment-terms">这里回看原季度工作；当前季度的工作仍须另行决定。工资与经营收入分别核对；查看不会补发工资或恢复行动。</p></div><div class="moment-decisions"><div class="command moment-decision moment-primary"><button type="button"><b aria-hidden="true">01</b><span>合上这页，回到今天<small>返回今天的选择，原来的书签保留</small></span><i aria-hidden="true">→</i></button></div><button type="button" class="moment-decision"><b aria-hidden="true">02</b><span>翻看这件事的完整原记录<small>只回看，不新增工作、交易或推进日期</small></span><i aria-hidden="true">↗</i></button><button type="button" class="moment-explore">环顾房间，想想别的可能 <span aria-hidden="true">↗</span></button></div></section><button type="button" class="opening-object" data-kind="receipt" data-day-kind="work" data-day-state="history" data-text-only="false" aria-label="2020-Q1 / 这一季留好的工作 合上这页，回到今天" aria-describedby="_R_6mr_-stage _R_6mr_-detail"><span class="opening-object-art" aria-hidden="true"><svg class="day-continuity-art" data-kind="work" data-state="history" viewBox="0 0 320 300" fill="none" aria-hidden="true" focusable="false"><ellipse class="day-paper-shadow" cx="166" cy="270" rx="119" ry="17"></ellipse><path class="day-paper-bottom" d="m46 55 229 23-17 194-229-23z"></path><g data-material="work-calendar"><path class="day-paper-cover" d="m49 43 218 23-17 192-218-23z"></path><path class="day-paper-sheet" d="m64 39 205 31-24 178-205-31z"></path><path class="day-paper-grid" d="m82 91 160 24m-163-4 160 24m-163-4 160 24m-163-4 160 24m-163-4 160 24M105 72l-17 139m48-134-17 139m48-134-17 139m48-134-17 139m48-134-17 139"></path><path class="day-paper-clip" d="m84 46 3-20c2-11 17-9 15 3l-3 20"></path></g><g data-material="archive-fold"><path class="day-paper-archive-under" d="m54 47 111 11-14 190-111-11z"></path><path class="day-paper-turned" d="m54 47 111 11-52 48-73 131z"></path><path class="day-paper-fold-edge" d="m165 58-52 48-73 131"></path><path class="day-paper-stitches" d="m61 80 12 1m-15 27 12 1m-15 27 12 1m-15 27 12 1m-15 27 12 1"></path></g></svg><span class="day-paper-contact"></span></span><span class="opening-object-copy"><span id="_R_6mr_-stage" class="opening-object-stage">历史回看 · 2020-Q1</span><strong id="_R_6mr_-title" class="opening-object-title"></strong><span id="_R_6mr_-detail" class="opening-object-detail">回响已有实际记录</span><span id="_R_6mr_-action" class="opening-object-action">合上这页，回到今天<span aria-hidden="true">↗</span></span></span></button>"
+
+ ❯ src/ui/SeasonRecollection.test.tsx:76:19
+     74|   const focus:OpeningFocus={runId:h.p().view.runId,kind:'work',account…
+     75|   const history=renderToStaticMarkup(<RoomMoment p={h.p()} headingRef=…
+     76|   expect(history).toContain('翻看2020-Q1的原工作记录');expect(history).not.toC…
+       |                   ^
+     77|  }finally{await h.close()}
+     78| },30000)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/13]⎯
+
+ FAIL  src/ui/SeasonRecollection.test.tsx > keeps an original advance exit when zero real AP cannot start the chosen free rest
+AssertionError: expected '<p class="opening-room-intention"><sp…' to contain '不新增安排，让原日子继续'
+
+Expected: "不新增安排，让原日子继续"
+Received: "<p class="opening-room-intention"><span>我想保持生活自主</span><span>选择自己愿意承担的一件安排，也可以先不新增承诺。</span><button type="button">调整本季书签 ↗</button><button type="button">翻本季留页 ↗</button></p><section class="room-current-moment opening-current-moment opening-attempt-scene" data-stage="choose" data-focus-scope="entry" aria-label="眼前这一幕"><header class="moment-heading"><p>2020-Q1 / 今天尚未写满的日历</p><h1 tabindex="-1">这一次，先决定怎样过日子。</h1></header><p class="opening-room-stage">眼前这件事 · 由你决定</p><div class="moment-story" aria-label="眼前的情况"><p class="moment-line">不必立刻接单或买股。可以保留工作、看看生活，也可以暂不新增承诺。</p><p class="moment-terms">阅读与探索不消耗行动；原生活费用和已经答应的事仍照日历继续。</p></div><div class="moment-decisions"><div class="command moment-decision moment-primary"><button type="button" aria-label="今天，先把时间留给什么"><b aria-hidden="true">01</b><span>今天，先把时间留给什么<small>工作、休整，或先看看别的可能</small></span><i aria-hidden="true">→</i></button></div><button type="button" class="moment-decision"><b aria-hidden="true">02</b><span>先看看日历上已有的安排<small>只翻阅工作与生活记录，不新增承诺</small></span><i aria-hidden="true">↗</i></button><button type="button" class="moment-explore">环顾房间，想想别的可能 <span aria-hidden="true">↗</span></button></div></section><button type="button" class="opening-object" data-kind="calendar" data-entry-paper="calendar" data-text-only="false" aria-label="今天尚未写满的日历 今天，先把时间留给什么" aria-describedby="_R_6mr_-stage _R_6mr_-detail"><span class="opening-object-art" aria-hidden="true"><svg class="opening-entry-paper" viewBox="0 0 320 300" fill="none" aria-hidden="true" focusable="false"><g class="entry-calendar-material"><path class="entry-paper-under" d="m52 58 228 19-16 197-228-19z"></path><path class="entry-paper-sheet" d="m43 47 228 19-16 197-228-19z"></path><path class="entry-calendar-binding" d="m43 47 228 19-4 43-228-19z"></path><path class="entry-paper-rings" d="m84 53 2-21c1-10 13-9 12 2l-2 21m125 10 2-21c1-10 13-9 12 2l-2 21"></path><path class="entry-calendar-grid" d="m60 113 180 15m-183 19 180 15m-182 19 179 15m-183 18 180 15M86 115l-9 111m39-108-9 111m39-108-9 111m39-109-9 111m39-108-9 111"></path><path class="entry-paper-pencil" d="m259 152 28 98-7 3-29-98 1-13z"></path></g></svg><span class="entry-paper-contact"></span></span><span class="opening-object-copy"><span id="_R_6mr_-stage" class="opening-object-stage">接下来，自己安排</span><strong id="_R_6mr_-title" class="opening-object-title"></strong><span id="_R_6mr_-detail" class="opening-object-detail">2020-01-08</span><span id="_R_6mr_-action" class="opening-object-action">今天，先把时间留给什么<span aria-hidden="true">↗</span></span></span></button>"
+
+ ❯ src/ui/SeasonRecollection.test.tsx:115:16
+    113|   expect(h.controller.preview(h.controller.prepare('StartLifeWork',{ki…
+    114|   const before=h.controller.exportSaved(),html=renderToStaticMarkup(<R…
+    115|   expect(html).toContain('不新增安排，让原日子继续')
+       |                ^
+    116|   const clock=html.match(/<button[^>]*aria-label="不新增安排，让原日子继续[^\"]*"[…
+    117|   expect(clock).toBeDefined();expect(clock).not.toContain('disabled')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/13]⎯
+
+ FAIL  src/ui/day-continuity.integration.test.tsx > keeps the real first delivery visible even when Today was requested through a season leaf
+AssertionError: expected '<link rel="preload" as="image" href="…' to contain '把作品交给客户'
+
+Expected: "把作品交给客户"
+Received: "<link rel="preload" as="image" href="/assets/ui-redesign/cinematic/props/first-attempt-v1.png"/><p class="opening-room-intention"><span>我想保持生活自主</span><span>把这笔手工委托从答复做到真实回款，再选择接下来的日子。</span><button type="button">调整本季书签 ↗</button><button type="button">翻本季留页 ↗</button></p><section class="room-current-moment opening-current-moment opening-attempt-scene" data-stage="delivery" data-focus-scope="current" aria-label="眼前这一幕"><header class="moment-heading"><p>2020-Q1 / 电脑里的手工委托</p><h1 tabindex="-1">短片做好了。要发给客户吗？</h1></header><p class="opening-room-stage">制作完成 · 等你提交</p><div class="moment-story" aria-label="眼前的情况"><p class="moment-line">完成制作与交给客户是两回事；提交不再占用行动，复核与到账还在后面。</p><p class="moment-terms">个人制作成本¥500 · 1点 · 2020-01-05—2020-01-19</p></div><div class="moment-decisions"><div class="command moment-decision moment-primary"><button type="button" class="" aria-label="把这份作品交给客户"><b aria-hidden="true">01</b><span>把这份作品交给客户<small>看清投入，再由你确认</small></span><i aria-hidden="true">→</i></button></div><div class="command moment-decision"><button type="button" class="" aria-label="先保留这一季的工作"><b aria-hidden="true">02</b><span>先保留这一季的工作<small>共享本季2点 · 按实际在岗日领工资，可与副业组合</small></span><i aria-hidden="true">→</i></button></div><button type="button" class="moment-explore">环顾房间，想想别的可能 <span aria-hidden="true">↗</span></button></div></section><button type="button" class="opening-object" data-kind="work" data-first-order-phase="delivery" data-text-only="false" aria-label="电脑里的手工委托 把这份作品交给客户" aria-describedby="_R_6mr_-stage _R_6mr_-detail _R_6mr_-date"><span class="opening-object-art" aria-hidden="true"><img src="/assets/ui-redesign/cinematic/props/first-attempt-v1.png" alt="" width="1280" height="1280" decoding="async"/><span class="first-order-contact"></span><svg class="first-order-paper-layers" viewBox="0 0 320 300" fill="none" aria-hidden="true" focusable="false"><g class="first-order-ready-work"><path class="first-order-sheet" d="m135 18 111 18-13 90-112-18z"></path><path class="first-order-sheet-under" d="m125 26 111 18-13 90-111-18z"></path><path class="first-order-film" d="m141 50 80 13-6 36-80-13z"></path><path class="first-order-film-ink" d="m151 62 56 9m-59 6 56 9m-45-27-5 28m23-25-5 28m23-25-5 28"></path><path class="first-order-tie" d="m123 112 113 19m-54-12-3 17"></path></g></svg></span><span class="opening-object-copy"><span id="_R_6mr_-stage" class="opening-object-stage">作品待提交</span><strong id="_R_6mr_-title" class="opening-object-title"></strong><span id="_R_6mr_-date" class="first-order-date-strip">提交 2020-01-19</span><span id="_R_6mr_-detail" class="opening-object-detail"></span><span id="_R_6mr_-action" class="opening-object-action">把这份作品交给客户<span aria-hidden="true">↗</span></span></span></button>"
+
+ ❯ src/ui/day-continuity.integration.test.tsx:88:16
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/13]⎯
+
+ FAIL  src/ui/player-thread.test.ts > keeps the technical_employee actual first-order stages and atomic payment tied to one original contract
+ FAIL  src/ui/player-thread.test.ts > keeps the content_employee actual first-order stages and atomic payment tied to one original contract
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/player-thread.test.ts:56:60
+     54| })
+     55|
+     56| it.each(['technical_employee','content_employee'] as const)('keeps the…
+       |                                                            ^
+     57|  const h=await normal('first-'+background,'first_order',background)
+     58|  try{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/13]⎯
+
+ FAIL  src/ui/player-thread.test.ts > preserves the real declined first-order exit without a success, reward or replacement order
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/player-thread.test.ts:89:86
+     87| })
+     88|
+     89| it.each(['declined','skipped','expired','cancelled','interrupted','mis…
+       |                                                                                      ^
+     90|  const h=await normal('exit-'+state,'first_order')
+     91|  try{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/13]⎯
+
+ FAIL  src/ui/player-thread.test.ts > lets a free life retain real work and salary without making it exclusive with the manual order
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/player-thread.test.ts:199:1
+    197| })
+    198|
+    199| it('lets a free life retain real work and salary without making it exc…
+       | ^
+    200|  const h=await normal('work')
+    201|  try{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/13]⎯
+
+ FAIL  src/ui/player-thread.test.ts > follows explicit saved first-order choices while work and time do not steal another intended object
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/player-thread.test.ts:262:1
+    260| })
+    261|
+    262| it('follows explicit saved first-order choices while work and time do …
+       | ^
+    263|  const h=await normal('saved-focus')
+    264|  try{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/13]⎯
+
+ FAIL  src/ui/player-thread.test.ts > recovers the last explicit non-work life-last source among real arrangements while an automatic invitation never steals it
+ FAIL  src/ui/player-thread.test.ts > recovers the last explicit non-work market-last source among real arrangements while an automatic invitation never steals it
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/player-thread.test.ts:387:46
+    385| })
+    386|
+    387| it.each(['life-last','market-last'] as const)('recovers the last expli…
+       |                                              ^
+    388|  const h=await normal('reopen-multiple-'+order)
+    389|  try{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/13]⎯
+
+ FAIL  src/ui/today-thread.test.ts > keeps a real first salary active, then separates the quarter result from old history without renewing work
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/today-thread.test.ts:37:1
+     35| })
+     36|
+     37| it('keeps a real first salary active, then separates the quarter resul…
+       | ^
+     38|  const h=normal('work');h.send('WorkQuarter',{});let p=h.p()
+     39|  const period=p.view.operations!.employment[0]!,pin:OpeningFocus={runI…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/13]⎯
+
+ FAIL  src/ui/today-thread.test.ts > carries an actual rest job across a quarter and only calls its later public completion a result
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/today-thread.test.ts:56:1
+     54| })
+     55|
+     56| it('carries an actual rest job across a quarter and only calls its lat…
+       | ^
+     57|  const h=normal('rest');h.advance('2020-03-28');h.send('StartLifeWork'…
+     58|  let p=h.p();const job=p.features.life.jobs.at(-1)!,pin:OpeningFocus={…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/13]⎯
+

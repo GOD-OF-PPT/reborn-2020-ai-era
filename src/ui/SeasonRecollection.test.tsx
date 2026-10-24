@@ -91,6 +91,24 @@ it('blocks an otherwise valid real simulated order while its bookmark is unread,
  }finally{await h.close()}
 },20000)
 
+it('keeps actual Q1 payroll sources while explicitly labeling the combined calendar link as today in Q2',async()=>{
+ const h=await normal('historical-ledger-label')
+ try{
+  await h.send('WorkQuarter',{});await h.advance('2020-04-01')
+  const p=h.p(),before=h.controller.exportSaved(),payroll=p.view.operations!.payroll.filter(row=>row.kind==='salary'&&row.through<'2020-04-01')
+  expect(p.features.workbench.quarter).toBe('2020-Q2');expect(payroll).toHaveLength(3)
+  const html=renderToStaticMarkup(<SeasonRecollection p={p} quarter="2020-Q1" onClose={()=>{}} onNavigate={()=>{throw Error('RENDER_MUST_NOT_NAVIGATE')}}/>)
+  expect(html).toContain('正在翻阅2020-Q1');expect(html).toContain('今天仍是2020-04-01')
+  expect(html.match(/转看今天（2020-Q2）的全部安排与原账/g)).toHaveLength(2)
+  expect(html).toContain('上方保留2020-Q1的有据节点与具体原对象')
+  for(const row of payroll){expect(html).toContain(row.id);expect(html).toContain(row.through)}
+  expect(html).toContain('翻看这段原工作与工资记录')
+  expect(html).not.toContain('翻开全部本季原账');expect(html).not.toContain('翻看这季完整原记录')
+  expect(html).not.toContain('核对旧约定，进入下一季')
+  expect(h.controller.exportSaved()).toBe(before);expect(h.p().view.budget.available).toBe(4)
+ }finally{await h.close()}
+},30000)
+
 it('offers the original clock directly after an actual rest result without creating another arrangement',async()=>{
  const h=await normal('rest-continue')
  try{

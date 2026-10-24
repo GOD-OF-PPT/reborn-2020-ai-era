@@ -1,0 +1,156 @@
+--- /dev/null
++++ b/src/ui/DayContinuityPaper.tsx
+@@ -0,0 +1,73 @@
++import './day-continuity.css'
++
++export type DayContinuityArt={kind:'today'|'work'|'life'|'market';state:'history'|'result'|'ongoing'|'carry'}
++
++/** The parent supplies committed context and all words. These papers have no business behaviour. */
++export function DayContinuityPaper({art}:{art:DayContinuityArt}){
++ return <svg className="day-continuity-art" data-kind={art.kind} data-state={art.state} viewBox="0 0 320 300" fill="none" aria-hidden="true" focusable="false">
++  <ellipse className="day-paper-shadow" cx="166" cy="270" rx="119" ry="17"/>
++  <path className="day-paper-bottom" d="m46 55 229 23-17 194-229-23z"/>
++  {art.kind==='today'?<g data-material="empty-calendar">
++   <path className="day-paper-sheet" d="m46 43 226 25-18 190-226-25z"/>
++   <path className="day-paper-cover" d="m46 43 226 25-4 37-226-25z"/>
++   <path className="day-paper-ring" d="m82 49 2-20c1-10 13-8 12 2l-2 20m127 12 2-20c1-10 13-8 12 2l-2 20"/>
++   <path className="day-paper-grid" d="m57 112 187 20m-190 16 187 20m-190 16 187 20m-190 16 187 20M86 115l-10 119m38-116-10 119m38-116-10 119m38-116-10 119m38-116-10 119m38-116-10 119"/>
++  </g>:null}
++  {art.kind==='work'?<g data-material="work-calendar">
++   <path className="day-paper-cover" d="m49 43 218 23-17 192-218-23z"/>
++   <path className="day-paper-sheet" d="m64 39 205 31-24 178-205-31z"/>
++   <path className="day-paper-grid" d="m82 91 160 24m-163-4 160 24m-163-4 160 24m-163-4 160 24m-163-4 160 24M105 72l-17 139m48-134-17 139m48-134-17 139m48-134-17 139m48-134-17 139"/>
++   <path className="day-paper-clip" d="m84 46 3-20c2-11 17-9 15 3l-3 20"/>
++   {art.state==='result'?<g data-material="wage-trace">
++    <path className="day-paper-kept" d="m184 169 98 11-9 67-98-11z"/>
++    <path className="day-paper-perforation" d="m187 181 83 9"/>
++    <path className="day-paper-ink" d="m189 197 64 7m-66 6 46 5m-48 7 64 7"/>
++   </g>:null}
++  </g>:null}
++  {art.kind==='life'?<g data-material="life-notebook">
++   <path className="day-paper-cover" d="m38 67 116-16 129 35-23 169-117-23-120 4z"/>
++   <path className="day-paper-sheet" d="m47 55 107-12-12 170-110 8z"/>
++   <path className="day-paper-warm-sheet" d="m154 43 121 34-23 161-110-25z"/>
++   <path className="day-paper-seam" d="m154 43-12 170"/>
++   <path className="day-paper-ink" d="m63 92 65-7m-67 23 65-6m-67 23 65-7m51-19 71 19m-74-3 71 19m-73-3 70 19"/>
++   <path className="day-paper-bookmark" d="m170 48 15 4-21 182-7-11-9 7z"/>
++   {art.state==='result'?<g data-material="kept-life-page">
++    <path className="day-paper-leaf" d="M201 169c-25-13-30 14-10 31 22 1 37-18 10-31z"/>
++    <path className="day-paper-seam" d="m186 207 20-31m-11 17-7-11m10 6 13-1"/>
++   </g>:null}
++  </g>:null}
++  {art.kind==='market'?<g data-material="market-records">
++   <path className="day-paper-cover" d="m53 40 222 35-28 194-222-35z"/>
++   <path className="day-paper-warm-sheet" d="m67 38 204 33-28 178-204-33z"/>
++   <path className="day-paper-sheet" d="m81 36 190 40-34 161-190-40z"/>
++   <path className="day-paper-ink" d="m99 77 133 28m-136-12 102 21m-106-4 131 27m-134-11 110 23"/>
++   <path className="day-paper-tab" d="m48 102 24 5-9 43-24-5z"/>
++   {art.state==='result'?<g data-material="execution-note">
++    <path className="day-paper-kept" d="m170 175 110 14-8 54-110-14z"/>
++    <path className="day-paper-ink" d="m181 192 84 11m-86 3 48 6m-50 7 84 10"/>
++    <path className="day-paper-clip" d="m187 175 2-14c1-8 13-6 12 2l-2 14"/>
++   </g>:<g data-material="reading-lens">
++    <circle className="day-paper-lens" cx="222" cy="199" r="30"/>
++    <circle className="day-paper-rim" cx="222" cy="199" r="35"/>
++    <path className="day-paper-handle" d="m197 226-37 39"/>
++   </g>}
++  </g>:null}
++  {art.state==='history'?<g data-material="archive-fold">
++   <path className="day-paper-archive-under" d="m54 47 111 11-14 190-111-11z"/>
++   <path className="day-paper-turned" d="m54 47 111 11-52 48-73 131z"/>
++   <path className="day-paper-fold-edge" d="m165 58-52 48-73 131"/>
++   <path className="day-paper-stitches" d="m61 80 12 1m-15 27 12 1m-15 27 12 1m-15 27 12 1m-15 27 12 1"/>
++  </g>:art.state==='carry'?<g data-material="continuation-tab">
++   <path className="day-paper-continuation" d="m238 114 55 8-21 143-19-16-23 10z"/>
++   <path className="day-paper-fold-edge" d="m247 126 35 5-16 112"/>
++   <path className="day-paper-perforation" d="m249 149 26 4m-30 24 26 4m-30 24 26 4"/>
++  </g>:art.state==='ongoing'?<g data-material="open-page">
++   <path className="day-paper-warm-sheet" d="m69 197 126 16-6 44-126-16z"/>
++   <path className="day-paper-ink" d="m81 211 100 13m-102 0 78 10"/>
++   <path className="day-paper-clip" d="m165 210 3-18c1-9 14-7 13 2l-3 18"/>
++  </g>:<g data-material="kept-result-edge">
++   <path className="day-paper-kept" d="m54 206 98 12-5 38-98-12z"/>
++   <path className="day-paper-ink" d="m64 219 74 9m-76 2 48 6"/>
++  </g>}
++ </svg>
++}
+--- /dev/null
++++ b/src/ui/DayContinuityPaper.test.tsx
+@@ -0,0 +1,47 @@
++import {expect,it} from 'vitest'
++import {renderToStaticMarkup} from 'react-dom/server'
++import {DayContinuityPaper,type DayContinuityArt} from './DayContinuityPaper.tsx'
++
++const kinds:readonly DayContinuityArt['kind'][]=['today','work','life','market']
++const states:readonly DayContinuityArt['state'][]=['history','result','ongoing','carry']
++const render=(art:DayContinuityArt)=>renderToStaticMarkup(<DayContinuityPaper art={art}/>)
++// Compare vector contents, never window geometry, CSS dimensions or a measured layout.
++const shapes=(html:string)=>(html.match(/<(?:path|circle|ellipse|rect|polygon)\b[^>]*>/g)??[]).map(s=>s.replace(/ class="[^"]*"/g,'')).join('')
++
++it('keeps every paper decorative, without a command, invented date, quote or reward text',()=>{
++ for(const kind of kinds)for(const state of states){
++  const svg=DayContinuityPaper({art:{kind,state}}),html=renderToStaticMarkup(svg)
++  expect(svg.type).toBe('svg')
++  expect(svg.props['aria-hidden']).toBe('true')
++  expect(svg.props.focusable).toBe('false')
++  expect(html).not.toMatch(/<(?:text|image|foreignObject|button|a|script)\b/)
++  expect(html).not.toMatch(/¥|￥|利润|收入|到账|20\d{2}-\d{2}-\d{2}/)
++ }
++})
++
++it('changes native paper contents for history, results, ongoing work and carry rather than only a label',()=>{
++ for(const kind of kinds)expect(new Set(states.map(state=>shapes(render({kind,state})))).size).toBe(states.length)
++ expect(new Set(kinds.map(kind=>shapes(render({kind,state:'ongoing'})))).size).toBe(kinds.length)
++})
++
++it('retains the work calendar when a wage trace is added, without declaring the work closed',()=>{
++ const html=render({kind:'work',state:'result'})
++ expect(html).toContain('data-material="work-calendar"')
++ expect(html).toContain('data-material="wage-trace"')
++ expect(html).not.toContain('data-material="archive-fold"')
++ expect(html).not.toContain('closed')
++})
++
++it('keeps life and market results distinct from cash receipts, and carry distinct from archival reading',()=>{
++ const life=render({kind:'life',state:'result'}),market=render({kind:'market',state:'result'})
++ expect(life).toContain('data-material="kept-life-page"')
++ expect(market).toContain('data-material="execution-note"')
++ expect(life+market).not.toMatch(/wage-trace|cash|receipt/)
++ for(const kind of kinds){
++  const carry=render({kind,state:'carry'}),history=render({kind,state:'history'})
++  expect(carry).toContain('data-material="continuation-tab"')
++  expect(carry).not.toContain('data-material="archive-fold"')
++  expect(history).toContain('data-material="archive-fold"')
++  expect(history).not.toContain('data-material="continuation-tab"')
++ }
++})
+--- /dev/null
++++ b/src/ui/day-continuity.css
+@@ -0,0 +1,27 @@
++/* The caller mounts this in the existing 160px desk plane with 850px perspective. */
++.day-continuity-art{position:absolute;inset:auto 0 0;width:100%;height:280px;transform-origin:50% 100%;transform:rotateX(58deg) rotateZ(-8deg);overflow:visible;pointer-events:none}
++.day-continuity-art .day-paper-shadow{fill:#14231e61}
++.day-continuity-art .day-paper-bottom{fill:#b9a884;stroke:#887c5c;stroke-width:1.2}
++.day-continuity-art .day-paper-sheet{fill:#f0e3c4;stroke:#bba57c;stroke-width:1.2}
++.day-continuity-art .day-paper-warm-sheet{fill:#e5d5ae;stroke:#b29d74;stroke-width:1.2}
++.day-continuity-art .day-paper-cover{fill:#63735b;stroke:#405844;stroke-width:1.5}
++.day-continuity-art .day-paper-ring{stroke:#a1874e;stroke-width:5;stroke-linecap:round}
++.day-continuity-art .day-paper-grid{stroke:#9c9876;stroke-width:1.1}
++.day-continuity-art .day-paper-clip{stroke:#aa894e;stroke-width:3;stroke-linecap:round}
++.day-continuity-art .day-paper-kept{fill:#f3e7c9;stroke:#aa9874;stroke-width:1.2}
++.day-continuity-art .day-paper-ink{stroke:#948d6c;stroke-width:1.4;stroke-linecap:round}
++.day-continuity-art .day-paper-perforation{stroke:#9b8964;stroke-width:1.2;stroke-dasharray:4 4}
++.day-continuity-art .day-paper-seam{stroke:#9c8d66;stroke-width:1.5}
++.day-continuity-art .day-paper-bookmark{fill:#b5965c;stroke:#8e7544;stroke-width:1}
++.day-continuity-art .day-paper-leaf{fill:#93a17e;stroke:#667851;stroke-width:1.2}
++.day-continuity-art .day-paper-tab{fill:#b49459;stroke:#8f7645;stroke-width:1.1}
++.day-continuity-art .day-paper-lens{fill:#9aaea34d;stroke:#d6d7b9;stroke-width:1.2}
++.day-continuity-art .day-paper-rim{stroke:#8d784f;stroke-width:5}
++.day-continuity-art .day-paper-handle{stroke:#50644d;stroke-width:9;stroke-linecap:round}
++.day-continuity-art .day-paper-archive-under{fill:#cfc8ad;stroke:#a59c7c;stroke-width:1.2}
++.day-continuity-art .day-paper-turned{fill:#e0d8bd;stroke:#a99e7b;stroke-width:1.2}
++.day-continuity-art .day-paper-fold-edge{stroke:#a28b59;stroke-width:1.5}
++.day-continuity-art .day-paper-stitches{stroke:#8d846a;stroke-width:2;stroke-linecap:round}
++.day-continuity-art .day-paper-continuation{fill:#d6b877;stroke:#9f8148;stroke-width:1.3}
++.day-continuity-art[data-state=history] .day-paper-bottom{fill:#ada68b}
++.day-continuity-art[data-state=carry] .day-paper-continuation{stroke-width:2}

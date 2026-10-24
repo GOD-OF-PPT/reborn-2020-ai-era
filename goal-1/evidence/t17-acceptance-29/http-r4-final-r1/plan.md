@@ -1,0 +1,1 @@
+复制已修字段比较的R3 helper到本fresh guarded根，仅R4路径/输出名和scope适配，旧helper不改。逐47产物/根HTTP字节，原exports runId和DEV入口/库名literal扫描；当前530源精确集合/bytes/hash/mode及原P3 26路径与baseline桥接，额外runner/guard仍同。记录实际监听PID/完整argv/cwd与终态，前后核同一服务。无build、源码/配置/masters/Git或服务改动，无浏览器/游戏/兼容/性能测试。

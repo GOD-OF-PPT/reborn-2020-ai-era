@@ -135,7 +135,7 @@ function resolvedFocus(p:Input,f:OpeningFocus):OpeningFocus{
   const progress=lifeSceneProgress(p.features.life,p.view.date,f.selection)
   return {...f,entityId:progress.sourceId}
  }
- if(f.kind==='work'&&f.entityId===null)return {...f,entityId:p.features.workbench.employment.at(-1)?.id??null}
+ if(f.kind==='work'&&f.entityId===null)return {...f,entityId:p.features.workbench.employment.filter(period=>period.quarter===p.features.workbench.quarter).at(-1)?.id??null}
  return f
 }
 
@@ -264,9 +264,16 @@ function focusOpen(p:Input,f:OpeningFocus){
  if(f.kind==='market'){
   const m=p.features.market
   return m.orders.some(o=>o.id===id&&['planned','pending','partially_filled'].includes(o.status))||m.researches.some(r=>r.id===id&&r.status==='running')||m.settlements.some(s=>s.id===id&&s.paidAt===null)||m.positions.some(x=>x.id===id&&x.quantity>0)
-   ||m.fills.some(fill=>fill.orderId===id&&m.settlements.some(s=>s.sourceId===fill.id&&s.paidAt===null))
+   ||marketOrderResults(p,f).settlements.some(settlement=>settlement.paidAt===null)
  }
  return false
+}
+function marketOrderResults(p:Input,f:Extract<OpeningFocus,{kind:'market'}>){
+ const market=p.features.market,order=market.orders.find(order=>order.id===f.entityId&&order.accountId===f.accountId),position=market.positions.find(position=>position.id===f.entityId&&position.accountId===f.accountId)
+ const symbol=order?.symbol??position?.symbol,orderIds=new Set(order?[order.id]:position?market.orders.filter(order=>order.accountId===f.accountId&&order.symbol===position.symbol).map(order=>order.id):[])
+ const fills=market.fills.filter(fill=>orderIds.has(fill.orderId)&&fill.date<=p.view.date),fillIds=new Set(fills.map(fill=>fill.id))
+ const settlements=market.settlements.filter(settlement=>settlement.accountId===f.accountId&&settlement.symbol===symbol&&settlement.kind==='sale'&&fillIds.has(settlement.sourceId))
+ return {fills,settlements}
 }
 function focusResultDate(p:Input,f:OpeningFocus):string|null{
  if(f.kind==='relay')return relayFocusResultDate(p,f)
@@ -276,7 +283,12 @@ function focusResultDate(p:Input,f:OpeningFocus):string|null{
  if(f.kind==='first-order'){const c=p.view.operations?.contracts.find(c=>c.id===p.features.firstOrder.contractId);return c?.settledAt??c?.reviewedAt??null}
  if(f.kind==='work')return p.view.operations?.payroll.filter(x=>x.entityId===id&&x.kind==='salary'&&x.amountFen>0).map(x=>x.through).sort().at(-1)??null
  if(f.kind==='life'){const j=p.features.life.jobs.find(j=>j.id===id),o=p.features.life.promises.find(o=>o.id===id);return j?.status==='completed'?j.completeAt:j?.releasedAt??o?.resolvedAt??null}
- if(f.kind==='market'){const m=p.features.market,r=m.researches.find(r=>r.id===id),s=m.settlements.find(s=>s.id===id);return r?.status==='completed'?r.completeAt:s?.paidAt??m.fills.filter(x=>x.orderId===id).map(x=>x.date).sort().at(-1)??null}
+ if(f.kind==='market'){
+  const m=p.features.market,r=m.researches.find(r=>r.id===id),s=m.settlements.find(s=>s.id===id&&s.accountId===f.accountId),results=marketOrderResults(p,f)
+  if(r?.status==='completed')return r.completeAt
+  const paidAt=[...results.settlements,...(s?[s]:[])].flatMap(row=>row.paidAt!==null&&row.paidAt<=p.view.date?[row.paidAt]:[])
+  return [...results.fills.map(fill=>fill.date),...paidAt].sort().at(-1)??null
+ }
  return null
 }
 function legacyPending(p:Input){
@@ -316,10 +328,9 @@ function marketScene(p:Input,f:Extract<OpeningFocus,{kind:'market'}>):Scene{
  const inspect={screen:'market' as const,label:'查看这份模拟投资与原记录',target:{accountId:f.accountId,...(f.entityId?{recordId:f.entityId}:{})}}
  const research=m.researches.find(r=>r.id===f.entityId),resultRefs:ThreadResultRef[]=[]
  if(research&&research.status!=='running')return {stage:'market-research-'+research.status,object:'原来的公开研究笔记',title:research.status==='completed'?'这次公开研究，已经完成。':'这次研究，已经中断。',line:'整理材料不会揭示未来价格，也没有替你下单；下一份委托仍需自己选择。',detail:'研究与买股分别发生，原成本和行动按实际记录保留。',outcome:research.status==='completed'?'actual':'non-success',inspect,resultRefs:research.status==='completed'?[{kind:'research',id:research.id,date:research.completeAt}]:[]}
- const order=m.orders.find(o=>o.id===f.entityId)
- const position=m.positions.find(o=>o.id===f.entityId)
- const sourceOrders=new Set(order?[order.id]:position?m.orders.filter(o=>o.accountId===f.accountId&&o.symbol===position.symbol).map(o=>o.id):[])
- for(const fill of m.fills.filter(x=>sourceOrders.has(x.orderId)&&x.date<=p.view.date))resultRefs.push({kind:'fill',id:fill.id,date:fill.date})
+ const order=m.orders.find(o=>o.id===f.entityId),results=marketOrderResults(p,f)
+ for(const fill of results.fills)resultRefs.push({kind:'fill',id:fill.id,date:fill.date})
+ for(const settlement of results.settlements)if(settlement.paidAt!==null&&settlement.paidAt<=p.view.date)resultRefs.push({kind:'settlement',id:settlement.id,date:settlement.paidAt})
  const settlement=m.settlements.find(s=>s.id===f.entityId)
  if(settlement?.paidAt&&settlement.paidAt<=p.view.date)resultRefs.push({kind:'settlement',id:settlement.id,date:settlement.paidAt})
  const rejected=order&&['cancelled','expired'].includes(order.status)

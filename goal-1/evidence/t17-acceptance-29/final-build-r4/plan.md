@@ -1,0 +1,1 @@
+复用现有run-step-r1.mjs只顺序npm run typecheck→vite build --outDir .delivery/t17-u2-r4，原530源和helper/guard extra初末由原runner记录。全新R4目录，不切5366，不改配置/时限/测试/源码/masters/Git。R3 HTTP合同与当前2源标签补丁身份分开；实际终态/日志读回后交Root，不预报。

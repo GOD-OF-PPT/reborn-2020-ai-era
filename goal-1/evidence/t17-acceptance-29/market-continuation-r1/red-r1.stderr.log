@@ -1,0 +1,36 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/market-scene-progress.test.tsx > presents real deferred sale proceeds as a dated wait and keeps research on the personal account
+AssertionError: expected { accountId: 'personal', …(10) } to match object { phase: 'settlement', …(5) }
+(9 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "active": true,
++   "active": false,
+    "entityId": "market:bb6edca153c5cc20c49b2b6e07a57a69",
+-   "nextDate": "2020-01-21",
+    "order": {
+      "id": "market:bb6edca153c5cc20c49b2b6e07a57a69",
+    },
+-   "phase": "settlement",
+-   "settlement": {
+-     "id": "market:954335c4655fa199adbb01c0641a6d1b",
+-   },
++   "phase": "history",
++   "settlement": null,
+  }
+
+ ❯ src/ui/market-scene-progress.test.tsx:103:28
+    101|   const originalSale=p.features.market.orders.find(order=>order.side==…
+    102|   const originalProgress=marketSceneProgress(p.features.market,p.view.…
+    103|   expect(originalProgress).toMatchObject({phase:'settlement',active:tr…
+       |                            ^
+    104|   expect(originalProgress.command).toBeUndefined();expect(originalProg…
+    105|   expect(progress.line).toContain('眼下仍不可花')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

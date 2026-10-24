@@ -9,14 +9,17 @@ import {abortAfterHeadWrite} from '../testing/abort-after-write.ts'
 import type {GamePanelProps,PlayingView,PlayFeatures} from './game-types.ts'
 import type {OpeningFocus} from './player-thread.ts'
 import {openingFocusAfterSave,openingFocusFor,playerThread} from './player-thread.ts'
+import retainedWorkQ2Raw from '../../goal-1/evidence/t17-acceptance-22/chrome-production-r4/work-q2-r4-original-readback.json?raw'
 
 type Input=Pick<GamePanelProps,'view'|'features'>
 const input=(view:PlayingView):Input=>({view,features:view.features as unknown as PlayFeatures})
-async function normal(name:string,approach:PlayingView['playerProfile']['approach']='free',backgroundId:'technical_employee'|'content_employee'='technical_employee'){
+async function normal(name:string,approach:PlayingView['playerProfile']['approach']='free',backgroundId:'technical_employee'|'content_employee'='technical_employee',raw?:string){
  const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'s1-thread-'+name})
  let count=0
  const controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=>`s1-thread-${name}-${++count}`})
- await controller.initialize();await controller.newLife({backgroundId,playerProfile:{wishId:'autonomy',approach},seed:'s1-thread-'+name})
+ await controller.initialize()
+ if(raw)await controller.importNew(raw)
+ else await controller.newLife({backgroundId,playerProfile:{wishId:'autonomy',approach},seed:'s1-thread-'+name})
  const p=()=>input(controller.snapshot.view!)
  const send=async(kind:string,payload:unknown)=>{const result=await controller.submit(controller.prepare(kind,payload));expect(result.status,JSON.stringify({kind,payload,result})).toBe('saved')}
  const advance=async(date:string)=>{for(let i=0;i<20;i++){
@@ -210,8 +213,36 @@ it('lets a free life retain real work and salary without making it exclusive wit
   await h.advance('2020-01-31')
   thread=playerThread(h.p(),focus)
   expect(thread.stage).toBe('work-paid')
+  expect(thread.wait).toEqual({date:'2020-02-29',label:'等下一次原工作日历反馈'})
   expect(thread.resultRefs.some(ref=>ref.kind==='payroll'&&h.p().view.operations!.payroll.some(row=>row.id===ref.id&&row.kind==='salary'))).toBe(true)
   expect(thread.focus.entityId).toBe(focus.entityId)
+ }finally{await h.close()}
+})
+
+it('keeps a current-quarter work entry empty until an actual new work decision, while the specified old salary stays historical',async()=>{
+ const h=await normal('work-current-entry','free','technical_employee',retainedWorkQ2Raw)
+ try{
+  const p=h.p(),old=p.view.operations!.employment.find(period=>period.quarter==='2020-Q1')!
+  expect(p.view.date).toBe('2020-04-01');expect(p.features.workbench.quarter).toBe('2020-Q2')
+  expect(p.view.operations!.employment.some(period=>period.quarter==='2020-Q2')).toBe(false)
+  const historical=openingFocusFor(p,'quarter',{accountId:'personal',recordId:old.id})!
+  const originalThread=playerThread(p,historical,'2020-Q1'),raw=h.controller.exportSaved(),budget=p.view.budget,accounts=p.view.accounts
+  expect(originalThread).toMatchObject({focusScope:'history',focus:{entityId:old.id}})
+  expect(originalThread.command).toBeUndefined()
+  const entry=openingFocusFor(p,'quarter',{accountId:'personal'})!,today=playerThread(p,entry,'2020-Q2')
+  expect(entry).toMatchObject({kind:'work',entityId:null})
+  expect(today).toMatchObject({focusScope:'entry',stage:'work-offer',command:{kind:'WorkQuarter',payload:{},confirm:true}})
+  // Defensive display boundary only: this is not imported or represented as a normal campaign.
+  const withHistoricalRows={...p,features:{...p.features,workbench:{...p.features.workbench,employment:[...p.view.operations!.employment]}}}
+  expect(openingFocusFor(withHistoricalRows,'quarter',{accountId:'personal'})).toMatchObject({kind:'work',entityId:null})
+  expect(today.resultRefs).toEqual([]);expect(today.wait).toBeUndefined()
+  expect(h.controller.preview(h.controller.prepare('WorkQuarter',{})).allowed).toBe(true)
+  expect(h.controller.exportSaved()).toBe(raw);expect(h.p().view.budget).toEqual(budget);expect(h.p().view.accounts).toEqual(accounts)
+  await h.send('WorkQuarter',{})
+  const current=openingFocusFor(h.p(),'quarter',{accountId:'personal'})!,period=h.p().view.operations!.employment.find(period=>period.quarter==='2020-Q2')!
+  expect(current.entityId).toBe(period.id);expect(current.entityId).not.toBe(old.id)
+  expect(playerThread(h.p(),historical,'2020-Q1').resultRefs).toEqual(originalThread.resultRefs)
+  expect(playerThread(h.p(),historical,'2020-Q1').command).toBeUndefined()
  }finally{await h.close()}
 })
 

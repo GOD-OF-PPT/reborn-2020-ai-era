@@ -1,0 +1,1 @@
+最后新2Create齐后请将最终production leak扫描补2runId（当前12raw已齐，1新增DEV正常run f b8...完整life-fb8a1287-8767-46bb-b4e1-0b38ff7dd06f），单独复用R4检查为http-r4-final-r2，不重build/源码/兼容；47byte同+530source仍同+2IDs/33DEV0，标R1仅1ID历史。Native其余已齐/root验证已正式落。docs修完/新check完成停止writer。

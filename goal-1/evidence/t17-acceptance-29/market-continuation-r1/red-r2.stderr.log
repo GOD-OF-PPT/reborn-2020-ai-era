@@ -1,0 +1,195 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/market-scene-progress.test.tsx > keeps the original normal Q1 sale waiting for its own Q2 cash and dates the actual result without replacing its pin
+AssertionError: expected { accountId: 'personal', …(10) } to match object { phase: 'settlement', …(5) }
+(9 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "active": true,
++   "active": false,
+    "entityId": "market:9bd1537cb9ba5ec5b6c1fe1bbbe9b0ce",
+-   "nextDate": "2020-04-01",
+    "order": {
+      "id": "market:9bd1537cb9ba5ec5b6c1fe1bbbe9b0ce",
+    },
+-   "phase": "settlement",
+-   "settlement": {
+-     "id": "market:b133e18ae20db94c124fc0625a7224d7",
+-   },
++   "phase": "history",
++   "settlement": null,
+  }
+
+ ❯ src/ui/market-scene-progress.test.tsx:76:20
+     74|   expect(settlement).toMatchObject({accountId:'personal',dueAt:'2020-0…
+     75|   const raw=h.controller.exportSaved(),progress=marketSceneProgress(p.…
+     76|   expect(progress).toMatchObject({phase:'settlement',active:true,entit…
+       |                    ^
+     77|   expect(thread).toMatchObject({focus:{entityId:sale.id,accountId:'per…
+     78|   expect(thread.resultRefs.some(ref=>ref.kind==='settlement')).toBe(fa…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  src/ui/market-scene-progress.test.tsx > keeps a real partially filled sale cancellable while its own earlier cash settlement still waits
+AssertionError: expected { accountId: 'personal', …(13) } to match object { Object (phase, active, ...) }
+(33 matching properties omitted from actual)
+
+- Expected
++ Received
+
+@@ -1,9 +1,9 @@
+  {
+    "active": true,
+    "entityId": "market:62bc4159180f5acba0d6fbdf5e8d4a1d",
+-   "nextDate": "2020-02-21",
++   "nextDate": "2020-02-29",
+    "phase": "partial",
+    "secondaryCommand": {
+      "kind": "CancelStockOrder",
+      "payload": {
+        "orderId": "market:62bc4159180f5acba0d6fbdf5e8d4a1d",
+
+ ❯ src/ui/market-scene-progress.test.tsx:113:20
+    111|   expect(p.features.market.orders.find(order=>order.id===sale.id)).toM…
+    112|   const progress=marketSceneProgress(p.features.market,p.view.date,'pe…
+    113|   expect(progress).toMatchObject({phase:'partial',active:true,entityId…
+       |                    ^
+    114|   expect(progress.line).toContain('交收')
+    115|   const cash=p.view.accounts.find(account=>account.accountId==='person…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  src/ui/market-scene-progress.test.tsx > presents real deferred sale proceeds as a dated wait and keeps research on the personal account
+AssertionError: expected { accountId: 'personal', …(10) } to match object { phase: 'settlement', …(5) }
+(9 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "active": true,
++   "active": false,
+    "entityId": "market:bb6edca153c5cc20c49b2b6e07a57a69",
+-   "nextDate": "2020-01-21",
+    "order": {
+      "id": "market:bb6edca153c5cc20c49b2b6e07a57a69",
+    },
+-   "phase": "settlement",
+-   "settlement": {
+-     "id": "market:954335c4655fa199adbb01c0641a6d1b",
+-   },
++   "phase": "history",
++   "settlement": null,
+  }
+
+ ❯ src/ui/market-scene-progress.test.tsx:173:28
+    171|   const originalSale=p.features.market.orders.find(order=>order.side==…
+    172|   const originalProgress=marketSceneProgress(p.features.market,p.view.…
+    173|   expect(originalProgress).toMatchObject({phase:'settlement',active:tr…
+       |                            ^
+    174|   expect(originalProgress.command).toBeUndefined();expect(originalProg…
+    175|   expect(progress.line).toContain('眼下仍不可花')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  src/ui/player-thread.test.ts > keeps a current-quarter work entry empty until an actual new work decision, while the specified old salary stays historical
+AssertionError: expected { …(4) } to match object { kind: 'work', entityId: null }
+(2 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "entityId": null,
++   "entityId": "ops:b97f767dc246396b9c06efe49070f714",
+    "kind": "work",
+  }
+
+ ❯ src/ui/player-thread.test.ts:237:80
+    235|   // Defensive display boundary only: this is not imported or represen…
+    236|   const withHistoricalRows={...p,features:{...p.features,workbench:{..…
+    237|   expect(openingFocusFor(withHistoricalRows,'quarter',{accountId:'pers…
+       |                                                                                ^
+    238|   expect(today.resultRefs).toEqual([]);expect(today.wait).toBeUndefine…
+    239|   expect(h.controller.preview(h.controller.prepare('WorkQuarter',{})).…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+ FAIL  src/ui/season-thread.test.ts > follows only an explicitly chosen empty Q2 calendar after the actual saved WorkQuarter, keeping preview and concrete pins intact
+AssertionError: expected { …(4) } to match object { …(3) }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "accountId": "personal",
+-   "kind": "work",
++   "kind": "free",
+    "runId": "life-267b7707-43cd-459c-a52e-6f50401430ee",
+  }
+
+ ❯ src/ui/season-thread.test.ts:54:16
+     52|   expect(h.controller.exportSaved()).toBe(raw)
+     53|   const saved=await h.send(kind,payload),next=seasonFocusAfterSave(sav…
+     54|   expect(next).toMatchObject({runId:empty.runId,accountId:'personal',k…
+       |                ^
+     55|   expect(next.entityId).not.toBeNull()
+     56|   expect(playerThread(saved.current,next).focusStatus).toBe('valid')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯
+
+ FAIL  src/ui/season-thread.test.ts > follows only an explicitly chosen empty Q2 calendar after the actual saved StartLifeWork, keeping preview and concrete pins intact
+AssertionError: expected { …(4) } to match object { …(3) }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "accountId": "personal",
+-   "kind": "life",
++   "kind": "free",
+    "runId": "life-267b7707-43cd-459c-a52e-6f50401430ee",
+  }
+
+ ❯ src/ui/season-thread.test.ts:54:16
+     52|   expect(h.controller.exportSaved()).toBe(raw)
+     53|   const saved=await h.send(kind,payload),next=seasonFocusAfterSave(sav…
+     54|   expect(next).toMatchObject({runId:empty.runId,accountId:'personal',k…
+       |                ^
+     55|   expect(next.entityId).not.toBeNull()
+     56|   expect(playerThread(saved.current,next).focusStatus).toBe('valid')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯
+
+ FAIL  src/ui/season-thread.test.ts > follows only an explicitly chosen empty Q2 calendar after the actual saved ResearchMarket, keeping preview and concrete pins intact
+ FAIL  src/ui/season-thread.test.ts > follows only an explicitly chosen empty Q2 calendar after the actual saved PlanStockOrder, keeping preview and concrete pins intact
+ FAIL  src/ui/season-thread.test.ts > follows only an explicitly chosen empty Q2 calendar after the actual saved PlaceStockOrder, keeping preview and concrete pins intact
+AssertionError: expected { …(4) } to match object { …(3) }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "accountId": "personal",
+-   "kind": "market",
++   "kind": "free",
+    "runId": "life-267b7707-43cd-459c-a52e-6f50401430ee",
+  }
+
+ ❯ src/ui/season-thread.test.ts:54:16
+     52|   expect(h.controller.exportSaved()).toBe(raw)
+     53|   const saved=await h.send(kind,payload),next=seasonFocusAfterSave(sav…
+     54|   expect(next).toMatchObject({runId:empty.runId,accountId:'personal',k…
+       |                ^
+     55|   expect(next.entityId).not.toBeNull()
+     56|   expect(playerThread(saved.current,next).focusStatus).toBe('valid')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/9]⎯
+

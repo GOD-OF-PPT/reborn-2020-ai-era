@@ -1,0 +1,81 @@
+- link "跳到主要操作":
+  - /url: "#main-content"
+- banner:
+  - link "重生2020 AI时代":
+    - /url: "#"
+    - text: 重生2020
+    - generic: AI时代
+  - generic: 本局模拟 / 架空情境
+  - button "保存退出到入口": 保存离开
+  - button "设置与说明"
+- complementary: 隔离存储验证库：reborn-2020-t15-life-work-abort-validation · 写入成功后中止：已触发。此开关只存在于本地开发服务。
+- generic: 2020-01-20
+- strong: 个人可花 ¥26,800
+- generic "行动3/4，预留0":
+  - generic: 行动 3/4
+  - generic: 预留0
+- button "个人账户 · 翻开原账 ↗"
+- status "未保存，第6次提交":
+  - text: 未保存
+  - generic: · 6
+- button "未保存 · 旧提交仍完整 · 查看处理":
+  - generic: "!"
+  - text: 未保存 · 旧提交仍完整 · 查看处理
+- main:
+  - region "可探索的住处":
+    - paragraph:
+      - generic: 我想保持生活自主
+      - generic: 把已经发生的事收好，再安排今天。
+      - button "回到书签里的那件事 ↗" [disabled]
+      - button "翻季度留页 ↗" [disabled]
+    - region "今天这一幕":
+      - paragraph: 2020-Q1 / 今天的日历
+      - heading "今天，仍由你安排。" [level=1]
+      - paragraph: 今天 2020-01-20 · 原来的书签和约定仍保留
+      - generic "今天的情况":
+        - paragraph: 可以先保留眼前的生活，再选择一件愿意承担的事。
+        - paragraph: 接下来，怎样让日子更接近“保持生活自主”？可以继续熟悉的节奏，也可以重新选择把时间留给哪里。
+      - button "今天，想把时间留给什么 继续原安排，或明确选择下一次投入" [disabled]:
+        - generic: "01"
+        - text: 今天，想把时间留给什么
+        - generic: 继续原安排，或明确选择下一次投入
+        - generic: →
+      - generic: 这一步还未保存，请先处理原候选。
+      - button "核对后推进 · 2020-01-22" [disabled]: 先核对 ↗
+      - button "不新增安排，让原日子继续 · 2020-01-22" [disabled]:
+        - text: ◷
+        - generic: 不新增安排，让原日子继续 · 2020-01-22
+        - generic: Space
+      - button "环顾房间，想想别的可能":
+        - text: 环顾房间，想想别的可能
+        - generic: ↗
+    - button "今天的日历 今天，想把时间留给什么" [disabled]:
+      - generic: 暂不可操作 · 今天 · 仍可安排
+      - generic: ┄尚未保存 · 仍是上次的物件
+      - generic: 2020-01-20
+      - text: 今天，想把时间留给什么
+      - generic: —
+    - navigation "随身记录":
+      - button "翻开随身册":
+        - generic: ▤
+        - text: 翻开随身册
+      - button "牵挂与日历":
+        - generic: ◷
+        - text: 牵挂与日历
+    - paragraph:
+      - generic: 普通出租屋 · 2020-01-20
+      - generic: 模拟市场 / 明确架空股权
+- dialog "未保存 · 旧提交仍完整":
+  - heading "未保存 · 旧提交仍完整" [level=2]
+  - button "关闭对话框": ×
+  - region "未保存 · 旧提交仍完整 · 翻页阅读":
+    - generic: LONG DAY / 未保存 · 旧提交仍完整
+    - generic: 无需滚动 · 一页一页，慢慢决定
+    - alert:
+      - strong [active]: 未保存：界面仍是上一次完整提交
+      - paragraph: 本次保存中断，旧档完整。界面仍显示旧提交，请重试同一候选。
+      - paragraph: 新操作已暂停。候选可以导出；重试不会重新执行命令或抽取结果。
+      - button "重试保存原候选"
+      - button "导出未保存候选"
+      - button "导出旧已保存存档"
+      - button "舍弃候选并重新读取"
