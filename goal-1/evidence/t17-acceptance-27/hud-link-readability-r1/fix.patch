@@ -1,0 +1,11 @@
+--- a/src/ui/opening-play.css
++++ b/src/ui/opening-play.css
+@@ -105,7 +105,7 @@
+ .opening-scene-active .opening-run-bar .scene-action-budget>small{font-size:11px}
+ .opening-scene-active .opening-run-bar .save-badge{padding:5px 9px;font-size:11px;line-height:1.6}
+ .opening-scene-active .opening-account-link{padding:5px 0;border:0;border-bottom:1px solid #c8b27b66;background:none;color:#d4d3b8;font:12px/1.7 var(--serif,"Songti SC",serif)}
+-.opening-scene-active .opening-account-link:hover{color:#ffe3ad;border-bottom-color:#e0c38a}
++.opening-scene-active .opening-account-link:is(:hover,:focus-visible){color:#ffe3ad;background:#15332e;border-bottom-color:#e0c38a}
+ .opening-scene-active .opening-account-link:focus-visible,
+ .opening-scene-active .site-header button:focus-visible{outline:3px solid #ffe2a6;outline-offset:5px}
+ 

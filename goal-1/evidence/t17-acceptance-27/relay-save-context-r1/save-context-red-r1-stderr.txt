@@ -1,0 +1,41 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/App.relay-save-context.test.tsx > preserves a changed account and a reopened original book while the actual saved service and global pin still publish
+AssertionError: a later reading workspace must remain open: expected undefined to be defined
+ ❯ src/ui/App.relay-save-context.test.tsx:131:67
+    129|    expect(ui.book()).toBeDefined();expect(f.controller.exportSaved()).…
+    130|    expect((await f.finish()).status).toBe('saved');ui.render()
+    131|    expect(ui.book(),'a later reading workspace must remain open').toBe…
+       |                                                                   ^
+    132|    expect(ui.scene().accountId).toBe(change==='account'?'personal':f.t…
+    133|    expect(ui.scene().relayTarget).toEqual(f.target);expect(ui.scene().…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/ui/App.relay-save-context.test.tsx > does not replace a same-account explicitly changed relay target after a real auxiliary save
+AssertionError: expected { …(6) } to deeply equal { …(5) }
+
+- Expected
++ Received
+
+  {
+    "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+    "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+-   "kind": "business",
++   "kind": "period",
++   "periodId": "rly:03db53459f6d8827f8a5b5e83e0c034a",
+    "runId": "normal-relay-technical_employee-ee9cb440",
+    "stationId": "rly:17d0059f10587b096f811c25087012fc",
+  }
+
+ ❯ src/ui/App.relay-save-context.test.tsx:147:34
+    145|   expect(ui.scene().accountId).toBe(f.target.accountId);expect(ui.scen…
+    146|   expect((await f.finish()).status).toBe('saved');ui.render()
+    147|   expect(ui.scene().relayTarget).toEqual(f.businessTarget);expect(ui.b…
+       |                                  ^
+    148|   expect(readFocus(f).relayTarget).toEqual(f.target)
+    149|   expect(f.controller.snapshot.view!.revision).toBe(f.view.revision+1)…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

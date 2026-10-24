@@ -1,0 +1,5 @@
+# relay 保存回调与当前阅读scope
+
+先保App源身份与前像；实际原r91/r92 Controller/FakeIndexedDB，提交通过真实App request/确认handler，延迟原store.commit让用户仍可关闭确认/改账户/重开或看同站另一目标。新revision实际保存与全局pin仍按原payload映射；仅origin与当前活动workspace完整同scope时改本地relayTarget/account/关闭原册/显示该sceneReceipt。
+
+既有epoch只跟run/screen/account/open，不含同账户period变更；增加只用于relay的完整目标identity键并纳入epoch，retry保留原键、仅沿原openfalse/currentepoch恢复正常路径。无变更video/course的分支或辅助白名单。新测试直接驱动App实际React handlers与原异步controller，不仅对判断器填布尔。实际abort/retry用原head.write后abort factory，核物理旧档和原candidate，非浏览器证据。原失败与时间边界保留，根后续实际Chrome仍负责。

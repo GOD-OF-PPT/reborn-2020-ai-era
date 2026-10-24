@@ -1,0 +1,15 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/RelayServiceChoice.test.tsx > accepts an explicit zero supplier budget through the real handler while empty or malformed input never becomes zero
+AssertionError: an explicitly entered zero must expose the original preview action: expected undefined to be defined
+ ❯ src/ui/RelayServiceChoice.test.tsx:170:89
+    168|    ui.edit('本期供应成本授权上限',explicit)
+    169|    const control=ui.all().find(e=>e.type===CommandButton&&e.props.kind…
+    170|    expect(control,'an explicitly entered zero must expose the original…
+       |                                                                                         ^
+    171|    const expected=relayServiceDraftCommand(p,target,p.relayDraftMemory…
+    172|    expect(expected.payload).toMatchObject({maxSupplierCostFen:0})
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

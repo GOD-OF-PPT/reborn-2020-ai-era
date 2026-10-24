@@ -1,0 +1,30 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/relay-scene-target.test.ts (7 tests | 1 failed) 9727ms
+   × uses actual job status and retains a cancelled audit when a later audit is scheduled for the same period 44ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/relay-scene-target.test.ts > uses actual job status and retains a cancelled audit when a later audit is scheduled for the same period
+AssertionError: expected 'collection' to be 'audit-waiting' // Object.is equality
+
+Expected: "audit-waiting"
+Received: "collection"
+
+ ❯ src/ui/relay-scene-target.test.ts:86:102
+     84|  expect(relaySceneProgress(cancelled.relay,cancelled.date,oldTarget,ca…
+     85|  expect(relaySceneProgress(auditPlanned.relay,auditPlanned.date,oldTar…
+     86|  expect(relaySceneProgress(auditPlanned.relay,auditPlanned.date,target…
+       |                                                                                                      ^
+     87|  const originalSupport={...target,jobId:supported.relay.periods[0]!.su…
+     88|  expect(relaySceneProgress(supported.relay,supported.date,originalSupp…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 27 passed (28)
+   Start at  06:40:30
+   Duration  12.41s (tests 62%, import 24%, transform 13%)
+

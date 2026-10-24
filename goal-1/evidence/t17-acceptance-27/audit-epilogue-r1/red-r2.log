@@ -1,0 +1,39 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/RelayServiceChoice.test.tsx (6 tests | 1 failed | 5 skipped) 3554ms
+   × allows only today for an old-meter audit in the explicit finite-epilogue display and original-preview variant 374ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/RelayServiceChoice.test.tsx > allows only today for an old-meter audit in the explicit finite-epilogue display and original-preview variant
+AssertionError: expected { allowed: false, …(4) } to match object { Object (allowed, reasonCodes, ...) }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "actionPoints": 1,
+-   "allowed": true,
+-   "reasonCodes": [],
+-   "upfrontCostFen": 10000,
++   "actionPoints": 0,
++   "allowed": false,
++   "reasonCodes": [
++     "OVERDUE_OBLIGATION",
++   ],
++   "upfrontCostFen": 0,
+  }
+
+ ❯ src/ui/RelayServiceChoice.test.tsx:220:74
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 5 skipped (6)
+   Start at  08:16:52
+   Duration  5.01s (tests 76%, import 13%, transform 11%)
+

@@ -1,0 +1,19 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/RelayServiceChoice.test.tsx > keeps actual meter scope and dates, and denies stale, readonly or candidate handler submissions
+AssertionError: expected '2025-01-28—2025-02-25原账期 · 本次现有可核记录1条…' to contain '没有自动改值'
+
+Expected: "没有自动改值"
+Received: "2025-01-28—2025-02-25原账期 · 本次现有可核记录1条；以后发生的计量不在这一批。¥100 / 1点 / 3日。2025-01-01—2025-01-04。完成前不揭示实计；差额仍要另行确认，客户和供应原价不覆盖。先明确选择有效开工日期；过期草稿没有自动改成今天。先明确资源与日期，核对原计量"
+
+ ❯ src/ui/RelayServiceChoice.test.tsx:147:24
+    145|  p.relayDraftMemory!.write(p.view.runId,scope,{...draft,startAt:'2025-…
+    146|  const expired=mounted('past-audit',()=>RelayAuditEditor({p,target:exa…
+    147|  expect(text(expired)).toContain('没有自动改值');expect(relayAuditDraftComma…
+       |                        ^
+    148|  expect(p.relayDraftMemory!.read(p.view.runId,scope)?.startAt).toBe('2…
+    149| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

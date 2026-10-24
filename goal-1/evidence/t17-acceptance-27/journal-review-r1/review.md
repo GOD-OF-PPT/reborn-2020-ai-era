@@ -1,0 +1,13 @@
+# R1 根接线只读复核
+
+限定阅读 App/NarrativeScene/SceneJournal/RelayCommandDetails/game-types，并追读relay-player-thread的实际saved映射。未改这五文件及原model冻结生产。
+
+确定问题已交根并读回闭合：服务确认页原句「原确认已经同时预留」把未来预留说成已发生；根已改「本次确认将同时预留这次支持，保存成功后不必再安排一次」。实际服务28天与四类支持原日期/成本/AP、供应顺序与上限/实际区别一致，员工与代理费另列。
+
+App在同run且status saved才调用差分映射；candidate/conflict只记录原payload与workspace，原retry沿该payload；helper再核+1revision/原receipt/saved/noCandidate/noReadOnly。查看导航携完整run/account/business/station/period及job或meter，显式account冲突仍进invalid，不被自动owner覆盖。原辅助同账期返回existing原引用，App完整identity相同不再写关注，普通Advance不更改旧季度。以上是静态因果核对，不是新增原子保存实测。
+
+Narrative等待仍走relaySceneAdvanceDate/playableAdvanceDate及原暂停/交付/季度屏障。明确job目标读取其实际状态，旧cancelled audit在新审安排后仍保原job；具体书签没有被latest重排替换。原册默认打开继续原target；显式重选由当前原投影校验。
+
+Journal多期audit只在唯一原batch且各period全部canonical有效时提供完整choices，任一坏拒部分选择。实际组件handlers先开原期chooser，不先导航；显选后传同audit job及选定period。根已按当前works重新匹配pending，换run不显示旧chooser。新增test三项覆盖这些边界，source为原F04小命令公开投影+明确多期display变体；不冒称normal/可达多期新机制/DOM/浏览器。request调用0。
+
+当前已读范围未发现另一个确定阻断；保留实际Chrome/Session候选与原retry/只读/重进、全Create与完整R1集成由根验收。原正常prefix审核不重复。无新长回放/兼容/P3改动。

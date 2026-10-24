@@ -1,0 +1,67 @@
+--- a/src/ui/relay-player-thread.ts
++++ b/src/ui/relay-player-thread.ts
+@@ -63,7 +63,7 @@
+ export function relayPlayerScene(p:Input,f:RelayOpeningFocus):Scene{
+  const progress=relaySceneProgress(p.features.relay,p.view.date,f.relayTarget,relaySceneContext(p,f.accountId))!,r=resolved(p,f)
+  const object=r.period?`${r.period.from}—${r.period.to}的服务约定`:r.customer?'这位客户的服务与原账':r.audience?'这次获客的实际回信':r.application?'供应方的申请回信':f.relayTarget?'本站的服务单与接线盒':'桌边的中转服务资料'
+- return {stage:'relay-'+progress.phase,object,title:progress.title,line:progress.line,detail:progress.choice.line,outcome:progress.outcome,resultRefs:progress.resultRefs,inspect:{screen:'relay',label:progress.choice.label,target:{accountId:f.accountId,relayTarget:f.relayTarget,openRecord:true,...(progress.recordId?{recordId:progress.recordId}:{})}},...(progress.command?{command:{...progress.command,label:progress.choice.label}}:{}),...(progress.wait?{wait:progress.wait}:{})}
++ return {stage:'relay-'+progress.phase,object,title:progress.title,line:progress.line,detail:progress.choice.line===progress.line?'':progress.choice.line,outcome:progress.outcome,resultRefs:progress.resultRefs,inspect:{screen:'relay',label:progress.choice.label,target:{accountId:f.accountId,relayTarget:f.relayTarget,openRecord:true,...(progress.recordId?{recordId:progress.recordId}:{})}},...(progress.command?{command:{...progress.command,label:progress.choice.label}}:{}),...(progress.wait?{wait:progress.wait}:{})}
+ }
+ 
+ /** New public IDs follow only a committed original receipt, never a candidate or a balance delta. */
+--- a/src/ui/OpeningMoment.tsx
++++ b/src/ui/OpeningMoment.tsx
+@@ -186,7 +186,7 @@
+    {focusNotice&&!previousFocusNotice?<p className="season-focus-notice" role="status">{focusNotice}</p>:null}
+    {thread.focusScope==='invalid'&&thread.invalidReason?<p className="season-focus-notice" role="status">{thread.invalidReason}</p>:null}
+    {feedback?<div className={typeof feedback==='string'?'moment-status':'moment-feedback'} role={typeof feedback==='string'?'status':undefined}>{feedback}</div>:null}
+-   <p className="moment-line">{sceneLine}</p><p className="moment-terms">{moment.detail}</p>
++   <p className="moment-line">{sceneLine}</p>{moment.detail?<p className="moment-terms">{moment.detail}</p>:null}
+   </div>
+   <div className="moment-decisions">
+    {originalAction(false,openOrder,openVideo,openCourse,openRelay)}
+@@ -204,7 +204,7 @@
+   </div>
+  </section>
+   <OpeningObject {...(!interrupted&&!requiresChoice&&(video||course||relay)?{appearance:relay?'relay' as const:course?'course' as const:'video' as const}:{})} {...(!interrupted&&!requiresChoice&&relay?{displayTitle:relayDisplayTitle}:{})} {...(!interrupted&&!requiresChoice&&courseDisplayTitle?{displayTitle:courseDisplayTitle}:{})} {...(teachingPaper?{teaching:teachingPaper}:{})} kind={interrupted||requiresChoice?'calendar':legacy?(moment.wait?'waiting':'portfolio'):objectKind(thread)} title={moment.object} detail={moment.wait?moment.wait.date+' · '+moment.wait.label:interrupted?'这项责任仍需你回应':requiresChoice?'原记录与责任都保留，先明确重新选择':legacy?'沿原业务记录继续':thread.outcome==='actual'?'回响已有实际记录':'翻开，看清这次选择'} stageLabel={label} actionLabel={requiresChoice?'重新选择原关注':'走近这件事'} disabled={p.view.busy} textOnly={p.textOnly===true} onActivate={requiresChoice?openDirections:()=>setObjectOpen(true)}/>
+-  {objectOpen?<Dialog title={moment.object} className="opening-paper" onClose={()=>setObjectOpen(false)}><p className="opening-paper-date">{p.view.date} · {label}</p>{previousFocusNotice?<p className="season-focus-notice" role="status">{focusNotice}</p>:null}<h3>{moment.title}</h3><p>{moment.line}</p><p className="opening-paper-terms">{moment.detail}</p>{originalAction(true,openOrder,openVideo,openCourse,openRelay)}{!interrupted&&!unknownFocus&&!legacy&&thread.stage==='offer'?<div className="opening-paper-alternatives"><CommandButton {...nearProps} kind="DeclineOffer" payload={{offerId:first.offerId}} label="婉拒这笔报价" confirm/><CommandButton {...nearProps} kind="SkipOffer" payload={{offerId:first.offerId}} label="先跳过这次小单" confirm/></div>:null}<button type="button" className="scene-text-action" onClick={inspect}>{unknownFocus?'翻看本季已有记录':'翻看同一件事的全部原记录'} ↗</button></Dialog>:null}
++  {objectOpen?<Dialog title={moment.object} className="opening-paper" onClose={()=>setObjectOpen(false)}><p className="opening-paper-date">{p.view.date} · {label}</p>{previousFocusNotice?<p className="season-focus-notice" role="status">{focusNotice}</p>:null}<h3>{moment.title}</h3><p>{moment.line}</p>{moment.detail?<p className="opening-paper-terms">{moment.detail}</p>:null}{originalAction(true,openOrder,openVideo,openCourse,openRelay)}{!interrupted&&!unknownFocus&&!legacy&&thread.stage==='offer'?<div className="opening-paper-alternatives"><CommandButton {...nearProps} kind="DeclineOffer" payload={{offerId:first.offerId}} label="婉拒这笔报价" confirm/><CommandButton {...nearProps} kind="SkipOffer" payload={{offerId:first.offerId}} label="先跳过这次小单" confirm/></div>:null}<button type="button" className="scene-text-action" onClick={inspect}>{unknownFocus?'翻看本季已有记录':'翻看同一件事的全部原记录'} ↗</button></Dialog>:null}
+   {directions?<Dialog title={'这一季，先把哪件事放在桌面？ · '+groupTitle} className="opening-paper season-focus-book" onClose={()=>setDirections(false)} footer={<div className="season-focus-footer">
+    <nav className="season-focus-groups" aria-label="按眼前约定、方向与历史翻阅书签">{seasonFocusGroups.map(group=><button type="button" key={group.id} aria-pressed={focusGroup===group.id} onClick={()=>setFocusGroup(group.id)}>{group.label} · {candidates.filter(candidate=>seasonFocusGroupFor(candidate)===group.id).length}</button>)}</nav>
+    <p className="season-selection-note" role="status">{picked?<>待确认：<strong>{picked.title}</strong> · {seasonFocusGroups.find(group=>group.id===seasonFocusGroupFor(picked))!.label}{picked.originQuarter?' · 来源'+picked.originQuarter:''}{picked.date?' · 原日期'+picked.date:''}。尚未改变原书签。{picked.disabledReason?' '+picked.disabledReason:''}</>:'尚未改变原关注。先选一个对象预看，再明确放到桌面。'}</p>
+--- a/src/ui/relay-player-copy.test.tsx
++++ b/src/ui/relay-player-copy.test.tsx
+@@ -0,0 +1,33 @@
++import {expect,it,vi} from 'vitest'
++import {renderToStaticMarkup} from 'react-dom/server'
++import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
++import {createCampaignCodec} from '../application/campaign.ts'
++import {GameController} from '../application/game-controller.ts'
++import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
++import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
++import type {GamePanelProps,PlayFeatures} from './game-types.ts'
++import {relayBusinessTarget,relayFocusFor} from './relay-player-thread.ts'
++import {playerThread} from './player-thread.ts'
++import {OpeningMoment} from './OpeningMoment.tsx'
++import {roomMoment} from './RoomMoment.tsx'
++import actual94 from '../../goal-1/evidence/t17-acceptance-27/chrome-main-r1/main-saved94-period-ended.json?raw'
++
++it('shows the actual r94 due collection sentence once while preserving customer 5, its full due scope and original support',async()=>{
++ const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'relay-copy-actual94'})
++ const controller=new GameController({codec,store,locks:new MemoryWriterAccess()})
++ try{
++  await controller.initialize();await controller.importNew(actual94)
++  const view=controller.snapshot.view!,features=view.features as unknown as PlayFeatures,period=features.relay!.periods[0]!,identity=relayBusinessTarget({view,features},period.businessId)!
++  expect(view.origin).toBe('normal');expect(view.revision).toBe(94);expect(view.date).toBe('2025-02-25');expect(view.budget).toMatchObject({available:1,reserved:0})
++  expect(period.job?.status).toBe('completed');expect(period.supportJob?.status).toBe('running');expect(period.supportJob?.completeAt).toBe('2025-03-04')
++  const p:GamePanelProps={view,features,controller,accountId:identity.accountId,request:vi.fn()},target={...identity,kind:'period' as const,periodId:period.id},focus=relayFocusFor(p,target),thread=playerThread(p,focus),raw=controller.exportSaved(),receipts=view.receipts
++  const sentence='本期有原单到期；本次命令收取该客户全部到期原单¥897.78，可能包括其他账期。回款不重复确认收入。'
++  expect(thread.stage).toBe('relay-collection');expect(thread.line).toBe(sentence);expect(thread.detail).toBe('')
++  expect(thread.command).toMatchObject({kind:'CollectRelayDue',payload:{customerId:features.relay!.customers[4]!.id},confirm:true})
++  expect(thread.inspect.target?.relayTarget).toEqual(target)
++  const html=renderToStaticMarkup(<OpeningMoment p={p} headingRef={null} fallback={roomMoment(p)} focus={focus} onFocus={vi.fn()} onNavigate={vi.fn()} onExplore={vi.fn()}/>)
++  expect(html.split(sentence)).toHaveLength(2);expect(html).not.toContain('class="moment-terms"')
++  expect(html).toContain('2025-01-28—2025-02-25的服务约定');expect(html).toContain('核对这位原客户全部到期原款');expect(html).toContain('尚待实际收取')
++  expect(p.request).not.toHaveBeenCalled();expect(controller.snapshot.view!.revision).toBe(94);expect(controller.snapshot.view!.receipts).toBe(receipts);expect(controller.exportSaved()).toBe(raw)
++ }finally{await controller.close()}
++})

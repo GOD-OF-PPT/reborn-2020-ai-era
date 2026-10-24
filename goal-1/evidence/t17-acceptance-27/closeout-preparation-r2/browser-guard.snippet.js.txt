@@ -1,0 +1,16 @@
+// Root runs only after root27 is sealed, in the actual current browser harness context.
+// This snippet calls the existing guarded entry wrapper; delegate0 means no UI action is dispatched.
+var guardModule = await import('file:///Users/gordon/githome/reborn-2020-ai-era/scripts/browser_evidence_guard.mjs');
+var fsGuardProbe = await import('node:fs');
+var guardPostRoot = '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-s4-relay-r1-post-commit-01';
+guardModule.assertBrowserEvidenceWritable(guardPostRoot);
+var guardDelegates = 0;
+var protectedProbe = guardModule.protectBrowserEvidence(Object.fromEntries(['journal','click','exportRaw','importText'].map(name => [name, async () => { guardDelegates++; throw Error('MUST_NOT_DELEGATE'); }])), '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-27');
+var guardResults = [];
+for (var method of ['journal','click','exportRaw','importText']) {
+ try { await protectedProbe[method](...(method==='exportRaw'?['sealed-probe.json']:method==='importText'?['{}','sealed-probe.json']:[{}])); throw Error('SEALED_ENTRY_NOT_REJECTED'); }
+ catch(error) { if(String(error)!=='Error: EVIDENCE_SEALED_USE_NEW_ROOT')throw error;guardResults.push({method,error:String(error),rejectedBeforeDelegate:guardDelegates===0}); }
+}
+if(guardDelegates!==0)throw Error('UNEXPECTED_DELEGATE');
+guardModule.assertBrowserEvidenceWritable(guardPostRoot);
+fsGuardProbe.writeFileSync(guardPostRoot+'/browser-parent-guard.json', JSON.stringify({at:new Date().toISOString(),context:'Actual current browser harness context; wrapper entry invocations only, delegates0',target:'goal-1/evidence/t17-acceptance-27',delegates:guardDelegates,results:guardResults},null,2)+'\n', {flag:'wx'});

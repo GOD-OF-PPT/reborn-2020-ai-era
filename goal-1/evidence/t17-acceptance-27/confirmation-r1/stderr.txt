@@ -1,0 +1,19 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/RelayCommandDetails.service.test.tsx > captures the chosen customer and supplier order, and separates original service and future support commitments
+AssertionError: expected '<section class="confirmation-context …' to contain '¥3000/1点/28日'
+
+Expected: "¥3000/1点/28日"
+Received: "<section class="confirmation-context relay-service-terms"><h3>这期服务与原支持，一起留在日历</h3><p>这家原中转企业 · 明确选择2份原客户合同，供应按你选择的先后尝试，不自动增加备援。</p><ul><li>客户2 · 后付信用 · 原合同有效至2025-03-31</li><li>客户1 · 充值制 · 原合同有效至2025-03-31</li></ul><p>供应顺序：港湾独立供应（虚构） → 杉木直供（虚构）。同故障域备援仍可能同时停服；许可与实际适配由原预览核验。</p><p>本人实际服务与支持时间；服务2025-01-28—2025-02-25，¥3,000/1点/28日。</p><p>集中支持：2025-02-25—2025-03-04，¥1,500/1点/7日。原确认已经同时预留这次支持，服务结束后不必再安排一次；员工工资和原代理服务费另计。</p><p>本期容量上限2800单位，供应成本授权上限¥1,200。上限不是已发生用量、实际成本或收入；供应预付仍是资产，客户未消费充值仍受保护。</p><p>保存成功才是已安排，真实开工、计量、支持完成、确认收入与实收仍分别发生。中断或停止保留原成本、支持和旧账责任。</p></section>"
+
+ ❯ src/ui/RelayCommandDetails.service.test.tsx:29:63
+     27|  expect(html).toContain('这家原中转企业');expect(html.indexOf('客户2')).toBeLes…
+     28|  expect(html.indexOf('港湾独立供应')).toBeLessThan(html.indexOf('杉木直供'))
+     29|  expect(html).toContain('2025-01-28—2025-02-25');expect(html).toContai…
+       |                                                               ^
+     30|  expect(html).toContain('2025-02-25—2025-03-04');expect(html).toContai…
+     31|  expect(html).toContain('不必再安排一次');expect(html).toContain('客户未消费充值仍受保护…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

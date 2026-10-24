@@ -1,0 +1,1 @@
+Root授权：仅App.tsx及新App.relay-save-context.test.tsx。relay局部target/account/原workspace关闭/sceneReceipt须仍同提交workspace run/screen/account/open/epoch，必要target身份若epoch没覆盖须审。全局实际saved receipt、真实主线新ID、失败候选与原retry正常保持；不能禁浏览/Nav替代scope正确性。用真实异步callback/同scope/换账户或重开/候选retry有意义事件回归，保红。仅新test＋App.relay-focus＋App.preparation-save必要定向和ownedstrict，冻结交回，不改video/course旧行为/原命令/保存，不browser/compat/Git。

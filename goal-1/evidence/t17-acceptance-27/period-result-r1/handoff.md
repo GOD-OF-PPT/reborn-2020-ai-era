@@ -1,0 +1,11 @@
+# 同期进展与普通变价优先级修缮
+
+实际r116完整官方import：2891640B / SHA6b07af85cbb339febae1e86eabbe7490229580cf5b587bb4fc4ad9e434b72593；normal/2025-03-18/rev116。唯一period实际settling，服务/支持completed，168计量/168复核，168追加更正包含7个已知非零差额、未更正已知0。原应收总439696分、已收438484分、尚余1212分；两笔606分为Mar7更正新增原应收，dueAt均Mar21。不能按原文件名或旧解读称全部结清。完整公开读回见raw-public-import.json与remaining-public-receivables.json，不读hiddenfacts指导策略。
+
+最小生产增量：legacy内部只有确有period且preferredPeriodId与该period.id相同，才不让ordinary business changes替换该period主幕。新的强类型period与指定旧string都走这个逻辑；business目标和undefined初入仍保market-change。原changes数组/acknowledgedAt、客户terms/供价/权限未改，原book入口与全局强制暂停/资金/风险代码完全未触。原服务、支持、audit、差额、未来款等待及真实closed阶段因此保持本对象；未自动确认任何变价。
+
+新增两个模型测试：真实r116必须settling/Mar21原款等待且官方export仍逐字原raw、business仍market-change；明确public display variants覆盖service/support/audit/correction/closed不被ordinary notice夺走。closed只在display变体有相应状态，不冒充r116已closed。
+
+红绿：red-r1两个确定红；首修对undefined的错误比较又使business回退2红，已纠正。该批原target beforeAll10000ms超时7skip原因未定，原档保留；同原时限单文件精确复验7pass，progress+clock2文件27pass，owned strict exit0。没有放宽原限时/配置/断言，不将分批报单次34绿。
+
+仅source-final.json列出的2文件变化，target/clock同前像，原raw末核同。未动Narrative/App/原册/core/P3/配置，未运行浏览器或新游戏命令，无Git/兼容操作。Root仍需新构建/实际当前图与后续Mar21原收款，方可判断正常实玩终态；静态R3旧构建不因模型源码修缮自动变成新验收。

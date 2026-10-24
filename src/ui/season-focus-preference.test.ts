@@ -20,6 +20,23 @@ const preference=(changes:Partial<SeasonFocusPreference>={}):SeasonFocusPreferen
 const gate=(changes:Partial<SeasonFocusPreferenceGate>={}):SeasonFocusPreferenceGate=>({...scope,saveStatus:'saved',hasCandidate:false,busy:false,...changes})
 const input=(view:PlayingView)=>({view,features:view.features as unknown as PlayFeatures})
 
+it('keeps complete relay station and original period anchors in v1 and preserves malformed cross-object text',()=>{
+ const storage=new MemoryPreferences(),key=seasonFocusPreferenceKey(scope.runId)
+ const target={kind:'period' as const,runId:scope.runId,accountId:'relay-company',businessId:'relay-business',stationId:'relay-station',periodId:'original-period',jobId:'original-support-job'}
+ const relay:Extract<OpeningFocus,{kind:'relay'}>={kind:'relay',runId:scope.runId,accountId:target.accountId,businessId:target.businessId,entityId:target.jobId,relayTarget:target}
+ expect(saveSeasonFocusPreference(storage,preference({focus:relay,quarter:'2020-Q1'}),gate({quarter:'2020-Q1'}))).toMatchObject({status:'saved'})
+ const raw=storage.values.get(key)!
+ expect(loadSeasonFocusPreference(storage,scope)).toMatchObject({status:'loaded',quarterStatus:'previous',raw,record:{focus:relay,quarter:'2020-Q1'}})
+ expect(JSON.parse(raw)).not.toHaveProperty('amountFen')
+ for(const invalid of [{...relay,entityId:target.periodId},{...relay,accountId:'another-account'},{...relay,businessId:'another-business'},{...relay,relayTarget:{...target,runId:'another-life'}},{...relay,relayTarget:{...target,stationId:undefined}},{...relay,relayTarget:{...target,meterId:'another-meter'}},{...relay,relayTarget:{...target,jobId:target.periodId}},{...relay,relayTarget:{...target,futureIncomeFen:1}}]){
+  const original=JSON.stringify({...preference(),focus:invalid});storage.values.set(key,original)
+  expect(loadSeasonFocusPreference(storage,scope)).toMatchObject({status:'invalid',raw:original})
+  expect(saveSeasonFocusPreference(storage,preference({focus:relay}),gate())).toMatchObject({status:'preserved',raw:original});expect(storage.values.get(key)).toBe(original)
+ }
+ storage.values.delete(key)
+ expect(saveSeasonFocusPreference(storage,preference({focus:{kind:'relay',runId:scope.runId,accountId:'personal',entityId:null,relayTarget:null}}),gate())).toMatchObject({status:'saved'})
+})
+
 it('persists strict course and original sample identities without rewriting earlier v1 text or repairing a malformed chain',()=>{
  const storage=new MemoryPreferences(),key=seasonFocusPreferenceKey(scope.runId),oldRaw=JSON.stringify(preference(),null,2)
  storage.values.set(key,oldRaw);expect(loadSeasonFocusPreference(storage,scope)).toMatchObject({status:'loaded',raw:oldRaw});expect(storage.writes).toBe(0)

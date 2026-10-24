@@ -1,0 +1,57 @@
+--- before/src/ui/App.tsx
++++ current/src/ui/App.tsx
+@@ -49,12 +49,20 @@
+ const RoutinesPanel=lazy(()=>import('./RoutinesPanel.tsx'))
+ const noSubscribe=()=>()=>{}
+ type Tab=Screen
+-export type PreparationWorkspaceContext={readonly runId:string;readonly screen:Screen;readonly accountId:string;readonly open:boolean;readonly epoch:number}
++export type PreparationWorkspaceContext={readonly runId:string;readonly screen:Screen;readonly accountId:string;readonly open:boolean;readonly epoch:number;readonly relayTargetKey?:string}
+ type Modal={kind:'command';intent:ConfirmIntent;details:ReactNode;workspace:PreparationWorkspaceContext}|{kind:'storage';text:string;source:string}|{kind:'settings'}|{kind:'exit'}|{kind:'reload'}
+ type LocalSeasonFocus={runId:string;quarter:string;focus:OpeningFocus|null;notice:string|null;requiresChoice:boolean}
+ // Access can fail even before getItem. The preference boundary catches both reads and writes.
+ const seasonFocusStorage:SeasonFocusPreferenceStorage={getItem:key=>localStorage.getItem(key),setItem:(key,value)=>localStorage.setItem(key,value)}
+ const focusIdentity=(focus:OpeningFocus|null)=>focus===null?null:JSON.stringify([focus.runId,focus.kind,focus.accountId,focus.entityId,focus.businessId??null,focus.kind==='market'?focus.entityKind??null:null,focus.kind==='life'?focus.selection:null,focus.kind==='video'?focus.videoTarget:null,focus.kind==='course'?focus.courseTarget:null,focus.kind==='relay'?focus.relayTarget:null])
++function relayWorkspaceTargetKey(target:SceneTarget['relayTarget']):string{
++ if(target===undefined)return 'legacy'
++ if(target===null)return 'entry'
++ return JSON.stringify([target.runId,target.accountId,target.businessId,target.stationId,target.kind,target.kind==='period'?target.periodId:target.kind==='customer'?target.customerId:target.kind==='audience'?target.audienceId:target.kind==='application'?target.applicationId:null,target.kind==='period'?target.jobId??null:null,target.kind==='period'?target.meterId??null:null])
++}
++function sameRelayWorkspace(origin:PreparationWorkspaceContext,active:PreparationWorkspaceContext):boolean{
++ return origin.runId===active.runId&&origin.screen===active.screen&&origin.accountId===active.accountId&&origin.open===active.open&&origin.epoch===active.epoch&&origin.relayTargetKey===active.relayTargetKey
++}
+ /** Retaining a draft never submits the next step or treats a planned licence as completed. */
+ export function keepPreparationWorkspace(status:string,kind:string,previous:PlayingView|null,current:PlayingView,origin:PreparationWorkspaceContext,active:PreparationWorkspaceContext){
+  return status==='saved'&&kind==='LicenseCourseMaterials'&&origin.screen==='course'&&origin.open&&active.open
+@@ -97,10 +105,13 @@
+  const accountId=viewedAccountExists||tab==='video'||tab==='course'||tab==='relay'?selectedAccountId:'personal'
+  const activeWorkspace=useRef<PreparationWorkspaceContext>({runId:'',screen:'room',accountId:'personal',open:false,epoch:0})
+  const lastWorkspace=activeWorkspace.current
+- if(lastWorkspace.runId!==(view?.runId??'')||lastWorkspace.screen!==tab||lastWorkspace.accountId!==accountId||lastWorkspace.open!==workspaceOpen)activeWorkspace.current={runId:view?.runId??'',screen:tab,accountId,open:workspaceOpen,epoch:lastWorkspace.epoch+1}
++ const relayTargetKey=tab==='relay'?relayWorkspaceTargetKey(relayTarget):undefined
++ if(lastWorkspace.runId!==(view?.runId??'')||lastWorkspace.screen!==tab||lastWorkspace.accountId!==accountId||lastWorkspace.open!==workspaceOpen||lastWorkspace.relayTargetKey!==relayTargetKey)activeWorkspace.current={runId:view?.runId??'',screen:tab,accountId,open:workspaceOpen,epoch:lastWorkspace.epoch+1,...(relayTargetKey===undefined?{}:{relayTargetKey})}
+  const onSubmission=(status:string,runId:string,screen:Screen,label:string,kind:string,workspace:PreparationWorkspaceContext,payload:unknown)=>{
+   const current=controller?.snapshot.view
+   if(!current||current.runId!==runId)return
++  // A successful original command may finish after the player has moved to another sheet.
++  const relayWorkspaceCurrent=screen!=='relay'||sameRelayWorkspace(workspace,activeWorkspace.current)
+   if(status==='saved'&&view&&view.runId===runId){
+    if(screen==='video'&&activeTab.current===screen){
+     const body=typeof payload==='object'&&payload!==null?payload as Record<string,unknown>:{}
+@@ -114,7 +125,7 @@
+     const retainLegacyPreparation=courseTarget===undefined&&keepPreparationWorkspace(status,kind,view,current,workspace,activeWorkspace.current)
+     if(savedCourse?.kind==='course'&&!retainLegacyPreparation){setCourseTarget(savedCourse.courseTarget);setAccountId(savedCourse.accountId);if(kind!=='LicenseCourseMaterials')setCourseDraftSlot(undefined);setCourseTeachingSlot(undefined)}
+    }
+-   if(screen==='relay'&&activeTab.current===screen){
++   if(screen==='relay'&&activeTab.current===screen&&relayWorkspaceCurrent){
+     const body=typeof payload==='object'&&payload!==null?payload as Record<string,unknown>:{}
+     const priorRelay=relayTarget!==undefined?openingFocusFor({view,features:view.features as unknown as PlayFeatures},'relay',{relayTarget,accountId}):null
+     const savedRelay=relayFocusFromSaved({view,features:view.features as unknown as PlayFeatures},{view:current,features:current.features as unknown as PlayFeatures},kind,body,priorRelay?.kind==='relay'?priorRelay:null)
+@@ -129,7 +140,7 @@
+    failedScene.current=null
+   }
+   if(status==='unsaved'||status==='conflict')failedScene.current={runId,screen,label,kind,payload,workspace}
+-  if(activeTab.current!==screen)return
++  if(activeTab.current!==screen||!relayWorkspaceCurrent)return
+   if(status==='saved'){
+    const active=activeWorkspace.current,frame=committedEcho(view,current)
+    if(!frame)return

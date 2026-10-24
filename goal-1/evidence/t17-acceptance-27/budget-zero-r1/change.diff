@@ -1,0 +1,74 @@
+--- before/src/ui/RelayServiceChoice.tsx
++++ current/src/ui/RelayServiceChoice.tsx
+@@ -22,6 +22,8 @@
+ const unique=(ids:readonly string[])=>new Set(ids).size===ids.length
+ const agentMode=(mode:string)=>mode==='assisted'||mode==='delegated'
+ function dateValid(date:string){try{isoDate(date);return true}catch{return false}}
++/** The original supplier authorization permits an explicit zero; fees are separate. */
++function supplierBudget(text:string):number|null{return /^0+(?:\.0{1,2})?$/.test(text)?0:parseMoneyInput(text)}
+ export function relaySubmissionReason(p:GamePanelProps,blockedReason?:string|null):string|null{
+  if(blockedReason)return blockedReason
+  if(p.view.readOnly)return '当前只读，原草稿和原记录仍可翻看，不能提交新的安排。'
+@@ -47,7 +49,7 @@
+  if(!draft.supplierIds.length)return '先明确选择本次供应与备选顺序。'
+  if(!unique(draft.supplierIds)||draft.supplierIds.some(id=>!relay.supplyOptions.some(s=>s.businessId===businessId&&s.supplierId===id&&s.permitted&&s.adapted)))return '草稿中的供应当前不可用或重复，请明确核对；没有换成另一条线路。'
+  if(!/^\d+$/.test(draft.maxUnits)||!Number.isSafeInteger(Number(draft.maxUnits))||Number(draft.maxUnits)<=0)return '先明确填写本期用量容量上限。'
+- if(parseMoneyInput(draft.maxSupplierCost)===null)return '先明确填写本期供应预算（元）。'
++ if(supplierBudget(draft.maxSupplierCost)===null)return '先明确填写本期供应预算（元）。'
+  if(!['guided','self','assisted','delegated'].includes(draft.supportMode))return '先明确选择随本期预留的原支持方式。'
+  if(agentMode(draft.supportMode)&&!p.features.story.deployments.some(d=>d.id===draft.deploymentId&&d.businessId===businessId&&d.lifecycle==='active'&&d.currentGrant?.scopes.includes('relay_support')&&(draft.supportMode!=='delegated'||d.currentGrant.level==='cross_flow')))return '本次原部署或权限已不可用，请明确重选；没有新授或扩大权限。'
+  return null
+@@ -55,7 +57,7 @@
+ export type RelayDraftCommand={readonly kind:'StartRelayServicePeriod'|'StartRelayAudit';readonly payload:unknown;readonly label:string;readonly confirm:true}
+ export function relayServiceDraftCommand(p:Input,target:RelaySceneTarget|null,draft:RelaySceneDraft):RelayDraftCommand|null{
+  if(relayDraftIssue(p,target,'service',draft))return null
+- return {kind:'StartRelayServicePeriod',payload:{businessId:target!.businessId,customerIds:[...draft.customerIds],supplierIds:[...draft.supplierIds],resources:[...draft.resources],startAt:draft.startAt,maxUnits:Number(draft.maxUnits),maxSupplierCostFen:parseMoneyInput(draft.maxSupplierCost)!,supportMode:draft.supportMode,deploymentId:agentMode(draft.supportMode)?draft.deploymentId:null},label:'核对这期服务与已经约定的支持',confirm:true}
++ return {kind:'StartRelayServicePeriod',payload:{businessId:target!.businessId,customerIds:[...draft.customerIds],supplierIds:[...draft.supplierIds],resources:[...draft.resources],startAt:draft.startAt,maxUnits:Number(draft.maxUnits),maxSupplierCostFen:supplierBudget(draft.maxSupplierCost)!,supportMode:draft.supportMode,deploymentId:agentMode(draft.supportMode)?draft.deploymentId:null},label:'核对这期服务与已经约定的支持',confirm:true}
+ }
+ export function relayAuditDraftCommand(p:Input,target:RelaySceneTarget|null,draft:RelaySceneDraft):RelayDraftCommand|null{
+  const checked=relayDraftScopeForTarget(p,target,'audit');if(checked.reason||relayDraftIssue(p,target,'audit',draft))return null
+--- before/src/ui/RelayServiceChoice.test.tsx
++++ current/src/ui/RelayServiceChoice.test.tsx
+@@ -147,3 +147,42 @@
+  expect(elements(expired).map(e=>text(e)).join('')).toContain('没有自动改值');expect(relayAuditDraftCommand(p,exact,p.relayDraftMemory!.read(p.view.runId,scope)!)).toBeNull()
+  expect(p.relayDraftMemory!.read(p.view.runId,scope)?.startAt).toBe('2025-01-01')
+ })
++
++it('accepts an explicit zero supplier budget through the real handler while empty or malformed input never becomes zero',async()=>{
++ const actual=await fixture(readyRaw,'relay-explicit-zero-budget')
++ try{
++  hooks.slots.clear()
++  const {p,target,controller}=actual,request=vi.fn(),customer=p.features.relay!.customers.find(c=>c.mode==='postpaid')!,scope=relayDraftScopeForTarget(p,target,'service').scope!,before=controller.exportSaved(),beforeFunds=p.features.relay!.businesses[0]!.funds
++  // This is an explicitly entered UI draft, not a mutation of the imported run.
++  const draft={...emptyRelaySceneDraft(),customerIds:[customer.id],supplierIds:['cedar-direct'],resources:['player-production'],startAt:'2025-01-28',maxUnits:'2800',supportMode:'guided' as const}
++  p.relayDraftMemory!.write(p.view.runId,scope,draft)
++  const ui=driver(()=>mounted('zero-budget',()=>RelayServiceChoice({p:{...p,request},target})))
++  ui.click('继续核对下一步');ui.click('继续核对下一步');ui.click('继续核对下一步')
++  for(const invalid of ['', ' ', '-0', '-1', '0.000', '1e2', 'NaN', 'Infinity']){
++   ui.edit('本期供应成本授权上限',invalid)
++   expect(relayServiceDraftCommand(p,target,p.relayDraftMemory!.read(p.view.runId,scope)!)).toBeNull()
++   expect(ui.all().some(e=>e.type===CommandButton&&e.props.kind==='StartRelayServicePeriod')).toBe(false)
++  }
++  expect(request).not.toHaveBeenCalled();expect(controller.exportSaved()).toBe(before)
++  for(const explicit of ['0','0.00']){
++   ui.edit('本期供应成本授权上限',explicit)
++   const control=ui.all().find(e=>e.type===CommandButton&&e.props.kind==='StartRelayServicePeriod')
++   expect(control,'an explicitly entered zero must expose the original preview action').toBeDefined()
++   const expected=relayServiceDraftCommand(p,target,p.relayDraftMemory!.read(p.view.runId,scope)!)!
++   expect(expected.payload).toMatchObject({maxSupplierCostFen:0})
++   expect(controller.preview(controller.prepare(expected.kind,expected.payload))).toMatchObject({allowed:true,actionPoints:2,upfrontCostFen:450000})
++   ui.click('核对这期服务与已经约定的支持')
++   expect(request).toHaveBeenLastCalledWith(expected.kind,expected.payload,expected.label,true)
++  }
++  expect(request).toHaveBeenCalledTimes(2);expect(controller.exportSaved()).toBe(before)
++  const command=relayServiceDraftCommand(p,target,p.relayDraftMemory!.read(p.view.runId,scope)!)!
++  expect((await controller.submit(controller.prepare(command.kind,command.payload))).status).toBe('saved')
++  const saved=controller.snapshot.view!,savedRelay=(saved.features as unknown as PlayFeatures).relay!,period=savedRelay.periods[0]!,savedFunds=savedRelay.businesses[0]!.funds
++  expect(period.maxSupplierCostFen).toBe(0);expect(period.job?.definitionId).toBe('relay-service');expect(period.supportJob?.definitionId).toBe('relay-support-guided')
++  expect(savedFunds.cashFen).toBe(beforeFunds.cashFen);expect(savedFunds.heldFen-beforeFunds.heldFen).toBe(450000);expect(savedFunds.availableFen).toBe(beforeFunds.availableFen-450000)
++  // Future service and support reserve their original fees; actual service starts on its original date.
++  for(let count=0;(controller.snapshot.view!.features as unknown as PlayFeatures).relay!.periods[0]!.job?.status==='planned'&&count<4;count++)expect((await controller.submit(controller.prepare('AdvanceTime',{date:'2025-01-28'}))).status).toBe('saved')
++  const started=(controller.snapshot.view!.features as unknown as PlayFeatures).relay!,startedFunds=started.businesses[0]!.funds
++  expect(started.periods[0]!.job?.status).toBe('running');expect(startedFunds.cashFen).toBe(beforeFunds.cashFen-300000);expect(startedFunds.heldFen-beforeFunds.heldFen).toBe(150000)
++ }finally{await actual.controller.close();await actual.store.close()}
++},20000)

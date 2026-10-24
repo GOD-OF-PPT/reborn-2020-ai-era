@@ -57,6 +57,13 @@
 .cinema-app .dialog>.season-recollection-actions{display:flex;align-items:center;justify-content:flex-end;gap:14px;flex:none;margin-top:12px;padding-top:15px;border-top:1px solid #ad986466}
 .season-focus-actions>button,
 .season-recollection-actions>button{padding:10px 14px;font:15px/1.7 var(--serif)}
+.cinema-app .dialog>.season-focus-footer{display:grid;gap:8px;flex:none;margin-top:12px;padding-top:12px;border-top:1px solid #ad986466}
+.season-focus-footer .season-focus-groups{display:flex;flex-wrap:wrap;gap:8px 16px}
+.season-focus-footer .season-focus-groups>button{padding:6px 4px;border:0;border-bottom:1px dashed #a69c6f;background:none;color:#667456;font-family:var(--serif)}
+.season-focus-footer .season-focus-groups>button[aria-pressed=true]{border-bottom:3px double #64794f;color:#354f3e}
+.season-focus-footer .season-focus-groups>button:focus-visible{outline:2px solid #7b8962;outline-offset:3px}
+.season-focus-book .season-focus-footer .season-selection-note{margin:0;padding:0}
+.season-focus-footer .season-focus-actions{display:flex;align-items:center;justify-content:flex-end;gap:14px}
 .season-recollection .season-leaf-heading{padding:7px 0 16px;border-bottom:1px solid #a69c6f55}
 .season-recollection .season-echo-leaf{padding:18px 0;border-bottom:1px solid #a69c6f55;break-inside:avoid}
 .season-recollection .season-echo-leaf:not(:first-child){break-before:column}
@@ -98,7 +105,7 @@
 .opening-scene-active .opening-run-bar .scene-action-budget>small{font-size:11px}
 .opening-scene-active .opening-run-bar .save-badge{padding:5px 9px;font-size:11px;line-height:1.6}
 .opening-scene-active .opening-account-link{padding:5px 0;border:0;border-bottom:1px solid #c8b27b66;background:none;color:#d4d3b8;font:12px/1.7 var(--serif,"Songti SC",serif)}
-.opening-scene-active .opening-account-link:hover{color:#ffe3ad;border-bottom-color:#e0c38a}
+.opening-scene-active .opening-account-link:is(:hover,:focus-visible){color:#ffe3ad;background:#15332e;border-bottom-color:#e0c38a}
 .opening-scene-active .opening-account-link:focus-visible,
 .opening-scene-active .site-header button:focus-visible{outline:3px solid #ffe2a6;outline-offset:5px}
 
@@ -345,6 +352,18 @@
 .opening-object[data-kind=receipt] .opening-object-copy{border-left:3px double #d9bc82}
 .opening-object[data-kind=receipt] .opening-object-mark:empty{width:26px;height:21px;background:transparent;border:2px solid #a66347;border-radius:0;transform:rotate(9deg)}
 .opening-object[data-kind=portfolio] .opening-object-mark:empty{background:#b2a17a;border:1px solid #6f7555;border-radius:0}
+
+/* The relay kit is a low object in this room; its labels remain live paper text. */
+.opening-room>.opening-object[data-appearance=relay],
+.opening-room .opening-room-object>.opening-object[data-appearance=relay]{grid-template-rows:minmax(0,1fr) auto;gap:10px}
+.opening-room>.opening-object[data-appearance=relay]{left:73%}
+.opening-room>.opening-object[data-appearance=relay]>.opening-object-art,
+.opening-room .opening-room-object>.opening-object[data-appearance=relay]>.opening-object-art{aspect-ratio:3/2;align-self:end;height:auto;width:100%;filter:drop-shadow(0 4px 3px #00151b66)}
+.opening-object[data-appearance=relay] .opening-object-copy{transform:none;background:linear-gradient(90deg,#25302ce8,#152c2dbb);border-left-color:#d1b583}
+.opening-object[data-appearance=relay] .opening-object-mark{right:29%;top:62%;border-radius:0;background:#e0cfaaeb;border-color:#96774f}
+.opening-object[data-appearance=relay][data-kind=calendar] .opening-object-mark{border-style:dashed}
+.opening-object[data-appearance=relay][data-kind=waiting] .opening-object-copy{border-left-style:dashed}
+.opening-object[data-appearance=relay][data-kind=receipt] .opening-object-mark:empty{background:transparent;border-style:double}
 
 .opening-object[data-text-only=true],
 .text-mode .opening-object{transform:none;box-shadow:none}

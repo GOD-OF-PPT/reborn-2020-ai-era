@@ -1,0 +1,106 @@
+--- before/src/ui/RelayPanel.tsx
++++ current/src/ui/RelayPanel.tsx
+@@ -54,7 +54,7 @@
+  <details className="panel" id={b.id+'-resources'} open={b.lifecycle==='preparing'}><summary>本次任务资源 · {v.resources.find(r=>r.id===resource)?.label??'需重新核对'} / {at}</summary><h3>本次实际资源与开工日</h3><div className="form-grid"><label className="field">中转任务资源<ResourceSelect options={v.resources} value={resource} onChange={setResource}/></label><label className="field">本次中转任务开工日期<input type="date" min={props.view.date} max={props.view.phase==='epilogue'?props.view.date:'2025-12-31'} readOnly={props.view.phase==='epilogue'} value={at} onChange={e=>setDate({at:props.view.date,value:e.target.value})} onBlur={e=>setDate({at:props.view.date,value:e.currentTarget.value})}/></label></div><p>服务、视频、课程共用真实日期资源；未来任务会预留行动与自有资金，开始不等于完成。</p>{!v.technicallyReady?<CommandButton {...props} kind="StartRelayPreparation" payload={{businessId:b.id,preparation:'basics',...assignment}} label="补齐服务技术基础 · 1点/1000元/7天"/>:null}{!v.preparations.some(p=>p.businessId===b.id&&p.kind==='materials'&&p.job?.status==='completed')?<CommandButton {...props} kind="StartRelayPreparation" payload={{businessId:b.id,preparation:'materials',...assignment}} label="完成供应申请与服务材料 · 1点/100元/7天"/>:null}{v.preparations.filter(p=>p.businessId===b.id).map(p=><article key={p.id}><h4>{p.kind==='basics'?'技术学习':'申请材料'}</h4><RelayJob props={props} job={p.job}/></article>)}<details><summary>需要员工：招聘与实际工资</summary><p>招聘占1点/500元，周助理月薪2500元，按实际在岗日计薪。员工不会提供免费注意力。</p><CommandButton {...props} kind="HireWorker" payload={{businessId:b.id,definitionId:'assistant-zhou'}} label="招聘周助理支持服务"/>{props.view.operations?.workers.filter(w=>w.to===null).map(w=><CommandButton key={w.id} {...props} kind="DismissWorker" payload={{workerId:w.id}} label={`结算并解聘${w.definitionId}`} confirm/>)}</details></details>
+ <section className="stack" id={b.id+'-periods'}><h3>当前服务与旧账处理</h3>{periodGroups.pendingByPeriod.size>0?<aside className="warning-box"><strong>独立复核已经揭示未更正差额</strong><p>即使原周期曾经结清，以下{periodGroups.pendingByPeriod.size}个周期仍有已知计量差额需要按原记录处理，不能藏进历史。</p></aside>:null}{currentPeriods.map(p=><RelayPeriodCard key={p.id} {...props} periodId={p.id} target={props.target} onSelectTarget={props.onSelectTarget}/>)}{archivedPeriods.length>0?<details className="panel"><summary>已结服务周期记录（{archivedPeriods.length}）</summary>{archivedPeriods.map(p=><RelayPeriodCard key={p.id} {...props} periodId={p.id} target={props.target} onSelectTarget={props.onSelectTarget}/>)}</details>:null}</section>
+  <details className="panel" id={b.id+'-customers'} open={customers.some(c=>c.dueReceivableFen>0)||station.trafficPaused}><summary>客户余额、信用与未来报价（{customers.length}）</summary>{visibleCustomers.map(c=><RelayCustomer key={c.id} {...props} customerId={c.id} number={v.customers.filter(original=>original.businessId===b.id).findIndex(original=>original.id===c.id)+1}/>)}{customers.length>0?<RequoteForm {...props} businessId={b.id} assignment={assignment}/>:null}</details>
+- {props.target.kind==='business'?<details className="panel" open={props.initialDraftSlot==='service'}><summary>安排另一份实际服务，与已经承诺的支持</summary><RelayServiceChoice p={props} target={businessTarget}/></details>:<button type="button" onClick={()=>props.onSelectTarget(businessTarget)}>明确回到本站，另拟新的服务</button>}
++ {props.target.kind==='business'?<section className="panel"><h3>安排另一份实际服务，与已经承诺的支持</h3><RelayServiceChoice p={props} target={businessTarget}>{view=><>{view.actions}{view.body}</>}</RelayServiceChoice></section>:<button type="button" onClick={()=>props.onSelectTarget(businessTarget)}>明确回到本站，另拟新的服务</button>}
+  <RelayIntake {...props} businessId={b.id} assignment={assignment}/>
+  <details className="panel" open={b.lifecycle==='preparing'}><summary>供应许可、故障域与供应资产</summary><p>名称和授权均为虚构。杉木与青桥共享cloud-east故障域，两家不等于独立备份；港湾有不同故障域与成本。只在明确选定、已批准且已适配的链内自动故障转移。</p>{v.catalog.suppliers.map(s=>{const option=v.supplyOptions.find(o=>o.businessId===b.id&&o.supplierId===s.id),applications=v.applications.filter(a=>a.businessId===b.id&&a.supplierId===s.id);return <section className="panel stack" key={s.id}><h4>{s.label}</h4><p>故障域{s.failureDomain} · {s.billing==='prepaid'?'供应预付后消耗':'实际用量后七天账期'} · 当前已知供价{s.currentRate?moneyText(s.currentRate.unitCostFen)+' / 千模拟token':'尚无本局已发布价'}；批准信用上限{moneyText(s.creditLimitFen)}</p><p>{option?.permitted?'当前许可有效':'尚无有效供应许可'} · {option?.adapted?'已有实际适配':'尚缺适配'} · 供应贷项/预付资产{moneyText(option?.credit?.remainingFen??0)} · 该供应未付{moneyText(option?.outstandingFen??0)}</p><CommandButton {...props} kind="ApplyRelaySupply" payload={{businessId:b.id,supplierId:s.id,...assignment}} label={`申请${s.label}服务范围 · 1点/1000元/7天`}/>{applications.map(a=><article key={a.id} id={a.id}><RelayJob props={props} job={a.job}/>{a.approved===null?<CommandButton {...props} kind="ReadRelaySupplyDecision" payload={{applicationId:a.id}} label="查看已完成的供应审查结果"/>:<p className={a.approved?'receipt-card':'warning-box'}>{a.approved?'已批准本局服务聚合范围，有效至'+a.expiresAt:'未获批准；费用已发生，稍后可重新申请'}。不代表现实第三方授权。</p>}</article>)}{option?.permitted&&!option.adapted?<CommandButton {...props} kind="StartRelayAdapter" payload={{businessId:b.id,supplierId:s.id,...assignment}} label="实际适配此供应 · 1点/1000元/7天"/>:null}{v.adapters.filter(a=>a.businessId===b.id&&a.supplierId===s.id).map(a=><RelayJob key={a.id} props={props} job={a.job}/>)}<SupplierFunds {...props} businessId={b.id} supplierId={s.id}/></section>})}</details>
+ 
+@@ -81,7 +81,7 @@
+  const selected=props.target.kind==='period'&&props.target.periodId===p.id?props.target:null,originalJob=selected?.jobId!==undefined,auditTarget=selected?.meterId?selected:target,targetIndex=selected?.meterId?meters.findIndex(m=>m.id===selected.meterId):-1,visibleRows=Math.max(meterRows,targetIndex+1)
+  return <section className="panel stack" id={p.id+'-period'}><div className="section-heading"><h3>{p.from}—{p.to}服务周期</h3><span className="tag">{state[p.status]}</span></div><p>已选择{p.customerIds.length}位客户，已授权供应{p.supplierIds.map(id=>v.catalog.suppliers.find(s=>s.id===id)?.label??id).join(' → ')}。上限{p.maxUnits}单位，供应成本授权上限{moneyText(p.maxSupplierCostFen)}；请求并非销量保证。</p><p>实际观测{p.observedDays}/28天，报告用量{p.reportedUnits}，有停止/不足原因的日期{p.failedDays}天；原记录保留。客户余额与企业欠款不会因为本期结束而消失。</p><h4>服务与基础设施</h4><RelayJob props={props} job={p.job} anchor={periodJobAnchor(p.id,p.jobId)}/><h4>已承诺的客户支持</h4><RelayJob props={props} job={p.supportJob} anchor={periodJobAnchor(p.id,p.supportJobId)}/><CommandButton {...props} kind="StopRelayPeriod" payload={{periodId:p.id}} label="停止本周期后续请求，保留支持与旧账" confirm/>
+  {v.observations.filter(o=>o.periodId===p.id).map(o=><p className="warning-box" key={o.id}>{o.date} · {o.reason}（{o.domain}）</p>)}
+- <h4>计量复核与原账更正</h4><p>复核只覆盖已经发生的记录，1点/100元/3天；原用量不覆盖，差额关联原记录。当前复核完成{p.auditedMeters}/{p.meterCount}条，已知不一致{p.knownCorrections}条。</p>{selected&&!originalJob?<details open><summary>明确资源与日期，再委托这份已有计量</summary><RelayAuditEditor p={props} target={auditTarget}/></details>:<button type="button" onClick={()=>props.onSelectTarget(target)}>明确翻回本期，再决定新的复核</button>}{auditJobs.map(a=><article key={a.jobId}><p>该次原复核覆盖{a.meterCount}条已有记录；完整批次可能包含原其他期，不是再次委托。</p><RelayJob props={props} job={a.job} anchor={periodJobAnchor(p.id,a.jobId)}/></article>)}<CommandButton {...props} kind="CorrectRelayPeriod" payload={{periodId:p.id}} label="按已完成复核逐笔更正本期已有账单" confirm/>
++ <h4>计量复核与原账更正</h4><p>复核只覆盖已经发生的记录，1点/100元/3天；原用量不覆盖，差额关联原记录。当前复核完成{p.auditedMeters}/{p.meterCount}条，已知不一致{p.knownCorrections}条。</p>{selected&&!originalJob?<section><h4>明确资源与日期，再委托这份已有计量</h4><RelayAuditEditor p={props} target={auditTarget}>{view=><>{view.actions}{view.body}</>}</RelayAuditEditor></section>:<button type="button" onClick={()=>props.onSelectTarget(target)}>明确翻回本期，再决定新的复核</button>}{auditJobs.map(a=><article key={a.jobId}><p>该次原复核覆盖{a.meterCount}条已有记录；完整批次可能包含原其他期，不是再次委托。</p><RelayJob props={props} job={a.job} anchor={periodJobAnchor(p.id,a.jobId)}/></article>)}<CommandButton {...props} kind="CorrectRelayPeriod" payload={{periodId:p.id}} label="按已完成复核逐笔更正本期已有账单" confirm/>
+  <details open={selected?.meterId!==undefined}><summary>用量、原始价格版本与更正记录（{meters.length}）</summary><div className="table-scroll"><table><thead><tr><th>日期</th><th>报告用量</th><th>复核实计</th><th>收费/供价版本</th><th>原因与更正</th></tr></thead><tbody>{meters.slice(0,visibleRows).map(m=><tr key={m.id} id={meterAnchor(m.id)}><td>{m.date}</td><td>{m.reportedUnits}</td><td>{m.auditedUnits??'尚未独立复核'}</td><td>{moneyText(m.unitPriceFen)} / {m.rateId??'未服务'}</td><td>{m.reason?reasonText(m.reason):'按当前已选供应服务'} · {m.correctionId?'已追加更正':'原记录'}</td></tr>)}</tbody></table></div>{visibleRows<meters.length?<div className="button-row"><button type="button" onClick={()=>setMeterRows(n=>n+50)}>显示后续50条用量</button><button type="button" onClick={()=>setMeterRows(meters.length)}>显示全部本期用量</button></div>:null}{v.corrections.filter(c=>meters.some(m=>m.id===c.meterId)&&(c.customerDeltaFen!==0||c.supplierDeltaFen!==0)).map(c=><p key={c.id}>{c.date} · 客户收入差额{moneyText(c.customerDeltaFen)} · 供应成本差额{moneyText(c.supplierDeltaFen)} · 原账{c.meterId.slice(-6)}</p>)}</details>
+  </section>
+ }
+--- before/src/ui/relay-target.test.tsx
++++ current/src/ui/relay-target.test.tsx
+@@ -9,6 +9,7 @@
+ import RelayPanel,{relayPanelTargetLocation} from './RelayPanel.tsx'
+ import type {RelaySceneIdentity,RelaySceneTarget} from './relay-scene-target.ts'
+ import {relayDraftScopeForTarget} from './RelayServiceChoice.tsx'
++import {createRelaySceneDraftMemory,emptyRelaySceneDraft} from './relay-scene-draft.ts'
+ import plannedRaw from '../../goal-1/evidence/t17-acceptance-11/chrome-relay-fault-r12/r92-normal-for-service-abort-text-before-import.json?raw'
+ 
+ const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'relay-book-target'})
+@@ -68,3 +69,20 @@
+  }
+  expect(controller.exportSaved()).toBe(before)
+ })
++
++it('places the single original-book service and audit action before their complete field groups',()=>{
++ const before=controller.exportSaved(),relay=p.features.relay!,businessTarget:RelaySceneTarget={kind:'business',runId:target.runId,accountId:target.accountId,businessId:target.businessId,stationId:target.stationId},memory=createRelaySceneDraftMemory(p.view.runId),book={...p,relayDraftMemory:memory}
++ memory.write(p.view.runId,relayDraftScopeForTarget(p,businessTarget,'service').scope!,{...emptyRelaySceneDraft(),customerIds:relay.customers.filter(c=>c.businessId===target.businessId&&c.closedAt===null).map(c=>c.id)})
++ const service=renderToStaticMarkup(<RelayPanel {...book} initialTarget={businessTarget} initialDraftSlot="service"/>),fields=service.indexOf('class="relay-service-editor"'),next=service.indexOf('继续核对下一步 →')
++ expect(fields).toBeGreaterThan(-1);expect(next).toBeGreaterThan(-1)
++ expect(next,'the complete original-book list must not precede the only next-step action').toBeLessThan(fields)
++ expect(service.match(/继续核对下一步 →/g)).toHaveLength(1)
++ const clientGroup=service.slice(fields,service.indexOf('</fieldset>',fields))
++ expect(clientGroup.match(/checked=""/g)).toHaveLength(6)
++ for(let number=1;number<=6;number++)expect(clientGroup).toContain('客户'+number+' · ')
++ const audit=renderToStaticMarkup(<RelayPanel {...p} initialTarget={target} initialDraftSlot="audit"/>),auditFields=audit.indexOf('class="relay-audit-editor"'),action=audit.indexOf('先明确资源与日期，核对原计量')
++ expect(auditFields).toBeGreaterThan(-1);expect(action).toBeGreaterThan(-1);expect(action).toBeLessThan(auditFields)
++ expect(audit.match(/先明确资源与日期，核对原计量/g)).toHaveLength(1)
++ expect(audit).toContain('实际开工日期');expect(audit).toContain('完成前不揭示实计')
++ expect(controller.exportSaved()).toBe(before);expect(p.request).not.toHaveBeenCalled()
++},20000)
+--- before/src/ui/RelayServiceChoice.test.tsx
++++ current/src/ui/RelayServiceChoice.test.tsx
+@@ -11,7 +11,7 @@
+ import {CommandButton} from './CommandButton.tsx'
+ import {createRelaySceneDraftMemory,emptyRelaySceneDraft} from './relay-scene-draft.ts'
+ import type {RelaySceneTarget} from './relay-scene-target.ts'
+-import {relayPanelTargetLocation} from './RelayPanel.tsx'
++import RelayPanel,{relayPanelTargetLocation} from './RelayPanel.tsx'
+ import readyRaw from '../../goal-1/evidence/t17-acceptance-11/normal-input-r1/chrome-normal-prefix-r1/r0091.json?raw'
+ import plannedRaw from '../../goal-1/evidence/t17-acceptance-11/chrome-relay-fault-r12/r92-normal-for-service-abort-text-before-import.json?raw'
+ 
+@@ -63,6 +63,25 @@
+   edit(label:string,value:string|boolean){const field=elements(tree).find(e=>e.type==='label'&&text(e.props.children).includes(label)),input=field&&elements(field).find(e=>e.type==='input'||e.type==='select');if(!input)throw Error('VISIBLE_FIELD_REQUIRED:'+label);handle(input,'onChange',value);refresh()},
+   text:()=>text(tree),
+  }
++}
++/** Follow the actual book's public JSX to its original business/period and shared editor. */
++function originalBookEditor(p:GamePanelProps,target:RelaySceneTarget,slot:'service'|'audit'='service'){
++ const invoke=(element:Element,name:string)=>{
++  if(typeof element.type!=='function')throw Error('ACTUAL_BOOK_COMPONENT_REQUIRED')
++  const component=element.type as (props:Record<string,unknown>)=>unknown
++  return mounted(name,()=>component(element.props))
++ }
++ const page=invoke(RelayPanel({...p,initialTarget:target,initialDraftSlot:slot}),'original-book-scope'),business=elements(page).find(e=>e.props.businessId===target.businessId&&typeof e.props.onSelectTarget==='function')
++ if(!business)throw Error('ORIGINAL_BOOK_BUSINESS_REQUIRED')
++ let content=invoke(business,'original-book-business')
++ if(slot==='audit'){
++  const period=elements(content).find(e=>target.kind==='period'&&e.props.periodId===target.periodId&&typeof e.props.onSelectTarget==='function')
++  if(!period)throw Error('ORIGINAL_BOOK_PERIOD_REQUIRED')
++  content=invoke(period,'original-book-period')
++ }
++ const editor=elements(content).find(e=>e.type===(slot==='service'?RelayServiceChoice:RelayAuditEditor))
++ if(!editor)throw Error('ORIGINAL_SHARED_BOOK_EDITOR_REQUIRED')
++ return invoke(editor,'original-book-editor:'+slot)
+ }
+ async function fixture(raw:string,name:string){
+  const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name})
+@@ -96,7 +115,7 @@
+  expect(draft).toMatchObject({customerIds:[customer.id],supplierIds:['cedar-direct'],resources:['player-production'],startAt:'2025-01-28',maxUnits:'2800',maxSupplierCost:'100',supportMode:'guided'})
+  expect(request).not.toHaveBeenCalled();expect(controller.exportSaved()).toBe(before)
+  ui.click('翻看同企业原册');expect(inspect).toHaveBeenCalledWith(target,'service')
+- const book=driver(()=>mounted('book',()=>RelayServiceChoice({p:input,target})))
++ const book=driver(()=>originalBookEditor(input,target))
+  book.click('继续核对下一步');book.click('继续核对下一步');book.click('继续核对下一步')
+  expect(p.relayDraftMemory!.read(p.view.runId,scope)).toEqual(draft)
+  const expected=relayServiceDraftCommand(p,target,draft)!
+@@ -137,7 +156,7 @@
+  const ui=driver(()=>mounted('audit',()=>RelayAuditEditor({p:{...p,request},target:exact,onInspect:inspect})))
+  ui.click('翻看同一期原计量');expect(inspect).toHaveBeenCalledWith(exact,'audit');expect(p.relayDraftMemory!.read(p.view.runId,scope)).toEqual(draft)
+  for(const blocked of [{readOnly:true},{hasCandidate:true,saveStatus:'unsaved' as const},{revision:p.view.revision+1}]){
+-  const view={...p.view,...blocked},tree=mounted('blocked-audit',()=>RelayAuditEditor({p:{...p,view,request},target:exact})),button=elements(tree).find(e=>e.type===CommandButton)
++  const view={...p.view,...blocked},tree=originalBookEditor({...p,view,request},exact,'audit'),button=elements(tree).find(e=>e.type===CommandButton)
+   if(!button)throw Error('ORIGINAL_AUDIT_COMMAND_REQUIRED')
+   const defensive=button.props.request as GamePanelProps['request'];defensive(expected.kind,expected.payload,expected.label,true)
+  }

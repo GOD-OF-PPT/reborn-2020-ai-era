@@ -7,6 +7,8 @@ import {openingFocusAfterSave,playerThread,type OpeningFocus} from './player-thr
 import {videoTargetEntity} from './video-player-thread.ts'
 import {courseFocusFor,courseSceneContext} from './course-player-thread.ts'
 import {courseTargetReason,type CourseSceneTarget} from './course-scene-progress.ts'
+import {relayBusinessTarget,relayFocusFor,relayFocusOpen} from './relay-player-thread.ts'
+import type {RelaySceneTarget} from './relay-scene-target.ts'
 
 export type SeasonInput=Pick<GamePanelProps,'view'|'features'>
 type Inspect={screen:Screen;label:string;target?:SceneTarget}
@@ -16,6 +18,18 @@ export interface SeasonFocusChoice{
  readonly originQuarter:string|null;readonly date:string|null;readonly nextDate:string|null
  readonly focus:OpeningFocus;readonly scope:'entry'|'current'|'carry'|'history';readonly disabledReason:string|null
 }
+export type SeasonFocusGroup='continue'|'directions'|'history'
+export const seasonFocusGroups:readonly {readonly id:SeasonFocusGroup;readonly label:string}[]=[
+ {id:'continue',label:'继续眼前的事'},
+ {id:'directions',label:'换个方向'},
+ {id:'history',label:'翻过去的记录'},
+]
+export function seasonFocusGroupFor(choice:SeasonFocusChoice):SeasonFocusGroup{return choice.scope==='entry'?'directions':choice.scope==='history'?'history':'continue'}
+export function initialSeasonFocusGroup(choices:readonly SeasonFocusChoice[]):SeasonFocusGroup{return choices.some(choice=>seasonFocusGroupFor(choice)==='continue'&&choice.disabledReason===null)?'continue':choices.some(choice=>seasonFocusGroupFor(choice)==='directions')?'directions':'history'}
+function focusChoiceLine(line:string,detail:string):string{
+ const first=line.trim(),second=detail.trim()
+ return !second||first.includes(second)?first:!first||second.includes(first)?second:first+' '+second
+}
 export interface SeasonEchoNode{readonly id:string;readonly date:string;readonly title:string;readonly line:string;readonly sourceRefs:readonly SeasonSourceRef[];readonly inspect:Inspect}
 export interface SeasonPendingItem{readonly id:string;readonly title:string;readonly line:string;readonly dueAt:string|null;readonly accountId:string|null;readonly urgent:boolean;readonly sourceRefs:readonly SeasonSourceRef[];readonly focus:OpeningFocus|null;readonly inspect:Inspect}
 export interface SeasonRecollectionView{
@@ -24,7 +38,7 @@ export interface SeasonRecollectionView{
  readonly nodes:readonly SeasonEchoNode[];readonly allNodes:readonly SeasonEchoNode[];readonly remaining:readonly SeasonPendingItem[]
  readonly nextQuestion:string;readonly nextQuarterDate:string|null
 }
-const focusId=(f:OpeningFocus)=>[f.kind,f.accountId,f.entityId??('selection' in f?f.selection:'entry')].join('|')
+const focusId=(f:OpeningFocus)=>[f.kind,f.accountId,f.entityId??('selection' in f?f.selection:'entry'),...(f.kind==='relay'&&f.relayTarget?[f.relayTarget.businessId,f.relayTarget.stationId,f.relayTarget.kind==='period'?f.relayTarget.periodId:'']:[])].join('|')
 
 /** Choosing a bookmark is separate from executing any of its original commands. */
 export function seasonFocusChoices(p:SeasonInput):readonly SeasonFocusChoice[]{
@@ -33,7 +47,7 @@ export function seasonFocusChoices(p:SeasonInput):readonly SeasonFocusChoice[]{
   const thread=playerThread(p,focus),id=focusId(thread.focus)
   const prior=rows.findIndex(row=>row.id===id)
   if(prior!==-1){if(rows[prior]!.date===null&&date!==null)rows[prior]={...rows[prior]!,date};return}
-  rows.push({id,title:title??thread.title,line:thread.line+' '+thread.detail,stage:thread.stage,originQuarter:thread.focusQuarter,date,nextDate:thread.wait?.date??null,focus:thread.focus,scope:thread.focusScope==='invalid'?'entry':thread.focusScope,disabledReason:thread.invalidReason})
+  rows.push({id,title:title??thread.title,line:focusChoiceLine(thread.line,thread.detail),stage:thread.stage,originQuarter:thread.focusQuarter,date,nextDate:thread.wait?.date??null,focus:thread.focus,scope:thread.focusScope==='invalid'?'entry':thread.focusScope,disabledReason:thread.invalidReason})
  }
  add({...base,kind:'work'},null,'本季的工作与生活底线')
  add({...base,kind:'life',selection:'rest'},null,'留一段时间给自己')
@@ -43,6 +57,19 @@ export function seasonFocusChoices(p:SeasonInput):readonly SeasonFocusChoice[]{
  add({...base,kind:'first-order',entityId:f.firstOrder.contractId??f.firstOrder.offerId},f.firstOrder.dates.startAt,'那份手工单与实际结果')
  add({...base,kind:'video',videoTarget:null},null,'从一个真实账号与视频尝试开始')
  add({...base,kind:'course',courseTarget:null},null,'从一份明确的课程准备开始')
+ add(relayFocusFor(p),null,'先选择同一笔中转服务与原站点')
+ for(const business of f.relay?.businesses??[]){const identity=relayBusinessTarget(p,business.id);if(!identity)continue
+  add(relayFocusFor(p,identity),f.relay!.stations.find(s=>s.id===identity.stationId)?.createdAt??null,'原中转站 · 服务与原账')
+  for(const application of f.relay!.applications.filter(a=>a.businessId===business.id))add(relayFocusFor(p,{...identity,kind:'application',applicationId:application.id}),application.appliedAt,'这份供应申请与实际回信')
+  for(const audience of f.relay!.audiences.filter(a=>a.businessId===business.id))add(relayFocusFor(p,{...identity,kind:'audience',audienceId:audience.id}),audience.createdAt,'这次中转获客的原反馈')
+  for(const [index,customer] of f.relay!.customers.filter(c=>c.businessId===business.id).entries())add(relayFocusFor(p,{...identity,kind:'customer',customerId:customer.id}),customer.signedAt,'原中转客户'+(index+1)+' · 余额、应收与约定')
+  for(const period of f.relay!.periods.filter(row=>row.businessId===business.id)){
+   const target:RelaySceneTarget={...identity,kind:'period',periodId:period.id}
+   add(relayFocusFor(p,target),period.createdAt,period.from+'—'+period.to+' · 原服务单')
+   const jobs=[period.job,period.supportJob,...f.relay!.auditJobs.filter(a=>a.periodIds.includes(period.id)).map(a=>a.job)]
+   for(const job of jobs)if(job)add(relayFocusFor(p,{...target,jobId:job.id}),job.startAt,period.from+'期 · 原服务、支持或复核任务')
+  }
+ }
  for(const business of f.course?.businesses??[])add(courseFocusFor(p,{kind:'studio',businessId:business.id}),business.history[0]?.date??null,'原课程工作室 · '+business.id.slice(-6))
  for(const outline of f.course?.outlines??[])add(courseFocusFor(p,{kind:'outline',businessId:outline.businessId,outlineId:outline.id}),outline.job?.startAt??null,'这份原教学大纲')
  for(const license of f.course?.licenses??[])add(courseFocusFor(p,{kind:'license',businessId:license.businessId,licenseId:license.id}),license.job?.startAt??null,'这份原课程素材使用范围')
@@ -73,10 +100,18 @@ export function seasonFocusAfterSave(previous:SeasonInput,current:SeasonInput,ki
  const candidate=openingFocusAfterSave(previous,current,kind,payload,existing)
  if(!pinned||existing===null||candidate===existing||candidate===null)return candidate
  if(existing.kind==='course'&&candidate.kind==='course'&&existing.runId===candidate.runId&&existing.courseTarget===null&&kind==='OpenCourseStudio')return candidate
+ if(existing.kind==='relay'&&candidate.kind==='relay'&&existing.runId===candidate.runId&&existing.relayTarget===null&&kind==='OpenRelayStation')return candidate
  if(existing.runId!==current.view.runId||candidate.kind!==existing.kind||candidate.accountId!==existing.accountId)return existing
  if(existing.kind==='life'&&(candidate.kind!=='life'||existing.selection!==candidate.selection))return existing
  // Refreshing the outcome of the same object is not a new primary selection or quarter.
  if(candidate.entityId===existing.entityId)return existing
+ if(existing.kind==='relay'&&candidate.kind==='relay'){
+  const old=existing.relayTarget,next=candidate.relayTarget
+  if(!old||!next||old.businessId!==next.businessId||old.stationId!==next.stationId)return existing
+  if(old.kind==='business'&&['ApplyRelaySupply','StartRelayMarketing','StartRelayServicePeriod'].includes(kind))return candidate
+  if(old.kind==='customer'&&next.kind==='period'&&kind==='StartRelayServicePeriod'&&current.features.relay?.periods.some(p=>p.id===next.periodId&&p.customerIds.includes(old.customerId)))return candidate
+  return existing
+ }
  if(existing.kind==='video'&&candidate.kind==='video'){
   const old=existing.videoTarget,next=candidate.videoTarget
   if(old===null)return candidate
@@ -145,6 +180,15 @@ function remainingItems(p:SeasonInput):SeasonPendingItem[]{
  for(const {target,jobId} of courseObjects){const job=view.operations?.jobs.find(j=>j.id===jobId);if(!job||!['planned','running'].includes(job.status)||courseTargetReason(f.course,target,courseSceneContext(p)))continue;const focus=courseFocusFor(p,target),thread=playerThread(p,focus);add({id:'operation-job:'+job.id,title:thread.title,line:`${job.startAt}—${job.completeAt}；原任务尚未实际完成，已收保护款、教学确认和退款仍按本对象原记录分别核对。`,dueAt:job.completeAt,accountId:focus.accountId,urgent:false,sourceRefs:[{kind:'job',id:job.id,date:job.startAt}],focus,inspect:thread.inspect})}
  for(const update of f.course?.updates.filter(u=>u.resolvedAt===null)??[]){const c=f.course!.courses.find(c=>c.id===update.courseId);if(!c)continue;const focus=courseFocusFor(p,{kind:'course',businessId:c.businessId,courseId:c.id});add({id:'update:'+update.id,title:'原课程的工具前提仍待处理',line:`${c.name}更新期限${update.dueAt}；旧学生与新招生限制继续，未被新的准备对象隐藏。`,dueAt:update.dueAt,accountId:focus.accountId,urgent:update.dueAt<=view.date,sourceRefs:[{kind:'update',id:update.id,date:update.occurredAt}],focus,inspect:{screen:'course',label:'翻看原课程更新与旧承诺',target:{accountId:focus.accountId,courseTarget:focus.courseTarget,recordId:c.id+'-course',openRecord:true}}})}
  for(const co of f.course?.cohorts.filter(co=>co.closedAt===null)??[]){const c=f.course!.courses.find(c=>c.id===co.courseId);if(!c)continue;const focus=courseFocusFor(p,{kind:'cohort',businessId:c.businessId,courseId:c.id,cohortId:co.id});add({id:'cohort:'+co.id,title:co.startAt+'开班的原课程仍有责任',line:`${c.name}教学至${co.endAt}、支持至${co.supportCompleteAt}、退款窗口至${co.refundUntil}；新准备不会清除这期原学员与责任。`,dueAt:co.refundUntil,accountId:focus.accountId,urgent:false,sourceRefs:[{kind:'cohort',id:co.id,date:co.createdAt}],focus,inspect:{screen:'course',label:'翻看这期原学生、支持与退款',target:{accountId:focus.accountId,courseTarget:focus.courseTarget,recordId:co.id,openRecord:true}}})}
+ for(const business of f.relay?.businesses??[]){const identity=relayBusinessTarget(p,business.id);if(!identity)continue
+  for(const period of f.relay!.periods.filter(row=>row.businessId===business.id)){
+   const target:RelaySceneTarget={...identity,kind:'period',periodId:period.id},focus=relayFocusFor(p,target),thread=playerThread(p,focus)
+   if(relayFocusOpen(p,focus))add({id:'relay-period:'+period.id,title:'这期原服务与支持仍需核对',line:thread.line+' '+thread.detail,dueAt:thread.wait?.date??period.to,accountId:identity.accountId,urgent:false,sourceRefs:[{kind:'period',id:period.id,date:period.createdAt}],focus,inspect:thread.inspect})
+   const jobs=[period.job,period.supportJob,...f.relay!.auditJobs.filter(a=>a.periodIds.includes(period.id)).map(a=>a.job)]
+   for(const job of jobs)if(job&&['planned','running'].includes(job.status)){const selected=relayFocusFor(p,{...target,jobId:job.id}),t=playerThread(p,selected);add({id:'operation-job:'+job.id,title:t.title,line:t.line+' '+t.detail,dueAt:t.wait?.date??job.completeAt,accountId:identity.accountId,urgent:false,sourceRefs:[{kind:'job',id:job.id,date:job.startAt}],focus:selected,inspect:t.inspect})}
+  }
+  for(const customer of f.relay!.customers.filter(c=>c.businessId===business.id&&(c.balance.prepaidFen>0||c.balance.receivableFen>0))){const focus=relayFocusFor(p,{...identity,kind:'customer',customerId:customer.id}),thread=playerThread(p,focus);add({id:'relay-customer:'+customer.id,title:'这位原客户的余额与应收仍在',line:`未消费余额${moneyText(customer.balance.prepaidFen)}、原应收${moneyText(customer.balance.receivableFen)}；到期与实际收取另核，不因服务停下清零。`,dueAt:null,accountId:identity.accountId,urgent:customer.dueReceivableFen>0,sourceRefs:[{kind:'customer',id:customer.id,date:customer.signedAt}],focus,inspect:thread.inspect})}
+ }
  for(const job of w.preparationJobs.filter(j=>j.status==='running'))add({id:'preparation:'+job.id,title:job.title,line:`原准备从${job.startAt}至${job.completeAt}，仍未完成；下一步沿原日历与准备记录。`,dueAt:job.completeAt,accountId:job.accountId,urgent:false,sourceRefs:[{kind:'preparation',id:job.id,date:job.startAt}],focus:null,inspect:{screen:'quarter',label:'翻看这项原准备',target:{accountId:job.accountId}}})
  for(const job of view.operations?.jobs.filter(j=>j.id!==first.jobId&&['planned','running'].includes(j.status))??[]){
   const business=view.operations?.businesses.find(b=>b.id===job.businessId)
@@ -168,6 +212,19 @@ export function seasonRecollection(p:SeasonInput,quarter=p.features.workbench.qu
  const inPeriod=(date:string|null)=>date!==null&&date>=from&&date<=through
  const allNodes:SeasonEchoNode[]=[]
  const add=(node:SeasonEchoNode)=>{if(inPeriod(node.date)&&!allNodes.some(x=>x.id===node.id))allNodes.push(node)}
+ for(const business of f.relay?.businesses??[]){const identity=relayBusinessTarget(p,business.id);if(!identity)continue
+  for(const period of f.relay!.periods.filter(row=>row.businessId===business.id)){
+   const target:RelaySceneTarget={...identity,kind:'period',periodId:period.id},inspect:Inspect={screen:'relay',label:'翻看同一期服务与完整原账',target:{accountId:identity.accountId,relayTarget:target,openRecord:true}}
+   add({id:'relay-plan:'+period.id,date:period.createdAt,title:'这期服务与后续支持已经安排',line:`服务${period.from}—${period.to}；容量与供应预算是原上限，尚不等于实际成本或收入。未来支持沿同一服务单保留。`,sourceRefs:[{kind:'period',id:period.id,date:period.createdAt}],inspect})
+   for(const job of [period.job,period.supportJob])if(job&&['completed','interrupted','cancelled'].includes(job.status)){
+    const date=job.status==='completed'?job.completeAt:job.releasedAt;if(!date)continue
+    add({id:'relay-job:'+job.id,date,title:(job.id===period.jobId?'这期原服务':'这期原支持')+(job.status==='completed'?'已经实际完成':'已经停下'),line:'服务、支持与复核各有原任务；报告用量不代替实计，结束也不清除客户余额、应收或供应责任。',sourceRefs:[{kind:'job',id:job.id,date},{kind:'period',id:period.id,date}],inspect:{...inspect,target:{accountId:identity.accountId,relayTarget:{...target,jobId:job.id},openRecord:true}}})
+   }
+   for(const audit of f.relay!.auditJobs.filter(a=>a.periodIds.includes(period.id)&&a.completed&&a.job?.status==='completed')){const date=audit.job!.completeAt;add({id:'relay-audit:'+audit.jobId+':'+period.id,date,title:'这份原计量复核已经完成',line:`原批次覆盖${audit.meterCount}条记录；公开实计与报告差额仍需逐项核对，更正与客户实际付款分别发生。`,sourceRefs:[{kind:'job',id:audit.jobId,date},{kind:'period',id:period.id,date}],inspect:{...inspect,target:{accountId:identity.accountId,relayTarget:{...target,jobId:audit.jobId},openRecord:true}}})}
+   for(const correction of f.relay!.corrections.filter(c=>f.relay!.meters.some(m=>m.id===c.meterId&&m.periodId===period.id)))add({id:'relay-correction:'+correction.id,date:correction.date,title:'原服务差额已经有据更正',line:`客户收入调整${moneyText(correction.customerDeltaFen)}、供应成本调整${moneyText(correction.supplierDeltaFen)}；更正不等于现金已收付，新增单据按各自原到期日保留。`,sourceRefs:[{kind:'correction',id:correction.id,date:correction.date},...correction.operationIds.map(id=>({kind:'operation',id,date:correction.date}))],inspect:{...inspect,target:{accountId:identity.accountId,relayTarget:{...target,meterId:correction.meterId},openRecord:true}}})
+  }
+  for(const tx of w.finance.find(a=>a.accountId===identity.accountId)?.transactions??[]){const customer=f.relay!.customers.find(c=>c.businessId===business.id&&c.id===tx.contractId);if(!customer||tx.amountFen<=0)continue;add({id:'relay-cash:'+tx.id,date:tx.date,title:'这位原客户的款项实际进入账户',line:`本次现金流入${moneyText(tx.amountFen)}；充值保护与到期应收收取按原流水分别核对，不把现金流入再算成本期新收入。`,sourceRefs:[{kind:'payment',id:tx.id,date:tx.date},{kind:'customer',id:customer.id,date:customer.signedAt}],inspect:{screen:'relay',label:'翻看这位原客户的现金与原单',target:{accountId:identity.accountId,relayTarget:{...identity,kind:'customer',customerId:customer.id},openRecord:true}}})}
+ }
  for(const payroll of view.operations?.payroll??[])if(payroll.kind==='salary'&&payroll.amountFen>0)add({id:payroll.id,date:payroll.through,title:'按实际在岗日，工资已经收到',line:`本次实际工资${moneyText(payroll.amountFen)}；它与经营利润、持仓浮盈分别记录。`,sourceRefs:[{kind:'payroll',id:payroll.id,date:payroll.through},...(payroll.operationId?[{kind:'operation',id:payroll.operationId,date:payroll.through}]:[])],inspect:{screen:'quarter',label:'翻看这段原工作与工资记录',target:{accountId:'personal',recordId:payroll.entityId}}})
  const first=f.firstOrder
  if(first.contractId)for(const tx of w.finance.find(a=>a.accountId==='personal')?.transactions??[])if(tx.amountFen>0&&(tx.contractId===first.contractId||tx.sourceId===first.contractId))add({id:tx.id,date:tx.date,title:'手工单的客户款实际到账',line:`本次实收${moneyText(tx.amountFen)}；原制作成本${moneyText(first.result.directCostFen)}、本单净额${moneyText(first.result.netOrderFen)}。工资与其他收支没有算入本单。`,sourceRefs:[{kind:'payment',id:tx.id,date:tx.date},{kind:'contract',id:first.contractId,date:tx.date}],inspect:{screen:'quarter',label:'翻看这份原手工单',target:{accountId:'personal',recordId:first.contractId}}})

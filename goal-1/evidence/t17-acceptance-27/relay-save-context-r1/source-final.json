@@ -1,0 +1,145 @@
+{
+  "owned": [
+    {
+      "path": "src/ui/App.tsx",
+      "bytes": 50905,
+      "sha256": "e31183aa8801c15ee7eb9d4851d6cb767c3006a64c584c04dfc0e286986178cb"
+    },
+    {
+      "path": "src/ui/App.relay-save-context.test.tsx",
+      "bytes": 13307,
+      "sha256": "3f1636c4cb800b417571858477d78b3787102ee0dadbbca50b8055d6974d52f9"
+    }
+  ],
+  "sourceBefore": [
+    {
+      "path": "src/ui/App.tsx",
+      "bytes": 49606,
+      "sha256": "8342c8bfb9a15c5f26308e7112ff1d2b3cf65062e16b59618957a49fd63a2fa7"
+    },
+    {
+      "path": "src/ui/NarrativeScene.tsx",
+      "bytes": 46210,
+      "sha256": "476fea9d4d4b30a06bd6f69987f7c692f99709ba31df6416e9e18b1ca44168de"
+    },
+    {
+      "path": "src/ui/RelayPanel.tsx",
+      "bytes": 34848,
+      "sha256": "d6c319f7556ee48918841b0a79bf62a3c3e833678b705a981195088da5f2cf62"
+    },
+    {
+      "path": "src/ui/RelayServiceChoice.tsx",
+      "bytes": 20554,
+      "sha256": "2e8eb5e6bdd1aec24d51b22fd805f4cdbf905985d9e65b34f2c8674ef327eaa4"
+    },
+    {
+      "path": "src/ui/relay-player-thread.ts",
+      "bytes": 13981,
+      "sha256": "169c8c3b4edf5ae5bfa577ba794e9c612649327873f33a818e054849273a5ea4"
+    },
+    {
+      "path": "src/ui/relay-scene-clock.ts",
+      "bytes": 697,
+      "sha256": "0de150eaa516adf763074601943fd935e99e44aa198e288dafb32e944f12c52f"
+    },
+    {
+      "path": "src/core/epilogue.ts",
+      "bytes": 9480,
+      "sha256": "a93e50d7178843cb8cf257630b1793e45ef35978baf4d3730dac651887fbc881"
+    },
+    {
+      "path": "src/application/game-controller.ts",
+      "bytes": 12213,
+      "sha256": "866879d0db9343e97afd5c500a4c40c63786fc53d63a91efe0e0b327882487c7"
+    }
+  ],
+  "sourceAfter": [
+    {
+      "path": "src/ui/App.tsx",
+      "bytes": 50905,
+      "sha256": "e31183aa8801c15ee7eb9d4851d6cb767c3006a64c584c04dfc0e286986178cb"
+    },
+    {
+      "path": "src/ui/NarrativeScene.tsx",
+      "bytes": 46210,
+      "sha256": "476fea9d4d4b30a06bd6f69987f7c692f99709ba31df6416e9e18b1ca44168de"
+    },
+    {
+      "path": "src/ui/RelayPanel.tsx",
+      "bytes": 34848,
+      "sha256": "d6c319f7556ee48918841b0a79bf62a3c3e833678b705a981195088da5f2cf62"
+    },
+    {
+      "path": "src/ui/RelayServiceChoice.tsx",
+      "bytes": 20896,
+      "sha256": "7870782ced47731a9f2b2c63ed5209219ba6fc9dd46ba2a2edd736e700ac43db"
+    },
+    {
+      "path": "src/ui/relay-player-thread.ts",
+      "bytes": 13981,
+      "sha256": "169c8c3b4edf5ae5bfa577ba794e9c612649327873f33a818e054849273a5ea4"
+    },
+    {
+      "path": "src/ui/relay-scene-clock.ts",
+      "bytes": 697,
+      "sha256": "0de150eaa516adf763074601943fd935e99e44aa198e288dafb32e944f12c52f"
+    },
+    {
+      "path": "src/core/epilogue.ts",
+      "bytes": 9480,
+      "sha256": "a93e50d7178843cb8cf257630b1793e45ef35978baf4d3730dac651887fbc881"
+    },
+    {
+      "path": "src/application/game-controller.ts",
+      "bytes": 12213,
+      "sha256": "866879d0db9343e97afd5c500a4c40c63786fc53d63a91efe0e0b327882487c7"
+    }
+  ],
+  "observedChanges": [
+    {
+      "path": "src/ui/App.tsx",
+      "ownership": "this owner"
+    },
+    {
+      "path": "src/ui/RelayServiceChoice.tsx",
+      "ownership": "another owner; not changed by this task"
+    }
+  ],
+  "boundaries": {
+    "videoCourseSavedBranchesUnchanged": true,
+    "coursePreparationExceptionUnchanged": true,
+    "requestPreparePreviewEnvelopeUnchanged": true,
+    "confirmationSubmitOriginalPayloadUnchanged": true,
+    "candidateRetryOriginalPayloadUnchanged": true
+  },
+  "red": {
+    "code": 1,
+    "tests": "4 cases: 2 passed, 2 failed",
+    "nativeSeconds": 15.2,
+    "wallMs": 16132
+  },
+  "firstGreen": {
+    "code": 0,
+    "tests": "3 files 9 passed",
+    "nativeSeconds": 24.18,
+    "wallMs": 25253,
+    "observedDrift": [
+      "src/ui/RelayServiceChoice.test.tsx"
+    ],
+    "note": "only a concurrently edited unexecuted peer test drifted; not a full frozen source claim"
+  },
+  "finalGreen": {
+    "code": 0,
+    "tests": "3 files 9 passed",
+    "nativeSeconds": 20.99,
+    "wallMs": 21718,
+    "sourceStable": true
+  },
+  "ownedStrict": {
+    "code": 0,
+    "wallMs": 28249,
+    "sourceStable": true
+  },
+  "sameFinalValidationSourceSet": true,
+  "nativeCandidateAcceptance": false
+}

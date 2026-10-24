@@ -1,0 +1,1 @@
+Root授权：本轮仅收原S4-R1必要正确性/本地提交，下一轮才U1。仅准备新closeout-preparation-r3候选；原r2已freeze不得修改/直接使用。HEAD51a794d49a80fc8c3db59ad8f3bf3b2936ffbd33已含2335B系统方案附录；工作树为旧R1/P3前缀加已提交方案附录，future master选择不得重复/丢P0；P3各14LF/2304B留工作树不stage。精确UI/PNG/root27/AGENTS原18/docs37 scope、root19原集合保全。最终root27仍有writer，不seal/stage/commit；不动master/source/旧seal。先完整分段重读当前goal三文件。

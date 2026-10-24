@@ -1,0 +1,30 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/relay-scene-target.test.ts (6 tests | 1 failed) 7397ms
+   × keeps period collection limited by an original source while describing the customer-wide command honestly 18ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/relay-scene-target.test.ts > keeps period collection limited by an original source while describing the customer-wide command honestly
+AssertionError: expected 'audit-ready' to be 'collection' // Object.is equality
+
+Expected: "collection"
+Received: "audit-ready"
+
+ ❯ src/ui/relay-scene-target.test.ts:100:23
+     98|  const {supported,target}=frames
+     99|  const actual=relaySceneProgress(supported.relay,supported.date,target…
+    100|  expect(actual.phase).toBe('collection');expect(actual.line).toContain…
+       |                       ^
+    101|  const outside={...supported.relay,receivables:supported.relay.receiva…
+    102|  expect(relaySceneProgress(outside,supported.date,target,supported.con…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 5 passed (6)
+   Start at  06:39:38
+   Duration  9.77s (tests 80%, import 10%, transform 10%)
+

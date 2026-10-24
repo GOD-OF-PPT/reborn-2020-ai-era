@@ -1,0 +1,150 @@
+{
+  "status": "OFFICIAL_READ_ONLY_ATOMIC_STOP_READBACK_PASS",
+  "inputs": {
+    "candidate92": {
+      "path": "goal-1/evidence/t17-acceptance-27/chrome-atomic-r5/atomic-candidate92-startservice.json",
+      "bytes": 1159923,
+      "sha256": "ae94d0c6e03fa447a0f5acd72a847176f290c34cc402651ba59baa8a42d30f54",
+      "mode": 420
+    },
+    "old91": {
+      "path": "goal-1/evidence/t17-acceptance-27/chrome-atomic-r5/atomic-old-saved91-after-abort.json",
+      "bytes": 1143084,
+      "sha256": "fbb353ba3c510d4e2a116170f78e5ee1bd4b93580541823195f8aa9c8f41a321",
+      "mode": 420
+    },
+    "physical91": {
+      "path": "goal-1/evidence/t17-acceptance-27/chrome-physical-old-r5/physical-readonly91-before-retry.json",
+      "bytes": 1143084,
+      "sha256": "fbb353ba3c510d4e2a116170f78e5ee1bd4b93580541823195f8aa9c8f41a321",
+      "mode": 420
+    },
+    "physical92": {
+      "path": "goal-1/evidence/t17-acceptance-27/chrome-physical-new-r5/physical-readonly92-after-retry.json",
+      "bytes": 1159923,
+      "sha256": "ae94d0c6e03fa447a0f5acd72a847176f290c34cc402651ba59baa8a42d30f54",
+      "mode": 420
+    },
+    "running93": {
+      "path": "goal-1/evidence/t17-acceptance-27/chrome-stop-r5/stop-running93-before-original-stop.json",
+      "bytes": 1197820,
+      "sha256": "4aecbd255fdc098e06636110460113410ab245bcf09e3c77cec8f830de5e451e",
+      "mode": 420
+    },
+    "stopped94": {
+      "path": "goal-1/evidence/t17-acceptance-27/chrome-stop-r5/stop-saved94-support-and-old-debts-retained.json",
+      "bytes": 1200676,
+      "sha256": "5ad7831f40234bb13e5f32b0c1898bb90ad4f98e22f9a710277207680a9f1441",
+      "mode": 420
+    }
+  },
+  "periodId": "rly:c89c1062f0ddd18e27ea8de398634f9e",
+  "atomicReceipt": {
+    "commandId": "command-a59cebfc-6389-4a38-8937-b0d6f7b01212",
+    "kind": "StartRelayServicePeriod",
+    "date": "2025-01-27",
+    "revisionBefore": 91,
+    "revisionAfter": 92,
+    "payload": {
+      "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+      "customerIds": [
+        "rly:1646f6bea2a2bb8044fa767453f56029",
+        "rly:4f2315c72376d421c714c14aa81b9b87",
+        "rly:6819c98825b35d91289fc86f9bed1313",
+        "rly:d32a932325c73f4d1968e8da9f6a15d2",
+        "rly:debf8cf3d233b2d7c3d758a916516bf8",
+        "rly:aa1ae71ec735b943dc1649d455d84dc5"
+      ],
+      "deploymentId": null,
+      "maxSupplierCostFen": 1200000,
+      "maxUnits": 300000,
+      "resources": [
+        "player-production"
+      ],
+      "startAt": "2025-01-28",
+      "supplierIds": [
+        "cedar-direct"
+      ],
+      "supportMode": "guided"
+    }
+  },
+  "stopReceipt": {
+    "commandId": "command-5378fcd5-c93c-42c6-bc5c-33c3878b3bb4",
+    "kind": "StopRelayPeriod",
+    "date": "2025-01-28",
+    "revisionBefore": 93,
+    "revisionAfter": 94,
+    "payload": {
+      "periodId": "rly:c89c1062f0ddd18e27ea8de398634f9e"
+    }
+  },
+  "servicePaidFen": 300000,
+  "supportReservedFen": 150000,
+  "runningBudget": {
+    "available": 1,
+    "quarter": "2025-Q1",
+    "reserved": 1,
+    "spent": 2,
+    "total": 4
+  },
+  "stoppedBudget": {
+    "available": 1,
+    "quarter": "2025-Q1",
+    "reserved": 1,
+    "spent": 2,
+    "total": 4
+  },
+  "runningFunds": {
+    "availableFen": 2182006,
+    "cashFen": 3907742,
+    "commitmentShortfallFen": 0,
+    "heldFen": 1725736,
+    "investmentValueFen": 0,
+    "netAssetsFen": 2332006,
+    "payableFen": 12132,
+    "prepaidLiabilityFen": 1575736,
+    "protectionRequiredFen": 1575736,
+    "protectionShortfallFen": 0,
+    "receivableFen": 12132,
+    "supplierPrepaidFen": 0
+  },
+  "stoppedFunds": {
+    "availableFen": 2182006,
+    "cashFen": 3907742,
+    "commitmentShortfallFen": 0,
+    "heldFen": 1725736,
+    "investmentValueFen": 0,
+    "netAssetsFen": 2332006,
+    "payableFen": 12132,
+    "prepaidLiabilityFen": 1575736,
+    "protectionRequiredFen": 1575736,
+    "protectionShortfallFen": 0,
+    "receivableFen": 12132,
+    "supplierPrepaidFen": 0
+  },
+  "checks": {
+    "sameRunAndSameActualPeriod": true,
+    "oneStartReceiptNotTwo": true,
+    "serviceActuallyPaid300000FenAndSpent1Point": true,
+    "futureSupport150000FenAnd1PointStillReserved": true,
+    "stopAddsNoPaymentOrRefund": true,
+    "stopDoesNotReleaseSupportOrRestoreServiceAp": true,
+    "allLedgerBytesUnchangedOnStop": true,
+    "publicCashIncomeProtectionReceivablesPayablesUnchangedOnStop": true,
+    "originalCustomersSuppliersPermissionsAndMeterEvidenceUnchanged": true,
+    "businessAndStationNotClosedByPeriodStop": true
+  },
+  "sourceBinding": {
+    "entries": [
+      "src/application/campaign.ts",
+      "src/core/commands.ts",
+      "src/persistence/codec.ts"
+    ],
+    "conservativeModules": 117,
+    "coreApplicationModules": 102,
+    "uiModules": 0,
+    "whole506SourceClaim": false
+  }
+}
+(node:70422) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

@@ -1,0 +1,1 @@
+R1为新2项1过1红；原始JSON与终态保留。失败在测试准备误用IndexedDbRunStore.create加载revision91，原store正确拒绝INVALID_NEW_RUN。改为原importSave(mode:create)导入同一完整原文，不改生产、断言或时限。

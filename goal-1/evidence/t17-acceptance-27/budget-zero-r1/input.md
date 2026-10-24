@@ -1,0 +1,1 @@
+Root授权：独立规则审查发现需修的新UI限制：RelayServiceChoice.relayDraftIssue用通用parseMoneyInput拒了玩家显式“0/0.00”供应预算，但原relay-commands money允许非负0，原表单也能0；0仍付服务/支持费用，实际请求按预算停止，不是免费服务。仅预算单独严格解析显式合法零，空/非法仍拒绝，不得默认0。Issue/payload共用；不改core/通用money/其它费用。增加实际handler零预算0和空值对照，原preview/saved正常手续费保留；记录原冻结前像/差异，必要定向后freeze。

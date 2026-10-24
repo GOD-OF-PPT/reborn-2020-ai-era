@@ -1,0 +1,3453 @@
+{
+  "status": "OFFICIAL_READ_ONLY_ATOMIC_STOP_READBACK_PASS",
+  "commandsIssued": 0,
+  "previewCalls": 0,
+  "replayCalls": 0,
+  "browserActions": 0,
+  "storageWrites": 0,
+  "inputs": {
+    "candidate92": {
+      "path": "goal-1/evidence/t17-acceptance-27/chrome-atomic-r5/atomic-candidate92-startservice.json",
+      "bytes": 1159923,
+      "sha256": "ae94d0c6e03fa447a0f5acd72a847176f290c34cc402651ba59baa8a42d30f54",
+      "mode": 420
+    },
+    "old91": {
+      "path": "goal-1/evidence/t17-acceptance-27/chrome-atomic-r5/atomic-old-saved91-after-abort.json",
+      "bytes": 1143084,
+      "sha256": "fbb353ba3c510d4e2a116170f78e5ee1bd4b93580541823195f8aa9c8f41a321",
+      "mode": 420
+    },
+    "physical91": {
+      "path": "goal-1/evidence/t17-acceptance-27/chrome-physical-old-r5/physical-readonly91-before-retry.json",
+      "bytes": 1143084,
+      "sha256": "fbb353ba3c510d4e2a116170f78e5ee1bd4b93580541823195f8aa9c8f41a321",
+      "mode": 420
+    },
+    "physical92": {
+      "path": "goal-1/evidence/t17-acceptance-27/chrome-physical-new-r5/physical-readonly92-after-retry.json",
+      "bytes": 1159923,
+      "sha256": "ae94d0c6e03fa447a0f5acd72a847176f290c34cc402651ba59baa8a42d30f54",
+      "mode": 420
+    },
+    "running93": {
+      "path": "goal-1/evidence/t17-acceptance-27/chrome-stop-r5/stop-running93-before-original-stop.json",
+      "bytes": 1197820,
+      "sha256": "4aecbd255fdc098e06636110460113410ab245bcf09e3c77cec8f830de5e451e",
+      "mode": 420
+    },
+    "stopped94": {
+      "path": "goal-1/evidence/t17-acceptance-27/chrome-stop-r5/stop-saved94-support-and-old-debts-retained.json",
+      "bytes": 1200676,
+      "sha256": "5ad7831f40234bb13e5f32b0c1898bb90ad4f98e22f9a710277207680a9f1441",
+      "mode": 420
+    }
+  },
+  "sourceBinding": {
+    "entries": [
+      "src/application/campaign.ts",
+      "src/core/commands.ts",
+      "src/persistence/codec.ts"
+    ],
+    "conservativeModules": 117,
+    "coreApplicationModules": 102,
+    "uiModules": 0,
+    "whole506SourceClaim": false
+  },
+  "canonicalRoundtripCount": 6,
+  "uniqueRunIds": 1,
+  "uniqueRevisions": [
+    91,
+    92,
+    93,
+    94
+  ],
+  "atomic": {
+    "old91EqualsIndependentPhysical91": true,
+    "candidate92EqualsRetryIndependentPhysical92": true,
+    "old91": {
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-27/chrome-atomic-r5/atomic-old-saved91-after-abort.json",
+        "bytes": 1143084,
+        "sha256": "fbb353ba3c510d4e2a116170f78e5ee1bd4b93580541823195f8aa9c8f41a321",
+        "mode": 420
+      },
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 91,
+      "date": "2025-01-27",
+      "origin": "normal",
+      "budget": {
+        "available": 3,
+        "quarter": "2025-Q1",
+        "reserved": 0,
+        "spent": 1,
+        "total": 4
+      },
+      "period": null,
+      "business": {
+        "id": "ops:60e1e4f1a8f744bbf167073569038995",
+        "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+        "company": true,
+        "lifecycle": "operating",
+        "stoppedAt": null,
+        "funds": {
+          "availableFen": 2607742,
+          "cashFen": 4207742,
+          "commitmentShortfallFen": 0,
+          "heldFen": 1600000,
+          "investmentValueFen": 0,
+          "netAssetsFen": 2607742,
+          "payableFen": 0,
+          "prepaidLiabilityFen": 1600000,
+          "protectionRequiredFen": 1600000,
+          "protectionShortfallFen": 0,
+          "receivableFen": 0,
+          "supplierPrepaidFen": 0
+        },
+        "metrics": {
+          "accruedCostFen": 26129,
+          "costFen": 418387,
+          "incomeFen": 0,
+          "profitFen": -418387
+        }
+      },
+      "publicAccount": {
+        "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+        "accruedCostFen": 26129,
+        "availableFen": 2607742,
+        "cashFen": 4207742,
+        "commitmentShortfallFen": 0,
+        "heldFen": 1600000,
+        "investmentValueFen": 0,
+        "lastKnownInvestmentValueFen": 0,
+        "netAssetsFen": 2581613,
+        "payableFen": 0,
+        "prepaidLiabilityFen": 1600000,
+        "protectionRequiredFen": 1600000,
+        "protectionShortfallFen": 0,
+        "receivableFen": 0,
+        "supplierPrepaidFen": 0,
+        "valuationStatus": "current"
+      },
+      "personalAccount": {
+        "accountId": "personal",
+        "accruedCostFen": 0,
+        "availableFen": 21200000,
+        "cashFen": 21200000,
+        "commitmentShortfallFen": 0,
+        "heldFen": 0,
+        "investmentValueFen": 0,
+        "lastKnownInvestmentValueFen": 0,
+        "netAssetsFen": 21200000,
+        "payableFen": 0,
+        "prepaidLiabilityFen": 0,
+        "protectionRequiredFen": 0,
+        "protectionShortfallFen": 0,
+        "receivableFen": 0,
+        "supplierPrepaidFen": 0,
+        "valuationStatus": "current"
+      },
+      "customerBalances": [
+        {
+          "id": "rly:1646f6bea2a2bb8044fa767453f56029",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:1646f6bea2a2bb8044fa767453f56029",
+            "prepaidFen": 400000,
+            "protectionReservationId": "rly:aaf7a750370ca0131cd082147a21e0a9",
+            "receivableFen": 0,
+            "recognizedIncomeFen": 0
+          }
+        },
+        {
+          "id": "rly:4f2315c72376d421c714c14aa81b9b87",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:4f2315c72376d421c714c14aa81b9b87",
+            "prepaidFen": 400000,
+            "protectionReservationId": "rly:31dda965cff8a1ee4620533094c87761",
+            "receivableFen": 0,
+            "recognizedIncomeFen": 0
+          }
+        },
+        {
+          "id": "rly:6819c98825b35d91289fc86f9bed1313",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:6819c98825b35d91289fc86f9bed1313",
+            "prepaidFen": 400000,
+            "protectionReservationId": "rly:834a602fc2f2a44c06802a2a275a0854",
+            "receivableFen": 0,
+            "recognizedIncomeFen": 0
+          }
+        },
+        {
+          "id": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+            "prepaidFen": 400000,
+            "protectionReservationId": "rly:80fb55a05f55a8a648c435836afd84b1",
+            "receivableFen": 0,
+            "recognizedIncomeFen": 0
+          }
+        },
+        {
+          "id": "rly:debf8cf3d233b2d7c3d758a916516bf8",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "postpaid",
+          "closedAt": null,
+          "balance": {
+            "prepaidFen": 0,
+            "receivableFen": 0,
+            "recognizedIncomeFen": 0
+          }
+        },
+        {
+          "id": "rly:aa1ae71ec735b943dc1649d455d84dc5",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "postpaid",
+          "closedAt": null,
+          "balance": {
+            "prepaidFen": 0,
+            "receivableFen": 0,
+            "recognizedIncomeFen": 0
+          }
+        }
+      ],
+      "supplierAssets": [
+        {
+          "adapted": true,
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "credit": null,
+          "outstandingFen": 0,
+          "permitted": true,
+          "supplierId": "cedar-direct"
+        },
+        {
+          "adapted": false,
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "credit": null,
+          "outstandingFen": 0,
+          "permitted": false,
+          "supplierId": "cedar-reseller"
+        },
+        {
+          "adapted": false,
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "credit": null,
+          "outstandingFen": 0,
+          "permitted": false,
+          "supplierId": "harbor-independent"
+        }
+      ],
+      "receivables": [],
+      "obligations": [
+        {
+          "id": "ops:e7a456d22dc9a7de572e3f60151f788f",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2024-10-31",
+          "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "originOperationId": "ops:51df70915047fec38198080a38011a35",
+          "kind": "expense",
+          "amountFen": 22258,
+          "remainingFen": 0,
+          "protectionReservationId": null
+        },
+        {
+          "id": "ops:e0953e13cf386f23ff6922a21e393482",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2024-11-30",
+          "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "originOperationId": "ops:95da541b1dcad074208d76ccb9f564c1",
+          "kind": "expense",
+          "amountFen": 30000,
+          "remainingFen": 0,
+          "protectionReservationId": null
+        },
+        {
+          "id": "ops:0db7b623c6850f835928968607ab52cc",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2024-12-31",
+          "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "originOperationId": "ops:28186fa8d82d6a1221b387b93a8dc704",
+          "kind": "expense",
+          "amountFen": 30000,
+          "remainingFen": 0,
+          "protectionReservationId": null
+        }
+      ],
+      "income": {
+        "amountFen": 0,
+        "entries": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "cost": {
+        "amountFen": 392258,
+        "entries": 6,
+        "sha256": "7d6895d1d9b6885def86898f82982eaed19acd5f6cbeb3ded16d30f86ddbe66b"
+      },
+      "customerProtection": [
+        {
+          "id": "rly:aaf7a750370ca0131cd082147a21e0a9",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "customer_protection",
+          "originId": "rly:1646f6bea2a2bb8044fa767453f56029",
+          "amountFen": 400000,
+          "status": "active"
+        },
+        {
+          "id": "rly:31dda965cff8a1ee4620533094c87761",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "customer_protection",
+          "originId": "rly:4f2315c72376d421c714c14aa81b9b87",
+          "amountFen": 400000,
+          "status": "active"
+        },
+        {
+          "id": "rly:834a602fc2f2a44c06802a2a275a0854",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "customer_protection",
+          "originId": "rly:6819c98825b35d91289fc86f9bed1313",
+          "amountFen": 400000,
+          "status": "active"
+        },
+        {
+          "id": "rly:80fb55a05f55a8a648c435836afd84b1",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "customer_protection",
+          "originId": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+          "amountFen": 400000,
+          "status": "active"
+        }
+      ],
+      "activePlanReservations": [],
+      "knownPostedOperations": [
+        {
+          "id": "ops:dd362100c80a1e6b62cf265605feec4a",
+          "kind": "open_business_account",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "date": "2024-07-02",
+            "id": "ops:dd362100c80a1e6b62cf265605feec4a",
+            "kind": "open_business_account",
+            "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995"
+          }
+        },
+        {
+          "id": "rly:2da04cbaef842ecf7de81c16a09eb55b:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 10000,
+            "bucket": "plan",
+            "date": "2024-07-02",
+            "id": "rly:2da04cbaef842ecf7de81c16a09eb55b:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:2da04cbaef842ecf7de81c16a09eb55b",
+            "reservationId": "ops:aa70440c3fa88dfb42ab137bf18d1784",
+            "sourceEventId": "rly:2da04cbaef842ecf7de81c16a09eb55b"
+          }
+        },
+        {
+          "id": "rly:2da04cbaef842ecf7de81c16a09eb55b:execute:cost",
+          "kind": "expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 10000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-07-02",
+            "id": "rly:2da04cbaef842ecf7de81c16a09eb55b:execute:cost",
+            "kind": "expense",
+            "originId": "rly:2da04cbaef842ecf7de81c16a09eb55b",
+            "referenceId": "rly:2da04cbaef842ecf7de81c16a09eb55b",
+            "reservationId": "ops:aa70440c3fa88dfb42ab137bf18d1784",
+            "sourceEventId": "rly:2da04cbaef842ecf7de81c16a09eb55b"
+          }
+        },
+        {
+          "id": "rly:94bc766ecf5339674b0f6e6f36af3553:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 100000,
+            "bucket": "plan",
+            "date": "2024-10-02",
+            "id": "rly:94bc766ecf5339674b0f6e6f36af3553:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:94bc766ecf5339674b0f6e6f36af3553",
+            "reservationId": "ops:163977ea1f7bbfc20d26125ff6c26ac0",
+            "sourceEventId": "rly:94bc766ecf5339674b0f6e6f36af3553"
+          }
+        },
+        {
+          "id": "rly:94bc766ecf5339674b0f6e6f36af3553:execute:cost",
+          "kind": "expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 100000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-10-02",
+            "id": "rly:94bc766ecf5339674b0f6e6f36af3553:execute:cost",
+            "kind": "expense",
+            "originId": "rly:94bc766ecf5339674b0f6e6f36af3553",
+            "referenceId": "rly:94bc766ecf5339674b0f6e6f36af3553",
+            "reservationId": "ops:163977ea1f7bbfc20d26125ff6c26ac0",
+            "sourceEventId": "rly:94bc766ecf5339674b0f6e6f36af3553"
+          }
+        },
+        {
+          "id": "ops:51df70915047fec38198080a38011a35",
+          "kind": "due_expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 22258,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-10-31",
+            "id": "ops:51df70915047fec38198080a38011a35",
+            "kind": "due_expense",
+            "obligationId": "ops:e7a456d22dc9a7de572e3f60151f788f",
+            "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995"
+          }
+        },
+        {
+          "id": "ops:95da541b1dcad074208d76ccb9f564c1",
+          "kind": "due_expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 30000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-11-30",
+            "id": "ops:95da541b1dcad074208d76ccb9f564c1",
+            "kind": "due_expense",
+            "obligationId": "ops:e0953e13cf386f23ff6922a21e393482",
+            "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995"
+          }
+        },
+        {
+          "id": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 200000,
+            "bucket": "plan",
+            "date": "2024-12-01",
+            "id": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099",
+            "reservationId": "ops:57e56d1dbdfc9369e8afb7ac6d2ee862",
+            "sourceEventId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099"
+          }
+        },
+        {
+          "id": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099:execute:cost",
+          "kind": "expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 200000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-12-01",
+            "id": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099:execute:cost",
+            "kind": "expense",
+            "originId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099",
+            "referenceId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099",
+            "reservationId": "ops:57e56d1dbdfc9369e8afb7ac6d2ee862",
+            "sourceEventId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099"
+          }
+        },
+        {
+          "id": "ops:28186fa8d82d6a1221b387b93a8dc704",
+          "kind": "due_expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 30000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-12-31",
+            "id": "ops:28186fa8d82d6a1221b387b93a8dc704",
+            "kind": "due_expense",
+            "obligationId": "ops:0db7b623c6850f835928968607ab52cc",
+            "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995"
+          }
+        },
+        {
+          "id": "rly:d3cb4e00a9fd9614123a5a6f25858c9a",
+          "kind": "receive_prepayment",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 400000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:1646f6bea2a2bb8044fa767453f56029",
+            "counterpartyId": "world",
+            "date": "2025-01-01",
+            "id": "rly:d3cb4e00a9fd9614123a5a6f25858c9a",
+            "kind": "receive_prepayment",
+            "reservationId": "rly:aaf7a750370ca0131cd082147a21e0a9",
+            "sourceEventId": "rly:1646f6bea2a2bb8044fa767453f56029"
+          }
+        },
+        {
+          "id": "rly:6a95e6d5fd64b5140e4e21159c180c9a",
+          "kind": "receive_prepayment",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 400000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:4f2315c72376d421c714c14aa81b9b87",
+            "counterpartyId": "world",
+            "date": "2025-01-01",
+            "id": "rly:6a95e6d5fd64b5140e4e21159c180c9a",
+            "kind": "receive_prepayment",
+            "reservationId": "rly:31dda965cff8a1ee4620533094c87761",
+            "sourceEventId": "rly:4f2315c72376d421c714c14aa81b9b87"
+          }
+        },
+        {
+          "id": "rly:75569102f07df0820234d374637925e2",
+          "kind": "receive_prepayment",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 400000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:6819c98825b35d91289fc86f9bed1313",
+            "counterpartyId": "world",
+            "date": "2025-01-01",
+            "id": "rly:75569102f07df0820234d374637925e2",
+            "kind": "receive_prepayment",
+            "reservationId": "rly:834a602fc2f2a44c06802a2a275a0854",
+            "sourceEventId": "rly:6819c98825b35d91289fc86f9bed1313"
+          }
+        },
+        {
+          "id": "rly:c839ad7fba33a47b2a0099363afda075",
+          "kind": "receive_prepayment",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 400000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+            "counterpartyId": "world",
+            "date": "2025-01-01",
+            "id": "rly:c839ad7fba33a47b2a0099363afda075",
+            "kind": "receive_prepayment",
+            "reservationId": "rly:80fb55a05f55a8a648c435836afd84b1",
+            "sourceEventId": "rly:d32a932325c73f4d1968e8da9f6a15d2"
+          }
+        }
+      ],
+      "agentPermissions": [],
+      "ledgerSha256": "69bc5dec79e9efcba7a0fafa5015b61ff82b0f96fdb2a46f8cc1157accab898e"
+    },
+    "candidate92": {
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-27/chrome-atomic-r5/atomic-candidate92-startservice.json",
+        "bytes": 1159923,
+        "sha256": "ae94d0c6e03fa447a0f5acd72a847176f290c34cc402651ba59baa8a42d30f54",
+        "mode": 420
+      },
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 92,
+      "date": "2025-01-27",
+      "origin": "normal",
+      "budget": {
+        "available": 1,
+        "quarter": "2025-Q1",
+        "reserved": 2,
+        "spent": 1,
+        "total": 4
+      },
+      "period": {
+        "auditedMeters": 0,
+        "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+        "compensatedAt": null,
+        "createdAt": "2025-01-27",
+        "customerIds": [
+          "rly:1646f6bea2a2bb8044fa767453f56029",
+          "rly:4f2315c72376d421c714c14aa81b9b87",
+          "rly:6819c98825b35d91289fc86f9bed1313",
+          "rly:d32a932325c73f4d1968e8da9f6a15d2",
+          "rly:debf8cf3d233b2d7c3d758a916516bf8",
+          "rly:aa1ae71ec735b943dc1649d455d84dc5"
+        ],
+        "failedDays": 0,
+        "feePostedAt": null,
+        "feeQuotes": [
+          {
+            "amountFen": 50000,
+            "customerId": "rly:1646f6bea2a2bb8044fa767453f56029",
+            "termsId": "rly:26a45fb46c6b65b238bbae954e8f5656"
+          },
+          {
+            "amountFen": 50000,
+            "customerId": "rly:4f2315c72376d421c714c14aa81b9b87",
+            "termsId": "rly:e1bc7c9daf160cad709283246073a001"
+          },
+          {
+            "amountFen": 50000,
+            "customerId": "rly:6819c98825b35d91289fc86f9bed1313",
+            "termsId": "rly:bb1a6accf391f1bff8d503cac7a8e020"
+          },
+          {
+            "amountFen": 50000,
+            "customerId": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+            "termsId": "rly:efa03246d3239c6eee27d54174a0dfe7"
+          },
+          {
+            "amountFen": 50000,
+            "customerId": "rly:debf8cf3d233b2d7c3d758a916516bf8",
+            "termsId": "rly:9942f26953133ce75dde3ce6eb0e3c1f"
+          },
+          {
+            "amountFen": 50000,
+            "customerId": "rly:aa1ae71ec735b943dc1649d455d84dc5",
+            "termsId": "rly:20f6afd9912a02fc47ac02bc2619bc56"
+          }
+        ],
+        "from": "2025-01-28",
+        "id": "rly:c89c1062f0ddd18e27ea8de398634f9e",
+        "job": {
+          "actionId": "rly:64033891ff6182d35eba257b674a2f87",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "completeAt": "2025-02-25",
+          "contractId": null,
+          "definitionId": "relay-service",
+          "id": "rly:64033891ff6182d35eba257b674a2f87",
+          "outputId": null,
+          "releasedAt": null,
+          "resources": [
+            "player-production"
+          ],
+          "startAt": "2025-01-28",
+          "status": "planned"
+        },
+        "jobId": "rly:64033891ff6182d35eba257b674a2f87",
+        "knownCorrections": 0,
+        "maxSupplierCostFen": 1200000,
+        "maxUnits": 300000,
+        "meterCount": 0,
+        "observedDays": 0,
+        "reportedUnits": 0,
+        "status": "planned",
+        "stoppedAt": null,
+        "supplierIds": [
+          "cedar-direct"
+        ],
+        "supportJob": {
+          "actionId": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "completeAt": "2025-03-04",
+          "contractId": null,
+          "definitionId": "relay-support-guided",
+          "id": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+          "outputId": null,
+          "releasedAt": null,
+          "resources": [
+            "player-production"
+          ],
+          "startAt": "2025-02-25",
+          "status": "planned"
+        },
+        "supportJobId": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+        "supportMode": "guided",
+        "to": "2025-02-25"
+      },
+      "business": {
+        "id": "ops:60e1e4f1a8f744bbf167073569038995",
+        "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+        "company": true,
+        "lifecycle": "operating",
+        "stoppedAt": null,
+        "funds": {
+          "availableFen": 2157742,
+          "cashFen": 4207742,
+          "commitmentShortfallFen": 0,
+          "heldFen": 2050000,
+          "investmentValueFen": 0,
+          "netAssetsFen": 2607742,
+          "payableFen": 0,
+          "prepaidLiabilityFen": 1600000,
+          "protectionRequiredFen": 1600000,
+          "protectionShortfallFen": 0,
+          "receivableFen": 0,
+          "supplierPrepaidFen": 0
+        },
+        "metrics": {
+          "accruedCostFen": 26129,
+          "costFen": 418387,
+          "incomeFen": 0,
+          "profitFen": -418387
+        }
+      },
+      "publicAccount": {
+        "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+        "accruedCostFen": 26129,
+        "availableFen": 2157742,
+        "cashFen": 4207742,
+        "commitmentShortfallFen": 0,
+        "heldFen": 2050000,
+        "investmentValueFen": 0,
+        "lastKnownInvestmentValueFen": 0,
+        "netAssetsFen": 2581613,
+        "payableFen": 0,
+        "prepaidLiabilityFen": 1600000,
+        "protectionRequiredFen": 1600000,
+        "protectionShortfallFen": 0,
+        "receivableFen": 0,
+        "supplierPrepaidFen": 0,
+        "valuationStatus": "current"
+      },
+      "personalAccount": {
+        "accountId": "personal",
+        "accruedCostFen": 0,
+        "availableFen": 21200000,
+        "cashFen": 21200000,
+        "commitmentShortfallFen": 0,
+        "heldFen": 0,
+        "investmentValueFen": 0,
+        "lastKnownInvestmentValueFen": 0,
+        "netAssetsFen": 21200000,
+        "payableFen": 0,
+        "prepaidLiabilityFen": 0,
+        "protectionRequiredFen": 0,
+        "protectionShortfallFen": 0,
+        "receivableFen": 0,
+        "supplierPrepaidFen": 0,
+        "valuationStatus": "current"
+      },
+      "customerBalances": [
+        {
+          "id": "rly:1646f6bea2a2bb8044fa767453f56029",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:1646f6bea2a2bb8044fa767453f56029",
+            "prepaidFen": 400000,
+            "protectionReservationId": "rly:aaf7a750370ca0131cd082147a21e0a9",
+            "receivableFen": 0,
+            "recognizedIncomeFen": 0
+          }
+        },
+        {
+          "id": "rly:4f2315c72376d421c714c14aa81b9b87",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:4f2315c72376d421c714c14aa81b9b87",
+            "prepaidFen": 400000,
+            "protectionReservationId": "rly:31dda965cff8a1ee4620533094c87761",
+            "receivableFen": 0,
+            "recognizedIncomeFen": 0
+          }
+        },
+        {
+          "id": "rly:6819c98825b35d91289fc86f9bed1313",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:6819c98825b35d91289fc86f9bed1313",
+            "prepaidFen": 400000,
+            "protectionReservationId": "rly:834a602fc2f2a44c06802a2a275a0854",
+            "receivableFen": 0,
+            "recognizedIncomeFen": 0
+          }
+        },
+        {
+          "id": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+            "prepaidFen": 400000,
+            "protectionReservationId": "rly:80fb55a05f55a8a648c435836afd84b1",
+            "receivableFen": 0,
+            "recognizedIncomeFen": 0
+          }
+        },
+        {
+          "id": "rly:debf8cf3d233b2d7c3d758a916516bf8",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "postpaid",
+          "closedAt": null,
+          "balance": {
+            "prepaidFen": 0,
+            "receivableFen": 0,
+            "recognizedIncomeFen": 0
+          }
+        },
+        {
+          "id": "rly:aa1ae71ec735b943dc1649d455d84dc5",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "postpaid",
+          "closedAt": null,
+          "balance": {
+            "prepaidFen": 0,
+            "receivableFen": 0,
+            "recognizedIncomeFen": 0
+          }
+        }
+      ],
+      "supplierAssets": [
+        {
+          "adapted": true,
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "credit": null,
+          "outstandingFen": 0,
+          "permitted": true,
+          "supplierId": "cedar-direct"
+        },
+        {
+          "adapted": false,
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "credit": null,
+          "outstandingFen": 0,
+          "permitted": false,
+          "supplierId": "cedar-reseller"
+        },
+        {
+          "adapted": false,
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "credit": null,
+          "outstandingFen": 0,
+          "permitted": false,
+          "supplierId": "harbor-independent"
+        }
+      ],
+      "receivables": [],
+      "obligations": [
+        {
+          "id": "ops:e7a456d22dc9a7de572e3f60151f788f",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2024-10-31",
+          "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "originOperationId": "ops:51df70915047fec38198080a38011a35",
+          "kind": "expense",
+          "amountFen": 22258,
+          "remainingFen": 0,
+          "protectionReservationId": null
+        },
+        {
+          "id": "ops:e0953e13cf386f23ff6922a21e393482",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2024-11-30",
+          "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "originOperationId": "ops:95da541b1dcad074208d76ccb9f564c1",
+          "kind": "expense",
+          "amountFen": 30000,
+          "remainingFen": 0,
+          "protectionReservationId": null
+        },
+        {
+          "id": "ops:0db7b623c6850f835928968607ab52cc",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2024-12-31",
+          "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "originOperationId": "ops:28186fa8d82d6a1221b387b93a8dc704",
+          "kind": "expense",
+          "amountFen": 30000,
+          "remainingFen": 0,
+          "protectionReservationId": null
+        }
+      ],
+      "income": {
+        "amountFen": 0,
+        "entries": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "cost": {
+        "amountFen": 392258,
+        "entries": 6,
+        "sha256": "7d6895d1d9b6885def86898f82982eaed19acd5f6cbeb3ded16d30f86ddbe66b"
+      },
+      "customerProtection": [
+        {
+          "id": "rly:aaf7a750370ca0131cd082147a21e0a9",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "customer_protection",
+          "originId": "rly:1646f6bea2a2bb8044fa767453f56029",
+          "amountFen": 400000,
+          "status": "active"
+        },
+        {
+          "id": "rly:31dda965cff8a1ee4620533094c87761",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "customer_protection",
+          "originId": "rly:4f2315c72376d421c714c14aa81b9b87",
+          "amountFen": 400000,
+          "status": "active"
+        },
+        {
+          "id": "rly:834a602fc2f2a44c06802a2a275a0854",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "customer_protection",
+          "originId": "rly:6819c98825b35d91289fc86f9bed1313",
+          "amountFen": 400000,
+          "status": "active"
+        },
+        {
+          "id": "rly:80fb55a05f55a8a648c435836afd84b1",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "customer_protection",
+          "originId": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+          "amountFen": 400000,
+          "status": "active"
+        }
+      ],
+      "activePlanReservations": [
+        {
+          "id": "ops:35b2b2cd8e786217f6e474618b3e7060",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "plan",
+          "originId": "rly:64033891ff6182d35eba257b674a2f87",
+          "amountFen": 300000,
+          "status": "active"
+        },
+        {
+          "id": "ops:8cd8513b1e28518afecc368da43f81e7",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "plan",
+          "originId": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+          "amountFen": 150000,
+          "status": "active"
+        }
+      ],
+      "knownPostedOperations": [
+        {
+          "id": "ops:dd362100c80a1e6b62cf265605feec4a",
+          "kind": "open_business_account",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "date": "2024-07-02",
+            "id": "ops:dd362100c80a1e6b62cf265605feec4a",
+            "kind": "open_business_account",
+            "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995"
+          }
+        },
+        {
+          "id": "rly:2da04cbaef842ecf7de81c16a09eb55b:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 10000,
+            "bucket": "plan",
+            "date": "2024-07-02",
+            "id": "rly:2da04cbaef842ecf7de81c16a09eb55b:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:2da04cbaef842ecf7de81c16a09eb55b",
+            "reservationId": "ops:aa70440c3fa88dfb42ab137bf18d1784",
+            "sourceEventId": "rly:2da04cbaef842ecf7de81c16a09eb55b"
+          }
+        },
+        {
+          "id": "rly:2da04cbaef842ecf7de81c16a09eb55b:execute:cost",
+          "kind": "expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 10000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-07-02",
+            "id": "rly:2da04cbaef842ecf7de81c16a09eb55b:execute:cost",
+            "kind": "expense",
+            "originId": "rly:2da04cbaef842ecf7de81c16a09eb55b",
+            "referenceId": "rly:2da04cbaef842ecf7de81c16a09eb55b",
+            "reservationId": "ops:aa70440c3fa88dfb42ab137bf18d1784",
+            "sourceEventId": "rly:2da04cbaef842ecf7de81c16a09eb55b"
+          }
+        },
+        {
+          "id": "rly:94bc766ecf5339674b0f6e6f36af3553:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 100000,
+            "bucket": "plan",
+            "date": "2024-10-02",
+            "id": "rly:94bc766ecf5339674b0f6e6f36af3553:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:94bc766ecf5339674b0f6e6f36af3553",
+            "reservationId": "ops:163977ea1f7bbfc20d26125ff6c26ac0",
+            "sourceEventId": "rly:94bc766ecf5339674b0f6e6f36af3553"
+          }
+        },
+        {
+          "id": "rly:94bc766ecf5339674b0f6e6f36af3553:execute:cost",
+          "kind": "expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 100000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-10-02",
+            "id": "rly:94bc766ecf5339674b0f6e6f36af3553:execute:cost",
+            "kind": "expense",
+            "originId": "rly:94bc766ecf5339674b0f6e6f36af3553",
+            "referenceId": "rly:94bc766ecf5339674b0f6e6f36af3553",
+            "reservationId": "ops:163977ea1f7bbfc20d26125ff6c26ac0",
+            "sourceEventId": "rly:94bc766ecf5339674b0f6e6f36af3553"
+          }
+        },
+        {
+          "id": "ops:51df70915047fec38198080a38011a35",
+          "kind": "due_expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 22258,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-10-31",
+            "id": "ops:51df70915047fec38198080a38011a35",
+            "kind": "due_expense",
+            "obligationId": "ops:e7a456d22dc9a7de572e3f60151f788f",
+            "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995"
+          }
+        },
+        {
+          "id": "ops:95da541b1dcad074208d76ccb9f564c1",
+          "kind": "due_expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 30000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-11-30",
+            "id": "ops:95da541b1dcad074208d76ccb9f564c1",
+            "kind": "due_expense",
+            "obligationId": "ops:e0953e13cf386f23ff6922a21e393482",
+            "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995"
+          }
+        },
+        {
+          "id": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 200000,
+            "bucket": "plan",
+            "date": "2024-12-01",
+            "id": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099",
+            "reservationId": "ops:57e56d1dbdfc9369e8afb7ac6d2ee862",
+            "sourceEventId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099"
+          }
+        },
+        {
+          "id": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099:execute:cost",
+          "kind": "expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 200000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-12-01",
+            "id": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099:execute:cost",
+            "kind": "expense",
+            "originId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099",
+            "referenceId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099",
+            "reservationId": "ops:57e56d1dbdfc9369e8afb7ac6d2ee862",
+            "sourceEventId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099"
+          }
+        },
+        {
+          "id": "ops:28186fa8d82d6a1221b387b93a8dc704",
+          "kind": "due_expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 30000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-12-31",
+            "id": "ops:28186fa8d82d6a1221b387b93a8dc704",
+            "kind": "due_expense",
+            "obligationId": "ops:0db7b623c6850f835928968607ab52cc",
+            "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995"
+          }
+        },
+        {
+          "id": "rly:d3cb4e00a9fd9614123a5a6f25858c9a",
+          "kind": "receive_prepayment",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 400000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:1646f6bea2a2bb8044fa767453f56029",
+            "counterpartyId": "world",
+            "date": "2025-01-01",
+            "id": "rly:d3cb4e00a9fd9614123a5a6f25858c9a",
+            "kind": "receive_prepayment",
+            "reservationId": "rly:aaf7a750370ca0131cd082147a21e0a9",
+            "sourceEventId": "rly:1646f6bea2a2bb8044fa767453f56029"
+          }
+        },
+        {
+          "id": "rly:6a95e6d5fd64b5140e4e21159c180c9a",
+          "kind": "receive_prepayment",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 400000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:4f2315c72376d421c714c14aa81b9b87",
+            "counterpartyId": "world",
+            "date": "2025-01-01",
+            "id": "rly:6a95e6d5fd64b5140e4e21159c180c9a",
+            "kind": "receive_prepayment",
+            "reservationId": "rly:31dda965cff8a1ee4620533094c87761",
+            "sourceEventId": "rly:4f2315c72376d421c714c14aa81b9b87"
+          }
+        },
+        {
+          "id": "rly:75569102f07df0820234d374637925e2",
+          "kind": "receive_prepayment",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 400000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:6819c98825b35d91289fc86f9bed1313",
+            "counterpartyId": "world",
+            "date": "2025-01-01",
+            "id": "rly:75569102f07df0820234d374637925e2",
+            "kind": "receive_prepayment",
+            "reservationId": "rly:834a602fc2f2a44c06802a2a275a0854",
+            "sourceEventId": "rly:6819c98825b35d91289fc86f9bed1313"
+          }
+        },
+        {
+          "id": "rly:c839ad7fba33a47b2a0099363afda075",
+          "kind": "receive_prepayment",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 400000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+            "counterpartyId": "world",
+            "date": "2025-01-01",
+            "id": "rly:c839ad7fba33a47b2a0099363afda075",
+            "kind": "receive_prepayment",
+            "reservationId": "rly:80fb55a05f55a8a648c435836afd84b1",
+            "sourceEventId": "rly:d32a932325c73f4d1968e8da9f6a15d2"
+          }
+        },
+        {
+          "id": "rly:64033891ff6182d35eba257b674a2f87:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 300000,
+            "bucket": "plan",
+            "date": "2025-01-27",
+            "id": "rly:64033891ff6182d35eba257b674a2f87:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:64033891ff6182d35eba257b674a2f87",
+            "reservationId": "ops:35b2b2cd8e786217f6e474618b3e7060",
+            "sourceEventId": "rly:64033891ff6182d35eba257b674a2f87"
+          }
+        },
+        {
+          "id": "rly:90aa9efbd7c96e06aea18631e5c358cb:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 150000,
+            "bucket": "plan",
+            "date": "2025-01-27",
+            "id": "rly:90aa9efbd7c96e06aea18631e5c358cb:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+            "reservationId": "ops:8cd8513b1e28518afecc368da43f81e7",
+            "sourceEventId": "rly:90aa9efbd7c96e06aea18631e5c358cb"
+          }
+        }
+      ],
+      "agentPermissions": [],
+      "ledgerSha256": "4074cf368abefb57045b698ad6b30f8390eb34b6a67b865f91b43d527326a057"
+    },
+    "oneNewOriginalStartReceipt": {
+      "commandId": "command-a59cebfc-6389-4a38-8937-b0d6f7b01212",
+      "kind": "StartRelayServicePeriod",
+      "date": "2025-01-27",
+      "revisionBefore": 91,
+      "revisionAfter": 92,
+      "payload": {
+        "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+        "customerIds": [
+          "rly:1646f6bea2a2bb8044fa767453f56029",
+          "rly:4f2315c72376d421c714c14aa81b9b87",
+          "rly:6819c98825b35d91289fc86f9bed1313",
+          "rly:d32a932325c73f4d1968e8da9f6a15d2",
+          "rly:debf8cf3d233b2d7c3d758a916516bf8",
+          "rly:aa1ae71ec735b943dc1649d455d84dc5"
+        ],
+        "deploymentId": null,
+        "maxSupplierCostFen": 1200000,
+        "maxUnits": 300000,
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2025-01-28",
+        "supplierIds": [
+          "cedar-direct"
+        ],
+        "supportMode": "guided"
+      }
+    }
+  },
+  "finiteStop": {
+    "running93": {
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-27/chrome-stop-r5/stop-running93-before-original-stop.json",
+        "bytes": 1197820,
+        "sha256": "4aecbd255fdc098e06636110460113410ab245bcf09e3c77cec8f830de5e451e",
+        "mode": 420
+      },
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 93,
+      "date": "2025-01-28",
+      "origin": "normal",
+      "budget": {
+        "available": 1,
+        "quarter": "2025-Q1",
+        "reserved": 1,
+        "spent": 2,
+        "total": 4
+      },
+      "period": {
+        "auditedMeters": 0,
+        "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+        "compensatedAt": null,
+        "createdAt": "2025-01-27",
+        "customerIds": [
+          "rly:1646f6bea2a2bb8044fa767453f56029",
+          "rly:4f2315c72376d421c714c14aa81b9b87",
+          "rly:6819c98825b35d91289fc86f9bed1313",
+          "rly:d32a932325c73f4d1968e8da9f6a15d2",
+          "rly:debf8cf3d233b2d7c3d758a916516bf8",
+          "rly:aa1ae71ec735b943dc1649d455d84dc5"
+        ],
+        "failedDays": 0,
+        "feePostedAt": null,
+        "feeQuotes": [
+          {
+            "amountFen": 50000,
+            "customerId": "rly:1646f6bea2a2bb8044fa767453f56029",
+            "termsId": "rly:26a45fb46c6b65b238bbae954e8f5656"
+          },
+          {
+            "amountFen": 50000,
+            "customerId": "rly:4f2315c72376d421c714c14aa81b9b87",
+            "termsId": "rly:e1bc7c9daf160cad709283246073a001"
+          },
+          {
+            "amountFen": 50000,
+            "customerId": "rly:6819c98825b35d91289fc86f9bed1313",
+            "termsId": "rly:bb1a6accf391f1bff8d503cac7a8e020"
+          },
+          {
+            "amountFen": 50000,
+            "customerId": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+            "termsId": "rly:efa03246d3239c6eee27d54174a0dfe7"
+          },
+          {
+            "amountFen": 50000,
+            "customerId": "rly:debf8cf3d233b2d7c3d758a916516bf8",
+            "termsId": "rly:9942f26953133ce75dde3ce6eb0e3c1f"
+          },
+          {
+            "amountFen": 50000,
+            "customerId": "rly:aa1ae71ec735b943dc1649d455d84dc5",
+            "termsId": "rly:20f6afd9912a02fc47ac02bc2619bc56"
+          }
+        ],
+        "from": "2025-01-28",
+        "id": "rly:c89c1062f0ddd18e27ea8de398634f9e",
+        "job": {
+          "actionId": "rly:64033891ff6182d35eba257b674a2f87",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "completeAt": "2025-02-25",
+          "contractId": null,
+          "definitionId": "relay-service",
+          "id": "rly:64033891ff6182d35eba257b674a2f87",
+          "outputId": null,
+          "releasedAt": null,
+          "resources": [
+            "player-production"
+          ],
+          "startAt": "2025-01-28",
+          "status": "running"
+        },
+        "jobId": "rly:64033891ff6182d35eba257b674a2f87",
+        "knownCorrections": 0,
+        "maxSupplierCostFen": 1200000,
+        "maxUnits": 300000,
+        "meterCount": 6,
+        "observedDays": 1,
+        "reportedUnits": 6066,
+        "status": "running",
+        "stoppedAt": null,
+        "supplierIds": [
+          "cedar-direct"
+        ],
+        "supportJob": {
+          "actionId": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "completeAt": "2025-03-04",
+          "contractId": null,
+          "definitionId": "relay-support-guided",
+          "id": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+          "outputId": null,
+          "releasedAt": null,
+          "resources": [
+            "player-production"
+          ],
+          "startAt": "2025-02-25",
+          "status": "planned"
+        },
+        "supportJobId": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+        "supportMode": "guided",
+        "to": "2025-02-25"
+      },
+      "business": {
+        "id": "ops:60e1e4f1a8f744bbf167073569038995",
+        "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+        "company": true,
+        "lifecycle": "operating",
+        "stoppedAt": null,
+        "funds": {
+          "availableFen": 2182006,
+          "cashFen": 3907742,
+          "commitmentShortfallFen": 0,
+          "heldFen": 1725736,
+          "investmentValueFen": 0,
+          "netAssetsFen": 2332006,
+          "payableFen": 12132,
+          "prepaidLiabilityFen": 1575736,
+          "protectionRequiredFen": 1575736,
+          "protectionShortfallFen": 0,
+          "receivableFen": 12132,
+          "supplierPrepaidFen": 0
+        },
+        "metrics": {
+          "accruedCostFen": 27096,
+          "costFen": 731486,
+          "incomeFen": 36396,
+          "profitFen": -695090
+        }
+      },
+      "publicAccount": {
+        "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+        "accruedCostFen": 27096,
+        "availableFen": 2182006,
+        "cashFen": 3907742,
+        "commitmentShortfallFen": 0,
+        "heldFen": 1725736,
+        "investmentValueFen": 0,
+        "lastKnownInvestmentValueFen": 0,
+        "netAssetsFen": 2304910,
+        "payableFen": 12132,
+        "prepaidLiabilityFen": 1575736,
+        "protectionRequiredFen": 1575736,
+        "protectionShortfallFen": 0,
+        "receivableFen": 12132,
+        "supplierPrepaidFen": 0,
+        "valuationStatus": "current"
+      },
+      "personalAccount": {
+        "accountId": "personal",
+        "accruedCostFen": 0,
+        "availableFen": 21200000,
+        "cashFen": 21200000,
+        "commitmentShortfallFen": 0,
+        "heldFen": 0,
+        "investmentValueFen": 0,
+        "lastKnownInvestmentValueFen": 0,
+        "netAssetsFen": 21200000,
+        "payableFen": 0,
+        "prepaidLiabilityFen": 0,
+        "protectionRequiredFen": 0,
+        "protectionShortfallFen": 0,
+        "receivableFen": 0,
+        "supplierPrepaidFen": 0,
+        "valuationStatus": "current"
+      },
+      "customerBalances": [
+        {
+          "id": "rly:1646f6bea2a2bb8044fa767453f56029",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:1646f6bea2a2bb8044fa767453f56029",
+            "prepaidFen": 393934,
+            "protectionReservationId": "rly:aaf7a750370ca0131cd082147a21e0a9",
+            "receivableFen": 0,
+            "recognizedIncomeFen": 6066
+          }
+        },
+        {
+          "id": "rly:4f2315c72376d421c714c14aa81b9b87",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:4f2315c72376d421c714c14aa81b9b87",
+            "prepaidFen": 393934,
+            "protectionReservationId": "rly:31dda965cff8a1ee4620533094c87761",
+            "receivableFen": 0,
+            "recognizedIncomeFen": 6066
+          }
+        },
+        {
+          "id": "rly:6819c98825b35d91289fc86f9bed1313",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:6819c98825b35d91289fc86f9bed1313",
+            "prepaidFen": 393934,
+            "protectionReservationId": "rly:834a602fc2f2a44c06802a2a275a0854",
+            "receivableFen": 0,
+            "recognizedIncomeFen": 6066
+          }
+        },
+        {
+          "id": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+            "prepaidFen": 393934,
+            "protectionReservationId": "rly:80fb55a05f55a8a648c435836afd84b1",
+            "receivableFen": 0,
+            "recognizedIncomeFen": 6066
+          }
+        },
+        {
+          "id": "rly:debf8cf3d233b2d7c3d758a916516bf8",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "postpaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:debf8cf3d233b2d7c3d758a916516bf8",
+            "prepaidFen": 0,
+            "protectionReservationId": null,
+            "receivableFen": 6066,
+            "recognizedIncomeFen": 6066
+          }
+        },
+        {
+          "id": "rly:aa1ae71ec735b943dc1649d455d84dc5",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "postpaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:aa1ae71ec735b943dc1649d455d84dc5",
+            "prepaidFen": 0,
+            "protectionReservationId": null,
+            "receivableFen": 6066,
+            "recognizedIncomeFen": 6066
+          }
+        }
+      ],
+      "supplierAssets": [
+        {
+          "adapted": true,
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "credit": null,
+          "outstandingFen": 12132,
+          "permitted": true,
+          "supplierId": "cedar-direct"
+        },
+        {
+          "adapted": false,
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "credit": null,
+          "outstandingFen": 0,
+          "permitted": false,
+          "supplierId": "cedar-reseller"
+        },
+        {
+          "adapted": false,
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "credit": null,
+          "outstandingFen": 0,
+          "permitted": false,
+          "supplierId": "harbor-independent"
+        }
+      ],
+      "receivables": [
+        {
+          "amountFen": 6066,
+          "collectedFen": 0,
+          "customerId": "rly:debf8cf3d233b2d7c3d758a916516bf8",
+          "date": "2025-01-28",
+          "dueAt": "2025-02-11",
+          "id": "rly:15fda2d6de3a7ab24d04870ed92914d8",
+          "operationId": "rly:37d903c9c6ebb9afe7cb92d8f6fc8f26",
+          "reversedFen": 0,
+          "sourceId": "rly:1d29206707abc4b4771c3355ebf48438"
+        },
+        {
+          "amountFen": 6066,
+          "collectedFen": 0,
+          "customerId": "rly:aa1ae71ec735b943dc1649d455d84dc5",
+          "date": "2025-01-28",
+          "dueAt": "2025-02-11",
+          "id": "rly:ee19dbd408450b2b685812f63f6adf4d",
+          "operationId": "rly:73ea1005f2933b440ffb52dbcbac8bec",
+          "reversedFen": 0,
+          "sourceId": "rly:2da0b67bb96553d9a7a78373689ce01c"
+        }
+      ],
+      "obligations": [
+        {
+          "id": "ops:e7a456d22dc9a7de572e3f60151f788f",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2024-10-31",
+          "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "originOperationId": "ops:51df70915047fec38198080a38011a35",
+          "kind": "expense",
+          "amountFen": 22258,
+          "remainingFen": 0,
+          "protectionReservationId": null
+        },
+        {
+          "id": "ops:e0953e13cf386f23ff6922a21e393482",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2024-11-30",
+          "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "originOperationId": "ops:95da541b1dcad074208d76ccb9f564c1",
+          "kind": "expense",
+          "amountFen": 30000,
+          "remainingFen": 0,
+          "protectionReservationId": null
+        },
+        {
+          "id": "ops:0db7b623c6850f835928968607ab52cc",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2024-12-31",
+          "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "originOperationId": "ops:28186fa8d82d6a1221b387b93a8dc704",
+          "kind": "expense",
+          "amountFen": 30000,
+          "remainingFen": 0,
+          "protectionReservationId": null
+        },
+        {
+          "id": "rly:e98171c643e02257a74da5e3d25bfd6b",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2025-02-04",
+          "sourceEventId": "rly:2c6cf70afc0ea8197fac86fe5205645c",
+          "originOperationId": "rly:3137ddfeeca26d9104d23b80c8dcdba7",
+          "kind": "expense",
+          "amountFen": 2022,
+          "remainingFen": 2022,
+          "protectionReservationId": null
+        },
+        {
+          "id": "rly:a186583ca0c970c47a9332bba9c90276",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2025-02-04",
+          "sourceEventId": "rly:126c2d83cbeb5faae02bf7523a67f46c",
+          "originOperationId": "rly:7333c072c723dfe3b2a284e475df4c81",
+          "kind": "expense",
+          "amountFen": 2022,
+          "remainingFen": 2022,
+          "protectionReservationId": null
+        },
+        {
+          "id": "rly:3846ad969d0c939b51ae5750dcbf6b55",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2025-02-04",
+          "sourceEventId": "rly:9ec0801f0c4663e7da22d934c0c6a08d",
+          "originOperationId": "rly:90a045400143a12f7a5171da3aa717f3",
+          "kind": "expense",
+          "amountFen": 2022,
+          "remainingFen": 2022,
+          "protectionReservationId": null
+        },
+        {
+          "id": "rly:c4092db3b48b3d35abac49f743a4f4c7",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2025-02-04",
+          "sourceEventId": "rly:ea23942a0787b976fe87eca173ed4a39",
+          "originOperationId": "rly:1c3d0609b172eb1a7577d11e3228a01f",
+          "kind": "expense",
+          "amountFen": 2022,
+          "remainingFen": 2022,
+          "protectionReservationId": null
+        },
+        {
+          "id": "rly:d13db2f81873f11cea133a176f8a0ee3",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2025-02-04",
+          "sourceEventId": "rly:1d29206707abc4b4771c3355ebf48438",
+          "originOperationId": "rly:f471318fe9c82db36ab12c6b9a76b795",
+          "kind": "expense",
+          "amountFen": 2022,
+          "remainingFen": 2022,
+          "protectionReservationId": null
+        },
+        {
+          "id": "rly:0a29711d9375345761eb6cfdc78f537b",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2025-02-04",
+          "sourceEventId": "rly:2da0b67bb96553d9a7a78373689ce01c",
+          "originOperationId": "rly:c5a42342956583aa943605e61343cd9c",
+          "kind": "expense",
+          "amountFen": 2022,
+          "remainingFen": 2022,
+          "protectionReservationId": null
+        }
+      ],
+      "income": {
+        "amountFen": 36396,
+        "entries": 6,
+        "sha256": "4a8d3c77ddb7b8a02dcd98bce78d5868cb10c8dcb137ce736b5a534a92d9d4c2"
+      },
+      "cost": {
+        "amountFen": 704390,
+        "entries": 13,
+        "sha256": "98eec9ae9125453ce2d3993f9008bf65c40eb44b107db31ce3c22bc7cbcc6e73"
+      },
+      "customerProtection": [
+        {
+          "id": "rly:aaf7a750370ca0131cd082147a21e0a9",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "customer_protection",
+          "originId": "rly:1646f6bea2a2bb8044fa767453f56029",
+          "amountFen": 393934,
+          "status": "active"
+        },
+        {
+          "id": "rly:31dda965cff8a1ee4620533094c87761",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "customer_protection",
+          "originId": "rly:4f2315c72376d421c714c14aa81b9b87",
+          "amountFen": 393934,
+          "status": "active"
+        },
+        {
+          "id": "rly:834a602fc2f2a44c06802a2a275a0854",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "customer_protection",
+          "originId": "rly:6819c98825b35d91289fc86f9bed1313",
+          "amountFen": 393934,
+          "status": "active"
+        },
+        {
+          "id": "rly:80fb55a05f55a8a648c435836afd84b1",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "customer_protection",
+          "originId": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+          "amountFen": 393934,
+          "status": "active"
+        }
+      ],
+      "activePlanReservations": [
+        {
+          "id": "ops:8cd8513b1e28518afecc368da43f81e7",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "plan",
+          "originId": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+          "amountFen": 150000,
+          "status": "active"
+        }
+      ],
+      "knownPostedOperations": [
+        {
+          "id": "ops:dd362100c80a1e6b62cf265605feec4a",
+          "kind": "open_business_account",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "date": "2024-07-02",
+            "id": "ops:dd362100c80a1e6b62cf265605feec4a",
+            "kind": "open_business_account",
+            "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995"
+          }
+        },
+        {
+          "id": "rly:2da04cbaef842ecf7de81c16a09eb55b:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 10000,
+            "bucket": "plan",
+            "date": "2024-07-02",
+            "id": "rly:2da04cbaef842ecf7de81c16a09eb55b:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:2da04cbaef842ecf7de81c16a09eb55b",
+            "reservationId": "ops:aa70440c3fa88dfb42ab137bf18d1784",
+            "sourceEventId": "rly:2da04cbaef842ecf7de81c16a09eb55b"
+          }
+        },
+        {
+          "id": "rly:2da04cbaef842ecf7de81c16a09eb55b:execute:cost",
+          "kind": "expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 10000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-07-02",
+            "id": "rly:2da04cbaef842ecf7de81c16a09eb55b:execute:cost",
+            "kind": "expense",
+            "originId": "rly:2da04cbaef842ecf7de81c16a09eb55b",
+            "referenceId": "rly:2da04cbaef842ecf7de81c16a09eb55b",
+            "reservationId": "ops:aa70440c3fa88dfb42ab137bf18d1784",
+            "sourceEventId": "rly:2da04cbaef842ecf7de81c16a09eb55b"
+          }
+        },
+        {
+          "id": "rly:94bc766ecf5339674b0f6e6f36af3553:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 100000,
+            "bucket": "plan",
+            "date": "2024-10-02",
+            "id": "rly:94bc766ecf5339674b0f6e6f36af3553:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:94bc766ecf5339674b0f6e6f36af3553",
+            "reservationId": "ops:163977ea1f7bbfc20d26125ff6c26ac0",
+            "sourceEventId": "rly:94bc766ecf5339674b0f6e6f36af3553"
+          }
+        },
+        {
+          "id": "rly:94bc766ecf5339674b0f6e6f36af3553:execute:cost",
+          "kind": "expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 100000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-10-02",
+            "id": "rly:94bc766ecf5339674b0f6e6f36af3553:execute:cost",
+            "kind": "expense",
+            "originId": "rly:94bc766ecf5339674b0f6e6f36af3553",
+            "referenceId": "rly:94bc766ecf5339674b0f6e6f36af3553",
+            "reservationId": "ops:163977ea1f7bbfc20d26125ff6c26ac0",
+            "sourceEventId": "rly:94bc766ecf5339674b0f6e6f36af3553"
+          }
+        },
+        {
+          "id": "ops:51df70915047fec38198080a38011a35",
+          "kind": "due_expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 22258,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-10-31",
+            "id": "ops:51df70915047fec38198080a38011a35",
+            "kind": "due_expense",
+            "obligationId": "ops:e7a456d22dc9a7de572e3f60151f788f",
+            "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995"
+          }
+        },
+        {
+          "id": "ops:95da541b1dcad074208d76ccb9f564c1",
+          "kind": "due_expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 30000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-11-30",
+            "id": "ops:95da541b1dcad074208d76ccb9f564c1",
+            "kind": "due_expense",
+            "obligationId": "ops:e0953e13cf386f23ff6922a21e393482",
+            "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995"
+          }
+        },
+        {
+          "id": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 200000,
+            "bucket": "plan",
+            "date": "2024-12-01",
+            "id": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099",
+            "reservationId": "ops:57e56d1dbdfc9369e8afb7ac6d2ee862",
+            "sourceEventId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099"
+          }
+        },
+        {
+          "id": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099:execute:cost",
+          "kind": "expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 200000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-12-01",
+            "id": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099:execute:cost",
+            "kind": "expense",
+            "originId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099",
+            "referenceId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099",
+            "reservationId": "ops:57e56d1dbdfc9369e8afb7ac6d2ee862",
+            "sourceEventId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099"
+          }
+        },
+        {
+          "id": "ops:28186fa8d82d6a1221b387b93a8dc704",
+          "kind": "due_expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 30000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-12-31",
+            "id": "ops:28186fa8d82d6a1221b387b93a8dc704",
+            "kind": "due_expense",
+            "obligationId": "ops:0db7b623c6850f835928968607ab52cc",
+            "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995"
+          }
+        },
+        {
+          "id": "rly:d3cb4e00a9fd9614123a5a6f25858c9a",
+          "kind": "receive_prepayment",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 400000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:1646f6bea2a2bb8044fa767453f56029",
+            "counterpartyId": "world",
+            "date": "2025-01-01",
+            "id": "rly:d3cb4e00a9fd9614123a5a6f25858c9a",
+            "kind": "receive_prepayment",
+            "reservationId": "rly:aaf7a750370ca0131cd082147a21e0a9",
+            "sourceEventId": "rly:1646f6bea2a2bb8044fa767453f56029"
+          }
+        },
+        {
+          "id": "rly:6a95e6d5fd64b5140e4e21159c180c9a",
+          "kind": "receive_prepayment",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 400000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:4f2315c72376d421c714c14aa81b9b87",
+            "counterpartyId": "world",
+            "date": "2025-01-01",
+            "id": "rly:6a95e6d5fd64b5140e4e21159c180c9a",
+            "kind": "receive_prepayment",
+            "reservationId": "rly:31dda965cff8a1ee4620533094c87761",
+            "sourceEventId": "rly:4f2315c72376d421c714c14aa81b9b87"
+          }
+        },
+        {
+          "id": "rly:75569102f07df0820234d374637925e2",
+          "kind": "receive_prepayment",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 400000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:6819c98825b35d91289fc86f9bed1313",
+            "counterpartyId": "world",
+            "date": "2025-01-01",
+            "id": "rly:75569102f07df0820234d374637925e2",
+            "kind": "receive_prepayment",
+            "reservationId": "rly:834a602fc2f2a44c06802a2a275a0854",
+            "sourceEventId": "rly:6819c98825b35d91289fc86f9bed1313"
+          }
+        },
+        {
+          "id": "rly:c839ad7fba33a47b2a0099363afda075",
+          "kind": "receive_prepayment",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 400000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+            "counterpartyId": "world",
+            "date": "2025-01-01",
+            "id": "rly:c839ad7fba33a47b2a0099363afda075",
+            "kind": "receive_prepayment",
+            "reservationId": "rly:80fb55a05f55a8a648c435836afd84b1",
+            "sourceEventId": "rly:d32a932325c73f4d1968e8da9f6a15d2"
+          }
+        },
+        {
+          "id": "rly:64033891ff6182d35eba257b674a2f87:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 300000,
+            "bucket": "plan",
+            "date": "2025-01-27",
+            "id": "rly:64033891ff6182d35eba257b674a2f87:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:64033891ff6182d35eba257b674a2f87",
+            "reservationId": "ops:35b2b2cd8e786217f6e474618b3e7060",
+            "sourceEventId": "rly:64033891ff6182d35eba257b674a2f87"
+          }
+        },
+        {
+          "id": "rly:90aa9efbd7c96e06aea18631e5c358cb:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 150000,
+            "bucket": "plan",
+            "date": "2025-01-27",
+            "id": "rly:90aa9efbd7c96e06aea18631e5c358cb:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+            "reservationId": "ops:8cd8513b1e28518afecc368da43f81e7",
+            "sourceEventId": "rly:90aa9efbd7c96e06aea18631e5c358cb"
+          }
+        },
+        {
+          "id": "ops:1b49bfef23623b38ecbd60b5f490b6a4:cost",
+          "kind": "expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 300000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "id": "ops:1b49bfef23623b38ecbd60b5f490b6a4:cost",
+            "kind": "expense",
+            "originId": "rly:64033891ff6182d35eba257b674a2f87",
+            "referenceId": "rly:64033891ff6182d35eba257b674a2f87",
+            "reservationId": "ops:35b2b2cd8e786217f6e474618b3e7060",
+            "sourceEventId": "rly:64033891ff6182d35eba257b674a2f87"
+          }
+        },
+        {
+          "id": "rly:acce9b60101b75888c658248f4bbeb62",
+          "kind": "deliver_prepaid",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 6066,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:1646f6bea2a2bb8044fa767453f56029",
+            "date": "2025-01-28",
+            "id": "rly:acce9b60101b75888c658248f4bbeb62",
+            "kind": "deliver_prepaid",
+            "referenceId": "rly:d3cb4e00a9fd9614123a5a6f25858c9a",
+            "sourceEventId": "rly:2c6cf70afc0ea8197fac86fe5205645c"
+          }
+        },
+        {
+          "id": "rly:3137ddfeeca26d9104d23b80c8dcdba7",
+          "kind": "incur_supplier_usage",
+          "status": "due",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 2022,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "dueAt": "2025-02-04",
+            "id": "rly:3137ddfeeca26d9104d23b80c8dcdba7",
+            "kind": "incur_supplier_usage",
+            "obligationId": "rly:e98171c643e02257a74da5e3d25bfd6b",
+            "prepaymentId": "rly:aef4cf222ee352d232a2606bb93bb14f",
+            "sourceEventId": "rly:2c6cf70afc0ea8197fac86fe5205645c"
+          }
+        },
+        {
+          "id": "rly:a245d3a3adac7792fc428bf89f77526d",
+          "kind": "deliver_prepaid",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 6066,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:4f2315c72376d421c714c14aa81b9b87",
+            "date": "2025-01-28",
+            "id": "rly:a245d3a3adac7792fc428bf89f77526d",
+            "kind": "deliver_prepaid",
+            "referenceId": "rly:6a95e6d5fd64b5140e4e21159c180c9a",
+            "sourceEventId": "rly:126c2d83cbeb5faae02bf7523a67f46c"
+          }
+        },
+        {
+          "id": "rly:7333c072c723dfe3b2a284e475df4c81",
+          "kind": "incur_supplier_usage",
+          "status": "due",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 2022,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "dueAt": "2025-02-04",
+            "id": "rly:7333c072c723dfe3b2a284e475df4c81",
+            "kind": "incur_supplier_usage",
+            "obligationId": "rly:a186583ca0c970c47a9332bba9c90276",
+            "prepaymentId": "rly:aef4cf222ee352d232a2606bb93bb14f",
+            "sourceEventId": "rly:126c2d83cbeb5faae02bf7523a67f46c"
+          }
+        },
+        {
+          "id": "rly:ea0b948faf407fe87770a8b12d116bfc",
+          "kind": "deliver_prepaid",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 6066,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:6819c98825b35d91289fc86f9bed1313",
+            "date": "2025-01-28",
+            "id": "rly:ea0b948faf407fe87770a8b12d116bfc",
+            "kind": "deliver_prepaid",
+            "referenceId": "rly:75569102f07df0820234d374637925e2",
+            "sourceEventId": "rly:9ec0801f0c4663e7da22d934c0c6a08d"
+          }
+        },
+        {
+          "id": "rly:90a045400143a12f7a5171da3aa717f3",
+          "kind": "incur_supplier_usage",
+          "status": "due",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 2022,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "dueAt": "2025-02-04",
+            "id": "rly:90a045400143a12f7a5171da3aa717f3",
+            "kind": "incur_supplier_usage",
+            "obligationId": "rly:3846ad969d0c939b51ae5750dcbf6b55",
+            "prepaymentId": "rly:aef4cf222ee352d232a2606bb93bb14f",
+            "sourceEventId": "rly:9ec0801f0c4663e7da22d934c0c6a08d"
+          }
+        },
+        {
+          "id": "rly:fb81090a64265b9b900c901697686da5",
+          "kind": "deliver_prepaid",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 6066,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+            "date": "2025-01-28",
+            "id": "rly:fb81090a64265b9b900c901697686da5",
+            "kind": "deliver_prepaid",
+            "referenceId": "rly:c839ad7fba33a47b2a0099363afda075",
+            "sourceEventId": "rly:ea23942a0787b976fe87eca173ed4a39"
+          }
+        },
+        {
+          "id": "rly:1c3d0609b172eb1a7577d11e3228a01f",
+          "kind": "incur_supplier_usage",
+          "status": "due",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 2022,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "dueAt": "2025-02-04",
+            "id": "rly:1c3d0609b172eb1a7577d11e3228a01f",
+            "kind": "incur_supplier_usage",
+            "obligationId": "rly:c4092db3b48b3d35abac49f743a4f4c7",
+            "prepaymentId": "rly:aef4cf222ee352d232a2606bb93bb14f",
+            "sourceEventId": "rly:ea23942a0787b976fe87eca173ed4a39"
+          }
+        },
+        {
+          "id": "rly:37d903c9c6ebb9afe7cb92d8f6fc8f26",
+          "kind": "deliver_on_credit",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 6066,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:debf8cf3d233b2d7c3d758a916516bf8",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "id": "rly:37d903c9c6ebb9afe7cb92d8f6fc8f26",
+            "kind": "deliver_on_credit",
+            "sourceEventId": "rly:1d29206707abc4b4771c3355ebf48438"
+          }
+        },
+        {
+          "id": "rly:f471318fe9c82db36ab12c6b9a76b795",
+          "kind": "incur_supplier_usage",
+          "status": "due",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 2022,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "dueAt": "2025-02-04",
+            "id": "rly:f471318fe9c82db36ab12c6b9a76b795",
+            "kind": "incur_supplier_usage",
+            "obligationId": "rly:d13db2f81873f11cea133a176f8a0ee3",
+            "prepaymentId": "rly:aef4cf222ee352d232a2606bb93bb14f",
+            "sourceEventId": "rly:1d29206707abc4b4771c3355ebf48438"
+          }
+        },
+        {
+          "id": "rly:73ea1005f2933b440ffb52dbcbac8bec",
+          "kind": "deliver_on_credit",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 6066,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:aa1ae71ec735b943dc1649d455d84dc5",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "id": "rly:73ea1005f2933b440ffb52dbcbac8bec",
+            "kind": "deliver_on_credit",
+            "sourceEventId": "rly:2da0b67bb96553d9a7a78373689ce01c"
+          }
+        },
+        {
+          "id": "rly:c5a42342956583aa943605e61343cd9c",
+          "kind": "incur_supplier_usage",
+          "status": "due",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 2022,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "dueAt": "2025-02-04",
+            "id": "rly:c5a42342956583aa943605e61343cd9c",
+            "kind": "incur_supplier_usage",
+            "obligationId": "rly:0a29711d9375345761eb6cfdc78f537b",
+            "prepaymentId": "rly:aef4cf222ee352d232a2606bb93bb14f",
+            "sourceEventId": "rly:2da0b67bb96553d9a7a78373689ce01c"
+          }
+        }
+      ],
+      "agentPermissions": [],
+      "ledgerSha256": "5e847fac342b79f2e3759f06b8b35ad1d1f8f64586095eae6231faf479d87a7e"
+    },
+    "stopped94": {
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-27/chrome-stop-r5/stop-saved94-support-and-old-debts-retained.json",
+        "bytes": 1200676,
+        "sha256": "5ad7831f40234bb13e5f32b0c1898bb90ad4f98e22f9a710277207680a9f1441",
+        "mode": 420
+      },
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 94,
+      "date": "2025-01-28",
+      "origin": "normal",
+      "budget": {
+        "available": 1,
+        "quarter": "2025-Q1",
+        "reserved": 1,
+        "spent": 2,
+        "total": 4
+      },
+      "period": {
+        "auditedMeters": 0,
+        "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+        "compensatedAt": null,
+        "createdAt": "2025-01-27",
+        "customerIds": [
+          "rly:1646f6bea2a2bb8044fa767453f56029",
+          "rly:4f2315c72376d421c714c14aa81b9b87",
+          "rly:6819c98825b35d91289fc86f9bed1313",
+          "rly:d32a932325c73f4d1968e8da9f6a15d2",
+          "rly:debf8cf3d233b2d7c3d758a916516bf8",
+          "rly:aa1ae71ec735b943dc1649d455d84dc5"
+        ],
+        "failedDays": 0,
+        "feePostedAt": null,
+        "feeQuotes": [
+          {
+            "amountFen": 50000,
+            "customerId": "rly:1646f6bea2a2bb8044fa767453f56029",
+            "termsId": "rly:26a45fb46c6b65b238bbae954e8f5656"
+          },
+          {
+            "amountFen": 50000,
+            "customerId": "rly:4f2315c72376d421c714c14aa81b9b87",
+            "termsId": "rly:e1bc7c9daf160cad709283246073a001"
+          },
+          {
+            "amountFen": 50000,
+            "customerId": "rly:6819c98825b35d91289fc86f9bed1313",
+            "termsId": "rly:bb1a6accf391f1bff8d503cac7a8e020"
+          },
+          {
+            "amountFen": 50000,
+            "customerId": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+            "termsId": "rly:efa03246d3239c6eee27d54174a0dfe7"
+          },
+          {
+            "amountFen": 50000,
+            "customerId": "rly:debf8cf3d233b2d7c3d758a916516bf8",
+            "termsId": "rly:9942f26953133ce75dde3ce6eb0e3c1f"
+          },
+          {
+            "amountFen": 50000,
+            "customerId": "rly:aa1ae71ec735b943dc1649d455d84dc5",
+            "termsId": "rly:20f6afd9912a02fc47ac02bc2619bc56"
+          }
+        ],
+        "from": "2025-01-28",
+        "id": "rly:c89c1062f0ddd18e27ea8de398634f9e",
+        "job": {
+          "actionId": "rly:64033891ff6182d35eba257b674a2f87",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "completeAt": "2025-02-25",
+          "contractId": null,
+          "definitionId": "relay-service",
+          "id": "rly:64033891ff6182d35eba257b674a2f87",
+          "outputId": null,
+          "releasedAt": "2025-01-28",
+          "resources": [
+            "player-production"
+          ],
+          "startAt": "2025-01-28",
+          "status": "interrupted"
+        },
+        "jobId": "rly:64033891ff6182d35eba257b674a2f87",
+        "knownCorrections": 0,
+        "maxSupplierCostFen": 1200000,
+        "maxUnits": 300000,
+        "meterCount": 6,
+        "observedDays": 1,
+        "reportedUnits": 6066,
+        "status": "stopped",
+        "stoppedAt": "2025-01-28",
+        "supplierIds": [
+          "cedar-direct"
+        ],
+        "supportJob": {
+          "actionId": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "completeAt": "2025-03-04",
+          "contractId": null,
+          "definitionId": "relay-support-guided",
+          "id": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+          "outputId": null,
+          "releasedAt": null,
+          "resources": [
+            "player-production"
+          ],
+          "startAt": "2025-02-25",
+          "status": "planned"
+        },
+        "supportJobId": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+        "supportMode": "guided",
+        "to": "2025-02-25"
+      },
+      "business": {
+        "id": "ops:60e1e4f1a8f744bbf167073569038995",
+        "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+        "company": true,
+        "lifecycle": "operating",
+        "stoppedAt": null,
+        "funds": {
+          "availableFen": 2182006,
+          "cashFen": 3907742,
+          "commitmentShortfallFen": 0,
+          "heldFen": 1725736,
+          "investmentValueFen": 0,
+          "netAssetsFen": 2332006,
+          "payableFen": 12132,
+          "prepaidLiabilityFen": 1575736,
+          "protectionRequiredFen": 1575736,
+          "protectionShortfallFen": 0,
+          "receivableFen": 12132,
+          "supplierPrepaidFen": 0
+        },
+        "metrics": {
+          "accruedCostFen": 27096,
+          "costFen": 731486,
+          "incomeFen": 36396,
+          "profitFen": -695090
+        }
+      },
+      "publicAccount": {
+        "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+        "accruedCostFen": 27096,
+        "availableFen": 2182006,
+        "cashFen": 3907742,
+        "commitmentShortfallFen": 0,
+        "heldFen": 1725736,
+        "investmentValueFen": 0,
+        "lastKnownInvestmentValueFen": 0,
+        "netAssetsFen": 2304910,
+        "payableFen": 12132,
+        "prepaidLiabilityFen": 1575736,
+        "protectionRequiredFen": 1575736,
+        "protectionShortfallFen": 0,
+        "receivableFen": 12132,
+        "supplierPrepaidFen": 0,
+        "valuationStatus": "current"
+      },
+      "personalAccount": {
+        "accountId": "personal",
+        "accruedCostFen": 0,
+        "availableFen": 21200000,
+        "cashFen": 21200000,
+        "commitmentShortfallFen": 0,
+        "heldFen": 0,
+        "investmentValueFen": 0,
+        "lastKnownInvestmentValueFen": 0,
+        "netAssetsFen": 21200000,
+        "payableFen": 0,
+        "prepaidLiabilityFen": 0,
+        "protectionRequiredFen": 0,
+        "protectionShortfallFen": 0,
+        "receivableFen": 0,
+        "supplierPrepaidFen": 0,
+        "valuationStatus": "current"
+      },
+      "customerBalances": [
+        {
+          "id": "rly:1646f6bea2a2bb8044fa767453f56029",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:1646f6bea2a2bb8044fa767453f56029",
+            "prepaidFen": 393934,
+            "protectionReservationId": "rly:aaf7a750370ca0131cd082147a21e0a9",
+            "receivableFen": 0,
+            "recognizedIncomeFen": 6066
+          }
+        },
+        {
+          "id": "rly:4f2315c72376d421c714c14aa81b9b87",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:4f2315c72376d421c714c14aa81b9b87",
+            "prepaidFen": 393934,
+            "protectionReservationId": "rly:31dda965cff8a1ee4620533094c87761",
+            "receivableFen": 0,
+            "recognizedIncomeFen": 6066
+          }
+        },
+        {
+          "id": "rly:6819c98825b35d91289fc86f9bed1313",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:6819c98825b35d91289fc86f9bed1313",
+            "prepaidFen": 393934,
+            "protectionReservationId": "rly:834a602fc2f2a44c06802a2a275a0854",
+            "receivableFen": 0,
+            "recognizedIncomeFen": 6066
+          }
+        },
+        {
+          "id": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "prepaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+            "prepaidFen": 393934,
+            "protectionReservationId": "rly:80fb55a05f55a8a648c435836afd84b1",
+            "receivableFen": 0,
+            "recognizedIncomeFen": 6066
+          }
+        },
+        {
+          "id": "rly:debf8cf3d233b2d7c3d758a916516bf8",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "postpaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:debf8cf3d233b2d7c3d758a916516bf8",
+            "prepaidFen": 0,
+            "protectionReservationId": null,
+            "receivableFen": 6066,
+            "recognizedIncomeFen": 6066
+          }
+        },
+        {
+          "id": "rly:aa1ae71ec735b943dc1649d455d84dc5",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "signedAt": "2025-01-01",
+          "termEnd": "2025-03-31",
+          "mode": "postpaid",
+          "closedAt": null,
+          "balance": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "id": "rly:aa1ae71ec735b943dc1649d455d84dc5",
+            "prepaidFen": 0,
+            "protectionReservationId": null,
+            "receivableFen": 6066,
+            "recognizedIncomeFen": 6066
+          }
+        }
+      ],
+      "supplierAssets": [
+        {
+          "adapted": true,
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "credit": null,
+          "outstandingFen": 12132,
+          "permitted": true,
+          "supplierId": "cedar-direct"
+        },
+        {
+          "adapted": false,
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "credit": null,
+          "outstandingFen": 0,
+          "permitted": false,
+          "supplierId": "cedar-reseller"
+        },
+        {
+          "adapted": false,
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "credit": null,
+          "outstandingFen": 0,
+          "permitted": false,
+          "supplierId": "harbor-independent"
+        }
+      ],
+      "receivables": [
+        {
+          "amountFen": 6066,
+          "collectedFen": 0,
+          "customerId": "rly:debf8cf3d233b2d7c3d758a916516bf8",
+          "date": "2025-01-28",
+          "dueAt": "2025-02-11",
+          "id": "rly:15fda2d6de3a7ab24d04870ed92914d8",
+          "operationId": "rly:37d903c9c6ebb9afe7cb92d8f6fc8f26",
+          "reversedFen": 0,
+          "sourceId": "rly:1d29206707abc4b4771c3355ebf48438"
+        },
+        {
+          "amountFen": 6066,
+          "collectedFen": 0,
+          "customerId": "rly:aa1ae71ec735b943dc1649d455d84dc5",
+          "date": "2025-01-28",
+          "dueAt": "2025-02-11",
+          "id": "rly:ee19dbd408450b2b685812f63f6adf4d",
+          "operationId": "rly:73ea1005f2933b440ffb52dbcbac8bec",
+          "reversedFen": 0,
+          "sourceId": "rly:2da0b67bb96553d9a7a78373689ce01c"
+        }
+      ],
+      "obligations": [
+        {
+          "id": "ops:e7a456d22dc9a7de572e3f60151f788f",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2024-10-31",
+          "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "originOperationId": "ops:51df70915047fec38198080a38011a35",
+          "kind": "expense",
+          "amountFen": 22258,
+          "remainingFen": 0,
+          "protectionReservationId": null
+        },
+        {
+          "id": "ops:e0953e13cf386f23ff6922a21e393482",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2024-11-30",
+          "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "originOperationId": "ops:95da541b1dcad074208d76ccb9f564c1",
+          "kind": "expense",
+          "amountFen": 30000,
+          "remainingFen": 0,
+          "protectionReservationId": null
+        },
+        {
+          "id": "ops:0db7b623c6850f835928968607ab52cc",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2024-12-31",
+          "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "originOperationId": "ops:28186fa8d82d6a1221b387b93a8dc704",
+          "kind": "expense",
+          "amountFen": 30000,
+          "remainingFen": 0,
+          "protectionReservationId": null
+        },
+        {
+          "id": "rly:e98171c643e02257a74da5e3d25bfd6b",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2025-02-04",
+          "sourceEventId": "rly:2c6cf70afc0ea8197fac86fe5205645c",
+          "originOperationId": "rly:3137ddfeeca26d9104d23b80c8dcdba7",
+          "kind": "expense",
+          "amountFen": 2022,
+          "remainingFen": 2022,
+          "protectionReservationId": null
+        },
+        {
+          "id": "rly:a186583ca0c970c47a9332bba9c90276",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2025-02-04",
+          "sourceEventId": "rly:126c2d83cbeb5faae02bf7523a67f46c",
+          "originOperationId": "rly:7333c072c723dfe3b2a284e475df4c81",
+          "kind": "expense",
+          "amountFen": 2022,
+          "remainingFen": 2022,
+          "protectionReservationId": null
+        },
+        {
+          "id": "rly:3846ad969d0c939b51ae5750dcbf6b55",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2025-02-04",
+          "sourceEventId": "rly:9ec0801f0c4663e7da22d934c0c6a08d",
+          "originOperationId": "rly:90a045400143a12f7a5171da3aa717f3",
+          "kind": "expense",
+          "amountFen": 2022,
+          "remainingFen": 2022,
+          "protectionReservationId": null
+        },
+        {
+          "id": "rly:c4092db3b48b3d35abac49f743a4f4c7",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2025-02-04",
+          "sourceEventId": "rly:ea23942a0787b976fe87eca173ed4a39",
+          "originOperationId": "rly:1c3d0609b172eb1a7577d11e3228a01f",
+          "kind": "expense",
+          "amountFen": 2022,
+          "remainingFen": 2022,
+          "protectionReservationId": null
+        },
+        {
+          "id": "rly:d13db2f81873f11cea133a176f8a0ee3",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2025-02-04",
+          "sourceEventId": "rly:1d29206707abc4b4771c3355ebf48438",
+          "originOperationId": "rly:f471318fe9c82db36ab12c6b9a76b795",
+          "kind": "expense",
+          "amountFen": 2022,
+          "remainingFen": 2022,
+          "protectionReservationId": null
+        },
+        {
+          "id": "rly:0a29711d9375345761eb6cfdc78f537b",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+          "contractId": null,
+          "counterpartyId": "world",
+          "date": "2025-02-04",
+          "sourceEventId": "rly:2da0b67bb96553d9a7a78373689ce01c",
+          "originOperationId": "rly:c5a42342956583aa943605e61343cd9c",
+          "kind": "expense",
+          "amountFen": 2022,
+          "remainingFen": 2022,
+          "protectionReservationId": null
+        }
+      ],
+      "income": {
+        "amountFen": 36396,
+        "entries": 6,
+        "sha256": "4a8d3c77ddb7b8a02dcd98bce78d5868cb10c8dcb137ce736b5a534a92d9d4c2"
+      },
+      "cost": {
+        "amountFen": 704390,
+        "entries": 13,
+        "sha256": "98eec9ae9125453ce2d3993f9008bf65c40eb44b107db31ce3c22bc7cbcc6e73"
+      },
+      "customerProtection": [
+        {
+          "id": "rly:aaf7a750370ca0131cd082147a21e0a9",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "customer_protection",
+          "originId": "rly:1646f6bea2a2bb8044fa767453f56029",
+          "amountFen": 393934,
+          "status": "active"
+        },
+        {
+          "id": "rly:31dda965cff8a1ee4620533094c87761",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "customer_protection",
+          "originId": "rly:4f2315c72376d421c714c14aa81b9b87",
+          "amountFen": 393934,
+          "status": "active"
+        },
+        {
+          "id": "rly:834a602fc2f2a44c06802a2a275a0854",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "customer_protection",
+          "originId": "rly:6819c98825b35d91289fc86f9bed1313",
+          "amountFen": 393934,
+          "status": "active"
+        },
+        {
+          "id": "rly:80fb55a05f55a8a648c435836afd84b1",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "customer_protection",
+          "originId": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+          "amountFen": 393934,
+          "status": "active"
+        }
+      ],
+      "activePlanReservations": [
+        {
+          "id": "ops:8cd8513b1e28518afecc368da43f81e7",
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "kind": "plan",
+          "originId": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+          "amountFen": 150000,
+          "status": "active"
+        }
+      ],
+      "knownPostedOperations": [
+        {
+          "id": "ops:dd362100c80a1e6b62cf265605feec4a",
+          "kind": "open_business_account",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "date": "2024-07-02",
+            "id": "ops:dd362100c80a1e6b62cf265605feec4a",
+            "kind": "open_business_account",
+            "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995"
+          }
+        },
+        {
+          "id": "rly:2da04cbaef842ecf7de81c16a09eb55b:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 10000,
+            "bucket": "plan",
+            "date": "2024-07-02",
+            "id": "rly:2da04cbaef842ecf7de81c16a09eb55b:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:2da04cbaef842ecf7de81c16a09eb55b",
+            "reservationId": "ops:aa70440c3fa88dfb42ab137bf18d1784",
+            "sourceEventId": "rly:2da04cbaef842ecf7de81c16a09eb55b"
+          }
+        },
+        {
+          "id": "rly:2da04cbaef842ecf7de81c16a09eb55b:execute:cost",
+          "kind": "expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 10000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-07-02",
+            "id": "rly:2da04cbaef842ecf7de81c16a09eb55b:execute:cost",
+            "kind": "expense",
+            "originId": "rly:2da04cbaef842ecf7de81c16a09eb55b",
+            "referenceId": "rly:2da04cbaef842ecf7de81c16a09eb55b",
+            "reservationId": "ops:aa70440c3fa88dfb42ab137bf18d1784",
+            "sourceEventId": "rly:2da04cbaef842ecf7de81c16a09eb55b"
+          }
+        },
+        {
+          "id": "rly:94bc766ecf5339674b0f6e6f36af3553:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 100000,
+            "bucket": "plan",
+            "date": "2024-10-02",
+            "id": "rly:94bc766ecf5339674b0f6e6f36af3553:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:94bc766ecf5339674b0f6e6f36af3553",
+            "reservationId": "ops:163977ea1f7bbfc20d26125ff6c26ac0",
+            "sourceEventId": "rly:94bc766ecf5339674b0f6e6f36af3553"
+          }
+        },
+        {
+          "id": "rly:94bc766ecf5339674b0f6e6f36af3553:execute:cost",
+          "kind": "expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 100000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-10-02",
+            "id": "rly:94bc766ecf5339674b0f6e6f36af3553:execute:cost",
+            "kind": "expense",
+            "originId": "rly:94bc766ecf5339674b0f6e6f36af3553",
+            "referenceId": "rly:94bc766ecf5339674b0f6e6f36af3553",
+            "reservationId": "ops:163977ea1f7bbfc20d26125ff6c26ac0",
+            "sourceEventId": "rly:94bc766ecf5339674b0f6e6f36af3553"
+          }
+        },
+        {
+          "id": "ops:51df70915047fec38198080a38011a35",
+          "kind": "due_expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 22258,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-10-31",
+            "id": "ops:51df70915047fec38198080a38011a35",
+            "kind": "due_expense",
+            "obligationId": "ops:e7a456d22dc9a7de572e3f60151f788f",
+            "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995"
+          }
+        },
+        {
+          "id": "ops:95da541b1dcad074208d76ccb9f564c1",
+          "kind": "due_expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 30000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-11-30",
+            "id": "ops:95da541b1dcad074208d76ccb9f564c1",
+            "kind": "due_expense",
+            "obligationId": "ops:e0953e13cf386f23ff6922a21e393482",
+            "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995"
+          }
+        },
+        {
+          "id": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 200000,
+            "bucket": "plan",
+            "date": "2024-12-01",
+            "id": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099",
+            "reservationId": "ops:57e56d1dbdfc9369e8afb7ac6d2ee862",
+            "sourceEventId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099"
+          }
+        },
+        {
+          "id": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099:execute:cost",
+          "kind": "expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 200000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-12-01",
+            "id": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099:execute:cost",
+            "kind": "expense",
+            "originId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099",
+            "referenceId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099",
+            "reservationId": "ops:57e56d1dbdfc9369e8afb7ac6d2ee862",
+            "sourceEventId": "rly:f4d2bf2bf15971f5e6fdd1d2fc89f099"
+          }
+        },
+        {
+          "id": "ops:28186fa8d82d6a1221b387b93a8dc704",
+          "kind": "due_expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 30000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2024-12-31",
+            "id": "ops:28186fa8d82d6a1221b387b93a8dc704",
+            "kind": "due_expense",
+            "obligationId": "ops:0db7b623c6850f835928968607ab52cc",
+            "sourceEventId": "ops:60e1e4f1a8f744bbf167073569038995"
+          }
+        },
+        {
+          "id": "rly:d3cb4e00a9fd9614123a5a6f25858c9a",
+          "kind": "receive_prepayment",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 400000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:1646f6bea2a2bb8044fa767453f56029",
+            "counterpartyId": "world",
+            "date": "2025-01-01",
+            "id": "rly:d3cb4e00a9fd9614123a5a6f25858c9a",
+            "kind": "receive_prepayment",
+            "reservationId": "rly:aaf7a750370ca0131cd082147a21e0a9",
+            "sourceEventId": "rly:1646f6bea2a2bb8044fa767453f56029"
+          }
+        },
+        {
+          "id": "rly:6a95e6d5fd64b5140e4e21159c180c9a",
+          "kind": "receive_prepayment",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 400000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:4f2315c72376d421c714c14aa81b9b87",
+            "counterpartyId": "world",
+            "date": "2025-01-01",
+            "id": "rly:6a95e6d5fd64b5140e4e21159c180c9a",
+            "kind": "receive_prepayment",
+            "reservationId": "rly:31dda965cff8a1ee4620533094c87761",
+            "sourceEventId": "rly:4f2315c72376d421c714c14aa81b9b87"
+          }
+        },
+        {
+          "id": "rly:75569102f07df0820234d374637925e2",
+          "kind": "receive_prepayment",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 400000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:6819c98825b35d91289fc86f9bed1313",
+            "counterpartyId": "world",
+            "date": "2025-01-01",
+            "id": "rly:75569102f07df0820234d374637925e2",
+            "kind": "receive_prepayment",
+            "reservationId": "rly:834a602fc2f2a44c06802a2a275a0854",
+            "sourceEventId": "rly:6819c98825b35d91289fc86f9bed1313"
+          }
+        },
+        {
+          "id": "rly:c839ad7fba33a47b2a0099363afda075",
+          "kind": "receive_prepayment",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 400000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+            "counterpartyId": "world",
+            "date": "2025-01-01",
+            "id": "rly:c839ad7fba33a47b2a0099363afda075",
+            "kind": "receive_prepayment",
+            "reservationId": "rly:80fb55a05f55a8a648c435836afd84b1",
+            "sourceEventId": "rly:d32a932325c73f4d1968e8da9f6a15d2"
+          }
+        },
+        {
+          "id": "rly:64033891ff6182d35eba257b674a2f87:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 300000,
+            "bucket": "plan",
+            "date": "2025-01-27",
+            "id": "rly:64033891ff6182d35eba257b674a2f87:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:64033891ff6182d35eba257b674a2f87",
+            "reservationId": "ops:35b2b2cd8e786217f6e474618b3e7060",
+            "sourceEventId": "rly:64033891ff6182d35eba257b674a2f87"
+          }
+        },
+        {
+          "id": "rly:90aa9efbd7c96e06aea18631e5c358cb:reserve:funds",
+          "kind": "reserve_cash",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 150000,
+            "bucket": "plan",
+            "date": "2025-01-27",
+            "id": "rly:90aa9efbd7c96e06aea18631e5c358cb:reserve:funds",
+            "kind": "reserve_cash",
+            "originId": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+            "reservationId": "ops:8cd8513b1e28518afecc368da43f81e7",
+            "sourceEventId": "rly:90aa9efbd7c96e06aea18631e5c358cb"
+          }
+        },
+        {
+          "id": "ops:1b49bfef23623b38ecbd60b5f490b6a4:cost",
+          "kind": "expense",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 300000,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "id": "ops:1b49bfef23623b38ecbd60b5f490b6a4:cost",
+            "kind": "expense",
+            "originId": "rly:64033891ff6182d35eba257b674a2f87",
+            "referenceId": "rly:64033891ff6182d35eba257b674a2f87",
+            "reservationId": "ops:35b2b2cd8e786217f6e474618b3e7060",
+            "sourceEventId": "rly:64033891ff6182d35eba257b674a2f87"
+          }
+        },
+        {
+          "id": "rly:acce9b60101b75888c658248f4bbeb62",
+          "kind": "deliver_prepaid",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 6066,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:1646f6bea2a2bb8044fa767453f56029",
+            "date": "2025-01-28",
+            "id": "rly:acce9b60101b75888c658248f4bbeb62",
+            "kind": "deliver_prepaid",
+            "referenceId": "rly:d3cb4e00a9fd9614123a5a6f25858c9a",
+            "sourceEventId": "rly:2c6cf70afc0ea8197fac86fe5205645c"
+          }
+        },
+        {
+          "id": "rly:3137ddfeeca26d9104d23b80c8dcdba7",
+          "kind": "incur_supplier_usage",
+          "status": "due",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 2022,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "dueAt": "2025-02-04",
+            "id": "rly:3137ddfeeca26d9104d23b80c8dcdba7",
+            "kind": "incur_supplier_usage",
+            "obligationId": "rly:e98171c643e02257a74da5e3d25bfd6b",
+            "prepaymentId": "rly:aef4cf222ee352d232a2606bb93bb14f",
+            "sourceEventId": "rly:2c6cf70afc0ea8197fac86fe5205645c"
+          }
+        },
+        {
+          "id": "rly:a245d3a3adac7792fc428bf89f77526d",
+          "kind": "deliver_prepaid",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 6066,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:4f2315c72376d421c714c14aa81b9b87",
+            "date": "2025-01-28",
+            "id": "rly:a245d3a3adac7792fc428bf89f77526d",
+            "kind": "deliver_prepaid",
+            "referenceId": "rly:6a95e6d5fd64b5140e4e21159c180c9a",
+            "sourceEventId": "rly:126c2d83cbeb5faae02bf7523a67f46c"
+          }
+        },
+        {
+          "id": "rly:7333c072c723dfe3b2a284e475df4c81",
+          "kind": "incur_supplier_usage",
+          "status": "due",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 2022,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "dueAt": "2025-02-04",
+            "id": "rly:7333c072c723dfe3b2a284e475df4c81",
+            "kind": "incur_supplier_usage",
+            "obligationId": "rly:a186583ca0c970c47a9332bba9c90276",
+            "prepaymentId": "rly:aef4cf222ee352d232a2606bb93bb14f",
+            "sourceEventId": "rly:126c2d83cbeb5faae02bf7523a67f46c"
+          }
+        },
+        {
+          "id": "rly:ea0b948faf407fe87770a8b12d116bfc",
+          "kind": "deliver_prepaid",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 6066,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:6819c98825b35d91289fc86f9bed1313",
+            "date": "2025-01-28",
+            "id": "rly:ea0b948faf407fe87770a8b12d116bfc",
+            "kind": "deliver_prepaid",
+            "referenceId": "rly:75569102f07df0820234d374637925e2",
+            "sourceEventId": "rly:9ec0801f0c4663e7da22d934c0c6a08d"
+          }
+        },
+        {
+          "id": "rly:90a045400143a12f7a5171da3aa717f3",
+          "kind": "incur_supplier_usage",
+          "status": "due",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 2022,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "dueAt": "2025-02-04",
+            "id": "rly:90a045400143a12f7a5171da3aa717f3",
+            "kind": "incur_supplier_usage",
+            "obligationId": "rly:3846ad969d0c939b51ae5750dcbf6b55",
+            "prepaymentId": "rly:aef4cf222ee352d232a2606bb93bb14f",
+            "sourceEventId": "rly:9ec0801f0c4663e7da22d934c0c6a08d"
+          }
+        },
+        {
+          "id": "rly:fb81090a64265b9b900c901697686da5",
+          "kind": "deliver_prepaid",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 6066,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:d32a932325c73f4d1968e8da9f6a15d2",
+            "date": "2025-01-28",
+            "id": "rly:fb81090a64265b9b900c901697686da5",
+            "kind": "deliver_prepaid",
+            "referenceId": "rly:c839ad7fba33a47b2a0099363afda075",
+            "sourceEventId": "rly:ea23942a0787b976fe87eca173ed4a39"
+          }
+        },
+        {
+          "id": "rly:1c3d0609b172eb1a7577d11e3228a01f",
+          "kind": "incur_supplier_usage",
+          "status": "due",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 2022,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "dueAt": "2025-02-04",
+            "id": "rly:1c3d0609b172eb1a7577d11e3228a01f",
+            "kind": "incur_supplier_usage",
+            "obligationId": "rly:c4092db3b48b3d35abac49f743a4f4c7",
+            "prepaymentId": "rly:aef4cf222ee352d232a2606bb93bb14f",
+            "sourceEventId": "rly:ea23942a0787b976fe87eca173ed4a39"
+          }
+        },
+        {
+          "id": "rly:37d903c9c6ebb9afe7cb92d8f6fc8f26",
+          "kind": "deliver_on_credit",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 6066,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:debf8cf3d233b2d7c3d758a916516bf8",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "id": "rly:37d903c9c6ebb9afe7cb92d8f6fc8f26",
+            "kind": "deliver_on_credit",
+            "sourceEventId": "rly:1d29206707abc4b4771c3355ebf48438"
+          }
+        },
+        {
+          "id": "rly:f471318fe9c82db36ab12c6b9a76b795",
+          "kind": "incur_supplier_usage",
+          "status": "due",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 2022,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "dueAt": "2025-02-04",
+            "id": "rly:f471318fe9c82db36ab12c6b9a76b795",
+            "kind": "incur_supplier_usage",
+            "obligationId": "rly:d13db2f81873f11cea133a176f8a0ee3",
+            "prepaymentId": "rly:aef4cf222ee352d232a2606bb93bb14f",
+            "sourceEventId": "rly:1d29206707abc4b4771c3355ebf48438"
+          }
+        },
+        {
+          "id": "rly:73ea1005f2933b440ffb52dbcbac8bec",
+          "kind": "deliver_on_credit",
+          "status": "applied",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 6066,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "contractId": "rly:aa1ae71ec735b943dc1649d455d84dc5",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "id": "rly:73ea1005f2933b440ffb52dbcbac8bec",
+            "kind": "deliver_on_credit",
+            "sourceEventId": "rly:2da0b67bb96553d9a7a78373689ce01c"
+          }
+        },
+        {
+          "id": "rly:c5a42342956583aa943605e61343cd9c",
+          "kind": "incur_supplier_usage",
+          "status": "due",
+          "operation": {
+            "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+            "amountFen": 2022,
+            "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+            "counterpartyId": "world",
+            "date": "2025-01-28",
+            "dueAt": "2025-02-04",
+            "id": "rly:c5a42342956583aa943605e61343cd9c",
+            "kind": "incur_supplier_usage",
+            "obligationId": "rly:0a29711d9375345761eb6cfdc78f537b",
+            "prepaymentId": "rly:aef4cf222ee352d232a2606bb93bb14f",
+            "sourceEventId": "rly:2da0b67bb96553d9a7a78373689ce01c"
+          }
+        }
+      ],
+      "agentPermissions": [],
+      "ledgerSha256": "5e847fac342b79f2e3759f06b8b35ad1d1f8f64586095eae6231faf479d87a7e"
+    },
+    "newOriginalReceipt": {
+      "commandId": "command-5378fcd5-c93c-42c6-bc5c-33c3878b3bb4",
+      "kind": "StopRelayPeriod",
+      "date": "2025-01-28",
+      "revisionBefore": 93,
+      "revisionAfter": 94,
+      "payload": {
+        "periodId": "rly:c89c1062f0ddd18e27ea8de398634f9e"
+      }
+    },
+    "serviceActionBefore": {
+      "definition": {
+        "id": "rly:64033891ff6182d35eba257b674a2f87",
+        "definitionId": "operating-action",
+        "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+        "counterpartyId": "world",
+        "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+        "actionPoints": 1,
+        "costFen": 300000,
+        "cashReservationId": "ops:35b2b2cd8e786217f6e474618b3e7060",
+        "startAt": "2025-01-28",
+        "completeAt": "2025-02-25",
+        "settlementAt": "2025-02-25"
+      },
+      "status": "executed",
+      "plannedAt": "2025-01-27",
+      "executedAt": "2025-01-28",
+      "finishedAt": null
+    },
+    "serviceActionAfter": {
+      "definition": {
+        "id": "rly:64033891ff6182d35eba257b674a2f87",
+        "definitionId": "operating-action",
+        "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+        "counterpartyId": "world",
+        "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+        "actionPoints": 1,
+        "costFen": 300000,
+        "cashReservationId": "ops:35b2b2cd8e786217f6e474618b3e7060",
+        "startAt": "2025-01-28",
+        "completeAt": "2025-02-25",
+        "settlementAt": "2025-02-25"
+      },
+      "status": "interrupted",
+      "plannedAt": "2025-01-27",
+      "executedAt": "2025-01-28",
+      "finishedAt": "2025-01-28"
+    },
+    "supportActionUnchanged": {
+      "definition": {
+        "id": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+        "definitionId": "operating-action",
+        "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+        "counterpartyId": "world",
+        "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+        "actionPoints": 1,
+        "costFen": 150000,
+        "cashReservationId": "ops:8cd8513b1e28518afecc368da43f81e7",
+        "startAt": "2025-02-25",
+        "completeAt": "2025-03-04",
+        "settlementAt": "2025-03-04"
+      },
+      "status": "reserved",
+      "plannedAt": "2025-01-27",
+      "executedAt": null,
+      "finishedAt": null
+    },
+    "supportReservationUnchanged": {
+      "id": "ops:8cd8513b1e28518afecc368da43f81e7",
+      "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+      "kind": "plan",
+      "originId": "rly:90aa9efbd7c96e06aea18631e5c358cb",
+      "amountFen": 150000,
+      "status": "active"
+    },
+    "actualServiceExpense": {
+      "receiptId": "ops:1b49bfef23623b38ecbd60b5f490b6a4:cost",
+      "status": "applied",
+      "operation": {
+        "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+        "amountFen": 300000,
+        "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+        "counterpartyId": "world",
+        "date": "2025-01-28",
+        "id": "ops:1b49bfef23623b38ecbd60b5f490b6a4:cost",
+        "kind": "expense",
+        "originId": "rly:64033891ff6182d35eba257b674a2f87",
+        "referenceId": "rly:64033891ff6182d35eba257b674a2f87",
+        "reservationId": "ops:35b2b2cd8e786217f6e474618b3e7060",
+        "sourceEventId": "rly:64033891ff6182d35eba257b674a2f87"
+      }
+    },
+    "actualServiceCash": {
+      "id": "ops:1b49bfef23623b38ecbd60b5f490b6a4:cost",
+      "date": "2025-01-28",
+      "sourceEventId": "rly:64033891ff6182d35eba257b674a2f87",
+      "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+      "contractId": null,
+      "referenceId": "rly:64033891ff6182d35eba257b674a2f87",
+      "lines": [
+        {
+          "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+          "deltaFen": -300000
+        },
+        {
+          "accountId": "world",
+          "deltaFen": 300000
+        }
+      ]
+    }
+  },
+  "checks": {
+    "sameRunAndSameActualPeriod": true,
+    "oneStartReceiptNotTwo": true,
+    "serviceActuallyPaid300000FenAndSpent1Point": true,
+    "futureSupport150000FenAnd1PointStillReserved": true,
+    "stopAddsNoPaymentOrRefund": true,
+    "stopDoesNotReleaseSupportOrRestoreServiceAp": true,
+    "allLedgerBytesUnchangedOnStop": true,
+    "publicCashIncomeProtectionReceivablesPayablesUnchangedOnStop": true,
+    "originalCustomersSuppliersPermissionsAndMeterEvidenceUnchanged": true,
+    "businessAndStationNotClosedByPeriodStop": true
+  },
+  "boundaries": [
+    "official codec import/export plus official public playing projections and already committed posted ledger operations only",
+    "raw imports do not replay or issue game commands; no controller/session/store was constructed",
+    "current UI label modules are excluded, so this is not a claim about all 506 source files or planned-support wording",
+    "physical source identity is the recorded native export supplied by Root; this script does not reopen browser storage",
+    "not a full CreateRun replay or new Chrome/playtest proof; Root audits actual branches separately",
+    "does not establish whole R1/S4/goal completion, profitability, formal P3/62/22 or compatibility"
+  ]
+}

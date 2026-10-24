@@ -1,0 +1,64 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/relay-scene-progress.test.ts (25 tests | 2 failed) 3427ms
+   × keeps the actual r116 period on its remaining original receivable while an ordinary price notice stays unread 3130ms
+   × distinguishes paused traffic from paused new contracts and preserves public price changes 10ms
+ ❯ src/ui/relay-scene-target.test.ts (7 tests | 7 skipped) 17709ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/relay-scene-target.test.ts [ src/ui/relay-scene-target.test.ts ]
+Error: Hook timed out in 10000ms.
+If this is a long-running hook, pass a timeout value as the last argument or configure it globally with "hookTimeout".
+ ❯ src/ui/relay-scene-target.test.ts:40:1
+     38| }
+     39| let frames:ReturnType<typeof actualFrames>
+     40| beforeAll(()=>{frames=actualFrames()})
+       | ^
+     41| const check=(relay:RelayProjection,target:RelaySceneTarget,context:Rel…
+     42|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/relay-scene-progress.test.ts > keeps the actual r116 period on its remaining original receivable while an ordinary price notice stays unread
+AssertionError: expected 'planning' to be 'market-change' // Object.is equality
+
+Expected: "market-change"
+Received: "planning"
+
+ ❯ src/ui/relay-scene-progress.test.ts:121:106
+    119|  expect(relaySceneProgress(relay,run.timeline.cursor.date,{...target,k…
+    120|  const {periodId:_,...identity}=target
+    121|  expect(relaySceneProgress(relay,run.timeline.cursor.date,{...identity…
+       |                                                                                                          ^
+    122|  expect(relay.changes.filter(c=>c.businessId===business.id&&c.acknowle…
+    123|  expect(JSON.stringify(relay)).toBe(before);expect(codec.export(run)).…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/ui/relay-scene-progress.test.ts > distinguishes paused traffic from paused new contracts and preserves public price changes
+AssertionError: expected 'intake' to be 'market-change' // Object.is equality
+
+Expected: "market-change"
+Received: "intake"
+
+ ❯ src/ui/relay-scene-progress.test.ts:278:23
+    276|  expect(contracts.phase).toBe('paused');expect(contracts.line).toConta…
+    277|  const change=relaySceneProgress(projection({changes:[{id:'change',bus…
+    278|  expect(change.phase).toBe('market-change');expect(change.command).toB…
+       |                       ^
+    279| })
+    280| it('leaves real intake, saved quote, contract and recharge choices sep…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  2 failed | 1 passed (3)
+      Tests  2 failed | 25 passed | 7 skipped (34)
+   Start at  08:04:28
+   Duration  21.21s (tests 75%, import 17%, transform 8%)
+

@@ -1,0 +1,52 @@
+{
+  "parsed": true,
+  "changedRules": [
+    {
+      "index": 80,
+      "before": {
+        "selector": ".opening-scene-active .opening-account-link:hover",
+        "declarations": [
+          {
+            "property": "color",
+            "value": "#ffe3ad",
+            "important": false
+          },
+          {
+            "property": "border-bottom-color",
+            "value": "#e0c38a",
+            "important": false
+          }
+        ]
+      },
+      "after": {
+        "selector": ".opening-scene-active .opening-account-link:is(:hover,:focus-visible)",
+        "declarations": [
+          {
+            "property": "color",
+            "value": "#ffe3ad",
+            "important": false
+          },
+          {
+            "property": "background",
+            "value": "#15332e",
+            "important": false
+          },
+          {
+            "property": "border-bottom-color",
+            "value": "#e0c38a",
+            "important": false
+          }
+        ]
+      }
+    }
+  ],
+  "allOtherRulesUnchanged": true,
+  "onlyNewDeclaration": "background:#15332e",
+  "staticDeclaredColorContrast": {
+    "foreground": "#ffe3ad",
+    "background": "#15332e",
+    "ratio": 10.90258965516556,
+    "previousObservedHoverRatio": 1.0595088756028141
+  },
+  "scope": "CSS parse, selector/declaration boundary and arithmetic only; no browser, dimensions, tests or build"
+}

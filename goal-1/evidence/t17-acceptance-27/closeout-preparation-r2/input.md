@@ -1,0 +1,1 @@
+Root授权：仅准备当前R1选择性Git/封存候选，复用baseline/旧pure lib与当前master appendix。严格排除原26P3/root19/3master原14行2304B；3masters未来应stage HEAD+自身R1 suffix，保旧working prefix。核差集只UI/新asset/AGENTS/docs37，保旧所有seal/input/config。不要seal、不stage/hash-object-write/commit、不跑已过测试、不改生产/masters/旧证据。Native根仍增长，Root最终明确冻结后才重算tree/scope；Root负责全部Browser/最终闭环。

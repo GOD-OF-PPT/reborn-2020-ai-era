@@ -1,0 +1,16 @@
+
+> reborn-2020-ai-era@0.1.0 typecheck
+> tsc -b
+
+src/ui/App.relay-focus.test.tsx(1,28): error TS2591: Cannot find name 'node:fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+src/ui/relay-target.test.tsx(46,46): error TS2322: Type 'string' is not assignable to type 'undefined'.
+src/ui/relay-target.test.tsx(52,79): error TS2322: Type 'string' is not assignable to type 'undefined'.
+src/ui/relay-target.test.tsx(56,86): error TS2322: Type 'string' is not assignable to type 'undefined'.
+src/ui/RelaySceneChoice.tsx(85,60): error TS2375: Type '{ children: (view: RelayEditorView) => Element; p: GamePanelProps; target: RelaySceneTarget; blockedReason: string | null | undefined; onInspect: (value: RelaySceneTarget | null, slot?: RelaySceneDraftSlot | undefined) => void; onClose: () => void; }' is not assignable to type 'EditorProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'blockedReason' are incompatible.
+    Type 'string | null | undefined' is not assignable to type 'string | null'.
+      Type 'undefined' is not assignable to type 'string | null'.
+src/ui/RelaySceneChoice.tsx(85,439): error TS2375: Type '{ children: (view: RelayEditorView) => Element; p: GamePanelProps; target: RelaySceneTarget; blockedReason: string | null | undefined; onInspect: (value: RelaySceneTarget | null, slot?: RelaySceneDraftSlot | undefined) => void; onClose: () => void; }' is not assignable to type 'EditorProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'blockedReason' are incompatible.
+    Type 'string | null | undefined' is not assignable to type 'string | null'.
+      Type 'undefined' is not assignable to type 'string | null'.

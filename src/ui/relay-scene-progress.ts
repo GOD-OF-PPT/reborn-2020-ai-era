@@ -1,15 +1,26 @@
 import type {RelayProjection} from '../core/relay-projection.ts'
 import {moneyText} from './game-text.ts'
+import {resolveRelaySceneTarget,relayTargetEntity,type RelaySceneTarget,type RelaySceneContext,type RelayTargetResolution} from './relay-scene-target.ts'
+export type {RelaySceneTarget,RelaySceneContext} from './relay-scene-target.ts'
 
 type Relay=NonNullable<RelayProjection>
 type Period=Relay['periods'][number]
 type Job=NonNullable<Relay['preparations'][number]['job']>
-export type RelayScenePhase='opening'|'preparation'|'supplier-letter'|'supply'|'marketing'|'intake'|'terms'|'funding'|'planning'|'planned'|'service'|'support'|'audit-waiting'|'audit-ready'|'correction'|'collection'|'settling'|'market-change'|'paused'|'stopping'|'closed'|'period-closed'|'records'
+export type RelayScenePhase='invalid'|'opening'|'preparation'|'supplier-letter'|'supply'|'marketing'|'intake'|'terms'|'funding'|'planning'|'planned'|'service'|'support'|'audit-waiting'|'audit-ready'|'correction'|'collection'|'settling'|'market-change'|'paused'|'stopping'|'closed'|'period-closed'|'records'
+export interface RelaySceneResultRef{readonly kind:'job'|'business'|'application'|'audience'|'customer'|'period'|'meter'|'audit'|'correction'|'receivable'|'operation';readonly id:string;readonly date:string|null}
 export type RelaySceneCommand=
  |{readonly kind:'ReadRelaySupplyDecision';readonly payload:{readonly applicationId:string};readonly confirm:false}
  |{readonly kind:'CorrectRelayPeriod';readonly payload:{readonly periodId:string};readonly confirm:true}
  |{readonly kind:'CollectRelayDue';readonly payload:{readonly customerId:string};readonly confirm:true}
 export interface RelaySceneProgress{
+ readonly target:RelaySceneTarget|null
+ readonly invalidReason:string|null
+ readonly historical:boolean
+ readonly outcome:'none'|'pending'|'actual'|'non-success'
+ readonly resultRefs:readonly RelaySceneResultRef[]
+ readonly recordId:string|null
+ readonly wait:{readonly date:string;readonly label:string}|null
+ readonly intent:'service'|'audit'|null
  readonly phase:RelayScenePhase
  readonly title:string
  readonly line:string
@@ -55,13 +66,13 @@ function selectedPeriod(relay:Relay,preferredId:string|null|undefined,businessId
 }
 
 /** Only saved public projections. Selecting a letter, scope or date executes nothing. */
-export function relaySceneProgress(relay:RelayProjection,date:string,preferredPeriodId?:string|null):RelaySceneProgress|null{
+function legacyRelaySceneProgress(relay:RelayProjection,date:string,preferredPeriodId?:string|null):RelaySceneProgress|null{
  if(!relay)return null
  const current=relay.businesses.find(b=>b.lifecycle!=='closed')??relay.businesses.at(-1)
  const period=selectedPeriod(relay,preferredPeriodId,current?.id)
  const business=relay.businesses.find(b=>b.id===period?.businessId)??current
  const businessId=business?.id??null,periodId=period?.id??null,periodIds=relay.periods.map(p=>p.id)
- const context={businessId,periodId,periodIds,periodIndex:periodId===null?-1:periodIds.indexOf(periodId),nextDate:null,completeAt:null,command:null,audit:null}
+ const context={businessId,periodId,periodIds,periodIndex:periodId===null?-1:periodIds.indexOf(periodId),nextDate:null,completeAt:null,command:null,audit:null,target:null,invalidReason:null,historical:false,outcome:'none' as const,resultRefs:[],recordId:null,wait:null,intent:null}
  const scene=(phase:RelayScenePhase,title:string,line:string,choiceTitle:string,choiceLine:string,label:string,extra:Partial<Pick<RelaySceneProgress,'nextDate'|'completeAt'|'command'|'audit'>>={}):RelaySceneProgress=>({...context,phase,title,line,choice:{title:choiceTitle,line:choiceLine,label},...extra})
  if(!business)return scene('opening','一盏夜班灯，从一份准备开始。','中转经营需要自有资金、真实材料与本局供应许可，尚没有已经营业的线路。','先核对这份新的准备','资本转入独立账户；开站、获客、客户充值和实际收入各自发生。','核对自有资金与开站条件')
  const station=relay.stations.find(s=>s.businessId===business.id)
@@ -87,7 +98,9 @@ export function relaySceneProgress(relay:RelayProjection,date:string,preferredPe
  if(station?.trafficPaused)return scene('paused','先把新的请求停一停。','原交通已暂停，既有资源、支持、费用和客户余额仍按原记录继续。','看看这盏灯下还留着什么',`${identity}的原约定没有被暂停按钮抹掉；恢复交通、停止本期或停站收尾仍由你明确选择。`,'核对暂停交通与全部旧责任',{nextDate:period&&active(period.job)?jobNext(period.job,date):period&&active(period.supportJob)?jobNext(period.supportJob,date):null})
  if(business.lifecycle==='paused'&&!active(period?.job)&&!active(period?.supportJob))return scene('paused','先缓一缓新的合同，旧约仍要认真对待。','这家企业暂停接受新合同，既有交通与原支持不因此自动停止。','核对原客户与暂停后的安排','是否恢复新合同仍由你明确选择，原余额、服务、支持与费用各自保留。','查看暂停新合同与原安排')
  const changes=relay.changes.filter(change=>change.businessId===business.id&&change.acknowledgedAt===null&&change.date<=date)
- if(changes.length)return scene('market-change','今天的风向变了，旧账仍有自己的日期。','供应与竞争前提已经发生公开变化。阅读与确认不替你重谈客户报价或增加供应权限。','对照新的前提，保留原来的约定',`${changes.length}项已发生变化待核对；已发生用量保持原价格版本，未来条款须另行选择、谈妥并实际生效。`,'查看公开变价与原合同')
+ // An ordinary business notice stays in its original book; an explicitly selected period keeps its own progress.
+ const explicitPeriod=period!==undefined&&preferredPeriodId===period.id
+ if(changes.length&&!explicitPeriod)return scene('market-change','今天的风向变了，旧账仍有自己的日期。','供应与竞争前提已经发生公开变化。阅读与确认不替你重谈客户报价或增加供应权限。','对照新的前提，保留原来的约定',`${changes.length}项已发生变化待核对；已发生用量保持原价格版本，未来条款须另行选择、谈妥并实际生效。`,'查看公开变价与原合同')
  if(period){
   if(active(period.job))return scene(period.job.status==='planned'?'planned':'service',period.job.status==='planned'?'下一班线路，已经留在日历里。':'夜里的线路，还在真实地走。','容量与供应预算只是原授权上限，真正发生的用量才进入原账。'+supportNote,'看看这一期已经留下的服务记录',`${identity}已记录${period.observedDays}日，报告用量${period.reportedUnits}，有不足或停止原因${period.failedDays}日；支持与收费仍有各自的完成日期。`,'翻看本期用量、线路与原安排',{nextDate:jobNext(period.job,date),completeAt:period.job.completeAt})
   if(active(period.supportJob)){
@@ -118,4 +131,120 @@ export function relaySceneProgress(relay:RelayProjection,date:string,preferredPe
  if(unfunded)return scene('funding','合同留下了，余额还需要另一份确认。','签约没有替客户充值。预付款形成客户保护与负债，服务后才按原用量确认收入。','明确核对这次模拟充值',`原月约定上限${moneyText(unfunded.rechargeLimitFen)}；本月剩余可充额度由原预览核验，不能凭当前余额推算。`,'核对客户余额、额度与本次充值')
  if(!relay.supplyOptions.some(option=>option.businessId===business.id&&option.permitted&&option.adapted))return scene('supply','电话那头的供应，还要逐条核实。','当前没有同时公开有效许可与实际适配的本主体供应，不能凭新闻或同名线路开服务。','核对原供应与实际可用条件','许可、适配、故障域和供应资产各自保留；初次批准附带的已完成基础适配不会要求再付一次。','查看原供应许可、适配与资金')
  return scene('planning','把下一班线路，认真留在日历上。','已有客户和供应并不等于服务已开始。新的周期仍需明确资源、日期、容量、供应预算与支持。','安排一次真实服务与支持','本期供应顺序和备援、客户合同期限、预留资金与跨季度行动各自核对；代理只能使用已有明确权限。','核对下一期客户、线路与真实安排')
+}
+
+function recordScene(relay:RelayProjection,phase:RelayScenePhase,title:string,line:string,label:string):RelaySceneProgress{
+ return {phase,title,line,choice:{title,line,label},businessId:null,periodId:null,periodIds:relay?.periods.map(p=>p.id)??[],periodIndex:-1,nextDate:null,completeAt:null,command:null,audit:null,target:null,invalidReason:null,historical:false,outcome:'none',resultRefs:[],recordId:null,wait:null,intent:null}
+}
+function invalidScene(relay:RelayProjection,reason:string,target:RelaySceneTarget|null=null){
+ return {...recordScene(relay,'invalid','这份原服务，需要重新选一次。',reason,'重新选择原中转对象'),target,invalidReason:reason,periodIds:[]}
+}
+function scopedRelay(relay:Relay,resolved:RelayTargetResolution):Relay{
+ const businessId=resolved.business!.id,period=resolved.period
+ return {...relay,businesses:[resolved.business!],stations:[resolved.station!],
+  periods:period?[period]:[],customers:relay.customers.filter(c=>c.businessId===businessId&&(!period||period.customerIds.includes(c.id))),
+  applications:period?[]:relay.applications.filter(a=>a.businessId===businessId),preparations:relay.preparations.filter(a=>a.businessId===businessId),
+  adapters:relay.adapters.filter(a=>a.businessId===businessId),audiences:relay.audiences.filter(a=>a.businessId===businessId),
+  offers:relay.offers.filter(a=>a.businessId===businessId),supplyOptions:relay.supplyOptions.filter(a=>a.businessId===businessId),
+  changes:relay.changes.filter(a=>a.businessId===businessId),auditJobs:relay.auditJobs.filter(a=>a.businessId===businessId&&(!period||a.periodIds.includes(period.id))),
+  // Collection is selected below by original source; the original command still collects every due invoice for that customer.
+  receivables:[]}
+}
+function bound(progress:RelaySceneProgress,relay:Relay,resolved:RelayTargetResolution):RelaySceneProgress{
+ const target=resolved.target!,periodIds=relay.periods.filter(p=>p.businessId===target.businessId).map(p=>p.id)
+ const date=progress.nextDate
+ const stopped=resolved.period&&(resolved.period.stoppedAt!==null||[resolved.period.job?.status,resolved.period.supportJob?.status].some(status=>status==='cancelled'||status==='interrupted'))
+ const supportWaitLabel=resolved.period?.supportJob?.status==='planned'?'等这期原支持开工':'等这期原支持完成'
+ return {...progress,target,businessId:target.businessId,periodId:resolved.period?.id??null,periodIds,periodIndex:resolved.period?periodIds.indexOf(resolved.period.id):-1,
+  recordId:relayTargetEntity(target),wait:date?{date,label:progress.phase==='support'?supportWaitLabel:progress.phase==='audit-waiting'?'等这批原计量复核':progress.phase==='planned'?'等这期原服务开工':'等这份原安排的下一反馈'}:null,
+  outcome:stopped?'non-success':['planned','service','support','audit-waiting','marketing','preparation'].includes(progress.phase)?'pending':progress.phase==='period-closed'?'actual':'none',
+  resultRefs:resolved.period?[{kind:'period',id:resolved.period.id,date:resolved.period.createdAt}]:[{kind:'business',id:target.businessId,date:resolved.station!.createdAt}],
+  intent:progress.audit?'audit':progress.phase==='planning'&&target.kind==='business'?'service':null}
+}
+function jobRecord(relay:Relay,date:string,resolved:RelayTargetResolution):RelaySceneProgress{
+ const job=resolved.job!,target=resolved.target!,kind=resolved.audit?'复核':job.definitionId==='relay-service'?'服务':target.kind==='application'?'供应申请':target.kind==='audience'?'获客':'支持'
+ const waiting=active(job),next=waiting?jobNext(job,date):null
+ const complete=job.status==='completed',stopped=job.status==='cancelled'||job.status==='interrupted'
+ const title=job.status==='planned'?`这份原${kind}，已经排进日历。`:job.status==='running'?`这份原${kind}，仍在实际进行。`:complete?`这份原${kind}已经实际完成。`:`这份原${kind}已经停下。`
+ const line=`${job.startAt}—${job.completeAt}。`+(waiting?'日期到达不替代原任务的实际完成；资源、费用与旧约仍按原记录执行。':complete?'完成的是这一份原任务，独立计量、账目更正和实际回款仍分别核对。':'等候不会免费重做；原已付成本、行动与旧责任保留。')
+ const result=bound(recordScene(relay,waiting?(resolved.audit?'audit-waiting':job.status==='planned'?'planned':kind==='支持'?'support':'service'):'records',title,line,'翻看这份原任务与同一期记录'),relay,resolved)
+ return {...result,historical:!waiting,outcome:waiting?'pending':complete?'actual':stopped?'non-success':'none',nextDate:next,completeAt:job.completeAt,
+  wait:next?{date:next,label:`等这份原${kind}${job.status==='planned'?'开工':'完成'}`} :null,
+  resultRefs:[...result.resultRefs,{kind:'job',id:job.id,date:complete?job.completeAt:job.releasedAt??job.startAt}],recordId:job.id,command:null,audit:null,intent:null}
+}
+function focusedRelaySceneProgress(relay:RelayProjection,date:string,target:RelaySceneTarget|null,context:RelaySceneContext):RelaySceneProgress|null{
+ const resolved=resolveRelaySceneTarget(relay,target,context)
+ if(resolved.status==='invalid')return invalidScene(relay,resolved.reason!,target)
+ if(resolved.status==='entry')return recordScene(relay,'opening','先选定这盏灯下的原服务。','显选原中转站、客户或账期；准备新站另行核对资本与资格。查看不会签约、充值或开始服务。','选择原中转对象或准备新站')
+ const value=relay!,t=resolved.target!,business=resolved.business!
+ if(t.kind==='period'&&t.jobId!==undefined)return jobRecord(value,date,resolved)
+ if(t.kind==='period'&&resolved.meter){
+  const meter=resolved.meter,known=meter.auditedUnits!==null
+  const scene=bound(recordScene(value,'records','这一天的原计量，仍在这期票根上。',`${meter.date}，原报告${meter.reportedUnits}单位；${known?'独立复核实计'+meter.auditedUnits+'单位':'实计待核'}。原价格和引用保留，查看不会更正或收款。`,'翻看这条原计量与原账'),value,resolved)
+  return {...scene,historical:true,outcome:known?'actual':'none',resultRefs:[...scene.resultRefs,{kind:'meter',id:meter.id,date:meter.date}],recordId:meter.id}
+ }
+ if(t.kind==='application'){
+  const application=resolved.application!
+  if(active(resolved.job))return {...jobRecord(value,date,resolved),phase:'supply'}
+  const result=bound(recordScene(value,'supplier-letter','这封原供应回信，还由你亲手拆开。',`${resolved.job!.startAt}—${resolved.job!.completeAt}。未读之前不宣布批准或有效期，原费用与准备来源保留。`,'阅读这份原供应回信'),value,resolved)
+  if(!application.read&&resolved.job!.status==='completed'&&resolved.job!.completeAt<=date&&application.decisionAt<=date)return {...result,command:{kind:'ReadRelaySupplyDecision',payload:{applicationId:application.id},confirm:false},resultRefs:[{kind:'application',id:application.id,date:application.appliedAt}]}
+  if(application.read)return {...result,phase:'records',historical:true,outcome:application.approved===true?'actual':application.approved===false?'non-success':'none',title:application.approved===true?'原回信写下了这一份许可。':'原回信与原成本都保留。',line:application.approved===true?`本局许可有效至${application.expiresAt}；实际适配、用途和当前日期仍须分别核对。`:'这次申请没有公开有效许可；不会替换为另一份批准。',command:null,resultRefs:[{kind:'application',id:application.id,date:application.decisionAt}]}
+  return {...jobRecord(value,date,resolved),phase:'records'}
+ }
+ if(t.kind==='audience'){
+  const audience=resolved.audience!
+  if(active(resolved.job))return {...jobRecord(value,date,resolved),phase:'marketing'}
+  return {...bound(recordScene(value,'terms','这份原需求名单，留在同一间站。',`${audience.members.length}位公开潜客；名单不是已签合同，报价、身份、预付/后付与期限仍须明确选择。`,'翻看这份原获客与客户约定'),value,resolved),outcome:audience.completedAt?'actual':'non-success',resultRefs:[{kind:'audience',id:audience.id,date:audience.completedAt??audience.createdAt}]}
+ }
+ if(t.kind==='customer'){
+  const customer=resolved.customer!
+  return {...bound(recordScene(value,'records','这一位原客户的承诺，仍须逐项核对。',`${customer.signedAt}—${customer.termEnd}，${customer.mode==='prepaid'?'预付余额':'后付信用'}；未消费余额${moneyText(customer.balance.prepaidFen)}、原应收${moneyText(customer.balance.receivableFen)}分列。查看不会充值、收款或安排另一账期。`,'翻看这位原客户与各期原账'),value,resolved),historical:customer.closedAt!==null,resultRefs:[{kind:'customer',id:customer.id,date:customer.signedAt}]}
+ }
+ const scoped=scopedRelay(value,resolved)
+ let progress=legacyRelaySceneProgress(scoped,date,resolved.period?.id)!
+ let futureReceivable:Relay['receivables'][number]|null=null
+ if(resolved.period){
+  const period=resolved.period,sources=new Set([period.id,...value.meters.filter(m=>m.periodId===period.id).map(m=>m.id)])
+  const invoice=value.receivables.find(r=>sources.has(r.sourceId)&&r.dueAt<=date&&r.amountFen>r.collectedFen+r.reversedFen&&period.customerIds.includes(r.customerId))
+  if(invoice&&progress.phase!=='correction'){
+   const due=value.receivables.filter(r=>r.customerId===invoice.customerId&&r.dueAt<=date).reduce((n,r)=>n+r.amountFen-r.collectedFen-r.reversedFen,0)
+   progress={...recordScene(value,'collection','这位原客户，已有到期款可以核对。',`本期有原单到期；本次命令收取该客户全部到期原单${moneyText(due)}，可能包括其他账期。回款不重复确认收入。`,'核对这位原客户全部到期原款'),command:{kind:'CollectRelayDue',payload:{customerId:invoice.customerId},confirm:true}}
+  }
+  if(!invoice&&progress.phase==='settling'&&!active(period.job)&&!active(period.supportJob)
+   &&!value.auditJobs.some(a=>a.periodIds.includes(period.id)&&active(a.job))&&!pendingCorrections(value,period.id).length){
+   futureReceivable=value.receivables.filter(row=>row.dueAt>date&&row.amountFen>row.collectedFen+row.reversedFen
+    &&period.customerIds.includes(row.customerId)&&value.customers.filter(c=>c.id===row.customerId&&c.businessId===period.businessId).length===1
+    &&(row.sourceId===period.id||value.meters.some(m=>m.id===row.sourceId&&m.periodId===period.id&&m.customerId===row.customerId)))
+    .sort((a,b)=>a.dueAt.localeCompare(b.dueAt)||a.id.localeCompare(b.id))[0]??null
+   if(futureReceivable){
+    const number=value.customers.filter(c=>c.businessId===period.businessId).findIndex(c=>c.id===futureReceivable!.customerId)+1
+    const amount=futureReceivable.amountFen-futureReceivable.collectedFen-futureReceivable.reversedFen
+    progress={...progress,title:'这笔原应收，还要等到约定的日子。',line:`客户${number}的原应收${moneyText(amount)}尚未到账；原成本、支持与应付继续按记录保留。`,
+     choice:{title:'等这笔原应收真正到期',line:`${futureReceivable.dueAt}是这笔原单的到期日。推进仍经过原日历屏障与费用，到期后再由你明确收款。`,label:`等客户${number}的原应收到期`},nextDate:futureReceivable.dueAt}
+   }
+  }
+  // A period may close before an independent audit. Do not erase original allowed follow-up actions by lifecycle alone.
+  if(progress.phase==='closed'&&relayAuditableMeters(value,period.id).length)progress={...recordScene(value,'audit-ready','这一期原计量，仍可核对独立依据。','企业状态与原计量分别保留；是否能新安排复核仍由原预览核验，已知更正、应收应付不会因关闭消失。','核对本期原复核条件'),audit:{businessId:business.id,periodId:period.id}}
+ }
+ const result=bound(progress,value,resolved)
+ if(futureReceivable)return {...result,outcome:result.outcome==='non-success'?'non-success':'pending',wait:{date:futureReceivable.dueAt,label:progress.choice.label},resultRefs:[...result.resultRefs,{kind:'receivable',id:futureReceivable.id,date:futureReceivable.date}]}
+ return {...result,command:result.command,audit:result.audit}
+}
+
+/** Undefined is the old initial recommendation; every explicitly supplied identity fails closed. */
+export function relaySceneProgress(relay:RelayProjection,date:string,target?:RelaySceneTarget|string|null,context?:RelaySceneContext):RelaySceneProgress|null{
+ if(target===undefined)return legacyRelaySceneProgress(relay,date)
+ if(typeof target==='string'){
+  const periods=relay?.periods.filter(p=>p.id===target)??[],period=periods.length===1?periods[0]:undefined
+  if(!period)return invalidScene(relay,'原账期不存在或不唯一，请重新选择；没有换到另一账期。')
+  if(context){
+   const business=relay?.businesses.find(b=>b.id===period.businessId),station=relay?.stations.find(s=>s.businessId===period.businessId)
+   if(!business||!station)return invalidScene(relay,'没有取得原企业与中转站，请重新选择。')
+   return focusedRelaySceneProgress(relay,date,{kind:'period',runId:context.runId,accountId:business.accountId,businessId:business.id,stationId:station.id,periodId:period.id},context)
+  }
+  return legacyRelaySceneProgress(relay,date,target)
+ }
+ if(target===null&&!context)return recordScene(relay,'opening','先明确选择一份原服务。','没有替你选择另一企业或账期；查看与准备仍分开。','选择原中转对象')
+ if(!context)return invalidScene(relay,'缺少原人生与账户上下文，请重新选择。',target)
+ return focusedRelaySceneProgress(relay,date,target,context)
 }

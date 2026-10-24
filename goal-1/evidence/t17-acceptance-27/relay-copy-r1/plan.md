@@ -1,0 +1,1 @@
+仅当progress.line与choice.line逐字相同时，纯relay适配器detail置空，主段原文完整保留；Opening不渲空terms/空近景框。用本次真实saved94完整raw官方导入做1项SSR/原回执检查，原收取命令、客户5、金额和跨账期范围均保持；不写游戏档/旧证据，不接触progress/Narrative/future wait。Root统一类型/build与Chrome。

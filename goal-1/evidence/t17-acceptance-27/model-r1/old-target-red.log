@@ -1,0 +1,30 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/relay-scene-progress.test.ts (19 tests | 1 failed | 18 skipped) 18ms
+   × promotes a known uncorrected old closed period and keeps every period explicitly reachable 16ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/relay-scene-progress.test.ts > promotes a known uncorrected old closed period and keeps every period explicitly reachable
+AssertionError: expected 'correction' to be 'invalid' // Object.is equality
+
+Expected: "invalid"
+Received: "correction"
+
+ ❯ src/ui/relay-scene-progress.test.ts:139:24
+    137|  expect(selected.periodId).toBe(current.id);expect(selected.periodInde…
+    138|  const missing=relaySceneProgress(r,'2025-02-06','missing')!
+    139|  expect(missing.phase).toBe('invalid');expect(missing.periodId).toBeNu…
+       |                        ^
+    140|  expect(missing.invalidReason).toContain('重新选择')
+    141| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 18 skipped (19)
+   Start at  06:31:12
+   Duration  1.22s (import 55%, transform 42%, tests 2%, worker 1%)
+

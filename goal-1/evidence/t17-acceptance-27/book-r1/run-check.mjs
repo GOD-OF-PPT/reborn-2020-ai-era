@@ -1,0 +1,9 @@
+import {readFileSync,writeFileSync,lstatSync} from 'node:fs';
+import {resolve,join} from 'node:path';
+import {createHash} from 'node:crypto';
+import {spawn} from 'node:child_process';
+import {assertBrowserEvidenceWritable} from '../../../../scripts/browser_evidence_guard.mjs';
+const root=resolve(import.meta.dirname),[name,...argv]=process.argv.slice(2);if(!/^[a-z0-9-]+$/.test(name)||argv[0]!=='rtk')throw Error('EXPLICIT_RTK_COMMAND_REQUIRED');assertBrowserEvidenceWritable(root);
+const paths=name.startsWith('draft')?['src/ui/relay-scene-draft.ts','src/ui/relay-scene-draft.test.ts']:['src/ui/RelayPanel.tsx','src/ui/RelaySceneChoice.tsx','src/ui/RelayServiceChoice.tsx','src/ui/relay-scene-draft.ts','src/ui/relay-scene-draft.test.ts','src/ui/RelaySceneChoice.test.tsx','src/ui/relay-target.test.tsx','src/ui/relay-scene-target.ts','src/ui/relay-scene-progress.ts','src/ui/game-types.ts'];
+const identity=()=>paths.map(path=>{const st=lstatSync(path,{throwIfNoEntry:false});if(!st)return {path,exists:false};if(st.isSymbolicLink()||!st.isFile())throw Error('REGULAR_SOURCE_REQUIRED:'+path);const b=readFileSync(path);return {path,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')}});
+const source=identity(),start=Date.now();let stdout='',stderr='';const proc=spawn(argv[0],argv.slice(1),{stdio:['ignore','pipe','pipe']});proc.stdout.on('data',b=>stdout+=b);proc.stderr.on('data',b=>stderr+=b);proc.on('error',e=>stderr+=String(e));proc.on('close',(code,signal)=>{const result={argv,code,signal,durationMs:Date.now()-start,source,sourceAfter:identity()};assertBrowserEvidenceWritable(root);writeFileSync(join(root,name+'-stdout.txt'),stdout);writeFileSync(join(root,name+'-stderr.txt'),stderr);writeFileSync(join(root,name+'-terminal.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));process.stdout.write(stdout);process.stderr.write(stderr);process.exitCode=code??1});

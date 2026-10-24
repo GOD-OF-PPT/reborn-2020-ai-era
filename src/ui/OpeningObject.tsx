@@ -3,6 +3,7 @@ import {moneyText} from './game-text.ts'
 import firstAttempt from '../../assets/ui-redesign/cinematic/props/first-attempt-v1.png'
 import videoMakingKit from '../../assets/ui-redesign/cinematic/props/video-making-kit-v1.png'
 import coursePreparationKit from '../../assets/ui-redesign/cinematic/props/course-preparation-kit-v1.png'
+import relayServiceKit from '../../assets/ui-redesign/cinematic/props/relay-service-kit-v1.png'
 
 export type CoursePaperStage='pending'|'planned'|'running'|'completed'|'stopped'
 export interface CoursePaperState{stages:readonly[CoursePaperStage,CoursePaperStage];protectedFen:number;needsHelp:number;refundDueFen:number;supportUnmet:boolean;closedAt:string|null}
@@ -19,7 +20,7 @@ export type OpeningObjectProps={
  actionLabel:string
  disabled:boolean
  textOnly?:boolean
- appearance?:'video'|'course'
+ appearance?:'video'|'course'|'relay'
  teaching?:CoursePaperState
 }
 
@@ -28,9 +29,9 @@ export function OpeningObject({kind,title,displayTitle,detail,stageLabel,onActiv
  const id=useId(),titleId=id+'-title',detailId=id+'-detail',stageId=id+'-stage',actionId=id+'-action'
  return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-text-only={textOnly?'true':'false'} disabled={disabled} onClick={onActivate} aria-label={displayTitle===undefined?undefined:title+' '+actionLabel} aria-labelledby={displayTitle===undefined?titleId+' '+actionId:undefined} aria-describedby={stageId+' '+detailId}>
   {!textOnly?<span className="opening-object-art" aria-hidden="true">
-   <img src={appearance==='course'?coursePreparationKit:appearance==='video'?videoMakingKit:firstAttempt} alt="" width={appearance==='course'?1536:appearance==='video'?1254:1280} height={appearance==='course'?1024:appearance==='video'?1254:1280} decoding="async"/>
+   <img src={appearance==='relay'?relayServiceKit:appearance==='course'?coursePreparationKit:appearance==='video'?videoMakingKit:firstAttempt} alt="" width={appearance==='course'||appearance==='relay'?1536:appearance==='video'?1254:1280} height={appearance==='course'||appearance==='relay'?1024:appearance==='video'?1254:1280} decoding="async"/>
    <span className="opening-object-mark">
-    {kind==='waiting'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><circle cx="16" cy="16" r="12"/><path d="M16 8v9l6 3"/></svg>:kind==='calendar'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M8 5v6m16-6v6M5 12h22M6 8h20v20H6zM11 17h3m5 0h3m-11 6h3m5 0h3"/></svg>:kind==='work'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><rect x="5" y="7" width="22" height="18"/><path d="m13 12 8 4-8 4zM9 7v18m14-18v18"/></svg>:null}
+    {kind==='waiting'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><circle cx="16" cy="16" r="12"/><path d="M16 8v9l6 3"/></svg>:kind==='calendar'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M8 5v6m16-6v6M5 12h22M6 8h20v20H6zM11 17h3m5 0h3m-11 6h3m5 0h3"/></svg>:kind==='work'?appearance==='relay'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M6 7h20v13H6zM11 20v5h10v-5M10 12v4m4-4v4m4-4v4m4-4v4M16 25v4"/></svg>:<svg viewBox="0 0 32 32" fill="none" focusable="false"><rect x="5" y="7" width="22" height="18"/><path d="m13 12 8 4-8 4zM9 7v18m14-18v18"/></svg>:null}
    </span>
   </span>:null}
   <span className="opening-object-copy">

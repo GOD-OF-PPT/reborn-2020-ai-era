@@ -1,0 +1,42 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/RelayServiceChoice.test.tsx (6 tests | 1 failed | 5 skipped) 12049ms
+   × allows only today for an old-meter audit in the explicit finite-epilogue display and original-preview variant 8051ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/RelayServiceChoice.test.tsx > allows only today for an old-meter audit in the explicit finite-epilogue display and original-preview variant
+AssertionError: expected null to match object { kind: 'StartRelayAudit', …(1) }
+
+- Expected:
+{
+  "kind": "StartRelayAudit",
+  "payload": {
+    "meterId": "rly:d4d9223491867ecd2ef016665f5ec956",
+    "resources": [
+      "player-production",
+    ],
+    "startAt": "2026-01-01",
+  },
+}
+
++ Received:
+null
+
+ ❯ src/ui/RelayServiceChoice.test.tsx:234:53
+    232|  try{
+    233|   const draft={...emptyRelaySceneDraft(),resources:['player-production…
+    234|   expect(relayAuditDraftCommand(input,exact,draft)).toMatchObject({kin…
+       |                                                     ^
+    235|   p.relayDraftMemory!.write(view.runId,scope,{...draft,startAt:'2026-0…
+    236|   const ui=driver(()=>mounted('tail-audit',()=>RelayAuditEditor({p:inp…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 5 skipped (6)
+   Start at  08:17:41
+   Duration  13.83s (tests 89%, import 6%, transform 4%)
+

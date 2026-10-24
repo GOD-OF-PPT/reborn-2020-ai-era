@@ -1,0 +1,62 @@
+import {lstatSync} from 'node:fs';
+import {resolve,join} from 'node:path';
+// Reuse the already sealed C2 pure I/O, tree and Git blob implementation unchanged.
+import {repo,hash,json,safe,bytes as oldBytes,ident as oldIdent,put,git,tree,verifySeal,blobOid,proof,readBlobs} from '../../t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs';
+export {repo,hash,json,safe,put,git,tree,verifySeal,blobOid,proof,readBlobs};
+export const task='goal-1/evidence/t17-acceptance-27',root19='goal-1/evidence/t17-acceptance-19';
+export const extras=['AGENTS.md','docs/37-relay-play-and-art-contract.md','assets/ui-redesign/cinematic/props/relay-service-kit-v1.png'];
+export const baseline=()=>json(task+'/baseline.json');
+export const opening=()=>json(task+'/closeout-preparation-r3/r3-opening.json');
+function noSymlink(p){let path=repo;for(const part of safe(p).split('/')){path=join(path,part);if(lstatSync(path).isSymbolicLink())throw Error('SYMLINK_REJECTED:'+p)}}
+export function bytes(p){noSymlink(p);return oldBytes(p)}
+export function ident(p){noSymlink(p);return oldIdent(p)}
+const exactRow=(expected)=>{const now=ident(expected.path);if(now.bytes!==expected.bytes||now.sha256!==expected.sha256||now.mode!==expected.mode)throw Error('OPENING_BYTES_OR_MODE_CHANGED:'+expected.path);return now};
+export function gitIdentity(expectedHead=opening().head){
+ const head=git(['rev-parse','HEAD']).toString().trim(),branch=git(['branch','--show-current']).toString().trim(),origin=git(['remote','get-url','origin']).toString().trim();
+ if(head!==expectedHead||branch!=='main'||origin!=='https://github.com/GOD-OF-PPT/reborn-2020-ai-era.git'||git(['rev-parse','--show-object-format']).toString().trim()!=='sha1')throw Error('REPOSITORY_IDENTITY_CHANGED');
+ return {head,branch,origin};
+}
+export function preserve(){
+ const b=baseline(),masterPaths=Object.keys(b.masters),old=Object.values(b.priorFiles).filter(row=>!masterPaths.includes(row.path)),p3=old.filter(row=>!row.path.startsWith('goal-1/'));
+ if(p3.length!==26||old.length!==1217||Object.keys(b.seals).length!==53||b.configs.length!==8)throw Error('OPENING_SCOPE_COUNTS_CHANGED');
+ for(const row of old)exactRow(row);for(const row of b.configs)exactRow(row);for(const row of Object.values(b.seals))exactRow(row);
+ const p0Bindings=json(task+'/closeout-preparation-r3/p0-committed-files.json');for(const row of p0Bindings.nonMasterRows)exactRow(row);exactRow(p0Bindings.agents);
+ const input=exactRow(b.originalInput);if(input.bytes!==61||input.sha256!=='20c73f8fec1a17a39606fc854126c59f949cddc6f8342ec2d55eb999c10a70b1')throw Error('ORIGINAL_INPUT_IDENTITY');
+ const oldRoot='goal-1/evidence/t17-acceptance-25',oldMarker=json(oldRoot+'/sealed-evidence.json');
+ const newestSeals=[oldRoot,'goal-1/evidence/t17-acceptance-26'].map(verifySeal);
+ const anchorFile=oldRoot+'/closeout-preparation-r1/root19-preparation-tree.json',libFile=oldRoot+'/closeout-preparation-r1/closeout-lib.candidate.mjs';
+ for(const p of [anchorFile,libFile]){const e=oldMarker.files.find(row=>row.path===p);if(!e)throw Error('SEALED_REUSE_ANCHOR_MISSING:'+p);exactRow(e)}
+ const expected=json(anchorFile),current=tree(root19);
+ const hadRootMarker=Object.hasOwn(b.priorFiles,root19+'/sealed-evidence.json'),hasRootMarker=!!lstatSync(resolve(repo,root19,'sealed-evidence.json'),{throwIfNoEntry:false});
+ if(hadRootMarker!==hasRootMarker||JSON.stringify(expected)!==JSON.stringify(current))throw Error('ROOT19_EXACT_TREE_CHANGED');
+ const anchorOnly=[];for(const row of expected.files){const opening=b.priorFiles[row.path];if(!opening){anchorOnly.push(row);continue}if(opening.bytes!==row.bytes||opening.sha256!==row.sha256||opening.mode!==row.mode)throw Error('ROOT19_ANCHOR_NOT_THE_R1_OPENING:'+row.path)}
+ return {oldNonMasterFiles:old.length,p3Count:p3.length,excludedP3Paths:p3.map(row=>row.path),configs:b.configs.length,oldSealMarkers:Object.keys(b.seals).length,oldMarkerByteModeAnchorsPreserved:true,p0CommittedNonMasterFiles:p0Bindings.nonMasterRows.length,agentsOwnRule18:p0Bindings.agents.ownRule18,newestSeals,originalInput:input,root19:{files:current.files.length,directories:current.directories.length,directoryModes:current.directoryModes.length,anchor:ident(anchorFile),openingBaselineOverlap:expected.files.length-anchorOnly.length,sealedC2AnchorOnly:anchorOnly},reusedPureLibrary:ident(libFile),scope:'53 marker identities; prior1217 files; exact Root19 tree; not a new re-audit of every legacy sealed payload'};
+}
+export function delta(){
+ const b=baseline(),current=[...tree('src').files,...tree('assets').files],old=new Map(b.sourceAndAssets.map(row=>[row.path,row])),now=new Map(current.map(row=>[row.path,row])),ui=[],assets=[];
+ for(const row of b.sourceAndAssets){const n=now.get(row.path);if(!n)throw Error('SOURCE_OR_ASSET_REMOVAL_REVIEW_REQUIRED:'+row.path);if(n.sha256!==row.sha256||n.mode!==row.mode){if(!row.path.startsWith('src/ui/'))throw Error('NON_UI_OR_OLD_ASSET_CHANGED:'+row.path);ui.push(row.path)}}
+ for(const row of current)if(!old.has(row.path)){if(row.path.startsWith('src/ui/'))ui.push(row.path);else if(row.path===extras[2])assets.push(row.path);else throw Error('UNEXPECTED_NEW_SOURCE_OR_ASSET:'+row.path)}
+ return {ui:ui.sort(),newAssets:assets.sort(),openingSourceAndAssets:b.sourceAndAssets.length,currentSourceAndAssets:current.length};
+}
+export const uiDelta=()=>delta().ui;
+export function masters(){
+ const b=baseline(),o=opening();return Object.entries(b.masters).map(([path,row])=>{
+  const bound=o.masters.find(m=>m.path===path);if(!bound)throw Error('R3_MASTER_BINDING_MISSING:'+path);
+  const current=bytes(path),working=ident(path),base=current.subarray(0,row.working.bytes),original=git(['cat-file','blob',b.head+':'+path]),committed=git(['cat-file','blob',o.head+':'+path]),p0=Buffer.from(bound.p0.text);
+  if(base.length!==row.working.bytes||hash(base)!==row.working.sha256||hash(original)!==row.headSha256||working.mode!==row.working.mode||working.mode!==bound.working.mode)throw Error('ORIGINAL_MASTER_PREFIX_OR_MODE_CHANGED:'+path);
+  if(hash(current.subarray(0,bound.working.bytes))!==bound.working.sha256)throw Error('R3_WORKING_PREFIX_CHANGED_APPEND_ONLY:'+path);
+  if(p0.length!==2335||hash(p0)!==bound.p0.sha256||committed.length!==original.length+p0.length||!committed.subarray(0,original.length).equals(original)||!committed.subarray(original.length).equals(p0)||hash(committed)!==bound.head.sha256)throw Error('COMMITTED_P0_NOT_EXACT_OR_ONCE:'+path);
+  const pos=current.indexOf(p0,row.working.bytes);if(pos!==bound.p0.positionInWorking||current.indexOf(p0,pos+1)!==-1)throw Error('WORKING_P0_MISSING_DUPLICATED_OR_MOVED:'+path);
+  let a=0,z=0;while(a<original.length&&a<base.length&&original[a]===base[a])a++;while(z<original.length-a&&z<base.length-a&&original[original.length-1-z]===base[base.length-1-z])z++;
+  const inserted=base.subarray(a,base.length-z);if(original.length-a-z!==0||inserted.length!==2304||inserted.toString().split(String.fromCharCode(10)).length-1!==14||hash(inserted)!=='d6d2ae77cb0e8dadcee47df146d712a82dbfa4a278a2de9cec3a3a5564610655')throw Error('ORIGINAL_P3_INSERTION_CHANGED:'+path);
+  const before=current.subarray(base.length,pos),after=current.subarray(pos+p0.length),suffix=Buffer.concat([before,after]);
+  if(before.length!==bound.r1BeforeP0.bytes||hash(before)!==bound.r1BeforeP0.sha256||!suffix.length||!suffix.toString().includes('S4-R1'))throw Error('OWN_R1_DELTA_REQUIRED:'+path);
+  const intended=Buffer.concat([current.subarray(0,a),current.subarray(a+inserted.length)]);
+  const p0Offset=original.length+before.length,withoutPendingR1=Buffer.concat([intended.subarray(0,original.length),intended.subarray(p0Offset,p0Offset+p0.length)]);
+  if(!withoutPendingR1.equals(committed)||intended.indexOf(p0)!==p0Offset||intended.indexOf(p0,p0Offset+1)!==-1||intended.includes(inserted))throw Error('P0_DUPLICATED_LOST_OR_P3_INCLUDED:'+path);
+  return {path,original:committed,current,suffix,intended,opening:row.working,workingIdentity:working,p3:{offset:a,bytes:inserted.length,lineFeeds:14,sha256:hash(inserted)},committedP0:{bytes:p0.length,sha256:hash(p0),head:o.head,workingOffset:pos,intendedOffset:p0Offset,mergeMode:'preserve-working-order-remove-only-p3'},ownSuffixBytes:suffix.length,ownSuffixSha256:hash(suffix),r1BeforeP0Bytes:before.length,r1AfterP0Bytes:after.length};
+ });
+}
+export function statusRows(){const raw=git(['status','--porcelain=v1','-z','--untracked-files=all']).toString();return raw.split('\0').filter(Boolean).map(line=>{if(/[RC]/.test(line.slice(0,2)))throw Error('RENAME_REQUIRES_REVIEW');return {status:line.slice(0,2),path:line.slice(3)}})}
+export function checkStatus(allowed,out,p3){const set=new Set(allowed);for(const row of statusRows())if(!set.has(row.path)&&!p3.includes(row.path)&&!row.path.startsWith(root19+'/')&&!(out&&row.path.startsWith(out+'/')))throw Error('UNACCOUNTED_STATUS_PATH:'+row.status+' '+row.path)}
+export function postRequired(out){safe(out);if(!out.startsWith('goal-1/evidence/t17-s4-relay-r1-post-commit-')||out===task||out.startsWith(task+'/'))throw Error('FRESH_INDEPENDENT_R1_POST_REQUIRED')}

@@ -1,8 +1,13 @@
 import {expect,it} from 'vitest'
-import {createCampaignRun,campaignRelay} from '../application/campaign.ts'
+import {createCampaignCodec,createCampaignRun,campaignRelay} from '../application/campaign.ts'
 import {projectRelay,type RelayProjection} from '../core/relay-projection.ts'
 import {accountPosition,metricsFor} from '../core/ledger.ts'
+import {actionBudget} from '../core/economy.ts'
+import {prepareRelayF04} from '../testing/relay-scenarios.ts'
 import {relayAuditableMeters,relaySceneProgress} from './relay-scene-progress.ts'
+import type {RelaySceneTarget,RelaySceneContext} from './relay-scene-target.ts'
+import originalPeriodR116 from '../../goal-1/evidence/t17-acceptance-27/chrome-main-r1/main-saved116-original-period-settled.json?raw'
+import originalStoppedR94 from '../../goal-1/evidence/t17-acceptance-27/chrome-stop-r5/stop-saved94-support-and-old-debts-retained.json?raw'
 
 type Relay=NonNullable<RelayProjection>
 type Business=Relay['businesses'][number]
@@ -42,6 +47,160 @@ function freeze<T>(value:T):T{
  if(value!==null&&typeof value==='object'){Object.freeze(value);for(const child of Object.values(value))freeze(child)}
  return value
 }
+
+function receivableDisplay(overrides:Partial<Relay>={}){
+ const service=job({status:'completed'}),support=job({id:'support-job',definitionId:'relay-support-guided',startAt:'2025-01-29',completeAt:'2025-02-05',status:'completed'})
+ const originalPeriod=period({status:'settling',job:service,supportJob:support,feePostedAt:'2025-02-05',compensatedAt:'2025-02-05'})
+ const marketing=job({id:'marketing-job',definitionId:'relay-marketing',startAt:'2024-12-01',completeAt:'2024-12-08',status:'completed'})
+ const relay=projection({periods:[originalPeriod],customers:[customer()],audiences:[{id:'audience',businessId:'business',segment:'local_merchants',mode:'paid',createdAt:'2024-12-01',jobId:marketing.id,sourceCohortIds:[],completedAt:'2024-12-08',members:['public-person'],job:marketing}],meters:[meter()],...auditRows('completed'),...overrides})
+ const jobs=[...relay.periods.flatMap(p=>[p.job,p.supportJob]),...relay.auditJobs.map(a=>a.job),...relay.audiences.map(a=>a.job)].filter((j):j is Job=>j!==null)
+ const context:RelaySceneContext={runId:'relay-receivable-display',accountId:'relay-account',operations:{businesses:relay.businesses,jobs}}
+ const target:RelaySceneTarget={kind:'period',runId:context.runId,accountId:context.accountId,businessId:'business',stationId:'station',periodId:'period'}
+ return {relay,context,target}
+}
+const invoice=(overrides:Partial<Relay['receivables'][number]>={}):Relay['receivables'][number]=>({id:'future-support-invoice',customerId:'customer',sourceId:'period',date:'2025-02-05',dueAt:'2025-02-19',operationId:'original-credit-operation',amountFen:5000,collectedFen:0,reversedFen:0,...overrides})
+
+it('keeps the real stopped r94 period waiting for its planned support start, without publishing completion or changing the saved record',()=>{
+ const codec=createCampaignCodec(),run=codec.import(originalStoppedR94),relay=projectRelay(run,campaignRelay)!
+ expect(run.origin).toBe('normal');expect(run.revision).toBe(94);expect(run.timeline.cursor.date).toBe('2025-01-28')
+ const period=relay.periods[0]!,business=relay.businesses.find(b=>b.id===period.businessId)!,station=relay.stations.find(s=>s.businessId===period.businessId)!
+ expect(period.job?.status).toBe('interrupted');expect(period.stoppedAt).toBe('2025-01-28')
+ expect(period.supportJob).toMatchObject({status:'planned',startAt:'2025-02-25',completeAt:'2025-03-04'})
+ const target:RelaySceneTarget={kind:'period',runId:run.runId,accountId:business.accountId,businessId:business.id,stationId:station.id,periodId:period.id},context={runId:run.runId,accountId:business.accountId,operations:run.operations}
+ const before=JSON.stringify(relay),budget=actionBudget(run.economy,run.timeline.cursor.date),p=relaySceneProgress(relay,run.timeline.cursor.date,target,context)!
+ expect(p).toMatchObject({target,phase:'support',nextDate:'2025-02-25',completeAt:'2025-03-04',outcome:'non-success',command:null})
+ expect(p.wait).toEqual({date:'2025-02-25',label:'等这期原支持开工'})
+ expect(p.resultRefs).toContainEqual({kind:'period',id:period.id,date:period.createdAt})
+ expect(JSON.stringify(relay)).toBe(before);expect(actionBudget(run.economy,run.timeline.cursor.date)).toEqual(budget)
+ expect(codec.export(run)).toBe(originalStoppedR94)
+})
+
+it('distinguishes future planned support, the actual start-day world phase, and genuinely running support after an original fixture stop',()=>{
+ // Independent F04 finance fixture with original commands/projectors, not a
+ // fabricated job status or a new normal 24-quarter playthrough.
+ const {h,business}=prepareRelayF04({parameters:{monthlyUnits:1000}})
+ h.send('StartRelayMarketing',{businessId:business.id,segment:'local_merchants',mode:'paid',resources:['player-production'],startAt:'2025-01-01'})
+ h.send('AdvanceTime',{date:'2025-01-08'});h.send('SetRelayOffer',{businessId:business.id,offerKind:'managed_support',unitPriceFen:6})
+ const audience=h.run.relay!.audiences[0]!,offer=h.run.relay!.offers[0]!
+ h.send('SignRelayCustomers',{businessId:business.id,audienceId:audience.id,offerId:offer.id,personIds:[audience.members[0]!],termEnd:'2025-03-31',mode:'prepaid',creditLimitFen:0})
+ const customer=h.run.relay!.customers[0]!
+ h.send('RechargeRelayCustomer',{customerId:customer.id,amountFen:50000})
+ h.send('StartRelayServicePeriod',{businessId:business.id,customerIds:[customer.id],supplierIds:['cedar-direct'],maxUnits:2800,maxSupplierCostFen:10000,supportMode:'guided',resources:['player-production'],startAt:'2025-01-09'})
+ h.send('AdvanceTime',{date:'2025-01-09'})
+ const periodId=h.run.relay!.periods[0]!.id
+ expect(h.run.operations!.jobs.find(j=>j.id===h.run.relay!.periods[0]!.jobId)?.status).toBe('running')
+ h.send('StopRelayPeriod',{periodId})
+ const capture=()=>{
+  const relay=projectRelay(h.run,h.relay)!,period=relay.periods[0]!,station=relay.stations.find(s=>s.businessId===business.id)!,date=h.run.timeline.cursor.date
+  const target:RelaySceneTarget={kind:'period',runId:h.run.runId,accountId:business.accountId,businessId:business.id,stationId:station.id,periodId},context={runId:h.run.runId,accountId:business.accountId,operations:h.run.operations}
+  const raw=h.codec.export(h.run),p=relaySceneProgress(relay,date,target,context)!,supportAction=h.run.economy.actions.find(a=>a.definition.id===period.supportJob!.actionId)!
+  expect(p).toMatchObject({target,phase:'support',periodId,completeAt:'2025-02-13',outcome:'non-success',command:null})
+  expect(h.codec.export(h.run)).toBe(raw)
+  const historical=relaySceneProgress(relay,date,{...target,jobId:period.jobId},context)!
+  expect(historical).toMatchObject({historical:true,outcome:'non-success',nextDate:null,wait:null,command:null})
+  expect(supportAction.definition).toMatchObject({costFen:150000,actionPoints:1,startAt:'2025-02-06',completeAt:'2025-02-13'})
+  return {p,date,status:period.supportJob!.status,actionStatus:supportAction.status,funds:accountPosition(h.run.economy.ledger,business.accountId),budget:actionBudget(h.run.economy,date)}
+ }
+ const future=capture()
+ h.send('AdvanceTime',{date:'2025-02-06',phase:'world_update'})
+ const startDayBefore=capture()
+ h.send('AdvanceTime',{date:'2025-02-06'})
+ const running=capture()
+ expect(future.date).toBe('2025-01-09');expect(startDayBefore.date).toBe('2025-02-06')
+ for(const frame of [future,startDayBefore]){
+  expect(frame.status).toBe('planned');expect(frame.actionStatus).toBe('reserved')
+  expect(frame.p.wait).toEqual({date:'2025-02-06',label:'等这期原支持开工'})
+  expect(frame.budget.reserved).toBe(1)
+ }
+ expect(running.status).toBe('running');expect(running.actionStatus).toBe('executed')
+ expect(running.p.wait).toEqual({date:'2025-02-13',label:'等这期原支持完成'})
+ expect(startDayBefore.funds.cashFen-running.funds.cashFen).toBe(150000)
+ expect(running.budget.spent-startDayBefore.budget.spent).toBe(1);expect(running.budget.reserved).toBe(0)
+})
+
+it('waits for the next unpaid original period receivable without collecting or recomputing a correction due date',()=>{
+ const original=invoice(),correction=invoice({id:'original-correction-invoice',sourceId:'meter',date:'2025-02-09',dueAt:'2025-02-23',collectedFen:1000,reversedFen:1000})
+ const {relay,target,context}=receivableDisplay({receivables:[correction,original]})
+ const before=JSON.stringify(relay),p=relaySceneProgress(relay,'2025-02-09',target,context)!
+ expect(p).toMatchObject({phase:'settling',target,periodId:'period',nextDate:'2025-02-19',outcome:'pending',command:null,audit:null})
+ expect(p.wait).toEqual({date:'2025-02-19',label:'等客户1的原应收到期'})
+ expect(p.line).toContain('尚未到账');expect(p.resultRefs).toContainEqual({kind:'receivable',id:original.id,date:original.date})
+ const later=relaySceneProgress({...relay,receivables:[correction]},'2025-02-09',target,context)!
+ expect(later.nextDate).toBe('2025-02-23');expect(later.command).toBeNull()
+ expect(JSON.stringify(relay)).toBe(before)
+})
+
+it('does not use another customer meter, another period source or an already cleared invoice as this period wait',()=>{
+ const second=customer({id:'customer-b',personId:'public-person-b'}),base=receivableDisplay()
+ const p=base.relay.periods[0]!,audience=base.relay.audiences[0]!
+ const {relay,target,context}=receivableDisplay({customers:[base.relay.customers[0]!,second],audiences:[{...audience,members:[...audience.members,second.personId]}],periods:[{...p,customerIds:[...p.customerIds,second.id],feeQuotes:[...p.feeQuotes,{customerId:second.id,termsId:'saved-offer',amountFen:50000}]}],receivables:[
+  invoice({id:'other-period',sourceId:'another-period',dueAt:'2025-02-10'}),
+  invoice({id:'other-meter-customer',sourceId:'meter',customerId:second.id,dueAt:'2025-02-11'}),
+  invoice({id:'cleared',dueAt:'2025-02-12',collectedFen:5000}),invoice(),
+ ]})
+ expect(relaySceneProgress(relay,'2025-02-09',target,context)?.nextDate).toBe('2025-02-19')
+ expect(relaySceneProgress({...relay,receivables:relay.receivables.slice(0,3)},'2025-02-09',target,context)?.wait).toBeNull()
+})
+
+it('keeps original active jobs, audits, known differences and currently due collection ahead of future receivable waiting',()=>{
+ const base=receivableDisplay(),p=base.relay.periods[0]!,future=invoice({sourceId:'meter',date:'2025-01-01',dueAt:'2025-01-15'})
+ const serving=receivableDisplay({periods:[{...p,status:'running',feePostedAt:null,compensatedAt:null,job:job(),supportJob:{...p.supportJob!,status:'planned'}}],receivables:[future],auditJobs:[],audits:[]})
+ expect(relaySceneProgress(serving.relay,'2025-01-10',serving.target,serving.context)).toMatchObject({phase:'service',nextDate:'2025-01-29'})
+ const supporting=receivableDisplay({periods:[{...p,status:'support',feePostedAt:null,compensatedAt:null,supportJob:{...p.supportJob!,status:'running'}}],receivables:[invoice({sourceId:'meter',dueAt:'2025-02-03'})],auditJobs:[],audits:[]})
+ expect(relaySceneProgress(supporting.relay,'2025-01-30',supporting.target,supporting.context)).toMatchObject({phase:'support',nextDate:'2025-02-05'})
+ const auditing=receivableDisplay({...auditRows('running'),receivables:[invoice({dueAt:'2025-02-07'})]})
+ expect(relaySceneProgress(auditing.relay,'2025-02-06',auditing.target,auditing.context)).toMatchObject({phase:'audit-waiting',nextDate:'2025-02-08'})
+ const difference=receivableDisplay({meters:[meter({auditedUnits:90})],receivables:[invoice()]})
+ expect(relaySceneProgress(difference.relay,'2025-02-09',difference.target,difference.context)).toMatchObject({phase:'correction',command:{kind:'CorrectRelayPeriod'},nextDate:null})
+ const due=receivableDisplay({receivables:[invoice({id:'current-due',dueAt:'2025-02-09'}),invoice()]})
+ expect(relaySceneProgress(due.relay,'2025-02-09',due.target,due.context)).toMatchObject({phase:'collection',command:{kind:'CollectRelayDue'},nextDate:null})
+})
+
+it('keeps explicit historical job and meter records instead of turning them into a later receivable wait',()=>{
+ const {relay,target,context}=receivableDisplay({receivables:[invoice()]})
+ for(const leaf of [{jobId:'audit-job'},{meterId:'meter'}]){
+  const selected={...target,...leaf} as RelaySceneTarget,p=relaySceneProgress(relay,'2025-02-09',selected,context)!
+  expect(p).toMatchObject({phase:'records',historical:true,nextDate:null,wait:null,command:null,audit:null})
+ }
+})
+
+it('keeps the actual r116 period on its remaining original receivable while an ordinary price notice stays unread',()=>{
+ const codec=createCampaignCodec(),run=codec.import(originalPeriodR116),relay=projectRelay(run,campaignRelay)!
+ expect(run.origin).toBe('normal');expect(run.timeline.cursor.date).toBe('2025-03-18');expect(relay.periods).toHaveLength(1)
+ const period=relay.periods[0]!,business=relay.businesses.find(b=>b.id===period.businessId)!,station=relay.stations.find(s=>s.businessId===period.businessId)!
+ expect(period.status).toBe('settling');expect(period.job?.status).toBe('completed');expect(period.supportJob?.status).toBe('completed')
+ expect(period.auditedMeters).toBe(168);expect(period.meterCount).toBe(168)
+ const sources=new Set([period.id,...relay.meters.filter(m=>m.periodId===period.id).map(m=>m.id)]),unpaid=relay.receivables.filter(r=>sources.has(r.sourceId)&&r.amountFen>r.collectedFen+r.reversedFen)
+ expect(unpaid.reduce((n,r)=>n+r.amountFen-r.collectedFen-r.reversedFen,0)).toBe(1212)
+ expect(unpaid.every(r=>r.dueAt==='2025-03-21')).toBe(true)
+ const target:RelaySceneTarget={kind:'period',runId:run.runId,accountId:business.accountId,businessId:business.id,stationId:station.id,periodId:period.id},context={runId:run.runId,accountId:business.accountId,operations:run.operations}
+ const before=JSON.stringify(relay),p=relaySceneProgress(relay,run.timeline.cursor.date,target,context)!
+ expect(p).toMatchObject({phase:'settling',target,nextDate:'2025-03-21',outcome:'pending',command:null})
+ expect(p.wait?.date).toBe('2025-03-21');expect(p.line).toContain('尚未到账')
+ expect(relaySceneProgress(relay,run.timeline.cursor.date,{...target,kind:'business',periodId:undefined} as unknown as RelaySceneTarget,context)?.phase).toBe('invalid')
+ const {periodId:_,...identity}=target
+ expect(relaySceneProgress(relay,run.timeline.cursor.date,{...identity,kind:'business'},context)?.phase).toBe('market-change')
+ expect(relay.changes.filter(c=>c.businessId===business.id&&c.acknowledgedAt===null)).toHaveLength(1)
+ expect(JSON.stringify(relay)).toBe(before);expect(codec.export(run)).toBe(originalPeriodR116)
+})
+
+it('does not let an ordinary business price notice replace explicit period service, support, audit, correction or closed facts',()=>{
+ const changes=[{id:'ordinary-price-notice',businessId:'business',anchorId:'H009',date:'2025-01-20',acknowledgedAt:null}]
+ const base=receivableDisplay({changes}),period=base.relay.periods[0]!
+ const states=[
+  {date:'2025-01-21',expected:'service',display:receivableDisplay({changes,periods:[{...period,status:'running',feePostedAt:null,job:job(),supportJob:{...period.supportJob!,status:'planned'}}],auditJobs:[],audits:[]})},
+  {date:'2025-01-30',expected:'support',display:receivableDisplay({changes,periods:[{...period,status:'support',feePostedAt:null,supportJob:{...period.supportJob!,status:'running'}}],auditJobs:[],audits:[]})},
+  {date:'2025-02-06',expected:'audit-waiting',display:receivableDisplay({changes,...auditRows('running')})},
+  {date:'2025-02-09',expected:'correction',display:receivableDisplay({changes,meters:[meter({auditedUnits:90})]})},
+  {date:'2025-02-09',expected:'period-closed',display:receivableDisplay({changes,periods:[{...period,status:'closed'}],receivables:[]})},
+ ]
+ for(const {date,expected,display} of states){
+  const before=JSON.stringify(display.relay),p=relaySceneProgress(display.relay,date,display.target,display.context)!
+  expect(p.phase).toBe(expected);expect(p.target).toBe(display.target);expect(p.periodId).toBe('period')
+  expect(display.relay.changes[0]!.acknowledgedAt).toBeNull();expect(JSON.stringify(display.relay)).toBe(before)
+ }
+ expect(relaySceneProgress(base.relay,'2025-02-09')?.phase).toBe('market-change')
+})
 
 it('has an opening story without inventing a company, permission or paid customer',()=>{
  expect(relaySceneProgress(null,'2025-01-01')).toBeNull()
@@ -135,7 +294,9 @@ it('promotes a known uncorrected old closed period and keeps every period explic
  expect(p.command).toEqual({kind:'CorrectRelayPeriod',payload:{periodId:old.id},confirm:true});expect(p.audit).toBeNull()
  const selected=relaySceneProgress(r,'2025-01-10',current.id)!
  expect(selected.periodId).toBe(current.id);expect(selected.periodIndex).toBe(1);expect(selected.phase).toBe('service');expect(selected.periodIds).toHaveLength(8)
- expect(relaySceneProgress(r,'2025-02-06','missing')?.periodId).toBe(old.id)
+ const missing=relaySceneProgress(r,'2025-02-06','missing')!
+ expect(missing.phase).toBe('invalid');expect(missing.periodId).toBeNull();expect(missing.command).toBeNull();expect(missing.audit).toBeNull()
+ expect(missing.invalidReason).toContain('重新选择')
 })
 it('does not mistake historical correction counts or an already corrected difference for a new command',()=>{
  const p=relaySceneProgress(projection({periods:[period({status:'closed',knownCorrections:9})],meters:[meter({auditedUnits:90,correctionId:'original-correction'})],...auditRows('completed')}),'2025-02-09')!

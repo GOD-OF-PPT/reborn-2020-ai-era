@@ -2,6 +2,7 @@ import type {SaveStatus} from '../application/session.ts'
 import type {OpeningFocus} from './player-thread.ts'
 import type {VideoSceneTarget} from './video-scene-progress.ts'
 import type {CourseSceneTarget} from './course-scene-progress.ts'
+import type {RelaySceneTarget} from './relay-scene-target.ts'
 
 export const SEASON_FOCUS_PREFERENCE_VERSION=1 as const
 export const SEASON_FOCUS_PREFERENCE_MAX_TEXT_LENGTH=16_384
@@ -26,7 +27,7 @@ type RecordValue=Record<string,unknown>
 type Parsed={record:SeasonFocusPreference}|{reason:SeasonFocusPreferenceInvalidReason}
 const personSelections=new Set(['tang-ying','linzhou','xu-cheng','chen-yu','rest','workspace'])
 const marketKinds=new Set(['order','settlement','position','research'])
-const focusKinds=new Set(['first-order','work','free','market','life','video','course'])
+const focusKinds=new Set(['first-order','work','free','market','life','video','course','relay'])
 const messages:Record<SeasonFocusPreferenceInvalidReason,string>={
  'invalid-scope':'当前关注上下文不完整，未读取或记下本机关注。',
  'too-large':'本机关注记录过长，未采用；原文保留，可在本窗口重新选择。',
@@ -52,9 +53,21 @@ function parseFocus(value:unknown):{focus:OpeningFocus}|{reason:SeasonFocusPrefe
  const f=object(value)
  if(!f||typeof f.kind!=='string')return {reason:'invalid-record'}
  if(!focusKinds.has(f.kind))return {reason:'unsupported-focus-kind'}
- const common=['kind','runId','accountId','entityId','businessId'],allowed=f.kind==='market'?[...common,'entityKind']:f.kind==='life'?[...common,'selection']:f.kind==='video'?[...common,'videoTarget']:f.kind==='course'?[...common,'courseTarget']:common
+ const common=['kind','runId','accountId','entityId','businessId'],allowed=f.kind==='market'?[...common,'entityKind']:f.kind==='life'?[...common,'selection']:f.kind==='video'?[...common,'videoTarget']:f.kind==='course'?[...common,'courseTarget']:f.kind==='relay'?[...common,'relayTarget']:common
  if(!exactKeys(f,allowed,['kind','runId','accountId','entityId'])||!id(f.runId)||!id(f.accountId)||f.entityId!==null&&!id(f.entityId)||f.businessId!==undefined&&!id(f.businessId))return {reason:'invalid-record'}
  const identity={runId:f.runId,accountId:f.accountId,entityId:f.entityId as string|null,...(f.businessId!==undefined?{businessId:f.businessId as string}:{})}
+ if(f.kind==='relay'){
+  if(f.relayTarget===null)return f.entityId===null&&f.accountId==='personal'&&f.businessId===undefined?{focus:{...identity,kind:'relay',relayTarget:null}}:{reason:'invalid-record'}
+  const t=object(f.relayTarget),base=['kind','runId','accountId','businessId','stationId']
+  if(!t||!['business','application','audience','customer','period'].includes(String(t.kind))||t.runId!==f.runId||t.accountId!==f.accountId||t.businessId!==f.businessId)return {reason:'invalid-record'}
+  const keys=t.kind==='business'?base:t.kind==='application'?[...base,'applicationId']:t.kind==='audience'?[...base,'audienceId']:t.kind==='customer'?[...base,'customerId']:[...base,'periodId','jobId','meterId']
+  const required=t.kind==='business'?base:t.kind==='application'?[...base,'applicationId']:t.kind==='audience'?[...base,'audienceId']:t.kind==='customer'?[...base,'customerId']:[...base,'periodId']
+  if(!exactKeys(t,keys,required)||!Object.values(t).every(id)||t.jobId!==undefined&&t.meterId!==undefined)return {reason:'invalid-record'}
+  const ids=Object.entries(t).filter(([key])=>!['kind','runId','accountId'].includes(key)).map(([,value])=>value)
+  const entity=t.meterId??t.jobId??t.periodId??t.customerId??t.audienceId??t.applicationId??t.businessId
+  if(new Set(ids).size!==ids.length||f.entityId!==entity)return {reason:'invalid-record'}
+  return {focus:{...identity,kind:'relay',relayTarget:{...t} as unknown as RelaySceneTarget}}
+ }
  if(f.kind==='course'){
   if(f.courseTarget===null)return f.entityId===null&&f.accountId==='personal'&&f.businessId===undefined?{focus:{...identity,kind:'course',courseTarget:null}}:{reason:'invalid-record'}
   const t=object(f.courseTarget)

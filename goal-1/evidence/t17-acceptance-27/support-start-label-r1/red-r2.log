@@ -1,0 +1,59 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/relay-scene-progress.test.ts (27 tests | 2 failed | 25 skipped) 1579ms
+   × keeps the real stopped r94 period waiting for its planned support start, without publishing completion or changing the saved record 583ms
+   × distinguishes future planned support, the actual start-day world phase, and genuinely running support after an original fixture stop 993ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/relay-scene-progress.test.ts > keeps the real stopped r94 period waiting for its planned support start, without publishing completion or changing the saved record
+AssertionError: expected { date: '2025-02-25', …(1) } to deeply equal { date: '2025-02-25', …(1) }
+
+- Expected
++ Received
+
+  {
+    "date": "2025-02-25",
+-   "label": "等这期原支持开工",
++   "label": "等这期原支持完成",
+  }
+
+ ❯ src/ui/relay-scene-progress.test.ts:72:17
+     70|  const before=JSON.stringify(relay),budget=actionBudget(run.economy,ru…
+     71|  expect(p).toMatchObject({target,phase:'support',nextDate:'2025-02-25'…
+     72|  expect(p.wait).toEqual({date:'2025-02-25',label:'等这期原支持开工'})
+       |                 ^
+     73|  expect(p.resultRefs).toContainEqual({kind:'period',id:period.id,date:…
+     74|  expect(JSON.stringify(relay)).toBe(before);expect(actionBudget(run.ec…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/ui/relay-scene-progress.test.ts > distinguishes future planned support, the actual start-day world phase, and genuinely running support after an original fixture stop
+AssertionError: expected { date: '2025-02-06', …(1) } to deeply equal { date: '2025-02-06', …(1) }
+
+- Expected
++ Received
+
+  {
+    "date": "2025-02-06",
+-   "label": "等这期原支持开工",
++   "label": "等这期原支持完成",
+  }
+
+ ❯ src/ui/relay-scene-progress.test.ts:112:24
+    110|  for(const frame of [future,startDayBefore]){
+    111|   expect(frame.status).toBe('planned');expect(frame.actionStatus).toBe…
+    112|   expect(frame.p.wait).toEqual({date:'2025-02-06',label:'等这期原支持开工'})
+       |                        ^
+    113|   expect(frame.budget.reserved).toBe(1)
+    114|  }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 25 skipped (27)
+   Start at  10:06:30
+   Duration  3.47s (tests 51%, import 27%, transform 22%)
+

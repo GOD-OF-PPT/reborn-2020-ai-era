@@ -1,0 +1,104 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/relay-scene-target.test.ts (6 tests | 5 failed) 1348ms
+   × matches original service/support jobs and keeps the approved application shared baseline source valid 14ms
+   × uses actual job status and retains a cancelled audit when a later audit is scheduled for the same period 3ms
+   × keeps historical price identity and does not disclose an unaudited actual value 1ms
+   × keeps period collection limited by an original source while describing the customer-wide command honestly 2ms
+   × rejects an audit calendar shortcut spanning periods rather than choosing the first period 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/relay-scene-target.test.ts > matches original service/support jobs and keeps the approved application shared baseline source valid
+AssertionError: expected 'invalid' to be 'valid' // Object.is equality
+
+Expected: "valid"
+Received: "invalid"
+
+ ❯ src/ui/relay-scene-target.test.ts:39:60
+     37|  const app:RelaySceneTarget={...identity,kind:'application',applicatio…
+     38|  expect(prepared.relay.adapters.some(a=>a.jobId===application.jobId)).…
+     39|  expect(check(prepared.relay,app,prepared.context).status).toBe('valid…
+       |                                                            ^
+     40|  expect(relayWorkTarget(prepared.relay,identity.runId,application.jobI…
+     41|  expect(canonicalRelayTarget(planned.relay,target,planned.context)).to…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  src/ui/relay-scene-target.test.ts > uses actual job status and retains a cancelled audit when a later audit is scheduled for the same period
+AssertionError: expected 'invalid' to be 'planned' // Object.is equality
+
+Expected: "planned"
+Received: "invalid"
+
+ ❯ src/ui/relay-scene-target.test.ts:67:28
+     65|  const service=planned.relay.periods[0]!.job!
+     66|  const notFinished=relaySceneProgress(planned.relay,service.completeAt…
+     67|  expect(notFinished.phase).toBe('planned');expect(notFinished.outcome)…
+       |                            ^
+     68|  const oldTarget={...target,jobId:oldJob} as RelaySceneTarget
+     69|  expect(relaySceneProgress(cancelled.relay,cancelled.date,oldTarget,ca…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  src/ui/relay-scene-target.test.ts > keeps historical price identity and does not disclose an unaudited actual value
+AssertionError: expected 'invalid' to be 'valid' // Object.is equality
+
+Expected: "valid"
+Received: "invalid"
+
+ ❯ src/ui/relay-scene-target.test.ts:79:67
+     77|  const {supported,audited,target}=frames,meter=supported.relay.meters[…
+     78|  const original={...target,meterId:meter.id} as RelaySceneTarget
+     79|  expect(check(supported.relay,original,supported.context).status).toBe…
+       |                                                                   ^
+     80|  const before=relaySceneProgress(supported.relay,supported.date,origin…
+     81|  expect(before.line).toContain('实计待核');expect(before.command).toBeNull…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  src/ui/relay-scene-target.test.ts > keeps period collection limited by an original source while describing the customer-wide command honestly
+AssertionError: expected 'invalid' to be 'collection' // Object.is equality
+
+Expected: "collection"
+Received: "invalid"
+
+ ❯ src/ui/relay-scene-target.test.ts:94:23
+     92|  const {supported,target}=frames
+     93|  const actual=relaySceneProgress(supported.relay,supported.date,target…
+     94|  expect(actual.phase).toBe('collection');expect(actual.line).toContain…
+       |                       ^
+     95|  const outside={...supported.relay,receivables:supported.relay.receiva…
+     96|  expect(relaySceneProgress(outside,supported.date,target,supported.con…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  src/ui/relay-scene-target.test.ts > rejects an audit calendar shortcut spanning periods rather than choosing the first period
+AssertionError: expected null to match object { kind: 'period', …(1) }
+
+- Expected:
+{
+  "jobId": "rly:836e4e4a14193bc68488ba671b0d77d5",
+  "kind": "period",
+}
+
++ Received:
+null
+
+ ❯ src/ui/relay-scene-target.test.ts:101:95
+     99| it('rejects an audit calendar shortcut spanning periods rather than ch…
+    100|  const {audited,identity}=frames,audit=audited.relay.auditJobs.at(-1)!
+    101|  expect(relayWorkTarget(audited.relay,identity.runId,audit.jobId,audit…
+       |                                                                                               ^
+    102|  const ambiguous={...audited.relay,auditJobs:audited.relay.auditJobs.m…
+    103|  expect(relayWorkTarget(ambiguous,identity.runId,audit.jobId,audited.c…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  5 failed | 22 passed (27)
+   Start at  06:38:12
+   Duration  3.27s (import 47%, tests 27%, transform 25%, worker 1%)
+

@@ -6,7 +6,7 @@ import { RuleError } from '../core/errors.ts'
 import { backgroundNames,reasonText,wishes } from './game-text.ts'
 export function StoragePanel({controller,initialText='',kind='import',onDone}:{controller:GameController;initialText?:string;kind?:string;onDone:()=>void}){
  const [text,setText]=useState(initialText),[preview,setPreview]=useState<ReturnType<GameController['inspectImport']>|null>(null),[error,setError]=useState<string|null>(null),[busy,setBusy]=useState(false),[message,setMessage]=useState('')
- const fail=(error:unknown)=>setError(reasonText(error instanceof RuleError?error.code:'FILE_READ_FAILED'))
+ const fail=(error:unknown)=>setError(error instanceof RuleError&&error.code==='SAVE_ABORTED'?'这次导入或恢复没有保存，输入原文仍在，已有原档保持完整。请再次核对并确认原操作；这里没有新的未保存候选。':reasonText(error instanceof RuleError?error.code:'FILE_READ_FAILED'))
  const inspect=()=>{try{setError(null);setPreview(controller.inspectImport(text))}catch(error){setPreview(null);fail(error)}}
  const current=controller.snapshot.view,canRestore=preview&&current?.runId===preview.runId&&!current.hasCandidate&&!current.readOnly&&!current.busy
  async function apply(mode:'new'|'restore'){setBusy(true);setError(null);try{if(mode==='new')await controller.importNew(text);else await controller.restore(text);onDone()}catch(error){fail(error)}finally{setBusy(false)}}

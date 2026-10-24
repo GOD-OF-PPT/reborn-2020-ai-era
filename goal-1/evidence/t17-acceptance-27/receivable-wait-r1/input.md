@@ -1,0 +1,1 @@
+授权修复你发现的未来原应收等待缺口，仅 relay-scene-progress.ts/test 添加严格wholeperiod且scope/source相符futureReceivable nextDate/wait；历史job/meter保持record、不可自动收款/改dueAt/钱。含原activejob/audit/known差额/当前due优先不变的有意义测试。NarrativeScene为根拥有，我随后同步按progress.wait允许settling。请root27/receivable-wait-r1新根guard、保存前像/全部红、适用定向验证，不兼容、不commit。当前静态R2继续；源冻结告知。

@@ -1,0 +1,65 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/relay-scene-progress.test.ts (23 tests | 2 failed | 21 skipped) 25ms
+   × waits for the next unpaid original period receivable without collecting or recomputing a correction due date 21ms
+   × does not use another customer meter, another period source or an already cleared invoice as this period wait 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/relay-scene-progress.test.ts > waits for the next unpaid original period receivable without collecting or recomputing a correction due date
+AssertionError: expected { businessId: 'business', …(19) } to match object { phase: 'settling', …(6) }
+(16 matching properties omitted from actual)
+
+- Expected
++ Received
+
+@@ -1,10 +1,10 @@
+  {
+    "audit": null,
+    "command": null,
+-   "nextDate": "2025-02-19",
+-   "outcome": "pending",
++   "nextDate": null,
++   "outcome": "none",
+    "periodId": "period",
+    "phase": "settling",
+    "target": {
+      "accountId": "relay-account",
+      "businessId": "business",
+
+ ❯ src/ui/relay-scene-progress.test.ts:63:12
+     61|  const {relay,target,context}=receivableDisplay({receivables:[correcti…
+     62|  const before=JSON.stringify(relay),p=relaySceneProgress(relay,'2025-0…
+     63|  expect(p).toMatchObject({phase:'settling',target,periodId:'period',ne…
+       |            ^
+     64|  expect(p.wait).toEqual({date:'2025-02-19',label:'等客户1的原应收到期'})
+     65|  expect(p.line).toContain('尚未到账');expect(p.resultRefs).toContainEqual(…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/ui/relay-scene-progress.test.ts > does not use another customer meter, another period source or an already cleared invoice as this period wait
+AssertionError: expected null to be '2025-02-19' // Object.is equality
+
+- Expected:
+"2025-02-19"
+
++ Received:
+null
+
+ ❯ src/ui/relay-scene-progress.test.ts:79:74
+     77|   invoice({id:'cleared',dueAt:'2025-02-12',collectedFen:5000}),invoice…
+     78|  ]})
+     79|  expect(relaySceneProgress(relay,'2025-02-09',target,context)?.nextDat…
+       |                                                                          ^
+     80|  expect(relaySceneProgress({...relay,receivables:relay.receivables.sli…
+     81| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 21 skipped (23)
+   Start at  07:48:44
+   Duration  1.22s (import 56%, transform 41%, tests 3%, worker 1%)
+

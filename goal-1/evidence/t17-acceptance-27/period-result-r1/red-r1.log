@@ -1,0 +1,58 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/relay-scene-progress.test.ts (25 tests | 2 failed | 23 skipped) 2448ms
+   × keeps the actual r116 period on its remaining original receivable while an ordinary price notice stays unread 2378ms
+   × does not let an ordinary business price notice replace explicit period service, support, audit, correction or closed facts 7ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/relay-scene-progress.test.ts > keeps the actual r116 period on its remaining original receivable while an ordinary price notice stays unread
+AssertionError: expected { …(20) } to match object { phase: 'settling', …(4) }
+(18 matching properties omitted from actual)
+
+- Expected
++ Received
+
+@@ -1,10 +1,10 @@
+  {
+    "command": null,
+-   "nextDate": "2025-03-21",
+-   "outcome": "pending",
+-   "phase": "settling",
++   "nextDate": null,
++   "outcome": "none",
++   "phase": "market-change",
+    "target": {
+      "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+      "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+      "kind": "period",
+      "periodId": "rly:503e6b6995b626f7c3bec7a0dd02e180",
+
+ ❯ src/ui/relay-scene-progress.test.ts:117:12
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/ui/relay-scene-progress.test.ts > does not let an ordinary business price notice replace explicit period service, support, audit, correction or closed facts
+AssertionError: expected 'market-change' to be 'service' // Object.is equality
+
+Expected: "service"
+Received: "market-change"
+
+ ❯ src/ui/relay-scene-progress.test.ts:138:19
+    136|  for(const {date,expected,display} of states){
+    137|   const before=JSON.stringify(display.relay),p=relaySceneProgress(disp…
+    138|   expect(p.phase).toBe(expected);expect(p.target).toBe(display.target)…
+       |                   ^
+    139|   expect(display.relay.changes[0]!.acknowledgedAt).toBeNull();expect(J…
+    140|  }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 23 skipped (25)
+   Start at  08:03:41
+   Duration  6.46s (tests 42%, import 30%, transform 28%)
+

@@ -1,0 +1,1 @@
+继续当前同一 S4-R1 的独立复核。压缩后请全量读取 goal-1/input.md、plan.md、tasks.md（分段避免截断）并回报与 root27/current R1 的约束一致性和最近准确状态。随后只读检查 src/ui/relay-scene-progress/target/clock、RelayServiceChoice、App 的最近最终接线，重点服务→支持→审计→收款、失败候选不发布。不要改代码、不要启动兼容检查/测试/提交。可写 root27/review-r1-final 新目录的审查结果，先保护祖先。保持 P3 文件不动。

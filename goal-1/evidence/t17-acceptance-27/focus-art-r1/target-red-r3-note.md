@@ -1,0 +1,1 @@
+R3 final批次4项3过1红（另5项未选择）；失败为新增SSR driver漏传onFocus，OpeningMoment在无onFocus时按原uncontrolled契约读取localFocus，故未渲render-prop指定relay。补与Root生产同样的受控onFocus回调，不修改生产或原命令/断言/时限。红test完整前像SHA 5e5bd4c1babf6622d5586ef340d8c4b32883a1faf026b39669264374e7e5f9ff。

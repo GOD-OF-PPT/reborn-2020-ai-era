@@ -1,0 +1,1 @@
+Root授权：修复同一R1实际原册操作缺口。仅RelayPanel原册interactive service/audit default wrapper去details嵌套，renderprop普通可分页正文，唯一actions放该步骤正文前。保全部原字段/费用/33命令/同Map，别动全局测量/兼容，不改现有测试限制。修复前像/诊断写root27/book-action-r1，guard祖先；必要实际handler核实时门槛，受影响定向和ownedstrict，freeze后交回。静态Chrome R2继续；DEV允许HMR，无新游戏保存。
