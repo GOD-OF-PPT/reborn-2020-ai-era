@@ -1,0 +1,7 @@
+# U2实际功能提交与完成记录意图
+
+功能提交22fd113af42dc8ff6c137facde0e027b2cb9779a已按547路径逐blob/字节/SHA/Gitmode核同，原sealed root29不回写。13浏览器入口及两CLI确实在委派/输出前拒写，原521 payload不变。原P3的26路径、root19精确1197/110与112旧marker均保全；3master只本U2完成后缀将选择性入Git，原2304B14LF插入仍留工作树。此post在record之前封存，record自身真实SHA/最终空index/远端读回在封存外交回；不循环改marker或记录。
+
+本片2Create/33不同后续/12原文逐字同及当前Native只证明U2限定范围，原红/文档23错误/原console空白保留，非一次全131绿或真人通过。全goal/T17及U3以后、PNG/真人/P3/M01暂停/T18均开放，无push/deploy或兼容开发测试。
+
+实际feature成功后，AGENTS及36号方案另同步U2限定完成/下一U3-V的当前口径；两文档随本record正常入Git。原feature的两文档blob仍保各自当时预提交状态，不回写root29；前像原byte在本post，运行时530源不变。
