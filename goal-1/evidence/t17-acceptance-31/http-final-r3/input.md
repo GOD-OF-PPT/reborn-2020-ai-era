@@ -1,0 +1,1 @@
+实际R2图已核并修一处后台术语：course-scene-progress.ts仅outline-needed的title/line/detail/choice.label文案更新；新course-progress-copy-r1 20case全过、build-final-r3实际0/556源同，.delivery/t17-u3c1-r3。原R2及HTTP原据保身份。现在5368与5370两个自有服务均换为R3（5370新exec68911、5368新exec56375），请在新http-final-r3复制适配已准备helper逐字核两端口对应同46产物（每端口47GET），全部同样2runId+33marker，实际源与产物末核绑定R3。不要改旧R2证据，不改src/兼容。只新此HTTP检查，不扩大。

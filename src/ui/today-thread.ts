@@ -3,6 +3,8 @@ import type {Screen} from './Navigation.tsx'
 import {openingFocusFor,playerThread,type OpeningFocus,type PlayerThreadView,type ThreadResultRef} from './player-thread.ts'
 import {seasonRecollection,type SeasonRecollectionView} from './season-thread.ts'
 import {videoFocusOpen} from './video-player-thread.ts'
+import {courseFocusOpen} from './course-player-thread.ts'
+import {isCoursePreparationThread} from './course-continuity.ts'
 import {playableAdvanceDate} from '../application/playable-advance.ts'
 
 export type TodayThreadInput=Pick<GamePanelProps,'view'|'features'>
@@ -17,7 +19,7 @@ export interface TodayThreadItem{
  readonly inspect:PlayerThreadView['inspect']
  readonly sourceRefs:readonly ThreadResultRef[]
 }
-export interface TodayDirection{readonly id:'work'|'life'|'market'|'video';readonly label:string;readonly line:string;readonly screen:Screen}
+export interface TodayDirection{readonly id:'work'|'life'|'market'|'video'|'course';readonly label:string;readonly line:string;readonly screen:Screen}
 export interface TodayThreadView{
  readonly source:{readonly runId:string;readonly revision:number;readonly date:string;readonly quarter:string}
  readonly primary:{readonly thread:PlayerThreadView;readonly classification:TodayThreadClassification;readonly supported:boolean;readonly originQuarter:string|null;readonly sourceRefs:readonly ThreadResultRef[]}
@@ -31,16 +33,17 @@ export interface TodayThreadView{
  readonly responsibilityOverrideNeeded:boolean
 }
 
-const supported=(focus:OpeningFocus)=>['free','work','life','market','video'].includes(focus.kind)
+const supported=(thread:PlayerThreadView)=>['free','work','life','market','video'].includes(thread.focus.kind)||isCoursePreparationThread(thread)
 
 /** Actual public arrangements decide whether a result is also still an ongoing commitment. */
 function classification(p:TodayThreadInput,thread:PlayerThreadView):TodayThreadClassification{
  if(thread.focusStatus==='invalid')return 'invalid'
  const f=thread.focus,id=f.entityId,w=p.features.workbench
- if(!supported(f))return 'other'
+ if(!supported(thread))return 'other'
  if(f.kind==='free'||id===null||thread.focusScope==='entry')return 'entry'
  let open=false
  if(f.kind==='video')open=videoFocusOpen(p,f)
+ else if(f.kind==='course')open=courseFocusOpen(p,f)
  else if(f.kind==='work'){
   const period=p.view.operations?.employment.find(row=>row.id===id)
   open=!!period&&period.quarter===w.quarter&&!w.atQuarterEnd&&p.view.date<period.limit&&period.segments.some(segment=>segment.from<=p.view.date&&(segment.to===null||segment.to>p.view.date))
@@ -74,6 +77,14 @@ function ongoing(p:TodayThreadInput):TodayThreadItem[]{
   for(const work of video.works.filter(row=>row.contractId===null))addVideo({videoTarget:{channelId:work.channelId,workId:work.id}})
   for(const marketing of video.marketing)addVideo({videoTarget:{channelId:marketing.channelId,marketingId:marketing.id}})
  }
+ const course=p.features.course
+ if(course){
+  const addCourse=(target:NonNullable<Extract<OpeningFocus,{kind:'course'}>['courseTarget']>)=>{const candidate=openingFocusFor(p,'course',{courseTarget:target});if(candidate)candidates.push(candidate)}
+  for(const business of course.businesses.filter(b=>b.lifecycle==='preparing'&&!course.outlines.some(o=>o.businessId===b.id&&o.job&&['planned','running'].includes(o.job.status))))addCourse({kind:'studio',businessId:business.id})
+  for(const outline of course.outlines.filter(o=>o.job&&['planned','running'].includes(o.job.status)))addCourse({kind:'outline',businessId:outline.businessId,outlineId:outline.id})
+  for(const lesson of course.courses.filter(c=>['draft','building'].includes(c.status)))addCourse({kind:'course',businessId:lesson.businessId,courseId:lesson.id,...(lesson.sampleJobId?{sampleJobId:lesson.sampleJobId}:{})})
+  for(const license of course.licenses.filter(l=>l.job&&['planned','running'].includes(l.job.status)&&!course.courses.some(c=>['draft','building'].includes(c.status)&&c.businessId===l.businessId&&c.cases.some(ref=>ref.id===l.caseId))))addCourse({kind:'license',businessId:license.businessId,licenseId:license.id})
+ }
  for(const focus of candidates){
   const thread=playerThread(p,focus),state=classification(p,thread)
   if(state!=='active'&&state!=='carry')continue
@@ -103,6 +114,7 @@ const directions:readonly TodayDirection[]=[
  {id:'work',label:'看看今天的工作安排',line:'先核对本季是否已在岗，再决定新的工作；原工资与行动分别保留。',screen:'quarter'},
  {id:'life',label:'给生活留一段日子',line:'休整、住处与原来认识的人，仍由你明确选择时间和投入。',screen:'life'},
  {id:'video',label:'给自己的视频尝试留一段时间',line:'显选账号、作品和客户，原制作与平台结算继续；新的投入仍要确认。',screen:'video'},
+ {id:'course',label:'把做过的事，认真准备成一堂课',line:'显选教案、已付案例与样课；资金、权利、工具资格和日期仍须核对，不自动招生。',screen:'course'},
  {id:'market',label:'想想这笔钱的去处',line:'核对公开研究、原委托和持仓，再决定是否承担下一份模拟交易。',screen:'market'},
 ]
 
@@ -115,8 +127,8 @@ export function todayThread(p:TodayThreadInput,focus?:OpeningFocus|null,focusQua
  const thread=playerThread(p,focus,focusQuarter),state=classification(p,thread),current=ongoing(p)
  return {
   source:{runId:p.view.runId,revision:p.view.revision,date:p.view.date,quarter:p.features.workbench.quarter},
-  primary:{thread,classification:state,supported:supported(thread.focus),originQuarter:thread.focusQuarter,sourceRefs:thread.resultRefs.map(ref=>({...ref}))},
+  primary:{thread,classification:state,supported:supported(thread),originQuarter:thread.focusQuarter,sourceRefs:thread.resultRefs.map(ref=>({...ref}))},
   title:'回到今天，慢慢决定',line:current.length?'已经答应的事仍照原约定继续；今天的去向由你决定。':'旧结果留在原记录。接下来的日子，可以重新选择。',
-  question:thread.focus.kind==='video'&&(state==='result'||state==='history')?'接下来是回应已有询价、做另一份作品，还是暂不新增制作？原结果与未完约定都留着。':season.nextQuestion,ongoing:current,directions:directions.map(direction=>({...direction})),remaining:season.remaining,wait:wait(p),responsibilityOverrideNeeded:thread.responsibilityOverrideNeeded,
+  question:thread.focus.kind==='video'&&(state==='result'||state==='history')?'接下来是回应已有询价、做另一份作品，还是暂不新增制作？原结果与未完约定都留着。':thread.focus.kind==='course'&&(state==='result'||state==='history')?'这份教学准备留下后，是先看下一步、另备一份教案，还是把日子留给生活？样课与招生、学费仍分别决定。':season.nextQuestion,ongoing:current,directions:directions.map(direction=>({...direction})),remaining:season.remaining,wait:wait(p),responsibilityOverrideNeeded:thread.responsibilityOverrideNeeded,
  }
 }

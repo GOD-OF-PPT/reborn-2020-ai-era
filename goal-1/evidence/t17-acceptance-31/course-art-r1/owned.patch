@@ -1,0 +1,261 @@
+--- a/src/ui/OpeningObject.tsx
++++ b/src/ui/OpeningObject.tsx
+@@ -8,6 +8,7 @@
+ import {OpeningEntryPaper,type OpeningEntryPaperKind} from './OpeningEntryPaper.tsx'
+ import {VideoContinuityPaper,type VideoPaperState} from './VideoContinuityPaper.tsx'
+ import {DayContinuityPaper,type DayContinuityArt} from './DayContinuityPaper.tsx'
++import {CoursePreparationPaper,type CoursePreparationPaperState} from './CoursePreparationPaper.tsx'
+ 
+ export type {FirstOrderArtState} from './FirstOrderPaper.tsx'
+ export type OpeningObjectProtection='readonly'|'unsaved'|'unavailable'
+@@ -34,17 +35,18 @@
+  entryPaper?:OpeningEntryPaperKind
+  dayPaper?:DayContinuityArt
+  videoPaper?:VideoPaperState
++ coursePaper?:CoursePreparationPaperState
+ }
+ 
+ /** The parent supplies committed facts and owns the action; the object adds no business state. */
+-export function OpeningObject({kind,title,displayTitle,detail,stageLabel,onActivate,actionLabel,disabled,textOnly=false,appearance,teaching,firstOrder,protection,entryPaper,dayPaper,videoPaper}:OpeningObjectProps){
++export function OpeningObject({kind,title,displayTitle,detail,stageLabel,onActivate,actionLabel,disabled,textOnly=false,appearance,teaching,firstOrder,protection,entryPaper,dayPaper,videoPaper,coursePaper}:OpeningObjectProps){
+  const id=useId(),titleId=id+'-title',detailId=id+'-detail',stageId=id+'-stage',actionId=id+'-action',dateId=id+'-date',receiptId=id+'-receipt',protectionId=id+'-protection'
+- const entry=firstOrder===undefined?entryPaper:undefined,day=firstOrder===undefined&&entry===undefined?dayPaper:undefined,video=firstOrder===undefined&&entry===undefined&&day===undefined?videoPaper:undefined,hasPaper=firstOrder!==undefined||entry!==undefined||day!==undefined||video!==undefined
++ const entry=firstOrder===undefined?entryPaper:undefined,day=firstOrder===undefined&&entry===undefined?dayPaper:undefined,video=firstOrder===undefined&&entry===undefined&&day===undefined?videoPaper:undefined,course=firstOrder===undefined&&entry===undefined&&day===undefined&&video===undefined?coursePaper:undefined,hasPaper=firstOrder!==undefined||entry!==undefined||day!==undefined||video!==undefined||course!==undefined
+  const protectionLabel=protection==='readonly'?'只读 · 原记录保留':protection==='unsaved'?'尚未保存 · 仍是上次的物件':protection==='unavailable'?'暂不可用 · 先核对原因':null
+- return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-first-order-phase={firstOrder?.phase} data-entry-paper={entry} data-day-kind={day?.kind} data-day-state={day?.state} data-video-phase={video?.phase} data-protection={hasPaper?protection:undefined} data-text-only={textOnly?'true':'false'} disabled={disabled} onClick={onActivate} aria-label={displayTitle===undefined?undefined:title+' '+actionLabel} aria-labelledby={displayTitle===undefined?titleId+' '+actionId:undefined} aria-describedby={stageId+' '+detailId+(firstOrder?.dateLabel?' '+dateId:'')+(firstOrder?.phase==='paid'?' '+receiptId:'')+(hasPaper&&protectionLabel?' '+protectionId:'')}>
++ return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-first-order-phase={firstOrder?.phase} data-entry-paper={entry} data-day-kind={day?.kind} data-day-state={day?.state} data-video-phase={video?.phase} data-course-phase={course?.phase} data-protection={hasPaper?protection:undefined} data-text-only={textOnly?'true':'false'} disabled={disabled} onClick={onActivate} aria-label={displayTitle===undefined?undefined:title+' '+actionLabel} aria-labelledby={displayTitle===undefined?titleId+' '+actionId:undefined} aria-describedby={stageId+' '+detailId+(firstOrder?.dateLabel?' '+dateId:'')+(firstOrder?.phase==='paid'?' '+receiptId:'')+(hasPaper&&protectionLabel?' '+protectionId:'')}>
+   {!textOnly?<span className="opening-object-art" aria-hidden="true">
+-   {video?<VideoContinuityPaper art={video}/>:day?<DayContinuityPaper art={day}/>:entry?<OpeningEntryPaper kind={entry}/>:<img src={appearance==='relay'?relayServiceKit:appearance==='course'?coursePreparationKit:appearance==='video'?videoMakingKit:firstAttempt} alt="" width={appearance==='course'||appearance==='relay'?1536:appearance==='video'?1254:1280} height={appearance==='course'||appearance==='relay'?1024:appearance==='video'?1254:1280} decoding="async"/>}
+-   {firstOrder?<><span className="first-order-contact"/><FirstOrderPaper phase={firstOrder.phase}/></>:video?null:day?<span className="day-paper-contact"/>:entry?<span className="entry-paper-contact"/>:<span className="opening-object-mark">
++   {video?<VideoContinuityPaper art={video}/>:day?<DayContinuityPaper art={day}/>:entry?<OpeningEntryPaper kind={entry}/>:course?<CoursePreparationPaper art={course}/>:<img src={appearance==='relay'?relayServiceKit:appearance==='course'?coursePreparationKit:appearance==='video'?videoMakingKit:firstAttempt} alt="" width={appearance==='course'||appearance==='relay'?1536:appearance==='video'?1254:1280} height={appearance==='course'||appearance==='relay'?1024:appearance==='video'?1254:1280} decoding="async"/>}
++   {firstOrder?<><span className="first-order-contact"/><FirstOrderPaper phase={firstOrder.phase}/></>:video||course?null:day?<span className="day-paper-contact"/>:entry?<span className="entry-paper-contact"/>:<span className="opening-object-mark">
+     {kind==='waiting'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><circle cx="16" cy="16" r="12"/><path d="M16 8v9l6 3"/></svg>:kind==='calendar'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M8 5v6m16-6v6M5 12h22M6 8h20v20H6zM11 17h3m5 0h3m-11 6h3m5 0h3"/></svg>:kind==='work'?appearance==='relay'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M6 7h20v13H6zM11 20v5h10v-5M10 12v4m4-4v4m4-4v4m4-4v4M16 25v4"/></svg>:<svg viewBox="0 0 32 32" fill="none" focusable="false"><rect x="5" y="7" width="22" height="18"/><path d="m13 12 8 4-8 4zM9 7v18m14-18v18"/></svg>:null}
+    </span>}
+   </span>:null}
+--- /dev/null
++++ b/src/ui/CoursePreparationPaper.tsx
+@@ -0,0 +1,111 @@
++import coursePreparationKit from '../../assets/ui-redesign/cinematic/props/course-preparation-kit-v1.png'
++import './course-preparation-paper.css'
++
++export type CoursePreparationPaperPhase='entry'|'outline-planned'|'outline-running'|'outline-completed'|'definition'|'license-planned'|'license-running'|'license-ready'|'sample-planned'|'sample-running'|'sample-ready'|'stopped'|'history'
++export interface CoursePreparationPaperState{phase:CoursePreparationPaperPhase}
++
++/** Committed paper shapes only; the caller supplies every fact, protection and action. */
++export function CoursePreparationPaper({art}:{art:CoursePreparationPaperState}){
++ return <span className="course-preparation-art" data-course-phase={art.phase} aria-hidden="true">
++  <img className="course-preparation-kit" src={coursePreparationKit} alt="" width={1536} height={1024} decoding="async"/>
++  <svg className="course-preparation-layers" viewBox="0 0 1536 1024" fill="none" aria-hidden="true" focusable="false">
++   {art.phase==='entry'?<g data-material="source-and-blank-plan">
++    <path className="course-paper-under" d="m984 522 443 102-64 231-443-102z"/>
++    <path className="course-paper-sheet" d="m1024 487 415 127-74 224-415-127z"/>
++    <path className="course-paper-fold" d="m1368 592 71 22-19 58z"/>
++    <path className="course-paper-case" d="m894 597 150 44-30 102-150-44z"/>
++    <path className="course-paper-ink" d="m910 632 91 27m-98-5 65 19"/>
++   </g>:null}
++   {art.phase==='outline-planned'?<g data-material="reserved-outline-packet">
++    <path className="course-paper-under" d="m833 601 560 136-29 115-560-136z"/>
++    <path className="course-paper-sheet" d="m842 581 561 145-29 110-561-145z"/>
++    <path className="course-paper-fold-line" d="m842 581 198 139 363 6"/>
++    <path className="course-paper-dashed" d="m859 603 518 134m-530-89 518 134"/>
++    <path className="course-paper-clip" d="m1001 622 12-47c5-20 31-12 26 7l-12 47"/>
++   </g>:null}
++   {art.phase==='outline-running'?<g data-material="open-outline-leaf">
++    <path className="course-paper-under" d="m831 440 603 171-77 263-603-171z"/>
++    <path className="course-paper-sheet" d="m854 412 592 183-79 253-592-183z"/>
++    <path className="course-paper-margin" d="m944 441-77 250"/>
++    <path className="course-paper-pencil" d="m980 502 373 115m-391-61 308 95m-325-43 373 115m-390-63 217 67"/>
++    <path className="course-paper-working-edge" d="m831 727 283 76-9 32-283-76z"/>
++   </g>:null}
++   {art.phase==='outline-completed'?<g data-material="bound-outline-pages">
++    <path className="course-paper-under" d="m881 457 555 160-67 249-555-160z"/>
++    <path className="course-paper-page-edge" d="m866 444 558 166-67 237-558-166z"/>
++    <path className="course-paper-kept" d="m881 421 554 174-71 227-554-174z"/>
++    <path className="course-paper-binding" d="m906 456-64 205"/>
++    <path className="course-paper-ink" d="m973 511 353 111m-369-58 303 95m-320-42 353 111"/>
++    <path className="course-paper-bookmark" d="m1266 542 54 17-79 251-17-28-34 12z"/>
++   </g>:null}
++   {art.phase==='definition'?<g data-material="case-beside-course-plan">
++    <path className="course-paper-sheet" d="m1012 451 427 134-98 310-427-134z"/>
++    <path className="course-paper-plan-frame" d="m1058 522 303 95-54 171-303-95z"/>
++    <path className="course-paper-ink" d="m1079 574 220 69m-230-35 174 55m-184-21 220 69"/>
++    <path className="course-paper-case" d="m816 537 236 68-54 185-236-68z"/>
++    <path className="course-paper-ink" d="m847 594 156 45m-165-14 123 36m-131-5 156 45"/>
++    <path className="course-paper-clip" d="m1012 601 15-50c6-20 32-12 26 8l-15 50"/>
++   </g>:null}
++   {art.phase==='license-planned'?<g data-material="reserved-material-scope">
++    <path className="course-paper-under" d="m919 559 490 140-55 195-490-140z"/>
++    <path className="course-paper-sheet" d="m942 538 480 144-55 184-480-144z"/>
++    <path className="course-paper-fold-line" d="m942 538 165 142 315 2"/>
++    <path className="course-paper-dashed" d="m964 567 426 128m-441-76 426 128"/>
++    <path className="course-paper-scope-tab" d="m1245 629 99 30-41 137-27-30-37 11z"/>
++   </g>:null}
++   {art.phase==='license-running'?<g data-material="material-and-scope-in-preparation">
++    <path className="course-paper-case" d="m804 500 390 105-62 223-390-105z"/>
++    <path className="course-paper-ink" d="m842 555 288 78m-301-35 214 58m-226-15 288 78"/>
++    <path className="course-paper-scope" d="m1043 442 388 120-104 331-388-120z"/>
++    <path className="course-paper-scope-frame" d="m1075 500 291 90-72 233-291-90z"/>
++    <path className="course-paper-pencil" d="m1091 548 215 66m-231-16 176 54m-191-5 215 66"/>
++   </g>:null}
++   {art.phase==='license-ready'?<g data-material="kept-material-scope-pair">
++    <path className="course-paper-case" d="m796 539 330 88-60 226-330-88z"/>
++    <path className="course-paper-kept" d="m1072 495 344 103-82 271-344-103z"/>
++    <path className="course-paper-scope-frame" d="m1102 544 254 76-56 186-254-76z"/>
++    <path className="course-paper-ink" d="m835 599 227 61m-238-20 180 48m93-99 196 59m-209-17 152 46"/>
++    <path className="course-paper-joined-clip" d="m1088 618-51 170c-11 36-60 20-49-14l43-143c7-23 38-12 31 10l-37 123"/>
++   </g>:null}
++   {art.phase==='sample-planned'?<g data-material="reserved-practice-leaf">
++    <path className="course-paper-under" d="m920 544 502 144-61 216-502-144z"/>
++    <path className="course-paper-sheet" d="m937 519 495 152-63 204-495-152z"/>
++    <path className="course-paper-fold" d="m1354 647 78 24-17 55z"/>
++    <path className="course-paper-practice-frame course-paper-dashed" d="m978 574 358 110-34 110-358-110z"/>
++    <path className="course-paper-tie" d="m896 667 485 149m-223-193-56 183"/>
++   </g>:null}
++   {art.phase==='sample-running'?<g data-material="open-practice-spread">
++    <path className="course-paper-under" d="m742 490 330-27 373 156-97 274-346-118-334-20z"/>
++    <path className="course-paper-sheet" d="m762 461 310-25-76 310-306-21z"/>
++    <path className="course-paper-warm-sheet" d="m1072 436 370 155-94 277-352-122z"/>
++    <path className="course-paper-fold-line" d="m1072 436-76 310"/>
++    <path className="course-paper-practice-frame" d="m808 517 186-13-38 156-186-13z"/>
++    <path className="course-paper-pencil" d="m1098 539 237 98m-250-53 204 84m-216-40 237 98"/>
++    <path className="course-paper-working-edge" d="m834 709 114 9-2 27-114-9z"/>
++   </g>:null}
++   {art.phase==='sample-ready'?<g data-material="kept-practice-pages">
++    <path className="course-paper-under" d="m820 467 602 167-73 263-602-167z"/>
++    <path className="course-paper-page-edge" d="m840 448 593 173-76 249-593-173z"/>
++    <path className="course-paper-kept" d="m862 422 580 185-76 233-580-185z"/>
++    <path className="course-paper-practice-frame" d="m918 491 174 56-39 121-174-56z"/>
++    <path className="course-paper-ink" d="m1143 563 211 67m-222-32 174 55m-184-20 211 67m-437-79 159 51"/>
++    <path className="course-paper-binding" d="m876 453-58 178"/>
++    <path className="course-paper-bookmark" d="m1266 709 70 22-33 101-23-25-32 7z"/>
++   </g>:null}
++   {art.phase==='stopped'?<g data-material="stowed-preparation-and-retained-leaf">
++    <path className="course-paper-muted" d="m863 536 556 151-55 209-556-151z"/>
++    <path className="course-paper-fold-line" d="m863 536 199 151 357 0"/>
++    <path className="course-paper-retained-tie" d="m837 693 555 152m-223-213-56 209"/>
++    <path className="course-paper-retained" d="m1280 718 122 35-45 152-34-30-42 8z"/>
++    <path className="course-paper-retained-line" d="m1297 755 74 21m-82 9 60 17"/>
++   </g>:null}
++   {art.phase==='history'?<g data-material="folded-preparation-history">
++    <path className="course-paper-muted" d="m823 499 590 160-62 232-590-160z"/>
++    <path className="course-paper-page-edge" d="m849 474 576 165-69 224-576-165z"/>
++    <path className="course-paper-sheet" d="m849 474 308 88-164 65-213 71z"/>
++    <path className="course-paper-fold-line" d="m1157 562-164 65-213 71"/>
++    <path className="course-paper-binding" d="m850 523 27 8m-42 37 27 8m-42 37 27 8m-42 37 27 8"/>
++   </g>:null}
++  </svg>
++ </span>
++}
+--- /dev/null
++++ b/src/ui/course-preparation-paper.css
+@@ -0,0 +1,45 @@
++/* The original low folio and native leaves share one complete authored canvas. */
++.course-preparation-art[data-course-phase]{position:relative;isolation:isolate;display:block;width:100%;height:160px;pointer-events:none}
++.course-preparation-art[data-course-phase] .course-preparation-kit,
++.course-preparation-art[data-course-phase] .course-preparation-layers{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:none;pointer-events:none}
++.course-preparation-art[data-course-phase] .course-preparation-kit{z-index:0;filter:none}
++.course-preparation-art[data-course-phase] .course-preparation-layers{z-index:1;filter:drop-shadow(1px 2px 1px #3d302450)}
++.course-preparation-art[data-course-phase] .course-paper-sheet{fill:#f0e2c5;stroke:#b8a17c;stroke-width:4}
++.course-preparation-art[data-course-phase] .course-paper-under{fill:#d5c29d;stroke:#a28c67;stroke-width:4}
++.course-preparation-art[data-course-phase] .course-paper-page-edge{fill:#e0ceab;stroke:#b5a07b;stroke-width:4}
++.course-preparation-art[data-course-phase] .course-paper-fold{fill:#d0bc98;stroke:#aa926a;stroke-width:4}
++.course-preparation-art[data-course-phase] .course-paper-fold-line{stroke:#ad9770;stroke-width:5}
++.course-preparation-art[data-course-phase] .course-paper-ink{stroke:#918968;stroke-width:5;stroke-linecap:round}
++.course-preparation-art[data-course-phase] .course-paper-pencil{stroke:#788469;stroke-width:5;stroke-linecap:round}
++.course-preparation-art[data-course-phase] .course-paper-dashed{stroke:#a18b60;stroke-width:4;stroke-dasharray:13 11}
++.course-preparation-art[data-course-phase] .course-paper-case{fill:#cfc3a4;stroke:#a49371;stroke-width:4}
++.course-preparation-art[data-course-phase] .course-paper-clip{stroke:#a47c42;stroke-width:10;stroke-linecap:round}
++.course-preparation-art[data-course-phase] .course-paper-margin{stroke:#bca887;stroke-width:4}
++.course-preparation-art[data-course-phase] .course-paper-working-edge{fill:#a4aa8b;stroke:#7f8b6d;stroke-width:4}
++.course-preparation-art[data-course-phase] .course-paper-kept{fill:#e9ddbd;stroke:#b39f77;stroke-width:4}
++.course-preparation-art[data-course-phase] .course-paper-binding{stroke:#8e8568;stroke-width:9;stroke-linecap:round}
++.course-preparation-art[data-course-phase] .course-paper-bookmark{fill:#b99a5f;stroke:#927343;stroke-width:4}
++.course-preparation-art[data-course-phase] .course-paper-plan-frame{stroke:#a99c76;stroke-width:5}
++.course-preparation-art[data-course-phase] .course-paper-scope-tab{fill:#c6b48c;stroke:#a08a61;stroke-width:4}
++.course-preparation-art[data-course-phase] .course-paper-scope{fill:#e4d8b9;stroke:#ad9974;stroke-width:4}
++.course-preparation-art[data-course-phase] .course-paper-scope-frame{stroke:#a99a77;stroke-width:4}
++.course-preparation-art[data-course-phase] .course-paper-joined-clip{stroke:#988755;stroke-width:11;stroke-linecap:round}
++.course-preparation-art[data-course-phase] .course-paper-practice-frame{stroke:#859273;stroke-width:6}
++.course-preparation-art[data-course-phase] .course-paper-tie{stroke:#b59760;stroke-width:7}
++.course-preparation-art[data-course-phase] .course-paper-warm-sheet{fill:#eadabb;stroke:#b39e7a;stroke-width:4}
++.course-preparation-art[data-course-phase] .course-paper-muted{fill:#bfb49a;stroke:#9c9074;stroke-width:4}
++.course-preparation-art[data-course-phase] .course-paper-retained-tie{stroke:#8c8065;stroke-width:7}
++.course-preparation-art[data-course-phase] .course-paper-retained{fill:#b78c70;stroke:#976b53;stroke-width:4}
++.course-preparation-art[data-course-phase] .course-paper-retained-line{stroke:#7f5d49;stroke-width:5}
++
++/* Only the explicit preparation paper uses this low slot; legacy teaching keeps its layout. */
++.opening-object[data-course-phase]{transform:none;transition:none}
++.opening-room>.opening-object[data-appearance=course][data-course-phase]>.opening-object-art,
++.opening-room .opening-room-object>.opening-object[data-appearance=course][data-course-phase]>.opening-object-art{height:160px;min-height:160px;width:100%;aspect-ratio:auto;align-self:end;filter:none;transform:none}
++.opening-object[data-course-phase] .opening-object-title:empty,
++.opening-object[data-course-phase] .opening-object-detail:empty{display:none}
++.opening-object[data-course-phase] .first-order-protection{display:flex;align-items:baseline;align-self:stretch;gap:7px;padding:5px 0;border-top:1px dashed #bac09d;color:#d8d6b8}
++.opening-object[data-course-phase][data-protection=readonly] .opening-object-copy{border-left:3px double #bac09d}
++.opening-object[data-course-phase][data-protection=unsaved] .opening-object-copy{border-left-style:dashed}
++.opening-object[data-course-phase][data-protection=unavailable] .opening-object-action{border-top-style:dashed}
++.opening-object[data-course-phase]:is(:hover,:focus-visible,:active):not(:disabled){transform:none}
+--- /dev/null
++++ b/src/ui/CoursePreparationPaper.test.tsx
+@@ -0,0 +1,62 @@
++import {expect,it} from 'vitest'
++import {renderToStaticMarkup} from 'react-dom/server'
++import {CoursePreparationPaper,type CoursePreparationPaperPhase} from './CoursePreparationPaper.tsx'
++import {OpeningObject,type OpeningObjectProps} from './OpeningObject.tsx'
++
++const phases:readonly CoursePreparationPaperPhase[]=['entry','outline-planned','outline-running','outline-completed','definition','license-planned','license-running','license-ready','sample-planned','sample-running','sample-ready','stopped','history']
++const render=(phase:CoursePreparationPaperPhase)=>renderToStaticMarkup(<CoursePreparationPaper art={{phase}}/>)
++const shapes=(html:string)=>(html.match(/<path\b[^>]*>/g)??[]).map(path=>path.replace(/ class="[^"]*"/g,'')).join('')
++const props:OpeningObjectProps={kind:'work',appearance:'course',title:'同一工作室的工具实操课程',displayTitle:'',detail:'样课尚未完成；已安排开工，原资源与日期保留。',stageLabel:'样课已安排',actionLabel:'等这份样课开工 · 2023-01-02',disabled:false,onActivate:()=>{},coursePaper:{phase:'sample-planned'}}
++
++it('keeps preparation phases decorative and changes the actual leaves without inventing business facts',()=>{
++ const paths=phases.map(phase=>{
++  const html=render(phase)
++  expect(html).toContain('aria-hidden="true"')
++  expect(html).toContain('focusable="false"')
++  expect(html).toContain('width="1536" height="1024"')
++  expect(html).not.toMatch(/<(?:text|foreignObject|button|a|script)\b/)
++  expect(html).not.toMatch(/¥|￥|收入|到账|批准|20\d{2}-\d{2}-\d{2}/)
++  return shapes(html)
++ })
++ expect(new Set(paths).size).toBe(phases.length)
++ expect(render('sample-planned')).toContain('data-material="reserved-practice-leaf"')
++ expect(render('sample-running')).toContain('data-material="open-practice-spread"')
++ expect(render('sample-ready')).toContain('data-material="kept-practice-pages"')
++ expect(render('license-ready')).toContain('data-material="kept-material-scope-pair"')
++ expect(render('license-ready')).not.toContain('kept-practice-pages')
++ expect(phases.map(render).join('')).not.toMatch(/receipt|cash|coin|payment/)
++})
++
++it('mounts the native course paper in the same button while keeping the full name and parent action',()=>{
++ const html=renderToStaticMarkup(<OpeningObject {...props}/>),{coursePaper,...legacyProps}=props
++ expect(html).toContain('type="button"')
++ expect(html).toContain('data-course-phase="sample-planned"')
++ expect(html).toContain('aria-label="'+props.title+' '+props.actionLabel+'"')
++ expect(html).toContain(props.detail)
++ expect(html).toContain('course-preparation-kit')
++ expect(html).not.toContain('opening-object-mark')
++ expect(coursePaper?.phase).toBe('sample-planned')
++ const legacy=renderToStaticMarkup(<OpeningObject {...legacyProps} teaching={{stages:['planned','pending'],protectedFen:0,needsHelp:0,refundDueFen:0,supportUnmet:false,closedAt:null}}/>)
++ expect(legacy).not.toContain('data-course-phase')
++ expect(legacy).toContain('course-stage-tab')
++ expect(legacy).toContain('第1段 · 已安排')
++ expect(legacy).toContain('opening-object-mark')
++})
++
++it('keeps the committed paper under readonly or unsaved protection, with complete text in textOnly mode',()=>{
++ for(const protection of ['readonly','unsaved','unavailable'] as const){
++  const html=renderToStaticMarkup(<OpeningObject {...props} protection={protection} disabled/>),text=renderToStaticMarkup(<OpeningObject {...props} protection={protection} disabled textOnly/>)
++  for(const content of [html,text]){
++   expect(content).toContain('data-course-phase="sample-planned"')
++   expect(content).toContain('data-protection="'+protection+'"')
++   expect(content).toContain('disabled=""')
++   expect(content).toContain(props.detail)
++   expect(content).toContain(props.actionLabel)
++   expect(content).toContain('aria-label="'+props.title+' '+props.actionLabel+'"')
++   expect(content).toContain(protection==='readonly'?'只读 · 原记录保留':protection==='unsaved'?'尚未保存 · 仍是上次的物件':'暂不可用 · 先核对原因')
++  }
++  expect(html).toContain('reserved-practice-leaf')
++  expect(text).not.toMatch(/<img\b|<svg\b|course-preparation-art|opening-object-art/)
++  expect(text).not.toContain('kept-practice-pages')
++ }
++})

@@ -10,6 +10,8 @@ import {courseSceneProgress,courseTargetReason} from './course-scene-progress.ts
 import {openingFocusFor,playerThread} from './player-thread.ts'
 import {seasonFocusAfterSave,seasonFocusChoices,seasonRecollection} from './season-thread.ts'
 import {courseSceneResult} from './course-scene-result.ts'
+import {todayThread} from './today-thread.ts'
+import {coursePreparationPaperFor} from './course-continuity.ts'
 import earnedPrefix from '../../goal-1/evidence/t17-acceptance-16/normal-before-course-studio.json?raw'
 import earnedLicensedCase from '../../goal-1/evidence/t17-acceptance-23/chrome-r6/ai-saved-70-paid-r6.json?raw'
 
@@ -56,6 +58,7 @@ it('binds a normally funded first-order course only after each actual save, keep
   expect(seasonFocusAfterSave(side.previous,side.current,'DefineCourse',{...definition,name:'明确另外留下的草稿'},course)).toBe(course)
   expect(playerThread(h.p(),course).object).toContain(definition.name)
   await h.advance('2023-01-01')
+  expect(todayThread(h.p(),course,'2022-Q4')!.primary).toMatchObject({classification:'carry',thread:{focus:course,stage:'course-draft'}})
   const target=course.courseTarget!;if(target.kind!=='course')throw Error('C1_EXPECT_COURSE')
   const payload={courseId:target.courseId,resources:['player-production'],startAt:'2023-01-02'},built=await h.send('BuildCourseSample',payload),sample=seasonFocusAfterSave(built.previous,built.current,'BuildCourseSample',payload,course)!
   expect(courseSceneResult('BuildCourseSample',built.previous.view,built.current.view)).toContain('已安排，尚未开工')
@@ -65,6 +68,8 @@ it('binds a normally funded first-order course only after each actual save, keep
   expect(courseSceneResult('AdvanceTime',completed.previous.view,completed.current.view)).toContain('样课已实际完成')
   const before=h.controller.exportSaved(),thread=playerThread(h.p(),sample)
   expect(thread).toMatchObject({stage:'course-ready',outcome:'actual',focusStatus:'valid'});expect(thread.line).toContain('尚未招生')
+  expect(todayThread(h.p(),sample)!.primary.classification).toBe('result')
+  expect(coursePreparationPaperFor(thread)).toEqual({phase:'sample-ready'})
   expect(thread.inspect.target?.courseTarget).toEqual(sample.kind==='course'?sample.courseTarget:null)
   expect(h.p().features.course!.cohorts).toHaveLength(0);expect(h.p().features.course!.businesses[0]!.metrics.incomeFen).toBe(0)
   expect(seasonFocusChoices(h.p()).some(c=>c.focus.entityId===sample.entityId)).toBe(true)
@@ -106,6 +111,8 @@ it('keeps a saved course materials task attached to its actual licensed course a
   await h.advance('2022-12-15');expect(playerThread(h.p(),focus).stage).toBe('course-draft')
   const completed=playerThread(h.p(),licenseFocus)
   expect(completed).toMatchObject({stage:'course-license-completed',outcome:'actual'});expect(completed.detail).toContain('已实际完成');expect(completed.detail).toContain('¥300 / 1点 / 7日');expect(completed.detail).toContain('资格与旧责任');expect(completed.detail).toContain('样课与招生另定');expect(completed.detail).not.toContain('尚未实付')
+  expect(coursePreparationPaperFor(completed)).toEqual({phase:'license-ready'})
+  expect(coursePreparationPaperFor(playerThread(h.p(),focus))).toEqual({phase:'definition'})
   expect(h.p().view.budget.spent).toBe(started.view.budget.spent);expect(funds(h.p())).toBe(funds(started))
   expect(h.p().features.course!.cohorts).toHaveLength(0);expect(h.p().features.course!.businesses.find(row=>row.id===b.id)!.metrics.incomeFen).toBe(0)
  }finally{await h.close()}

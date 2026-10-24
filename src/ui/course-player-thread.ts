@@ -40,10 +40,13 @@ export function courseFocusQuarter(p:Input,f:CourseOpeningFocus):string|null{
 }
 export function courseFocusOpen(p:Input,f:CourseOpeningFocus):boolean{
  const t=f.courseTarget;if(!t)return false
+ const progress=courseSceneProgress(p.features.course,p.view.date,t,courseSceneContext(p))
+ if(progress?.invalidReason||progress?.historical)return false
+ if(progress?.command||progress?.wait)return true
+ if(t.kind==='studio')return p.features.course?.businesses.some(b=>b.id===t.businessId&&['preparing','operating'].includes(b.lifecycle))??false
+ if(t.kind==='course'&&p.features.course?.courses.some(c=>c.id===t.courseId&&['draft','building'].includes(c.status))&&p.features.course.businesses.some(b=>b.id===t.businessId&&b.lifecycle==='operating'))return true
  const job=focusJob(p,f);if(job)return ['planned','running'].includes(job.status)
  if(t.kind==='cohort')return p.features.course?.cohorts.some(co=>co.id===t.cohortId&&co.closedAt===null)??false
- if(t.kind==='studio')return p.features.course?.businesses.some(b=>b.id===t.businessId&&b.lifecycle==='preparing')??false
- if(t.kind==='course')return p.features.course?.courses.some(c=>c.id===t.courseId&&c.status==='draft')??false
  return false
 }
 export function courseFocusResultDate(p:Input,f:CourseOpeningFocus):string|null{

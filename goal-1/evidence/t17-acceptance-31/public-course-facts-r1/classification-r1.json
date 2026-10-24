@@ -1,0 +1,134 @@
+{
+  "at": "2026-10-24T15:57:49.617Z",
+  "originalTerminal": {
+    "at": "2026-10-24T15:54:25.810Z",
+    "wallMs": 3188,
+    "exitCode": 1,
+    "signal": null,
+    "error": null,
+    "sourceCount": 556,
+    "sourceR6Equal": true,
+    "sourceUnchanged": true,
+    "inputUnchanged": true,
+    "extraUnchanged": true,
+    "authorityUnchanged": true,
+    "factIdentity": {
+      "path": "goal-1/evidence/t17-acceptance-31/public-course-facts-r1/public-facts.json",
+      "bytes": 115435,
+      "sha256": "5354cfa8ad595227ca26bd9f9bae1659c9c6778213fd3756c70162c402296ecd",
+      "mode": 420
+    },
+    "allFactChecks": false,
+    "passed": false
+  },
+  "originalResult": {
+    "path": "goal-1/evidence/t17-acceptance-31/public-course-facts-r1/result.json",
+    "bytes": 544,
+    "sha256": "5804fdeec2ad406a44648a41956c383ab8ff5eb98613d14e12d938dd0e9ee68e",
+    "mode": 420
+  },
+  "originalFacts": {
+    "path": "goal-1/evidence/t17-acceptance-31/public-course-facts-r1/public-facts.json",
+    "bytes": 115435,
+    "sha256": "5354cfa8ad595227ca26bd9f9bae1659c9c6778213fd3756c70162c402296ecd",
+    "mode": 420
+  },
+  "readOnlyClassification": true,
+  "noSecondProjection": true,
+  "noScriptOrRawModification": true,
+  "readyPublicFacts": {
+    "expectedFactCountPer86": 22,
+    "both22ActualTrue": true,
+    "publicCourseAccountBudgetDateSame": true,
+    "normalCreation": {
+      "sameCreationIdentity": true,
+      "allPublicOriginNormal": true,
+      "allCreatePayloadNormal": true,
+      "creationIdentity": "7a63026ecff81aae4f1f208c60389f93c564081014dd0444642d0fcbebf8c76c",
+      "runIds": [
+        "normal-course-content_employee-453bb7c2"
+      ],
+      "meaning": "Original registered receipts identify the same normal CreateRun. This read-only fact pass does not replay or independently establish browser capture provenance."
+    },
+    "byteRelations": {
+      "candidateEqualsOriginalRetry": true,
+      "candidateEqualsFreshPhysical74": true,
+      "retryEqualsFreshPhysical74": true,
+      "oldSavedEqualsFreshPhysical73": true,
+      "funded73EqualsOldSaved73": true,
+      "freshPhysical73Differs74": true,
+      "r6ReentryExactlySame": true,
+      "mainPreferencesExactlySame": true
+    }
+  },
+  "extraRed": {
+    "key": "fullPublicFeaturesIdentical",
+    "actual": false,
+    "originalAllFactChecks": false,
+    "originalPassed": false,
+    "classification": "Additional unnormalized whole-feature equality assertion is inapplicable to distinct actual AdvanceTime command identities. Preserve original exit1/false. It is not a course/game-state defect and is not converted to a new passing script result.",
+    "source": {
+      "path": "src/application/workbench-projection.ts",
+      "bytes": 11136,
+      "sha256": "36a6092bee23b9509b26a7ff04535518cd0d5717aa4bbaacbf0e2be8c944b4a1",
+      "mode": 420,
+      "line": 52,
+      "exactLine": "  evidence:run.causes.filter(c=>c.visibility==='visible').slice(-20).map(c=>({id:c.id,date:c.date,text:c.visibleSummary,sourceId:c.sourceEventId})),"
+    },
+    "specificPublicFields": [
+      "features.workbench.evidence[].id",
+      "features.workbench.evidence[].sourceId"
+    ],
+    "publicSourceRecord": {
+      "main": {
+        "id": "cause:command-8f516952-c211-4f6d-96e9-74846a5447fd",
+        "commandId": "command-8f516952-c211-4f6d-96e9-74846a5447fd",
+        "date": "2023-01-15",
+        "domain": "time",
+        "sourceEventId": "command:command-8f516952-c211-4f6d-96e9-74846a5447fd",
+        "visibleSummary": "推进至2023-01-15",
+        "visibility": "visible"
+      },
+      "r6": {
+        "id": "cause:command-e5892fc5-0d4b-4896-aa6a-3c97243abedd",
+        "commandId": "command-e5892fc5-0d4b-4896-aa6a-3c97243abedd",
+        "date": "2023-01-15",
+        "domain": "time",
+        "sourceEventId": "command:command-e5892fc5-0d4b-4896-aa6a-3c97243abedd",
+        "visibleSummary": "推进至2023-01-15",
+        "visibility": "visible"
+      }
+    },
+    "explanation": "The official Workbench projection deliberately exposes the original visible cause id and sourceEventId. The final AdvanceTime cause is visible and in the last20 visible causes: its id/sourceId differ between the two actual command identities. Thus a whole-feature raw SHA equality is overbroad. Exact whole-feature field diff was not retained, and no second projection is performed to manufacture one."
+  },
+  "branch": {
+    "structuralDifferenceCount": 11,
+    "paths": [
+      "/checksum",
+      "/state/causes/588/commandId",
+      "/state/causes/588/id",
+      "/state/causes/588/sourceEventId",
+      "/state/causes/589/commandId",
+      "/state/causes/590/commandId",
+      "/state/causes/591/commandId",
+      "/state/causes/592/commandId",
+      "/state/causes/593/commandId",
+      "/state/receipts/85/causeIds/0",
+      "/state/receipts/85/commandId"
+    ],
+    "sameOriginal85ReceiptPrefix": true,
+    "eachPrefixEqualsActualSaved85": true,
+    "lastAdvanceReceiptsSamePayload": true,
+    "differentRaw": true,
+    "onlyLastCommandIdentityDerivedStringsAfterChecksumRemoval": true,
+    "normalizationMeaning": "Explanation of command-identity-only differences, not equality of original raw bytes; neither a replay nor a replacement for official full Create audit."
+  },
+  "limitations": {
+    "independentNative": false,
+    "humanPlaytest": false,
+    "completeCreateReplay": false,
+    "installedNodeModulesRecursivelyHashed": false,
+    "privateEnrollmentOrPaymentTablesRead": false,
+    "originalFailurePreserved": true
+  }
+}

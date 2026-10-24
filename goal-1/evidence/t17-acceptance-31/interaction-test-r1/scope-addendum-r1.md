@@ -1,0 +1,3 @@
+# Root新增授权第5case
+
+Root随后明确：ready但winding_down/paused/closed等不应落入提前teaching委派，且要求以原ready86真实WindDownBusiness或PauseBusiness造成已ready/non-success，再验next/Today/Life不隐式执行。选择原WindDownBusiness，因为原focused模型对Pause的ready可能仍actual；先原preview.allowed再原submit saved，不造投影。WindDown会实际结算维护等旧费用，所以以实际stop后账户/AP/date/raw为阅读基线，不声称免费或停业前后现金不变。仍默认5s，App/原测试不改，当前不跑测。

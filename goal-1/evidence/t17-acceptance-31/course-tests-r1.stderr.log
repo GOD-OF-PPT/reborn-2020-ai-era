@@ -1,0 +1,53 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/course-player-thread.test.ts > reuses an actual old global outline after closing its studio, without charging another outline for the new prepared business
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/course-player-thread.test.ts:114:1
+    112| },30000)
+    113|
+    114| it('reuses an actual old global outline after closing its studio, with…
+       | ^
+    115|  const h=await normal('reused-outline')
+    116|  try{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/ui/today-thread.test.ts > offers only UI directions from a normal empty day and retains the exact primary and game bytes
+AssertionError: expected [ 'work', 'life', 'video', …(2) ] to deeply equal [ 'work', 'life', 'video', 'market' ]
+
+- Expected
++ Received
+
+  [
+    "work",
+    "life",
+    "video",
++   "course",
+    "market",
+  ]
+
+ ❯ src/ui/today-thread.test.ts:31:43
+     29|  expect(view.ongoing).toEqual([])
+     30|  expect(todayThread(p,{runId:p.view.runId,accountId:'personal',kind:'l…
+     31|  expect(view.directions.map(row=>row.id)).toEqual(['work','life','vide…
+       |                                           ^
+     32|  for(const original of ['work','life','market'])expect(view.directions…
+     33|  expect(view.directions[2]).toMatchObject({id:'video',screen:'video'})
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/ui/today-thread.test.ts > keeps a real first salary active, then separates the quarter result from old history without renewing work
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/today-thread.test.ts:39:1
+     37| })
+     38|
+     39| it('keeps a real first salary active, then separates the quarter resul…
+       | ^
+     40|  const h=normal('work');h.send('WorkQuarter',{});let p=h.p()
+     41|  const period=p.view.operations!.employment[0]!,pin:OpeningFocus={runI…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+

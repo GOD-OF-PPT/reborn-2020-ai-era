@@ -1,0 +1,9 @@
+# Root修后定向只读确认
+
+原review.md的一项宽委托因果已静态闭合：CourseSceneChoice提前teaching现在仅audience/cohort，或ready课程的refresh/update域；其他ready分支仍由render保留准备结果/原记录，next不再被折成旧Teaching默认页。底部ready wrapper只提供openTeaching回调，新结果页仍须玩家明确点击“先看看谁会需要”才进入原受众选择，不自动推广或开班。
+
+原C2能力未由此删除：真实audience/cohort与refresh/update直接走原CourseTeachingChoice；正常ready课程仍有显选开班前条件路径，完整原册入口与原命令预览保持。暂停/关闭不会被静默恢复，旧责任仍留原记录；没有为修next额外限制原允许动作。
+
+纸件修缮与原事实相符：paused/rights/tool且课程公开resultRefs已有已完成job时保sample-ready痕迹；stopped/closed/non-success先走独立停止状态，当前资格不足不会被画成重新获批。本结论依公开progress在这些阶段只加入实际completed样课job引用的原合同。
+
+未运行任何测试或Native，也没有新gamecommand；Root当前Chrome失连，本追加只证明所读新源因果/可达性，不能预勾正常完整准备、实际暂停/收尾handler或原生通过。原R3报告/快照保留，不回写为最初无问题。

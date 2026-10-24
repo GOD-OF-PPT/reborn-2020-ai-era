@@ -205,7 +205,7 @@ function focusedCourseScene(course:NonNullable<CourseProjection>,date:string,tar
   if(b.lifecycle==='preparing'){
    const active=course.outlines.filter(o=>o.businessId===b.id&&o.job&&['planned','running'].includes(o.job.status))
    if(active.length===1){const o=active[0]!,p=originalJob('outline',o.job!,'这间工作室的大纲',[{kind:'outline',id:o.id,date:o.job!.startAt}]);return {...p,preparation:{phase:'waiting',businessId:b.id,jobId:o.job!.id}}}
-   return {...make('course-outline-needed','先把教学准备真正写出来。',globalOutline?'原全局大纲已经存在；本工作室的营业准备仍须按原记录核对。':'全局教学大纲与本工作室准备各有自己的原条件。','可安排原大纲任务¥100、1点、7日；已有合法准备路线继续可用，不会重复收取一笔强制准备费。','选择原执笔资源与日期'),preparation:{phase:'outline',businessId:b.id}}
+   return {...make('course-outline-needed','先把做过的事，写成能教给别人的大纲。',globalOutline?'以前写过的大纲还在，眼前这间教室还需要准备好。':'先整理自己真正做过的事，再准备好这间教室。','自己写这份大纲需要¥100、1点、7日；选好执笔人和开工日，完成后再决定是否启用教室。已有的合法准备也可在随身册核对、沿用，不必强制重写。','选择执笔人和开工日'),preparation:{phase:'outline',businessId:b.id}}
   }
   return make('course-define','这间教室已启用，再明确想教什么。','已有课程与案例仍保留；没有替你选择第一份草稿。','选择实际已付案例、形式、主题、受众和使用同意，再独立定义这门课；此刻没有招生。','构思新课或明确翻选已有课程')
  }

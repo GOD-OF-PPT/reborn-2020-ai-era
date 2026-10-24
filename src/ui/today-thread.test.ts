@@ -28,9 +28,10 @@ it('offers only UI directions from a normal empty day and retains the exact prim
  expect(view.primary).toMatchObject({classification:'entry',supported:true,thread:{focus:pin}})
  expect(view.ongoing).toEqual([])
  expect(todayThread(p,{runId:p.view.runId,accountId:'personal',kind:'life',selection:'rest',entityId:null})!.primary.classification).toBe('entry')
- expect(view.directions.map(row=>row.id)).toEqual(['work','life','video','market'])
- for(const original of ['work','life','market'])expect(view.directions.filter(row=>row.id===original)).toHaveLength(1)
+ expect(view.directions.map(row=>row.id)).toEqual(['work','life','video','course','market'])
+ for(const original of ['work','life','video','market'])expect(view.directions.filter(row=>row.id===original)).toHaveLength(1)
  expect(view.directions[2]).toMatchObject({id:'video',screen:'video'})
+ expect(view.directions[3]).toMatchObject({id:'course',screen:'course'})
  for(const direction of view.directions){expect(direction).not.toHaveProperty('command');expect(direction).not.toHaveProperty('payload');expect(direction).not.toHaveProperty('focus')}
  expect(view.wait?.date).toBe(p.features.workbench.progression.nextDate)
  expect(todayThread(p,pin)).toEqual(view);expect(h.raw()).toBe(before)

@@ -9,7 +9,8 @@ const scheduled=(job:ProductionJob)=>`${job.startAt}—${job.completeAt}，${job
 
 /** A saved public transition names its actual course object; a date alone proves no completion. */
 export function courseSceneResult(kind:string,previous:PlayingView|null,current:PlayingView):string|null{
- if(!previous||previous.runId!==current.runId||current.revision<=previous.revision||current.saveStatus!=='saved'||current.hasCandidate)return null
+ const receipt=current.receipts.at(-1)
+ if(!previous||previous.runId!==current.runId||current.revision!==previous.revision+1||current.saveStatus!=='saved'||current.hasCandidate||current.readOnly||current.busy||receipt?.kind!==kind||receipt.revisionAfter!==current.revision)return null
  const before=(previous.features as unknown as PlayFeatures).course,after=(current.features as unknown as PlayFeatures).course
  if(!before||!after)return null
  const teaching=courseTeachingSceneResult(kind,previous,current)

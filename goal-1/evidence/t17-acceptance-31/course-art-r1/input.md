@@ -1,0 +1,3 @@
+root31现已实际三文件/baseline547/HEADd77822a先于改源。接受准备状态纸件路线；请只own新CoursePreparationPaper.tsx与其CSS（命名避免现有CoursePreparation.tsx冲突）、OpeningObject.tsx必要typed prop与图形挂载。复用原kit图片+原生SVG，无新位图。状态entry/outline planned-running/completed-activate/definition/license planned-running-ready/sample planned-running-ready/stopped/history按公开model Root传入；纸件不是钱receipt，必须保textOnly/protection/focus完整。先actualguard写freshroot31/course-art-r1三文件/前像后实施。Root负责OpeningMoment/route/choice/model绑定，你不改这些/共享CSS其它文件、不控Chrome/兼容；新Paper meaningful SSR stage/protection即可，不全测。完后freeze接口/源码交Root实际画面修缮。
+
+并行期先实现paper/interface+meaningful单测后freeze；可先只静态自审，Root统一所有源冻结后跑定向联合检查，不在其它owner编辑期写‘547源初末同’。若本地单测自证，绑定实际owned/运行依赖并明限范围，保原时限；无需重复全type/build。

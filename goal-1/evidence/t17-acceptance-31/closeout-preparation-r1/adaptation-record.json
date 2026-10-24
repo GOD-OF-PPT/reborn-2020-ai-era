@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-24T15:32:20.830Z",
+  "original": {
+    "path": "goal-1/evidence/t17-acceptance-30/closeout-preparation-r1/closeout-final-r5.candidate.mjs",
+    "bytes": 19194,
+    "sha256": "12497de5aeaca0adf4342705cb794f0f79b862c37435541834b4d3ca588ad9ae",
+    "mode": 420,
+    "gitMode": "100644"
+  },
+  "candidate": {
+    "path": "goal-1/evidence/t17-acceptance-31/closeout-preparation-r1/closeout-final-r1.candidate.mjs",
+    "bytes": 18820,
+    "sha256": "67c931170338b5a9b4e7699427ec795affcb40e131a42018d8452f5082003a7f",
+    "mode": 420,
+    "gitMode": "100644"
+  },
+  "pureBrowser": {
+    "path": "goal-1/evidence/t17-acceptance-31/closeout-preparation-r1/browser-probes.mjs",
+    "bytes": 2429,
+    "sha256": "84492ea639f57017a515668e5e42d78a15b30908fbe37f7a7e507c1f9c662654",
+    "mode": 420,
+    "gitMode": "100644"
+  },
+  "edits": [
+    {
+      "before": "docs=['AGENTS.md','docs/36-mainline-and-art-reconstruction-plan.md']",
+      "after": "docs=['docs/36-mainline-and-art-reconstruction-plan.md']"
+    },
+    {
+      "before": "anchor=json(prep+'/master-readback.json').masters.find(r=>r.path===row.path)",
+      "after": "anchor=base.masterP3.find(r=>r.path===row.path)"
+    },
+    {
+      "before": "const expected19=json('goal-1/evidence/t17-acceptance-25/closeout-preparation-r1/root19-preparation-tree.json'),actual19=tree('goal-1/evidence/t17-acceptance-19');if(!eq(expected19,actual19))",
+      "after": "const expected19=base.root19,actual19=tree('goal-1/evidence/t17-acceptance-19');if(!eq(canonicalTree(expected19),canonicalTree(actual19)))"
+    },
+    {
+      "before": "if(base.seals.length!==114)throw Error('EXPECTED_114_OLD_MARKERS');",
+      "after": "const markerSets=oldMarkerSets();exact(markerSets.regular,base.seals.map(e=>e.path),'OLD_MARKER_EXACT_SET_CHANGED');exact(markerSets.symlinks,base.markerSymlinks.map(e=>e.path),'OLD_MARKER_SYMLINK_SET_CHANGED');const preparedLinks=json(prep+'/marker-symlinks-preparation.json').rows;for(const e of base.markerSymlinks){const st=fs.lstatSync(resolve(repo,e.path)),target=st.isSymbolicLink()?fs.readlinkSync(resolve(repo,e.path)):null,anchor=preparedLinks.find(a=>a.path===e.path);if(!st.isSymbolicLink()||target!==e.target||!anchor||target!==anchor.target||(st.mode&0o777)!==anchor.mode)throw Error('OLD_MARKER_SYMLINK_CHANGED:'+e.path);}"
+    },
+    {
+      "before": "oldMarkers:114,oldMarkersScope:'bytes/mode identities; full payload only lastSealed two'",
+      "after": "oldMarkers:base.seals.length,markerSymlinks:base.markerSymlinks.length,oldMarkersScope:'Exact ordinary marker set/bytes/mode and symbolic marker type/target literal; link filesystem mode since preparation only; full payload only lastSealed roots'"
+    }
+  ],
+  "mechanicalRootPostTaskSubstitutions": true,
+  "ownedMasterPrefixBytes": 1513,
+  "oldMasterPrefixBytes": 2090,
+  "docWhitelist": [
+    "docs/36-mainline-and-art-reconstruction-plan.md"
+  ],
+  "noModesExecuted": true
+}

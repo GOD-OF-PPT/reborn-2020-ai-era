@@ -1,0 +1,199 @@
+import {expect,it,vi} from 'vitest'
+import {isValidElement,type ComponentProps,type ReactElement} from 'react'
+import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
+import {createCampaignCodec} from '../application/campaign.ts'
+import {GameController} from '../application/game-controller.ts'
+import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
+import type {GamePanelProps,PlayFeatures} from './game-types.ts'
+import type {CourseSceneTarget} from './course-scene-progress.ts'
+import {createCourseSceneDraftMemory,emptyCourseSceneDraft} from './course-scene-draft.ts'
+import {createCourseTeachingDraftMemory} from './course-teaching-draft.ts'
+import {CourseSceneChoice,type CourseChoiceIntent} from './CourseSceneChoice.tsx'
+import {CourseTeachingChoice} from './CourseTeachingChoice.tsx'
+import {CourseEncounter} from './CourseEncounter.tsx'
+import {CourseThreadAction} from './CourseThreadAction.tsx'
+import {OpeningObject} from './OpeningObject.tsx'
+import {openingFocusFor,playerThread} from './player-thread.ts'
+import {Dialog} from './Dialog.tsx'
+import readySource from '../../goal-1/evidence/t17-acceptance-24/chrome-r5/course-physical-86.json?raw'
+
+// Each actual component gets its own hook scope, including the original teaching
+// render-prop component. This is handler evidence, not DOM/effect/Chrome evidence.
+const hooks=vi.hoisted(()=>({current:{values:[] as unknown[],index:0}}))
+vi.mock('react',async importOriginal=>{
+ const actual=await importOriginal<typeof import('react')>()
+ const state=<T,>(initial:T|(()=>T))=>{
+  const index=hooks.current.index++,values=hooks.current.values
+  if(!(index in values))values[index]=typeof initial==='function'?(initial as ()=>T)():initial
+  return [values[index] as T,(next:T|((old:T)=>T))=>{values[index]=typeof next==='function'?(next as (old:T)=>T)(values[index] as T):next}] as const
+ }
+ return {...actual,useState:state,useRef:<T,>(initial:T)=>state(()=>({current:initial}))[0],useId:()=> 'course-preparation-interaction',useEffect:()=>{}}
+})
+type HookScope={values:unknown[];index:number}
+function within<T>(scope:HookScope,render:()=>T):T{
+ const previous=hooks.current;hooks.current=scope;scope.index=0
+ try{return render()}finally{hooks.current=previous}
+}
+type Element=ReactElement<Record<string,unknown>>
+function elements(value:unknown):Element[]{
+ if(Array.isArray(value))return value.flatMap(elements)
+ return isValidElement<Record<string,unknown>>(value)?[value,...elements(value.props.children),...elements(value.props.footer)]:[]
+}
+function text(value:unknown):string{
+ if(typeof value==='string'||typeof value==='number')return String(value)
+ if(Array.isArray(value))return value.map(text).join('')
+ return isValidElement<Record<string,unknown>>(value)?text(value.props.children):''
+}
+function fire(element:Element|undefined,event:'onClick'|'onChange',value?:unknown){
+ const handler=element?.props[event]
+ if(!element||element.props.disabled||typeof handler!=='function')throw Error('ACTUAL_ENABLED_HANDLER_REQUIRED:'+event)
+ handler(value)
+}
+async function normalReady(name:string){
+ const codec=createCampaignCodec(),original=codec.import(readySource),factory=new IDBFactory(),locks=new MemoryWriterAccess(),storeName='u3c1-interaction-'+name,store=new IndexedDbRunStore({codec,factory,keyRange:IDBKeyRange,name:storeName})
+ expect(original.origin).toBe('normal');expect(original.revision).toBe(86)
+ await store.importSave(readySource,{mode:'create',actorId:'player',importId:name+'-original'})
+ let sequence=0
+ const controller=new GameController({codec,store,locks,id:()=>name+'-'+(++sequence)})
+ await controller.initialize();await controller.continueLife(original.runId)
+ const initial=controller.snapshot.view!,features=initial.features as unknown as PlayFeatures,course=features.course!.courses[0]!,business=features.course!.businesses.find(b=>b.id===course.businessId)!
+ expect(initial.date).toBe('2023-01-16');expect(course.status).toBe('ready');expect(features.course!.cohorts).toHaveLength(0)
+ const target:CourseSceneTarget={kind:'course',businessId:business.id,courseId:course.id,...(course.sampleJobId?{sampleJobId:course.sampleJobId}:{})},request=vi.fn<GamePanelProps['request']>(),memory=createCourseSceneDraftMemory(initial.runId),teachingMemory=createCourseTeachingDraftMemory(initial.runId)
+ const p=(owner=controller):GamePanelProps=>{const view=owner.snapshot.view!;return {controller:owner,view,features:view.features as unknown as PlayFeatures,accountId:business.accountId,request,courseDraftMemory:memory,courseTeachingDraftMemory:teachingMemory}}
+ const thread=(props=p())=>playerThread(props,openingFocusFor(props,'course',{courseTarget:target,accountId:business.accountId})!)
+ const send=async(kind:string,payload:unknown)=>{const command=controller.prepare(kind,payload);expect(controller.preview(command).allowed).toBe(true);expect((await controller.submit(command)).status).toBe('saved')}
+ return {codec,factory,locks,storeName,controller,initial,course,business,target,request,memory,p,thread,send,close:async()=>{await controller.close();await store.close()}}
+}
+type Ready=Awaited<ReturnType<typeof normalReady>>
+function choiceDriver(f:Ready,p:()=>GamePanelProps=f.p){
+ const rootScope:HookScope={values:[],index:0},teachingScope:HookScope={values:[],index:0},chosen=vi.fn(),inspect=vi.fn(),today=vi.fn(),life=vi.fn()
+ let target:CourseSceneTarget|null=f.target,tree:unknown,teachingProps:ComponentProps<typeof CourseTeachingChoice>|null=null,teachingMounted=false
+ const render=()=>{
+  const outer=within(rootScope,()=>CourseSceneChoice({p:p(),target,onTarget:next=>{chosen(next);target=next},onInspect:inspect,onToday:today,onLife:life,children:open=><><button type="button" onClick={()=>open()}>打开这份准备</button><button type="button" onClick={()=>open('next')}>显式选择下一步</button><button type="button" onClick={()=>open('define')}>显式继续定义草稿</button></>}))
+  if(isValidElement<ComponentProps<typeof CourseTeachingChoice>>(outer)&&outer.type===CourseTeachingChoice){teachingProps=outer.props;teachingMounted=true;tree=within(teachingScope,()=>CourseTeachingChoice(outer.props))}
+  else{if(teachingMounted){teachingScope.values=[];teachingMounted=false}teachingProps=null;tree=outer}
+ }
+ const click=(label:string)=>{fire(elements(tree).find(e=>e.type==='button'&&text(e).includes(label)),'onClick');render()}
+ const open=(intent?:CourseChoiceIntent)=>click(intent==='next'?'显式选择下一步':intent==='define'?'显式继续定义草稿':'打开这份准备')
+ const dialog=(className:string)=>elements(tree).find(e=>e.type===Dialog&&e.props.className===className)
+ const change=(label:string,value:string|boolean)=>{
+  const field=elements(tree).find(e=>e.type==='label'&&text(e).includes(label)),control=field&&elements(field).find(e=>e.type==='input'||e.type==='select')
+  fire(control,'onChange',{target:typeof value==='boolean'?{checked:value}:{value}});render()
+ }
+ render()
+ return {render,open,click,change,chosen,inspect,today,life,target:()=>target,all:()=>elements(tree),text:()=>text(tree),teaching:()=>teachingProps,
+  preparation:()=>dialog('opening-paper course-choice-paper'),teachingDialog:()=>dialog('opening-paper course-teaching-paper'),
+  closeTeaching(){const current=dialog('opening-paper course-teaching-paper');if(!current||typeof current.props.onClose!=='function')throw Error('ORIGINAL_TEACHING_DIALOG_REQUIRED');current.props.onClose();render()},
+  fieldValue(label:string){const field=elements(tree).find(e=>e.type==='label'&&text(e).includes(label));return field&&elements(field).find(e=>e.type==='input'||e.type==='select')?.props.value},
+ }
+}
+function encounterHandlers(props:ComponentProps<typeof CourseEncounter>){
+ const encounter=CourseEncounter(props)
+ if(!isValidElement<ComponentProps<typeof CourseThreadAction>>(encounter)||encounter.type!==CourseThreadAction)throw Error('ORIGINAL_COURSE_ACTION_REQUIRED')
+ const tree=CourseThreadAction(encounter.props),rows=elements(tree),main=rows.find(e=>e.type==='button'),paper=rows.find(e=>e.type===OpeningObject),section=rows.find(e=>e.type==='section')
+ if(!main||!paper||!section)throw Error('SHARED_COURSE_THOUGHT_AND_OBJECT_REQUIRED')
+ return {main,paper:paper.props as ComponentProps<typeof OpeningObject>,rows,section,click:()=>fire(main,'onClick')}
+}
+
+it('opens the real next choices after an actually ready sample and enters the original audience editor only by explicit choice',async()=>{
+ const f=await normalReady('ready-next')
+ try{
+  const raw=f.controller.exportSaved(),ui=choiceDriver(f)
+  expect(f.thread().stage).toBe('course-ready');ui.open()
+  expect(ui.preparation()?.props.title).toBe('这一份准备之后，怎样继续？');expect(ui.teachingDialog()).toBeUndefined()
+  expect(ui.text()).toContain(f.course.name);expect(ui.text()).toContain('尚未招生')
+  ui.click('先看看谁会需要这一堂课')
+  expect(ui.preparation()).toBeUndefined();expect(ui.teachingDialog()).toBeDefined();expect(ui.teaching()?.target).toEqual(f.target)
+  expect(f.request).not.toHaveBeenCalled();expect(ui.chosen).not.toHaveBeenCalled()
+  ui.closeTeaching();ui.open('next');ui.click('先不新增安排，回到今天')
+  expect(ui.today).toHaveBeenCalledTimes(1);ui.open();ui.click('把余下的日子留给生活');expect(ui.life).toHaveBeenCalledTimes(1)
+  expect(ui.target()).toEqual(f.target);expect(f.request).not.toHaveBeenCalled()
+  const course=f.p().features.course!
+  expect(course.audiences).toHaveLength(0);expect(course.cohorts).toHaveLength(0);expect(course.businesses.find(b=>b.id===f.business.id)!.metrics.incomeFen).toBe(0)
+  expect(f.controller.exportSaved()).toBe(raw)
+ }finally{await f.close()}
+})
+
+it('keeps the explicitly chosen next definition draft across closing, returning and opening its original book slot',async()=>{
+ const f=await normalReady('next-draft')
+ try{
+  const ui=choiceDriver(f),raw=f.controller.exportSaved(),ref=f.p().features.course!.cases.find(c=>c.kind==='first_order')!,studio:CourseSceneTarget={kind:'studio',businessId:f.business.id}
+  ui.open('next');ui.click('为这间教室构思另一堂课');expect(ui.target()).toEqual(studio);expect(ui.chosen).toHaveBeenCalledExactlyOnceWith(studio)
+  ui.change(ref.label,true);ui.click('带着这些经历，想清这堂课')
+  ui.change('这堂课的名字','另一个值得认真准备的图像教案');ui.change('用什么形式教','intro_recorded');ui.change('教哪种工具方法','image_workflows');ui.change('想回应谁的需要','local_merchants');ui.change('只使用有权使用的案例',true)
+  const scope={accountId:f.business.accountId,businessId:f.business.id,courseId:null,slot:'definition' as const},expected={...emptyCourseSceneDraft(),name:'另一个值得认真准备的图像教案',productId:'intro_recorded',topicId:'image_workflows',segment:'local_merchants',consent:true,cases:[{kind:'first_order' as const,id:ref.id}]}
+  expect(f.memory.read(f.initial.runId,scope)).toEqual(expected)
+  ui.click('先合上，保留草稿');expect(ui.preparation()).toBeUndefined();ui.open('define');ui.click('带着这些经历，想清这堂课')
+  expect(ui.fieldValue('这堂课的名字')).toBe(expected.name);expect(ui.fieldValue('用什么形式教')).toBe(expected.productId);expect(ui.fieldValue('想回应谁的需要')).toBe(expected.segment)
+  ui.click('翻看课程、资金与全部责任')
+  expect(ui.inspect).toHaveBeenCalledExactlyOnceWith(studio,'definition');expect(f.memory.read(f.initial.runId,scope)).toEqual(expected)
+  expect(f.request).not.toHaveBeenCalled();expect(f.p().features.course!.courses).toHaveLength(1);expect(f.controller.exportSaved()).toBe(raw)
+ }finally{await f.close()}
+})
+
+it('binds the actual ready thought and preparation object to the same result handler and rejects it after a real source change',async()=>{
+ const f=await normalReady('shared-binding')
+ try{
+  const p=f.p(),raw=f.controller.exportSaved(),choose=vi.fn(),result=vi.fn(),today=vi.fn(),ui=encounterHandlers({p:{...p,textOnly:true},thread:f.thread(p),date:null,waitLabel:'',onChoose:choose,onResult:result,onToday:today})
+  expect(ui.main.props.onClick).toBe(ui.paper.onActivate);expect(ui.paper.disabled).toBe(false);expect(ui.paper.kind).toBe('work');expect(ui.paper.coursePaper?.phase).toBe('sample-ready');expect(ui.paper.textOnly).toBe(true)
+  expect(ui.rows.filter(e=>e.type==='p').map(e=>text(e.props.children))).toContain(f.thread(p).object)
+  expect(ui.rows.some(e=>String(e.props.className).split(' ').includes('scene-decision-main')&&elements(e.props.children).includes(ui.main))).toBe(true)
+  ui.click();ui.paper.onActivate();expect(result).toHaveBeenCalledTimes(2);expect(choose).not.toHaveBeenCalled();expect(today).not.toHaveBeenCalled();expect(f.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(raw)
+  const ref=p.features.course!.cases.find(c=>c.kind==='first_order')!
+  await f.send('DefineCourse',{businessId:f.business.id,name:'明确另外留下的来源变化',productId:'intro_recorded',topicId:'image_workflows',edition:'foundation',segment:'local_merchants',cases:[{kind:'first_order',id:ref.id}],consent:true})
+  const committed=f.controller.exportSaved();expect(committed).not.toBe(raw);expect(f.controller.snapshot.view!.revision).toBe(p.view.revision+1)
+  ui.paper.onActivate();expect(result).toHaveBeenCalledTimes(2);expect(f.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(committed)
+ }finally{await f.close()}
+})
+
+it('keeps next choices readable for a real second-controller reader while disabling new business decisions',async()=>{
+ const f=await normalReady('reader'),readerStore=new IndexedDbRunStore({codec:f.codec,factory:f.factory,keyRange:IDBKeyRange,name:f.storeName}),reader=new GameController({codec:f.codec,store:readerStore,locks:f.locks,id:()=> 'course-preparation-reader'})
+ try{
+  await reader.initialize();await reader.continueLife(f.initial.runId);const p=()=>f.p(reader),raw=reader.exportSaved()
+  expect(p().view.readOnly).toBe(true)
+  const result=vi.fn(),paper=encounterHandlers({p:p(),thread:f.thread(p()),date:null,waitLabel:'',onChoose:vi.fn(),onResult:result,onToday:vi.fn()})
+  expect(paper.paper.protection).toBe('readonly');expect(paper.paper.disabled).toBe(false);paper.paper.onActivate();expect(result).toHaveBeenCalledTimes(1)
+  const ui=choiceDriver(f,p);ui.open()
+  const pause=ui.all().find(e=>e.type==='button'&&text(e).includes('核对暂停接新业务'))
+  expect(pause?.props.disabled).toBe(true);expect(pause?.props.onClick).toBeUndefined()
+  ui.click('先不新增安排，回到今天');expect(ui.today).toHaveBeenCalledTimes(1)
+  expect(f.request).not.toHaveBeenCalled();expect(reader.exportSaved()).toBe(raw);expect(f.controller.exportSaved()).toBe(raw)
+ }finally{await reader.close();await readerStore.close();await f.close()}
+})
+
+it('retains next, today and life after a real ready course winds down without implicitly starting another activity',async()=>{
+ const f=await normalReady('ready-wind-down')
+ try{
+  await f.send('WindDownBusiness',{businessId:f.business.id})
+  const p=f.p(),raw=f.controller.exportSaved(),thread=f.thread(p),accounts=p.view.accounts,budget=p.view.budget,date=p.view.date
+  expect(p.features.course!.courses.find(c=>c.id===f.course.id)!.status).toBe('ready');expect(p.features.course!.businesses.find(b=>b.id===f.business.id)!.lifecycle).toBe('winding_down')
+  expect(thread.outcome).toBe('non-success')
+  // WindDownBusiness may bill real maintenance; the reading baseline is the
+  // actual saved result above, never a fabricated or free stop projection.
+  const ui=choiceDriver(f);ui.open('next');expect(ui.preparation()?.props.title).toBe('这一份准备之后，怎样继续？');expect(ui.teachingDialog()).toBeUndefined()
+  ui.click('先不新增安排，回到今天');ui.open();expect(ui.preparation()).toBeDefined();ui.click('把余下的日子留给生活')
+  expect(ui.today).toHaveBeenCalledTimes(1);expect(ui.life).toHaveBeenCalledTimes(1);expect(ui.target()).toEqual(f.target);expect(f.request).not.toHaveBeenCalled()
+  expect(f.p().view.accounts).toEqual(accounts);expect(f.p().view.budget).toEqual(budget);expect(f.p().view.date).toBe(date)
+  expect(f.p().features.course!.cohorts).toHaveLength(0);expect(f.p().features.course!.businesses.find(b=>b.id===f.business.id)!.metrics.incomeFen).toBe(0);expect(f.controller.exportSaved()).toBe(raw)
+ }finally{await f.close()}
+})
+
+it('defaults to next for the same actually paused ready course and keeps its result, today and life choices read-only',async()=>{
+ const f=await normalReady('ready-pause')
+ try{
+  await f.send('PauseBusiness',{businessId:f.business.id})
+  const p=f.p(),raw=f.controller.exportSaved(),thread=f.thread(p),accounts=p.view.accounts,budget=p.view.budget,date=p.view.date
+  expect(p.features.course!.courses.find(c=>c.id===f.course.id)!.status).toBe('ready');expect(p.features.course!.businesses.find(b=>b.id===f.business.id)!.lifecycle).toBe('paused')
+  expect(thread).toMatchObject({stage:'course-paused',outcome:'actual'})
+  const choose=vi.fn(),result=vi.fn(),paper=encounterHandlers({p,thread,date:null,waitLabel:'',onChoose:choose,onResult:result,onToday:vi.fn()})
+  expect(paper.main.props.onClick).toBe(paper.paper.onActivate);paper.click();paper.paper.onActivate()
+  expect(result).toHaveBeenCalledTimes(2);expect(choose).not.toHaveBeenCalled()
+  const ui=choiceDriver(f);ui.open()
+  expect(ui.preparation()?.props.title).toBe('这一份准备之后，怎样继续？');expect(ui.teachingDialog()).toBeUndefined();expect(ui.target()).toEqual(f.target)
+  ui.click('先不新增安排，回到今天');ui.open();expect(ui.preparation()).toBeDefined();ui.click('把余下的日子留给生活')
+  expect(ui.today).toHaveBeenCalledTimes(1);expect(ui.life).toHaveBeenCalledTimes(1);expect(f.request).not.toHaveBeenCalled()
+  expect(f.p().view.accounts).toEqual(accounts);expect(f.p().view.budget).toEqual(budget);expect(f.p().view.date).toBe(date)
+  expect(f.p().features.course!.cohorts).toHaveLength(0);expect(f.p().features.course!.businesses.find(b=>b.id===f.business.id)!.metrics.incomeFen).toBe(0);expect(f.controller.exportSaved()).toBe(raw)
+ }finally{await f.close()}
+})

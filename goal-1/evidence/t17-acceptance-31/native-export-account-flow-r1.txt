@@ -1,0 +1,1 @@
+async(h,account,label,origin,source)=>{guard31(h.directory);await h.key(account,undefined,true);await h.key('导出已保存存档','账本与存档',true);await h.key('只读翻阅完整原文','本机存档与备份',true);let result=await h.readRaw(label,origin,source);await h.key('关闭对话框','完整存档原文 · 只读',true);await h.key('关闭对话框','本机存档与备份',true);await h.key('关闭对话框','账本与存档',true);await h.key('住处',undefined,true);return result}

@@ -1,0 +1,54 @@
+{
+  "at": "2026-10-24T14:28:29.299Z",
+  "old": {
+    "path": "goal-1/evidence/t17-acceptance-30/audit-preparation-r1/run-audit.mjs",
+    "bytes": 11791,
+    "sha256": "1013fd8bee10403d64249413ee576649ace5806646f67b865ef9d66084c5d7c6",
+    "mode": 420
+  },
+  "new": {
+    "path": "goal-1/evidence/t17-acceptance-31/audit-preparation-r1/run-audit.mjs",
+    "bytes": 12846,
+    "sha256": "40c43a612b12ea7066d94b481baa0988de1229440862ce93b744ffc931c9509c",
+    "mode": 420
+  },
+  "rootSubstitution": "Root30 -> Root31 only in this new wrapper; old sealed wrapper unchanged",
+  "specificEdits": [
+    {
+      "before": "    const category=categories.has(sourceRole)?sourceRole:'unknown'\n    if(categories.has(row.artifactKind)&&category!=='unknown'&&row.artifactKind!==category)throw Error('CONFLICTING_SOURCE_ROLE_DECLARATION:'+key)",
+      "after": "    if(!sourceRole||!categories.has(sourceRole))throw Error('U3C1_EXPLICIT_SOURCE_ROLE_PREFIX_REQUIRED:'+key)\n    const category=sourceRole\n    if(row.origin!==category)throw Error('U3C1_LOWERCASE_ORIGIN_MUST_MATCH_EXPLICIT_SOURCE_ROLE:'+key)\n    if(row.artifactKind!==undefined&&row.artifactKind!==category)throw Error('CONFLICTING_SOURCE_ROLE_DECLARATION:'+key)"
+    },
+    {
+      "before": "  roleLimit:'Only exact explicit SAVED_UI/PHYSICAL_READONLY/IMPORT_BUFFER/UNSAVED_CANDIDATE source prefixes declare roles; origin is capture provenance only and never a role. Other source prose remains unknown. Final native-log role cross-check is independent; candidate/import/readonly artifacts are audited, not additional saved outcomes.',",
+      "after": "  roleLimit:'U3-C1 roles come only from exact explicit SAVED_UI:/PHYSICAL_READONLY:/IMPORT_BUFFER:/UNSAVED_CANDIDATE: source prefixes. origin must match the corresponding lowercase role as a consistency check and is never used to infer it. Missing/conflicting declarations reject before replay. Native-log capture-role cross-check remains independent; candidate/import/readonly artifacts are audited, not additional saved outcomes.',"
+    },
+    {
+      "before": " beforeSources=sources();beforeInputs=inputs()",
+      "after": " beforeSources=sources();if(beforeSources.length!==126)throw Error('U3C1_ORIGINAL_126_OFFICIAL_SOURCES_REQUIRED:'+beforeSources.length);beforeInputs=inputs()"
+    },
+    {
+      "before": " const baselineDiff=beforeSources.filter(entry=>baselineMap.has(entry.path)&&baselineMap.get(entry.path).sha256!==entry.sha256)",
+      "after": " const baselineDiff=beforeSources.filter(entry=>baselineMap.has(entry.path)&&['bytes','sha256','mode'].some(key=>baselineMap.get(entry.path)[key]!==entry[key]))\n const p3Before=baseline.p3.map(expected=>{const actual=read(expected.path).identity;if(['bytes','sha256','mode'].some(key=>expected[key]!==actual[key]))throw Error('U3C1_ORIGINAL_P3_BASELINE_CHANGED:'+expected.path);return actual});if(p3Before.length!==26)throw Error('U3C1_ORIGINAL_26_P3_REQUIRED');write('p3-before.json',{rows:p3Before,comparedTo:'Root31 opening working-tree baseline, including original uncommitted P3; not bare HEAD'})"
+    },
+    {
+      "before": " const afterSources=sources(),afterInputs=inputs(),afterReferences=extraReferences.map(entry=>read(entry.path).identity)",
+      "after": " const afterSources=sources(),afterInputs=inputs(),afterReferences=extraReferences.map(entry=>read(entry.path).identity),p3After=p3Before.map(entry=>read(entry.path).identity)\n const p3Equal=JSON.stringify(p3Before)===JSON.stringify(p3After);write('p3-after.json',{rows:p3After,p3Equal})"
+    },
+    {
+      "before": "&&sourceEqual&&inputEqual&&extraReferencesEqual&&officialIdentityEqual",
+      "after": "&&sourceEqual&&inputEqual&&extraReferencesEqual&&p3Equal&&officialIdentityEqual"
+    },
+    {
+      "before": "passed,sourceEqual,inputEqual,extraReferencesEqual,officialIdentityEqual,officialSourceCount:",
+      "after": "passed,sourceEqual,inputEqual,extraReferencesEqual,p3Equal,officialIdentityEqual,officialSourceCount:"
+    },
+    {
+      "before": "scope:'Original complete Create replay; no browser, compatibility, game UI mutation, source changes or Git writes.'",
+      "after": "scope:'U3-C1 original complete Create replay after Root declares captures done; no browser, compatibility, game UI mutation, source changes or Git writes.'"
+    }
+  ],
+  "noExecution": true,
+  "sourceRolePolicy": "source prefix determines; lowercase origin cross-check only",
+  "originalOfficialCount": 126,
+  "p3OpeningWorkingTreeCount": 26
+}

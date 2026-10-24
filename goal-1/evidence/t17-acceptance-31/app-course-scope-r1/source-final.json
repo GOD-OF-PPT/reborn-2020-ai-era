@@ -1,0 +1,64 @@
+{
+  "at": "2026-10-24T13:28:42.117Z",
+  "scope": "Owned App + new narrow tests frozen for Root joint validation; other owners are editing concurrently so no whole547 equality claim.",
+  "owned": [
+    {
+      "path": "src/ui/App.tsx",
+      "bytes": 54598,
+      "sha256": "cf74e13a3fff3639fa535577af733e69be11b89b8804e98a1ca37c3eed17c643",
+      "mode": 420
+    },
+    {
+      "path": "src/ui/App.course-workspace.test.tsx",
+      "bytes": 20272,
+      "sha256": "d6ce9d739fd60164d40ee465dc93706c10b474aff56356768e587680a7596189",
+      "mode": 420
+    }
+  ],
+  "normalInput": {
+    "path": "goal-1/evidence/t17-acceptance-24/chrome-r4/course-physical-78.json",
+    "bytes": 857141,
+    "sha256": "7ecc2f4bdb7d7f63b84e2693fd033ee0267e5ea9bb0afef218ff088b3856bacb",
+    "mode": 420
+  },
+  "normalInputUnchanged": true,
+  "relatedReadOnlyTests": [
+    {
+      "path": "src/ui/App.video-workspace.test.tsx",
+      "bytes": 12895,
+      "sha256": "f2552fb5a5c9b1433795840e04d7c2a4f1fdf0c76d445d3303f0e10fc0dead5b",
+      "mode": 420
+    },
+    {
+      "path": "src/ui/App.preparation-save.test.tsx",
+      "bytes": 9501,
+      "sha256": "6994fc9124ad6cacc76f22fbf97b6bea4722da97b4fa186f3eca493ff85af9d6",
+      "mode": 420
+    }
+  ],
+  "relatedTestsUnchanged": true,
+  "testsDeclaredCases": 10,
+  "testTimeout": "Existing Vitest default5000ms; no per-case or config timeout override",
+  "checksActuallyRun": [],
+  "reason": "Root explicitly requested code+tests first then freeze for one joint directed check after every owner freezes. No independent Vitest/type/build/static check was started during parallel edits.",
+  "redEvidence": {
+    "executed": false,
+    "originalApp": "goal-1/evidence/t17-acceptance-31/app-course-scope-r1/App.tsx.before.raw",
+    "newTestOriginalAbsence": "goal-1/evidence/t17-acceptance-31/app-course-scope-r1/App.course-workspace.test.tsx.before.json",
+    "limit": "Source counterexample is confirmed by code review; no invented red output. Root owns actual frozen red/green validation and preservation."
+  },
+  "productionScope": [
+    "Canonical complete CourseSceneTarget plus preparation/teaching slot and recordId, undefined legacy distinct from null entry",
+    "Current workspace guard for course target/account save-follow, common receipt/close and Licence retention",
+    "Actual saved auxiliary licence may follow its own new target; retained feedback binds expected committed scope, no active-ref prewrite; old recordId cleared only on actual target change",
+    "Original video/relay/seasonFocus logic and core/commands remain intact"
+  ],
+  "remaining": [
+    "Root actual original5-second directed new10 and related App preparation/video/relay checks",
+    "Root type/build and real Chrome/atomic/byte audit",
+    "Other course UI/art owner integration"
+  ],
+  "noProductionEditsOutsideOwnedByThisChild": true,
+  "noOldTestsCoreMasterScriptsSealedEditsByThisChild": true,
+  "sourceWriterFrozen": true
+}

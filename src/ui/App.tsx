@@ -50,7 +50,7 @@ const LifePanel=lazy(()=>import('./LifePanel.tsx'))
 const RoutinesPanel=lazy(()=>import('./RoutinesPanel.tsx'))
 const noSubscribe=()=>()=>{}
 type Tab=Screen
-export type PreparationWorkspaceContext={readonly runId:string;readonly screen:Screen;readonly accountId:string;readonly open:boolean;readonly epoch:number;readonly relayTargetKey?:string;readonly videoTargetKey?:string}
+export type PreparationWorkspaceContext={readonly runId:string;readonly screen:Screen;readonly accountId:string;readonly open:boolean;readonly epoch:number;readonly relayTargetKey?:string;readonly videoTargetKey?:string;readonly courseTargetKey?:string}
 type Modal={kind:'command';intent:ConfirmIntent;details:ReactNode;workspace:PreparationWorkspaceContext}|{kind:'storage';text:string;source:string}|{kind:'settings'}|{kind:'exit'}|{kind:'reload'}
 type LocalSeasonFocus={runId:string;quarter:string;focus:OpeningFocus|null;notice:string|null;requiresChoice:boolean}
 // Access can fail even before getItem. The preference boundary catches both reads and writes.
@@ -71,11 +71,18 @@ function videoWorkspaceTargetKey(target:SceneTarget['videoTarget']):string{
 function sameVideoWorkspace(origin:PreparationWorkspaceContext,active:PreparationWorkspaceContext):boolean{
  return origin.runId===active.runId&&origin.screen===active.screen&&origin.accountId===active.accountId&&origin.open===active.open&&origin.epoch===active.epoch&&origin.videoTargetKey===active.videoTargetKey
 }
+function courseWorkspaceTargetKey(target:SceneTarget['courseTarget'],draftSlot:SceneTarget['courseDraftSlot'],teachingSlot:SceneTarget['courseTeachingSlot'],recordId:string|null):string{
+ const object=target===undefined?'legacy':target===null?'entry':target.kind==='studio'?[target.kind,target.businessId]:target.kind==='outline'?[target.kind,target.businessId,target.outlineId]:target.kind==='license'?[target.kind,target.businessId,target.licenseId]:target.kind==='course'?[target.kind,target.businessId,target.courseId,target.sampleJobId??null]:target.kind==='audience'?[target.kind,target.businessId,target.courseId,target.audienceId]:[target.kind,target.businessId,target.courseId,target.cohortId,target.jobId??null]
+ return JSON.stringify([object,draftSlot??null,teachingSlot??null,recordId])
+}
+function sameCourseWorkspace(origin:PreparationWorkspaceContext,active:PreparationWorkspaceContext):boolean{
+ return origin.runId===active.runId&&origin.screen===active.screen&&origin.accountId===active.accountId&&origin.open===active.open&&origin.epoch===active.epoch&&origin.courseTargetKey===active.courseTargetKey
+}
 /** Retaining a draft never submits the next step or treats a planned licence as completed. */
 export function keepPreparationWorkspace(status:string,kind:string,previous:PlayingView|null,current:PlayingView,origin:PreparationWorkspaceContext,active:PreparationWorkspaceContext){
  return status==='saved'&&kind==='LicenseCourseMaterials'&&origin.screen==='course'&&origin.open&&active.open
   &&origin.runId===current.runId&&active.runId===origin.runId&&active.screen===origin.screen
-  &&active.accountId===origin.accountId&&active.epoch===origin.epoch
+  &&sameCourseWorkspace(origin,active)
   &&current.accounts.some(account=>account.accountId===origin.accountId)&&!current.readOnly
   &&committedEcho(previous,current)!==null
 }
@@ -116,25 +123,33 @@ export default function App({controller=null,startupError=null,diagnostics=null,
  const lastWorkspace=activeWorkspace.current
  const relayTargetKey=tab==='relay'?relayWorkspaceTargetKey(relayTarget):undefined
  const videoTargetKey=tab==='video'?videoWorkspaceTargetKey(videoTarget):undefined
- if(lastWorkspace.runId!==(view?.runId??'')||lastWorkspace.screen!==tab||lastWorkspace.accountId!==accountId||lastWorkspace.open!==workspaceOpen||lastWorkspace.relayTargetKey!==relayTargetKey||lastWorkspace.videoTargetKey!==videoTargetKey)activeWorkspace.current={runId:view?.runId??'',screen:tab,accountId,open:workspaceOpen,epoch:lastWorkspace.epoch+1,...(relayTargetKey===undefined?{}:{relayTargetKey}),...(videoTargetKey===undefined?{}:{videoTargetKey})}
+ const courseTargetKey=tab==='course'?courseWorkspaceTargetKey(courseTarget,courseDraftSlot,courseTeachingSlot,courseRecordId):undefined
+ if(lastWorkspace.runId!==(view?.runId??'')||lastWorkspace.screen!==tab||lastWorkspace.accountId!==accountId||lastWorkspace.open!==workspaceOpen||lastWorkspace.relayTargetKey!==relayTargetKey||lastWorkspace.videoTargetKey!==videoTargetKey||lastWorkspace.courseTargetKey!==courseTargetKey)activeWorkspace.current={runId:view?.runId??'',screen:tab,accountId,open:workspaceOpen,epoch:lastWorkspace.epoch+1,...(relayTargetKey===undefined?{}:{relayTargetKey}),...(videoTargetKey===undefined?{}:{videoTargetKey}),...(courseTargetKey===undefined?{}:{courseTargetKey})}
  const onSubmission=(status:string,runId:string,screen:Screen,label:string,kind:string,workspace:PreparationWorkspaceContext,payload:unknown)=>{
   const current=controller?.snapshot.view
   if(!current||current.runId!==runId)return
   // A successful original command may finish after the player has moved to another sheet.
   const relayWorkspaceCurrent=screen!=='relay'||sameRelayWorkspace(workspace,activeWorkspace.current)
   const videoWorkspaceCurrent=screen!=='video'||sameVideoWorkspace(workspace,activeWorkspace.current)
+  const courseWorkspaceCurrent=screen!=='course'||sameCourseWorkspace(workspace,activeWorkspace.current)
+  let savedCourseWorkspaceKey:string|undefined
   if(status==='saved'&&view&&view.runId===runId){
    if(screen==='video'&&activeTab.current===screen&&videoWorkspaceCurrent){
     const body=typeof payload==='object'&&payload!==null?payload as Record<string,unknown>:{}
     const savedVideo=videoFocusFromSaved({view,features:view.features as unknown as PlayFeatures},{view:current,features:current.features as unknown as PlayFeatures},kind,body)
     if(savedVideo?.videoTarget){setVideoTarget(savedVideo.videoTarget);setAccountId(savedVideo.accountId)}
    }
-   if(screen==='course'&&activeTab.current===screen){
+   if(screen==='course'&&activeTab.current===screen&&courseWorkspaceCurrent){
     const body=typeof payload==='object'&&payload!==null?payload as Record<string,unknown>:{}
     const priorCourse=courseTarget!==undefined?openingFocusFor({view,features:view.features as unknown as PlayFeatures},'course',{courseTarget,accountId}):null
     const savedCourse=courseFocusFromSaved({view,features:view.features as unknown as PlayFeatures},{view:current,features:current.features as unknown as PlayFeatures},kind,body,priorCourse?.kind==='course'?priorCourse:null)
     const retainLegacyPreparation=courseTarget===undefined&&keepPreparationWorkspace(status,kind,view,current,workspace,activeWorkspace.current)
-    if(savedCourse?.kind==='course'&&!retainLegacyPreparation){setCourseTarget(savedCourse.courseTarget);setAccountId(savedCourse.accountId);if(kind!=='LicenseCourseMaterials')setCourseDraftSlot(undefined);setCourseTeachingSlot(undefined)}
+    if(savedCourse?.kind==='course'&&!retainLegacyPreparation){
+     const targetChanged=courseWorkspaceTargetKey(courseTarget,undefined,undefined,null)!==courseWorkspaceTargetKey(savedCourse.courseTarget,undefined,undefined,null)
+     const nextRecordId=targetChanged?null:courseRecordId,nextDraftSlot=kind==='LicenseCourseMaterials'?courseDraftSlot:undefined
+     setCourseTarget(savedCourse.courseTarget);setAccountId(savedCourse.accountId);if(targetChanged)setCourseRecordId(null);if(kind!=='LicenseCourseMaterials')setCourseDraftSlot(undefined);setCourseTeachingSlot(undefined)
+     savedCourseWorkspaceKey=courseWorkspaceTargetKey(savedCourse.courseTarget,nextDraftSlot,undefined,nextRecordId)
+    }
    }
    if(screen==='relay'&&activeTab.current===screen&&relayWorkspaceCurrent){
     const body=typeof payload==='object'&&payload!==null?payload as Record<string,unknown>:{}
@@ -151,14 +166,18 @@ export default function App({controller=null,startupError=null,diagnostics=null,
    failedScene.current=null
   }
   if(status==='unsaved'||status==='conflict')failedScene.current={runId,screen,label,kind,payload,workspace}
-  if(activeTab.current!==screen||!relayWorkspaceCurrent||!videoWorkspaceCurrent)return
+  if(activeTab.current!==screen||!relayWorkspaceCurrent||!videoWorkspaceCurrent||!courseWorkspaceCurrent)return
   if(status==='saved'){
    const active=activeWorkspace.current,frame=committedEcho(view,current)
    if(!frame)return
    failedScene.current=null
    const keep=keepPreparationWorkspace(status,kind,view,current,workspace,active)
+   // A real saved auxiliary task may follow its own newly created licence.
+   // Bind its retained feedback to that committed transition, without changing
+   // the live reading ref or granting a later viewing context this exception.
+   const keptWorkspace=keep?savedCourseWorkspaceKey===undefined?workspace:{...workspace,courseTargetKey:savedCourseWorkspaceKey,epoch:active.epoch+(active.courseTargetKey===savedCourseWorkspaceKey?0:1)}:null
    setWorkspaceOpen(open=>keep&&open)
-   setSceneReceipt({runId,screen,revision:current.revision,kind,text:savedSceneResult(kind,label,view,current),frame,workspace:keep?workspace:null})
+   setSceneReceipt({runId,screen,revision:current.revision,kind,text:savedSceneResult(kind,label,view,current),frame,workspace:keptWorkspace})
   }else if(status==='unsaved'||status==='conflict'){setWorkspaceOpen(false);setSceneReceipt(null)}
  }
  const heading=useRef<HTMLHeadingElement>(null),unsavedHeading=useRef<HTMLElement>(null)
@@ -299,7 +318,7 @@ export default function App({controller=null,startupError=null,diagnostics=null,
  const stateError=state.error==='SAVE_ABORTED'&&!view?.hasCandidate?'这一步没有保存，已有原档保持完整。请回到原页重新核对并确认；当前没有未保存候选。':state.error?reasonText(state.error):null
  const error=localError??stateError??startupError
  const accountName=(id:string)=>{if(id==='personal')return '个人账户';const b=view?.operations?.businesses.find(b=>b.accountId===id&&b.company);return b?'企业账户 · '+(features?.workbench.routes.find(r=>r.id===b.route)?.name??id.slice(-6))+(b.lifecycle==='closed'?'（已关闭）':''):id}
- const preparationReceipt=workspaceOpen&&view?.saveStatus==='saved'&&!view.hasCandidate&&!view.readOnly&&sceneReceipt?.kind==='LicenseCourseMaterials'&&sceneReceipt.workspace&&sceneReceipt.runId===view.runId&&sceneReceipt.screen===tab&&sceneReceipt.revision===view.revision&&sceneReceipt.workspace.accountId===accountId&&sceneReceipt.workspace.epoch===activeWorkspace.current.epoch?sceneReceipt:null
+ const preparationReceipt=workspaceOpen&&view?.saveStatus==='saved'&&!view.hasCandidate&&!view.readOnly&&sceneReceipt?.kind==='LicenseCourseMaterials'&&sceneReceipt.workspace&&sceneReceipt.runId===view.runId&&sceneReceipt.screen===tab&&sceneReceipt.revision===view.revision&&sameCourseWorkspace(sceneReceipt.workspace,activeWorkspace.current)?sceneReceipt:null
  const readOnlyTitle=view?.readOnlyReason==='ANOTHER_WRITER'?'另一标签占有写权限，本页只读':view?.readOnlyReason==='LOCK_API_UNAVAILABLE'?'当前浏览器缺少可靠写锁，本页只读':'写锁申请失败，本页只读'
  const payloadStart=modal?.kind==='command'&&typeof modal.intent.command.payload==='object'&&modal.intent.command.payload!==null&&'startAt' in modal.intent.command.payload&&typeof modal.intent.command.payload.startAt==='string'?modal.intent.command.payload.startAt:null
  const confirm=modal?.kind==='command'&&controller?(pendingSubmission?.commandId===modal.intent.command.commandId?pendingSubmission.preview:controller.preview(modal.intent.command)):null

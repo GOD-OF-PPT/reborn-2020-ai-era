@@ -1,0 +1,1 @@
+本目录Root拥有课程连续模型/动作共用/房间路线Today绑定/取消与ready结果去向和原册案例无静默丢失。App与OpeningObject/Paper由各owner独立，Root不覆盖。保C2 audience/cohort及ready旧更新原入口，仅样课完成后增加显选next，不执行获客或班期；确认取消保原页，实际保存/候选仍原effect关闭。新sharedAction与原Clock/CommandButton共用，准备道具不画receipt，既有等待/资格/原账保持。

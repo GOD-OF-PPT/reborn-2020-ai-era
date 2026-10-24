@@ -1,0 +1,1 @@
+最后R4纯显示补明确对象（现场R3跨季课名只在AX无可见字）：CourseEncounter thought新增p显示真实thread.object，CSS只材质色font-family不改字号/缩字/裁切。23相关case全绿，新增可见p课名断言原默认5s精确case也绿（4仅选择排除保原cases），build-final-r4实际0/556初末同。5368/5370已核仅自有R3进程后TERM，正常服务R4（exec54975/47600）。请新http-final-r4复用同样双端口94GET+19图+2ID33DEV检查绑定R4，保旧R3不改。此后源码冻结不再美术扩展，Native正同normal82继续样课/终态。
