@@ -1,0 +1,70 @@
+{
+  "at": "2026-10-24T02:43:49.367Z",
+  "results": [
+    {
+      "name": "collector",
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_course_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-27/guard-collector-probe"
+      ],
+      "startedAt": "2026-10-24T02:43:45.440Z",
+      "finishedAt": "2026-10-24T02:43:47.360Z",
+      "exit": 1,
+      "signal": null,
+      "rejectedBeforeOutput": true,
+      "targetAbsent": true
+    },
+    {
+      "name": "auditor",
+      "argv": [
+        "rtk",
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-27",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-27/guard-auditor-probe"
+      ],
+      "startedAt": "2026-10-24T02:43:47.361Z",
+      "finishedAt": "2026-10-24T02:43:49.032Z",
+      "exit": 1,
+      "signal": null,
+      "rejectedBeforeOutput": true,
+      "targetAbsent": true
+    }
+  ],
+  "sealedRootBefore": {
+    "root": "goal-1/evidence/t17-acceptance-27",
+    "ordinaryFiles": 850,
+    "directories": 87,
+    "directoryModesRecorded": true,
+    "marker": {
+      "path": "goal-1/evidence/t17-acceptance-27/sealed-evidence.json",
+      "bytes": 206302,
+      "sha256": "059dbd8608a6b40669969080cda8bcd999c4df82ac85a3c6bafe9c69be765b9d",
+      "mode": 420,
+      "gitMode": "100644"
+    }
+  },
+  "sealedRootAfter": {
+    "root": "goal-1/evidence/t17-acceptance-27",
+    "ordinaryFiles": 850,
+    "directories": 87,
+    "directoryModesRecorded": true,
+    "marker": {
+      "path": "goal-1/evidence/t17-acceptance-27/sealed-evidence.json",
+      "bytes": 206302,
+      "sha256": "059dbd8608a6b40669969080cda8bcd999c4df82ac85a3c6bafe9c69be765b9d",
+      "mode": 420,
+      "gitMode": "100644"
+    }
+  },
+  "exactReadbackEqual": true
+}
