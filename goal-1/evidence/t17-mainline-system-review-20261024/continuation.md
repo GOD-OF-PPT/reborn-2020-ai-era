@@ -1,0 +1,5 @@
+# 后续收口注意
+
+本轮文档提交仅包含本轮方案增量。AGENTS及三master的原R1/P3增量保持在工作树，不混入本轮index；主方案docs36此前无未提交差异，本轮全增量可单独提交。master采用Git HEAD原文＋本轮master-appendix.txt入index，工作文件保持原before＋本轮appendix。
+
+root27/closeout-preparation-r2中的候选绑定旧HEAD与当时master前缀，已freeze，不能在本轮文档提交之后直接执行。重新收R1时，须以新HEAD和当前树重新计算自己的增量/保存验证/精确暂存，保留本轮已提交方案及原P3。当前没有候选，原atomic91与normal118继续保留，不重载或触发命令。
