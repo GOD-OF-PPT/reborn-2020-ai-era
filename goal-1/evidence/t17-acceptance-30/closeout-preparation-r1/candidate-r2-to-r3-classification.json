@@ -1,0 +1,58 @@
+{
+  "at": "2026-10-24T11:48:39.944Z",
+  "original": {
+    "path": "goal-1/evidence/t17-acceptance-30/closeout-preparation-r1/closeout-final-r2.candidate.mjs",
+    "bytes": 18808,
+    "sha256": "349bd9663a93754b689c6baa70ab6b632782afc21f008fe1e5e0972f4bec8c54",
+    "mode": 420,
+    "gitMode": "100644"
+  },
+  "final": {
+    "path": "goal-1/evidence/t17-acceptance-30/closeout-preparation-r1/closeout-final-r3.candidate.mjs",
+    "bytes": 18735,
+    "sha256": "e88b236362512e5e7afb556dc4093d7cb5d11e98959a5d53d193498d73e3ec94",
+    "mode": 420,
+    "gitMode": "100644"
+  },
+  "changes": [
+    {
+      "before": "const uiPaths=fs.readFileSync(resolve(repo,prep+'/u3-ui-paths.txt'),'utf8').trim().split('\\n');\n",
+      "after": ""
+    },
+    {
+      "before": "exact(changed.map(r=>r.path),uiPaths,'UI_WHITELIST_CHANGED');if(current.length!==547)throw Error('EXPECTED_CURRENT_547_SOURCE_ENTRIES');",
+      "after": "const currentUI=changed.map(r=>r.path).sort();"
+    },
+    {
+      "before": "return {count:current.length,baselineCount:base.sourceAndAssets.length,uiPaths:[...uiPaths],files:current,binding:binding??null};",
+      "after": "return {count:current.length,baselineCount:base.sourceAndAssets.length,uiPaths:currentUI,files:current,binding:binding??null};"
+    },
+    {
+      "before": "const suffix=current.subarray(original.length),owned=Buffer.from(own.ownSuffix)",
+      "after": "if(ident(row.path).mode!==row.mode)throw Error('MASTER_WORKING_MODE_CHANGED');const suffix=current.subarray(original.length),owned=Buffer.from(own.ownSuffix)"
+    },
+    {
+      "before": "sourceCount:scope.count,ui:uiPaths.length,indexWrites:false",
+      "after": "sourceCount:scope.count,ui:scope.uiPaths.length,indexWrites:false"
+    },
+    {
+      "before": "const pre=json(post+'/pre-feature-binding.json');sourceScope(pre.binding.path);const seal=verifySeal(root)",
+      "after": "const pre=json(post+'/pre-feature-binding.json'),scope=sourceScope(pre.binding.path);const seal=verifySeal(root)"
+    },
+    {
+      "before": "paths=[...uiPaths,...changedDocs",
+      "after": "paths=[...scope.uiPaths,...changedDocs"
+    },
+    {
+      "before": "parent:base.head,seal,uiPaths,docs:changedDocs",
+      "after": "parent:base.head,seal,uiPaths:scope.uiPaths,docs:changedDocs"
+    },
+    {
+      "before": "return {...result,ui:uiPaths.length,mastersIncluded:0};",
+      "after": "return {...result,ui:scope.uiPaths.length,mastersIncluded:0};"
+    }
+  ],
+  "reason": "Root Native found bounded exit-confirmation defect; final UI delta may add one existing test path. Scope must be dynamically recomputed from original baseline and bound to Root final build source manifest, rather than 38/547. Preserve current master mode as well as bytes.",
+  "oldR2Preserved": true,
+  "noCandidateModeExecuted": true
+}

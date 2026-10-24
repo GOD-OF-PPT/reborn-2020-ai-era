@@ -1,0 +1,181 @@
+--- /dev/null
++++ b/src/ui/VideoContinuityPaper.tsx
+@@ -0,0 +1,95 @@
++import videoMakingKit from '../../assets/ui-redesign/cinematic/props/video-making-kit-v1.png'
++import './video-continuity.css'
++
++export type VideoPaperPhase='entry'|'planned'|'making'|'review'|'delivery'|'feedback'|'revision'|'settlement'|'result'|'non-success'|'history'
++export interface VideoPaperState{phase:VideoPaperPhase}
++
++/** A persistent original kit plus committed paper shapes; words and actions belong to the caller. */
++export function VideoContinuityPaper({art}:{art:VideoPaperState}){
++ return <span className="video-continuity-art" data-video-phase={art.phase} aria-hidden="true">
++  <span className="video-kit-contact video-phone-contact"/>
++  <span className="video-kit-contact video-book-contact"/>
++  <img className="video-continuity-kit" src={videoMakingKit} alt="" width={1254} height={1254} decoding="async"/>
++  <svg className="video-continuity-layers" viewBox="0 0 1254 1254" fill="none" aria-hidden="true" focusable="false">
++   {art.phase==='entry'?<g data-material="open-request-paper">
++    <path className="video-state-under" d="m809 634 302 81-54 207-302-81z"/>
++    <path className="video-state-sheet" d="m829 604 287 92-67 207-287-92z"/>
++    <path className="video-state-ink" d="m850 665 202 65m-215-22 168 54m-181-11 202 65"/>
++    <path className="video-state-fold" d="m1065 679 51 17-12 40z"/>
++   </g>:null}
++   {art.phase==='planned'?<g data-material="reserved-production-paper">
++    <path className="video-state-under" d="m671 751 440 112-23 90-440-112z"/>
++    <path className="video-state-sheet" d="m678 735 438 119-20 75-438-119z"/>
++    <path className="video-state-dashed" d="m693 755 400 109m-409-72 400 109"/>
++    <path className="video-state-clip" d="m790 768 14-62c5-24 36-15 31 8l-14 62"/>
++    <path className="video-state-tie" d="m956 810 25-90m-53 185 24-84"/>
++   </g>:null}
++   {art.phase==='making'?<g data-material="open-working-page">
++    <path className="video-state-sheet" d="m664 517 339 104-74 236-339-104z"/>
++    <path className="video-state-pencil" d="m692 588 233 72m-245-35 194 60m-206-23 233 72"/>
++    <path className="video-state-film" d="m641 812 296 75-21 81-296-75z"/>
++    <path className="video-state-film-ink" d="m668 836 235 60m-240-37 235 60m-198-61-13 52m70-37-13 52m70-37-13 52m70-37-13 52"/>
++    <path className="video-state-pencil-tool" d="m1064 630-49 246-16-4 49-246 12-18z"/>
++   </g>:null}
++   {art.phase==='review'?<g data-material="version-inspection">
++    <path className="video-state-sheet" d="m720 535 312 101-77 234-312-101z"/>
++    <path className="video-state-frame" d="m758 590 217 70-36 111-217-70z"/>
++    <path className="video-state-ink" d="m731 752 191 61m-201-30 133 42"/>
++    <circle className="video-state-lens" cx="960" cy="801" r="78"/>
++    <circle className="video-state-rim" cx="960" cy="801" r="89"/>
++    <path className="video-state-lens-handle" d="m1017 869 89 105"/>
++   </g>:null}
++   {art.phase==='delivery'?<g data-material="ready-to-send-version">
++    <path className="video-state-under" d="m827 574 306 101-85 254-306-101z"/>
++    <path className="video-state-sheet" d="m846 549 298 105-82 242-298-105z"/>
++    <path className="video-state-film" d="m870 619 209 74-38 112-209-74z"/>
++    <path className="video-state-film-ink" d="m885 649 166 59m-176-28 166 59"/>
++    <path className="video-state-tie" d="m799 802 294 100m-155-160-54 156"/>
++    <path className="video-state-sheet" d="m1052 844 102 34-22 63-102-34z"/>
++   </g>:null}
++   {art.phase==='feedback'?<g data-material="sent-version-and-reply-slot">
++    <path className="video-state-envelope" d="m798 632 345 107-64 207-345-107z"/>
++    <path className="video-state-envelope-line" d="m798 632 123 159 222-52m-409 100 145-65m200 172-84-142"/>
++    <path className="video-state-sheet" d="m670 882 136 35-21 81-136-35z"/>
++    <path className="video-state-dashed" d="m688 915 88 23"/>
++   </g>:null}
++   {art.phase==='revision'?<g data-material="returned-version-and-change-fold">
++    <path className="video-state-under" d="m710 579 325 106-76 231-325-106z"/>
++    <path className="video-state-sheet" d="m740 559 310 107-72 211-310-107z"/>
++    <path className="video-state-ink" d="m765 622 220 76m-233-39 178 61m-191-24 220 76"/>
++    <path className="video-state-response" d="m1016 728 129 43-72 220-44-54-63 17z"/>
++    <path className="video-state-response-line" d="m1035 762 77 26m-87 7 62 21"/>
++    <path className="video-state-pencil-tool" d="m690 792 319 121-6 17-319-121-24-18z"/>
++   </g>:null}
++   {art.phase==='settlement'?<g data-material="accepted-version-awaiting-payment">
++    <path className="video-state-sheet" d="m747 652 260 82-47 152-260-82z"/>
++    <path className="video-state-double-rule" d="m772 698 194 61m-198-47 194 61"/>
++    <path className="video-state-pending-slip" d="m1048 652 105 32-91 296-105-32"/>
++    <path className="video-state-dashed" d="m1048 652 105 32m-111 35 78 24m-93 24 78 24m-93 24 78 24"/>
++   </g>:null}
++   {art.phase==='result'?<g data-material="kept-work-and-result-paper">
++    <path className="video-state-under" d="m729 572 308 102-80 242-308-102z"/>
++    <path className="video-state-kept" d="m752 554 302 106-80 228-302-106z"/>
++    <path className="video-state-film" d="m787 620 204 72-37 105-204-72z"/>
++    <path className="video-state-film-ink" d="m803 647 160 56m-170-26 160 56"/>
++    <path className="video-state-result-paper" d="m1051 733 116 36-81 254-15-20-19 9-15-20-19 9-15-20-19 9-15-20-19 9z"/>
++    <path className="video-state-ink" d="m1064 778 77 24m-90 16 77 24m-90 16 51 16"/>
++    <path className="video-state-stamp" d="m1027 910 44 14-15 44-44-14z"/>
++   </g>:null}
++   {art.phase==='non-success'?<g data-material="stowed-work-and-retained-record">
++    <path className="video-state-muted" d="m726 649 374 117-56 178-374-117z"/>
++    <path className="video-state-fold" d="m726 649 139 130 235-13"/>
++    <path className="video-state-retained-tie" d="m688 774 374 117m-167-187-54 177"/>
++    <path className="video-state-sheet" d="m1025 897 99 30-31 96-99-30z"/>
++    <path className="video-state-ink" d="m1035 927 66 20m-75 7 50 15"/>
++   </g>:null}
++   {art.phase==='history'?<g data-material="bound-history-page">
++    <path className="video-state-muted" d="m672 556 413 127-84 270-413-127z"/>
++    <path className="video-state-sheet" d="m680 533 220 64-125 102-179 127z"/>
++    <path className="video-state-envelope-line" d="m900 597-125 102-179 127"/>
++    <path className="video-state-binding" d="m696 601 26 8m-46 41 26 8m-46 41 26 8m-46 41 26 8"/>
++    <path className="video-state-under" d="m1022 824 99 28-19 68-99-28z"/>
++   </g>:null}
++  </svg>
++ </span>
++}
+--- /dev/null
++++ b/src/ui/video-continuity.css
+@@ -0,0 +1,36 @@
++/* The original upright phone and angled notebook remain one intact authored image. */
++.video-continuity-art[data-video-phase]{position:relative;isolation:isolate;display:block;width:100%;height:160px;pointer-events:none}
++.video-continuity-art[data-video-phase] .video-continuity-kit,
++.video-continuity-art[data-video-phase] .video-continuity-layers{position:absolute;inset:auto 0 -42px;width:100%;height:280px;object-fit:contain;transform:none;pointer-events:none}
++.video-continuity-art[data-video-phase] .video-continuity-kit{z-index:1;filter:none}
++.video-continuity-art[data-video-phase] .video-continuity-layers{z-index:2;overflow:visible;filter:drop-shadow(1px 2px 1px #332e2455)}
++.video-continuity-art[data-video-phase] .video-kit-contact{position:absolute;z-index:0;height:10%;border-radius:50%;background:radial-gradient(ellipse,#14231e9c 0%,#10231c4d 49%,transparent 73%);filter:blur(2px)}
++.video-continuity-art[data-video-phase] .video-phone-contact{left:5%;width:39%;bottom:20%;transform:rotate(7deg)}
++.video-continuity-art[data-video-phase] .video-book-contact{left:41%;right:3%;bottom:1%;transform:rotate(8deg)}
++.video-continuity-art[data-video-phase] .video-state-sheet{fill:#f0e3c5;stroke:#b8a179;stroke-width:4}
++.video-continuity-art[data-video-phase] .video-state-under{fill:#d9c8a1;stroke:#a89068;stroke-width:4}
++.video-continuity-art[data-video-phase] .video-state-fold{fill:#cbb896;stroke:#a28c67;stroke-width:4}
++.video-continuity-art[data-video-phase] .video-state-ink{stroke:#918b6c;stroke-width:5;stroke-linecap:round}
++.video-continuity-art[data-video-phase] .video-state-pencil{stroke:#7f896b;stroke-width:5;stroke-linecap:round}
++.video-continuity-art[data-video-phase] .video-state-dashed{stroke:#96835b;stroke-width:4;stroke-dasharray:12 12}
++.video-continuity-art[data-video-phase] .video-state-clip{stroke:#a17e43;stroke-width:10;stroke-linecap:round}
++.video-continuity-art[data-video-phase] .video-state-tie{stroke:#b49658;stroke-width:7}
++.video-continuity-art[data-video-phase] .video-state-film{fill:#65755b;stroke:#405440;stroke-width:4}
++.video-continuity-art[data-video-phase] .video-state-film-ink{stroke:#d5d2b5;stroke-width:4}
++.video-continuity-art[data-video-phase] .video-state-pencil-tool{fill:#b7a16c;stroke:#796c49;stroke-width:4}
++.video-continuity-art[data-video-phase] .video-state-frame{stroke:#8b906d;stroke-width:6}
++.video-continuity-art[data-video-phase] .video-state-lens{fill:#9eafa540;stroke:#d8d4b3;stroke-width:5}
++.video-continuity-art[data-video-phase] .video-state-rim{stroke:#998253;stroke-width:13}
++.video-continuity-art[data-video-phase] .video-state-lens-handle{stroke:#5b6c51;stroke-width:28;stroke-linecap:round}
++.video-continuity-art[data-video-phase] .video-state-envelope{fill:#cbb891;stroke:#a18c66;stroke-width:4}
++.video-continuity-art[data-video-phase] .video-state-envelope-line{stroke:#9f8b66;stroke-width:5}
++.video-continuity-art[data-video-phase] .video-state-response{fill:#c9ad72;stroke:#aa7b50;stroke-width:6}
++.video-continuity-art[data-video-phase] .video-state-response-line{stroke:#886b4b;stroke-width:5}
++.video-continuity-art[data-video-phase] .video-state-double-rule{stroke:#9b976d;stroke-width:6}
++.video-continuity-art[data-video-phase] .video-state-pending-slip{fill:#e4d8b9;stroke:#a38f69;stroke-width:4;stroke-dasharray:13 10}
++.video-continuity-art[data-video-phase] .video-state-kept{fill:#e7dab9;stroke:#b09c76;stroke-width:4}
++.video-continuity-art[data-video-phase] .video-state-result-paper{fill:#f3e8cc;stroke:#b8a17a;stroke-width:4}
++.video-continuity-art[data-video-phase] .video-state-stamp{stroke:#a57157;stroke-width:7}
++.video-continuity-art[data-video-phase] .video-state-muted{fill:#c5bba0;stroke:#9b9073;stroke-width:4}
++.video-continuity-art[data-video-phase] .video-state-retained-tie{stroke:#8c8061;stroke-width:7}
++.video-continuity-art[data-video-phase] .video-state-binding{stroke:#8e846c;stroke-width:8;stroke-linecap:round}
+--- /dev/null
++++ b/src/ui/VideoContinuityPaper.test.tsx
+@@ -0,0 +1,41 @@
++import {expect,it} from 'vitest'
++import {renderToStaticMarkup} from 'react-dom/server'
++import {VideoContinuityPaper,type VideoPaperPhase} from './VideoContinuityPaper.tsx'
++
++const phases:readonly VideoPaperPhase[]=['entry','planned','making','review','delivery','feedback','revision','settlement','result','non-success','history']
++const render=(phase:VideoPaperPhase)=>renderToStaticMarkup(<VideoContinuityPaper art={{phase}}/>)
++// Native vector contents only; no window dimensions or measured layout are involved.
++const shapes=(html:string)=>(html.match(/<(?:path|circle|ellipse|rect|polygon)\b[^>]*>/g)??[]).map(s=>s.replace(/ class="[^"]*"/g,'')).join('')
++
++it('retains the original kit and keeps every layer decorative without a fabricated caption or command',()=>{
++ for(const phase of phases){
++  const html=render(phase),root=VideoContinuityPaper({art:{phase}})
++  expect(root.props['aria-hidden']).toBe('true')
++  expect(html).toContain('video-making-kit-v1.png')
++  expect(html).toContain('width="1254" height="1254"')
++  expect(html).not.toMatch(/<(?:text|foreignObject|button|a|script)\b/)
++  expect(html).not.toMatch(/¥|￥|利润|到账|客户说|20\d{2}-\d{2}-\d{2}/)
++ }
++})
++
++it('uses eleven different paper compositions rather than changing only an attribute or badge',()=>{
++ expect(new Set(phases.map(phase=>shapes(render(phase)))).size).toBe(phases.length)
++})
++
++it('separates inspection, the version ready to send and waiting for an actual reply',()=>{
++ const review=render('review'),delivery=render('delivery'),feedback=render('feedback')
++ expect(review).toContain('data-material="version-inspection"')
++ expect(delivery).toContain('data-material="ready-to-send-version"')
++ expect(feedback).toContain('data-material="sent-version-and-reply-slot"')
++ for(const html of [review,delivery,feedback])expect(html).not.toContain('video-state-result-paper')
++})
++
++it('keeps pending settlement, a recorded result, non-success and historical reading visibly separate',()=>{
++ const waiting=render('settlement'),result=render('result'),failed=render('non-success'),history=render('history')
++ expect(waiting).toContain('video-state-pending-slip')
++ expect(waiting).not.toContain('video-state-result-paper')
++ expect(result).toContain('video-state-result-paper')
++ expect(failed).toContain('data-material="stowed-work-and-retained-record"')
++ expect(history).toContain('data-material="bound-history-page"')
++ expect(failed+history).not.toContain('video-state-result-paper')
++})

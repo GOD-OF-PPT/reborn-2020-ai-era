@@ -1,0 +1,140 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/video-player-thread.test.ts > does not invent an affiliate observation after an actually qualified F02 publication is unlisted the same day
+AssertionError: expected { title: '有人看见了，仍要等订单真正留下。', …(8) } to match object { stage: 'video-published', …(2) }
+(11 matching properties omitted from actual)
+
+- Expected
++ Received
+
+@@ -1,8 +1,8 @@
+  {
+-   "outcome": "actual",
+-   "stage": "video-published",
++   "outcome": "pending",
++   "stage": "video-affiliate-window",
+    "target": {
+      "channelId": "vid:4b6700b30e88378797f3248b50ab06a2",
+      "section": "publications",
+      "workId": "vid:02de5bea8fee572b47b126d61ab1352e",
+    },
+
+ ❯ src/ui/video-player-thread.test.ts:157:23
+    155|  const raw=h.f.codec.export(h.run),publicBefore=JSON.stringify(video),…
+    156|  // Soft assertions preserve every independent symptom in the expected…
+    157|  expect.soft(focused).toMatchObject({stage:'video-published',outcome:'…
+       |                       ^
+    158|  expect.soft(focused.wait).toBeUndefined()
+    159|  expect.soft(legacy?.title??'').not.toContain('等订单')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  src/ui/video-player-thread.test.ts > does not invent an affiliate observation after an actually qualified F02 publication is unlisted the same day
+AssertionError: expected { date: '2020-02-26', …(1) } to be undefined
+
+- Expected:
+undefined
+
++ Received:
+{
+  "date": "2020-02-26",
+  "label": "等这份原发布的留存与退款反馈",
+}
+
+ ❯ src/ui/video-player-thread.test.ts:158:28
+    156|  // Soft assertions preserve every independent symptom in the expected…
+    157|  expect.soft(focused).toMatchObject({stage:'video-published',outcome:'…
+    158|  expect.soft(focused.wait).toBeUndefined()
+       |                            ^
+    159|  expect.soft(legacy?.title??'').not.toContain('等订单')
+    160|  expect.soft(legacy?.choice.line??'').not.toContain('观察窗口')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  src/ui/video-player-thread.test.ts > does not invent an affiliate observation after an actually qualified F02 publication is unlisted the same day
+AssertionError: expected '有人看见了，仍要等订单留下。' not to contain '等订单'
+
+Expected: "等订单"
+Received: "有人看见了，仍要等订单留下。"
+
+ ❯ src/ui/video-player-thread.test.ts:159:37
+    157|  expect.soft(focused).toMatchObject({stage:'video-published',outcome:'…
+    158|  expect.soft(focused.wait).toBeUndefined()
+    159|  expect.soft(legacy?.title??'').not.toContain('等订单')
+       |                                     ^
+    160|  expect.soft(legacy?.choice.line??'').not.toContain('观察窗口')
+    161|  expect.soft(videoFocusOpen(current,h.focus)).toBe(false)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  src/ui/video-player-thread.test.ts > does not invent an affiliate observation after an actually qualified F02 publication is unlisted the same day
+AssertionError: expected '2020-02-26观察窗口结束，佣金只按实际留存订单确认；商品成交额不等…' not to contain '观察窗口'
+
+Expected: "观察窗口"
+Received: "2020-02-26观察窗口结束，佣金只按实际留存订单确认；商品成交额不等于佣金。"
+
+ ❯ src/ui/video-player-thread.test.ts:160:43
+    158|  expect.soft(focused.wait).toBeUndefined()
+    159|  expect.soft(legacy?.title??'').not.toContain('等订单')
+    160|  expect.soft(legacy?.choice.line??'').not.toContain('观察窗口')
+       |                                           ^
+    161|  expect.soft(videoFocusOpen(current,h.focus)).toBe(false)
+    162|  const feedback=videoSceneResult('AdvanceTime',previous,current.view)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  src/ui/video-player-thread.test.ts > does not invent an affiliate observation after an actually qualified F02 publication is unlisted the same day
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ src/ui/video-player-thread.test.ts:161:47
+    159|  expect.soft(legacy?.title??'').not.toContain('等订单')
+    160|  expect.soft(legacy?.choice.line??'').not.toContain('观察窗口')
+    161|  expect.soft(videoFocusOpen(current,h.focus)).toBe(false)
+       |                                               ^
+    162|  const feedback=videoSceneResult('AdvanceTime',previous,current.view)
+    163|  expect.soft(feedback).not.toBeNull()
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  src/ui/video-player-thread.test.ts > does not invent an affiliate observation after an actually qualified F02 publication is unlisted the same day
+AssertionError: expected '「平台回款原记录」 · 作品3 / 第1版于2020-02-19留下实际统…' not to contain '原订单观察仍需等到'
+
+Expected: "原订单观察仍需等到"
+Received: "「平台回款原记录」 · 作品3 / 第1版于2020-02-19留下实际统计：播放0、合格询价0；这些不是现金，原订单观察仍需等到2020-02-26。"
+
+ ❯ src/ui/video-player-thread.test.ts:165:28
+    163|  expect.soft(feedback).not.toBeNull()
+    164|  expect.soft(feedback).toContain('播放0')
+    165|  expect.soft(feedback).not.toContain('原订单观察仍需等到')
+       |                            ^
+    166|  expect.soft(feedback).not.toContain('原订单观察止于')
+    167|  expect(JSON.stringify(video)).toBe(publicBefore);expect(h.f.codec.exp…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+ FAIL  src/ui/video-scene-result.test.ts > does not invent an order observation or future commission for an unqualified normal affiliate publication
+AssertionError: expected '「留给受众的这一份手工样片」 · 作品1 / 第1版于2020-01-16…' not to match /订单观察|观察窗口|退货观察/
+
+- Expected:
+/订单观察|观察窗口|退货观察/
+
++ Received:
+"「留给受众的这一份手工样片」 · 作品1 / 第1版于2020-01-16留下实际统计：播放6280、合格询价10；这些不是现金，原订单观察仍需等到2020-01-23。"
+
+ ❯ src/ui/video-scene-result.test.ts:176:20
+    174|   expect(text).toContain('合格询价'+measured.qualifiedInquiries)
+    175|   expect(text).toContain('不是现金')
+    176|   expect(text).not.toMatch(/订单观察|观察窗口|退货观察/)
+       |                    ^
+    177|   expect(text).not.toMatch(/(?:等待|等到|预计|未来|将会|即将)[^。；]*佣金|佣金[^。；]*(?:到…
+    178|   expect(h.controller.exportSaved()).toBe(raw)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯
+

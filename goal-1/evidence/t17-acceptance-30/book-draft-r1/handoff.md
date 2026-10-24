@@ -1,0 +1,11 @@
+# 原册同稿交回；4文件停止写入
+
+实际新normal/handler3项+原纯memory4项在book-draft-green-r3均通过，exit0，wall14627ms/Vitest11.65s，540当时绑定源初末同、extra同。没有运行全局type/build、浏览器、兼容或性能。Root将原video-target3项放统一affected，不重复单跑。
+
+当前VideoPanel用原memory key与严格canonical target，共享creation/making字段；原work各自返工/谈判与发布草稿隔离。显式调整原作品按钮只选择原目标，不发命令。可读/显选与命令写权分离；复用shared-action检查当前快照，陈旧source、candidate、conflict不改旧槽；readonly可准备UI草稿，原CommandButton仍拒写。原完整团队/许可/客户/发布/财务/退出操作保留。已有blank/过期日期/消失资源不补默认或换本人；no-memory保原默认合法路径。纯video-scene-draft不依赖React，hook独立。
+
+红档分别为：red-r1的1个默认名逻辑红+1个原5s超时；red-r2精确第1项仍原5s超时；red-r3三项逻辑红（素材original取代licensed、账号默认名、manual取代blank）。green-r1和green-r2仍各2个默认5s超时，原纯Map4与创建case通过；这些是重叠轮次，不相加。最终对仅新测试将真实前史移标准beforeEach、默认hook10s/body5s均未改，实际行为断言完整保留。红-r3与green-r1的原测试全文精确前像、green-r2 before-fixture全文均已用记录源SHA反向重建核同，proof JSON与raw.txt并列；原失败日志/各次source索引仍原样。
+
+正常前史均每case新Create，固定seed/背景/profile及全部原命令；不从晚档删条件、不加钱/AP/资格。作品case为Create→2原OpenVideoChannel→2原StartVideoWork，经原evaluateCommand/官方codec再controller.importNew；候选case为Create→OpenVideoChannel→AdvanceTimeJan3，同法导入后真实controller的OpenVideoChannel head.put abort→原retry。创建case自己controller.newLife并经真实按钮request/原submit保存。前两份完整命令日志在red-r3 stdout，最终相同输入沿测试源；不把engine前史称新Controller UI保存链。Node fake-indexeddb+MemoryWriterAccess只读reader是真实Session门槛，但不是Chrome独立fresh物理验收，后者由Root另做。
+
+最终identity见source-final.json，均mode0644：VideoPanel.tsx 32858B/176c8a2ebae229f465bf8be646a2aa114a26b99f2c6335aa17a52ebb6bfa64cd；video-scene-draft.ts 1682B/150cbbc1ec68d05394dab8cf68220c4168b580ef97df944b00ea29b4484656bf；use-video-scene-draft.ts 1084B/3907b018bc2ec536ae8f91c8d77b1f147809d80dfc53f5d5c7f1676deb3b23d9；VideoPanel.draft.test.tsx 16684B/7d8bc4f2ba48f47ff6da7f7ff3adb390ab54db2dd53db25be0ea5acc73709127。Choice、App、Opening、game-types、核心、P3、原测试、主master均未由本子项修改；其余owner源有并行变化，不用旧6源前像宣称整个root30未变。

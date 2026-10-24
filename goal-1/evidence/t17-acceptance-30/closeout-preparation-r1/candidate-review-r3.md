@@ -1,0 +1,7 @@
+# 最终候选静态复核
+
+确定红点已保留：r1.prepare误guard证据根必拒；r2虽修父链，却把38/547准备快照当最终门槛，在Root本次退出确认必要新增UI差集后会拒合法收口。两者均未执行，未影响真实源码/索引。r3改动态baseline差集且严格绑定Root最终源manifest，补当前master mode相等，旧版本不覆盖。
+
+无新增确定红点的边界：旧root29仅参考，旧root25仅读pure tree/ident/Git blob helper；候选所有执行常量为root30/独立U3 post。未建post前先guard未封root30核共同祖先，mkdir新post后再次guard；所有证据文件wx。feature不含master；record以原HEAD主文件+baseline后U3完整suffix（own2090唯一且之后需实际完成增量），原唯一2304B/14LF插入和master工作树保留，intended不得含原P3插入。两轮NUL精确路径、逐blob SHA/Gitmode、只允许预设正式文档，其他status须归既有P3/root19；post封存后只输出不回写。
+
+执行仍未发生：Node语法0不验证Git实际stage、commit、封存拒写或Native。Root必须等当前Native/原子候选/完整Create/最终docs与所有writer停后，以最终构建manifest启动prepare。当前可变UI身份不强称无漂移；本文不把old绿/图/候选当原生或整个goal验收。

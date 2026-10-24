@@ -1,0 +1,52 @@
+--- a/src/ui/video-scene-result.test.ts
++++ b/src/ui/video-scene-result.test.ts
+@@ -59,6 +59,7 @@
+  fresh=undefined;ready=undefined;contract=undefined
+  if(task.name==='names a truly saved channel and original planned work without manufacturing production, payment or another source')fresh=await mounted('opening')
+  if(task.name==='separates actual production, current-version review, publication and its later real statistics')ready=await prepareReady()
++ if(task.name==='does not invent an order observation or future commission for an unqualified normal affiliate publication')ready=await prepareReady()
+  if(task.name==='replays the original normal commission and reports protected prepayment, acceptance and actual remainder with its original fee')contract=await prepareContract()
+ })
+ 
+@@ -139,3 +140,41 @@
+   expect(h.controller.exportSaved()).toBe(originalPaid)
+  }finally{await h.close()}
+ })
++
++
++it('does not invent an order observation or future commission for an unqualified normal affiliate publication',async()=>{
++ if(!ready)throw Error('ORIGINAL_READY_FIXTURE_REQUIRED')
++ const h=ready
++ try{
++  const initial=h.controller.snapshot.view!,initialFeatures=initial.features as unknown as PlayFeatures,channel=initialFeatures.video!.channels[0]!,initialRaw=h.controller.exportSaved()
++  expect(initial.origin).toBe('normal')
++  expect(channel.eligiblePrograms.some(program=>program.program==='affiliate')).toBe(false)
++  expect(initialFeatures.video!.applications).toHaveLength(0)
++  expect((await h.controller.submit(h.controller.prepare('ReviewVideoOutput',{workId:h.workId,disclosure:'manual'}))).status).toBe('saved')
++  const reviewed=h.controller.snapshot.view!,reviewedRaw=h.controller.exportSaved()
++  expect(reviewedRaw).not.toBe(initialRaw)
++  videoSceneResult('ReviewVideoOutput',initial,reviewed)
++  expect(h.controller.exportSaved()).toBe(reviewedRaw)
++  expect((await h.controller.submit(h.controller.prepare('PublishVideo',{workId:h.workId,monetization:'affiliate',label:false}))).status).toBe('saved')
++  const publishedView=h.controller.snapshot.view!,publishedFeatures=publishedView.features as unknown as PlayFeatures,published=publishedFeatures.video!.publications.find(row=>row.workId===h.workId)!,publishedRaw=h.controller.exportSaved()
++  expect(publishedRaw).not.toBe(reviewedRaw)
++  expect(published).toMatchObject({channelId:channel.id,workId:h.workId,monetization:'affiliate',qualified:false,permissionId:null,measuredAt:null,settlementId:null})
++  expect(publishedFeatures.video!.settlements).toHaveLength(0)
++  videoSceneResult('PublishVideo',reviewed,publishedView)
++  expect(h.controller.exportSaved()).toBe(publishedRaw)
++  expect((await h.controller.submit(h.controller.prepare('AdvanceTime',{date:published.measureAt}))).status).toBe('saved')
++  const current=h.controller.snapshot.view!,features=current.features as unknown as PlayFeatures,measured=features.video!.publications.find(row=>row.id===published.id)!,raw=h.controller.exportSaved(),text=videoSceneResult('AdvanceTime',publishedView,current)
++  expect(raw).not.toBe(publishedRaw)
++  expect(current.receipts.at(-1)).toMatchObject({kind:'AdvanceTime',revisionAfter:current.revision})
++  expect(measured).toMatchObject({id:published.id,workId:h.workId,qualified:false,permissionId:null,measuredAt:published.measureAt,settlementId:null})
++  expect(features.video!.settlements).toHaveLength(0)
++  expect(text).not.toBeNull()
++  expect(text).toContain(channel.name)
++  expect(text).toContain('播放'+measured.views)
++  expect(text).toContain('合格询价'+measured.qualifiedInquiries)
++  expect(text).toContain('不是现金')
++  expect(text).not.toMatch(/订单观察|观察窗口|退货观察/)
++  expect(text).not.toMatch(/(?:等待|等到|预计|未来|将会|即将)[^。；]*佣金|佣金[^。；]*(?:到账|入账|回款)/)
++  expect(h.controller.exportSaved()).toBe(raw)
++ }finally{await h.close()}
++})

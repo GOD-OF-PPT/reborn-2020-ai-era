@@ -1,0 +1,92 @@
+{
+  "at": "2026-10-24T10:27:06.484620+00:00",
+  "scope": "Candidates only while Root171 runs; no src write, test or collector execution.",
+  "candidates": [
+    {
+      "id": "01a-unqualified-affiliate-regression",
+      "path": "src/ui/video-scene-result.test.ts",
+      "before": {
+        "bytes": 12741,
+        "sha256": "cd0602435a32e5886354c1075181fe3bf50ef077d6b6b98745ed4f3846822068",
+        "mode": 420
+      },
+      "candidate": {
+        "bytes": 15868,
+        "sha256": "8daf3eabdca0d61bd8ddaab102aa46953d1112bcc0a412ccd9145a4b26fe5b4d",
+        "mode": 420
+      },
+      "patchSha256": "abf480c9ed1c3ad1dd0cfdd8598f913708542c7f7909f41e017f1cd40d4ca343",
+      "patch": "01a-unqualified-affiliate-regression.patch",
+      "reason": "新增一个正常无申请/无收益资格的affiliate发布及真实统计回归；仅给原beforeEach增加新title分支，复用prepareReady，不改原三case/默认hook或body限制。预期在当前helper命中虚构订单观察的逻辑红，尚未执行。",
+      "dependsOn": null,
+      "applied": false,
+      "executed": false
+    },
+    {
+      "id": "01b-guard-real-affiliate-observation",
+      "path": "src/ui/video-scene-result.ts",
+      "before": {
+        "bytes": 16491,
+        "sha256": "7a577e546cfeac06b7a4ee7d0bd26d7dd0f1416f6899ca10aca11356df4fa443",
+        "mode": 420
+      },
+      "candidate": {
+        "bytes": 16527,
+        "sha256": "28aced3bd4f81b3777195f08fe40062332ab5dace989d00d0ae87ba015a2da05",
+        "mode": 420
+      },
+      "patchSha256": "722d59751be022c8b5503345dd8885e01439507d2ccf3dd1bfad6e8f01cf3964",
+      "patch": "01b-guard-real-affiliate-observation.patch",
+      "reason": "只在原公开qualified且实际形成cohort的affiliate统计才显示原观察期；对应src/core/video.ts原metrics分支的p.qualified && monetization affiliate && cohort。无资格发布只保实际统计/非现金，不改命令、收益、日期、随机或规则。",
+      "dependsOn": "01a先单独应用并实际跑出原helper逻辑红；本候选再应用后用同case核绿。",
+      "applied": false,
+      "executed": false
+    },
+    {
+      "id": "02-today-exact-four-directions",
+      "path": "src/ui/today-thread.test.ts",
+      "before": {
+        "bytes": 16478,
+        "sha256": "efe329c8f4c481b0e95c3934696fd8444d4a4778b29dd15be2659f611441c708",
+        "mode": 420
+      },
+      "candidate": {
+        "bytes": 16676,
+        "sha256": "40d924d160b07792fa74340540acd10d0e8d30a01cf808104e2ac7c30c9c2640",
+        "mode": 420
+      },
+      "patchSha256": "c356707aa077228b7934df6ef6feba1c8c7bbb8f7181092baef4e24bfafb00e7",
+      "patch": "02-today-exact-four-directions.patch",
+      "reason": "保精确四项顺序，保原work/life/market逐项各一次并核新video索引2/screen；原primary/source/raw/wait/所有方向无command/payload/focus断言逐字保留，不放宽contains，不改生产。当前171初红不回写。",
+      "dependsOn": null,
+      "applied": false,
+      "executed": false
+    },
+    {
+      "id": "03-focus-book-expand-video-wrapper",
+      "path": "src/ui/OpeningMoment.focus-book.test.tsx",
+      "before": {
+        "bytes": 8606,
+        "sha256": "b26a76d8ea885c6572e5f155ccf97b150a5041a952653c090a525fbd7b52bb4b",
+        "mode": 420
+      },
+      "candidate": {
+        "bytes": 8696,
+        "sha256": "fc4df762e5287145ccad9cedd560abbb4e55d84b769dfe1f4bed418fa706b483",
+        "mode": 420
+      },
+      "patchSha256": "7c8f59d12f71ecb60e1ffc2d6edc13c4ebb165f38d587e7b60a1d40070156417",
+      "patch": "03-focus-book-expand-video-wrapper.patch",
+      "reason": "只增加新wrapper import及按既有action方式children(null)展开。原radio/分组/取消/明确确认/未执行命令/raw等断言不动；不模拟mounted effect、Clock或浏览器行为。",
+      "dependsOn": null,
+      "applied": false,
+      "executed": false
+    }
+  ],
+  "sourceStillMatchesAllBefore": true,
+  "notClaims": [
+    "new regression has not been executed red",
+    "helper candidate has not been applied or verified green",
+    "current171 final status unknown here"
+  ]
+}

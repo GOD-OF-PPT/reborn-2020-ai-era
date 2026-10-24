@@ -1,0 +1,3 @@
+接下来只新增本片纯continuity/day-perspective/Today video模型适用测试（你可新增独立文件，不改Root生产/旧测试），重点video平台未收款carry/已结清历史与Todayongoing、PublishVideo实际新commit退出Today、主/物件quarter共绑定交叉U1/U2。请先读实际模型选择少而真实的必要反例，原生/全项目不称通过。不起Node，Root会排小批。若身份需要长前史优先复用正常Create+既有合法前缀，不直接赠钱/资格。
+
+该3层合理：实际正常Publish原链核真正副作用/DayPerspective；原已核正常paid原文与明确display未收款反例核呈现，务必报告variant不是可导入财务/新游戏成功；完整Collect命令链由mainline新case独立承担。季度共binding需实际handler同函数和无command、候选禁并保旧原source字段。请尽快写并冻结，Root读后统一小批，勿展开新多年fixture。

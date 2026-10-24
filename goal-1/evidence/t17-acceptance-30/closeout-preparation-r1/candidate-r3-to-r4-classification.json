@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-24T11:49:50.723Z",
+  "changes": [
+    {
+      "before": "proof(intent.rows);preserve();const start=",
+      "after": "proof(intent.rows);preserve();sourceScope(json(post+'/pre-feature-binding.json').binding.path);const start="
+    },
+    {
+      "before": "if(staged().length)throw Error('INDEX_MUST_BE_EMPTY');preserve();verifySeal(root);const intent=",
+      "after": "if(staged().length)throw Error('INDEX_MUST_BE_EMPTY');preserve();sourceScope(json(post+'/pre-feature-binding.json').binding.path);verifySeal(root);const intent="
+    },
+    {
+      "before": "preserve();verifySeal(root);git(['add','-f','--pathspec-from-file='+post+'/record-ordinary-paths.nul'",
+      "after": "preserve();sourceScope(json(post+'/pre-feature-binding.json').binding.path);verifySeal(root);git(['add','-f','--pathspec-from-file='+post+'/record-ordinary-paths.nul'"
+    },
+    {
+      "before": "const result=proof(rows,commit);preserve();return {commit,parent:intent.parent",
+      "after": "const result=proof(rows,commit);preserve();sourceScope(json(post+'/pre-feature-binding.json').binding.path);return {commit,parent:intent.parent"
+    }
+  ],
+  "reason": "Recheck complete final source binding at feature commit and record prepare/stage/verify, so a previously unchanged UI or source path cannot drift after the feature freeze unnoticed. No candidate mode executed."
+}

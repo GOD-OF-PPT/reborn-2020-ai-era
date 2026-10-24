@@ -1,0 +1,1 @@
+初次纯I/O源快照命令已创建三文件并复制9份现有源，随后因预期的独立VideoResultChoices.tsx尚不存在而ENOENT退出，未写source-at-read.json；旧快照保留。本补充逐字为已存在的9个前像补身份，不重采覆盖，结果页按VideoSceneChoice内联实现审查。无游戏/测试执行。

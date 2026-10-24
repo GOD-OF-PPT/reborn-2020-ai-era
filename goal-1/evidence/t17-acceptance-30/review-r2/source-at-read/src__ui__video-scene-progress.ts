@@ -1,0 +1,174 @@
+import {addDays,quarterOf} from '../core/calendar.ts'
+import type {VideoProjection} from '../core/video-projection.ts'
+import {moneyText} from './game-text.ts'
+
+export interface VideoSceneTarget{
+ readonly channelId:string
+ readonly workId?:string
+ readonly contractId?:string
+ readonly marketingId?:string
+ readonly section?:'publications'|'leads'|'making'
+}
+export interface VideoSceneProgress{
+ readonly stage:string
+ readonly invalidReason:string|null
+ readonly outcome:'none'|'pending'|'actual'|'non-success'
+ readonly resultRefs:readonly {readonly kind:'job'|'contract'|'payment'|'publication'|'marketing'|'settlement';readonly id:string;readonly date:string|null}[]
+ readonly wait?:{readonly date:string;readonly label:string}
+ readonly title:string
+ readonly line:string
+ readonly choice:{readonly title:string;readonly line:string;readonly label:string}
+ readonly target?:VideoSceneTarget
+ readonly command?:{readonly kind:'ReviewVideoOutput'|'SubmitVideoCommission'|'CollectVideoSettlement';readonly payload:Record<string,unknown>;readonly confirm:boolean}
+}
+function detail(title:string,line:string,choiceTitle:string,choiceLine:string,label:string):VideoSceneProgress{
+ return {title,line,choice:{title:choiceTitle,line:choiceLine,label},stage:'legacy',invalidReason:null,outcome:'none',resultRefs:[]}
+}
+
+/** Presentation of committed public facts only; every action keeps its original command guard. */
+function legacyVideoSceneProgress(video:VideoProjection,date:string):VideoSceneProgress|null{
+ if(!video||!video.channels.length)return null
+ const contracts=video.contracts.filter(c=>!['settled','cancelled'].includes(c.status)).sort((a,b)=>a.dueAt.localeCompare(b.dueAt)||a.id.localeCompare(b.id))
+ const contract=contracts[0]
+ const work=contract?video.works.find(w=>w.id===contract.workId):video.works.find(w=>w.contractId===null&&w.abandonedAt===null&&!video.publications.some(p=>p.workId===w.id))
+ const target:VideoSceneTarget|undefined=contract?{channelId:contract.channelId,workId:contract.workId,contractId:contract.id}:work?{channelId:work.channelId,workId:work.id}:undefined
+ const selectedDetail=(...args:Parameters<typeof detail>):VideoSceneProgress=>({...detail(...args),...(target?{target}:{})})
+ if(contract?.status==='review')return selectedDetail('作品已交，等一个真实的回答。','这一版已经交出，对方还没有最终验收。','看看这次客户复核',`${contract.submittedAt}提交，客户仍按原条款实际复核；这次提交不等于验收或到账。`,'查看客户复核与原条款')
+ if(contract?.status==='delivered')return selectedDetail('对方认可了，回款还在路上。','客户已经验收，现金仍要等约定日期。','核对原来的回款约定',`余款约定${contract.paymentAt??'原记录所列日期'}收取，收款与手续费按原账执行；未到账前不作可花资金。`,'查看实际验收与应收')
+ if(contract?.status==='negotiating')return selectedDetail('条件已提出，等对方答复。','这一次条款谈判已经按你的安排开始，结果仍待实际反馈。','看看这次条件谈判','原工作、成本与客户义务仍在，不因等待或换页而消失。','查看谈判任务与原义务')
+ if(contract?.status==='revision')return selectedDetail('客户回话了，先看清修改。','对方提出了新的修改意见，还需要你决定如何回应。','把范围与代价谈清楚','原约定仍在，可以核对有成本的返工、条款谈判或有限退出；不把再次提交当作已经验收。','查看修改、谈判与退出')
+ if(work){
+  const ordinal=video.works.filter(w=>w.channelId===work.channelId).findIndex(w=>w.id===work.id)+1
+  const channel=video.channels.find(c=>c.id===work.channelId)
+  const item=(video.channels.length>1&&channel?channel.name+' / ':'')+'作品'+ordinal
+  const jobs=[work.production,...work.corrections]
+  const active=jobs.filter(j=>j&&(j.status==='planned'||j.status==='running')).sort((a,b)=>a!.completeAt.localeCompare(b!.completeAt))[0]
+  if(active)return selectedDetail(contract?'答应过的作品，正在成形。':'这个念头，已经排进日历。',active.status==='planned'?'已经安排，仍须等到实际开工和完成。':'制作已经开始，做完以后还要认真检查。','把这一份先做好',`${item}安排在${active.startAt}—${active.completeAt}；实际完成、人工核对和回款各有自己的时刻。`,'查看这份作品的制作记录')
+  if(!work.production||work.production.status!=='completed'||work.corrections.some(j=>!j||j.status!=='completed'))return selectedDetail('制作停下了，原承诺还在。','没有实际完成的部分，不能当作已经交付。','先把原安排收好','已花成本、原交付与退款责任继续保留；可以查看中断记录和有限收尾。','查看中断与原责任')
+  if(work.defectKnown&&work.corrections.length===0)return selectedDetail('有些地方，还要认真修好。','已经公开的素材问题，需要先决定如何处理。','把素材与校正代价看清','校正仍使用真实资金、时间与资源；也可以核对放弃样片或退出原单的后果。','查看素材问题与校正安排')
+  if(work.reviewedVersion!==work.version){
+   const base=selectedDetail('成片做完了，先由自己看清。','制作已经实际结束，还要由你亲自把关。','亲手核对这一版成片',`${item}第${work.version}版仍待人工复核。记录来源、权利与使用说明，不代表客户认可或回款。`,'人工核对'+item+'与使用说明')
+   return {...base,command:{kind:'ReviewVideoOutput',payload:{workId:work.id,disclosure:work.modeId==='manual'?'manual':work.modeId==='image_assisted'?'ai_assisted':'synthetic'},confirm:false}}
+  }
+  if(contract){
+   const base=selectedDetail('现在，把这一版交给客户。','这一版已经由你核对，接着听客户的实际反馈。','交出已经复核的这一版',`${item}最晚${contract.dueAt}前提交；客户仍需复核，提交时不提前增加回款。`,'提交'+item+'的这一版')
+   return {...base,command:{kind:'SubmitVideoCommission',payload:{contractId:contract.id},confirm:true}}
+  }
+  return selectedDetail('给这份作品，选一个去处。','这一版已核对，发布方式仍值得由你决定。','决定怎样让人看见作品','积累受众、平台分成与带货各有资格和结算条件；素材与合成标识仍按实际年代核对。','核对这份作品的发布选择')
+ }
+ if(contract)return selectedDetail('原来的约定，还要逐项看清。','这份客户责任仍保留在原记录里。','翻看原作品与客户记录','没有取得实际完成、验收和结算依据之前，不把这份责任说成已经结束。','查看原商单与责任')
+ const published=video.publications.find(p=>p.measuredAt===null)
+ if(published)return {...detail('作品已经发出，回应还在路上。','发布已经完成，实际反馈仍要等日子走到。','回看这一次发布',`${published.measureAt}统计实际反馈；播放、询价和收入分别发生，不把发布当作回款。`,'查看发布与实际反馈'),target:{channelId:published.channelId,workId:published.workId,section:'publications'}}
+ const window=video.publications.find(p=>p.measuredAt!==null&&p.monetization==='affiliate'&&p.qualified&&p.settlementId===null&&date<addDays(p.measuredAt,7))
+ if(window)return {...detail('有人看见了，仍要等订单留下。','带货的观察窗口还没有结束。','看清退货与佣金的边界',`${addDays(window.measuredAt!,7)}观察窗口结束，佣金只按实际留存订单确认；商品成交额不等于佣金。`,'查看带货观察与结算'),target:{channelId:window.channelId,workId:window.workId,section:'publications'}}
+ const settlement=video.settlements.find(s=>s.collectedAt===null)
+ if(settlement){
+  const publication=video.publications.find(p=>p.id===settlement.publicationId)
+  return {...detail('收入已有凭据，现金还在路上。','这一笔已确认，仍要等约定的实际结算。','回看这笔实际应收',`${settlement.dueAt}回款，原手续费另计；还没有收到的钱，不能支持今天的消费。`,'查看平台结算与原费用'),...(publication?{target:{channelId:publication.channelId,workId:publication.workId,section:'publications' as const}}:{})}
+ }
+ const paid=video.contracts.filter(c=>c.paidCase&&c.settledAt!==null&&quarterOf(c.settledAt)===quarterOf(date)).at(-1)
+ if(paid)return {...detail('这笔商单，已经真正结算。',`${paid.settledAt}实际收取了这笔款，原费用也留在账里。`,'再给下一份作品留一点时间','已经发生的回款与成本都保留。下一份作品仍需新投入，不保证同样结果。','安排下一份作品'),target:{channelId:paid.channelId,section:'making'}}
+ const leads=new Set(video.channels.filter(c=>c.lifecycle==='operating').flatMap(c=>c.leads.map(l=>l.personId)))
+ if(leads.size){
+  const channel=video.channels.find(c=>c.lifecycle==='operating'&&c.leads.length)!
+  return {...detail('有人，真的需要你的作品。','已有作品带来了具体询价，接下来仍要认真核对。','听听这一次具体需求',`目前有${leads.size}名去重的合格询价者。询价还不是成交，素材、资源、报价与预款都要先看清。`,'核对现有商单与制作安排'),target:{channelId:channel.id,section:'leads'}}
+ }
+ return null
+}
+
+const targetKeys=['channelId','workId','contractId','marketingId','section']
+const targetId=(x:unknown):x is string=>typeof x==='string'&&x.length>0&&x.trim().length>0
+/** A supplied identity is never repaired by selecting another channel or work. */
+export function videoTargetReason(video:VideoProjection,target:VideoSceneTarget):string|null{
+ if(!video||!target||typeof target!=='object'||Object.keys(target).some(k=>!targetKeys.includes(k))||!targetId(target.channelId))return '原视频账号身份不完整，请明确重新选择。'
+ for(const key of ['workId','contractId','marketingId'] as const)if(target[key]!==undefined&&!targetId(target[key]))return '原视频对象身份为空，请明确重新选择。'
+ const ids=[target.channelId,target.workId,target.contractId,target.marketingId].filter(x=>x!==undefined);if(new Set(ids).size!==ids.length)return '原视频对象身份重复或冲突，请重新选择。'
+ if(target.section!==undefined&&!['publications','leads','making'].includes(target.section))return '原视频记录种类无效，请重新选择。'
+ const channels=video.channels.filter(c=>c.id===target.channelId)
+ if(channels.length!==1)return '原视频账号不存在或身份重复，没有换到另一个账号。'
+ if(target.marketingId){
+  if(target.workId||target.contractId||target.section)return '原推广与作品身份互相冲突，请重新选择。'
+  const rows=video.marketing.filter(m=>m.id===target.marketingId)
+  return rows.length===1&&rows[0]!.channelId===target.channelId?null:'原推广不存在或不属于这个账号，没有替换为另一项推广。'
+ }
+ const contracts=target.contractId?video.contracts.filter(c=>c.id===target.contractId):[]
+ if(target.contractId&&(contracts.length!==1||contracts[0]!.channelId!==target.channelId))return '原商单不存在、身份重复或不属于这个账号，请重新选择。'
+ const contract=contracts[0],workId=target.workId??contract?.workId
+ const works=workId?video.works.filter(w=>w.id===workId):[]
+ if(workId&&(works.length!==1||works[0]!.channelId!==target.channelId))return '原作品不存在、身份重复或不属于这个账号，请重新选择。'
+ const work=works[0]
+ if(contract&&(!work||contract.workId!==work.id||work.contractId!==contract.id))return '原作品与商单身份不一致，没有换成另一单。'
+ if(work?.contractId){const own=video.contracts.filter(c=>c.id===work.contractId);if(own.length!==1||own[0]!.workId!==work.id||own[0]!.channelId!==target.channelId)return '原作品的客户合同已不可匹配，请重新选择。'}
+ if(target.section==='publications'&&(!work||!video.publications.some(p=>p.workId===work.id&&p.channelId===target.channelId)))return '原发布记录已不可达，没有换成另一份作品。'
+ if(target.section&&target.section!=='publications'&&(work||contract))return '原作品与账号章节身份冲突，请重新选择。'
+ return null
+}
+
+/** Canonical completion adds only the supplied object's actual public relations. */
+export function canonicalVideoTarget(video:NonNullable<VideoProjection>,target:VideoSceneTarget):VideoSceneTarget{
+ const contract=video.contracts.find(c=>c.id===target.contractId),work=video.works.find(w=>w.id===(target.workId??contract?.workId))
+ return {...target,...(work?{workId:work.id,...(work.contractId?{contractId:work.contractId}:{})}:{})}
+}
+
+function focusedVideoScene(video:VideoProjection,date:string,target:VideoSceneTarget):VideoSceneProgress{
+ const reason=videoTargetReason(video,target)
+ const scene=(stage:string,title:string,line:string,terms:string,label:string,outcome:VideoSceneProgress['outcome']='none'):VideoSceneProgress=>({...detail(title,line,title,terms,label),stage,outcome,target,invalidReason:null})
+ if(reason)return {...scene('video-invalid','先找回原来的这份作品。',reason,'原记录与责任保留；请明确重新选择，不会替你创建账号或接另一单。','重新选择原视频对象'),invalidReason:reason}
+ const v=video!,t=canonicalVideoTarget(v,target),channel=v.channels.find(c=>c.id===t.channelId)!
+ const result=(p:VideoSceneProgress):VideoSceneProgress=>({...p,target:t})
+ const wait=(p:VideoSceneProgress,date:string,label:string):VideoSceneProgress=>result({...p,wait:{date,label}})
+ if(t.marketingId){
+  const m=v.marketing.find(m=>m.id===t.marketingId)!,j=m.job
+  if(j&&['planned','running'].includes(j.status))return wait(scene('video-marketing-'+j.status,'让具体的需求，先留下来。',j.status==='planned'?'推广已经留出日子，尚未开工或形成询价。':'正在按原安排了解需求，尚未产生询价。',`${channel.name} · 原资源与费用按${j.startAt}—${j.completeAt}承担；推广不是订单或收入。`,'查看这份原推广','pending'),j.status==='planned'?j.startAt:j.completeAt,j.status==='planned'?'等原推广开工':'等这份推广的实际询价反馈')
+  return result({...scene(m.completedAt?'video-marketing-completed':'video-marketing-stopped',m.completedAt?'推广结束，谁需要这份作品？':'这次推广停下了，原成本仍在。',m.completedAt?`${m.completedAt}形成实际受众；本账号当前有${channel.leads.length}名未转化询价者。`:'没有把中断记为完成或创造新客户。','询价仍须显选客户、资源和条款，不能直接记作成交。','查看本账号真实询价',m.completedAt?'actual':'non-success'),resultRefs:m.completedAt?[{kind:'marketing',id:m.id,date:m.completedAt}]:[]})
+ }
+ const work=v.works.find(w=>w.id===t.workId),contract=v.contracts.find(c=>c.id===t.contractId)
+ if(contract?.status==='cancelled')return result(scene('video-cancelled','这份原商单，已经退出。','原作品、实际成本和退款/欠款仍按原账保留。','退出不是客户验收或成功回款；下一份作品仍须新投入。','翻看原退出与费用','non-success'))
+ if(contract?.status==='settled'){
+  const feeFen=Number(BigInt(contract.priceFen)*BigInt(contract.feeBps)/10000n)
+  const feeState=!contract.feePosted?'费用尚未登记，须核对原账，不能说已经付清。':contract.paidCase?'本单费用已付，已形成已付案例。':'原账仍有未付费用；不能把这项责任藏在结算提示后。'
+  return result({...scene('video-settled','这笔原商单，已经实际结算。',`原预款${moneyText(contract.prepaymentFen)}于${contract.acceptedAt}入账；本次余款${moneyText(contract.priceFen-contract.prepaymentFen)}于${contract.settledAt}实际收取（原报价${moneyText(contract.priceFen)}）。`,`原费用${moneyText(feeFen)}（${contract.feeBps/100}%）${contract.feePosted?'已登记':'尚待登记'}。${feeState}下一次选择仍由你决定，不会自动换成另一单。`,'翻看这份原单的实际结算','actual'),resultRefs:[{kind:'contract',id:contract.id,date:contract.settledAt}]})
+ }
+ if(contract?.status==='review')return wait(scene('video-client-review','这一版已发出，等客户真实回答。','亲手提交与客户验收分别发生。',`${contract.submittedAt}已提交；报价、预款保护及原费用仍按原账。`,'查看原提交与条款','pending'),addDays(contract.submittedAt!,v.catalog.commercial.reviewDays),'等这份原商单的客户反馈')
+ if(contract?.status==='delivered')return wait(scene('video-payment-wait','客户验收了，余款仍在路上。','实际验收已经发生，尚未把应收当作可花现金。',`原付款日${contract.paymentAt}；原${contract.feeBps/100}%费用按本单条款与原账核对。`,'翻看本单验收与应收','pending'),contract.paymentAt!,'等这份原商单的实际回款')
+ if(contract?.status==='negotiating')return result(scene('video-negotiating','条件已提出，等原谈判任务反馈。','谈判可能失败，旧义务没有消失。','原资源、日期和已耗行动继续保留，实际完成日沿原任务。','查看原谈判任务','pending'))
+ const active=work?[work.production,...work.corrections].filter(j=>j&&['planned','running'].includes(j.status)).sort((a,b)=>a!.completeAt.localeCompare(b!.completeAt))[0]:null
+ if(active){
+  const planned=active.status==='planned',production=active.id===work?.production?.id
+  return wait(scene('video-'+active.status,planned?'先给这份作品，留好一段日子。':'这份作品，正在一点点成形。',planned?'已安排，尚未实际开工或完成。':production?'制作已经开工，完成后还要亲自核对这一版。':'这一版的修整已经开工，完成后还要亲自核对。',`${channel.name} · ${active.startAt}—${active.completeAt}；${active.resources.map(id=>v.resources.find(r=>r.id===id)?.label??'原安排的制作成员').join('、')}。${planned?'资源与资金仍沿原约定预留，实际开工和完成分别发生。':'已耗用的成本与行动保留在原记录里。'}`,'查看这份原制作','pending'),planned?active.startAt:active.completeAt,planned?'等这份作品实际开工':'等这份作品实际完成')
+ }
+ if(work&&(!work.production||work.production.status!=='completed'||work.corrections.some(j=>!j||j.status!=='completed')||work.abandonedAt))return result(scene('video-stopped','这份制作停下了，原责任还在。','没有把中断或放弃的作品当作完成。','已耗成本与行动保留；原商单退出、退款和欠费仍须独立处理。','查看中断与有限收尾','non-success'))
+ if(contract?.status==='revision'){
+  if(contract.negotiation==='scope'&&contract.negotiationOutcome==='accepted'&&work!==undefined&&work.reviewedVersion===work.version&&work.version>contract.submittedVersion&&date<=contract.dueAt)return result({...scene('video-submit','按已接受的范围，重新交出这一版。','客户接受了范围调整，仍须你亲手重新提交并等待实际复核。','原版本与人工核对保留；这次谈判没有替你完成客户验收或提前回款。','重新提交原单已核对版本','pending'),command:{kind:'SubmitVideoCommission',payload:{contractId:contract.id},confirm:true}})
+  return result(scene('video-revision','客户回话了，先看清这次修改。','这一版尚未被客户验收。','返工仍需真实资源、1点/300元/7日；超出原包含范围时可按原条件谈判或有限退出。','选择原单返工、谈判或退出','pending'))
+ }
+ if(work?.defectKnown&&work.corrections.length===0)return result(scene('video-quality','已经公开的问题，需要认真修好。','素材缺陷已在实际制作后公开；尚不能人工通过这一版。','质量校正与客户修改分开记，仍需原资源、资金和日期。','核对原校正与退出','pending'))
+ if(work){
+  if(work.reviewedVersion!==work.version)return result({...scene('video-self-review','成片做完了，先亲自看清这一版。','实际制作完成，还没有替你人工核对或提交客户。',`原第${work.version}版；素材、权利与使用说明核对不会产生收入。`,'人工核对这一版','pending'),command:{kind:'ReviewVideoOutput',payload:{workId:work.id,disclosure:work.modeId==='manual'?'manual':work.modeId==='image_assisted'?'ai_assisted':'synthetic'},confirm:false}})
+  if(contract)return result({...scene('video-submit','现在，把已核对的这一版交给客户。','这份原作品已人工核对，客户反馈与实际回款仍在后面。',`原最晚提交日${contract.dueAt}；提交不会提前增加回款。`,'提交原单这一版','pending'),command:{kind:'SubmitVideoCommission',payload:{contractId:contract.id},confirm:true}})
+  const publication=v.publications.find(p=>p.workId===work.id)
+  if(publication){
+   const refs:VideoSceneProgress['resultRefs'][number][]=publication.measuredAt?[{kind:'publication',id:publication.id,date:publication.measuredAt}]:[]
+   const settlements=v.settlements.filter(s=>s.publicationId===publication.id&&s.channelId===channel.id).sort((a,b)=>a.dueAt.localeCompare(b.dueAt)||a.id.localeCompare(b.id))
+   for(const settlement of settlements)refs.push({kind:'settlement',id:settlement.id,date:settlement.collectedAt??settlement.confirmedAt})
+   const pending=settlements.find(s=>s.collectedAt===null)
+   if(pending){
+    const due=pending.dueAt<=date
+    const p={...scene(due?'video-platform-collect':'video-platform-payment-wait',due?'这份作品的原应收，已经到了约定日。':'这份作品已有应收，现金仍在路上。',`原平台已确认${moneyText(pending.amountFen)}，约定${pending.dueAt}收取；尚未记作可花现金。`,`原费用${moneyText(pending.feeFen)}另计。${pending.kind==='affiliate'?`商品成交额${moneyText(pending.grossMerchandiseFen)}不是本号收入；实际留存${pending.retained}、退款${pending.returned}。`:''}收取只处理这份原结算，不接下一单，也不表示全账号已结清。`,due?'核对收取这份原平台应收':'翻看这份原平台应收与费用','pending'),resultRefs:refs}
+    return due?result({...p,command:{kind:'CollectVideoSettlement',payload:{settlementId:pending.id},confirm:true}}):wait(p,pending.dueAt,'等这份原平台款实际到账')
+   }
+   const paid=settlements.filter(s=>s.collectedAt!==null).sort((a,b)=>a.collectedAt!.localeCompare(b.collectedAt!)||a.id.localeCompare(b.id)).at(-1)
+   if(paid)return result({...scene('video-platform-paid','这份作品的原平台款，已经实际收到。',`${paid.collectedAt}实际收取${moneyText(paid.amountFen)}；原费用${moneyText(paid.feeFen)}另记。`,`已确认平台收入、实际收款与费用分别保留。${paid.kind==='affiliate'?`商品成交额${moneyText(paid.grossMerchandiseFen)}不是本号收入；实际留存${paid.retained}、退款${paid.returned}。`:''}实际到账不表示全账号旧账已经结清；下一份作品仍须你另行选择。`,'翻看这份原平台实收与费用','actual'),resultRefs:refs})
+   if(publication.measuredAt&&publication.qualified&&publication.monetization==='affiliate'&&date<addDays(publication.measuredAt,7))return wait({...scene('video-affiliate-window','有人看见了，仍要等订单真正留下。','播放与询价已有实际记录；带货观察窗口仍未结束。',`${addDays(publication.measuredAt,7)}结束原观察窗口；商品成交额不是佣金，实际留存、退款与平台应收各按原记录。`,'翻看这份原带货观察','pending'),resultRefs:refs},addDays(publication.measuredAt,7),'等这份原发布的留存与退款反馈')
+   return result({...scene('video-published','这份原作品，已经发布。','播放、询价与平台收入仍分别记录。',publication.measuredAt?'已有实际统计，当前公开原记录没有待收平台款；播放和询价不等于收入。':`${publication.measureAt}才统计真实反馈。`,'翻看原发布与结算',publication.measuredAt?'actual':'pending'),...(!publication.measuredAt?{wait:{date:publication.measureAt,label:'等这份原发布的实际反馈'}}:{}),resultRefs:refs})
+  }
+  return result(scene('video-ready-to-publish','这一版看清了，再选择它的去处。','人工核对完成，不等于发布、客户验收或到账。','发布方式和资格仍要显选；不自动申请平台收益或生成订单。','查看这份作品的发布选择','pending'))
+ }
+ return result(scene('video-channel','先给这一个账号，选一份具体的尝试。',`${channel.name}有${channel.leads.length}名未转化的合格询价者；这不是订单或收入。`,'选择原客户、制作方式、素材、资源与日期后仍须独立确认；也可先准备真实受众。','选择本账号的具体安排'))
+}
+
+/** Undefined retains the recommendation; null is an explicit entry without a channel. */
+export function videoSceneProgress(video:VideoProjection,date:string,requested?:VideoSceneTarget|null):VideoSceneProgress|null{
+ if(requested===null)return {...detail('先选一个具体的账号和受众。','新客户必须来自真实形成的受众，不能由入口创造。','准备这一份真实视频尝试','账号、受众、制作方式、素材、资源与日期仍由你选择；原资格沿真实年代与批准。','选择视频账号与准备'),stage:'video-entry'}
+ return requested===undefined?legacyVideoSceneProgress(video,date):focusedVideoScene(video,date,requested)
+}

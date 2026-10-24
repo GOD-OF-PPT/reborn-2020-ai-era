@@ -1,0 +1,69 @@
+--- a/src/ui/video-player-thread.test.ts
++++ b/src/ui/video-player-thread.test.ts
+@@ -13,6 +13,7 @@
+ import {openingFocusFor,playerThread} from './player-thread.ts'
+ import {videoFocusFromSaved,videoFocusOpen,videoFocusResultDate,videoPlayerScene,type VideoOpeningFocus} from './video-player-thread.ts'
+ import {videoSceneProgress} from './video-scene-progress.ts'
++import {videoSceneResult} from './video-scene-result.ts'
+ import type {GameRun} from '../core/run-types.ts'
+ 
+ const input=(view:PlayingView)=>({view,features:view.features as unknown as PlayFeatures})
+@@ -54,22 +55,26 @@
+ },20000)
+ 
+ /** The independent F02 fixture exercises real platform commands, not normal-game qualification proof. */
+-function platform(kind:'ads'|'affiliate'){
++function platform(kind:'ads'|'affiliate',unlistAtPublish=false){
+  const f=createVideoFixture();let run=f.run
++ let beforeMeasurement:PlayingView|null=null
+  const send=(command:string,payload:unknown)=>{run=f.apply(run,command,payload)}
+  const p=()=>fixtureInput(f,run)
+  send('OpenVideoChannel',{name:'平台回款原记录',segment:'local_merchants'})
+  const channel=run.video!.channels[0]!
+- const publish=(monetization:'none'|'ads'|'affiliate')=>{
++ const publish=(monetization:'none'|'ads'|'affiliate',unlist=false)=>{
+   send('StartVideoWork',{channelId:channel.id,productId:'hotspot',modeId:'manual',materialId:'original',resources:['player-production'],startAt:run.timeline.cursor.date})
+   const work=run.video!.works.at(-1)!
+-  send('AdvanceTime',{date:addDays(run.timeline.cursor.date,7)});send('ReviewVideoOutput',{workId:work.id,disclosure:'manual'});send('PublishVideo',{workId:work.id,monetization,label:false});send('AdvanceTime',{date:addDays(run.timeline.cursor.date,7)})
++  send('AdvanceTime',{date:addDays(run.timeline.cursor.date,7)});send('ReviewVideoOutput',{workId:work.id,disclosure:'manual'});send('PublishVideo',{workId:work.id,monetization,label:false})
++  if(unlist)send('UnlistVideo',{publicationId:run.video!.publications.find(row=>row.workId===work.id)!.id})
++  beforeMeasurement=p().view
++  send('AdvanceTime',{date:addDays(run.timeline.cursor.date,7)})
+   return work
+  }
+  publish('none');publish('none')
+  send('ApplyVideoProgram',{channelId:channel.id,program:kind,resources:['player-production'],startAt:run.timeline.cursor.date});send('AdvanceTime',{date:addDays(run.timeline.cursor.date,7)});send('DecideVideoProgram',{applicationId:run.video!.applications.at(-1)!.id})
+- const work=publish(kind),focus:VideoOpeningFocus={runId:run.runId,kind:'video',accountId:'personal',businessId:channel.businessId,entityId:work.id,videoTarget:{channelId:channel.id,workId:work.id,section:'publications'}}
+- return {f,p,send,focus,work,get run(){return run}}
++ const work=publish(kind,unlistAtPublish),focus:VideoOpeningFocus={runId:run.runId,kind:'video',accountId:'personal',businessId:channel.businessId,entityId:work.id,videoTarget:{channelId:channel.id,workId:work.id,section:'publications'}}
++ return {f,p,send,focus,work,get beforeMeasurement(){return beforeMeasurement},get run(){return run}}
+ }
+ 
+ it.each(['ads','affiliate'] as const)('keeps the original %s publication pending until its own real collection and maps the saved settlement back to that same work',kind=>{
+@@ -138,3 +143,26 @@
+  expect(videoFocusFromSaved(previous,current,'CollectVideoSettlement',{settlementId:work.id})).toBeNull()
+  expect(f.codec.export(run)).toBe(raw)
+ },20000)
++
++
++it('does not invent an affiliate observation after an actually qualified F02 publication is unlisted the same day',()=>{
++ // Explicit independent F02 qualification; this is not a normal earned-program proof.
++ const h=platform('affiliate',true),previous=h.beforeMeasurement,current=h.p(),video=current.features.video!,target=h.focus.videoTarget!
++ if(!previous)throw Error('ACTUAL_PRE_MEASUREMENT_VIEW_REQUIRED')
++ const publication=video.publications.find(row=>row.workId===h.work.id)!
++ expect(publication).toMatchObject({qualified:true,views:0,cohortId:null,unlistedAt:publication.publishedAt,measuredAt:current.view.date})
++ expect(video.settlements.filter(row=>row.publicationId===publication.id)).toHaveLength(0)
++ const raw=h.f.codec.export(h.run),publicBefore=JSON.stringify(video),focused=videoSceneProgress(video,current.view.date,target)!,legacy=videoSceneProgress(video,current.view.date)
++ // Soft assertions preserve every independent symptom in the expected pre-fix red.
++ expect.soft(focused).toMatchObject({stage:'video-published',outcome:'actual',target})
++ expect.soft(focused.wait).toBeUndefined()
++ expect.soft(legacy?.title??'').not.toContain('等订单')
++ expect.soft(legacy?.choice.line??'').not.toContain('观察窗口')
++ expect.soft(videoFocusOpen(current,h.focus)).toBe(false)
++ const feedback=videoSceneResult('AdvanceTime',previous,current.view)
++ expect.soft(feedback).not.toBeNull()
++ expect.soft(feedback).toContain('播放0')
++ expect.soft(feedback).not.toContain('原订单观察仍需等到')
++ expect.soft(feedback).not.toContain('原订单观察止于')
++ expect(JSON.stringify(video)).toBe(publicBefore);expect(h.f.codec.export(h.run)).toBe(raw)
++})

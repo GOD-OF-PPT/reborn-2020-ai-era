@@ -1,0 +1,59 @@
+{
+  "at": "2026-10-24T12:05:57.208Z",
+  "scope": "Independent static byte diff and code readback only; no helper import/mode, node check, audit, tests, browser, seal, index or commit",
+  "before": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-30/closeout-preparation-r1/closeout-final-r4.candidate.mjs",
+      "bytes": 18995,
+      "sha256": "bf981fab38c8c59a81d4c645d07b4acea1233e9a31bf6aa3f8220dd31a7adcf0",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-30/closeout-preparation-r1/closeout-final-r5.candidate.mjs",
+      "bytes": 19194,
+      "sha256": "12497de5aeaca0adf4342705cb794f0f79b862c37435541834b4d3ca588ad9ae",
+      "mode": 420
+    }
+  ],
+  "after": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-30/closeout-preparation-r1/closeout-final-r4.candidate.mjs",
+      "bytes": 18995,
+      "sha256": "bf981fab38c8c59a81d4c645d07b4acea1233e9a31bf6aa3f8220dd31a7adcf0",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-30/closeout-preparation-r1/closeout-final-r5.candidate.mjs",
+      "bytes": 19194,
+      "sha256": "12497de5aeaca0adf4342705cb794f0f79b862c37435541834b4d3ca588ad9ae",
+      "mode": 420
+    }
+  ],
+  "inputsUnchanged": true,
+  "inverseMinimalPatchCounts": [
+    1,
+    1,
+    1
+  ],
+  "inversePatchExactlyEqualsR4": true,
+  "findings": {
+    "CR4_01": "Closed statically: verifyRecord checks exact root tree at start and after all parent/blob/preserve/source checks, compares both seal identities, and returns rootSeal; no root/post writes added.",
+    "CR4_02": "Closed statically: guard(post) immediately precedes the actual git commit call, before any irreversible commit; guard rejects sealed/invalid parent before mutation."
+  },
+  "preservedScope": [
+    "dynamic final source inventory and explicit complete source binding",
+    "original26 P3/root19/114 old marker/input preservation",
+    "master2304B/14LF selective exclusion and2090 prefix, worktree not rewritten",
+    "fresh independent post and all evidence wx/ancestor guard",
+    "feature/record NUL, blob/hash/Gitmode/exact sets, identity/parent checks",
+    "same original browser13+CLI2 protocol",
+    "old R4/helper immutable"
+  ],
+  "executionStillUnverified": [
+    "Root stop-all-writers and final manifest",
+    "actual seal/probe/stage/commit and full subtree/mode/blob readbacks",
+    "real fullCreate and role addendum while exports are live"
+  ],
+  "postExists": false,
+  "rootSealed": false
+}

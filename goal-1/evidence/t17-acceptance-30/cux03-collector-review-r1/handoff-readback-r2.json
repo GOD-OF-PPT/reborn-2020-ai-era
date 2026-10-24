@@ -1,0 +1,75 @@
+{
+  "at": "2026-10-24T11:30:06.851Z",
+  "reason": "Source freeze was explicitly released for Root subsequent art/browser work. New final readback observes a later CSS-only edit; earlier five collector results remain bound to their immutable execution-time snapshots. No collector/test restart.",
+  "correctsHandoffR1": {
+    "path": "goal-1/evidence/t17-acceptance-30/cux03-collector-review-r1/handoff-readback-r1.json",
+    "bytes": 1787,
+    "sha256": "eab0467f8f3deea283f1d9f763eb0f3bbe828ce3ec3645506a0e7f7f0f03fbfb",
+    "mode": 420,
+    "reason": "Its sourceMismatches truthfully listed the new CSS drift, but all547SourceInitialFinalCurrentEqual copied an earlier readback true flag. R2 separates execution-time equality from present-source equality."
+  },
+  "sourceCount": 547,
+  "currentSourceExactlyUiR2": false,
+  "mismatch": [
+    {
+      "before": {
+        "path": "src/ui/video-scene-object.css",
+        "bytes": 695,
+        "sha256": "bc69af168007d288f2ce283a75fc2d6d903a8def1f6793a9299d140af50c5482",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/ui/video-scene-object.css",
+        "bytes": 810,
+        "sha256": "ddc6bdc9264aa937a07a1626c4a25fa0ba7e0480548330e4e106fcfc51ae9f11",
+        "mode": 420
+      }
+    }
+  ],
+  "allFiveExecutionBeforeAfterEqual": true,
+  "allFiveExecutionSourceExactlyUiR2": true,
+  "allFiveActualTerminal0": true,
+  "all36DeclaredSnapshotsExact": true,
+  "current139InputMismatches": [],
+  "nonUiRuntimeClosureAffected": [],
+  "typescriptAndTestSourceDiff": [],
+  "remainingOwner": "Root verifies new CSS/current final build/current-window Chrome; this child does not run browser/geometry/compatibility or rerun unchanged TS/tests.",
+  "evidenceFiles": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-30/cux03-collector-review-r1/collector-final-readback-r1.json",
+      "bytes": 80829,
+      "sha256": "6cdff4010d0d93e6d3bccbb39236ef84d50d330358627c5195a09f5f462fc8cc",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-30/cux03-collector-review-r1/collector-final-readback-r2.json",
+      "bytes": 81474,
+      "sha256": "61908c3f8ffaec490f5c8f1d931f99db905ffa981b6f69c0ebf9fc635a74a280",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-30/cux03-collector-review-r1/handoff-readback-r1.json",
+      "bytes": 1787,
+      "sha256": "eab0467f8f3deea283f1d9f763eb0f3bbe828ce3ec3645506a0e7f7f0f03fbfb",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-30/cux03-collector-review-r1/input-before.json",
+      "bytes": 29301,
+      "sha256": "bbd3182e67126f646db4983cb40dc326f8a4ee44b0b3df10c115af6f997f96e0",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-30/cux03-collector-review-r1/non-ui-inheritance-r1.json",
+      "bytes": 30968,
+      "sha256": "1604e3912a5f73c9ada8f4ae43b974a274d5da436a6c2c9fd1cdfc14caf3cbaf",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-30/cux03-collector-review-r1/review.md",
+      "bytes": 8923,
+      "sha256": "f934d0b4648c908c7f74329a065fc31db10414dc8bd398b4ef2d33c6f1c2c285",
+      "mode": 420
+    }
+  ]
+}

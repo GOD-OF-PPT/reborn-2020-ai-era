@@ -1,0 +1,19 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/VideoSceneChoice.reselect.test.tsx > keeps the confirmed account and both drafts until a different account is explicitly chosen
+AssertionError: expected '2020-01-01 · 只预看未确认的账号乙' to contain '已经确认的账号甲'
+
+Expected: "已经确认的账号甲"
+Received: "2020-01-01 · 只预看未确认的账号乙"
+
+ ❯ src/ui/VideoSceneChoice.reselect.test.tsx:86:26
+     84|   target=targetA;render();click('翻开视频制作与客户约定')
+     85|   const returned=elements(tree).find(element=>element.type==='p'&&elem…
+     86|   expect(text(returned)).toContain(a.name);expect(text(returned)).not.…
+       |                          ^
+     87|   expect(target).toEqual(targetA);expect(chosen).toEqual([targetB])
+     88|   expect(memory.read(view.runId,a.accountId,targetA)).toEqual(draftA)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

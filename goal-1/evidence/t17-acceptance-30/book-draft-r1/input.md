@@ -1,0 +1,3 @@
+增加独立必要接缝子项（仍U3-V）：mainline实查VideoPanel.tsx:102等用自有默认manual/original/player/today，未读videoDraftMemory，近景→原册同稿缺口。你在CUX03准备范围交回后，可独占VideoPanel.tsx及video-scene-draft.ts（若需，不碰VideoSceneChoice）和适用新/旧tests，把当前run/account/严格target同一草稿读写真正接到完整原册的创建/制作/返工/谈判/发布字段，保原所有字段/动作和自有显选，不以blank/default隐式选择新合同。按原DraftMemory public API、失效/只读/候选/跨run隔离；先guard子dir计划/前像再代码。不要跑全type/build或大累计直到Root源码freeze；可跑必要定向。Root拥有OpeningMoment/Object/Today模型集成和新ResultChoices，mainline独占video-player-thread/scene-progress，art独占新paper/css。请回计划接口后做完整最小接缝。
+
+方案同意实施；emptyVideoSceneDraft纯函数可加原draft模块，小hook请独立新use-video-scene-draft.ts而非把React hook引入现有纯memory模块（该模块被Node纯模型消费），你可独占新hook+Panel/draft+tests。保持no memory时原完整原册合法路径，但若同slot已有blank或过期草稿，不用默认manual/today盖写；公开缺失明确重选。记录source前后与真实handler/normal命令证据。

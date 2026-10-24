@@ -1,0 +1,1 @@
+同U3-V收口：DEV5369正常原册日志实际出现React同级重复key警告，需修VideoChannelOpening与VideoChannel组件身份而保同对象草稿。

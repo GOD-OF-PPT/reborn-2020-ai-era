@@ -1,0 +1,57 @@
+--- before/src/ui/VideoEncounter.tsx
++++ after/src/ui/VideoEncounter.tsx
+@@ -27,6 +27,8 @@
+ /** One original route decision and its foreground object; no parallel command or lifecycle. */
+ export function VideoEncounter({p,thread,date,waitLabel,onChoose,onResult,onToday}:VideoEncounterProps){
+  const art=videoPaperFor(thread)
++ const paperStage=thread.focusScope==='history'?'历史回看':thread.focusScope==='carry'?'原约定仍在继续':thread.stage==='video-entry'?'先选账号':art?.phase==='planned'?'已经安排 · 尚未开工':art?.phase==='making'?'正在进行 · 尚待实际完成':art?.phase==='review'?'作品完成 · 待亲自核对':art?.phase==='delivery'?(thread.stage==='video-ready-to-publish'?'这一版待选择发布':'这一版待亲手提交'):art?.phase==='feedback'?'等待这次反馈':art?.phase==='revision'?(thread.stage==='video-quality'?'素材问题 · 待处理':'客户回信 · 待回应'):art?.phase==='settlement'?'原应收 · 尚未实际到账':art?.phase==='non-success'?'这次留下的原记录':art?.phase==='result'?'已有实际结果':'等待你的决定'
++ const paperDetail=thread.wait?thread.wait.date+' · '+thread.wait.label:thread.outcome==='non-success'?'原成本与约定仍保留':''
+  return <VideoThreadAction p={p} thread={thread} active={thread.focus.kind==='video'&&thread.focusStatus!=='invalid'} date={date} waitLabel={waitLabel} onChoose={onChoose} onResult={onResult} onToday={onToday}>{primary=>{
+   if(!primary)return null
+   // Keep the original button/Clock and live handler. The existing route number
+@@ -40,7 +42,7 @@
+     {main}
+    </div>
+    <div className="video-encounter-paper">
+-    <OpeningObject kind={objectKind(thread)} appearance="video" title={thread.object} displayTitle="" detail={thread.wait?thread.wait.date+' · '+thread.wait.label:thread.outcome==='non-success'?'原成本与约定仍保留':'同一份作品与原记录'} stageLabel={thread.focusScope==='history'?'历史回看':thread.focusScope==='carry'?'原约定仍在继续':art?.phase==='planned'?'已经安排 · 尚未开工':art?.phase==='making'?'正在进行 · 尚待实际完成':art?.phase==='settlement'?'原应收 · 尚未实际到账':art?.phase==='non-success'?'这次留下的原记录':art?.phase==='result'?'已有实际结果':'同一份视频的原记录'} actionLabel={primary.binding.label} disabled={primary.binding.disabled} onActivate={primary.binding.activate} textOnly={p.textOnly===true} {...(art?{videoPaper:art}:{})} {...(protection?{protection}:{})}/>
++    <OpeningObject kind={objectKind(thread)} appearance="video" title={thread.object} displayTitle="" detail={paperDetail} stageLabel={paperStage} actionLabel={primary.binding.label} disabled={primary.binding.disabled} onActivate={primary.binding.activate} textOnly={p.textOnly===true} {...(art?{videoPaper:art}:{})} {...(protection?{protection}:{})}/>
+    </div>
+   </section>
+  }}</VideoThreadAction>
+--- before/src/ui/video-encounter.css
++++ after/src/ui/video-encounter.css
+@@ -5,12 +5,16 @@
+ .video-encounter .scene-decision-main{margin:0;min-width:0}
+ .video-encounter .scene-decision-main>button{width:100%;text-align:left}
+ .video-encounter .moment-decision>button>span{display:flex;flex-direction:column;gap:5px}
+-.video-encounter .video-encounter-paper{width:208px;min-width:0;align-self:center}
+-.video-encounter .opening-object{position:relative;inset:auto;display:flex;flex-direction:column;width:208px;max-width:100%;margin:0;transform:none;transition:none}
++.video-encounter .video-encounter-paper{width:208px;min-width:0;align-self:end}
++.video-encounter .opening-object{position:relative;inset:auto;display:flex;flex-direction:column-reverse;width:208px;max-width:100%;margin:0;gap:6px;transform:none;transition:none}
+ .video-encounter .opening-object:hover:not(:disabled),.video-encounter .opening-object:focus-visible:not(:disabled),.video-encounter .opening-object:active:not(:disabled){transform:none}
+-.video-encounter .opening-object-art{display:block;position:relative;align-self:center;width:160px;height:160px;min-height:160px;aspect-ratio:auto;filter:none;transform:none}
+-.video-encounter .video-continuity-art[data-video-phase]{height:160px}
+-.video-encounter .opening-object-copy{width:100%;gap:6px;margin:0;padding:10px 12px;transform:none}
++.video-encounter .opening-object-art{display:block;position:relative;align-self:center;width:184px;height:184px;min-height:184px;aspect-ratio:auto;filter:none;transform:none}
++.video-encounter .video-continuity-art[data-video-phase]{height:184px}
++.video-encounter .video-continuity-art[data-video-phase] .video-continuity-kit,
++.video-encounter .video-continuity-art[data-video-phase] .video-continuity-layers{inset:0;width:100%;height:100%}
++.video-encounter .opening-object-copy{width:100%;gap:6px;margin:0;padding:6px 10px;transform:none}
++.video-encounter .opening-object-title:empty,
++.video-encounter .opening-object-detail:empty{display:none}
+ .video-encounter .opening-object-stage,.video-encounter .opening-object-action{letter-spacing:0}
+ .video-encounter .opening-object-action{gap:7px}
+ .video-encounter .opening-object[data-video-phase=non-success]{--object-accent:#a9b397}
+--- before/src/ui/video-continuity.css
++++ after/src/ui/video-continuity.css
+@@ -7,6 +7,10 @@
+ .video-continuity-art[data-video-phase] .video-kit-contact{position:absolute;z-index:0;height:10%;border-radius:50%;background:radial-gradient(ellipse,#14231e9c 0%,#10231c4d 49%,transparent 73%);filter:blur(2px)}
+ .video-continuity-art[data-video-phase] .video-phone-contact{left:5%;width:39%;bottom:20%;transform:rotate(7deg)}
+ .video-continuity-art[data-video-phase] .video-book-contact{left:41%;right:3%;bottom:1%;transform:rotate(8deg)}
++/* The route close-up uses the complete square image; contact follows its stand and book edges. */
++.video-encounter .video-continuity-art[data-video-phase] .video-kit-contact{height:4%;background:radial-gradient(ellipse,#182018b8 0%,#1b231a66 45%,transparent 73%);filter:blur(1px)}
++.video-encounter .video-continuity-art[data-video-phase] .video-phone-contact{left:7%;width:35%;bottom:30%;transform:rotate(-8deg)}
++.video-encounter .video-continuity-art[data-video-phase] .video-book-contact{left:40%;right:4%;bottom:24%;transform:rotate(16deg)}
+ .video-continuity-art[data-video-phase] .video-state-sheet{fill:#f0e3c5;stroke:#b8a179;stroke-width:4}
+ .video-continuity-art[data-video-phase] .video-state-under{fill:#d9c8a1;stroke:#a89068;stroke-width:4}
+ .video-continuity-art[data-video-phase] .video-state-fold{fill:#cbb896;stroke:#a28c67;stroke-width:4}

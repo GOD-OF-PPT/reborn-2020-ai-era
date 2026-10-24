@@ -1,0 +1,33 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/video-player-thread.test.ts > keeps a normal original work through its actual next-quarter publication feedback without rewriting its saved source
+AssertionError: expected '2020-03-25' to be '2020-04-01' // Object.is equality
+
+Expected: "2020-04-01"
+Received: "2020-03-25"
+
+ ❯ src/ui/video-player-thread.test.ts:43:97
+     41|   const current=p(),raw=controller.exportSaved(),publication=current.f…
+     42|   expect(current.view.origin).toBe('normal');expect(publication.measur…
+     43|   expect(videoFocusOpen(current,focus)).toBe(false);expect(videoFocusR…
+       |                                                                                                 ^
+     44|   expect(playerThread(current,focus)).toMatchObject({focusScope:'curre…
+     45|   expect(playerThread(current,focus).resultRefs).toContainEqual({kind:…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/ui/video-player-thread.test.ts > keeps the original ads publication pending until its own real collection and maps the saved settlement back to that same work
+ FAIL  src/ui/video-player-thread.test.ts > keeps the original affiliate publication pending until its own real collection and maps the saved settlement back to that same work
+TypeError: f.registry.runtime.project is not a function
+ ❯ Object.p src/ui/video-player-thread.test.ts:55:38
+     53|  const send=(command:string,payload:unknown)=>{run=f.apply(run,command…
+     54|  const p=()=>{
+     55|   const features=f.registry.runtime!.project!(run),view={...projectRun…
+       |                                      ^
+     56|   return input(view)
+     57|  }
+ ❯ src/ui/video-player-thread.test.ts:73:83
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+

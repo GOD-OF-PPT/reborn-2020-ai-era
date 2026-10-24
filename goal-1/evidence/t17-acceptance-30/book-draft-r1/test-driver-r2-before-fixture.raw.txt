@@ -1,0 +1,194 @@
+import {expect,it,vi} from 'vitest'
+import {cloneElement,isValidElement,type ReactElement} from 'react'
+import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
+import {createCampaignCodec,createCampaignRun} from '../application/campaign.ts'
+import {evaluateCommand} from '../core/commands.ts'
+import {GameController} from '../application/game-controller.ts'
+import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
+import {abortAfterHeadWrite} from '../testing/abort-after-write.ts'
+import type {GamePanelProps,PlayFeatures} from './game-types.ts'
+import {VideoPanel} from './VideoPanel.tsx'
+import {CommandButton} from './CommandButton.tsx'
+import {createVideoSceneDraftMemory,type VideoSceneDraft} from './video-scene-draft.ts'
+import type {VideoSceneTarget} from './video-scene-progress.ts'
+
+// Actual input/button handlers with scoped hook state; no DOM/effect/Chrome claim.
+const hooks=vi.hoisted(()=>({slots:new Map<string,unknown[]>(),scope:'',index:0}))
+vi.mock('react',async original=>{
+ const actual=await original<typeof import('react')>()
+ const slot=<T,>(initial:()=>T):[T,(value:T|((previous:T)=>T))=>void]=>{
+  const values=hooks.slots.get(hooks.scope)??[]
+  hooks.slots.set(hooks.scope,values)
+  const index=hooks.index++
+  if(!(index in values))values[index]=initial()
+  return [values[index] as T,value=>{values[index]=typeof value==='function'?(value as (previous:T)=>T)(values[index] as T):value}]
+ }
+ return {...actual,useState:<T,>(value:T|(()=>T))=>slot(()=>typeof value==='function'?(value as ()=>T)():value),useRef:<T,>(value:T)=>slot(()=>({current:value}))[0],useId:()=> 'video-book-draft',useEffect:()=>{}}
+})
+type Element=ReactElement<Record<string,unknown>>
+function expand(value:unknown,path='root'):unknown{
+ if(Array.isArray(value))return value.map((child,index)=>expand(child,path+'/'+index))
+ if(!isValidElement<Record<string,unknown>>(value))return value
+ if(typeof value.type==='function'&&['VideoPanel','VideoPanelScope','VideoChannelOpening','VideoChannel'].includes(value.type.name)){
+  hooks.scope=path+'/'+value.type.name+':'+value.key;hooks.index=0
+  return expand(Reflect.apply(value.type,undefined,[value.props]),hooks.scope)
+ }
+ return cloneElement(value,{children:expand(value.props.children,path+'/children')})
+}
+function elements(value:unknown):Element[]{
+ if(Array.isArray(value))return value.flatMap(elements)
+ return isValidElement<Record<string,unknown>>(value)?[value,...elements(value.props.children)]:[]
+}
+function text(value:unknown):string{
+ if(typeof value==='string'||typeof value==='number')return String(value)
+ if(Array.isArray(value))return value.map(text).join('')
+ return isValidElement<Record<string,unknown>>(value)?text(value.props.children):''
+}
+function driver(p:GamePanelProps,target?:VideoSceneTarget){
+ let tree:unknown
+ const render=()=>{tree=expand(<VideoPanel {...p} {...(target?{initialTarget:target}:{})}/>)}
+ const field=(label:string)=>{
+  const owner=elements(tree).find(e=>e.type==='label'&&text(e.props.children).startsWith(label))
+  const input=owner&&elements(owner).find(e=>e.type==='input'||e.type==='select'||typeof e.props.onChange==='function')
+  if(!input)throw Error('ORIGINAL_FIELD_REQUIRED:'+label)
+  return input
+ }
+ const change=(label:string,value:string)=>{
+  const input=field(label),handler=input.props.onChange
+  if(typeof handler!=='function')throw Error('REAL_INPUT_HANDLER_REQUIRED')
+  handler({target:{value},currentTarget:{value,checked:value==='true'}});render()
+ }
+ const button=(label:string)=>{
+  // Run the original command component for the exact button being inspected.
+  // Unrelated original commands remain elements, not repeated preview workloads.
+  const command=elements(tree).find(e=>e.type===CommandButton&&String(e.props.label).includes(label))
+  const input=command?elements(Reflect.apply(CommandButton,undefined,[command.props])).find(e=>e.type==='button'):elements(tree).find(e=>e.type==='button'&&text(e.props.children).includes(label))
+  if(!input)throw Error('ORIGINAL_BUTTON_REQUIRED:'+label)
+  return input
+ }
+ render()
+ return {field,change,button,tree:()=>tree,render}
+}
+const filled=(channelId:string,startAt:string):VideoSceneDraft=>({channelId,clientId:'unsubmitted-choice',cohortId:'unsubmitted-source',modeId:'manual',materialId:'licensed',resource:'player-production',startAt,productId:'original_series',name:'尚未提交的新账号名称',segment:'lifestyle',monetization:'affiliate',label:true})
+
+it('shares the same original work draft with the book and writes its real fields without changing another work or the saved run',async()=>{
+ hooks.slots.clear()
+ const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'u3-video-book-draft'})
+ let id=0;const controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=>`u3-video-book-${++id}`})
+ try{
+  // The same full Create and four original commands, then one official import.
+  // This bounds handler setup without changing a seed, balance, AP or qualification.
+  const creation={runId:'life-u3-video-book-1',actorId:'player',commandId:'create-u3-video-book-2',backgroundId:'technical_employee',playerProfile:{wishId:'autonomy' as const,approach:'free' as const},seed:'u3-video-book-draft'},commands:unknown[]=[]
+  let normal=createCampaignRun(creation),sequence=2
+  const send=(kind:string,payload:unknown)=>{
+   const command={runId:normal.runId,actorId:'player',commandId:`command-u3-video-book-${++sequence}`,expectedRevision:normal.revision,kind,payload},result=evaluateCommand(normal,command,codec.registry,'player')
+   expect(result.status).toBe('proposed');if(result.status!=='proposed')throw Error('ORIGINAL_NORMAL_COMMAND_REQUIRED')
+   commands.push(command);normal=codec.import(codec.export(result.nextRun))
+  }
+  send('OpenVideoChannel',{name:'同稿原账号甲',segment:'local_merchants'});send('OpenVideoChannel',{name:'另一账号乙',segment:'lifestyle'})
+  const channelId=normal.video!.channels[0]!.id
+  for(const startAt of ['2020-01-02','2020-01-10'])send('StartVideoWork',{channelId,productId:'hotspot',modeId:'manual',materialId:'original',resources:['player-production'],startAt})
+  await controller.initialize();await controller.importNew(codec.export(normal))
+  console.info('NORMAL_ENGINE_PREFIX',JSON.stringify({creation,commands,origin:normal.origin,revision:normal.revision}))
+  const channel=(controller.snapshot.view!.features as unknown as PlayFeatures).video!.channels[0]!
+  const view=controller.snapshot.view!,features=view.features as unknown as PlayFeatures,[a,b]=features.video!.works
+  if(!a||!b)throw Error('TWO_REAL_PLANNED_WORKS_REQUIRED')
+  const target={channelId:channel.id,workId:a.id},other={channelId:channel.id,workId:b.id},memory=createVideoSceneDraftMemory(view.runId),draft=filled(channel.id,'2020-01-25'),second={...filled(channel.id,'2020-02-10'),materialId:'original',monetization:'none',label:false}
+  // Unsubmitted choices do not grant permissions, clients, income or completed work.
+  memory.write(view.runId,channel.accountId,target,draft);memory.write(view.runId,channel.accountId,other,second)
+  const request=vi.fn(),p:GamePanelProps={controller,view,features,accountId:channel.accountId,videoDraftMemory:memory,request},raw=controller.exportSaved(),book=driver(p,{workId:a.id,channelId:channel.id})
+  expect(book.field('素材与权利').props.value).toBe('licensed')
+  expect(book.field('产品方向').props.value).toBe('original_series')
+  expect(book.field('开工日期').props.value).toBe('2020-01-25')
+  expect(book.field('账号名称').props.value).toBe(draft.name)
+  expect(book.field('受众').props.value).toBe('lifestyle')
+  expect(book.field('本次发布方式').props.value).toBe('affiliate')
+  book.change('开工日期','2020-02-01');book.change('素材与权利','original');book.change('本次发布方式','ads')
+  expect(memory.read(view.runId,channel.accountId,target)).toEqual({...draft,startAt:'2020-02-01',materialId:'original',monetization:'ads'})
+  expect(memory.read(view.runId,channel.accountId,other)).toEqual(second)
+  const another=driver(p,other)
+  expect(another.field('开工日期').props.value).toBe('2020-02-10')
+  expect(another.field('素材与权利').props.value).toBe('original')
+  expect(request).not.toHaveBeenCalled();expect(controller.exportSaved()).toBe(raw)
+ }finally{hooks.slots.clear();await controller.close()}
+})
+
+it('reads and edits the entry draft before using the original explicit creation command',async()=>{
+ hooks.slots.clear()
+ const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'u3-video-book-creation'})
+ let id=0;const controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=>`u3-video-book-creation-${++id}`})
+ try{
+  await controller.initialize();await controller.newLife({backgroundId:'technical_employee',playerProfile:{wishId:'autonomy',approach:'free'},seed:'u3-video-book-protection'})
+  const view=controller.snapshot.view!,memory=createVideoSceneDraftMemory(view.runId),requests:{kind:string;payload:unknown}[]=[],entry=filled('','2020-01-01')
+  memory.write(view.runId,'personal',undefined,entry)
+  const raw=controller.exportSaved(),entryBook=driver({controller,view,features:view.features as unknown as PlayFeatures,accountId:'personal',videoDraftMemory:memory,request:(kind,payload)=>requests.push({kind,payload})})
+  expect(entryBook.field('账号名称').props.value).toBe(entry.name)
+  entryBook.change('账号名称','这次亲手确认的新账号');entryBook.change('受众','local_merchants')
+  expect(controller.exportSaved()).toBe(raw);expect(requests).toEqual([])
+  const create=entryBook.button('创建并启用内容账号')
+  expect(create.props.disabled).toBe(false)
+  if(typeof create.props.onClick!=='function')throw Error('ORIGINAL_CREATE_HANDLER_REQUIRED')
+  create.props.onClick()
+  expect(requests).toEqual([{kind:'OpenVideoChannel',payload:{name:'这次亲手确认的新账号',segment:'local_merchants'}}])
+  const command=requests[0]!
+  expect((await controller.submit(controller.prepare(command.kind,command.payload))).status).toBe('saved')
+  expect((controller.snapshot.view!.features as unknown as PlayFeatures).video!.channels[0]).toMatchObject({name:'这次亲手确认的新账号',segment:'local_merchants'})
+  console.info('NORMAL_CONTROLLER_PREFIX',JSON.stringify({seed:'u3-video-book-protection',receipts:controller.snapshot.view!.receipts}))
+ }finally{hooks.slots.clear();await controller.close()}
+})
+
+it('retains blank and stale choices and blocks stale or candidate handlers without granting a readonly writer',async()=>{
+ hooks.slots.clear()
+ const codec=createCampaignCodec(),base=new IDBFactory(),name='u3-video-book-protection';let armed=false
+ const fault=abortAfterHeadWrite(base,name,()=>armed),store=new IndexedDbRunStore({codec,factory:fault.factory,keyRange:IDBKeyRange,name}),locks=new MemoryWriterAccess()
+ let id=0;const controller=new GameController({codec,store,locks,id:()=>`u3-video-book-protection-${++id}`})
+ let reader:GameController|null=null
+ try{
+  const creation={runId:'life-u3-video-book-protection-1',actorId:'player',commandId:'create-u3-video-book-protection-2',backgroundId:'technical_employee',playerProfile:{wishId:'autonomy' as const,approach:'free' as const},seed:'u3-video-book-protection'},commands:unknown[]=[]
+  let normal=createCampaignRun(creation)
+  for(const [kind,payload]of [['OpenVideoChannel',{name:'这次亲手确认的新账号',segment:'local_merchants'}],['AdvanceTime',{date:'2020-01-03'}]] as const){
+   const command={runId:normal.runId,actorId:'player',commandId:'command-u3-video-book-protection-'+(commands.length+3),expectedRevision:normal.revision,kind,payload},result=evaluateCommand(normal,command,codec.registry,'player')
+   expect(result.status).toBe('proposed');if(result.status!=='proposed')throw Error('ORIGINAL_NORMAL_COMMAND_REQUIRED')
+   commands.push(command);normal=codec.import(codec.export(result.nextRun))
+  }
+  await controller.initialize();await controller.importNew(codec.export(normal))
+  console.info('NORMAL_ENGINE_PREFIX',JSON.stringify({creation,commands,origin:normal.origin,revision:normal.revision}))
+  const memory=createVideoSceneDraftMemory(controller.snapshot.view!.runId)
+  const props=():GamePanelProps=>{const view=controller.snapshot.view!;return {controller,view,features:view.features as unknown as PlayFeatures,accountId:'personal',videoDraftMemory:memory,request:()=>{throw Error('EDITING_MUST_NOT_REQUEST')}}}
+  const target={channelId:(controller.snapshot.view!.features as unknown as PlayFeatures).video!.channels[0]!.id}
+  const view=controller.snapshot.view!,blank={...filled(target.channelId,'2020-01-01'),modeId:'',materialId:'',resource:'missing-original-worker',productId:'',monetization:''}
+  memory.write(view.runId,'personal',target,blank)
+  const book=driver(props(),target),before=controller.exportSaved()
+  expect(book.field('制作方式').props.value).toBe('');expect(book.field('素材与权利').props.value).toBe('')
+  expect(book.field('开工日期').props.value).toBe('2020-01-01')
+  expect(text(book.tree())).toContain('草稿里的开工日已经过去')
+  expect(text(book.tree())).toContain('原制作资源已不可用')
+  expect(book.button('安排一件新作品').props.disabled).toBe(true)
+  const stale=book.field('账号名称').props.onChange
+  armed=true
+  expect((await controller.submit(controller.prepare('OpenVideoChannel',{name:'未发布的候选账号',segment:'lifestyle'}))).status).toBe('unsaved')
+  expect(fault.trace).toEqual({writeSucceeded:true,abortIssued:true})
+  expect(controller.snapshot.view!.hasCandidate).toBe(true)
+  if(typeof stale!=='function')throw Error('ORIGINAL_EDIT_HANDLER_REQUIRED')
+  stale({target:{value:'候选时不得改旧槽'}})
+  expect(memory.read(view.runId,'personal',target)).toEqual(blank)
+  const candidateBook=driver(props(),target)
+  candidateBook.change('账号名称','不能绕过候选保护')
+  expect(memory.read(view.runId,'personal',target)).toEqual(blank)
+  expect(candidateBook.button('创建并启用内容账号').props.disabled).toBe(true)
+  expect(controller.exportSaved()).toBe(before)
+  expect((await controller.retry()).status).toBe('saved')
+  reader=new GameController({codec,store,locks});await reader.initialize();await reader.continueLife(view.runId)
+  const readonly=reader.snapshot.view!
+  expect(readonly.readOnly).toBe(true);expect(readonly.saveStatus).toBe('read_only')
+  const reading=driver({controller:reader,view:readonly,features:readonly.features as unknown as PlayFeatures,accountId:'personal',videoDraftMemory:memory,request:()=>{throw Error('READONLY_BOOK_MUST_NOT_REQUEST')}},target)
+  reading.change('账号名称','只读仍可准备UI草稿')
+  expect(memory.read(view.runId,'personal',target)?.name).toBe('只读仍可准备UI草稿')
+  expect(reading.button('创建并启用内容账号').props.disabled).toBe(true)
+  const invalid=driver(props(),{channelId:target.channelId,workId:'missing-original-work'})
+  expect(text(invalid.tree())).toContain('先找回原来的视频记录')
+  expect(text(invalid.tree())).not.toContain('创建并启用内容账号')
+  expect(memory.read('another-run','personal',target)).toBeUndefined()
+ }finally{hooks.slots.clear();if(reader)await reader.close();await controller.close()}
+})

@@ -1,0 +1,65 @@
+{
+  "owned": [
+    {
+      "path": "src/ui/VideoCommandDetails.tsx",
+      "bytes": 4421,
+      "sha256": "83215a17c9623d2d506dfc0a1b78d2bf5592ff97ea2c3de61566d28a5446bf62",
+      "mode": "0o644"
+    },
+    {
+      "path": "src/ui/CommandDetails.tsx",
+      "bytes": 12853,
+      "sha256": "94d81ecc345d78bc6b9b3c46e3274eba6782c59caa619eeef62233774af715c2",
+      "mode": "0o644"
+    },
+    {
+      "path": "src/ui/video-command-details.test.tsx",
+      "bytes": 8474,
+      "sha256": "1eb36929a8ac930a5f264c34b595bd6b149efb05687d21e3f7c9f29d7783f5cc",
+      "mode": "0o644"
+    }
+  ],
+  "checks": {
+    "oldPublishAndAcceptBodyExact": true,
+    "oldThreeCasesExact": true,
+    "finalOwnedSameAsPassedUnit": true,
+    "unitBoundOnlySevenFiles": true,
+    "noFallbackToInitialPrepayment": true,
+    "runRevisionGuard": true
+  },
+  "readOnlyRulesAndTypes": [
+    {
+      "path": "src/core/video.ts",
+      "sameAsBefore": true
+    },
+    {
+      "path": "src/core/ledger.ts",
+      "sameAsBefore": true
+    },
+    {
+      "path": "src/application/workbench-projection.ts",
+      "sameAsBefore": true
+    },
+    {
+      "path": "src/ui/game-types.ts",
+      "sameAsBefore": true
+    }
+  ],
+  "unit": {
+    "argv": [
+      "rtk",
+      "proxy",
+      "node_modules/.bin/vitest",
+      "run",
+      "src/ui/video-command-details.test.tsx",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 9.27167702303268,
+    "sourceUnchanged": true,
+    "boundFiles": 7,
+    "testTimeout": "original default 5000ms, unchanged",
+    "scope": "only video-command-details.test.tsx; no full type/build/browser"
+  },
+  "global547Binding": "not performed by this agent; Root R6 owns whole source/type/build/Native"
+}

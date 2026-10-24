@@ -1,0 +1,67 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/video-player-thread.test.ts > keeps the original ads publication pending until its own real collection and maps the saved settlement back to that same work
+AssertionError: expected { title: '这份原作品，已经发布。', …(7) } to match object { …(4) }
+(8 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "outcome": "pending",
+-   "stage": "video-platform-payment-wait",
++   "outcome": "actual",
++   "stage": "video-published",
+    "target": {
+      "channelId": "vid:4b6700b30e88378797f3248b50ab06a2",
+      "section": "publications",
+      "workId": "vid:02de5bea8fee572b47b126d61ab1352e",
+-   },
+-   "wait": {
+-     "date": "2020-03-04",
+    },
+  }
+
+ ❯ src/ui/video-player-thread.test.ts:86:78
+     84|  expect(settlement.amountFen).toBeGreaterThan(0);expect(settlement.col…
+     85|  const pending=h.p(),rawPending=h.f.codec.export(h.run)
+     86|  expect(videoSceneProgress(pending.features.video,pending.view.date,ta…
+       |                                                                              ^
+     87|  expect(videoFocusOpen(pending,h.focus)).toBe(true)
+     88|  expect(videoPlayerScene(pending,h.focus).resultRefs).toContainEqual({…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/ui/video-player-thread.test.ts > keeps the original affiliate publication pending until its own real collection and maps the saved settlement back to that same work
+AssertionError: expected { title: '这份原作品，已经发布。', …(7) } to match object { …(4) }
+(8 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "outcome": "pending",
+-   "stage": "video-affiliate-window",
++   "outcome": "actual",
++   "stage": "video-published",
+    "target": {
+      "channelId": "vid:4b6700b30e88378797f3248b50ab06a2",
+      "section": "publications",
+      "workId": "vid:02de5bea8fee572b47b126d61ab1352e",
+-   },
+-   "wait": {
+-     "date": "2020-02-26",
+    },
+  }
+
+ ❯ src/ui/video-player-thread.test.ts:78:75
+     76|   const pub=h.p().features.video!.publications.find(p=>p.workId===h.wo…
+     77|   expect(h.p().features.video!.settlements).toHaveLength(0)
+     78|   expect(videoSceneProgress(h.p().features.video,h.p().view.date,targe…
+       |                                                                           ^
+     79|   expect(videoFocusOpen(h.p(),h.focus)).toBe(true)
+     80|   expect(h.f.codec.export(h.run)).toBe(rawBefore);expect(JSON.stringif…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

@@ -1,0 +1,141 @@
+import {beforeEach,expect,it} from 'vitest'
+import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
+import {createCampaignCodec,createCampaignRun} from '../application/campaign.ts'
+import {evaluateCommand,projectRun} from '../core/commands.ts'
+import type {GameRun,CommandEnvelope} from '../core/run-types.ts'
+import {GameController} from '../application/game-controller.ts'
+import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
+import type {PlayingView,PlayFeatures} from './game-types.ts'
+import {videoSceneResult} from './video-scene-result.ts'
+import {moneyText} from './game-text.ts'
+import originalPaid from '../../goal-1/evidence/t17-acceptance-23/chrome-r3/manual-saved-12-r6.json?raw'
+
+function normal(name:string){
+ const codec=createCampaignCodec(),creation={runId:'u3-result-'+name,actorId:'player',commandId:'create-'+name,backgroundId:'technical_employee',seed:'u3-result-'+name,playerProfile:{wishId:'autonomy' as const,approach:'free' as const}}
+ let run=createCampaignRun(creation)
+ const view=():PlayingView=>{const features=codec.registry.runtime!.project!(run);return {...projectRun(run),features,saveStatus:'saved',busy:false,readOnly:false,readOnlyReason:null,hasCandidate:false,pendingRevision:null}}
+ const frames:{kind:string;before:PlayingView;after:PlayingView}[]=[]
+ const send=(kind:string,payload:unknown)=>{
+  const before=view(),command={runId:run.runId,actorId:run.actorId,commandId:name+'-'+run.revision,expectedRevision:run.revision,kind,payload},result=evaluateCommand(run,command,codec.registry,run.actorId)
+  expect(result.status,JSON.stringify({kind,payload,result})).toBe('proposed');if(result.status!=='proposed')throw Error('ORIGINAL_NORMAL_COMMAND_REQUIRED')
+  run=codec.import(codec.export(result.nextRun));frames.push({kind,before,after:view()})
+ }
+ return {codec,view,send,frames,raw:()=>codec.export(run)}
+}
+async function mounted(name:string,source?:string){
+ const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'u3-result-'+name})
+ let sequence=0;const controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=>name+'-'+(++sequence)})
+ await controller.initialize()
+ if(source)await controller.importNew(source)
+ else await controller.newLife({backgroundId:'technical_employee',seed:'u3-result-'+name,playerProfile:{wishId:'autonomy',approach:'free'}})
+ return {controller,close:()=>controller.close()}
+}
+let fresh:Awaited<ReturnType<typeof mounted>>|undefined,ready:Awaited<ReturnType<typeof prepareReady>>|undefined,contract:Awaited<ReturnType<typeof prepareContract>>|undefined
+async function prepareReady(){
+ const h=normal('ready')
+ h.send('OpenVideoChannel',{name:'留给受众的这一份手工样片',segment:'local_merchants'})
+ const channel=(h.view().features as unknown as PlayFeatures).video!.channels[0]!
+ h.send('StartVideoWork',{channelId:channel.id,productId:'hotspot',modeId:'manual',materialId:'original',resources:['player-production'],startAt:'2020-01-02'})
+ h.send('AdvanceTime',{date:'2020-01-02'});h.send('AdvanceTime',{date:'2020-01-09'})
+ const work=(h.view().features as unknown as PlayFeatures).video!.works[0]!
+ expect(work.production!.status).toBe('completed')
+ return {...await mounted('ready',h.raw()),frames:h.frames,workId:work.id}
+}
+async function prepareContract(){
+ const codec=createCampaignCodec(),original=codec.import(originalPaid),first=original.receipts[0]!
+ expect(original.origin).toBe('normal')
+ let run=createCampaignRun({runId:original.runId,actorId:original.actorId,commandId:first.commandId,backgroundId:original.backgroundId,seed:original.seed,playerProfile:original.playerProfile})
+ const frames:{kind:string;before:PlayingView;after:PlayingView}[]=[],view=(r:GameRun):PlayingView=>{const features=codec.registry.runtime!.project!(r);return {...projectRun(r),features,saveStatus:'saved',busy:false,readOnly:false,readOnlyReason:null,hasCandidate:false,pendingRevision:null}}
+ for(const receipt of original.receipts.slice(1,-3)){
+  const command:CommandEnvelope={...JSON.parse(receipt.payloadSignature),commandId:receipt.commandId,expectedRevision:receipt.revisionBefore},before=view(run),result=evaluateCommand(run,command,codec.registry,run.actorId)
+  expect(result.status).toBe('proposed');if(result.status!=='proposed')throw Error('ORIGINAL_FULL_CREATE_PREFIX_REQUIRED')
+  run=codec.import(codec.export(result.nextRun));frames.push({kind:receipt.kind,before,after:view(run)})
+ }
+ expect(run.revision).toBe(9)
+ return {...await mounted('contract',codec.export(run)),frames,commands:original.receipts.slice(-3).map((receipt):CommandEnvelope=>({...JSON.parse(receipt.payloadSignature),commandId:receipt.commandId,expectedRevision:receipt.revisionBefore}))}
+}
+beforeEach(async({task})=>{
+ fresh=undefined;ready=undefined;contract=undefined
+ if(task.name==='names a truly saved channel and original planned work without manufacturing production, payment or another source')fresh=await mounted('opening')
+ if(task.name==='separates actual production, current-version review, publication and its later real statistics')ready=await prepareReady()
+ if(task.name==='replays the original normal commission and reports protected prepayment, acceptance and actual remainder with its original fee')contract=await prepareContract()
+})
+
+it('names a truly saved channel and original planned work without manufacturing production, payment or another source',async()=>{
+ if(!fresh)throw Error('FRESH_NORMAL_REQUIRED')
+ const h=fresh
+ try{
+  let previous=h.controller.snapshot.view!
+  expect((await h.controller.submit(h.controller.prepare('OpenVideoChannel',{name:'这次给本地商家的内容',segment:'local_merchants'}))).status).toBe('saved')
+  let current=h.controller.snapshot.view!,text=videoSceneResult('OpenVideoChannel',previous,current)!
+  expect(text).toContain('这次给本地商家的内容');expect(text).toContain(current.date);expect(text).not.toContain('已经制作完成')
+  const channel=(current.features as unknown as PlayFeatures).video!.channels[0]!
+  previous=current
+  expect((await h.controller.submit(h.controller.prepare('StartVideoWork',{channelId:channel.id,productId:'hotspot',modeId:'manual',materialId:'original',resources:['player-production'],startAt:'2020-01-02'}))).status).toBe('saved')
+  current=h.controller.snapshot.view!;text=videoSceneResult('StartVideoWork',previous,current)!
+  const features=current.features as unknown as PlayFeatures,work=features.video!.works[0]!,raw=h.controller.exportSaved()
+  expect(work.production!.status).toBe('planned');expect(text).toContain(channel.name);expect(text).toContain(work.production!.startAt);expect(text).toContain(work.production!.completeAt)
+  expect(text).toContain('预留');expect(text).toContain(moneyText(60000));expect(text).not.toContain('已经实际完成')
+  for(const changed of [
+   {...current,hasCandidate:true,saveStatus:'unsaved' as const},
+   {...current,readOnly:true,saveStatus:'read_only' as const},
+   {...current,busy:true},
+   {...current,runId:'another-life'},
+   {...current,revision:previous.revision},
+   {...current,revision:current.revision+1},
+  ])expect(videoSceneResult('StartVideoWork',previous,changed)).toBeNull()
+  expect(videoSceneResult('AdvanceTime',previous,current)).toBeNull();expect(videoSceneResult('StartVideoWork',null,current)).toBeNull()
+  const wrongOwner={...current,features:{...features,video:{...features.video!,channels:features.video!.channels.map(row=>({...row,accountId:'uncontrolled-account'}))}}}
+  expect(videoSceneResult('StartVideoWork',previous,wrongOwner)).toBeNull()
+  expect(h.controller.exportSaved()).toBe(raw)
+ }finally{await h.close()}
+})
+
+it('separates actual production, current-version review, publication and its later real statistics',async()=>{
+ if(!ready)throw Error('NORMAL_READY_WORK_REQUIRED')
+ const h=ready
+ try{
+  const running=h.frames.find(frame=>frame.kind==='AdvanceTime'&&(frame.after.features as unknown as PlayFeatures).video!.works[0]!.production!.status==='running')!,completed=h.frames.find(frame=>frame.kind==='AdvanceTime'&&(frame.after.features as unknown as PlayFeatures).video!.works[0]!.production!.status==='completed')!
+  expect(videoSceneResult('AdvanceTime',running.before,running.after)).toContain('实际直接成本')
+  expect(videoSceneResult('AdvanceTime',completed.before,completed.after)).toContain('2020-01-09实际完成')
+  const feature=completed.after.features as unknown as PlayFeatures,uncompleted={...completed.after,features:{...feature,video:{...feature.video!,works:feature.video!.works.map(work=>({...work,production:{...work.production!,status:'running' as const}}))}}}
+  // Date reached is not proof that the original job actually completed.
+  expect(videoSceneResult('AdvanceTime',completed.before,uncompleted)).toBeNull()
+  let previous=h.controller.snapshot.view!
+  expect((await h.controller.submit(h.controller.prepare('ReviewVideoOutput',{workId:h.workId,disclosure:'manual'}))).status).toBe('saved')
+  let current=h.controller.snapshot.view!,text=videoSceneResult('ReviewVideoOutput',previous,current)!
+  expect(text).toContain('人工核对');expect(text).toContain('第1版');expect(text).not.toContain('已交给原客户')
+  previous=current
+  expect((await h.controller.submit(h.controller.prepare('PublishVideo',{workId:h.workId,monetization:'none',label:false}))).status).toBe('saved')
+  current=h.controller.snapshot.view!;text=videoSceneResult('PublishVideo',previous,current)!
+  const pub=(current.features as unknown as PlayFeatures).video!.publications[0]!
+  expect(text).toContain(pub.publishedAt);expect(text).toContain(pub.measureAt);expect(text).toContain('没有提前加钱')
+  previous=current
+  expect((await h.controller.submit(h.controller.prepare('AdvanceTime',{date:pub.measureAt}))).status).toBe('saved')
+  current=h.controller.snapshot.view!;text=videoSceneResult('AdvanceTime',previous,current)!
+  const measured=(current.features as unknown as PlayFeatures).video!.publications[0]!
+  expect(measured.measuredAt).toBe(pub.measureAt);expect(text).toContain('播放'+measured.views);expect(text).toContain('合格询价'+measured.qualifiedInquiries);expect(text).toContain('不是现金')
+ }finally{await h.close()}
+})
+
+it('replays the original normal commission and reports protected prepayment, acceptance and actual remainder with its original fee',async()=>{
+ if(!contract)throw Error('NORMAL_COMMISSION_REQUIRED')
+ const h=contract
+ try{
+  const accepted=h.frames.find(frame=>frame.kind==='AcceptVideoCommission')!,marketing=h.frames.find(frame=>frame.kind==='AdvanceTime'&&(frame.after.features as unknown as PlayFeatures).video!.marketing.some(row=>row.completedAt!==null)&&!(frame.before.features as unknown as PlayFeatures).video!.marketing.some(row=>row.completedAt!==null))!
+  const acceptedText=videoSceneResult('AcceptVideoCommission',accepted.before,accepted.after)!,c=(accepted.after.features as unknown as PlayFeatures).video!.contracts[0]!
+  expect(acceptedText).toContain(moneyText(c.prepaymentFen));expect(acceptedText).toContain('受保护');expect(acceptedText).toContain(c.dueAt)
+  const marketingText=videoSceneResult('AdvanceTime',marketing.before,marketing.after)!,m=(marketing.after.features as unknown as PlayFeatures).video!.marketing[0]!,channel=(marketing.after.features as unknown as PlayFeatures).video!.channels.find(row=>row.id===m.channelId)!,leadCount=channel.leads.filter(lead=>lead.cohortId===m.cohortId).length
+  expect(marketingText).toContain(channel.name);expect(marketingText).toContain('当前'+leadCount+'份尚未转化');expect(marketingText).toContain('选择回应哪位客户')
+  for(const command of h.commands){
+   const previous=h.controller.snapshot.view!
+   expect((await h.controller.submit(command)).status).toBe('saved')
+   const current=h.controller.snapshot.view!,text=videoSceneResult(command.kind,previous,current)!,row=(current.features as unknown as PlayFeatures).video!.contracts[0]!
+   if(command.kind==='SubmitVideoCommission'){expect(text).toContain('已交给原客户');expect(text).toContain('尚未验收')}
+   else if(row.status==='delivered'){expect(text).toContain('原余款应收'+moneyText(row.priceFen-row.prepaymentFen));expect(text).toContain(row.paymentAt!);expect(text).toContain('没有把应收变现金')}
+   else{expect(row.status).toBe('settled');expect(text).toContain('此前原预款'+moneyText(90000));expect(text).toContain('本次原余款'+moneyText(210000));expect(text).toContain('原费用'+moneyText(15000));expect(text).not.toContain('净利润')}
+  }
+  expect(h.controller.exportSaved()).toBe(originalPaid)
+ }finally{await h.close()}
+})

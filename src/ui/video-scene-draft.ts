@@ -2,6 +2,8 @@ import type {VideoSceneTarget} from './video-scene-progress.ts'
 
 export type VideoSceneDraft={channelId:string;clientId:string;cohortId:string;modeId:string;materialId:string;resource:string;startAt:string;productId:string;name:string;segment:string;monetization:string;label:boolean}
 
+export const emptyVideoSceneDraft=(channelId=''):VideoSceneDraft=>({channelId,clientId:'',cohortId:'',modeId:'',materialId:'',resource:'',startAt:'',productId:'',name:'',segment:'',monetization:'',label:false})
+
 /** Sections change the page being read, not the identity of the unfinished choice. */
 export function videoSceneDraftKey(runId:string,accountId:string,target:VideoSceneTarget|undefined):string{
  return JSON.stringify([runId,accountId,target?.channelId??'',target?.workId??'',target?.contractId??'',target?.marketingId??''])

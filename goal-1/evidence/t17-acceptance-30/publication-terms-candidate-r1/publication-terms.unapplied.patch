@@ -1,0 +1,94 @@
+diff --git a/src/ui/VideoPublicationTerms.tsx b/src/ui/VideoPublicationTerms.tsx
+new file mode 100644
+--- /dev/null
++++ b/src/ui/VideoPublicationTerms.tsx
+@@ -0,0 +1,38 @@
++import type {VideoProjection} from '../core/video-projection.ts'
++import {addDays} from '../core/calendar.ts'
++
++export interface VideoPublicationTermsProps{
++ readonly video:VideoProjection
++ readonly date:string
++ readonly workId:string
++ readonly monetization:string
++ readonly className?:string
++}
++
++/** Only the selected work, public channel eligibility and original measurement date are read. */
++export function VideoPublicationTerms({video,date,workId,monetization,className}:VideoPublicationTermsProps){
++ const sectionClass=className??'confirmation-context video-paper-terms'
++ const works=video?.works.filter(work=>work.id===workId)??[]
++ const work=works.length===1?works[0]:undefined
++ const channels=work?video?.channels.filter(channel=>channel.id===work.channelId)??[]:[]
++ const channel=channels.length===1?channels[0]:undefined
++ if(!video||!work||!channel)return <section className={sectionClass}><p className="warning-box">这份作品与账号尚未匹配，请返回重新核对；没有换到其他作品。</p></section>
++ const identity=<p>{channel.name} · 作品第{work.version}版</p>
++ const publications=video.publications.filter(publication=>publication.workId===work.id&&publication.channelId===channel.id)
++ if(publications.length){
++  const publication=publications.length===1?publications[0]:undefined
++  return <section className={sectionClass}>{identity}<p className="warning-box">这份作品已有发布记录。{publication?<>原发布日{publication.publishedAt}，原统计日{publication.measureAt}。</>:null}请返回核对这份发布，不重新统计或补计收入。</p></section>
++ }
++ if(!['none','ads','affiliate'].includes(monetization))return <section className={sectionClass}>{identity}<p>先明确本次发布方式，再核对这次能得到的反馈。</p></section>
++ let measureAt:string
++ try{measureAt=addDays(date,7)}catch{return <section className={sectionClass}>{identity}<p className="warning-box">尚未取得这次发布的当前日期，请返回重新核对。</p></section>}
++ const programLabel=monetization==='ads'?'平台分成':'带货'
++ const hasProgram=channel.eligiblePrograms.some(program=>program.program===monetization)
++ const covered=channel.eligiblePrograms.some(program=>program.program===monetization&&program.expiresAt!==null&&measureAt<program.expiresAt)
++ return <section className={sectionClass}>
++  {identity}
++  <p>若在<time dateTime={date}>{date}</time>发布，将在<time dateTime={measureAt}>{measureAt}</time>统计实际曝光与询价。发布本身不增加现金。</p>
++  {monetization==='none'?<p>这次只积累受众，不申请平台分成或带货变现。曝光、关注和询价都不是现金收入。</p>:covered?<p>当前{programLabel}资格覆盖这次统计窗口，仍要等待实际反馈；有资格也不保证收入。即使形成应收，也须按约定实际收取后才是现金。</p>:<p className="warning-box">{hasProgram?'现有'+programLabel+'资格没有覆盖本次统计窗口。':'当前账号没有覆盖本次统计日的'+programLabel+'资格。'}本次只统计曝光与询价，不产生这项收入；以后取得资格也不会给这次发布补计收入。</p>}
++  {monetization==='affiliate'?<p>只有本次资格覆盖、且统计时实际形成受众，才有后续订单观察；没有受众就没有该观察。有受众也不承诺订单、留存或收入。</p>:null}
++ </section>
++}
+diff --git a/src/ui/VideoSceneChoice.tsx b/src/ui/VideoSceneChoice.tsx
+--- a/src/ui/VideoSceneChoice.tsx
++++ b/src/ui/VideoSceneChoice.tsx
+@@ -9,6 +9,7 @@
+ import {playableAdvanceDate} from '../application/playable-advance.ts'
+ import {addDays,isoDate} from '../core/calendar.ts'
+ import {VIDEO_JOBS} from '../content/video.ts'
++import {VideoPublicationTerms} from './VideoPublicationTerms.tsx'
+ import {moneyText,playableThrough,lifecycleText,reasonText} from './game-text.ts'
+ import './video-play.css'
+ 
+@@ -205,7 +206,7 @@
+    </div>
+    <p className="video-schedule-account">{channel?.accountId==='personal'?'个人账户':p.features.workbench.routes.find(route=>route.accountId===channel?.accountId)?.name??'经营账户'}承担这次费用；继续前核对资源冲突、共享四点、资格与完成日期。</p>
+   </>:null}
+-  {page==='publish'?<><fieldset className="video-paper-choices"><legend>明确本次发布方式</legend>{[['none','积累受众'],['ads','平台分成（需本次已有资格）'],['affiliate','带货（需本次已有资格）']].map(([id,label])=><label key={id}><input type="radio" name={name+'publish'} checked={draft.monetization===id} onChange={()=>edit({monetization:id!})}/><span>{label}</span></label>)}</fieldset><label className="video-paper-check"><input type="checkbox" checked={draft.label} onChange={e=>edit({label:e.target.checked})}/>为AI生成内容附合成标识；2025-09-01起按要求核对。</label><p>发布7日后才统计实际反馈。播放、询价、收入资格、应收和实际到账分别记录；发布不提前加钱。</p></>:null}
++  {page==='publish'?<><fieldset className="video-paper-choices"><legend>明确本次发布方式</legend>{[['none','积累受众'],['ads','平台分成（需本次已有资格）'],['affiliate','带货（需本次已有资格）']].map(([id,label])=><label key={id}><input type="radio" name={name+'publish'} checked={draft.monetization===id} onChange={()=>edit({monetization:id!})}/><span>{label}</span></label>)}</fieldset><label className="video-paper-check"><input type="checkbox" checked={draft.label} onChange={e=>edit({label:e.target.checked})}/>为AI生成内容附合成标识；2025-09-01起按要求核对。</label><VideoPublicationTerms video={v} date={p.view.date} workId={work?.id??''} monetization={draft.monetization} className="video-paper-terms"/></>:null}
+   {page==='record'&&currentTarget?<><VideoSceneRecord p={p} target={currentTarget}/><div className="video-paper-directions">
+    {(work?.defectKnown===true&&work.corrections.length===0||contract?.status==='revision')?<button type="button" onClick={()=>selectAction('rework','schedule')}>安排有代价的校正或返工<small>¥300 · 1点 · 7日，再核对新的版本。</small></button>:null}
+    {contract?.status==='revision'?<button type="button" onClick={()=>setPage('response')}>先核对范围、报价与退出<small>先看清可谈的条件，再决定是否投入时间。</small></button>:null}
+diff --git a/src/ui/VideoCommandDetails.tsx b/src/ui/VideoCommandDetails.tsx
+--- a/src/ui/VideoCommandDetails.tsx
++++ b/src/ui/VideoCommandDetails.tsx
+@@ -1,9 +1,14 @@
+ import type {CommandEnvelope} from '../core/run-types.ts'
+ import type {VideoProjection} from '../core/video-projection.ts'
+ import {moneyText} from './game-text.ts'
++import {VideoPublicationTerms} from './VideoPublicationTerms.tsx'
+ 
+ /** Terms belong to the committed snapshot captured when this choice was opened. */
+-export function VideoCommandDetails({command,video}:{command:CommandEnvelope;video:VideoProjection}){
++export function VideoCommandDetails({command,video,date}:{command:CommandEnvelope;video:VideoProjection;date?:string}){
++ if(command.kind==='PublishVideo'){
++  const payload=typeof command.payload==='object'&&command.payload!==null?command.payload as Record<string,unknown>:{}
++  return <VideoPublicationTerms video={video} date={date??''} workId={typeof payload.workId==='string'?payload.workId:''} monetization={typeof payload.monetization==='string'?payload.monetization:''} className="confirmation-context video-contract"/>
++ }
+  if(command.kind!=='AcceptVideoCommission'||!video)return null
+  const terms=video.catalog.commercial
+  return <section className="confirmation-context video-contract">
+diff --git a/src/ui/CommandDetails.tsx b/src/ui/CommandDetails.tsx
+--- a/src/ui/CommandDetails.tsx
++++ b/src/ui/CommandDetails.tsx
+@@ -23,7 +23,7 @@
+  <JourneyCommandDetails command={command} features={features}/>
+  <StoryCommandDetails command={command} confirm={confirm} features={features} view={view} accountName={accountName}/>
+  <LifeCommandDetails command={command} confirm={confirm} features={features} view={view}/>
+- <VideoCommandDetails command={command} video={features.video}/>
++ <VideoCommandDetails command={command} video={features.video} date={view.date}/>
+  <CourseCommandDetails command={command} course={features.course} workers={view.operations?.workers??[]} view={view} confirm={confirm} accountName={accountName}/>
+  <RelayCommandDetails command={command} relay={features.relay} workers={view.operations?.workers??[]} accountName={accountName}/>
+  {command.kind==='FundBusiness'||command.kind==='DistributeProfit'?<section className="confirmation-context"><h3>本次转账不产生一份新利润</h3><p>{command.kind==='FundBusiness'?'个人账户 → '+(business?accountName(business.accountId):'指定企业账户'):(business?accountName(business.accountId):'指定企业账户')+' → 个人账户'}，实际金额{moneyText(typeof p.amountFen==='number'?p.amountFen:null)}。转入资金不计业务收入，已确认利润也不等于当前可分配现金。</p></section>:null}

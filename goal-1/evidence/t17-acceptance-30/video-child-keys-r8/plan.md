@@ -1,0 +1,1 @@
+原DEV exec50887已actual143退役；返回tool chunk417126截断stdout中明确两次重复key警告。源码VideoPanelScope内两个direct siblings共用targetContext，与警告JSON同run/account/canonical target完全对应。仅在两处React key加opening/channel角色前缀，不改canonical target/store key/命令/账款/原草稿保存。保原7draft tests及门槛复验、新R8类型构建，fresh DEV正常隔离origin导入已有manual12仅查看原册，实际捕获新console和画面以核无duplicate；无新增游戏命令或raw/exports，原126依赖与2Create/83/19审核保持不变，不重跑。

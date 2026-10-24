@@ -1,0 +1,102 @@
+{
+  "at": "2026-10-24T11:26:11.119Z",
+  "checks": [
+    {
+      "name": "cux03-final-tools-r1",
+      "path": "goal-1/evidence/t17-acceptance-30/cux03-final-tools-r1.result.json",
+      "bytes": 259,
+      "sha256": "104b4a1ad5180b31480f4aae6e72875f9a2ee0b149feb5f98ee60f2897f6feda",
+      "at": "2026-10-24T11:17:53.421Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:docs"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 20970,
+      "sourceCount": 547,
+      "sourceUnchanged": true,
+      "extraSame": true,
+      "error": null
+    },
+    {
+      "name": "cux03-final-content-r1",
+      "path": "goal-1/evidence/t17-acceptance-30/cux03-final-content-r1.result.json",
+      "bytes": 265,
+      "sha256": "b62f2374c1ed7bc147002c182b31aca401cd51fc8fa6ad1c4b9c7c907a55e2ce",
+      "at": "2026-10-24T11:18:13.019Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "validate:content"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 2060,
+      "sourceCount": 547,
+      "sourceUnchanged": true,
+      "extraSame": true,
+      "error": null
+    },
+    {
+      "name": "cux03-final-plan-r1",
+      "path": "goal-1/evidence/t17-acceptance-30/cux03-final-plan-r1.result.json",
+      "bytes": 271,
+      "sha256": "991842e0c584b8535e010d2b69b28d6a37b3ee8a4bfee72d0deb6544d44f3c8a",
+      "at": "2026-10-24T11:18:41.845Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_plan.py"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 89,
+      "sourceCount": 547,
+      "sourceUnchanged": true,
+      "extraSame": true,
+      "error": null
+    },
+    {
+      "name": "cux03-final-competitive-r1",
+      "path": "goal-1/evidence/t17-acceptance-30/cux03-final-competitive-r1.result.json",
+      "bytes": 286,
+      "sha256": "65e9c4ee1a22584ae9ff9c96daa4bb01c73eda89d56565343fbbd8de92e3cfae",
+      "at": "2026-10-24T11:18:53.178Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_competitive_design.py"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 128,
+      "sourceCount": 547,
+      "sourceUnchanged": true,
+      "extraSame": true,
+      "error": null
+    }
+  ],
+  "toolsActualTests": 77,
+  "docs": {
+    "executed": false,
+    "reason": "Wait for AGENTS/docs36/root30 final text to stabilize; avoids known repeat and keeps expected23-old-error classification accurate."
+  },
+  "notExecuted": [
+    "npm check",
+    "unfiltered Vitest",
+    "whole book-layout",
+    "compatibility",
+    "5 collectors owned by independent audit agent",
+    "Root-owned build/Chrome"
+  ]
+}

@@ -1,0 +1,11 @@
+--- a/src/ui/video-scene-result.ts
++++ b/src/ui/video-scene-result.ts
+@@ -139,7 +139,7 @@
+   const old=one(a.publications.filter(prior=>prior.id===row.id&&prior.channelId===row.channelId&&prior.workId===row.workId)),c=context(row.channelId,row.workId)
+   if(!old||!c||old.measuredAt!==null||row.measuredAt===null||row.measuredAt>current.date)continue
+   const through=addDays(row.measuredAt,7)
+-  facts.push(`${c.label}于${row.measuredAt}留下实际统计：播放${row.views}、合格询价${row.qualifiedInquiries}；这些不是现金${row.monetization==='affiliate'?current.date<through?`，原订单观察仍需等到${through}`:`，原订单观察止于${through}，款项另按原结算核对`:''}`)
++  facts.push(`${c.label}于${row.measuredAt}留下实际统计：播放${row.views}、合格询价${row.qualifiedInquiries}；这些不是现金${row.monetization==='affiliate'&&row.qualified&&row.cohortId!==null?current.date<through?`，原订单观察仍需等到${through}`:`，原订单观察止于${through}，款项另按原结算核对`:''}`)
+  }
+  for(const row of b.settlements){
+   const text=collected(row);if(text){facts.push(text);continue}

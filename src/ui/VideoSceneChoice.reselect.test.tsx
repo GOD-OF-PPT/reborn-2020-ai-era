@@ -79,6 +79,12 @@ it('keeps the confirmed account and both drafts until a different account is exp
   expect(target).toEqual(targetA);expect(chosen).toEqual([])
   click('重新选择账号');previewB();click('明确选择这个账号')
   expect(chosen).toEqual([targetB]);expect(target).toEqual(targetB)
+  click('先合上，保留草稿')
+  // The external original selection must win after the parent already accepted B.
+  target=targetA;render();click('翻开视频制作与客户约定')
+  const returned=elements(tree).find(element=>element.type==='p'&&element.props.className==='video-paper-kicker')
+  expect(text(returned)).toContain(a.name);expect(text(returned)).not.toContain(b.name)
+  expect(target).toEqual(targetA);expect(chosen).toEqual([targetB])
   expect(memory.read(view.runId,a.accountId,targetA)).toEqual(draftA)
   expect(memory.read(view.runId,b.accountId,targetB)).toEqual(draftB)
   expect(controller.exportSaved()).toBe(before)

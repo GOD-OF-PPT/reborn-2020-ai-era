@@ -1,0 +1,1 @@
+复用U1/day与Route既有空displayTitle模式，保完整aria-label与主幕对象，空签不裁切不缩字。仅当前视频原生纸件；若Clock因屏障显示更早日，保任务真实日期/对象，readonly/candidate独立保护文案不动。R6原图与独立art判断见实际同root图及团队交回；新源需R7构建与当前自然Chrome实图，原source/游戏raw必须逐字保留。

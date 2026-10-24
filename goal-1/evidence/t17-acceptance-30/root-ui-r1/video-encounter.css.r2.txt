@@ -1,0 +1,19 @@
+/* Only the video route decision owns this grid; original books and room stay unchanged. */
+.cinema-app .book-flow .video-encounter.scene-action{display:grid;grid-template-columns:minmax(0,1fr) 208px;align-items:center;gap:24px}
+.cinema-app .book-flow .video-encounter .video-encounter-thought{min-width:0;display:flex;flex-direction:column;align-items:stretch;gap:12px}
+.video-encounter .video-encounter-thought>.scene-choice-line{margin:0}
+.video-encounter .scene-decision-main{margin:0;min-width:0}
+.video-encounter .scene-decision-main>button{width:100%;text-align:left}
+.video-encounter .moment-decision>button>span{display:flex;flex-direction:column;gap:5px}
+.video-encounter .video-encounter-paper{width:208px;min-width:0;align-self:center}
+.video-encounter .opening-object{position:relative;inset:auto;display:flex;flex-direction:column;width:208px;max-width:100%;margin:0;transform:none;transition:none}
+.video-encounter .opening-object:hover:not(:disabled),.video-encounter .opening-object:focus-visible:not(:disabled),.video-encounter .opening-object:active:not(:disabled){transform:none}
+.video-encounter .opening-object-art{display:block;position:relative;align-self:center;width:160px;height:160px;min-height:160px;aspect-ratio:auto;filter:none;transform:none}
+.video-encounter .video-continuity-art[data-video-phase]{height:160px}
+.video-encounter .opening-object-copy{width:100%;gap:6px;margin:0;padding:10px 12px;transform:none}
+.video-encounter .opening-object-stage,.video-encounter .opening-object-action{letter-spacing:0}
+.video-encounter .opening-object-action{gap:7px}
+.video-encounter .opening-object[data-video-phase=non-success]{--object-accent:#a9b397}
+.video-encounter .opening-object[data-video-phase=non-success] .opening-object-stage{color:#bdc6ab}
+.video-encounter .opening-object[data-text-only=true]{width:208px}
+.video-encounter .opening-object[data-text-only=true] .opening-object-copy{box-shadow:none}

@@ -3,7 +3,7 @@ import type {GamePanelProps} from './game-types.ts'
 import type {OpeningFocus,PlayerThreadView} from './player-thread.ts'
 import {canonicalVideoTarget,videoSceneProgress,videoTargetReason,type VideoSceneTarget} from './video-scene-progress.ts'
 
-type Input=Pick<GamePanelProps,'view'|'features'>
+type Input={readonly view:GamePanelProps['view'];readonly features:Pick<GamePanelProps['features'],'video'|'workbench'>}
 export type VideoOpeningFocus=Extract<OpeningFocus,{kind:'video'}>
 type Scene=Pick<PlayerThreadView,'stage'|'object'|'title'|'line'|'detail'|'outcome'|'inspect'|'resultRefs'|'command'|'secondaryCommand'|'wait'>
 export const videoTargetEntity=(t:VideoSceneTarget)=>t.contractId??t.workId??t.marketingId??t.channelId
@@ -30,15 +30,21 @@ export function videoFocusQuarter(p:Input,f:VideoOpeningFocus):string|null{
 }
 export function videoFocusOpen(p:Input,f:VideoOpeningFocus){
  const v=p.features.video,t=f.videoTarget;if(!v||!t)return false
- if(t.contractId)return v.contracts.some(c=>c.id===t.contractId&&!['settled','cancelled'].includes(c.status))
+ const sources=new Set([t.contractId,...v.settlements.filter(s=>s.channelId===t.channelId&&v.publications.some(pub=>pub.id===s.publicationId&&pub.workId===t.workId)).map(s=>s.id)].filter(id=>id!==undefined))
+ const unpaid=p.features.workbench.finance.find(a=>a.accountId===f.accountId)?.obligations.some(o=>o.remainingFen>0&&(sources.has(o.sourceEventId)||o.contractId!==null&&sources.has(o.contractId)))===true
+ if(t.contractId)return unpaid||v.contracts.some(c=>c.id===t.contractId&&(!['settled','cancelled'].includes(c.status)||c.status==='settled'&&!c.paidCase))
  if(t.marketingId)return v.marketing.some(m=>m.id===t.marketingId&&!!m.job&&['planned','running'].includes(m.job.status))
- if(t.workId)return v.works.some(w=>w.id===t.workId&&!w.abandonedAt&&!v.publications.some(pub=>pub.workId===w.id&&pub.measuredAt!==null))
+ if(t.workId)return unpaid||v.works.some(w=>w.id===t.workId&&!w.abandonedAt&&videoSceneProgress(v,p.view.date,t)?.outcome==='pending')
  return false
 }
 export function videoFocusResultDate(p:Input,f:VideoOpeningFocus):string|null{
  const v=p.features.video,t=f.videoTarget;if(!v||!t)return null
  const c=v.contracts.find(c=>c.id===t.contractId),w=v.works.find(w=>w.id===t.workId),m=v.marketing.find(m=>m.id===t.marketingId)
- return c?.settledAt??c?.reviewedAt??m?.completedAt??(w?.production?.status==='completed'?w.production.completeAt:null)
+ const publications=v.publications.filter(pub=>pub.channelId===t.channelId&&pub.workId===t.workId),settlements=v.settlements.filter(s=>s.channelId===t.channelId&&publications.some(pub=>pub.id===s.publicationId))
+ const dates=[c?.settledAt,c?.reviewedAt,c?.submittedAt,m?.completedAt,m?.job?.releasedAt,w?.abandonedAt,
+  ...[w?.production,...(w?.corrections??[])].flatMap(job=>job?[job.status==='completed'?job.completeAt:null,job.releasedAt]:[]),
+  ...publications.flatMap(pub=>[pub.publishedAt,pub.measuredAt,pub.unlistedAt]),...settlements.flatMap(s=>[s.confirmedAt,s.collectedAt])]
+ return dates.filter((date):date is string=>typeof date==='string'&&date<=p.view.date).sort().at(-1)??null
 }
 export function videoPlayerScene(p:Input,f:VideoOpeningFocus):Scene{
  const t=f.videoTarget
@@ -50,7 +56,8 @@ export function videoPlayerScene(p:Input,f:VideoOpeningFocus):Scene{
  const workNumber=work?p.features.video!.works.filter(w=>w.channelId===channel.id).findIndex(w=>w.id===work.id)+1:null
  const object=channel.name+(workNumber?' · 作品'+workNumber:t.marketingId?' · 这次受众推广':' · 下一次制作')
  for(const job of work?[work.production,...work.corrections]:[])if(job?.status==='completed'&&job.completeAt<=p.view.date&&!resultRefs.some(r=>r.id===job.id))resultRefs.push({kind:'job',id:job.id,date:job.completeAt})
- if(contract?.settledAt)for(const tx of p.features.workbench.finance.find(a=>a.accountId===f.accountId)?.transactions??[])if(tx.date<=p.view.date&&tx.amountFen>0&&(tx.contractId===contract.id||tx.sourceId===contract.id))resultRefs.push({kind:'payment',id:tx.id,date:tx.date})
+ const sources=new Set([...(contract?.settledAt?[contract.id]:[]),...p.features.video!.settlements.filter(s=>s.channelId===t.channelId&&s.collectedAt!==null&&p.features.video!.publications.some(pub=>pub.id===s.publicationId&&pub.workId===t.workId)).map(s=>s.id)])
+ for(const tx of p.features.workbench.finance.find(a=>a.accountId===f.accountId)?.transactions??[])if(tx.date<=p.view.date&&tx.amountFen>0&&(sources.has(tx.sourceId)||tx.contractId!==null&&sources.has(tx.contractId)))resultRefs.push({kind:'payment',id:tx.id,date:tx.date})
  const negotiation=contract?.status==='negotiating'?p.view.operations?.jobs.find(j=>j.id===contract.negotiationJobId):null
  const wait=negotiation&&['planned','running'].includes(negotiation.status)?{date:negotiation.status==='planned'?negotiation.startAt:negotiation.completeAt,label:negotiation.status==='planned'?'等这份原谈判开工':'等这份原谈判实际反馈'}:progress.wait
  return {stage:progress.stage,object,title:progress.title,line:progress.line,detail:progress.choice.line,outcome:progress.outcome,inspect:{screen:'video',label:progress.choice.label,target:{accountId:f.accountId,videoTarget:t}},resultRefs,...(progress.command?{command:{...progress.command,label:progress.choice.label}}:{}),...(wait?{wait}:{})}
@@ -58,6 +65,8 @@ export function videoPlayerScene(p:Input,f:VideoOpeningFocus):Scene{
 
 /** Only an explicitly saved video command can introduce a related public identity. */
 export function videoFocusFromSaved(previous:Input,current:Input,kind:string,body:Record<string,unknown>):VideoOpeningFocus|null{
+ const last=current.view.receipts.at(-1)
+ if(previous.view.runId!==current.view.runId||current.view.revision!==previous.view.revision+1||current.view.saveStatus!=='saved'||current.view.hasCandidate||current.view.readOnly||last?.kind!==kind||last.revisionAfter!==current.view.revision)return null
  const before=previous.features.video,v=current.features.video;if(!v||!before)return null
  let target:VideoSceneTarget|null=null
  if(kind==='OpenVideoChannel'){const channel=v.channels.find(c=>!before.channels.some(old=>old.id===c.id));if(channel)target={channelId:channel.id}}
@@ -65,7 +74,15 @@ export function videoFocusFromSaved(previous:Input,current:Input,kind:string,bod
  if(kind==='StartVideoWork'){const w=v.works.find(w=>w.channelId===body.channelId&&!before.works.some(old=>old.id===w.id));if(w)target={channelId:w.channelId,workId:w.id}}
  if(kind==='AcceptVideoCommission'){const c=v.contracts.find(c=>c.channelId===body.channelId&&c.clientId===body.clientId&&c.cohortId===body.cohortId&&!before.contracts.some(old=>old.id===c.id));if(c)target={channelId:c.channelId,workId:c.workId,contractId:c.id}}
  if(['ReviewVideoOutput','ReworkVideo','PublishVideo','AbandonVideoWork'].includes(kind)){const w=v.works.find(w=>w.id===body.workId);if(w)target={channelId:w.channelId,workId:w.id,...(w.contractId?{contractId:w.contractId}:{})}}
- if(['SubmitVideoCommission','NegotiateVideoCommission','ExitVideoCommission','CollectVideoSettlement'].includes(kind)){const c=v.contracts.find(c=>c.id===(body.contractId??body.settlementId));if(c)target={channelId:c.channelId,workId:c.workId,contractId:c.id}}
+ if(['SubmitVideoCommission','NegotiateVideoCommission','ExitVideoCommission'].includes(kind)){const c=v.contracts.find(c=>c.id===body.contractId);if(c)target={channelId:c.channelId,workId:c.workId,contractId:c.id}}
+ if(kind==='CollectVideoSettlement'){
+  const c=v.contracts.find(c=>c.id===body.settlementId)
+  if(c){if(before.contracts.some(old=>old.id===c.id&&old.status==='delivered')&&c.status==='settled'&&c.settledAt!==null)target={channelId:c.channelId,workId:c.workId,contractId:c.id}}
+  else{
+   const settlement=v.settlements.find(s=>s.id===body.settlementId),old=before.settlements.find(s=>s.id===body.settlementId),publication=v.publications.find(pub=>pub.id===settlement?.publicationId&&pub.channelId===settlement?.channelId)
+   if(settlement&&old?.collectedAt===null&&settlement.collectedAt!==null&&publication)target={channelId:publication.channelId,workId:publication.workId,section:'publications'}
+  }
+ }
  if(kind==='InterruptJob'){
   const w=v.works.find(w=>w.production?.id===body.jobId||w.corrections.some(j=>j?.id===body.jobId)),c=v.contracts.find(c=>c.negotiationJobId===body.jobId),m=v.marketing.find(m=>m.jobId===body.jobId)
   if(w)target={channelId:w.channelId,workId:w.id,...(w.contractId?{contractId:w.contractId}:{})}

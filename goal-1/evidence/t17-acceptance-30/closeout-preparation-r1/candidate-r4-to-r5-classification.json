@@ -1,0 +1,34 @@
+{
+  "at": "2026-10-24T12:03:28.877Z",
+  "original": {
+    "path": "goal-1/evidence/t17-acceptance-30/closeout-preparation-r1/closeout-final-r4.candidate.mjs",
+    "bytes": 18995,
+    "sha256": "bf981fab38c8c59a81d4c645d07b4acea1233e9a31bf6aa3f8220dd31a7adcf0",
+    "mode": 420,
+    "gitMode": "100644"
+  },
+  "final": {
+    "path": "goal-1/evidence/t17-acceptance-30/closeout-preparation-r1/closeout-final-r5.candidate.mjs",
+    "bytes": 19194,
+    "sha256": "12497de5aeaca0adf4342705cb794f0f79b862c37435541834b4d3ca588ad9ae",
+    "mode": 420,
+    "gitMode": "100644"
+  },
+  "changes": [
+    {
+      "before": "proof(intent.rows);preserve();sourceScope(json(post+'/pre-feature-binding.json').binding.path);const start=",
+      "after": "proof(intent.rows);preserve();sourceScope(json(post+'/pre-feature-binding.json').binding.path);guard(resolve(repo,post));const start="
+    },
+    {
+      "before": "export function verifyRecord(commit){const seal=verifySeal(post)",
+      "after": "export function verifyRecord(commit){const rootSeal=verifySeal(root),seal=verifySeal(post)"
+    },
+    {
+      "before": "const result=proof(rows,commit);preserve();sourceScope(json(post+'/pre-feature-binding.json').binding.path);return {commit,parent:intent.parent,seal,...result",
+      "after": "const result=proof(rows,commit);preserve();sourceScope(json(post+'/pre-feature-binding.json').binding.path);const rootSealAfter=verifySeal(root);if(!eq(rootSeal,rootSealAfter))throw Error('ROOT30_SEAL_CHANGED_DURING_RECORD_VERIFY');return {commit,parent:intent.parent,seal,rootSeal:rootSealAfter,...result"
+    }
+  ],
+  "reason": "Independent audit found verifyRecord did not re-verify root30 payload after stageRecord; Root authorized two exact rootSeal checks and returned rootSeal. Also guard independent post before actual feature git commit so sealed-post mis-order rejects before commit rather than only on log write.",
+  "oldR4Preserved": true,
+  "noCandidateModeExecuted": true
+}

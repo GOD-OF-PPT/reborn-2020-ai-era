@@ -1,0 +1,1 @@
+原red保留：normal命中真实resultDate错季；两平台case先因fixture registry不提供project而失败，不能作为模型逻辑红。仅把fixture公开输入改为原projectRun/projectVideo/projectWorkbench，生产Input类型收窄到实际读取的video/workbench（无运行行为改变），随后精确再核两平台原命令。

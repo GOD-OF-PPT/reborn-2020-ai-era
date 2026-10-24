@@ -1,0 +1,43 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/VideoPanel.draft.test.tsx > shares the same original work draft with the book and writes its real fields without changing another work or the saved run
+AssertionError: expected 'original' to be 'licensed' // Object.is equality
+
+Expected: "licensed"
+Received: "original"
+
+ ❯ src/ui/VideoPanel.draft.test.tsx:98:43
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/ui/VideoPanel.draft.test.tsx > reads and edits the entry draft before using the original explicit creation command
+AssertionError: expected '我的内容账号' to be '尚未提交的新账号名称' // Object.is equality
+
+Expected: "尚未提交的新账号名称"
+Received: "我的内容账号"
+
+ ❯ src/ui/VideoPanel.draft.test.tsx:123:47
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/ui/VideoPanel.draft.test.tsx > retains blank and stale choices and blocks stale or candidate handlers without granting a readonly writer
+AssertionError: expected 'manual' to be '' // Object.is equality
+
+- Expected
++ Received
+
++ manual
+
+ ❯ src/ui/VideoPanel.draft.test.tsx:160:42
+    158|   memory.write(view.runId,'personal',target,blank)
+    159|   const book=driver(props(),target),before=controller.exportSaved()
+    160|   expect(book.field('制作方式').props.value).toBe('');expect(book.field('素…
+       |                                          ^
+    161|   expect(book.field('开工日期').props.value).toBe('2020-01-01')
+    162|   expect(text(book.tree())).toContain('草稿里的开工日已经过去')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+

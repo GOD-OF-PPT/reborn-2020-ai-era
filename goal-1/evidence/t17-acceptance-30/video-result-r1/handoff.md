@@ -1,0 +1,9 @@
+# 视频具体回响接口冻结；未执行检查
+
+导出`videoSceneResult(kind:string,previous:PlayingView|null,current:PlayingView):string|null`。Root调用方式与courseSceneResult相同；视频命令直接用返回值，AdvanceTime可拼接其返回的实际变化。严格同run/+1 revision/当前saved/非readonly、busy、candidate/最后回执kind与revisionAfter。无唯一公开同账号/业务/作品/合同链返回null，保原fallback。helper无preview/命令/随机/hidden facts访问。
+
+具体命令覆盖OpenVideoChannel、StartVideoWork/Marketing、AcceptVideoCommission、Review、Submit、Rework、Negotiate、Publish、Exit、Abandon、CollectVideoSettlement；Advance按原job实际状态、marketing来源真实leads差集/尚未转化数、客户修改/验收与应收、原商单/平台实收、真实统计与新应收分列。未来日期不当完成；同一次Advance新建平台应收并已收款时可核原同source交易，避免误说未到账。费用按原公开price/prepayment/feeBps或settlementfee及BigInt整数舍入；费用入账不写成全部付清，残余义务持续说明，不报余额差收益。未实现的其他命令仍null，不编资格批准回信。
+
+3新case尚未运行：正常Controller新Create→建立账号/未来planned作品并核错误来源与保存门槛；正常Create原手工制作开工/完成前史→Controller实际Review/Publish/统计；旧已核normal manual12逐Create重建至原9后，最后Submit/Advance/Advance原envelope由新Controller真实保存，期望最终原文逐字同，并分别核900元原预款、2100元余款、150元原费。重建只读原receipts/原正常source，不删条件/加资源/换seed。标准fixture默认hook/body不配置；正式原生、完整Create总审计与金额大套仍由Root排。
+
+最终均mode0644：video-scene-result.ts 16491B/SHA7a577e546cfeac06b7a4ee7d0bd26d7dd0f1416f6899ca10aca11356df4fa443；video-scene-result.test.ts 12741B/SHAcd0602435a32e5886354c1075181fe3bf50ef077d6b6b98745ed4f3846822068。source-final.json与两份raw.txt保存。未运行Node重负载/test/type/build/browser，未改既有source、P3、masters、配置或Git，不预报通过。

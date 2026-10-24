@@ -23,7 +23,7 @@ export function CommandDetails({command,confirm,features,view,accountName,clock}
  <JourneyCommandDetails command={command} features={features}/>
  <StoryCommandDetails command={command} confirm={confirm} features={features} view={view} accountName={accountName}/>
  <LifeCommandDetails command={command} confirm={confirm} features={features} view={view}/>
- <VideoCommandDetails command={command} video={features.video}/>
+ <VideoCommandDetails command={command} video={features.video} date={view.date} view={view} finance={features.workbench.finance}/>
  <CourseCommandDetails command={command} course={features.course} workers={view.operations?.workers??[]} view={view} confirm={confirm} accountName={accountName}/>
  <RelayCommandDetails command={command} relay={features.relay} workers={view.operations?.workers??[]} accountName={accountName}/>
  {command.kind==='FundBusiness'||command.kind==='DistributeProfit'?<section className="confirmation-context"><h3>本次转账不产生一份新利润</h3><p>{command.kind==='FundBusiness'?'个人账户 → '+(business?accountName(business.accountId):'指定企业账户'):(business?accountName(business.accountId):'指定企业账户')+' → 个人账户'}，实际金额{moneyText(typeof p.amountFen==='number'?p.amountFen:null)}。转入资金不计业务收入，已确认利润也不等于当前可分配现金。</p></section>:null}

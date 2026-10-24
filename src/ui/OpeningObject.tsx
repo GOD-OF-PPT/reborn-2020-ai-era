@@ -6,6 +6,7 @@ import coursePreparationKit from '../../assets/ui-redesign/cinematic/props/cours
 import relayServiceKit from '../../assets/ui-redesign/cinematic/props/relay-service-kit-v1.png'
 import {FirstOrderPaper,type FirstOrderArtState} from './FirstOrderPaper.tsx'
 import {OpeningEntryPaper,type OpeningEntryPaperKind} from './OpeningEntryPaper.tsx'
+import {VideoContinuityPaper,type VideoPaperState} from './VideoContinuityPaper.tsx'
 import {DayContinuityPaper,type DayContinuityArt} from './DayContinuityPaper.tsx'
 
 export type {FirstOrderArtState} from './FirstOrderPaper.tsx'
@@ -32,17 +33,18 @@ export type OpeningObjectProps={
  protection?:OpeningObjectProtection
  entryPaper?:OpeningEntryPaperKind
  dayPaper?:DayContinuityArt
+ videoPaper?:VideoPaperState
 }
 
 /** The parent supplies committed facts and owns the action; the object adds no business state. */
-export function OpeningObject({kind,title,displayTitle,detail,stageLabel,onActivate,actionLabel,disabled,textOnly=false,appearance,teaching,firstOrder,protection,entryPaper,dayPaper}:OpeningObjectProps){
+export function OpeningObject({kind,title,displayTitle,detail,stageLabel,onActivate,actionLabel,disabled,textOnly=false,appearance,teaching,firstOrder,protection,entryPaper,dayPaper,videoPaper}:OpeningObjectProps){
  const id=useId(),titleId=id+'-title',detailId=id+'-detail',stageId=id+'-stage',actionId=id+'-action',dateId=id+'-date',receiptId=id+'-receipt',protectionId=id+'-protection'
- const entry=firstOrder===undefined?entryPaper:undefined,day=firstOrder===undefined&&entry===undefined?dayPaper:undefined,hasPaper=firstOrder!==undefined||entry!==undefined||day!==undefined
+ const entry=firstOrder===undefined?entryPaper:undefined,day=firstOrder===undefined&&entry===undefined?dayPaper:undefined,video=firstOrder===undefined&&entry===undefined&&day===undefined?videoPaper:undefined,hasPaper=firstOrder!==undefined||entry!==undefined||day!==undefined||video!==undefined
  const protectionLabel=protection==='readonly'?'只读 · 原记录保留':protection==='unsaved'?'尚未保存 · 仍是上次的物件':protection==='unavailable'?'暂不可用 · 先核对原因':null
- return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-first-order-phase={firstOrder?.phase} data-entry-paper={entry} data-day-kind={day?.kind} data-day-state={day?.state} data-protection={hasPaper?protection:undefined} data-text-only={textOnly?'true':'false'} disabled={disabled} onClick={onActivate} aria-label={displayTitle===undefined?undefined:title+' '+actionLabel} aria-labelledby={displayTitle===undefined?titleId+' '+actionId:undefined} aria-describedby={stageId+' '+detailId+(firstOrder?.dateLabel?' '+dateId:'')+(firstOrder?.phase==='paid'?' '+receiptId:'')+(hasPaper&&protectionLabel?' '+protectionId:'')}>
+ return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-first-order-phase={firstOrder?.phase} data-entry-paper={entry} data-day-kind={day?.kind} data-day-state={day?.state} data-video-phase={video?.phase} data-protection={hasPaper?protection:undefined} data-text-only={textOnly?'true':'false'} disabled={disabled} onClick={onActivate} aria-label={displayTitle===undefined?undefined:title+' '+actionLabel} aria-labelledby={displayTitle===undefined?titleId+' '+actionId:undefined} aria-describedby={stageId+' '+detailId+(firstOrder?.dateLabel?' '+dateId:'')+(firstOrder?.phase==='paid'?' '+receiptId:'')+(hasPaper&&protectionLabel?' '+protectionId:'')}>
   {!textOnly?<span className="opening-object-art" aria-hidden="true">
-   {day?<DayContinuityPaper art={day}/>:entry?<OpeningEntryPaper kind={entry}/>:<img src={appearance==='relay'?relayServiceKit:appearance==='course'?coursePreparationKit:appearance==='video'?videoMakingKit:firstAttempt} alt="" width={appearance==='course'||appearance==='relay'?1536:appearance==='video'?1254:1280} height={appearance==='course'||appearance==='relay'?1024:appearance==='video'?1254:1280} decoding="async"/>}
-   {firstOrder?<><span className="first-order-contact"/><FirstOrderPaper phase={firstOrder.phase}/></>:day?<span className="day-paper-contact"/>:entry?<span className="entry-paper-contact"/>:<span className="opening-object-mark">
+   {video?<VideoContinuityPaper art={video}/>:day?<DayContinuityPaper art={day}/>:entry?<OpeningEntryPaper kind={entry}/>:<img src={appearance==='relay'?relayServiceKit:appearance==='course'?coursePreparationKit:appearance==='video'?videoMakingKit:firstAttempt} alt="" width={appearance==='course'||appearance==='relay'?1536:appearance==='video'?1254:1280} height={appearance==='course'||appearance==='relay'?1024:appearance==='video'?1254:1280} decoding="async"/>}
+   {firstOrder?<><span className="first-order-contact"/><FirstOrderPaper phase={firstOrder.phase}/></>:video?null:day?<span className="day-paper-contact"/>:entry?<span className="entry-paper-contact"/>:<span className="opening-object-mark">
     {kind==='waiting'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><circle cx="16" cy="16" r="12"/><path d="M16 8v9l6 3"/></svg>:kind==='calendar'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M8 5v6m16-6v6M5 12h22M6 8h20v20H6zM11 17h3m5 0h3m-11 6h3m5 0h3"/></svg>:kind==='work'?appearance==='relay'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M6 7h20v13H6zM11 20v5h10v-5M10 12v4m4-4v4m4-4v4m4-4v4M16 25v4"/></svg>:<svg viewBox="0 0 32 32" fill="none" focusable="false"><rect x="5" y="7" width="22" height="18"/><path d="m13 12 8 4-8 4zM9 7v18m14-18v18"/></svg>:null}
    </span>}
   </span>:null}

@@ -1,0 +1,33 @@
+--- a/src/ui/video-scene-result.ts
++++ b/src/ui/video-scene-result.ts
+@@ -138,8 +138,8 @@
+  for(const row of b.publications){
+   const old=one(a.publications.filter(prior=>prior.id===row.id&&prior.channelId===row.channelId&&prior.workId===row.workId)),c=context(row.channelId,row.workId)
+   if(!old||!c||old.measuredAt!==null||row.measuredAt===null||row.measuredAt>current.date)continue
+-  const through=addDays(row.measuredAt,7)
+-  facts.push(`${c.label}于${row.measuredAt}留下实际统计：播放${row.views}、合格询价${row.qualifiedInquiries}；这些不是现金${row.monetization==='affiliate'?current.date<through?`，原订单观察仍需等到${through}`:`，原订单观察止于${through}，款项另按原结算核对`:''}`)
++  const through=addDays(row.measuredAt,7),affiliateWindow=row.monetization==='affiliate'&&row.qualified&&row.cohortId!==null
++  facts.push(`${c.label}于${row.measuredAt}留下实际统计：播放${row.views}、合格询价${row.qualifiedInquiries}；这些不是现金${row.monetization!=='none'&&!row.qualified?'，本次发布没有对应收益资格，统计不会补发收入':''}${affiliateWindow?current.date<through?`，原订单观察仍需等到${through}`:`，原订单观察止于${through}，款项另按原结算核对`:''}`)
+  }
+  for(const row of b.settlements){
+   const text=collected(row);if(text){facts.push(text);continue}
+--- a/src/ui/video-scene-progress.ts
++++ b/src/ui/video-scene-progress.ts
+@@ -59,7 +59,7 @@
+  if(contract)return selectedDetail('原来的约定，还要逐项看清。','这份客户责任仍保留在原记录里。','翻看原作品与客户记录','没有取得实际完成、验收和结算依据之前，不把这份责任说成已经结束。','查看原商单与责任')
+  const published=video.publications.find(p=>p.measuredAt===null)
+  if(published)return {...detail('作品已经发出，回应还在路上。','发布已经完成，实际反馈仍要等日子走到。','回看这一次发布',`${published.measureAt}统计实际反馈；播放、询价和收入分别发生，不把发布当作回款。`,'查看发布与实际反馈'),target:{channelId:published.channelId,workId:published.workId,section:'publications'}}
+- const window=video.publications.find(p=>p.measuredAt!==null&&p.monetization==='affiliate'&&p.qualified&&p.settlementId===null&&date<addDays(p.measuredAt,7))
++ const window=video.publications.find(p=>p.measuredAt!==null&&p.monetization==='affiliate'&&p.qualified&&p.cohortId!==null&&p.settlementId===null&&date<addDays(p.measuredAt,7))
+  if(window)return {...detail('有人看见了，仍要等订单留下。','带货的观察窗口还没有结束。','看清退货与佣金的边界',`${addDays(window.measuredAt!,7)}观察窗口结束，佣金只按实际留存订单确认；商品成交额不等于佣金。`,'查看带货观察与结算'),target:{channelId:window.channelId,workId:window.workId,section:'publications'}}
+  const settlement=video.settlements.find(s=>s.collectedAt===null)
+  if(settlement){
+@@ -159,7 +159,7 @@
+    }
+    const paid=settlements.filter(s=>s.collectedAt!==null).sort((a,b)=>a.collectedAt!.localeCompare(b.collectedAt!)||a.id.localeCompare(b.id)).at(-1)
+    if(paid)return result({...scene('video-platform-paid','这份作品的原平台款，已经实际收到。',`${paid.collectedAt}实际收取${moneyText(paid.amountFen)}；原费用${moneyText(paid.feeFen)}另记。`,`已确认平台收入、实际收款与费用分别保留。${paid.kind==='affiliate'?`商品成交额${moneyText(paid.grossMerchandiseFen)}不是本号收入；实际留存${paid.retained}、退款${paid.returned}。`:''}实际到账不表示全账号旧账已经结清；下一份作品仍须你另行选择。`,'翻看这份原平台实收与费用','actual'),resultRefs:refs})
+-   if(publication.measuredAt&&publication.qualified&&publication.monetization==='affiliate'&&date<addDays(publication.measuredAt,7))return wait({...scene('video-affiliate-window','有人看见了，仍要等订单真正留下。','播放与询价已有实际记录；带货观察窗口仍未结束。',`${addDays(publication.measuredAt,7)}结束原观察窗口；商品成交额不是佣金，实际留存、退款与平台应收各按原记录。`,'翻看这份原带货观察','pending'),resultRefs:refs},addDays(publication.measuredAt,7),'等这份原发布的留存与退款反馈')
++   if(publication.measuredAt&&publication.qualified&&publication.monetization==='affiliate'&&publication.cohortId!==null&&date<addDays(publication.measuredAt,7))return wait({...scene('video-affiliate-window','有人看见了，仍要等订单真正留下。','播放与询价已有实际记录；带货观察窗口仍未结束。',`${addDays(publication.measuredAt,7)}结束原观察窗口；商品成交额不是佣金，实际留存、退款与平台应收各按原记录。`,'翻看这份原带货观察','pending'),resultRefs:refs},addDays(publication.measuredAt,7),'等这份原发布的留存与退款反馈')
+    return result({...scene('video-published','这份原作品，已经发布。','播放、询价与平台收入仍分别记录。',publication.measuredAt?'已有实际统计，当前公开原记录没有待收平台款；播放和询价不等于收入。':`${publication.measureAt}才统计真实反馈。`,'翻看原发布与结算',publication.measuredAt?'actual':'pending'),...(!publication.measuredAt?{wait:{date:publication.measureAt,label:'等这份原发布的实际反馈'}}:{}),resultRefs:refs})
+   }
+   return result(scene('video-ready-to-publish','这一版看清了，再选择它的去处。','人工核对完成，不等于发布、客户验收或到账。','发布方式和资格仍要显选；不自动申请平台收益或生成订单。','查看这份作品的发布选择','pending'))

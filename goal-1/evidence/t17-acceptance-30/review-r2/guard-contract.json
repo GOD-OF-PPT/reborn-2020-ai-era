@@ -1,0 +1,13 @@
+{
+  "source": "scripts/browser_evidence_guard.mjs",
+  "bytes": 1880,
+  "sha256": "e764a45a8a3f627d35cc80f570b92a597f836c134c4355a826701b60e4ae441e",
+  "execution": "Pure Python I/O ancestor lstat equivalent for this non-browser static-review write; no Node or JS export execution.",
+  "checks": [
+    "lexical descendant of evidence root",
+    "target and every ancestor down to evidence root exists as real directory",
+    "every ancestor sealed-evidence marker absent, any type",
+    "native-progress/exports append target if present must be ordinary nonsymlink file"
+  ],
+  "writeMode": "xb (exclusive create)"
+}

@@ -1,0 +1,1 @@
+接受Room共同230画布靠右候选，请现在只应用你提交的room-contact.unapplied.patch到src/ui/video-scene-object.css，先读当前确与reviewbefore同、实际guard保存preimage与applieddiff/hash到fresh art-contact-r5。只能此一CSS，不能改otherproduction/tests/masters，不做兼容/几何测试。5原collectors已全部terminal547源同。root后续newbuildR5/currentChrome实际图验收，你的完成仅source调整不称图通过。
