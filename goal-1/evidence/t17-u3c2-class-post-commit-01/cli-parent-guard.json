@@ -1,0 +1,72 @@
+{
+  "at": "2026-10-24T19:44:34.002Z",
+  "results": [
+    {
+      "name": "collector",
+      "target": "goal-1/evidence/t17-acceptance-32/guard-collector-probe",
+      "argv": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_course_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-32/guard-collector-probe"
+      ],
+      "start": "2026-10-24T19:44:30.682Z",
+      "finishedAt": "2026-10-24T19:44:32.165Z",
+      "exitCode": 1,
+      "signal": null,
+      "targetAbsent": true,
+      "rejectedBeforeOutput": true
+    },
+    {
+      "name": "auditor",
+      "target": "goal-1/evidence/t17-acceptance-32/guard-auditor-probe",
+      "argv": [
+        "rtk",
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-32",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-32/guard-auditor-probe"
+      ],
+      "start": "2026-10-24T19:44:32.165Z",
+      "finishedAt": "2026-10-24T19:44:33.835Z",
+      "exitCode": 1,
+      "signal": null,
+      "targetAbsent": true,
+      "rejectedBeforeOutput": true
+    }
+  ],
+  "sealBefore": {
+    "root": "goal-1/evidence/t17-acceptance-32",
+    "ordinaryFiles": 520,
+    "directories": 27,
+    "directoryModesRecorded": true,
+    "marker": {
+      "path": "goal-1/evidence/t17-acceptance-32/sealed-evidence.json",
+      "bytes": 119351,
+      "sha256": "f9a88a71d200803a1ea06a46e334ee2532a38fee656ae602c33f3cddca4449e2",
+      "mode": 420,
+      "gitMode": "100644"
+    }
+  },
+  "sealAfter": {
+    "root": "goal-1/evidence/t17-acceptance-32",
+    "ordinaryFiles": 520,
+    "directories": 27,
+    "directoryModesRecorded": true,
+    "marker": {
+      "path": "goal-1/evidence/t17-acceptance-32/sealed-evidence.json",
+      "bytes": 119351,
+      "sha256": "f9a88a71d200803a1ea06a46e334ee2532a38fee656ae602c33f3cddca4449e2",
+      "mode": 420,
+      "gitMode": "100644"
+    }
+  },
+  "exactReadbackEqual": true
+}

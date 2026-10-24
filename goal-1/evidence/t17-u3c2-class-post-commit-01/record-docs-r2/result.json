@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-24T19:53:06.329Z",
+  "argv": [
+    "rtk",
+    "proxy",
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport importlib.util,sys\nr=Path.cwd()\ns=importlib.util.spec_from_file_location('original_check_docs',r/'scripts/check_docs.py')\nm=importlib.util.module_from_spec(s);s.loader.exec_module(m)\nnames=[\"goal-1/t17-plan.md\"]\nm.project_files=lambda unused:[r/n for n in names]\nprint('SCOPED ONLY: goal-1/t17-plan.md only; whole repository/native enumeration NOT RUN.')\nerrors=m.check(r,text_only=True)\nfor error in errors: print(error,file=sys.stderr)\nraise SystemExit(bool(errors))\n"
+  ],
+  "exitCode": 0,
+  "signal": null,
+  "error": null,
+  "wallMs": 277,
+  "sourceCount": 564,
+  "selectedMarkdownCount": 1,
+  "sourceMatchedR11": true,
+  "sourceAndInputEqual": true,
+  "wholeDocs": false,
+  "originalPlanAndCompetitiveRerun": false
+}
