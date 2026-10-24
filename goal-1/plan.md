@@ -620,3 +620,25 @@ C-UX03全171适用文件已于10:05:28Z启动，原时限/隔离保留、只排�
 - 下一具体task **U3-C1：准备一堂课**；本轮不提前实施。原U3-C2以后/U4映射R2R3及C-S4-R/生态与架空权益/人物六年/成套视听/全部T17后续、旧PNG0/3（来源已定位）/新ABC3/3/正式真人0、P3正式62=0/22例行、M01暂停须用户明确恢复/T18/整个goal仍开放。全部页面兼容开发测试0。最终5368 R8/原manual12可继续，5个本轮临时核验标签已实关，DEV5369及旧R7服务实际143、原DB/构建保留。REPEAT复用既有技能/guard/回放/Git，无新全局Skill/automation/memory写入或外部资源；未push/deploy，PUBLIC远端main仍9bf4399。
 
 本条在实际feature之后追加；记录提交自身SHA由Git/封存外真实读回交回，不回填封存前快照或本记录造成循环。
+
+
+## 当前U3-C1 准备一堂课（2026-10-24，尚未完成）
+
+上一U3-V实现5f625cf/记录d77822a为真实progress。本轮仅按36号8.5执行U3-C1，三文件与547源/原P3保全基线先于源码建立，见[evidence/t17-acceptance-31计划](evidence/t17-acceptance-31/plan.md)。把案例、大纲、独立课程素材范围、样课与完成后的下一选择接成同一教案经历；主操作和物件共用原决定，取消/翻页/原册/日历保同身份，保存回调核run/account/完整目标/草稿槽/原册实例，不抢走另一教案。样课完成不是招生或收入，原C2和全部原规则可达，本轮不实施U3-C2。
+
+沿A长日重启复用原课程素材/原生纸件状态，当前自然Chrome按真实投入/等待/完成与下一步核，金额/日期/AP/资格/原子存档继续验。仅相关原规则/组件与必要工程、原生/完整Create证据，不重复刚完成C-UX03全171；原失败/时限保持，截图与脚本不当真人。新root31取证，原sealed/helper不回写，116普通marker与2原marker symlink分列（旧19为全repo负向symlink总数，不能混计）。
+
+原26P3/root19精确1197普通110目录/三master各唯一2304B14LF/原input61B保持；只追加本轮后缀，P3不入三master记录blob。U3-C2以后/U4映射R2R3与C-S4-R/全部T17/旧PNG0/3（来源已定位）/正式真人0/P3正式62=0/22例行/M01暂停须用户明确恢复/T18/完整goal仍开放。全部兼容开发测试0，未push/deploy或新建外部资源。
+
+
+## U3-C1 准备一堂课限定完成（2026-10-25）
+
+- [x] 本具体U3-C1任务（含root31任务6实现/收口）已在实际本地feature **30cad66bc94c127bfb95aa82df4bbb13c4637bfb** 后记录：505任务路径/23UI逐暂存及commit blob、完整bytes/SHA/Gitmode相同，parent d77822a，index清空。root31封存480普通文件/35目录，自排除marker SHA4da4d85cd4c3c2af242f14207053601d961794dcb7fce7515fbcc538874b4261；[限定验证](evidence/t17-acceptance-31/validation.md)与[实际feature读回](evidence/t17-u3c1-course-post-commit-01/feature-commit-readback.json)分层。root31任务6为提交前不可回写快照；本后记记录实际feature/封存/拒写完成，record自身SHA由Git/封存外末核交回，不循环改封存。
+- 玩家经历：同一教案串联真实案例、大纲、独立课程素材范围与实际样课；主操作/物件共用原决定，具体课名和源季度可见。资金确认取消、原册资源/日期、日历同job往返保草稿；保存回调核run/account/完整target/slot/record/epoch。停止与旧记录、样课实际完成、招生与收入分开；结果可显选下一步、另备、回Today或生活，ready暂停/收尾也保去向。原C2/全部字段和责任仍可达，本片未执行班期业务。原PNG完整保持，13态原生纸件无新位图/声音。
+- Chrome正常70前史经原UI34段导入后，71—86实际10000元转自有资本、大纲100/1点/7日、独立素材300/1点/7日，0AP等待及年末/Jan1跨季保同教案。第一样课83投入2000/1点、原中断84不退成本/AP，第二85再付2000/1点，Jan15实际86完成；企业现金可花5519.36/AP2，个人70450，无受众/班期/预售/学费收入。原应计成本48.38仍在，原净资产5470.98，不将现金当净资产或利润。原主86在R6翻阅/偏好恢复后905659B/SHA c39d2cb2…逐字同。
+- 实际R4完整回响下paper被原分页inert禁点，原失败留档；R6精简重复side签，不改分页保护、字号或裁切。原UI只读导出真实备份85，在5371隔离存储38段导入、原Advance生成另一86，完整完成回响下鼠标paper真实开Next；显选原受众仅预览、Today/生活/SaveExit/reload/Continue不增命令，905659B/SHA092a8c06…同。两86为同Create不同末命令分支，未强称互同或新人生。最后独立实际R6图无新增阻断，落桌接触/条款密度继续美术润色；文本/减少动效实际可用并恢复false/false，两个production标签console warn/error0。
+- 原生保存：DEV generic原导入73首次事务abort且无candidate，原导入重试后SaveExit/reload重置故障；StartOutline实际head.put后abort保旧73企业10000/AP2/旧教案，未发布候选74。旧保存/另fresh物理73均等before829348B a4f4232f…；原retry74/另fresh物理74均等候选836364B d7edf299…，新企业9900/AP1/大纲进行中；旧缓存73不冒新物理读，没重新执行扣费。
+- 分层验证：15相关文件91不同case分批，不称一次91全绿；原29/32、37/38及30s/5s超时/类标记/invalid来源红均保，修后原门槛定向与23UI、最后6新交互分别0。R6 type/build0/556源同；5368/5370两端口94GET逐bytes/SHA同、19原图及指定2ID33DEV零命中。正式完整Create实际1Create/87不同完整命令/12raw/1buffer全字节同，126源/20输入/P326初末同；8saved/2physical/1buffer/1candidate不加经营成果。独立公开事实各22真，额外whole-features同SHA原exit1因不同真实cause分类保留，未重投影或造绿。
+- [杠精审查] 本片自主限定通过，确定缺口已修，代码/当前图/正常与非成功/原子与完整原文分层核。13浏览器入口（4wrapper stub+9实际bound native）均在委派前拒写、delegates0，两个原CLI均在sealed父拒写/子目标不存在，root480payload/marker同；不是13次UI操作。原P326、root19精确1197/110、116旧marker/2marker symlink、原input61B保；三master只选本任务后缀，原P3各2304B/14LF仍在工作树、不入master记录blob。当前树含原P3，未声称裸HEAD独立构建。
+- 资料plan/competitive0；全仓docs真实exit1仍原23错误与3PNG提示，stdout/stderr与前轮逐字同、新增0，定向79MD/232JSON零错。source/36空白0；全feature默认空白2仅22原console/diff/精确P3快照的23诊断，原no-index误限退出3/漏无git-header补丁分类false保原，再据完整字节补正，不裁原数据。REPEAT复用现有技能/guard/回放/Git，不新建全局Skill/automation/memory/外部资源。全部兼容开发测试0，未push/deploy，PUBLIC远端main仍9bf4399。
+- 下一具体task **U3-C2：面对这一班学员**，本轮不越序实施。U4映射R2/R3及C-S4-R、生态/架空权益、人物六年、成套美术视听/全部T17后续、旧PNG0/3（来源已定位）/新ABC3/3/正式真人0、P3正式62=0/22例行、M01暂停须用户明确恢复、T18/完整goal仍开放。最终5370 R6/原主86已标交付；DEV5369与临时5371实际143，原DB/构建保留；原子/物理/隔离270本轮页实关，早期239/242/245/248关闭被工具拒绝原false保留，未称已清理。record实际提交及最终逐blob/远端读回随后完成并由Git/外末核交回。
