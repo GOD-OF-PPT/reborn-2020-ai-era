@@ -594,3 +594,29 @@ R0设计a350e4c/记录5aec3f3已实际完成；按37号合同先建[evidence/t17
 - [杠精审查] 本片自主限定通过，实际发现的交付遮挡/企业focus/交收去重/0AP原等待/历史综合入口歧义均修并复核；13浏览器入口与两CLI在委派/输出前拒写sealed父，521原payload/marker保持。原P3 26、root19精确1197文件110目录、112旧marker、原input61B与三master各2304B/14LF插入均保；本master仅本U2后缀选择性入Git，原P3不入Git。验证绑定保留P3的当前工作树，不声称裸HEAD独立构建或P3正式62/22通过。
 - 资料plan/competitive/content0；docs最终1仅原23（18逐字Skill引用/3旧空JSON/2negative marker），原75初红和52自有证据链接/前像类型修缮保字节留档，58新links/32JSON无新红。source25空白无诊断，staged source0；全feature默认空白2只49原console/统一diff路径的57行，其他498路径无诊断，原byte不裁改。独立代码/实际图/完整原文/保全分层，截图或绿测不等于真人理解/趣味。REPEAT复用既有技能/guard/回放/Git，无新全局Skill/automation/依赖/外部资源。
 - 下一具体任务 **U3-V视频续接，随后C-UX03**，本轮不越序实施。原U3—U9/全部后续、R2/R3映射U4与C-S4-R、P3正式62=0/22例行、完整T17/旧PNG0/3/新ABC3/3/正式招募试玩0、M01暂停须用户明确恢复、T18/整个goal仍开放。纸件触感/日期说明重复/下一问题偏泛继续美术润色。全部页面兼容开发测试0。最终5366 R4/原28可继续；旧DB/构建保留，自有DEV5367与旧5366 R2/R3服务实际143、临时198/202/195及旧185核身份关闭。未push/deploy，PUBLIC远端main仍9bf4399，完成record随后独立提交。
+
+
+## 当前U3-V 一份视频之后与C-UX03（2026-10-24，尚未完成）
+
+U2实现22fd113/记录64b1624为真实progress。本轮仅按36号8.5与[evidence/t17-acceptance-30计划](evidence/t17-acceptance-30/plan.md)实施U3-V和第三实际任务后的C-UX03，不进入课程下一片。具体客户/账号/作品的原选择、同一主操作与物件、返回调整保原页/草稿、结果后继续同账号/收缩/回Today或生活，以及真实制作/修改/交付/平台款状态正在统一；机遇Narrative与房间共用同动作，不只优化一条隐藏入口。原完整业务、四点与原账不简化。
+
+当前分层实据：App旧回调跨目标/账户/重开问题原四红后同五case全过；受控选择复活原红后原case过。两个定向批17/25分别通过；R3类型/构建实际0、546源同。Chrome正常Create至4实际推广600元/1点、Jan8形成1询价，结果回Today不增命令；R3已载同4。商单完整后缀、合法AI/原子候选/独立物理旧新/原retry、完整Create原文审核和最终艺术图仍待，不能以目前小批/图当全片完成。
+
+C-UX03全171适用文件已于10:05:28Z启动，原时限/隔离保留、只排除整book-layout页面几何测试；当前同exec95703/父Node67260持续，终态和全部计数未出，具体接续见root30 live-handoff。已记录旧Today三方向精确预期与新增视频方向冲突；另静态复核发现无资格或零cohort的affiliate不应虚报订单观察，须保活源至终态后修复并定向复验。不得拼旧绿/放宽原规则断言或将活套预勾通过。
+
+原P3 26路径/root19精确1197普通110目录、114旧普通marker、三master各唯一2304B/14LF原插入和原input61B均已独立核同，原symlink负向夹具分类红与19原链接字面另保；本轮只追加自己的后缀，原P3仍未提交。正式62=0/22例行、U3-C1以后/U4映射R2R3及C-S4-R、全部T17后续、旧PNG0/3/新ABC3/3/正式真人0、M01暂停须用户明确恢复、T18/整个goal仍开放。全部兼容开发测试0，无push/deploy或新外部资源。
+
+
+## U3-V 一份视频之后与C-UX03限定完成（2026-10-24）
+
+- [x] 本具体task（含root30任务6）已按限定合同完成实现提交 **5f625cf3ed5b7286f115d051ce658633eaa538c3**；930任务路径/39UI源逐Git blob、完整字节/SHA与Gitmode实核，code parent64b1624，index空。root30封存888普通文件/59目录，自排除marker SHAfa3e8c74675901a957bf6d54edb2babae1097cc6a0cdcd752b26e5081cd6aa03；[提交前限定验证](evidence/t17-acceptance-30/validation.md)与[真实feature读回](evidence/t17-u3-video-post-commit-01/feature-commit-readback.json)分层。root30任务6为不可回写的提交前快照，本条记录实际完成；独立record身份由Git/封存外末核交回，不循环回写旧证据。
+- 玩家经历：房间与路线的主操作/物件直达同一原决定，同账号/合同/作品草稿与原册/日历往返；安排、开工、亲核、提交、修改、验收应收、实收及非成功分开，结果可继续同账号/暂停接新业务/回Today或生活，导航不新增承诺。视频原PNG保持，原创SVG和纸件状态相连；侧签去重保完整AX身份，提前日历屏障仍保任务真正反馈日；原字段/责任与分页可达，不裁切或缩字。
+- Chrome正常manual1→12真实推广600/1点、商单制作900/1点，Jan22完成亲核提交、Jan24验收、Jan31余款2100/费150；现金27350/AP2，R4/R6/R7显式重进和19登记原文中的12全字节同。AI正常挣得前史53经可见原导入，后54→70合法图像辅助/本单授权1000/1、0AP等待、Oct1跨季300/1返工、一次scope谈判0/1与同第2版重提，Oct22余款2100/费150；现金92450/AP2，70重进同。53前史不是本次新53Chrome动作，泛Continue/分页定位原失败与原生日期提交中间态保留。
+- 独立原子与退出：DEV真正head.put后abort保旧4，未发布候选5；fresh只读物理旧4等故障前、原retry5等候选、另fresh物理新5等候选079e309a…。Jan9开工6后同原账确认退款900/已耗成本AP不退，再原Exit7；现金可花24500/AP2、原7最终199872B/SHA7f02aba6…同，未把退款/退出当收入或成功。两个物理时点与旧缓存分列，不新建免费资源。
+- C-UX03原171/1080为1076通过4UI逻辑红、0超时，原红保；修后84UI/522实际0，非UI87沿未变运行依赖保持原通过，560仅冻结源差分推导，不称一次全绿。后续Exit5、原册草稿3+4分批0、R8类型/Vite0与547源同；46产物/根HTTP逐字同，2runId/33DEV marker0。原同级key警告已仅加opening/channel角色前缀，canonical草稿不变；fresh实际原册console3只连接/开发info、0warn/error/duplicate，未新增命令/raw。
+- 完整Create原单次审核2Create/83不同完整后续/19raw全字节同，126官方源/27raw与exports输入末核仍同；R7额外41输入保持其当时身份，R8新capturejournal与唯一UIkey另层绑定。原wrapper source-prefix unknown3和原inputBuffers0不改，独立实际操作附录另核14saved/2physical/2buffer/1candidate，候选/缓冲/重复/物理档不当新经营成果。五原collector/77工具/content/plan/competitive0；docs1仅原23与3PNG提示精确多重集、新增0。
+- [杠精审查] 本片自主限定通过，已修同对象异步/重选、无资格或零受众虚报窗口、取消丢草稿、确认未说明退款及同级key等确定问题；原断言/时限/隔离不放宽。实际4wrapper stub+9绑定native拒写，delegates0；CLI2入口各原IMMUTABLE拒写、子目标不存在，888payload/marker同。CUA直接导入带CLI入口的R5 helper初次报process未定义且0probes，原模块未改；实际改以同guard/native/verifySeal直接13调用成功，执行源码与失败分类保独立post，不冒13次UI动作。
+- 原26P3路径、root19精确1197文件110目录、114原普通marker、root29/post、原input61B保持；三master仅本U3后缀选择性提交，原P3各2304B/14LF仍留工作树，不入三master记录blob。验证包含保留P3的当前工作树，不声称裸HEAD独立构建或P3正式62/22通过。source39/AGENTS/36空白检查0；全feature空白2仅56原日志/patch/AX/P3提取路径的61诊断，字节保留无未分类，不裁原数据。
+- 下一具体task **U3-C1：准备一堂课**；本轮不提前实施。原U3-C2以后/U4映射R2R3及C-S4-R/生态与架空权益/人物六年/成套视听/全部T17后续、旧PNG0/3（来源已定位）/新ABC3/3/正式真人0、P3正式62=0/22例行、M01暂停须用户明确恢复/T18/整个goal仍开放。全部页面兼容开发测试0。最终5368 R8/原manual12可继续，5个本轮临时核验标签已实关，DEV5369及旧R7服务实际143、原DB/构建保留。REPEAT复用既有技能/guard/回放/Git，无新全局Skill/automation/memory写入或外部资源；未push/deploy，PUBLIC远端main仍9bf4399。
+
+本条在实际feature之后追加；记录提交自身SHA由Git/封存外真实读回交回，不回填封存前快照或本记录造成循环。
