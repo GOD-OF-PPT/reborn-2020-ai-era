@@ -1,0 +1,1 @@
+R10源码已冻结/type0/4files16cases0/build0，564same。授权同前成功脚本做fresh http-r10，仅127.0.0.1:5376/，build .delivery/t17-u3c2-r10，权威build-r10.source-after.json；47GET/46产物/19图按实际，不固定旧计数，原2ID33DEV核。原R9根不可改。当前Chrome马上从119原文本导入新5376实际关闭再看未收起回响与Clock，你HTTP完成冻结后等图审。不要改src/master/docs或browser/兼容/几何。

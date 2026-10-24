@@ -4,7 +4,7 @@ import {openingFocusFor,playerThread,type OpeningFocus,type PlayerThreadView,typ
 import {seasonRecollection,type SeasonRecollectionView} from './season-thread.ts'
 import {videoFocusOpen} from './video-player-thread.ts'
 import {courseFocusOpen} from './course-player-thread.ts'
-import {isCoursePreparationThread} from './course-continuity.ts'
+import {isCoursePreparationThread,isCourseContinuityThread} from './course-continuity.ts'
 import {playableAdvanceDate} from '../application/playable-advance.ts'
 
 export type TodayThreadInput=Pick<GamePanelProps,'view'|'features'>
@@ -33,7 +33,7 @@ export interface TodayThreadView{
  readonly responsibilityOverrideNeeded:boolean
 }
 
-const supported=(thread:PlayerThreadView)=>['free','work','life','market','video'].includes(thread.focus.kind)||isCoursePreparationThread(thread)
+const supported=(thread:PlayerThreadView)=>['free','work','life','market','video'].includes(thread.focus.kind)||isCourseContinuityThread(thread)
 
 /** Actual public arrangements decide whether a result is also still an ongoing commitment. */
 function classification(p:TodayThreadInput,thread:PlayerThreadView):TodayThreadClassification{
@@ -84,6 +84,9 @@ function ongoing(p:TodayThreadInput):TodayThreadItem[]{
   for(const outline of course.outlines.filter(o=>o.job&&['planned','running'].includes(o.job.status)))addCourse({kind:'outline',businessId:outline.businessId,outlineId:outline.id})
   for(const lesson of course.courses.filter(c=>['draft','building'].includes(c.status)))addCourse({kind:'course',businessId:lesson.businessId,courseId:lesson.id,...(lesson.sampleJobId?{sampleJobId:lesson.sampleJobId}:{})})
   for(const license of course.licenses.filter(l=>l.job&&['planned','running'].includes(l.job.status)&&!course.courses.some(c=>['draft','building'].includes(c.status)&&c.businessId===l.businessId&&c.cases.some(ref=>ref.id===l.caseId))))addCourse({kind:'license',businessId:license.businessId,licenseId:license.id})
+  for(const audience of course.audiences.filter(a=>a.job&&['planned','running'].includes(a.job.status))){const lesson=course.courses.find(c=>c.id===audience.courseId);if(lesson)addCourse({kind:'audience',businessId:lesson.businessId,courseId:lesson.id,audienceId:audience.id})}
+  for(const cohort of course.cohorts.filter(co=>co.closedAt===null)){const lesson=course.courses.find(c=>c.id===cohort.courseId);if(lesson)addCourse({kind:'cohort',businessId:lesson.businessId,courseId:lesson.id,cohortId:cohort.id})}
+  for(const lesson of course.courses.filter(c=>c.refreshes.some(r=>!r.applied&&r.job&&['planned','running'].includes(r.job.status))&&!course.cohorts.some(co=>co.courseId===c.id&&co.closedAt===null)))addCourse({kind:'course',businessId:lesson.businessId,courseId:lesson.id})
  }
  for(const focus of candidates){
   const thread=playerThread(p,focus),state=classification(p,thread)
@@ -129,6 +132,6 @@ export function todayThread(p:TodayThreadInput,focus?:OpeningFocus|null,focusQua
   source:{runId:p.view.runId,revision:p.view.revision,date:p.view.date,quarter:p.features.workbench.quarter},
   primary:{thread,classification:state,supported:supported(thread),originQuarter:thread.focusQuarter,sourceRefs:thread.resultRefs.map(ref=>({...ref}))},
   title:'回到今天，慢慢决定',line:current.length?'已经答应的事仍照原约定继续；今天的去向由你决定。':'旧结果留在原记录。接下来的日子，可以重新选择。',
-  question:thread.focus.kind==='video'&&(state==='result'||state==='history')?'接下来是回应已有询价、做另一份作品，还是暂不新增制作？原结果与未完约定都留着。':thread.focus.kind==='course'&&(state==='result'||state==='history')?'这份教学准备留下后，是先看下一步、另备一份教案，还是把日子留给生活？样课与招生、学费仍分别决定。':season.nextQuestion,ongoing:current,directions:directions.map(direction=>({...direction})),remaining:season.remaining,wait:wait(p),responsibilityOverrideNeeded:thread.responsibilityOverrideNeeded,
+  question:thread.focus.kind==='video'&&(state==='result'||state==='history')?'接下来是回应已有询价、做另一份作品，还是暂不新增制作？原结果与未完约定都留着。':thread.focus.kind==='course'&&(state==='result'||state==='history')?isCoursePreparationThread(thread)?'这份教学准备留下后，是先看下一步、另备一份教案，还是把日子留给生活？样课与招生、学费仍分别决定。':thread.focus.courseTarget?.kind==='cohort'?'这一班已经发生的学习与钱款都留着。先续上未完承诺，还是不再新增安排，把日子留给生活？':'这次实际受众已经留下。是否作出开班承诺、另定受众，或先回生活，仍由你明确决定。':season.nextQuestion,ongoing:current,directions:directions.map(direction=>({...direction})),remaining:season.remaining,wait:wait(p),responsibilityOverrideNeeded:thread.responsibilityOverrideNeeded,
  }
 }

@@ -1,0 +1,38 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/CourseTeachingChoice.test.tsx > keeps the actual92 first-stage draft when returning to its deadline-bounded record
+AssertionError: expected undefined to be '2023-01-30' // Object.is equality
+
+- Expected:
+"2023-01-30"
+
++ Received:
+undefined
+
+ ❯ src/ui/CourseTeachingChoice.test.tsx:215:31
+    213|   d.click('返回这份原记录')
+    214|   const clock=()=>d.all().find(e=>e.type===ClockAdvance)
+    215|   expect(clock()?.props.date).toBe('2023-01-30')
+       |                               ^
+    216|   expect(h.memory.read(p.view.runId,scope)).toEqual(draft)
+    217|   // UI policy boundaries only: these dates/budgets are not newly acce…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/ui/CourseTeachingInteraction.test.tsx > offers Today and Life after an actual closed class, keeping all original learning and fee records reachable
+AssertionError: expected '打开眼前这班明确看下一步明确看当前一步明确重选对象2023-05-05 ·…' to contain '没有自动开启新班'
+
+Expected: "没有自动开启新班"
+Received: "打开眼前这班明确看下一步明确看当前一步明确重选对象2023-05-05 · 让小店的第一条短片被看见 · 2023-01-26班这期的承诺与原账，已经收好。让小店的第一条短片被看见 · 2023-01-26班 · 2023-05-05实际收尾。冻结单价¥999 · 留存5/5人；退款窗口至2023-05-04。原结算费¥249.75；学习、退款及购买身份保留，不是新的现金或重复收费资格。本班5位仍留存原款的学员；两段教学2/2已实际交付。原支持至2023-04-27，整改至2023-05-04，退款窗口至2023-05-04。已收预款¥4,995 · 待交付预款¥0 · 仍受保护¥0；教学收入¥4,995。已登记退款¥0 · 已退¥0 · 待退¥0。结算费¥249.75，已付¥249.75、待付¥0。实际学习反馈：5人已达到原约定，0人仍需帮助；反馈与新收费资格分开。本班已于2023-05-05收尾。学员、退款与费用留在这份班期记录里；下一班由你另作决定。"
+
+ ❯ src/ui/CourseTeachingInteraction.test.tsx:126:57
+    124|   const p=f.p(),co=p.features.course!.cohorts[0]!,target=f.cohortTarge…
+    125|   expect(co.closedAt).toBe('2023-05-05');ui.open('next')
+    126|   expect(ui.text()).toContain('实际收尾');expect(ui.text()).toContain('没有自…
+       |                                                         ^
+    127|   expect(ui.all().filter(e=>e.type==='button'&&e.props.className==='pr…
+    128|   ui.click('收好这一班，回到今天');expect(ui.today).toHaveBeenCalledTimes(1)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

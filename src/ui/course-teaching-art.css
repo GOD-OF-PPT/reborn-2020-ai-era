@@ -1,0 +1,48 @@
+/* One original low folio; native leaves show the original class's actual commitments. */
+.course-teaching-art[data-teaching-phase]{position:relative;isolation:isolate;display:block;width:100%;height:160px;pointer-events:none}
+.course-teaching-art[data-teaching-phase] .course-teaching-kit,
+.course-teaching-art[data-teaching-phase] .course-teaching-layers{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:none;pointer-events:none}
+.course-teaching-art[data-teaching-phase] .course-teaching-kit{z-index:0;filter:none}
+.course-teaching-art[data-teaching-phase] .course-teaching-layers{z-index:1;filter:drop-shadow(1px 2px 1px #3d302450)}
+.course-teaching-art .teaching-art-sheet{fill:#f0e2c5;stroke:#b6a079;stroke-width:4}
+.course-teaching-art .teaching-art-under{fill:#d2bd97;stroke:#a28b66;stroke-width:4}
+.course-teaching-art .teaching-art-envelope{fill:#d9c5a1;stroke:#ad956f;stroke-width:4}
+.course-teaching-art .teaching-art-seam{stroke:#a79270;stroke-width:5}
+.course-teaching-art .teaching-art-ink{stroke:#92876a;stroke-width:5;stroke-linecap:round}
+.course-teaching-art .teaching-art-pencil{stroke:#7d886c;stroke-width:5;stroke-linecap:round}
+.course-teaching-art .teaching-art-binding{stroke:#8d8062;stroke-width:9;stroke-linecap:round}
+.course-teaching-art .teaching-art-frame{stroke:#9f9b77;stroke-width:5}
+.course-teaching-art .teaching-art-bookmark{fill:#b29a66;stroke:#897847;stroke-width:4}
+.course-teaching-art .teaching-art-warm-sheet{fill:#e5d5b2;stroke:#b29b75;stroke-width:4}
+.course-teaching-art .teaching-art-kept{fill:#e6d8b6;stroke:#ac9870;stroke-width:4}
+.course-teaching-art .teaching-art-fold{fill:#cbb591;stroke:#a68d68;stroke-width:4}
+.course-teaching-art .teaching-art-clip{stroke:#a17b43;stroke-width:10;stroke-linecap:round}
+.course-teaching-art .teaching-art-return-fold{fill:#c3b28e;stroke:#9e8964;stroke-width:4}
+.course-teaching-art .teaching-art-page-edge{fill:#d3c3a1;stroke:#a8956f;stroke-width:4}
+.course-teaching-art .teaching-art-closure-binding{stroke:#8b8061;stroke-width:9;stroke-linecap:round}
+.course-teaching-art .teaching-art-muted{fill:#beb39b;stroke:#988c70;stroke-width:4}
+.course-teaching-art .teaching-art-retained-tie{stroke:#8c8065;stroke-width:7}
+.course-teaching-art .teaching-art-dashed{stroke:#9f8860;stroke-width:4;stroke-dasharray:13 11}
+.course-teaching-art .teaching-art-stage-tab{fill:#e8d9b9;stroke:#a9956d;stroke-width:4}
+.course-teaching-art .teaching-art-stage-pending{fill:#e0d0ae;stroke-dasharray:4 12}
+.course-teaching-art .teaching-art-stage-planned{stroke-dasharray:13 11}
+.course-teaching-art .teaching-art-stage-running{fill:#d6d0ad;stroke:#8a906e}
+.course-teaching-art .teaching-art-stage-completed{fill:#e5d8b8;stroke:#8d8868;stroke-width:6}
+.course-teaching-art .teaching-art-stage-stopped{fill:#c7baa1;stroke:#9b7f65;stroke-dasharray:6 9}
+.course-teaching-art .teaching-art-double-rule{stroke:#8c8867;stroke-width:5}
+.course-teaching-art .teaching-art-protection{fill:#cebb8f;stroke:#9a8359;stroke-width:5}
+.course-teaching-art .teaching-art-responsibility{fill:#bb8e70;stroke:#965c46;stroke-width:5}
+.course-teaching-art .teaching-art-fee-fold{fill:#b29a79;stroke:#8e654d;stroke-width:5}
+
+/* New teaching papers alone use this slot; old preparation and original text slips stay intact. */
+.opening-object[data-teaching-phase]{transform:none;transition:none}
+.opening-room>.opening-object[data-appearance=course][data-teaching-phase]>.opening-object-art,
+.opening-room .opening-room-object>.opening-object[data-appearance=course][data-teaching-phase]>.opening-object-art{height:160px;min-height:160px;width:100%;aspect-ratio:auto;align-self:end;filter:none;transform:none}
+.opening-object[data-teaching-phase] .opening-object-title:empty,
+.opening-object[data-teaching-phase] .opening-object-detail:empty{display:none}
+.opening-object[data-teaching-phase] .first-order-protection{display:flex;align-items:baseline;align-self:stretch;gap:7px;padding:5px 0;border-top:1px dashed #bac09d;color:#d8d6b8}
+.opening-object[data-teaching-phase][data-protection=readonly] .opening-object-copy{border-left:3px double #bac09d}
+.opening-object[data-teaching-phase][data-protection=unsaved] .opening-object-copy{border-left-style:dashed}
+.opening-object[data-teaching-phase][data-protection=unavailable] .opening-object-action{border-top-style:dashed}
+.opening-object[data-teaching-phase]:is(:hover,:focus-visible,:active):not(:disabled){transform:none;background:none}
+.course-scene-money{border-left:2px solid #c4aa70;padding-left:12px;color:#e8d7af;font:14px/1.8 var(--serif);font-variant-numeric:tabular-nums}

@@ -1,0 +1,1 @@
+R11 build/type实际0/564same，权威build-r11.source-after.json；R10→R11只有today-scene.css两新scope规则。原5376 R10精确pid58422实SIGTERM/session88691 exit143，现5376新R11 .delivery/t17-u3c2-r11（43184）ready。同DB原120已SaveExit；根将新Chrome页Continue120真实Today hover与点击，不重走命令。请先fresh http-r11仅5376按原流程完整字节/源桥比较，并明确R10其它563输入同、1CSSdelta，不重跑16功能case；后续我给实际Today图你再图审新报告，不改旧R10红记录。

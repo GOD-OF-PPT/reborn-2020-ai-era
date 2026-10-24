@@ -1,0 +1,87 @@
+{
+  "at": "2026-10-24T16:53:41.365Z",
+  "checks": {
+    "exactInverseToOriginal": true,
+    "noOldOwnThreshold": true,
+    "ownLengthFromMetadata": true,
+    "ownSHAFromMetadata": true,
+    "completionRequiresAdditionalSuffix": true,
+    "sourceUIPathSetDynamic": true,
+    "fullManifestBound": true,
+    "old25OnlyPureIO": true,
+    "rootSealAtVerifyStartAndEnd": true,
+    "guardPostBeforeFeatureCommit": true,
+    "featureAndRecordNUL": true,
+    "pureBrowserNoCLI": true,
+    "pureBrowserActualDirectory": true,
+    "noOldActiveRoot": true
+  },
+  "allTrue": true,
+  "inverseReadbackSHA256": "67c931170338b5a9b4e7699427ec795affcb40e131a42018d8452f5082003a7f",
+  "originalSHA256": "67c931170338b5a9b4e7699427ec795affcb40e131a42018d8452f5082003a7f",
+  "reverseEdits": [
+    {
+      "after": "feat(ui): connect class promises to teaching and next choice",
+      "count": 2
+    },
+    {
+      "after": "ownedPrefixIncludedOnce:true",
+      "count": 1
+    },
+    {
+      "after": "ownedPrefixBytes:plan.ownedPrefixBytes,ownedPrefixSHA:plan.ownedPrefixSHA",
+      "count": 1
+    },
+    {
+      "after": "plan.suffixBytes<=plan.ownedPrefixBytes",
+      "count": 1
+    },
+    {
+      "after": "ownedPrefixBytes:owned.length,ownedPrefixSHA:hash(owned)",
+      "count": 1
+    },
+    {
+      "after": "OWN_U3C2_PREFIX_REQUIRED_ONCE",
+      "count": 1
+    },
+    {
+      "after": "!ownRow||!Number.isSafeInteger(ownRow.ownSuffixBytes)||ownRow.ownSuffixBytes<=0||owned.length!==ownRow.ownSuffixBytes||hash(owned)!==ownRow.ownSuffixSha256",
+      "count": 1
+    },
+    {
+      "after": "t17-u3c2-class-exact-bytes-v1",
+      "count": 1
+    },
+    {
+      "after": "U3-C2",
+      "count": 2
+    },
+    {
+      "after": "ROOT32",
+      "count": 4
+    },
+    {
+      "after": "t17-u3c2-class-post-commit-01",
+      "count": 1
+    },
+    {
+      "after": "t17-acceptance-32",
+      "count": 1
+    }
+  ],
+  "candidate": {
+    "path": "goal-1/evidence/t17-acceptance-32/closeout-preparation-r1/closeout-final-r1.candidate.mjs",
+    "bytes": 19021,
+    "sha256": "1d89ab8b6398ecdb1706f69c0907dc3418473a0ba2028759b21a0f0df7645561",
+    "mode": 420
+  },
+  "pure": {
+    "path": "goal-1/evidence/t17-acceptance-32/closeout-preparation-r1/browser-probes.mjs",
+    "bytes": 2428,
+    "sha256": "e2c569fca12da49e7b936964272d5f24c795eb95723d2801c6a41b1c76ffd42a",
+    "mode": 420
+  },
+  "noCandidateImportOrMode": true,
+  "postExists": false,
+  "scope": "Static contract checks and exact reverse adaptation only; not an execution or behavior test."
+}

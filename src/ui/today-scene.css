@@ -19,6 +19,8 @@
 .opening-object[data-day-kind][data-day-state=history] .opening-object-copy{border-left:3px double #7c8569}
 .opening-object[data-day-kind][data-day-state=carry] .opening-object-copy{border-top-style:dashed}
 .opening-object[data-day-kind]:hover:not(:disabled),.opening-object[data-day-kind]:focus-visible:not(:disabled),.opening-object[data-day-kind]:active:not(:disabled){transform:none}
+.opening-object[data-day-kind=today]:is(:hover,:focus-visible,:active):not(:disabled){background:none}
+.opening-object[data-day-kind=today]:is(:hover,:focus-visible,:active):not(:disabled) .opening-object-copy{background:linear-gradient(110deg,#f1e4c2,#e1d0a8);border-color:#f2d18f}
 .opening-object[data-day-kind]:focus-visible{outline:3px solid #ffe2a6;outline-offset:6px}
 .opening-object[data-day-kind][data-text-only=true],.text-mode .opening-object[data-day-kind]{grid-template-rows:auto;align-content:start;gap:0}
 .opening-object[data-day-kind][data-text-only=true] .opening-object-copy,.text-mode .opening-object[data-day-kind] .opening-object-copy{margin:0;transform:none;box-shadow:none}

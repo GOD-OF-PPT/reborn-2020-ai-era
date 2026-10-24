@@ -1,0 +1,5 @@
+# 检查后源身份变化补记
+
+三原checker执行各自的source-before/after均562项同R6，原result不变。结束时额外全树枚举仍562项/无增删，但CourseTeachingChoice.tsx已变为53662B/SHA2ad4545f530a9bf07462640dc6c7bd153de94262a61725c3d9f1eda213131595；其它项同R6。作者未改任何src，不推断变化来源。
+
+此变化发生在本轮最终独立读回时已可观察，故R6检查不得冒称对这一后续源重新执行。原check_docs/check_plan/check_competitive_design本身未变，所报告25错误/原三PNG和各退出仍为其实际对应时点结果。后续产品类型/构建/Native及最终docs冻结由Root继续负责，当前不重复启动检查。source-set-final-readback.json保真实false与差集，不覆写成true。

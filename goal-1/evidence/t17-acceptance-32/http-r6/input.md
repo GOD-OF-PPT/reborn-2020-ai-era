@@ -1,0 +1,1 @@
+R6当前生产已在5370，.delivery/t17-u3c2-r6，source binding root32/build-r6.source-after.json（562）；原子R4 enrollment链已齐见debug-r4-r6，Root继续R6实际小循环。请并行只做此当前构建HTTP artifact/原19图字节及开发marker检查，复用原31工具至freshguarded root32/http-r6，单端口5370，不做任何兼容/性能/窗口矩阵。源全部冻结，不跑单测/重建。后续我再给R6真实图审PNG/AX。若发现来源绑定差异保fail，不擅自重跑/改源。

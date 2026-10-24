@@ -1,0 +1,80 @@
+{
+  "at": "2026-10-24T17:51:04.392Z",
+  "actualExitCode": 1,
+  "actualErrors": 25,
+  "previousErrors": 23,
+  "baseline": {
+    "path": "goal-1/evidence/t17-acceptance-31/docs-final-r1.stderr.log",
+    "bytes": 4053,
+    "sha256": "d4fac08e79600bd4339e82e1cacdf9667f32530c0b82a2d29bc0b306caef01ae",
+    "mode": 420
+  },
+  "newErrors": [
+    "goal-1/evidence/t17-acceptance-32/art-r1/input.md: broken local link /Users/gordon/.codex/plugins/cache/openai-curated-remote/game-studio/0.1.2/skills/game-studio/SKILL.md",
+    "goal-1/evidence/t17-acceptance-32/input.md: broken local link /Users/gordon/.codex/plugins/cache/openai-curated-remote/game-studio/0.1.2/skills/game-studio/SKILL.md"
+  ],
+  "removedErrors": [],
+  "newCategories": {
+    "verbatimExternalSkillReference": 2,
+    "unclassified": []
+  },
+  "oldErrorMultisetFullyRetained": true,
+  "oldPngWarningBytesEqual": true,
+  "oldPngWarnings": [
+    "PENDING ORIGINAL ASSET: assets/concepts/style-01-anime.png",
+    "PENDING ORIGINAL ASSET: assets/concepts/style-02-pixel.png",
+    "PENDING ORIGINAL ASSET: assets/concepts/style-03-cinematic.png"
+  ],
+  "sourceR6": {
+    "manifest": {
+      "path": "goal-1/evidence/t17-acceptance-32/build-r6.source-before.json",
+      "bytes": 104620,
+      "sha256": "a47811d0dcd17c3ee163af734860d497515cd5ac45021c3efd6e5f29ef10e585",
+      "mode": 420
+    },
+    "count": 562,
+    "initialFinalEqual": true,
+    "allRowsMatched": true
+  },
+  "wholeInputs": {
+    "before": {
+      "count": 12975,
+      "rowsDigestSha256": "ccc80ad08762b917e71d3d7dd3f8dcb02a5bc17f8a5b3cf35cfc341fc78c6d69",
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "goal-1/evidence/t17-acceptance-32/docs-r6/input-inventory.py",
+        "docs"
+      ],
+      "wallMs": 20492
+    },
+    "after": {
+      "count": 12976,
+      "rowsDigestSha256": "34229e9aeef25e64ae28a7984134bab67291e1f0fdaf8627e98aad8980b07c4e",
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "goal-1/evidence/t17-acceptance-32/docs-r6/input-inventory.py",
+        "docs"
+      ],
+      "wallMs": 21861
+    },
+    "inputEqual": false,
+    "added": [
+      {
+        "path": "goal-1/evidence/t17-acceptance-32/chrome-main-r6/recovery-buffer88.json",
+        "mode": 420,
+        "type": "file",
+        "bytes": 921355,
+        "sha256": "f8007427dc65c480aed39303e049327ebd2a4f12753eeeb296005b287a67067d"
+      }
+    ],
+    "removed": [],
+    "changed": []
+  },
+  "limits": "Exit1 remains exit1. The2 added verbatim input Skill links are new documented errors, not relabeled old23 or product source defects. Native input growth prevents claiming a frozen whole-input set. No behavior/Native/human/compatibility acceptance."
+}

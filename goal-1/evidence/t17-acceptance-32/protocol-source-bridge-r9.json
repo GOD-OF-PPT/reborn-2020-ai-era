@@ -1,0 +1,1698 @@
+{
+  "format": "t17-u3c2-protocol-source-bridge-r9-v1",
+  "at": "2026-10-24T18:53:22.037Z",
+  "method": "Read-only comparison of existing R4 build manifests to R9 type/test/final-build manifests plus current file bytes/SHA/mode; no test, browser, game command or audit execution.",
+  "references": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-32/build-r4.source-before.json",
+      "bytes": 104620,
+      "sha256": "4ab9fc5ca9bcdf0379968be7a8352730b6be9638e369b43022a07c43c88c6178",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-32/build-r4.source-after.json",
+      "bytes": 104179,
+      "sha256": "8596348b25ef5fd8192515048bb8de513a79e638312a1f2c2ea938e9147a5583",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-32/build-r4.result.json",
+      "bytes": 310,
+      "sha256": "dffcb6db8b75f708a294cc6dff957747b11a9e954e7e36c9a2c7fa90d37c77ff",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-32/type-r9.source-before.json",
+      "bytes": 104985,
+      "sha256": "30f552280dacfeeb8d33eede622101a01a46698424a8ee5c8e053cb8d56278e3",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-32/type-r9.source-after.json",
+      "bytes": 104544,
+      "sha256": "8f63e6dd69fb3371055abefe053fb422bbc5161ff349c587ae944f8706a5b896",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-32/type-r9.result.json",
+      "bytes": 259,
+      "sha256": "af18bfb5170af9d82ed93e15e0b9b49c61be80ae4607d445022cb47acdeb8ed1",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-32/course-wait-r9.source-before.json",
+      "bytes": 104985,
+      "sha256": "30f552280dacfeeb8d33eede622101a01a46698424a8ee5c8e053cb8d56278e3",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-32/course-wait-r9.source-after.json",
+      "bytes": 104544,
+      "sha256": "8f63e6dd69fb3371055abefe053fb422bbc5161ff349c587ae944f8706a5b896",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-32/course-wait-r9.result.json",
+      "bytes": 634,
+      "sha256": "544c019a0f12ec3a953193a8f0c6f15c64f46769349e60bdd2b18c9a82b87b62",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-32/course-wait-r9.stdout.log",
+      "bytes": 191,
+      "sha256": "b627a312d790915043c7a480947b87d2149dad2da9be38d9b18cd5d25054b18f",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-32/build-r9.source-before.json",
+      "bytes": 104985,
+      "sha256": "30f552280dacfeeb8d33eede622101a01a46698424a8ee5c8e053cb8d56278e3",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-32/build-r9.source-after.json",
+      "bytes": 104544,
+      "sha256": "8f63e6dd69fb3371055abefe053fb422bbc5161ff349c587ae944f8706a5b896",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-32/build-r9.result.json",
+      "bytes": 310,
+      "sha256": "3c449b18b9207376781a24d87806384e1c211a6e89d0581e3ac416d511dcae27",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-32/baseline.json",
+      "bytes": 921946,
+      "sha256": "5819b624565bfe0f32e1d48a24f99a927959e5e62c3307e06aa630b2064c8d00",
+      "mode": 420
+    }
+  ],
+  "binding": {
+    "r4SourceCount": 562,
+    "r9TypeSourceCount": 564,
+    "r9BuildSourceCount": 564,
+    "r4BeforeAfterEqual": true,
+    "r9TypeBeforeAfterEqual": true,
+    "r9BuildBeforeAfterEqual": true,
+    "r9TypeBuildEqual": true,
+    "r9TargetTestsMatchBuild": true,
+    "currentSourceSetMatchesBuild": true,
+    "currentBytesShaModeMatchBuild": true,
+    "removed": [],
+    "existingDeltaCount": 8,
+    "addedCount": 2,
+    "nonUIChanges": [],
+    "criticalSourceCount": 11,
+    "criticalAllUnchanged": true,
+    "p3Count": 26,
+    "p3AllCurrentBaselineSame": true,
+    "sourceAggregateSHA256": {
+      "r4": "4f5158806512a8c32d4025e494b5a7df9f2671565d38342c273d24717b4334d5",
+      "r9Type": "e7a9b7c5f32eda4a05fe9e031ab4ca4a113012c12bfb533ef6c1128fcc1684f6",
+      "r9Build": "e7a9b7c5f32eda4a05fe9e031ab4ca4a113012c12bfb533ef6c1128fcc1684f6",
+      "current": "e7a9b7c5f32eda4a05fe9e031ab4ca4a113012c12bfb533ef6c1128fcc1684f6"
+    }
+  },
+  "existingUIDelta": [
+    {
+      "path": "src/ui/course-teaching-art.css",
+      "r4": {
+        "path": "src/ui/course-teaching-art.css",
+        "bytes": 4466,
+        "sha256": "0edf7b7d31aa65272f851d051b3a0768c7d413f587ac802d3eb8a179940ad74f",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/ui/course-teaching-art.css",
+        "bytes": 4610,
+        "sha256": "0e6329742a5a11a79f690305a850e8408c1c798a3926a2ecd9f917a82fb3c605",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/ui/course-teaching-art.css",
+        "bytes": 4610,
+        "sha256": "0e6329742a5a11a79f690305a850e8408c1c798a3926a2ecd9f917a82fb3c605",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/ui/course-teaching-art.css",
+        "bytes": 4610,
+        "sha256": "0e6329742a5a11a79f690305a850e8408c1c798a3926a2ecd9f917a82fb3c605",
+        "mode": 420
+      }
+    },
+    {
+      "path": "src/ui/course-teaching-continuity.ts",
+      "r4": {
+        "path": "src/ui/course-teaching-continuity.ts",
+        "bytes": 4807,
+        "sha256": "fdb68916dab370552227395da2cc68e1cf641a50eff2a2582f1af93e6f360062",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/ui/course-teaching-continuity.ts",
+        "bytes": 5645,
+        "sha256": "de7b61b3a2be2d09e637e271304dc6156c59261d579df8a3ca482803e1c48678",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/ui/course-teaching-continuity.ts",
+        "bytes": 5645,
+        "sha256": "de7b61b3a2be2d09e637e271304dc6156c59261d579df8a3ca482803e1c48678",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/ui/course-teaching-continuity.ts",
+        "bytes": 5645,
+        "sha256": "de7b61b3a2be2d09e637e271304dc6156c59261d579df8a3ca482803e1c48678",
+        "mode": 420
+      }
+    },
+    {
+      "path": "src/ui/CourseEncounter.tsx",
+      "r4": {
+        "path": "src/ui/CourseEncounter.tsx",
+        "bytes": 3450,
+        "sha256": "e0592de3892bbb2ec705a0ea286c9c323cecfce8571913bb56bbda210612d705",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/ui/CourseEncounter.tsx",
+        "bytes": 3570,
+        "sha256": "1ed0257164f5abbe404aa9a0f4110bff1e987faf10af0ac34851410d1c1367e4",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/ui/CourseEncounter.tsx",
+        "bytes": 3570,
+        "sha256": "1ed0257164f5abbe404aa9a0f4110bff1e987faf10af0ac34851410d1c1367e4",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/ui/CourseEncounter.tsx",
+        "bytes": 3570,
+        "sha256": "1ed0257164f5abbe404aa9a0f4110bff1e987faf10af0ac34851410d1c1367e4",
+        "mode": 420
+      }
+    },
+    {
+      "path": "src/ui/CourseTeachingChoice.test.tsx",
+      "r4": {
+        "path": "src/ui/CourseTeachingChoice.test.tsx",
+        "bytes": 21653,
+        "sha256": "1be4fd49a2d3dc797be7795395f610ab1d20851ed1c32e1be9af7e48b2667457",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/ui/CourseTeachingChoice.test.tsx",
+        "bytes": 21866,
+        "sha256": "5abb5c13206a5e6c4fe3d526ebd96956e2ff287516c914464fa5b7deb99d6422",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/ui/CourseTeachingChoice.test.tsx",
+        "bytes": 21866,
+        "sha256": "5abb5c13206a5e6c4fe3d526ebd96956e2ff287516c914464fa5b7deb99d6422",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/ui/CourseTeachingChoice.test.tsx",
+        "bytes": 21866,
+        "sha256": "5abb5c13206a5e6c4fe3d526ebd96956e2ff287516c914464fa5b7deb99d6422",
+        "mode": 420
+      }
+    },
+    {
+      "path": "src/ui/CourseTeachingChoice.tsx",
+      "r4": {
+        "path": "src/ui/CourseTeachingChoice.tsx",
+        "bytes": 53368,
+        "sha256": "c12ce42e60045000bf46bea5ba07652c6c11c198f787e65c8cecf05abcf2104c",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/ui/CourseTeachingChoice.tsx",
+        "bytes": 53821,
+        "sha256": "e6116bf81d275bb61295ef3b22b305aa3f516771faf71d3204e710aa37219ba3",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/ui/CourseTeachingChoice.tsx",
+        "bytes": 53821,
+        "sha256": "e6116bf81d275bb61295ef3b22b305aa3f516771faf71d3204e710aa37219ba3",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/ui/CourseTeachingChoice.tsx",
+        "bytes": 53821,
+        "sha256": "e6116bf81d275bb61295ef3b22b305aa3f516771faf71d3204e710aa37219ba3",
+        "mode": 420
+      }
+    },
+    {
+      "path": "src/ui/CourseTeachingContinuity.test.tsx",
+      "r4": {
+        "path": "src/ui/CourseTeachingContinuity.test.tsx",
+        "bytes": 7945,
+        "sha256": "6e762f05ab3a1763ee499224edf9891b2afeecf8c5b40862b355159d574557a5",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/ui/CourseTeachingContinuity.test.tsx",
+        "bytes": 9169,
+        "sha256": "c3176d5f9377fabb3f600214d633fbf914e9626116631af3408dd55ede0f9170",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/ui/CourseTeachingContinuity.test.tsx",
+        "bytes": 9169,
+        "sha256": "c3176d5f9377fabb3f600214d633fbf914e9626116631af3408dd55ede0f9170",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/ui/CourseTeachingContinuity.test.tsx",
+        "bytes": 9169,
+        "sha256": "c3176d5f9377fabb3f600214d633fbf914e9626116631af3408dd55ede0f9170",
+        "mode": 420
+      }
+    },
+    {
+      "path": "src/ui/CourseThreadAction.tsx",
+      "r4": {
+        "path": "src/ui/CourseThreadAction.tsx",
+        "bytes": 3588,
+        "sha256": "32a1830f7805c5fb8893b665d3de1a831c22709d5ea8d8acce3747080fb43cbf",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/ui/CourseThreadAction.tsx",
+        "bytes": 3902,
+        "sha256": "8068274eed8876d128a6a88cf2f87f0950be61928f3907372367b31aa6e50c9a",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/ui/CourseThreadAction.tsx",
+        "bytes": 3902,
+        "sha256": "8068274eed8876d128a6a88cf2f87f0950be61928f3907372367b31aa6e50c9a",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/ui/CourseThreadAction.tsx",
+        "bytes": 3902,
+        "sha256": "8068274eed8876d128a6a88cf2f87f0950be61928f3907372367b31aa6e50c9a",
+        "mode": 420
+      }
+    },
+    {
+      "path": "src/ui/OpeningMoment.tsx",
+      "r4": {
+        "path": "src/ui/OpeningMoment.tsx",
+        "bytes": 47674,
+        "sha256": "3d0d3621e4a2ff6d8be5dd960767ee4ab86e845953971ff6f7ba98f85283a229",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/ui/OpeningMoment.tsx",
+        "bytes": 47998,
+        "sha256": "988b3163dd7d624d0e234dac9158395e8fc2ceaa3bd7126f9d1f981fae4574c6",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/ui/OpeningMoment.tsx",
+        "bytes": 47998,
+        "sha256": "988b3163dd7d624d0e234dac9158395e8fc2ceaa3bd7126f9d1f981fae4574c6",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/ui/OpeningMoment.tsx",
+        "bytes": 47998,
+        "sha256": "988b3163dd7d624d0e234dac9158395e8fc2ceaa3bd7126f9d1f981fae4574c6",
+        "mode": 420
+      }
+    }
+  ],
+  "addedUI": [
+    {
+      "path": "src/ui/course-wait-date.ts",
+      "r4": null,
+      "r9Type": {
+        "path": "src/ui/course-wait-date.ts",
+        "bytes": 1030,
+        "sha256": "a97aca8a9be9118d4df3c2db0d8ded811d05ea678d2a403cd6f2b6bb69624788",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/ui/course-wait-date.ts",
+        "bytes": 1030,
+        "sha256": "a97aca8a9be9118d4df3c2db0d8ded811d05ea678d2a403cd6f2b6bb69624788",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/ui/course-wait-date.ts",
+        "bytes": 1030,
+        "sha256": "a97aca8a9be9118d4df3c2db0d8ded811d05ea678d2a403cd6f2b6bb69624788",
+        "mode": 420
+      }
+    },
+    {
+      "path": "src/ui/CourseWaitDate.test.tsx",
+      "r4": null,
+      "r9Type": {
+        "path": "src/ui/CourseWaitDate.test.tsx",
+        "bytes": 12001,
+        "sha256": "f1d6d18dfed9e51cac66ca2134cca511aff6f54b26ea5cf59ba5b90549b77520",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/ui/CourseWaitDate.test.tsx",
+        "bytes": 12001,
+        "sha256": "f1d6d18dfed9e51cac66ca2134cca511aff6f54b26ea5cf59ba5b90549b77520",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/ui/CourseWaitDate.test.tsx",
+        "bytes": 12001,
+        "sha256": "f1d6d18dfed9e51cac66ca2134cca511aff6f54b26ea5cf59ba5b90549b77520",
+        "mode": 420
+      }
+    }
+  ],
+  "criticalSources": [
+    {
+      "path": "src/application/game-controller.ts",
+      "r4": {
+        "path": "src/application/game-controller.ts",
+        "bytes": 12213,
+        "sha256": "866879d0db9343e97afd5c500a4c40c63786fc53d63a91efe0e0b327882487c7",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/application/game-controller.ts",
+        "bytes": 12213,
+        "sha256": "866879d0db9343e97afd5c500a4c40c63786fc53d63a91efe0e0b327882487c7",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/application/game-controller.ts",
+        "bytes": 12213,
+        "sha256": "866879d0db9343e97afd5c500a4c40c63786fc53d63a91efe0e0b327882487c7",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/application/game-controller.ts",
+        "bytes": 12213,
+        "sha256": "866879d0db9343e97afd5c500a4c40c63786fc53d63a91efe0e0b327882487c7",
+        "mode": 420
+      },
+      "allBytesShaModeEqual": true
+    },
+    {
+      "path": "src/application/session.ts",
+      "r4": {
+        "path": "src/application/session.ts",
+        "bytes": 12821,
+        "sha256": "4b413b56eb6a18fa90c8e730d518394dfb0b7bbd6fc559c432a518d8a5d7d72f",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/application/session.ts",
+        "bytes": 12821,
+        "sha256": "4b413b56eb6a18fa90c8e730d518394dfb0b7bbd6fc559c432a518d8a5d7d72f",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/application/session.ts",
+        "bytes": 12821,
+        "sha256": "4b413b56eb6a18fa90c8e730d518394dfb0b7bbd6fc559c432a518d8a5d7d72f",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/application/session.ts",
+        "bytes": 12821,
+        "sha256": "4b413b56eb6a18fa90c8e730d518394dfb0b7bbd6fc559c432a518d8a5d7d72f",
+        "mode": 420
+      },
+      "allBytesShaModeEqual": true
+    },
+    {
+      "path": "src/persistence/codec.ts",
+      "r4": {
+        "path": "src/persistence/codec.ts",
+        "bytes": 20916,
+        "sha256": "1bf625fbc6da65c3167d19fdd1548e18954a50bd88af87bce407a9e06aa40c8f",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/persistence/codec.ts",
+        "bytes": 20916,
+        "sha256": "1bf625fbc6da65c3167d19fdd1548e18954a50bd88af87bce407a9e06aa40c8f",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/persistence/codec.ts",
+        "bytes": 20916,
+        "sha256": "1bf625fbc6da65c3167d19fdd1548e18954a50bd88af87bce407a9e06aa40c8f",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/persistence/codec.ts",
+        "bytes": 20916,
+        "sha256": "1bf625fbc6da65c3167d19fdd1548e18954a50bd88af87bce407a9e06aa40c8f",
+        "mode": 420
+      },
+      "allBytesShaModeEqual": true
+    },
+    {
+      "path": "src/persistence/indexeddb.ts",
+      "r4": {
+        "path": "src/persistence/indexeddb.ts",
+        "bytes": 18462,
+        "sha256": "978209e115e087256e81b60c39080ec029d9c067252beb1451817dc0c3f480dd",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/persistence/indexeddb.ts",
+        "bytes": 18462,
+        "sha256": "978209e115e087256e81b60c39080ec029d9c067252beb1451817dc0c3f480dd",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/persistence/indexeddb.ts",
+        "bytes": 18462,
+        "sha256": "978209e115e087256e81b60c39080ec029d9c067252beb1451817dc0c3f480dd",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/persistence/indexeddb.ts",
+        "bytes": 18462,
+        "sha256": "978209e115e087256e81b60c39080ec029d9c067252beb1451817dc0c3f480dd",
+        "mode": 420
+      },
+      "allBytesShaModeEqual": true
+    },
+    {
+      "path": "src/persistence/writer-lock.ts",
+      "r4": {
+        "path": "src/persistence/writer-lock.ts",
+        "bytes": 1553,
+        "sha256": "b5eb19e5beba9b7262cbfce046bdd8e413f8742a77a491184fcbbbd7a96498df",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/persistence/writer-lock.ts",
+        "bytes": 1553,
+        "sha256": "b5eb19e5beba9b7262cbfce046bdd8e413f8742a77a491184fcbbbd7a96498df",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/persistence/writer-lock.ts",
+        "bytes": 1553,
+        "sha256": "b5eb19e5beba9b7262cbfce046bdd8e413f8742a77a491184fcbbbd7a96498df",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/persistence/writer-lock.ts",
+        "bytes": 1553,
+        "sha256": "b5eb19e5beba9b7262cbfce046bdd8e413f8742a77a491184fcbbbd7a96498df",
+        "mode": 420
+      },
+      "allBytesShaModeEqual": true
+    },
+    {
+      "path": "src/core/commands.ts",
+      "r4": {
+        "path": "src/core/commands.ts",
+        "bytes": 20764,
+        "sha256": "eb050a803ad47778a66cee1a04508ad1c64d024f2eada4cbdd592d8fdc7169c3",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/core/commands.ts",
+        "bytes": 20764,
+        "sha256": "eb050a803ad47778a66cee1a04508ad1c64d024f2eada4cbdd592d8fdc7169c3",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/core/commands.ts",
+        "bytes": 20764,
+        "sha256": "eb050a803ad47778a66cee1a04508ad1c64d024f2eada4cbdd592d8fdc7169c3",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/core/commands.ts",
+        "bytes": 20764,
+        "sha256": "eb050a803ad47778a66cee1a04508ad1c64d024f2eada4cbdd592d8fdc7169c3",
+        "mode": 420
+      },
+      "allBytesShaModeEqual": true
+    },
+    {
+      "path": "src/application/course-commands.ts",
+      "r4": {
+        "path": "src/application/course-commands.ts",
+        "bytes": 3000,
+        "sha256": "d495eff57e0ee36d087715fa6a5c8a810218ba6a339883fe99f9dfdc74dbd195",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/application/course-commands.ts",
+        "bytes": 3000,
+        "sha256": "d495eff57e0ee36d087715fa6a5c8a810218ba6a339883fe99f9dfdc74dbd195",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/application/course-commands.ts",
+        "bytes": 3000,
+        "sha256": "d495eff57e0ee36d087715fa6a5c8a810218ba6a339883fe99f9dfdc74dbd195",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/application/course-commands.ts",
+        "bytes": 3000,
+        "sha256": "d495eff57e0ee36d087715fa6a5c8a810218ba6a339883fe99f9dfdc74dbd195",
+        "mode": 420
+      },
+      "allBytesShaModeEqual": true
+    },
+    {
+      "path": "src/ui/App.tsx",
+      "r4": {
+        "path": "src/ui/App.tsx",
+        "bytes": 54598,
+        "sha256": "cf74e13a3fff3639fa535577af733e69be11b89b8804e98a1ca37c3eed17c643",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/ui/App.tsx",
+        "bytes": 54598,
+        "sha256": "cf74e13a3fff3639fa535577af733e69be11b89b8804e98a1ca37c3eed17c643",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/ui/App.tsx",
+        "bytes": 54598,
+        "sha256": "cf74e13a3fff3639fa535577af733e69be11b89b8804e98a1ca37c3eed17c643",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/ui/App.tsx",
+        "bytes": 54598,
+        "sha256": "cf74e13a3fff3639fa535577af733e69be11b89b8804e98a1ca37c3eed17c643",
+        "mode": 420
+      },
+      "allBytesShaModeEqual": true
+    },
+    {
+      "path": "src/ui/CommandButton.tsx",
+      "r4": {
+        "path": "src/ui/CommandButton.tsx",
+        "bytes": 1928,
+        "sha256": "85027bd69586619720a0fb0ffb4952543784b46d42e146e1f3d2f84567b85b51",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/ui/CommandButton.tsx",
+        "bytes": 1928,
+        "sha256": "85027bd69586619720a0fb0ffb4952543784b46d42e146e1f3d2f84567b85b51",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/ui/CommandButton.tsx",
+        "bytes": 1928,
+        "sha256": "85027bd69586619720a0fb0ffb4952543784b46d42e146e1f3d2f84567b85b51",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/ui/CommandButton.tsx",
+        "bytes": 1928,
+        "sha256": "85027bd69586619720a0fb0ffb4952543784b46d42e146e1f3d2f84567b85b51",
+        "mode": 420
+      },
+      "allBytesShaModeEqual": true
+    },
+    {
+      "path": "src/ui/ClockAdvance.tsx",
+      "r4": {
+        "path": "src/ui/ClockAdvance.tsx",
+        "bytes": 3495,
+        "sha256": "919ec76c3c762f0ab428e47233c468784f9c18ff51bda007fe8d38d634110f2f",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/ui/ClockAdvance.tsx",
+        "bytes": 3495,
+        "sha256": "919ec76c3c762f0ab428e47233c468784f9c18ff51bda007fe8d38d634110f2f",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/ui/ClockAdvance.tsx",
+        "bytes": 3495,
+        "sha256": "919ec76c3c762f0ab428e47233c468784f9c18ff51bda007fe8d38d634110f2f",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/ui/ClockAdvance.tsx",
+        "bytes": 3495,
+        "sha256": "919ec76c3c762f0ab428e47233c468784f9c18ff51bda007fe8d38d634110f2f",
+        "mode": 420
+      },
+      "allBytesShaModeEqual": true
+    },
+    {
+      "path": "src/ui/CourseTeachingDetails.tsx",
+      "r4": {
+        "path": "src/ui/CourseTeachingDetails.tsx",
+        "bytes": 12597,
+        "sha256": "eb16c882a8239b616e4f81b7652e2d2681591fc832c070ba6c8d27c8074ad3de",
+        "mode": 420
+      },
+      "r9Type": {
+        "path": "src/ui/CourseTeachingDetails.tsx",
+        "bytes": 12597,
+        "sha256": "eb16c882a8239b616e4f81b7652e2d2681591fc832c070ba6c8d27c8074ad3de",
+        "mode": 420
+      },
+      "r9Build": {
+        "path": "src/ui/CourseTeachingDetails.tsx",
+        "bytes": 12597,
+        "sha256": "eb16c882a8239b616e4f81b7652e2d2681591fc832c070ba6c8d27c8074ad3de",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/ui/CourseTeachingDetails.tsx",
+        "bytes": 12597,
+        "sha256": "eb16c882a8239b616e4f81b7652e2d2681591fc832c070ba6c8d27c8074ad3de",
+        "mode": 420
+      },
+      "allBytesShaModeEqual": true
+    }
+  ],
+  "p3": [
+    {
+      "path": "src/application/relay.test.ts",
+      "baseline": {
+        "path": "src/application/relay.test.ts",
+        "bytes": 15288,
+        "sha256": "0253493ecfd22f0255c5b403d61465dfc541c7a3a4cfcad0e9e6db8aac1e0ad8",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/application/relay.test.ts",
+        "bytes": 15288,
+        "sha256": "0253493ecfd22f0255c5b403d61465dfc541c7a3a4cfcad0e9e6db8aac1e0ad8",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/application/relay.test.ts",
+        "bytes": 15288,
+        "sha256": "0253493ecfd22f0255c5b403d61465dfc541c7a3a4cfcad0e9e6db8aac1e0ad8",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/application/relay.test.ts",
+        "bytes": 15288,
+        "sha256": "0253493ecfd22f0255c5b403d61465dfc541c7a3a4cfcad0e9e6db8aac1e0ad8",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "src/application/workbench-projection.ts",
+      "baseline": {
+        "path": "src/application/workbench-projection.ts",
+        "bytes": 11136,
+        "sha256": "36a6092bee23b9509b26a7ff04535518cd0d5717aa4bbaacbf0e2be8c944b4a1",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/application/workbench-projection.ts",
+        "bytes": 11136,
+        "sha256": "36a6092bee23b9509b26a7ff04535518cd0d5717aa4bbaacbf0e2be8c944b4a1",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/application/workbench-projection.ts",
+        "bytes": 11136,
+        "sha256": "36a6092bee23b9509b26a7ff04535518cd0d5717aa4bbaacbf0e2be8c944b4a1",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/application/workbench-projection.ts",
+        "bytes": 11136,
+        "sha256": "36a6092bee23b9509b26a7ff04535518cd0d5717aa4bbaacbf0e2be8c944b4a1",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "src/core/commands.ts",
+      "baseline": {
+        "path": "src/core/commands.ts",
+        "bytes": 20764,
+        "sha256": "eb050a803ad47778a66cee1a04508ad1c64d024f2eada4cbdd592d8fdc7169c3",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/core/commands.ts",
+        "bytes": 20764,
+        "sha256": "eb050a803ad47778a66cee1a04508ad1c64d024f2eada4cbdd592d8fdc7169c3",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/core/commands.ts",
+        "bytes": 20764,
+        "sha256": "eb050a803ad47778a66cee1a04508ad1c64d024f2eada4cbdd592d8fdc7169c3",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/core/commands.ts",
+        "bytes": 20764,
+        "sha256": "eb050a803ad47778a66cee1a04508ad1c64d024f2eada4cbdd592d8fdc7169c3",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "src/core/relay-projection.ts",
+      "baseline": {
+        "path": "src/core/relay-projection.ts",
+        "bytes": 4686,
+        "sha256": "272f4f94a65d23bcddcde8b189d2610ca726f55ddf92396d2a71b616c5956fef",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/core/relay-projection.ts",
+        "bytes": 4686,
+        "sha256": "272f4f94a65d23bcddcde8b189d2610ca726f55ddf92396d2a71b616c5956fef",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/core/relay-projection.ts",
+        "bytes": 4686,
+        "sha256": "272f4f94a65d23bcddcde8b189d2610ca726f55ddf92396d2a71b616c5956fef",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/core/relay-projection.ts",
+        "bytes": 4686,
+        "sha256": "272f4f94a65d23bcddcde8b189d2610ca726f55ddf92396d2a71b616c5956fef",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "src/core/relay.ts",
+      "baseline": {
+        "path": "src/core/relay.ts",
+        "bytes": 55571,
+        "sha256": "b29dc6002fef804132040bf61d07130f506a61e88f5ebe42831a886606ee61ab",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/core/relay.ts",
+        "bytes": 55571,
+        "sha256": "b29dc6002fef804132040bf61d07130f506a61e88f5ebe42831a886606ee61ab",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/core/relay.ts",
+        "bytes": 55571,
+        "sha256": "b29dc6002fef804132040bf61d07130f506a61e88f5ebe42831a886606ee61ab",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/core/relay.ts",
+        "bytes": 55571,
+        "sha256": "b29dc6002fef804132040bf61d07130f506a61e88f5ebe42831a886606ee61ab",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "src/core/routines.ts",
+      "baseline": {
+        "path": "src/core/routines.ts",
+        "bytes": 23460,
+        "sha256": "4a45dbad22525184894dd2b047b43b89ce49c0ed08a05858a5e49fd9868e7634",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/core/routines.ts",
+        "bytes": 23460,
+        "sha256": "4a45dbad22525184894dd2b047b43b89ce49c0ed08a05858a5e49fd9868e7634",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/core/routines.ts",
+        "bytes": 23460,
+        "sha256": "4a45dbad22525184894dd2b047b43b89ce49c0ed08a05858a5e49fd9868e7634",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/core/routines.ts",
+        "bytes": 23460,
+        "sha256": "4a45dbad22525184894dd2b047b43b89ce49c0ed08a05858a5e49fd9868e7634",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "src/testing/relay-scenarios.ts",
+      "baseline": {
+        "path": "src/testing/relay-scenarios.ts",
+        "bytes": 5058,
+        "sha256": "0c129ee47c42cda4ec61fd575805d07ba98f900fba52e009c6bc925d22cf4eff",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/testing/relay-scenarios.ts",
+        "bytes": 5058,
+        "sha256": "0c129ee47c42cda4ec61fd575805d07ba98f900fba52e009c6bc925d22cf4eff",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/testing/relay-scenarios.ts",
+        "bytes": 5058,
+        "sha256": "0c129ee47c42cda4ec61fd575805d07ba98f900fba52e009c6bc925d22cf4eff",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/testing/relay-scenarios.ts",
+        "bytes": 5058,
+        "sha256": "0c129ee47c42cda4ec61fd575805d07ba98f900fba52e009c6bc925d22cf4eff",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "vitest.config.ts",
+      "baseline": {
+        "path": "vitest.config.ts",
+        "bytes": 261,
+        "sha256": "754861ae90e60a32db71bd96543b5f12f7a4dbe542420556ca0490c3dfb07c9f",
+        "mode": 420
+      },
+      "current": {
+        "path": "vitest.config.ts",
+        "bytes": 261,
+        "sha256": "754861ae90e60a32db71bd96543b5f12f7a4dbe542420556ca0490c3dfb07c9f",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "vitest.config.ts",
+        "bytes": 261,
+        "sha256": "754861ae90e60a32db71bd96543b5f12f7a4dbe542420556ca0490c3dfb07c9f",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "vitest.config.ts",
+        "bytes": 261,
+        "sha256": "754861ae90e60a32db71bd96543b5f12f7a4dbe542420556ca0490c3dfb07c9f",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "scripts/browser_evidence_guard.d.mts",
+      "baseline": {
+        "path": "scripts/browser_evidence_guard.d.mts",
+        "bytes": 131,
+        "sha256": "97578b664f7d74c0f3a9dce0790e4a279fe941caf373cf1a352c304cd2afa961",
+        "mode": 420
+      },
+      "current": {
+        "path": "scripts/browser_evidence_guard.d.mts",
+        "bytes": 131,
+        "sha256": "97578b664f7d74c0f3a9dce0790e4a279fe941caf373cf1a352c304cd2afa961",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": null,
+      "r9BuildSource": null,
+      "inSourceCensus": false,
+      "r4R9SourceMatch": null,
+      "limit": "Script/config outside this source census is compared to the original root32 P3 working-tree baseline; do not invent an R4 source-census entry."
+    },
+    {
+      "path": "scripts/collect_relay_critical_pilot.ts",
+      "baseline": {
+        "path": "scripts/collect_relay_critical_pilot.ts",
+        "bytes": 12160,
+        "sha256": "b93a682a70a309aad31151280ec1794b61fe4f16c69dd629960789b80be68869",
+        "mode": 420
+      },
+      "current": {
+        "path": "scripts/collect_relay_critical_pilot.ts",
+        "bytes": 12160,
+        "sha256": "b93a682a70a309aad31151280ec1794b61fe4f16c69dd629960789b80be68869",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": null,
+      "r9BuildSource": null,
+      "inSourceCensus": false,
+      "r4R9SourceMatch": null,
+      "limit": "Script/config outside this source census is compared to the original root32 P3 working-tree baseline; do not invent an R4 source-census entry."
+    },
+    {
+      "path": "scripts/relay-critical-audit.test.ts",
+      "baseline": {
+        "path": "scripts/relay-critical-audit.test.ts",
+        "bytes": 5902,
+        "sha256": "04dd96b6daeef46e2c9c3e1362f898e73f582998a805f263c0495fbe4cbc1aa6",
+        "mode": 420
+      },
+      "current": {
+        "path": "scripts/relay-critical-audit.test.ts",
+        "bytes": 5902,
+        "sha256": "04dd96b6daeef46e2c9c3e1362f898e73f582998a805f263c0495fbe4cbc1aa6",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": null,
+      "r9BuildSource": null,
+      "inSourceCensus": false,
+      "r4R9SourceMatch": null,
+      "limit": "Script/config outside this source census is compared to the original root32 P3 working-tree baseline; do not invent an R4 source-census entry."
+    },
+    {
+      "path": "scripts/relay-critical-audit.ts",
+      "baseline": {
+        "path": "scripts/relay-critical-audit.ts",
+        "bytes": 9838,
+        "sha256": "2024d5769a577f417ce6304f2a3844a56ea0266cfef9204a7a74205bffea6311",
+        "mode": 420
+      },
+      "current": {
+        "path": "scripts/relay-critical-audit.ts",
+        "bytes": 9838,
+        "sha256": "2024d5769a577f417ce6304f2a3844a56ea0266cfef9204a7a74205bffea6311",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": null,
+      "r9BuildSource": null,
+      "inSourceCensus": false,
+      "r4R9SourceMatch": null,
+      "limit": "Script/config outside this source census is compared to the original root32 P3 working-tree baseline; do not invent an R4 source-census entry."
+    },
+    {
+      "path": "scripts/relay-critical-evidence.ts",
+      "baseline": {
+        "path": "scripts/relay-critical-evidence.ts",
+        "bytes": 12839,
+        "sha256": "1eb169b4ed32e5ef82c33284e54507953b8465bcb6d6309c6c52b9b2a30af1aa",
+        "mode": 420
+      },
+      "current": {
+        "path": "scripts/relay-critical-evidence.ts",
+        "bytes": 12839,
+        "sha256": "1eb169b4ed32e5ef82c33284e54507953b8465bcb6d6309c6c52b9b2a30af1aa",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": null,
+      "r9BuildSource": null,
+      "inSourceCensus": false,
+      "r4R9SourceMatch": null,
+      "limit": "Script/config outside this source census is compared to the original root32 P3 working-tree baseline; do not invent an R4 source-census entry."
+    },
+    {
+      "path": "scripts/relay-critical-run.test.ts",
+      "baseline": {
+        "path": "scripts/relay-critical-run.test.ts",
+        "bytes": 6417,
+        "sha256": "87fea402e6d54e3721abdd0bac0b5cab5a6d17f957840608575e44093c758d2b",
+        "mode": 420
+      },
+      "current": {
+        "path": "scripts/relay-critical-run.test.ts",
+        "bytes": 6417,
+        "sha256": "87fea402e6d54e3721abdd0bac0b5cab5a6d17f957840608575e44093c758d2b",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": null,
+      "r9BuildSource": null,
+      "inSourceCensus": false,
+      "r4R9SourceMatch": null,
+      "limit": "Script/config outside this source census is compared to the original root32 P3 working-tree baseline; do not invent an R4 source-census entry."
+    },
+    {
+      "path": "scripts/relay-critical-run.ts",
+      "baseline": {
+        "path": "scripts/relay-critical-run.ts",
+        "bytes": 11913,
+        "sha256": "c7b4ff7021d2fbf2a7a49be57264ec8a2888f63b6e2eee9580c4effea4651ef2",
+        "mode": 420
+      },
+      "current": {
+        "path": "scripts/relay-critical-run.ts",
+        "bytes": 11913,
+        "sha256": "c7b4ff7021d2fbf2a7a49be57264ec8a2888f63b6e2eee9580c4effea4651ef2",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": null,
+      "r9BuildSource": null,
+      "inSourceCensus": false,
+      "r4R9SourceMatch": null,
+      "limit": "Script/config outside this source census is compared to the original root32 P3 working-tree baseline; do not invent an R4 source-census entry."
+    },
+    {
+      "path": "scripts/verify_relay_critical_pilot.ts",
+      "baseline": {
+        "path": "scripts/verify_relay_critical_pilot.ts",
+        "bytes": 12739,
+        "sha256": "966f8fd49c4827572e901e5b433b9d5894ee17daffb6624543b37b3beb345759",
+        "mode": 420
+      },
+      "current": {
+        "path": "scripts/verify_relay_critical_pilot.ts",
+        "bytes": 12739,
+        "sha256": "966f8fd49c4827572e901e5b433b9d5894ee17daffb6624543b37b3beb345759",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": null,
+      "r9BuildSource": null,
+      "inSourceCensus": false,
+      "r4R9SourceMatch": null,
+      "limit": "Script/config outside this source census is compared to the original root32 P3 working-tree baseline; do not invent an R4 source-census entry."
+    },
+    {
+      "path": "src/core/relay-knowledge.ts",
+      "baseline": {
+        "path": "src/core/relay-knowledge.ts",
+        "bytes": 740,
+        "sha256": "77e0fa413e905d303c76c28bf9d23ad038495a768dc1d0f09d585b3f26877ea3",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/core/relay-knowledge.ts",
+        "bytes": 740,
+        "sha256": "77e0fa413e905d303c76c28bf9d23ad038495a768dc1d0f09d585b3f26877ea3",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/core/relay-knowledge.ts",
+        "bytes": 740,
+        "sha256": "77e0fa413e905d303c76c28bf9d23ad038495a768dc1d0f09d585b3f26877ea3",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/core/relay-knowledge.ts",
+        "bytes": 740,
+        "sha256": "77e0fa413e905d303c76c28bf9d23ad038495a768dc1d0f09d585b3f26877ea3",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "src/core/relay-read-boundary.test.ts",
+      "baseline": {
+        "path": "src/core/relay-read-boundary.test.ts",
+        "bytes": 7555,
+        "sha256": "4ba9b520009a87cf6f2492114ef16594855b1398dd65d1bf640c62819e6932d7",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/core/relay-read-boundary.test.ts",
+        "bytes": 7555,
+        "sha256": "4ba9b520009a87cf6f2492114ef16594855b1398dd65d1bf640c62819e6932d7",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/core/relay-read-boundary.test.ts",
+        "bytes": 7555,
+        "sha256": "4ba9b520009a87cf6f2492114ef16594855b1398dd65d1bf640c62819e6932d7",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/core/relay-read-boundary.test.ts",
+        "bytes": 7555,
+        "sha256": "4ba9b520009a87cf6f2492114ef16594855b1398dd65d1bf640c62819e6932d7",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "src/testing/relay-critical-authority.ts",
+      "baseline": {
+        "path": "src/testing/relay-critical-authority.ts",
+        "bytes": 45290,
+        "sha256": "8496046db166201edd29694906319070ed306c4bc611c10a92b25fb2c34cd0ac",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/testing/relay-critical-authority.ts",
+        "bytes": 45290,
+        "sha256": "8496046db166201edd29694906319070ed306c4bc611c10a92b25fb2c34cd0ac",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/testing/relay-critical-authority.ts",
+        "bytes": 45290,
+        "sha256": "8496046db166201edd29694906319070ed306c4bc611c10a92b25fb2c34cd0ac",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/testing/relay-critical-authority.ts",
+        "bytes": 45290,
+        "sha256": "8496046db166201edd29694906319070ed306c4bc611c10a92b25fb2c34cd0ac",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "src/testing/relay-critical-context.ts",
+      "baseline": {
+        "path": "src/testing/relay-critical-context.ts",
+        "bytes": 7321,
+        "sha256": "e49d1861c9852a4417b4d4b232ac7a80f28b3ae4c7b698125ca7c60d383a7c09",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/testing/relay-critical-context.ts",
+        "bytes": 7321,
+        "sha256": "e49d1861c9852a4417b4d4b232ac7a80f28b3ae4c7b698125ca7c60d383a7c09",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/testing/relay-critical-context.ts",
+        "bytes": 7321,
+        "sha256": "e49d1861c9852a4417b4d4b232ac7a80f28b3ae4c7b698125ca7c60d383a7c09",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/testing/relay-critical-context.ts",
+        "bytes": 7321,
+        "sha256": "e49d1861c9852a4417b4d4b232ac7a80f28b3ae4c7b698125ca7c60d383a7c09",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "src/testing/relay-critical-lifecycle.ts",
+      "baseline": {
+        "path": "src/testing/relay-critical-lifecycle.ts",
+        "bytes": 57233,
+        "sha256": "ed396caf5565d549d3b01a8d3066325b1854b887d5568e8c9b215827ca75e8cb",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/testing/relay-critical-lifecycle.ts",
+        "bytes": 57233,
+        "sha256": "ed396caf5565d549d3b01a8d3066325b1854b887d5568e8c9b215827ca75e8cb",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/testing/relay-critical-lifecycle.ts",
+        "bytes": 57233,
+        "sha256": "ed396caf5565d549d3b01a8d3066325b1854b887d5568e8c9b215827ca75e8cb",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/testing/relay-critical-lifecycle.ts",
+        "bytes": 57233,
+        "sha256": "ed396caf5565d549d3b01a8d3066325b1854b887d5568e8c9b215827ca75e8cb",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "src/testing/relay-critical-metering.ts",
+      "baseline": {
+        "path": "src/testing/relay-critical-metering.ts",
+        "bytes": 43853,
+        "sha256": "cee702c48008b244af7324b814578430db92662d7fb0b28ad65d3d48779ee021",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/testing/relay-critical-metering.ts",
+        "bytes": 43853,
+        "sha256": "cee702c48008b244af7324b814578430db92662d7fb0b28ad65d3d48779ee021",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/testing/relay-critical-metering.ts",
+        "bytes": 43853,
+        "sha256": "cee702c48008b244af7324b814578430db92662d7fb0b28ad65d3d48779ee021",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/testing/relay-critical-metering.ts",
+        "bytes": 43853,
+        "sha256": "cee702c48008b244af7324b814578430db92662d7fb0b28ad65d3d48779ee021",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "src/testing/relay-critical-money.test.ts",
+      "baseline": {
+        "path": "src/testing/relay-critical-money.test.ts",
+        "bytes": 7275,
+        "sha256": "6ba6a23837abc30a0b6738c323701f0fd3de739b1a6772c8cd2804ed97b22e18",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/testing/relay-critical-money.test.ts",
+        "bytes": 7275,
+        "sha256": "6ba6a23837abc30a0b6738c323701f0fd3de739b1a6772c8cd2804ed97b22e18",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/testing/relay-critical-money.test.ts",
+        "bytes": 7275,
+        "sha256": "6ba6a23837abc30a0b6738c323701f0fd3de739b1a6772c8cd2804ed97b22e18",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/testing/relay-critical-money.test.ts",
+        "bytes": 7275,
+        "sha256": "6ba6a23837abc30a0b6738c323701f0fd3de739b1a6772c8cd2804ed97b22e18",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "src/testing/relay-critical-money.ts",
+      "baseline": {
+        "path": "src/testing/relay-critical-money.ts",
+        "bytes": 10920,
+        "sha256": "a38b9fd301fd9f9b3aca396b1eab62bd25c6240275a013433629d2ebb48d100e",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/testing/relay-critical-money.ts",
+        "bytes": 10920,
+        "sha256": "a38b9fd301fd9f9b3aca396b1eab62bd25c6240275a013433629d2ebb48d100e",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/testing/relay-critical-money.ts",
+        "bytes": 10920,
+        "sha256": "a38b9fd301fd9f9b3aca396b1eab62bd25c6240275a013433629d2ebb48d100e",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/testing/relay-critical-money.ts",
+        "bytes": 10920,
+        "sha256": "a38b9fd301fd9f9b3aca396b1eab62bd25c6240275a013433629d2ebb48d100e",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "src/testing/relay-critical-service.ts",
+      "baseline": {
+        "path": "src/testing/relay-critical-service.ts",
+        "bytes": 64960,
+        "sha256": "a8bf467688a80ccd95e2928229d54e9798f5a21ce8f29e8dfa51057d40f0ff73",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/testing/relay-critical-service.ts",
+        "bytes": 64960,
+        "sha256": "a8bf467688a80ccd95e2928229d54e9798f5a21ce8f29e8dfa51057d40f0ff73",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/testing/relay-critical-service.ts",
+        "bytes": 64960,
+        "sha256": "a8bf467688a80ccd95e2928229d54e9798f5a21ce8f29e8dfa51057d40f0ff73",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/testing/relay-critical-service.ts",
+        "bytes": 64960,
+        "sha256": "a8bf467688a80ccd95e2928229d54e9798f5a21ce8f29e8dfa51057d40f0ff73",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    },
+    {
+      "path": "src/testing/relay-critical-supply.ts",
+      "baseline": {
+        "path": "src/testing/relay-critical-supply.ts",
+        "bytes": 28174,
+        "sha256": "b9aa96b8d8fd48c6cab532e1f99ed456b534d2f9f06d9b2d9bc67db4478e4e14",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/testing/relay-critical-supply.ts",
+        "bytes": 28174,
+        "sha256": "b9aa96b8d8fd48c6cab532e1f99ed456b534d2f9f06d9b2d9bc67db4478e4e14",
+        "mode": 420
+      },
+      "baselineMatchesCurrent": true,
+      "r4Source": {
+        "path": "src/testing/relay-critical-supply.ts",
+        "bytes": 28174,
+        "sha256": "b9aa96b8d8fd48c6cab532e1f99ed456b534d2f9f06d9b2d9bc67db4478e4e14",
+        "mode": 420
+      },
+      "r9BuildSource": {
+        "path": "src/testing/relay-critical-supply.ts",
+        "bytes": 28174,
+        "sha256": "b9aa96b8d8fd48c6cab532e1f99ed456b534d2f9f06d9b2d9bc67db4478e4e14",
+        "mode": 420
+      },
+      "inSourceCensus": true,
+      "r4R9SourceMatch": true,
+      "limit": null
+    }
+  ],
+  "nativeR4References": [
+    {
+      "manifest": {
+        "path": "goal-1/evidence/t17-acceptance-32/chrome-dev-r1/exports.jsonl",
+        "bytes": 1589,
+        "sha256": "2bfd702c2a1ed91d4f687ed56836ad6c088e1bcea2c452223ddae8afd0369db3",
+        "mode": 420
+      },
+      "line": 2,
+      "originalManifestRow": {
+        "file": "dev88-before-enrollment.json",
+        "origin": "saved_ui",
+        "source": "SAVED_UI: imported exact main88 before first qualifying course payment abort",
+        "bytes": 921355,
+        "sha256": "f8007427dc65c480aed39303e049327ebd2a4f12753eeeb296005b287a67067d",
+        "runId": "normal-course-content_employee-453bb7c2",
+        "revision": 88
+      },
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-32/chrome-dev-r1/dev88-before-enrollment.json",
+        "bytes": 921355,
+        "sha256": "f8007427dc65c480aed39303e049327ebd2a4f12753eeeb296005b287a67067d",
+        "mode": 420
+      },
+      "header": {
+        "runId": "normal-course-content_employee-453bb7c2",
+        "revision": 88,
+        "schemaVersion": 13
+      },
+      "meaning": "R4 Native capture role declared by its original source. This bridge re-reads bytes only; it does not re-run the browser operation or relabel it as R9."
+    },
+    {
+      "manifest": {
+        "path": "goal-1/evidence/t17-acceptance-32/chrome-dev-r1/exports.jsonl",
+        "bytes": 1589,
+        "sha256": "2bfd702c2a1ed91d4f687ed56836ad6c088e1bcea2c452223ddae8afd0369db3",
+        "mode": 420
+      },
+      "line": 3,
+      "originalManifestRow": {
+        "file": "dev88-after-enrollment-abort.json",
+        "origin": "saved_ui",
+        "source": "SAVED_UI: old complete88 after real enrollment head-write abort; no tuition published",
+        "bytes": 921355,
+        "sha256": "f8007427dc65c480aed39303e049327ebd2a4f12753eeeb296005b287a67067d",
+        "runId": "normal-course-content_employee-453bb7c2",
+        "revision": 88
+      },
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-32/chrome-dev-r1/dev88-after-enrollment-abort.json",
+        "bytes": 921355,
+        "sha256": "f8007427dc65c480aed39303e049327ebd2a4f12753eeeb296005b287a67067d",
+        "mode": 420
+      },
+      "header": {
+        "runId": "normal-course-content_employee-453bb7c2",
+        "revision": 88,
+        "schemaVersion": 13
+      },
+      "meaning": "R4 Native capture role declared by its original source. This bridge re-reads bytes only; it does not re-run the browser operation or relabel it as R9."
+    },
+    {
+      "manifest": {
+        "path": "goal-1/evidence/t17-acceptance-32/chrome-dev-r1/exports.jsonl",
+        "bytes": 1589,
+        "sha256": "2bfd702c2a1ed91d4f687ed56836ad6c088e1bcea2c452223ddae8afd0369db3",
+        "mode": 420
+      },
+      "line": 4,
+      "originalManifestRow": {
+        "file": "dev89-unsaved-enrollment-candidate.json",
+        "origin": "unsaved_candidate",
+        "source": "UNSAVED_CANDIDATE: real first qualifying course-payment head-write aborted; original exact candidate89",
+        "bytes": 930483,
+        "sha256": "4ff1cebd491f72a5ad00a5c4ffc48e080eb89350ddd87c56f182e884e4177225",
+        "runId": "normal-course-content_employee-453bb7c2",
+        "revision": 89
+      },
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-32/chrome-dev-r1/dev89-unsaved-enrollment-candidate.json",
+        "bytes": 930483,
+        "sha256": "4ff1cebd491f72a5ad00a5c4ffc48e080eb89350ddd87c56f182e884e4177225",
+        "mode": 420
+      },
+      "header": {
+        "runId": "normal-course-content_employee-453bb7c2",
+        "revision": 89,
+        "schemaVersion": 13
+      },
+      "meaning": "R4 Native capture role declared by its original source. This bridge re-reads bytes only; it does not re-run the browser operation or relabel it as R9."
+    },
+    {
+      "manifest": {
+        "path": "goal-1/evidence/t17-acceptance-32/chrome-dev-r1/exports.jsonl",
+        "bytes": 1589,
+        "sha256": "2bfd702c2a1ed91d4f687ed56836ad6c088e1bcea2c452223ddae8afd0369db3",
+        "mode": 420
+      },
+      "line": 5,
+      "originalManifestRow": {
+        "file": "dev89-original-candidate-retry.json",
+        "origin": "saved_ui",
+        "source": "SAVED_UI: original enrollment candidate89 saved by original retry without reexecution",
+        "bytes": 930483,
+        "sha256": "4ff1cebd491f72a5ad00a5c4ffc48e080eb89350ddd87c56f182e884e4177225",
+        "runId": "normal-course-content_employee-453bb7c2",
+        "revision": 89
+      },
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-32/chrome-dev-r1/dev89-original-candidate-retry.json",
+        "bytes": 930483,
+        "sha256": "4ff1cebd491f72a5ad00a5c4ffc48e080eb89350ddd87c56f182e884e4177225",
+        "mode": 420
+      },
+      "header": {
+        "runId": "normal-course-content_employee-453bb7c2",
+        "revision": 89,
+        "schemaVersion": 13
+      },
+      "meaning": "R4 Native capture role declared by its original source. This bridge re-reads bytes only; it does not re-run the browser operation or relabel it as R9."
+    },
+    {
+      "manifest": {
+        "path": "goal-1/evidence/t17-acceptance-32/chrome-physical-old-r1/exports.jsonl",
+        "bytes": 360,
+        "sha256": "f9e330d431ef25a24ea4234e663ce6af746af2fc67a9041b1e25c932cd92b7c9",
+        "mode": 420
+      },
+      "line": 1,
+      "originalManifestRow": {
+        "file": "physical88-before-original-retry.json",
+        "origin": "physical_readonly",
+        "source": "PHYSICAL_READONLY: fresh separate Chrome tab loaded DB88 while original writer holds unsaved enrollment candidate89",
+        "bytes": 921355,
+        "sha256": "f8007427dc65c480aed39303e049327ebd2a4f12753eeeb296005b287a67067d",
+        "runId": "normal-course-content_employee-453bb7c2",
+        "revision": 88
+      },
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-32/chrome-physical-old-r1/physical88-before-original-retry.json",
+        "bytes": 921355,
+        "sha256": "f8007427dc65c480aed39303e049327ebd2a4f12753eeeb296005b287a67067d",
+        "mode": 420
+      },
+      "header": {
+        "runId": "normal-course-content_employee-453bb7c2",
+        "revision": 88,
+        "schemaVersion": 13
+      },
+      "meaning": "R4 Native capture role declared by its original source. This bridge re-reads bytes only; it does not re-run the browser operation or relabel it as R9."
+    },
+    {
+      "manifest": {
+        "path": "goal-1/evidence/t17-acceptance-32/chrome-physical-new-r1/exports.jsonl",
+        "bytes": 338,
+        "sha256": "93a4392effa9e1a9a7f6e1575e931950489eea00021a10599cf426a3601bad51",
+        "mode": 420
+      },
+      "line": 1,
+      "originalManifestRow": {
+        "file": "physical89-after-original-retry.json",
+        "origin": "physical_readonly",
+        "source": "PHYSICAL_READONLY: new separate tab loaded DB89 only after original enrollment candidate retry",
+        "bytes": 930483,
+        "sha256": "4ff1cebd491f72a5ad00a5c4ffc48e080eb89350ddd87c56f182e884e4177225",
+        "runId": "normal-course-content_employee-453bb7c2",
+        "revision": 89
+      },
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-32/chrome-physical-new-r1/physical89-after-original-retry.json",
+        "bytes": 930483,
+        "sha256": "4ff1cebd491f72a5ad00a5c4ffc48e080eb89350ddd87c56f182e884e4177225",
+        "mode": 420
+      },
+      "header": {
+        "runId": "normal-course-content_employee-453bb7c2",
+        "revision": 89,
+        "schemaVersion": 13
+      },
+      "meaning": "R4 Native capture role declared by its original source. This bridge re-reads bytes only; it does not re-run the browser operation or relabel it as R9."
+    }
+  ],
+  "observedChecks": {
+    "typeR9": {
+      "at": "2026-10-24T18:46:53.727Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 46364,
+      "sourceCount": 564,
+      "sourceUnchanged": true,
+      "extraSame": true,
+      "error": null
+    },
+    "targetR9": {
+      "at": "2026-10-24T18:48:33.306Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "node_modules/.bin/vitest",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "--maxWorkers",
+        "1",
+        "--no-file-parallelism",
+        "src/ui/CourseWaitDate.test.tsx",
+        "src/ui/CourseTeachingChoice.test.tsx",
+        "src/ui/OpeningMoment.course-wait.test.tsx",
+        "src/ui/CourseTeachingContinuity.test.tsx",
+        "src/ui/CourseTeachingPaper.test.tsx",
+        "--exclude",
+        "src/ui/book-layout.test.ts"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 36017,
+      "sourceCount": 564,
+      "sourceUnchanged": true,
+      "extraSame": true,
+      "error": null
+    },
+    "targetR9Stdout": "\n RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era\n\n\n Test Files  5 passed (5)\n      Tests  21 passed (21)\n   Start at  02:47:57\n   Duration  35.41s (tests 89%, import 7%, transform 4%)\n\n",
+    "buildR9": {
+      "at": "2026-10-24T18:49:33.315Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        ".delivery/t17-u3c2-r9"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 47761,
+      "sourceCount": 564,
+      "sourceUnchanged": true,
+      "extraSame": true,
+      "error": null
+    }
+  },
+  "finiteConclusion": {
+    "r4Evidence": "R4 genuine head-write abort, original retry, independently captured old/new physical bytes and read-only enrollment guard retain their R4 identity. Unchanged source provides a bounded protocol bridge, not a new R9 browser pass.",
+    "noFullR4FaultMatrixRequiredByTheseChanges": true,
+    "reason": "R9 selects an earlier date and renders public/refund copy through the original unchanged confirmation, command, session and atomic store paths.",
+    "r9RequiredNative": [
+      "From explicit original97 import in an isolated R9 branch, actually use the course clock/object/review to visit existing public calendar dates; receive H004 at Mar14 before its Mar21 deadline while keeping the original class and Apr1 job target.",
+      "Read cumulative prepayment, actually paid refunds, protection and recognized income against the current original class ledger, including the existing 995/199/398/398 half-refund state until later real events change it.",
+      "Continue the original update and class obligations, save and reenter consistently; bind final new exports to the final source and run the complete Create export audit after captures stop."
+    ],
+    "r9TargetTests": "Original recorded 5 files/21 cases passed, with their own execution and source identities; not a Native or human pass.",
+    "rerunTrigger": "Reopen targeted fault verification if later changes affect the listed confirmation/submission/save sources, candidate publication gates, or a concrete new failure appears.",
+    "notClaimed": [
+      "R4 Native chain reexecuted on R9",
+      "R4 screenshot proves R9 date/copy behavior",
+      "all source frozen evidence has stopped writing",
+      "final whole-export replay already run",
+      "human understanding or fun",
+      "compatibility work resumed"
+    ]
+  },
+  "markdown": {
+    "path": "goal-1/evidence/t17-acceptance-32/protocol-source-bridge-r9.md",
+    "bytes": 6735,
+    "sha256": "ad641dce6bf150de198ee8d7df11d0bb8650a8935c920d3d325caaf19db4276a",
+    "mode": 420
+  },
+  "referencesUnchanged": true,
+  "currentStillSame": true,
+  "writerStoppedAfterThisJSON": true
+}

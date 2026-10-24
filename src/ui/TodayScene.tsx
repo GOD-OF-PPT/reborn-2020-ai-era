@@ -53,7 +53,7 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
   {page?<Dialog title={page==='directions'?'今天，想把时间留给什么？':page==='life'?'给生活留出一段真实的日子':page==='market'?'给自己的模拟判断划一个边界':'这些原安排，仍在继续'} className="opening-paper today-choice-paper" onClose={()=>setPage(null)} footer={<div className="today-choice-footer">{page!=='directions'?button('返回今天的选择',()=>setPage('directions')):null}{button('先不新增安排，合上这一页',()=>setPage(null))}</div>}>
    <p className="opening-paper-date">今天 {p.view.date} · {p.features.workbench.quarter}</p>
    {page==='directions'?<><p>选择关注只把一件事放到眼前。新的工作、生活投入和买卖，仍由你核对原确认。</p><div className="opening-directions today-directions">
-    {today.ongoing.length?button('继续已经答应的事',()=>setPage('ongoing'),'从同一份工作、生活、作品、教学准备或投资安排继续'):null}
+    {today.ongoing.length?button('继续已经答应的事',()=>setPage('ongoing'),'从同一份工作、生活、作品、教学与学员承诺或投资安排继续'):null}
     {button('先看看本季工作',()=>choose({runId:p.view.runId,kind:'work',accountId:'personal',entityId:null}),'若本季尚未安排，先看真实行动占用与工资日期，再决定')}
     {button('留一段新的时间给生活',()=>prepare('life'),'休整或改善住处；原安排、费用和行动保留')}
     {button('给一次视频尝试留出日子',()=>{setPage(null);openVideo('select-account')},'明确选择账号和具体作品；新的客户、素材与投入仍由你决定')}

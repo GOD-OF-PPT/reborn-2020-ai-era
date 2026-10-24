@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {createCampaignCodec} from '../../../../src/application/campaign.ts';
+import {projectRun} from '../../../../src/core/commands.ts';
+import {assertBrowserEvidenceWritable as guard} from '../../../../scripts/browser_evidence_guard.mjs';
+const out=import.meta.dirname,rawPath='goal-1/evidence/t17-acceptance-31/chrome-main-r5/normal86-sample-actually-ready.json';
+const hash=b=>createHash('sha256').update(b).digest('hex');
+const bytes=fs.readFileSync(rawPath),before={path:rawPath,bytes:bytes.length,sha256:hash(bytes)};
+if(before.bytes!==905659||before.sha256!=='c39d2cb2e66ce85f9a84d0c9bdf349ec950edb4df727d7e14eae3ab82e49c517')throw Error('ORIGINAL_MAIN86_REQUIRED');
+const codec=createCampaignCodec(),run=codec.import(bytes.toString('utf8')),view=projectRun(run),project=codec.registry.runtime?.project;
+if(typeof project!=='function')throw Error('OFFICIAL_PUBLIC_PROJECT_REQUIRED');
+const features=project.call(codec.registry.runtime,run),c=features.course,w=features.workbench;
+const result={at:new Date().toISOString(),method:'Original codec.import plus original committed public project only; no Create, command, preview, Controller, replay, fixture or hidden-state guidance.',raw:before,source:{runId:view.runId,revision:view.revision,date:view.date,phase:view.phase,budget:view.budget},accounts:view.accounts,courses:c?.courses.map(({id,businessId,name,productId,topicId,edition,segment,status,paused,qualificationReasons,unresolvedUpdates,sampleJobId})=>({id,businessId,name,productId,topicId,edition,segment,status,paused,qualificationReasons,unresolvedUpdates,sampleJobId})),videoCohorts:c?.videoCohorts,courseAudienceCount:c?.audiences.length,cohortCount:c?.cohorts.length,resources:c?.resources,openJobs:view.operations?.jobs.filter(j=>['planned','running'].includes(j.status)),workbench:{quarter:w.quarter,atQuarterEnd:w.atQuarterEnd,pause:w.pause,progression:w.progression},limits:'Audience count/segment are public. Matching source does not promise any buyers, support success or future learning result. Source preparation is not execution acceptance.'};
+const after=fs.readFileSync(rawPath);if(!bytes.equals(after))throw Error('RAW_CHANGED_DURING_READ');guard(out);fs.writeFileSync(out+'/main86-public.json',JSON.stringify({...result,rawAfter:{bytes:after.length,sha256:hash(after)},rawEqual:true},null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify({source:result.source,courses:result.courses,videoCohorts:result.videoCohorts,openJobs:result.openJobs,workbench:result.workbench},null,2));

@@ -1,0 +1,266 @@
+--- /dev/null
++++ b/src/ui/CourseTeachingPaper.tsx
+@@ -0,0 +1,108 @@
++import coursePreparationKit from '../../assets/ui-redesign/cinematic/props/course-preparation-kit-v1.png'
++import type {CoursePaperStage} from './OpeningObject.tsx'
++import './course-teaching-art.css'
++
++export type CourseTeachingPaperPhase='audience'|'cohort'|'teaching'|'support'|'refund'|'closed'|'stopped'|'history'
++export interface CourseTeachingPaperState{
++ phase:CourseTeachingPaperPhase
++ status:'choice'|'planned'|'running'|'actual'
++ stages:readonly[CoursePaperStage,CoursePaperStage]|null
++ protectedFen:number|null
++ needsHelp:number|null
++ refundDueFen:number|null
++ feeDueFen:number|null
++ closedAt:string|null
++}
++
++/** Shapes are decorative. All names, money, dates, protection and actions remain caller-owned DOM. */
++export function CourseTeachingPaper({art}:{art:CourseTeachingPaperState}){
++ const history=art.phase==='history'
++ return <span className="course-teaching-art" data-teaching-phase={art.phase} data-teaching-status={art.status} aria-hidden="true">
++  <img className="course-teaching-kit" src={coursePreparationKit} alt="" width={1536} height={1024} decoding="async"/>
++  <svg className="course-teaching-layers" viewBox="0 0 1536 1024" fill="none" aria-hidden="true" focusable="false">
++   {art.phase==='audience'?<g data-material="audience-letter-and-unfilled-plan">
++    <path className="teaching-art-under" d="m856 529 552 149-58 220-552-149z"/>
++    <path className="teaching-art-envelope" d="m879 501 541 159-60 202-541-159z"/>
++    <path className="teaching-art-seam" d="m879 501 184 162 357-3m-601 43 205-61m276 221-111-154"/>
++    <path className="teaching-art-sheet" d="m1035 443 333 101-57 185-333-101z"/>
++    <path className="teaching-art-ink" d="m1072 504 219 67m-230-31 171 52"/>
++   </g>:null}
++   {art.phase==='cohort'?<g data-material="class-promise-folio">
++    <path className="teaching-art-under" d="m795 473 626 176-67 248-626-176z"/>
++    <path className="teaching-art-sheet" d="m824 439 611 190-70 226-611-190z"/>
++    <path className="teaching-art-binding" d="m849 478-53 168"/>
++    <path className="teaching-art-frame" d="m909 513 431 134-36 116-431-134z"/>
++    <path className="teaching-art-ink" d="m937 557 343 107m-355-70 242 75"/>
++    <path className="teaching-art-bookmark" d="m1271 764 63 19-29 94-22-25-32 8z"/>
++   </g>:null}
++   {art.phase==='teaching'?<g data-material="two-part-teaching-spread">
++    <path className="teaching-art-under" d="m735 490 319-24 390 153-91 274-356-113-326-18z"/>
++    <path className="teaching-art-sheet" d="m757 458 297-23-74 310-303-22z"/>
++    <path className="teaching-art-warm-sheet" d="m1054 435 388 154-89 276-373-120z"/>
++    <path className="teaching-art-seam" d="m1054 435-74 310"/>
++    <path className="teaching-art-frame" d="m799 510 174-12-35 151-174-12z"/>
++    <path className="teaching-art-ink" d="m1102 524 253 101m-267-55 208 83m-221-38 253 101"/>
++   </g>:null}
++   {art.phase==='support'?<g data-material="support-reply-and-kept-lesson">
++    <path className="teaching-art-under" d="m783 524 597 162-66 239-597-162z"/>
++    <path className="teaching-art-kept" d="m800 499 591 172-64 217-591-172z"/>
++    <path className="teaching-art-sheet" d="m1120 439 304 101-111 332-304-101z"/>
++    <path className="teaching-art-fold" d="m1354 516 70 24-20 60z"/>
++    <path className="teaching-art-ink" d="m1147 501 194 65m-207-26 155 52m-168-14 194 65"/>
++    <path className="teaching-art-clip" d="m1084 713 20-62c7-23 37-12 30 10l-20 62"/>
++   </g>:null}
++   {art.phase==='refund'?<g data-material="return-scope-and-reconciliation">
++    <path className="teaching-art-under" d="m795 506 597 160-62 233-597-160z"/>
++    <path className="teaching-art-kept" d="m818 480 589 173-66 214-589-173z"/>
++    <path className="teaching-art-sheet" d="m1109 462 314 107-111 324-314-107z"/>
++    <path className="teaching-art-frame" d="m1136 517 230 78-71 211-230-78z"/>
++    <path className="teaching-art-seam" d="m1107 601 228 77m-245-28 228 77m-244-29 228 77"/>
++    <path className="teaching-art-return-fold" d="m1029 747 145 43-23 78-145-43 44-33z"/>
++   </g>:null}
++   {art.phase==='closed'?<g data-material="kept-class-record">
++    <path className="teaching-art-under" d="m806 488 601 160-68 248-601-160z"/>
++    <path className="teaching-art-page-edge" d="m823 470 595 170-69 230-595-170z"/>
++    <path className="teaching-art-kept" d="m846 441 583 185-71 221-583-185z"/>
++    <path className="teaching-art-ink" d="m939 524 389 124m-405-72 306 98m-323-47 389 124"/>
++    {art.closedAt!==null?<path className="teaching-art-closure-binding" data-material="actual-closure-binding" d="m887 475-58 179m15-193-58 179"/>:null}
++   </g>:null}
++   {art.phase==='stopped'?<g data-material="stowed-class-and-retained-responsibility">
++    <path className="teaching-art-muted" d="m837 536 575 156-52 207-575-156z"/>
++    <path className="teaching-art-seam" d="m837 536 204 156 371 0"/>
++    <path className="teaching-art-retained-tie" d="m809 704 576 155m-236-215-55 206"/>
++    <path className="teaching-art-sheet" d="m1255 739 143 41-42 144-143-41z"/>
++    <path className="teaching-art-ink" d="m1275 782 93 26m-102 5 73 21"/>
++   </g>:null}
++   {history?<g data-material="original-attempt-history-leaf">
++    <path className="teaching-art-muted" d="m806 511 604 164-61 229-604-164z"/>
++    <path className="teaching-art-sheet" d="m828 477 330 91-184 67-229 66z"/>
++    <path className="teaching-art-seam" d="m1158 568-184 67-229 66"/>
++    <path className="teaching-art-binding" d="m829 528 26 8m-41 38 26 8m-41 38 26 8m-41 38 26 8"/>
++   </g>:null}
++   {!history&&art.status==='planned'?<g data-material="reserved-fold">
++    <path className="teaching-art-sheet" d="m829 726 478 127-20 75-478-127z"/>
++    <path className="teaching-art-dashed" d="m847 750 438 116m-445-90 438 116"/>
++   </g>:!history&&art.status==='running'?<g data-material="working-loose-leaf">
++    <path className="teaching-art-warm-sheet" d="m1031 495 346 111-41 129-346-111z"/>
++    <path className="teaching-art-pencil" d="m1060 543 245 78m-255-46 199 64"/>
++   </g>:!history&&art.status==='actual'?<g data-material="recorded-page-edge">
++    <path className="teaching-art-page-edge" d="m844 769 288 77-13 46-288-77z"/>
++    <path className="teaching-art-ink" d="m858 790 244 65"/>
++   </g>:null}
++   {!history&&art.stages?<g data-material="actual-teaching-tabs">{art.stages.map((state,index)=>{
++    const x=826+index*187,y=692+index*49
++    return <g key={index} data-stage-index={index} data-stage-state={state}>
++     <path className={'teaching-art-stage-tab teaching-art-stage-'+state} d={`m${x} ${y} 163 43-25 94-163-43z`}/>
++     {state==='completed'?<path className="teaching-art-double-rule" d={`m${x+16} ${y+32} 119 31m-124-14 119 31`}/>:state==='running'?<path className="teaching-art-pencil" d={`m${x+18} ${y+38} 110 29m-114-11 77 20`}/>:null}
++    </g>
++   })}</g>:null}
++   {!history&&art.protectedFen!==null&&art.protectedFen>0?<g data-material="actual-protection-fold">
++    <path className="teaching-art-protection" d="m812 785 475 121-17 60-475-121 30-23z"/>
++    <path className="teaching-art-seam" d="m837 811 413 105"/>
++   </g>:null}
++   {!history&&art.needsHelp!==null&&art.needsHelp>0?<path data-material="actual-help-fold" className="teaching-art-responsibility" d="m1328 648 90 30-67 200-25-34-40 12z"/>:null}
++   {!history&&art.refundDueFen!==null&&art.refundDueFen>0?<path data-material="actual-refund-due-fold" className="teaching-art-responsibility" d="m1212 778 101 30-42 139-34-30-40 9z"/>:null}
++   {!history&&art.feeDueFen!==null&&art.feeDueFen>0?<path data-material="actual-fee-due-fold" className="teaching-art-fee-fold" d="m1102 754 84 24-40 137-25-26-36 8z"/>:null}
++  </svg>
++ </span>
++}
+--- /dev/null
++++ b/src/ui/course-teaching-art.css
+@@ -0,0 +1,47 @@
++/* One original low folio; native leaves show the original class's actual commitments. */
++.course-teaching-art[data-teaching-phase]{position:relative;isolation:isolate;display:block;width:100%;height:160px;pointer-events:none}
++.course-teaching-art[data-teaching-phase] .course-teaching-kit,
++.course-teaching-art[data-teaching-phase] .course-teaching-layers{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:none;pointer-events:none}
++.course-teaching-art[data-teaching-phase] .course-teaching-kit{z-index:0;filter:none}
++.course-teaching-art[data-teaching-phase] .course-teaching-layers{z-index:1;filter:drop-shadow(1px 2px 1px #3d302450)}
++.course-teaching-art .teaching-art-sheet{fill:#f0e2c5;stroke:#b6a079;stroke-width:4}
++.course-teaching-art .teaching-art-under{fill:#d2bd97;stroke:#a28b66;stroke-width:4}
++.course-teaching-art .teaching-art-envelope{fill:#d9c5a1;stroke:#ad956f;stroke-width:4}
++.course-teaching-art .teaching-art-seam{stroke:#a79270;stroke-width:5}
++.course-teaching-art .teaching-art-ink{stroke:#92876a;stroke-width:5;stroke-linecap:round}
++.course-teaching-art .teaching-art-pencil{stroke:#7d886c;stroke-width:5;stroke-linecap:round}
++.course-teaching-art .teaching-art-binding{stroke:#8d8062;stroke-width:9;stroke-linecap:round}
++.course-teaching-art .teaching-art-frame{stroke:#9f9b77;stroke-width:5}
++.course-teaching-art .teaching-art-bookmark{fill:#b29a66;stroke:#897847;stroke-width:4}
++.course-teaching-art .teaching-art-warm-sheet{fill:#e5d5b2;stroke:#b29b75;stroke-width:4}
++.course-teaching-art .teaching-art-kept{fill:#e6d8b6;stroke:#ac9870;stroke-width:4}
++.course-teaching-art .teaching-art-fold{fill:#cbb591;stroke:#a68d68;stroke-width:4}
++.course-teaching-art .teaching-art-clip{stroke:#a17b43;stroke-width:10;stroke-linecap:round}
++.course-teaching-art .teaching-art-return-fold{fill:#c3b28e;stroke:#9e8964;stroke-width:4}
++.course-teaching-art .teaching-art-page-edge{fill:#d3c3a1;stroke:#a8956f;stroke-width:4}
++.course-teaching-art .teaching-art-closure-binding{stroke:#8b8061;stroke-width:9;stroke-linecap:round}
++.course-teaching-art .teaching-art-muted{fill:#beb39b;stroke:#988c70;stroke-width:4}
++.course-teaching-art .teaching-art-retained-tie{stroke:#8c8065;stroke-width:7}
++.course-teaching-art .teaching-art-dashed{stroke:#9f8860;stroke-width:4;stroke-dasharray:13 11}
++.course-teaching-art .teaching-art-stage-tab{fill:#e8d9b9;stroke:#a9956d;stroke-width:4}
++.course-teaching-art .teaching-art-stage-pending{fill:#e0d0ae;stroke-dasharray:4 12}
++.course-teaching-art .teaching-art-stage-planned{stroke-dasharray:13 11}
++.course-teaching-art .teaching-art-stage-running{fill:#d6d0ad;stroke:#8a906e}
++.course-teaching-art .teaching-art-stage-completed{fill:#e5d8b8;stroke:#8d8868;stroke-width:6}
++.course-teaching-art .teaching-art-stage-stopped{fill:#c7baa1;stroke:#9b7f65;stroke-dasharray:6 9}
++.course-teaching-art .teaching-art-double-rule{stroke:#8c8867;stroke-width:5}
++.course-teaching-art .teaching-art-protection{fill:#cebb8f;stroke:#9a8359;stroke-width:5}
++.course-teaching-art .teaching-art-responsibility{fill:#bb8e70;stroke:#965c46;stroke-width:5}
++.course-teaching-art .teaching-art-fee-fold{fill:#b29a79;stroke:#8e654d;stroke-width:5}
++
++/* New teaching papers alone use this slot; old preparation and original text slips stay intact. */
++.opening-object[data-teaching-phase]{transform:none;transition:none}
++.opening-room>.opening-object[data-appearance=course][data-teaching-phase]>.opening-object-art,
++.opening-room .opening-room-object>.opening-object[data-appearance=course][data-teaching-phase]>.opening-object-art{height:160px;min-height:160px;width:100%;aspect-ratio:auto;align-self:end;filter:none;transform:none}
++.opening-object[data-teaching-phase] .opening-object-title:empty,
++.opening-object[data-teaching-phase] .opening-object-detail:empty{display:none}
++.opening-object[data-teaching-phase] .first-order-protection{display:flex;align-items:baseline;align-self:stretch;gap:7px;padding:5px 0;border-top:1px dashed #bac09d;color:#d8d6b8}
++.opening-object[data-teaching-phase][data-protection=readonly] .opening-object-copy{border-left:3px double #bac09d}
++.opening-object[data-teaching-phase][data-protection=unsaved] .opening-object-copy{border-left-style:dashed}
++.opening-object[data-teaching-phase][data-protection=unavailable] .opening-object-action{border-top-style:dashed}
++.opening-object[data-teaching-phase]:is(:hover,:focus-visible,:active):not(:disabled){transform:none}
+--- /dev/null
++++ b/src/ui/CourseTeachingPaper.test.tsx
+@@ -0,0 +1,53 @@
++import {expect,it} from 'vitest'
++import {renderToStaticMarkup} from 'react-dom/server'
++import {CourseTeachingPaper,type CourseTeachingPaperState,type CourseTeachingPaperPhase} from './CourseTeachingPaper.tsx'
++
++const base:CourseTeachingPaperState={phase:'cohort',status:'choice',stages:null,protectedFen:null,needsHelp:null,refundDueFen:null,feeDueFen:null,closedAt:null}
++const phases:readonly CourseTeachingPaperPhase[]=['audience','cohort','teaching','support','refund','closed','stopped','history']
++const render=(art:CourseTeachingPaperState)=>renderToStaticMarkup(<CourseTeachingPaper art={art}/>)
++const shapes=(html:string)=>(html.match(/<path\b[^>]*>/g)??[]).map(path=>path.replace(/ class="[^"]*"/g,'')).join('')
++
++it('keeps every class paper decorative, preserves the original kit, and distinguishes the actual material shapes',()=>{
++ const paths=phases.map(phase=>{
++  const html=render({...base,phase})
++  expect(html).toContain('aria-hidden="true"')
++  expect(html).toContain('focusable="false"')
++  expect(html).toContain('course-preparation-kit-v1.png')
++  expect(html).toContain('width="1536" height="1024"')
++  expect(html).not.toMatch(/<(?:text|foreignObject|button|a|script)\b/)
++  expect(html).not.toMatch(/¥|￥|%|学员说|收入|到账|20\d{2}-\d{2}-\d{2}/)
++  return shapes(html)
++ })
++ expect(new Set(paths).size).toBe(phases.length)
++ expect(new Set(['choice','planned','running','actual'].map(status=>shapes(render({...base,phase:'teaching',status:status as CourseTeachingPaperState['status']})))).size).toBe(4)
++ const audience=render({...base,phase:'audience',status:'actual'})
++ expect(audience).toContain('audience-letter-and-unfilled-plan')
++ expect(audience).not.toMatch(/class-promise-folio|actual-teaching-tabs|actual-closure-binding/)
++})
++
++it('keeps stage arrangements distinct from delivered lessons without declaring a learning outcome or closing the class',()=>{
++ const planned=render({...base,phase:'teaching',status:'planned',stages:['planned','pending']}),delivered=render({...base,phase:'support',status:'running',stages:['completed','completed']})
++ expect(planned).toContain('data-material="reserved-fold"')
++ expect(planned).toContain('data-stage-state="planned"')
++ expect(planned).not.toContain('data-stage-state="completed"')
++ expect(delivered.match(/data-stage-state="completed"/g)).toHaveLength(2)
++ expect(delivered).toContain('data-material="working-loose-leaf"')
++ expect(delivered).not.toMatch(/actual-closure-binding|actual-help-fold|helped|outcome/)
++ const noClosure=render({...base,phase:'closed',status:'actual'}),closed=render({...base,phase:'closed',status:'actual',closedAt:'2023-05-01'})
++ expect(noClosure).not.toContain('actual-closure-binding')
++ expect(closed).toContain('actual-closure-binding')
++ expect(closed).not.toContain('2023-05-01')
++})
++
++it('adds only positive actual protection and responsibility folds, never a made-up cash receipt or zero claim',()=>{
++ const unknown=render({...base,phase:'refund'}),zero=render({...base,phase:'refund',protectedFen:0,needsHelp:0,refundDueFen:0,feeDueFen:0}),due=render({...base,phase:'stopped',status:'actual',protectedFen:500000,needsHelp:1,refundDueFen:500000,feeDueFen:100})
++ for(const html of [unknown,zero])expect(html).not.toMatch(/actual-(?:protection|help|refund-due|fee-due)-fold/)
++ for(const material of ['actual-protection-fold','actual-help-fold','actual-refund-due-fold','actual-fee-due-fold'])expect(due).toContain(material)
++ expect(due).not.toMatch(/500000|receipt|coin|paid|cash|actual-closure-binding/)
++})
++
++it('keeps a historical attempt free of the later class delivery and money markings even if stale art fields are supplied',()=>{
++ const html=render({...base,phase:'history',status:'actual',stages:['completed','completed'],protectedFen:500000,needsHelp:2,refundDueFen:500000,feeDueFen:100,closedAt:'2023-05-01'})
++ expect(html).toContain('original-attempt-history-leaf')
++ expect(html).not.toMatch(/actual-teaching-tabs|actual-protection-fold|actual-help-fold|actual-refund-due-fold|actual-fee-due-fold|actual-closure-binding|recorded-page-edge|2023-05-01/)
++})
+--- /dev/null
++++ b/src/ui/course-teaching-continuity.ts
+@@ -0,0 +1,46 @@
++import type {GamePanelProps} from './game-types.ts'
++import type {CourseSceneTarget} from './course-scene-progress.ts'
++import {courseSceneProgress,courseTargetReason} from './course-scene-progress.ts'
++import {courseSceneContext} from './course-player-thread.ts'
++import {courseTeachingPaper} from './course-teaching-paper.ts'
++import {courseCohortFinancials} from './CourseTeachingDetails.tsx'
++import type {CourseTeachingPaperState} from './CourseTeachingPaper.tsx'
++
++type Input=Pick<GamePanelProps,'view'|'features'>
++const empty:Omit<CourseTeachingPaperState,'phase'|'status'>={stages:null,protectedFen:null,needsHelp:null,refundDueFen:null,feeDueFen:null,closedAt:null}
++
++/** Select shapes from this original public object, never from a future date or a different class. */
++export function courseTeachingPaperFor(p:Input,target:CourseSceneTarget|null):CourseTeachingPaperState|undefined{
++ const v=p.features.course
++ if(!v||!target||target.kind!=='course'&&target.kind!=='audience'&&target.kind!=='cohort')return undefined
++ const context=courseSceneContext(p)
++ if(courseTargetReason(v,target,context))return undefined
++ const businesses=v.businesses.filter(b=>b.id===target.businessId),business=businesses[0]
++ if(businesses.length!==1||!business||p.view.accounts.filter(a=>a.accountId===business.accountId).length!==1)return undefined
++ const operations=p.view.operations?.businesses.filter(b=>b.id===business.id)??[]
++ if(operations.length!==1||operations[0]!.accountId!==business.accountId||operations[0]!.route!=='ai_course'||operations[0]!.definitionId!=='course-studio')return undefined
++ const progress=courseSceneProgress(v,p.view.date,target,context)
++ if(!progress||progress.invalidReason)return undefined
++ if(target.kind==='course')return progress.phase==='course-ready'?{...empty,phase:'audience',status:'choice'}:undefined
++ // The old attempt must not acquire the later class's delivery, money or support markings.
++ if(progress.historical)return {...empty,phase:'history',status:'actual'}
++ const status:CourseTeachingPaperState['status']=progress.phase.endsWith('-planned')?'planned':progress.phase.endsWith('-running')?'running':progress.outcome==='actual'||progress.outcome==='non-success'?'actual':'choice'
++ if(target.kind==='audience'){
++  const audience=v.audiences.find(a=>a.id===target.audienceId&&a.courseId===target.courseId)
++  if(!audience)return undefined
++  return {...empty,phase:audience.completedAt===null&&progress.outcome==='non-success'?'stopped':'audience',status:audience.completedAt!==null?'actual':status}
++ }
++ const cohort=v.cohorts.find(co=>co.id===target.cohortId&&co.courseId===target.courseId)
++ if(!cohort)return undefined
++ const money=courseCohortFinancials(v,p.view,cohort.id)
++ let paper:ReturnType<typeof courseTeachingPaper>
++ try{paper=courseTeachingPaper(p,target)}catch{return undefined}
++ if(!paper)return undefined
++ const facts:Omit<CourseTeachingPaperState,'phase'|'status'>={stages:paper.stages,protectedFen:money?.protectedFen??null,needsHelp:cohort.assessmentAt===null?null:paper.needsHelp,refundDueFen:money?.refundDueFen??null,feeDueFen:money?.feeDueFen??null,closedAt:cohort.closedAt}
++ if(cohort.closedAt!==null)return {...facts,phase:'closed',status:'actual'}
++ if(cohort.teachingCancelled||progress.outcome==='non-success')return {...facts,phase:'stopped',status:'actual'}
++ if(money!==null&&(money.refundDueFen>0||money.feeDueFen>0)||progress.phase==='course-refund-window'||progress.phase==='course-cohort-settling')return {...facts,phase:'refund',status}
++ if(progress.phase.startsWith('course-stage-'))return {...facts,phase:'teaching',status}
++ if(['course-support-','course-recovery-','course-refresh-'].some(prefix=>progress.phase.startsWith(prefix))||progress.phase==='course-cohort-update-required')return {...facts,phase:'support',status}
++ return {...facts,phase:'cohort',status:progress.phase==='course-cohort-enroll'?'planned':status}
++}

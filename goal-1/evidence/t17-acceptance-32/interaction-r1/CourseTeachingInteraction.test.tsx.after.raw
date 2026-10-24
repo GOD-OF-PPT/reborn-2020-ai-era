@@ -1,0 +1,182 @@
+import {expect,it,vi} from 'vitest'
+import {isValidElement,type ReactElement} from 'react'
+import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
+import {createCampaignCodec} from '../application/campaign.ts'
+import {GameController} from '../application/game-controller.ts'
+import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
+import {abortAfterHeadWrite} from '../testing/abort-after-write.ts'
+import {CourseTeachingChoice,type CourseTeachingIntent} from './CourseTeachingChoice.tsx'
+import {CommandButton} from './CommandButton.tsx'
+import {Dialog} from './Dialog.tsx'
+import {createCourseTeachingDraftMemory,emptyCourseTeachingDraft,type CourseTeachingDraftScope} from './course-teaching-draft.ts'
+import type {CourseSceneTarget} from './course-scene-progress.ts'
+import type {GamePanelProps,PlayFeatures} from './game-types.ts'
+import audience90 from '../../goal-1/evidence/t17-acceptance-25/chrome-r2/c2-saved90-audience-completed.json?raw'
+import enrolled92 from '../../goal-1/evidence/t17-acceptance-25/chrome-r3/c2-saved92-enrolled-protected.json?raw'
+import stage95 from '../../goal-1/evidence/t17-acceptance-25/chrome-recover-r3/c2-physical-readonly95-stage1.json?raw'
+import closed117 from '../../goal-1/evidence/t17-acceptance-25/chrome-r4/c2-r4-saved117-closed.json?raw'
+
+// These are the original sealed normal Create histories from root25, not newly
+// invented current-run projections. Only actual component handlers are driven;
+// this opt-in hook scope does not claim DOM, modal-focus, effects or Native QA.
+const hooks=vi.hoisted(()=>({values:[] as unknown[],index:0}))
+vi.mock('react',async importOriginal=>{
+ const actual=await importOriginal<typeof import('react')>()
+ const state=<T,>(initial:T|(()=>T))=>{
+  const index=hooks.index++
+  if(!(index in hooks.values))hooks.values[index]=typeof initial==='function'?(initial as ()=>T)():initial
+  return [hooks.values[index] as T,(value:T|((old:T)=>T))=>{hooks.values[index]=typeof value==='function'?(value as (old:T)=>T)(hooks.values[index] as T):value}] as const
+ }
+ return {...actual,useState:state,useRef:<T,>(initial:T)=>state(()=>({current:initial}))[0],useId:()=> 'course-teaching-interaction',useEffect:()=>{}}
+})
+type Element=ReactElement<Record<string,unknown>>
+const elements=(value:unknown):Element[]=>Array.isArray(value)?value.flatMap(elements):isValidElement<Record<string,unknown>>(value)?[value,...elements(value.props.children),...elements(value.props.footer)]:[]
+const text=(value:unknown):string=>typeof value==='string'||typeof value==='number'?String(value):Array.isArray(value)?value.map(text).join(''):isValidElement<Record<string,unknown>>(value)?text(value.props.children):''
+function fire(element:Element|undefined,event:'onClick'|'onChange',value?:unknown){
+ const handler=element?.props[event]
+ if(!element||element.props.disabled||typeof handler!=='function')throw Error('ACTUAL_ENABLED_TEACHING_HANDLER_REQUIRED:'+event)
+ handler(value)
+}
+async function normal(name:string,raw:string,failing=false){
+ const codec=createCampaignCodec(),original=codec.import(raw),factory=new IDBFactory(),locks=new MemoryWriterAccess(),database='u3c2-interaction-'+name,physical=new IndexedDbRunStore({codec,factory,keyRange:IDBKeyRange,name:database})
+ expect(original.origin).toBe('normal');expect(original.versions.schemaVersion).toBe(13)
+ await physical.importSave(raw,{mode:'create',actorId:'player',importId:name+'-original-normal'})
+ const fault=failing?abortAfterHeadWrite(factory,database):null,store=new IndexedDbRunStore({codec,factory:fault?.factory??factory,keyRange:IDBKeyRange,name:database})
+ let sequence=0
+ const controller=new GameController({codec,store,locks,id:()=>name+'-'+(++sequence)})
+ await controller.initialize();await controller.continueLife(original.runId)
+ const memory=createCourseTeachingDraftMemory(original.runId),request=vi.fn<GamePanelProps['request']>()
+ const p=(owner=controller):GamePanelProps=>{const view=owner.snapshot.view!,features=view.features as unknown as PlayFeatures,b=features.course!.businesses.find(b=>b.definitionId==='course-studio')!;return {controller:owner,view,features,accountId:b.accountId,request,courseTeachingDraftMemory:memory}}
+ const course=p().features.course!.courses[0]!
+ const courseTarget:CourseSceneTarget={kind:'course',businessId:course.businessId,courseId:course.id}
+ const cohortTarget=():Extract<CourseSceneTarget,{kind:'cohort'}>=>{const cohorts=p().features.course!.cohorts;expect(cohorts).toHaveLength(1);return {kind:'cohort',businessId:course.businessId,courseId:course.id,cohortId:cohorts[0]!.id}}
+ return {codec,factory,locks,database,controller,physical,store,fault,memory,request,p,course,courseTarget,cohortTarget,close:async()=>{await controller.close(true);await store.close();await physical.close()}}
+}
+type Normal=Awaited<ReturnType<typeof normal>>
+function driver(f:Normal,initial:CourseSceneTarget|null,p:()=>GamePanelProps=f.p){
+ const values:unknown[]=[],chosen=vi.fn(),inspect=vi.fn(),today=vi.fn(),life=vi.fn()
+ let target=initial,tree:unknown
+ const render=()=>{hooks.values=values;hooks.index=0;tree=CourseTeachingChoice({p:p(),target,onTarget:next=>{chosen(next);target=next},onInspect:inspect,onToday:today,onLife:life,children:open=><><button type="button" onClick={()=>open()}>打开眼前这班</button><button type="button" onClick={()=>open('next')}>明确看下一步</button><button type="button" onClick={()=>open('record')}>明确看当前一步</button><button type="button" onClick={()=>open('targets')}>明确重选对象</button></>})}
+ const expanded=()=>elements(tree).flatMap(element=>typeof element.type==='function'&&['Resources','DateField','Support'].includes(element.type.name)?[element,...elements(Reflect.apply(element.type,undefined,[element.props]))]:[element])
+ const click=(label:string)=>{fire(expanded().find(e=>e.type==='button'&&text(e).includes(label)),'onClick');render()}
+ const change=(label:string,value:string|boolean)=>{
+  const field=expanded().find(e=>e.type==='label'&&text(e).includes(label)),input=field&&elements(field).find(e=>e.type==='input'||e.type==='select')
+  fire(input,'onChange',{target:typeof value==='boolean'?{checked:value}:{value}});render()
+ }
+ const command=()=>{const e=elements(tree).find(e=>e.type===CommandButton);if(!e)throw Error('ORIGINAL_COMMAND_BUTTON_REQUIRED');return Reflect.apply(CommandButton,undefined,[e.props])}
+ render()
+ return {render,click,change,chosen,inspect,today,life,command,target:()=>target,all:()=>expanded(),text:()=>text(tree),dialog:()=>elements(tree).find(e=>e.type===Dialog),
+  open(intent?:CourseTeachingIntent){click(intent==='next'?'明确看下一步':intent==='record'?'明确看当前一步':intent==='targets'?'明确重选对象':'打开眼前这班')},
+  submit(){const node=command();fire(elements(node).find(e=>e.type==='button'),'onClick');render()},
+ }
+}
+
+it('continues a real completed audience into an explicit original class plan without enrolling or changing money',async()=>{
+ const f=await normal('audience-next',audience90)
+ try{
+  const p=f.p(),a=p.features.course!.audiences[0]!,target:CourseSceneTarget={kind:'audience',businessId:f.course.businessId,courseId:f.course.id,audienceId:a.id},raw=f.controller.exportSaved(),ui=driver(f,target)
+  expect(a.completedAt).not.toBeNull();expect(a.eligibleMembers.length).toBeGreaterThan(0)
+  ui.open('next');expect(ui.dialog()?.props.title).toBe('这份回应之后，怎样继续？')
+  ui.click('明确本班期限与真实支持');expect(ui.dialog()?.props.title).toBe('这一班，我明确答应什么？')
+  expect(ui.all().find(e=>e.type==='input'&&e.props.type==='date')?.props.value).toBe('')
+  expect(ui.target()).toEqual(target);expect(ui.chosen).not.toHaveBeenCalled();expect(f.request).not.toHaveBeenCalled()
+  ui.click('先合上，保留草稿');ui.open('next');ui.click('先不新增安排，回到今天');expect(ui.today).toHaveBeenCalledTimes(1)
+  expect(f.controller.exportSaved()).toBe(raw);expect(f.p().view.accounts).toEqual(p.view.accounts);expect(f.p().features.course!.cohorts).toHaveLength(0)
+ }finally{await f.close()}
+})
+
+it('keeps an actual completed stage as its original job until the player explicitly returns to that same class',async()=>{
+ const f=await normal('completed-job-next',stage95)
+ try{
+  const p=f.p(),co=p.features.course!.cohorts[0]!,job=co.stageJobs[0]!.find(j=>j?.status==='completed')!,base=f.cohortTarget(),target:CourseSceneTarget={...base,jobId:job.id},raw=f.controller.exportSaved(),ui=driver(f,target)
+  expect(co.stages[0]!.deliveredAt).not.toBeNull();expect(co.stages[1]!.deliveredAt).toBeNull()
+  ui.open('next');expect(ui.target()).toEqual(target);expect(ui.text()).toContain('尚未换到本班当前安排')
+  expect(ui.all().some(e=>e.type===CommandButton)).toBe(false)
+  ui.click('翻回这一班，决定接下来的事');expect(ui.chosen).toHaveBeenCalledExactlyOnceWith(base);expect(ui.target()).toEqual(base)
+  expect(ui.all().some(e=>e.type==='button'&&text(e).includes('也可核对本班原退款'))).toBe(true)
+  ui.click('选择第2段资源与日期');expect(ui.dialog()?.props.title).toBe('为第2段课留出日子')
+  expect(f.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(raw)
+ }finally{await f.close()}
+})
+
+it('retains the same actual teaching draft while original confirmation is requested and cancelled, including original-book inspection',async()=>{
+ const f=await normal('confirmation-cancel-draft',enrolled92)
+ try{
+  const p=f.p(),co=p.features.course!.cohorts[0]!,target=f.cohortTarget(),raw=f.controller.exportSaved(),ui=driver(f,target)
+  ui.open();expect(ui.dialog()?.props.title).toBe('为第1段课留出日子')
+  ui.change('由我自己承担',true);ui.change('从哪天开始',co.startAt)
+  ui.submit();expect(f.request).toHaveBeenCalledExactlyOnceWith('StartCourseStage',{cohortId:co.id,index:0,resources:['player-production'],startAt:co.startAt},'核对第1段实际教学安排',true)
+  // The outer App owns confirmation/cancel. Requesting it must leave this
+  // exact editor open underneath; no optimistic result or new job is created.
+  expect(ui.dialog()?.props.title).toBe('为第1段课留出日子')
+  const scope:CourseTeachingDraftScope={accountId:p.accountId,businessId:f.course.businessId,courseId:f.course.id,audienceId:co.audienceId,cohortId:co.id,slot:'stage:0'},draft={...emptyCourseTeachingDraft(),resources:['player-production'],startAt:co.startAt}
+  expect(f.memory.read(p.view.runId,scope)).toEqual(draft)
+  ui.click('先合上，保留草稿');ui.open();expect(ui.all().find(e=>e.type==='input'&&e.props.type==='date')?.props.value).toBe(co.startAt)
+  ui.click('翻开同对象的完整原册');expect(ui.inspect).toHaveBeenCalledExactlyOnceWith(target,'stage:0');expect(f.memory.read(p.view.runId,scope)).toEqual(draft)
+  expect(f.controller.exportSaved()).toBe(raw);expect(f.p().features.course!.cohorts[0]!.stageJobs[0]).toHaveLength(0)
+ }finally{await f.close()}
+})
+
+it('offers Today and Life after an actual closed class, keeping all original learning and fee records reachable',async()=>{
+ const f=await normal('closed-class-next',closed117)
+ try{
+  const p=f.p(),co=p.features.course!.cohorts[0]!,target=f.cohortTarget(),raw=f.controller.exportSaved(),ui=driver(f,target)
+  expect(co.closedAt).toBe('2023-05-05');ui.open('next')
+  expect(ui.text()).toContain('实际收尾');expect(ui.text()).toContain('没有自动开启新班')
+  expect(ui.all().filter(e=>e.type==='button'&&e.props.className==='primary')).toHaveLength(1)
+  ui.click('收好这一班，回到今天');expect(ui.today).toHaveBeenCalledTimes(1)
+  ui.open('next');ui.click('把余下的日子留给生活');expect(ui.life).toHaveBeenCalledTimes(1)
+  ui.open('next');ui.click('其他选择与完整原记录');ui.click('翻看这份承诺的全部学员与原账')
+  expect(ui.dialog()?.props.title).toBe('这一班的学员与完整原账')
+  ui.click('翻开同对象的完整原册');expect(ui.inspect).toHaveBeenCalledExactlyOnceWith(target,undefined)
+  expect(f.controller.exportSaved()).toBe(raw);expect(f.request).not.toHaveBeenCalled();expect(ui.chosen).not.toHaveBeenCalled()
+ }finally{await f.close()}
+})
+
+it('does not substitute an invalid original class or another account with a first available target',async()=>{
+ const f=await normal('invalid-original',enrolled92)
+ try{
+  const raw=f.controller.exportSaved(),target:CourseSceneTarget={...f.cohortTarget(),cohortId:'missing-original-class'},ui=driver(f,target)
+  ui.open('next');expect(ui.dialog()?.props.title).toBe('先选回这一份教学承诺');expect(ui.target()).toEqual(target)
+  expect(ui.chosen).not.toHaveBeenCalled();expect(f.request).not.toHaveBeenCalled();expect(ui.all().some(e=>e.type===CommandButton)).toBe(false)
+  const wrongAccount=driver(f,f.cohortTarget(),()=>({...f.p(),accountId:'personal'}));wrongAccount.open('next')
+  expect(wrongAccount.dialog()?.props.title).toBe('先选回这一份教学承诺');expect(wrongAccount.chosen).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(raw)
+  const valid=driver(f,f.cohortTarget());valid.open('targets')
+  expect(valid.dialog()?.props.title).toBe('先选回这一份教学承诺');expect(valid.target()).toEqual(f.cohortTarget());expect(valid.chosen).not.toHaveBeenCalled()
+  expect(valid.all().some(e=>e.type===CommandButton)).toBe(false);expect(f.request).not.toHaveBeenCalled()
+ }finally{await f.close()}
+})
+
+it('lets an actual read-only player read the next decision while keeping the original teaching submission disabled',async()=>{
+ const f=await normal('readonly-teaching',enrolled92),readerStore=new IndexedDbRunStore({codec:f.codec,factory:f.factory,keyRange:IDBKeyRange,name:f.database}),reader=new GameController({codec:f.codec,store:readerStore,locks:f.locks,id:()=> 'readonly-course-reader'})
+ try{
+  await reader.initialize();await reader.continueLife(f.p().view.runId);expect(reader.snapshot.view?.readOnly).toBe(true)
+  const p=f.p(reader),co=p.features.course!.cohorts[0]!,raw=f.controller.exportSaved(),ui=driver(f,f.cohortTarget(),()=>f.p(reader))
+  ui.open();ui.change('由我自己承担',true);ui.change('从哪天开始',co.startAt)
+  expect(ui.text()).toContain('当前仅可翻阅');expect(ui.all().some(e=>e.type==='button'&&e.props.disabled&&text(e).includes('核对第1段实际教学安排'))).toBe(true)
+  expect(f.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(raw);expect(reader.exportSaved()).toBe(raw)
+ }finally{await reader.close();await readerStore.close();await f.close()}
+})
+
+it('preserves the original class and draft through a real head-write abort and saves only its exact candidate on retry',async()=>{
+ const f=await normal('candidate-stage',enrolled92,true)
+ try{
+  const p=f.p(),co=p.features.course!.cohorts[0]!,target=f.cohortTarget(),raw=f.controller.exportSaved(),ui=driver(f,target)
+  ui.open();ui.change('由我自己承担',true);ui.change('从哪天开始',co.startAt)
+  const stale=elements(ui.command()).find(e=>e.type==='button')!
+  ui.submit();const [kind,payload]=f.request.mock.calls[0]!,command=f.controller.prepare(kind,payload)
+  expect(f.controller.preview(command).allowed).toBe(true)
+  expect((await f.controller.submit(command)).status).toBe('unsaved');expect(f.fault?.trace).toEqual({writeSucceeded:true,abortIssued:true})
+  const candidate=f.controller.exportCandidate();expect(f.controller.exportSaved()).toBe(raw);expect(await f.physical.exportStored(p.view.runId)).toBe(raw)
+  expect(f.p().view.revision).toBe(p.view.revision);expect(f.p().view.accounts).toEqual(p.view.accounts);expect(f.p().view.budget).toEqual(p.view.budget)
+  // The old enabled binding sees the actual same-revision candidate and must
+  // refuse another request. The old committed teaching object remains visible.
+  const click=stale.props.onClick;if(typeof click!=='function')throw Error('ORIGINAL_STALE_BINDING_REQUIRED');click();expect(f.request).toHaveBeenCalledTimes(1)
+  ui.render();expect(ui.target()).toEqual(target);expect(f.p().view.hasCandidate).toBe(true)
+  expect((await f.controller.retry()).status).toBe('saved');expect(f.controller.exportSaved()).toBe(candidate);expect(await f.physical.exportStored(p.view.runId)).toBe(candidate)
+  expect(f.p().features.course!.cohorts[0]!.stages[0]!.attempts).toHaveLength(1)
+  const scope:CourseTeachingDraftScope={accountId:p.accountId,businessId:f.course.businessId,courseId:f.course.id,audienceId:co.audienceId,cohortId:co.id,slot:'stage:0'}
+  expect(f.memory.read(p.view.runId,scope)).toEqual({...emptyCourseTeachingDraft(),resources:['player-production'],startAt:co.startAt})
+ }finally{await f.close()}
+})

@@ -1,6 +1,11 @@
 import type {PlayerThreadView} from './player-thread.ts'
 import type {CoursePreparationPaperState} from './CoursePreparationPaper.tsx'
 
+/** Every valid public course object shares the same thought and object action. */
+export function isCourseContinuityThread(thread:PlayerThreadView):boolean{
+ return thread.focus.kind==='course'&&thread.focusStatus!=='invalid'
+}
+
 /** Preparation stays distinct from the original class, learner and update flows. */
 export function isCoursePreparationThread(thread:PlayerThreadView):boolean{
  if(thread.focus.kind!=='course'||thread.focusStatus==='invalid')return false

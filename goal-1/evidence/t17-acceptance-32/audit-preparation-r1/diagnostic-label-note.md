@@ -1,0 +1,3 @@
+# 静态审查补记
+
+独立快审确认实际input/output父路径均root32；唯一继承诊断名U3C2_ROOT31_FRESH_AUDIT_SIBLING_REQUIRED残留ROOT31字样，只有输出目录名不合法时的错误文本，不参与选根或读取。不是执行阻断。原wrapper/r1哈希保持，不为非功能文案另造一版；Root执行仍用handoff中的root32命令。当前未执行audit/preflight，不能把本审查当真实结果。

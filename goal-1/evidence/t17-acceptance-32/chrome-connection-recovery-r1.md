@@ -1,0 +1,5 @@
+# 当前连接恢复界限
+
+R6追加planned-teaching保护验证的DEV reload返回入口加载态，随后Continue key工具30s超时、kernel reset；重取原281首次browser unavailable，随后inventory实有Chrome1但getTab原281明确Debugger unattached。没有StartCourseStage请求/候选90证据，不把尝试当完成。CUA运行时绑定已失，原main255/DEV281未冒称关闭。已保存导出仍main88与独立DEV89；物理old284/new288此前已真关闭，R4原报名候选/重试完整证据保持。
+
+继续自主恢复：同R6不可变产物另开5374本地服务、新Chrome页，用可见UI导入原main88（相同run/同CreateRun），显式记录新独立origin与后续命令，不把它冒作旧5370原实例连续提交。原5370/5373与DB先保留，不改扩展/浏览器安全权限，不换浏览器或进行任何兼容专项。当前恢复尚未成功前此处不称新页完成。

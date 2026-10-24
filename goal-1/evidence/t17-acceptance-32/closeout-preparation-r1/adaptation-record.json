@@ -1,0 +1,102 @@
+{
+  "at": "2026-10-24T16:50:30.671Z",
+  "reference": {
+    "path": "goal-1/evidence/t17-acceptance-31/closeout-preparation-r1/closeout-final-r1.candidate.mjs",
+    "bytes": 18820,
+    "sha256": "67c931170338b5a9b4e7699427ec795affcb40e131a42018d8452f5082003a7f",
+    "mode": 420
+  },
+  "pureReference": {
+    "path": "goal-1/evidence/t17-acceptance-31/closeout-preparation-r1/browser-probes.mjs",
+    "bytes": 2429,
+    "sha256": "84492ea639f57017a515668e5e42d78a15b30908fbe37f7a7e507c1f9c662654",
+    "mode": 420
+  },
+  "edits": [
+    {
+      "before": "t17-acceptance-31",
+      "after": "t17-acceptance-32",
+      "count": 1
+    },
+    {
+      "before": "t17-u3c1-course-post-commit-01",
+      "after": "t17-u3c2-class-post-commit-01",
+      "count": 1
+    },
+    {
+      "before": "ROOT31",
+      "after": "ROOT32",
+      "count": 4
+    },
+    {
+      "before": "U3-C1",
+      "after": "U3-C2",
+      "count": 2
+    },
+    {
+      "before": "t17-u3c1-course-exact-bytes-v1",
+      "after": "t17-u3c2-class-exact-bytes-v1",
+      "count": 1
+    },
+    {
+      "before": "owned.length!==1513||hash(owned)!==ownRow.ownSuffixSha256",
+      "after": "!ownRow||!Number.isSafeInteger(ownRow.ownSuffixBytes)||ownRow.ownSuffixBytes<=0||owned.length!==ownRow.ownSuffixBytes||hash(owned)!==ownRow.ownSuffixSha256",
+      "count": 1
+    },
+    {
+      "before": "OWN_U3_1513_PREFIX_REQUIRED_ONCE",
+      "after": "OWN_U3C2_PREFIX_REQUIRED_ONCE",
+      "count": 1
+    },
+    {
+      "before": "own1513SHA:hash(owned)",
+      "after": "ownedPrefixBytes:owned.length,ownedPrefixSHA:hash(owned)",
+      "count": 1
+    },
+    {
+      "before": "plan.suffixBytes<=1513",
+      "after": "plan.suffixBytes<=plan.ownedPrefixBytes",
+      "count": 1
+    },
+    {
+      "before": "own1513SHA:plan.own1513SHA",
+      "after": "ownedPrefixBytes:plan.ownedPrefixBytes,ownedPrefixSHA:plan.ownedPrefixSHA",
+      "count": 1
+    },
+    {
+      "before": "own1513IncludedOnce:true",
+      "after": "ownedPrefixIncludedOnce:true",
+      "count": 1
+    },
+    {
+      "before": "feat(ui): connect course preparation with its next choice",
+      "after": "feat(ui): connect class promises to teaching and next choice",
+      "count": 2
+    }
+  ],
+  "candidate": {
+    "path": "goal-1/evidence/t17-acceptance-32/closeout-preparation-r1/closeout-final-r1.candidate.mjs",
+    "bytes": 19021,
+    "sha256": "1d89ab8b6398ecdb1706f69c0907dc3418473a0ba2028759b21a0f0df7645561",
+    "mode": 420
+  },
+  "pure": {
+    "path": "goal-1/evidence/t17-acceptance-32/closeout-preparation-r1/browser-probes.mjs",
+    "bytes": 2428,
+    "sha256": "e2c569fca12da49e7b936964272d5f24c795eb95723d2801c6a41b1c76ffd42a",
+    "mode": 420
+  },
+  "own": {
+    "bytes": 1206,
+    "sha256": "0f06978a4b1b177cad944ec513f87a632f08831d5f35614e846586e5b37267ce",
+    "method": "Runtime compares each own.rows length/SHA; no fixed old1513/new1206 threshold"
+  },
+  "baseline": {
+    "head": "56923404f3afba65a566055df66b45a737fdc8cb",
+    "sources": 556,
+    "p3": 26,
+    "ordinaryMarkers": 118,
+    "markerSymlinks": 2
+  },
+  "noModesExecuted": true
+}

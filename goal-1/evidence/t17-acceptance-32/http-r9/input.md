@@ -1,0 +1,1 @@
+现在授权最终R9 HTTP原字节核：build-r9 exit0，564sources unchanged，权威goal-1/evidence/t17-acceptance-32/build-r9.source-after.json；build .delivery/t17-u3c2-r9，现仅 http://127.0.0.1:5375/ 实ready（root会保服务）。用你准备的成功recheck-r2脚本/marker-inputs原字节，新root32/http-r9先guard新根。实际数量动态收集，不固定562/46；原2runID33DEVliteral保留。不要改src/docs/masters，不做浏览器或兼容/几何。完成后把命令、来源/结果/限度记录同新根并停止写；后续当前Chrome关键图发你独立图审。

@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "rtk",
+    "proxy",
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport importlib.util,sys\nr=Path.cwd()\ns=importlib.util.spec_from_file_location('original_check_docs',r/'scripts/check_docs.py')\nm=importlib.util.module_from_spec(s);s.loader.exec_module(m)\nnames=[\"goal-1/evidence/t17-acceptance-32/validation.md\",\"goal-1/evidence/t17-acceptance-32/tasks.md\"]\nm.project_files=lambda unused:[r/n for n in names]\nprint('SCOPED ONLY: validation.md and root32/tasks.md; whole repository/native enumeration NOT RUN.')\nerrors=m.check(r,text_only=True)\nfor error in errors: print(error,file=sys.stderr)\nraise SystemExit(bool(errors))\n"
+  ],
+  "scoped": true,
+  "wholeDocs": false,
+  "originalFunction": "scripts/check_docs.py check(root,text_only=True)",
+  "provider": [
+    "goal-1/evidence/t17-acceptance-32/validation.md",
+    "goal-1/evidence/t17-acceptance-32/tasks.md"
+  ]
+}

@@ -1,0 +1,1 @@
+R6源冻结，Root实际Chrome继续。请独立只读复核R5 moneyFor（首层public学员预款/保护/收入，hist job不套后续数字）与R6 DateField未来min快捷项/max禁用、原manual字段/同稿/readonly/submission锁；money-r5 2files7pass、date-r6 2files13pass、R6build0/562同。可以读取debug-r4-r6及实际原4raw/candidate/retry/两个物理manifest，对已齐R4 enrollment原子事实做只读字节/公开金额审核（不能把本地重算冒新browser动作，不能提前跑full-export wrapper，待全部raw齐后Root执行）。freshguarded最小review，不改源/跑tests。

@@ -1,0 +1,77 @@
+{
+  "at": "2026-10-24T17:48:40.815Z",
+  "results": [
+    {
+      "at": "2026-10-24T17:46:42.859Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_plan.py"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallMs": 89,
+      "sourceCount": 562,
+      "sourceEqual": true,
+      "sourceMatchedR6": true,
+      "inputEqual": true,
+      "inputCountBefore": 5,
+      "inputCountAfter": 5,
+      "provider": "Exact original check_plan.py main reads",
+      "scopedInputs": true,
+      "wholeDocs": false
+    },
+    {
+      "at": "2026-10-24T17:46:43.492Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_competitive_design.py"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallMs": 142,
+      "sourceCount": 562,
+      "sourceEqual": true,
+      "sourceMatchedR6": true,
+      "inputEqual": true,
+      "inputCountBefore": 6,
+      "inputCountAfter": 6,
+      "provider": "Original check_competitive_design.py default provider, no base-index override; documents include existence dependencies",
+      "scopedInputs": true,
+      "wholeDocs": false
+    },
+    {
+      "at": "2026-10-24T17:48:40.815Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_docs.py",
+        "--text-only"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "wallMs": 73998,
+      "sourceCount": 562,
+      "sourceEqual": true,
+      "sourceMatchedR6": true,
+      "inputEqual": false,
+      "inputCountBefore": 12975,
+      "inputCountAfter": 12976,
+      "provider": "Original scripts/check_docs.py project_files(root), whole repository exclusions unchanged",
+      "scopedInputs": false,
+      "wholeDocs": true
+    }
+  ],
+  "noBusinessOrCompatibilityTests": true,
+  "originalCheckerExitsPreserved": true
+}

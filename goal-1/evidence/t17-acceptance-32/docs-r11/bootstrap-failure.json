@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "rtk",
+    "proxy",
+    "node",
+    "--input-type=module"
+  ],
+  "stdin": "Initial inline evidence preparation script; JS template accidentally contained raw Markdown fence inside Python regex.",
+  "exitCode": 1,
+  "phase": "JavaScript parse, before any mkdir or writes/checker execution",
+  "error": "SyntaxError: Unexpected token '*'",
+  "sourceAndCheckersUnchanged": true,
+  "correctiveAction": "Use chr(96)*3 in new local Python adapter, leaving original checker unchanged."
+}

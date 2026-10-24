@@ -206,6 +206,8 @@ it('keeps the actual92 first-stage draft when returning to its deadline-bounded 
   const p=h.p(),co=p.features.course!.cohorts.find(co=>co.startAt==='2023-01-26')!,lesson=p.features.course!.courses.find(c=>c.id===co.courseId)!,target:CourseSceneTarget={kind:'cohort',businessId:lesson.businessId,courseId:lesson.id,cohortId:co.id},d=driver(h,target),before=h.controller.exportSaved()
   expect(p.view).toMatchObject({origin:'normal',revision:92,date:'2023-01-24'});expect(p.features.workbench.progression.nextDate).toBe('2023-01-31')
   d.open('stage:0')
+  const earliest=elements(component(d.named('DateField'))).find(e=>e.type==='button'&&text(e.props.children)==='明确从 2023-01-26 起安排')
+  expect(earliest).toBeDefined();act(earliest,'onClick');d.render()
   const date=elements(component(d.named('DateField'))).find(e=>e.type==='input'&&e.props.type==='date')
   act(date,'onChange',{target:{value:'2023-01-26'}});d.render()
   const scope:CourseTeachingDraftScope={accountId:p.accountId,businessId:lesson.businessId,courseId:lesson.id,audienceId:co.audienceId,cohortId:co.id,slot:'stage:0'},draft=h.memory.read(p.view.runId,scope)
@@ -222,7 +224,7 @@ it('keeps the actual92 first-stage draft when returning to its deadline-bounded 
   d.override({view:{...p.view,readOnly:true}});expect(clock()).toBeUndefined()
   d.override({view:{...p.view,hasCandidate:true,saveStatus:'unsaved'}});expect(clock()).toBeUndefined()
   d.override({view:p.view});expect(clock()?.props.date).toBe('2023-01-30')
-  d.click('翻开同对象');expect(h.inspect).toHaveBeenLastCalledWith(target,undefined)
+  d.click('其他选择与完整原记录');d.click('翻开同对象');expect(h.inspect).toHaveBeenLastCalledWith(target,undefined)
   expect(h.chosen).not.toHaveBeenCalled();expect(h.requests).not.toHaveBeenCalled();expect(h.controller.exportSaved()).toBe(before)
  }finally{await h.close()}
 })
