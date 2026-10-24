@@ -1,0 +1,58 @@
+import {expect,it,vi} from 'vitest'
+import {renderToStaticMarkup} from 'react-dom/server'
+import {OpeningObject,type OpeningObjectProps} from './OpeningObject.tsx'
+
+vi.mock('react',async original=>({...await original<typeof import('react')>(),useId:()=> 'first-order-paper'}))
+
+// Presentation inputs only: these checks do not claim a new campaign or payment.
+function props(extra:Partial<OpeningObjectProps>={}):OpeningObjectProps{
+ return {kind:'letter',title:'1月5日开工的手工剪辑与资料整理小单',displayTitle:'这份委托',detail:'个人制作成本¥500 · 1点；1月19日做完后仍需提交。',stageLabel:'已安排 · 尚未开工',actionLabel:'核对这份约定',onActivate:vi.fn(),disabled:false,...extra}
+}
+
+it('keeps the full object name and the same native activation while a short label is shown',()=>{
+ const p=props({firstOrder:{phase:'planned',dateLabel:'2020-01-05 开工'},protection:'readonly'})
+ const button=OpeningObject(p)
+ expect(button.type).toBe('button')
+ expect(button.props.type).toBe('button')
+ expect(button.props['aria-label']).toBe(p.title+' '+p.actionLabel)
+ expect(button.props['data-first-order-phase']).toBe('planned')
+ button.props.onClick()
+ expect(p.onActivate).toHaveBeenCalledTimes(1)
+ const html=renderToStaticMarkup(button)
+ expect(html).toContain('只读 · 可以翻阅')
+ expect(html).toContain('2020-01-05 开工')
+ expect(html).not.toContain('收到客户付款')
+})
+
+it('keeps the actual receipt and date in text mode without relying on a picture',()=>{
+ const p=props({kind:'receipt',textOnly:true,stageLabel:'已实际收款',firstOrder:{phase:'paid',receipt:{receivedFen:130000,receivedAt:'2020-01-20'}}})
+ const html=renderToStaticMarkup(<OpeningObject {...p}/>)
+ expect(html).toContain('收到客户付款')
+ expect(html).toContain('¥1,300')
+ expect(html).toContain('datetime="2020-01-20"')
+ expect(html).toContain('aria-describedby="first-order-paper-stage first-order-paper-detail first-order-paper-receipt"')
+ expect(html).not.toContain('<img')
+ expect(html).not.toContain('<svg')
+ expect(p.onActivate).not.toHaveBeenCalled()
+})
+
+it('adds an unsaved notice without replacing the committed work or inventing a receipt',()=>{
+ const p=props({firstOrder:{phase:'running'},protection:'unsaved',stageLabel:'正在制作',detail:'实际制作成本¥500与原行动已发生。'})
+ const button=OpeningObject(p),html=renderToStaticMarkup(button)
+ expect(button.props['data-first-order-phase']).toBe('running')
+ expect(html).toContain('尚未保存 · 仍是上次的物件')
+ expect(html).toContain('实际制作成本¥500与原行动已发生。')
+ expect(html).not.toContain('收到客户付款')
+ expect(html).not.toContain('first-order-receipt-shape')
+ expect(p.onActivate).not.toHaveBeenCalled()
+})
+
+it('leaves the existing video object branch and its editable description intact',()=>{
+ const p=props({appearance:'video',kind:'work',displayTitle:'这份视频',detail:'本版尚未提交',protection:'readonly'})
+ const html=renderToStaticMarkup(<OpeningObject {...p}/>)
+ expect(html).toContain('video-making-kit-v1.png')
+ expect(html).toContain('本版尚未提交')
+ expect(html).not.toContain('data-first-order-phase')
+ expect(html).not.toContain('first-order-paper-layers')
+ expect(html).not.toContain('只读 · 可以翻阅')
+})

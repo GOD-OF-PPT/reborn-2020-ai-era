@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-24T05:00:59.604Z",
+  "original": {
+    "path": "goal-1/evidence/t17-acceptance-28/audit-preparation-r1/run-audit.mjs",
+    "bytes": 11351,
+    "sha256": "1b4fea9815496fea74343ed04e88e98afc12a1d6e18fe3658e1c2c6ee83f2e2a",
+    "unchanged": true
+  },
+  "fixed": {
+    "path": "goal-1/evidence/t17-acceptance-28/audit-preparation-r1/run-audit-r2.mjs",
+    "bytes": 11409,
+    "sha256": "ab34e98fcd0199675ae29c199ffc569ba0e88677e80a92fe4fc033afe1f4a1ea"
+  },
+  "failure": "normal-export-audit-r1/failure.json; pre-replay CHROME_DIRECTORY_REQUIRED on a regular chrome-*.json diagnostic file",
+  "changes": [
+    {
+      "old": " const folders=fs.readdirSync(input,{withFileTypes:true}).filter(entry=>entry.name.startsWith('chrome-')).map(entry=>{\n  if(entry.isSymbolicLink()||!entry.isDirectory())throw Error('CHROME_DIRECTORY_REQUIRED:'+entry.name)\n  return entry.name\n }).sort()",
+      "next": " const chromeEntries=fs.readdirSync(input,{withFileTypes:true}).filter(entry=>entry.name.startsWith('chrome-'))\n for(const entry of chromeEntries)if(entry.isSymbolicLink())throw Error('CHROME_DIRECTORY_SYMLINK_NOT_FOLLOWED:'+entry.name)\n const folders=chromeEntries.filter(entry=>entry.isDirectory()).map(entry=>entry.name).sort()"
+    },
+    {
+      "old": "'goal-1/evidence/t17-acceptance-28/audit-preparation-r1/run-audit.mjs'",
+      "next": "path.relative(repo,fileURLToPath(import.meta.url))"
+    }
+  ],
+  "syntax": {
+    "command": [
+      "rtk",
+      "proxy",
+      "node",
+      "--check",
+      "goal-1/evidence/t17-acceptance-28/audit-preparation-r1/run-audit-r2.mjs"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "stdout": "",
+    "stderr": ""
+  },
+  "gameSourceChanges": 0,
+  "exportsChanges": 0
+}

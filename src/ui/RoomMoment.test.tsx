@@ -22,7 +22,7 @@ it('makes the actual first-order commitment, delivery and cash separate playable
  const send=async(kind:string,payload:unknown)=>expect((await controller.submit(controller.prepare(kind,payload))).status).toBe('saved')
  const render=()=>{const p=snapshot(),before=controller.exportSaved(),html=renderToStaticMarkup(<RoomMoment p={p} headingRef={null} onNavigate={()=>{throw Error('RENDER_MUST_NOT_NAVIGATE')}} onExplore={()=>{throw Error('RENDER_MUST_NOT_EXPLORE')}}/>);expect(controller.exportSaved()).toBe(before);return html}
  try{
-  expect(roomMoment(snapshot()).stage).toBe('offer');expect(render()).toContain('接下这笔手工单');expect(render()).toContain('先保留这一季的工作')
+  expect(roomMoment(snapshot()).stage).toBe('offer');expect(render()).toContain('回应这封委托');expect(render()).toContain('先保留这一季的工作')
   await send('WorkQuarter',{});await send('StartFirstOrder',{})
   expect(roomMoment(snapshot())).toMatchObject({stage:'planned',wait:{date:'2020-01-05'}});expect(snapshot().features.firstOrder.result.paymentFen).toBe(0)
   expect(render()).not.toContain('先保留这一季的工作');expect(render()).toContain('还没有交付或回款')
@@ -44,7 +44,9 @@ it('keeps a real readonly current moment from submitting while its original info
  try{
   const saved=controller.exportSaved(),view=controller.snapshot.view!,features=view.features as unknown as PlayFeatures
   const html=renderToStaticMarkup(<RoomMoment p={{controller,view:{...view,readOnly:true},features,accountId:'personal',request:()=>{throw Error('READ_ONLY_RENDER_MUST_NOT_SUBMIT')}}} headingRef={null} onNavigate={()=>{}} onExplore={()=>{}}/>)
-  expect(html.match(/<button[^>]*aria-label="接下这笔手工单"[^>]*>/)?.[0]).toContain('disabled=""');expect(html).toContain('¥500');expect(html).toContain('个人制作成本¥500 · 1点');expect(controller.exportSaved()).toBe(saved)
+  // This readonly display copy also has a stale snapshot identity; neither surface can dispatch.
+  // The actual stable readonly reader and its UI-only choices are covered in shared-action.test.tsx.
+  expect(html.match(/<button[^>]*aria-label="回应这封委托"[^>]*>/)?.[0]).toContain('disabled=""');expect(html).toContain('¥500');expect(html).toContain('个人制作成本¥500 · 1点');expect(controller.exportSaved()).toBe(saved)
  }finally{await controller.close();await store.close()}
 },20000)
 

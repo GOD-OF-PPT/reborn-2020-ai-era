@@ -1,0 +1,15 @@
+/* A reply on paper: choices read as different intentions, with the original confirmation after them. */
+.opening-attempt-choices .opening-offer-decisions{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;margin:20px 0}
+.opening-attempt-choices .opening-offer-decisions>.command:first-child{grid-column:1/-1}
+.opening-attempt-choices .command>button,
+.opening-attempt-choices .opening-next-choice{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:7px;width:100%;padding:13px 20px;border:0;border-bottom:1px solid #aa996e77;background:linear-gradient(90deg,#c1a76c15,transparent);color:#eadbb7;text-align:left;font:16px/1.7 var(--opening-serif)}
+.opening-attempt-choices .opening-offer-decisions>.command:first-child>button{border-left:2px solid #e1bd75;background:linear-gradient(90deg,#c1a76c28,transparent)}
+.opening-attempt-choices .command>button small,
+.opening-attempt-choices .opening-next-choice>span{display:block;color:#c0c5b0;font:14px/1.8 var(--opening-serif)}
+.opening-attempt-choices .opening-next-choice>strong{font-weight:400}
+.opening-attempt-choices .opening-next-choice>i{position:absolute;right:8px;top:13px;color:#c8b079;font-style:normal}
+.opening-attempt-choices .command>button:hover:not(:disabled),
+.opening-attempt-choices .opening-next-choice:hover:not(:disabled){background:linear-gradient(90deg,#c1a76c30,transparent);border-bottom-color:#ebce91}
+.opening-attempt-choices :is(.command>button,.opening-next-choice):focus-visible{outline:2px solid #ffe0a2;outline-offset:4px}
+.opening-attempt-choices :is(.command>button,.opening-next-choice):disabled{border-bottom-style:dashed;color:#a8b1a0;cursor:default}
+.opening-attempt-choices .opening-choice-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px 20px;padding:14px 0 0;border-top:1px solid #af9d694f}

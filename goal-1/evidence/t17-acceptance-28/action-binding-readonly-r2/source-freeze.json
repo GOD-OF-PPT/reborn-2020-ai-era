@@ -1,0 +1,84 @@
+{
+  "status": "FROZEN_BEHAVIORAL_FIX_VERIFIED",
+  "owned": [
+    {
+      "path": "src/ui/shared-action.ts",
+      "bytes": 2290,
+      "sha256": "5562777df4ccdacbd266f29835571e0c18d1977424cf12816ae39fd2cf6e42b7",
+      "mode": 420,
+      "unchanged": false
+    }
+  ],
+  "unchanged": [
+    {
+      "path": "src/ui/shared-action.test.tsx",
+      "bytes": 12868,
+      "sha256": "7923d77b48b81847d4e98c08d2777950b45788be5fd5f556178d334284f30a28",
+      "mode": 420,
+      "unchanged": true
+    },
+    {
+      "path": "src/ui/CommandButton.tsx",
+      "bytes": 1928,
+      "sha256": "85027bd69586619720a0fb0ffb4952543784b46d42e146e1f3d2f84567b85b51",
+      "mode": 420,
+      "unchanged": true
+    },
+    {
+      "path": "src/ui/ClockAdvance.tsx",
+      "bytes": 3411,
+      "sha256": "37719adbea2f0d44a3e1e85ebc67ebf6811a6a0d7cb1b456860d5eaa688ca215",
+      "mode": 420,
+      "unchanged": true
+    },
+    {
+      "path": "src/application/session.ts",
+      "bytes": 12821,
+      "sha256": "4b413b56eb6a18fa90c8e730d518394dfb0b7bbd6fc559c432a518d8a5d7d72f",
+      "mode": 420,
+      "unchanged": true
+    },
+    {
+      "path": "vitest.config.ts",
+      "bytes": 261,
+      "sha256": "754861ae90e60a32db71bd96543b5f12f7a4dbe542420556ca0490c3dfb07c9f",
+      "mode": 420,
+      "unchanged": true
+    },
+    {
+      "path": "tsconfig.app.json",
+      "bytes": 726,
+      "sha256": "e8691b4a5c64ab8c74e40e73bd89f2744986934ed5f7170ce54f113467b15d8f",
+      "mode": 420,
+      "unchanged": true
+    }
+  ],
+  "checks": {
+    "unitR2": {
+      "exitCode": 0,
+      "files": 1,
+      "tests": 9,
+      "durationMs": 14000,
+      "argv": [
+        "npx",
+        "vitest",
+        "run",
+        "src/ui/shared-action.test.tsx",
+        "--testTimeout=60000",
+        "--hookTimeout=60000",
+        "--reporter=verbose"
+      ],
+      "performanceAcceptance": false,
+      "sourceTestTimeoutsAndExpectationsUnchanged": true
+    },
+    "red": "Root C-U1-A-R3 original 47/48 with real readonly UI choice logic failure preserved"
+  },
+  "scope": "Explicit readonly UI only; original commands still reject readonly; all prior identity and unsafe save gates retained",
+  "notExecuted": [
+    "new full typecheck",
+    "whole UI or test suite",
+    "browser or keyboard",
+    "build",
+    "Git"
+  ]
+}

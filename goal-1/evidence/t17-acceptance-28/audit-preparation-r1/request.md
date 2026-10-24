@@ -1,0 +1,1 @@
+Root授权：为U1准备独立完整Create重放审核，复用官方verify_normal_browser_exports接口，读取本root28所有chrome-*可见exports，每run完整命令原文逐字；buffer/candidate不额外算saved结果。后续新增导出可重跑fresh报告目录，不覆旧。不改src/scripts旧helper/masters/浏览器/P3/旧sealed。先工具准备，等Root通知exports齐才实际运行。

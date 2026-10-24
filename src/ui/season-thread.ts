@@ -101,6 +101,9 @@ export function seasonFocusAfterSave(previous:SeasonInput,current:SeasonInput,ki
  if(!pinned||existing===null||candidate===existing||candidate===null)return candidate
  if(existing.kind==='course'&&candidate.kind==='course'&&existing.runId===candidate.runId&&existing.courseTarget===null&&kind==='OpenCourseStudio')return candidate
  if(existing.kind==='relay'&&candidate.kind==='relay'&&existing.runId===candidate.runId&&existing.relayTarget===null&&kind==='OpenRelayStation')return candidate
+ // An empty opening calendar is a choice of freedom, not a pin to an object that never existed.
+ // Follow only the player's explicit, saved first arrangement; a preview/cancellation never reaches here.
+ if(existing.kind==='free'&&existing.entityId===null&&existing.runId===current.view.runId&&candidate.accountId===existing.accountId&&previous.features.workbench.quarter==='2020-Q1'&&current.features.workbench.quarter==='2020-Q1'&&['WorkQuarter','StartLifeWork','ResearchMarket','PlanStockOrder'].includes(kind))return candidate
  if(existing.runId!==current.view.runId||candidate.kind!==existing.kind||candidate.accountId!==existing.accountId)return existing
  if(existing.kind==='life'&&(candidate.kind!=='life'||existing.selection!==candidate.selection))return existing
  // Refreshing the outcome of the same object is not a new primary selection or quarter.

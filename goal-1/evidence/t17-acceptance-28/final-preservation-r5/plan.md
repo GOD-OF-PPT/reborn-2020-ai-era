@@ -1,0 +1,1 @@
+核root28基线身份与显式数量；以原R1 helper指定的sealed C2 root19树为目录锚点，独立只读实现字节/SHA/模式和精确集合比较，不执行旧closeout候选。三master先全字节等.baseline，再只读当前HEAD三blob确认唯一P3插入；仅git rev-parse/cat-file读取，无index/Git写。现exact模式，未来append模式必须外部明确提供每份suffix长度/SHA，仍保原前缀与P3，不把未来状态预报通过。输出只在本guard目录。无游戏/浏览器/兼容测试、源码或master修改。

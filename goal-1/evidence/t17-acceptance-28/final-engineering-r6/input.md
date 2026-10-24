@@ -1,0 +1,1 @@
+请继续本U1收口的独立最终工程验核，只写root28/final-engineering-r6新目录（先guard），不要改生产或masters/Git。当前R5后仅shared-action.test.tsx补候选assert，上一case10/10已过；请冻结518源/资产/配置（参source-r5格式，diff应只此测试），跑项目tsc再Vite新.delivery/t17-u1-r6，记录实际终态、源前后同。对R5/R6产物精确集合/bytes/hash，若全同继续用当前5364R5；HTTP5364所有产物逐字同，扫产物无本轮正常runId/DEVfault markers。不跑新行为大套、不跑兼容/性能，不改变服务器。构建后终止写并交回，再由root文档终检。

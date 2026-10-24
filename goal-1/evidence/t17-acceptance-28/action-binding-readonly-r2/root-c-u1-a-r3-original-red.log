@@ -1,0 +1,34 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ❯ src/ui/shared-action.test.tsx (9 tests | 1 failed) 10371ms
+   ❯ readonly choices and an actual pending write (2)
+     × allows explicit stable readonly UI choices without permitting a command 19ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/shared-action.test.tsx > readonly choices and an actual pending write > allows explicit stable readonly UI choices without permitting a command
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ src/ui/shared-action.test.tsx:110:28
+    108|   const command=makeSharedAction(p,'执行',choose),reading=makeSharedActi…
+    109|   expect(command.disabled).toBe(true);command.activate();expect(choose…
+    110|   expect(reading.disabled).toBe(false);reading.activate();expect(choos…
+       |                            ^
+    111|  })
+    112|  it('blocks both old and newly rendered activations while the original…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 47 passed (48)
+   Start at  11:33:49
+   Duration  134.67s (tests 93%, import 5%, transform 1%)
+

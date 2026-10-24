@@ -1,0 +1,163 @@
+--- a/src/ui/OpeningObject.tsx
++++ b/src/ui/OpeningObject.tsx
+@@ -5,6 +5,7 @@
+ import coursePreparationKit from '../../assets/ui-redesign/cinematic/props/course-preparation-kit-v1.png'
+ import relayServiceKit from '../../assets/ui-redesign/cinematic/props/relay-service-kit-v1.png'
+ import {FirstOrderPaper,type FirstOrderArtState} from './FirstOrderPaper.tsx'
++import {OpeningEntryPaper,type OpeningEntryPaperKind} from './OpeningEntryPaper.tsx'
+ 
+ export type {FirstOrderArtState} from './FirstOrderPaper.tsx'
+ export type OpeningObjectProtection='readonly'|'unsaved'|'unavailable'
+@@ -28,16 +29,18 @@
+  teaching?:CoursePaperState
+  firstOrder?:FirstOrderArtState
+  protection?:OpeningObjectProtection
++ entryPaper?:OpeningEntryPaperKind
+ }
+ 
+ /** The parent supplies committed facts and owns the action; the object adds no business state. */
+-export function OpeningObject({kind,title,displayTitle,detail,stageLabel,onActivate,actionLabel,disabled,textOnly=false,appearance,teaching,firstOrder,protection}:OpeningObjectProps){
++export function OpeningObject({kind,title,displayTitle,detail,stageLabel,onActivate,actionLabel,disabled,textOnly=false,appearance,teaching,firstOrder,protection,entryPaper}:OpeningObjectProps){
+  const id=useId(),titleId=id+'-title',detailId=id+'-detail',stageId=id+'-stage',actionId=id+'-action',dateId=id+'-date',receiptId=id+'-receipt',protectionId=id+'-protection'
++ const entry=firstOrder===undefined?entryPaper:undefined,hasPaper=firstOrder!==undefined||entry!==undefined
+  const protectionLabel=protection==='readonly'?'只读 · 原记录保留':protection==='unsaved'?'尚未保存 · 仍是上次的物件':protection==='unavailable'?'暂不可用 · 先核对原因':null
+- return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-first-order-phase={firstOrder?.phase} data-protection={firstOrder?protection:undefined} data-text-only={textOnly?'true':'false'} disabled={disabled} onClick={onActivate} aria-label={displayTitle===undefined?undefined:title+' '+actionLabel} aria-labelledby={displayTitle===undefined?titleId+' '+actionId:undefined} aria-describedby={stageId+' '+detailId+(firstOrder?.dateLabel?' '+dateId:'')+(firstOrder?.phase==='paid'?' '+receiptId:'')+(firstOrder&&protectionLabel?' '+protectionId:'')}>
++ return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-first-order-phase={firstOrder?.phase} data-entry-paper={entry} data-protection={hasPaper?protection:undefined} data-text-only={textOnly?'true':'false'} disabled={disabled} onClick={onActivate} aria-label={displayTitle===undefined?undefined:title+' '+actionLabel} aria-labelledby={displayTitle===undefined?titleId+' '+actionId:undefined} aria-describedby={stageId+' '+detailId+(firstOrder?.dateLabel?' '+dateId:'')+(firstOrder?.phase==='paid'?' '+receiptId:'')+(hasPaper&&protectionLabel?' '+protectionId:'')}>
+   {!textOnly?<span className="opening-object-art" aria-hidden="true">
+-   <img src={appearance==='relay'?relayServiceKit:appearance==='course'?coursePreparationKit:appearance==='video'?videoMakingKit:firstAttempt} alt="" width={appearance==='course'||appearance==='relay'?1536:appearance==='video'?1254:1280} height={appearance==='course'||appearance==='relay'?1024:appearance==='video'?1254:1280} decoding="async"/>
+-   {firstOrder?<><span className="first-order-contact"/><FirstOrderPaper phase={firstOrder.phase}/></>:<span className="opening-object-mark">
++   {entry?<OpeningEntryPaper kind={entry}/>:<img src={appearance==='relay'?relayServiceKit:appearance==='course'?coursePreparationKit:appearance==='video'?videoMakingKit:firstAttempt} alt="" width={appearance==='course'||appearance==='relay'?1536:appearance==='video'?1254:1280} height={appearance==='course'||appearance==='relay'?1024:appearance==='video'?1254:1280} decoding="async"/>}
++   {firstOrder?<><span className="first-order-contact"/><FirstOrderPaper phase={firstOrder.phase}/></>:entry?<span className="entry-paper-contact"/>:<span className="opening-object-mark">
+     {kind==='waiting'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><circle cx="16" cy="16" r="12"/><path d="M16 8v9l6 3"/></svg>:kind==='calendar'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M8 5v6m16-6v6M5 12h22M6 8h20v20H6zM11 17h3m5 0h3m-11 6h3m5 0h3"/></svg>:kind==='work'?appearance==='relay'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M6 7h20v13H6zM11 20v5h10v-5M10 12v4m4-4v4m4-4v4m4-4v4M16 25v4"/></svg>:<svg viewBox="0 0 32 32" fill="none" focusable="false"><rect x="5" y="7" width="22" height="18"/><path d="m13 12 8 4-8 4zM9 7v18m14-18v18"/></svg>:null}
+    </span>}
+   </span>:null}
+@@ -46,7 +49,7 @@
+    <strong id={titleId} className="opening-object-title">{displayTitle??title}</strong>
+    {firstOrder?.dateLabel?<span id={dateId} className="first-order-date-strip">{firstOrder.dateLabel}</span>:null}
+    {firstOrder?.phase==='paid'?<span id={receiptId} className="first-order-receipt"><span>收到客户付款</span><strong>{moneyText(firstOrder.receipt.receivedFen)}</strong><time dateTime={firstOrder.receipt.receivedAt}>{firstOrder.receipt.receivedAt}</time></span>:null}
+-   {firstOrder&&protectionLabel?<span id={protectionId} className="first-order-protection"><span aria-hidden="true">{protection==='readonly'?'▣':'┄'}</span>{protectionLabel}</span>:null}
++   {hasPaper&&protectionLabel?<span id={protectionId} className={entry?'entry-paper-protection':'first-order-protection'}><span aria-hidden="true">{protection==='readonly'?'▣':'┄'}</span>{protectionLabel}</span>:null}
+    {teaching?<span className="course-teaching-slips" aria-label="本班实际教学与责任"><span className="course-stage-tabs">{teaching.stages.map((state,index)=><span key={index} className="course-stage-tab" data-state={state}>第{index+1}段 · {{pending:'待安排',planned:'已安排',running:'进行中',completed:'已交付',stopped:'已停止'}[state]}</span>)}</span><span className="course-money-folds">{teaching.protectedFen>0?<span className="course-protected-band">保护中 {moneyText(teaching.protectedFen)}</span>:null}{teaching.needsHelp>0?<span className="course-responsibility-fold">{teaching.needsHelp}人待帮助</span>:null}{teaching.refundDueFen>0?<span className="course-responsibility-fold">退款待付 {moneyText(teaching.refundDueFen)}</span>:null}{teaching.supportUnmet?<span className="course-support-fold">原支持待履行</span>:null}{teaching.closedAt?<span className="course-closed-slip">本班结清 {teaching.closedAt}</span>:null}</span></span>:null}
+    <span id={detailId} className="opening-object-detail">{detail}</span>
+    <span id={actionId} className="opening-object-action">{actionLabel}<span aria-hidden="true">{disabled?'—':'↗'}</span></span>
+--- a/src/ui/OpeningEntryPaper.tsx
++++ b/src/ui/OpeningEntryPaper.tsx
+@@ -0,0 +1,24 @@
++export type OpeningEntryPaperKind='calendar'|'market'
++
++/** Blank planning and reference materials; no invented event, quote or completed research. */
++export function OpeningEntryPaper({kind}:{kind:OpeningEntryPaperKind}){
++ return <svg className="opening-entry-paper" viewBox="0 0 320 300" fill="none" aria-hidden="true" focusable="false">
++  {kind==='calendar'?<g className="entry-calendar-material">
++   <path className="entry-paper-under" d="m52 58 228 19-16 197-228-19z"/>
++   <path className="entry-paper-sheet" d="m43 47 228 19-16 197-228-19z"/>
++   <path className="entry-calendar-binding" d="m43 47 228 19-4 43-228-19z"/>
++   <path className="entry-paper-rings" d="m84 53 2-21c1-10 13-9 12 2l-2 21m125 10 2-21c1-10 13-9 12 2l-2 21"/>
++   <path className="entry-calendar-grid" d="m60 113 180 15m-183 19 180 15m-182 19 179 15m-183 18 180 15M86 115l-9 111m39-108-9 111m39-108-9 111m39-109-9 111m39-108-9 111"/>
++   <path className="entry-paper-pencil" d="m259 152 28 98-7 3-29-98 1-13z"/>
++  </g>:<g className="entry-market-material">
++   <path className="entry-reference-cover" d="m49 44 215 31-24 194-215-31z"/>
++   <path className="entry-paper-under" d="m62 38 208 35-25 180-208-35z"/>
++   <path className="entry-paper-sheet" d="m81 32 192 42-36 167-192-42z"/>
++   <path className="entry-reference-rule" d="m99 68 139 30m-142-13 100 22m-104-5 136 30m-140-13 116 26m-120-8 104 23"/>
++   <path className="entry-reference-tab" d="m51 102 23 5-10 49-23-5z"/>
++   <circle className="entry-reading-lens" cx="224" cy="199" r="33"/>
++   <circle className="entry-reading-rim" cx="224" cy="199" r="38"/>
++   <path className="entry-reading-handle" d="m196 227-37 42m-7-7 14 13"/>
++  </g>}
++ </svg>
++}
+--- a/src/ui/OpeningEntryPaper.test.tsx
++++ b/src/ui/OpeningEntryPaper.test.tsx
+@@ -0,0 +1,39 @@
++import {expect,it,vi} from 'vitest'
++import {renderToStaticMarkup} from 'react-dom/server'
++import {OpeningObject,type OpeningObjectProps} from './OpeningObject.tsx'
++
++vi.mock('react',async original=>({...await original<typeof import('react')>(),useId:()=> 'opening-entry-paper'}))
++function props(extra:Partial<OpeningObjectProps>={}):OpeningObjectProps{
++ return {kind:'portfolio',title:'今天尚未安排的时间与生活',displayTitle:'',detail:'2020-01-01',stageLabel:'尚未新增安排',actionLabel:'选择今天怎样安排',disabled:false,onActivate:vi.fn(),...extra}
++}
++
++it.each(['calendar','market'] as const)('shows the explicit %s paper without borrowing a commission or inventing a result',entryPaper=>{
++ const html=renderToStaticMarkup(<OpeningObject {...props({entryPaper})}/>)
++ expect(html).toContain(`data-entry-paper="${entryPaper}"`)
++ expect(html).toContain('aria-label="今天尚未安排的时间与生活 选择今天怎样安排"')
++ expect(html).toContain('2020-01-01')
++ expect(html).not.toContain('<img')
++ expect(html).not.toContain('first-attempt-v1')
++ expect(html).not.toContain('收到客户付款')
++ expect(html).not.toContain('data-first-order-phase')
++})
++
++it('keeps the same native activation and all entry information in text mode',()=>{
++ const p=props({entryPaper:'market',textOnly:true,protection:'readonly'}),button=OpeningObject(p)
++ expect(button.type).toBe('button')
++ button.props.onClick()
++ expect(p.onActivate).toHaveBeenCalledTimes(1)
++ const html=renderToStaticMarkup(button)
++ expect(html).toContain('只读 · 原记录保留')
++ expect(html).toContain('尚未新增安排')
++ expect(html).toContain('选择今天怎样安排')
++ expect(html).not.toContain('<svg')
++})
++
++it('keeps a committed commission authoritative if an entry hint is also supplied',()=>{
++ const html=renderToStaticMarkup(<OpeningObject {...props({entryPaper:'calendar',firstOrder:{phase:'planned',dateLabel:'2020-01-05 开工'}})}/>)
++ expect(html).toContain('data-first-order-phase="planned"')
++ expect(html).toContain('first-attempt-v1.png')
++ expect(html).not.toContain('data-entry-paper')
++ expect(html).not.toContain('class="opening-entry-paper"')
++})
+--- a/src/ui/opening-play.css
++++ b/src/ui/opening-play.css
+@@ -470,3 +470,49 @@
+ .text-mode .opening-object[data-first-order-phase]{grid-template-rows:auto;align-content:start;gap:0}
+ .opening-object[data-first-order-phase][data-text-only=true] .opening-object-copy,
+ .text-mode .opening-object[data-first-order-phase] .opening-object-copy{margin:0;transform:none;box-shadow:none}
++
++/* Explicit opening directions use their own blank planning/reference papers. */
++.opening-object[data-entry-paper]{transform:none;transition:none}
++.opening-room>.opening-object[data-entry-paper],
++.opening-room .opening-room-object>.opening-object[data-entry-paper]{grid-template-rows:auto auto;align-content:start;gap:8px}
++.opening-room>.opening-object[data-entry-paper]{left:auto;right:3%;top:300px;bottom:auto;width:280px}
++.opening-room>.opening-object[data-entry-paper]>.opening-object-art,
++.opening-room .opening-room-object>.opening-object[data-entry-paper]>.opening-object-art{isolation:isolate;align-self:start;justify-self:center;aspect-ratio:auto;height:160px;width:100%;perspective:850px;filter:none}
++.opening-object[data-entry-paper] .opening-entry-paper{position:absolute;inset:auto 0 0;z-index:1;width:100%;height:280px;transform-origin:50% 100%;transform:rotateX(58deg) rotateZ(-8deg);overflow:visible;pointer-events:none}
++.opening-object[data-entry-paper] .entry-paper-contact{position:absolute;left:6%;right:7%;bottom:7%;height:10%;z-index:0;border-radius:50%;background:radial-gradient(ellipse,#14231ed9 0%,#10231c77 44%,transparent 73%);transform:rotate(-5deg);filter:blur(2px)}
++.opening-object[data-entry-paper] .entry-paper-under{fill:#cdbb96;stroke:#9f8b64;stroke-width:1.2}
++.opening-object[data-entry-paper] .entry-paper-sheet{fill:#f0e2bd;stroke:#b29c71;stroke-width:1.2}
++.opening-object[data-entry-paper] .entry-calendar-binding{fill:#5e7057;stroke:#465d48;stroke-width:1.3}
++.opening-object[data-entry-paper] .entry-paper-rings{stroke:#a98b52;stroke-width:5;stroke-linecap:round}
++.opening-object[data-entry-paper] .entry-calendar-grid{stroke:#a69d7b;stroke-width:1.1}
++.opening-object[data-entry-paper] .entry-paper-pencil{fill:#bda36c;stroke:#726b4a;stroke-width:1.2}
++.opening-object[data-entry-paper] .entry-reference-cover{fill:#586c55;stroke:#3a5140;stroke-width:1.4}
++.opening-object[data-entry-paper] .entry-reference-rule{stroke:#9e9777;stroke-width:1.5;stroke-linecap:round}
++.opening-object[data-entry-paper] .entry-reference-tab{fill:#b18d53;stroke:#876c40;stroke-width:1.1}
++.opening-object[data-entry-paper] .entry-reading-lens{fill:#98aaa14d;stroke:#d6d5b7;stroke-width:1.5}
++.opening-object[data-entry-paper] .entry-reading-rim{stroke:#8e7950;stroke-width:5}
++.opening-object[data-entry-paper] .entry-reading-handle{stroke:#50634e;stroke-width:10;stroke-linecap:round}
++.opening-object[data-entry-paper] .opening-object-copy{gap:6px;margin:0;padding:10px 13px;transform:none;border:1px solid #bfa678;border-top:2px solid #b69c66;background:linear-gradient(110deg,#e9dcba,#d9cba9);box-shadow:1px 3px 3px #071d2266}
++.opening-object[data-entry-paper] .opening-object-copy:before{content:"";position:absolute;top:-4px;left:18px;width:6px;height:6px;border:1px solid #b59655;border-radius:50%;background:#8e713d}
++.opening-object[data-entry-paper] .opening-object-stage{color:#75643f}
++.opening-object[data-entry-paper] .opening-object-title{color:#3e513d}
++.opening-object[data-entry-paper] .opening-object-detail{color:#56654b}
++.opening-object[data-entry-paper] :is(.opening-object-title,.opening-object-detail):empty{display:none}
++.opening-object[data-entry-paper] .opening-object-action{border-top-color:#8f895f77;color:#52613d}
++.opening-object[data-entry-paper] .entry-paper-protection{display:flex;align-items:baseline;gap:7px;align-self:stretch;padding:5px 0;border-top:1px dashed #7d886b;color:#5a654d;font:12px/1.75 var(--opening-serif)}
++.opening-object[data-entry-paper][data-protection=readonly] .opening-object-copy{border-left:3px double #7c8569}
++.opening-object[data-entry-paper][data-protection=unsaved] .opening-object-copy{border-top-style:dashed}
++.opening-object[data-entry-paper][data-protection=unavailable] .opening-object-action{border-top-style:dashed}
++.opening-object[data-entry-paper]:hover:not(:disabled),
++.opening-object[data-entry-paper]:focus-visible:not(:disabled),
++.opening-object[data-entry-paper]:active:not(:disabled){transform:none}
++.opening-object[data-entry-paper]:hover:not(:disabled) .opening-object-copy,
++.opening-object[data-entry-paper]:focus-visible:not(:disabled) .opening-object-copy{border-color:#f2d18f;background:linear-gradient(110deg,#f1e4c2,#e1d0a8)}
++.opening-object[data-entry-paper]:focus-visible{outline:3px solid #ffe2a6;outline-offset:6px}
++.opening-object[data-entry-paper]:disabled .opening-object-copy{border-style:dashed}
++.opening-object[data-entry-paper]:disabled .opening-object-stage,
++.opening-object[data-entry-paper]:disabled .opening-object-action{color:#65735b}
++.opening-object[data-entry-paper][data-text-only=true],
++.text-mode .opening-object[data-entry-paper]{grid-template-rows:auto;align-content:start;gap:0}
++.opening-object[data-entry-paper][data-text-only=true] .opening-object-copy,
++.text-mode .opening-object[data-entry-paper] .opening-object-copy{margin:0;transform:none;box-shadow:none}

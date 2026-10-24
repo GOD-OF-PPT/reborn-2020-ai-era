@@ -7,6 +7,7 @@ import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
 import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
 import type {GamePanelProps,PlayFeatures} from './game-types.ts'
 import {OpeningMoment} from './OpeningMoment.tsx'
+import {OpeningAttemptAction} from './OpeningAttemptAction.tsx'
 import {roomMoment} from './RoomMoment.tsx'
 import {playerThread} from './player-thread.ts'
 import {Dialog} from './Dialog.tsx'
@@ -32,6 +33,7 @@ const wrappers=new Set<unknown>([MarketSceneChoice,VideoSceneChoice,CourseSceneC
 function elements(value:unknown):Element[]{
  if(Array.isArray(value))return value.flatMap(elements)
  if(!isValidElement<Record<string,unknown>>(value))return []
+ if(value.type===OpeningAttemptAction&&typeof value.props.children==='function')return elements(value.props.children(null))
  if(wrappers.has(value.type)&&typeof value.props.children==='function')return elements(value.props.children(()=>{}))
  return [value,...elements(value.props.children),...elements(value.props.footer)]
 }

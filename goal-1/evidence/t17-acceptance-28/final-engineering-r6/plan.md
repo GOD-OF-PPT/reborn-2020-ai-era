@@ -1,0 +1,1 @@
+冻结R5所列518项并核src/assets精确集合，相对R5仅允许src/ui/shared-action.test.tsx。额外明列tsc引用但旧518未含的tsconfig.core.json和public静态拷贝输入身份，不混入518分母。guard新目录后顺序执行原项目tsc -b、Vite production build到全新.delivery/t17-u1-r6；记录每个实际exit与完整日志/argv。比R5/R6产物精确集合/bytes/SHA/mode，逐产物GET当前5364比实际字节，另外核根入口。扫描本轮exports原runId与DEV-only故障入口/库名marker。源前后回读，若同产物保5364原R5身份，不启动或切服务。不运行行为套件、游戏/浏览器/兼容/性能，未通过时保真实红并报告，不修生产。

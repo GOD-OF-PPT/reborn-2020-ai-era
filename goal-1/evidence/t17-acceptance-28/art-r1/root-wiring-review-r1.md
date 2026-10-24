@@ -1,0 +1,13 @@
+# U1首单/控制接线只读复核
+
+按当前root-wiring-reviewed-source.json绑定的7文件读取；不修改Root或model文件、不增加测试/浏览器。此为静态限定结论，不声称新Chrome或全部生命周期100%通过。
+
+未发现当前首单新增命令/跨对象分叉：
+
+- OpeningMoment只在无责任中断、无需重选、非legacy/非季末时取openingAttempt；未知关注不绕回默认首单，原独立责任仍优先。首单自身交付屏障由ownDelivery识别，其他blocking/缺款/incident仍能覆盖。
+- attempt有效时主念头取primary.main，物件取同一个primary.binding.activate/disabled/label，已不先开objectOpen复述。原objectOpen只留在!attempt旧路径。艺术props只读同attempt；payment date存在才传实际receipt，未知日期没有写成今天。
+- offer面仍是原StartFirstOrder、DeclineOffer、SkipOffer三个独立CommandButton与confirm；当前request先合近景再交原请求。delivery仍使用原SubmitDelivery/contractId；missed或interrupted先保原CancelContract处置，不直接冒成功或显示下一尝试。
+- wait通过ClockAdvance的renderAction共享原CommandButton binding，原date、已知支出caption及reviewNode保留；物件没有另发AdvanceTime。makeSharedAction在激活时再核busy/candidate/conflict/current view身份与preview；只读UI选择的allowReadOnly不授予命令执行资格。
+- paid/合法终态开next选择面，实际焦点只在玩家点选后变更；changeAttempt核同run/current view并保锁，不自动开业务、接工作、买股。投资/自由entry不共通首单，纯艺术不参与其规则。
+
+仍需Root实际验证的边界：原确认返回/取消、过窗或中断处置、候选/只读与原重试、Clock实际屏障/费用、原册往返、重进及七态接触。当前短旁签仍由Root的displayTitle决定；组件已保全文AX。截图未出现前不称图形子态或接触美术验收。

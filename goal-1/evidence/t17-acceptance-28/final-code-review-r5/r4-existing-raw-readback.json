@@ -1,0 +1,57 @@
+{
+  "kind": "existing-artifacts-byte-readback-only",
+  "chainPath": "goal-1/evidence/t17-acceptance-28/chrome-atomic-r4/candidate-chain-result.json",
+  "chainSha256": "2f3a50176322584739129a49ca27c72f4404c526b2bfd78d8660fcb68da50bde",
+  "records": [
+    {
+      "role": "oldBefore",
+      "path": "chrome-atomic-r4/old-saved-r5-before-abort.json",
+      "bytes": 182378,
+      "sha256": "49730fa2a3c5c5af2dacfbb2de6a8984ec95f9d51157636f2d812f022b5307ca",
+      "matchesExistingChainRecord": true
+    },
+    {
+      "role": "oldAfter",
+      "path": "chrome-atomic-r4/old-saved-r5-after-abort.json",
+      "bytes": 182378,
+      "sha256": "49730fa2a3c5c5af2dacfbb2de6a8984ec95f9d51157636f2d812f022b5307ca",
+      "matchesExistingChainRecord": true
+    },
+    {
+      "role": "physicalOld",
+      "path": "chrome-physical-old-r4/physical-old-r5.json",
+      "bytes": 182378,
+      "sha256": "49730fa2a3c5c5af2dacfbb2de6a8984ec95f9d51157636f2d812f022b5307ca",
+      "matchesExistingChainRecord": true
+    },
+    {
+      "role": "candidate",
+      "path": "chrome-atomic-r4/candidate-r6-uncommitted.json",
+      "bytes": 192040,
+      "sha256": "69a049ae1b9b6ac60c6312839984445f5792426c77c5214ec1695a5fe5c735a2",
+      "matchesExistingChainRecord": true
+    },
+    {
+      "role": "savedRetry",
+      "path": "chrome-atomic-r4/saved-r6-after-original-retry.json",
+      "bytes": 192040,
+      "sha256": "69a049ae1b9b6ac60c6312839984445f5792426c77c5214ec1695a5fe5c735a2",
+      "matchesExistingChainRecord": true
+    },
+    {
+      "role": "physicalNew",
+      "path": "chrome-physical-new-r4/physical-new-r6.json",
+      "bytes": 192040,
+      "sha256": "69a049ae1b9b6ac60c6312839984445f5792426c77c5214ec1695a5fe5c735a2",
+      "matchesExistingChainRecord": true
+    }
+  ],
+  "equalities": {
+    "oldAfterEqualsBefore": true,
+    "physicalOldEqualsBefore": true,
+    "retryEqualsOriginalCandidate": true,
+    "physicalNewEqualsOriginalCandidate": true
+  },
+  "statePublicationFromExistingChain": "Actual old feedback/date Jan19/cash25500 held until original retry; paid Jan20/cash26800 after save",
+  "scope": "No fresh browser, engine, codec import, fullCreate replay or game command; these are existing R4 evidence artifacts, not R5 runtime acceptance"
+}

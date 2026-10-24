@@ -1,0 +1,33 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ ✓ src/ui/FirstOrderPaper.test.tsx > keeps the full object name and the same native activation while a short label is shown 16ms
+ × src/ui/FirstOrderPaper.test.tsx > keeps the actual receipt and date in text mode without relying on a picture 30ms
+   → expected '<button type="button" class="opening-…' to contain 'datetime="2020-01-20"'
+ ✓ src/ui/FirstOrderPaper.test.tsx > adds an unsaved notice without replacing the committed work or inventing a receipt 2ms
+ ✓ src/ui/FirstOrderPaper.test.tsx > leaves the existing video object branch and its editable description intact 2ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 passed (4)
+   Start at  11:19:07
+   Duration  727ms (transform 72%, import 16%, tests 11%, worker 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/FirstOrderPaper.test.tsx > keeps the actual receipt and date in text mode without relying on a picture
+AssertionError: expected '<button type="button" class="opening-…' to contain 'datetime="2020-01-20"'
+
+Expected: "datetime="2020-01-20""
+Received: "<button type="button" class="opening-object" data-kind="receipt" data-first-order-phase="paid" data-text-only="true" aria-label="1月5日开工的手工剪辑与资料整理小单 核对这份约定" aria-describedby="first-order-paper-stage first-order-paper-detail first-order-paper-receipt"><span class="opening-object-copy"><span id="first-order-paper-stage" class="opening-object-stage">已实际收款</span><strong id="first-order-paper-title" class="opening-object-title">这份委托</strong><span id="first-order-paper-receipt" class="first-order-receipt"><span>收到客户付款</span><strong>¥1,300</strong><time dateTime="2020-01-20">2020-01-20</time></span><span id="first-order-paper-detail" class="opening-object-detail">个人制作成本¥500 · 1点；1月19日做完后仍需提交。</span><span id="first-order-paper-action" class="opening-object-action">核对这份约定<span aria-hidden="true">↗</span></span></span></button>"
+
+ ❯ src/ui/FirstOrderPaper.test.tsx:32:15
+     30|  expect(html).toContain('收到客户付款')
+     31|  expect(html).toContain('¥1,300')
+     32|  expect(html).toContain('datetime="2020-01-20"')
+       |               ^
+     33|  expect(html).toContain('aria-describedby="first-order-paper-stage fir…
+     34|  expect(html).not.toContain('<img')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

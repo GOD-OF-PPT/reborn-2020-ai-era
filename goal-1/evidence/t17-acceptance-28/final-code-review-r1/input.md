@@ -1,0 +1,1 @@
+当前最终prod代码已freeze，R2 Chrome首单实际1→6全链走通(5commands，现金26800/3AP/净800)，物件与main各实际行动。39文件235功能回归232pass，3红只旧RoomMoment/CinematicRoom期望默认直接接单/默认rest；Root仅更新这2旧测试为新显选入口、保金额/日期/原交付等断言，正定向复验，不再重复39。请对root集成+最终shared只读做最终窄review，重点callbacks跨run/不同saveState、原责任和完整记录到达、free pin升级是否越权，别改/跑测试/浏览器。产出root28/final-code-review-r1；明确任何确定阻断和U2后置范围，不将用户整体体验/旧剩余宣称通过。

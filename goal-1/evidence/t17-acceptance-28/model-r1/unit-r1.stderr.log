@@ -1,0 +1,65 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/opening-attempt.test.ts > shows the saved technical_employee first order from reservation to one atomic receipt and explicit next directions
+ FAIL  src/ui/opening-attempt.test.ts > shows the saved content_employee first order from reservation to one atomic receipt and explicit next directions
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/opening-attempt.test.ts:43:60
+     41| })
+     42|
+     43| it.each(['technical_employee','content_employee'] as const)('shows the…
+       |                                                            ^
+     44|  const h=await normal('paid-'+background,'first_order',background)
+     45|  try{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  src/ui/opening-attempt.test.ts > keeps the actual declined exit and any original cleanup instead of a paid result
+ FAIL  src/ui/opening-attempt.test.ts > keeps the actual skipped exit and any original cleanup instead of a paid result
+ FAIL  src/ui/opening-attempt.test.ts > keeps the actual expired exit and any original cleanup instead of a paid result
+ FAIL  src/ui/opening-attempt.test.ts > keeps the actual cancelled exit and any original cleanup instead of a paid result
+ FAIL  src/ui/opening-attempt.test.ts > keeps the actual interrupted exit and any original cleanup instead of a paid result
+ FAIL  src/ui/opening-attempt.test.ts > keeps the actual missed exit and any original cleanup instead of a paid result
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/opening-attempt.test.ts:88:86
+     86| })
+     87|
+     88| it.each(['declined','skipped','expired','cancelled','interrupted','mis…
+       |                                                                                      ^
+     89|  const h=await normal('exit-'+state)
+     90|  try{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  src/ui/opening-attempt.test.ts > keeps the old letter during a real head-write abort and publishes the plan only after the same candidate saves
+AssertionError: expected { kind: 'first-order', …(7) } to deeply equal { kind: 'first-order', …(7) }
+
+- Expected
++ Received
+
+@@ -53,11 +53,11 @@
+        "kind": "first-order",
+        "runId": "u1-attempt-atomic",
+      },
+      "focusQuarter": "2020-Q1",
+      "focusScope": "entry",
+-     "focusStatus": "default",
++     "focusStatus": "valid",
+      "inspect": {
+        "label": "查看这份手工单与原记录",
+        "screen": "quarter",
+        "target": {
+          "accountId": "personal",
+
+ ❯ src/ui/opening-attempt.test.ts:142:52
+    140|   expect(reader.view.readOnly).toBe(true)
+    141|   expect((await reader.submit(command)).status).toBe('rejected')
+    142|   expect(openingAttempt(input(reader.view),focus)).toEqual(old)
+       |                                                    ^
+    143|   expect((await session.submit(command)).status).toBe('unsaved')
+    144|   expect(fault.trace).toEqual({writeSucceeded:true,abortIssued:true})
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+

@@ -1,0 +1,230 @@
+--- a/src/ui/OpeningObject.tsx
++++ b/src/ui/OpeningObject.tsx
+@@ -4,6 +4,10 @@
+ import videoMakingKit from '../../assets/ui-redesign/cinematic/props/video-making-kit-v1.png'
+ import coursePreparationKit from '../../assets/ui-redesign/cinematic/props/course-preparation-kit-v1.png'
+ import relayServiceKit from '../../assets/ui-redesign/cinematic/props/relay-service-kit-v1.png'
++import {FirstOrderPaper,type FirstOrderArtState} from './FirstOrderPaper.tsx'
++
++export type {FirstOrderArtState} from './FirstOrderPaper.tsx'
++export type OpeningObjectProtection='readonly'|'unsaved'|'unavailable'
+ 
+ export type CoursePaperStage='pending'|'planned'|'running'|'completed'|'stopped'
+ export interface CoursePaperState{stages:readonly[CoursePaperStage,CoursePaperStage];protectedFen:number;needsHelp:number;refundDueFen:number;supportUnmet:boolean;closedAt:string|null}
+@@ -22,21 +26,27 @@
+  textOnly?:boolean
+  appearance?:'video'|'course'|'relay'
+  teaching?:CoursePaperState
++ firstOrder?:FirstOrderArtState
++ protection?:OpeningObjectProtection
+ }
+ 
+ /** The parent supplies committed facts and owns the action; the object adds no business state. */
+-export function OpeningObject({kind,title,displayTitle,detail,stageLabel,onActivate,actionLabel,disabled,textOnly=false,appearance,teaching}:OpeningObjectProps){
+- const id=useId(),titleId=id+'-title',detailId=id+'-detail',stageId=id+'-stage',actionId=id+'-action'
+- return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-text-only={textOnly?'true':'false'} disabled={disabled} onClick={onActivate} aria-label={displayTitle===undefined?undefined:title+' '+actionLabel} aria-labelledby={displayTitle===undefined?titleId+' '+actionId:undefined} aria-describedby={stageId+' '+detailId}>
++export function OpeningObject({kind,title,displayTitle,detail,stageLabel,onActivate,actionLabel,disabled,textOnly=false,appearance,teaching,firstOrder,protection}:OpeningObjectProps){
++ const id=useId(),titleId=id+'-title',detailId=id+'-detail',stageId=id+'-stage',actionId=id+'-action',dateId=id+'-date',receiptId=id+'-receipt',protectionId=id+'-protection'
++ const protectionLabel=protection==='readonly'?'只读 · 可以翻阅':protection==='unsaved'?'尚未保存 · 仍是上次的物件':protection==='unavailable'?'暂不可用 · 先核对原因':null
++ return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-first-order-phase={firstOrder?.phase} data-protection={firstOrder?protection:undefined} data-text-only={textOnly?'true':'false'} disabled={disabled} onClick={onActivate} aria-label={displayTitle===undefined?undefined:title+' '+actionLabel} aria-labelledby={displayTitle===undefined?titleId+' '+actionId:undefined} aria-describedby={stageId+' '+detailId+(firstOrder?.dateLabel?' '+dateId:'')+(firstOrder?.phase==='paid'?' '+receiptId:'')+(firstOrder&&protectionLabel?' '+protectionId:'')}>
+   {!textOnly?<span className="opening-object-art" aria-hidden="true">
+    <img src={appearance==='relay'?relayServiceKit:appearance==='course'?coursePreparationKit:appearance==='video'?videoMakingKit:firstAttempt} alt="" width={appearance==='course'||appearance==='relay'?1536:appearance==='video'?1254:1280} height={appearance==='course'||appearance==='relay'?1024:appearance==='video'?1254:1280} decoding="async"/>
+-   <span className="opening-object-mark">
++   {firstOrder?<><span className="first-order-contact"/><FirstOrderPaper phase={firstOrder.phase}/></>:<span className="opening-object-mark">
+     {kind==='waiting'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><circle cx="16" cy="16" r="12"/><path d="M16 8v9l6 3"/></svg>:kind==='calendar'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M8 5v6m16-6v6M5 12h22M6 8h20v20H6zM11 17h3m5 0h3m-11 6h3m5 0h3"/></svg>:kind==='work'?appearance==='relay'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M6 7h20v13H6zM11 20v5h10v-5M10 12v4m4-4v4m4-4v4m4-4v4M16 25v4"/></svg>:<svg viewBox="0 0 32 32" fill="none" focusable="false"><rect x="5" y="7" width="22" height="18"/><path d="m13 12 8 4-8 4zM9 7v18m14-18v18"/></svg>:null}
+-   </span>
++   </span>}
+   </span>:null}
+   <span className="opening-object-copy">
+    <span id={stageId} className="opening-object-stage">{disabled?'暂不可操作 · ':null}{stageLabel}</span>
+    <strong id={titleId} className="opening-object-title">{displayTitle??title}</strong>
++   {firstOrder?.dateLabel?<span id={dateId} className="first-order-date-strip">{firstOrder.dateLabel}</span>:null}
++   {firstOrder?.phase==='paid'?<span id={receiptId} className="first-order-receipt"><span>收到客户付款</span><strong>{moneyText(firstOrder.receipt.receivedFen)}</strong><time dateTime={firstOrder.receipt.receivedAt}>{firstOrder.receipt.receivedAt}</time></span>:null}
++   {firstOrder&&protectionLabel?<span id={protectionId} className="first-order-protection"><span aria-hidden="true">{protection==='readonly'?'▣':'┄'}</span>{protectionLabel}</span>:null}
+    {teaching?<span className="course-teaching-slips" aria-label="本班实际教学与责任"><span className="course-stage-tabs">{teaching.stages.map((state,index)=><span key={index} className="course-stage-tab" data-state={state}>第{index+1}段 · {{pending:'待安排',planned:'已安排',running:'进行中',completed:'已交付',stopped:'已停止'}[state]}</span>)}</span><span className="course-money-folds">{teaching.protectedFen>0?<span className="course-protected-band">保护中 {moneyText(teaching.protectedFen)}</span>:null}{teaching.needsHelp>0?<span className="course-responsibility-fold">{teaching.needsHelp}人待帮助</span>:null}{teaching.refundDueFen>0?<span className="course-responsibility-fold">退款待付 {moneyText(teaching.refundDueFen)}</span>:null}{teaching.supportUnmet?<span className="course-support-fold">原支持待履行</span>:null}{teaching.closedAt?<span className="course-closed-slip">本班结清 {teaching.closedAt}</span>:null}</span></span>:null}
+    <span id={detailId} className="opening-object-detail">{detail}</span>
+    <span id={actionId} className="opening-object-action">{actionLabel}<span aria-hidden="true">{disabled?'—':'↗'}</span></span>
+--- a/src/ui/opening-play.css
++++ b/src/ui/opening-play.css
+@@ -407,3 +407,63 @@
+  .opening-object[data-text-only=true],
+  .text-mode .opening-object{transform:none}
+ }
++
++/* U1: the first commission keeps one folio and changes its actual paper contents. */
++.opening-object[data-first-order-phase]{transform:none;transition:none;--first-order-ink:#435743}
++.opening-room>.opening-object[data-first-order-phase],
++.opening-room .opening-room-object>.opening-object[data-first-order-phase]{grid-template-rows:auto auto;align-content:end;gap:8px}
++.opening-room>.opening-object[data-first-order-phase]{left:73%;top:auto;bottom:132px;width:280px}
++.opening-room>.opening-object[data-first-order-phase]>.opening-object-art,
++.opening-room .opening-room-object>.opening-object[data-first-order-phase]>.opening-object-art{isolation:isolate;align-self:end;justify-self:center;aspect-ratio:1;height:auto;width:100%;filter:none}
++.opening-object[data-first-order-phase] .opening-object-art>img{position:relative;z-index:1;filter:drop-shadow(0 3px 2px #17251f66)}
++.opening-object[data-first-order-phase] .first-order-contact{position:absolute;left:9%;right:7%;bottom:8%;height:12%;z-index:0;border-radius:50%;background:radial-gradient(ellipse,#14231ee0 0%,#10231c77 44%,transparent 73%);transform:rotate(8deg);filter:blur(3px)}
++.opening-object[data-first-order-phase] .first-order-paper-layers{position:absolute;inset:0;z-index:2;width:100%;height:100%;pointer-events:none;overflow:visible;filter:drop-shadow(1px 2px 1px #332e2466)}
++.opening-object[data-first-order-phase] .first-order-sheet{fill:#f4e7c9;stroke:#b8a47d;stroke-width:1}
++.opening-object[data-first-order-phase] .first-order-sheet-under{fill:#e7d7b3;stroke:#a99570;stroke-width:1}
++.opening-object[data-first-order-phase] .first-order-fold{fill:#d8c6a1;stroke:#ad9873;stroke-width:1}
++.opening-object[data-first-order-phase] .first-order-pencil{stroke:#718069;stroke-width:1.5;stroke-linecap:round}
++.opening-object[data-first-order-phase] .first-order-dashed{stroke:#95845f;stroke-width:1.4;stroke-dasharray:4 4}
++.opening-object[data-first-order-phase] .first-order-clip{stroke:#997039;stroke-width:3;stroke-linecap:round}
++.opening-object[data-first-order-phase] .first-order-film{fill:#51624e;stroke:#2e4439;stroke-width:1}
++.opening-object[data-first-order-phase] .first-order-film-ink{stroke:#cfc9aa;stroke-width:1.2}
++.opening-object[data-first-order-phase] .first-order-pencil-tool{fill:#ae8954;stroke:#65583e;stroke-width:1}
++.opening-object[data-first-order-phase] .first-order-tie{stroke:#a68a55;stroke-width:2}
++.opening-object[data-first-order-phase] .first-order-envelope{fill:#c5b38b;stroke:#8e7e5d;stroke-width:1.2}
++.opening-object[data-first-order-phase] .first-order-envelope-seam{stroke:#8e7e5d;stroke-width:1.2}
++.opening-object[data-first-order-phase] .first-order-reply-slot{fill:#e9dfc3;stroke:#9c9475;stroke-width:1;stroke-dasharray:4 3}
++.opening-object[data-first-order-phase] .first-order-receipt-shape{fill:#f7edcf;stroke:#baa781;stroke-width:1}
++.opening-object[data-first-order-phase] .first-order-receipt-lines{stroke:#a28f6b;stroke-width:1.2}
++.opening-object[data-first-order-phase] .first-order-receipt-stamp{stroke:#a5664e;stroke-width:2}
++.opening-object[data-first-order-phase] .first-order-folded-work{fill:#b7ad91;stroke:#8b8268;stroke-width:1.2}
++.opening-object[data-first-order-phase] .first-order-retained-tie{stroke:#776f56;stroke-width:2}
++.opening-object[data-first-order-phase] .first-order-record-corner{fill:#dfd1af;stroke:#978560;stroke-width:1.2}
++.opening-object[data-first-order-phase] .opening-object-copy{gap:6px;margin:0;padding:10px 13px;transform:none;border:1px solid #bfa678;border-top:2px solid #b69c66;background:linear-gradient(110deg,#e9dcba,#d9cba9);color:var(--first-order-ink);box-shadow:1px 3px 3px #071d2266}
++.opening-object[data-first-order-phase] .opening-object-copy:before{content:"";position:absolute;top:-4px;left:18px;width:6px;height:6px;border:1px solid #b59655;border-radius:50%;background:#8e713d}
++.opening-object[data-first-order-phase] .opening-object-stage{color:#75643f}
++.opening-object[data-first-order-phase] .opening-object-title{color:#3e513d}
++.opening-object[data-first-order-phase] .opening-object-detail{color:#56654b}
++.opening-object[data-first-order-phase] .opening-object-action{border-top-color:#8f895f77;color:#52613d}
++.opening-object[data-first-order-phase] .first-order-date-strip{align-self:stretch;padding:5px 0;border-top:1px solid #9d916b;border-bottom:1px solid #9d916b;color:#665f3d;font:13px/1.75 var(--opening-serif)}
++.opening-object[data-first-order-phase=planned] .first-order-date-strip{border-style:dashed}
++.opening-object[data-first-order-phase=feedback] .first-order-date-strip{border-bottom-style:dashed}
++.opening-object[data-first-order-phase=non-success] .opening-object-copy{border-top-style:double;background:linear-gradient(110deg,#ddd3b7,#cbc4aa)}
++.opening-object[data-first-order-phase] .first-order-receipt{display:flex;align-items:baseline;flex-wrap:wrap;gap:3px 11px;align-self:stretch;padding:7px 0;border-top:1px dashed #9a8961;border-bottom:1px dashed #9a8961;color:#6c5a3d;font:12px/1.75 var(--opening-serif)}
++.opening-object[data-first-order-phase] .first-order-receipt>strong{color:#8c513b;font:19px/1.5 Georgia,var(--opening-serif);font-weight:400}
++.opening-object[data-first-order-phase] .first-order-receipt>time{color:#706d4e}
++.opening-object[data-first-order-phase] .first-order-protection{display:flex;align-items:baseline;gap:7px;align-self:stretch;padding:5px 0;border-top:1px dashed #7d886b;color:#5a654d;font:12px/1.75 var(--opening-serif)}
++.opening-object[data-first-order-phase][data-protection=readonly] .opening-object-copy{border-left:3px double #7c8569}
++.opening-object[data-first-order-phase][data-protection=unsaved] .opening-object-copy{border-top-style:dashed}
++.opening-object[data-first-order-phase][data-protection=unavailable] .opening-object-action{border-top-style:dashed}
++.opening-object[data-first-order-phase]:hover:not(:disabled),
++.opening-object[data-first-order-phase]:focus-visible:not(:disabled),
++.opening-object[data-first-order-phase]:active:not(:disabled){transform:none}
++.opening-object[data-first-order-phase]:hover:not(:disabled) .opening-object-copy,
++.opening-object[data-first-order-phase]:focus-visible:not(:disabled) .opening-object-copy{border-color:#f2d18f;background:linear-gradient(110deg,#f1e4c2,#e1d0a8)}
++.opening-object[data-first-order-phase]:focus-visible{outline:3px solid #ffe2a6;outline-offset:6px}
++.opening-object[data-first-order-phase]:disabled .opening-object-copy{border-style:dashed;color:#65735b}
++.opening-object[data-first-order-phase]:disabled .opening-object-stage,
++.opening-object[data-first-order-phase]:disabled .opening-object-action{color:#65735b}
++.opening-object[data-first-order-phase][data-text-only=true],
++.text-mode .opening-object[data-first-order-phase]{grid-template-rows:auto;align-content:start;gap:0}
++.opening-object[data-first-order-phase][data-text-only=true] .opening-object-copy,
++.text-mode .opening-object[data-first-order-phase] .opening-object-copy{margin:0;transform:none;box-shadow:none}
+--- a/src/ui/FirstOrderPaper.tsx
++++ b/src/ui/FirstOrderPaper.tsx
+@@ -0,0 +1,54 @@
++export type FirstOrderArtState=(
++ | {phase:'letter'|'planned'|'running'|'delivery'|'feedback'|'non-success'}
++ | {phase:'paid';receipt:{receivedFen:number;receivedAt:string}}
++)&{dateLabel?:string}
++
++/** Paper shapes describe committed work; they do not decide its stage or execute it. */
++export function FirstOrderPaper({phase}:{phase:FirstOrderArtState['phase']}){
++ return <svg className="first-order-paper-layers" viewBox="0 0 320 300" fill="none" aria-hidden="true" focusable="false">
++  {phase==='letter'?<g className="first-order-letter">
++   <path className="first-order-sheet" d="m165 22 105 19-12 82-106-19z"/>
++   <path className="first-order-fold" d="m246 37 24 4-4 24z"/>
++   <path className="first-order-pencil" d="m179 52 52 9m-55 6 64 12m-66 4 45 8"/>
++  </g>:null}
++  {phase==='planned'?<g className="first-order-agreement">
++   <path className="first-order-sheet" d="m81 136 185 32-7 40-185-32z"/>
++   <path className="first-order-dashed" d="m89 148 162 29m-166-6 162 28"/>
++   <path className="first-order-clip" d="m126 141 4-25c2-10 16-8 14 3l-5 27"/>
++  </g>:null}
++  {phase==='running'?<g className="first-order-in-progress">
++   <path className="first-order-sheet" d="m105 32 114 19-14 90-114-19z"/>
++   <path className="first-order-pencil" d="m123 58 73 13m-76 6 49 9m-52 8 66 12"/>
++   <path className="first-order-film" d="m43 144 103 18-8 40-103-18z"/>
++   <path className="first-order-film-ink" d="m55 157 76 13m-78-4 76 13M61 152l-4 25m25-21-4 25m25-21-4 25m25-21-4 25"/>
++   <path className="first-order-pencil-tool" d="m216 121 43 67-7 5-43-67 1-10z"/>
++  </g>:null}
++  {phase==='delivery'?<g className="first-order-ready-work">
++   <path className="first-order-sheet" d="m135 18 111 18-13 90-112-18z"/>
++   <path className="first-order-sheet-under" d="m125 26 111 18-13 90-111-18z"/>
++   <path className="first-order-film" d="m141 50 80 13-6 36-80-13z"/>
++   <path className="first-order-film-ink" d="m151 62 56 9m-59 6 56 9m-45-27-5 28m23-25-5 28m23-25-5 28"/>
++   <path className="first-order-tie" d="m123 112 113 19m-54-12-3 17"/>
++  </g>:null}
++  {phase==='feedback'?<g className="first-order-sent-work">
++   <path className="first-order-envelope" d="m161 119 122 21-11 74-122-21z"/>
++   <path className="first-order-envelope-seam" d="m161 119 52 51 70-30m-133 53 49-30m73 51-36-44"/>
++   <path className="first-order-reply-slot" d="m87 192 48 8-6 33-48-8z"/>
++   <path className="first-order-dashed" d="m92 207 30 5"/>
++  </g>:null}
++  {phase==='paid'?<g className="first-order-kept-work">
++   <path className="first-order-sheet" d="m115 31 106 19-13 86-106-19z"/>
++   <path className="first-order-film" d="m131 58 66 12-5 30-66-12z"/>
++   <path className="first-order-film-ink" d="m141 68 42 8m-44 3 42 8"/>
++   <path className="first-order-receipt-shape" d="m231 134 51 9-15 104-6-5-6 3-6-5-6 3-6-5-6 3-6-5z"/>
++   <path className="first-order-receipt-lines" d="m239 153 30 5m-32 9 30 5m-32 9 20 4"/>
++   <path className="first-order-receipt-stamp" d="m237 198 21 4-3 19-21-4z"/>
++  </g>:null}
++  {phase==='non-success'?<g className="first-order-kept-record">
++   <path className="first-order-folded-work" d="m114 113 137 25-13 73-137-25z"/>
++   <path className="first-order-fold" d="m114 113 47 48 90-23"/>
++   <path className="first-order-retained-tie" d="m111 167 129 23m-68-43-8 47"/>
++   <path className="first-order-record-corner" d="m232 199 33 5-5 31-33-5z"/>
++  </g>:null}
++ </svg>
++}
+--- a/src/ui/FirstOrderPaper.test.tsx
++++ b/src/ui/FirstOrderPaper.test.tsx
+@@ -0,0 +1,58 @@
++import {expect,it,vi} from 'vitest'
++import {renderToStaticMarkup} from 'react-dom/server'
++import {OpeningObject,type OpeningObjectProps} from './OpeningObject.tsx'
++
++vi.mock('react',async original=>({...await original<typeof import('react')>(),useId:()=> 'first-order-paper'}))
++
++// Presentation inputs only: these checks do not claim a new campaign or payment.
++function props(extra:Partial<OpeningObjectProps>={}):OpeningObjectProps{
++ return {kind:'letter',title:'1月5日开工的手工剪辑与资料整理小单',displayTitle:'这份委托',detail:'个人制作成本¥500 · 1点；1月19日做完后仍需提交。',stageLabel:'已安排 · 尚未开工',actionLabel:'核对这份约定',onActivate:vi.fn(),disabled:false,...extra}
++}
++
++it('keeps the full object name and the same native activation while a short label is shown',()=>{
++ const p=props({firstOrder:{phase:'planned',dateLabel:'2020-01-05 开工'},protection:'readonly'})
++ const button=OpeningObject(p)
++ expect(button.type).toBe('button')
++ expect(button.props.type).toBe('button')
++ expect(button.props['aria-label']).toBe(p.title+' '+p.actionLabel)
++ expect(button.props['data-first-order-phase']).toBe('planned')
++ button.props.onClick()
++ expect(p.onActivate).toHaveBeenCalledTimes(1)
++ const html=renderToStaticMarkup(button)
++ expect(html).toContain('只读 · 可以翻阅')
++ expect(html).toContain('2020-01-05 开工')
++ expect(html).not.toContain('收到客户付款')
++})
++
++it('keeps the actual receipt and date in text mode without relying on a picture',()=>{
++ const p=props({kind:'receipt',textOnly:true,stageLabel:'已实际收款',detail:'制作成本¥500，本单净额¥800。',actionLabel:'选择接下来的日子',firstOrder:{phase:'paid',receipt:{receivedFen:130000,receivedAt:'2020-01-20'}}})
++ const html=renderToStaticMarkup(<OpeningObject {...p}/>)
++ expect(html).toContain('收到客户付款')
++ expect(html).toContain('¥1,300')
++ expect(html).toMatch(/datetime="2020-01-20"/i)
++ expect(html).toContain('aria-describedby="first-order-paper-stage first-order-paper-detail first-order-paper-receipt"')
++ expect(html).not.toContain('<img')
++ expect(html).not.toContain('<svg')
++ expect(p.onActivate).not.toHaveBeenCalled()
++})
++
++it('adds an unsaved notice without replacing the committed work or inventing a receipt',()=>{
++ const p=props({firstOrder:{phase:'running'},protection:'unsaved',stageLabel:'正在制作',detail:'实际制作成本¥500与原行动已发生。'})
++ const button=OpeningObject(p),html=renderToStaticMarkup(button)
++ expect(button.props['data-first-order-phase']).toBe('running')
++ expect(html).toContain('尚未保存 · 仍是上次的物件')
++ expect(html).toContain('实际制作成本¥500与原行动已发生。')
++ expect(html).not.toContain('收到客户付款')
++ expect(html).not.toContain('first-order-receipt-shape')
++ expect(p.onActivate).not.toHaveBeenCalled()
++})
++
++it('leaves the existing video object branch and its editable description intact',()=>{
++ const p=props({appearance:'video',kind:'work',displayTitle:'这份视频',detail:'本版尚未提交',protection:'readonly'})
++ const html=renderToStaticMarkup(<OpeningObject {...p}/>)
++ expect(html).toContain('video-making-kit-v1.png')
++ expect(html).toContain('本版尚未提交')
++ expect(html).not.toContain('data-first-order-phase')
++ expect(html).not.toContain('first-order-paper-layers')
++ expect(html).not.toContain('只读 · 可以翻阅')
++})

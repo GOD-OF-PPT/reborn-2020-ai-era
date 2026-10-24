@@ -1,0 +1,60 @@
+
+ RUN  v5.0.5 /Users/gordon/githome/reborn-2020-ai-era
+
+ × src/ui/shared-action.test.tsx > shares original command activation and blocks the actual failed candidate, retried stale view, same-revision reload and another run 6425ms
+   → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ × src/ui/shared-action.test.tsx > allows explicit stable readonly UI choices while denying commands and genuine in-flight saving actions 5408ms
+   → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ × src/ui/shared-action.test.tsx > keeps default clock controls and gives the bridge the same main activation, original cost review and fallback confirmation 5075ms
+   → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/shared-action.test.tsx > shares original command activation and blocks the actual failed candidate, retried stale view, same-revision reload and another run
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/shared-action.test.tsx:49:1
+     47| }
+     48|
+     49| it('shares original command activation and blocks the actual failed ca…
+       | ^
+     50|  const f=await fixture('shared-command-source',{abort:true})
+     51|  try{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/ui/shared-action.test.tsx > allows explicit stable readonly UI choices while denying commands and genuine in-flight saving actions
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/shared-action.test.tsx:83:1
+     81| })
+     82|
+     83| it('allows explicit stable readonly UI choices while denying commands …
+       | ^
+     84|  const f=await fixture('shared-action-held',{held:true})
+     85|  const readerStore=new IndexedDbRunStore({codec:f.codec,factory:f.fact…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/ui/shared-action.test.tsx > keeps default clock controls and gives the bridge the same main activation, original cost review and fallback confirmation
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/shared-action.test.tsx:105:1
+    103| })
+    104|
+    105| it('keeps default clock controls and gives the bridge the same main ac…
+       | ^
+    106|  const f=await fixture('shared-clock-original')
+    107|  try{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed (3)
+   Start at  11:23:10
+   Duration  21.74s (tests 82%, import 10%, transform 8%)
+

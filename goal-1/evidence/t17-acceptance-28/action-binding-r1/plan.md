@@ -1,0 +1,7 @@
+# 共用原动作binding
+
+只改CommandButton/ClockAdvance，新增shared-action及定向测试。makeSharedAction只守当前run/revision/完整snapshot、保存状态与只读；纯UI选择可显式允许稳定只读，但候选/busy/conflict/陈旧仍拦。CommandButton返回原preview/intent对应binding，默认DOM保持；Clock可选renderAction提供原mainNode/reviewNode/caption，custom根display contents，Spaceeffect逐字保持。激活最终仍App.request，不构造第二套费用/推进算法。
+
+测试用真实normal新局controller/IndexedDB与原head.put abort/原retry，验证双入口相同原request、陈旧/跨run/只读/候选/保存中gate；Clock原费用预览/force与review、关键同源元数据检查，旧默认按钮结构保留。无浏览器、兼容矩阵、book-layout或核心改动。定向与owned strict后冻结，Root负责桥接/完整集成与原生。
+
+最终布局修订：按Root后续明确指令移除custom wrapper，CommandButton可选rootRef接原div；Clock main根接ref，custom直接返回main组件。Space effect逐字保留。原测试3case及隔离1case均在setup即超默认5s，日志保留；证据显示单setup6.39s。只将装载移默认beforeAll并按实际durable阶段细分断言，不改默认5s测试/10s hook或任何配置。Root要求停止新增并行Node，最终9case交Root统一串行，尚未记绿。
