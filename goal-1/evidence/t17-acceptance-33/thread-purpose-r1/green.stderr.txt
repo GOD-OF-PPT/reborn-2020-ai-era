@@ -1,0 +1,32 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/thread-purpose.test.tsx > the original class purpose follows the saved preparation, promise and closure > keeps the actual refund window open after teaching and recovery have completed
+AssertionError: expected '等原窗口结束并核对结算、退款与费用，不能把教学完成当作已经结清。' not to contain '已经结清'
+
+Expected: "已经结清"
+Received: "等原窗口结束并核对结算、退款与费用，不能把教学完成当作已经结清。"
+
+ ❯ src/ui/thread-purpose.test.tsx:62:75
+     60|   const raw=waiting.controller.exportSaved(),thread=courseThread(waiti…
+     61|   expect(thread.stage).toBe('course-refund-window');expect(thread.atte…
+     62|   expect(thread.finishWhen).toContain('结算');expect(thread.finishWhen).…
+       |                                                                           ^
+     63|   expect(ui.button.props.children).toBeDefined();expect(ui.today).not.…
+     64|   expect(waiting.controller.exportSaved()).toBe(raw)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/ui/thread-purpose.test.tsx > feedback is a stopping point without silently ending the job or investment > keeps the normally earned first salary in an active job, then keeps a real position after matching
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/thread-purpose.test.tsx:103:2
+    101|  beforeAll(async()=>{f=await original('work-market')})
+    102|  afterAll(async()=>{await f?.close()})
+    103|  it('keeps the normally earned first salary in an active job, then kee…
+       |  ^
+    104|   await f.send('WorkQuarter',{});await f.advance('2020-01-31')
+    105|   const p=f.p(),work=playerThread(p,openingFocusFor(p,'quarter',{recor…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

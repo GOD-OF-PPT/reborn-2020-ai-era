@@ -14,6 +14,7 @@ import type {CourseSceneTarget} from './course-scene-progress.ts'
 import {courseFocusFor,resolveCourseFocus,courseFocusQuarter,courseFocusOpen,courseFocusResultDate,coursePlayerScene,courseFocusFromSaved} from './course-player-thread.ts'
 import type {RelaySceneTarget} from './relay-scene-target.ts'
 import {relayFocusFor,resolveRelayFocus,relayFocusQuarter,relayFocusOpen,relayFocusResultDate,relayPlayerScene,relayFocusFromSaved} from './relay-player-thread.ts'
+import {threadPurpose} from './thread-purpose.ts'
 
 type Input=Pick<GamePanelProps,'view'|'features'>
 type Identity={readonly runId:string;readonly accountId:string;readonly entityId:string|null;readonly businessId?:string}
@@ -32,6 +33,7 @@ export interface PlayerThreadView{
  readonly approach:Input['view']['playerProfile']['approach']
  readonly yearQuestion:string
  readonly attempt:string
+ readonly finishWhen:string
  readonly focus:OpeningFocus
  readonly focusStatus:'default'|'valid'|'invalid'
  readonly focusQuarter:string|null
@@ -54,13 +56,6 @@ export interface PlayerThreadView{
 }
 type Scene=Pick<PlayerThreadView,'stage'|'object'|'title'|'line'|'detail'|'outcome'|'inspect'|'resultRefs'|'command'|'secondaryCommand'|'wait'>
 const questions=['怎样先站稳？','什么值得继续？','什么值得准备？','怎样参与变化？','哪些边界须亲自守？','六年留下了什么？'] as const
-const attempt={
- 'first-order':'用一笔真实交付，试试自己的手艺。',market:'先保留生活储备，再验证一份模拟投资判断。',
- work:'保留工作，也为自己的生活留出余地。',life:'把真实的日子留给生活。',free:'把这一季留给自己愿意承担的安排。',
- video:'认真做一份作品，听清真实反馈，再决定下一次投入。',
- course:'从真实案例准备同一堂课，样课完成后再决定是否承担学生的承诺。',
- relay:'让同一期服务经过真实请求、支持与核账，再决定继续承担什么。',
-} as const
 
 function responsibility(p:Input){
  const w=p.features.workbench
@@ -385,12 +380,13 @@ export function playerThread(p:Input,requested?:OpeningFocus|null,requestedQuart
  const resolved=reason?focus:resolvedFocus(p,focus)
  const resultDate=focusResultDate(p,resolved)
  const focusQuarter=originQuarter(p,resolved),scope:PlayerThreadView['focusScope']=reason?'invalid':focusEntry(p,resolved)?'entry':focusQuarter&&focusQuarter<quarter?focusOpen(p,resolved)?'carry':resultDate&&resultDate>=p.features.workbench.quarterStart?'current':'history':'current'
- const common={wish:{id:p.view.playerProfile.wishId,label:wishes[p.view.playerProfile.wishId]},approach:p.view.playerProfile.approach,yearQuestion:questions[Number(p.view.date.slice(0,4))-2020]??'原来的事，想怎样收好？',attempt:attempt[focus.kind],responsibilityOverrideNeeded:responsibility(p),focusQuarter,focusScope:scope,legacyFallbackRequired:!requested&&legacyPending(p)}
- if(reason)return {...common,focus,focusStatus:'invalid',invalidReason:reason,stage:'unavailable',object:'原来的关注对象',title:'先找回刚才那件事。',line:reason,detail:'没有自动接受、换主体或替换对象。请明确选择下一件事。',outcome:'none',inspect:{screen:'routes',label:'重新选择眼前的方向'},resultRefs:[]}
- if(recovery?.needsReview)return {...common,focus,focusStatus:'default',invalidReason:null,stage:'review-choice',object:'本季已经留下的安排',title:'有几件真实的事，可以先回看。',line:`本季有${recovery.count}项实际安排。请先选择想继续看哪一件。`,detail:'原记录都保留，尚未替你选定一件；翻阅不会重新安排或付费。',attempt:'先回看本季已经安排的事，再决定把注意力留给哪里。',outcome:'none',inspect:{screen:'quarter',label:'翻看本季实际安排，选择一件继续',target:{accountId:'personal'}},resultRefs:[]}
+ const common={wish:{id:p.view.playerProfile.wishId,label:wishes[p.view.playerProfile.wishId]},approach:p.view.playerProfile.approach,yearQuestion:questions[Number(p.view.date.slice(0,4))-2020]??'原来的事，想怎样收好？',responsibilityOverrideNeeded:responsibility(p),focusQuarter,focusScope:scope,legacyFallbackRequired:!requested&&legacyPending(p)}
+ const present=(thread:Omit<PlayerThreadView,'attempt'|'finishWhen'>):PlayerThreadView=>({...thread,...threadPurpose(p,thread)})
+ if(reason)return present({...common,focus,focusStatus:'invalid',invalidReason:reason,stage:'unavailable',object:'原来的关注对象',title:'先找回刚才那件事。',line:reason,detail:'没有自动接受、换主体或替换对象。请明确选择下一件事。',outcome:'none',inspect:{screen:'routes',label:'重新选择眼前的方向'},resultRefs:[]})
+ if(recovery?.needsReview)return present({...common,focus,focusStatus:'default',invalidReason:null,stage:'review-choice',object:'本季已经留下的安排',title:'有几件真实的事，可以先回看。',line:`本季有${recovery.count}项实际安排。请先选择想继续看哪一件。`,detail:'原记录都保留，尚未替你选定一件；翻阅不会重新安排或付费。',outcome:'none',inspect:{screen:'quarter',label:'翻看本季实际安排，选择一件继续',target:{accountId:'personal'}},resultRefs:[]})
  let scene=resolved.kind==='relay'?relayPlayerScene(p,resolved):resolved.kind==='course'?coursePlayerScene(p,resolved):resolved.kind==='video'?videoPlayerScene(p,resolved):resolved.kind==='first-order'?firstScene(p):resolved.kind==='market'?marketScene(p,resolved):resolved.kind==='life'?lifeScene(p,resolved):resolved.kind==='work'?workScene(p,resolved):freeScene()
- if(focusQuarter&&focusQuarter<quarter)scene={...scene,object:focusQuarter+' / '+scene.object,line:(scope==='history'?'这是'+focusQuarter+'的原记录，旧收支不会重记为本季收入。':scope==='carry'?'这件事从'+focusQuarter+'留下，仍按原约定继续。':'这项安排始于'+focusQuarter+'，本季出现以下实际反馈。')+scene.line}
- return {...common,...scene,focus:resolved,focusStatus:requested?'valid':'default',invalidReason:null}
+ if(focusQuarter&&focusQuarter<quarter)scene={...scene,object:(scope==='history'?'回看':'始于')+focusQuarter+' · '+scene.object,line:(scope==='history'?'这是'+focusQuarter+'的原记录，旧收支不会重记为本季收入。':scope==='carry'?'这件事从'+focusQuarter+'留下，仍按原约定继续。':'这项安排始于'+focusQuarter+'，本季出现以下实际反馈。')+scene.line}
+ return present({...common,...scene,focus:resolved,focusStatus:requested?'valid':'default',invalidReason:null})
 }
 
 const payloadRecord=(payload:unknown):Record<string,unknown>|null=>payload!==null&&typeof payload==='object'&&!Array.isArray(payload)?payload as Record<string,unknown>:null

@@ -1,0 +1,26 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/relay-journey.test.tsx > stops at an already disclosed original invoice date without creating daily metering clicks or changing the saved life
+AssertionError: expected { heading: '', …(7) } to match object { Object (phase, state) }
+(6 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "phase": "result",
+-   "state": "receivable",
++   "state": "received",
+  }
+
+ ❯ src/ui/relay-journey.test.tsx:137:43
+    135|  expect(p.view.date).toBe('2025-03-18')
+    136|  expect(relayReviewDate(p,'2025-03-31')).toBe('2025-03-21')
+    137|  expect(relayPaperFor(p,periodTarget(p))).toMatchObject({phase:'result…
+       |                                           ^
+    138|  expect(relayPaperFor(p,periodTarget(p))?.paymentLabel).toContain('本期原…
+    139|  expect(relayReviewDate(p,'2025-03-20')).toBe('2025-03-20')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

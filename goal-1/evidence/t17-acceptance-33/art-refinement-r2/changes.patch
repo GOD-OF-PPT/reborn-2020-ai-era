@@ -1,0 +1,127 @@
+--- a/src/ui/RelayServicePaper.tsx
++++ b/src/ui/RelayServicePaper.tsx
+@@ -9,6 +9,7 @@
+  supportLabel?:string
+  responsibility?:string
+  paymentLabel?:string
++ actionHint?:string
+  historical?:boolean
+  support?:RelayPaperSupportState
+ }
+--- a/src/ui/relay-service-paper.css
++++ b/src/ui/relay-service-paper.css
+@@ -31,33 +31,47 @@
+ .relay-service-art .relay-history-corner{fill:#c1b496;stroke:#9d8d6a;stroke-width:4}
+ .relay-service-art .relay-responsibility-fold{fill:#b78368;stroke:#8e5542;stroke-width:5}
+ 
+-/* Explicit complete palette beats generic button states without changing another route. */
++/* One attached set of slips, never a second rectangular control panel. */
+ .opening-object[data-relay-phase][data-relay-state],
+ .opening-object[data-relay-phase][data-relay-state]:is(:hover,:focus-visible,:active,:disabled){background:transparent;color:#eee3c8;box-shadow:none;transform:none;transition:none;opacity:1}
+ .opening-object[data-relay-phase][data-relay-state]>.opening-object-art{height:160px;min-height:160px;width:100%;max-width:100%;aspect-ratio:auto;align-self:end;filter:none;transform:none}
+-.opening-object[data-relay-phase][data-relay-state]>.opening-object-copy{gap:6px;margin-top:0;transform:none;border-left:2px solid #b8a475;border-top:1px solid #b8a47588;background:linear-gradient(90deg,#20352de8,#142c2b9c);color:#e6dcc2;box-shadow:none}
+-.opening-object[data-relay-phase][data-relay-state] .opening-object-stage{color:#d2be90}
+-.opening-object[data-relay-phase][data-relay-state] .opening-object-title{color:#f0e2bf}
+-.opening-object[data-relay-phase][data-relay-state] .opening-object-detail{color:#d0d0b7}
+-.opening-object[data-relay-phase][data-relay-state] :is(.opening-object-title,.opening-object-detail):empty{display:none}
+-.opening-object[data-relay-phase][data-relay-state] .opening-object-action{color:#e3c58c;border-top-color:#b8a47577}
+-.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes{display:flex;flex-direction:column;align-self:stretch;gap:4px;color:#ded6b9}
+-.opening-object[data-relay-phase][data-relay-state] .relay-paper-heading{color:#ede0bc}
+-.opening-object[data-relay-phase][data-relay-state] .relay-paper-date{color:#d9caa5;font-variant-numeric:tabular-nums}
+-.opening-object[data-relay-phase][data-relay-state] :is(.relay-paper-line,.relay-paper-support-note){color:#c8cdb3}
+-.opening-object[data-relay-phase][data-relay-state] .relay-paper-payment-note{color:#ead5a5;border-left:2px double #b8a475;padding-left:8px}
+-.opening-object[data-relay-phase][data-relay-state] .relay-paper-responsibility{color:#f0b69c;border-left:3px solid #b4775b;padding-left:8px}
+-.opening-object[data-relay-phase][data-relay-state] .first-order-protection{display:flex;align-items:baseline;gap:7px;align-self:stretch;padding:5px 0;border-top:1px dashed #a9b494;color:#d6dcc3}
+-.opening-object[data-relay-phase][data-relay-state]:is(:hover,:focus-visible):not(:disabled)>.opening-object-copy{border-color:#ead099;background:linear-gradient(90deg,#294136eb,#18322fba)}
+-.opening-object[data-relay-phase][data-relay-state]:is(:hover,:focus-visible):not(:disabled) .opening-object-action{color:#ffe0a0;border-top-color:#e2c68d}
++.opening-room>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]>.opening-object-art,
++.opening-room .opening-room-object>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]>.opening-object-art{height:160px;min-height:160px;width:100%;max-width:100%;aspect-ratio:auto;align-self:end;filter:none;transform:none}
++.opening-object[data-relay-phase][data-relay-state]>.opening-object-copy{gap:4px;margin-top:0;padding:8px 0 0 12px;transform:none;border:0;background:transparent;color:#44513b;box-shadow:none;align-items:flex-start}
++.opening-object[data-relay-phase][data-relay-state]>.opening-object-copy::before{content:"";position:absolute;left:24px;top:-5px;width:6px;height:18px;border:1px solid #8e7952;border-radius:4px;background:linear-gradient(90deg,#a58a57,#d3bc85,#92794c);box-shadow:1px 1px 1px #10241d66;pointer-events:none}
++.opening-object[data-relay-phase][data-relay-state] :is(.opening-object-stage,.opening-object-title,.opening-object-detail,.opening-object-action,.first-order-protection),
++.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>span{max-width:100%;padding:4px 9px;border:1px solid #ad9a7399;background:linear-gradient(110deg,#e8dbb9,#d8c8a5);box-shadow:1px 2px 2px #11241d55;white-space:normal}
++.opening-object[data-relay-phase][data-relay-state] .opening-object-stage{color:#716342;letter-spacing:0;border-bottom-style:dashed}
++.opening-object[data-relay-phase][data-relay-state] .opening-object-title{color:#3e503a}
++.opening-object[data-relay-phase][data-relay-state] .opening-object-detail{color:#526044}
++.opening-object[data-relay-phase][data-relay-state] :is(.opening-object-stage,.opening-object-title,.opening-object-detail,.relay-paper-notes):empty{display:none}
++.opening-object[data-relay-phase][data-relay-state] .opening-object-action{width:auto;align-self:flex-start;gap:12px;color:#41563b;border-left:2px solid #9e8a55;border-top:1px solid #ad9a7399}
++.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes{display:flex;flex-direction:column;align-self:stretch;align-items:flex-start;gap:4px;color:#48553d}
++.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-heading{color:#48553d}
++.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-date{color:#615d3c;font-variant-numeric:tabular-nums;border-bottom-style:dashed}
++.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>:is(.relay-paper-line,.relay-paper-support-note){color:#536046}
++.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-support-note{border-left:2px solid #8b9273}
++.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-payment-note{color:#66583a;border-left:3px double #9c885b}
++.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-responsibility{color:#793f2d;border-left:3px solid #a66449;background:linear-gradient(110deg,#e4c9ab,#d6b796)}
++.opening-object[data-relay-phase][data-relay-state] .first-order-protection{display:flex;align-items:baseline;gap:7px;align-self:flex-start;border:1px dashed #879272;color:#526248;background:linear-gradient(110deg,#dedcc0,#c9cbb0)}
++.opening-object[data-relay-phase][data-relay-state]:is(:hover,:focus-visible):not(:disabled)>.opening-object-copy{border:0;background:transparent}
++.opening-object[data-relay-phase][data-relay-state]:is(:hover,:focus-visible):not(:disabled) .opening-object-action{color:#32492f;border-color:#e6c880;background:linear-gradient(110deg,#f0e3bf,#dfcca1)}
+ .opening-object[data-relay-phase][data-relay-state]:focus-visible{outline:3px solid #f1d397;outline-offset:6px}
+-.opening-object[data-relay-phase][data-relay-state]:active:not(:disabled)>.opening-object-copy{border-color:#f2d89f;background:linear-gradient(90deg,#30463aeb,#1d3730cc)}
+-.opening-object[data-relay-phase][data-relay-state]:disabled>.opening-object-copy{border-left-style:dashed;background:linear-gradient(90deg,#26372fe8,#1b302b9c)}
+-.opening-object[data-relay-phase][data-relay-state]:disabled :is(.opening-object-stage,.opening-object-action){color:#bbc6a8}
+-.opening-object[data-relay-phase][data-relay-state][data-protection=readonly]>.opening-object-copy{border-left:3px double #a9b494}
+-.opening-object[data-relay-phase][data-relay-state][data-protection=unsaved]>.opening-object-copy{border-top-style:dashed}
++.opening-object[data-relay-phase][data-relay-state]:active:not(:disabled)>.opening-object-copy{border:0;background:transparent}
++.opening-object[data-relay-phase][data-relay-state]:active:not(:disabled) .opening-object-action{color:#34482e;background:linear-gradient(110deg,#ddcba4,#cbb58b)}
++.opening-object[data-relay-phase][data-relay-state]:disabled>.opening-object-copy{border:0;background:transparent}
++.opening-object[data-relay-phase][data-relay-state]:disabled .opening-object-action{color:#637158;border-style:dashed;background:linear-gradient(110deg,#dad4b9,#c8c3a8)}
++.opening-object[data-relay-phase][data-relay-state]:disabled .opening-object-stage{color:#657052}
++.opening-object[data-relay-phase][data-relay-state][data-protection=readonly] .first-order-protection{border-left:3px double #879272}
++.opening-object[data-relay-phase][data-relay-state][data-protection=unsaved] .first-order-protection{border-style:dashed}
+ .opening-object[data-relay-phase][data-relay-state][data-protection=unavailable] .opening-object-action{border-top-style:dashed}
++.opening-room>.opening-object[data-relay-phase][data-relay-state],
++.opening-room .opening-room-object>.opening-object[data-relay-phase][data-relay-state]{gap:0}
+ .opening-object[data-relay-phase][data-relay-state][data-text-only=true],
+ .text-mode .opening-object[data-relay-phase][data-relay-state]{grid-template-rows:auto;align-content:start;gap:0}
+ .opening-object[data-relay-phase][data-relay-state][data-text-only=true]>.opening-object-copy,
+-.text-mode .opening-object[data-relay-phase][data-relay-state]>.opening-object-copy{margin:0;transform:none;box-shadow:none}
++.text-mode .opening-object[data-relay-phase][data-relay-state]>.opening-object-copy{margin:0;padding:0;transform:none;box-shadow:none}
++.opening-object[data-relay-phase][data-relay-state][data-text-only=true][data-kind=receipt]>.opening-object-copy,
++.text-mode .opening-object[data-relay-phase][data-relay-state][data-kind=receipt]>.opening-object-copy{border:0;background:transparent}
++.opening-object[data-relay-phase][data-relay-state][data-text-only=true]>.opening-object-copy::before,
++.text-mode .opening-object[data-relay-phase][data-relay-state]>.opening-object-copy::before{display:none}
+--- a/src/ui/OpeningObject.tsx
++++ b/src/ui/OpeningObject.tsx
+@@ -47,7 +47,8 @@
+  const id=useId(),titleId=id+'-title',detailId=id+'-detail',stageId=id+'-stage',actionId=id+'-action',dateId=id+'-date',receiptId=id+'-receipt',protectionId=id+'-protection',relayNotesId=id+'-relay-notes'
+  const entry=firstOrder===undefined?entryPaper:undefined,day=firstOrder===undefined&&entry===undefined?dayPaper:undefined,video=firstOrder===undefined&&entry===undefined&&day===undefined?videoPaper:undefined,course=firstOrder===undefined&&entry===undefined&&day===undefined&&video===undefined?coursePaper:undefined,classPaper=firstOrder===undefined&&entry===undefined&&day===undefined&&video===undefined&&course===undefined?teachingPaper:undefined,relay=firstOrder===undefined&&entry===undefined&&day===undefined&&video===undefined&&course===undefined&&classPaper===undefined?relayPaper:undefined,hasPaper=firstOrder!==undefined||entry!==undefined||day!==undefined||video!==undefined||course!==undefined||classPaper!==undefined||relay!==undefined
+  const protectionLabel=protection==='readonly'?'只读 · 原记录保留':protection==='unsaved'?'尚未保存 · 仍是上次的物件':protection==='unavailable'?'暂不可用 · 先核对原因':null
+- return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-first-order-phase={firstOrder?.phase} data-entry-paper={entry} data-day-kind={day?.kind} data-day-state={day?.state} data-video-phase={video?.phase} data-course-phase={course?.phase} data-teaching-phase={classPaper?.phase} data-teaching-status={classPaper?.status} data-relay-phase={relay?.phase} data-relay-state={relay?.state} data-protection={hasPaper?protection:undefined} data-text-only={textOnly?'true':'false'} disabled={disabled} onClick={onActivate} aria-label={displayTitle===undefined?undefined:title+' '+actionLabel} aria-labelledby={displayTitle===undefined?titleId+' '+actionId:undefined} aria-describedby={stageId+' '+detailId+(firstOrder?.dateLabel?' '+dateId:'')+(firstOrder?.phase==='paid'?' '+receiptId:'')+(relay?' '+relayNotesId:'')+(hasPaper&&protectionLabel?' '+protectionId:'')}>
++ const relayActionHint=textOnly?undefined:relay?.actionHint,explicitActionName=displayTitle!==undefined||relayActionHint!==undefined
++ return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-first-order-phase={firstOrder?.phase} data-entry-paper={entry} data-day-kind={day?.kind} data-day-state={day?.state} data-video-phase={video?.phase} data-course-phase={course?.phase} data-teaching-phase={classPaper?.phase} data-teaching-status={classPaper?.status} data-relay-phase={relay?.phase} data-relay-state={relay?.state} data-protection={hasPaper?protection:undefined} data-text-only={textOnly?'true':'false'} disabled={disabled} onClick={onActivate} aria-label={explicitActionName?title+' '+actionLabel:undefined} aria-labelledby={explicitActionName?undefined:titleId+' '+actionId} aria-describedby={stageId+' '+detailId+(firstOrder?.dateLabel?' '+dateId:'')+(firstOrder?.phase==='paid'?' '+receiptId:'')+(relay?' '+relayNotesId:'')+(hasPaper&&protectionLabel?' '+protectionId:'')}>
+   {!textOnly?<span className="opening-object-art" aria-hidden="true">
+    {video?<VideoContinuityPaper art={video}/>:day?<DayContinuityPaper art={day}/>:entry?<OpeningEntryPaper kind={entry}/>:course?<CoursePreparationPaper art={course}/>:classPaper?<CourseTeachingPaper art={classPaper}/>:relay?<RelayServicePaper art={relay}/>:<img src={appearance==='relay'?relayServiceKit:appearance==='course'?coursePreparationKit:appearance==='video'?videoMakingKit:firstAttempt} alt="" width={appearance==='course'||appearance==='relay'?1536:appearance==='video'?1254:1280} height={appearance==='course'||appearance==='relay'?1024:appearance==='video'?1254:1280} decoding="async"/>}
+    {firstOrder?<><span className="first-order-contact"/><FirstOrderPaper phase={firstOrder.phase}/></>:video||course||classPaper||relay?null:day?<span className="day-paper-contact"/>:entry?<span className="entry-paper-contact"/>:<span className="opening-object-mark">
+@@ -63,7 +64,7 @@
+    {teaching?<span className="course-teaching-slips" aria-label="本班实际教学与责任"><span className="course-stage-tabs">{teaching.stages.map((state,index)=><span key={index} className="course-stage-tab" data-state={state}>第{index+1}段 · {{pending:'待安排',planned:'已安排',running:'进行中',completed:'已交付',stopped:'已停止'}[state]}</span>)}</span><span className="course-money-folds">{teaching.protectedFen>0?<span className="course-protected-band">保护中 {moneyText(teaching.protectedFen)}</span>:null}{teaching.needsHelp>0?<span className="course-responsibility-fold">{teaching.needsHelp}人待帮助</span>:null}{teaching.refundDueFen>0?<span className="course-responsibility-fold">退款待付 {moneyText(teaching.refundDueFen)}</span>:null}{teaching.supportUnmet?<span className="course-support-fold">原支持待履行</span>:null}{teaching.closedAt?<span className="course-closed-slip">本班结清 {teaching.closedAt}</span>:null}</span></span>:null}
+    {relay?<RelayServicePaperNotes art={relay} id={relayNotesId}/>:null}
+    <span id={detailId} className="opening-object-detail">{detail}</span>
+-   <span id={actionId} className="opening-object-action">{actionLabel}<span aria-hidden="true">{disabled?'—':'↗'}</span></span>
++   <span id={actionId} className="opening-object-action" aria-label={relayActionHint!==undefined?actionLabel:undefined}>{relayActionHint??actionLabel}<span aria-hidden="true">{disabled?'—':'↗'}</span></span>
+   </span>
+  </button>
+ }
+--- a/src/ui/RelayServicePaper.test.tsx
++++ b/src/ui/RelayServicePaper.test.tsx
+@@ -107,3 +107,21 @@
+  expect(video).toContain('video-making-kit-v1.png')
+  expect(video).not.toContain('relay-service-art')
+ })
++
++it('uses an explicit short paper verb while retaining the full action identity and text-mode wording',()=>{
++ const art:RelayServicePaperState={phase:'service',state:'planned',heading:'',actionHint:'核对开工',dateLabel:'2025-01-28 开工',supportLabel:'支持另于2025-02-25开工',paymentLabel:'客户未消费余额仍保护',responsibility:'原应付仍需处理'}
++ const p=props(art)
++ delete p.displayTitle
++ const button=OpeningObject(p),html=renderToStaticMarkup(button)
++ expect(button.props['aria-label']).toBe(p.title+' '+p.actionLabel)
++ expect(html).toContain('id="relay-paper-action" class="opening-object-action" aria-label="'+p.actionLabel+'">核对开工')
++ for(const label of [art.dateLabel,art.supportLabel,art.paymentLabel,art.responsibility])expect(html).toContain(label)
++ expect(html).not.toContain('class="relay-paper-heading"')
++ expect(html).not.toContain('class="relay-paper-line"')
++ const text=renderToStaticMarkup(<OpeningObject {...p} textOnly/>)
++ expect(text).toContain('id="relay-paper-action" class="opening-object-action">'+p.actionLabel)
++ expect(text).not.toContain('核对开工')
++ expect(text).not.toMatch(/<img\b|<svg\b/)
++ button.props.onClick()
++ expect(p.onActivate).toHaveBeenCalledTimes(1)
++})

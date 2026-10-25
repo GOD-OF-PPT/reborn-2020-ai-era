@@ -1,0 +1,90 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/thread-purpose.test.tsx > the original class purpose follows the saved preparation, promise and closure > leaves the actual ready sample as a preparation endpoint without inventing enrollment
+AssertionError: the given combination of arguments (undefined and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string
+ ❯ src/ui/thread-purpose.test.tsx:49:29
+     47|   const raw=ready.controller.exportSaved(),thread=courseThread(ready)
+     48|   expect(thread.stage).toBe('course-ready');expect(thread.attempt).toC…
+     49|   expect(thread.finishWhen).toContain('准备');expect(thread.finishWhen).…
+       |                             ^
+     50|   expect(ready.p().features.course!.cohorts).toHaveLength(0)
+     51|   expect(ready.controller.exportSaved()).toBe(raw)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  src/ui/thread-purpose.test.tsx > the original class purpose follows the saved preparation, promise and closure > keeps the actual refund window open after teaching and recovery have completed
+AssertionError: expected '从真实案例准备同一堂课，样课完成后再决定是否承担学生的承诺。' to contain '退款窗口'
+
+Expected: "退款窗口"
+Received: "从真实案例准备同一堂课，样课完成后再决定是否承担学生的承诺。"
+
+ ❯ src/ui/thread-purpose.test.tsx:55:76
+     53|  it('keeps the actual refund window open after teaching and recovery h…
+     54|   const raw=waiting.controller.exportSaved(),thread=courseThread(waiti…
+     55|   expect(thread.stage).toBe('course-refund-window');expect(thread.atte…
+       |                                                                            ^
+     56|   expect(thread.finishWhen).toContain('结算');expect(thread.finishWhen).…
+     57|   expect(ui.button.props.children).toBeDefined();expect(ui.today).not.…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  src/ui/thread-purpose.test.tsx > the original class purpose follows the saved preparation, promise and closure > takes the actual closed class straight to today, with the same guarded binding and unchanged original account
+AssertionError: expected '从真实案例准备同一堂课，样课完成后再决定是否承担学生的承诺。' to contain '本班'
+
+Expected: "本班"
+Received: "从真实案例准备同一堂课，样课完成后再决定是否承担学生的承诺。"
+
+ ❯ src/ui/thread-purpose.test.tsx:62:76
+     60|  it('takes the actual closed class straight to today, with the same gu…
+     61|   const p=closed.p(),raw=closed.controller.exportSaved(),ui=action(clo…
+     62|   expect(thread.stage).toBe('course-cohort-closed');expect(thread.atte…
+       |                                                                            ^
+     63|   expect(thread.attempt).not.toContain('样课完成后');expect(thread.finishWh…
+     64|   expect(elements(ui.button).map(e=>e.props.children).flat().join(' ')…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  src/ui/thread-purpose.test.tsx > the original class purpose follows the saved preparation, promise and closure > keeps a completed original teaching job attached to the same class rather than treating it as the later closure
+AssertionError: expected '从真实案例准备同一堂课，样课完成后再决定是否承担学生的承诺。' to contain '回看'
+
+Expected: "回看"
+Received: "从真实案例准备同一堂课，样课完成后再决定是否承担学生的承诺。"
+
+ ❯ src/ui/thread-purpose.test.tsx:72:68
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  src/ui/thread-purpose.test.tsx > the original class purpose follows the saved preparation, promise and closure > keeps an invalid original identity explicit without describing a new attempt as already arranged
+AssertionError: expected '从真实案例准备同一堂课，样课完成后再决定是否承担学生的承诺。' to contain '原对象'
+
+Expected: "原对象"
+Received: "从真实案例准备同一堂课，样课完成后再决定是否承担学生的承诺。"
+
+ ❯ src/ui/thread-purpose.test.tsx:88:68
+     86|   const p=closed.p(),c=p.features.course!.courses[0]!,focus=courseFocu…
+     87|   const thread=playerThread(p,{...focus,runId:'another-life'})
+     88|   expect(thread.focusScope).toBe('invalid');expect(thread.attempt).toC…
+       |                                                                    ^
+     89|   expect(thread.command).toBeUndefined();expect(closed.controller.expo…
+     90|  })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  src/ui/thread-purpose.test.tsx > feedback is a stopping point without silently ending the job or investment > keeps the normally earned first salary in an active job, then keeps a real position after matching
+AssertionError: expected 'work-scheduled' to be 'work-paid' // Object.is equality
+
+Expected: "work-paid"
+Received: "work-scheduled"
+
+ ❯ src/ui/thread-purpose.test.tsx:100:22
+     98|   await f.send('WorkQuarter',{});await f.send('AdvanceTime',{date:'202…
+     99|   const p=f.p(),work=playerThread(p,openingFocusFor(p,'quarter',{recor…
+    100|   expect(work.stage).toBe('work-paid');expect(work.finishWhen).toConta…
+       |                      ^
+    101|   expect(work.attempt).not.toContain('结束工作');expect(work.resultRefs.so…
+    102|   const m=p.features.market,stock=m.stocks.find(s=>s.symbol==='SIM-AI0…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+

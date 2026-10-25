@@ -54,16 +54,16 @@ it('opens the same original audience commitment from the thought and paper witho
  }finally{await f.close()}
 })
 
-it('takes a truly closed class to its next choices and refuses an old binding after an actual save',async()=>{
+it('takes a truly closed class to today and refuses an old binding after an actual save',async()=>{
  const f=await original(closedRaw,'closed')
  try{
   const co=f.p.features.course!.cohorts.find(c=>c.closedAt!==null)!,target:CourseSceneTarget={kind:'cohort',businessId:f.lesson.businessId,courseId:co.courseId,cohortId:co.id},raw=f.controller.exportSaved(),ui=shared(f.p,target)
   expect(ui.thread.stage).toBe('course-cohort-closed')
   expect(courseTeachingMoneyFor(f.p,target)).toBe('累计预款¥4,995 · 仍受保护¥0 · 教学收入¥4,995')
-  ;(ui.paper.props.onActivate as ()=>void)();expect(ui.result).toHaveBeenCalledTimes(1);expect(ui.choose).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(raw)
+  ;(ui.paper.props.onActivate as ()=>void)();expect(ui.today).toHaveBeenCalledTimes(1);expect(ui.result).not.toHaveBeenCalled();expect(ui.choose).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(raw)
   const command=f.controller.prepare('AdvanceTime',{date:f.p.features.workbench.progression.nextDate})
   expect((await f.controller.submit(command)).status).toBe('saved')
-  ;(ui.button.props.onClick as ()=>void)();expect(ui.result).toHaveBeenCalledTimes(1)
+  ;(ui.button.props.onClick as ()=>void)();expect(ui.today).toHaveBeenCalledTimes(1);expect(ui.result).not.toHaveBeenCalled()
  }finally{await f.close()}
 })
 

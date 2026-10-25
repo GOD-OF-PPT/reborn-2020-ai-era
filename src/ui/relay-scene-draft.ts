@@ -8,6 +8,8 @@ export interface RelaySceneDraftScope{
  readonly periodId:string|null
  readonly meterId:string|null
  readonly slot:RelaySceneDraftSlot
+ /** Service only: a stable public set of already saved period IDs, never a date or revision. */
+ readonly generation?:string
 }
 export interface RelaySceneDraft{
  customerIds:string[]
@@ -25,7 +27,9 @@ const copy=(draft:RelaySceneDraft):RelaySceneDraft=>({...draft,customerIds:[...d
 
 /** Page, revision and today's date never change an unfinished service or audit identity. */
 export function relaySceneDraftKey(runId:string,scope:RelaySceneDraftScope):string{
- return JSON.stringify([runId,scope.accountId,scope.businessId,scope.stationId,scope.periodId,scope.meterId,scope.slot])
+ const identity=[runId,scope.accountId,scope.businessId,scope.stationId,scope.periodId,scope.meterId,scope.slot]
+ if(scope.slot==='service'&&scope.generation!==undefined)identity.push(scope.generation)
+ return JSON.stringify(identity)
 }
 export interface RelaySceneDraftMemory{
  read(runId:string,scope:RelaySceneDraftScope):RelaySceneDraft|undefined

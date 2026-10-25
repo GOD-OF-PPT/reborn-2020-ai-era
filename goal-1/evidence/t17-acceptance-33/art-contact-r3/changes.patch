@@ -1,0 +1,27 @@
+--- a/src/ui/relay-service-paper.css
++++ b/src/ui/relay-service-paper.css
+@@ -67,10 +67,24 @@
+ .opening-object[data-relay-phase][data-relay-state][data-protection=unavailable] .opening-object-action{border-top-style:dashed}
+ .opening-room>.opening-object[data-relay-phase][data-relay-state],
+ .opening-room .opening-room-object>.opening-object[data-relay-phase][data-relay-state]{gap:0}
++/* Keep the kit on the desk when a caller supplies fewer slips. Text must not move its anchor. */
++.opening-room>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]{top:32%;bottom:auto;grid-template-rows:160px auto;align-content:start}
++.opening-room .opening-room-object:has(>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]){top:32%;bottom:auto}
++.opening-room .opening-room-object>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]{height:auto;grid-template-rows:160px auto;align-content:start}
++.opening-room>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]>.opening-object-copy,
++.opening-room .opening-room-object>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]>.opening-object-copy{margin-top:-12px;padding-top:0}
+ .opening-object[data-relay-phase][data-relay-state][data-text-only=true],
+ .text-mode .opening-object[data-relay-phase][data-relay-state]{grid-template-rows:auto;align-content:start;gap:0}
++.opening-room>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state][data-text-only=true],
++.opening-room .opening-room-object>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state][data-text-only=true],
++.text-mode .opening-room>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state],
++.text-mode .opening-room .opening-room-object>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]{grid-template-rows:auto}
+ .opening-object[data-relay-phase][data-relay-state][data-text-only=true]>.opening-object-copy,
+ .text-mode .opening-object[data-relay-phase][data-relay-state]>.opening-object-copy{margin:0;padding:0;transform:none;box-shadow:none}
++.opening-room>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state][data-text-only=true]>.opening-object-copy,
++.opening-room .opening-room-object>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state][data-text-only=true]>.opening-object-copy,
++.text-mode .opening-room>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]>.opening-object-copy,
++.text-mode .opening-room .opening-room-object>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]>.opening-object-copy{margin:0;padding:0}
+ .opening-object[data-relay-phase][data-relay-state][data-text-only=true][data-kind=receipt]>.opening-object-copy,
+ .text-mode .opening-object[data-relay-phase][data-relay-state][data-kind=receipt]>.opening-object-copy{border:0;background:transparent}
+ .opening-object[data-relay-phase][data-relay-state][data-text-only=true]>.opening-object-copy::before,

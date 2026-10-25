@@ -5,6 +5,7 @@ import {CommandButton} from './CommandButton.tsx'
 import {ClockAdvance} from './ClockAdvance.tsx'
 import {makeSharedAction,type SharedActionBinding} from './shared-action.ts'
 import {courseWaitDate} from './course-wait-date.ts'
+import {courseAttemptClosed} from './thread-purpose.ts'
 
 type Primary={binding:SharedActionBinding;main:ReactNode}
 type Props={p:GamePanelProps;thread:PlayerThreadView;active:boolean;date:string|null;waitLabel:string;onChoose:()=>void;onResult:()=>void;onToday:()=>void;children:(primary:Primary|null)=>ReactNode}
@@ -18,6 +19,7 @@ export function CourseThreadAction({p,thread,active,date,waitLabel,onChoose,onRe
   const binding=makeSharedAction(p,label,activate,{allowReadOnly:true})
   return children({binding,main:<div className="command moment-decision moment-primary"><button type="button" disabled={binding.disabled} onClick={binding.activate}><b aria-hidden="true">01</b><span>{label}<small>{caption}</small></span><i aria-hidden="true">→</i></button>{binding.reason?<small className="reason">{binding.reason}</small>:null}</div>})
  }
+ if(courseAttemptClosed(p,thread))return choice('回到今天，看看接下来的日子','保留本班学习、退款、钱款与原书签；新班仍须另行决定',onToday)
  if(thread.focusScope==='history')return teaching?choice('看清这一段之后，决定怎样继续','翻回同一班的当前承诺，或保留这份实际结果',onResult):choice('合上这份教案留页，回到今天','保留原课程、样课尝试与书签，不重做准备',onToday)
  if(teaching&&thread.outcome==='non-success')return choice('看清停下之后，仍要面对什么','先决定退款与未完承诺，再考虑继续等待',onResult)
  if(thread.command)return <CommandButton {...p} {...thread.command} className="moment-decision moment-primary" showReason={showReason} renderAction={(binding,main)=>children({binding,main})}><b aria-hidden="true">01</b><span>{thread.command.label}<small>核对这间教室的条件，再由你决定</small></span><i aria-hidden="true">→</i></CommandButton>

@@ -20,12 +20,13 @@ import type {CourseSceneTarget} from './course-scene-progress.ts'
 import type {CourseSceneDraftMemory,CourseSceneDraftSlot} from './course-scene-draft.ts'
 import type {CourseTeachingDraftMemory,CourseTeachingDraftSlot} from './course-teaching-draft.ts'
 import type {RelaySceneTarget} from './relay-scene-target.ts'
-import type {RelaySceneDraftMemory,RelaySceneDraftSlot} from './relay-scene-draft.ts'
+import type {RelaySceneDraftMemory} from './relay-scene-draft.ts'
+import type {RelayChoiceDraftSlot,RelayPreparationDraftMemory} from './relay-preparation-draft.ts'
 export type PlayingView=NonNullable<GameSnapshot['view']>
 export interface PlayFeatures {readonly journey?:(NonNullable<ReturnType<typeof projectJourney>>&{ending?:EndingProjection|null})|null;readonly life:LifeProjection;readonly story:StoryProjection;readonly deepseek:DeepseekProjection;readonly relay:RelayProjection;readonly routines:RoutineProjection;readonly course:CourseProjection;readonly video:VideoProjection;readonly firstOrder:ReturnType<typeof projectFirstOrder>;readonly market:NonNullable<ReturnType<typeof projectMarket>>;readonly workbench:WorkbenchProjection}
 export type RequestCommand=(kind:string,payload:unknown,label:string,confirm?:boolean)=>void
 export type LifeSceneMode='person'|'rest'|'workspace'
-export interface SceneTarget {roomView?:'today';accountId?:string;personId?:LifePerson;lifeSelection?:LifeSceneMode;deepseekPane?:'ecosystem'|'equity';recordId?:string;videoTarget?:VideoSceneTarget;courseTarget?:CourseSceneTarget|null;courseDraftSlot?:CourseSceneDraftSlot;courseTeachingSlot?:CourseTeachingDraftSlot;relayTarget?:RelaySceneTarget|null;relayDraftSlot?:RelaySceneDraftSlot;openRecord?:boolean}
+export interface SceneTarget {roomView?:'today';accountId?:string;personId?:LifePerson;lifeSelection?:LifeSceneMode;deepseekPane?:'ecosystem'|'equity';recordId?:string;videoTarget?:VideoSceneTarget;courseTarget?:CourseSceneTarget|null;courseDraftSlot?:CourseSceneDraftSlot;courseTeachingSlot?:CourseTeachingDraftSlot;relayTarget?:RelaySceneTarget|null;relayDraftSlot?:RelayChoiceDraftSlot;openRecord?:boolean}
 export type NavigateScene=(screen:Screen,target?:SceneTarget)=>void
-export interface GamePanelProps {readonly controller:GameController;readonly view:PlayingView;readonly features:PlayFeatures;readonly request:RequestCommand;readonly accountId:string;readonly textOnly?:boolean;readonly videoDraftMemory?:VideoSceneDraftMemory;readonly courseDraftMemory?:CourseSceneDraftMemory;readonly courseTeachingDraftMemory?:CourseTeachingDraftMemory;readonly relayDraftMemory?:RelaySceneDraftMemory}
+export interface GamePanelProps {readonly controller:GameController;readonly view:PlayingView;readonly features:PlayFeatures;readonly request:RequestCommand;readonly accountId:string;readonly textOnly?:boolean;readonly videoDraftMemory?:VideoSceneDraftMemory;readonly courseDraftMemory?:CourseSceneDraftMemory;readonly courseTeachingDraftMemory?:CourseTeachingDraftMemory;readonly relayDraftMemory?:RelaySceneDraftMemory;readonly relayPreparationDraftMemory?:RelayPreparationDraftMemory}
 export interface ConfirmIntent {readonly command:CommandEnvelope;readonly label:string}

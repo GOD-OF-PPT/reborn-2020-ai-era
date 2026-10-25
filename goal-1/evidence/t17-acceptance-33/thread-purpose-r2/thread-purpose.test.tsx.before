@@ -1,0 +1,121 @@
+import {afterAll,beforeAll,describe,expect,it,vi} from 'vitest'
+import {isValidElement,type ReactElement} from 'react'
+import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
+import {createCampaignCodec} from '../application/campaign.ts'
+import {GameController} from '../application/game-controller.ts'
+import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
+import type {GamePanelProps,PlayFeatures} from './game-types.ts'
+import {courseFocusFor} from './course-player-thread.ts'
+import {openingFocusFor,playerThread} from './player-thread.ts'
+import {CourseThreadAction} from './CourseThreadAction.tsx'
+import readyRaw from '../../goal-1/evidence/t17-acceptance-31/chrome-main-r5/normal86-sample-actually-ready.json?raw'
+import waitingRaw from '../../goal-1/evidence/t17-acceptance-32/chrome-main-r9/r9-saved119-recovery-complete-window-open.json?raw'
+import closedRaw from '../../goal-1/evidence/t17-acceptance-32/chrome-main-r9/r9-saved120-class-actually-closed.json?raw'
+
+type Element=ReactElement<Record<string,unknown>>
+const elements=(node:unknown):Element[]=>Array.isArray(node)?node.flatMap(elements):isValidElement<Record<string,unknown>>(node)?[node,...elements(node.props.children)]:[]
+async function original(name:string,raw?:string){
+ const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'purpose-'+name})
+ let sequence=0
+ const controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=>name+'-'+(++sequence)})
+ await controller.initialize()
+ if(raw)await controller.importNew(raw)
+ else await controller.newLife({backgroundId:'technical_employee',playerProfile:{wishId:'autonomy',approach:'free'},seed:'purpose-'+name})
+ const p=():GamePanelProps=>{const view=controller.snapshot.view!;return {controller,view,features:view.features as unknown as PlayFeatures,accountId:'personal',request:vi.fn()}}
+ const send=async(kind:string,payload:unknown)=>expect((await controller.submit(controller.prepare(kind,payload))).status).toBe('saved')
+ const advance=async(date:string)=>{for(let n=0;n<20;n++){
+  const current=p(),w=current.features.workbench
+  if(w.pause){const event=w.events.find(e=>e.isBlocking)!,choice=event.choices.find(c=>c.isDefault)!;expect(choice).toMatchObject({costFen:0,actionPoints:0});await send('ChooseEvent',{instanceId:event.id,choiceId:choice.id});continue}
+  if(current.view.date>=date)return
+  await send('AdvanceTime',{date})
+ }throw Error('PURPOSE_ORIGINAL_CLOCK_LIMIT')}
+ return {controller,p,send,advance,close:async()=>{await controller.close();await store.close()}}
+}
+
+describe('the original class purpose follows the saved preparation, promise and closure',()=>{
+ let ready:Awaited<ReturnType<typeof original>>,waiting:Awaited<ReturnType<typeof original>>,closed:Awaited<ReturnType<typeof original>>
+ beforeAll(async()=>{ready=await original('ready',readyRaw)})
+ beforeAll(async()=>{waiting=await original('window',waitingRaw)})
+ beforeAll(async()=>{closed=await original('closed',closedRaw)})
+ afterAll(async()=>{await ready?.close();await waiting?.close();await closed?.close()})
+ const courseThread=(f:Awaited<ReturnType<typeof original>>,cohort=false,jobId?:string)=>{
+  const p=f.p(),c=p.features.course!.courses[0]!,co=p.features.course!.cohorts[0]!
+  return playerThread(p,courseFocusFor(p,cohort?{kind:'cohort',businessId:c.businessId,courseId:c.id,cohortId:co.id,...(jobId?{jobId}:{})}:{kind:'course',businessId:c.businessId,courseId:c.id}))
+ }
+ const action=(f:Awaited<ReturnType<typeof original>>,thread=courseThread(f,true))=>{
+  const p=f.p(),today=vi.fn(),result=vi.fn(),choose=vi.fn()
+  const tree=CourseThreadAction({p,thread,active:true,date:null,waitLabel:'',onChoose:choose,onResult:result,onToday:today,children:primary=>primary?.main})
+  const button=elements(tree).find(e=>e.type==='button')!
+  return {p,thread,today,result,choose,button}
+ }
+ it('leaves the actual ready sample as a preparation endpoint without inventing enrollment',()=>{
+  const raw=ready.controller.exportSaved(),thread=courseThread(ready)
+  expect(thread.stage).toBe('course-ready');expect(thread.attempt).toContain('样课')
+  expect(thread.finishWhen).toContain('准备');expect(thread.finishWhen).toContain('招生')
+  expect(ready.p().features.course!.cohorts).toHaveLength(0)
+  expect(ready.controller.exportSaved()).toBe(raw)
+ })
+ it('keeps the actual refund window open after teaching and recovery have completed',()=>{
+  const raw=waiting.controller.exportSaved(),thread=courseThread(waiting,true),ui=action(waiting,thread)
+  expect(thread.stage).toBe('course-refund-window');expect(thread.attempt).toContain('退款窗口')
+  expect(thread.finishWhen).toContain('结算');expect(thread.finishWhen).not.toContain('已经结清')
+  expect(ui.button.props.children).toBeDefined();expect(ui.today).not.toHaveBeenCalled()
+  expect(waiting.controller.exportSaved()).toBe(raw)
+ })
+ it('takes the actual closed class straight to today, with the same guarded binding and unchanged original account',()=>{
+  const p=closed.p(),raw=closed.controller.exportSaved(),ui=action(closed),thread=ui.thread
+  expect(thread.stage).toBe('course-cohort-closed');expect(thread.attempt).toContain('本班')
+  expect(thread.object).toMatch(/^始于2023-Q1 · /)
+  expect(thread.attempt).not.toContain('样课完成后');expect(thread.finishWhen).toContain('结清')
+  expect(elements(ui.button).map(e=>e.props.children).flat().join(' ')).toContain('回到今天，看看接下来的日子')
+  ;(ui.button.props.onClick as ()=>void)()
+  expect(ui.today).toHaveBeenCalledOnce();expect(ui.result).not.toHaveBeenCalled();expect(ui.choose).not.toHaveBeenCalled()
+  expect(ui.p.request).not.toHaveBeenCalled();expect(closed.controller.exportSaved()).toBe(raw)
+  expect(closed.p().view.accounts).toEqual(p.view.accounts)
+ })
+ it('keeps a completed original teaching job attached to the same class rather than treating it as the later closure',()=>{
+  const p=closed.p(),co=p.features.course!.cohorts[0]!,job=co.stageJobs.flat().find(j=>j?.status==='completed')!,thread=courseThread(closed,true,job.id),ui=action(closed,thread),raw=closed.controller.exportSaved()
+  expect(thread.focusScope).toBe('history');expect(thread.attempt).toContain('回看')
+  expect(thread.object).toMatch(/^回看2023-Q1 · /)
+  expect(thread.finishWhen).toContain('原记录')
+  ;(ui.button.props.onClick as ()=>void)()
+  expect(ui.result).toHaveBeenCalledOnce();expect(ui.today).not.toHaveBeenCalled()
+  expect(thread.inspect.target?.courseTarget).toMatchObject({cohortId:co.id,jobId:job.id})
+  expect(closed.controller.exportSaved()).toBe(raw)
+ })
+ it('does not use the closed-class shortcut to override a real responsibility gate',()=>{
+  // Bounded UI policy input, not another accepted game history or a fabricated debt.
+  const thread={...courseThread(closed,true),responsibilityOverrideNeeded:true},ui=action(closed,thread)
+  ;(ui.button.props.onClick as ()=>void)()
+  expect(ui.today).not.toHaveBeenCalled();expect(ui.result).toHaveBeenCalledOnce()
+ })
+ it('keeps an invalid original identity explicit without describing a new attempt as already arranged',()=>{
+  const p=closed.p(),c=p.features.course!.courses[0]!,focus=courseFocusFor(p,{kind:'course',businessId:c.businessId,courseId:c.id}),raw=closed.controller.exportSaved()
+  const thread=playerThread(p,{...focus,runId:'another-life'})
+  expect(thread.focusScope).toBe('invalid');expect(thread.attempt).toContain('原对象');expect(thread.finishWhen).toContain('重新选择')
+  expect(thread.command).toBeUndefined();expect(closed.controller.exportSaved()).toBe(raw)
+ })
+})
+
+describe('feedback is a stopping point without silently ending the job or investment',()=>{
+ let f:Awaited<ReturnType<typeof original>>
+ beforeAll(async()=>{f=await original('work-market')})
+ beforeAll(async()=>{await f.send('WorkQuarter',{});await f.advance('2020-01-31')})
+ afterAll(async()=>{await f?.close()})
+ it('keeps the normally earned first salary as feedback in an active job',()=>{
+  const p=f.p(),raw=f.controller.exportSaved(),work=playerThread(p,openingFocusFor(p,'quarter',{recordId:p.features.workbench.employment[0]!.id})!)
+  expect(work.stage).toBe('work-paid');expect(work.finishWhen).toContain('仍在岗')
+  expect(work.attempt).not.toContain('结束工作');expect(work.resultRefs.some(r=>r.kind==='payroll'&&r.date==='2020-01-31')).toBe(true)
+  expect(f.controller.exportSaved()).toBe(raw)
+ })
+ it('keeps a real position after matching without treating the investment as closed',async()=>{
+  const p=f.p()
+  const m=p.features.market,stock=m.stocks.find(s=>s.symbol==='SIM-AI01')!,point=m.matchingCalendar.find(point=>point.date>p.view.date)!
+  await f.send('PlaceStockOrder',{accountId:'personal',symbol:stock.symbol,side:'buy',quantity:100,limitPriceFen:stock.upperFen!,quoteId:m.quoteId!,validUntil:point.id})
+  await f.advance(point.date)
+  const now=f.p(),position=now.features.market.positions.find(pos=>pos.quantity===100)!,before=f.controller.exportSaved(),thread=playerThread(now,openingFocusFor(now,'market',{accountId:'personal',recordId:position.id})!)
+  expect(thread.stage).toBe('market-position');expect(thread.attempt).toContain('持仓');expect(thread.finishWhen).toContain('不会自动卖出')
+  expect(thread.command).toBeUndefined();expect(f.controller.exportSaved()).toBe(before)
+ })
+})

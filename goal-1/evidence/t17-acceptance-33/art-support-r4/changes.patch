@@ -1,0 +1,50 @@
+--- a/src/ui/RelayServicePaper.tsx
++++ b/src/ui/RelayServicePaper.tsx
+@@ -28,6 +28,15 @@
+  const responsibility=Boolean(art.responsibility?.trim())
+  return <span className="relay-service-art" data-relay-phase={art.phase} data-relay-state={art.state} data-relay-history={art.historical?'true':undefined} aria-hidden="true">
+   <span className="relay-service-contact"/>
++  <svg className="relay-service-support" viewBox="0 0 1536 1024" fill="none" aria-hidden="true" focusable="false">
++   <g data-material="shared-wooden-tray">
++    <path className="relay-tray-contact" d="m86 843 1301-34 93 113-1287 82z"/>
++    <path className="relay-tray-front" d="m83 875 1399-70-8 65-1384 72z"/>
++    <path className="relay-tray-top" d="m56 549 1369-64 78 319-1418 72z"/>
++    <path className="relay-tray-edge" d="m56 549 1369-64 78 319-1418 72zM85 876l5 66 1384-72 8-65"/>
++    <path className="relay-tray-grain" d="m116 803 1245-63m-1219 95 1118-56m-211-246 344-16"/>
++   </g>
++  </svg>
+   <img className="relay-service-kit" src={relayServiceKit} alt="" width={1536} height={1024} decoding="async"/>
+   <svg className="relay-service-layers" viewBox="0 0 1536 1024" fill="none" aria-hidden="true" focusable="false">
+    {art.phase==='preparation'?<g data-material={'preparation-'+art.state}>
+--- a/src/ui/relay-service-paper.css
++++ b/src/ui/relay-service-paper.css
+@@ -1,10 +1,17 @@
+ /* The original passive kit stays intact. Native leaves carry only caller-supplied public state. */
+ .relay-service-art[data-relay-phase]{position:relative;isolation:isolate;display:block;width:100%;height:160px;pointer-events:none}
+ .relay-service-art[data-relay-phase] .relay-service-kit,
++.relay-service-art[data-relay-phase] .relay-service-support,
+ .relay-service-art[data-relay-phase] .relay-service-layers{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:none;pointer-events:none}
++.relay-service-art[data-relay-phase] .relay-service-support{z-index:0}
+ .relay-service-art[data-relay-phase] .relay-service-kit{z-index:1;filter:none}
+ .relay-service-art[data-relay-phase] .relay-service-layers{z-index:2;filter:drop-shadow(1px 2px 1px #342c2155)}
+-.relay-service-art[data-relay-phase] .relay-service-contact{position:absolute;left:13%;right:7%;bottom:9%;height:9%;z-index:0;border-radius:50%;background:radial-gradient(ellipse,#15211bc7,transparent 72%)}
++.relay-service-art[data-relay-phase] .relay-service-contact{position:absolute;left:8%;right:5%;bottom:3%;height:12%;z-index:0;border-radius:50%;background:radial-gradient(ellipse,#0f1b17d9,#17231a66 43%,transparent 73%)}
++.relay-service-art .relay-tray-contact{fill:#101b16;opacity:.45}
++.relay-service-art .relay-tray-front{fill:#60452e;stroke:#433923;stroke-width:4}
++.relay-service-art .relay-tray-top{fill:#98764d;stroke:#6e5539;stroke-width:4}
++.relay-service-art .relay-tray-edge{stroke:#b29764;stroke-width:4}
++.relay-service-art .relay-tray-grain{stroke:#bfa274;stroke-width:3;opacity:.65;stroke-linecap:round}
+ .relay-service-art .relay-leaf{fill:#ecdfbf;stroke:#ad9974;stroke-width:4}
+ .relay-service-art .relay-leaf-warm{fill:#dfcda9;stroke:#a58e66;stroke-width:4}
+ .relay-service-art .relay-leaf-under{fill:#c3b08b;stroke:#928063;stroke-width:4}
+@@ -68,8 +75,8 @@
+ .opening-room>.opening-object[data-relay-phase][data-relay-state],
+ .opening-room .opening-room-object>.opening-object[data-relay-phase][data-relay-state]{gap:0}
+ /* Keep the kit on the desk when a caller supplies fewer slips. Text must not move its anchor. */
+-.opening-room>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]{top:32%;bottom:auto;grid-template-rows:160px auto;align-content:start}
+-.opening-room .opening-room-object:has(>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]){top:32%;bottom:auto}
++.opening-room>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]{top:41%;bottom:auto;grid-template-rows:160px auto;align-content:start}
++.opening-room .opening-room-object:has(>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]){top:41%;bottom:auto}
+ .opening-room .opening-room-object>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]{height:auto;grid-template-rows:160px auto;align-content:start}
+ .opening-room>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]>.opening-object-copy,
+ .opening-room .opening-room-object>.opening-object[data-appearance=relay][data-relay-phase][data-relay-state]>.opening-object-copy{margin-top:-12px;padding-top:0}

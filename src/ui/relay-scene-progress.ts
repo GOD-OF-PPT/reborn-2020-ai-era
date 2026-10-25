@@ -100,7 +100,8 @@ function legacyRelaySceneProgress(relay:RelayProjection,date:string,preferredPer
  const changes=relay.changes.filter(change=>change.businessId===business.id&&change.acknowledgedAt===null&&change.date<=date)
  // An ordinary business notice stays in its original book; an explicitly selected period keeps its own progress.
  const explicitPeriod=period!==undefined&&preferredPeriodId===period.id
- if(changes.length&&!explicitPeriod)return scene('market-change','今天的风向变了，旧账仍有自己的日期。','供应与竞争前提已经发生公开变化。阅读与确认不替你重谈客户报价或增加供应权限。','对照新的前提，保留原来的约定',`${changes.length}项已发生变化待核对；已发生用量保持原价格版本，未来条款须另行选择、谈妥并实际生效。`,'查看公开变价与原合同')
+ const keepingWork=active(period?.job)||active(period?.supportJob)||[...relay.preparations,...relay.applications,...relay.adapters,...relay.audiences].some(row=>row.businessId===business.id&&active(row.job))
+ if(changes.length&&!explicitPeriod&&!keepingWork)return scene('market-change','今天的风向变了，旧账仍有自己的日期。','供应与竞争前提已经发生公开变化。阅读与确认不替你重谈客户报价或增加供应权限。','对照新的前提，保留原来的约定',`${changes.length}项已发生变化待核对；已发生用量保持原价格版本，未来条款须另行选择、谈妥并实际生效。`,'查看公开变价与原合同')
  if(period){
   if(active(period.job))return scene(period.job.status==='planned'?'planned':'service',period.job.status==='planned'?'下一班线路，已经留在日历里。':'夜里的线路，还在真实地走。','容量与供应预算只是原授权上限，真正发生的用量才进入原账。'+supportNote,'看看这一期已经留下的服务记录',`${identity}已记录${period.observedDays}日，报告用量${period.reportedUnits}，有不足或停止原因${period.failedDays}日；支持与收费仍有各自的完成日期。`,'翻看本期用量、线路与原安排',{nextDate:jobNext(period.job,date),completeAt:period.job.completeAt})
   if(active(period.supportJob)){
@@ -109,7 +110,7 @@ function legacyRelaySceneProgress(relay:RelayProjection,date:string,preferredPer
   }
   if(eligible.length)return scene('audit-ready','线路走过的日子，留下了一叠账单。','报告用量还不是独立实计。你可以安排真实资源，核对已经发生的记录。'+supportNote,'给这些原账安排一次独立复核',`${identity}有${eligible.length}条已有供应记录尚未被有效复核覆盖；日期、资源与实际费用仍要分别确认。`,'选择本期复核的资源与日期',{audit:{businessId:business.id,periodId:period.id}})
   if(period.status==='settling'||period.status==='stopped'||period.feePostedAt===null)return scene('settling','这期已经留下记录，原账还没有收好。','停止请求、任务中断或服务结束，都不会免费补齐支持、清除应收应付或客户保护。','核对这期还在延续的责任',`${identity}的支持、费用与原账逐项保留；未到期应收不能提前取用，已揭示差额仍须独立更正。`,'查看本期原账与未结责任')
-  if(period.status==='closed')return scene('period-closed',stoppedSupport?'原账收好后，中断的支持仍留在记录。':'这一期收好了，客户的余额仍另有去处。','本期结清不等于企业关闭，也不等于客户余额或供应贷项已经变成利润。'+supportNote,'翻看这一期真实留下的账',`${identity}已经按原账结束；旧计量、更正和其他周期仍可逐份查看，下一期须重新明确客户、供应与支持。`,'查看本期结果、旧余额与下一期安排')
+  if(period.status==='closed')return scene('period-closed',stoppedSupport?'原账收好，原支持记录保留。':'这一期，已经收好。','本期结清不等于企业关闭，也不等于客户余额或供应贷项已经变成利润。'+supportNote,'翻看这一期真实留下的账',`${identity}已经按原账结束；旧计量、更正和其他周期仍可逐份查看，下一期须重新明确客户、供应与支持。`,'翻阅本期完整原记录')
  }
  const preparations=relay.preparations.filter(p=>p.businessId===business.id)
  const preparation=preparations.find(p=>active(p.job))
@@ -175,7 +176,7 @@ function jobRecord(relay:Relay,date:string,resolved:RelayTargetResolution):Relay
 function focusedRelaySceneProgress(relay:RelayProjection,date:string,target:RelaySceneTarget|null,context:RelaySceneContext):RelaySceneProgress|null{
  const resolved=resolveRelaySceneTarget(relay,target,context)
  if(resolved.status==='invalid')return invalidScene(relay,resolved.reason!,target)
- if(resolved.status==='entry')return recordScene(relay,'opening','先选定这盏灯下的原服务。','显选原中转站、客户或账期；准备新站另行核对资本与资格。查看不会签约、充值或开始服务。','选择原中转对象或准备新站')
+ if(resolved.status==='entry')return recordScene(relay,'opening','这一次，试着为别人接通线路。','先用自己的钱准备材料、申请许可，再去寻找真实需求。已有站点、客户和服务也可逐份翻开。','核对自己的投入与开站条件')
  const value=relay!,t=resolved.target!,business=resolved.business!
  if(t.kind==='period'&&t.jobId!==undefined)return jobRecord(value,date,resolved)
  if(t.kind==='period'&&resolved.meter){

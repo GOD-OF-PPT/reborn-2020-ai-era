@@ -75,7 +75,7 @@ it('renders reported days, interrupted support and only still uncorrected public
   const scene={...p,screen:'relay' as const,headingRef:null,personId:'tang-ying' as const,onPerson:noWrite,onOpen:noWrite,onPeople:noWrite,onYear:noWrite,onNavigate:noWrite,receipt:null}
   for(const blocked of [{readOnly:true},{hasCandidate:true,saveStatus:'unsaved' as const}]){
    const html=renderToStaticMarkup(<NarrativeScene {...scene} view={{...p.view,...blocked}}/>)
-   expect(html.match(/<button[^>]*aria-label="核对并更正本期原账"[^>]*>/)?.[0]).toContain('disabled=""')
+   expect(html).toContain('明确选定原对象或准备新站');expect(html).not.toContain('aria-label="核对并更正本期原账"')
    expect(html).toContain('翻看全部中转、客户与原安排');expect(html).not.toContain('把一次服务认真安排好')
   }
   const confirm=renderToStaticMarkup(<CommandDetails command={auditCommand} confirm={{allowed:true,reasonCodes:[],actionPoints:1,upfrontCostFen:10000,releasedFen:0}} features={features} view={p.view} accountName={()=>'原中转企业'} clock={null}/>)

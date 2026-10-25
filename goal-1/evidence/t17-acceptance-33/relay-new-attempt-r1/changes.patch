@@ -1,0 +1,150 @@
+--- a/src/ui/relay-scene-draft.ts
++++ b/src/ui/relay-scene-draft.ts
+@@ -8,6 +8,8 @@
+  readonly periodId:string|null
+  readonly meterId:string|null
+  readonly slot:RelaySceneDraftSlot
++ /** Service only: a stable public set of already saved period IDs, never a date or revision. */
++ readonly generation?:string
+ }
+ export interface RelaySceneDraft{
+  customerIds:string[]
+@@ -25,7 +27,9 @@
+ 
+ /** Page, revision and today's date never change an unfinished service or audit identity. */
+ export function relaySceneDraftKey(runId:string,scope:RelaySceneDraftScope):string{
+- return JSON.stringify([runId,scope.accountId,scope.businessId,scope.stationId,scope.periodId,scope.meterId,scope.slot])
++ const identity=[runId,scope.accountId,scope.businessId,scope.stationId,scope.periodId,scope.meterId,scope.slot]
++ if(scope.slot==='service'&&scope.generation!==undefined)identity.push(scope.generation)
++ return JSON.stringify(identity)
+ }
+ export interface RelaySceneDraftMemory{
+  read(runId:string,scope:RelaySceneDraftScope):RelaySceneDraft|undefined
+--- a/src/ui/RelayServiceChoice.tsx
++++ b/src/ui/RelayServiceChoice.tsx
+@@ -18,7 +18,10 @@
+  if(resolved.status!=='valid'||!target)return {scope:null,reason:resolved.reason??'先明确选择原中转企业或账期，再留下这份草稿。'}
+  if(slot==='service'&&target.kind!=='business')return {scope:null,reason:'这里是原记录。请明确回到这间站，再决定另一份新服务；没有修改原账期。'}
+  if(slot==='audit'&&(target.kind!=='period'||target.jobId!==undefined))return {scope:null,reason:'先明确翻回这一期已有计量，再决定新的复核；原任务没有被当作另一份委托。'}
+- return {scope:{accountId:target.accountId,businessId:target.businessId,stationId:target.stationId,periodId:slot==='audit'&&target.kind==='period'?target.periodId:null,meterId:slot==='audit'&&target.kind==='period'?target.meterId??null:null,slot},reason:null}
++ // Only a newly saved same-business period starts another service draft. An
++ // unfinished or failed candidate still exposes the old public period set.
++ const generation=slot==='service'?{generation:JSON.stringify(p.features.relay!.periods.filter(period=>period.businessId===target.businessId).map(period=>period.id).sort())}:{}
++ return {scope:{accountId:target.accountId,businessId:target.businessId,stationId:target.stationId,periodId:slot==='audit'&&target.kind==='period'?target.periodId:null,meterId:slot==='audit'&&target.kind==='period'?target.meterId??null:null,slot,...generation},reason:null}
+ }
+ const unique=(ids:readonly string[])=>new Set(ids).size===ids.length
+ const agentMode=(mode:string)=>mode==='assisted'||mode==='delegated'
+--- a/src/ui/relay-scene-draft.test.ts
++++ b/src/ui/relay-scene-draft.test.ts
+@@ -46,6 +46,22 @@
+  expect(memory.read('life-a',service)).toMatchObject({customerIds:['customer-a'],supplierIds:['backup-first','primary-second'],resources:['worker-a']})
+ })
+ 
++it('keeps an unfinished generation and its original draft while a new service has no inherited commitment',()=>{
++ const memory=createRelaySceneDraftMemory('life-a'),original={...service,generation:'["period:a"]'},next={...service,generation:'["period:a","period:b"]'},draft={...emptyRelaySceneDraft(),customerIds:['customer-a'],supplierIds:['supplier-a'],resources:['worker-a'],startAt:'2025-02-03',maxUnits:'2800',maxSupplierCost:'100',supportMode:'guided' as const}
++ memory.write('life-a',original,draft)
++ expect(memory.read('life-a',{...original})).toEqual(draft)
++ expect(memory.read('life-a',next)).toBeUndefined()
++ memory.write('life-a',next,emptyRelaySceneDraft())
++ expect(memory.read('life-a',original)).toEqual(draft)
++ expect(memory.read('life-a',next)).toEqual(emptyRelaySceneDraft())
++ // Audit identity remains its original seven parts, even if a caller passes a
++ // service context; another service cannot hide or relabel the original meter.
++ const originalAudit={...audit,meterId:'meter:a',generation:original.generation},laterAudit={...originalAudit,generation:next.generation}
++ expect(relaySceneDraftKey('life-a',originalAudit)).toBe(JSON.stringify(['life-a','company-a','business-a','station-a','period-a','meter:a','audit']))
++ memory.write('life-a',originalAudit,{...emptyRelaySceneDraft(),resources:['worker-a'],startAt:'2025-03-04'})
++ expect(memory.read('life-a',laterAudit)).toMatchObject({resources:['worker-a'],startAt:'2025-03-04'})
++})
++
+ it('keeps consecutive functional edits and changes from another mounted book in the same slot',()=>{
+  for(const shared of [false,true]){
+   hooks.values=[]
+--- a/src/ui/RelayServiceChoice.test.tsx
++++ b/src/ui/RelayServiceChoice.test.tsx
+@@ -7,6 +7,7 @@
+ import {GameController} from '../application/game-controller.ts'
+ import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+ import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
++import {abortAfterHeadWrite} from '../testing/abort-after-write.ts'
+ import type {GamePanelProps,PlayFeatures} from './game-types.ts'
+ import {RelayAuditEditor,RelayDraftDate,RelayDraftResources,RelayServiceChoice,RelayServiceFields,relayAuditDraftCommand,relayDraftScopeForTarget,relayServiceDraftCommand} from './RelayServiceChoice.tsx'
+ import {RelaySceneChoice,RelayTargetPicker} from './RelaySceneChoice.tsx'
+@@ -85,24 +86,31 @@
+  if(!editor)throw Error('ORIGINAL_SHARED_BOOK_EDITOR_REQUIRED')
+  return invoke(editor,'original-book-editor:'+slot)
+ }
+-async function fixture(raw:string,name:string){
+- const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name})
++async function fixture(raw:string,name:string,abortOnSave=false){
++ const codec=createCampaignCodec(),factory=new IDBFactory()
++ // Seed the original complete envelope before arming the physical head.put
++ // fault, so the tested failure belongs to the new service, not the import.
++ const original=abortOnSave?new IndexedDbRunStore({codec,factory,keyRange:IDBKeyRange,name}):null
++ const imported=original?await original.importSave(raw,{mode:'create',actorId:'player',importId:name+'-original-import'}):null
++ if(original)await original.close()
++ const fault=abortOnSave?abortAfterHeadWrite(factory,name):null,store=new IndexedDbRunStore({codec,factory:fault?.factory??factory,keyRange:IDBKeyRange,name})
+  let sequence=0
+  const controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=>`${name}-${++sequence}`})
+- await controller.initialize();await controller.importNew(raw)
++ await controller.initialize();if(imported)await controller.continueLife(imported.record.run.runId);else await controller.importNew(raw)
+  const props=()=>{const view=controller.snapshot.view!,features=view.features as unknown as PlayFeatures,business=features.relay!.businesses[0]!;return {controller,view,features,accountId:business.accountId,request:vi.fn(),relayDraftMemory:createRelaySceneDraftMemory(view.runId)} satisfies GamePanelProps}
+  const p=props(),relay=p.features.relay!,business=relay.businesses[0]!,station=relay.stations.find(s=>s.businessId===business.id)!
+  const target:RelaySceneTarget={kind:'business',runId:p.view.runId,accountId:business.accountId,businessId:business.id,stationId:station.id}
+- return {controller,store,p,target,props}
++ return {controller,store,p,target,props,fault}
+ }
+-let ready:Awaited<ReturnType<typeof fixture>>,planned:Awaited<ReturnType<typeof fixture>>
++let ready:Awaited<ReturnType<typeof fixture>>,planned:Awaited<ReturnType<typeof fixture>>,failed:Awaited<ReturnType<typeof fixture>>,plannedBefore:GamePanelProps
+ beforeAll(async()=>{
+- ready=await fixture(readyRaw,'relay-scene-ready');planned=await fixture(plannedRaw,'relay-scene-planned')
++ ready=await fixture(readyRaw,'relay-scene-ready');planned=await fixture(plannedRaw,'relay-scene-planned');plannedBefore=planned.p
+  // Only an affected original-clock suffix, not a fabricated public meter.
+  for(let count=0;planned.controller.snapshot.view!.date<'2025-01-29'&&count<4;count++)expect((await planned.controller.submit(planned.controller.prepare('AdvanceTime',{date:'2025-01-29'}))).status).toBe('saved')
+  expect(planned.controller.snapshot.view!.date).toBe('2025-01-29');planned.p=planned.props()
++ failed=await fixture(readyRaw,'relay-scene-new-attempt',true)
+ },20000)
+-afterAll(async()=>{for(const f of [ready,planned])if(f){await f.controller.close();await f.store.close()}})
++afterAll(async()=>{for(const f of [ready,planned,failed])if(f){await f.controller.close();await f.store.close()}})
+ 
+ it('keeps deliberately selected service fields through near/book instances and submits only that original payload',async()=>{
+  hooks.slots.clear()
+@@ -128,9 +136,39 @@
+  expect((await controller.submit(controller.prepare(expected.kind,expected.payload))).status).toBe('saved')
+  const saved=controller.snapshot.view!,actual=(saved.features as unknown as PlayFeatures).relay!.periods.at(-1)!
+  expect(saved.revision).toBe(p.view.revision+1);expect(actual.customerIds).toEqual([customer.id]);expect(actual.from).toBe(draft.startAt);expect(actual.supportMode).toBe('guided')
++ expect(p.relayDraftMemory!.read(p.view.runId,scope)).toEqual(draft)
++ const current={...ready.props(),relayDraftMemory:p.relayDraftMemory},nextScope=relayDraftScopeForTarget(current,target,'service').scope!
++ expect(nextScope).not.toEqual(scope);expect(p.relayDraftMemory!.read(saved.runId,nextScope)).toBeUndefined()
++ // The same mounted editor returns to empty customer selection; the original
++ // submitted scope and an old public snapshot still retain the old draft.
++ const next=driver(()=>mounted('service',()=>RelayServiceChoice({p:current,target})))
++ expect(next.text()).toContain('第1/4步')
++ expect(next.all().filter(e=>e.type==='input'&&e.props.type==='checkbox').every(e=>e.props.checked===false)).toBe(true)
++ expect(relayServiceDraftCommand(current,target,emptyRelaySceneDraft())).toBeNull()
++ expect(relayDraftScopeForTarget(p,target,'service').scope).toEqual(scope)
+  expect(p.relayDraftMemory!.read(p.view.runId,scope)).toEqual(draft)
+ },20000)
+ 
++it('retains the real aborted service draft until original retry saves its period, without clearing on ordinary clock saves',async()=>{
++ hooks.slots.clear()
++ const {p,target,controller,fault}=failed,memory=p.relayDraftMemory!,before=controller.exportSaved(),scope=relayDraftScopeForTarget(p,target,'service').scope!,customer=p.features.relay!.customers.find(c=>c.mode==='postpaid')!
++ const draft={...emptyRelaySceneDraft(),customerIds:[customer.id],supplierIds:['cedar-direct'],resources:['player-production'],startAt:'2025-01-28',maxUnits:'2800',maxSupplierCost:'100',supportMode:'guided' as const}
++ memory.write(p.view.runId,scope,draft)
++ const command=relayServiceDraftCommand(p,target,draft)!
++ expect((await controller.submit(controller.prepare(command.kind,command.payload))).status).toBe('unsaved')
++ expect(fault?.trace).toEqual({writeSucceeded:true,abortIssued:true});expect(controller.exportSaved()).toBe(before)
++ const candidate={...failed.props(),relayDraftMemory:memory}
++ expect(candidate.view.hasCandidate).toBe(true);expect(candidate.features.relay!.periods).toHaveLength(0)
++ expect(relayDraftScopeForTarget(candidate,target,'service').scope).toEqual(scope)
++ expect(memory.read(p.view.runId,scope)).toEqual(draft)
++ expect((await controller.retry()).status).toBe('saved')
++ const current={...failed.props(),relayDraftMemory:memory},newScope=relayDraftScopeForTarget(current,target,'service').scope!
++ expect(current.features.relay!.periods).toHaveLength(1);expect(newScope).not.toEqual(scope)
++ expect(memory.read(p.view.runId,newScope)).toBeUndefined();expect(memory.read(p.view.runId,scope)).toEqual(draft)
++ expect(relayDraftScopeForTarget(plannedBefore,planned.target,'service').scope).toEqual(relayDraftScopeForTarget(planned.p,planned.target,'service').scope)
++ expect(planned.p.view.revision).toBeGreaterThan(plannedBefore.view.revision)
++})
++
+ it('previews another original period without changing the confirmed service or its unfinished draft',()=>{
+  hooks.slots.clear()
+  const {p,target,controller}=planned,before=controller.exportSaved(),period=p.features.relay!.periods[0]!,chosen=vi.fn(),inspect=vi.fn(),draft={...emptyRelaySceneDraft(),startAt:'2025-02-03',maxUnits:'4567'}

@@ -1,0 +1,1 @@
+先将本轮实际saved80前段原文通过可见导入UI带入独立5378 DEV origin；显选同一客户/供应/资源/未来日期/预算/支持，真实保存原period安排，再待首次实际计量触发原head.put后abort。先核实际候选/旧钱日期AP，导出candidate，另一Chrome标签只读读取物理旧档；原writer原重试后第三独立标签读物理新档，与candidate逐字比较。保所有失败及来源，不用storage API读写或删除旧库；不做原生离页/兼容。

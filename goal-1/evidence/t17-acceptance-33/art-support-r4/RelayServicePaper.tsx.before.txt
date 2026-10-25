@@ -1,0 +1,146 @@
+import relayServiceKit from '../../assets/ui-redesign/cinematic/props/relay-service-kit-v1.png'
+import './relay-service-paper.css'
+
+export type RelayPaperSupportState='pending'|'planned'|'running'|'completed'|'stopped'
+type RelayPaperLabels={
+ heading:string
+ dateLabel?:string
+ line?:string
+ supportLabel?:string
+ responsibility?:string
+ paymentLabel?:string
+ actionHint?:string
+ historical?:boolean
+ support?:RelayPaperSupportState
+}
+export type RelayServicePaperState=RelayPaperLabels&(
+ |{phase:'preparation';state:'choice'|'planned'|'running'|'ready'}
+ |{phase:'permission';state:'unread'|'read-pending'|'approved'|'declined'}
+ |{phase:'commitment';state:'choice'|'agreed'|'funded'}
+ |{phase:'service';state:'planned'|'running'|'ended'|'stopped'}
+ |{phase:'audit';state:'unmetered'|'reported'|'planned'|'running'|'reviewed'|'corrected'}
+ |{phase:'result';state:'receivable'|'received'|'closed'|'stopped'}
+)
+export type RelayPaperPhase=RelayServicePaperState['phase']
+
+/** Decorative leaves only: no permission, meter reading, money or date is inferred here. */
+export function RelayServicePaper({art}:{art:RelayServicePaperState}){
+ const responsibility=Boolean(art.responsibility?.trim())
+ return <span className="relay-service-art" data-relay-phase={art.phase} data-relay-state={art.state} data-relay-history={art.historical?'true':undefined} aria-hidden="true">
+  <span className="relay-service-contact"/>
+  <img className="relay-service-kit" src={relayServiceKit} alt="" width={1536} height={1024} decoding="async"/>
+  <svg className="relay-service-layers" viewBox="0 0 1536 1024" fill="none" aria-hidden="true" focusable="false">
+   {art.phase==='preparation'?<g data-material={'preparation-'+art.state}>
+    <path className="relay-leaf-under" d="m851 479 557 157-68 232-557-157z"/>
+    {art.state==='running'?<>
+     <path className="relay-leaf" d="m901 430 263 59-70 238-263-59z"/>
+     <path className="relay-leaf-warm" d="m1164 489 266 101-70 238-266-101z"/>
+     <path className="relay-pencil" d="m950 500 126 29m-141 17 126 29m96-38 164 64"/>
+     <path className="relay-binding" d="m1164 489-70 238"/>
+    </>:<>
+     <path className="relay-leaf" d="m884 443 539 159-66 218-539-159z"/>
+     <path className={art.state==='choice'?'relay-dashed':'relay-rule'} d="m963 500 359 106-37 122-359-106z"/>
+     {art.state==='planned'?<path className="relay-reservation" d="m860 688 449 131-18 60-449-131z"/>:null}
+     {art.state==='ready'?<path className="relay-binding" d="m930 465-66 218m30-228-66 218"/>:null}
+    </>}
+   </g>:null}
+   {art.phase==='permission'?<g data-material={'permission-'+art.state}>
+    <path className="relay-leaf-under" d="m866 508 552 158-65 223-552-158z"/>
+    {art.state==='unread'?<g data-material="sealed-unread-reply">
+     <path className="relay-envelope" d="m888 481 539 159-62 212-539-159z"/>
+     <path className="relay-rule" d="m888 481 193 164 346-5m-601 53 203-57m275 216-112-153"/>
+     <path className="relay-neutral-seal" d="m1066 612 40 12-11 38-40-12z"/>
+    </g>:<>
+     <path className="relay-envelope" d="m888 535 539 159-46 157-539-159z"/>
+     <path className="relay-leaf" d="m968 434 410 122-69 234-410-122z"/>
+     <path className="relay-rule" d="m1026 501 277 82m-290-38 225 67"/>
+     {art.state==='read-pending'?<path className="relay-dashed" d="m973 683 252 75"/>:null}
+     {art.state==='approved'?<g data-material="read-scope-leaf"><path className="relay-kept-edge" d="m970 719 283 84-17 56-283-84z"/><path className="relay-double-rule" d="m1001 743 212 63m-216-48 212 63"/></g>:null}
+     {art.state==='declined'?<path className="relay-muted-fold" d="m968 434 144 42-91 107-101-25z"/>:null}
+    </>}
+   </g>:null}
+   {art.phase==='commitment'?<g data-material={'customer-commitment-'+art.state}>
+    <path className="relay-leaf-under" d="m819 482 607 175-64 225-607-175z"/>
+    <path className="relay-leaf" d="m847 450 282 79-65 222-282-79z"/>
+    <path className="relay-leaf-warm" d="m1129 529 301 105-65 222-301-105z"/>
+    <path className="relay-rule" d="m891 514 167 47m-180-5 167 47m133 2 177 62m-189-22 177 62"/>
+    {art.state==='choice'?<path className="relay-dashed" d="m866 665 454 134"/>:<path className="relay-binding" d="m1117 518-66 224"/>}
+    {art.state==='funded'?<g data-material="customer-funds-protection-band"><path className="relay-protection-band" d="m832 701 509 149-19 66-509-149 30-27z"/><path className="relay-rule" d="m867 736 431 127"/></g>:null}
+   </g>:null}
+   {art.phase==='service'?<g data-material={'service-'+art.state}>
+    <path className="relay-leaf-under" d="m846 479 582 167-66 226-582-167z"/>
+    {art.state==='planned'?<>
+     <path className="relay-leaf" d="m882 446 545 164-65 217-545-164z"/>
+     <path className="relay-dashed" d="m938 504 412 124-39 133-412-124z"/>
+     <path className="relay-reservation" d="m861 694 458 135-18 60-458-135z"/>
+    </>:art.state==='running'?<>
+     <path className="relay-leaf" d="m918 410 244 64-79 268-244-64z"/>
+     <path className="relay-leaf-warm" d="m1162 474 276 121-79 268-276-121z"/>
+     <path className="relay-binding" d="m1162 474-79 268"/>
+     <path className="relay-pencil" d="m958 482 132 35m-147 16 132 35m124-8 153 67m-169-15 153 67"/>
+    </>:art.state==='ended'?<>
+     <path className="relay-kept-edge" d="m868 468 550 163-62 213-550-163z"/>
+     <path className="relay-leaf" d="m884 442 550 163-62 213-550-163z"/>
+     <path className="relay-double-rule" d="m966 514 363 108m-371-81 363 108"/>
+     <path className="relay-clip" d="m978 729 15-50c8-25 39-15 31 10l-15 50"/>
+    </>:<>
+     <path className="relay-muted-fold" d="m880 493 544 160-61 209-544-160z"/>
+     <path className="relay-retained-tie" d="m858 678 548 159m-204-253-75 257"/>
+    </>}
+   </g>:null}
+   {art.phase==='audit'?<g data-material={'audit-'+art.state}>
+    <path className="relay-leaf-under" d="m825 497 608 168-62 223-608-168z"/>
+    <path className="relay-leaf" d="m846 458 276 78-69 235-276-78z"/>
+    {art.state==='unmetered'?<path className="relay-empty-frame" data-material="unmeasured-empty-leaf" d="m890 513 165 46-34 115-165-46z"/>:<>
+     <path className="relay-pencil" d="m891 516 163 46m-175-7 163 46m-175-6 163 46"/>
+     {art.state!=='reported'?<path className="relay-leaf-warm" d="m1122 536 306 100-69 235-306-100z"/>:null}
+     {art.state==='planned'?<path className="relay-dashed" d="m1170 597 193 63-36 122-193-63z"/>:null}
+     {art.state==='running'?<path className="relay-pencil" d="m1169 596 196 64m-209-23 139 46"/>:null}
+     {art.state==='reviewed'||art.state==='corrected'?<g data-material="actual-reviewed-comparison"><path className="relay-double-rule" d="m1169 596 196 64m-209-22 196 64m-209-22 196 64"/><path className="relay-rule" d="m1034 651 116 34m-71-41-16 57"/></g>:null}
+     {art.state==='corrected'?<g data-material="kept-correction-attachment"><path className="relay-kept-edge" d="m1019 758 303 88-19 64-303-88z"/><path className="relay-clip" d="m1060 788 10-36c7-24 38-15 31 9l-10 36"/></g>:null}
+    </>}
+   </g>:null}
+   {art.phase==='result'?<g data-material={'result-'+art.state}>
+    <path className="relay-leaf-under" d="m861 494 562 160-62 220-562-160z"/>
+    {art.state==='receivable'?<g data-material="open-receivable-ticket">
+     <path className="relay-leaf" d="m1043 416 351 111-100 319-351-111z"/>
+     <path className="relay-rule" d="m1070 489 231 73m-245-28 182 58"/>
+     <path className="relay-dashed" d="m963 728 325 103"/>
+     <path className="relay-muted-fold" d="m1288 831 106-304 29 79-74 238z"/>
+    </g>:art.state==='received'?<g data-material="actual-received-ticket-pair">
+     <path className="relay-kept-edge" d="m964 499 369 109-62 211-369-109z"/>
+     <path className="relay-leaf" d="m1014 450 369 109-62 211-369-109z"/>
+     <path className="relay-double-rule" d="m1059 515 243 72m-253-38 243 72"/>
+     <path className="relay-clip" d="m1076 732 15-50c8-25 39-15 31 10l-15 50"/>
+    </g>:art.state==='closed'?<g data-material="kept-period-record">
+     <path className="relay-kept-edge" d="m888 466 540 158-64 216-540-158z"/>
+     <path className="relay-leaf" d="m909 440 540 158-64 216-540-158z"/>
+     <path className="relay-retained-tie" d="m941 450-65 219m30-230-65 219"/>
+     <path className="relay-rule" d="m1037 535 307 90m-318-48 242 71"/>
+    </g>:<g data-material="neutral-stopped-record">
+     <path className="relay-muted-fold" d="m893 490 537 158-63 215-537-158z"/>
+     <path className="relay-retained-tie" d="m865 692 543 159m-216-251-75 257"/>
+     <path className="relay-leaf" d="m1287 727 123 36-40 133-123-36z"/>
+    </g>}
+   </g>:null}
+   {art.support?<g data-material="independent-support-leaf" data-support-state={art.support}>
+    <path className={'relay-support-leaf relay-support-'+art.support} d="m481 645 287 84-39 133-287-84z"/>
+    {art.support==='running'?<path className="relay-pencil" d="m524 696 181 53m-191-19 126 37"/>:art.support==='completed'?<path className="relay-double-rule" d="m524 696 181 53m-188-28 181 53"/>:null}
+   </g>:null}
+   {art.historical?<path data-material="original-history-corner" className="relay-history-corner" d="m1375 639 67 20-38 131-81-24 54-61z"/>:null}
+   {responsibility?<path data-material="actual-responsibility-fold" className="relay-responsibility-fold" d="m1284 740 101 31-45 146-31-34-45 11z"/>:null}
+  </svg>
+ </span>
+}
+
+/** Caller-authored public facts remain DOM text, including when the illustration is disabled. */
+export function RelayServicePaperNotes({art,id}:{art:RelayServicePaperState;id?:string}){
+ return <span id={id} className="relay-paper-notes">
+  {art.heading?<span className="relay-paper-heading">{art.heading}</span>:null}
+  {art.dateLabel?<span className="relay-paper-date">{art.dateLabel}</span>:null}
+  {art.line?<span className="relay-paper-line">{art.line}</span>:null}
+  {art.supportLabel?<span className="relay-paper-support-note" data-support-state={art.support}>{art.supportLabel}</span>:null}
+  {art.paymentLabel?<span className="relay-paper-payment-note">{art.paymentLabel}</span>:null}
+  {art.responsibility?.trim()?<span className="relay-paper-responsibility">{art.responsibility}</span>:null}
+ </span>
+}

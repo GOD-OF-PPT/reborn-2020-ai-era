@@ -6,7 +6,7 @@ import {GameController} from '../application/game-controller.ts'
 import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
 import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
 import {abortAfterHeadWrite} from '../testing/abort-after-write.ts'
-import type {PlayFeatures} from './game-types.ts'
+import type {PlayFeatures,SceneTarget} from './game-types.ts'
 import {openingFocusFor} from './player-thread.ts'
 import {seasonFocusPreferenceKey,type SeasonFocusPreferenceStorage} from './season-focus-preference.ts'
 import type {RelaySceneTarget} from './relay-scene-target.ts'
@@ -89,8 +89,8 @@ function driver(f:Fixture){
  const scene=()=>component<ComponentProps<typeof NarrativeScene>>(NarrativeScene)
  const book=()=>elements(tree).find(e=>e.type===Dialog&&e.props.className==='scene-workspace workspace-relay')
  const click=(label:string)=>{const button=elements(tree).find(e=>e.type==='button'&&text(e).includes(label));if(!button)throw Error('PUBLIC_APP_BUTTON_REQUIRED:'+label);fire(button,'onClick');render()}
- const openBook=(target=f.target)=>{
-  const request={openRecord:true,accountId:target.accountId,relayTarget:target}
+ const openBook=(target=f.target,details:Pick<SceneTarget,'relayDraftSlot'|'recordId'>={})=>{
+  const request={...details,openRecord:true,accountId:target.accountId,relayTarget:target}
   if(elements(tree).some(e=>e.type===CinematicRoom))component<ComponentProps<typeof CinematicRoom>>(CinematicRoom).onNavigate('relay',request)
   else scene().onOpen('relay',request)
   render()
@@ -106,6 +106,23 @@ function driver(f:Fixture){
  }
 }
 const readFocus=(f:Fixture)=>JSON.parse(f.preferences.get(seasonFocusPreferenceKey(f.view.runId))!).focus as {relayTarget:RelaySceneTarget}
+
+it('preserves another draft slot or record on the same business during an actual delayed commit',async()=>{
+ for(const change of ['slot','record'] as const){
+  const f=await fixture('relay-save-same-business-'+change)
+  try{
+   const ui=driver(f);ui.openBook(f.target,{relayDraftSlot:'service',recordId:'original-service-page'});await ui.start();ui.closeConfirmation()
+   ui.openBook(f.target,{relayDraftSlot:change==='slot'?'capital':'service',recordId:change==='record'?'another-visible-record':'original-service-page'})
+   expect(ui.book()).toBeDefined()
+   expect((await f.finish()).status).toBe('saved');ui.render()
+   expect(ui.book(),'a distinct same-business draft must keep its own reading context').toBeDefined()
+   expect(ui.scene().relayTarget).toEqual(f.target);expect(ui.scene().receipt).toBeNull()
+   expect(f.controller.snapshot.view!.revision).toBe(f.view.revision+1);expect(f.submit).toHaveBeenCalledTimes(1)
+   const period=(f.controller.snapshot.view!.features as unknown as PlayFeatures).relay!.periods[0]!
+   expect(readFocus(f).relayTarget).toEqual({...f.businessTarget,kind:'period',periodId:period.id})
+  }finally{await f.close()}
+ }
+},20000)
 
 it('maps an actual same-scope saved service to its new public period and closes only that original book',async()=>{
  const f=await fixture('relay-save-same-scope')

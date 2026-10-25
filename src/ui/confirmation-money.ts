@@ -14,6 +14,7 @@ export function confirmationMoney(command:CommandEnvelope,preview:CommandPreview
  if(['OpenEcosystemService','OpenCourseStudio','OpenRelayStation'].includes(command.kind))return {label:'转入新企业的自有资本（不计收入或费用）',amountFen:amount('capitalFen')}
  if(command.kind==='SignEquityAgreement'||command.kind==='FollowEquityRound')return {label:'投资本金支付（不计经营费用）',amountFen:preview.upfrontCostFen}
  if(command.kind==='PayObligation')return {label:'偿还原有义务（不再确认一遍费用）',amountFen:amount('amountFen')}
+ if(command.kind==='TopUpRelaySupplier')return {label:'自有资金转为供应资产（未消费不是成本）',amountFen:amount('amountFen')}
  if(command.kind==='AdvanceTime'||command.kind==='AdvanceEpilogueTime')return {label:'推进本身费用（途中原费用逐项列在下方）',amountFen:preview.upfrontCostFen}
  if(command.kind==='AcceptEquityExit')return {label:'本次即时现金支出（转让费用从价款扣除）',amountFen:preview.upfrontCostFen}
  if(command.kind==='CancelEcoContract')return {label:'本次支持赔偿义务（现金不足则保留应付）',amountFen:preview.upfrontCostFen}

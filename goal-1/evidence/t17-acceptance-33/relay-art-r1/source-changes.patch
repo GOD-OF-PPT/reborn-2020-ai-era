@@ -1,0 +1,369 @@
+--- a/src/ui/OpeningObject.tsx
++++ b/src/ui/OpeningObject.tsx
+@@ -10,6 +10,7 @@
+ import {DayContinuityPaper,type DayContinuityArt} from './DayContinuityPaper.tsx'
+ import {CoursePreparationPaper,type CoursePreparationPaperState} from './CoursePreparationPaper.tsx'
+ import {CourseTeachingPaper,type CourseTeachingPaperState} from './CourseTeachingPaper.tsx'
++import {RelayServicePaper,RelayServicePaperNotes,type RelayServicePaperState} from './RelayServicePaper.tsx'
+ 
+ export type {FirstOrderArtState} from './FirstOrderPaper.tsx'
+ export type OpeningObjectProtection='readonly'|'unsaved'|'unavailable'
+@@ -38,17 +39,18 @@
+  videoPaper?:VideoPaperState
+  coursePaper?:CoursePreparationPaperState
+  teachingPaper?:CourseTeachingPaperState
++ relayPaper?:RelayServicePaperState
+ }
+ 
+ /** The parent supplies committed facts and owns the action; the object adds no business state. */
+-export function OpeningObject({kind,title,displayTitle,detail,stageLabel,onActivate,actionLabel,disabled,textOnly=false,appearance,teaching,firstOrder,protection,entryPaper,dayPaper,videoPaper,coursePaper,teachingPaper}:OpeningObjectProps){
+- const id=useId(),titleId=id+'-title',detailId=id+'-detail',stageId=id+'-stage',actionId=id+'-action',dateId=id+'-date',receiptId=id+'-receipt',protectionId=id+'-protection'
+- const entry=firstOrder===undefined?entryPaper:undefined,day=firstOrder===undefined&&entry===undefined?dayPaper:undefined,video=firstOrder===undefined&&entry===undefined&&day===undefined?videoPaper:undefined,course=firstOrder===undefined&&entry===undefined&&day===undefined&&video===undefined?coursePaper:undefined,classPaper=firstOrder===undefined&&entry===undefined&&day===undefined&&video===undefined&&course===undefined?teachingPaper:undefined,hasPaper=firstOrder!==undefined||entry!==undefined||day!==undefined||video!==undefined||course!==undefined||classPaper!==undefined
++export function OpeningObject({kind,title,displayTitle,detail,stageLabel,onActivate,actionLabel,disabled,textOnly=false,appearance,teaching,firstOrder,protection,entryPaper,dayPaper,videoPaper,coursePaper,teachingPaper,relayPaper}:OpeningObjectProps){
++ const id=useId(),titleId=id+'-title',detailId=id+'-detail',stageId=id+'-stage',actionId=id+'-action',dateId=id+'-date',receiptId=id+'-receipt',protectionId=id+'-protection',relayNotesId=id+'-relay-notes'
++ const entry=firstOrder===undefined?entryPaper:undefined,day=firstOrder===undefined&&entry===undefined?dayPaper:undefined,video=firstOrder===undefined&&entry===undefined&&day===undefined?videoPaper:undefined,course=firstOrder===undefined&&entry===undefined&&day===undefined&&video===undefined?coursePaper:undefined,classPaper=firstOrder===undefined&&entry===undefined&&day===undefined&&video===undefined&&course===undefined?teachingPaper:undefined,relay=firstOrder===undefined&&entry===undefined&&day===undefined&&video===undefined&&course===undefined&&classPaper===undefined?relayPaper:undefined,hasPaper=firstOrder!==undefined||entry!==undefined||day!==undefined||video!==undefined||course!==undefined||classPaper!==undefined||relay!==undefined
+  const protectionLabel=protection==='readonly'?'只读 · 原记录保留':protection==='unsaved'?'尚未保存 · 仍是上次的物件':protection==='unavailable'?'暂不可用 · 先核对原因':null
+- return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-first-order-phase={firstOrder?.phase} data-entry-paper={entry} data-day-kind={day?.kind} data-day-state={day?.state} data-video-phase={video?.phase} data-course-phase={course?.phase} data-teaching-phase={classPaper?.phase} data-teaching-status={classPaper?.status} data-protection={hasPaper?protection:undefined} data-text-only={textOnly?'true':'false'} disabled={disabled} onClick={onActivate} aria-label={displayTitle===undefined?undefined:title+' '+actionLabel} aria-labelledby={displayTitle===undefined?titleId+' '+actionId:undefined} aria-describedby={stageId+' '+detailId+(firstOrder?.dateLabel?' '+dateId:'')+(firstOrder?.phase==='paid'?' '+receiptId:'')+(hasPaper&&protectionLabel?' '+protectionId:'')}>
++ return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-first-order-phase={firstOrder?.phase} data-entry-paper={entry} data-day-kind={day?.kind} data-day-state={day?.state} data-video-phase={video?.phase} data-course-phase={course?.phase} data-teaching-phase={classPaper?.phase} data-teaching-status={classPaper?.status} data-relay-phase={relay?.phase} data-relay-state={relay?.state} data-protection={hasPaper?protection:undefined} data-text-only={textOnly?'true':'false'} disabled={disabled} onClick={onActivate} aria-label={displayTitle===undefined?undefined:title+' '+actionLabel} aria-labelledby={displayTitle===undefined?titleId+' '+actionId:undefined} aria-describedby={stageId+' '+detailId+(firstOrder?.dateLabel?' '+dateId:'')+(firstOrder?.phase==='paid'?' '+receiptId:'')+(relay?' '+relayNotesId:'')+(hasPaper&&protectionLabel?' '+protectionId:'')}>
+   {!textOnly?<span className="opening-object-art" aria-hidden="true">
+-   {video?<VideoContinuityPaper art={video}/>:day?<DayContinuityPaper art={day}/>:entry?<OpeningEntryPaper kind={entry}/>:course?<CoursePreparationPaper art={course}/>:classPaper?<CourseTeachingPaper art={classPaper}/>:<img src={appearance==='relay'?relayServiceKit:appearance==='course'?coursePreparationKit:appearance==='video'?videoMakingKit:firstAttempt} alt="" width={appearance==='course'||appearance==='relay'?1536:appearance==='video'?1254:1280} height={appearance==='course'||appearance==='relay'?1024:appearance==='video'?1254:1280} decoding="async"/>}
+-   {firstOrder?<><span className="first-order-contact"/><FirstOrderPaper phase={firstOrder.phase}/></>:video||course||classPaper?null:day?<span className="day-paper-contact"/>:entry?<span className="entry-paper-contact"/>:<span className="opening-object-mark">
++   {video?<VideoContinuityPaper art={video}/>:day?<DayContinuityPaper art={day}/>:entry?<OpeningEntryPaper kind={entry}/>:course?<CoursePreparationPaper art={course}/>:classPaper?<CourseTeachingPaper art={classPaper}/>:relay?<RelayServicePaper art={relay}/>:<img src={appearance==='relay'?relayServiceKit:appearance==='course'?coursePreparationKit:appearance==='video'?videoMakingKit:firstAttempt} alt="" width={appearance==='course'||appearance==='relay'?1536:appearance==='video'?1254:1280} height={appearance==='course'||appearance==='relay'?1024:appearance==='video'?1254:1280} decoding="async"/>}
++   {firstOrder?<><span className="first-order-contact"/><FirstOrderPaper phase={firstOrder.phase}/></>:video||course||classPaper||relay?null:day?<span className="day-paper-contact"/>:entry?<span className="entry-paper-contact"/>:<span className="opening-object-mark">
+     {kind==='waiting'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><circle cx="16" cy="16" r="12"/><path d="M16 8v9l6 3"/></svg>:kind==='calendar'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M8 5v6m16-6v6M5 12h22M6 8h20v20H6zM11 17h3m5 0h3m-11 6h3m5 0h3"/></svg>:kind==='work'?appearance==='relay'?<svg viewBox="0 0 32 32" fill="none" focusable="false"><path d="M6 7h20v13H6zM11 20v5h10v-5M10 12v4m4-4v4m4-4v4m4-4v4M16 25v4"/></svg>:<svg viewBox="0 0 32 32" fill="none" focusable="false"><rect x="5" y="7" width="22" height="18"/><path d="m13 12 8 4-8 4zM9 7v18m14-18v18"/></svg>:null}
+    </span>}
+   </span>:null}
+@@ -59,6 +61,7 @@
+    {firstOrder?.phase==='paid'?<span id={receiptId} className="first-order-receipt"><span>收到客户付款</span><strong>{moneyText(firstOrder.receipt.receivedFen)}</strong><time dateTime={firstOrder.receipt.receivedAt}>{firstOrder.receipt.receivedAt}</time></span>:null}
+    {hasPaper&&protectionLabel?<span id={protectionId} className={entry?'entry-paper-protection':'first-order-protection'}><span aria-hidden="true">{protection==='readonly'?'▣':'┄'}</span>{protectionLabel}</span>:null}
+    {teaching?<span className="course-teaching-slips" aria-label="本班实际教学与责任"><span className="course-stage-tabs">{teaching.stages.map((state,index)=><span key={index} className="course-stage-tab" data-state={state}>第{index+1}段 · {{pending:'待安排',planned:'已安排',running:'进行中',completed:'已交付',stopped:'已停止'}[state]}</span>)}</span><span className="course-money-folds">{teaching.protectedFen>0?<span className="course-protected-band">保护中 {moneyText(teaching.protectedFen)}</span>:null}{teaching.needsHelp>0?<span className="course-responsibility-fold">{teaching.needsHelp}人待帮助</span>:null}{teaching.refundDueFen>0?<span className="course-responsibility-fold">退款待付 {moneyText(teaching.refundDueFen)}</span>:null}{teaching.supportUnmet?<span className="course-support-fold">原支持待履行</span>:null}{teaching.closedAt?<span className="course-closed-slip">本班结清 {teaching.closedAt}</span>:null}</span></span>:null}
++   {relay?<RelayServicePaperNotes art={relay} id={relayNotesId}/>:null}
+    <span id={detailId} className="opening-object-detail">{detail}</span>
+    <span id={actionId} className="opening-object-action">{actionLabel}<span aria-hidden="true">{disabled?'—':'↗'}</span></span>
+   </span>
+--- a/src/ui/RelayServicePaper.tsx
++++ b/src/ui/RelayServicePaper.tsx
+@@ -0,0 +1,145 @@
++import relayServiceKit from '../../assets/ui-redesign/cinematic/props/relay-service-kit-v1.png'
++import './relay-service-paper.css'
++
++export type RelayPaperSupportState='pending'|'planned'|'running'|'completed'|'stopped'
++type RelayPaperLabels={
++ heading:string
++ dateLabel?:string
++ line?:string
++ supportLabel?:string
++ responsibility?:string
++ paymentLabel?:string
++ historical?:boolean
++ support?:RelayPaperSupportState
++}
++export type RelayServicePaperState=RelayPaperLabels&(
++ |{phase:'preparation';state:'choice'|'planned'|'running'|'ready'}
++ |{phase:'permission';state:'unread'|'read-pending'|'approved'|'declined'}
++ |{phase:'commitment';state:'choice'|'agreed'|'funded'}
++ |{phase:'service';state:'planned'|'running'|'ended'|'stopped'}
++ |{phase:'audit';state:'unmetered'|'reported'|'planned'|'running'|'reviewed'|'corrected'}
++ |{phase:'result';state:'receivable'|'received'|'closed'|'stopped'}
++)
++export type RelayPaperPhase=RelayServicePaperState['phase']
++
++/** Decorative leaves only: no permission, meter reading, money or date is inferred here. */
++export function RelayServicePaper({art}:{art:RelayServicePaperState}){
++ const responsibility=Boolean(art.responsibility?.trim())
++ return <span className="relay-service-art" data-relay-phase={art.phase} data-relay-state={art.state} data-relay-history={art.historical?'true':undefined} aria-hidden="true">
++  <span className="relay-service-contact"/>
++  <img className="relay-service-kit" src={relayServiceKit} alt="" width={1536} height={1024} decoding="async"/>
++  <svg className="relay-service-layers" viewBox="0 0 1536 1024" fill="none" aria-hidden="true" focusable="false">
++   {art.phase==='preparation'?<g data-material={'preparation-'+art.state}>
++    <path className="relay-leaf-under" d="m851 479 557 157-68 232-557-157z"/>
++    {art.state==='running'?<>
++     <path className="relay-leaf" d="m901 430 263 59-70 238-263-59z"/>
++     <path className="relay-leaf-warm" d="m1164 489 266 101-70 238-266-101z"/>
++     <path className="relay-pencil" d="m950 500 126 29m-141 17 126 29m96-38 164 64"/>
++     <path className="relay-binding" d="m1164 489-70 238"/>
++    </>:<>
++     <path className="relay-leaf" d="m884 443 539 159-66 218-539-159z"/>
++     <path className={art.state==='choice'?'relay-dashed':'relay-rule'} d="m963 500 359 106-37 122-359-106z"/>
++     {art.state==='planned'?<path className="relay-reservation" d="m860 688 449 131-18 60-449-131z"/>:null}
++     {art.state==='ready'?<path className="relay-binding" d="m930 465-66 218m30-228-66 218"/>:null}
++    </>}
++   </g>:null}
++   {art.phase==='permission'?<g data-material={'permission-'+art.state}>
++    <path className="relay-leaf-under" d="m866 508 552 158-65 223-552-158z"/>
++    {art.state==='unread'?<g data-material="sealed-unread-reply">
++     <path className="relay-envelope" d="m888 481 539 159-62 212-539-159z"/>
++     <path className="relay-rule" d="m888 481 193 164 346-5m-601 53 203-57m275 216-112-153"/>
++     <path className="relay-neutral-seal" d="m1066 612 40 12-11 38-40-12z"/>
++    </g>:<>
++     <path className="relay-envelope" d="m888 535 539 159-46 157-539-159z"/>
++     <path className="relay-leaf" d="m968 434 410 122-69 234-410-122z"/>
++     <path className="relay-rule" d="m1026 501 277 82m-290-38 225 67"/>
++     {art.state==='read-pending'?<path className="relay-dashed" d="m973 683 252 75"/>:null}
++     {art.state==='approved'?<g data-material="read-scope-leaf"><path className="relay-kept-edge" d="m970 719 283 84-17 56-283-84z"/><path className="relay-double-rule" d="m1001 743 212 63m-216-48 212 63"/></g>:null}
++     {art.state==='declined'?<path className="relay-muted-fold" d="m968 434 144 42-91 107-101-25z"/>:null}
++    </>}
++   </g>:null}
++   {art.phase==='commitment'?<g data-material={'customer-commitment-'+art.state}>
++    <path className="relay-leaf-under" d="m819 482 607 175-64 225-607-175z"/>
++    <path className="relay-leaf" d="m847 450 282 79-65 222-282-79z"/>
++    <path className="relay-leaf-warm" d="m1129 529 301 105-65 222-301-105z"/>
++    <path className="relay-rule" d="m891 514 167 47m-180-5 167 47m133 2 177 62m-189-22 177 62"/>
++    {art.state==='choice'?<path className="relay-dashed" d="m866 665 454 134"/>:<path className="relay-binding" d="m1117 518-66 224"/>}
++    {art.state==='funded'?<g data-material="customer-funds-protection-band"><path className="relay-protection-band" d="m832 701 509 149-19 66-509-149 30-27z"/><path className="relay-rule" d="m867 736 431 127"/></g>:null}
++   </g>:null}
++   {art.phase==='service'?<g data-material={'service-'+art.state}>
++    <path className="relay-leaf-under" d="m846 479 582 167-66 226-582-167z"/>
++    {art.state==='planned'?<>
++     <path className="relay-leaf" d="m882 446 545 164-65 217-545-164z"/>
++     <path className="relay-dashed" d="m938 504 412 124-39 133-412-124z"/>
++     <path className="relay-reservation" d="m861 694 458 135-18 60-458-135z"/>
++    </>:art.state==='running'?<>
++     <path className="relay-leaf" d="m918 410 244 64-79 268-244-64z"/>
++     <path className="relay-leaf-warm" d="m1162 474 276 121-79 268-276-121z"/>
++     <path className="relay-binding" d="m1162 474-79 268"/>
++     <path className="relay-pencil" d="m958 482 132 35m-147 16 132 35m124-8 153 67m-169-15 153 67"/>
++    </>:art.state==='ended'?<>
++     <path className="relay-kept-edge" d="m868 468 550 163-62 213-550-163z"/>
++     <path className="relay-leaf" d="m884 442 550 163-62 213-550-163z"/>
++     <path className="relay-double-rule" d="m966 514 363 108m-371-81 363 108"/>
++     <path className="relay-clip" d="m978 729 15-50c8-25 39-15 31 10l-15 50"/>
++    </>:<>
++     <path className="relay-muted-fold" d="m880 493 544 160-61 209-544-160z"/>
++     <path className="relay-retained-tie" d="m858 678 548 159m-204-253-75 257"/>
++    </>}
++   </g>:null}
++   {art.phase==='audit'?<g data-material={'audit-'+art.state}>
++    <path className="relay-leaf-under" d="m825 497 608 168-62 223-608-168z"/>
++    <path className="relay-leaf" d="m846 458 276 78-69 235-276-78z"/>
++    {art.state==='unmetered'?<path className="relay-empty-frame" data-material="unmeasured-empty-leaf" d="m890 513 165 46-34 115-165-46z"/>:<>
++     <path className="relay-pencil" d="m891 516 163 46m-175-7 163 46m-175-6 163 46"/>
++     {art.state!=='reported'?<path className="relay-leaf-warm" d="m1122 536 306 100-69 235-306-100z"/>:null}
++     {art.state==='planned'?<path className="relay-dashed" d="m1170 597 193 63-36 122-193-63z"/>:null}
++     {art.state==='running'?<path className="relay-pencil" d="m1169 596 196 64m-209-23 139 46"/>:null}
++     {art.state==='reviewed'||art.state==='corrected'?<g data-material="actual-reviewed-comparison"><path className="relay-double-rule" d="m1169 596 196 64m-209-22 196 64m-209-22 196 64"/><path className="relay-rule" d="m1034 651 116 34m-71-41-16 57"/></g>:null}
++     {art.state==='corrected'?<g data-material="kept-correction-attachment"><path className="relay-kept-edge" d="m1019 758 303 88-19 64-303-88z"/><path className="relay-clip" d="m1060 788 10-36c7-24 38-15 31 9l-10 36"/></g>:null}
++    </>}
++   </g>:null}
++   {art.phase==='result'?<g data-material={'result-'+art.state}>
++    <path className="relay-leaf-under" d="m861 494 562 160-62 220-562-160z"/>
++    {art.state==='receivable'?<g data-material="open-receivable-ticket">
++     <path className="relay-leaf" d="m1043 416 351 111-100 319-351-111z"/>
++     <path className="relay-rule" d="m1070 489 231 73m-245-28 182 58"/>
++     <path className="relay-dashed" d="m963 728 325 103"/>
++     <path className="relay-muted-fold" d="m1288 831 106-304 29 79-74 238z"/>
++    </g>:art.state==='received'?<g data-material="actual-received-ticket-pair">
++     <path className="relay-kept-edge" d="m964 499 369 109-62 211-369-109z"/>
++     <path className="relay-leaf" d="m1014 450 369 109-62 211-369-109z"/>
++     <path className="relay-double-rule" d="m1059 515 243 72m-253-38 243 72"/>
++     <path className="relay-clip" d="m1076 732 15-50c8-25 39-15 31 10l-15 50"/>
++    </g>:art.state==='closed'?<g data-material="kept-period-record">
++     <path className="relay-kept-edge" d="m888 466 540 158-64 216-540-158z"/>
++     <path className="relay-leaf" d="m909 440 540 158-64 216-540-158z"/>
++     <path className="relay-retained-tie" d="m941 450-65 219m30-230-65 219"/>
++     <path className="relay-rule" d="m1037 535 307 90m-318-48 242 71"/>
++    </g>:<g data-material="neutral-stopped-record">
++     <path className="relay-muted-fold" d="m893 490 537 158-63 215-537-158z"/>
++     <path className="relay-retained-tie" d="m865 692 543 159m-216-251-75 257"/>
++     <path className="relay-leaf" d="m1287 727 123 36-40 133-123-36z"/>
++    </g>}
++   </g>:null}
++   {art.support?<g data-material="independent-support-leaf" data-support-state={art.support}>
++    <path className={'relay-support-leaf relay-support-'+art.support} d="m481 645 287 84-39 133-287-84z"/>
++    {art.support==='running'?<path className="relay-pencil" d="m524 696 181 53m-191-19 126 37"/>:art.support==='completed'?<path className="relay-double-rule" d="m524 696 181 53m-188-28 181 53"/>:null}
++   </g>:null}
++   {art.historical?<path data-material="original-history-corner" className="relay-history-corner" d="m1375 639 67 20-38 131-81-24 54-61z"/>:null}
++   {responsibility?<path data-material="actual-responsibility-fold" className="relay-responsibility-fold" d="m1284 740 101 31-45 146-31-34-45 11z"/>:null}
++  </svg>
++ </span>
++}
++
++/** Caller-authored public facts remain DOM text, including when the illustration is disabled. */
++export function RelayServicePaperNotes({art,id}:{art:RelayServicePaperState;id?:string}){
++ return <span id={id} className="relay-paper-notes">
++  {art.heading?<span className="relay-paper-heading">{art.heading}</span>:null}
++  {art.dateLabel?<span className="relay-paper-date">{art.dateLabel}</span>:null}
++  {art.line?<span className="relay-paper-line">{art.line}</span>:null}
++  {art.supportLabel?<span className="relay-paper-support-note" data-support-state={art.support}>{art.supportLabel}</span>:null}
++  {art.paymentLabel?<span className="relay-paper-payment-note">{art.paymentLabel}</span>:null}
++  {art.responsibility?.trim()?<span className="relay-paper-responsibility">{art.responsibility}</span>:null}
++ </span>
++}
+--- a/src/ui/relay-service-paper.css
++++ b/src/ui/relay-service-paper.css
+@@ -0,0 +1,63 @@
++/* The original passive kit stays intact. Native leaves carry only caller-supplied public state. */
++.relay-service-art[data-relay-phase]{position:relative;isolation:isolate;display:block;width:100%;height:160px;pointer-events:none}
++.relay-service-art[data-relay-phase] .relay-service-kit,
++.relay-service-art[data-relay-phase] .relay-service-layers{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:none;pointer-events:none}
++.relay-service-art[data-relay-phase] .relay-service-kit{z-index:1;filter:none}
++.relay-service-art[data-relay-phase] .relay-service-layers{z-index:2;filter:drop-shadow(1px 2px 1px #342c2155)}
++.relay-service-art[data-relay-phase] .relay-service-contact{position:absolute;left:13%;right:7%;bottom:9%;height:9%;z-index:0;border-radius:50%;background:radial-gradient(ellipse,#15211bc7,transparent 72%)}
++.relay-service-art .relay-leaf{fill:#ecdfbf;stroke:#ad9974;stroke-width:4}
++.relay-service-art .relay-leaf-warm{fill:#dfcda9;stroke:#a58e66;stroke-width:4}
++.relay-service-art .relay-leaf-under{fill:#c3b08b;stroke:#928063;stroke-width:4}
++.relay-service-art .relay-envelope{fill:#dbc6a0;stroke:#a18a63;stroke-width:4}
++.relay-service-art .relay-rule{stroke:#9b8f70;stroke-width:5;stroke-linecap:round}
++.relay-service-art .relay-pencil{stroke:#78836a;stroke-width:5;stroke-linecap:round}
++.relay-service-art .relay-double-rule{stroke:#7d8268;stroke-width:5;stroke-linecap:round}
++.relay-service-art .relay-binding{stroke:#827658;stroke-width:9;stroke-linecap:round}
++.relay-service-art .relay-dashed{stroke:#9c8c67;stroke-width:5;stroke-dasharray:13 11}
++.relay-service-art .relay-reservation{fill:#decead;stroke:#9c8c67;stroke-width:4;stroke-dasharray:13 11}
++.relay-service-art .relay-kept-edge{fill:#d4c3a0;stroke:#a18e66;stroke-width:4}
++.relay-service-art .relay-muted-fold{fill:#bcb39a;stroke:#92866c;stroke-width:4}
++.relay-service-art .relay-neutral-seal{fill:#a58b62;stroke:#806e51;stroke-width:5}
++.relay-service-art .relay-protection-band{fill:#c6b58d;stroke:#96815c;stroke-width:4}
++.relay-service-art .relay-retained-tie{stroke:#80775e;stroke-width:8;stroke-linecap:round}
++.relay-service-art .relay-clip{stroke:#9a7d4a;stroke-width:9;stroke-linecap:round}
++.relay-service-art .relay-empty-frame{stroke:#b3a484;stroke-width:4;stroke-dasharray:4 12}
++.relay-service-art .relay-support-leaf{fill:#e5d8b9;stroke:#a6936c;stroke-width:4}
++.relay-service-art .relay-support-pending{stroke-dasharray:4 12}
++.relay-service-art .relay-support-planned{stroke-dasharray:13 11}
++.relay-service-art .relay-support-running{fill:#d2cfac;stroke:#8d9274}
++.relay-service-art .relay-support-completed{stroke:#7d8268;stroke-width:6}
++.relay-service-art .relay-support-stopped{fill:#bfb69d;stroke:#93866b}
++.relay-service-art .relay-history-corner{fill:#c1b496;stroke:#9d8d6a;stroke-width:4}
++.relay-service-art .relay-responsibility-fold{fill:#b78368;stroke:#8e5542;stroke-width:5}
++
++/* Explicit complete palette beats generic button states without changing another route. */
++.opening-object[data-relay-phase][data-relay-state],
++.opening-object[data-relay-phase][data-relay-state]:is(:hover,:focus-visible,:active,:disabled){background:transparent;color:#eee3c8;box-shadow:none;transform:none;transition:none;opacity:1}
++.opening-object[data-relay-phase][data-relay-state]>.opening-object-art{height:160px;min-height:160px;width:100%;max-width:100%;aspect-ratio:auto;align-self:end;filter:none;transform:none}
++.opening-object[data-relay-phase][data-relay-state]>.opening-object-copy{gap:6px;margin-top:0;transform:none;border-left:2px solid #b8a475;border-top:1px solid #b8a47588;background:linear-gradient(90deg,#20352de8,#142c2b9c);color:#e6dcc2;box-shadow:none}
++.opening-object[data-relay-phase][data-relay-state] .opening-object-stage{color:#d2be90}
++.opening-object[data-relay-phase][data-relay-state] .opening-object-title{color:#f0e2bf}
++.opening-object[data-relay-phase][data-relay-state] .opening-object-detail{color:#d0d0b7}
++.opening-object[data-relay-phase][data-relay-state] :is(.opening-object-title,.opening-object-detail):empty{display:none}
++.opening-object[data-relay-phase][data-relay-state] .opening-object-action{color:#e3c58c;border-top-color:#b8a47577}
++.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes{display:flex;flex-direction:column;align-self:stretch;gap:4px;color:#ded6b9}
++.opening-object[data-relay-phase][data-relay-state] .relay-paper-heading{color:#ede0bc}
++.opening-object[data-relay-phase][data-relay-state] .relay-paper-date{color:#d9caa5;font-variant-numeric:tabular-nums}
++.opening-object[data-relay-phase][data-relay-state] :is(.relay-paper-line,.relay-paper-support-note){color:#c8cdb3}
++.opening-object[data-relay-phase][data-relay-state] .relay-paper-payment-note{color:#ead5a5;border-left:2px double #b8a475;padding-left:8px}
++.opening-object[data-relay-phase][data-relay-state] .relay-paper-responsibility{color:#f0b69c;border-left:3px solid #b4775b;padding-left:8px}
++.opening-object[data-relay-phase][data-relay-state] .first-order-protection{display:flex;align-items:baseline;gap:7px;align-self:stretch;padding:5px 0;border-top:1px dashed #a9b494;color:#d6dcc3}
++.opening-object[data-relay-phase][data-relay-state]:is(:hover,:focus-visible):not(:disabled)>.opening-object-copy{border-color:#ead099;background:linear-gradient(90deg,#294136eb,#18322fba)}
++.opening-object[data-relay-phase][data-relay-state]:is(:hover,:focus-visible):not(:disabled) .opening-object-action{color:#ffe0a0;border-top-color:#e2c68d}
++.opening-object[data-relay-phase][data-relay-state]:focus-visible{outline:3px solid #f1d397;outline-offset:6px}
++.opening-object[data-relay-phase][data-relay-state]:active:not(:disabled)>.opening-object-copy{border-color:#f2d89f;background:linear-gradient(90deg,#30463aeb,#1d3730cc)}
++.opening-object[data-relay-phase][data-relay-state]:disabled>.opening-object-copy{border-left-style:dashed;background:linear-gradient(90deg,#26372fe8,#1b302b9c)}
++.opening-object[data-relay-phase][data-relay-state]:disabled :is(.opening-object-stage,.opening-object-action){color:#bbc6a8}
++.opening-object[data-relay-phase][data-relay-state][data-protection=readonly]>.opening-object-copy{border-left:3px double #a9b494}
++.opening-object[data-relay-phase][data-relay-state][data-protection=unsaved]>.opening-object-copy{border-top-style:dashed}
++.opening-object[data-relay-phase][data-relay-state][data-protection=unavailable] .opening-object-action{border-top-style:dashed}
++.opening-object[data-relay-phase][data-relay-state][data-text-only=true],
++.text-mode .opening-object[data-relay-phase][data-relay-state]{grid-template-rows:auto;align-content:start;gap:0}
++.opening-object[data-relay-phase][data-relay-state][data-text-only=true]>.opening-object-copy,
++.text-mode .opening-object[data-relay-phase][data-relay-state]>.opening-object-copy{margin:0;transform:none;box-shadow:none}
+--- a/src/ui/RelayServicePaper.test.tsx
++++ b/src/ui/RelayServicePaper.test.tsx
+@@ -0,0 +1,109 @@
++import {expect,it,vi} from 'vitest'
++import {renderToStaticMarkup} from 'react-dom/server'
++import {RelayServicePaper,type RelayServicePaperState} from './RelayServicePaper.tsx'
++import {OpeningObject,type OpeningObjectProps} from './OpeningObject.tsx'
++
++vi.mock('react',async original=>({...await original<typeof import('react')>(),useId:()=> 'relay-paper'}))
++
++// Presentation inputs exercise no campaign, permission decision, meter or payment.
++const render=(art:RelayServicePaperState)=>renderToStaticMarkup(<RelayServicePaper art={art}/>)
++const shapes=(html:string)=>(html.match(/<path\b[^>]*>/g)??[]).map(path=>path.replace(/ class="[^"]*"/g,'')).join('')
++const props=(relayPaper:RelayServicePaperState,extra:Partial<OpeningObjectProps>={}):OpeningObjectProps=>({
++ kind:'work',appearance:'relay',title:'这座中转站的同一服务账期',displayTitle:'',stageLabel:'服务已安排',
++ detail:'原服务尚未开工，未来支持仍按原安排保留。',actionLabel:'等这期服务开工 · 原公开日期',
++ disabled:false,onActivate:vi.fn(),relayPaper,...extra,
++})
++
++it('gives all six paper families distinct leaves without inventing figures or interactive controls',()=>{
++ const states:readonly RelayServicePaperState[]=[
++  {phase:'preparation',state:'choice',heading:''},{phase:'permission',state:'unread',heading:''},
++  {phase:'commitment',state:'agreed',heading:''},{phase:'service',state:'planned',heading:''},
++  {phase:'audit',state:'unmetered',heading:''},{phase:'result',state:'receivable',heading:''},
++ ]
++ const html=states.map(render)
++ expect(new Set(html.map(shapes)).size).toBe(6)
++ for(const value of html){
++  expect(value).toContain('aria-hidden="true"')
++  expect(value).toContain('focusable="false"')
++  expect(value).toContain('relay-service-kit-v1.png')
++  expect(value).toContain('width="1536" height="1024"')
++  expect(value).not.toMatch(/<(?:text|foreignObject|button|a|script)\b|¥|￥|收入|实收|20\d{2}-\d{2}-\d{2}/)
++ }
++})
++
++it('keeps unread replies sealed and unaudited reports separate from actual comparison or receipts',()=>{
++ const unread=render({phase:'permission',state:'unread',heading:''})
++ expect(unread).toContain('sealed-unread-reply')
++ expect(unread).not.toMatch(/read-scope-leaf|actual-reviewed-comparison|actual-received-ticket-pair/)
++ const unmeasured=render({phase:'audit',state:'unmetered',heading:''})
++ expect(unmeasured).toContain('unmeasured-empty-leaf')
++ expect(unmeasured).not.toMatch(/relay-pencil|actual-reviewed-comparison/)
++ const reported=render({phase:'audit',state:'reported',heading:''})
++ expect(reported).not.toContain('actual-reviewed-comparison')
++ const reviewed=render({phase:'audit',state:'reviewed',heading:''})
++ expect(reviewed).toContain('actual-reviewed-comparison')
++ expect(reviewed).not.toContain('actual-received-ticket-pair')
++ const corrected=render({phase:'audit',state:'corrected',heading:''})
++ expect(corrected).toContain('kept-correction-attachment')
++ expect(corrected).not.toContain('actual-received-ticket-pair')
++})
++
++it('distinguishes arrangement, running, service ending and actual receipt while support stays independent',()=>{
++ const phases:readonly RelayServicePaperState[]=[
++  {phase:'service',state:'planned',support:'planned',heading:''},
++  {phase:'service',state:'running',support:'planned',heading:''},
++  {phase:'service',state:'ended',support:'running',heading:''},
++  {phase:'result',state:'received',support:'running',heading:''},
++ ]
++ const html=phases.map(render)
++ expect(new Set(html.map(shapes)).size).toBe(4)
++ expect(html[0]).toContain('data-support-state="planned"')
++ expect(html[2]).toContain('data-support-state="running"')
++ expect(html[3]).toContain('data-support-state="running"')
++ for(const value of html.slice(0,3))expect(value).not.toContain('actual-received-ticket-pair')
++ expect(html[3]).toContain('actual-received-ticket-pair')
++ const stopped:RelayServicePaperState={phase:'result',state:'stopped',support:'pending',heading:'原支持尚待履行'}
++ expect(render(stopped)).toContain('neutral-stopped-record')
++ expect(render(stopped)).not.toContain('actual-responsibility-fold')
++ expect(render({...stopped,responsibility:'原支持仍需履行'})).toContain('actual-responsibility-fold')
++ expect(render({...stopped,responsibility:'  '})).not.toContain('actual-responsibility-fold')
++})
++
++it('keeps caller text, full identity and one native action, with protection over the committed paper',()=>{
++ const art:RelayServicePaperState={phase:'service',state:'planned',heading:'这期服务尚未开工',dateLabel:'2025-01-28 开工',line:'服务成本与未来支持分别核对',support:'planned',supportLabel:'原支持另有开工与完成日期',paymentLabel:'客户预款仍受保护，并非利润',responsibility:'原到期义务仍需处理'}
++ const p=props(art),button=OpeningObject(p)
++ expect(button.type).toBe('button')
++ expect(button.props.type).toBe('button')
++ expect(button.props['aria-label']).toBe(p.title+' '+p.actionLabel)
++ expect(button.props['aria-describedby']).toContain('relay-paper-relay-notes')
++ button.props.onClick()
++ expect(p.onActivate).toHaveBeenCalledTimes(1)
++ for(const protection of ['readonly','unsaved','unavailable'] as const){
++  const markup=renderToStaticMarkup(<OpeningObject {...p} protection={protection} disabled/>)
++  expect(markup).toContain('data-relay-phase="service"')
++  expect(markup).toContain('data-relay-state="planned"')
++  expect(markup).toContain('data-protection="'+protection+'"')
++  expect(markup).toContain('disabled=""')
++  expect(markup).not.toContain('actual-received-ticket-pair')
++  expect(markup).toContain(protection==='readonly'?'只读 · 原记录保留':protection==='unsaved'?'尚未保存 · 仍是上次的物件':'暂不可用 · 先核对原因')
++  const text=renderToStaticMarkup(<OpeningObject {...p} protection={protection} disabled textOnly/>)
++  for(const label of [art.heading,art.dateLabel,art.line,art.supportLabel,art.paymentLabel,art.responsibility,p.detail,p.actionLabel]){
++   expect(text).toContain(label)
++  }
++  expect(text).toContain(p.title+' '+p.actionLabel)
++  expect(text).not.toMatch(/<img\b|<svg\b|class="opening-object-art"/)
++ }
++ expect(p.onActivate).toHaveBeenCalledTimes(1)
++})
++
++it('does not change the existing relay image or another route when no relay paper is provided',()=>{
++ const {relayPaper,...legacy}=props({phase:'preparation',state:'choice',heading:''})
++ expect(relayPaper?.phase).toBe('preparation')
++ const old=renderToStaticMarkup(<OpeningObject {...legacy}/>)
++ expect(old).toContain('relay-service-kit-v1.png')
++ expect(old).toContain('opening-object-mark')
++ expect(old).not.toContain('data-relay-phase')
++ const video=renderToStaticMarkup(<OpeningObject {...legacy} appearance="video"/>)
++ expect(video).toContain('video-making-kit-v1.png')
++ expect(video).not.toContain('relay-service-art')
++})

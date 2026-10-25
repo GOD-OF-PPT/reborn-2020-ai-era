@@ -3,6 +3,7 @@ import type {GamePanelProps} from './game-types.ts'
 import type {OpeningFocus,PlayerThreadView} from './player-thread.ts'
 import {relaySceneProgress} from './relay-scene-progress.ts'
 import {resolveRelaySceneTarget,relayTargetEntity,type RelaySceneTarget,type RelaySceneContext} from './relay-scene-target.ts'
+import {relayJourneyAction,relayJourneyScene} from './relay-journey.ts'
 
 type Input=Pick<GamePanelProps,'view'|'features'>
 export type RelayOpeningFocus=Extract<OpeningFocus,{kind:'relay'}>
@@ -39,8 +40,8 @@ export function relayFocusQuarter(p:Input,f:RelayOpeningFocus):string|null{
 export function relayFocusOpen(p:Input,f:RelayOpeningFocus):boolean{
  const r=resolved(p,f),t=f.relayTarget,v=p.features.relay
  if(r.status!=='valid'||!t||!v)return false
+ if(t.kind==='application')return !r.application!.read&&r.application!.job?.status==='completed'||['planned','running'].includes(r.application!.job!.status)
  if(r.job)return ['planned','running'].includes(r.job.status)
- if(t.kind==='application')return !r.application!.read||['planned','running'].includes(r.application!.job!.status)
  if(t.kind==='audience')return r.audience!.completedAt===null&&!!r.audience!.job&&['planned','running'].includes(r.audience!.job.status)
  if(t.kind==='customer')return r.customer!.closedAt===null||r.customer!.balance.prepaidFen>0||r.customer!.balance.receivableFen>0
  if(t.kind==='business')return r.business!.lifecycle!=='closed'
@@ -52,18 +53,19 @@ export function relayFocusOpen(p:Input,f:RelayOpeningFocus):boolean{
 export function relayFocusResultDate(p:Input,f:RelayOpeningFocus):string|null{
  const r=resolved(p,f),t=f.relayTarget,v=p.features.relay
  if(r.status!=='valid'||!t||!v)return null
+ if(r.application)return r.application.read?r.application.decisionAt:r.job&&['cancelled','interrupted'].includes(r.job.status)?r.job.releasedAt:null
  if(r.job)return r.job.status==='completed'?r.job.completeAt:r.job.releasedAt
  if(r.meter){const m=r.meter,correction=v.corrections.find(c=>c.id===m.correctionId),audit=v.audits.filter(a=>a.meterId===m.id&&a.completedAt!==null).at(-1);return correction?.date??audit?.completedAt??m.date}
  if(r.period){const sourceIds=new Set([r.period.id,...v.meters.filter(m=>m.periodId===r.period!.id).map(m=>m.id)]),invoices=new Set(v.receivables.filter(i=>sourceIds.has(i.sourceId)).map(i=>i.id));const dates=[r.period.stoppedAt,r.period.feePostedAt,r.period.compensatedAt,...v.corrections.filter(c=>v.meters.some(m=>m.id===c.meterId&&m.periodId===r.period!.id)).map(c=>c.date),...(p.features.workbench.finance.find(a=>a.accountId===f.accountId)?.transactions.filter(tx=>tx.amountFen>0&&invoices.has(tx.sourceId)).map(tx=>tx.date)??[])].filter((date):date is string=>date!==null&&date<=p.view.date);return dates.sort().at(-1)??null}
  if(r.customer)return [r.customer.closedAt,r.customer.signedAt,...(p.features.workbench.finance.find(a=>a.accountId===f.accountId)?.transactions.filter(tx=>tx.contractId===r.customer!.id).map(tx=>tx.date)??[])].filter((date):date is string=>date!==null&&date<=p.view.date).sort().at(-1)??null
  if(r.audience)return r.audience.completedAt
- if(r.application)return r.application.read?r.application.decisionAt:null
  return r.station?.closedAt??r.business?.history.filter(h=>['operating','closed','winding_down'].includes(h.state)).at(-1)?.date??null
 }
 export function relayPlayerScene(p:Input,f:RelayOpeningFocus):Scene{
  const progress=relaySceneProgress(p.features.relay,p.view.date,f.relayTarget,relaySceneContext(p,f.accountId))!,r=resolved(p,f)
  const object=r.period?`${r.period.from}—${r.period.to}的服务约定`:r.customer?'这位客户的服务与原账':r.audience?'这次获客的实际回信':r.application?'供应方的申请回信':f.relayTarget?'本站的服务单与接线盒':'桌边的中转服务资料'
- return {stage:'relay-'+progress.phase,object,title:progress.title,line:progress.line,detail:progress.choice.line===progress.line?'':progress.choice.line,outcome:progress.outcome,resultRefs:progress.resultRefs,inspect:{screen:'relay',label:progress.choice.label,target:{accountId:f.accountId,relayTarget:f.relayTarget,openRecord:true,...(progress.recordId?{recordId:progress.recordId}:{})}},...(progress.command?{command:{...progress.command,label:progress.choice.label}}:{}),...(progress.wait?{wait:progress.wait}:{})}
+ const decision=!progress.historical&&!progress.wait&&!progress.command?relayJourneyScene(relayJourneyAction({...p,accountId:f.accountId},f.relayTarget)):null
+ return {stage:'relay-'+progress.phase,object,title:decision?.title??progress.title,line:decision?.line??progress.line,detail:decision?(r.audience||r.customer?progress.line:''):progress.choice.line===progress.line?'':progress.choice.line,outcome:progress.outcome,resultRefs:progress.resultRefs,inspect:{screen:'relay',label:progress.choice.label,target:{accountId:f.accountId,relayTarget:f.relayTarget,openRecord:true,...(progress.recordId?{recordId:progress.recordId}:{})}},...(progress.command?{command:{...progress.command,label:progress.choice.label}}:{}),...(progress.wait?{wait:progress.wait}:{})}
 }
 
 /** New public IDs follow only a committed original receipt, never a candidate or a balance delta. */

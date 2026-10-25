@@ -43,7 +43,7 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
   <section className="room-current-moment opening-current-moment today-current-moment" data-day-view="today" aria-label="今天这一幕">
    <header className="moment-heading"><p>{p.features.workbench.quarter} / 今天的日历</p><h1 ref={localHeading} tabIndex={-1}>今天，仍由你安排。</h1></header>
    <p className="opening-room-stage">今天 {p.view.date} · 原来的书签和约定仍保留</p>
-   <div className="moment-story" aria-label="今天的情况">{feedback?<div className={typeof feedback==='string'?'moment-status':'moment-feedback'}>{feedback}</div>:null}<p className="moment-line">{today.ongoing.length?'还有'+today.ongoing.length+'件工作、生活、作品、教学准备或模拟投资安排，正在照原约定继续。':'可以先保留眼前的生活，再选择一件愿意承担的事。'}</p><p className="moment-terms">{today.question}</p></div>
+   <div className="moment-story" aria-label="今天的情况">{feedback?<div className={typeof feedback==='string'?'moment-status':'moment-feedback'}>{feedback}</div>:null}<p className="moment-line">{today.ongoing.length?'还有'+today.ongoing.length+'件已经答应的事，正在照约定继续。':'可以先保留眼前的生活，再选择一件愿意承担的事。'}</p><p className="moment-terms">{today.question}</p></div>
    <div className="moment-decisions"><div className="command moment-decision moment-primary"><button type="button" disabled={primary.disabled} onClick={primary.activate}><b aria-hidden="true">01</b><span>{primary.label}<small>继续原安排，或明确选择下一次投入</small></span><i aria-hidden="true">→</i></button>{primary.reason?<small className="reason">{primary.reason}</small>:null}</div>
     {today.wait?<div className="moment-wait"><ClockAdvance p={p} date={today.wait.date} label={'不新增安排，让原日子继续 · '+today.wait.date} room showReason={!p.view.readOnly&&!p.view.hasCandidate&&p.view.saveStatus!=='conflict'}/></div>:button('翻看今天的日历',()=>onNavigate('quarter',{accountId:p.accountId}),'原费用、期限和未完约定都在这里')}
     <button type="button" className="moment-explore" onClick={ui('环顾房间，想想别的可能',onExplore).activate}>环顾房间，想想别的可能 <span aria-hidden="true">↗</span></button>
@@ -53,11 +53,12 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
   {page?<Dialog title={page==='directions'?'今天，想把时间留给什么？':page==='life'?'给生活留出一段真实的日子':page==='market'?'给自己的模拟判断划一个边界':'这些原安排，仍在继续'} className="opening-paper today-choice-paper" onClose={()=>setPage(null)} footer={<div className="today-choice-footer">{page!=='directions'?button('返回今天的选择',()=>setPage('directions')):null}{button('先不新增安排，合上这一页',()=>setPage(null))}</div>}>
    <p className="opening-paper-date">今天 {p.view.date} · {p.features.workbench.quarter}</p>
    {page==='directions'?<><p>选择关注只把一件事放到眼前。新的工作、生活投入和买卖，仍由你核对原确认。</p><div className="opening-directions today-directions">
-    {today.ongoing.length?button('继续已经答应的事',()=>setPage('ongoing'),'从同一份工作、生活、作品、教学与学员承诺或投资安排继续'):null}
+    {today.ongoing.length?button('继续已经答应的事',()=>setPage('ongoing'),'逐份翻回同一件事，核对安排、日期与账目'):null}
     {button('先看看本季工作',()=>choose({runId:p.view.runId,kind:'work',accountId:'personal',entityId:null}),'若本季尚未安排，先看真实行动占用与工资日期，再决定')}
     {button('留一段新的时间给生活',()=>prepare('life'),'休整或改善住处；原安排、费用和行动保留')}
     {button('给一次视频尝试留出日子',()=>{setPage(null);openVideo('select-account')},'明确选择账号和具体作品；新的客户、素材与投入仍由你决定')}
     {button('把做过的事，准备成一堂课',()=>{setPage(null);openCourse('objects')},'明确选择教室与教案；案例、大纲、素材范围和样课分别准备，不自动招生')}
+    {button('看看谁需要一份可靠的服务',()=>{const focus=openingFocusFor(p,'relay',{relayTarget:null,accountId:'personal'});if(focus)choose(focus)},'先核对自有资本、供应与客户承诺；不自动开站或充值')}
     {button('准备自己的下一份模拟判断',()=>prepare('market'),'研究、显选委托，或先保留现金')}
    </div></>:null}
    {page==='life'?<><p>留给自己的时间也要作取舍。已经在进行的安排仍在原日历上，新安排不返行动或增加收入。</p><div className="today-commitments">{(['rest','workspace'] as const).map(kind=>{const terms=p.features.life.work[kind];return <article key={kind}><h3>{terms.title}</h3><p>个人{moneyText(terms.costFen)} · {terms.points}点 · {terms.days}日；今天开始，最早{addDays(p.view.date,terms.days)}实际完成。</p><CommandButton {...commandProps} kind="StartLifeWork" payload={{kind,personId:null,reference:null}} label={kind==='rest'?'核对并留出七天休整':'核对并改善桌椅与照明'} confirm/></article>})}</div>{button('看看相识的人与全部生活记录',()=>{setPage(null);onNavigate('life',{accountId:'personal'})})}</>:null}

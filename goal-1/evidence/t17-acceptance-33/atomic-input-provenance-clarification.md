@@ -1,0 +1,3 @@
+# 旧前史注册字段补足
+
+正式Create审核尚未启动、没有input-before冻结。原注册purpose/role及实际导入buffer已经明确saved80只作atomic支路前史，未冒称该支路新前段；本次仅补入口要求的notNewNativeHistory=true及已知run/revision。原注册完整字节另存atomic-input-registration-before-clarification.json（SHA b5b80d42974c3d924b7a425e64186deee1eca2cc0c194b14cc8aaba61ba1a2e9），原raw与exports来源身份完全不改，不改审核断言/旧helper或已有读回结果。

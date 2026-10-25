@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "rtk",
+    "proxy",
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport importlib.util,sys\nr=Path.cwd()\ns=importlib.util.spec_from_file_location('original_check_docs',r/'scripts/check_docs.py')\nm=importlib.util.module_from_spec(s);s.loader.exec_module(m)\nnames=[\"AGENTS.md\",\"docs/37-relay-play-and-art-contract.md\",\"goal-1/evidence/t17-acceptance-33/validation.md\",\"goal-1/evidence/t17-acceptance-33/tasks.md\",\"goal-1/evidence/t17-acceptance-33/final-precommit-review.md\",\"goal-1/evidence/t17-acceptance-33/docs-r1-classification.json\",\"goal-1/plan.md\",\"goal-1/tasks.md\",\"goal-1/t17-plan.md\"]\nm.project_files=lambda unused:[r/n for n in names]\nprint('SCOPED ONLY: eight current authored Markdown and one classification JSON; protected input links and whole Docs are not redefined as passing.')\nerrors=m.check(r,text_only=True)\nfor error in errors: print(error,file=sys.stderr)\nraise SystemExit(bool(errors))\n"
+  ],
+  "scoped": true,
+  "wholeDocs": false,
+  "originalFunction": "scripts/check_docs.py check(root,text_only=True)",
+  "provider": [
+    "AGENTS.md",
+    "docs/37-relay-play-and-art-contract.md",
+    "goal-1/evidence/t17-acceptance-33/validation.md",
+    "goal-1/evidence/t17-acceptance-33/tasks.md",
+    "goal-1/evidence/t17-acceptance-33/final-precommit-review.md",
+    "goal-1/evidence/t17-acceptance-33/docs-r1-classification.json",
+    "goal-1/plan.md",
+    "goal-1/tasks.md",
+    "goal-1/t17-plan.md"
+  ]
+}

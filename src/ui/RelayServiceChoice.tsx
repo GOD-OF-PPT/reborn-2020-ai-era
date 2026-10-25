@@ -6,6 +6,7 @@ import {relayAuditableMeters} from './relay-scene-progress.ts'
 import {CommandButton} from './CommandButton.tsx'
 import {RELAY_JOBS} from '../content/relay.ts'
 import {addDays,isoDate} from '../core/calendar.ts'
+import {quarterLimit} from '../core/operations-calendar.ts'
 import {parseMoneyInput} from './money-input.ts'
 import {moneyText,playableThrough} from './game-text.ts'
 import {relayAuditCompletion} from './relay-audit-dates.ts'
@@ -17,7 +18,10 @@ export function relayDraftScopeForTarget(p:Input,target:RelaySceneTarget|null,sl
  if(resolved.status!=='valid'||!target)return {scope:null,reason:resolved.reason??'先明确选择原中转企业或账期，再留下这份草稿。'}
  if(slot==='service'&&target.kind!=='business')return {scope:null,reason:'这里是原记录。请明确回到这间站，再决定另一份新服务；没有修改原账期。'}
  if(slot==='audit'&&(target.kind!=='period'||target.jobId!==undefined))return {scope:null,reason:'先明确翻回这一期已有计量，再决定新的复核；原任务没有被当作另一份委托。'}
- return {scope:{accountId:target.accountId,businessId:target.businessId,stationId:target.stationId,periodId:slot==='audit'&&target.kind==='period'?target.periodId:null,meterId:slot==='audit'&&target.kind==='period'?target.meterId??null:null,slot},reason:null}
+ // Only a newly saved same-business period starts another service draft. An
+ // unfinished or failed candidate still exposes the old public period set.
+ const generation=slot==='service'?{generation:JSON.stringify(p.features.relay!.periods.filter(period=>period.businessId===target.businessId).map(period=>period.id).sort())}:{}
+ return {scope:{accountId:target.accountId,businessId:target.businessId,stationId:target.stationId,periodId:slot==='audit'&&target.kind==='period'?target.periodId:null,meterId:slot==='audit'&&target.kind==='period'?target.meterId??null:null,slot,...generation},reason:null}
 }
 const unique=(ids:readonly string[])=>new Set(ids).size===ids.length
 const agentMode=(mode:string)=>mode==='assisted'||mode==='delegated'
@@ -72,8 +76,8 @@ export function RelayDraftResources({p,draft,setDraft}:Omit<FieldProps,'target'>
  return <fieldset><legend>这一次，谁留出真实时间</legend>{options.map(r=><label className="radio-line" key={r.id}><input type="checkbox" name={name} checked={draft.resources.includes(r.id)} onChange={e=>{const checked=e.target.checked;setDraft(old=>({...old,resources:checked?old.resources.includes(r.id)?old.resources:[...old.resources,r.id]:old.resources.filter(id=>id!==r.id)}))}}/>{r.label}</label>)}{draft.resources.some(id=>!options.some(r=>r.id===id))?<p className="warning-box">原资源已不可用，草稿仍保留。请明确重选，不会自动改给本人。<button type="button" onClick={()=>setDraft(old=>({...old,resources:[]}))}>清除本次资源，重新选择</button></p>:null}</fieldset>
 }
 export function RelayDraftDate({p,draft,setDraft,service=false}:Omit<FieldProps,'target'>&{service?:boolean}){
- const auditToday=!service&&p.view.phase==='epilogue',min=service?addDays(p.view.date,1):p.view.date,max=auditToday?p.view.date:playableThrough
- return <div><label className="field">实际开工日期<input type="date" min={min} max={max} value={draft.startAt} onChange={e=>{const value=e.target.value;setDraft(old=>({...old,startAt:value}))}}/></label><button type="button" onClick={()=>setDraft(old=>({...old,startAt:min}))}>{service?'明确留到明天':'明确选择今天'} · {min}</button>{draft.startAt&&(draft.startAt<min||auditToday&&draft.startAt!==min)?<p className="warning-box">原草稿日期{draft.startAt}已不适用，请重新选择；没有自动改值。</p>:null}</div>
+ const auditToday=!service&&p.view.phase==='epilogue',min=service?addDays(p.view.date,1):p.view.date,max=auditToday?p.view.date:playableThrough,nextQuarter=quarterLimit(p.view.date)
+ return <div><label className="field">实际开工日期<input type="date" min={min} max={max} value={draft.startAt} onChange={e=>{const value=e.target.value;setDraft(old=>({...old,startAt:value}))}}/></label><button type="button" onClick={()=>setDraft(old=>({...old,startAt:min}))}>{service?'明确留到明天':'明确选择今天'} · {min}</button>{p.view.phase==='playing'&&nextQuarter<=playableThrough?<button type="button" onClick={()=>setDraft(old=>({...old,startAt:nextQuarter}))}>明确留到下一季 · {nextQuarter}</button>:null}{draft.startAt&&(draft.startAt<min||auditToday&&draft.startAt!==min)?<p className="warning-box">原草稿日期{draft.startAt}已不适用，请重新选择；没有自动改值。</p>:null}</div>
 }
 type ServicePage='customers'|'suppliers'|'schedule'|'terms'
 const pages:readonly ServicePage[]=['customers','suppliers','schedule','terms']
@@ -91,7 +95,7 @@ type EditorProps={p:GamePanelProps;target:RelaySceneTarget|null;blockedReason?:s
 export function RelayServiceChoice({p,target,blockedReason,onInspect,onClose,children}:EditorProps){
  const checked=relayDraftScopeForTarget(p,target,'service'),[draft,setDraft]=useRelaySceneDraft(p.view.runId,checked.scope,p.relayDraftMemory),key=checked.scope?relaySceneDraftKey(p.view.runId,checked.scope):'unselected'
  const [position,setPosition]=useState({key,index:0}),index=position.key===key?position.index:0,page=pages[index]!,issue=relayDraftIssue(p,target,'service',draft),lock=relaySubmissionReason(p,blockedReason),command=relayServiceDraftCommand(p,target,draft)
- const request:GamePanelProps['request']=(...args)=>{if(relaySubmissionReason(p,blockedReason)||relayDraftIssue(p,target,'service',draft))return;onClose?.();p.request(...args)}
+ const request:GamePanelProps['request']=(...args)=>{if(relaySubmissionReason(p,blockedReason)||relayDraftIssue(p,target,'service',draft))return;p.request(...args)}
  const next=()=>setPosition({key,index:Math.min(index+1,pages.length-1)}),ready=index===0?draft.customerIds.length>0:index===1?draft.supplierIds.length>0:index===2?draft.resources.length>0&&dateValid(draft.startAt)&&draft.startAt>p.view.date:issue===null
  const support=RELAY_JOBS.find(j=>j.id==='relay-support-'+draft.supportMode),end=relayAuditCompletion(draft.startAt,p.features.relay?.catalog.serviceDays??28),supportEnd=end&&support?relayAuditCompletion(end,support.durationDays):null
  const view:RelayEditorView={title:['先选定，要认真服务的客户','给本期线路排出明确顺序','把真实时间留给这期服务','看清预算，与原来的支持'][index]!,body:<section className="relay-service-editor">{checked.reason?<p className="warning-box" role="status">{checked.reason}</p>:target?<><p>第{index+1}/{pages.length}步 · 拟定新一期；原账期和原合同没有因此修改。</p>{lock?<p className="warning-box" role="status">{lock}</p>:null}<RelayServiceFields p={p} target={target} draft={draft} setDraft={setDraft} page={page}/><p>原服务{moneyText(RELAY_JOBS.find(j=>j.id==='relay-service')!.costFen)} / 1点 / {p.features.relay!.catalog.serviceDays}日。{end?'本次草稿'+draft.startAt+'—'+end+'；':''}{support&&supportEnd?'原支持另在'+end+'—'+supportEnd+'，'+moneyText(support.costFen)+' / '+support.actionPoints+'点。':''}</p>{index===pages.length-1&&issue?<p className="warning-box">{issue}</p>:null}</>:null}</section>,actions:<div className="button-row">{!checked.reason?index<pages.length-1?<button type="button" disabled={!ready} onClick={next}>继续核对下一步 →</button>:command?<CommandButton {...p} {...command} request={request} primary/>:<button type="button" disabled>先明确本页选择</button>:null}{index>0?<button type="button" onClick={()=>setPosition({key,index:index-1})}>返回上一步，保留草稿</button>:null}{onInspect?<button type="button" onClick={()=>onInspect(target,'service')}>翻看同企业原册，保留这份草稿</button>:null}{onClose?<button type="button" onClick={onClose}>先合上，保留草稿</button>:null}</div>}
@@ -101,7 +105,7 @@ export function RelayServiceChoice({p,target,blockedReason,onInspect,onClose,chi
 export function RelayAuditEditor({p,target,blockedReason,onInspect,onClose,children}:EditorProps){
  const checked=relayDraftScopeForTarget(p,target,'audit'),[draft,setDraft]=useRelaySceneDraft(p.view.runId,checked.scope,p.relayDraftMemory),issue=relayDraftIssue(p,target,'audit',draft),lock=relaySubmissionReason(p,blockedReason),command=relayAuditDraftCommand(p,target,draft),period=p.features.relay?.periods.find(row=>row.id===checked.scope?.periodId)
  const eligible=period?relayAuditableMeters(p.features.relay!,period.id).filter(m=>checked.scope?.meterId===null||m.id===checked.scope?.meterId):[],job=RELAY_JOBS.find(j=>j.id==='relay-meter-audit')!,end=relayAuditCompletion(draft.startAt,job.durationDays)
- const request:GamePanelProps['request']=(...args)=>{if(relaySubmissionReason(p,blockedReason)||relayDraftIssue(p,target,'audit',draft))return;onClose?.();p.request(...args)}
+ const request:GamePanelProps['request']=(...args)=>{if(relaySubmissionReason(p,blockedReason)||relayDraftIssue(p,target,'audit',draft))return;p.request(...args)}
  const view:RelayEditorView={title:'只核对，这份已经发生的原账',body:<section className="relay-audit-editor">{checked.reason?<p className="warning-box" role="status">{checked.reason}</p>:<><p>{period?.from}—{period?.to}原账期 · 本次现有可核记录{eligible.length}条；以后发生的计量不在这一批。</p>{lock?<p className="warning-box" role="status">{lock}</p>:null}<RelayDraftResources p={p} draft={draft} setDraft={setDraft}/><RelayDraftDate p={p} draft={draft} setDraft={setDraft}/><p>{moneyText(job.costFen)} / {job.actionPoints}点 / {job.durationDays}日。{end?draft.startAt+'—'+end+'。':''}完成前不揭示实计；差额仍要另行确认，客户和供应原价不覆盖。</p>{issue?<p className="warning-box">{issue}</p>:null}</>}</section>,actions:<div className="button-row">{command?<CommandButton {...p} {...command} request={request} primary/>:<button type="button" disabled>先明确资源与日期，核对原计量</button>}{onInspect?<button type="button" onClick={()=>onInspect(target,'audit')}>翻看同一期原计量，保留草稿</button>:null}{onClose?<button type="button" onClick={onClose}>先合上，保留草稿</button>:null}</div>}
  return children?children(view):<section className="panel">{view.body}{view.actions}</section>
 }

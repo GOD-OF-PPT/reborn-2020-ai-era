@@ -10,6 +10,11 @@ import {moneyText} from './game-text.ts'
 /** The caller supplies the same captured public snapshot as the original confirmation. */
 export function RelayCommandDetails({command,relay,workers,accountName}:{command:CommandEnvelope;relay:RelayProjection;workers:readonly WorkerInstance[];accountName:(id:string)=>string}){
  if(!relay)return null
+ if(command.kind==='TopUpRelaySupplier'){
+  const p=command.payload as {businessId:string;supplierId:string;amountFen:number},business=relay.businesses.find(b=>b.id===p.businessId),supplier=relay.catalog.suppliers.find(s=>s.id===p.supplierId)
+  if(!business||!supplier)return null
+  return <section className="confirmation-context"><h3>这笔自有资金先成为供应资产</h3><p>{accountName(business.accountId)}拟向{supplier.label}转入{moneyText(p.amountFen)}；自有可花减少，原供应资产等额增加。</p><p>这次转入本身不确认服务收入或供应消耗成本；原已发生成本仍保留，后续实际消费才计成本。供应资产不代替本期预算，也不能挪用客户保护资金；未用资产退回另行决定。</p></section>
+ }
  if(command.kind==='StartRelayServicePeriod'){
   const p=command.payload as {businessId:string;customerIds:string[];supplierIds:string[];resources:string[];startAt:string;maxUnits:number;maxSupplierCostFen:number;supportMode:string;deploymentId?:string|null}
   const business=relay.businesses.find(b=>b.id===p.businessId),service=RELAY_JOBS.find(j=>j.id==='relay-service'),support=RELAY_JOBS.find(j=>j.id==='relay-support-'+p.supportMode)

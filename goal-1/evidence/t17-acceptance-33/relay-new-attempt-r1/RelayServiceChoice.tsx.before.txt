@@ -1,0 +1,108 @@
+import {useId,useState,type ReactNode} from 'react'
+import type {GamePanelProps} from './game-types.ts'
+import {resolveRelaySceneTarget,type RelaySceneTarget,type RelaySceneContext} from './relay-scene-target.ts'
+import {relaySceneDraftKey,useRelaySceneDraft,type RelaySceneDraft,type RelaySceneDraftScope,type RelaySceneDraftSlot,type RelaySceneDraftUpdate} from './relay-scene-draft.ts'
+import {relayAuditableMeters} from './relay-scene-progress.ts'
+import {CommandButton} from './CommandButton.tsx'
+import {RELAY_JOBS} from '../content/relay.ts'
+import {addDays,isoDate} from '../core/calendar.ts'
+import {quarterLimit} from '../core/operations-calendar.ts'
+import {parseMoneyInput} from './money-input.ts'
+import {moneyText,playableThrough} from './game-text.ts'
+import {relayAuditCompletion} from './relay-audit-dates.ts'
+
+type Input=Pick<GamePanelProps,'view'|'features'|'accountId'>
+export const relayChoiceContext=(p:Input):RelaySceneContext=>({runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})
+export function relayDraftScopeForTarget(p:Input,target:RelaySceneTarget|null,slot:RelaySceneDraftSlot):{scope:RelaySceneDraftScope|null;reason:string|null}{
+ const resolved=resolveRelaySceneTarget(p.features.relay,target,relayChoiceContext(p))
+ if(resolved.status!=='valid'||!target)return {scope:null,reason:resolved.reason??'先明确选择原中转企业或账期，再留下这份草稿。'}
+ if(slot==='service'&&target.kind!=='business')return {scope:null,reason:'这里是原记录。请明确回到这间站，再决定另一份新服务；没有修改原账期。'}
+ if(slot==='audit'&&(target.kind!=='period'||target.jobId!==undefined))return {scope:null,reason:'先明确翻回这一期已有计量，再决定新的复核；原任务没有被当作另一份委托。'}
+ return {scope:{accountId:target.accountId,businessId:target.businessId,stationId:target.stationId,periodId:slot==='audit'&&target.kind==='period'?target.periodId:null,meterId:slot==='audit'&&target.kind==='period'?target.meterId??null:null,slot},reason:null}
+}
+const unique=(ids:readonly string[])=>new Set(ids).size===ids.length
+const agentMode=(mode:string)=>mode==='assisted'||mode==='delegated'
+function dateValid(date:string){try{isoDate(date);return true}catch{return false}}
+/** The original supplier authorization permits an explicit zero; fees are separate. */
+function supplierBudget(text:string):number|null{return /^0+(?:\.0{1,2})?$/.test(text)?0:parseMoneyInput(text)}
+export function relaySubmissionReason(p:GamePanelProps,blockedReason?:string|null):string|null{
+ if(blockedReason)return blockedReason
+ if(p.view.readOnly)return '当前只读，原草稿和原记录仍可翻看，不能提交新的安排。'
+ if(p.view.hasCandidate||p.view.saveStatus==='unsaved')return '原候选尚未保存，先处理写入状态；这份草稿仍保留。'
+ if(p.view.saveStatus==='conflict')return '存档冲突尚未处理，没有提交另一份安排。'
+ if(p.view.busy||p.controller.snapshot.busy||p.view.saveStatus==='saving')return '原提交正在保存，请等这一次写入完成。'
+ if(p.controller.snapshot.view!==p.view||p.view.saveStatus!=='saved')return '原记录已经变化，请重新翻看当前对象后再核对。'
+ return null
+}
+export function relayDraftIssue(p:Input,target:RelaySceneTarget|null,slot:RelaySceneDraftSlot,draft:RelaySceneDraft):string|null{
+ const scope=relayDraftScopeForTarget(p,target,slot);if(scope.reason)return scope.reason
+ const relay=p.features.relay!,businessId=target!.businessId
+ if(!draft.resources.length)return '先明确选择本次实际资源。'
+ if(!unique(draft.resources)||draft.resources.some(id=>!relay.resources.some(r=>r.id===id)))return '草稿中的原资源已不可用或重复，请明确重选；没有改给本人。'
+ const auditToday=slot==='audit'&&p.view.phase==='epilogue'
+ if(auditToday&&draft.startAt!==p.view.date)return '有限尾声仅能把原计量复核安排在今天；原草稿没有自动改值，请明确重选。'
+ if(!dateValid(draft.startAt)||draft.startAt<p.view.date||!auditToday&&draft.startAt>playableThrough)return '先明确选择有效开工日期；过期草稿没有自动改成今天。'
+ if(slot==='audit'){
+  const periodId=scope.scope!.periodId!,eligible=relayAuditableMeters(relay,periodId).filter(m=>scope.scope!.meterId===null||m.id===scope.scope!.meterId)
+  return eligible.length?null:'所选原记录目前没有可新委托的计量。原复核批次仍可翻看，没有重复安排。'
+ }
+ if(draft.startAt<=p.view.date)return '新服务须明确留在今天之后；原日期保留，请重新选择。'
+ if(!draft.customerIds.length)return '先明确选择这次服务的原客户。'
+ if(!unique(draft.customerIds)||draft.customerIds.some(id=>!relay.customers.some(c=>c.id===id&&c.businessId===businessId&&c.closedAt===null)))return '草稿中的客户已失效、关闭或重复，请明确重选；没有删掉后按更少人数提交。'
+ if(!draft.supplierIds.length)return '先明确选择本次供应与备选顺序。'
+ if(!unique(draft.supplierIds)||draft.supplierIds.some(id=>!relay.supplyOptions.some(s=>s.businessId===businessId&&s.supplierId===id&&s.permitted&&s.adapted)))return '草稿中的供应当前不可用或重复，请明确核对；没有换成另一条线路。'
+ if(!/^\d+$/.test(draft.maxUnits)||!Number.isSafeInteger(Number(draft.maxUnits))||Number(draft.maxUnits)<=0)return '先明确填写本期用量容量上限。'
+ if(supplierBudget(draft.maxSupplierCost)===null)return '先明确填写本期供应预算（元）。'
+ if(!['guided','self','assisted','delegated'].includes(draft.supportMode))return '先明确选择随本期预留的原支持方式。'
+ if(agentMode(draft.supportMode)&&!p.features.story.deployments.some(d=>d.id===draft.deploymentId&&d.businessId===businessId&&d.lifecycle==='active'&&d.currentGrant?.scopes.includes('relay_support')&&(draft.supportMode!=='delegated'||d.currentGrant.level==='cross_flow')))return '本次原部署或权限已不可用，请明确重选；没有新授或扩大权限。'
+ return null
+}
+export type RelayDraftCommand={readonly kind:'StartRelayServicePeriod'|'StartRelayAudit';readonly payload:unknown;readonly label:string;readonly confirm:true}
+export function relayServiceDraftCommand(p:Input,target:RelaySceneTarget|null,draft:RelaySceneDraft):RelayDraftCommand|null{
+ if(relayDraftIssue(p,target,'service',draft))return null
+ return {kind:'StartRelayServicePeriod',payload:{businessId:target!.businessId,customerIds:[...draft.customerIds],supplierIds:[...draft.supplierIds],resources:[...draft.resources],startAt:draft.startAt,maxUnits:Number(draft.maxUnits),maxSupplierCostFen:supplierBudget(draft.maxSupplierCost)!,supportMode:draft.supportMode,deploymentId:agentMode(draft.supportMode)?draft.deploymentId:null},label:'核对这期服务与已经约定的支持',confirm:true}
+}
+export function relayAuditDraftCommand(p:Input,target:RelaySceneTarget|null,draft:RelaySceneDraft):RelayDraftCommand|null{
+ const checked=relayDraftScopeForTarget(p,target,'audit');if(checked.reason||relayDraftIssue(p,target,'audit',draft))return null
+ return {kind:'StartRelayAudit',payload:{...(checked.scope!.meterId!==null?{meterId:checked.scope!.meterId}:{periodId:checked.scope!.periodId!}),resources:[...draft.resources],startAt:draft.startAt},label:'核对这份已有计量的复核委托',confirm:true}
+}
+export interface RelayEditorView{readonly title:string;readonly body:ReactNode;readonly actions:ReactNode}
+type FieldProps={p:GamePanelProps;target:RelaySceneTarget;draft:RelaySceneDraft;setDraft:RelaySceneDraftUpdate}
+export function RelayDraftResources({p,draft,setDraft}:Omit<FieldProps,'target'>){
+ const name=useId(),options=p.features.relay?.resources??[]
+ return <fieldset><legend>这一次，谁留出真实时间</legend>{options.map(r=><label className="radio-line" key={r.id}><input type="checkbox" name={name} checked={draft.resources.includes(r.id)} onChange={e=>{const checked=e.target.checked;setDraft(old=>({...old,resources:checked?old.resources.includes(r.id)?old.resources:[...old.resources,r.id]:old.resources.filter(id=>id!==r.id)}))}}/>{r.label}</label>)}{draft.resources.some(id=>!options.some(r=>r.id===id))?<p className="warning-box">原资源已不可用，草稿仍保留。请明确重选，不会自动改给本人。<button type="button" onClick={()=>setDraft(old=>({...old,resources:[]}))}>清除本次资源，重新选择</button></p>:null}</fieldset>
+}
+export function RelayDraftDate({p,draft,setDraft,service=false}:Omit<FieldProps,'target'>&{service?:boolean}){
+ const auditToday=!service&&p.view.phase==='epilogue',min=service?addDays(p.view.date,1):p.view.date,max=auditToday?p.view.date:playableThrough,nextQuarter=quarterLimit(p.view.date)
+ return <div><label className="field">实际开工日期<input type="date" min={min} max={max} value={draft.startAt} onChange={e=>{const value=e.target.value;setDraft(old=>({...old,startAt:value}))}}/></label><button type="button" onClick={()=>setDraft(old=>({...old,startAt:min}))}>{service?'明确留到明天':'明确选择今天'} · {min}</button>{p.view.phase==='playing'&&nextQuarter<=playableThrough?<button type="button" onClick={()=>setDraft(old=>({...old,startAt:nextQuarter}))}>明确留到下一季 · {nextQuarter}</button>:null}{draft.startAt&&(draft.startAt<min||auditToday&&draft.startAt!==min)?<p className="warning-box">原草稿日期{draft.startAt}已不适用，请重新选择；没有自动改值。</p>:null}</div>
+}
+type ServicePage='customers'|'suppliers'|'schedule'|'terms'
+const pages:readonly ServicePage[]=['customers','suppliers','schedule','terms']
+/** The original book and the near scene render these same controlled fields. */
+export function RelayServiceFields({p,target,draft,setDraft,page}:FieldProps&{page:ServicePage}){
+ const relay=p.features.relay!,customers=relay.customers.filter(c=>c.businessId===target.businessId&&c.closedAt===null),supplies=relay.supplyOptions.filter(s=>s.businessId===target.businessId&&s.permitted&&s.adapted),deployments=p.features.story.deployments.filter(d=>d.businessId===target.businessId&&d.lifecycle==='active'&&d.currentGrant?.scopes.includes('relay_support')&&(draft.supportMode!=='delegated'||d.currentGrant.level==='cross_flow'))
+ const move=(index:number,to:number)=>setDraft(old=>{const ids=[...old.supplierIds],item=ids[index];if(item===undefined||to<0||to>=ids.length)return old;ids.splice(index,1);ids.splice(to,0,item);return {...old,supplierIds:ids}})
+ if(page==='customers')return <><fieldset><legend>明确选择这期原客户</legend>{customers.map(c=><label className="radio-line" key={c.id}><input type="checkbox" checked={draft.customerIds.includes(c.id)} onChange={e=>{const checked=e.target.checked;setDraft(old=>({...old,customerIds:checked?old.customerIds.includes(c.id)?old.customerIds:[...old.customerIds,c.id]:old.customerIds.filter(id=>id!==c.id)}))}}/><span>客户{relay.customers.filter(c=>c.businessId===target.businessId).findIndex(row=>row.id===c.id)+1} · {c.mode==='prepaid'?'原充值余额'+moneyText(c.balance.prepaidFen):'原信用上限'+moneyText(c.creditLimitFen)} · 合同至{c.termEnd}</span></label>)}{!customers.length?<p>本站尚无未关闭原客户；请翻原客户与合同，没有签下新人。</p>:null}</fieldset>{draft.customerIds.some(id=>!customers.some(c=>c.id===id))?<p className="warning-box">草稿仍有不可用原客户，没有过滤后少签。<button type="button" onClick={()=>setDraft(old=>({...old,customerIds:[]}))}>清除本次客户，重新选择</button></p>:null}<p>这里不签约或充值。客户额度、合同日期与其他原账期仍由原预览核对。</p></>
+ if(page==='suppliers')return <><fieldset><legend>明确选择本期供应和备选</legend>{supplies.map(s=>{const supplier=relay.catalog.suppliers.find(row=>row.id===s.supplierId)!;return <label className="radio-line" key={s.supplierId}><input type="checkbox" checked={draft.supplierIds.includes(s.supplierId)} onChange={e=>{const checked=e.target.checked;setDraft(old=>({...old,supplierIds:checked?old.supplierIds.includes(s.supplierId)?old.supplierIds:[...old.supplierIds,s.supplierId]:old.supplierIds.filter(id=>id!==s.supplierId)}))}}/>{supplier.label} · {supplier.failureDomain} · {supplier.billing==='prepaid'?'供应预付资产'+moneyText(s.credit?.remainingFen??0):'用量后原账期付款'}</label>})}{!supplies.length?<p>本站没有当前已批准且适配的供应；翻看原申请、许可与供应资产，不替你另选。</p>:null}</fieldset><ol>{draft.supplierIds.map((id,index)=><li key={id}>{index===0?'主供':'备选'+index} · {relay.catalog.suppliers.find(s=>s.id===id)?.label??'原供应已不可达'} <button type="button" disabled={index===0} onClick={()=>move(index,index-1)}>上移</button><button type="button" disabled={index===draft.supplierIds.length-1} onClick={()=>move(index,index+1)}>下移</button><button type="button" onClick={()=>setDraft(old=>({...old,supplierIds:old.supplierIds.filter(s=>s!==id)}))}>明确移除</button></li>)}</ol><p>仅在本次明确顺序内使用原已批准供应。同故障域不等于独立备援，供应预算不代替预付资产。</p></>
+ if(page==='schedule')return <><RelayDraftResources p={p} draft={draft} setDraft={setDraft}/><RelayDraftDate p={p} draft={draft} setDraft={setDraft} service/><p>共享视频、课程与本期支持的真实资源；日期和未来预留仍由原预览核验。</p></>
+ return <><label className="field">本期用量容量上限<input inputMode="numeric" value={draft.maxUnits} onChange={e=>{const value=e.target.value;setDraft(old=>({...old,maxUnits:value}))}}/></label><label className="field">本期供应成本授权上限（元）<input inputMode="decimal" value={draft.maxSupplierCost} onChange={e=>{const value=e.target.value;setDraft(old=>({...old,maxSupplierCost:value}))}}/></label><label className="field">明确选择已约定的支持<select value={draft.supportMode} onChange={e=>{const value=e.target.value as RelaySceneDraft['supportMode'];setDraft(old=>({...old,supportMode:value,deploymentId:null}))}}><option value="" disabled>请选择，不自动承担支持</option>{(['guided','self','assisted','delegated'] as const).map(mode=>{const job=RELAY_JOBS.find(j=>j.id==='relay-support-'+mode)!;return <option key={mode} value={mode} disabled={agentMode(mode)&&!p.features.story.deployments.some(d=>d.businessId===target.businessId&&d.lifecycle==='active'&&d.currentGrant?.scopes.includes('relay_support')&&(mode!=='delegated'||d.currentGrant.level==='cross_flow'))}>{mode==='guided'?'集中支持':mode==='self'?'限额自支持（最多5客户）':mode==='assisted'?'原权限辅助支持':'原跨流程委托'} · {moneyText(job.costFen)}/{job.actionPoints}点/{job.durationDays}日</option>})}</select></label>{agentMode(draft.supportMode)?<label className="field">本次明确使用的原部署<select value={draft.deploymentId??''} onChange={e=>{const value=e.target.value;setDraft(old=>({...old,deploymentId:value||null}))}}><option value="" disabled>选择已有权限，不新授或扩权</option>{draft.deploymentId&&!deployments.some(d=>d.id===draft.deploymentId)?<option value={draft.deploymentId} disabled>原部署已不可用，请重选</option>:null}{deployments.map(d=><option value={d.id} key={d.id}>{d.id.slice(-6)} · 原权限至{d.currentGrant?.expiresAt}</option>)}</select></label>:null}<p>容量与供应预算只是授权上限，不是实际成本或收入。服务与未来支持随同一次原确认安排，之后不重复占行动。</p></>
+}
+type EditorProps={p:GamePanelProps;target:RelaySceneTarget|null;blockedReason?:string|null|undefined;onInspect?:((target:RelaySceneTarget|null,slot?:RelaySceneDraftSlot)=>void)|undefined;onClose?:(()=>void)|undefined;children?:((view:RelayEditorView)=>ReactNode)|undefined}
+/** One service editor is reused inline in the original book and inside the scene wrapper. */
+export function RelayServiceChoice({p,target,blockedReason,onInspect,onClose,children}:EditorProps){
+ const checked=relayDraftScopeForTarget(p,target,'service'),[draft,setDraft]=useRelaySceneDraft(p.view.runId,checked.scope,p.relayDraftMemory),key=checked.scope?relaySceneDraftKey(p.view.runId,checked.scope):'unselected'
+ const [position,setPosition]=useState({key,index:0}),index=position.key===key?position.index:0,page=pages[index]!,issue=relayDraftIssue(p,target,'service',draft),lock=relaySubmissionReason(p,blockedReason),command=relayServiceDraftCommand(p,target,draft)
+ const request:GamePanelProps['request']=(...args)=>{if(relaySubmissionReason(p,blockedReason)||relayDraftIssue(p,target,'service',draft))return;p.request(...args)}
+ const next=()=>setPosition({key,index:Math.min(index+1,pages.length-1)}),ready=index===0?draft.customerIds.length>0:index===1?draft.supplierIds.length>0:index===2?draft.resources.length>0&&dateValid(draft.startAt)&&draft.startAt>p.view.date:issue===null
+ const support=RELAY_JOBS.find(j=>j.id==='relay-support-'+draft.supportMode),end=relayAuditCompletion(draft.startAt,p.features.relay?.catalog.serviceDays??28),supportEnd=end&&support?relayAuditCompletion(end,support.durationDays):null
+ const view:RelayEditorView={title:['先选定，要认真服务的客户','给本期线路排出明确顺序','把真实时间留给这期服务','看清预算，与原来的支持'][index]!,body:<section className="relay-service-editor">{checked.reason?<p className="warning-box" role="status">{checked.reason}</p>:target?<><p>第{index+1}/{pages.length}步 · 拟定新一期；原账期和原合同没有因此修改。</p>{lock?<p className="warning-box" role="status">{lock}</p>:null}<RelayServiceFields p={p} target={target} draft={draft} setDraft={setDraft} page={page}/><p>原服务{moneyText(RELAY_JOBS.find(j=>j.id==='relay-service')!.costFen)} / 1点 / {p.features.relay!.catalog.serviceDays}日。{end?'本次草稿'+draft.startAt+'—'+end+'；':''}{support&&supportEnd?'原支持另在'+end+'—'+supportEnd+'，'+moneyText(support.costFen)+' / '+support.actionPoints+'点。':''}</p>{index===pages.length-1&&issue?<p className="warning-box">{issue}</p>:null}</>:null}</section>,actions:<div className="button-row">{!checked.reason?index<pages.length-1?<button type="button" disabled={!ready} onClick={next}>继续核对下一步 →</button>:command?<CommandButton {...p} {...command} request={request} primary/>:<button type="button" disabled>先明确本页选择</button>:null}{index>0?<button type="button" onClick={()=>setPosition({key,index:index-1})}>返回上一步，保留草稿</button>:null}{onInspect?<button type="button" onClick={()=>onInspect(target,'service')}>翻看同企业原册，保留这份草稿</button>:null}{onClose?<button type="button" onClick={onClose}>先合上，保留草稿</button>:null}</div>}
+ return children?children(view):<section className="panel">{view.body}{view.actions}</section>
+}
+
+export function RelayAuditEditor({p,target,blockedReason,onInspect,onClose,children}:EditorProps){
+ const checked=relayDraftScopeForTarget(p,target,'audit'),[draft,setDraft]=useRelaySceneDraft(p.view.runId,checked.scope,p.relayDraftMemory),issue=relayDraftIssue(p,target,'audit',draft),lock=relaySubmissionReason(p,blockedReason),command=relayAuditDraftCommand(p,target,draft),period=p.features.relay?.periods.find(row=>row.id===checked.scope?.periodId)
+ const eligible=period?relayAuditableMeters(p.features.relay!,period.id).filter(m=>checked.scope?.meterId===null||m.id===checked.scope?.meterId):[],job=RELAY_JOBS.find(j=>j.id==='relay-meter-audit')!,end=relayAuditCompletion(draft.startAt,job.durationDays)
+ const request:GamePanelProps['request']=(...args)=>{if(relaySubmissionReason(p,blockedReason)||relayDraftIssue(p,target,'audit',draft))return;p.request(...args)}
+ const view:RelayEditorView={title:'只核对，这份已经发生的原账',body:<section className="relay-audit-editor">{checked.reason?<p className="warning-box" role="status">{checked.reason}</p>:<><p>{period?.from}—{period?.to}原账期 · 本次现有可核记录{eligible.length}条；以后发生的计量不在这一批。</p>{lock?<p className="warning-box" role="status">{lock}</p>:null}<RelayDraftResources p={p} draft={draft} setDraft={setDraft}/><RelayDraftDate p={p} draft={draft} setDraft={setDraft}/><p>{moneyText(job.costFen)} / {job.actionPoints}点 / {job.durationDays}日。{end?draft.startAt+'—'+end+'。':''}完成前不揭示实计；差额仍要另行确认，客户和供应原价不覆盖。</p>{issue?<p className="warning-box">{issue}</p>:null}</>}</section>,actions:<div className="button-row">{command?<CommandButton {...p} {...command} request={request} primary/>:<button type="button" disabled>先明确资源与日期，核对原计量</button>}{onInspect?<button type="button" onClick={()=>onInspect(target,'audit')}>翻看同一期原计量，保留草稿</button>:null}{onClose?<button type="button" onClick={onClose}>先合上，保留草稿</button>:null}</div>}
+ return children?children(view):<section className="panel">{view.body}{view.actions}</section>
+}

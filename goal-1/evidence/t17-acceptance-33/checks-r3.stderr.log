@@ -1,0 +1,56 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/RelaySceneChoice.test.tsx > renders reported days, interrupted support and only still uncorrected public differences as facts
+AssertionError: the given combination of arguments (undefined and string) is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a string
+ ❯ src/ui/RelaySceneChoice.test.tsx:78:72
+     76|   for(const blocked of [{readOnly:true},{hasCandidate:true,saveStatus:…
+     77|    const html=renderToStaticMarkup(<NarrativeScene {...scene} view={{.…
+     78|    expect(html.match(/<button[^>]*aria-label="核对并更正本期原账"[^>]*>/)?.[0])…
+       |                                                                        ^
+     79|    expect(html).toContain('翻看全部中转、客户与原安排');expect(html).not.toContain(…
+     80|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/ui/relay-player-thread.test.ts > publishes the actual normal service identity only after original retry, keeps its pin on waiting and preserves stopped support
+AssertionError: expected '<link rel="preload" as="image" href="…' to contain '本期服务单'
+
+Expected: "本期服务单"
+Received: "<link rel="preload" as="image" href="/assets/ui-redesign/cinematic/props/relay-service-kit-v1.png"/><p class="opening-room-intention"><span>我想保持生活自主</span><span>把这一期答应客户的服务按原资源和预算走完。</span><button type="button">调整本季书签 ↗</button><button type="button">翻本季留页 ↗</button></p><section class="room-current-moment opening-current-moment" data-stage="relay-planned" data-focus-scope="current" aria-label="眼前这一幕"><header class="moment-heading"><p>2025-01-28—2025-02-25的服务约定</p><h1 tabindex="-1">下一班线路，已经留在日历里。</h1></header><p class="opening-room-stage">已经安排 · 尚未实际开工<span> · 本次走到：服务实际结束是一处反馈点；原支持、核账与收款仍分别继续。</span></p><div class="moment-story" aria-label="眼前的情况"><p class="moment-line">容量与供应预算只是原授权上限，真正发生的用量才进入原账。</p><p class="moment-terms">2025-01-28—2025-02-25这期服务已记录0日，报告用量0，有不足或停止原因0日；支持与收费仍有各自的完成日期。</p><p class="relay-scene-money">企业可花¥21,577.42 · 本账户客户未消费保护¥16,000</p></div><div class="moment-decisions"><div class="moment-wait moment-primary"><div class="clock-advance clock-advance-room"><div class="command clock-review"><button type="button" class="" aria-label="核对后推进 · 2025-01-28"><span>先核对 ↗</span></button></div><div class="command clock-main"><button type="button" class="" aria-label="等这期原服务开工 · 2025-01-28 · 经营已知待付¥3,000"><span>等这期原服务开工 · 2025-01-28</span><kbd aria-hidden="true">Space</kbd><small>经营已知待付¥3,000</small></button></div></div></div><button type="button" class="moment-decision"><b aria-hidden="true">02</b><span>翻看本期约定与原账<small>只翻阅同一对象，不新增工作或改变日期</small></span><i aria-hidden="true">↗</i></button><button type="button" class="moment-explore">环顾房间，想想别的可能 <span aria-hidden="true">↗</span></button></div></section><button type="button" class="opening-object" data-kind="calendar" data-appearance="relay" data-relay-phase="service" data-relay-state="planned" data-text-only="false" aria-label="2025-01-28—2025-02-25的服务约定 等这期原服务开工 · 2025-01-28 · 经营已知待付¥3,000" aria-describedby="_R_6mr_-stage _R_6mr_-detail _R_6mr_-relay-notes"><span class="opening-object-art" aria-hidden="true"><span class="relay-service-art" data-relay-phase="service" data-relay-state="planned" aria-hidden="true"><span class="relay-service-contact"></span><img class="relay-service-kit" src="/assets/ui-redesign/cinematic/props/relay-service-kit-v1.png" alt="" width="1536" height="1024" decoding="async"/><svg class="relay-service-layers" viewBox="0 0 1536 1024" fill="none" aria-hidden="true" focusable="false"><g data-material="service-planned"><path class="relay-leaf-under" d="m846 479 582 167-66 226-582-167z"></path><path class="relay-leaf" d="m882 446 545 164-65 217-545-164z"></path><path class="relay-dashed" d="m938 504 412 124-39 133-412-124z"></path><path class="relay-reservation" d="m861 694 458 135-18 60-458-135z"></path></g><g data-material="independent-support-leaf" data-support-state="planned"><path class="relay-support-leaf relay-support-planned" d="m481 645 287 84-39 133-287-84z"></path></g></svg></span></span><span class="opening-object-copy"><span id="_R_6mr_-stage" class="opening-object-stage">这份原服务</span><strong id="_R_6mr_-title" class="opening-object-title"></strong><span id="_R_6mr_-relay-notes" class="relay-paper-notes"><span class="relay-paper-date">2025-01-28—2025-02-25</span><span class="relay-paper-line">已记录 0日 · 报告 0单位</span><span class="relay-paper-support-note" data-support-state="planned">原支持 2025-02-25—2025-03-04</span></span><span id="_R_6mr_-detail" class="opening-object-detail"></span><span id="_R_6mr_-action" class="opening-object-action">等这期原服务开工 · 2025-01-28 · 经营已知待付¥3,000<span aria-hidden="true">↗</span></span></span></button>"
+
+ ❯ src/ui/relay-player-thread.test.ts:57:16
+     55|   expect(current.view.budget.available).toBe(1)
+     56|   expect(html).toContain('relay-service-kit-v1.png');expect(html).not.…
+     57|   expect(html).toContain('本期服务单');expect(html).toContain('翻看本期约定与原账');…
+       |                ^
+     58|   expect(controller.exportSaved()).toBe(beforeRead)
+     59|   const advance=controller.prepare('AdvanceTime',{date:'2025-01-28'});…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/ui/today-thread.test.ts > offers only UI directions from a normal empty day and retains the exact primary and game bytes
+AssertionError: expected [ 'work', 'life', 'video', …(3) ] to deeply equal [ 'work', 'life', 'video', …(2) ]
+
+- Expected
++ Received
+
+  [
+    "work",
+    "life",
+    "video",
+    "course",
++   "relay",
+    "market",
+  ]
+
+ ❯ src/ui/today-thread.test.ts:31:43
+     29|  expect(view.ongoing).toEqual([])
+     30|  expect(todayThread(p,{runId:p.view.runId,accountId:'personal',kind:'l…
+     31|  expect(view.directions.map(row=>row.id)).toEqual(['work','life','vide…
+       |                                           ^
+     32|  for(const original of ['work','life','video','market'])expect(view.di…
+     33|  expect(view.directions[2]).toMatchObject({id:'video',screen:'video'})
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+

@@ -47,3 +47,10 @@ it('states customer-wide due collection separately from outstanding future invoi
  expect(html).toContain('更正新增单据按自己的原到期日');expect(html).toContain('回款不重复确认收入')
  expect(JSON.stringify(relay)).toBe(before)
 })
+
+it('shows the original owner and selected supplier asset transfer without presenting it as consumed cost',()=>{
+ const relay=display(),before=JSON.stringify(relay),html=render(relay,{...command,kind:'TopUpRelaySupplier',payload:{businessId:'relay-business',supplierId:'cedar-reseller',amountFen:100000}})
+ expect(html).toContain('这家原中转企业');expect(html).toContain('青桥转售');expect(html).toContain('¥1,000')
+ expect(html).toContain('供应资产等额增加');expect(html).toContain('转入本身不确认服务收入或供应消耗成本')
+ expect(html).toContain('不能挪用客户保护资金');expect(JSON.stringify(relay)).toBe(before)
+})

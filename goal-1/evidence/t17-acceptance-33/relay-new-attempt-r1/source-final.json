@@ -1,0 +1,172 @@
+{
+  "at": "2026-10-24T23:32:44.194Z",
+  "sources": [
+    {
+      "path": "src/ui/relay-scene-draft.ts",
+      "bytes": 3383,
+      "sha256": "15f9730b989c61707c46c58d1a38e9c76f2671211234441e4f99f439439f2885",
+      "mode": 420
+    },
+    {
+      "path": "src/ui/RelayServiceChoice.tsx",
+      "bytes": 21505,
+      "sha256": "d651029a6e2d0ccca9799ab62e46995501e4ca6037cfb898e2c6d52f847faf10",
+      "mode": 420
+    },
+    {
+      "path": "src/ui/relay-scene-draft.test.ts",
+      "bytes": 7094,
+      "sha256": "9c74679a6ccbb05570918d3d3eeff2f872c68d30afe0fd9dbfc12ad52dac287c",
+      "mode": 420
+    },
+    {
+      "path": "src/ui/RelayServiceChoice.test.tsx",
+      "bytes": 26986,
+      "sha256": "2d7e7191d67ba87971aa8222d0c8866a3ac4c3d0cad864befb67e271de951610",
+      "mode": 420
+    }
+  ],
+  "inputs": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-11/normal-input-r1/chrome-normal-prefix-r1/r0091.json",
+      "bytes": 1143084,
+      "sha256": "fbb353ba3c510d4e2a116170f78e5ee1bd4b93580541823195f8aa9c8f41a321",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-11/chrome-relay-fault-r12/r92-normal-for-service-abort-text-before-import.json",
+      "bytes": 1159691,
+      "sha256": "d2a42c34932414c5473d04c5415af88e0604b944ec3bc0d4aabeaeccf85fbea6",
+      "mode": 420
+    }
+  ],
+  "originalInputsUnchanged": true,
+  "testChecks": [
+    {
+      "path": "src/ui/relay-scene-draft.test.ts",
+      "oldCases": [
+        "keeps a deliberately unfinished service choice and its dates when the same slot is reopened",
+        "isolates lives, accounts, businesses, stations, periods, meters and the two steps",
+        "copies selections in both directions and retains the explicitly chosen supplier order",
+        "keeps consecutive functional edits and changes from another mounted book in the same slot",
+        "keeps a past audit date in its original period and does not expose or update it behind an invalid scope"
+      ],
+      "currentCases": [
+        "keeps a deliberately unfinished service choice and its dates when the same slot is reopened",
+        "isolates lives, accounts, businesses, stations, periods, meters and the two steps",
+        "copies selections in both directions and retains the explicitly chosen supplier order",
+        "keeps an unfinished generation and its original draft while a new service has no inherited commitment",
+        "keeps consecutive functional edits and changes from another mounted book in the same slot",
+        "keeps a past audit date in its original period and does not expose or update it behind an invalid scope"
+      ],
+      "allOldCaseTitlesRemain": true,
+      "originalExplicitTimeouts": [],
+      "currentExplicitTimeouts": [],
+      "timeoutsUnchanged": true,
+      "allOriginalExpectLinesRemain": true
+    },
+    {
+      "path": "src/ui/RelayServiceChoice.test.tsx",
+      "oldCases": [
+        "keeps deliberately selected service fields through near/book instances and submits only that original payload",
+        "previews another original period without changing the confirmed service or its unfinished draft",
+        "keeps actual meter scope and dates, and denies stale, readonly or candidate handler submissions",
+        "accepts an explicit zero supplier budget through the real handler while empty or malformed input never becomes zero",
+        "allows only today for an old-meter audit in the explicit finite-epilogue display and original-preview variant",
+        "keeps the campaign cap for playing and new service, and never silently replaces a tail audit date"
+      ],
+      "currentCases": [
+        "keeps deliberately selected service fields through near/book instances and submits only that original payload",
+        "retains the real aborted service draft until original retry saves its period, without clearing on ordinary clock saves",
+        "previews another original period without changing the confirmed service or its unfinished draft",
+        "keeps actual meter scope and dates, and denies stale, readonly or candidate handler submissions",
+        "accepts an explicit zero supplier budget through the real handler while empty or malformed input never becomes zero",
+        "allows only today for an old-meter audit in the explicit finite-epilogue display and original-preview variant",
+        "keeps the campaign cap for playing and new service, and never silently replaces a tail audit date"
+      ],
+      "allOldCaseTitlesRemain": true,
+      "originalExplicitTimeouts": [
+        "20000",
+        "20000",
+        "20000"
+      ],
+      "currentExplicitTimeouts": [
+        "20000",
+        "20000",
+        "20000"
+      ],
+      "timeoutsUnchanged": true,
+      "allOriginalExpectLinesRemain": true
+    }
+  ],
+  "diffRuns": [
+    {
+      "program": "rtk",
+      "argv": [
+        "proxy",
+        "diff",
+        "-u",
+        "--label",
+        "a/src/ui/relay-scene-draft.ts",
+        "--label",
+        "b/src/ui/relay-scene-draft.ts",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-33/relay-new-attempt-r1/relay-scene-draft.ts.before.txt",
+        "src/ui/relay-scene-draft.ts"
+      ],
+      "exitCode": 1,
+      "stderr": ""
+    },
+    {
+      "program": "rtk",
+      "argv": [
+        "proxy",
+        "diff",
+        "-u",
+        "--label",
+        "a/src/ui/RelayServiceChoice.tsx",
+        "--label",
+        "b/src/ui/RelayServiceChoice.tsx",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-33/relay-new-attempt-r1/RelayServiceChoice.tsx.before.txt",
+        "src/ui/RelayServiceChoice.tsx"
+      ],
+      "exitCode": 1,
+      "stderr": ""
+    },
+    {
+      "program": "rtk",
+      "argv": [
+        "proxy",
+        "diff",
+        "-u",
+        "--label",
+        "a/src/ui/relay-scene-draft.test.ts",
+        "--label",
+        "b/src/ui/relay-scene-draft.test.ts",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-33/relay-new-attempt-r1/relay-scene-draft.test.ts.before.txt",
+        "src/ui/relay-scene-draft.test.ts"
+      ],
+      "exitCode": 1,
+      "stderr": ""
+    },
+    {
+      "program": "rtk",
+      "argv": [
+        "proxy",
+        "diff",
+        "-u",
+        "--label",
+        "a/src/ui/RelayServiceChoice.test.tsx",
+        "--label",
+        "b/src/ui/RelayServiceChoice.test.tsx",
+        "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-33/relay-new-attempt-r1/RelayServiceChoice.test.tsx.before.txt",
+        "src/ui/RelayServiceChoice.test.tsx"
+      ],
+      "exitCode": 1,
+      "stderr": ""
+    }
+  ],
+  "testsExecuted": 0,
+  "typeChecksExecuted": 0,
+  "buildsExecuted": 0,
+  "freeze": true
+}

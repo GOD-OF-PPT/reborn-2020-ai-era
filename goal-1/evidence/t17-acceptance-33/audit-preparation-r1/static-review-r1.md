@@ -1,0 +1,9 @@
+# 限定静态复核
+
+Root32旧helper 12846B/SHA 1db134797dc1b06a365f2b118a1d1e939b18d23308691867c082007e31e94a2a；新helper 15216B/SHA a5a4c26703034bc8c2520245a1a3bfb2dab1cf9eda8571f8b1d4cb41396c2de2。原官方auditor未改。
+
+独立复核者：/root/game_mainline_design；只读纯文本结论：未发现降低原断言。原全Create入口、126枚举与report sourceHashes逐126相等、原raw bytes全同终态、P326对开工workingtree及prepared合同、显式source前缀+lowercase origin一致、raw/manifest前后、unknownJSON和漏登raw拒绝、wx/祖先guard/旧输出拒覆写均保留。新增official126/P326及旧template强核、native-inputs规范旧prefix bytes/SHA/notNewNativeHistory及after重新枚举extraReferences合理。该复核未import/执行runner/official auditor、未写目录、未跑检查/测试/浏览器/Git。
+
+本owner实际node --check退出0，原stdout/stderr均空，见syntax-r1.json；只检查语法，没有执行wrapper正文。
+
+当前仍须等Root确认全部captures写停。本复核不证明实际完整Create审核、Native/画面或整体验收。

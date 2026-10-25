@@ -1,0 +1,109 @@
+import {expect,it,vi} from 'vitest'
+import {renderToStaticMarkup} from 'react-dom/server'
+import {RelayServicePaper,type RelayServicePaperState} from './RelayServicePaper.tsx'
+import {OpeningObject,type OpeningObjectProps} from './OpeningObject.tsx'
+
+vi.mock('react',async original=>({...await original<typeof import('react')>(),useId:()=> 'relay-paper'}))
+
+// Presentation inputs exercise no campaign, permission decision, meter or payment.
+const render=(art:RelayServicePaperState)=>renderToStaticMarkup(<RelayServicePaper art={art}/>)
+const shapes=(html:string)=>(html.match(/<path\b[^>]*>/g)??[]).map(path=>path.replace(/ class="[^"]*"/g,'')).join('')
+const props=(relayPaper:RelayServicePaperState,extra:Partial<OpeningObjectProps>={}):OpeningObjectProps=>({
+ kind:'work',appearance:'relay',title:'这座中转站的同一服务账期',displayTitle:'',stageLabel:'服务已安排',
+ detail:'原服务尚未开工，未来支持仍按原安排保留。',actionLabel:'等这期服务开工 · 原公开日期',
+ disabled:false,onActivate:vi.fn(),relayPaper,...extra,
+})
+
+it('gives all six paper families distinct leaves without inventing figures or interactive controls',()=>{
+ const states:readonly RelayServicePaperState[]=[
+  {phase:'preparation',state:'choice',heading:''},{phase:'permission',state:'unread',heading:''},
+  {phase:'commitment',state:'agreed',heading:''},{phase:'service',state:'planned',heading:''},
+  {phase:'audit',state:'unmetered',heading:''},{phase:'result',state:'receivable',heading:''},
+ ]
+ const html=states.map(render)
+ expect(new Set(html.map(shapes)).size).toBe(6)
+ for(const value of html){
+  expect(value).toContain('aria-hidden="true"')
+  expect(value).toContain('focusable="false"')
+  expect(value).toContain('relay-service-kit-v1.png')
+  expect(value).toContain('width="1536" height="1024"')
+  expect(value).not.toMatch(/<(?:text|foreignObject|button|a|script)\b|¥|￥|收入|实收|20\d{2}-\d{2}-\d{2}/)
+ }
+})
+
+it('keeps unread replies sealed and unaudited reports separate from actual comparison or receipts',()=>{
+ const unread=render({phase:'permission',state:'unread',heading:''})
+ expect(unread).toContain('sealed-unread-reply')
+ expect(unread).not.toMatch(/read-scope-leaf|actual-reviewed-comparison|actual-received-ticket-pair/)
+ const unmeasured=render({phase:'audit',state:'unmetered',heading:''})
+ expect(unmeasured).toContain('unmeasured-empty-leaf')
+ expect(unmeasured).not.toMatch(/relay-pencil|actual-reviewed-comparison/)
+ const reported=render({phase:'audit',state:'reported',heading:''})
+ expect(reported).not.toContain('actual-reviewed-comparison')
+ const reviewed=render({phase:'audit',state:'reviewed',heading:''})
+ expect(reviewed).toContain('actual-reviewed-comparison')
+ expect(reviewed).not.toContain('actual-received-ticket-pair')
+ const corrected=render({phase:'audit',state:'corrected',heading:''})
+ expect(corrected).toContain('kept-correction-attachment')
+ expect(corrected).not.toContain('actual-received-ticket-pair')
+})
+
+it('distinguishes arrangement, running, service ending and actual receipt while support stays independent',()=>{
+ const phases:readonly RelayServicePaperState[]=[
+  {phase:'service',state:'planned',support:'planned',heading:''},
+  {phase:'service',state:'running',support:'planned',heading:''},
+  {phase:'service',state:'ended',support:'running',heading:''},
+  {phase:'result',state:'received',support:'running',heading:''},
+ ]
+ const html=phases.map(render)
+ expect(new Set(html.map(shapes)).size).toBe(4)
+ expect(html[0]).toContain('data-support-state="planned"')
+ expect(html[2]).toContain('data-support-state="running"')
+ expect(html[3]).toContain('data-support-state="running"')
+ for(const value of html.slice(0,3))expect(value).not.toContain('actual-received-ticket-pair')
+ expect(html[3]).toContain('actual-received-ticket-pair')
+ const stopped:RelayServicePaperState={phase:'result',state:'stopped',support:'pending',heading:'原支持尚待履行'}
+ expect(render(stopped)).toContain('neutral-stopped-record')
+ expect(render(stopped)).not.toContain('actual-responsibility-fold')
+ expect(render({...stopped,responsibility:'原支持仍需履行'})).toContain('actual-responsibility-fold')
+ expect(render({...stopped,responsibility:'  '})).not.toContain('actual-responsibility-fold')
+})
+
+it('keeps caller text, full identity and one native action, with protection over the committed paper',()=>{
+ const art:RelayServicePaperState={phase:'service',state:'planned',heading:'这期服务尚未开工',dateLabel:'2025-01-28 开工',line:'服务成本与未来支持分别核对',support:'planned',supportLabel:'原支持另有开工与完成日期',paymentLabel:'客户预款仍受保护，并非利润',responsibility:'原到期义务仍需处理'}
+ const p=props(art),button=OpeningObject(p)
+ expect(button.type).toBe('button')
+ expect(button.props.type).toBe('button')
+ expect(button.props['aria-label']).toBe(p.title+' '+p.actionLabel)
+ expect(button.props['aria-describedby']).toContain('relay-paper-relay-notes')
+ button.props.onClick()
+ expect(p.onActivate).toHaveBeenCalledTimes(1)
+ for(const protection of ['readonly','unsaved','unavailable'] as const){
+  const markup=renderToStaticMarkup(<OpeningObject {...p} protection={protection} disabled/>)
+  expect(markup).toContain('data-relay-phase="service"')
+  expect(markup).toContain('data-relay-state="planned"')
+  expect(markup).toContain('data-protection="'+protection+'"')
+  expect(markup).toContain('disabled=""')
+  expect(markup).not.toContain('actual-received-ticket-pair')
+  expect(markup).toContain(protection==='readonly'?'只读 · 原记录保留':protection==='unsaved'?'尚未保存 · 仍是上次的物件':'暂不可用 · 先核对原因')
+  const text=renderToStaticMarkup(<OpeningObject {...p} protection={protection} disabled textOnly/>)
+  for(const label of [art.heading,art.dateLabel,art.line,art.supportLabel,art.paymentLabel,art.responsibility,p.detail,p.actionLabel]){
+   expect(text).toContain(label)
+  }
+  expect(text).toContain(p.title+' '+p.actionLabel)
+  expect(text).not.toMatch(/<img\b|<svg\b|class="opening-object-art"/)
+ }
+ expect(p.onActivate).toHaveBeenCalledTimes(1)
+})
+
+it('does not change the existing relay image or another route when no relay paper is provided',()=>{
+ const {relayPaper,...legacy}=props({phase:'preparation',state:'choice',heading:''})
+ expect(relayPaper?.phase).toBe('preparation')
+ const old=renderToStaticMarkup(<OpeningObject {...legacy}/>)
+ expect(old).toContain('relay-service-kit-v1.png')
+ expect(old).toContain('opening-object-mark')
+ expect(old).not.toContain('data-relay-phase')
+ const video=renderToStaticMarkup(<OpeningObject {...legacy} appearance="video"/>)
+ expect(video).toContain('video-making-kit-v1.png')
+ expect(video).not.toContain('relay-service-art')
+})

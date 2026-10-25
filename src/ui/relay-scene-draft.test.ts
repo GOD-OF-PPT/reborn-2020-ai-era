@@ -46,6 +46,22 @@ it('copies selections in both directions and retains the explicitly chosen suppl
  expect(memory.read('life-a',service)).toMatchObject({customerIds:['customer-a'],supplierIds:['backup-first','primary-second'],resources:['worker-a']})
 })
 
+it('keeps an unfinished generation and its original draft while a new service has no inherited commitment',()=>{
+ const memory=createRelaySceneDraftMemory('life-a'),original={...service,generation:'["period:a"]'},next={...service,generation:'["period:a","period:b"]'},draft={...emptyRelaySceneDraft(),customerIds:['customer-a'],supplierIds:['supplier-a'],resources:['worker-a'],startAt:'2025-02-03',maxUnits:'2800',maxSupplierCost:'100',supportMode:'guided' as const}
+ memory.write('life-a',original,draft)
+ expect(memory.read('life-a',{...original})).toEqual(draft)
+ expect(memory.read('life-a',next)).toBeUndefined()
+ memory.write('life-a',next,emptyRelaySceneDraft())
+ expect(memory.read('life-a',original)).toEqual(draft)
+ expect(memory.read('life-a',next)).toEqual(emptyRelaySceneDraft())
+ // Audit identity remains its original seven parts, even if a caller passes a
+ // service context; another service cannot hide or relabel the original meter.
+ const originalAudit={...audit,meterId:'meter:a',generation:original.generation},laterAudit={...originalAudit,generation:next.generation}
+ expect(relaySceneDraftKey('life-a',originalAudit)).toBe(JSON.stringify(['life-a','company-a','business-a','station-a','period-a','meter:a','audit']))
+ memory.write('life-a',originalAudit,{...emptyRelaySceneDraft(),resources:['worker-a'],startAt:'2025-03-04'})
+ expect(memory.read('life-a',laterAudit)).toMatchObject({resources:['worker-a'],startAt:'2025-03-04'})
+})
+
 it('keeps consecutive functional edits and changes from another mounted book in the same slot',()=>{
  for(const shared of [false,true]){
   hooks.values=[]

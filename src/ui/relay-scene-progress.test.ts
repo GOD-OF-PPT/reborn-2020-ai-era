@@ -60,6 +60,16 @@ function receivableDisplay(overrides:Partial<Relay>={}){
 }
 const invoice=(overrides:Partial<Relay['receivables'][number]>={}):Relay['receivables'][number]=>({id:'future-support-invoice',customerId:'customer',sourceId:'period',date:'2025-02-05',dueAt:'2025-02-19',operationId:'original-credit-operation',amountFen:5000,collectedFen:0,reversedFen:0,...overrides})
 
+it('keeps an explicitly selected station waiting for its scheduled campaign when an ordinary market notice arrives',()=>{
+ const scheduled=job({id:'scheduled-marketing',definitionId:'relay-marketing',status:'planned',startAt:'2025-01-03',completeAt:'2025-01-10'})
+ const relay=projection({audiences:[{id:'scheduled-audience',businessId:'business',segment:'local_merchants',mode:'paid',createdAt:'2025-01-01',jobId:scheduled.id,sourceCohortIds:[],completedAt:null,members:[],job:scheduled}],changes:[{id:'public-change',businessId:'business',anchorId:'public-market-notice',date:'2025-01-01',acknowledgedAt:null}]})
+ const context:RelaySceneContext={runId:'relay-scheduled-display',accountId:'relay-account',operations:{businesses:relay.businesses,jobs:[scheduled]}}
+ const target:RelaySceneTarget={kind:'business',runId:context.runId,accountId:context.accountId,businessId:'business',stationId:'station'},before=JSON.stringify(relay)
+ const progress=relaySceneProgress(relay,'2025-01-01',target,context)!
+ expect(progress.phase).toBe('marketing');expect(progress.wait?.date).toBe('2025-01-03')
+ expect(relay.changes).toHaveLength(1);expect(JSON.stringify(relay)).toBe(before)
+})
+
 it('keeps the real stopped r94 period waiting for its planned support start, without publishing completion or changing the saved record',()=>{
  const codec=createCampaignCodec(),run=codec.import(originalStoppedR94),relay=projectRelay(run,campaignRelay)!
  expect(run.origin).toBe('normal');expect(run.revision).toBe(94);expect(run.timeline.cursor.date).toBe('2025-01-28')

@@ -5,6 +5,7 @@ import {seasonRecollection,type SeasonRecollectionView} from './season-thread.ts
 import {videoFocusOpen} from './video-player-thread.ts'
 import {courseFocusOpen} from './course-player-thread.ts'
 import {isCoursePreparationThread,isCourseContinuityThread} from './course-continuity.ts'
+import {relayFocusOpen,relayFocusFor,relayBusinessTarget} from './relay-player-thread.ts'
 import {playableAdvanceDate} from '../application/playable-advance.ts'
 
 export type TodayThreadInput=Pick<GamePanelProps,'view'|'features'>
@@ -19,7 +20,7 @@ export interface TodayThreadItem{
  readonly inspect:PlayerThreadView['inspect']
  readonly sourceRefs:readonly ThreadResultRef[]
 }
-export interface TodayDirection{readonly id:'work'|'life'|'market'|'video'|'course';readonly label:string;readonly line:string;readonly screen:Screen}
+export interface TodayDirection{readonly id:'work'|'life'|'market'|'video'|'course'|'relay';readonly label:string;readonly line:string;readonly screen:Screen}
 export interface TodayThreadView{
  readonly source:{readonly runId:string;readonly revision:number;readonly date:string;readonly quarter:string}
  readonly primary:{readonly thread:PlayerThreadView;readonly classification:TodayThreadClassification;readonly supported:boolean;readonly originQuarter:string|null;readonly sourceRefs:readonly ThreadResultRef[]}
@@ -33,7 +34,7 @@ export interface TodayThreadView{
  readonly responsibilityOverrideNeeded:boolean
 }
 
-const supported=(thread:PlayerThreadView)=>['free','work','life','market','video'].includes(thread.focus.kind)||isCourseContinuityThread(thread)
+const supported=(thread:PlayerThreadView)=>['free','work','life','market','video','relay'].includes(thread.focus.kind)||isCourseContinuityThread(thread)
 
 /** Actual public arrangements decide whether a result is also still an ongoing commitment. */
 function classification(p:TodayThreadInput,thread:PlayerThreadView):TodayThreadClassification{
@@ -43,6 +44,7 @@ function classification(p:TodayThreadInput,thread:PlayerThreadView):TodayThreadC
  if(f.kind==='free'||id===null||thread.focusScope==='entry')return 'entry'
  let open=false
  if(f.kind==='video')open=videoFocusOpen(p,f)
+ else if(f.kind==='relay')open=relayFocusOpen(p,f)
  else if(f.kind==='course')open=courseFocusOpen(p,f)
  else if(f.kind==='work'){
   const period=p.view.operations?.employment.find(row=>row.id===id)
@@ -88,6 +90,20 @@ function ongoing(p:TodayThreadInput):TodayThreadItem[]{
   for(const cohort of course.cohorts.filter(co=>co.closedAt===null)){const lesson=course.courses.find(c=>c.id===cohort.courseId);if(lesson)addCourse({kind:'cohort',businessId:lesson.businessId,courseId:lesson.id,cohortId:cohort.id})}
   for(const lesson of course.courses.filter(c=>c.refreshes.some(r=>!r.applied&&r.job&&['planned','running'].includes(r.job.status))&&!course.cohorts.some(co=>co.courseId===c.id&&co.closedAt===null)))addCourse({kind:'course',businessId:lesson.businessId,courseId:lesson.id})
  }
+ const relay=p.features.relay
+ if(relay){
+  for(const business of relay.businesses){
+   const baseTarget=relayBusinessTarget(p,business.id)
+   if(!baseTarget)continue
+   const periods=relay.periods.filter(period=>period.businessId===business.id)
+   let hasOpenChild=false
+   const add=(target:NonNullable<Extract<OpeningFocus,{kind:'relay'}>['relayTarget']>)=>{const focus=relayFocusFor(p,target);if(relayFocusOpen(p,focus)){candidates.push(focus);hasOpenChild=true}}
+   for(const period of periods)add({...baseTarget,kind:'period',periodId:period.id})
+   for(const application of relay.applications.filter(row=>row.businessId===business.id))add({...baseTarget,kind:'application',applicationId:application.id})
+   for(const audience of relay.audiences.filter(row=>row.businessId===business.id))add({...baseTarget,kind:'audience',audienceId:audience.id})
+   if(!hasOpenChild&&business.lifecycle!=='closed')candidates.push(relayFocusFor(p,baseTarget))
+  }
+ }
  for(const focus of candidates){
   const thread=playerThread(p,focus),state=classification(p,thread)
   if(state!=='active'&&state!=='carry')continue
@@ -118,6 +134,7 @@ const directions:readonly TodayDirection[]=[
  {id:'life',label:'给生活留一段日子',line:'休整、住处与原来认识的人，仍由你明确选择时间和投入。',screen:'life'},
  {id:'video',label:'给自己的视频尝试留一段时间',line:'显选账号、作品和客户，原制作与平台结算继续；新的投入仍要确认。',screen:'video'},
  {id:'course',label:'把做过的事，认真准备成一堂课',line:'显选教案、已付案例与样课；资金、权利、工具资格和日期仍须核对，不自动招生。',screen:'course'},
+ {id:'relay',label:'看看谁需要一份可靠的服务',line:'显选资本、供应和客户承诺，实际服务与核账后再决定下一次投入。',screen:'relay'},
  {id:'market',label:'想想这笔钱的去处',line:'核对公开研究、原委托和持仓，再决定是否承担下一份模拟交易。',screen:'market'},
 ]
 

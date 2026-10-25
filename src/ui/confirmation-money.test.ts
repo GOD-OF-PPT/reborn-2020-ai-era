@@ -28,3 +28,8 @@ it('keeps the original zero refund operation fee separate from the student refun
  const result=confirmationMoney(command('RefundCourseLearners',{cohortId:'original-class',personIds:['original-person'],reason:'按原款退款'}),preview)
  expect(result).toEqual({label:'本次新增操作费用（学员退款另列）',amountFen:0})
 })
+it('separates supplier asset funding from consumed expense even when its preview requires that cash',()=>{
+ const result=confirmationMoney(command('TopUpRelaySupplier',{businessId:'station',supplierId:'cedar-reseller',amountFen:100000}),{...preview,upfrontCostFen:100000})
+ expect(result.amountFen).toBe(100000);expect(result.label).toContain('供应资产');expect(result.label).toContain('未消费不是成本')
+ expect(confirmationMoney(command('TopUpRelaySupplier',{}),preview).amountFen).toBeNull()
+})
