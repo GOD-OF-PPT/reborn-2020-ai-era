@@ -1,0 +1,74 @@
+{
+  "at": "2026-10-25T01:52:04.276Z",
+  "preparedOnly": true,
+  "projectionExecutions": 0,
+  "replayExecutions": 0,
+  "testsBuildBrowserExecutions": 0,
+  "template": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-33/account-readback-r2/readback.mjs",
+      "bytes": 18449,
+      "sha256": "09accb83cc5f34a2234786df571721869250725c0e2f67982ce9911504bc735f",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-33/account-readback-r2/run-once.mjs",
+      "bytes": 1678,
+      "sha256": "423c752eb2bf6c4cd0f7ebc9028e797650577e24c9f64ccf7069960c3cf9ca56",
+      "mode": 420
+    }
+  ],
+  "sourceContract": {
+    "path": "goal-1/evidence/t17-acceptance-33/audit-preparation-r1/official-source-contract-r1.json",
+    "bytes": 28319,
+    "sha256": "60c10fa4bda76e17ec4073d1b839fc503b22c7d4ab4bc44b1f9a402a7185166e",
+    "mode": 420
+  },
+  "currentBaseline": {
+    "path": "goal-1/evidence/t17-acceptance-34/baseline.json",
+    "bytes": 155312,
+    "sha256": "de259df964571b7cad8f0d31d321c4901a5ba76a429c0211d670b1c141c8e352",
+    "mode": 420
+  },
+  "currentAuditContract": {
+    "path": "goal-1/evidence/t17-acceptance-34/audit-preparation-r1/official-source-contract-r1.json",
+    "bytes": 28648,
+    "sha256": "f5ebc2a38af8032e3b491afa35bd8ed9dfafe3ac33b20ec7cf6350a202192ad6",
+    "mode": 420
+  },
+  "candidateFiles": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-34/account-readback-r1/readback.mjs",
+      "bytes": 25360,
+      "sha256": "2959186bfa29a9a1390ab05ffc089a07a387fdf87cb789043dec107af12f6f37",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-34/account-readback-r1/run-once.mjs",
+      "bytes": 1845,
+      "sha256": "b565be01a162ffb75bdefef634192f26ba6c149f43a41de39bbfa97a6f78dcdd",
+      "mode": 420
+    }
+  ],
+  "futureExecution": {
+    "argv": [
+      "rtk",
+      "proxy",
+      "node",
+      "goal-1/evidence/t17-acceptance-34/account-readback-r1/run-once.mjs"
+    ],
+    "condition": "Root explicitly authorizes this readback and keeps input manifest/raw set stable during the one run. No fixed manifest row count. Failure outputs are immutable; use fresh sibling for any new candidate/run."
+  },
+  "instructionCorrection": {
+    "originalRequestedCommandName": "EnrollCourseCohort",
+    "actualOriginalReceiptKind": "EnrollCourseAudience",
+    "rootAcknowledged": true,
+    "method": "Preparation read only original stored receipt JSON kind/payload; no codec/project imported or command evaluated."
+  },
+  "limits": [
+    "Original official126 and P326 contracts apply; not full current578 UI/build verification.",
+    "Candidate and fresh physical old/new only byte equality; Native causality remains Root original UI evidence.",
+    "Original120 and actualprevious86 if present are read-only contexts, not additional new completion/Create.",
+    "99500fen and551936fen are pending assertions, never substituted for original projection amounts."
+  ]
+}

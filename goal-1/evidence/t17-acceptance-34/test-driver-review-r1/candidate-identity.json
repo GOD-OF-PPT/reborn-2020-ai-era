@@ -1,0 +1,138 @@
+{
+  "at": "2026-10-25T01:36:09.028Z",
+  "changes": [
+    {
+      "path": "src/ui/App.relay-focus.test.tsx",
+      "beforeSha256": "8dbea2123718a0586aec29971cac43b80599a3919278a2e12ed666ac57e6eedd",
+      "candidate": {
+        "path": "goal-1/evidence/t17-acceptance-34/test-driver-review-r1/App.relay-focus.test.tsx.candidate.txt",
+        "bytes": 3845,
+        "sha256": "95183f86eaa82b0c4244e233256bcb50436f7f6f7b6d87607dbf5897a372ac74"
+      },
+      "substitutions": [
+        {
+          "from": "  const valid=route(business.accountId);expect(valid).toContain('显选客户、供应和真实投入')\n  const wrong=route('unrelated-account');expect(wrong).toContain('原中转账户与当前对象不匹配');expect(wrong).not.toContain('显选客户、供应和真实投入')",
+          "to": "  const serviceCaption='显选客户、供应顺序、资源、未来日期、预算和支持；原确认后才承诺。'\n  const valid=route(business.accountId);expect(valid).toContain('为这些客户，认真安排一期服务');expect(valid).toContain(serviceCaption)\n  const wrong=route('unrelated-account');expect(wrong).toContain('原中转账户与当前对象不匹配');expect(wrong).not.toContain('为这些客户，认真安排一期服务');expect(wrong).not.toContain(serviceCaption)"
+        }
+      ],
+      "originalExplicitTimeouts": [
+        "20000"
+      ],
+      "candidateExplicitTimeouts": [
+        "20000"
+      ],
+      "removedExpectLines": [
+        "  const valid=route(business.accountId);expect(valid).toContain('显选客户、供应和真实投入')",
+        "  const wrong=route('unrelated-account');expect(wrong).toContain('原中转账户与当前对象不匹配');expect(wrong).not.toContain('显选客户、供应和真实投入')"
+      ],
+      "diff": {
+        "program": "rtk",
+        "argv": [
+          "proxy",
+          "diff",
+          "-u",
+          "--label",
+          "a/src/ui/App.relay-focus.test.tsx",
+          "--label",
+          "b/src/ui/App.relay-focus.test.tsx",
+          "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-34/test-driver-review-r1/App.relay-focus.test.tsx.before.txt",
+          "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-34/test-driver-review-r1/App.relay-focus.test.tsx.candidate.txt"
+        ],
+        "exitCode": 1,
+        "stderr": ""
+      },
+      "applied": false
+    },
+    {
+      "path": "src/ui/OpeningMoment.focus-book.test.tsx",
+      "beforeSha256": "fc4df762e5287145ccad9cedd560abbb4e55d84b769dfe1f4bed418fa706b483",
+      "candidate": {
+        "path": "goal-1/evidence/t17-acceptance-34/test-driver-review-r1/OpeningMoment.focus-book.test.tsx.candidate.txt",
+        "bytes": 9095,
+        "sha256": "07e99abeeb19b414f1e120f80cadf7679134c6338e37638ff07ee09fa3b130ee"
+      },
+      "substitutions": [
+        {
+          "from": "import {VideoThreadAction} from './VideoThreadAction.tsx'",
+          "to": "import {VideoThreadAction} from './VideoThreadAction.tsx'\nimport {CourseThreadAction} from './CourseThreadAction.tsx'\nimport {RelayThreadAction} from './RelayThreadAction.tsx'"
+        },
+        {
+          "from": "const wrappers=new Set<unknown>([MarketSceneChoice,VideoSceneChoice,CourseSceneChoice,RelaySceneChoice])",
+          "to": "const wrappers=new Set<unknown>([MarketSceneChoice,VideoSceneChoice,CourseSceneChoice,RelaySceneChoice])\nconst actionWrappers=new Set<unknown>([OpeningAttemptAction,DayThreadAction,VideoThreadAction,CourseThreadAction,RelayThreadAction])"
+        },
+        {
+          "from": " if((value.type===OpeningAttemptAction||value.type===DayThreadAction||value.type===VideoThreadAction)&&typeof value.props.children==='function')return elements(value.props.children(null))",
+          "to": " // Run each real pure action wrapper: inactive wrappers yield children(null),\n // while an active choice keeps its original binding and protection checks.\n if(actionWrappers.has(value.type)&&typeof value.type==='function'){\n  const action=value.type as (props:Record<string,unknown>)=>unknown\n  return elements(action(value.props))\n }"
+        }
+      ],
+      "originalExplicitTimeouts": [],
+      "candidateExplicitTimeouts": [],
+      "removedExpectLines": [],
+      "diff": {
+        "program": "rtk",
+        "argv": [
+          "proxy",
+          "diff",
+          "-u",
+          "--label",
+          "a/src/ui/OpeningMoment.focus-book.test.tsx",
+          "--label",
+          "b/src/ui/OpeningMoment.focus-book.test.tsx",
+          "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-34/test-driver-review-r1/OpeningMoment.focus-book.test.tsx.before.txt",
+          "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-34/test-driver-review-r1/OpeningMoment.focus-book.test.tsx.candidate.txt"
+        ],
+        "exitCode": 1,
+        "stderr": ""
+      },
+      "applied": false
+    },
+    {
+      "path": "src/ui/video-day-continuity.test.tsx",
+      "beforeSha256": "ba93c7983a916997ecb74a1bad7072faf2b832fed9c534b1f56e01d17b16b629",
+      "candidate": {
+        "path": "goal-1/evidence/t17-acceptance-34/test-driver-review-r1/video-day-continuity.test.tsx.candidate.txt",
+        "bytes": 13651,
+        "sha256": "2d8def7dfab3a8c894caf32fabcd0257d94bd3ec48f5a699fa6d2b527446864f"
+      },
+      "substitutions": [
+        {
+          "from": "import {VideoThreadAction} from './VideoThreadAction.tsx'",
+          "to": "import {VideoThreadAction} from './VideoThreadAction.tsx'\nimport {CourseThreadAction} from './CourseThreadAction.tsx'\nimport {RelayThreadAction} from './RelayThreadAction.tsx'"
+        },
+        {
+          "from": "const actionWrappers=new Set<unknown>([OpeningAttemptAction,DayThreadAction,VideoThreadAction])",
+          "to": "const actionWrappers=new Set<unknown>([OpeningAttemptAction,DayThreadAction,VideoThreadAction,CourseThreadAction,RelayThreadAction])"
+        },
+        {
+          "from": " if(actionWrappers.has(value.type)&&typeof value.props.children==='function')return elements(value.props.children(null))",
+          "to": " // Preserve the real wrapper's active/inactive contract and shared action;\n // do not invent a primary node just to make the quarter lookup succeed.\n if(actionWrappers.has(value.type)&&typeof value.type==='function'){\n  const action=value.type as (props:Record<string,unknown>)=>unknown\n  return elements(action(value.props))\n }"
+        }
+      ],
+      "originalExplicitTimeouts": [],
+      "candidateExplicitTimeouts": [],
+      "removedExpectLines": [],
+      "diff": {
+        "program": "rtk",
+        "argv": [
+          "proxy",
+          "diff",
+          "-u",
+          "--label",
+          "a/src/ui/video-day-continuity.test.tsx",
+          "--label",
+          "b/src/ui/video-day-continuity.test.tsx",
+          "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-34/test-driver-review-r1/video-day-continuity.test.tsx.before.txt",
+          "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-34/test-driver-review-r1/video-day-continuity.test.tsx.candidate.txt"
+        ],
+        "exitCode": 1,
+        "stderr": ""
+      },
+      "applied": false
+    }
+  ],
+  "patchBytes": 5285,
+  "patchSha256": "362fcad41587f5ce3ea47b25f7522efda420bb5c5aca432e144b7e5e1cfe8425",
+  "testsExecuted": 0,
+  "typeChecksExecuted": 0,
+  "sourceModified": false
+}

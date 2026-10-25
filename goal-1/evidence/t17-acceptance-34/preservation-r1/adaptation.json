@@ -1,0 +1,63 @@
+{
+  "at": "2026-10-25T00:19:53.831Z",
+  "original": {
+    "path": "goal-1/evidence/t17-acceptance-33/preservation-r1/verify-preservation-final.mjs",
+    "bytes": 15074,
+    "sha256": "d293e1195375903e18c06901bc41a7ff534b6691fda6cad7ac87d8810529ec9a"
+  },
+  "changes": [
+    {
+      "from": "t17-acceptance-33",
+      "to": "t17-acceptance-34",
+      "count": 4
+    },
+    {
+      "from": "markers.regular.length===120",
+      "to": "markers.regular.length===122",
+      "count": 1
+    },
+    {
+      "from": "result.fileSet.actual===e.files",
+      "to": "result.fileSet.actual===e.ordinaryFiles",
+      "count": 1
+    },
+    {
+      "from": "symlinkBaselineModeAvailable:false",
+      "to": "symlinkBaselineModeAvailable:true",
+      "count": 1
+    },
+    {
+      "from": "modeLimit:'symlink mode is current and initial/final checked only; baseline targets have no historical mode'",
+      "to": "modeLimit:'symbolic modes and literal targets match this task baseline and initial/final; fixture creation-time modes are not separately proven'",
+      "count": 1
+    },
+    {
+      "from": "const eb=Buffer.from(e.target);",
+      "to": "check(typeof e.mode==='number'&&a.mode===e.mode,label+':MARKER_SYMLINK_BASELINE_MODE',{path:e.path,expected:e.mode,actual:a.mode});const eb=Buffer.from(e.target);",
+      "count": 1
+    },
+    {
+      "from": "120 ordinary marker identities and exact set are checked; only latest root32/post payloads are fully rehashed in addition to full root19.",
+      "to": "122 ordinary marker identities and exact set are checked; only latest root33/post payloads are fully rehashed in addition to full root19.",
+      "count": 1
+    },
+    {
+      "from": "Historical symlink modes are absent from baseline; current mode and initial/final stability only.",
+      "to": "Symbolic marker modes and literal targets match this task baseline; their fixture creation-time modes are not independently established.",
+      "count": 1
+    },
+    {
+      "from": "format:'u4a-preservation-readback-v1'",
+      "to": "format:'cux06-preservation-readback-v1'",
+      "count": 1
+    },
+    {
+      "from": "'scripts/browser_evidence_guard.mjs',rel(fileURLToPath(import.meta.url))",
+      "to": "'scripts/browser_evidence_guard.mjs',rel(resolve(out,'preparation-inputs.json')),rel(fileURLToPath(import.meta.url))",
+      "count": 1
+    }
+  ],
+  "newScriptBytes": 15333,
+  "newScriptSha256": "f3ee08d44d5a7c50bd682022168c68da562688c63e8e0c3f017d571660780423",
+  "mutationsExecuted": 0
+}

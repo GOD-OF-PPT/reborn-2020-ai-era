@@ -1,0 +1,60 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
+import {spawn} from 'node:child_process';
+import {assertBrowserEvidenceWritable as guard} from '../../../scripts/browser_evidence_guard.mjs';
+
+// Preparation only. Root starts this after the current UI run reaches its real terminal state.
+const ownFile=fileURLToPath(import.meta.url),root=path.dirname(ownFile),repo=path.resolve(root,'../../..'),relative=name=>path.relative(repo,name);
+const runner=path.join(root,'run-long-step-r2.mjs'),kinds=['kernel','save','first-order','market','video','course','relay'];
+const stem='run-collectors-r1',outerNames=['started.json','terminal.json','stdout.log','stderr.log','steps.jsonl'].map(suffix=>stem+'.'+suffix);
+const stepSuffixes=['source-before.json','source-after.json','started.json','result.json','stdout.log','stderr.log'];
+const sha=bytes=>createHash('sha256').update(bytes).digest('hex'),same=(a,b)=>JSON.stringify(a)===JSON.stringify(b),exists=name=>!!fs.lstatSync(name,{throwIfNoEntry:false});
+const identity=name=>{const stat=fs.lstatSync(name);if(stat.isSymbolicLink()||!stat.isFile())throw Error('ORDINARY_COLLECTOR_RUNNER_REQUIRED:'+name);const bytes=fs.readFileSync(name);return {path:relative(name),bytes:bytes.length,sha256:sha(bytes),mode:stat.mode&0o777}};
+const put=(name,value)=>{guard(root);fs.writeFileSync(path.join(root,name),JSON.stringify(value,null,2)+'\n',{flag:'wx'})};
+const load=name=>{const record=identity(name);return {identity:record,value:JSON.parse(fs.readFileSync(name,'utf8'))}};
+const writeAll=(fd,chunk)=>{const bytes=Buffer.isBuffer(chunk)?chunk:Buffer.from(chunk);let offset=0;while(offset<bytes.length){const written=fs.writeSync(fd,bytes,offset,bytes.length-offset);if(written<=0)throw Error('COLLECTOR_STREAM_WRITE_INCOMPLETE');offset+=written}};
+const stepPaths=kind=>{const name='cux06-collector-'+kind+'-r1';return {kind,name,target:path.join(root,'collector-'+kind+'-r1'),artifacts:stepSuffixes.map(suffix=>path.join(root,name+'.'+suffix))}};
+const assertStepFresh=step=>{guard(root);if(exists(step.target)||step.artifacts.some(exists))throw Error('COLLECTOR_TARGET_OR_STEP_ARTIFACT_ALREADY_EXISTS:'+step.kind)};
+const limits={collectorNotNewNative:true,collectorNotHumanOrCompatibilityAcceptance:true,formalP3Critical62AndRoutine22NotClaimed:true,fixtureAndNormalScenarioIdentitiesPreserved:true,legacySaveCollectorNativeReferenceIsHistorical:true,noTimeoutIsolationAssertionOrOriginalParameterChanges:true,stopAtFirstFailureWithoutSkipping:true};
+guard(root);if(process.argv.length!==2)throw Error('COLLECTOR_SERIAL_NO_ARGUMENTS');
+for(const name of outerNames)if(exists(path.join(root,name)))throw Error('COLLECTOR_OUTER_ALREADY_EXISTS_USE_FRESH_AUTHORIZED_SIBLING:'+name);
+const started=Date.now(),selfBefore=identity(ownFile),runnerBefore=identity(runner),planned=kinds.map(stepPaths),steps=[],errors=[];
+const initialTargets=planned.map(step=>({kind:step.kind,target:relative(step.target),targetExists:exists(step.target),existingArtifacts:step.artifacts.filter(exists).map(relative)}));
+put(stem+'.started.json',{at:new Date().toISOString(),cwd:repo,parentPid:process.pid,self:selfBefore,runner:runnerBefore,sequence:kinds,initialTargets,sourceGate:{expectedSourceCount:578,sourceUnchanged:true,extraSame:true},limits});
+const descriptors={};let selfAfter=null,runnerAfter=null,sourceContract=null,extraContract=null;
+try{
+ for(const suffix of ['stdout','stderr','steps']){guard(root);descriptors[suffix]=fs.openSync(path.join(root,stem+'.'+(suffix==='steps'?'steps.jsonl':suffix+'.log')),'wx')}
+ for(const step of planned)assertStepFresh(step);
+ for(const step of planned){
+  guard(root);assertStepFresh(step);
+  if(!same(identity(ownFile),selfBefore)||!same(identity(runner),runnerBefore))throw Error('COLLECTOR_WRAPPER_OR_ORIGINAL_RUNNER_CHANGED_BEFORE_STEP:'+step.kind);
+  const argv=['rtk','proxy','node',relative(runner),step.name,'npm','run','evidence:'+step.kind,'--','--output-dir',relative(step.target)],start=Date.now();
+  const child=spawn(argv[0],argv.slice(1),{cwd:repo,stdio:['ignore','pipe','pipe']});let childError=null,streamError=null;
+  for(const stream of ['stdout','stderr'])child[stream].on('data',chunk=>{try{guard(root);writeAll(descriptors[stream],chunk);if(!process[stream].write(chunk)){child[stream].pause();process[stream].once('drain',()=>child[stream].resume())}}catch(error){streamError??={name:error.name,message:error.message}}});
+  child.once('error',error=>{childError={name:error.name,message:error.message}});
+  // Only close is a terminal: an error event never advances the sequence by itself.
+  const close=await new Promise(resolve=>child.once('close',(code,signal)=>resolve({code,signal})));
+  const record={kind:step.kind,argv,childPid:child.pid??null,exitCode:close.code,signal:close.signal,error:childError,streamError,wallMs:Date.now()-start,result:null,binding:null,validated:false};steps.push(record);
+  try{
+   const result=load(path.join(root,step.name+'.result.json')),before=load(path.join(root,step.name+'.source-before.json')),after=load(path.join(root,step.name+'.source-after.json'));
+   record.result={identity:result.identity,value:result.value};
+   sourceContract??=before.value.files;extraContract??=before.value.extra;
+   const sameBatchSource=same(sourceContract,before.value.files)&&same(sourceContract,after.value.files),sameBatchExtra=same(extraContract,before.value.extra);
+   guard(step.target);
+   record.binding={sourceBefore:before.identity,sourceAfter:after.identity,sourceBeforeCount:before.value.files?.length??null,sourceAfterCount:after.value.files?.length??null,sourceFilesEqual:same(before.value.files,after.value.files),extraCount:before.value.extra?.length??null,afterExtraSame:after.value.extraSame,sameBatchSource,sameBatchExtra};
+   const expectedInner=['rtk','proxy','npm','run','evidence:'+step.kind,'--','--output-dir',relative(step.target)];
+   record.validated=close.code===0&&close.signal===null&&childError===null&&streamError===null&&sameBatchSource&&sameBatchExtra&&result.value.exitCode===0&&result.value.signal===null&&result.value.error===null&&result.value.sourceCount===578&&result.value.sourceUnchanged===true&&result.value.extraSame===true&&same(result.value.argv,expectedInner)&&before.value.files?.length===578&&after.value.files?.length===578&&record.binding.sourceFilesEqual&&after.value.extraSame===true&&exists(step.target)&&fs.lstatSync(step.target).isDirectory()&&!fs.lstatSync(step.target).isSymbolicLink();
+  }catch(error){record.readbackError={name:error.name,message:error.message}}
+  guard(root);writeAll(descriptors.steps,JSON.stringify(record)+'\n');fs.fsyncSync(descriptors.steps);
+  if(!record.validated)throw Error('COLLECTOR_REAL_TERMINAL_OR_ORIGINAL_SOURCE_GATE_FAILED:'+step.kind);
+ }
+}catch(error){errors.push({name:error?.name??'Error',message:error?.message??String(error),stack:error?.stack??null})}
+finally{
+ for(const fd of Object.values(descriptors)){try{fs.fsyncSync(fd);fs.closeSync(fd)}catch(error){errors.push({stage:'close-stream',name:error.name,message:error.message})}}
+ try{selfAfter=identity(ownFile);runnerAfter=identity(runner);if(!same(selfBefore,selfAfter)||!same(runnerBefore,runnerAfter))errors.push({stage:'final-identity',message:'COLLECTOR_WRAPPER_OR_ORIGINAL_RUNNER_CHANGED'})}catch(error){errors.push({stage:'final-identity',name:error.name,message:error.message})}
+}
+const passed=errors.length===0&&steps.length===kinds.length&&steps.every(step=>step.validated===true)&&same(selfBefore,selfAfter)&&same(runnerBefore,runnerAfter);
+const terminal={at:new Date().toISOString(),passed,exitCode:passed?0:1,wallMs:Date.now()-started,sequence:kinds,completedKinds:steps.filter(step=>step.validated).map(step=>step.kind),attemptedKinds:steps.map(step=>step.kind),notStartedKinds:kinds.filter(kind=>!steps.some(step=>step.kind===kind)),selfBefore,selfAfter,selfUnchanged:same(selfBefore,selfAfter),runnerBefore,runnerAfter,runnerUnchanged:same(runnerBefore,runnerAfter),batchSource:sourceContract?{count:sourceContract.length,sha256:sha(JSON.stringify(sourceContract))}:null,batchExtra:extraContract?{count:extraContract.length,sha256:sha(JSON.stringify(extraContract))}:null,steps,errors,limits};
+put(stem+'.terminal.json',terminal);console.log(JSON.stringify(terminal));process.exitCode=passed?0:1;

@@ -1,0 +1,74 @@
+--- a/src/ui/App.relay-focus.test.tsx
++++ b/src/ui/App.relay-focus.test.tsx
+@@ -37,8 +37,9 @@
+   expect(before).toBe(input);expect(room).toContain('2024-Q4');expect(room).toContain('原书签未变')
+   expect(room).toContain('relay-service-kit-v1.png');expect(room).not.toContain('接下这笔手工单')
+   const route=(accountId:string)=>renderToStaticMarkup(<NarrativeScene {...p} accountId={accountId} relayTarget={target} screen="relay" headingRef={null} personId="tang-ying" onPerson={request} onOpen={request} onPeople={request} onYear={request} onNavigate={request} receipt={null}/>)
+-  const valid=route(business.accountId);expect(valid).toContain('显选客户、供应和真实投入')
+-  const wrong=route('unrelated-account');expect(wrong).toContain('原中转账户与当前对象不匹配');expect(wrong).not.toContain('显选客户、供应和真实投入')
++  const serviceCaption='显选客户、供应顺序、资源、未来日期、预算和支持；原确认后才承诺。'
++  const valid=route(business.accountId);expect(valid).toContain('为这些客户，认真安排一期服务');expect(valid).toContain(serviceCaption)
++  const wrong=route('unrelated-account');expect(wrong).toContain('原中转账户与当前对象不匹配');expect(wrong).not.toContain('为这些客户，认真安排一期服务');expect(wrong).not.toContain(serviceCaption)
+   expect(writes).toBe(0);expect(controller.exportSaved()).toBe(before)
+  }finally{await controller.close();await store.close()}
+ },20000)
+--- a/src/ui/OpeningMoment.focus-book.test.tsx
++++ b/src/ui/OpeningMoment.focus-book.test.tsx
+@@ -10,6 +10,8 @@
+ import {OpeningAttemptAction} from './OpeningAttemptAction.tsx'
+ import {DayThreadAction} from './DayThreadAction.tsx'
+ import {VideoThreadAction} from './VideoThreadAction.tsx'
++import {CourseThreadAction} from './CourseThreadAction.tsx'
++import {RelayThreadAction} from './RelayThreadAction.tsx'
+ import {roomMoment} from './RoomMoment.tsx'
+ import {playerThread} from './player-thread.ts'
+ import {Dialog} from './Dialog.tsx'
+@@ -33,10 +35,16 @@
+ })
+ type Element=ReactElement<Record<string,unknown>>
+ const wrappers=new Set<unknown>([MarketSceneChoice,VideoSceneChoice,CourseSceneChoice,RelaySceneChoice])
++const actionWrappers=new Set<unknown>([OpeningAttemptAction,DayThreadAction,VideoThreadAction,CourseThreadAction,RelayThreadAction])
+ function elements(value:unknown):Element[]{
+  if(Array.isArray(value))return value.flatMap(elements)
+  if(!isValidElement<Record<string,unknown>>(value))return []
+- if((value.type===OpeningAttemptAction||value.type===DayThreadAction||value.type===VideoThreadAction)&&typeof value.props.children==='function')return elements(value.props.children(null))
++ // Run each real pure action wrapper: inactive wrappers yield children(null),
++ // while an active choice keeps its original binding and protection checks.
++ if(actionWrappers.has(value.type)&&typeof value.type==='function'){
++  const action=value.type as (props:Record<string,unknown>)=>unknown
++  return elements(action(value.props))
++ }
+  if(wrappers.has(value.type)&&typeof value.props.children==='function')return elements(value.props.children(()=>{}))
+  return [value,...elements(value.props.children),...elements(value.props.footer)]
+ }
+--- a/src/ui/video-day-continuity.test.tsx
++++ b/src/ui/video-day-continuity.test.tsx
+@@ -18,6 +18,8 @@
+ import {OpeningAttemptAction} from './OpeningAttemptAction.tsx'
+ import {DayThreadAction} from './DayThreadAction.tsx'
+ import {VideoThreadAction} from './VideoThreadAction.tsx'
++import {CourseThreadAction} from './CourseThreadAction.tsx'
++import {RelayThreadAction} from './RelayThreadAction.tsx'
+ import {MarketSceneChoice} from './MarketSceneChoice.tsx'
+ import {VideoSceneChoice} from './VideoSceneChoice.tsx'
+ import {CourseSceneChoice} from './CourseSceneChoice.tsx'
+@@ -126,12 +128,17 @@
+ 
+ type Element=ReactElement<Record<string,unknown>>
+ const wrappers=new Set<unknown>([MarketSceneChoice,VideoSceneChoice,CourseSceneChoice,RelaySceneChoice])
+-const actionWrappers=new Set<unknown>([OpeningAttemptAction,DayThreadAction,VideoThreadAction])
++const actionWrappers=new Set<unknown>([OpeningAttemptAction,DayThreadAction,VideoThreadAction,CourseThreadAction,RelayThreadAction])
+ function elements(value:unknown):Element[]{
+  if(Array.isArray(value))return value.flatMap(elements)
+  if(!isValidElement<Record<string,unknown>>(value))return []
+  if(wrappers.has(value.type)&&typeof value.props.children==='function')return elements(value.props.children(()=>{}))
+- if(actionWrappers.has(value.type)&&typeof value.props.children==='function')return elements(value.props.children(null))
++ // Preserve the real wrapper's active/inactive contract and shared action;
++ // do not invent a primary node just to make the quarter lookup succeed.
++ if(actionWrappers.has(value.type)&&typeof value.type==='function'){
++  const action=value.type as (props:Record<string,unknown>)=>unknown
++  return elements(action(value.props))
++ }
+  return [value,...elements(value.props.children)]
+ }
+ function text(value:unknown):string{return typeof value==='string'||typeof value==='number'?String(value):Array.isArray(value)?value.map(text).join(''):isValidElement<Record<string,unknown>>(value)?text(value.props.children):''}

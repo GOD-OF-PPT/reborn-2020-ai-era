@@ -1,0 +1,45 @@
+/* The original low folio and native leaves share one complete authored canvas. */
+.course-preparation-art[data-course-phase]{position:relative;isolation:isolate;display:block;width:100%;height:160px;pointer-events:none}
+.course-preparation-art[data-course-phase] .course-preparation-kit,
+.course-preparation-art[data-course-phase] .course-preparation-layers{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform:none;pointer-events:none}
+.course-preparation-art[data-course-phase] .course-preparation-kit{z-index:0;filter:none}
+.course-preparation-art[data-course-phase] .course-preparation-layers{z-index:1;filter:drop-shadow(1px 2px 1px #3d302450)}
+.course-preparation-art[data-course-phase] .course-paper-sheet{fill:#f0e2c5;stroke:#b8a17c;stroke-width:4}
+.course-preparation-art[data-course-phase] .course-paper-under{fill:#d5c29d;stroke:#a28c67;stroke-width:4}
+.course-preparation-art[data-course-phase] .course-paper-page-edge{fill:#e0ceab;stroke:#b5a07b;stroke-width:4}
+.course-preparation-art[data-course-phase] .course-paper-fold{fill:#d0bc98;stroke:#aa926a;stroke-width:4}
+.course-preparation-art[data-course-phase] .course-paper-fold-line{stroke:#ad9770;stroke-width:5}
+.course-preparation-art[data-course-phase] .course-paper-ink{stroke:#918968;stroke-width:5;stroke-linecap:round}
+.course-preparation-art[data-course-phase] .course-paper-pencil{stroke:#788469;stroke-width:5;stroke-linecap:round}
+.course-preparation-art[data-course-phase] .course-paper-dashed{stroke:#a18b60;stroke-width:4;stroke-dasharray:13 11}
+.course-preparation-art[data-course-phase] .course-paper-case{fill:#cfc3a4;stroke:#a49371;stroke-width:4}
+.course-preparation-art[data-course-phase] .course-paper-clip{stroke:#a47c42;stroke-width:10;stroke-linecap:round}
+.course-preparation-art[data-course-phase] .course-paper-margin{stroke:#bca887;stroke-width:4}
+.course-preparation-art[data-course-phase] .course-paper-working-edge{fill:#a4aa8b;stroke:#7f8b6d;stroke-width:4}
+.course-preparation-art[data-course-phase] .course-paper-kept{fill:#e9ddbd;stroke:#b39f77;stroke-width:4}
+.course-preparation-art[data-course-phase] .course-paper-binding{stroke:#8e8568;stroke-width:9;stroke-linecap:round}
+.course-preparation-art[data-course-phase] .course-paper-bookmark{fill:#b99a5f;stroke:#927343;stroke-width:4}
+.course-preparation-art[data-course-phase] .course-paper-plan-frame{stroke:#a99c76;stroke-width:5}
+.course-preparation-art[data-course-phase] .course-paper-scope-tab{fill:#c6b48c;stroke:#a08a61;stroke-width:4}
+.course-preparation-art[data-course-phase] .course-paper-scope{fill:#e4d8b9;stroke:#ad9974;stroke-width:4}
+.course-preparation-art[data-course-phase] .course-paper-scope-frame{stroke:#a99a77;stroke-width:4}
+.course-preparation-art[data-course-phase] .course-paper-joined-clip{stroke:#988755;stroke-width:11;stroke-linecap:round}
+.course-preparation-art[data-course-phase] .course-paper-practice-frame{stroke:#859273;stroke-width:6}
+.course-preparation-art[data-course-phase] .course-paper-tie{stroke:#b59760;stroke-width:7}
+.course-preparation-art[data-course-phase] .course-paper-warm-sheet{fill:#eadabb;stroke:#b39e7a;stroke-width:4}
+.course-preparation-art[data-course-phase] .course-paper-muted{fill:#bfb49a;stroke:#9c9074;stroke-width:4}
+.course-preparation-art[data-course-phase] .course-paper-retained-tie{stroke:#8c8065;stroke-width:7}
+.course-preparation-art[data-course-phase] .course-paper-retained{fill:#b78c70;stroke:#976b53;stroke-width:4}
+.course-preparation-art[data-course-phase] .course-paper-retained-line{stroke:#7f5d49;stroke-width:5}
+
+/* Only the explicit preparation paper uses this low slot; legacy teaching keeps its layout. */
+.opening-object[data-course-phase]{transform:none;transition:none}
+.opening-room>.opening-object[data-appearance=course][data-course-phase]>.opening-object-art,
+.opening-room .opening-room-object>.opening-object[data-appearance=course][data-course-phase]>.opening-object-art{height:160px;min-height:160px;width:100%;aspect-ratio:auto;align-self:end;filter:none;transform:none}
+.opening-object[data-course-phase] .opening-object-title:empty,
+.opening-object[data-course-phase] .opening-object-detail:empty{display:none}
+.opening-object[data-course-phase] .first-order-protection{display:flex;align-items:baseline;align-self:stretch;gap:7px;padding:5px 0;border-top:1px dashed #bac09d;color:#d8d6b8}
+.opening-object[data-course-phase][data-protection=readonly] .opening-object-copy{border-left:3px double #bac09d}
+.opening-object[data-course-phase][data-protection=unsaved] .opening-object-copy{border-left-style:dashed}
+.opening-object[data-course-phase][data-protection=unavailable] .opening-object-action{border-top-style:dashed}
+.opening-object[data-course-phase]:is(:hover,:focus-visible,:active):not(:disabled){transform:none}

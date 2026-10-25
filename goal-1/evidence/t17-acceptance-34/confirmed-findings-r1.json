@@ -1,0 +1,125 @@
+{
+  "at": "2026-10-25T00:45:37.809Z",
+  "status": "confirmed, fix not started; current182 source freeze remains until actual terminal",
+  "source": [
+    {
+      "path": "src/ui/OpeningMoment.tsx",
+      "bytes": 51491,
+      "sha256": "4d3740103bcb322ea07ba0a2d05e48ad12351ff176c7639211fa99176bc269c0",
+      "mode": 420,
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/ui/OpeningObject.tsx",
+      "bytes": 8482,
+      "sha256": "ccb2d945aa60ecc7d56f8321d4096b75c5d9691f7b9d52d6f6161b650919327a",
+      "mode": 420,
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/ui/course-teaching-continuity.ts",
+      "bytes": 6700,
+      "sha256": "4a68e88338be44d232c5cbcbcfe3578bdbec76e8144aea56b1778c199b99760c",
+      "mode": 420,
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/ui/course-preparation-paper.css",
+      "bytes": 4809,
+      "sha256": "6920e05e0db0791084940adc53fc02abf71dad47ef4bb3a0066fd2deb37e3ffc",
+      "mode": 420,
+      "gitMode": "100644"
+    },
+    {
+      "path": "src/ui/course-continuity.ts",
+      "bytes": 2207,
+      "sha256": "7f6f1ab68555d3ed3aef81d0b779a852e6161370f9e5e2927144b1da2969c81c",
+      "mode": 420,
+      "gitMode": "100644"
+    }
+  ],
+  "screenshot": {
+    "path": "goal-1/evidence/t17-acceptance-34/chrome-dev-r1/r1-02-sample-actually-ready86-full-reply.jpg",
+    "bytes": 150145,
+    "sha256": "89771f7be46a3ef8a428e07eee2f2d2111cd46f79e517e1bfe6ad912c39776ac",
+    "mode": 420,
+    "gitMode": "100644"
+  },
+  "ax": {
+    "path": "goal-1/evidence/t17-acceptance-34/chrome-dev-r1/r1-02-sample-actually-ready86-full-reply.ax.txt",
+    "bytes": 3397,
+    "sha256": "cb6ed644b122312599469452cb89436576eda6eaa480a39922faba1e823bc994",
+    "mode": 420,
+    "gitMode": "100644"
+  },
+  "runId": "normal-course-content_employee-453bb7c2",
+  "revision": 86,
+  "findings": [
+    {
+      "id": "CUX-F01",
+      "priority": 2,
+      "checkpointBlocking": true,
+      "observed": "Actual sample-ready object is rendered with preparation paper but tagged 这次受众与报价, while main purpose/receipt correctly say sample completed, enrollment still separately decided",
+      "cause": "OpeningMoment prefers classArt label from audience/choice while OpeningObject gives coursePaper visual precedence",
+      "requirement": "AGENTS22/26 current object and purpose must match; not delayed U4B"
+    },
+    {
+      "id": "CUX-F02",
+      "priority": 2,
+      "checkpointBlocking": true,
+      "observed": {
+        "artBackgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundColor": "rgb(232, 223, 208)",
+        "backgroundImage": "none",
+        "focusVisible": false,
+        "hover": true,
+        "kind": "work",
+        "phase": "sample-ready",
+        "stage": "这次受众与报价"
+      },
+      "cause": "Preparation phase does not override global button:hover background; actual hover fills opaque beige behind whole art, all images complete",
+      "requirement": "AGENTS26 meaningful object state material, no global hover fallback; preserve focus and action"
+    }
+  ],
+  "imageLoadObservation": {
+    "images": [
+      {
+        "className": "",
+        "complete": true,
+        "naturalHeight": 941,
+        "naturalWidth": 1672,
+        "src": "/assets/ui-redesign/cinematic/room-ordinary-v1.jpg"
+      },
+      {
+        "className": "room-image-ready",
+        "complete": true,
+        "naturalHeight": 941,
+        "naturalWidth": 1672,
+        "src": "/assets/ui-redesign/cinematic/room-ordinary-v1.jpg"
+      },
+      {
+        "className": "course-preparation-kit",
+        "complete": true,
+        "naturalHeight": 1024,
+        "naturalWidth": 1536,
+        "src": "/assets/ui-redesign/cinematic/props/course-preparation-kit-v1.png"
+      }
+    ],
+    "objects": [
+      {
+        "className": "opening-object",
+        "phase": "sample-ready",
+        "tag": "BUTTON",
+        "text": "这次受众与报价这一份准备之后，想怎样继续↗"
+      },
+      {
+        "className": "course-preparation-art",
+        "phase": "sample-ready",
+        "tag": "SPAN",
+        "text": ""
+      }
+    ]
+  },
+  "sourceEdits": 0,
+  "compatibilityWork": 0
+}

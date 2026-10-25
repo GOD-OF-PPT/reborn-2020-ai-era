@@ -18,6 +18,8 @@ import {roomMoment} from './RoomMoment.tsx'
 import {OpeningAttemptAction} from './OpeningAttemptAction.tsx'
 import {DayThreadAction} from './DayThreadAction.tsx'
 import {VideoThreadAction} from './VideoThreadAction.tsx'
+import {CourseThreadAction} from './CourseThreadAction.tsx'
+import {RelayThreadAction} from './RelayThreadAction.tsx'
 import {MarketSceneChoice} from './MarketSceneChoice.tsx'
 import {VideoSceneChoice} from './VideoSceneChoice.tsx'
 import {CourseSceneChoice} from './CourseSceneChoice.tsx'
@@ -126,12 +128,17 @@ it('keeps the original paid platform history separate from an explicitly bounded
 
 type Element=ReactElement<Record<string,unknown>>
 const wrappers=new Set<unknown>([MarketSceneChoice,VideoSceneChoice,CourseSceneChoice,RelaySceneChoice])
-const actionWrappers=new Set<unknown>([OpeningAttemptAction,DayThreadAction,VideoThreadAction])
+const actionWrappers=new Set<unknown>([OpeningAttemptAction,DayThreadAction,VideoThreadAction,CourseThreadAction,RelayThreadAction])
 function elements(value:unknown):Element[]{
  if(Array.isArray(value))return value.flatMap(elements)
  if(!isValidElement<Record<string,unknown>>(value))return []
  if(wrappers.has(value.type)&&typeof value.props.children==='function')return elements(value.props.children(()=>{}))
- if(actionWrappers.has(value.type)&&typeof value.props.children==='function')return elements(value.props.children(null))
+ // Preserve the real wrapper's active/inactive contract and shared action;
+ // do not invent a primary node just to make the quarter lookup succeed.
+ if(actionWrappers.has(value.type)&&typeof value.type==='function'){
+  const action=value.type as (props:Record<string,unknown>)=>unknown
+  return elements(action(value.props))
+ }
  return [value,...elements(value.props.children)]
 }
 function text(value:unknown):string{return typeof value==='string'||typeof value==='number'?String(value):Array.isArray(value)?value.map(text).join(''):isValidElement<Record<string,unknown>>(value)?text(value.props.children):''}

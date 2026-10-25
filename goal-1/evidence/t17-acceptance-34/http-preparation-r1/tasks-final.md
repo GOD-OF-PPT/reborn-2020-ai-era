@@ -1,0 +1,5 @@
+- [x] root34三文件先读、parent/child guard与fresh三文件先于候选。
+- [x] 旧helper/marker/images原件保留，新CLI、当前exact runner extra与正常ID身份适配。
+- [x] 两候选syntax0；准备时149 extra实际同原runner权威；33DEV字面同当前seam。
+- [x] 交最终候选SHA/边界，停止writer。
+- [ ] Root未来build/端口已就绪且明确安排后才fresh实际HTTP；当前未执行。

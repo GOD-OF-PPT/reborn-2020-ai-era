@@ -145,13 +145,13 @@
 
 .cinema-app .opening-room:not([data-exploring=true]) .room-current-moment{
  inset:193px 51% 87px 6%;
- gap:8px;
+ gap:6px;
  width:auto;
  min-width:0;
  color:var(--opening-copy);
 }
 .opening-room .room-current-moment .moment-heading>p{
- margin:0 0 12px;
+ margin:0 0 8px;
  color:#d3b77f;
  font:12px/1.8 var(--opening-serif);
  letter-spacing:2px;
@@ -173,7 +173,7 @@
  color:#c6cab5;
  font:13px/1.85 var(--opening-serif);
 }
-.opening-room .room-current-moment .moment-decisions{display:grid;gap:6px;margin-top:7px}
+.opening-room .room-current-moment .moment-decisions{display:grid;gap:4px;margin-top:4px}
 .opening-room .room-current-moment .moment-decision,
 .opening-room .room-current-moment .moment-decision>button{
  display:flex;
@@ -265,7 +265,7 @@
 .opening-room .room-current-moment .moment-wait .clock-main>button:is(:hover,:focus-visible):not(:disabled),
 .opening-room .room-current-moment .moment-idle-clock .clock-main>button:is(:hover,:focus-visible):not(:disabled){background:#d5b87d14;color:#ffe8b4;border-bottom-color:#f1d08f}
 .opening-room .room-current-moment .moment-wait .clock-review>button{padding:5px 0;color:#cfc3a0;font:12px/1.8 var(--opening-serif)}
-.opening-room .room-current-moment .moment-feedback{margin:0 0 8px;padding:6px 0 6px 13px;background:none;border-left:2px solid #d8bb7c}
+.opening-room .room-current-moment .moment-feedback{margin:0 0 4px;padding:4px 0 4px 13px;background:none;border-left:2px solid #d8bb7c}
 .opening-room .room-current-moment .moment-status{color:#c5d0b9;font:13px/1.8 var(--opening-serif)}
 .opening-room .room-current-moment :is(button,a):focus-visible,
 .opening-room .opening-room-intention>button:focus-visible{outline:3px solid var(--opening-focus);outline-offset:5px}
@@ -283,10 +283,12 @@
 .opening-room:not([data-exploring=true]) .room-pocket .scene-journal-object small{font:11px/1.7 var(--opening-serif)}
 .opening-room .opening-room-records{position:static;display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 20px;max-width:none;margin-top:14px}
 .opening-room>.opening-room-records{position:absolute;right:6%;bottom:70px;z-index:3;max-width:43%;margin-top:0}
+/* Service slips keep their desk anchor; the two reading entries use a separate scene edge. */
+.opening-room:not([data-exploring=true]):has(.opening-object[data-relay-phase][data-relay-state]) :is(.room-pocket,.opening-room-records){top:185px;bottom:auto}
 .opening-room .opening-room-records button{display:inline-flex;align-items:baseline;gap:7px;min-height:34px;padding:5px 0;border:0;border-bottom:1px solid #b6a7784d;background:none;color:#d7d4b9;font:12px/1.8 var(--opening-serif)}
 .opening-room .opening-room-records button:hover{color:#ffe2aa;border-bottom-color:#d8bd80}
 .opening-room .opening-room-records button:focus-visible{outline:3px solid #ffe2a6;outline-offset:5px}
-.opening-room .room-caption{left:6%;right:6%;bottom:24px;color:#aebca9;font:11px/1.7 var(--opening-serif)}
+.opening-room .room-caption{left:6%;right:6%;bottom:8px;color:#aebca9;font:11px/1.7 var(--opening-serif)}
 
 /* One persistent illustration; public state stays in the editable adjacent label. */
 .opening-object{

@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {spawnSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import {assertBrowserEvidenceWritable as guard} from '../../../../scripts/browser_evidence_guard.mjs';
+const output=path.dirname(fileURLToPath(import.meta.url)),repo=path.resolve(output,'../../../..');
+const put=(name,value)=>{guard(output);fs.writeFileSync(path.join(output,name),typeof value==='string'?value:JSON.stringify(value,null,2)+'\n',{flag:'wx'})};
+guard(output);if(fs.existsSync(path.join(output,'terminal.json'))||fs.existsSync(path.join(output,'result.json'))||fs.existsSync(path.join(output,'command.json')))throw Error('READBACK_ALREADY_EXECUTED_USE_FRESH_SIBLING');
+const script=path.relative(repo,path.join(output,'readback.mjs')),bytes=fs.readFileSync(path.join(repo,script)),started=Date.now(),command=['rtk','proxy','node','--experimental-strip-types',script];
+put('command.json',{at:new Date().toISOString(),cwd:repo,command,node:process.version,script:{path:script,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')},scope:'Read-only original public account/course projection, no Controller/Store/Session/commands/preview/replay/browser; original explicit roles and every current chrome raw initially/finally bound.'});
+const execution=spawnSync(command[0],command.slice(1),{cwd:repo,encoding:'utf8',maxBuffer:32*1024*1024});put('stdout.log',execution.stdout??'');put('stderr.log',execution.stderr??'');
+const terminal={at:new Date().toISOString(),exitCode:execution.status,signal:execution.signal,error:execution.error?.message??null,wallMs:Date.now()-started};put('terminal.json',terminal);console.log(JSON.stringify(terminal));process.exitCode=execution.status===0&&execution.signal===null&&!execution.error?0:1;

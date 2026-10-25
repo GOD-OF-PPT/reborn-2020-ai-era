@@ -1,0 +1,115 @@
+{
+  "at": "2026-10-25T03:27:15.203Z",
+  "beforeBuild": "cux06-build-r1.source-before.json",
+  "finalBuild": "cux06-build-r2.source-before.json",
+  "sourceCount": 578,
+  "unchangedSourceCount": 577,
+  "changed": [
+    {
+      "path": "src/ui/opening-play.css",
+      "bytes": 38413,
+      "sha256": "f314228aaf2bb63fe2a96dba3084f0ddc3bb031d80b2e96be0e6f1843017af62",
+      "mode": 420
+    }
+  ],
+  "extraCount": 149,
+  "extraExactSame": true,
+  "ui95Result": "cux06-ui-r3.result.json",
+  "ui615AssertionsSourceIdentity": "R1 same logic and test source; R2 changes only opening-play.css spacing and relay record placement. React/unit does not prove CSS; actual current R2 native images/actions separately verify F03/F04. No need to rerun unchanged rule/handler assertions as CSS pixel proof.",
+  "collectorResults": "run-collectors-r1.terminal.json",
+  "tools": [
+    {
+      "name": "cux06-python-r1",
+      "at": "2026-10-25T02:17:42.376Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "test:docs"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 20536,
+      "sourceCount": 578,
+      "sourceUnchanged": true,
+      "extraSame": true,
+      "error": null
+    },
+    {
+      "name": "cux06-content-r1",
+      "at": "2026-10-25T02:17:24.814Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "npm",
+        "run",
+        "validate:content"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 2990,
+      "sourceCount": 578,
+      "sourceUnchanged": true,
+      "extraSame": true,
+      "error": null
+    },
+    {
+      "name": "cux06-plan-r1",
+      "at": "2026-10-25T02:17:22.365Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_plan.py"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 534,
+      "sourceCount": 578,
+      "sourceUnchanged": true,
+      "extraSame": true,
+      "error": null
+    },
+    {
+      "name": "cux06-competitive-r1",
+      "at": "2026-10-25T02:17:22.395Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "python3",
+        "-B",
+        "scripts/check_competitive_design.py"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 573,
+      "sourceCount": 578,
+      "sourceUnchanged": true,
+      "extraSame": true,
+      "error": null
+    }
+  ],
+  "build2Result": {
+    "at": "2026-10-25T02:53:20.895Z",
+    "argv": [
+      "rtk",
+      "proxy",
+      "npm",
+      "run",
+      "build",
+      "--",
+      "--outDir",
+      ".delivery/t17-cux06-r2"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "wallMs": 76971,
+    "sourceCount": 578,
+    "sourceUnchanged": true,
+    "extraSame": true,
+    "error": null
+  },
+  "limits": "No full182 rerun claimed; original182 red and scoped original-timeout diagnostics preserved. No compatibility or geometry validation."
+}

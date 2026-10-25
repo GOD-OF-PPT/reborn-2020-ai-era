@@ -10,6 +10,8 @@ import {OpeningMoment} from './OpeningMoment.tsx'
 import {OpeningAttemptAction} from './OpeningAttemptAction.tsx'
 import {DayThreadAction} from './DayThreadAction.tsx'
 import {VideoThreadAction} from './VideoThreadAction.tsx'
+import {CourseThreadAction} from './CourseThreadAction.tsx'
+import {RelayThreadAction} from './RelayThreadAction.tsx'
 import {roomMoment} from './RoomMoment.tsx'
 import {playerThread} from './player-thread.ts'
 import {Dialog} from './Dialog.tsx'
@@ -33,10 +35,16 @@ vi.mock('react',async importOriginal=>{
 })
 type Element=ReactElement<Record<string,unknown>>
 const wrappers=new Set<unknown>([MarketSceneChoice,VideoSceneChoice,CourseSceneChoice,RelaySceneChoice])
+const actionWrappers=new Set<unknown>([OpeningAttemptAction,DayThreadAction,VideoThreadAction,CourseThreadAction,RelayThreadAction])
 function elements(value:unknown):Element[]{
  if(Array.isArray(value))return value.flatMap(elements)
  if(!isValidElement<Record<string,unknown>>(value))return []
- if((value.type===OpeningAttemptAction||value.type===DayThreadAction||value.type===VideoThreadAction)&&typeof value.props.children==='function')return elements(value.props.children(null))
+ // Run each real pure action wrapper: inactive wrappers yield children(null),
+ // while an active choice keeps its original binding and protection checks.
+ if(actionWrappers.has(value.type)&&typeof value.type==='function'){
+  const action=value.type as (props:Record<string,unknown>)=>unknown
+  return elements(action(value.props))
+ }
  if(wrappers.has(value.type)&&typeof value.props.children==='function')return elements(value.props.children(()=>{}))
  return [value,...elements(value.props.children),...elements(value.props.footer)]
 }

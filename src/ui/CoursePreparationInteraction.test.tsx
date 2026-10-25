@@ -137,6 +137,10 @@ it('binds the actual ready thought and preparation object to the same result han
  try{
   const p=f.p(),raw=f.controller.exportSaved(),choose=vi.fn(),result=vi.fn(),today=vi.fn(),ui=encounterHandlers({p:{...p,textOnly:true},thread:f.thread(p),date:null,waitLabel:'',onChoose:choose,onResult:result,onToday:today})
   expect(ui.main.props.onClick).toBe(ui.paper.onActivate);expect(ui.paper.disabled).toBe(false);expect(ui.paper.kind).toBe('work');expect(ui.paper.coursePaper?.phase).toBe('sample-ready');expect(ui.paper.textOnly).toBe(true)
+  expect(p.features.course!.audiences).toHaveLength(0);expect(p.features.course!.cohorts).toHaveLength(0)
+  expect(ui.paper.teachingPaper).toBeUndefined();expect(ui.paper.stageLabel).toBe('样课已经完成')
+  expect(ui.section.props['aria-label']).toBe('这一份教学准备的决定')
+  expect(ui.rows.find(e=>e.type==='span'&&e.props.className==='scene-choice-overline')?.props.children).toBe('眼前这份教案 · 由你决定')
   expect(ui.rows.filter(e=>e.type==='p').map(e=>text(e.props.children))).toContain(f.thread(p).object)
   expect(ui.rows.some(e=>String(e.props.className).split(' ').includes('scene-decision-main')&&elements(e.props.children).includes(ui.main))).toBe(true)
   ui.click();ui.paper.onActivate();expect(result).toHaveBeenCalledTimes(2);expect(choose).not.toHaveBeenCalled();expect(today).not.toHaveBeenCalled();expect(f.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(raw)

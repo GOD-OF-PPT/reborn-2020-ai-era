@@ -1,0 +1,5 @@
+- [x] 全读root34三文件，ancestor guard/fresh目录/三文件先于候选。
+- [x] 旧template原字节绑定，当前126/P326精确原合同；候选仅34/CUX06/元数据适配。
+- [x] 实际语法exit0、静态拒绝门槛/动态输入检查完成，无module import/审核运行。
+- [x] 候选SHA与运行前条件交回；writer停止。
+- [ ] 未来主控宣布captures全部停止后，才独立fresh一次完整Create审核；当前未执行。

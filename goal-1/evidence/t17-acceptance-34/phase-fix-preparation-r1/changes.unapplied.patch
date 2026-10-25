@@ -1,0 +1,49 @@
+--- a/src/ui/course-teaching-continuity.ts
++++ b/src/ui/course-teaching-continuity.ts
+@@ -40,7 +40,7 @@
+ /** Select shapes from this original public object, never from a future date or a different class. */
+ export function courseTeachingPaperFor(p:Input,target:CourseSceneTarget|null):CourseTeachingPaperState|undefined{
+  const v=p.features.course
+- if(!v||!target||target.kind!=='course'&&target.kind!=='audience'&&target.kind!=='cohort')return undefined
++ if(!v||!target||target.kind!=='audience'&&target.kind!=='cohort')return undefined
+  const context=courseSceneContext(p)
+  if(courseTargetReason(v,target,context))return undefined
+  const businesses=v.businesses.filter(b=>b.id===target.businessId),business=businesses[0]
+@@ -49,7 +49,6 @@
+  if(operations.length!==1||operations[0]!.accountId!==business.accountId||operations[0]!.route!=='ai_course'||operations[0]!.definitionId!=='course-studio')return undefined
+  const progress=courseSceneProgress(v,p.view.date,target,context)
+  if(!progress||progress.invalidReason)return undefined
+- if(target.kind==='course')return progress.phase==='course-ready'?{...empty,phase:'audience',status:'choice'}:undefined
+  // The old attempt must not acquire the later class's delivery, money or support markings.
+  if(progress.historical)return {...empty,phase:'history',status:'actual'}
+  const status:CourseTeachingPaperState['status']=progress.phase.endsWith('-planned')?'planned':progress.phase.endsWith('-running')?'running':progress.outcome==='actual'||progress.outcome==='non-success'?'actual':'choice'
+--- a/src/ui/course-preparation-paper.css
++++ b/src/ui/course-preparation-paper.css
+@@ -33,7 +33,7 @@
+ .course-preparation-art[data-course-phase] .course-paper-retained-line{stroke:#7f5d49;stroke-width:5}
+ 
+ /* Only the explicit preparation paper uses this low slot; legacy teaching keeps its layout. */
+-.opening-object[data-course-phase]{transform:none;transition:none}
++.opening-object[data-course-phase]{background:transparent;transform:none;transition:none}
+ .opening-room>.opening-object[data-appearance=course][data-course-phase]>.opening-object-art,
+ .opening-room .opening-room-object>.opening-object[data-appearance=course][data-course-phase]>.opening-object-art{height:160px;min-height:160px;width:100%;aspect-ratio:auto;align-self:end;filter:none;transform:none}
+ .opening-object[data-course-phase] .opening-object-title:empty,
+@@ -42,4 +42,4 @@
+ .opening-object[data-course-phase][data-protection=readonly] .opening-object-copy{border-left:3px double #bac09d}
+ .opening-object[data-course-phase][data-protection=unsaved] .opening-object-copy{border-left-style:dashed}
+ .opening-object[data-course-phase][data-protection=unavailable] .opening-object-action{border-top-style:dashed}
+-.opening-object[data-course-phase]:is(:hover,:focus-visible,:active):not(:disabled){transform:none}
++.opening-object[data-course-phase]:is(:hover,:focus-visible,:active,:disabled){background:transparent;transform:none}
+--- a/src/ui/CoursePreparationInteraction.test.tsx
++++ b/src/ui/CoursePreparationInteraction.test.tsx
+@@ -137,6 +137,10 @@
+  try{
+   const p=f.p(),raw=f.controller.exportSaved(),choose=vi.fn(),result=vi.fn(),today=vi.fn(),ui=encounterHandlers({p:{...p,textOnly:true},thread:f.thread(p),date:null,waitLabel:'',onChoose:choose,onResult:result,onToday:today})
+   expect(ui.main.props.onClick).toBe(ui.paper.onActivate);expect(ui.paper.disabled).toBe(false);expect(ui.paper.kind).toBe('work');expect(ui.paper.coursePaper?.phase).toBe('sample-ready');expect(ui.paper.textOnly).toBe(true)
++  expect(p.features.course!.audiences).toHaveLength(0);expect(p.features.course!.cohorts).toHaveLength(0)
++  expect(ui.paper.teachingPaper).toBeUndefined();expect(ui.paper.stageLabel).toBe('样课已经完成')
++  expect(ui.section.props['aria-label']).toBe('这一份教学准备的决定')
++  expect(ui.rows.find(e=>e.type==='span'&&e.props.className==='scene-choice-overline')?.props.children).toBe('眼前这份教案 · 由你决定')
+   expect(ui.rows.filter(e=>e.type==='p').map(e=>text(e.props.children))).toContain(f.thread(p).object)
+   expect(ui.rows.some(e=>String(e.props.className).split(' ').includes('scene-decision-main')&&elements(e.props.children).includes(ui.main))).toBe(true)
+   ui.click();ui.paper.onActivate();expect(result).toHaveBeenCalledTimes(2);expect(choose).not.toHaveBeenCalled();expect(today).not.toHaveBeenCalled();expect(f.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(raw)

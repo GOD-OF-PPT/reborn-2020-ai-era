@@ -37,8 +37,9 @@ it('reads an older-quarter relay bookmark into the actual room and gates a misma
   expect(before).toBe(input);expect(room).toContain('2024-Q4');expect(room).toContain('原书签未变')
   expect(room).toContain('relay-service-kit-v1.png');expect(room).not.toContain('接下这笔手工单')
   const route=(accountId:string)=>renderToStaticMarkup(<NarrativeScene {...p} accountId={accountId} relayTarget={target} screen="relay" headingRef={null} personId="tang-ying" onPerson={request} onOpen={request} onPeople={request} onYear={request} onNavigate={request} receipt={null}/>)
-  const valid=route(business.accountId);expect(valid).toContain('显选客户、供应和真实投入')
-  const wrong=route('unrelated-account');expect(wrong).toContain('原中转账户与当前对象不匹配');expect(wrong).not.toContain('显选客户、供应和真实投入')
+  const serviceCaption='显选客户、供应顺序、资源、未来日期、预算和支持；原确认后才承诺。'
+  const valid=route(business.accountId);expect(valid).toContain('为这些客户，认真安排一期服务');expect(valid).toContain(serviceCaption)
+  const wrong=route('unrelated-account');expect(wrong).toContain('原中转账户与当前对象不匹配');expect(wrong).not.toContain('为这些客户，认真安排一期服务');expect(wrong).not.toContain(serviceCaption)
   expect(writes).toBe(0);expect(controller.exportSaved()).toBe(before)
  }finally{await controller.close();await store.close()}
 },20000)

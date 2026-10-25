@@ -40,7 +40,7 @@ export function courseTeachingClosureFor(p:Input,target:CourseSceneTarget|null){
 /** Select shapes from this original public object, never from a future date or a different class. */
 export function courseTeachingPaperFor(p:Input,target:CourseSceneTarget|null):CourseTeachingPaperState|undefined{
  const v=p.features.course
- if(!v||!target||target.kind!=='course'&&target.kind!=='audience'&&target.kind!=='cohort')return undefined
+ if(!v||!target||target.kind!=='audience'&&target.kind!=='cohort')return undefined
  const context=courseSceneContext(p)
  if(courseTargetReason(v,target,context))return undefined
  const businesses=v.businesses.filter(b=>b.id===target.businessId),business=businesses[0]
@@ -49,7 +49,6 @@ export function courseTeachingPaperFor(p:Input,target:CourseSceneTarget|null):Co
  if(operations.length!==1||operations[0]!.accountId!==business.accountId||operations[0]!.route!=='ai_course'||operations[0]!.definitionId!=='course-studio')return undefined
  const progress=courseSceneProgress(v,p.view.date,target,context)
  if(!progress||progress.invalidReason)return undefined
- if(target.kind==='course')return progress.phase==='course-ready'?{...empty,phase:'audience',status:'choice'}:undefined
  // The old attempt must not acquire the later class's delivery, money or support markings.
  if(progress.historical)return {...empty,phase:'history',status:'actual'}
  const status:CourseTeachingPaperState['status']=progress.phase.endsWith('-planned')?'planned':progress.phase.endsWith('-running')?'running':progress.outcome==='actual'||progress.outcome==='non-success'?'actual':'choice'

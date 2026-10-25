@@ -1,0 +1,180 @@
+{
+  "at": "2026-10-25T01:42:16.609Z",
+  "reason": "All original frozen test processes reached actual terminal; Native head-abort/original retry/independent physical readback ended. No timer/isolation/assertion relaxations.",
+  "rows": [
+    {
+      "name": "cux06-unit-r2",
+      "result": {
+        "at": "2026-10-25T01:05:41.707Z",
+        "argv": [
+          "rtk",
+          "proxy",
+          "npm",
+          "run",
+          "test:unit",
+          "--",
+          "--exclude",
+          "src/ui/book-layout.test.ts",
+          "--maxWorkers",
+          "1",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile=goal-1/evidence/t17-acceptance-34/cux06-unit-r2.vitest.json"
+        ],
+        "exitCode": 1,
+        "signal": null,
+        "wallMs": 2739980,
+        "sourceCount": 578,
+        "sourceUnchanged": true,
+        "extraSame": true,
+        "error": null
+      },
+      "files": 214,
+      "tests": 1175,
+      "passed": 1135,
+      "failed": 5,
+      "pending": 35,
+      "success": false
+    },
+    {
+      "name": "cux06-abort-diagnostic-r1",
+      "result": {
+        "at": "2026-10-25T01:31:35.908Z",
+        "argv": [
+          "rtk",
+          "proxy",
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/ui/CourseTeachingInteraction.test.tsx",
+          "--testNamePattern",
+          "preserves the original class and draft through a real head-write abort and saves only its exact candidate on retry",
+          "--exclude",
+          "src/ui/book-layout.test.ts",
+          "--maxWorkers",
+          "1",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile=goal-1/evidence/t17-acceptance-34/cux06-abort-diagnostic-r1.vitest.json"
+        ],
+        "exitCode": 0,
+        "signal": null,
+        "wallMs": 6624,
+        "sourceCount": 578,
+        "sourceUnchanged": true,
+        "extraSame": true,
+        "error": null
+      },
+      "files": 1,
+      "tests": 7,
+      "passed": 1,
+      "failed": 0,
+      "pending": 6,
+      "success": true
+    },
+    {
+      "name": "cux06-agency-diagnostic-r1",
+      "result": {
+        "at": "2026-10-25T01:35:46.660Z",
+        "argv": [
+          "rtk",
+          "proxy",
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/application/story-agency.test.ts",
+          "--exclude",
+          "src/ui/book-layout.test.ts",
+          "--maxWorkers",
+          "1",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile=goal-1/evidence/t17-acceptance-34/cux06-agency-diagnostic-r1.vitest.json"
+        ],
+        "exitCode": 0,
+        "signal": null,
+        "wallMs": 174230,
+        "sourceCount": 578,
+        "sourceUnchanged": true,
+        "extraSame": true,
+        "error": null
+      },
+      "files": 2,
+      "tests": 8,
+      "passed": 8,
+      "failed": 0,
+      "pending": 0,
+      "success": true
+    },
+    {
+      "name": "cux06-domain-diagnostic-r1",
+      "result": {
+        "at": "2026-10-25T01:40:50.985Z",
+        "argv": [
+          "rtk",
+          "proxy",
+          "node",
+          "node_modules/vitest/vitest.mjs",
+          "run",
+          "src/ui/scene-domain-results.test.ts",
+          "--exclude",
+          "src/ui/book-layout.test.ts",
+          "--maxWorkers",
+          "1",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile=goal-1/evidence/t17-acceptance-34/cux06-domain-diagnostic-r1.vitest.json"
+        ],
+        "exitCode": 0,
+        "signal": null,
+        "wallMs": 59150,
+        "sourceCount": 578,
+        "sourceUnchanged": true,
+        "extraSame": true,
+        "error": null
+      },
+      "files": 1,
+      "tests": 27,
+      "passed": 27,
+      "failed": 0,
+      "pending": 0,
+      "success": true
+    }
+  ],
+  "sourcePreimages": [
+    {
+      "path": "src/ui/course-teaching-continuity.ts",
+      "bytes": 6700,
+      "sha256": "4a68e88338be44d232c5cbcbcfe3578bdbec76e8144aea56b1778c199b99760c"
+    },
+    {
+      "path": "src/ui/course-preparation-paper.css",
+      "bytes": 4809,
+      "sha256": "6920e05e0db0791084940adc53fc02abf71dad47ef4bb3a0066fd2deb37e3ffc"
+    },
+    {
+      "path": "src/ui/CoursePreparationInteraction.test.tsx",
+      "bytes": 18260,
+      "sha256": "f4887dad006143e63d43d9d929fcb6d4e3a6d8c697ca1d8ef73e965d3900106e"
+    },
+    {
+      "path": "src/ui/App.relay-focus.test.tsx",
+      "bytes": 3627,
+      "sha256": "8dbea2123718a0586aec29971cac43b80599a3919278a2e12ed666ac57e6eedd"
+    },
+    {
+      "path": "src/ui/OpeningMoment.focus-book.test.tsx",
+      "bytes": 8696,
+      "sha256": "fc4df762e5287145ccad9cedd560abbb4e55d84b769dfe1f4bed418fa706b483"
+    },
+    {
+      "path": "src/ui/video-day-continuity.test.tsx",
+      "bytes": 13287,
+      "sha256": "ba93c7983a916997ecb74a1bad7072faf2b832fed9c534b1f56e01d17b16b629"
+    }
+  ],
+  "full182RedPreserved": true,
+  "originalPhysicalAtomicIntervalEnded": true,
+  "sourceEditsAtRecord": 0,
+  "cssReviewCorrection": "Keep original enabled-state :not(:disabled) specificity; separate disabled transparent rule, preserve focus outline."
+}

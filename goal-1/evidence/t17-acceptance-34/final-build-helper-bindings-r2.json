@@ -1,0 +1,45 @@
+{
+  "at": "2026-10-25T02:53:04.888Z",
+  "rows": [
+    {
+      "from": {
+        "path": "goal-1/evidence/t17-acceptance-34/http-preparation-r1/http-readback-final.mjs",
+        "bytes": 19563,
+        "sha256": "c673cf319c5da9d99d592c46a4b999d2175ff69318843a691cf8f8657c69b772"
+      },
+      "to": {
+        "path": "goal-1/evidence/t17-acceptance-34/http-preparation-r1/http-readback-r2.mjs",
+        "bytes": 19563,
+        "sha256": "6225f5121206b87b417c577c3c21d8b6a7f638f47c8c003abca40dc242d8b605"
+      },
+      "onlyChanges": "Final build/source authority R1→R2; original prepared candidates unchanged. No gates removed."
+    },
+    {
+      "from": {
+        "path": "goal-1/evidence/t17-acceptance-34/docs-preparation-r1/run-check.mjs",
+        "bytes": 12851,
+        "sha256": "89fe776fe7e117a7f253745c43897f5745aaee3ea9ee087ca27c0ca0dbc1f6fa"
+      },
+      "to": {
+        "path": "goal-1/evidence/t17-acceptance-34/docs-preparation-r1/run-check-r2.mjs",
+        "bytes": 12851,
+        "sha256": "0a89e533338791b3b2bab1e41f3b8fbcd7c2c60caf5e69a03caee9e7a9c76537"
+      },
+      "onlyChanges": "Final build/source authority R1→R2; original prepared candidates unchanged. No gates removed."
+    },
+    {
+      "from": {
+        "path": "goal-1/evidence/t17-acceptance-34/closeout-preparation-r1/closeout.mjs",
+        "bytes": 16407,
+        "sha256": "410b5d6104c7944160b6529621e5734ce6ae3c35fc7c02fa60d2ebc048c0c327"
+      },
+      "to": {
+        "path": "goal-1/evidence/t17-acceptance-34/closeout-preparation-r1/closeout-r2.mjs",
+        "bytes": 16407,
+        "sha256": "3e11817d2d386243d2cac28ff9fddb3141457f7fcaa47b3b4dd2006ad8fcba9f"
+      },
+      "onlyChanges": "Final build/source authority R1→R2; original prepared candidates unchanged. No gates removed."
+    }
+  ],
+  "reason": "Original R1 long checks finished before CSS-only overlap fix; current helpers must explicitly use actual final R2 build. No candidate was executed as R1 then relabeled."
+}

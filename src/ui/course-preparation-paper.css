@@ -33,7 +33,7 @@
 .course-preparation-art[data-course-phase] .course-paper-retained-line{stroke:#7f5d49;stroke-width:5}
 
 /* Only the explicit preparation paper uses this low slot; legacy teaching keeps its layout. */
-.opening-object[data-course-phase]{transform:none;transition:none}
+.opening-object[data-course-phase]{background:transparent;transform:none;transition:none}
 .opening-room>.opening-object[data-appearance=course][data-course-phase]>.opening-object-art,
 .opening-room .opening-room-object>.opening-object[data-appearance=course][data-course-phase]>.opening-object-art{height:160px;min-height:160px;width:100%;aspect-ratio:auto;align-self:end;filter:none;transform:none}
 .opening-object[data-course-phase] .opening-object-title:empty,
@@ -42,4 +42,5 @@
 .opening-object[data-course-phase][data-protection=readonly] .opening-object-copy{border-left:3px double #bac09d}
 .opening-object[data-course-phase][data-protection=unsaved] .opening-object-copy{border-left-style:dashed}
 .opening-object[data-course-phase][data-protection=unavailable] .opening-object-action{border-top-style:dashed}
-.opening-object[data-course-phase]:is(:hover,:focus-visible,:active):not(:disabled){transform:none}
+.opening-object[data-course-phase]:is(:hover,:focus-visible,:active):not(:disabled){background:transparent;transform:none}
+.opening-object[data-course-phase]:disabled{background:transparent;transform:none}
