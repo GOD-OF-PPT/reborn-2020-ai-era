@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "rtk",
+    "proxy",
+    "python3",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport importlib.util,sys\nr=Path.cwd()\ns=importlib.util.spec_from_file_location('original_check_docs',r/'scripts/check_docs.py')\nm=importlib.util.module_from_spec(s);s.loader.exec_module(m)\nnames=[\"goal-1/evidence/t17-u4a-service-post-commit-01/browser-parent-guard.json\",\"goal-1/evidence/t17-u4a-service-post-commit-01/cli-parent-guard.json\",\"goal-1/evidence/t17-u4a-service-post-commit-01/completion-write-intent.json\",\"goal-1/evidence/t17-u4a-service-post-commit-01/completion-write-readback.json\",\"goal-1/evidence/t17-u4a-service-post-commit-01/feature-commit-command.json\",\"goal-1/evidence/t17-u4a-service-post-commit-01/feature-commit-readback.json\",\"goal-1/evidence/t17-u4a-service-post-commit-01/feature-stage-intent.json\",\"goal-1/evidence/t17-u4a-service-post-commit-01/feature-stage-readback.json\",\"goal-1/evidence/t17-u4a-service-post-commit-01/feature-whitespace-classification.json\",\"goal-1/evidence/t17-u4a-service-post-commit-01/feature-whitespace-result.json\",\"goal-1/evidence/t17-u4a-service-post-commit-01/pre-feature-binding.json\",\"goal-1/plan.md\",\"goal-1/t17-plan.md\",\"goal-1/tasks.md\"]\nm.project_files=lambda unused:[r/n for n in names]\nprint('SCOPED ONLY: three completion masters and current post JSON; not whole repository docs.')\nerrors=m.check(r,text_only=True)\nfor error in errors: print(error,file=sys.stderr)\nraise SystemExit(bool(errors))\n"
+  ],
+  "scoped": true,
+  "wholeDocs": false,
+  "originalFunction": "scripts/check_docs.py check(root,text_only=True)",
+  "provider": [
+    "goal-1/evidence/t17-u4a-service-post-commit-01/browser-parent-guard.json",
+    "goal-1/evidence/t17-u4a-service-post-commit-01/cli-parent-guard.json",
+    "goal-1/evidence/t17-u4a-service-post-commit-01/completion-write-intent.json",
+    "goal-1/evidence/t17-u4a-service-post-commit-01/completion-write-readback.json",
+    "goal-1/evidence/t17-u4a-service-post-commit-01/feature-commit-command.json",
+    "goal-1/evidence/t17-u4a-service-post-commit-01/feature-commit-readback.json",
+    "goal-1/evidence/t17-u4a-service-post-commit-01/feature-stage-intent.json",
+    "goal-1/evidence/t17-u4a-service-post-commit-01/feature-stage-readback.json",
+    "goal-1/evidence/t17-u4a-service-post-commit-01/feature-whitespace-classification.json",
+    "goal-1/evidence/t17-u4a-service-post-commit-01/feature-whitespace-result.json",
+    "goal-1/evidence/t17-u4a-service-post-commit-01/pre-feature-binding.json",
+    "goal-1/plan.md",
+    "goal-1/t17-plan.md",
+    "goal-1/tasks.md"
+  ]
+}
