@@ -1,0 +1,106 @@
+{
+  "at": "2026-10-25T03:59:53.958Z",
+  "readbacks": [
+    {
+      "port": 5380,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "port": 5381,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "port": 5382,
+      "exitCode": 0,
+      "stdout": "COMMAND   PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME\nnode    29553 gordon   13u  IPv4 0x46dbf43dc1856421      0t0  TCP 127.0.0.1:5382 (LISTEN)\n",
+      "stderr": ""
+    },
+    {
+      "port": 5383,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "port": 5384,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "port": 5385,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "ownedTerminated": [
+    {
+      "port": 5380,
+      "pid": 11938,
+      "exec": 39923,
+      "exitCode": 143
+    },
+    {
+      "port": 5381,
+      "pid": 12545,
+      "exec": 73134,
+      "exitCode": 143
+    },
+    {
+      "port": 5383,
+      "pid": 29555,
+      "exec": 9374,
+      "exitCode": 143
+    },
+    {
+      "port": 5384,
+      "pid": 29557,
+      "exec": 86495,
+      "exitCode": 143
+    },
+    {
+      "port": 5385,
+      "pid": 30341,
+      "exec": 72122,
+      "exitCode": 143
+    }
+  ],
+  "originalR1ReplacedEarlier": [
+    {
+      "pid": 21576,
+      "exec": 5713,
+      "exitCode": 143
+    },
+    {
+      "pid": 24500,
+      "exec": 88949,
+      "exitCode": 143
+    },
+    {
+      "pid": 24516,
+      "exec": 41631,
+      "exitCode": 143
+    }
+  ],
+  "kept": {
+    "port": 5382,
+    "pid": 29553,
+    "exec": 4181,
+    "build": ".delivery/t17-cux06-r2",
+    "tab": "387928358",
+    "save": 86
+  },
+  "preparationFailure": "Initial multi-port lsof output correctly contained only5382 but exit1 because other queried ports were absent; no write occurred. Individual port statuses now verified exactly.",
+  "devOutputAfterFrozenAtomicInterval": [
+    "09:46:48 HMR CourseEncounter/OpeningMoment/preparation CSS",
+    "10:02:07 buildR1 index reload",
+    "10:51:49 opening-play CSS HMR",
+    "10:53:19 buildR2 index reload"
+  ],
+  "scope": "Current native failure interval ended before first09:46 source edit; later HMR not final failure rerun. No unrelated services, original DBs or builds deleted."
+}

@@ -615,3 +615,26 @@ Today/同身份草稿/保存保护共同注册，保两背景、三开局、五�
 - 原P326/root19精确1197普通文件110目录/旧120普通marker与2符号marker/root32及post完整payload/input61B保持，三master各唯一2304B/14LF原P3插入仍仅工作区。只从原HEAD加本任务后缀重建记录blob，不覆盖工作树；当前验证包含原P3，未称裸HEAD独立构建。资料plan/competitive0；root33限定79MD/251JSON原exit1仅8处受保护input原绝对skill链接，精确分类无其它错误；作者8MD/1JSON另验0，原三PNG提示和旧wholeDocs红不关闭。source/文档空白0；全feature空白2仅37原日志/patch路径41诊断，原字节保留、未分类0。
 - 下一实际任务 **C-UX06：累计核U3-C1/C2/U4-A**，不得以本轮定向检查或旧171替代；它完成后才U4-B。原R2/R3深层客户/计量/逐笔责任/非成功与退出、贴图感与等权纸签、C-S4-R、U5生态/U6条件架空权益/U7人物/U8两背景六年/U9成套视听及检查、P3正式62=0/22例行、原PNG0/3字节（来源已定位）/正式真人0、M01暂停须用户明确恢复、T17/T18与完整goal仍开放。
 - 最终5377 R12/原91和Chrome319已标交付；本轮DEV5378与临时5379实际终态143，4个本轮临时标签实关，原DB/构建保留；未声称旧314仍在或由本轮关闭。全部页面兼容开发测试0，整book-layout排除；复用现有技能/guard/回放/Git，无新全局Skill、automation、memory或外部资源，未push/deploy。实际record提交及PUBLIC/远端分支和文件哈希由封存外末核交回。
+
+
+## 当前C-UX06：三任务累计全面检查-debug（2026-10-25）
+
+上一U4-A实际676702e7实现/0c7e3c7c完成记录及真实逐blob读回属于progress。本轮仅按36号8.5/9累计核U3-C1/U3-C2/U4-A，见[evidence/t17-acceptance-34计划](evidence/t17-acceptance-34/plan.md)。三文件与578源/原P326/root19/122普通seal及2符号marker、root33/post完整payload和三master各2304B14LF原插入先于源码建立；原input61B保持。
+
+当前完整适用单测集合与原timeout/隔离/断言、相关collector/工程、Chrome当前自然窗口的整屏目的/时间身份/去向/等待可回应/跨季同对象及金额日期AP权限保存分层核验。原120准备目的滞后必须复验；确定缺陷修前不进U4-B。旧171与已有原文/Native身份不冒本轮新验；原R2/R3深状态及C-S4-R保持责任。
+
+全部兼容开发测试0，book-layout整文件排除，不切尺寸/缩放/浏览器，不做原生离页/几何专项。只追加本片自有后缀，原P3不提交；正式62/22、原PNG字节/真人、M01须用户明确恢复、U4-B后续/T17/T18/完整goal仍开放，无push/deploy或新外部资源。
+
+
+## C-UX06三任务累计检查限定完成（2026-10-25）
+
+- [x] 实际U3-C1/U3-C2/U4-A之后的C-UX06已完成自主限定检查-debug，本地修缮提交 **1cc971ba969c06babdecda7cb2859fbeab2a9571**，parent0c7e3c7c；530任务路径（7UI、AGENTS/36号和root34证据）暂存/commit blob完整bytes/SHA/Gitmode逐项同。root34已封存520普通文件/32目录，marker SHA0c27420cdfae102110700e7630661ffe25dadafd6bc2f31fd0af5ef25afa85b5。本后记为实际feature之后的完成记录；root34/tasks是提交前不可回写快照，record自身与末读回另外核，不循环改封存。
+- 体验修缮：样课完成无受众时保持准备纸件/正确阶段，修hover大块底并保原focus；服务长纸签与随身册/日历分区，长回响下环顾与地点分行。3生产UI/4既有test，原字体、全部金额/责任/Clock/原确认和规则/schema/RNG/P3保持。实际最终长回响和服务纸签图及mouse分别核，纸签密度/接触感继续后续美术，不当真人认可。
+- 当前Chrome：原120闭班目的/同班Today/Life/重进同；85→89原报价/班期/逐位5人、995元保护预款与0教学收入，真正head.put后abort保旧88、fresh物理旧88，原retry与fresh物理89等候选。另sample85→86实际完成、退款班95→107在Mar14及时回应Mar21原期限并付2000元/1点更新、service83→85原等待至Nov6且明确CollectRelayDue收180.64元，未来19.36/支持/34待复核仍在；最终106→新107独立末命令重验完整回响。两107是同106前缀的不同末命令，不硬等；原来源误名另补正，raw/来源行不改。
+- 全部23原文=16saved UI/2physical readonly/4buffer/1candidate；实际20条新保存命令=4+1+12+2+1，旧前缀/物理/候选/重复读取不加成果。正式完整Create实际exit0，2创建/221不同完整后续历史/23raw逐字同，126官方源/P326与所有输入引用初末同；独立公开核账18/18真，预款现金与负债同增、可花5519.36不增、旧责任保。
+- 分层检查：原182文件1175项=1135pass/5fail/35skip，原红保；原时限诊断1/8/27分别通过。修后95UI615一次全过；非UI旧552与同源agency8按292节点/149引用条件继承，不称新一次182绿。七原collector、77Python、content/plan/competitive0；最终R2类型/Vite0/578源149引用同，末CSS仅opening-play相对R1变化，其余577同，实际R2图动作复验，不用单测冒CSS。47HTTP/19原图bytes/SHA同，2指定normalID/33DEV及限定测试/raw泄漏扫描0，保大chunk告警，不冒性能验收。
+- 资料scope47MD/273JSON实际exit1，仅3处受保护input原绝对skill链接、其它错误0；作者38MD/1JSON实际0，3原PNG提示保持，不称wholeDocs通过。source/文档空白0；全feature空白2仅6条原日志/patch/前像证据路径诊断，原字节保留。13浏览器入口（4wrapper stub/9实际bound）与2原CLI均在委派/输出前拒写sealed父，delegates0，520payload/marker同；不是13次UI动作。
+- [杠精审查] 本checkpoint限定通过：未以绿测掩盖实图，新增F03/F04同task修完；原182红/超时/工具与计数补正保留，截图/回放不当人类理解或趣味。P326/root19精确1197文件110目录/122普通旧marker+2符号marker/root33及post完整payload/input61B保持；三master各原2304B14LF插入仅工作树，本记录只原HEAD加本CUX自有后缀入Git。当前验证含原P3，不称裸HEAD独立构建。
+- 下一实际task **U4-B服务深状态与逐笔责任**，逐项归还原R2/R3与C-S4-R；随后U5/U6/C-UX09、U7/U8/U9/C-UX12，T17原后续、P3正式62=0/22例行、原PNG字节0/3（来源已定位）/正式真人0、M01暂停须用户明确恢复、T18/整个goal保持开放，全部兼容开发测试0。最终5382 R2/原86保留；5个本轮临时标签和5个临时服务已实关/143，3个R1服务替换时也实143，原DB/构建与无关服务保留。不push/deploy，PUBLIC远端main仍9bf4399。REPEAT复用既有技能/guard/回放/Git，无新全局Skill/automation/memory或外部资源。
+
+实际record提交自身与末Git/远端文件哈希随后独立读回；完整goal继续active。

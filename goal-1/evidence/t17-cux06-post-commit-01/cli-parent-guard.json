@@ -1,0 +1,67 @@
+{
+  "at": "2026-10-25T03:51:00.342Z",
+  "results": [
+    {
+      "name": "collector",
+      "target": "goal-1/evidence/t17-acceptance-34/guard-collector-probe",
+      "argv": [
+        "node",
+        "--experimental-strip-types",
+        "scripts/collect_course_evidence.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-34/guard-collector-probe"
+      ],
+      "started": "2026-10-25T03:50:58.256Z",
+      "finished": "2026-10-25T03:50:59.265Z",
+      "exitCode": 1,
+      "signal": null,
+      "targetAbsent": true,
+      "rejectedBeforeOutput": true
+    },
+    {
+      "name": "auditor",
+      "target": "goal-1/evidence/t17-acceptance-34/guard-auditor-probe",
+      "argv": [
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-34",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-34/guard-auditor-probe"
+      ],
+      "started": "2026-10-25T03:50:59.265Z",
+      "finished": "2026-10-25T03:51:00.192Z",
+      "exitCode": 1,
+      "signal": null,
+      "targetAbsent": true,
+      "rejectedBeforeOutput": true
+    }
+  ],
+  "sealBefore": {
+    "root": "goal-1/evidence/t17-acceptance-34",
+    "ordinaryFiles": 520,
+    "directories": 32,
+    "directoryModesRecorded": true,
+    "marker": {
+      "path": "goal-1/evidence/t17-acceptance-34/sealed-evidence.json",
+      "bytes": 125920,
+      "sha256": "0c27420cdfae102110700e7630661ffe25dadafd6bc2f31fd0af5ef25afa85b5",
+      "mode": 420,
+      "gitMode": "100644"
+    }
+  },
+  "sealAfter": {
+    "root": "goal-1/evidence/t17-acceptance-34",
+    "ordinaryFiles": 520,
+    "directories": 32,
+    "directoryModesRecorded": true,
+    "marker": {
+      "path": "goal-1/evidence/t17-acceptance-34/sealed-evidence.json",
+      "bytes": 125920,
+      "sha256": "0c27420cdfae102110700e7630661ffe25dadafd6bc2f31fd0af5ef25afa85b5",
+      "mode": 420,
+      "gitMode": "100644"
+    }
+  }
+}
