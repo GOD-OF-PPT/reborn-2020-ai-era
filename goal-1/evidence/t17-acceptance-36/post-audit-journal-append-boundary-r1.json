@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-26T12:59:46.982Z",
+  "reason": "Root used old openings harness for first settings-open action after producer completion and final audit; preserve this actual late event, move all following settings evidence to fresh root",
+  "auditFinalAt": "2026-10-26T12:56:46.421Z",
+  "journal": {
+    "path": "goal-1/evidence/t17-acceptance-36/chrome-openings-r1/native-progress.jsonl",
+    "bytes": 271623,
+    "sha256": "8b602c28c51347b431e5549a3276fc73f8de5a06a2c5f7dd9d236b62a0011219",
+    "mode": 420,
+    "gitMode": "100644"
+  },
+  "auditedSnapshot": {
+    "path": "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/chrome-openings-r1-native.snapshot.jsonl",
+    "bytes": 267714,
+    "sha256": "68d7b51b4e983beb10cef78afc0a3a52e9c669a7e022262568c01aaa04640ca8",
+    "mode": 420,
+    "gitMode": "100644"
+  },
+  "prefixExact": true,
+  "lateEvents": [
+    {
+      "at": "2026-10-26T12:57:06.070Z",
+      "action": "设置与说明",
+      "error": null
+    }
+  ],
+  "manifestAndAllRawUnchanged": true,
+  "limit": "Original audit final freeze is true at12:56:46; source journal gained one later UI-only event at12:57:06. Do not claim original entire journal stays frozen-current after this point; immutable audited snapshot remains exact prefix. No audit report/raw rewritten or replay repeated."
+}

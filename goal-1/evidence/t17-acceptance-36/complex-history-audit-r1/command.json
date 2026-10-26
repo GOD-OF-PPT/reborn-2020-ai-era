@@ -1,0 +1,38 @@
+{
+  "at": "2026-10-26T10:16:30.334Z",
+  "cwd": "/Users/gordon/githome/reborn-2020-ai-era",
+  "node": "v22.12.0",
+  "contract": {
+    "path": "goal-1/evidence/t17-acceptance-36/complex-history-audit-r1/frozen-contract.json",
+    "bytes": 278768,
+    "sha256": "a5c27a1035c7581890ff47fd4a1a19172d2264e34ae11505ec97231ed725d723",
+    "mode": 420
+  },
+  "commands": [
+    {
+      "name": "replay",
+      "command": [
+        "rtk",
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-36/complex-history-audit-r1/input",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-36/complex-history-audit-r1/report"
+      ]
+    },
+    {
+      "name": "readback",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/t17-acceptance-36/complex-history-audit-r1/readback.mjs"
+      ]
+    }
+  ],
+  "scope": "One full originalCreate audit of fixed5 capture rows plus2 explicitly historical references, then one independent public account/branch projection. No UI sources/new atomic/physical directories included. Original verifier only reads Git identity/output guards."
+}

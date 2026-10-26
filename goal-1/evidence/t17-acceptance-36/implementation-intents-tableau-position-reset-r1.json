@@ -1,0 +1,23 @@
+{
+  "task": "U0-R",
+  "stage": "tableau-position-reset-r1",
+  "path": "src/ui/room-tableau.css",
+  "before": ".delivery/t17-u0r-tableau-position-reset-r1.before.css",
+  "bytes": 11952,
+  "sha256": "4e0f31d1f5371b02fa0446b396875163e45afc34e398681e2ac39bc39ffaa831",
+  "issue": "Old relay wrapper :has(...) top:41% outranks generic grid inset reset",
+  "reviewed": [
+    "opening-play.css first-order and entry direct-child positions",
+    "course-preparation-paper.css and course-teaching-art.css wrapper/art rules",
+    "video-scene-object.css direct room positions",
+    "relay-service-paper.css top:41% wrapper and direct object rules",
+    "today-scene.css direct object and wrapped day rules"
+  ],
+  "change": "Add a higher-specificity tableau-only wrapper and direct object inset:auto/top/right/bottom/left reset; preserve the current grid, all sizes and text-mode rows.",
+  "validation": "Static source investigation only. No tests/build/browser/Git or geometry/compatibility checks.",
+  "status": "source-written-writer-frozen",
+  "after": {
+    "bytes": 12425,
+    "sha256": "bce7f121d134cffd7d899011fbe7048bd3fb9cef71cf1b8b11c70f835e119e1b"
+  }
+}

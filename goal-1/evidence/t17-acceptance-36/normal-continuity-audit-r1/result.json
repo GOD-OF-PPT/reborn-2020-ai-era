@@ -1,0 +1,168 @@
+{
+  "at": "2026-10-26T07:01:35.423Z",
+  "passed": false,
+  "wallMs": 9469,
+  "executions": [
+    {
+      "name": "replay",
+      "command": [
+        "rtk",
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/input",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/report"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallMs": 6912
+    },
+    {
+      "name": "readback",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/readback.mjs"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "wallMs": 1965
+    }
+  ],
+  "freeze": {
+    "sources": true,
+    "p3": true,
+    "references": true,
+    "dependencies": true,
+    "input": true,
+    "snapshots": true,
+    "nativeJournalPrefix": true
+  },
+  "officialSourceCount": 126,
+  "p3Count": 26,
+  "dependencyFiles": 901,
+  "officialSourceIdentity": true,
+  "completeReplay": true,
+  "replay": {
+    "creations": 1,
+    "executedUniqueCommands": 17,
+    "files": 4,
+    "inputBuffers": 0,
+    "allByteEqual": true
+  },
+  "publicReadback": {
+    "passed": false,
+    "checkCount": 31,
+    "passedChecks": 30,
+    "failedChecks": [
+      {
+        "name": "lastQ1PointDerivedFromOriginalActions",
+        "passed": false,
+        "actual": {
+          "budgetAtSaved6": {
+            "available": 3,
+            "quarter": "2020-Q1",
+            "reserved": 0,
+            "spent": 1,
+            "total": 4
+          },
+          "firstOrderPoints": 1,
+          "workQuarterReceipt": {
+            "kind": "WorkQuarter",
+            "commandId": "command-0d3cadaf-8732-4855-b002-3416889f026a",
+            "revisionBefore": 6,
+            "revisionAfter": 7,
+            "date": "2020-01-20",
+            "payload": {}
+          },
+          "lifeReceipt": {
+            "kind": "StartLifeWork",
+            "commandId": "command-d157b6c8-1c7e-4361-9404-17303cf4ba35",
+            "revisionBefore": 14,
+            "revisionAfter": 15,
+            "date": "2020-03-28",
+            "payload": {
+              "kind": "workspace",
+              "personId": null,
+              "reference": null
+            }
+          },
+          "knownOriginalQ1Points": {
+            "firstOrder": 1,
+            "WorkQuarter": 2,
+            "StartLifeWork": 1
+          },
+          "derivedAvailableBeforeLife": 1
+        },
+        "expected": "saved6 leaves3; original WorkQuarter2 then life1 uses last Q1 point. Derived from actual ordered receipts and frozen original WorkQuarter2 rule, not a saved15 export"
+      }
+    ],
+    "snapshots": [
+      {
+        "revision": 6,
+        "date": "2020-01-20",
+        "quarter": "2020-Q1",
+        "cashFen": 2680000,
+        "budget": {
+          "available": 3,
+          "quarter": "2020-Q1",
+          "reserved": 0,
+          "spent": 1,
+          "total": 4
+        }
+      },
+      {
+        "revision": 17,
+        "date": "2020-04-01",
+        "quarter": "2020-Q2",
+        "cashFen": 3089677,
+        "budget": {
+          "available": 4,
+          "quarter": "2020-Q2",
+          "reserved": 0,
+          "spent": 0,
+          "total": 4
+        }
+      },
+      {
+        "revision": 18,
+        "date": "2020-04-04",
+        "quarter": "2020-Q2",
+        "cashFen": 3089677,
+        "budget": {
+          "available": 4,
+          "quarter": "2020-Q2",
+          "reserved": 0,
+          "spent": 0,
+          "total": 4
+        }
+      },
+      {
+        "revision": 18,
+        "date": "2020-04-04",
+        "quarter": "2020-Q2",
+        "cashFen": 3089677,
+        "budget": {
+          "available": 4,
+          "quarter": "2020-Q2",
+          "reserved": 0,
+          "spent": 0,
+          "total": 4
+        }
+      }
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "OWNED_STEP_FAILED:readback",
+    "stack": "Error: OWNED_STEP_FAILED:readback\n    at file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/run-once.mjs:15:537\n    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)"
+  },
+  "limits": "One same normal life/17 distinct postCreate commands/4 saved exports of3 unique states. Reentered18 is a repeated saved artifact, not another command or outcome. FullCreate byte audit and public account facts do not establish visual quality, real player understanding/fun, compatibility, formalP3/62/22, full24quarters or goal completion."
+}

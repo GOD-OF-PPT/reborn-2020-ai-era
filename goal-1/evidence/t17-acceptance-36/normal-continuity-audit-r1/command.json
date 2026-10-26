@@ -1,0 +1,44 @@
+{
+  "at": "2026-10-26T07:01:26.266Z",
+  "cwd": "/Users/gordon/githome/reborn-2020-ai-era",
+  "node": "v22.12.0",
+  "parentBaseline": {
+    "path": "goal-1/evidence/t17-acceptance-36/baseline.json",
+    "bytes": 168371,
+    "sha256": "fe2bd6c7426b13b418ea91ab8b0bda559d81666bc1fe0c8cec305819ece56ebd",
+    "mode": 420
+  },
+  "contract": {
+    "path": "goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/frozen-contract.json",
+    "bytes": 272041,
+    "sha256": "611a7659f0a1b2e26240c5c21c06f470565255a23fca78fef9e10a22151fbbc8",
+    "mode": 420
+  },
+  "commands": [
+    {
+      "name": "replay",
+      "command": [
+        "rtk",
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/input",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/report"
+      ]
+    },
+    {
+      "name": "readback",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/readback.mjs"
+      ]
+    }
+  ],
+  "scope": "One original fullCreate verifier execution followed by one read-only four-artifact public projection; no UI source dependence, no browser/compatibility or product changes. Original verifier invokes read-only Git identity/output guards."
+}

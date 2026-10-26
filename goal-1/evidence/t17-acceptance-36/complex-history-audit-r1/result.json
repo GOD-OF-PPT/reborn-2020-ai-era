@@ -1,0 +1,111 @@
+{
+  "at": "2026-10-26T10:17:58.976Z",
+  "passed": true,
+  "wallMs": 89276,
+  "executions": [
+    {
+      "name": "replay",
+      "command": [
+        "rtk",
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-36/complex-history-audit-r1/input",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-36/complex-history-audit-r1/report"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallMs": 83331
+    },
+    {
+      "name": "readback",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/t17-acceptance-36/complex-history-audit-r1/readback.mjs"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallMs": 4751
+    }
+  ],
+  "freeze": {
+    "sources": true,
+    "p3": true,
+    "references": true,
+    "dependencies": true,
+    "input": true,
+    "snapshots": true
+  },
+  "officialSourceCount": 126,
+  "p3Count": 26,
+  "dependencyFiles": 901,
+  "officialSourceIdentity": true,
+  "completeReplay": true,
+  "replay": {
+    "originalNormalCreationHistories": 2,
+    "executedUniqueHistoricalCommands": 173,
+    "artifactsIncludingHistoricalReferences": 7,
+    "inputBuffers": 0,
+    "allByteEqual": true,
+    "newNativeCreates": 0
+  },
+  "publicReadback": {
+    "passed": true,
+    "checkCount": 23,
+    "passedChecks": 23,
+    "failedChecks": [],
+    "service": {
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "customerNumber": 2,
+      "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+      "businessId": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+      "periodId": "rly:f0b021b3e0b75ccdae0eae2e2d6f4700",
+      "actualCollectedFen": 1216,
+      "futureFen": 720,
+      "date": "2024-11-07",
+      "budget": {
+        "available": 1,
+        "quarter": "2024-Q4",
+        "reserved": 0,
+        "spent": 3,
+        "total": 4
+      },
+      "supportCompleteAt": "2024-11-13",
+      "personalAccount": {
+        "accountId": "personal",
+        "accruedCostFen": 0,
+        "availableFen": 22000000,
+        "cashFen": 22000000,
+        "commitmentShortfallFen": 0,
+        "heldFen": 0,
+        "investmentValueFen": 0,
+        "lastKnownInvestmentValueFen": 0,
+        "netAssetsFen": 22000000,
+        "payableFen": 0,
+        "prepaidLiabilityFen": 0,
+        "protectionRequiredFen": 0,
+        "protectionShortfallFen": 0,
+        "receivableFen": 0,
+        "supplierPrepaidFen": 0,
+        "valuationStatus": "current"
+      }
+    },
+    "roles": {
+      "currentBranchCommands": 2,
+      "courseCommands": 0,
+      "backupCommands": 0,
+      "priorBranchCommands": 2,
+      "newNativeCreates": 0
+    }
+  },
+  "error": null,
+  "limits": "Five capture rows plus2 prior source references, not7 new UI outcomes. Reconstructed2 old normalCreate histories are not new native Creates. Old87 and new87 are distinct branches after shared original85. Backup87 adds no command/current-head proof. Current final branch has2 new saved receipts, course86 has0. No UI/physical/atomic/human/compatibility/formalP3 or whole-goal acceptance is implied."
+}

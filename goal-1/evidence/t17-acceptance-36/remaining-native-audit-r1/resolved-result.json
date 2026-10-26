@@ -1,0 +1,173 @@
+{
+  "at": "2026-10-26T12:56:46.415Z",
+  "passed": true,
+  "fullCreateExecutions": 1,
+  "fullCreateReplay": {
+    "normalCreationHistories": 4,
+    "existingCreationHistories": 1,
+    "newNativeCreates": 3,
+    "executedUniqueHistoricalCommands": 121,
+    "artifactRowsIncludingReference": 13,
+    "actualImportBufferRows": 0,
+    "allByteEqual": true,
+    "terminal": {
+      "name": "replay",
+      "command": [
+        "rtk",
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/input",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/report"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallMs": 75242
+    },
+    "report": {
+      "path": "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/report/normal-browser-export-audit.json",
+      "bytes": 23598,
+      "sha256": "687d2f7be39fc140d008cf927de5b5ed2059802cd0c89376c5aa8b89382b6f46",
+      "mode": 420
+    }
+  },
+  "publicReadbackExecutions": 2,
+  "firstPublicReadback": {
+    "passed": false,
+    "passedChecks": 25,
+    "checkCount": 26,
+    "terminal": {
+      "name": "readback",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/readback.mjs"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "wallMs": 5616
+    },
+    "result": {
+      "path": "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/readback-result.json",
+      "bytes": 2328,
+      "sha256": "29c17cd144175dbe08b6214fcfd65c9dfbab660a487e40ef96943b82ff2f0c81",
+      "mode": 420
+    },
+    "originalMainExitCode": 1
+  },
+  "correctedPublicReadback": {
+    "passed": true,
+    "passedChecks": 26,
+    "checkCount": 26,
+    "terminal": {
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/readback-correction-r2/readback.mjs"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallMs": 6026
+    },
+    "result": {
+      "path": "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/readback-correction-r2/readback-result.json",
+      "bytes": 1538,
+      "sha256": "d9213cb748096d63f105353ec7009de2051517866e9cc4d90d679a7892bba5b3",
+      "mode": 420
+    }
+  },
+  "originalRedAndHelperPreserved": {
+    "result": {
+      "path": "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/result.json",
+      "bytes": 4647,
+      "sha256": "e4adb91a15e38c8fecb7557a68adb695f3025e1fc4c4967897873f263a51e671",
+      "mode": 420
+    },
+    "helper": {
+      "path": "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/readback.mjs",
+      "bytes": 21784,
+      "sha256": "6942e26723e4879070569c7d920268db447f7ae9787149884fb15832db69dca0",
+      "mode": 420
+    }
+  },
+  "correctionScope": {
+    "semanticChange": "Only openingPlayerProfilesStayIndependent compares wishId and approach individually, preserving the same exact values. JSON key order is not a game-state defect.",
+    "allOther25AssertionsByteIdenticalAfterImportAndOutputPlumbing": true,
+    "fullCreateReexecuted": false,
+    "correctedHelper": {
+      "path": "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/readback-correction-r2/readback.mjs",
+      "bytes": 21913,
+      "sha256": "7215a5709e0f5223e448435436fbf5a07595885f62a0bae4d673967b986827ef",
+      "mode": 420
+    }
+  },
+  "freeze": {
+    "sources": true,
+    "p3": true,
+    "references": true,
+    "dependencies": true,
+    "input": true,
+    "snapshots": true
+  },
+  "summary": {
+    "historicalCourseRun": "normal-course-content_employee-453bb7c2",
+    "courseId": "crs:60aafe5da1d987ede4868ffc2c3a469f",
+    "cohortId": "crs:65e711b806d157156363b88c08ec182c",
+    "contrastRevisions": [
+      97,
+      98,
+      120
+    ],
+    "retainedStudents": [
+      4,
+      4,
+      4
+    ],
+    "cumulativeClassIncomeFen": [
+      39800,
+      39800,
+      79600
+    ],
+    "classPrepaymentFen": [
+      39800,
+      39800,
+      0
+    ],
+    "originalRefundFen": 19900,
+    "closedFeeFen": 3980,
+    "freshRunIds": [
+      "life-e73a06bf-e779-42b5-9be8-63df114327e8",
+      "life-1b7dbb44-6e3c-400c-82b0-77ba8844d2f6",
+      "life-75a5ffa6-bf58-4001-ba08-bd161cb62ed0"
+    ],
+    "freshCreates": 3,
+    "newPostCreateCommands": [
+      {
+        "kind": "DeclineOffer",
+        "commandId": "command-01028579-0db2-439d-aec0-80bf986b89ca",
+        "revisionBefore": 1,
+        "revisionAfter": 2,
+        "date": "2020-01-01",
+        "payload": {
+          "offerId": "manual-first-2020"
+        }
+      }
+    ],
+    "openingCashFen": 2600000,
+    "openingDate": "2020-01-01",
+    "openingAvailableAP": 4,
+    "investmentCommandsAfterCreate": 0,
+    "freeCommandsAfterCreate": 0
+  },
+  "limits": "One successful complete replay plus first25/26 audit-helper red and one corrected26/26 readback. Not one all-green original run. NewNativeCreates3 and postCreateDecline1 only; old history, cancelled confirmations, tool failures and reentry add no commands. No product/UI/compatibility/human acceptance inferred."
+}

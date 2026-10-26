@@ -1,0 +1,827 @@
+diff --git a/src/ui/App.tsx b/src/ui/App.tsx
+index 2a5e50b2..4bf27efe 100644
+--- a/src/ui/App.tsx
++++ b/src/ui/App.tsx
+@@ -1,4 +1,4 @@
+-import type {DayPerspective} from './day-perspective.ts'
++import {dayPerspectiveCurrent,type DayPerspective} from './day-perspective.ts'
+ import {savedSceneResult} from './scene-result.ts'
+ import {journeyIntent} from './journey-intent.ts'
+ import {rememberViewedLife} from './continuation.ts'
+@@ -96,7 +96,7 @@ export default function App({controller=null,startupError=null,diagnostics=null,
+  const relayDraftMemory=useMemo(()=>createRelaySceneDraftMemory(view?.runId??''),[view?.runId])
+  const relayPreparationDraftMemory=useMemo(()=>createRelayPreparationDraftMemory(view?.runId??''),[view?.runId])
+  const [entryKey,setEntryKey]=useState(0)
+- const requestedRoomToday=useRef<DayPerspective|null>(null)
++ const [requestedRoomToday,setRequestedRoomToday]=useState<DayPerspective|null>(null)
+  const [storyIncidentId,setStoryIncidentId]=useState<string|null>(null)
+  const [journeyOpen,setJourneyOpen]=useState(false),[lifeYear,setLifeYear]=useState<number|null>(null)
+  const [lifePane,setLifePane]=useState<'today'|'people'|'year'>('today')
+@@ -115,7 +115,7 @@ export default function App({controller=null,startupError=null,diagnostics=null,
+  const [marketRecordId,setMarketRecordId]=useState<string|null>(null),[quarterRecordId,setQuarterRecordId]=useState<string|null>(null),[lifeRecordId,setLifeRecordId]=useState<string|null>(null)
+  const [workspaceOpen,setWorkspaceOpen]=useState(false),[sceneReceipt,setSceneReceipt]=useState<{runId:string;screen:Screen;revision:number;kind:string;text:string;frame:EchoFrame|null;workspace:PreparationWorkspaceContext|null}|null>(null)
+  const failedScene=useRef<{runId:string;screen:Screen;label:string;kind:string;payload:unknown;workspace:PreparationWorkspaceContext}|null>(null)
+- const navigate=(screen:Screen,open=false)=>{requestedRoomToday.current=null;if(screen==='life'){setLifePane('today');setLifeSceneMode('person')}setSceneReceipt(null);setVideoTarget(undefined);setCourseTarget(screen==='course'?null:undefined);setCourseRecordId(null);setCourseDraftSlot(undefined);setCourseTeachingSlot(undefined);setRelayTarget(screen==='relay'?null:undefined);setRelayDraftSlot(undefined);setRelayRecordId(null);setMarketRecordId(null);setQuarterRecordId(null);setLifeRecordId(null);setWorkspaceOpen(open&&screen!=='room'&&screen!=='routes');setTab(screen)}
++ const navigate=(screen:Screen,open=false)=>{setRequestedRoomToday(null);if(screen==='life'){setLifePane('today');setLifeSceneMode('person')}setSceneReceipt(null);setVideoTarget(undefined);setCourseTarget(screen==='course'?null:undefined);setCourseRecordId(null);setCourseDraftSlot(undefined);setCourseTeachingSlot(undefined);setRelayTarget(screen==='relay'?null:undefined);setRelayDraftSlot(undefined);setRelayRecordId(null);setMarketRecordId(null);setQuarterRecordId(null);setLifeRecordId(null);setWorkspaceOpen(open&&screen!=='room'&&screen!=='routes');setTab(screen)}
+  const [pendingSubmission,setPendingSubmission]=useState<{commandId:string;preview:CommandPreview}|null>(null)
+  const [tab,setTab]=useState<Tab>('room'),[selectedAccountId,setAccountId]=useState('personal'),[modal,setModal]=useState<Modal|null>(null),[localError,setLocalError]=useState<string|null>(null),[settings,setSettings]=useState(readSettings),[settingsNotice,setSettingsNotice]=useState('')
+  const activeTab=useRef<Screen>('room');activeTab.current=tab
+@@ -224,7 +224,8 @@ export default function App({controller=null,startupError=null,diagnostics=null,
+  }
+  const openingRoom=!!view&&view.phase==='playing'&&tab==='room'
+  const openingThread=openingRoom&&props?(selectedThread??playerThread(props,openingFocus,openingFocusQuarter??undefined)):null
+- const displayAccountId=openingThread&&!focusRequiresChoice&&openingThread.focusStatus!=='invalid'?openingThread.focus.accountId:accountId
++ const displayingToday=openingRoom&&view&&dayPerspectiveCurrent(view,requestedRoomToday)&&openingThread&&!focusRequiresChoice&&openingThread.focusStatus!=='invalid'&&!openingThread.responsibilityOverrideNeeded&&!openingThread.legacyFallbackRequired
++ const displayAccountId=displayingToday?'personal':openingThread&&!focusRequiresChoice&&openingThread.focusStatus!=='invalid'?openingThread.focus.accountId:accountId
+  const openWorkspace=(screen:Screen=tab,target?:SceneTarget)=>{
+   const lifeMode=target?.lifeSelection??(screen===tab?lifeSceneMode:'person')
+   const recordId=target?.recordId??(screen===tab?(screen==='market'?marketRecordId:screen==='quarter'?quarterRecordId:screen==='life'?lifeRecordId:null):null)
+@@ -261,7 +262,7 @@ export default function App({controller=null,startupError=null,diagnostics=null,
+  const navigateScene=(screen:Screen,target?:SceneTarget)=>{
+   if(target?.openRecord||((screen==='quarter'||screen==='life')&&target?.recordId)){openWorkspace(screen,target);return}
+   navigate(screen)
+-  if(screen==='room'&&target?.roomView==='today'&&view?.phase==='playing')requestedRoomToday.current={runId:view.runId,revision:view.revision}
++  if(screen==='room'&&target?.roomView==='today'&&view?.phase==='playing')setRequestedRoomToday({runId:view.runId,revision:view.revision})
+   if(target?.accountId)setAccountId(target.accountId)
+   if(target?.personId)setLifePerson(target.personId)
+   if(screen==='market')setMarketRecordId(target?.recordId??null)
+@@ -341,7 +342,7 @@ export default function App({controller=null,startupError=null,diagnostics=null,
+  {journeyOpen?<Dialog title="你走过的篇章" className="journey-dialog" onClose={()=>setJourneyOpen(false)}><Suspense fallback={<p role="status">正在翻开这段人生…</p>}><JourneyPanel p={props} onYear={year=>{setJourneyOpen(false);showYear(year)}} onChoose={()=>{setJourneyOpen(false);navigate('quarter')}}/></Suspense></Dialog>:null}
+  <SceneAttention p={props} onStoryScene={id=>{setStoryIncidentId(id);navigate('story')}} onOpen={(screen,accountId)=>{if(accountId)setAccountId(accountId);navigate(screen,true)}}/>
+  {tab==='room'&&!openingRoom&&!modal&&sceneReceipt?.kind!=='AdvanceTime'&&sceneReceipt?.runId===view.runId&&sceneReceipt.screen===tab&&sceneReceipt.revision===view.revision?<SceneEcho text={sceneReceipt.text} frame={sceneReceipt.frame} onClose={()=>setSceneReceipt(null)} accountName={accountName}/>:null}
+- <div className="workbench-layout"><main id="main-content" tabIndex={-1} className="workbench-main">{tab==='room'&&features!.journey?.ending&&(view.phase!=='playing'||features!.journey.canEnterEpilogue)?<Suspense fallback={<p className="scene-loading" role="status">正在回看这段人生…</p>}><EndingStage key={view.runId+':'+view.phase} p={props} headingRef={heading} onOpen={screen=>navigate(screen,true)} onJourney={()=>setJourneyOpen(true)} onNewLife={()=>{if(controller?.needsUnsavedWarning)setModal({kind:'exit'});else void controller?.home().catch(fail)}}/></Suspense>:tab==='room'?<CinematicRoom {...props} initialToday={requestedRoomToday.current} openingFocus={openingFocus} focusQuarter={openingFocusQuarter} focusNotice={openingFocusNotice} focusRequiresChoice={focusRequiresChoice} onOpeningFocus={focus=>rememberFocus(focus)} notice={openingRoom&&view.revision===1?null:state.notice?activityText(state.notice):null} timeEcho={!modal&&sceneReceipt&&(openingRoom||sceneReceipt.kind==='AdvanceTime')&&sceneReceipt.runId===view.runId&&sceneReceipt.screen===tab&&sceneReceipt.revision===view.revision?<SceneTimeNotice compact={openingRoom} key={view.revision} date={view.date} text={sceneReceipt.text} frame={sceneReceipt.frame} onClose={()=>setSceneReceipt(null)} accountName={accountName}/>:null} headingRef={heading} onJourney={()=>setJourneyOpen(true)} onNavigate={navigateScene} onPeople={personId=>showPeople(personId??'tang-ying')} onYear={()=>showYear()}/>:tab==='routes'?<Suspense fallback={<p className="scene-loading" role="status">新的路，正在眼前展开…</p>}><RoutesPanel {...props} headingRef={heading} onRoute={id=>navigate(screenForRoute(id))}/></Suspense>:<NarrativeScene {...props} videoTarget={videoTarget} onVideoTargetChange={selectVideoRecord} courseTarget={courseTarget} onCourseTargetChange={selectCourseRecord} relayTarget={relayTarget} onRelayTargetChange={selectRelayRecord} marketRecordId={marketRecordId} onStoryIncident={id=>{setStoryIncidentId(id);setSceneReceipt(null)}} storyIncidentId={storyIncidentId} screen={tab} headingRef={heading} personId={lifePerson} lifeMode={lifeSceneMode} onLifeMode={setLifeSceneMode} onPerson={id=>{setLifeRecordId(null);setLifePerson(id);setLifeSceneMode('person');setSceneReceipt(null)}} onNavigate={navigateScene} onOpen={openWorkspace} onPeople={()=>showPeople(lifePerson,true)} onYear={()=>showYear()} onDismissReceipt={()=>setSceneReceipt(null)} receiptKind={!preparationReceipt&&sceneReceipt?.runId===view.runId&&sceneReceipt.screen===tab&&sceneReceipt.revision===view.revision?sceneReceipt.kind:null} echoFrame={!preparationReceipt&&sceneReceipt?.runId===view.runId&&sceneReceipt.revision===view.revision?sceneReceipt.frame:null} receipt={!preparationReceipt&&sceneReceipt?.runId===view.runId&&sceneReceipt.screen===tab&&sceneReceipt.revision===view.revision?sceneReceipt.text:null}/>}</main></div>
++ <div className="workbench-layout"><main id="main-content" tabIndex={-1} className="workbench-main">{tab==='room'&&features!.journey?.ending&&(view.phase!=='playing'||features!.journey.canEnterEpilogue)?<Suspense fallback={<p className="scene-loading" role="status">正在回看这段人生…</p>}><EndingStage key={view.runId+':'+view.phase} p={props} headingRef={heading} onOpen={screen=>navigate(screen,true)} onJourney={()=>setJourneyOpen(true)} onNewLife={()=>{if(controller?.needsUnsavedWarning)setModal({kind:'exit'});else void controller?.home().catch(fail)}}/></Suspense>:tab==='room'?<CinematicRoom {...props} todayPerspective={requestedRoomToday} onTodayPerspective={setRequestedRoomToday} openingFocus={openingFocus} focusQuarter={openingFocusQuarter} focusNotice={openingFocusNotice} focusRequiresChoice={focusRequiresChoice} onOpeningFocus={focus=>rememberFocus(focus)} notice={openingRoom&&view.revision===1?null:state.notice?activityText(state.notice):null} timeEcho={!modal&&sceneReceipt&&(openingRoom||sceneReceipt.kind==='AdvanceTime')&&sceneReceipt.runId===view.runId&&sceneReceipt.screen===tab&&sceneReceipt.revision===view.revision?<SceneTimeNotice compact={openingRoom} key={view.revision} date={view.date} text={sceneReceipt.text} frame={sceneReceipt.frame} onClose={()=>setSceneReceipt(null)} accountName={accountName}/>:null} headingRef={heading} onJourney={()=>setJourneyOpen(true)} onNavigate={navigateScene} onPeople={personId=>showPeople(personId??'tang-ying')} onYear={()=>showYear()}/>:tab==='routes'?<Suspense fallback={<p className="scene-loading" role="status">新的路，正在眼前展开…</p>}><RoutesPanel {...props} headingRef={heading} onRoute={id=>navigate(screenForRoute(id))}/></Suspense>:<NarrativeScene {...props} videoTarget={videoTarget} onVideoTargetChange={selectVideoRecord} courseTarget={courseTarget} onCourseTargetChange={selectCourseRecord} relayTarget={relayTarget} onRelayTargetChange={selectRelayRecord} marketRecordId={marketRecordId} onStoryIncident={id=>{setStoryIncidentId(id);setSceneReceipt(null)}} storyIncidentId={storyIncidentId} screen={tab} headingRef={heading} personId={lifePerson} lifeMode={lifeSceneMode} onLifeMode={setLifeSceneMode} onPerson={id=>{setLifeRecordId(null);setLifePerson(id);setLifeSceneMode('person');setSceneReceipt(null)}} onNavigate={navigateScene} onOpen={openWorkspace} onPeople={()=>showPeople(lifePerson,true)} onYear={()=>showYear()} onDismissReceipt={()=>setSceneReceipt(null)} receiptKind={!preparationReceipt&&sceneReceipt?.runId===view.runId&&sceneReceipt.screen===tab&&sceneReceipt.revision===view.revision?sceneReceipt.kind:null} echoFrame={!preparationReceipt&&sceneReceipt?.runId===view.runId&&sceneReceipt.revision===view.revision?sceneReceipt.frame:null} receipt={!preparationReceipt&&sceneReceipt?.runId===view.runId&&sceneReceipt.screen===tab&&sceneReceipt.revision===view.revision?sceneReceipt.text:null}/>}</main></div>
+  {tab!=='room'?<SceneThreads p={props} onOpen={(screen,personId,incidentId)=>{if(screen==='story'&&incidentId){setStoryIncidentId(incidentId);navigate('story')}else navigate(screen,true);if(screen==='life'&&personId){setLifePane('people');setLifePerson(personId)}}}/>:null}
+  {workspaceOpen&&tab!=='room'&&tab!=='routes'?<Dialog title={screens.find(s=>s[0]===tab)![1]} className={'scene-workspace workspace-'+tab} onClose={()=>setWorkspaceOpen(false)}><p className="scene-sheet-caption">{view.phase==='playing'?'把接下来的日子安排仔细。合上这一页，回到眼前的生活。':'翻看原来的记录与责任。合上这一页，回到这段人生。'}</p><SectionNavigation screen={tab} onNavigate={screen=>navigate(screen,true)}/><label className="scene-sheet-account">查看哪一份账与安排<select value={accountId} onChange={event=>setAccountId(event.target.value)}>{!view.accounts.some(account=>account.accountId===accountId)?<option value={accountId} disabled>原账户已不可达，请重选</option>:null}{view.accounts.map(account=><option key={account.accountId} value={account.accountId}>{accountName(account.accountId)}</option>)}</select></label>{preparationReceipt?<p key="preparation-feedback" className="scene-sheet-caption" role="status"><strong>素材使用范围的准备已安排。</strong> {preparationReceipt.text}<br/><span>继续准备，已填内容仍在。授权任务仍要按约定日期完成。</span></p>:null}<div key="workspace-content" className="scene-workspace-content"><Suspense fallback={<p className="loading-panel" role="status">正在翻开这段生活…</p>}>{tab==='quarter'?<QuarterPanel {...props} initialRecordId={quarterRecordId} initialPhase="plan" onLife={()=>{setLifePane('today');setLifeSceneMode('person');setTab('life')}} onPeople={personId=>showPeople(personId??'tang-ying',true)} onDeepseek={()=>setTab('deepseek')} onCourse={()=>setTab('course')} onRelay={()=>setTab('relay')} onRoutines={()=>setTab('routines')} onStory={()=>setTab('story')} onMarket={()=>setTab('market')} guideHidden={settings.hiddenGuides.includes(view.runId)} onHideGuide={()=>saveSettings({...settings,hiddenGuides:[...new Set([...settings.hiddenGuides,view.runId])].slice(-100)})}/>:tab==='life'?<LifePanel key={view.runId} {...props} initialRecordId={lifeRecordId} initialPane={lifePane} initialPersonId={lifePerson} initialYear={lifeYear}/>:tab==='story'?<StoryPanel {...props}/>:tab==='market'?<MarketPanel key={accountId+':'+(marketRecordId??'')} {...props} initialRecordId={marketRecordId}/>:tab==='video'?<VideoPanel {...props} {...(videoTarget?{initialTarget:videoTarget}:{})} onTargetChange={selectVideoRecord}/>:tab==='course'?<CoursePanel {...props} {...(courseTarget!==undefined?{initialTarget:courseTarget}:{})} onTargetChange={selectCourseRecord} {...(courseDraftSlot?{initialDraftSlot:courseDraftSlot}:{})} {...(courseTeachingSlot?{initialTeachingSlot:courseTeachingSlot}:{})} {...(courseRecordId?{initialFocusId:courseRecordId}:{})}/>:tab==='relay'?<Suspense fallback={<p role="status">正在打开中转站…</p>}><RelayPanel {...props} {...(relayTarget!==undefined?{initialTarget:relayTarget}:{})} onTargetChange={selectRelayRecord} {...(relayDraftSlot?{initialDraftSlot:relayDraftSlot}:{})}/></Suspense>:tab==='routines'?<Suspense fallback={<p role="status">正在载入例行计划…</p>}><RoutinesPanel {...props}/></Suspense>:tab==='deepseek'?<Suspense fallback={<p role="status">正在载入DeepSeek机会…</p>}><DeepseekPanel {...props} initialPane={deepseekTarget.pane} {...(deepseekTarget.recordId?{initialFocusId:deepseekTarget.recordId}:{})}/></Suspense>:tab==='memory'?<MemoryPanel {...props}/>:<FinancePanel key={accountId} {...props} onStorage={()=>openStorage()} onExport={()=>exportCurrent()} onBackup={()=>exportOriginal(view.runId,true)}/>}</Suspense></div></Dialog>:null}</>:<div className="entry-wrap"><Home key={entryKey} controller={controller} state={state} onStorage={()=>openStorage()} onExport={id=>exportOriginal(id)}/></div>}
+  {!openingRoom?<footer className="site-footer">本机人生 · 模拟市场 / 明确架空股权</footer>:null}
+diff --git a/src/ui/CinematicRoom.tsx b/src/ui/CinematicRoom.tsx
+index f2f93d1d..94df4432 100644
+--- a/src/ui/CinematicRoom.tsx
++++ b/src/ui/CinematicRoom.tsx
+@@ -18,7 +18,7 @@ import {SeasonRecollection} from './SeasonRecollection.tsx'
+ import {makeSharedAction} from './shared-action.ts'
+ import {dayPerspectiveCurrent,type DayPerspective} from './day-perspective.ts'
+ 
+-type Props=GamePanelProps&{initialToday?:DayPerspective|null;headingRef:Ref<HTMLHeadingElement>;notice:string|null;timeEcho?:ReactNode;onNavigate:NavigateScene;onPeople:(id?:LifePerson)=>void;onYear:()=>void;onJourney?:()=>void;openingFocus?:OpeningFocus|null;focusQuarter?:string|null|undefined;focusNotice?:string|null|undefined;focusRequiresChoice?:boolean|undefined;onOpeningFocus?:(focus:OpeningFocus|null)=>void}
++type Props=GamePanelProps&{initialToday?:DayPerspective|null;todayPerspective?:DayPerspective|null;onTodayPerspective?:(perspective:DayPerspective|null)=>void;headingRef:Ref<HTMLHeadingElement>;notice:string|null;timeEcho?:ReactNode;onNavigate:NavigateScene;onPeople:(id?:LifePerson)=>void;onYear:()=>void;onJourney?:()=>void;openingFocus?:OpeningFocus|null;focusQuarter?:string|null|undefined;focusNotice?:string|null|undefined;focusRequiresChoice?:boolean|undefined;onOpeningFocus?:(focus:OpeningFocus|null)=>void}
+ const spots=[['routes','电脑 · 经营','新的机会，都从一次尝试开始。',76,49],['quarter','门外 · 安排','工作与时间，仍由你决定。',37,40],['memory','书架 · 记忆','记得趋势，不是答案。',22,48],['life','床边 · 生活','也留一些时间，给自己。',21,65]] as const
+ type Spot=typeof spots[number][0]
+ const inspection:Record<Spot,{speaker:string;line:string;hint:string}>={
+@@ -32,7 +32,8 @@ const ecoContractStatus={production:'制作中',review:'等待客户复核',reje
+ 
+ export function CinematicRoom(p:Props){
+  const [responsibilities,setResponsibilities]=useState(false),[exploring,setExploring]=useState(false),[records,setRecords]=useState(false)
+- const [recollection,setRecollection]=useState(false),[todayAt,setTodayAt]=useState<DayPerspective|null>(()=>p.initialToday?.runId===p.view.runId?p.initialToday:null)
++ const [recollection,setRecollection]=useState(false),[localTodayAt,setLocalTodayAt]=useState<DayPerspective|null>(()=>p.initialToday?.runId===p.view.runId?p.initialToday:null)
++ const todayAt=p.onTodayPerspective?p.todayPerspective??null:localTodayAt,setTodayAt=p.onTodayPerspective??setLocalTodayAt
+  const momentRoot=useRef<HTMLDivElement>(null)
+  const [hovered,setHovered]=useState<Spot|null>(null),[focused,setFocused]=useState<Spot|null>(null)
+  const inspected=hovered??focused,spot=spots.find(([screen])=>screen===inspected),look=inspected?inspection[inspected]:null
+@@ -40,7 +41,7 @@ export function CinematicRoom(p:Props){
+  const opening=view.phase==='playing'
+  const showToday=()=>makeSharedAction(p,'回到今天',()=>{setRecollection(false);setExploring(false);setTodayAt(w.pause||w.progression.requiresDelivery?null:{runId:view.runId,revision:view.revision})},{allowReadOnly:true}).activate()
+  const returnToFocus=()=>setTodayAt(null)
+- useEffect(()=>{if(todayAt&&!dayPerspectiveCurrent(view,todayAt))setTodayAt(null)},[todayAt,view])
++ useEffect(()=>{if(todayAt&&!dayPerspectiveCurrent(view,todayAt))setTodayAt(null)},[todayAt,view,setTodayAt])
+  const season=sceneSeason(w.quarter)
+  useEffect(()=>{
+   const key=(event:KeyboardEvent)=>{
+diff --git a/src/ui/CourseEncounter.tsx b/src/ui/CourseEncounter.tsx
+index 68cfaa4a..8acb1c8d 100644
+--- a/src/ui/CourseEncounter.tsx
++++ b/src/ui/CourseEncounter.tsx
+@@ -6,9 +6,10 @@ import {CourseThreadAction} from './CourseThreadAction.tsx'
+ import {coursePreparationPaperFor} from './course-continuity.ts'
+ import {courseTeachingPaperFor,courseTeachingPaperLabel,courseTeachingMoneyFor} from './course-teaching-continuity.ts'
+ import {courseTeachingPaper} from './course-teaching-paper.ts'
++import type {CourseChoiceIntent} from './CourseSceneChoice.tsx'
+ import './course-encounter.css'
+ 
+-type Props={p:GamePanelProps;thread:PlayerThreadView;date:string|null;waitLabel:string;onChoose:()=>void;onResult:()=>void;onToday:()=>void}
++type Props={p:GamePanelProps;thread:PlayerThreadView;date:string|null;waitLabel:string;onChoose:(intent?:CourseChoiceIntent)=>void;onResult:()=>void;onToday:()=>void}
+ 
+ export function CourseEncounter({p,thread,date,waitLabel,onChoose,onResult,onToday}:Props){
+  const art=coursePreparationPaperFor(thread)
+diff --git a/src/ui/CoursePreparationInteraction.test.tsx b/src/ui/CoursePreparationInteraction.test.tsx
+index b5d77bf8..80e57e37 100644
+--- a/src/ui/CoursePreparationInteraction.test.tsx
++++ b/src/ui/CoursePreparationInteraction.test.tsx
+@@ -16,6 +16,7 @@ import {CourseThreadAction} from './CourseThreadAction.tsx'
+ import {OpeningObject} from './OpeningObject.tsx'
+ import {openingFocusFor,playerThread} from './player-thread.ts'
+ import {Dialog} from './Dialog.tsx'
++import {sceneMeaning} from './scene-meaning.ts'
+ import readySource from '../../goal-1/evidence/t17-acceptance-24/chrome-r5/course-physical-86.json?raw'
+ 
+ // Each actual component gets its own hook scope, including the original teaching
+@@ -70,12 +71,12 @@ function choiceDriver(f:Ready,p:()=>GamePanelProps=f.p){
+  const rootScope:HookScope={values:[],index:0},teachingScope:HookScope={values:[],index:0},chosen=vi.fn(),inspect=vi.fn(),today=vi.fn(),life=vi.fn()
+  let target:CourseSceneTarget|null=f.target,tree:unknown,teachingProps:ComponentProps<typeof CourseTeachingChoice>|null=null,teachingMounted=false
+  const render=()=>{
+-  const outer=within(rootScope,()=>CourseSceneChoice({p:p(),target,onTarget:next=>{chosen(next);target=next},onInspect:inspect,onToday:today,onLife:life,children:open=><><button type="button" onClick={()=>open()}>打开这份准备</button><button type="button" onClick={()=>open('next')}>显式选择下一步</button><button type="button" onClick={()=>open('define')}>显式继续定义草稿</button></>}))
++  const outer=within(rootScope,()=>CourseSceneChoice({p:p(),target,onTarget:next=>{chosen(next);target=next},onInspect:inspect,onToday:today,onLife:life,children:open=><><button type="button" onClick={()=>open()}>打开这份准备</button><button type="button" onClick={()=>open('audience')}>显式了解来源与拟报价</button><button type="button" onClick={()=>open('next')}>显式选择下一步</button><button type="button" onClick={()=>open('define')}>显式继续定义草稿</button></>}))
+   if(isValidElement<ComponentProps<typeof CourseTeachingChoice>>(outer)&&outer.type===CourseTeachingChoice){teachingProps=outer.props;teachingMounted=true;tree=within(teachingScope,()=>CourseTeachingChoice(outer.props))}
+   else{if(teachingMounted){teachingScope.values=[];teachingMounted=false}teachingProps=null;tree=outer}
+  }
+  const click=(label:string)=>{fire(elements(tree).find(e=>e.type==='button'&&text(e).includes(label)),'onClick');render()}
+- const open=(intent?:CourseChoiceIntent)=>click(intent==='next'?'显式选择下一步':intent==='define'?'显式继续定义草稿':'打开这份准备')
++ const open=(intent?:CourseChoiceIntent)=>click(intent==='audience'?'显式了解来源与拟报价':intent==='next'?'显式选择下一步':intent==='define'?'显式继续定义草稿':'打开这份准备')
+  const dialog=(className:string)=>elements(tree).find(e=>e.type===Dialog&&e.props.className===className)
+  const change=(label:string,value:string|boolean)=>{
+   const field=elements(tree).find(e=>e.type==='label'&&text(e).includes(label)),control=field&&elements(field).find(e=>e.type==='input'||e.type==='select')
+@@ -96,11 +97,16 @@ function encounterHandlers(props:ComponentProps<typeof CourseEncounter>){
+  return {main,paper:paper.props as ComponentProps<typeof OpeningObject>,rows,section,click:()=>fire(main,'onClick')}
+ }
+ 
+-it('opens the real next choices after an actually ready sample and enters the original audience editor only by explicit choice',async()=>{
++it('opens the current ready sample audience editor directly by explicit intent and keeps the original next choices readable',async()=>{
+  const f=await normalReady('ready-next')
+  try{
+   const raw=f.controller.exportSaved(),ui=choiceDriver(f)
+-  expect(f.thread().stage).toBe('course-ready');ui.open()
++  expect(f.thread().stage).toBe('course-ready');ui.open('audience')
++  expect(ui.preparation()).toBeUndefined();expect(ui.teachingDialog()?.props.title).toBe('这堂课，先让谁真正看见？');expect(ui.teaching()?.target).toEqual(f.target)
++  expect(ui.fieldValue('这次面向受众的课程报价')).toBe('')
++  expect(ui.all().filter(element=>element.type==='input'&&element.props.type==='radio').every(element=>element.props.checked===false)).toBe(true)
++  expect(f.request).not.toHaveBeenCalled();expect(ui.chosen).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(raw)
++  ui.closeTeaching();ui.open()
+   expect(ui.preparation()?.props.title).toBe('这一份准备之后，怎样继续？');expect(ui.teachingDialog()).toBeUndefined()
+   expect(ui.text()).toContain(f.course.name);expect(ui.text()).toContain('尚未招生')
+   ui.click('先看看谁会需要这一堂课')
+@@ -132,7 +138,7 @@ it('keeps the explicitly chosen next definition draft across closing, returning
+  }finally{await f.close()}
+ })
+ 
+-it('binds the actual ready thought and preparation object to the same result handler and rejects it after a real source change',async()=>{
++it('binds the actual ready thought and preparation object to the same audience intent and rejects it after a real source change',async()=>{
+  const f=await normalReady('shared-binding')
+  try{
+   const p=f.p(),raw=f.controller.exportSaved(),choose=vi.fn(),result=vi.fn(),today=vi.fn(),ui=encounterHandlers({p:{...p,textOnly:true},thread:f.thread(p),date:null,waitLabel:'',onChoose:choose,onResult:result,onToday:today})
+@@ -143,11 +149,12 @@ it('binds the actual ready thought and preparation object to the same result han
+   expect(ui.rows.find(e=>e.type==='span'&&e.props.className==='scene-choice-overline')?.props.children).toBe('眼前这份教案 · 由你决定')
+   expect(ui.rows.filter(e=>e.type==='p').map(e=>text(e.props.children))).toContain(f.thread(p).object)
+   expect(ui.rows.some(e=>String(e.props.className).split(' ').includes('scene-decision-main')&&elements(e.props.children).includes(ui.main))).toBe(true)
+-  ui.click();ui.paper.onActivate();expect(result).toHaveBeenCalledTimes(2);expect(choose).not.toHaveBeenCalled();expect(today).not.toHaveBeenCalled();expect(f.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(raw)
++  expect(text(ui.main)).toContain('先了解，谁可能需要这堂课')
++  ui.click();ui.paper.onActivate();expect(choose).toHaveBeenCalledTimes(2);expect(choose).toHaveBeenNthCalledWith(1,'audience');expect(choose).toHaveBeenNthCalledWith(2,'audience');expect(result).not.toHaveBeenCalled();expect(today).not.toHaveBeenCalled();expect(f.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(raw)
+   const ref=p.features.course!.cases.find(c=>c.kind==='first_order')!
+   await f.send('DefineCourse',{businessId:f.business.id,name:'明确另外留下的来源变化',productId:'intro_recorded',topicId:'image_workflows',edition:'foundation',segment:'local_merchants',cases:[{kind:'first_order',id:ref.id}],consent:true})
+   const committed=f.controller.exportSaved();expect(committed).not.toBe(raw);expect(f.controller.snapshot.view!.revision).toBe(p.view.revision+1)
+-  ui.paper.onActivate();expect(result).toHaveBeenCalledTimes(2);expect(f.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(committed)
++  ui.paper.onActivate();expect(choose).toHaveBeenCalledTimes(2);expect(result).not.toHaveBeenCalled();expect(f.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(committed)
+  }finally{await f.close()}
+ })
+ 
+@@ -156,8 +163,8 @@ it('keeps next choices readable for a real second-controller reader while disabl
+  try{
+   await reader.initialize();await reader.continueLife(f.initial.runId);const p=()=>f.p(reader),raw=reader.exportSaved()
+   expect(p().view.readOnly).toBe(true)
+-  const result=vi.fn(),paper=encounterHandlers({p:p(),thread:f.thread(p()),date:null,waitLabel:'',onChoose:vi.fn(),onResult:result,onToday:vi.fn()})
+-  expect(paper.paper.protection).toBe('readonly');expect(paper.paper.disabled).toBe(false);paper.paper.onActivate();expect(result).toHaveBeenCalledTimes(1)
++  const choose=vi.fn(),result=vi.fn(),paper=encounterHandlers({p:p(),thread:f.thread(p()),date:null,waitLabel:'',onChoose:choose,onResult:result,onToday:vi.fn()})
++  expect(paper.paper.protection).toBe('readonly');expect(paper.paper.disabled).toBe(false);paper.paper.onActivate();expect(choose).toHaveBeenCalledExactlyOnceWith('audience');expect(result).not.toHaveBeenCalled()
+   const ui=choiceDriver(f,p);ui.open()
+   const pause=ui.all().find(e=>e.type==='button'&&text(e).includes('核对暂停接新业务'))
+   expect(pause?.props.disabled).toBe(true);expect(pause?.props.onClick).toBeUndefined()
+@@ -173,6 +180,7 @@ it('retains next, today and life after a real ready course winds down without im
+   const p=f.p(),raw=f.controller.exportSaved(),thread=f.thread(p),accounts=p.view.accounts,budget=p.view.budget,date=p.view.date
+   expect(p.features.course!.courses.find(c=>c.id===f.course.id)!.status).toBe('ready');expect(p.features.course!.businesses.find(b=>b.id===f.business.id)!.lifecycle).toBe('winding_down')
+   expect(thread.outcome).toBe('non-success')
++  expect(sceneMeaning(p,thread)).toBeNull()
+   // WindDownBusiness may bill real maintenance; the reading baseline is the
+   // actual saved result above, never a fabricated or free stop projection.
+   const ui=choiceDriver(f);ui.open('next');expect(ui.preparation()?.props.title).toBe('这一份准备之后，怎样继续？');expect(ui.teachingDialog()).toBeUndefined()
+@@ -190,6 +198,7 @@ it('defaults to next for the same actually paused ready course and keeps its res
+   const p=f.p(),raw=f.controller.exportSaved(),thread=f.thread(p),accounts=p.view.accounts,budget=p.view.budget,date=p.view.date
+   expect(p.features.course!.courses.find(c=>c.id===f.course.id)!.status).toBe('ready');expect(p.features.course!.businesses.find(b=>b.id===f.business.id)!.lifecycle).toBe('paused')
+   expect(thread).toMatchObject({stage:'course-paused',outcome:'actual'})
++  expect(sceneMeaning(p,thread)).toBeNull()
+   const choose=vi.fn(),result=vi.fn(),paper=encounterHandlers({p,thread,date:null,waitLabel:'',onChoose:choose,onResult:result,onToday:vi.fn()})
+   expect(paper.main.props.onClick).toBe(paper.paper.onActivate);paper.click();paper.paper.onActivate()
+   expect(result).toHaveBeenCalledTimes(2);expect(choose).not.toHaveBeenCalled()
+@@ -201,3 +210,16 @@ it('defaults to next for the same actually paused ready course and keeps its res
+   expect(f.p().features.course!.cohorts).toHaveLength(0);expect(f.p().features.course!.businesses.find(b=>b.id===f.business.id)!.metrics.incomeFen).toBe(0);expect(f.controller.exportSaved()).toBe(raw)
+  }finally{await f.close()}
+ })
++
++it('keeps a stopped ready sample as a saved preparation without asking for new audience acquisition',async()=>{
++ const f=await normalReady('ready-sales-stopped')
++ try{
++  await f.send('StopCourseSales',{courseId:f.course.id})
++  const p=f.p(),thread=f.thread(p),raw=f.controller.exportSaved()
++  expect(p.features.course!.courses.find(course=>course.id===f.course.id)).toMatchObject({status:'ready',paused:true})
++  expect(thread.stage).toBe('course-paused');expect(sceneMeaning(p,thread)).toBeNull()
++  const choose=vi.fn(),result=vi.fn(),paper=encounterHandlers({p,thread,date:null,waitLabel:'',onChoose:choose,onResult:result,onToday:vi.fn()})
++  paper.click();expect(result).toHaveBeenCalledTimes(1);expect(choose).not.toHaveBeenCalled()
++  expect(f.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(raw)
++ }finally{await f.close()}
++})
+diff --git a/src/ui/CourseSceneChoice.tsx b/src/ui/CourseSceneChoice.tsx
+index caadce90..614ef5c3 100644
+--- a/src/ui/CourseSceneChoice.tsx
++++ b/src/ui/CourseSceneChoice.tsx
+@@ -15,7 +15,8 @@ import './course-play.css'
+ import {CourseTeachingChoice,type CourseTeachingIntent} from './CourseTeachingChoice.tsx'
+ import type {CourseTeachingDraftSlot} from './course-teaching-draft.ts'
+ 
+-export type CourseChoiceIntent='fund'|'outline'|'activate'|'define'|'license'|'sample'|'record'|'next'|'objects'
++export type CourseChoiceIntent='fund'|'outline'|'activate'|'define'|'license'|'sample'|'record'|'next'|'objects'|'audience'
++type PreparationIntent=Exclude<CourseChoiceIntent,'audience'>
+ type Page='objects'|'fund'|'outline'|'activate'|'cases'|'definition'|'license'|'sample'|'record'|'next'
+ type Props={p:GamePanelProps;target:CourseSceneTarget|null;onTarget?:(target:CourseSceneTarget|null)=>void;onInspect?:(target:CourseSceneTarget|null,slot?:CourseSceneDraftSlot,teachingSlot?:CourseTeachingDraftSlot)=>void;onToday?:()=>void;onLife?:()=>void;blockedReason?:string|null;children?:(open:(intent?:CourseChoiceIntent)=>void)=>ReactNode}
+ const segments=[['ai_learners','AI学习者'],['local_merchants','本地商家'],['lifestyle','生活方式受众']] as const
+@@ -112,7 +113,7 @@ export function CourseSceneChoice({p,target,onTarget,onInspect,onToday,onLife,bl
+  useEffect(()=>{if(blockedReason||p.view.hasCandidate||p.view.saveStatus==='conflict'||open&&p.view.revision!==openedRevision.current&&p.view.saveStatus==='saved')setOpen(false)},[blockedReason,p.view.hasCandidate,p.view.saveStatus,p.view.revision,open])
+  const choose=(next:CourseSceneTarget|null)=>{if(courseSceneBookmarkLock(p,blockedReason))return false;binding.current.value=next;refreshTarget(value=>value+1);onTarget?.(next);return true}
+  const inferredPage=():Page=>!current||contextReason||progress?.invalidReason?'objects':progress?.phase==='course-outline-needed'?'outline':progress?.phase==='course-activate'?'activate':progress?.phase==='course-define'?'cases':progress?.phase==='course-draft'?'sample':progress?.phase==='course-ready'||progress?.outcome==='non-success'||course?.status==='ready'&&progress?.phase==='course-paused'?'next':'record'
+- const activate=(intent?:CourseChoiceIntent)=>{if(blockedReason)return;openedRevision.current=p.view.revision;setPick(null);if(!intent&&!contextReason&&!progress?.invalidReason&&!progress?.historical&&current?.kind==='course'&&course&&progress?.phase==='course-rights-required'&&missingLicense.length===1){const ref=missingLicense[0]!;setLicenseCase({kind:ref.kind as CourseDraftCase['kind'],id:ref.id});setPage('license');setOpen(true);return}setPage(contextReason||progress?.invalidReason||intent==='fund'&&hasOpenStudio?'objects':intent==='define'?'cases':intent==='license'?'record':intent??inferredPage());setOpen(true)}
++ const activate=(intent?:PreparationIntent)=>{if(blockedReason)return;openedRevision.current=p.view.revision;setPick(null);if(!intent&&!contextReason&&!progress?.invalidReason&&!progress?.historical&&current?.kind==='course'&&course&&progress?.phase==='course-rights-required'&&missingLicense.length===1){const ref=missingLicense[0]!;setLicenseCase({kind:ref.kind as CourseDraftCase['kind'],id:ref.id});setPage('license');setOpen(true);return}setPage(contextReason||progress?.invalidReason||intent==='fund'&&hasOpenStudio?'objects':intent==='define'?'cases':intent==='license'?'record':intent??inferredPage());setOpen(true)}
+  const request:GamePanelProps['request']=(kind,payload,label,confirm)=>{if(courseSceneSubmissionLock(p,blockedReason)||courseSceneContextReason(p,current)||current&&courseTargetReason(p.features.course,current,context(p)))return;p.request(kind,payload,label,confirm)}
+  const submit=(command:CoursePreparationCommand)=>lock?<button type="button" disabled>{command.label}</button>:<CommandButton {...p} {...command} request={request} primary reasonText={courseSceneReasonText}/>
+  const inspect=()=>{setOpen(false);onInspect?.(current,['fund','outline','activate','cases','definition','license','sample'].includes(page)?slot:undefined)}
+@@ -137,7 +138,13 @@ export function CourseSceneChoice({p,target,onTarget,onInspect,onToday,onLife,bl
+  // Teaching owns its own children and drafts; the supplied object is never replaced here.
+  const teaching=current?.kind==='audience'||current?.kind==='cohort'||current?.kind==='course'&&course?.status==='ready'&&(progress?.phase==='course-update-required'||progress?.phase.startsWith('course-refresh'))&&!progress?.historical
+  if(teaching)return <CourseTeachingChoice p={p} target={current} onTarget={choose} blockedReason={blockedReason??null} {...(onToday?{onToday}:{})} {...(onLife?{onLife}:{})} {...(onInspect?{onInspect:(next:CourseSceneTarget|null,teachingSlot?:CourseTeachingDraftSlot)=>onInspect(next,undefined,teachingSlot)}:{})} {...(children?{children:(open:(intent?:CourseTeachingIntent)=>void)=>children(intent=>open(intent==='objects'?'targets':intent==='record'||intent==='next'?intent:undefined))}:{})}/>
+- const render=(openTeaching?:((intent?:CourseTeachingIntent)=>void))=><>{children?children(activate):<button type="button" onClick={()=>activate()}>走近这份教案 ↗</button>}{open?<Dialog title={title} className="opening-paper course-choice-paper" onClose={()=>setOpen(false)} footer={footer}><p className="course-paper-kicker">{p.view.date} · {business?'这间教室 · '+(lifecycleText[business.lifecycle]??'状态待核对'):'尚未选择教室'}{course?' · '+course.name:''}</p>{lock?<p role="status" className="course-paper-warning">{lock}</p>:null}
++ const dispatch=(openTeaching?:((intent?:CourseTeachingIntent)=>void))=>(intent?:CourseChoiceIntent)=>{
++  if(intent!=='audience'){activate(intent);return}
++  if(blockedReason||courseSceneBookmarkLock(p,blockedReason))return
++  if(openTeaching&&current?.kind==='course'&&course?.status==='ready'&&progress?.phase==='course-ready'&&!progress.historical&&!contextReason&&!progress.invalidReason){setOpen(false);openTeaching('audience');return}
++  activate('record')
++ }
++ const render=(openTeaching?:((intent?:CourseTeachingIntent)=>void))=><>{children?children(dispatch(openTeaching)):<button type="button" onClick={()=>activate()}>走近这份教案 ↗</button>}{open?<Dialog title={title} className="opening-paper course-choice-paper" onClose={()=>setOpen(false)} footer={footer}><p className="course-paper-kicker">{p.view.date} · {business?'这间教室 · '+(lifecycleText[business.lifecycle]??'状态待核对'):'尚未选择教室'}{course?' · '+course.name:''}</p>{lock?<p role="status" className="course-paper-warning">{lock}</p>:null}
+   {page==='next'&&current?<><h3>{course?.name??'这间教室的教学准备'}</h3><p>{progress?.line}</p><p>{progress?.choice.line}</p>{business?<p>本教室可花{moneyText(business.funds.availableFen)}；维护、旧班与已发生费用仍按原日期和记录继续。</p>:null}{business&&(business.funds.payableFen>0||business.funds.prepaidLiabilityFen>0||business.funds.protectionShortfallFen>0||business.funds.commitmentShortfallFen>0)?<p className="course-paper-warning">尚未履约保护款{moneyText(business.funds.prepaidLiabilityFen)} · 未结应付{moneyText(business.funds.payableFen)}。原资金缺口和承诺须先在原账与日历处理，回到今天不会清除。</p>:null}<div className="course-paper-directions">
+    {progress?.phase==='course-ready'&&openTeaching?<button type="button" disabled={bookmarkLock!==null} onClick={()=>{setOpen(false);openTeaching('audience')}}>先看看谁会需要这一堂课<small>只打开原受众与报价选择，不自动推广、开班或收款。</small></button>:null}
+    {course&&['draft','building'].includes(course.status)&&progress?.outcome==='non-success'&&!progress.historical?<button type="button" disabled={bookmarkLock!==null} onClick={()=>setPage('sample')}>重新核对这份样课的资源与日期<small>已耗成本与原尝试保留，新样课仍须新的真实投入。</small></button>:null}
+diff --git a/src/ui/CourseTeachingChoice.test.tsx b/src/ui/CourseTeachingChoice.test.tsx
+index 72d6b689..e6064d18 100644
+--- a/src/ui/CourseTeachingChoice.test.tsx
++++ b/src/ui/CourseTeachingChoice.test.tsx
+@@ -12,7 +12,9 @@ import {CourseTeachingChoice,courseTeachingDraftCommand,courseEnrollmentBatch,ty
+ import {createCourseTeachingDraftMemory,emptyCourseTeachingDraft,type CourseTeachingDraftScope} from './course-teaching-draft.ts'
+ import {CommandButton} from './CommandButton.tsx'
+ import {ClockAdvance} from './ClockAdvance.tsx'
++import {moneyText} from './game-text.ts'
+ import ready from '../../goal-1/evidence/t17-acceptance-24/chrome-final-r5/course-r5-final-physical-86.json?raw'
++import currentReady from '../../goal-1/evidence/t17-acceptance-34/chrome-final-sample-r2/r2-saved86-current-final-preview.json?raw'
+ import beforeClass from '../../goal-1/evidence/t17-acceptance-10/chrome-physical-r1/r74-physical-after-candidate-retry.json?raw'
+ 
+ import plannedEnrollment from '../../goal-1/evidence/t17-acceptance-25/chrome-r3/c2-saved91-planned-cohort.json?raw'
+@@ -48,6 +50,42 @@ function driver(h:Awaited<ReturnType<typeof setup>>,initial:CourseSceneTarget){
+  render();return {render,all,named,click,open,text:()=>text(tree),setTarget:(next:CourseSceneTarget)=>{target=next;render()},setBlocked:(reason:string|null)=>{blocked=reason;render()},override:(next:Partial<GamePanelProps>)=>{override=next;render()}}
+ }
+ const basicScope=(p:GamePanelProps,courseId:string,businessId:string,slot:CourseTeachingDraftScope['slot']):CourseTeachingDraftScope=>({accountId:p.accountId,businessId,courseId,audienceId:null,cohortId:null,slot})
++it('shows the actual Jan15 ready86 marketing gap before scheduling and keeps explicit source drafts separate from saved facts',async()=>{
++ const h=await setup(currentReady,'u0-ready86-cost-source')
++ try{
++  const p=h.p(),lesson=p.features.course!.courses.find(course=>course.status==='ready')!,business=p.features.course!.businesses.find(row=>row.id===lesson.businessId)!,target:CourseSceneTarget={kind:'course',businessId:lesson.businessId,courseId:lesson.id,...(lesson.sampleJobId?{sampleJobId:lesson.sampleJobId}:{})},d=driver(h,target),before=h.controller.exportSaved(),scope=basicScope(p,lesson.id,lesson.businessId,'audience')
++  expect(p.view.revision).toBe(86);expect(p.view.date).toBe('2023-01-15');expect(business.funds.availableFen).toBe(551936);expect(p.features.course!.catalog.marketingCostFen).toBe(600000)
++  d.open('audience')
++  expect(d.all().find(element=>element.type==='input'&&element.props.inputMode==='decimal')?.props.value).toBe('')
++  expect(d.all().filter(element=>element.type==='input'&&element.props.type==='radio').every(element=>element.props.checked===false)).toBe(true)
++  const mode=(label:string)=>d.all().find(element=>element.type==='label'&&text(element.props.children).includes(label))
++  act(elements(mode('为本课做一次付费推广')).find(element=>element.type==='input'),'onChange');d.render()
++  expect(d.text()).toContain('本次推广'+moneyText(600000)+' · 1点 · 7日')
++  expect(d.text()).toContain('本教室当前可花'+moneyText(551936));expect(d.text()).toContain('仅推广费还差'+moneyText(48064));expect(d.text()).toContain('当前不能提交这次推广')
++  expect(h.memory.read(p.view.runId,scope)).toMatchObject({audienceMode:'paid',price:'',resources:[],startAt:'',sourceIds:[]})
++  act(d.all().find(element=>element.type==='input'&&element.props.inputMode==='decimal'),'onChange',{target:{value:'199'}});d.render();d.click('再留出本次推广')
++  const resources=elements(component(d.named('Resources'))),date=elements(component(d.named('DateField'))).find(element=>element.type==='input'&&element.props.type==='date')
++  act(resources.find(element=>element.type==='input'&&element.props.type==='radio'),'onChange',{target:{checked:true}});act(date,'onChange',{target:{value:p.view.date}});d.render()
++  const proposal=d.all().find(element=>element.type===CommandButton&&element.props.kind==='CreateCourseAudience'),button=elements(component(proposal)).find(element=>element.type==='button')
++  expect(proposal?.props.payload).toEqual({courseId:lesson.id,mode:'paid',priceFen:19900,resources:['player-production'],startAt:'2023-01-15'})
++  expect(button?.props.disabled).toBe(true);expect(h.requests).not.toHaveBeenCalled();expect(h.controller.exportSaved()).toBe(before)
++  d.open('audience');act(elements(mode('核对已有同受众的视频记录')).find(element=>element.type==='input'),'onChange');d.render()
++  const sources=p.features.course!.videoCohorts.filter(source=>source.segment===lesson.segment&&source.date<=p.view.date)
++  expect(d.text()).toContain(sources.length?'当前有'+sources.length+'份本课同受众的公开既有来源':'当前没有本课同受众的公开既有来源')
++  expect(d.all().filter(element=>element.type==='input'&&element.props.type==='checkbox')).toHaveLength(sources.length)
++  expect(d.all().filter(element=>element.type==='input'&&element.props.type==='checkbox').every(element=>element.props.checked===false)).toBe(true)
++  expect(h.memory.read(p.view.runId,scope)).toMatchObject({audienceMode:'video_referral',price:'199',sourceIds:[],resources:['player-production'],startAt:'2023-01-15'})
++  expect(courseTeachingDraftCommand(p,h.memory.read(p.view.runId,scope)!,'audience',target)).toBeNull()
++  // Only the UI draft is varied: no new source or business history is generated.
++  h.memory.write(p.view.runId,scope,{...h.memory.read(p.view.runId,scope)!,sourceIds:['no-longer-matching-original-source']});d.render()
++  expect(d.text()).toContain('草稿里的原来源已不匹配，仍保留原选择')
++  expect(courseTeachingDraftCommand(p,h.memory.read(p.view.runId,scope)!,'audience',target)).toBeNull()
++  d.click('明确清除这次来源选择');const preserved=h.memory.read(p.view.runId,scope)
++  d.click('先合上，保留草稿');d.open('audience')
++  expect(h.memory.read(p.view.runId,scope)).toEqual(preserved);expect(d.all().find(element=>element.type==='input'&&element.props.inputMode==='decimal')?.props.value).toBe('199')
++  expect(h.chosen).not.toHaveBeenCalled();expect(h.requests).not.toHaveBeenCalled();expect(h.controller.exportSaved()).toBe(before)
++ }finally{await h.close()}
++},20000)
+ it('uses actual capital and paid-audience handlers without spending on browsing, defaulting fields or borrowing the capital draft',async()=>{
+  const h=await setup(ready,'teaching-ready-handlers')
+  try{
+diff --git a/src/ui/CourseTeachingChoice.tsx b/src/ui/CourseTeachingChoice.tsx
+index b0d2c284..ea7cb836 100644
+--- a/src/ui/CourseTeachingChoice.tsx
++++ b/src/ui/CourseTeachingChoice.tsx
+@@ -208,10 +208,13 @@ export function CourseTeachingChoice({p,target,onTarget,onInspect,onToday,onLife
+  const title=page==='next'?(co?'这一班之后，怎样继续？':'这份回应之后，怎样继续？'):page==='more'?'原来的承诺与其他选择':page==='details'?(co?'这一班的学员与完整原账':'这份受众的完整原记录'):page==='targets'?'先选回这一份教学承诺':page==='capital'?'为这门课，再留多少自己的钱？':page==='audience'?'这堂课，先让谁真正看见？':page==='audience-schedule'?'让这次推广，占用真正的日子':page==='plan'?'这一班，我明确答应什么？':page==='plan-support'?'这些人，需要我怎样承担支持？':page==='enroll-people'?'逐位核对原受众意向':page==='enroll'?'这一班，明确接下哪几位？':page==='stage:0'||page==='stage:1'?'为第'+(page==='stage:0'?1:2)+'段课留出日子':page==='recovery'?'还有人没跟上，这次怎样补帮助？':page==='refund'?'按已经交付的部分，核对这次退款':page==='refresh'?'工具变了，先照顾原来的学员':page==='stop'?'要停下这次安排吗？':'这一班，与答应过的人'
+  const selectedPeople=co?draft.personIds.map(id=>co.students.find(s=>s.personId===id)):[],refundQuote=selectedPeople.every(Boolean)?(()=>{try{return sumMoney(selectedPeople.map(s=>s!.paidRemainingFen))}catch{return null}})():null
+  const matchingSources=s?.v.videoCohorts.filter(source=>source.segment===s.lesson.segment&&source.date<=p.view.date)??[],product=s?.v.catalog.products.find(product=>product.id===s.lesson.productId)
++ const marketingGap=s?Math.max(0,s.v.catalog.marketingCostFen-s.business.funds.availableFen):null
+  return <>{children?children(activate):<button type="button" onClick={()=>activate()}>走近这一班的承诺 ↗</button>}{open?<Dialog title={title} className="opening-paper course-teaching-paper" onClose={()=>setOpen(false)} footer={footer}><p className="teaching-kicker">{p.view.date} · {s?.lesson.name??'尚未明确选择教学对象'}{co?' · '+co.startAt+'班':''}</p>{lock?<p role="status" className="teaching-warning">{lock}</p>:null}{progress?.invalidReason&&progress.invalidReason!==lock?<p className="teaching-warning">{progress.invalidReason}</p>:null}{!summaryPage&&co?<p className="teaching-terms">{money?'本班原保护'+moneyText(money.protectedFen)+'；':'本班保护金额待翻原账核对；'}原支持至{co.supportCompleteAt}，退款窗口至{co.refundUntil}，原责任继续。</p>:null}{!summaryPage&&s?.lesson.unresolvedUpdates.length?<p className="teaching-warning">原课程更新最早期限{s.lesson.unresolvedUpdates.map(update=>update.dueAt).sort()[0]}，没有因本次新选择解除。</p>:null}{!summaryPage&&money&&money.totalDueFen>0?<p className="teaching-warning">本班仍有{moneyText(money.totalDueFen)}原应付（其中退款{moneyText(money.refundDueFen)}），当前原保护{moneyText(money.protectedFen)}；原账与期限不因本次新安排消失。</p>:null}
+   {page==='targets'?<fieldset className="teaching-paper-choices"><legend>预看不会更换书签，明确选择才放到眼前</legend>{records.map(t=>{const lesson=p.features.course!.courses.find(c=>c.id===('courseId' in t?t.courseId:'')),record=t.kind==='audience'?p.features.course!.audiences.find(a=>a.id===t.audienceId):undefined,cohort=t.kind==='cohort'?p.features.course!.cohorts.find(co=>co.id===t.cohortId):undefined;return <label key={JSON.stringify(t)}><input type="radio" name={name+'target'} checked={JSON.stringify(pick)===JSON.stringify(t)} onChange={()=>setPick(t)}/><span>{lesson?.name}<small>{cohort?cohort.startAt+'班 · '+(cohort.closedAt?'原班已结清':'原承诺仍在'):record?record.createdAt+'受众记录 · 报价'+moneyText(record.priceFen):'样课已经准备好，新的班期另定'}</small></span></label>})}{!records.length?<p>当前没有可核的课程或班期。原记录和生活仍可翻阅，没有自动开班。</p>:null}</fieldset>:null}
+   {page==='capital'&&s?<><p>这门课当前可花{moneyText(s.business.funds.availableFen)}；个人当前可花{moneyText(p.view.accounts.find(a=>a.accountId==='personal')?.availableFen)}。只转入你这次明确选择的自有资金，不是收入或额外利润。</p><label className="field">本次从个人转入多少元<input inputMode="decimal" value={draft.capital} onChange={e=>edit({capital:e.target.value})}/></label><p>推广、支持、工资与维护仍分别承担；未来学员预款不能替代现在的自有资金。</p></>:null}
+-  {page==='audience'&&s?<><p>本课为{product?.label}；可报价{moneyText(product?.minPriceFen)}—{moneyText(product?.maxPriceFen)}。报价影响实际意向，不保证报名。</p><fieldset className="teaching-paper-choices"><legend>这次通过什么原途径认识受众</legend><label><input type="radio" name={name+'audience'} checked={draft.audienceMode==='paid'} onChange={()=>edit({audienceMode:'paid'})}/><span>为本课做一次付费推广<small>{moneyText(s.v.catalog.marketingCostFen)} · 1点 · 7日，实际完成后才看意向。</small></span></label><label><input type="radio" name={name+'audience'} checked={draft.audienceMode==='video_referral'} onChange={()=>edit({audienceMode:'video_referral'})}/><span>核对已有同受众的视频记录<small>仅明确复用本课受众一致的实际记录；仍需原命令保存核对。</small></span></label></fieldset><label className="field">这次面向受众的课程报价（元）<input inputMode="decimal" value={draft.price} onChange={e=>edit({price:e.target.value})}/></label>{draft.audienceMode==='video_referral'?<fieldset className="teaching-paper-choices"><legend>明确选择已有来源，不自动借用别的受众</legend>{matchingSources.map((source,index)=><label key={source.id}><input type="checkbox" checked={draft.sourceIds.includes(source.id)} onChange={e=>{const checked=e.target.checked;setDraft(old=>({...old,sourceIds:checked?old.sourceIds.includes(source.id)?old.sourceIds:[...old.sourceIds,source.id]:old.sourceIds.filter(id=>id!==source.id)}))}}/><span>已有受众{index+1} · {source.date} · 实际{source.members}人</span></label>)}{!matchingSources.length?<p className="teaching-warning">没有本课同受众的已有记录，不会借用另一群人；可明确改选付费推广或先保留准备。</p>:null}</fieldset>:null}{current?.kind!=='course'?<button type="button" className="teaching-link" onClick={selectNewAudience}>明确回到这门课，准备另一份受众方案</button>:null}<button type="button" className="teaching-link" onClick={()=>show('capital')}>先核对是否追加自己的资金</button></>:null}
++  {(page==='audience'||page==='audience-schedule')&&s&&draft.audienceMode==='paid'?<p role="status" aria-label="本次付费推广的资金核对" className={marketingGap!==null&&marketingGap>0?'teaching-warning':'teaching-terms'}>本次推广{moneyText(s.v.catalog.marketingCostFen)} · 1点 · 7日；本教室当前可花{moneyText(s.business.funds.availableFen)}。{marketingGap!==null&&marketingGap>0?<>仅推广费还差{moneyText(marketingGap)}，当前不能提交这次推广。可保留草稿，或另行确认自己的资金投入。</>:<>当前可花可覆盖这笔推广费；资源、资格、日期及沿途费用仍须原确认核对。</>}未来学费和客户保护不能支付现在的投入。</p>:null}
++  {page==='audience'&&s?<p className="teaching-terms" aria-label="当前公开的视频来源">{matchingSources.length?'当前有'+matchingSources.length+'份本课同受众的公开既有来源，仍须逐份显选；':'当前没有本课同受众的公开既有来源，不把未知画成可用；'}本次实际意向、报名与收入尚未发生。</p>:null}
++  {page==='audience'&&s?<><p>本课为{product?.label}；可报价{moneyText(product?.minPriceFen)}—{moneyText(product?.maxPriceFen)}。报价影响实际意向，不保证报名。</p><fieldset className="teaching-paper-choices"><legend>这次通过什么原途径认识受众</legend><label><input type="radio" name={name+'audience'} checked={draft.audienceMode==='paid'} onChange={()=>edit({audienceMode:'paid'})}/><span>为本课做一次付费推广<small>{moneyText(s.v.catalog.marketingCostFen)} · 1点 · 7日，实际完成后才看意向。</small></span></label><label><input type="radio" name={name+'audience'} checked={draft.audienceMode==='video_referral'} onChange={()=>edit({audienceMode:'video_referral'})}/><span>核对已有同受众的视频记录<small>仅明确复用本课受众一致的实际记录；仍需原命令保存核对。</small></span></label></fieldset><label className="field">这次面向受众的课程报价（元）<input inputMode="decimal" value={draft.price} onChange={e=>edit({price:e.target.value})}/></label>{draft.audienceMode==='video_referral'?<fieldset className="teaching-paper-choices"><legend>明确选择已有来源，不自动借用别的受众</legend>{matchingSources.map((source,index)=><label key={source.id}><input type="checkbox" checked={draft.sourceIds.includes(source.id)} onChange={e=>{const checked=e.target.checked;setDraft(old=>({...old,sourceIds:checked?old.sourceIds.includes(source.id)?old.sourceIds:[...old.sourceIds,source.id]:old.sourceIds.filter(id=>id!==source.id)}))}}/><span>已有受众{index+1} · {source.date} · 实际{source.members}人</span></label>)}{!matchingSources.length?<p className="teaching-warning">没有本课同受众的已有记录，不会借用另一群人；可明确改选付费推广或先保留准备。</p>:null}{draft.sourceIds.some(id=>!matchingSources.some(source=>source.id===id))?<p className="teaching-warning">草稿里的原来源已不匹配，仍保留原选择；请明确清除或重选，没有换成另一个视频记录。</p>:null}{draft.sourceIds.length?<button type="button" className="teaching-link" onClick={()=>edit({sourceIds:[]})}>明确清除这次来源选择</button>:null}</fieldset>:null}{current?.kind!=='course'?<button type="button" className="teaching-link" onClick={selectNewAudience}>明确回到这门课，准备另一份受众方案</button>:null}<button type="button" className="teaching-link" onClick={()=>show('capital')}>先核对是否追加自己的资金</button></>:null}
+   {page==='audience-schedule'&&s?<><p className="teaching-terms">{terms(s,'audience',draft,p.view.date)}</p><Resources p={p} draft={draft} setDraft={setDraft}/><DateField p={p} draft={draft} setDraft={setDraft}/><p>本课程自有资金承担；完成才形成实际意向，不提前接受学员或预售款。</p></>:null}
+   {page==='plan'&&s&&a?<><p>沿这份实际受众记录的报价冻结单价{moneyText(a.priceFen)}；已有基础意向{a.eligibleMembers.length}人。班额还要核对真实支持容量，这一步没有收款。</p><div className="teaching-fields"><DateField p={p} draft={draft} setDraft={setDraft} label="本班从哪天开课" min={addDays(p.view.date,1)}/><DateField p={p} draft={draft} setDraft={setDraft} field="endAt" label="最迟哪天完成两段教学"/></div><label className="field">本班最多明确接下多少人<input inputMode="numeric" value={draft.seatLimit} onChange={e=>edit({seatLimit:e.target.value})}/></label><label className="field">这一次作出怎样的原承诺<select value={draft.promise} onChange={e=>edit({promise:e.target.value})}><option value="">请明确选择本班承诺</option><option value="clear_scope">明确范围与练习目标</option><option value="accelerated_results">更激进的加速承诺 · 更多意向及投诉风险</option></select></label><p>两段教学须各自留出真实资源和日期；支持也要先预留，不能等收预款后才准备。</p></>:null}
+   {page==='plan-support'&&s?<><Support p={p} draft={draft} setDraft={setDraft} businessId={s.business.id}/><Resources p={p} draft={draft} setDraft={setDraft} multiple/><DateField p={p} draft={draft} setDraft={setDraft} field="supportStartAt" label="原支持从哪天开始"/><p className="teaching-terms">{terms(s,'plan',draft,p.view.date)}</p>{draft.supportMode&&product?<p>所选方式每份资源容量{draft.supportMode==='self_small'?product.selfCapacity:product.capacity}人；名额还受实际在岗、日期与权限核对。保存班期即预留这些支持，不会再要求重复安排原支持。</p>:null}</>:null}
+diff --git a/src/ui/CourseThreadAction.tsx b/src/ui/CourseThreadAction.tsx
+index a6535efa..371697e0 100644
+--- a/src/ui/CourseThreadAction.tsx
++++ b/src/ui/CourseThreadAction.tsx
+@@ -6,9 +6,12 @@ import {ClockAdvance} from './ClockAdvance.tsx'
+ import {makeSharedAction,type SharedActionBinding} from './shared-action.ts'
+ import {courseWaitDate} from './course-wait-date.ts'
+ import {courseAttemptClosed} from './thread-purpose.ts'
++import type {CourseChoiceIntent} from './CourseSceneChoice.tsx'
++import {courseSceneProgress} from './course-scene-progress.ts'
++import {resolveCourseFocus,courseSceneContext} from './course-player-thread.ts'
+ 
+ type Primary={binding:SharedActionBinding;main:ReactNode}
+-type Props={p:GamePanelProps;thread:PlayerThreadView;active:boolean;date:string|null;waitLabel:string;onChoose:()=>void;onResult:()=>void;onToday:()=>void;children:(primary:Primary|null)=>ReactNode}
++type Props={p:GamePanelProps;thread:PlayerThreadView;active:boolean;date:string|null;waitLabel:string;onChoose:(intent?:CourseChoiceIntent)=>void;onResult:()=>void;onToday:()=>void;children:(primary:Primary|null)=>ReactNode}
+ 
+ /** The thought and course object invoke this same original decision. */
+ export function CourseThreadAction({p,thread,active,date,waitLabel,onChoose,onResult,onToday,children}:Props){
+@@ -30,6 +33,9 @@ export function CourseThreadAction({p,thread,active,date,waitLabel,onChoose,onRe
+   return <ClockAdvance p={p} date={next} label={label+' · '+next} room showReason={showReason} renderAction={binding=>children({binding,main:<div className="moment-wait moment-primary"><div className="clock-advance clock-advance-room">{binding.reviewNode}{binding.mainNode}</div></div>})}/>
+  }
+  if(teaching&&(thread.outcome==='non-success'||thread.stage==='course-cohort-closed'||thread.stage.endsWith('-completed')))return choice('这一次的结果之后，怎样继续','看清实际学员、钱款与未完承诺，再决定下一步',onResult)
++ const readyFocus=thread.focus.kind==='course'&&thread.focus.courseTarget?.kind==='course'?thread.focus:null
++ const ready=readyFocus&&readyFocus.accountId===p.accountId&&!resolveCourseFocus(p,readyFocus).reason?courseSceneProgress(p.features.course,p.view.date,readyFocus.courseTarget,courseSceneContext(p)):null
++ if(thread.stage==='course-ready'&&thread.focusStatus!=='invalid'&&thread.invalidReason===null&&ready?.phase==='course-ready'&&!ready.historical&&!thread.responsibilityOverrideNeeded&&p.features.workbench.pause===null&&!p.features.workbench.progression.requiresDelivery)return choice('先了解，谁可能需要这堂课','只选择来源与拟报价；推广、开班和报名仍须分别确认',()=>onChoose('audience'))
+  if(thread.stage==='course-ready'||thread.stage==='course-paused'&&thread.outcome==='actual'||thread.outcome==='non-success'||thread.stage==='course-closed')return choice('这一份准备之后，想怎样继续','看清这份准备与未完约定，再决定接下来的日子',onResult)
+  return choice(thread.inspect.label,teaching?thread.focus.kind==='course'&&thread.focus.courseTarget?.kind==='audience'?'先决定是否开班，新的承诺仍需确认':'先选择这班的具体安排，真正投入仍需确认':'先选教案、资源与日期，真正投入仍需确认',onChoose)
+ }
+diff --git a/src/ui/FirstOrderPaper.tsx b/src/ui/FirstOrderPaper.tsx
+index 470a5a3f..c90030b1 100644
+--- a/src/ui/FirstOrderPaper.tsx
++++ b/src/ui/FirstOrderPaper.tsx
+@@ -6,24 +6,24 @@ export type FirstOrderArtState=(
+ /** Paper shapes describe committed work; they do not decide its stage or execute it. */
+ export function FirstOrderPaper({phase}:{phase:FirstOrderArtState['phase']}){
+  return <svg className="first-order-paper-layers" viewBox="0 0 320 300" fill="none" aria-hidden="true" focusable="false">
+-  {phase==='letter'?<g className="first-order-letter">
++  {phase==='letter'?<g className="first-order-letter" transform="translate(-18 95)">
+    <path className="first-order-sheet" d="m165 22 105 19-12 82-106-19z"/>
+    <path className="first-order-fold" d="m246 37 24 4-4 24z"/>
+    <path className="first-order-pencil" d="m179 52 52 9m-55 6 64 12m-66 4 45 8"/>
+   </g>:null}
+-  {phase==='planned'?<g className="first-order-agreement">
++  {phase==='planned'?<g className="first-order-agreement" transform="translate(0 18)">
+    <path className="first-order-sheet" d="m81 136 185 32-7 40-185-32z"/>
+    <path className="first-order-dashed" d="m89 148 162 29m-166-6 162 28"/>
+    <path className="first-order-clip" d="m126 141 4-25c2-10 16-8 14 3l-5 27"/>
+   </g>:null}
+   {phase==='running'?<g className="first-order-in-progress">
+-   <path className="first-order-sheet" d="m105 32 114 19-14 90-114-19z"/>
+-   <path className="first-order-pencil" d="m123 58 73 13m-76 6 49 9m-52 8 66 12"/>
++   <g transform="translate(-8 60)"><path className="first-order-sheet" d="m105 32 114 19-14 90-114-19z"/>
++   <path className="first-order-pencil" d="m123 58 73 13m-76 6 49 9m-52 8 66 12"/></g>
+    <path className="first-order-film" d="m43 144 103 18-8 40-103-18z"/>
+    <path className="first-order-film-ink" d="m55 157 76 13m-78-4 76 13M61 152l-4 25m25-21-4 25m25-21-4 25m25-21-4 25"/>
+    <path className="first-order-pencil-tool" d="m216 121 43 67-7 5-43-67 1-10z"/>
+   </g>:null}
+-  {phase==='delivery'?<g className="first-order-ready-work">
++  {phase==='delivery'?<g className="first-order-ready-work" transform="translate(-14 74)">
+    <path className="first-order-sheet" d="m135 18 111 18-13 90-112-18z"/>
+    <path className="first-order-sheet-under" d="m125 26 111 18-13 90-111-18z"/>
+    <path className="first-order-film" d="m141 50 80 13-6 36-80-13z"/>
+@@ -37,9 +37,9 @@ export function FirstOrderPaper({phase}:{phase:FirstOrderArtState['phase']}){
+    <path className="first-order-dashed" d="m92 207 30 5"/>
+   </g>:null}
+   {phase==='paid'?<g className="first-order-kept-work">
+-   <path className="first-order-sheet" d="m115 31 106 19-13 86-106-19z"/>
++   <g transform="translate(-14 68)"><path className="first-order-sheet" d="m115 31 106 19-13 86-106-19z"/>
+    <path className="first-order-film" d="m131 58 66 12-5 30-66-12z"/>
+-   <path className="first-order-film-ink" d="m141 68 42 8m-44 3 42 8"/>
++   <path className="first-order-film-ink" d="m141 68 42 8m-44 3 42 8"/></g>
+    <path className="first-order-receipt-shape" d="m231 134 51 9-15 104-6-5-6 3-6-5-6 3-6-5-6 3-6-5z"/>
+    <path className="first-order-receipt-lines" d="m239 153 30 5m-32 9 30 5m-32 9 20 4"/>
+    <path className="first-order-receipt-stamp" d="m237 198 21 4-3 19-21-4z"/>
+diff --git a/src/ui/NarrativeScene.tsx b/src/ui/NarrativeScene.tsx
+index 9fbc7cf6..601b6c75 100644
+--- a/src/ui/NarrativeScene.tsx
++++ b/src/ui/NarrativeScene.tsx
+@@ -206,7 +206,7 @@ export function NarrativeScene(p:Props){
+    {p.screen==='video'?w.progression.requiresDelivery?(first.status==='awaiting_submission'?firstChoice:<Choice title="先把答应过的交付看清" line="这份制作与原客户责任仍在；先处理交付，再回到视频尝试。" label="先面对这份交付" onClick={()=>p.onOpen('quarter')}/>):w.pause!==null?<Choice title="日历里，有件事需要先回应" line={w.progression.barrierLabel??'先看清已经发生的事，再回到这份视频尝试。'} label="先回应日历里的这件事" onClick={()=>p.onOpen(w.pause?.reason==='STORY_RISK_DECISION_PENDING'?'story':'quarter')}/>:<VideoSceneChoice p={p} {...(p.videoTarget?{target:p.videoTarget}:{})} {...(p.onVideoTargetChange?{onTargetChange:p.onVideoTargetChange}:{})} blockedReason={w.pause!==null||w.progression.requiresDelivery?'先回应日历里的原责任；视频草稿和原约定仍保留。':null} onToday={()=>p.onNavigate('room',{roomView:'today'})} onLife={()=>p.onNavigate('life',{accountId:'personal'})} onInspect={target=>p.onOpen('video',target?{accountId:p.accountId,videoTarget:target}:undefined)}>{open=><>
+     {videoThread&&videoThread.focusStatus!=='invalid'&&!videoThread.legacyFallbackRequired?<VideoEncounter p={p} thread={videoThread} date={waitAt} waitLabel={waitLabel} onChoose={()=>open(videoThread.stage==='video-quality'?'rework':videoThread.stage==='video-ready-to-publish'?'publish':undefined)} onResult={()=>open('next')} onToday={()=>p.onNavigate('room',{roomView:'today'})}/>:<Choice intent="plan" title={videoProgress?.choice.title??'先选一个具体的内容账号'} line={videoProgress?.invalidReason??videoProgress?.choice.line??'从手工制作开始，受众、作品和客户反馈分别发生。'} label={videoProgress?.invalidReason?'明确重新选择原视频对象':videoProgress?.choice.label??'选择账号与这次尝试'} caption={videoProgress?.invalidReason?'重新选择，不替换原记录':'先选择，再核对真正的投入'} onClick={()=>open()}/>}
+    </>}</VideoSceneChoice>:null}
+-   {p.screen==='course'&&courseProgress?p.courseTarget===undefined?<>{courseProgress.preparation?.phase==='fund'||courseProgress.preparation?.phase==='outline'?<CoursePreparation key={view.runId+':'+(courseProgress.preparation.businessId??'new')} p={p} step={courseProgress.preparation}/>:courseProgress.preparation?.phase==='waiting'&&waitAt?<><CoursePreparationTrail step={courseProgress.preparation}/><WaitChoice p={p} date={waitAt} title={courseProgress.choice.title} line={courseProgress.choice.line} label={waitLabel}/></>:courseProgress.preparation?.phase==='activate'?<><CoursePreparationTrail step={courseProgress.preparation}/><Action p={p} kind="ActivateBusiness" payload={{businessId:courseProgress.preparation.businessId}} title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label}/></>:courseProgress.stage?<CourseStageChoice key={courseProgress.stage.cohortId+':'+courseProgress.stage.index} p={p} stage={courseProgress.stage} onFullRecord={(target,slot)=>p.onOpen('course',{...(target?{courseTarget:target}:{}),...(slot?{courseTeachingSlot:slot}:{})})}>{open=><Choice title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label} caption="选择资源与日期" onClick={open}/>}</CourseStageChoice>:<Choice title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label} onClick={openCourse}/>}</>:<CourseSceneChoice p={p} target={p.courseTarget} {...(p.onCourseTargetChange?{onTarget:p.onCourseTargetChange}:{})} onToday={()=>p.onNavigate('room',{roomView:'today'})} onLife={()=>p.onNavigate('life',{accountId:'personal'})} blockedReason={w.pause!==null||w.progression.requiresDelivery?'先面对原责任，再回到这份教案。':null} onInspect={(target,slot,teachingSlot)=>{const recordId=!slot&&!teachingSlot?courseSceneProgress(f.course,view.date,target,{operations:view.operations})?.recordId:undefined;p.onOpen('course',{courseTarget:target,...(recordId?{recordId}:{}),...(slot?{courseDraftSlot:slot}:{}),...(teachingSlot?{courseTeachingSlot:teachingSlot}:{})})}}>{open=><>{courseContinuity&&courseThread?<CourseEncounter p={p} thread={courseThread} date={waitAt} waitLabel={waitLabel} onChoose={()=>open()} onResult={()=>open('next')} onToday={()=>p.onNavigate('room',{roomView:'today'})}/>:courseProgress.command&&!courseProgress.invalidReason&&!courseIdentityReason?<Action p={p} {...courseProgress.command} title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label}/>:waitAt&&!courseProgress.invalidReason&&!courseIdentityReason?<WaitChoice p={p} date={waitAt} title={courseProgress.choice.title} line={courseProgress.choice.line} label={waitLabel}/>:<Choice intent="plan" title={courseProgress.choice.title} line={courseIdentityReason??courseProgress.invalidReason??courseProgress.choice.line} label={courseProgress.choice.label} caption={courseProgress.invalidReason?'重新显选，不替换原记录':'走近这份教案，核对眼前一步'} onClick={()=>open()}/>}</>}</CourseSceneChoice>:null}
++   {p.screen==='course'&&courseProgress?p.courseTarget===undefined?<>{courseProgress.preparation?.phase==='fund'||courseProgress.preparation?.phase==='outline'?<CoursePreparation key={view.runId+':'+(courseProgress.preparation.businessId??'new')} p={p} step={courseProgress.preparation}/>:courseProgress.preparation?.phase==='waiting'&&waitAt?<><CoursePreparationTrail step={courseProgress.preparation}/><WaitChoice p={p} date={waitAt} title={courseProgress.choice.title} line={courseProgress.choice.line} label={waitLabel}/></>:courseProgress.preparation?.phase==='activate'?<><CoursePreparationTrail step={courseProgress.preparation}/><Action p={p} kind="ActivateBusiness" payload={{businessId:courseProgress.preparation.businessId}} title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label}/></>:courseProgress.stage?<CourseStageChoice key={courseProgress.stage.cohortId+':'+courseProgress.stage.index} p={p} stage={courseProgress.stage} onFullRecord={(target,slot)=>p.onOpen('course',{...(target?{courseTarget:target}:{}),...(slot?{courseTeachingSlot:slot}:{})})}>{open=><Choice title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label} caption="选择资源与日期" onClick={open}/>}</CourseStageChoice>:<Choice title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label} onClick={openCourse}/>}</>:<CourseSceneChoice p={p} target={p.courseTarget} {...(p.onCourseTargetChange?{onTarget:p.onCourseTargetChange}:{})} onToday={()=>p.onNavigate('room',{roomView:'today'})} onLife={()=>p.onNavigate('life',{accountId:'personal'})} blockedReason={w.pause!==null||w.progression.requiresDelivery?'先面对原责任，再回到这份教案。':null} onInspect={(target,slot,teachingSlot)=>{const recordId=!slot&&!teachingSlot?courseSceneProgress(f.course,view.date,target,{operations:view.operations})?.recordId:undefined;p.onOpen('course',{courseTarget:target,...(recordId?{recordId}:{}),...(slot?{courseDraftSlot:slot}:{}),...(teachingSlot?{courseTeachingSlot:teachingSlot}:{})})}}>{open=><>{courseContinuity&&courseThread?<CourseEncounter p={p} thread={courseThread} date={waitAt} waitLabel={waitLabel} onChoose={intent=>open(intent)} onResult={()=>open('next')} onToday={()=>p.onNavigate('room',{roomView:'today'})}/>:courseProgress.command&&!courseProgress.invalidReason&&!courseIdentityReason?<Action p={p} {...courseProgress.command} title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label}/>:waitAt&&!courseProgress.invalidReason&&!courseIdentityReason?<WaitChoice p={p} date={waitAt} title={courseProgress.choice.title} line={courseProgress.choice.line} label={waitLabel}/>:<Choice intent="plan" title={courseProgress.choice.title} line={courseIdentityReason??courseProgress.invalidReason??courseProgress.choice.line} label={courseProgress.choice.label} caption={courseProgress.invalidReason?'重新显选，不替换原记录':'走近这份教案，核对眼前一步'} onClick={()=>open()}/>}</>}</CourseSceneChoice>:null}
+    {p.screen==='relay'?w.progression.requiresDelivery?(first.status==='awaiting_submission'?firstChoice:<Choice title="先看清答应过的交付" line="原服务书签和草稿仍在，先回应眼前的原交付责任。" label="先面对这份交付" onClick={()=>p.onOpen('quarter')}/>):w.pause!==null?<Choice title="日历里，有件事需要先回应" line={w.progression.barrierLabel??'先处理已发生的责任，再回这份服务。'} label="先回应日历里的这件事" onClick={()=>p.onOpen(w.pause?.reason==='STORY_RISK_DECISION_PENDING'?'story':'quarter')}/>:relayProgress?<RelaySceneChoice p={relayProps} target={relayTarget} onTargetChange={selectRelay} onInspect={openRelay} onToday={()=>p.onNavigate('room',{roomView:'today'})} onLife={()=>p.onNavigate('life',{accountId:'personal'})}>{open=>relayThread&&relayThread.focusStatus!=='invalid'?<RelayEncounter p={relayProps} thread={relayThread} target={relayTarget} date={next} waitLabel={relayReviewLabel(relayProps,next,next===relayThread.wait?.date?relayThread.wait.label:'先到日历上的这一日')} onChoose={open} onToday={()=>p.onNavigate('room',{roomView:'today'})}/>:<Choice intent="plan" title={relayProgress.choice.title} line={relayProgress.invalidReason??relayProgress.choice.line} label="明确选定原对象或准备新站" caption="查看不签约、不充值" onClick={()=>open('objects')}/>}</RelaySceneChoice>:null:null}
+    {storyProgress?<>
+     {w.pause?.reason==='STORY_RISK_DECISION_PENDING'?<Action p={p} kind="AcknowledgeStoryPause" payload={{instanceId:w.pause.instanceId}} title="记下让日子暂停的那条信号" line="只确认已看见触发暂停的新信号。眼前其他来信、核查、付款与原期限仍分别保留。" label="记下新信号，保留期限继续"/>:null}
+diff --git a/src/ui/OpeningAttemptAction.tsx b/src/ui/OpeningAttemptAction.tsx
+index f26ef8f7..dc08ef89 100644
+--- a/src/ui/OpeningAttemptAction.tsx
++++ b/src/ui/OpeningAttemptAction.tsx
+@@ -6,10 +6,10 @@ import {ClockAdvance} from './ClockAdvance.tsx'
+ import {makeSharedAction,type SharedActionBinding} from './shared-action.ts'
+ 
+ type SharedPrimary={binding:SharedActionBinding;main:ReactNode}
+-type Props={p:GamePanelProps;attempt:OpeningAttemptView|null;date:string|null;waitLabel:string;openOffer:()=>void;openMarket:()=>void;openFree:()=>void;openNext:()=>void;inspect:()=>void;children:(primary:SharedPrimary|null)=>ReactNode}
++type Props={p:GamePanelProps;attempt:OpeningAttemptView|null;date:string|null;waitLabel:string;openOffer:()=>void;openMarket:()=>void;openFree:()=>void;openNext:()=>void;onToday?:()=>void;inspect:()=>void;children:(primary:SharedPrimary|null)=>ReactNode}
+ 
+ /** One original action serves the thought and the physical object. No second command path. */
+-export function OpeningAttemptAction({p,attempt,date,waitLabel,openOffer,openMarket,openFree,openNext,inspect,children}:Props){
++export function OpeningAttemptAction({p,attempt,date,waitLabel,openOffer,openMarket,openFree,openNext,onToday,inspect,children}:Props){
+  if(!attempt)return children(null)
+  const intent=attempt.action
+  // The room already exposes the global save/readonly notice and its recovery button.
+@@ -19,7 +19,7 @@ export function OpeningAttemptAction({p,attempt,date,waitLabel,openOffer,openMar
+  const choice=intent.kind==='offer-reply'?{label:'回应这封委托',caption:'接下、婉拒，或把日子留给别的事',activate:openOffer}
+   :intent.kind==='market-choice'?{label:'看看这笔钱，准备怎样安排',caption:'先研究、显选模拟委托，或暂不买入',activate:openMarket}
+   :intent.kind==='free-choice'?{label:'今天，先把时间留给什么',caption:'工作、休整，或先看看别的可能',activate:openFree}
+-  :intent.kind==='next-choice'?{label:'接下来的日子，想怎样继续',caption:'保留这次结果，再选一个在意的方向',activate:openNext}
++  :intent.kind==='next-choice'?onToday?{label:'收好这次结果，回到今天安排日子',caption:'保留这份委托与原书签；工作、生活和新的投入仍由你显选',activate:onToday}:{label:'接下来的日子，想怎样继续',caption:'保留这次结果，再选一个在意的方向',activate:openNext}
+   :{label:intent.inspect.label,caption:'翻阅同一件事的记录',activate:inspect}
+  const binding=makeSharedAction(p,choice.label,choice.activate,{allowReadOnly:true})
+  return children({binding,main:<div className="command moment-decision moment-primary"><button type="button" aria-label={binding.label} disabled={binding.disabled} onClick={binding.activate}><b aria-hidden="true">01</b><span>{choice.label}<small>{choice.caption}</small></span><i aria-hidden="true">→</i></button>{binding.reason?<small className="reason">{binding.reason}</small>:null}</div>})
+diff --git a/src/ui/OpeningMoment.tsx b/src/ui/OpeningMoment.tsx
+index 077d32bf..c2c9a24e 100644
+--- a/src/ui/OpeningMoment.tsx
++++ b/src/ui/OpeningMoment.tsx
+@@ -23,7 +23,7 @@ import {playableAdvanceDate} from '../application/playable-advance.ts'
+ import {moneyText,playableThrough} from './game-text.ts'
+ import {seasonFocusChoices,seasonFocusGroups,seasonFocusGroupFor,initialSeasonFocusGroup,type SeasonFocusGroup} from './season-thread.ts'
+ import {SeasonRecollection} from './SeasonRecollection.tsx'
+-import {openingAttempt} from './opening-attempt.ts'
++import {openingAttempt,type OpeningFirstOrderView} from './opening-attempt.ts'
+ import {OpeningAttemptAction} from './OpeningAttemptAction.tsx'
+ import {OpeningAttemptChoices,type OpeningChoicePanel} from './OpeningAttemptChoices.tsx'
+ import type {FirstOrderArtState} from './OpeningObject.tsx'
+@@ -42,9 +42,21 @@ import {relayReviewDate,relayReviewLabel,relayDeferredFeedback} from './relay-sc
+ import {courseAttemptClosed} from './thread-purpose.ts'
+ import {coursePreparationPaperFor,isCoursePreparationThread,isCourseContinuityThread} from './course-continuity.ts'
+ import type {DayContinuityArt} from './DayContinuityPaper.tsx'
++import {RoomTableau} from './RoomTableau.tsx'
++import {sceneMeaning} from './scene-meaning.ts'
+ 
+ type Props={p:GamePanelProps;headingRef:Ref<HTMLHeadingElement>;fallback:Moment;feedback?:ReactNode;focus?:OpeningFocus|null|undefined;focusQuarter?:string|null|undefined;focusNotice?:string|null|undefined;focusRequiresChoice?:boolean|undefined;onFocus?:((focus:OpeningFocus|null)=>void)|undefined;onNavigate:NavigateScene;onExplore:()=>void;onResponsibilities?:(()=>void)|undefined;onRecollection?:(()=>void)|undefined;todayView?:boolean|undefined;onToday?:(()=>void)|undefined;onReturnFocus?:(()=>void)|undefined}
+ 
++/** Keep the offer, reserved cost, actual payment and net result distinct in the first layer. */
++function firstOrderFacts(first:OpeningFirstOrderView):readonly string[]|null{
++ if(first.phase==='paid')return [`本单实收${moneyText(first.result.paymentFen)} · 制作直接成本${moneyText(first.result.directCostFen)} · 本单净额${moneyText(first.result.netOrderFen)}。`]
++ if(first.phase==='letter')return [`原报价${moneyText(first.terms.priceFen)} · 制作需${moneyText(first.terms.costFen)} / ${first.terms.actionPoints}点。尚未接单，实际制作费与本单行动占用均为0。`,`${first.dates.replyBy}前答复 · 接下后须在${first.dates.submitBy}前提交。`]
++ if(first.phase==='planned')return [`已预留制作${moneyText(first.terms.costFen)} / ${first.terms.actionPoints}点，尚未实际支付制作费。`,`${first.dates.startAt}开工 · ${first.dates.submitBy}前提交。`]
++ if(first.phase==='running'||first.phase==='delivery')return [`已支付制作直接成本${moneyText(first.result.directCostFen)} · 原约定${first.terms.actionPoints}点。`,`${first.dates.submitBy}前提交；客户款仍须实际验收和支付。`]
++ if(first.phase==='feedback')return [`制作直接成本${moneyText(first.result.directCostFen)} · 已确认收入${moneyText(first.result.confirmedIncomeFen)} · 客户实付${moneyText(first.result.paymentFen)}。`,`验收与实际到账分别发生。`]
++ return null
++}
++
+ function objectKind(thread:PlayerThreadView):OpeningObjectProps['kind']{
+  if(thread.focus.kind==='relay')return thread.outcome==='actual'?'receipt':thread.outcome==='non-success'?'letter':thread.stage==='relay-planned'?'calendar':thread.wait?'waiting':thread.stage==='relay-service'?'work':'portfolio'
+  if(thread.focus.kind==='market')return 'portfolio'
+@@ -102,6 +114,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
+  const [localQuarter,setLocalQuarter]=useState<string|null>(null)
+  const [focusGroup,setFocusGroup]=useState<SeasonFocusGroup>('continue')
+  const [localTodayAt,setLocalTodayAt]=useState<DayPerspective|null>(null)
++ const [recordOpen,setRecordOpen]=useState(false)
+  useEffect(()=>{if(localTodayAt&&!dayPerspectiveCurrent(p.view,localTodayAt))setLocalTodayAt(null)},[localTodayAt,p.view])
+  const choiceName=useId(),candidates=seasonFocusChoices(p),picked=candidates.find(candidate=>candidate.id===draftId)
+  const groupTitle=seasonFocusGroups.find(group=>group.id===focusGroup)!.label,groupCandidates=candidates.filter(candidate=>seasonFocusGroupFor(candidate)===focusGroup)
+@@ -126,6 +139,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
+  const previousFocusNotice=!!bookmarkQuarter&&bookmarkQuarter<w.quarter&&focusNotice===`这份关注来自${bookmarkQuarter}，当前是${w.quarter}；可明确回看或继续原对象，不会自动改成本季关注。`
+  const originPrefix=thread.focusQuarter&&thread.focusScope==='carry'?'这件事从'+thread.focusQuarter+'留下，仍按原约定继续。':thread.focusQuarter&&thread.focusScope==='history'?'这是'+thread.focusQuarter+'的原记录，旧收支不会重记为本季收入。':''
+  const sceneLine=!interrupted&&!requiresChoice&&!legacy&&originPrefix&&moment.line.startsWith(originPrefix)?moment.line.slice(originPrefix.length):moment.line
++ const meaning=!interrupted&&!requiresChoice&&!legacy?sceneMeaning({...p,accountId:thread.focus.accountId},thread):null
+  const openDirections=()=>{setDraftId(null);setFocusGroup(initialSeasonFocusGroup(candidates));setDirections(true)}
+  const openRecollection=()=>{setObjectOpen(false);if(onRecollection)onRecollection();else setRecollectionOpen(true)}
+  const openToday=()=>{if(!day||focusLocked||p.controller.snapshot.view!==p.view)return;setObjectOpen(false);setChoicePanel(null);setDirections(false);setRecollectionOpen(false);if(thread.responsibilityOverrideNeeded){setLocalTodayAt(null);onReturnFocus?.();return}if(onToday)onToday();else setLocalTodayAt({runId:p.view.runId,revision:p.view.revision})}
+@@ -195,7 +209,10 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
+  const research=w.researches.find(r=>r.id==='market-overview')
+  const closeRequest:GamePanelProps['request']=(...args)=>{setObjectOpen(false);setDirections(false);p.request(...args)}
+  const nearProps={...p,accountId:video||course||relay?thread.focus.accountId:p.accountId,request:closeRequest}
+- const action=(index:string,label:string,caption:string,perform:()=>void)=> <button type="button" className={'moment-decision'+(index==='01'?' moment-primary':'')} onClick={perform}><b aria-hidden="true">{index}</b><span>{label}<small>{caption}</small></span><i aria-hidden="true">↗</i></button>
++ const action=(index:string,label:string,caption:string,perform:()=>void)=>{
++  const binding=makeSharedAction(p,label,perform,{allowReadOnly:true})
++  return <button type="button" className={'moment-decision'+(index==='01'?' moment-primary':'')} disabled={binding.disabled} onClick={binding.activate}><b aria-hidden="true">{index}</b><span>{label}<small>{caption}</small></span><i aria-hidden="true">↗</i></button>
++ }
+  const courseInspectLabel=course&&courseTarget?.kind==='audience'?'翻阅这次受众与报价':course&&courseTarget?.kind==='cohort'?courseTarget.jobId?'翻阅这一段的实际记录':'翻阅这一班的学员与承诺':null
+  const inspectLabel=courseInspectLabel??(thread.focusScope==='history'&&thread.focus.kind==='work'&&thread.focusQuarter!==null?'翻看'+thread.focusQuarter+'的原工作记录':thread.inspect.label)
+  const originalAction=(near=false,openOrder?:()=>void,openVideo?:(intent?:VideoChoiceAction)=>void,openCourse?:(intent?:CourseChoiceIntent)=>void,openRelay?:()=>void)=>{
+@@ -217,6 +234,10 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
+  const label=interrupted?'先面对这项原责任':requiresChoice?'尚未改变关注':legacy?'原业务仍按原约定继续':day?.primary.classification==='active'&&thread.focus.kind==='work'?'本季工作仍在继续 · 工资按原日历发生':day?.primary.classification==='active'&&thread.stage==='market-position'?'仍在持有 · 浮盈不是现金':day?.primary.classification==='active'&&thread.stage==='market-settlement'&&thread.wait?'原款仍待交收 · 目前不可花':stageLabel(thread)
+  const attempt=!interrupted&&!requiresChoice&&!legacy&&!w.atQuarterEnd?openingAttempt(p,onFocus?focus:localFocus,onFocus?focusQuarter:localQuarter):null
+  const firstAttempt=attempt?.firstOrder
++ const firstFacts=firstAttempt?firstOrderFacts(firstAttempt):null
++ const courseReady=course&&!interrupted&&!requiresChoice&&!legacy&&thread.focusScope!=='history'&&thread.stage==='course-ready'&&courseTarget?.kind==='course'&&courseProgress?.historical!==true
++ const summarized=firstFacts!==null||meaning!==null&&(courseReady||relay&&relayTarget?.kind==='period'&&!relayHistory)
++ const recordBinding=makeSharedAction(p,requiresChoice?'翻看本季已有记录':'翻阅这一段的记录与代价',()=>{if(requiresChoice)onNavigate('quarter',{accountId:p.accountId});else setRecordOpen(true)},{allowReadOnly:true})
+  const entryPaper=attempt?.kind==='free-entry'?'calendar' as const:attempt?.kind==='market-entry'?'market' as const:undefined
+  const firstObjectLabel=firstAttempt?({letter:'待答复',planned:'已安排 · 等开工',running:'制作中',delivery:'作品待提交',feedback:'已发送 · 等回信',paid:'实收凭证','non-success':({declined:'已婉拒',skipped:'已略过',expired:'报价已到期',cancelled:'已取消',interrupted:'工作已中断',missed:'错过交付期限'} as Record<string,string>)[thread.stage]??'这次留下的记录'}[firstAttempt.phase]):null
+  const firstArt:FirstOrderArtState|undefined=firstAttempt?firstAttempt.phase==='paid'?firstAttempt.receipt?.date?{phase:'paid',receipt:{receivedFen:firstAttempt.receipt.amountFen,receivedAt:firstAttempt.receipt.date}}:undefined:{phase:firstAttempt.phase,dateLabel:firstAttempt.phase==='letter'?'最迟'+firstAttempt.dates.replyBy+'答复':firstAttempt.phase==='planned'?'开工 '+firstAttempt.dates.startAt:firstAttempt.phase==='running'||firstAttempt.phase==='delivery'?'提交 '+firstAttempt.dates.submitBy:firstAttempt.phase==='feedback'?moment.wait?.date??'等待客户回复':p.features.firstOrder.decision?'答复 '+p.features.firstOrder.decision.date:firstAttempt.needsAttention?'原约定仍待处理':'原记录保留'}:undefined
+@@ -237,23 +258,25 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
+  const videoChooseIntent:VideoChoiceAction|undefined=thread.stage==='video-quality'?'rework':thread.stage==='video-ready-to-publish'?'publish':undefined
+  const dayArt:DayContinuityArt|undefined=dayActive&&['work','life','market'].includes(thread.focus.kind)?{kind:thread.focus.kind as 'work'|'life'|'market',state:thread.focusScope==='history'?'history':day?.primary.classification==='result'?'result':thread.focusScope==='carry'?'carry':'ongoing'}:undefined
+  if((todayView??dayPerspectiveCurrent(p.view,localTodayAt))&&day&&!thread.responsibilityOverrideNeeded&&!interrupted&&!requiresChoice&&!legacy)return <TodayScene p={p} today={day} headingRef={headingRef} feedback={feedback} onFocus={chooseToday} onPrepare={prepareToday} onResume={returnToFocus} onExplore={onExplore} onRecollection={openRecollection} onNavigate={onNavigate}/>
+- return <MarketSceneChoice p={p} onFullRecord={inspect} blockedReason={unknownFocus?'原来的关注尚未读出，请先重新选择；原委托草稿仍保留。':null}>{openOrder=><VideoSceneChoice p={video?{...p,accountId:thread.focus.accountId}:p} {...(videoTarget?{target:videoTarget}:{})} onTargetChange={chooseVideoTarget} onToday={openToday} onLife={()=>{setObjectOpen(false);onNavigate('life',{accountId:'personal'})}} blockedReason={unknownFocus?"原来的关注尚待读出，请先明确重新选择。":interrupted?"先回应日历里的原责任；原视频草稿仍保留。":null} onInspect={target=>{setObjectOpen(false);onNavigate('video',target?{openRecord:true,videoTarget:target,...(p.features.video?.channels.find(c=>c.id===target.channelId)?{accountId:p.features.video.channels.find(c=>c.id===target.channelId)!.accountId}:{})}:{openRecord:true,accountId:video?thread.focus.accountId:p.accountId})}}>{openVideo=><CourseSceneChoice p={course?{...p,accountId:thread.focus.accountId}:p} target={courseTarget} onTarget={chooseCourseTarget} onToday={openToday} onLife={()=>{setObjectOpen(false);onNavigate('life',{accountId:'personal'})}} blockedReason={unknownFocus?'原关注尚待读出，请先明确重新选择。':interrupted?'先回应日历里的原责任；这份教案仍保留。':null} onInspect={(target,slot,teachingSlot)=>{setObjectOpen(false);const owner=p.features.course?.businesses.find(b=>b.id===target?.businessId),recordId=!slot&&!teachingSlot?courseSceneProgress(p.features.course,p.view.date,target,courseSceneContext(p))?.recordId:undefined;onNavigate('course',{openRecord:true,courseTarget:target,accountId:owner?.accountId??'personal',...(recordId?{recordId}:{}),...(slot?{courseDraftSlot:slot}:{}),...(teachingSlot?{courseTeachingSlot:teachingSlot}:{})})}}>{openCourse=><RelaySceneChoice p={relayProps} target={relayTarget} onToday={openToday} onLife={()=>{setObjectOpen(false);onNavigate('life',{accountId:'personal'})}} onTargetChange={chooseRelayTarget} blockedReason={unknownFocus?'原关注尚待读出，请先明确重新选择。':interrupted?'先回应日历里的原责任；这份服务单仍保留。':null} onInspect={(target,slot)=>{setObjectOpen(false);const accountId=target?.accountId??(relay?thread.focus.accountId:p.accountId),recordId=!slot?relaySceneProgress(p.features.relay,p.view.date,target,relaySceneContext(p,accountId))?.recordId:undefined;onNavigate('relay',{openRecord:true,relayTarget:target,accountId,...(recordId?{recordId}:{}),...(slot?{relayDraftSlot:slot}:{})})}}>{openRelay=><RelayThreadAction p={relayProps} thread={thread} target={relayTarget} active={dayActive&&!attempt&&relay} date={safeDate} waitLabel={waitLabel} onChoose={intent=>{setObjectOpen(false);openRelay(intent)}} onToday={openToday}>{relayPrimary=><OpeningAttemptAction p={p} attempt={attempt} date={safeDate} waitLabel={waitLabel} openOffer={()=>setChoicePanel('offer')} openMarket={()=>setChoicePanel('market')} openFree={()=>setChoicePanel('free')} openNext={()=>setChoicePanel('next')} inspect={inspect}>{primary=><VideoThreadAction p={nearProps} thread={thread} active={dayActive&&!attempt&&video} date={safeDate} waitLabel={waitLabel} onChoose={()=>{setObjectOpen(false);openVideo(videoChooseIntent)}} onResult={()=>{setObjectOpen(false);openVideo('next')}} onToday={openToday}>{videoPrimary=><CourseThreadAction p={nearProps} thread={thread} active={dayActive&&!attempt&&course&&isCourseContinuityThread(thread)} date={safeDate} waitLabel={waitLabel} onChoose={()=>{setObjectOpen(false);openCourse()}} onResult={()=>{setObjectOpen(false);openCourse('next')}} onToday={openToday}>{coursePrimary=><DayThreadAction p={p} thread={thread} active={dayActive&&!attempt&&!video&&!course&&!relay} result={day?.primary.classification==='result'} date={safeDate} waitLabel={waitLabel} onToday={openToday}>{dayPrimary=><><p className="opening-room-intention"><span>我想{thread.wish.label}</span>{(unknownFocus||legacy||(attempt?.purpose??thread.attempt)!==moment.title)?<span>{unknownFocus?'先选回原来的关注，原安排仍保留。':legacy?'原来的经营事项，还在继续。':attempt?.purpose??thread.attempt}</span>:null}{!unknownFocus&&!w.atQuarterEnd?<button type="button" onClick={openDirections}>调整本季书签 ↗</button>:null}{!w.atQuarterEnd?<button type="button" onClick={openRecollection}>翻本季留页 ↗</button>:null}</p>
+- <section className={'room-current-moment opening-current-moment'+(attempt?' opening-attempt-scene':'')} data-stage={moment.stage} data-focus-scope={thread.focusScope} aria-label="眼前这一幕">
+-  <header className="moment-heading"><p>{thread.focusScope==='history'?'正在回看 · ':''}{moment.object}</p><h1 ref={headingRef} tabIndex={-1}>{moment.title}</h1></header>
+-  <p className="opening-room-stage" data-interrupted={interrupted?'true':undefined}>{label}{!interrupted&&!requiresChoice&&!legacy&&thread.focusScope!=='history'?<span> · 这一步想做到：{thread.finishWhen}</span>:null}{interrupted?<span> · 原来的关注仍保留</span>:previousFocusNotice?<span> · 原书签未变（{bookmarkQuarter}）</span>:null}</p>
+-  <div className="moment-story" aria-label="眼前的情况">
+-   {interrupted?<p className="season-return-bookmark">{unknownFocus?'原关注尚待读出。先面对原责任，再明确重选；没有换成另一项安排。':'书签留着：'+thread.object+'。原责任处理后，回来核对这件事的当前状态。'}</p>:null}
++ return <MarketSceneChoice p={p} onFullRecord={inspect} blockedReason={unknownFocus?'原来的关注尚未读出，请先重新选择；原委托草稿仍保留。':null}>{openOrder=><VideoSceneChoice p={video?{...p,accountId:thread.focus.accountId}:p} {...(videoTarget?{target:videoTarget}:{})} onTargetChange={chooseVideoTarget} onToday={openToday} onLife={()=>{setObjectOpen(false);onNavigate('life',{accountId:'personal'})}} blockedReason={unknownFocus?"原来的关注尚待读出，请先明确重新选择。":interrupted?"先回应日历里的原责任；原视频草稿仍保留。":null} onInspect={target=>{setObjectOpen(false);onNavigate('video',target?{openRecord:true,videoTarget:target,...(p.features.video?.channels.find(c=>c.id===target.channelId)?{accountId:p.features.video.channels.find(c=>c.id===target.channelId)!.accountId}:{})}:{openRecord:true,accountId:video?thread.focus.accountId:p.accountId})}}>{openVideo=><CourseSceneChoice p={course?{...p,accountId:thread.focus.accountId}:p} target={courseTarget} onTarget={chooseCourseTarget} onToday={openToday} onLife={()=>{setObjectOpen(false);onNavigate('life',{accountId:'personal'})}} blockedReason={unknownFocus?'原关注尚待读出，请先明确重新选择。':interrupted?'先回应日历里的原责任；这份教案仍保留。':null} onInspect={(target,slot,teachingSlot)=>{setObjectOpen(false);const owner=p.features.course?.businesses.find(b=>b.id===target?.businessId),recordId=!slot&&!teachingSlot?courseSceneProgress(p.features.course,p.view.date,target,courseSceneContext(p))?.recordId:undefined;onNavigate('course',{openRecord:true,courseTarget:target,accountId:owner?.accountId??'personal',...(recordId?{recordId}:{}),...(slot?{courseDraftSlot:slot}:{}),...(teachingSlot?{courseTeachingSlot:teachingSlot}:{})})}}>{openCourse=><RelaySceneChoice p={relayProps} target={relayTarget} onToday={openToday} onLife={()=>{setObjectOpen(false);onNavigate('life',{accountId:'personal'})}} onTargetChange={chooseRelayTarget} blockedReason={unknownFocus?'原关注尚待读出，请先明确重新选择。':interrupted?'先回应日历里的原责任；这份服务单仍保留。':null} onInspect={(target,slot)=>{setObjectOpen(false);const accountId=target?.accountId??(relay?thread.focus.accountId:p.accountId),recordId=!slot?relaySceneProgress(p.features.relay,p.view.date,target,relaySceneContext(p,accountId))?.recordId:undefined;onNavigate('relay',{openRecord:true,relayTarget:target,accountId,...(recordId?{recordId}:{}),...(slot?{relayDraftSlot:slot}:{})})}}>{openRelay=><RelayThreadAction p={relayProps} thread={thread} target={relayTarget} active={dayActive&&!attempt&&relay} date={safeDate} waitLabel={waitLabel} onChoose={intent=>{setObjectOpen(false);openRelay(intent)}} onToday={openToday}>{relayPrimary=><OpeningAttemptAction p={p} attempt={attempt} date={safeDate} waitLabel={waitLabel} openOffer={()=>setChoicePanel('offer')} openMarket={()=>setChoicePanel('market')} openFree={()=>setChoicePanel('free')} openNext={()=>setChoicePanel('next')} onToday={openToday} inspect={inspect}>{primary=><VideoThreadAction p={nearProps} thread={thread} active={dayActive&&!attempt&&video} date={safeDate} waitLabel={waitLabel} onChoose={()=>{setObjectOpen(false);openVideo(videoChooseIntent)}} onResult={()=>{setObjectOpen(false);openVideo('next')}} onToday={openToday}>{videoPrimary=><CourseThreadAction p={nearProps} thread={thread} active={dayActive&&!attempt&&course&&isCourseContinuityThread(thread)} date={safeDate} waitLabel={waitLabel} onChoose={intent=>{setObjectOpen(false);openCourse(intent)}} onResult={()=>{setObjectOpen(false);openCourse('next')}} onToday={openToday}>{coursePrimary=><DayThreadAction p={p} thread={thread} active={dayActive&&!attempt&&!video&&!course&&!relay} result={day?.primary.classification==='result'} date={safeDate} waitLabel={waitLabel} onToday={openToday}>{dayPrimary=><><RoomTableau scene={interrupted?'attention':requiresChoice?'unavailable':thread.focus.kind} state={moment.stage} perspective={thread.focusScope} textOnly={p.textOnly===true}
++ intention={<p className="opening-room-intention"><span>我想{thread.wish.label}</span>{!unknownFocus&&!w.atQuarterEnd?<button type="button" onClick={openDirections}>调整本季书签 ↗</button>:null}{!w.atQuarterEnd?<button type="button" onClick={openRecollection}>翻本季留页 ↗</button>:null}</p>}
++ heading={<header className="moment-heading"><p>{thread.focusScope==='history'?'正在回看 · ':''}{moment.object}</p><h1 ref={headingRef} tabIndex={-1}>{meaning?.title??moment.title}</h1></header>}
++ context={<><p className="opening-room-stage" data-interrupted={interrupted?'true':undefined}>{label}{interrupted?<span> · 原来的关注仍保留</span>:previousFocusNotice?<span> · 原书签未变（{bookmarkQuarter}）</span>:null}</p>{meaning?.question?<p className="tableau-question">{meaning.question}</p>:null}</>}
++ feedback={<>{interrupted?<p className="season-return-bookmark">{unknownFocus?'原关注尚待读出。先面对原责任，再明确重选；没有换成另一项安排。':'书签留着：'+thread.object+'。原责任处理后，回来核对这件事的当前状态。'}</p>:null}
+    {focusNotice&&!previousFocusNotice?<p className="season-focus-notice" role="status">{focusNotice}</p>:null}
+    {thread.focusScope==='invalid'&&thread.invalidReason?<p className="season-focus-notice" role="status">{thread.invalidReason}</p>:null}
+    {!interrupted&&!requiresChoice&&!legacy&&thread.focusScope==='history'?<p className="season-focus-notice">正在回看{thread.focusQuarter}，今天仍是{p.view.date}。旧收支不会重记为本季收入。</p>:null}
+-   {sceneFeedback?<div className={typeof sceneFeedback==='string'?'moment-status':'moment-feedback'} role={typeof sceneFeedback==='string'?'status':undefined}>{sceneFeedback}</div>:null}
+-   {!closedEcho?<p className="moment-line">{closedCopy?.line??sceneLine}</p>:null}{closedCopy?.terms||moment.detail?<p className="moment-terms">{closedCopy?.terms??moment.detail}</p>:null}{teachingMoney?<p className="course-scene-money">{teachingMoney}</p>:null}{relayMoney?<p className="relay-scene-money">{relayMoney}</p>:null}{courseComplete?<button type="button" className="scene-text-action" onClick={inspectFocus}>翻阅本班的完整原记录 ↗</button>:null}
+-  </div>
+-  <div className="moment-decisions">
++   {sceneFeedback?<div className={typeof sceneFeedback==='string'?'moment-status':'moment-feedback'} role={typeof sceneFeedback==='string'?'status':undefined}>{sceneFeedback}</div>:null}</>}
++ facts={<>{!closedEcho?firstFacts?firstFacts.map(line=><p key={line} className="moment-line">{line}</p>):<p className="moment-line">{summarized?meaning!.situation:closedCopy?.line??sceneLine}</p>:null}{!summarized&&(closedCopy?.terms||moment.detail)?<p className="moment-terms">{closedCopy?.terms??moment.detail}</p>:null}{teachingMoney?<p className="course-scene-money">{teachingMoney}</p>:null}{relayMoney?<p className="relay-scene-money">{relayMoney}</p>:null}{courseComplete?<button type="button" className="scene-text-action" onClick={inspectFocus}>翻阅本班的完整原记录 ↗</button>:null}</>}
++ decisions={<>
++
+    {primary?.main??quarterPrimary?.main??videoPrimary?.main??coursePrimary?.main??relayPrimary?.main??dayPrimary?.main??originalAction(false,openOrder,openVideo,openCourse,openRelay)}
+    {interrupted?unknownFocus?action('02','只翻本季已有记录','原关注待重选；这项原责任不会因此解除',()=>onNavigate('quarter',{accountId:p.accountId})):action('02','只翻原来关注的那件事','只查看；这项原责任不会因此解除',inspectFocus)
+     :!requiresChoice&&!legacy&&thread.focusScope==='history'?action('02',inspectLabel,'只回看，不新增工作、交易或推进日期',inspectFocus)
+     :deferredRelay?<div className="moment-wait moment-continue"><ClockAdvance showReason={showSceneReasons} p={nearProps} date={deferredRelay.date} label={deferredRelay.label+' · '+deferredRelay.date} room/></div>
++    :courseReady?action('02','把样课收好，回到今天','保留这份准备与原书签，新的招生仍另行决定',openToday)
++    :attempt?.action.kind==='next-choice'?action('02','看看这份经历，还能通向哪些尝试','先看手艺、生活与模拟判断，不自动新增安排',()=>setChoicePanel('next'))
++    :!requiresChoice&&!legacy&&!w.atQuarterEnd&&relay&&relayTarget?.kind==='period'&&!relayHistory?action('02','先回到今天，留些时间给生活','原支持、待复核与旧款照原日历保留',openToday)
+     :courseComplete?action('02','看看再备一堂课前的选择','查看下一次准备或生活方向，不招生、不付款',()=>openCourse('next'))
+     :dayActive&&!attempt&&(day?.primary.classification==='result'||thread.stage==='market-position')?action('02',inspectLabel,'只翻阅同一件事的实际结果与全部原记录',inspectFocus)
+     :requiresChoice?action('02','翻看本季已有记录','只翻阅，不代你换到另一项安排',()=>onNavigate('quarter',{accountId:p.accountId}))
+@@ -268,16 +291,19 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
+     :!interrupted&&!legacy&&relay&&(p.view.budget.available<2||p.view.readOnly||p.view.hasCandidate)?action('02',relayTarget?.kind==='period'?'翻看本期约定与原账':'翻看同一对象的原记录','只翻阅同一对象，不新增工作或改变日期',inspectFocus)
+     :!interrupted&&!legacy&&!employed&&!market&&moment.command?.kind!=='WorkQuarter'?<CommandButton showReason={showSceneReasons} {...p} kind="WorkQuarter" payload={{}} label="先保留这一季的工作" confirm className="moment-decision"><b aria-hidden="true">02</b><span>先保留这一季的工作<small>共享本季2点 · 按实际在岗日领工资，可与副业组合</small></span><i aria-hidden="true">→</i></CommandButton>
+     :action('02',!legacy&&thread.outcome==='actual'?'给接下来的日子，留一点余地':'等候时，也看看生活','只翻阅休整与相识的人，不改变本季书签',()=>onNavigate('life',{accountId:'personal'}))}
+-   {canContinue&&(thread.secondaryCommand||dayActive&&!attempt&&(day?.primary.classification==='result'||thread.stage==='market-position'))?continuation():<button type="button" className="moment-explore" onClick={interrupted?(onResponsibilities??onExplore):onExplore}>{interrupted?'翻看全部原责任与牵挂':'环顾房间，想想别的可能'} <span aria-hidden="true">↗</span></button>}
+-  </div>
+- </section>
+-  <OpeningObject {...(relayArt?{relayPaper:{...relayArt,...(relayPrimary?{actionHint:relayPrimary.hint}:{})},displayTitle:''}:{})} {...(videoArt?{videoPaper:videoArt,displayTitle:''}:{})} {...(courseArt?{coursePaper:courseArt,displayTitle:''}:{})} {...(classArt?{teachingPaper:classArt,displayTitle:''}:{})} {...(dayArt?{dayPaper:dayArt,displayTitle:''}:{})} {...(entryPaper?{entryPaper,displayTitle:''}:{})} {...(firstArt?{displayTitle:''}:{})} {...(!interrupted&&!requiresChoice&&(video||course||relay)?{appearance:relay?'relay' as const:course?'course' as const:'video' as const}:{})} {...(!interrupted&&!requiresChoice&&relay&&!relayArt?{displayTitle:relayDisplayTitle}:{})} {...(!interrupted&&!requiresChoice&&courseDisplayTitle&&!classArt?{displayTitle:courseDisplayTitle}:{})} {...(teachingPaper?{teaching:teachingPaper}:{})} kind={interrupted||requiresChoice?'calendar':legacy?(moment.wait?'waiting':'portfolio'):objectKind(thread)} title={moment.object} detail={relayArt?'':courseArt||classArt?(moment.wait&&!(coursePrimary?.binding.label.includes(moment.wait.date)&&coursePrimary?.binding.label.includes(moment.wait.label))?moment.wait.date+' · '+moment.wait.label:''):videoArt?(moment.wait&&!(videoPrimary?.binding.label.includes(moment.wait.date)&&videoPrimary?.binding.label.includes(moment.wait.label))?moment.wait.date+' · '+moment.wait.label:''):entryPaper?p.view.date:firstArt?'':moment.wait?moment.wait.date+' · '+moment.wait.label:interrupted?'这项责任仍需你回应':requiresChoice?'原记录与责任都保留，先明确重新选择':legacy?'沿原业务记录继续':thread.outcome==='actual'?'回响已有实际记录':'翻开，看清这次选择'} stageLabel={relayArt?relayTarget===null?'服务资料':relayDisplayTitle:classArt?courseTeachingPaperLabel(classArt):entryPaper==='calendar'?'接下来，自己安排':entryPaper==='market'?'公开市场资料':firstObjectLabel??label} actionLabel={primary?.binding.label??quarterPrimary?.binding.label??videoPrimary?.binding.label??coursePrimary?.binding.label??relayPrimary?.binding.label??dayPrimary?.binding.label??(requiresChoice?'重新选择原关注':'走近这件事')} {...(firstArt?{firstOrder:firstArt}:{})} {...(p.view.readOnly?{protection:'readonly' as const}:p.view.hasCandidate||p.view.saveStatus!=='saved'?{protection:'unsaved' as const}:(primary?.binding.disabled??quarterPrimary?.binding.disabled??videoPrimary?.binding.disabled??coursePrimary?.binding.disabled??relayPrimary?.binding.disabled??dayPrimary?.binding.disabled)?{protection:'unavailable' as const}:{})} disabled={primary?.binding.disabled??quarterPrimary?.binding.disabled??videoPrimary?.binding.disabled??coursePrimary?.binding.disabled??relayPrimary?.binding.disabled??dayPrimary?.binding.disabled??p.view.busy} textOnly={p.textOnly===true} onActivate={primary?.binding.activate??quarterPrimary?.binding.activate??videoPrimary?.binding.activate??coursePrimary?.binding.activate??relayPrimary?.binding.activate??dayPrimary?.binding.activate??(requiresChoice?openDirections:()=>setObjectOpen(true))}/>
++   {canContinue&&(courseReady||attempt?.action.kind==='next-choice'||thread.secondaryCommand||dayActive&&!attempt&&(day?.primary.classification==='result'||thread.stage==='market-position'))?continuation():<button type="button" className="moment-explore" onClick={interrupted?(onResponsibilities??onExplore):onExplore}>{interrupted?'翻看全部原责任与牵挂':'环顾房间，想想别的可能'} <span aria-hidden="true">↗</span></button>}
++ </>}
++ object={<OpeningObject copyMode="tableau" {...(relayArt?{relayPaper:{...relayArt,...(relayPrimary?{actionHint:relayPrimary.hint}:{})},displayTitle:''}:{})} {...(videoArt?{videoPaper:videoArt,displayTitle:''}:{})} {...(courseArt?{coursePaper:courseArt,displayTitle:''}:{})} {...(classArt?{teachingPaper:classArt,displayTitle:''}:{})} {...(dayArt?{dayPaper:dayArt,displayTitle:''}:{})} {...(entryPaper?{entryPaper,displayTitle:''}:{})} {...(firstArt?{displayTitle:''}:{})} {...(!interrupted&&!requiresChoice&&(video||course||relay)?{appearance:relay?'relay' as const:course?'course' as const:'video' as const}:{})} {...(!interrupted&&!requiresChoice&&relay&&!relayArt?{displayTitle:relayDisplayTitle}:{})} {...(!interrupted&&!requiresChoice&&courseDisplayTitle&&!classArt?{displayTitle:courseDisplayTitle}:{})} {...(teachingPaper?{teaching:teachingPaper}:{})} kind={interrupted||requiresChoice?'calendar':legacy?(moment.wait?'waiting':'portfolio'):objectKind(thread)} title={moment.object} detail={relayArt?'':courseArt||classArt?(moment.wait&&!(coursePrimary?.binding.label.includes(moment.wait.date)&&coursePrimary?.binding.label.includes(moment.wait.label))?moment.wait.date+' · '+moment.wait.label:''):videoArt?(moment.wait&&!(videoPrimary?.binding.label.includes(moment.wait.date)&&videoPrimary?.binding.label.includes(moment.wait.label))?moment.wait.date+' · '+moment.wait.label:''):entryPaper?p.view.date:firstArt?'':moment.wait?moment.wait.date+' · '+moment.wait.label:interrupted?'这项责任仍需你回应':requiresChoice?'原记录与责任都保留，先明确重新选择':legacy?'沿原业务记录继续':thread.outcome==='actual'?'回响已有实际记录':'翻开，看清这次选择'} stageLabel={relayArt?relayTarget===null?'服务资料':relayDisplayTitle:classArt?courseTeachingPaperLabel(classArt):entryPaper==='calendar'?'接下来，自己安排':entryPaper==='market'?'公开市场资料':firstObjectLabel??label} actionLabel={primary?.binding.label??quarterPrimary?.binding.label??videoPrimary?.binding.label??coursePrimary?.binding.label??relayPrimary?.binding.label??dayPrimary?.binding.label??(requiresChoice?'重新选择原关注':'走近这件事')} {...(firstArt?{firstOrder:firstArt}:{})} {...(p.view.readOnly?{protection:'readonly' as const}:p.view.hasCandidate||p.view.saveStatus!=='saved'?{protection:'unsaved' as const}:(primary?.binding.disabled??quarterPrimary?.binding.disabled??videoPrimary?.binding.disabled??coursePrimary?.binding.disabled??relayPrimary?.binding.disabled??dayPrimary?.binding.disabled)?{protection:'unavailable' as const}:{})} disabled={primary?.binding.disabled??quarterPrimary?.binding.disabled??videoPrimary?.binding.disabled??coursePrimary?.binding.disabled??relayPrimary?.binding.disabled??dayPrimary?.binding.disabled??p.view.busy} textOnly={p.textOnly===true} onActivate={primary?.binding.activate??quarterPrimary?.binding.activate??videoPrimary?.binding.activate??coursePrimary?.binding.activate??relayPrimary?.binding.activate??dayPrimary?.binding.activate??(requiresChoice?openDirections:()=>setObjectOpen(true))}/>}
++ record={<button type="button" className="scene-text-action" disabled={recordBinding.disabled} onClick={recordBinding.activate}>{recordBinding.label} ↗</button>}
++ />
++  {recordOpen?<Dialog title={moment.object+' · 记录与代价'} className="opening-paper tableau-source-record" onClose={()=>setRecordOpen(false)}><p className="opening-paper-date">今天 {p.view.date} · {label}</p><h3>{moment.title}</h3><p>{moment.line}</p><p>{moment.detail}</p>{!interrupted&&!requiresChoice&&!legacy?<p>这一步想走到：{thread.finishWhen}</p>:null}{attempt?<p>{attempt.purpose}</p>:null}{firstFacts?.map(line=><p key={line}>{line}</p>)}{teachingMoney?<p>{teachingMoney}</p>:null}{relayMoney?<p>{relayMoney}</p>:null}{meaning?.sourceRefs.length?<details><summary>核对这段处境的实际来源</summary>{meaning.sourceRefs.map(ref=><p key={ref.kind+':'+ref.id+':'+(ref.date??'')}>{ref.kind} · {ref.date??'原记录日期'} · <code>{ref.id}</code></p>)}</details>:null}{attempt?.action.kind==='next-choice'?<button type="button" onClick={()=>{setRecordOpen(false);setChoicePanel('next')}}>翻看手艺、生活与模拟判断的后续选择</button>:null}{courseReady?<button type="button" onClick={()=>{setRecordOpen(false);openCourse('next')}}>翻看这间教室的其它选择与旧责任</button>:null}<button type="button" onClick={()=>{setRecordOpen(false);if(interrupted||legacy)inspect();else inspectFocus()}}>翻开这件事的完整原册 ↗</button></Dialog>:null}
++
+   {objectOpen&&!attempt?<Dialog title={moment.object} className="opening-paper" onClose={()=>setObjectOpen(false)}><p className="opening-paper-date">{p.view.date} · {label}</p>{previousFocusNotice?<p className="season-focus-notice" role="status">{focusNotice}</p>:null}<h3>{moment.title}</h3><p>{moment.line}</p>{moment.detail?<p className="opening-paper-terms">{moment.detail}</p>:null}{originalAction(true,openOrder,openVideo,openCourse,openRelay)}{!interrupted&&!unknownFocus&&!legacy&&thread.stage==='offer'?<div className="opening-paper-alternatives"><CommandButton {...nearProps} kind="DeclineOffer" payload={{offerId:first.offerId}} label="婉拒这笔报价" confirm/><CommandButton {...nearProps} kind="SkipOffer" payload={{offerId:first.offerId}} label="先跳过这次小单" confirm/></div>:null}<button type="button" className="scene-text-action" onClick={inspect}>{unknownFocus?'翻看本季已有记录':'翻看同一件事的全部原记录'} ↗</button></Dialog>:null}
+   {choicePanel&&attempt?<OpeningAttemptChoices p={p} attempt={attempt} panel={choicePanel} onClose={()=>setChoicePanel(null)} onInspect={inspect} onMarket={()=>{setChoicePanel(null);openOrder()}} onExplore={()=>{setChoicePanel(null);onExplore()}} onFocus={changeAttempt} onNavigate={onNavigate}/>:null}
+   {directions?<Dialog title={'这一季，先把哪件事放在桌面？ · '+groupTitle} className="opening-paper season-focus-book" onClose={()=>setDirections(false)} footer={<div className="season-focus-footer">
+    <nav className="season-focus-groups" aria-label="按眼前约定、方向与历史翻阅书签">{seasonFocusGroups.map(group=><button type="button" key={group.id} aria-pressed={focusGroup===group.id} onClick={()=>setFocusGroup(group.id)}>{group.label} · {candidates.filter(candidate=>seasonFocusGroupFor(candidate)===group.id).length}</button>)}</nav>
+    <p className="season-selection-note" role="status">{picked?<>待确认：<strong>{picked.title}</strong> · {seasonFocusGroups.find(group=>group.id===seasonFocusGroupFor(picked))!.label}{picked.originQuarter?' · 来源'+picked.originQuarter:''}{picked.date?' · 原日期'+picked.date:''}。尚未改变原书签。{picked.disabledReason?' '+picked.disabledReason:''}</>:'尚未改变原关注。先选一个对象预看，再明确放到桌面。'}</p>
+-   <div className="season-focus-actions"><button type="button" onClick={()=>setDirections(false)}>仍留原来的书签</button><button type="button" className="primary" disabled={!picked||picked.disabledReason!==null||focusLocked} onClick={()=>{if(!picked||picked.disabledReason!==null||focusLocked)return;chooseFocus(picked.focus);if(!onFocus)setLocalQuarter(picked.originQuarter??w.quarter);setDirections(false);setDraftId(null)}}>把这件事放到桌面</button></div>
++   <div className="season-focus-actions"><button type="button" onClick={()=>setDirections(false)}>仍留原来的书签</button><button type="button" className="primary" disabled={!picked||picked.disabledReason!==null||focusLocked} onClick={()=>{if(!picked||picked.disabledReason!==null||focusLocked)return;chooseFocus(picked.focus);if(!onFocus)setLocalQuarter(picked.originQuarter??w.quarter);setDirections(false);setDraftId(null);returnToFocus()}}>把这件事放到桌面</button></div>
+   </div>}>
+    <p>你想{thread.wish.label}。{thread.yearQuestion} 先翻看具体对象，再决定调整书签；不接受合同、工作、交易或新权限。</p>
+    <p className="opening-paper-date">当前{w.quarter} · {p.view.date} · 本季共享四点保持原数</p>
+diff --git a/src/ui/OpeningObject.tsx b/src/ui/OpeningObject.tsx
+index 66b04ec9..6867e03d 100644
+--- a/src/ui/OpeningObject.tsx
++++ b/src/ui/OpeningObject.tsx
+@@ -40,15 +40,17 @@ export type OpeningObjectProps={
+  coursePaper?:CoursePreparationPaperState
+  teachingPaper?:CourseTeachingPaperState
+  relayPaper?:RelayServicePaperState
++ copyMode?:'full'|'tableau'
+ }
+ 
+ /** The parent supplies committed facts and owns the action; the object adds no business state. */
+-export function OpeningObject({kind,title,displayTitle,detail,stageLabel,onActivate,actionLabel,disabled,textOnly=false,appearance,teaching,firstOrder,protection,entryPaper,dayPaper,videoPaper,coursePaper,teachingPaper,relayPaper}:OpeningObjectProps){
++export function OpeningObject({kind,title,displayTitle,detail,stageLabel,onActivate,actionLabel,disabled,textOnly=false,appearance,teaching,firstOrder,protection,entryPaper,dayPaper,videoPaper,coursePaper,teachingPaper,relayPaper,copyMode}:OpeningObjectProps){
+  const id=useId(),titleId=id+'-title',detailId=id+'-detail',stageId=id+'-stage',actionId=id+'-action',dateId=id+'-date',receiptId=id+'-receipt',protectionId=id+'-protection',relayNotesId=id+'-relay-notes'
+  const entry=firstOrder===undefined?entryPaper:undefined,day=firstOrder===undefined&&entry===undefined?dayPaper:undefined,video=firstOrder===undefined&&entry===undefined&&day===undefined?videoPaper:undefined,course=firstOrder===undefined&&entry===undefined&&day===undefined&&video===undefined?coursePaper:undefined,classPaper=firstOrder===undefined&&entry===undefined&&day===undefined&&video===undefined&&course===undefined?teachingPaper:undefined,relay=firstOrder===undefined&&entry===undefined&&day===undefined&&video===undefined&&course===undefined&&classPaper===undefined?relayPaper:undefined,hasPaper=firstOrder!==undefined||entry!==undefined||day!==undefined||video!==undefined||course!==undefined||classPaper!==undefined||relay!==undefined
+  const protectionLabel=protection==='readonly'?'只读 · 原记录保留':protection==='unsaved'?'尚未保存 · 仍是上次的物件':protection==='unavailable'?'暂不可用 · 先核对原因':null
+- const relayActionHint=textOnly?undefined:relay?.actionHint,explicitActionName=displayTitle!==undefined||relayActionHint!==undefined
+- return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-first-order-phase={firstOrder?.phase} data-entry-paper={entry} data-day-kind={day?.kind} data-day-state={day?.state} data-video-phase={video?.phase} data-course-phase={course?.phase} data-teaching-phase={classPaper?.phase} data-teaching-status={classPaper?.status} data-relay-phase={relay?.phase} data-relay-state={relay?.state} data-protection={hasPaper?protection:undefined} data-text-only={textOnly?'true':'false'} disabled={disabled} onClick={onActivate} aria-label={explicitActionName?title+' '+actionLabel:undefined} aria-labelledby={explicitActionName?undefined:titleId+' '+actionId} aria-describedby={stageId+' '+detailId+(firstOrder?.dateLabel?' '+dateId:'')+(firstOrder?.phase==='paid'?' '+receiptId:'')+(relay?' '+relayNotesId:'')+(hasPaper&&protectionLabel?' '+protectionId:'')}>
++ const compactAction=copyMode==='tableau'&&!textOnly
++ const relayActionHint=textOnly?undefined:relay?.actionHint,explicitActionName=displayTitle!==undefined||relayActionHint!==undefined||compactAction
++ return <button type="button" className="opening-object" data-kind={kind} data-appearance={appearance} data-first-order-phase={firstOrder?.phase} data-entry-paper={entry} data-day-kind={day?.kind} data-day-state={day?.state} data-video-phase={video?.phase} data-course-phase={course?.phase} data-teaching-phase={classPaper?.phase} data-teaching-status={classPaper?.status} data-relay-phase={relay?.phase} data-relay-state={relay?.state} data-protection={hasPaper?protection:undefined} data-text-only={textOnly?'true':'false'} data-copy-mode={copyMode} disabled={disabled} onClick={onActivate} aria-label={explicitActionName?title+' '+actionLabel:undefined} aria-labelledby={explicitActionName?undefined:titleId+' '+actionId} aria-describedby={stageId+' '+detailId+(firstOrder?.dateLabel?' '+dateId:'')+(firstOrder?.phase==='paid'?' '+receiptId:'')+(relay?' '+relayNotesId:'')+(hasPaper&&protectionLabel?' '+protectionId:'')}>
+   {!textOnly?<span className="opening-object-art" aria-hidden="true">
+    {video?<VideoContinuityPaper art={video}/>:day?<DayContinuityPaper art={day}/>:entry?<OpeningEntryPaper kind={entry}/>:course?<CoursePreparationPaper art={course}/>:classPaper?<CourseTeachingPaper art={classPaper}/>:relay?<RelayServicePaper art={relay}/>:<img src={appearance==='relay'?relayServiceKit:appearance==='course'?coursePreparationKit:appearance==='video'?videoMakingKit:firstAttempt} alt="" width={appearance==='course'||appearance==='relay'?1536:appearance==='video'?1254:1280} height={appearance==='course'||appearance==='relay'?1024:appearance==='video'?1254:1280} decoding="async"/>}
+    {firstOrder?<><span className="first-order-contact"/><FirstOrderPaper phase={firstOrder.phase}/></>:video||course||classPaper||relay?null:day?<span className="day-paper-contact"/>:entry?<span className="entry-paper-contact"/>:<span className="opening-object-mark">
+@@ -64,7 +66,7 @@ export function OpeningObject({kind,title,displayTitle,detail,stageLabel,onActiv
+    {teaching?<span className="course-teaching-slips" aria-label="本班实际教学与责任"><span className="course-stage-tabs">{teaching.stages.map((state,index)=><span key={index} className="course-stage-tab" data-state={state}>第{index+1}段 · {{pending:'待安排',planned:'已安排',running:'进行中',completed:'已交付',stopped:'已停止'}[state]}</span>)}</span><span className="course-money-folds">{teaching.protectedFen>0?<span className="course-protected-band">保护中 {moneyText(teaching.protectedFen)}</span>:null}{teaching.needsHelp>0?<span className="course-responsibility-fold">{teaching.needsHelp}人待帮助</span>:null}{teaching.refundDueFen>0?<span className="course-responsibility-fold">退款待付 {moneyText(teaching.refundDueFen)}</span>:null}{teaching.supportUnmet?<span className="course-support-fold">原支持待履行</span>:null}{teaching.closedAt?<span className="course-closed-slip">本班结清 {teaching.closedAt}</span>:null}</span></span>:null}
+    {relay?<RelayServicePaperNotes art={relay} id={relayNotesId}/>:null}
+    <span id={detailId} className="opening-object-detail">{detail}</span>
+-   <span id={actionId} className="opening-object-action" aria-label={relayActionHint!==undefined?actionLabel:undefined}>{relayActionHint??actionLabel}<span aria-hidden="true">{disabled?'—':'↗'}</span></span>
++   {compactAction?null:<span id={actionId} className="opening-object-action" aria-label={relayActionHint!==undefined?actionLabel:undefined}>{relayActionHint??actionLabel}<span aria-hidden="true">{disabled?'—':'↗'}</span></span>}
+   </span>
+  </button>
+ }
+diff --git a/src/ui/RelayPanel.tsx b/src/ui/RelayPanel.tsx
+index b6fc88f0..f47a075a 100644
+--- a/src/ui/RelayPanel.tsx
++++ b/src/ui/RelayPanel.tsx
+@@ -18,13 +18,14 @@ const locked=(p:Props)=>p.view.busy||p.view.readOnly||p.view.hasCandidate||p.vie
+ const jobStatus:Record<string,string>={planned:'已预留，未开工',running:'进行中',completed:'已实际完成',cancelled:'未开工安排已取消',interrupted:'已中断，已耗成本保留'}
+ const periodJobAnchor=(periodId:string,jobId:string)=>'relay-period-job:'+periodId+':'+jobId
+ const meterAnchor=(meterId:string)=>'relay-meter:'+meterId
++const customerDueAnchor=(customerId:string)=>'relay-customer-due:'+customerId
+ const requoteFirstDate=(startAt:string,fallback:string)=>{try{return addDays(startAt,8)}catch{return fallback}}
+ function RelayJob({job,props,anchor}:{job:NonNullable<Props['view']['operations']>['jobs'][number]|null;props:Props;anchor?:string|undefined}){return job?<div className="stack" id={anchor}><p>{jobStatus[job.status]} · {job.startAt}—{job.completeAt}</p>{['planned','running'].includes(job.status)?<div className="button-row"><button type="button" disabled={locked(props)||props.features.workbench.pause!==null} onClick={()=>props.request('AdvanceTime',{date:job.completeAt},'推进到本项中转任务实际完成')}>推进到本项中转任务完成</button><CommandButton {...props} kind="InterruptJob" payload={{jobId:job.id}} label="停止此任务，保留已有费用和义务" confirm/></div>:null}</div>:null}
+ export type RelayPanelProps=GamePanelProps&{initialTarget?:RelaySceneTarget|null;initialDraftSlot?:RelayChoiceDraftSlot;onTargetChange?:((target:RelaySceneTarget|null)=>void)|undefined}
+ export function relayPanelTargetLocation(p:Props,target:RelaySceneTarget|null):{reason:string|null;anchor:string|null}{
+  const r=resolveRelaySceneTarget(p.features.relay,target,relayChoiceContext(p))
+  if(r.status!=='valid'||!target)return {reason:r.reason,anchor:null}
+- return {reason:null,anchor:target.kind==='period'?target.jobId?periodJobAnchor(target.periodId,target.jobId):target.meterId?meterAnchor(target.meterId):target.periodId+'-period':target.kind==='application'?target.applicationId:target.kind==='audience'?target.audienceId:target.kind==='customer'?target.customerId:target.businessId}
++ return {reason:null,anchor:target.kind==='period'?target.jobId?periodJobAnchor(target.periodId,target.jobId):target.meterId?meterAnchor(target.meterId):target.periodId+'-period':target.kind==='application'?target.applicationId:target.kind==='audience'?target.audienceId:target.kind==='customer'?r.customer&&r.customer.dueReceivableFen>0?customerDueAnchor(target.customerId):target.customerId:target.businessId}
+ }
+ export default function RelayPanel(props:RelayPanelProps){return <RelayPanelScope key={props.view.runId+'|'+props.accountId+'|'+JSON.stringify(props.initialTarget)+'|'+props.initialDraftSlot} {...props}/>}
+ function RelayPanelScope(props:RelayPanelProps){
+@@ -69,7 +70,7 @@ function RelayIntake(props:Props&{target:RelaySceneTarget;initialDraftSlot?:Rela
+ }
+ function RelayCustomer(props:Props&{customerId:string;number:number}){
+  const c=props.features.relay!.customers.find(c=>c.id===props.customerId)!,[renewCredit,setRenewCredit]=useState(String(c.creditLimitFen/100)),[renewMode,setRenewMode]=useState(c.mode)
+- return <article className="panel stack" id={c.id}><h4>客户{props.number} · 身份{c.personId.slice(-6)}</h4><p>{c.mode==='prepaid'?'充值制':'后付信用制'} · 合同至{c.termEnd} · 当前已生效用量价{moneyText(c.activeTerms.unitPriceFen)}/千模拟token · 支持完成后的周期基准费（按实际服务天数分摊）{moneyText(c.activeTerms.serviceFeeFen)}</p><dl className="finance-grid"><div><dt>未消费余额（受保护）</dt><dd>{moneyText(c.balance.prepaidFen)}</dd></div><div><dt>未回款应收</dt><dd>{moneyText(c.balance.receivableFen)}</dd></div><div><dt>其中已到期可收</dt><dd>{moneyText(c.dueReceivableFen)}</dd></div><div><dt>已确认本客户净收入</dt><dd>{moneyText(c.balance.recognizedIncomeFen)}</dd></div></dl><div className="button-row"><CommandButton {...props} kind="CollectRelayDue" payload={{customerId:c.id}} label={`收取客户${props.number}实际已到期应收`}/>{c.balance.prepaidFen>0?<CommandButton {...props} kind="RefundRelayBalance" payload={{customerId:c.id,amountFen:c.balance.prepaidFen}} label={`退还客户${props.number}全部未消费余额`} confirm/>:null}<CommandButton {...props} kind="CloseRelayCustomer" payload={{customerId:c.id}} label={`结清旧责任后关闭客户${props.number}合同`} confirm/></div><details><summary>明确续签本客户，不自动续约</summary><form className="stack" onSubmit={e=>{e.preventDefault();const f=new FormData(e.currentTarget);props.request('RenewRelayCustomer',{customerId:c.id,termEnd:String(f.get('end')),mode:renewMode,creditLimitFen:renewMode==='postpaid'?parseMoneyInput(renewCredit)??0:0},'确认续签、信用上限与有效期',true)}}><label className="field">新有效期<input type="date" name="end" min={props.view.date} max="2025-12-31" defaultValue={addDays(props.view.date,89)>'2025-12-31'?'2025-12-31':addDays(props.view.date,89)}/></label><label className="field">续签收款条件<select value={renewMode} onChange={e=>setRenewMode(e.target.value as 'prepaid'|'postpaid')}><option value="prepaid">充值制</option><option value="postpaid">后付信用</option></select></label><label className="field">续签后付信用上限（元）<input value={renewCredit} inputMode="decimal" onChange={e=>setRenewCredit(e.target.value)}/></label><button type="submit" disabled={locked(props)}>预览续签条件</button></form></details></article>
++ return <article className="panel stack" id={c.id}><h4>客户{props.number} · 身份{c.personId.slice(-6)}</h4><p>{c.mode==='prepaid'?'充值制':'后付信用制'} · 合同至{c.termEnd} · 当前已生效用量价{moneyText(c.activeTerms.unitPriceFen)}/千模拟token · 支持完成后的周期基准费（按实际服务天数分摊）{moneyText(c.activeTerms.serviceFeeFen)}</p><dl className="finance-grid"><div><dt>未消费余额（受保护）</dt><dd>{moneyText(c.balance.prepaidFen)}</dd></div><div><dt>未回款应收</dt><dd>{moneyText(c.balance.receivableFen)}</dd></div><div><dt>其中已到期可收</dt><dd>{moneyText(c.dueReceivableFen)}</dd></div><div><dt>已确认本客户净收入</dt><dd>{moneyText(c.balance.recognizedIncomeFen)}</dd></div></dl><div className="button-row" id={customerDueAnchor(c.id)}><CommandButton {...props} kind="CollectRelayDue" payload={{customerId:c.id}} label={`收取客户${props.number}实际已到期应收`}/>{c.balance.prepaidFen>0?<CommandButton {...props} kind="RefundRelayBalance" payload={{customerId:c.id,amountFen:c.balance.prepaidFen}} label={`退还客户${props.number}全部未消费余额`} confirm/>:null}<CommandButton {...props} kind="CloseRelayCustomer" payload={{customerId:c.id}} label={`结清旧责任后关闭客户${props.number}合同`} confirm/></div><details><summary>明确续签本客户，不自动续约</summary><form className="stack" onSubmit={e=>{e.preventDefault();const f=new FormData(e.currentTarget);props.request('RenewRelayCustomer',{customerId:c.id,termEnd:String(f.get('end')),mode:renewMode,creditLimitFen:renewMode==='postpaid'?parseMoneyInput(renewCredit)??0:0},'确认续签、信用上限与有效期',true)}}><label className="field">新有效期<input type="date" name="end" min={props.view.date} max="2025-12-31" defaultValue={addDays(props.view.date,89)>'2025-12-31'?'2025-12-31':addDays(props.view.date,89)}/></label><label className="field">续签收款条件<select value={renewMode} onChange={e=>setRenewMode(e.target.value as 'prepaid'|'postpaid')}><option value="prepaid">充值制</option><option value="postpaid">后付信用</option></select></label><label className="field">续签后付信用上限（元）<input value={renewCredit} inputMode="decimal" onChange={e=>setRenewCredit(e.target.value)}/></label><button type="submit" disabled={locked(props)}>预览续签条件</button></form></details></article>
+ }
+ function RequoteForm(props:Props&{businessId:string}){const [resource,setResource]=useState(''),[at,setAt]=useState(''),[effective,setEffective]=useState(''),assignment={resources:resource?[resource]:[],startAt:at},v=props.features.relay!,customers=v.customers.filter(c=>c.businessId===props.businessId&&c.closedAt===null),[selected,setSelected]=useState<string[]>([]);const selectedCurrent=selected;return <details><summary>与已有客户重谈未来报价</summary><label className="field">本次谈判资源<ResourceSelect options={v.resources} value={resource} onChange={setResource}/></label><label className="field">本次谈判开工日期<input type="date" min={props.view.date} max="2025-12-31" value={at} onChange={event=>setAt(event.target.value)}/></label><p>谈判占1点与7天，客户可以拒绝。生效前原价不变，已消费账单不重写。新用量价从生效日影响请求；已确认周期的支持费保持原约定，后续周期采用新方案且须实际支持交付。</p>{customers.map(c=><label className="radio-line" key={c.id}><input type="checkbox" checked={selectedCurrent.includes(c.id)} onChange={e=>setSelected(e.target.checked?[...selected,c.id]:selected.filter(id=>id!==c.id))}/>客户{v.customers.filter(original=>original.businessId===props.businessId).findIndex(original=>original.id===c.id)+1} · {c.personId.slice(-6)}</label>)}<form className="stack" onSubmit={e=>{e.preventDefault();const f=new FormData(e.currentTarget);props.request('StartRelayRequote',{businessId:props.businessId,customerIds:selectedCurrent,offerKind:String(f.get('kind')),unitPriceFen:Number(f.get('price')),effectiveAt:String(f.get('effective')),...assignment},'预览未来报价谈判与实际日期',true)}}><div className="form-grid"><label className="field">拟谈方案<select name="kind" defaultValue=""><option value="" disabled>明确选择未来方案</option><option value="managed_support">支持完成后收服务费</option><option value="low_margin">纯用量方案</option></select></label><label className="field">拟谈单价（分/千模拟token）<input type="number" name="price" min="1" max="100" defaultValue=""/></label><label className="field">最早生效日期<input name="effective" type="date" value={effective} onChange={event=>setEffective(event.target.value)} min={requoteFirstDate(at,props.view.date)} max="2025-12-31"/></label></div><button type="submit" disabled={locked(props)||selectedCurrent.length===0||selectedCurrent.some(id=>!customers.some(customer=>customer.id===id))||!v.resources.some(row=>row.id===resource)||!at||at<props.view.date||!effective}>确认本批未来报价谈判</button></form>{v.quotes.filter(q=>q.businessId===props.businessId).map(q=><article key={q.id}><h4>{q.effectiveAt}拟生效 · {moneyText(q.unitPriceFen)}/千模拟token</h4><RelayJob props={props} job={q.job}/>{q.completedAt?<p>实际接受{q.responses.filter(r=>r.accepted).length}/{q.responses.length}名；拒绝者保持旧合同，不静默涨价。</p>:<p>谈判结果尚未知。</p>}</article>)}</details>}
+ function RelayPeriodCard(props:Props&{periodId:string;target:RelaySceneTarget;onSelectTarget:(target:RelaySceneTarget)=>void}){
+diff --git a/src/ui/SeasonRecollection.tsx b/src/ui/SeasonRecollection.tsx
+index 2f25f29c..0628012a 100644
+--- a/src/ui/SeasonRecollection.tsx
++++ b/src/ui/SeasonRecollection.tsx
+@@ -5,6 +5,7 @@ import {Dialog} from './Dialog.tsx'
+ import {ClockAdvance} from './ClockAdvance.tsx'
+ import type {OpeningFocus} from './player-thread.ts'
+ import {makeSharedAction} from './shared-action.ts'
++import {seasonMeaning} from './scene-meaning.ts'
+ 
+ type Props={p:GamePanelProps;quarter?:string;onClose:()=>void;onNavigate:NavigateScene;onChooseFocus?:()=>void;focusLabel?:string;onToday?:()=>void;onContinueFocus?:(focus:OpeningFocus)=>void}
+ 
+@@ -19,6 +20,7 @@ export function SeasonRecollection({p,quarter,onClose,onNavigate,onChooseFocus,f
+  const sourceLocked=p.view.hasCandidate||p.view.busy||p.controller.snapshot.busy||p.view.saveStatus==='conflict'||p.controller.snapshot.view!==p.view
+  const inspect:NavigateScene=(screen,target)=>{onClose();onNavigate(screen,target)}
+  if(!season)return <Dialog title="这份季度留页暂不可读" className="opening-paper season-recollection" onClose={onClose}><p>原季度不存在、尚未开始或无法从当前公开记录确认。没有替换成另一季度。</p><button type="button" onClick={onClose}>回到眼前这件事</button></Dialog>
++ const meaning=seasonMeaning(p,season)
+  const current=season.quarter===p.features.workbench.quarter
+  const canEnter=current&&season.atQuarterEnd&&season.nextQuarterDate!==null&&p.view.phase==='playing'
+  const closeRequest:GamePanelProps['request']=(...args)=>{onClose();p.request(...args)}
+@@ -35,7 +37,7 @@ export function SeasonRecollection({p,quarter,onClose,onNavigate,onChooseFocus,f
+   </section>
+   {season.allNodes.length>season.nodes.length?<details className="season-all-echoes"><summary>翻看本季全部有据回响（{season.allNodes.length}）</summary>{season.allNodes.map(node=><article key={node.id}><time>{node.date}</time><h4>{node.title}</h4><p>{node.line}</p><button type="button" className="scene-text-action" onClick={()=>inspect(node.inspect.screen,node.inspect.target)}>{node.inspect.label} ↗</button><details><summary>本项来源</summary>{node.sourceRefs.map(ref=><code key={ref.kind+':'+ref.id}>{ref.kind} · {ref.id}</code>)}</details></article>)}</details>:null}
+   <section className="season-remaining" aria-label="原来未完的约定"><h3>截至今天，仍需面对的约定。</h3><p>以下是{p.view.date}的当前待续事项，与上方原季度已经发生的结果分开核对。</p>{season.remaining.length?season.remaining.map(item=><article key={item.id} data-urgent={item.urgent?'true':'false'}><p className="season-remaining-label">{item.urgent?'需要先面对 · ':'原约定 · '}{item.dueAt??'日期沿原记录'}</p><h4>{item.title}</h4><p>{item.line}</p><button type="button" className="scene-text-action" onClick={()=>inspect(item.inspect.screen,item.inspect.target)}>{item.inspect.label} ↗</button>{item.focus&&onContinueFocus?<button type="button" disabled={sourceLocked} className="scene-text-action" onClick={()=>ui('回到这件仍待续的事',()=>{onClose();onContinueFocus(item.focus!)}).activate()}>把这件仍待续的事放回眼前</button>:null}<details><summary>核对原责任来源</summary>{item.sourceRefs.map(ref=><code key={ref.kind+':'+ref.id}>{ref.kind} · {ref.id}</code>)}</details></article>):<p>当前公开记录中没有待续项。查看留页不会新增或清除责任。</p>}</section>
+-  <section className="season-next-question"><p className="opening-paper-date">把选择，留给接下来的自己</p><h3>{season.nextQuestion}</h3><p>可以继续原来的尝试，也可以改变关注。工作、交易、融资、招生和权限仍须各自决定。</p></section>
++  <section className="season-next-question"><p className="opening-paper-date">把选择，留给接下来的自己</p><h3>{meaning?.question??season.nextQuestion}</h3>{meaning?<><p>{meaning.situation}</p><details><summary>核对这段处境的实际来源</summary>{meaning.sourceRefs.map(ref=><p key={ref.kind+':'+ref.id}>{ref.kind} · {ref.date??'原记录日期'} · <code>{ref.id}</code></p>)}</details></>:null}<p>可以继续原来的尝试，也可以改变关注。工作、交易、融资、招生和权限仍须各自决定。</p></section>
+    <details><summary>原季度的来源与今天的完整安排</summary><p>上方保留{season.quarter}的有据节点与具体原对象；下面转看今天{p.view.date}的综合安排。全部原账、日期、费用、资格与未结责任仍以原记录为准。</p><button type="button" className="scene-text-action" onClick={()=>inspect('quarter',{accountId:p.accountId})}>转看今天（{p.features.workbench.quarter}）的全部安排与原账 ↗</button>{season.closeSourceId?<code>原季度结束来源 · {season.closeSourceId}</code>:<p>没有把本次阅读记作季度结束。</p>}</details>
+  </Dialog>
+ }
+diff --git a/src/ui/TodayScene.tsx b/src/ui/TodayScene.tsx
+index 54ce72cf..6090be54 100644
+--- a/src/ui/TodayScene.tsx
++++ b/src/ui/TodayScene.tsx
+@@ -12,6 +12,9 @@ import {MarketSceneChoice} from './MarketSceneChoice.tsx'
+ import {makeSharedAction} from './shared-action.ts'
+ import {moneyText} from './game-text.ts'
+ import {addDays} from '../core/calendar.ts'
++import {RoomTableau} from './RoomTableau.tsx'
++import {sceneMeaning} from './scene-meaning.ts'
++import {relayBusinessTarget} from './relay-player-thread.ts'
+ import './today-scene.css'
+ 
+ type Props={p:GamePanelProps;today:TodayThreadView;headingRef:Ref<HTMLHeadingElement>;feedback?:ReactNode;onFocus:(focus:OpeningFocus)=>void;onPrepare:(focus:OpeningFocus)=>void;onResume:()=>void;onExplore:()=>void;onRecollection:()=>void;onNavigate:NavigateScene}
+@@ -29,7 +32,15 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
+  const prepare=(next:'life'|'market')=>{const binding=ui('选择新的方向',()=>{onPrepare(free);setPage(next)});binding.activate()}
+  const request:GamePanelProps['request']=(...args)=>{setPage(null);p.request(...args)}
+  const commandProps={...personal,request}
+- const primary=ui('今天，想把时间留给什么',()=>setPage('directions'))
++ const continuing=today.ongoing.filter(item=>!(item.focus.kind==='market'&&item.focus.entityKind==='position'&&!item.wait))
++ const one=continuing.length===1?continuing[0]:null
++ const primary=p.features.workbench.atQuarterEnd?ui('看看这一季，实际留下了什么',onRecollection)
++  :one?ui('继续'+({work:'这季的工作',life:'这段生活安排',course:'这份教学约定',relay:'这期原服务',video:'这份作品',market:'这份模拟委托',free:'原来的安排','first-order':'这份委托'}[one.focus.kind]),()=>choose(one.focus))
++  :continuing.length>1?ui('选回一件未完的约定',()=>setPage('ongoing'))
++  :ui('给生活留一段真实的日子',()=>prepare('life'))
++ const meaning=sceneMeaning({...p,accountId:today.primary.thread.focus.accountId},today.primary.thread)
++ const dueCustomers=p.features.relay?.customers.filter(customer=>customer.dueReceivableFen>0)??[]
++ const dueTotal=dueCustomers.reduce((sum,customer)=>sum+customer.dueReceivableFen,0)
+  const button=(label:string,activate:()=>void,description?:string)=>{const action=ui(label,activate);return <button type="button" disabled={action.disabled} onClick={action.activate}>{label}{description?<span>{description}</span>:null}</button>}
+  const videoFocus=today.primary.thread.focus.kind==='video'?today.primary.thread.focus:null
+  const videoTarget=videoFocus?.videoTarget??undefined
+@@ -39,20 +50,22 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
+  const research=p.features.workbench.researches.find(r=>r.id==='market-overview')
+  if(today.responsibilityOverrideNeeded)return <section className="room-current-moment opening-current-moment" aria-label="今天仍需面对的责任"><header className="moment-heading"><p>今天 {p.view.date}</p><h1 ref={localHeading} tabIndex={-1}>先面对已经答应的事。</h1></header><p>原来的交付、期限或资金责任仍在；这页不替你新增安排。</p>{button('回到眼前需要处理的事',onResume)}</section>
+  return <VideoSceneChoice p={videoProps} {...(videoTarget?{target:videoTarget}:{})} onTargetChange={target=>{const next=openingFocusFor(p,'video',{videoTarget:target});if(next)onPrepare(next)}} onToday={()=>setPage(null)} onLife={()=>{setPage(null);onNavigate('life',{accountId:'personal'})}} onInspect={target=>{setPage(null);const owner=p.features.video?.channels.find(c=>c.id===target?.channelId);onNavigate('video',{openRecord:true,...(target?{videoTarget:target}:{}),accountId:owner?.accountId??videoProps.accountId})}}>{openVideo=><CourseSceneChoice p={courseProps} target={courseFocus?.courseTarget??null} onTarget={target=>{const next=openingFocusFor(p,'course',{courseTarget:target});if(next)onPrepare(next)}} onToday={()=>setPage(null)} onLife={()=>{setPage(null);onNavigate('life',{accountId:'personal'})}} onInspect={(target,slot,teachingSlot)=>{setPage(null);const owner=p.features.course?.businesses.find(b=>b.id===target?.businessId);onNavigate('course',{openRecord:true,courseTarget:target,accountId:owner?.accountId??courseProps.accountId,...(slot?{courseDraftSlot:slot}:{}),...(teachingSlot?{courseTeachingSlot:teachingSlot}:{})})}}>{openCourse=><MarketSceneChoice p={commandProps} onFullRecord={()=>onNavigate('market',{accountId:'personal',openRecord:true})}>{openOrder=><>
+-  <p className="opening-room-intention"><span>我想{today.primary.thread.wish.label}</span><span>把已经发生的事收好，再安排今天。</span>{button('回到书签里的那件事 ↗',onResume)}{button('翻季度留页 ↗',onRecollection)}</p>
+-  <section className="room-current-moment opening-current-moment today-current-moment" data-day-view="today" aria-label="今天这一幕">
+-   <header className="moment-heading"><p>{p.features.workbench.quarter} / 今天的日历</p><h1 ref={localHeading} tabIndex={-1}>今天，仍由你安排。</h1></header>
+-   <p className="opening-room-stage">今天 {p.view.date} · 原来的书签和约定仍保留</p>
+-   <div className="moment-story" aria-label="今天的情况">{feedback?<div className={typeof feedback==='string'?'moment-status':'moment-feedback'}>{feedback}</div>:null}<p className="moment-line">{today.ongoing.length?'还有'+today.ongoing.length+'件已经答应的事，正在照约定继续。':'可以先保留眼前的生活，再选择一件愿意承担的事。'}</p><p className="moment-terms">{today.question}</p></div>
+-   <div className="moment-decisions"><div className="command moment-decision moment-primary"><button type="button" disabled={primary.disabled} onClick={primary.activate}><b aria-hidden="true">01</b><span>{primary.label}<small>继续原安排，或明确选择下一次投入</small></span><i aria-hidden="true">→</i></button>{primary.reason?<small className="reason">{primary.reason}</small>:null}</div>
++  <RoomTableau scene="today" state={today.primary.classification} perspective="today" textOnly={p.textOnly===true}
++   intention={<p className="opening-room-intention"><span>我想{today.primary.thread.wish.label}</span>{button('回到书签里的那件事 ↗',onResume)}{button('翻季度留页 ↗',onRecollection)}</p>}
++   heading={<header className="moment-heading"><p>{p.features.workbench.quarter} / 今天的日历</p><h1 ref={localHeading} tabIndex={-1}>{one?'这份约定，今天还在继续。':continuing.length>1?'今天，还有几件答应过的事。':meaning?.title??'今天，仍由你安排。'}</h1></header>}
++   context={<><p className="opening-room-stage">今天 {p.view.date} · 旧书签和原约定仍保留</p>{meaning?.question?<p className="tableau-question">{meaning.question}</p>:null}</>}
++   feedback={feedback?<div className={typeof feedback==='string'?'moment-status':'moment-feedback'}>{feedback}</div>:null}
++   facts={<><p className="moment-line">{meaning?.situation??(today.ongoing.length?'还有'+today.ongoing.length+'件已经答应的事，正在照约定继续。':'原来的结果已经留下；接下来的日子，可以自己安排。')}</p>{one?<p className="moment-terms">仍在继续：{one.title.replace(/[。！？]$/u,'')}{one.wait?' · 下一反馈 '+one.wait.date:''}。</p>:null}{dueTotal>0?<p className="relay-scene-money">原客户款已到期、尚未收取 {moneyText(dueTotal)}。<button type="button" className="scene-text-action" onClick={ui('翻看这些原客户款',()=>setPage('ongoing')).activate}>逐位翻回原客户 ↗</button></p>:null}</>}
++   decisions={<><div className="command moment-decision moment-primary"><button type="button" disabled={primary.disabled} onClick={primary.activate}><b aria-hidden="true">01</b><span>{primary.label}<small>先看具体对象与代价，新的承诺仍由你确认</small></span><i aria-hidden="true">→</i></button>{primary.reason?<small className="reason">{primary.reason}</small>:null}</div>
+     {today.wait?<div className="moment-wait"><ClockAdvance p={p} date={today.wait.date} label={'不新增安排，让原日子继续 · '+today.wait.date} room showReason={!p.view.readOnly&&!p.view.hasCandidate&&p.view.saveStatus!=='conflict'}/></div>:button('翻看今天的日历',()=>onNavigate('quarter',{accountId:p.accountId}),'原费用、期限和未完约定都在这里')}
+     <button type="button" className="moment-explore" onClick={ui('环顾房间，想想别的可能',onExplore).activate}>环顾房间，想想别的可能 <span aria-hidden="true">↗</span></button>
+-   </div>
+-  </section>
+-  <OpeningObject kind="calendar" title="今天的日历" displayTitle="" detail={p.view.date} stageLabel="今天 · 仍可安排" actionLabel={primary.label} onActivate={primary.activate} disabled={primary.disabled} textOnly={p.textOnly===true} dayPaper={{kind:'today',state:'ongoing'}} {...(p.view.readOnly?{protection:'readonly' as const}:p.view.hasCandidate||p.view.saveStatus==='conflict'?{protection:'unsaved' as const}:{})}/>
++   </>}
++   object={<OpeningObject copyMode="tableau" kind="calendar" title="今天的日历" displayTitle="" detail={p.view.date} stageLabel="今天 · 仍可安排" actionLabel={primary.label} onActivate={primary.activate} disabled={primary.disabled} textOnly={p.textOnly===true} dayPaper={{kind:'today',state:'ongoing'}} {...(p.view.readOnly?{protection:'readonly' as const}:p.view.hasCandidate||p.view.saveStatus==='conflict'?{protection:'unsaved' as const}:{})}/>}
++   record={<button type="button" className="scene-text-action" onClick={ui('看看工作、其它尝试与原约定',()=>setPage('directions')).activate}>看看工作、其它尝试与原约定 ↗</button>}
++  />
+   {page?<Dialog title={page==='directions'?'今天，想把时间留给什么？':page==='life'?'给生活留出一段真实的日子':page==='market'?'给自己的模拟判断划一个边界':'这些原安排，仍在继续'} className="opening-paper today-choice-paper" onClose={()=>setPage(null)} footer={<div className="today-choice-footer">{page!=='directions'?button('返回今天的选择',()=>setPage('directions')):null}{button('先不新增安排，合上这一页',()=>setPage(null))}</div>}>
+    <p className="opening-paper-date">今天 {p.view.date} · {p.features.workbench.quarter}</p>
+-   {page==='directions'?<><p>选择关注只把一件事放到眼前。新的工作、生活投入和买卖，仍由你核对原确认。</p><div className="opening-directions today-directions">
++   {page==='directions'?<><p>{today.question}</p><p>选择关注只把一件事放到眼前。新的工作、生活投入和买卖，仍由你核对原确认。</p><div className="opening-directions today-directions">
+     {today.ongoing.length?button('继续已经答应的事',()=>setPage('ongoing'),'逐份翻回同一件事，核对安排、日期与账目'):null}
+     {button('先看看本季工作',()=>choose({runId:p.view.runId,kind:'work',accountId:'personal',entityId:null}),'若本季尚未安排，先看真实行动占用与工资日期，再决定')}
+     {button('留一段新的时间给生活',()=>prepare('life'),'休整或改善住处；原安排、费用和行动保留')}
+@@ -63,7 +76,7 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
+    </div></>:null}
+    {page==='life'?<><p>留给自己的时间也要作取舍。已经在进行的安排仍在原日历上，新安排不返行动或增加收入。</p><div className="today-commitments">{(['rest','workspace'] as const).map(kind=>{const terms=p.features.life.work[kind];return <article key={kind}><h3>{terms.title}</h3><p>个人{moneyText(terms.costFen)} · {terms.points}点 · {terms.days}日；今天开始，最早{addDays(p.view.date,terms.days)}实际完成。</p><CommandButton {...commandProps} kind="StartLifeWork" payload={{kind,personId:null,reference:null}} label={kind==='rest'?'核对并留出七天休整':'核对并改善桌椅与照明'} confirm/></article>})}</div>{button('看看相识的人与全部生活记录',()=>{setPage(null);onNavigate('life',{accountId:'personal'})})}</>:null}
+    {page==='market'?<><p>这里只准备自己的判断，不预报未来价格。已有持仓、未成交余量和交收仍按原记录继续。</p><div className="opening-directions today-directions">{button('显选一份新的模拟委托',()=>{setPage(null);openOrder()},'自己选账户、标的、方向、股数、限价和原撮合期限')}{research&&!research.state?<article><h3>先整理公开产业线索</h3><p>个人{moneyText(research.costFen)} · {research.actionPoints}点 · {research.days}日</p><CommandButton {...commandProps} kind="ResearchMarket" payload={{definitionId:research.id}} label="核对并开始公开研究" confirm/></article>:<p>这组基础线索已按原记录整理；完整研究和已有委托仍可在原记录核对。</p>}{button('先保留现金，不新增委托',()=>setPage(null),'回到今天，原来的股票与交收不变')}</div></>:null}
+-   {page==='ongoing'?<><p>这些是截至今天仍在继续的原对象。回到其中一件事不重做任务，也不新增合同。</p><div className="today-ongoing">{today.ongoing.map(item=><article key={JSON.stringify(item.focus)}><p className="opening-paper-date">{item.classification==='carry'?'从'+item.originQuarter+'留下，仍在继续':'本季原安排'}{item.wait?' · 下一反馈 '+item.wait.date:''}</p><h3>{item.title}</h3><p>{item.line}</p>{button('回到这件原安排',()=>choose(item.focus))}</article>)}</div></>:null}
++   {page==='ongoing'?<>{dueCustomers.length?<section><h3>已到期、尚未收取的原客户款</h3>{dueCustomers.map((customer,index)=>{const identity=relayBusinessTarget(p,customer.businessId),target=identity?{...identity,kind:'customer' as const,customerId:customer.id}:null,next=target?openingFocusFor(p,'relay',{relayTarget:target,accountId:target.accountId}):null;return <article key={customer.id}><p>原客户{index+1} · 已到期{moneyText(customer.dueReceivableFen)}，尚未实收；本入口不收款。</p>{next&&target?button('翻到这位原客户的到期款记录',()=>{setPage(null);onNavigate('relay',{accountId:target.accountId,relayTarget:target,recordId:customer.id,openRecord:true})}):<p className="warning-box">这位原客户的服务身份暂不可确认，请先从原服务记录重新选择；没有换到另一客户或账户。</p>}</article>})}</section>:null}<p>这些是截至今天仍在继续的原对象。回到其中一件事不重做任务，也不新增合同。</p><div className="today-ongoing">{today.ongoing.map(item=><article key={JSON.stringify(item.focus)}><p className="opening-paper-date">{item.classification==='carry'?'从'+item.originQuarter+'留下，仍在继续':'本季原安排'}{item.wait?' · 下一反馈 '+item.wait.date:''}</p><h3>{item.title}</h3><p>{item.line}</p>{button('回到这件原安排',()=>choose(item.focus))}</article>)}</div></>:null}
+   </Dialog>:null}
+  </>}</MarketSceneChoice>}</CourseSceneChoice>}</VideoSceneChoice>
+ }
+diff --git a/src/ui/day-continuity.integration.test.tsx b/src/ui/day-continuity.integration.test.tsx
+index 313b5935..2a846fa4 100644
+--- a/src/ui/day-continuity.integration.test.tsx
++++ b/src/ui/day-continuity.integration.test.tsx
+@@ -85,7 +85,7 @@ it('renders today after an actual life result without auto arranging work, anoth
+   const p=h.p(),job=p.features.life.jobs[0]!,focus:OpeningFocus={runId:p.view.runId,kind:'life',accountId:'personal',selection:'rest',entityId:job.id},today=todayThread(p,focus)!
+   expect(today.primary.classification).toBe('result')
+   const before=h.controller.exportSaved(),html=renderToStaticMarkup(<TodayScene p={p} today={today} headingRef={null} onFocus={never} onPrepare={never} onResume={never} onExplore={never} onRecollection={never} onNavigate={never}/>)
+-  expect(html).toContain('今天，仍由你安排');expect(html).toContain('data-day-kind="today"');expect(html).toContain('不新增安排，让原日子继续')
++  expect(html).toContain('接下来仍留一点时间给自己');expect(html).toContain('2020-01-08实际完成，投入¥0');expect(html).toContain('给生活留一段真实的日子');expect(html).toContain('data-day-kind="today"');expect(html).toContain('不新增安排，让原日子继续')
+   expect(html).not.toContain('aria-label="保留这一季的工作"');expect(html).not.toContain('核对并留出七天休整');expect(html).not.toContain('核对并提交买单')
+   expect(h.controller.exportSaved()).toBe(before)
+  }finally{await h.close()}
+diff --git a/src/ui/relay-target.test.tsx b/src/ui/relay-target.test.tsx
+index cc4a26e4..9b4085e3 100644
+--- a/src/ui/relay-target.test.tsx
++++ b/src/ui/relay-target.test.tsx
+@@ -7,10 +7,13 @@ import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+ import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
+ import type {GamePanelProps,PlayFeatures} from './game-types.ts'
+ import RelayPanel,{relayPanelTargetLocation} from './RelayPanel.tsx'
++import * as CommandControls from './CommandButton.tsx'
+ import type {RelaySceneIdentity,RelaySceneTarget} from './relay-scene-target.ts'
+ import {relayDraftScopeForTarget} from './RelayServiceChoice.tsx'
+ import {createRelaySceneDraftMemory,emptyRelaySceneDraft} from './relay-scene-draft.ts'
+ import plannedRaw from '../../goal-1/evidence/t17-acceptance-11/chrome-relay-fault-r12/r92-normal-for-service-abort-text-before-import.json?raw'
++import dueRaw from '../../goal-1/evidence/t17-acceptance-33/chrome-main-r1/r4-saved83-mid-service-first-original-due.json?raw'
++import futureRaw from '../../goal-1/evidence/t17-acceptance-34/chrome-final-service-r2/r2-saved85-current-separate-record-entries.json?raw'
+ 
+ const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'relay-book-target'})
+ let sequence=0
+@@ -86,3 +89,50 @@ it('places the single original-book service and audit action before their comple
+  expect(audit).toContain('实际开工日期');expect(audit).toContain('完成前不揭示实计')
+  expect(controller.exportSaved()).toBe(before);expect(p.request).not.toHaveBeenCalled()
+ },20000)
++
++
++it('reveals the same original due-customer collection action while future, invalid and readonly records keep their own boundaries',async()=>{
++ const opened:{store:IndexedDbRunStore;controller:GameController}[]=[],commands=vi.spyOn(CommandControls,'CommandButton'),oldPlanned=controller.exportSaved()
++ const load=async(raw:string,name:string):Promise<GamePanelProps>=>{
++  const ownCodec=createCampaignCodec(),ownStore=new IndexedDbRunStore({codec:ownCodec,factory:new IDBFactory(),keyRange:IDBKeyRange,name}),ownController=new GameController({codec:ownCodec,store:ownStore,locks:new MemoryWriterAccess(),id:()=>name+'-'+(++sequence)})
++  opened.push({store:ownStore,controller:ownController})
++  await ownController.initialize();await ownController.importNew(raw)
++  const view=ownController.snapshot.view!,features=view.features as unknown as PlayFeatures,business=features.relay!.businesses[0]!
++  return {controller:ownController,view,features,accountId:business.accountId,request:vi.fn()}
++ }
++ const customerTarget=(source:GamePanelProps,customerId:string):RelaySceneTarget=>{
++  const relay=source.features.relay!,customer=relay.customers.find(row=>row.id===customerId)!,business=relay.businesses.find(row=>row.id===customer.businessId)!,station=relay.stations.find(row=>row.businessId===business.id)!
++  return {kind:'customer',runId:source.view.runId,accountId:business.accountId,businessId:business.id,stationId:station.id,customerId}
++ }
++ try{
++  const due=await load(dueRaw,'relay-target-actual-due'),future=await load(futureRaw,'relay-target-actual-future'),dueSaved=due.controller.exportSaved(),futureSaved=future.controller.exportSaved(),relay=due.features.relay!,customer=relay.customers.find(row=>row.dueReceivableFen>0)!,other=relay.customers.find(row=>row.id!==customer.id&&row.dueReceivableFen===0)!,exact=customerTarget(due,customer.id),anchor='relay-customer-due:'+customer.id,number=relay.customers.filter(row=>row.businessId===customer.businessId).findIndex(row=>row.id===customer.id)+1,label='收取客户'+number+'实际已到期应收'
++  expect(customer.dueReceivableFen).toBeGreaterThan(0);expect(other).toBeDefined()
++  expect(relayPanelTargetLocation(due,exact)).toEqual({reason:null,anchor})
++  const html=renderToStaticMarkup(<RelayPanel {...due} initialTarget={exact}/>),start=html.indexOf('id="'+anchor+'"'),action=html.slice(start,html.indexOf('</div>',start)+6)
++  expect(start).toBeGreaterThan(-1);expect(action).toContain(label);expect(action).not.toContain('disabled=""')
++  expect(action).not.toContain('收取客户'+(relay.customers.findIndex(row=>row.id===other.id)+1)+'实际已到期应收')
++  expect(commands.mock.calls.filter(([props])=>props.kind==='CollectRelayDue'&&props.label===label)).toHaveLength(1)
++  expect(commands.mock.calls.find(([props])=>props.kind==='CollectRelayDue'&&props.label===label)?.[0]).toMatchObject({payload:{customerId:customer.id},request:due.request})
++  expect(relayPanelTargetLocation(due,customerTarget(due,other.id))).toEqual({reason:null,anchor:other.id})
++  const futureCustomer=future.features.relay!.customers.find(row=>row.dueReceivableFen===0&&row.balance.receivableFen>0)!,futureTarget=customerTarget(future,futureCustomer.id)
++  expect(future.features.relay!.receivables.some(row=>row.customerId===futureCustomer.id&&row.dueAt>future.view.date&&row.amountFen-row.collectedFen-row.reversedFen>0)).toBe(true)
++  expect(relayPanelTargetLocation(future,futureTarget)).toEqual({reason:null,anchor:futureCustomer.id})
++  const empty=p.features.relay!.customers.find(row=>row.dueReceivableFen===0)!,emptyTarget=customerTarget(p,empty.id)
++  expect(relayPanelTargetLocation(p,emptyTarget)).toEqual({reason:null,anchor:empty.id})
++  const missing={...exact,customerId:'missing-original-customer'} as RelaySceneTarget
++  expect(relayPanelTargetLocation(due,missing).anchor).toBeNull()
++  expect(relayPanelTargetLocation(due,{...exact,runId:'a-different-original-life'}).anchor).toBeNull()
++  expect(renderToStaticMarkup(<RelayPanel {...due} initialTarget={missing}/>)).toContain('原对象没有换成另一站')
++  // A bounded public display variant checks closed-record reachability, not a new legal close/save.
++  const closed={...p,features:{...p.features,relay:{...p.features.relay!,customers:p.features.relay!.customers.map(row=>row.id===empty.id?{...row,closedAt:p.view.date}:row)}}}
++  expect(relayPanelTargetLocation(closed,emptyTarget)).toEqual({reason:null,anchor:empty.id})
++  expect(renderToStaticMarkup(<RelayPanel {...closed} initialTarget={emptyTarget}/>)).toContain('id="'+empty.id+'"')
++  const readonly=renderToStaticMarkup(<RelayPanel {...due} view={{...due.view,readOnly:true}} initialTarget={exact}/>),readonlyStart=readonly.indexOf('id="'+anchor+'"'),readonlyAction=readonly.slice(readonlyStart,readonly.indexOf('</div>',readonlyStart)+6)
++  expect(readonlyAction).toContain(label);expect(readonlyAction).toContain('disabled=""')
++  expect(due.request).not.toHaveBeenCalled();expect(future.request).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled()
++  expect(due.controller.exportSaved()).toBe(dueSaved);expect(future.controller.exportSaved()).toBe(futureSaved);expect(controller.exportSaved()).toBe(oldPlanned)
++ }finally{
++  commands.mockRestore()
++  for(const own of opened){await own.controller.close();await own.store.close()}
++ }
++},20000)

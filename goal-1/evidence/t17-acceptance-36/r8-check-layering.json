@@ -1,0 +1,105 @@
+{
+  "at": "2026-10-26T09:46:27.729Z",
+  "same584SourcesAcrossRuns": true,
+  "runs": [
+    {
+      "name": "u0r-type-r8",
+      "at": "2026-10-26T09:16:03.794Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "/Users/gordon/.nvm/versions/node/v22.12.0/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "-b"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 47411,
+      "sourceCount": 584,
+      "sourceUnchanged": true,
+      "extraSame": true,
+      "error": null
+    },
+    {
+      "name": "u0r-build-r8",
+      "at": "2026-10-26T09:18:47.361Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "/Users/gordon/.nvm/versions/node/v22.12.0/bin/node",
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--outDir",
+        ".delivery/t17-u0r-r8"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 1558,
+      "sourceCount": 584,
+      "sourceUnchanged": true,
+      "extraSame": true,
+      "error": null
+    },
+    {
+      "name": "u0r-ui-all-r8",
+      "at": "2026-10-26T09:32:08.412Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "/Users/gordon/.nvm/versions/node/v22.12.0/bin/node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "--exclude",
+        "src/ui/book-layout.test.ts",
+        "src/ui"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "wallMs": 314769,
+      "sourceCount": 584,
+      "sourceUnchanged": true,
+      "extraSame": true,
+      "error": null
+    },
+    {
+      "name": "u0r-course-workspace-original-gate-r9",
+      "at": "2026-10-26T09:39:51.556Z",
+      "argv": [
+        "rtk",
+        "proxy",
+        "/Users/gordon/.nvm/versions/node/v22.12.0/bin/node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "--exclude",
+        "src/ui/book-layout.test.ts",
+        "src/ui/App.course-workspace.test.tsx"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "wallMs": 32526,
+      "sourceCount": 584,
+      "sourceUnchanged": true,
+      "extraSame": true,
+      "error": null
+    }
+  ],
+  "parallelFullUi": {
+    "files": 97,
+    "tests": 641,
+    "passedTests": 640,
+    "failedTests": 1,
+    "failure": "App.course-workspace retained licence draft, original 5000ms timeout",
+    "singleBatchPassed": false
+  },
+  "targetedSameOriginalGate": {
+    "files": 1,
+    "tests": 10,
+    "passedTests": 10,
+    "defaultsUnchanged": true
+  },
+  "scope": "targeted pass does not rewrite original full batch red or prove human understanding/fun"
+}

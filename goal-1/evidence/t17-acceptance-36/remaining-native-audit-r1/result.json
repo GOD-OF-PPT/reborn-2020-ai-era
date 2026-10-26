@@ -1,0 +1,152 @@
+{
+  "at": "2026-10-26T12:49:39.973Z",
+  "passed": false,
+  "wallMs": 81744,
+  "executions": [
+    {
+      "name": "replay",
+      "command": [
+        "rtk",
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/input",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/report"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallMs": 75242
+    },
+    {
+      "name": "readback",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/readback.mjs"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "error": null,
+      "wallMs": 5616
+    }
+  ],
+  "freeze": {
+    "sources": true,
+    "p3": true,
+    "references": true,
+    "dependencies": true,
+    "input": true,
+    "snapshots": true
+  },
+  "officialSourceCount": 126,
+  "p3Count": 26,
+  "dependencyFiles": 901,
+  "officialSourceIdentity": true,
+  "completeReplay": true,
+  "replay": {
+    "normalCreationHistories": 4,
+    "existingCreationHistories": 1,
+    "newNativeCreates": 3,
+    "executedUniqueHistoricalCommands": 121,
+    "artifactRowsIncludingReference": 13,
+    "actualImportBufferRows": 0,
+    "allByteEqual": true
+  },
+  "publicReadback": {
+    "passed": false,
+    "checkCount": 26,
+    "passedChecks": 25,
+    "failedChecks": [
+      {
+        "name": "openingPlayerProfilesStayIndependent",
+        "passed": false,
+        "actual": [
+          {
+            "backgroundId": "content_employee",
+            "profile": {
+              "approach": "investment",
+              "wishId": "financial_independence"
+            }
+          },
+          {
+            "backgroundId": "technical_employee",
+            "profile": {
+              "approach": "free",
+              "wishId": "autonomy"
+            }
+          },
+          {
+            "backgroundId": "technical_employee",
+            "profile": {
+              "approach": "first_order",
+              "wishId": "autonomy"
+            }
+          }
+        ],
+        "expected": "investment wish, free autonomy and first-letter reply are explicit independent openings, not forced common first order"
+      }
+    ],
+    "summary": {
+      "historicalCourseRun": "normal-course-content_employee-453bb7c2",
+      "courseId": "crs:60aafe5da1d987ede4868ffc2c3a469f",
+      "cohortId": "crs:65e711b806d157156363b88c08ec182c",
+      "contrastRevisions": [
+        97,
+        98,
+        120
+      ],
+      "retainedStudents": [
+        4,
+        4,
+        4
+      ],
+      "cumulativeClassIncomeFen": [
+        39800,
+        39800,
+        79600
+      ],
+      "classPrepaymentFen": [
+        39800,
+        39800,
+        0
+      ],
+      "originalRefundFen": 19900,
+      "closedFeeFen": 3980,
+      "freshRunIds": [
+        "life-e73a06bf-e779-42b5-9be8-63df114327e8",
+        "life-1b7dbb44-6e3c-400c-82b0-77ba8844d2f6",
+        "life-75a5ffa6-bf58-4001-ba08-bd161cb62ed0"
+      ],
+      "freshCreates": 3,
+      "newPostCreateCommands": [
+        {
+          "kind": "DeclineOffer",
+          "commandId": "command-01028579-0db2-439d-aec0-80bf986b89ca",
+          "revisionBefore": 1,
+          "revisionAfter": 2,
+          "date": "2020-01-01",
+          "payload": {
+            "offerId": "manual-first-2020"
+          }
+        }
+      ],
+      "openingCashFen": 2600000,
+      "openingDate": "2020-01-01",
+      "openingAvailableAP": 4,
+      "investmentCommandsAfterCreate": 0,
+      "freeCommandsAfterCreate": 0
+    }
+  },
+  "error": {
+    "name": "Error",
+    "message": "REMAINING_NATIVE_STEP_FAILED:readback",
+    "stack": "Error: REMAINING_NATIVE_STEP_FAILED:readback\n    at file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/run-once.mjs:12:539\n    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)"
+  },
+  "limits": "Three historical contrasts are exact original snapshots, not new gameplay. Seven opening captures represent3 freshCreates and1 postCreateDecline only. Cancellations, failed draft automation, reading and reentry add0 commands. Does not re-execute browser actions or prove human understanding, visual approval, compatibility or whole-goal acceptance."
+}

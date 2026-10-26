@@ -1,0 +1,28 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/u0r-continuity.test.tsx > U0-R continuity keeps the original identity, amounts and guards > publishes original97 whole-class learner continuity beside its unchanged planned teaching and original money
+AssertionError: expected '我想保持生活自主调整本季书签 ↗翻本季留页 ↗\n把亲手做过的作品教给初学…' to contain '4名留存学员'
+
+- Expected
++ Received
+
+- 4名留存学员
++ 我想保持生活自主调整本季书签 ↗翻本季留页 ↗
++ 把亲手做过的作品教给初学者 · 2023-01-16班
++ 已经安排 · 尚未实际开工
++ 接下来的时间怎样留给教学和自己？
++ 把亲手做过的作品教给初学者 · 2023-01-16班 · 2023-04-01—2023-04-08。
++ 本人制作/教学时间 · ¥0 / 1点 / 7日；已预留，尚未实付或使用行动。教学实际交付才释放原保护、确认阶段收入；不是又收一笔钱。
++ 累计预款¥995 · 已实际退¥199 · 仍受保护¥398 · 教学收入¥398
+
+ ❯ src/ui/u0r-continuity.test.tsx:145:21
+    143|   expect(published).toContain('累计预款¥995');expect(published).toContain(…
+    144|   expect(published).toContain('仍受保护¥398');expect(published).toContain(…
+    145|   expect(published).toContain('4名留存学员');expect(published).toContain('已…
+       |                     ^
+    146|   expect(driver.onFocus).not.toHaveBeenCalled();expect(driver.onNaviga…
+    147|  })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

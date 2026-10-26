@@ -1,0 +1,20 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import {read,put,mkdir,sources,dependencies,inputs,same,root,directory,output,guard} from './io.mjs'
+guard(output)
+const baseline=JSON.parse(read(root+'/baseline.json').bytes),authorityName='goal-1/evidence/t17-acceptance-34/audit-preparation-r1/official-source-contract-r1.json',authority=JSON.parse(read(authorityName).bytes),official=sources(),shape=row=>({path:row.path,bytes:row.bytes,sha256:row.sha256,mode:row.mode})
+if(official.length!==126||!same(official,authority.officialSources))throw Error('ORIGINAL_OFFICIAL126_CHANGED')
+const p3=baseline.p3.map(row=>{const actual=read(row.path).identity;if(!same(actual,shape(row)))throw Error('P3_BASELINE_CHANGED:'+row.path);return actual})
+if(p3.length!==26||!same(p3,authority.p3.map(shape)))throw Error('ORIGINAL_P326_REQUIRED')
+const original=inputs(),snapshots=[]
+mkdir('input')
+for(const folder of [...new Set(original.records.map(row=>row.folder))]){mkdir('input/'+folder);for(const name of ['exports.jsonl',...original.records.filter(row=>row.folder===folder).map(row=>row.file)]){put('input/'+folder+'/'+name,read(root+'/'+folder+'/'+name).bytes);snapshots.push(read(directory+'/input/'+folder+'/'+name).identity)}}
+mkdir('input/chrome-history-reference')
+const historicalManifest=[]
+for(const prefix of original.prefixes){const file='original-'+prefix.key+'-'+prefix.revision+'.json';put('input/chrome-history-reference/'+file,read(prefix.identity.path).bytes);snapshots.push(read(directory+'/input/chrome-history-reference/'+file).identity);historicalManifest.push({file,origin:'historical_source_reference',source:'Original already-earned '+prefix.key+' history; not a current UI export, imported buffer, new Create or new progression',bytes:prefix.identity.bytes,sha256:prefix.identity.sha256,runId:prefix.runId,revision:prefix.revision})}
+put('input/chrome-history-reference/exports.jsonl',historicalManifest.map(row=>JSON.stringify(row)).join('\n')+'\n');snapshots.push(read(directory+'/input/chrome-history-reference/exports.jsonl').identity)
+put('native-inputs.snapshot.json',read(root+'/native-inputs.json').bytes);snapshots.push(read(directory+'/native-inputs.snapshot.json').identity)
+const references=[root+'/baseline.json',authorityName,'goal-1/evidence/t17-acceptance-34/audit-preparation-r1/run-audit.mjs','goal-1/evidence/t17-acceptance-34/account-readback-r1/readback.mjs','goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/io.mjs','goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/run-once.mjs','scripts/browser_evidence_guard.mjs','package.json','package-lock.json',...['input.md','plan.md','io.mjs','prepare.mjs','readback.mjs','run-once.mjs'].map(name=>directory+'/'+name),...original.prefixes.map(prefix=>prefix.manifest.path)].map(name=>read(name).identity)
+const dependencyRows=dependencies();if(dependencyRows.length!==901)throw Error('CURRENT_ORIGINAL_RUNTIME_DEPENDENCY_COUNT_CHANGED:'+dependencyRows.length)
+put('frozen-contract.json',{at:new Date().toISOString(),officialSourceCount:official.length,officialSources:official,p3,references,dependencies:dependencyRows,input:original,snapshots,registryPolicy:'The exact selected ready/service prefix definitions are frozen, including old raw/manifest identity. A full registry snapshot is retained; unrelated later atomic registry entries or replay-status annotations are not runtime inputs.',expectedReplay:{oldNormalCreationHistories:2,executedUniqueHistoricalCommands:173,artifactRowsIncludingReferences:7,inputBuffers:0,newNativeCreates:0},scope:'Five original capture rows plus2 explicitly labeled historical references. Copies are not new UI outcomes. Excludes UI source changes and all future atomic/physical captures.'})
+console.log(JSON.stringify({prepared:true,officialSources:official.length,p3:p3.length,dependencies:dependencyRows.length,captures:original.records.map(row=>({key:row.key,role:row.role,revision:row.revision,sha256:row.identity.sha256})),prefixes:original.prefixes.map(row=>({key:row.key,revision:row.revision,sha256:row.identity.sha256})),command:['rtk','proxy','node',directory+'/run-once.mjs']}))

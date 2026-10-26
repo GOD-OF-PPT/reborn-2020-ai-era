@@ -1,0 +1,305 @@
+{
+  "at": "2026-10-26T07:12:17.705Z",
+  "passed": true,
+  "originalAttempt": {
+    "identity": {
+      "path": "goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/result.json",
+      "bytes": 4914,
+      "sha256": "a7316f5fdb032d80f12c2c2b78027b044df3a2a628b90615f49ec4765c19883c",
+      "mode": 420
+    },
+    "passed": false,
+    "readbackPassedChecks": 30,
+    "readbackChecks": 31,
+    "defect": "Audit helper incorrectly compared employment.actionId directly to commandId; original Operations uses operatingId(commandId, WorkQuarter). Original failure/inputs/helpers retained."
+  },
+  "completeCreate": {
+    "identity": {
+      "path": "goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/report/normal-browser-export-audit.json",
+      "bytes": 16434,
+      "sha256": "733041be02ff10a73fb40e22ec9f7c6083c28f175811cf2763f3add31608dc0c",
+      "mode": 420
+    },
+    "executions": 1,
+    "terminal": {
+      "name": "replay",
+      "command": [
+        "rtk",
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/input",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/report"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallMs": 6912
+    },
+    "creations": 1,
+    "executedUniqueCommands": 17,
+    "files": 4,
+    "inputBuffers": 0,
+    "allByteEqual": true
+  },
+  "correctedPublicReadback": {
+    "identity": {
+      "path": "goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/readback-correction-r2/result.json",
+      "bytes": 2459,
+      "sha256": "9936ddfa7356e1688c6f5005b2cd1f0723118ea21ce29b73bf51b7170cd0eebe",
+      "mode": 420
+    },
+    "executionsIncludingOriginal": 2,
+    "terminal": {
+      "at": "2026-10-26T07:08:36.912Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallMs": 2476
+    },
+    "passed": true,
+    "checks": 31,
+    "passedChecks": 31,
+    "failedChecks": []
+  },
+  "nativeCorroboration": {
+    "path": "goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/native-corroboration.json",
+    "bytes": 951,
+    "sha256": "79392717102dfa7a084f567adf8d1d25352bd2cf903bd6b184433c9d454bbd60",
+    "mode": 420
+  },
+  "originalInputs": {
+    "manifest": {
+      "path": "goal-1/evidence/t17-acceptance-36/chrome-normal-r1/exports.jsonl",
+      "bytes": 1198,
+      "sha256": "468fa324f1a8508a1c42b41462fd03a147c4c5d54bb801c9ffb7a7d499ca7862",
+      "mode": 420
+    },
+    "records": [
+      {
+        "line": 1,
+        "rawLine": "{\"file\":\"n04-saved6-first-result-today.json\",\"origin\":\"saved_ui\",\"source\":\"fresh Create to first actual paid result then explicit Today\",\"bytes\":192038,\"sha256\":\"5a7b660cd4c3fc563cd25302a19c913620669e63009a2161fe83a3ff130cdd15\",\"runId\":\"life-74a8a411-e20c-4fbf-86d7-d6559b102c60\",\"revision\":6}",
+        "rawLineSha256": "0033b3860bf3f98fd0f565ec725d4e2dd8843ace9853def5266f3b7dc9876d96",
+        "role": "saved_ui",
+        "roleSource": "explicit original manifest origin and parent selection, not prose inference",
+        "source": "fresh Create to first actual paid result then explicit Today",
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-36/chrome-normal-r1/n04-saved6-first-result-today.json",
+          "bytes": 192038,
+          "sha256": "5a7b660cd4c3fc563cd25302a19c913620669e63009a2161fe83a3ff130cdd15",
+          "mode": 420
+        },
+        "publicHeader": {
+          "runId": "life-74a8a411-e20c-4fbf-86d7-d6559b102c60",
+          "revision": 6,
+          "schemaVersion": 13,
+          "rulesVersion": "rules-t16-journey-v1",
+          "contentHash": "d2cb24af0ffcad3a172e28e0a6cf6612feb383e9c60db597f9491772d338530a"
+        }
+      },
+      {
+        "line": 2,
+        "rawLine": "{\"file\":\"n07-saved17-cross-quarter-old-job.json\",\"origin\":\"saved_ui\",\"source\":\"same fresh run crossed original quarter barrier; old life job still running, no new Q2 work\",\"bytes\":252990,\"sha256\":\"45a0157b19c0efd7e42dc64baa3077f458243a5de1e00cd038b8b90ccde601c9\",\"runId\":\"life-74a8a411-e20c-4fbf-86d7-d6559b102c60\",\"revision\":17}",
+        "rawLineSha256": "3f86777da9f561b0b71a68ca5e2c541c6806c53b93255a4a97306fdad089ca0b",
+        "role": "saved_ui",
+        "roleSource": "explicit original manifest origin and parent selection, not prose inference",
+        "source": "same fresh run crossed original quarter barrier; old life job still running, no new Q2 work",
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-36/chrome-normal-r1/n07-saved17-cross-quarter-old-job.json",
+          "bytes": 252990,
+          "sha256": "45a0157b19c0efd7e42dc64baa3077f458243a5de1e00cd038b8b90ccde601c9",
+          "mode": 420
+        },
+        "publicHeader": {
+          "runId": "life-74a8a411-e20c-4fbf-86d7-d6559b102c60",
+          "revision": 17,
+          "schemaVersion": 13,
+          "rulesVersion": "rules-t16-journey-v1",
+          "contentHash": "d2cb24af0ffcad3a172e28e0a6cf6612feb383e9c60db597f9491772d338530a"
+        }
+      },
+      {
+        "line": 3,
+        "rawLine": "{\"file\":\"n09-saved18-life-complete.json\",\"origin\":\"saved_ui\",\"source\":\"same fresh run actual life complete Apr4; improved room, no Q2 employment\",\"bytes\":255622,\"sha256\":\"f8e55248e168cfd6e812546b9137a9643391c0f7c28d3212c3d9af6fbb28c5b2\",\"runId\":\"life-74a8a411-e20c-4fbf-86d7-d6559b102c60\",\"revision\":18}",
+        "rawLineSha256": "f3134c7ef4db0a373b5f799f5f8d6081a28817cf11f24e172929304e09434421",
+        "role": "saved_ui",
+        "roleSource": "explicit original manifest origin and parent selection, not prose inference",
+        "source": "same fresh run actual life complete Apr4; improved room, no Q2 employment",
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-36/chrome-normal-r1/n09-saved18-life-complete.json",
+          "bytes": 255622,
+          "sha256": "f8e55248e168cfd6e812546b9137a9643391c0f7c28d3212c3d9af6fbb28c5b2",
+          "mode": 420
+        },
+        "publicHeader": {
+          "runId": "life-74a8a411-e20c-4fbf-86d7-d6559b102c60",
+          "revision": 18,
+          "schemaVersion": 13,
+          "rulesVersion": "rules-t16-journey-v1",
+          "contentHash": "d2cb24af0ffcad3a172e28e0a6cf6612feb383e9c60db597f9491772d338530a"
+        }
+      },
+      {
+        "line": 4,
+        "rawLine": "{\"file\":\"n10-saved18-reentered-unchanged.json\",\"origin\":\"saved_ui\",\"source\":\"same run reentry without commands\",\"bytes\":255622,\"sha256\":\"f8e55248e168cfd6e812546b9137a9643391c0f7c28d3212c3d9af6fbb28c5b2\",\"runId\":\"life-74a8a411-e20c-4fbf-86d7-d6559b102c60\",\"revision\":18}",
+        "rawLineSha256": "587060625d011d7989c7081b3e6f422b7b08eca5779cf5d2d0820829d57d115a",
+        "role": "saved_ui",
+        "roleSource": "explicit original manifest origin and parent selection, not prose inference",
+        "source": "same run reentry without commands",
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-36/chrome-normal-r1/n10-saved18-reentered-unchanged.json",
+          "bytes": 255622,
+          "sha256": "f8e55248e168cfd6e812546b9137a9643391c0f7c28d3212c3d9af6fbb28c5b2",
+          "mode": 420
+        },
+        "publicHeader": {
+          "runId": "life-74a8a411-e20c-4fbf-86d7-d6559b102c60",
+          "revision": 18,
+          "schemaVersion": 13,
+          "rulesVersion": "rules-t16-journey-v1",
+          "contentHash": "d2cb24af0ffcad3a172e28e0a6cf6612feb383e9c60db597f9491772d338530a"
+        }
+      }
+    ]
+  },
+  "canonicalPublicFacts": {
+    "path": "goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/readback-correction-r2/public-facts.json",
+    "bytes": 110551,
+    "sha256": "020229ea85bdfa90c520f63c0c3d4c245d4095ac440da3cf56352f805b1f0753",
+    "mode": 420
+  },
+  "sourceAndDependencies": {
+    "official": 126,
+    "p3": 26,
+    "runtimeDependencyFiles": 901,
+    "uiSourcesExcluded": true,
+    "allOriginalAndCorrectedRunFreezeChecksPassed": true
+  },
+  "facts": {
+    "runId": "life-74a8a411-e20c-4fbf-86d7-d6559b102c60",
+    "profile": {
+      "approach": "first_order",
+      "wishId": "autonomy"
+    },
+    "firstOrder": {
+      "confirmedIncomeFen": 130000,
+      "paymentFen": 130000,
+      "directCostFen": 50000,
+      "netOrderFen": 80000,
+      "businessPostedProfitFen": 80000
+    },
+    "snapshots": [
+      {
+        "revision": 6,
+        "date": "2020-01-20",
+        "quarter": "2020-Q1",
+        "cashFen": 2680000,
+        "budget": {
+          "available": 3,
+          "quarter": "2020-Q1",
+          "reserved": 0,
+          "spent": 1,
+          "total": 4
+        }
+      },
+      {
+        "revision": 17,
+        "date": "2020-04-01",
+        "quarter": "2020-Q2",
+        "cashFen": 3089677,
+        "budget": {
+          "available": 4,
+          "quarter": "2020-Q2",
+          "reserved": 0,
+          "spent": 0,
+          "total": 4
+        }
+      },
+      {
+        "revision": 18,
+        "date": "2020-04-04",
+        "quarter": "2020-Q2",
+        "cashFen": 3089677,
+        "budget": {
+          "available": 4,
+          "quarter": "2020-Q2",
+          "reserved": 0,
+          "spent": 0,
+          "total": 4
+        }
+      },
+      {
+        "revision": 18,
+        "date": "2020-04-04",
+        "quarter": "2020-Q2",
+        "cashFen": 3089677,
+        "budget": {
+          "available": 4,
+          "quarter": "2020-Q2",
+          "reserved": 0,
+          "spent": 0,
+          "total": 4
+        }
+      }
+    ],
+    "lifeJob": {
+      "accountId": "personal",
+      "actionId": "life:33321034b5604b654184481fffb87f95",
+      "actionPoints": 1,
+      "completeAt": "2020-04-04",
+      "costFen": 300000,
+      "id": "life:719699f293d85e4fd27a700d7d9d1d3e",
+      "interruptedBy": null,
+      "interruptionReason": null,
+      "kind": "workspace",
+      "originCommandId": "command-d157b6c8-1c7e-4361-9404-17303cf4ba35",
+      "personId": null,
+      "promiseId": null,
+      "reference": null,
+      "releasedAt": "2020-04-04",
+      "resourceId": "player-production",
+      "result": "workspace_ready",
+      "startAt": "2020-03-28",
+      "status": "completed"
+    },
+    "salaryByMonth": [
+      {
+        "month": "2020-01",
+        "actualFen": 309677,
+        "expectedFen": 309677,
+        "days": 12,
+        "monthDays": 31,
+        "from": "2020-01-20",
+        "to": "2020-01-31"
+      },
+      {
+        "month": "2020-02",
+        "actualFen": 800000,
+        "expectedFen": 800000,
+        "days": 29,
+        "monthDays": 29,
+        "from": "2020-02-01",
+        "to": "2020-02-29"
+      },
+      {
+        "month": "2020-03",
+        "actualFen": 800000,
+        "expectedFen": 800000,
+        "days": 31,
+        "monthDays": 31,
+        "from": "2020-03-01",
+        "to": "2020-03-31"
+      }
+    ],
+    "q1ClosingCashFen": 3489677
+  },
+  "limits": [
+    "One actual normal run, four saved UI exports of three unique states; repeated18 does not add a command/outcome.",
+    "One completeCreate replay; two public readbacks because the first audit helper had a wrong identity expectation. Original red is not overwritten.",
+    "Public account and replay proof is independent of browser actions/visuals/human understanding/fun or compatibility. No production code, source, old helper, original raw, Git index/commit or main tasks changed.",
+    "Existing Native journal includes its original action/locator errors; this audit does not classify the whole Native log as clean or rerun those interactions."
+  ]
+}

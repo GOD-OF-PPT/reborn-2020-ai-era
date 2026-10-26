@@ -1,0 +1,38 @@
+{
+  "at": "2026-10-26T12:48:18.600Z",
+  "cwd": "/Users/gordon/githome/reborn-2020-ai-era",
+  "node": "v22.12.0",
+  "contract": {
+    "path": "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/frozen-contract.json",
+    "bytes": 479633,
+    "sha256": "7668a4938a3cce9a8cd98338f6dab48817e61b9841f88f794ad26708644f00e4",
+    "mode": 420
+  },
+  "commands": [
+    {
+      "name": "replay",
+      "command": [
+        "rtk",
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/input",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/report"
+      ]
+    },
+    {
+      "name": "readback",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/readback.mjs"
+      ]
+    }
+  ],
+  "scope": "One full canonical Create audit of10 exact captures plus3 prior historical references, then independent public account/state/log-role readback. Existing contrasts are not new progression; new NativeCreate3 and original Decline1 only. UI sources/other folders excluded."
+}

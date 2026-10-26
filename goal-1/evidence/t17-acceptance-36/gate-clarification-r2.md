@@ -1,0 +1,3 @@
+# 时限身份澄清
+
+原current/carry纯显示case保持默认5秒；实际Oct1推进另拆新case，明确30秒范围。旧失败没有靠延长时限修绿，原R1错误history断言与全日志保留。R2 runner明确记录原Vitest配置保持及新case身份，不将新增集成case说成原case时限未变。原runner R1不回写。

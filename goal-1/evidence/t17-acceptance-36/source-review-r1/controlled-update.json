@@ -1,0 +1,61 @@
+{
+  "at": "2026-10-26T08:19:15.570Z",
+  "finding": {
+    "priority": "P2",
+    "path": "src/ui/scene-meaning.ts",
+    "description": "Ready-sample meaning overrode saved paused/winding-down/stopped course context with an acquisition question.",
+    "status": "Root repaired; statically re-read; reviewer did not run new assertions"
+  },
+  "rootIntent": {
+    "path": "goal-1/evidence/t17-acceptance-36/course-stopped-meaning-fix-r1.intent.json",
+    "bytes": 796,
+    "sha256": "555a1430bfe878797f13ce382993ba8c966c6c52f27b6074622f041dffa5e3dd",
+    "mode": 420
+  },
+  "rootIntentAt": "2026-10-26T08:10:47.595Z",
+  "scopeSnapshotAt": "2026-10-26T08:11:08.683Z",
+  "phaseOrder": "Reviewer initially read pre-fix source; Root registered and made the two-file repair. Formal scope.json was captured after the repair. Final23 still equal that post-fix snapshot.",
+  "repair": [
+    {
+      "beforeFromRootIntent": {
+        "path": "src/ui/scene-meaning.ts",
+        "bytes": 14982,
+        "sha256": "b549f2b50d284c671e0b33933b6c7a5591659c3f85848871a22b6e29da087787"
+      },
+      "current": {
+        "path": "src/ui/scene-meaning.ts",
+        "bytes": 15215,
+        "sha256": "d972ac9dfca7342ac5a1f0960192f2db65ccea16ece534bb21a854590c015b11",
+        "mode": 420
+      },
+      "scopeCaptured": {
+        "path": "src/ui/scene-meaning.ts",
+        "bytes": 15215,
+        "sha256": "d972ac9dfca7342ac5a1f0960192f2db65ccea16ece534bb21a854590c015b11",
+        "mode": 420
+      }
+    },
+    {
+      "beforeFromRootIntent": {
+        "path": "src/ui/CoursePreparationInteraction.test.tsx",
+        "bytes": 19692,
+        "sha256": "d08ad86d581b269c99ef64c98fc4f4b480bfdba9b09355c52c6d0fa80fc862e2"
+      },
+      "current": {
+        "path": "src/ui/CoursePreparationInteraction.test.tsx",
+        "bytes": 20683,
+        "sha256": "a09326d00bea85c1e321924b5f491c8c0b8c7eaec6bdbe4b157993c54e635c2d",
+        "mode": 420
+      },
+      "scopeCaptured": {
+        "path": "src/ui/CoursePreparationInteraction.test.tsx",
+        "bytes": 20683,
+        "sha256": "a09326d00bea85c1e321924b5f491c8c0b8c7eaec6bdbe4b157993c54e635c2d",
+        "mode": 420
+      }
+    }
+  ],
+  "currentSourceChangesSinceFormalScope": [],
+  "fullReviewClaimedImmutable": false,
+  "staticResolution": "Course-only meaning requires !course.paused and original operating business. Otherwise null preserves the original stopped/resume/record presentation. Actual saved PauseBusiness/WindDownBusiness and StopCourseSales tests retain original rule/action expectations."
+}

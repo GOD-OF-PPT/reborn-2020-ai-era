@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-26T08:10:47.595Z",
+  "sourceReviewFinding": "source-review-r1 P2: ready sample meaning overrides saved paused/winding-down course context",
+  "files": [
+    {
+      "path": "src/ui/scene-meaning.ts",
+      "bytes": 14982,
+      "sha256": "b549f2b50d284c671e0b33933b6c7a5591659c3f85848871a22b6e29da087787"
+    },
+    {
+      "path": "src/ui/CoursePreparationInteraction.test.tsx",
+      "bytes": 19692,
+      "sha256": "d08ad86d581b269c99ef64c98fc4f4b480bfdba9b09355c52c6d0fa80fc862e2"
+    }
+  ],
+  "fix": "Only currently operating, unpaused ready course can receive preparation-complete meaning; otherwise preserve original stopped/resume/record presentation. Actual PauseBusiness/WindDownBusiness/StopCourseSales tests, old rules/gates unchanged.",
+  "checksRunning": false
+}

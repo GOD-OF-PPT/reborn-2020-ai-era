@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-26T12:44:54.208Z",
+  "formalAuditExecuted": false,
+  "before": {
+    "path": "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/readback.mjs",
+    "bytes": 21646,
+    "sha256": "af2f9d7f9a7553d79236cbdd84872bb064f1ed3042f4b46bb45a24395a660100",
+    "mode": 420
+  },
+  "after": {
+    "path": "goal-1/evidence/t17-acceptance-36/remaining-native-audit-r1/readback.mjs",
+    "bytes": 21784,
+    "sha256": "6942e26723e4879070569c7d920268db447f7ae9787149884fb15832db69dca0",
+    "mode": 420
+  },
+  "corrections": [
+    {
+      "source": "Root direct read-only review",
+      "issue": "Original late98 has a planned final-stage job Apr1–8. A planned job is not an effective already-running completed path and cannot bypass original CourseRuntime.jobConstraint unresolved-update gate.",
+      "change": "Retain all original planned jobs in actual evidence. Only exclude an effective running stage with start<=current and complete<=originalDue, retain no active refresh and fixed known durations check. No product/raw action is cancelled or changed."
+    },
+    {
+      "source": "Author pre-freeze public schema review",
+      "issue": "workbench.finance.reservations only exposes positive amount; closed contract may retain a protectionReservationId whose zero reservation is absent from the public list.",
+      "change": "Treat absence of a public positive reservation as null; still require exact class prepaid0, income796 and closed facts. 97/98 still require actual active protection398."
+    }
+  ],
+  "note": "Preparation-only helper corrections before freezing or execution; no red check run is overwritten."
+}

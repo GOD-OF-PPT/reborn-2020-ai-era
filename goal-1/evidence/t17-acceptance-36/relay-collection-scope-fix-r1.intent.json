@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-26T08:44:09.987Z",
+  "finding": "Actual full UI r4 red: period summary removed the original all-customer due collection scope from first-layer decision",
+  "files": [
+    {
+      "path": "src/ui/OpeningMoment.tsx",
+      "bytes": 55886,
+      "sha256": "4cb4e8ea477286fd077ab459f4f0caf7848f716a38713fc971d5b45544883a2d"
+    },
+    {
+      "path": "src/ui/relay-player-thread.test.ts",
+      "bytes": 9135,
+      "sha256": "652e72c88022dc2728aae00d98b14fb8f22b4f517378f112617ce91bd93ca7a6"
+    },
+    {
+      "path": "src/ui/relay-player-copy.test.tsx",
+      "bytes": 3166,
+      "sha256": "8152b31138fdda19a543940a85128e9949a3a600f518b09a537e0133091028f6"
+    }
+  ],
+  "fix": "During collection display original thread.line once with exact all-customer due amount and cross-period scope, keep original period summary in reachable source record; paper retains support/period money. Original command/confirm unchanged. Update old record-entry label test to actual source record entry; preserve amount, customer5, identity, support and no-submit assertions.",
+  "oldFailure": "u0r-ui-all-r4.result.json",
+  "checksRunning": false
+}

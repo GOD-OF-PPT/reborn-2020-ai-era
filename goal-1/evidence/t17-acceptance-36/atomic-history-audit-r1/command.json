@@ -1,0 +1,38 @@
+{
+  "at": "2026-10-26T11:44:45.180Z",
+  "cwd": "/Users/gordon/githome/reborn-2020-ai-era",
+  "node": "v22.12.0",
+  "contract": {
+    "path": "goal-1/evidence/t17-acceptance-36/atomic-history-audit-r1/frozen-contract.json",
+    "bytes": 281898,
+    "sha256": "d6d5e6088ed9913d866f231ec246c566a8d39210a4c213f40060725276d7f5e4",
+    "mode": 420
+  },
+  "commands": [
+    {
+      "name": "replay",
+      "command": [
+        "rtk",
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-36/atomic-history-audit-r1/input",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-36/atomic-history-audit-r1/report"
+      ]
+    },
+    {
+      "name": "readback",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/t17-acceptance-36/atomic-history-audit-r1/readback.mjs"
+      ]
+    }
+  ],
+  "scope": "One full oldCreate audit of exact8 role-labeled captures and1 historical reference, then independent public account/reservation/byte readback. UI sources/other browser folders excluded; original verifier Git calls read identity/output guards only."
+}

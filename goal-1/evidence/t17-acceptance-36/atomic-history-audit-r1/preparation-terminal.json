@@ -1,0 +1,41 @@
+{
+  "recordedAt": "2026-10-26T11:26:31.380Z",
+  "command": [
+    "rtk",
+    "proxy",
+    "node",
+    "goal-1/evidence/t17-acceptance-36/atomic-history-audit-r1/prepare.mjs"
+  ],
+  "exitCode": 0,
+  "wallSeconds": 0.850549593,
+  "contract": {
+    "path": "goal-1/evidence/t17-acceptance-36/atomic-history-audit-r1/frozen-contract.json",
+    "bytes": 281898,
+    "sha256": "d6d5e6088ed9913d866f231ec246c566a8d39210a4c213f40060725276d7f5e4",
+    "mode": 420
+  },
+  "syntaxChecks": [
+    {
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--check",
+        "goal-1/evidence/t17-acceptance-36/atomic-history-audit-r1/readback.mjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--check",
+        "goal-1/evidence/t17-acceptance-36/atomic-history-audit-r1/run-once.mjs"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "formalAuditStarted": false,
+  "pending": "Root requested a direct static review before the one formal execution."
+}

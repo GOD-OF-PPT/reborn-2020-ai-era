@@ -1,0 +1,87 @@
+{
+  "at": "2026-10-26T12:49:39.418Z",
+  "passed": false,
+  "checkCount": 26,
+  "passedChecks": 25,
+  "failedChecks": [
+    {
+      "name": "openingPlayerProfilesStayIndependent",
+      "passed": false,
+      "actual": [
+        {
+          "backgroundId": "content_employee",
+          "profile": {
+            "approach": "investment",
+            "wishId": "financial_independence"
+          }
+        },
+        {
+          "backgroundId": "technical_employee",
+          "profile": {
+            "approach": "free",
+            "wishId": "autonomy"
+          }
+        },
+        {
+          "backgroundId": "technical_employee",
+          "profile": {
+            "approach": "first_order",
+            "wishId": "autonomy"
+          }
+        }
+      ],
+      "expected": "investment wish, free autonomy and first-letter reply are explicit independent openings, not forced common first order"
+    }
+  ],
+  "summary": {
+    "historicalCourseRun": "normal-course-content_employee-453bb7c2",
+    "courseId": "crs:60aafe5da1d987ede4868ffc2c3a469f",
+    "cohortId": "crs:65e711b806d157156363b88c08ec182c",
+    "contrastRevisions": [
+      97,
+      98,
+      120
+    ],
+    "retainedStudents": [
+      4,
+      4,
+      4
+    ],
+    "cumulativeClassIncomeFen": [
+      39800,
+      39800,
+      79600
+    ],
+    "classPrepaymentFen": [
+      39800,
+      39800,
+      0
+    ],
+    "originalRefundFen": 19900,
+    "closedFeeFen": 3980,
+    "freshRunIds": [
+      "life-e73a06bf-e779-42b5-9be8-63df114327e8",
+      "life-1b7dbb44-6e3c-400c-82b0-77ba8844d2f6",
+      "life-75a5ffa6-bf58-4001-ba08-bd161cb62ed0"
+    ],
+    "freshCreates": 3,
+    "newPostCreateCommands": [
+      {
+        "kind": "DeclineOffer",
+        "commandId": "command-01028579-0db2-439d-aec0-80bf986b89ca",
+        "revisionBefore": 1,
+        "revisionAfter": 2,
+        "date": "2020-01-01",
+        "payload": {
+          "offerId": "manual-first-2020"
+        }
+      }
+    ],
+    "openingCashFen": 2600000,
+    "openingDate": "2020-01-01",
+    "openingAvailableAP": 4,
+    "investmentCommandsAfterCreate": 0,
+    "freeCommandsAfterCreate": 0
+  },
+  "limit": "Canonical saved-history/public-account and original Native log-role readback only; does not newly perform human or browser playtest, visual approval, all-route or compatibility acceptance."
+}

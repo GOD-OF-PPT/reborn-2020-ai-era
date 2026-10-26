@@ -1,0 +1,46 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/day-continuity.integration.test.tsx > renders today after an actual life result without auto arranging work, another rest or a simulated order
+AssertionError: expected '<div class="room-tableau" data-scene=…' to contain '今天，仍由你安排'
+
+Expected: "今天，仍由你安排"
+Received: "<div class="room-tableau" data-scene="today" data-state="result" data-perspective="today" data-text-only="false"><div class="tableau-intention"><p class="opening-room-intention"><span>我想保持生活自主</span><button type="button">回到书签里的那件事 ↗</button><button type="button">翻季度留页 ↗</button></p></div><section class="room-current-moment opening-current-moment tableau-content today-current-moment" data-stage="result" data-focus-scope="today" data-day-view="today" aria-label="今天这一幕"><header class="moment-heading"><p>2020-Q1 / 今天的日历</p><h1 tabindex="-1">接下来仍留一点时间给自己，还是回到原来的工作与约定？</h1></header><div class="tableau-context"><p class="opening-room-stage">今天 2020-01-08 · 旧书签和原约定仍保留</p></div><div class="moment-story tableau-feedback" aria-label="这次真实留下的回响"></div><div class="moment-story tableau-facts" aria-label="眼前的情况与原责任"><p class="moment-line">2020-01-08实际完成，投入¥0；结果不返还行动，也不产生收入。</p></div><div class="moment-decisions"><div class="command moment-decision moment-primary"><button type="button"><b aria-hidden="true">01</b><span>给生活留一段真实的日子<small>先看具体对象与代价，新的承诺仍由你确认</small></span><i aria-hidden="true">→</i></button></div><div class="moment-wait"><div class="clock-advance clock-advance-room"><div class="command clock-review"><button type="button" class="" aria-label="核对后推进 · 2020-01-10"><span>先核对 ↗</span></button></div><div class="command clock-main"><button type="button" class="" aria-label="不新增安排，让原日子继续 · 2020-01-10"><span>不新增安排，让原日子继续 · 2020-01-10</span><kbd aria-hidden="true">Space</kbd></button></div></div></div><button type="button" class="moment-explore">环顾房间，想想别的可能 <span aria-hidden="true">↗</span></button></div><div class="opening-room-object tableau-object"><span class="tableau-desk-support" aria-hidden="true"></span><button type="button" class="opening-object" data-kind="calendar" data-day-kind="today" data-day-state="ongoing" data-text-only="false" data-copy-mode="tableau" aria-label="今天的日历 给生活留一段真实的日子" aria-describedby="_R_2qar_-stage _R_2qar_-detail"><span class="opening-object-art" aria-hidden="true"><svg class="day-continuity-art" data-kind="today" data-state="ongoing" viewBox="0 0 320 300" fill="none" aria-hidden="true" focusable="false"><ellipse class="day-paper-shadow" cx="166" cy="270" rx="119" ry="17"></ellipse><path class="day-paper-bottom" d="m46 55 229 23-17 194-229-23z"></path><g data-material="empty-calendar"><path class="day-paper-sheet" d="m46 43 226 25-18 190-226-25z"></path><path class="day-paper-cover" d="m46 43 226 25-4 37-226-25z"></path><path class="day-paper-ring" d="m82 49 2-20c1-10 13-8 12 2l-2 20m127 12 2-20c1-10 13-8 12 2l-2 20"></path><path class="day-paper-grid" d="m57 112 187 20m-190 16 187 20m-190 16 187 20m-190 16 187 20M86 115l-10 119m38-116-10 119m38-116-10 119m38-116-10 119m38-116-10 119m38-116-10 119"></path></g><g data-material="open-page"><path class="day-paper-warm-sheet" d="m69 197 126 16-6 44-126-16z"></path><path class="day-paper-ink" d="m81 211 100 13m-102 0 78 10"></path><path class="day-paper-clip" d="m165 210 3-18c1-9 14-7 13 2l-3 18"></path></g></svg><span class="day-paper-contact"></span></span><span class="opening-object-copy"><span id="_R_2qar_-stage" class="opening-object-stage">今天 · 仍可安排</span><strong id="_R_2qar_-title" class="opening-object-title"></strong><span id="_R_2qar_-detail" class="opening-object-detail">2020-01-08</span></span></button></div><div class="tableau-record"><button type="button" class="scene-text-action">看看工作、其它尝试与原约定 ↗</button></div></section></div>"
+
+ ❯ src/ui/day-continuity.integration.test.tsx:88:16
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/ui/scene-meaning.test.ts > a public scene connects an actual choice with the next part of life > does not borrow a later closure to promise that the original late-update class can still finish
+AssertionError: expected '这一次，已经答应了学员。' to contain '来不及'
+
+Expected: "来不及"
+Received: "这一次，已经答应了学员。"
+
+ ❯ src/ui/scene-meaning.test.ts:65:29
+     63|   const a=course(late,true),b=course(closed,true),before=late.controll…
+     64|   expect(a.p.view.runId).toBe(b.p.view.runId)
+     65|   expect(lateMeaning.title).toContain('来不及');expect(lateMeaning.questi…
+       |                             ^
+     66|   expect(lateMeaning.situation).not.toContain('已经收好');expect(lateMeani…
+     67|   expect(done.title).toContain('收好了');expect(done.situation).toContain…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/ui/scene-meaning.test.ts > a public scene connects an actual choice with the next part of life > does not call a carry-over life job complete or turn its later history into a new reward
+AssertionError: expected '这一次，真正给生活留了时间。' to contain '走过'
+
+Expected: "走过"
+Received: "这一次，真正给生活留了时间。"
+
+ ❯ src/ui/scene-meaning.test.ts:123:28
+    121|   const p=life.p(),job=p.features.life.jobs.find(job=>job.kind==='work…
+    122|   const historical=sceneMeaning(p,thread)!
+    123|   expect(historical.title).toContain('走过');expect(historical.situation…
+       |                            ^
+    124|   // Bounded public display variant only; not submitted, imported or c…
+    125|   const features={...p.features,life:{...p.features.life,jobs:p.featur…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+

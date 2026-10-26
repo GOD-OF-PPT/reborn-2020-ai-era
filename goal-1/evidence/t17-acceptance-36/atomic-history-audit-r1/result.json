@@ -1,0 +1,106 @@
+{
+  "at": "2026-10-26T11:46:15.583Z",
+  "passed": true,
+  "wallMs": 91032,
+  "executions": [
+    {
+      "name": "replay",
+      "command": [
+        "rtk",
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-36/atomic-history-audit-r1/input",
+        "node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-36/atomic-history-audit-r1/report"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallMs": 84035
+    },
+    {
+      "name": "readback",
+      "command": [
+        "rtk",
+        "proxy",
+        "node",
+        "--experimental-strip-types",
+        "goal-1/evidence/t17-acceptance-36/atomic-history-audit-r1/readback.mjs"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "wallMs": 5845
+    }
+  ],
+  "freeze": {
+    "sources": true,
+    "p3": true,
+    "references": true,
+    "dependencies": true,
+    "input": true,
+    "snapshots": true
+  },
+  "officialSourceCount": 126,
+  "p3Count": 26,
+  "dependencyFiles": 901,
+  "officialSourceIdentity": true,
+  "completeReplay": true,
+  "replay": {
+    "oldNormalCreationHistories": 1,
+    "executedUniqueHistoricalCommands": 88,
+    "artifactRowsIncludingReference": 9,
+    "actualImportBufferRows": 1,
+    "allByteEqual": true,
+    "newNativeCreates": 0
+  },
+  "publicReadback": {
+    "passed": true,
+    "checkCount": 24,
+    "passedChecks": 24,
+    "failedChecks": [],
+    "summary": {
+      "courseId": "crs:60aafe5da1d987ede4868ffc2c3a469f",
+      "cohortId": "crs:0639eeff9b0aa7f3685262ff72871125",
+      "accountId": "ops:0ff547135b6bcc30fbb71fd65d3b0c8a",
+      "sourcePeople": 111,
+      "baseIntent": 77,
+      "studentCount": 5,
+      "priceFen": 19900,
+      "receivedFen": 99500,
+      "protectedFen": 99500,
+      "spendableFen": 251936,
+      "teachingIncomeFen": 0,
+      "currentDate": "2023-01-15",
+      "currentBudget": {
+        "available": 2,
+        "quarter": "2023-Q1",
+        "reserved": 0,
+        "spent": 2,
+        "total": 4
+      },
+      "support": {
+        "mode": "guided_group",
+        "costFen": 300000,
+        "actionPoints": 1,
+        "startAt": "2023-04-08",
+        "completeAt": "2023-04-15",
+        "status": "planned",
+        "knownQuarterBudget": {
+          "quarter": "2023-Q2",
+          "total": 4,
+          "spent": 0,
+          "reserved": 1,
+          "available": 3
+        }
+      },
+      "newSavedCommands": 3,
+      "newNativeCreates": 0
+    }
+  },
+  "error": null,
+  "limits": "Eight role-labeled captures plus1 prior reference are3 unique raw states. Actual newly saved commands are source87/cohort88/enroll89 only; retry/readers/import/reentry add0 and there is0 new nativeCreate. Candidate89 is a proposed artifact, not old UI/saved88. Replay/public/log-role audit does not re-execute IndexedDB abort or writer-lock isolation and does not prove visual/human/compatibility/whole-goal acceptance."
+}
