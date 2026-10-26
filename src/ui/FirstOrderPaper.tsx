@@ -6,24 +6,24 @@ export type FirstOrderArtState=(
 /** Paper shapes describe committed work; they do not decide its stage or execute it. */
 export function FirstOrderPaper({phase}:{phase:FirstOrderArtState['phase']}){
  return <svg className="first-order-paper-layers" viewBox="0 0 320 300" fill="none" aria-hidden="true" focusable="false">
-  {phase==='letter'?<g className="first-order-letter">
+  {phase==='letter'?<g className="first-order-letter" transform="translate(-18 95)">
    <path className="first-order-sheet" d="m165 22 105 19-12 82-106-19z"/>
    <path className="first-order-fold" d="m246 37 24 4-4 24z"/>
    <path className="first-order-pencil" d="m179 52 52 9m-55 6 64 12m-66 4 45 8"/>
   </g>:null}
-  {phase==='planned'?<g className="first-order-agreement">
+  {phase==='planned'?<g className="first-order-agreement" transform="translate(0 18)">
    <path className="first-order-sheet" d="m81 136 185 32-7 40-185-32z"/>
    <path className="first-order-dashed" d="m89 148 162 29m-166-6 162 28"/>
    <path className="first-order-clip" d="m126 141 4-25c2-10 16-8 14 3l-5 27"/>
   </g>:null}
   {phase==='running'?<g className="first-order-in-progress">
-   <path className="first-order-sheet" d="m105 32 114 19-14 90-114-19z"/>
-   <path className="first-order-pencil" d="m123 58 73 13m-76 6 49 9m-52 8 66 12"/>
+   <g transform="translate(-8 60)"><path className="first-order-sheet" d="m105 32 114 19-14 90-114-19z"/>
+   <path className="first-order-pencil" d="m123 58 73 13m-76 6 49 9m-52 8 66 12"/></g>
    <path className="first-order-film" d="m43 144 103 18-8 40-103-18z"/>
    <path className="first-order-film-ink" d="m55 157 76 13m-78-4 76 13M61 152l-4 25m25-21-4 25m25-21-4 25m25-21-4 25"/>
    <path className="first-order-pencil-tool" d="m216 121 43 67-7 5-43-67 1-10z"/>
   </g>:null}
-  {phase==='delivery'?<g className="first-order-ready-work">
+  {phase==='delivery'?<g className="first-order-ready-work" transform="translate(-14 74)">
    <path className="first-order-sheet" d="m135 18 111 18-13 90-112-18z"/>
    <path className="first-order-sheet-under" d="m125 26 111 18-13 90-111-18z"/>
    <path className="first-order-film" d="m141 50 80 13-6 36-80-13z"/>
@@ -37,9 +37,9 @@ export function FirstOrderPaper({phase}:{phase:FirstOrderArtState['phase']}){
    <path className="first-order-dashed" d="m92 207 30 5"/>
   </g>:null}
   {phase==='paid'?<g className="first-order-kept-work">
-   <path className="first-order-sheet" d="m115 31 106 19-13 86-106-19z"/>
+   <g transform="translate(-14 68)"><path className="first-order-sheet" d="m115 31 106 19-13 86-106-19z"/>
    <path className="first-order-film" d="m131 58 66 12-5 30-66-12z"/>
-   <path className="first-order-film-ink" d="m141 68 42 8m-44 3 42 8"/>
+   <path className="first-order-film-ink" d="m141 68 42 8m-44 3 42 8"/></g>
    <path className="first-order-receipt-shape" d="m231 134 51 9-15 104-6-5-6 3-6-5-6 3-6-5-6 3-6-5z"/>
    <path className="first-order-receipt-lines" d="m239 153 30 5m-32 9 30 5m-32 9 20 4"/>
    <path className="first-order-receipt-stamp" d="m237 198 21 4-3 19-21-4z"/>

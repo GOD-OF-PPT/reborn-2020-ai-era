@@ -12,6 +12,7 @@ import {DayThreadAction} from './DayThreadAction.tsx'
 import {VideoThreadAction} from './VideoThreadAction.tsx'
 import {CourseThreadAction} from './CourseThreadAction.tsx'
 import {RelayThreadAction} from './RelayThreadAction.tsx'
+import {RoomTableau} from './RoomTableau.tsx'
 import {roomMoment} from './RoomMoment.tsx'
 import {playerThread} from './player-thread.ts'
 import {Dialog} from './Dialog.tsx'
@@ -35,12 +36,12 @@ vi.mock('react',async importOriginal=>{
 })
 type Element=ReactElement<Record<string,unknown>>
 const wrappers=new Set<unknown>([MarketSceneChoice,VideoSceneChoice,CourseSceneChoice,RelaySceneChoice])
-const actionWrappers=new Set<unknown>([OpeningAttemptAction,DayThreadAction,VideoThreadAction,CourseThreadAction,RelayThreadAction])
+const actionWrappers=new Set<unknown>([OpeningAttemptAction,DayThreadAction,VideoThreadAction,CourseThreadAction,RelayThreadAction,RoomTableau])
 function elements(value:unknown):Element[]{
  if(Array.isArray(value))return value.flatMap(elements)
  if(!isValidElement<Record<string,unknown>>(value))return []
- // Run each real pure action wrapper: inactive wrappers yield children(null),
- // while an active choice keeps its original binding and protection checks.
+ // Real action wrappers retain their active/inactive contract. Rendering the
+ // pure tableau reveals its named slots without replacing any choice handler.
  if(actionWrappers.has(value.type)&&typeof value.type==='function'){
   const action=value.type as (props:Record<string,unknown>)=>unknown
   return elements(action(value.props))

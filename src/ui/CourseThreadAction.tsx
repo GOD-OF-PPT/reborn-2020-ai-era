@@ -6,9 +6,12 @@ import {ClockAdvance} from './ClockAdvance.tsx'
 import {makeSharedAction,type SharedActionBinding} from './shared-action.ts'
 import {courseWaitDate} from './course-wait-date.ts'
 import {courseAttemptClosed} from './thread-purpose.ts'
+import type {CourseChoiceIntent} from './CourseSceneChoice.tsx'
+import {courseSceneProgress} from './course-scene-progress.ts'
+import {resolveCourseFocus,courseSceneContext} from './course-player-thread.ts'
 
 type Primary={binding:SharedActionBinding;main:ReactNode}
-type Props={p:GamePanelProps;thread:PlayerThreadView;active:boolean;date:string|null;waitLabel:string;onChoose:()=>void;onResult:()=>void;onToday:()=>void;children:(primary:Primary|null)=>ReactNode}
+type Props={p:GamePanelProps;thread:PlayerThreadView;active:boolean;date:string|null;waitLabel:string;onChoose:(intent?:CourseChoiceIntent)=>void;onResult:()=>void;onToday:()=>void;children:(primary:Primary|null)=>ReactNode}
 
 /** The thought and course object invoke this same original decision. */
 export function CourseThreadAction({p,thread,active,date,waitLabel,onChoose,onResult,onToday,children}:Props){
@@ -30,6 +33,9 @@ export function CourseThreadAction({p,thread,active,date,waitLabel,onChoose,onRe
   return <ClockAdvance p={p} date={next} label={label+' · '+next} room showReason={showReason} renderAction={binding=>children({binding,main:<div className="moment-wait moment-primary"><div className="clock-advance clock-advance-room">{binding.reviewNode}{binding.mainNode}</div></div>})}/>
  }
  if(teaching&&(thread.outcome==='non-success'||thread.stage==='course-cohort-closed'||thread.stage.endsWith('-completed')))return choice('这一次的结果之后，怎样继续','看清实际学员、钱款与未完承诺，再决定下一步',onResult)
+ const readyFocus=thread.focus.kind==='course'&&thread.focus.courseTarget?.kind==='course'?thread.focus:null
+ const ready=readyFocus&&readyFocus.accountId===p.accountId&&!resolveCourseFocus(p,readyFocus).reason?courseSceneProgress(p.features.course,p.view.date,readyFocus.courseTarget,courseSceneContext(p)):null
+ if(thread.stage==='course-ready'&&thread.focusStatus!=='invalid'&&thread.invalidReason===null&&ready?.phase==='course-ready'&&!ready.historical&&!thread.responsibilityOverrideNeeded&&p.features.workbench.pause===null&&!p.features.workbench.progression.requiresDelivery)return choice('先了解，谁可能需要这堂课','只选择来源与拟报价；推广、开班和报名仍须分别确认',()=>onChoose('audience'))
  if(thread.stage==='course-ready'||thread.stage==='course-paused'&&thread.outcome==='actual'||thread.outcome==='non-success'||thread.stage==='course-closed')return choice('这一份准备之后，想怎样继续','看清这份准备与未完约定，再决定接下来的日子',onResult)
  return choice(thread.inspect.label,teaching?thread.focus.kind==='course'&&thread.focus.courseTarget?.kind==='audience'?'先决定是否开班，新的承诺仍需确认':'先选择这班的具体安排，真正投入仍需确认':'先选教案、资源与日期，真正投入仍需确认',onChoose)
 }

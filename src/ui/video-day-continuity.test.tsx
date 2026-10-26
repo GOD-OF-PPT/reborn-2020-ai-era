@@ -20,6 +20,7 @@ import {DayThreadAction} from './DayThreadAction.tsx'
 import {VideoThreadAction} from './VideoThreadAction.tsx'
 import {CourseThreadAction} from './CourseThreadAction.tsx'
 import {RelayThreadAction} from './RelayThreadAction.tsx'
+import {RoomTableau} from './RoomTableau.tsx'
 import {MarketSceneChoice} from './MarketSceneChoice.tsx'
 import {VideoSceneChoice} from './VideoSceneChoice.tsx'
 import {CourseSceneChoice} from './CourseSceneChoice.tsx'
@@ -128,13 +129,13 @@ it('keeps the original paid platform history separate from an explicitly bounded
 
 type Element=ReactElement<Record<string,unknown>>
 const wrappers=new Set<unknown>([MarketSceneChoice,VideoSceneChoice,CourseSceneChoice,RelaySceneChoice])
-const actionWrappers=new Set<unknown>([OpeningAttemptAction,DayThreadAction,VideoThreadAction,CourseThreadAction,RelayThreadAction])
+const actionWrappers=new Set<unknown>([OpeningAttemptAction,DayThreadAction,VideoThreadAction,CourseThreadAction,RelayThreadAction,RoomTableau])
 function elements(value:unknown):Element[]{
  if(Array.isArray(value))return value.flatMap(elements)
  if(!isValidElement<Record<string,unknown>>(value))return []
  if(wrappers.has(value.type)&&typeof value.props.children==='function')return elements(value.props.children(()=>{}))
- // Preserve the real wrapper's active/inactive contract and shared action;
- // do not invent a primary node just to make the quarter lookup succeed.
+ // Preserve the real action contract. The pure tableau exposes its supplied
+ // named slots through its actual render; no synthetic primary is inserted.
  if(actionWrappers.has(value.type)&&typeof value.type==='function'){
   const action=value.type as (props:Record<string,unknown>)=>unknown
   return elements(action(value.props))

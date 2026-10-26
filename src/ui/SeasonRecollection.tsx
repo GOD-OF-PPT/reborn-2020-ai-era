@@ -5,6 +5,7 @@ import {Dialog} from './Dialog.tsx'
 import {ClockAdvance} from './ClockAdvance.tsx'
 import type {OpeningFocus} from './player-thread.ts'
 import {makeSharedAction} from './shared-action.ts'
+import {seasonMeaning} from './scene-meaning.ts'
 
 type Props={p:GamePanelProps;quarter?:string;onClose:()=>void;onNavigate:NavigateScene;onChooseFocus?:()=>void;focusLabel?:string;onToday?:()=>void;onContinueFocus?:(focus:OpeningFocus)=>void}
 
@@ -19,6 +20,7 @@ export function SeasonRecollection({p,quarter,onClose,onNavigate,onChooseFocus,f
  const sourceLocked=p.view.hasCandidate||p.view.busy||p.controller.snapshot.busy||p.view.saveStatus==='conflict'||p.controller.snapshot.view!==p.view
  const inspect:NavigateScene=(screen,target)=>{onClose();onNavigate(screen,target)}
  if(!season)return <Dialog title="这份季度留页暂不可读" className="opening-paper season-recollection" onClose={onClose}><p>原季度不存在、尚未开始或无法从当前公开记录确认。没有替换成另一季度。</p><button type="button" onClick={onClose}>回到眼前这件事</button></Dialog>
+ const meaning=seasonMeaning(p,season)
  const current=season.quarter===p.features.workbench.quarter
  const canEnter=current&&season.atQuarterEnd&&season.nextQuarterDate!==null&&p.view.phase==='playing'
  const closeRequest:GamePanelProps['request']=(...args)=>{onClose();p.request(...args)}
@@ -35,7 +37,7 @@ export function SeasonRecollection({p,quarter,onClose,onNavigate,onChooseFocus,f
   </section>
   {season.allNodes.length>season.nodes.length?<details className="season-all-echoes"><summary>翻看本季全部有据回响（{season.allNodes.length}）</summary>{season.allNodes.map(node=><article key={node.id}><time>{node.date}</time><h4>{node.title}</h4><p>{node.line}</p><button type="button" className="scene-text-action" onClick={()=>inspect(node.inspect.screen,node.inspect.target)}>{node.inspect.label} ↗</button><details><summary>本项来源</summary>{node.sourceRefs.map(ref=><code key={ref.kind+':'+ref.id}>{ref.kind} · {ref.id}</code>)}</details></article>)}</details>:null}
   <section className="season-remaining" aria-label="原来未完的约定"><h3>截至今天，仍需面对的约定。</h3><p>以下是{p.view.date}的当前待续事项，与上方原季度已经发生的结果分开核对。</p>{season.remaining.length?season.remaining.map(item=><article key={item.id} data-urgent={item.urgent?'true':'false'}><p className="season-remaining-label">{item.urgent?'需要先面对 · ':'原约定 · '}{item.dueAt??'日期沿原记录'}</p><h4>{item.title}</h4><p>{item.line}</p><button type="button" className="scene-text-action" onClick={()=>inspect(item.inspect.screen,item.inspect.target)}>{item.inspect.label} ↗</button>{item.focus&&onContinueFocus?<button type="button" disabled={sourceLocked} className="scene-text-action" onClick={()=>ui('回到这件仍待续的事',()=>{onClose();onContinueFocus(item.focus!)}).activate()}>把这件仍待续的事放回眼前</button>:null}<details><summary>核对原责任来源</summary>{item.sourceRefs.map(ref=><code key={ref.kind+':'+ref.id}>{ref.kind} · {ref.id}</code>)}</details></article>):<p>当前公开记录中没有待续项。查看留页不会新增或清除责任。</p>}</section>
-  <section className="season-next-question"><p className="opening-paper-date">把选择，留给接下来的自己</p><h3>{season.nextQuestion}</h3><p>可以继续原来的尝试，也可以改变关注。工作、交易、融资、招生和权限仍须各自决定。</p></section>
+  <section className="season-next-question"><p className="opening-paper-date">把选择，留给接下来的自己</p><h3>{meaning?.question??season.nextQuestion}</h3>{meaning?<><p>{meaning.situation}</p><details><summary>核对这段处境的实际来源</summary>{meaning.sourceRefs.map(ref=><p key={ref.kind+':'+ref.id}>{ref.kind} · {ref.date??'原记录日期'} · <code>{ref.id}</code></p>)}</details></>:null}<p>可以继续原来的尝试，也可以改变关注。工作、交易、融资、招生和权限仍须各自决定。</p></section>
    <details><summary>原季度的来源与今天的完整安排</summary><p>上方保留{season.quarter}的有据节点与具体原对象；下面转看今天{p.view.date}的综合安排。全部原账、日期、费用、资格与未结责任仍以原记录为准。</p><button type="button" className="scene-text-action" onClick={()=>inspect('quarter',{accountId:p.accountId})}>转看今天（{p.features.workbench.quarter}）的全部安排与原账 ↗</button>{season.closeSourceId?<code>原季度结束来源 · {season.closeSourceId}</code>:<p>没有把本次阅读记作季度结束。</p>}</details>
  </Dialog>
 }

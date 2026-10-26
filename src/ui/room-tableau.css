@@ -1,0 +1,229 @@
+/* A shared foreground belongs to the room; every fact and action is supplied by its owner. */
+.opening-room:not([data-exploring=true]) .room-tableau{
+ position:absolute;
+ inset:142px 6% 77px;
+ z-index:3;
+ display:grid;
+ align-content:start;
+ gap:15px;
+ min-width:0;
+ color:var(--opening-copy,#eee4ce);
+}
+.opening-room .room-tableau .tableau-intention:empty,
+.opening-room .room-tableau :is(.tableau-context,.tableau-feedback,.tableau-facts,.tableau-record):empty{display:none}
+.opening-room .room-tableau .tableau-intention>.opening-room-intention{
+ position:static;
+ max-width:none;
+ width:auto;
+ margin:0;
+}
+.cinema-app .opening-room:not([data-exploring=true]) .room-tableau>.tableau-content{
+ position:relative;
+ inset:auto;
+ display:grid;
+ grid-template-columns:minmax(0,1fr);
+ grid-template-areas:"heading" "context" "feedback" "facts" "decisions";
+ gap:10px 28px;
+ align-items:start;
+ align-content:start;
+ width:auto;
+ min-width:0;
+ min-height:0;
+ padding-right:42%;
+}
+.opening-room .room-tableau .moment-heading{grid-area:heading;max-width:100%}
+.opening-room .room-tableau .moment-heading>p{margin-bottom:5px}
+.opening-room .room-tableau .tableau-context{grid-area:context;max-width:100%;min-width:0}
+.opening-room .room-tableau .tableau-question{margin:5px 0 0;color:#e8d5aa;font:17px/1.9 var(--opening-serif)}
+.opening-room .room-tableau .tableau-feedback{grid-area:feedback;min-width:0;max-width:100%}
+.opening-room .room-tableau .tableau-feedback .moment-feedback{margin:0;padding-block:4px;background:none}
+.opening-room .room-tableau .tableau-feedback .moment-status{margin:0}
+.opening-room .room-tableau .tableau-facts{grid-area:facts;min-width:0;max-width:100%}
+.opening-room .room-tableau .tableau-facts :is(.moment-line,.moment-terms,.course-scene-money,.relay-scene-money){margin:0 0 6px}
+.opening-room .room-tableau .tableau-feedback .scene-time-note{gap:5px 12px;align-items:baseline}
+.opening-room .room-tableau .tableau-feedback .scene-time-result{white-space:pre-line;max-width:100%;color:#f0e3ca}
+.opening-room .room-tableau .tableau-facts>p+p{padding-top:3px}
+.opening-room .room-tableau .tableau-content>.moment-decisions{
+ grid-area:decisions;
+ min-width:0;
+ align-self:center;
+ margin-top:0;
+ gap:9px;
+}
+.opening-room .room-tableau .moment-decisions>.moment-explore{margin-top:2px}
+.opening-room .room-tableau .moment-decisions .moment-decision,
+.opening-room .room-tableau .moment-decisions .moment-decision>button{width:100%;max-width:none}
+.opening-room .room-tableau .tableau-content>.tableau-foreground{
+ position:absolute;
+ top:100px;
+ right:0;
+ display:flex;
+ flex-direction:column;
+ gap:15px;
+ width:35%;
+ min-width:0;
+ isolation:isolate;
+}
+.opening-room .room-tableau .tableau-foreground::before{
+ content:"";
+ position:absolute;
+ z-index:-1;
+ inset:110px -28px -20px;
+ background:radial-gradient(ellipse at 50% 45%,#081f27b8,#081f2788 38%,#081f273b 63%,transparent 78%);
+ pointer-events:none;
+}
+.opening-room .room-tableau .tableau-content>.tableau-foreground>.tableau-object.opening-room-object{
+ position:relative;
+ inset:auto;
+ width:100%;
+ max-width:none;
+ min-width:0;
+ margin:0;
+ align-self:start;
+ isolation:isolate;
+}
+/* Grid placement replaces every older room-relative prop offset, including the service :has rule. */
+.cinema-app .opening-room:not([data-exploring=true]) .room-tableau[data-scene] .tableau-content>.tableau-foreground>.tableau-object.opening-room-object,
+.cinema-app .opening-room:not([data-exploring=true]) .room-tableau[data-scene] .tableau-content>.tableau-foreground>.tableau-object.opening-room-object>.opening-object[data-copy-mode=tableau]{
+ inset:auto;
+ top:auto;
+ right:auto;
+ bottom:auto;
+ left:auto;
+}
+.opening-room .room-tableau .tableau-desk-support{
+ position:absolute;
+ z-index:-1;
+ top:108px;
+ left:50%;
+ width:68%;
+ height:62px;
+ transform:translateX(-50%);
+ pointer-events:none;
+}
+.opening-room .room-tableau .tableau-tray-contact-outer{fill:#071819;opacity:.25}
+.opening-room .room-tableau .tableau-tray-contact{fill:#071819;opacity:.48}
+.opening-room .room-tableau .tableau-tray-top{fill:#96764f;stroke:#6b5138;stroke-width:1.5}
+.opening-room .room-tableau .tableau-tray-front{fill:#60472f;stroke:#483723;stroke-width:1.5}
+.opening-room .room-tableau .tableau-tray-side{fill:#715537;stroke:#483723;stroke-width:1.5}
+.opening-room .room-tableau .tableau-tray-rim{stroke:#b29567;stroke-width:2;stroke-linecap:round}
+.opening-room .room-tableau .tableau-tray-grain{stroke:#c0a274;stroke-width:1.2;stroke-linecap:round;opacity:.45}
+.opening-room .room-tableau .tableau-object:has(>.opening-object[data-first-order-phase])>.tableau-desk-support{width:56%}
+/* The service kit already contains its own original tray and contact plane. */
+.opening-room .room-tableau .tableau-object:has(>.opening-object[data-relay-phase])>.tableau-desk-support{display:none}
+.opening-room .room-tableau .tableau-object.opening-room-object>.opening-object[data-copy-mode=tableau]{
+ position:relative;
+ inset:auto;
+ display:grid;
+ grid-template-rows:160px auto;
+ align-content:start;
+ width:100%;
+ max-width:none;
+ height:auto;
+ gap:7px;
+ margin:0;
+ padding:0;
+ transform:none;
+ background:transparent;
+ box-shadow:none;
+ transition:none;
+}
+.opening-room .room-tableau .tableau-object.opening-room-object>.opening-object[data-copy-mode=tableau]:is(:hover,:focus-visible,:active,:disabled){transform:none;background:transparent;box-shadow:none;opacity:1}
+.opening-room .room-tableau .tableau-object.opening-room-object>.opening-object[data-copy-mode=tableau]>.opening-object-art{
+ min-height:160px;
+ height:160px;
+ width:100%;
+ max-width:100%;
+ aspect-ratio:auto;
+ align-self:end;
+ transform:none;
+ filter:none;
+}
+.opening-room .room-tableau .tableau-object.opening-room-object>.opening-object[data-copy-mode=tableau]>.opening-object-copy{
+ gap:6px;
+ margin:0;
+ padding:7px 0 0;
+ transform:none;
+ border:0;
+ background:transparent;
+ box-shadow:none;
+ align-items:center;
+}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau]>.opening-object-copy::before{content:none}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .opening-object-stage{
+ padding:5px 10px;
+ border:1px solid #b39b70;
+ border-left:3px solid #a88d55;
+ background:linear-gradient(110deg,#eadbb7,#d5c29b);
+ color:#66573c;
+ letter-spacing:0;
+ box-shadow:1px 2px 2px #10251e55;
+}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau]:is(:hover,:focus-visible):not(:disabled) .opening-object-stage{background:linear-gradient(110deg,#f1e3bf,#e4cfa5);border-color:#e6c383;color:#4d5039}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau]:active:not(:disabled) .opening-object-stage{background:linear-gradient(110deg,#ddcba8,#cfb98e);color:#4e4935}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau]:disabled .opening-object-stage{border-style:dashed;color:#657052;background:linear-gradient(110deg,#d8d5b9,#c7c2a8)}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau]:focus-visible{outline:3px solid var(--opening-focus,#ffe2a6);outline-offset:6px}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] :is(.opening-object-title,.opening-object-detail){padding:0;border:0;background:none;color:#dedac1;box-shadow:none;text-align:center}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .relay-paper-notes{
+ display:flex;
+ flex-direction:column;
+ gap:5px;
+ padding:0;
+ color:#dedac1;
+}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .relay-paper-notes>span{padding:0;border:0;background:none;color:#dedac1;box-shadow:none}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .relay-paper-notes>.relay-paper-responsibility{border-left:3px solid #bd8466;padding-left:8px;color:#f0c7a4}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] :is(.first-order-protection,.entry-paper-protection){border-left:3px double #a6b596;padding:5px 8px;background:#243e32;color:#e1e5ca}
+/* A paper fact keeps its paper and ink together when the surrounding copy is transparent. */
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] :is(.first-order-date-strip,.first-order-receipt),
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .relay-paper-notes>:is(.relay-paper-date,.relay-paper-payment-note){
+ align-self:center;
+ width:auto;
+ max-width:100%;
+ padding:6px 10px;
+ border:1px solid #ad9870;
+ background:linear-gradient(110deg,#eee2c4,#dfcfaa);
+ color:#514e39;
+ box-shadow:1px 2px 2px #0b211b55;
+ white-space:normal;
+}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau][data-first-order-phase=planned] .first-order-date-strip{border-style:dashed}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau][data-first-order-phase=feedback] .first-order-date-strip{border-bottom-style:dashed}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .first-order-receipt{border-left:3px double #9c8051}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .first-order-receipt>span{color:#57583f}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .first-order-receipt>strong{color:#874932}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .first-order-receipt>time{color:#595c43}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .relay-paper-notes>.relay-paper-payment-note{border-left-style:dashed}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau][data-relay-state=received] .relay-paper-notes>.relay-paper-payment-note{border-left:3px double #9c8051}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .course-teaching-slips{color:#e2dbc0}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .course-stage-tab{padding:2px 6px;background:#203b32;color:#e1dec4;border-color:#b5a273}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .course-stage-tab[data-state=running]{color:#f2deb2;border-bottom-style:solid}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .course-stage-tab[data-state=completed]{color:#eee4c7;border-bottom:3px double #c9b17c}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .course-stage-tab[data-state=stopped]{color:#f0c5ac;border-left:2px solid #b98065}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .course-protected-band{padding:2px 7px;border:1px solid #a89368;background:#e4d7b6;color:#4c593f}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .course-responsibility-fold{padding:2px 7px;border-left:3px solid #a56348;background:#e3c8ad;color:#773f2d}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .course-support-fold{padding:2px 7px;border:1px dashed #919b76;background:#d7d6b9;color:#4d5e44}
+.opening-room .room-tableau .opening-object[data-copy-mode=tableau] .course-closed-slip{padding:2px 7px;border-bottom:3px double #9c8b61;background:#e8dcbf;color:#525740}
+.opening-room .room-tableau .tableau-record{
+ display:flex;
+ flex-direction:column;
+ align-items:flex-start;
+ gap:12px;
+ min-width:0;
+ align-self:end;
+ padding-bottom:8px;
+}
+.opening-room .room-tableau .tableau-record>.scene-text-action{max-width:100%;padding:5px 0;background:none;border:0;border-bottom:1px solid #b4a27266;color:#d3ccb3;text-align:left}
+.opening-room .room-tableau[data-perspective=history] .tableau-context{border-left:3px double #a4b18d;padding-left:10px}
+.opening-room .room-tableau[data-scene=attention] .tableau-context{border-left:3px solid #bf8664;padding-left:10px}
+.opening-room .room-tableau[data-scene=unavailable] .tableau-context{border-left:2px dashed #a8b596;padding-left:10px}
+.opening-room .room-tableau[data-text-only=true] .tableau-desk-support,
+.text-mode .opening-room .room-tableau .tableau-desk-support{display:none}
+.opening-room .room-tableau[data-text-only=true] .tableau-object.opening-room-object>.opening-object[data-copy-mode=tableau],
+.text-mode .opening-room .room-tableau .tableau-object.opening-room-object>.opening-object[data-copy-mode=tableau]{grid-template-rows:auto;gap:0}
+.opening-room .room-tableau[data-text-only=true] .opening-object[data-copy-mode=tableau]>.opening-object-copy,
+.text-mode .opening-room .room-tableau .opening-object[data-copy-mode=tableau]>.opening-object-copy{padding:12px;border:1px solid #a89669;background:#18382f;box-shadow:none}
+.opening-room .room-tableau[data-text-only=true] .opening-object[data-copy-mode=tableau] .opening-object-action,
+.text-mode .opening-room .room-tableau .opening-object[data-copy-mode=tableau] .opening-object-action{color:#e2d3a9;border-top-color:#a8966977}
+.reduced-motion .opening-room .room-tableau .moment-heading,
+.reduced-motion .opening-room .room-tableau .moment-feedback{animation:none;transition:none}

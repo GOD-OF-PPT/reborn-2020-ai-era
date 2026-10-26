@@ -6,9 +6,10 @@ import {CourseThreadAction} from './CourseThreadAction.tsx'
 import {coursePreparationPaperFor} from './course-continuity.ts'
 import {courseTeachingPaperFor,courseTeachingPaperLabel,courseTeachingMoneyFor} from './course-teaching-continuity.ts'
 import {courseTeachingPaper} from './course-teaching-paper.ts'
+import type {CourseChoiceIntent} from './CourseSceneChoice.tsx'
 import './course-encounter.css'
 
-type Props={p:GamePanelProps;thread:PlayerThreadView;date:string|null;waitLabel:string;onChoose:()=>void;onResult:()=>void;onToday:()=>void}
+type Props={p:GamePanelProps;thread:PlayerThreadView;date:string|null;waitLabel:string;onChoose:(intent?:CourseChoiceIntent)=>void;onResult:()=>void;onToday:()=>void}
 
 export function CourseEncounter({p,thread,date,waitLabel,onChoose,onResult,onToday}:Props){
  const art=coursePreparationPaperFor(thread)

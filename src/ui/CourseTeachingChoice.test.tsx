@@ -12,7 +12,9 @@ import {CourseTeachingChoice,courseTeachingDraftCommand,courseEnrollmentBatch,ty
 import {createCourseTeachingDraftMemory,emptyCourseTeachingDraft,type CourseTeachingDraftScope} from './course-teaching-draft.ts'
 import {CommandButton} from './CommandButton.tsx'
 import {ClockAdvance} from './ClockAdvance.tsx'
+import {moneyText} from './game-text.ts'
 import ready from '../../goal-1/evidence/t17-acceptance-24/chrome-final-r5/course-r5-final-physical-86.json?raw'
+import currentReady from '../../goal-1/evidence/t17-acceptance-34/chrome-final-sample-r2/r2-saved86-current-final-preview.json?raw'
 import beforeClass from '../../goal-1/evidence/t17-acceptance-10/chrome-physical-r1/r74-physical-after-candidate-retry.json?raw'
 
 import plannedEnrollment from '../../goal-1/evidence/t17-acceptance-25/chrome-r3/c2-saved91-planned-cohort.json?raw'
@@ -48,6 +50,42 @@ function driver(h:Awaited<ReturnType<typeof setup>>,initial:CourseSceneTarget){
  render();return {render,all,named,click,open,text:()=>text(tree),setTarget:(next:CourseSceneTarget)=>{target=next;render()},setBlocked:(reason:string|null)=>{blocked=reason;render()},override:(next:Partial<GamePanelProps>)=>{override=next;render()}}
 }
 const basicScope=(p:GamePanelProps,courseId:string,businessId:string,slot:CourseTeachingDraftScope['slot']):CourseTeachingDraftScope=>({accountId:p.accountId,businessId,courseId,audienceId:null,cohortId:null,slot})
+it('shows the actual Jan15 ready86 marketing gap before scheduling and keeps explicit source drafts separate from saved facts',async()=>{
+ const h=await setup(currentReady,'u0-ready86-cost-source')
+ try{
+  const p=h.p(),lesson=p.features.course!.courses.find(course=>course.status==='ready')!,business=p.features.course!.businesses.find(row=>row.id===lesson.businessId)!,target:CourseSceneTarget={kind:'course',businessId:lesson.businessId,courseId:lesson.id,...(lesson.sampleJobId?{sampleJobId:lesson.sampleJobId}:{})},d=driver(h,target),before=h.controller.exportSaved(),scope=basicScope(p,lesson.id,lesson.businessId,'audience')
+  expect(p.view.revision).toBe(86);expect(p.view.date).toBe('2023-01-15');expect(business.funds.availableFen).toBe(551936);expect(p.features.course!.catalog.marketingCostFen).toBe(600000)
+  d.open('audience')
+  expect(d.all().find(element=>element.type==='input'&&element.props.inputMode==='decimal')?.props.value).toBe('')
+  expect(d.all().filter(element=>element.type==='input'&&element.props.type==='radio').every(element=>element.props.checked===false)).toBe(true)
+  const mode=(label:string)=>d.all().find(element=>element.type==='label'&&text(element.props.children).includes(label))
+  act(elements(mode('为本课做一次付费推广')).find(element=>element.type==='input'),'onChange');d.render()
+  expect(d.text()).toContain('本次推广'+moneyText(600000)+' · 1点 · 7日')
+  expect(d.text()).toContain('本教室当前可花'+moneyText(551936));expect(d.text()).toContain('仅推广费还差'+moneyText(48064));expect(d.text()).toContain('当前不能提交这次推广')
+  expect(h.memory.read(p.view.runId,scope)).toMatchObject({audienceMode:'paid',price:'',resources:[],startAt:'',sourceIds:[]})
+  act(d.all().find(element=>element.type==='input'&&element.props.inputMode==='decimal'),'onChange',{target:{value:'199'}});d.render();d.click('再留出本次推广')
+  const resources=elements(component(d.named('Resources'))),date=elements(component(d.named('DateField'))).find(element=>element.type==='input'&&element.props.type==='date')
+  act(resources.find(element=>element.type==='input'&&element.props.type==='radio'),'onChange',{target:{checked:true}});act(date,'onChange',{target:{value:p.view.date}});d.render()
+  const proposal=d.all().find(element=>element.type===CommandButton&&element.props.kind==='CreateCourseAudience'),button=elements(component(proposal)).find(element=>element.type==='button')
+  expect(proposal?.props.payload).toEqual({courseId:lesson.id,mode:'paid',priceFen:19900,resources:['player-production'],startAt:'2023-01-15'})
+  expect(button?.props.disabled).toBe(true);expect(h.requests).not.toHaveBeenCalled();expect(h.controller.exportSaved()).toBe(before)
+  d.open('audience');act(elements(mode('核对已有同受众的视频记录')).find(element=>element.type==='input'),'onChange');d.render()
+  const sources=p.features.course!.videoCohorts.filter(source=>source.segment===lesson.segment&&source.date<=p.view.date)
+  expect(d.text()).toContain(sources.length?'当前有'+sources.length+'份本课同受众的公开既有来源':'当前没有本课同受众的公开既有来源')
+  expect(d.all().filter(element=>element.type==='input'&&element.props.type==='checkbox')).toHaveLength(sources.length)
+  expect(d.all().filter(element=>element.type==='input'&&element.props.type==='checkbox').every(element=>element.props.checked===false)).toBe(true)
+  expect(h.memory.read(p.view.runId,scope)).toMatchObject({audienceMode:'video_referral',price:'199',sourceIds:[],resources:['player-production'],startAt:'2023-01-15'})
+  expect(courseTeachingDraftCommand(p,h.memory.read(p.view.runId,scope)!,'audience',target)).toBeNull()
+  // Only the UI draft is varied: no new source or business history is generated.
+  h.memory.write(p.view.runId,scope,{...h.memory.read(p.view.runId,scope)!,sourceIds:['no-longer-matching-original-source']});d.render()
+  expect(d.text()).toContain('草稿里的原来源已不匹配，仍保留原选择')
+  expect(courseTeachingDraftCommand(p,h.memory.read(p.view.runId,scope)!,'audience',target)).toBeNull()
+  d.click('明确清除这次来源选择');const preserved=h.memory.read(p.view.runId,scope)
+  d.click('先合上，保留草稿');d.open('audience')
+  expect(h.memory.read(p.view.runId,scope)).toEqual(preserved);expect(d.all().find(element=>element.type==='input'&&element.props.inputMode==='decimal')?.props.value).toBe('199')
+  expect(h.chosen).not.toHaveBeenCalled();expect(h.requests).not.toHaveBeenCalled();expect(h.controller.exportSaved()).toBe(before)
+ }finally{await h.close()}
+},20000)
 it('uses actual capital and paid-audience handlers without spending on browsing, defaulting fields or borrowing the capital draft',async()=>{
  const h=await setup(ready,'teaching-ready-handlers')
  try{

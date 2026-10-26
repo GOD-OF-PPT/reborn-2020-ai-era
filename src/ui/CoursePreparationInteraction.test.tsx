@@ -16,6 +16,7 @@ import {CourseThreadAction} from './CourseThreadAction.tsx'
 import {OpeningObject} from './OpeningObject.tsx'
 import {openingFocusFor,playerThread} from './player-thread.ts'
 import {Dialog} from './Dialog.tsx'
+import {sceneMeaning} from './scene-meaning.ts'
 import readySource from '../../goal-1/evidence/t17-acceptance-24/chrome-r5/course-physical-86.json?raw'
 
 // Each actual component gets its own hook scope, including the original teaching
@@ -70,12 +71,12 @@ function choiceDriver(f:Ready,p:()=>GamePanelProps=f.p){
  const rootScope:HookScope={values:[],index:0},teachingScope:HookScope={values:[],index:0},chosen=vi.fn(),inspect=vi.fn(),today=vi.fn(),life=vi.fn()
  let target:CourseSceneTarget|null=f.target,tree:unknown,teachingProps:ComponentProps<typeof CourseTeachingChoice>|null=null,teachingMounted=false
  const render=()=>{
-  const outer=within(rootScope,()=>CourseSceneChoice({p:p(),target,onTarget:next=>{chosen(next);target=next},onInspect:inspect,onToday:today,onLife:life,children:open=><><button type="button" onClick={()=>open()}>打开这份准备</button><button type="button" onClick={()=>open('next')}>显式选择下一步</button><button type="button" onClick={()=>open('define')}>显式继续定义草稿</button></>}))
+  const outer=within(rootScope,()=>CourseSceneChoice({p:p(),target,onTarget:next=>{chosen(next);target=next},onInspect:inspect,onToday:today,onLife:life,children:open=><><button type="button" onClick={()=>open()}>打开这份准备</button><button type="button" onClick={()=>open('audience')}>显式了解来源与拟报价</button><button type="button" onClick={()=>open('next')}>显式选择下一步</button><button type="button" onClick={()=>open('define')}>显式继续定义草稿</button></>}))
   if(isValidElement<ComponentProps<typeof CourseTeachingChoice>>(outer)&&outer.type===CourseTeachingChoice){teachingProps=outer.props;teachingMounted=true;tree=within(teachingScope,()=>CourseTeachingChoice(outer.props))}
   else{if(teachingMounted){teachingScope.values=[];teachingMounted=false}teachingProps=null;tree=outer}
  }
  const click=(label:string)=>{fire(elements(tree).find(e=>e.type==='button'&&text(e).includes(label)),'onClick');render()}
- const open=(intent?:CourseChoiceIntent)=>click(intent==='next'?'显式选择下一步':intent==='define'?'显式继续定义草稿':'打开这份准备')
+ const open=(intent?:CourseChoiceIntent)=>click(intent==='audience'?'显式了解来源与拟报价':intent==='next'?'显式选择下一步':intent==='define'?'显式继续定义草稿':'打开这份准备')
  const dialog=(className:string)=>elements(tree).find(e=>e.type===Dialog&&e.props.className===className)
  const change=(label:string,value:string|boolean)=>{
   const field=elements(tree).find(e=>e.type==='label'&&text(e).includes(label)),control=field&&elements(field).find(e=>e.type==='input'||e.type==='select')
@@ -96,11 +97,16 @@ function encounterHandlers(props:ComponentProps<typeof CourseEncounter>){
  return {main,paper:paper.props as ComponentProps<typeof OpeningObject>,rows,section,click:()=>fire(main,'onClick')}
 }
 
-it('opens the real next choices after an actually ready sample and enters the original audience editor only by explicit choice',async()=>{
+it('opens the current ready sample audience editor directly by explicit intent and keeps the original next choices readable',async()=>{
  const f=await normalReady('ready-next')
  try{
   const raw=f.controller.exportSaved(),ui=choiceDriver(f)
-  expect(f.thread().stage).toBe('course-ready');ui.open()
+  expect(f.thread().stage).toBe('course-ready');ui.open('audience')
+  expect(ui.preparation()).toBeUndefined();expect(ui.teachingDialog()?.props.title).toBe('这堂课，先让谁真正看见？');expect(ui.teaching()?.target).toEqual(f.target)
+  expect(ui.fieldValue('这次面向受众的课程报价')).toBe('')
+  expect(ui.all().filter(element=>element.type==='input'&&element.props.type==='radio').every(element=>element.props.checked===false)).toBe(true)
+  expect(f.request).not.toHaveBeenCalled();expect(ui.chosen).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(raw)
+  ui.closeTeaching();ui.open()
   expect(ui.preparation()?.props.title).toBe('这一份准备之后，怎样继续？');expect(ui.teachingDialog()).toBeUndefined()
   expect(ui.text()).toContain(f.course.name);expect(ui.text()).toContain('尚未招生')
   ui.click('先看看谁会需要这一堂课')
@@ -132,7 +138,7 @@ it('keeps the explicitly chosen next definition draft across closing, returning 
  }finally{await f.close()}
 })
 
-it('binds the actual ready thought and preparation object to the same result handler and rejects it after a real source change',async()=>{
+it('binds the actual ready thought and preparation object to the same audience intent and rejects it after a real source change',async()=>{
  const f=await normalReady('shared-binding')
  try{
   const p=f.p(),raw=f.controller.exportSaved(),choose=vi.fn(),result=vi.fn(),today=vi.fn(),ui=encounterHandlers({p:{...p,textOnly:true},thread:f.thread(p),date:null,waitLabel:'',onChoose:choose,onResult:result,onToday:today})
@@ -143,11 +149,12 @@ it('binds the actual ready thought and preparation object to the same result han
   expect(ui.rows.find(e=>e.type==='span'&&e.props.className==='scene-choice-overline')?.props.children).toBe('眼前这份教案 · 由你决定')
   expect(ui.rows.filter(e=>e.type==='p').map(e=>text(e.props.children))).toContain(f.thread(p).object)
   expect(ui.rows.some(e=>String(e.props.className).split(' ').includes('scene-decision-main')&&elements(e.props.children).includes(ui.main))).toBe(true)
-  ui.click();ui.paper.onActivate();expect(result).toHaveBeenCalledTimes(2);expect(choose).not.toHaveBeenCalled();expect(today).not.toHaveBeenCalled();expect(f.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(raw)
+  expect(text(ui.main)).toContain('先了解，谁可能需要这堂课')
+  ui.click();ui.paper.onActivate();expect(choose).toHaveBeenCalledTimes(2);expect(choose).toHaveBeenNthCalledWith(1,'audience');expect(choose).toHaveBeenNthCalledWith(2,'audience');expect(result).not.toHaveBeenCalled();expect(today).not.toHaveBeenCalled();expect(f.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(raw)
   const ref=p.features.course!.cases.find(c=>c.kind==='first_order')!
   await f.send('DefineCourse',{businessId:f.business.id,name:'明确另外留下的来源变化',productId:'intro_recorded',topicId:'image_workflows',edition:'foundation',segment:'local_merchants',cases:[{kind:'first_order',id:ref.id}],consent:true})
   const committed=f.controller.exportSaved();expect(committed).not.toBe(raw);expect(f.controller.snapshot.view!.revision).toBe(p.view.revision+1)
-  ui.paper.onActivate();expect(result).toHaveBeenCalledTimes(2);expect(f.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(committed)
+  ui.paper.onActivate();expect(choose).toHaveBeenCalledTimes(2);expect(result).not.toHaveBeenCalled();expect(f.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(committed)
  }finally{await f.close()}
 })
 
@@ -156,8 +163,8 @@ it('keeps next choices readable for a real second-controller reader while disabl
  try{
   await reader.initialize();await reader.continueLife(f.initial.runId);const p=()=>f.p(reader),raw=reader.exportSaved()
   expect(p().view.readOnly).toBe(true)
-  const result=vi.fn(),paper=encounterHandlers({p:p(),thread:f.thread(p()),date:null,waitLabel:'',onChoose:vi.fn(),onResult:result,onToday:vi.fn()})
-  expect(paper.paper.protection).toBe('readonly');expect(paper.paper.disabled).toBe(false);paper.paper.onActivate();expect(result).toHaveBeenCalledTimes(1)
+  const choose=vi.fn(),result=vi.fn(),paper=encounterHandlers({p:p(),thread:f.thread(p()),date:null,waitLabel:'',onChoose:choose,onResult:result,onToday:vi.fn()})
+  expect(paper.paper.protection).toBe('readonly');expect(paper.paper.disabled).toBe(false);paper.paper.onActivate();expect(choose).toHaveBeenCalledExactlyOnceWith('audience');expect(result).not.toHaveBeenCalled()
   const ui=choiceDriver(f,p);ui.open()
   const pause=ui.all().find(e=>e.type==='button'&&text(e).includes('核对暂停接新业务'))
   expect(pause?.props.disabled).toBe(true);expect(pause?.props.onClick).toBeUndefined()
@@ -173,6 +180,7 @@ it('retains next, today and life after a real ready course winds down without im
   const p=f.p(),raw=f.controller.exportSaved(),thread=f.thread(p),accounts=p.view.accounts,budget=p.view.budget,date=p.view.date
   expect(p.features.course!.courses.find(c=>c.id===f.course.id)!.status).toBe('ready');expect(p.features.course!.businesses.find(b=>b.id===f.business.id)!.lifecycle).toBe('winding_down')
   expect(thread.outcome).toBe('non-success')
+  expect(sceneMeaning(p,thread)).toBeNull()
   // WindDownBusiness may bill real maintenance; the reading baseline is the
   // actual saved result above, never a fabricated or free stop projection.
   const ui=choiceDriver(f);ui.open('next');expect(ui.preparation()?.props.title).toBe('这一份准备之后，怎样继续？');expect(ui.teachingDialog()).toBeUndefined()
@@ -190,6 +198,7 @@ it('defaults to next for the same actually paused ready course and keeps its res
   const p=f.p(),raw=f.controller.exportSaved(),thread=f.thread(p),accounts=p.view.accounts,budget=p.view.budget,date=p.view.date
   expect(p.features.course!.courses.find(c=>c.id===f.course.id)!.status).toBe('ready');expect(p.features.course!.businesses.find(b=>b.id===f.business.id)!.lifecycle).toBe('paused')
   expect(thread).toMatchObject({stage:'course-paused',outcome:'actual'})
+  expect(sceneMeaning(p,thread)).toBeNull()
   const choose=vi.fn(),result=vi.fn(),paper=encounterHandlers({p,thread,date:null,waitLabel:'',onChoose:choose,onResult:result,onToday:vi.fn()})
   expect(paper.main.props.onClick).toBe(paper.paper.onActivate);paper.click();paper.paper.onActivate()
   expect(result).toHaveBeenCalledTimes(2);expect(choose).not.toHaveBeenCalled()
@@ -199,5 +208,18 @@ it('defaults to next for the same actually paused ready course and keeps its res
   expect(ui.today).toHaveBeenCalledTimes(1);expect(ui.life).toHaveBeenCalledTimes(1);expect(f.request).not.toHaveBeenCalled()
   expect(f.p().view.accounts).toEqual(accounts);expect(f.p().view.budget).toEqual(budget);expect(f.p().view.date).toBe(date)
   expect(f.p().features.course!.cohorts).toHaveLength(0);expect(f.p().features.course!.businesses.find(b=>b.id===f.business.id)!.metrics.incomeFen).toBe(0);expect(f.controller.exportSaved()).toBe(raw)
+ }finally{await f.close()}
+})
+
+it('keeps a stopped ready sample as a saved preparation without asking for new audience acquisition',async()=>{
+ const f=await normalReady('ready-sales-stopped')
+ try{
+  await f.send('StopCourseSales',{courseId:f.course.id})
+  const p=f.p(),thread=f.thread(p),raw=f.controller.exportSaved()
+  expect(p.features.course!.courses.find(course=>course.id===f.course.id)).toMatchObject({status:'ready',paused:true})
+  expect(thread.stage).toBe('course-paused');expect(sceneMeaning(p,thread)).toBeNull()
+  const choose=vi.fn(),result=vi.fn(),paper=encounterHandlers({p,thread,date:null,waitLabel:'',onChoose:choose,onResult:result,onToday:vi.fn()})
+  paper.click();expect(result).toHaveBeenCalledTimes(1);expect(choose).not.toHaveBeenCalled()
+  expect(f.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(raw)
  }finally{await f.close()}
 })

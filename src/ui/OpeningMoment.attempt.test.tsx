@@ -24,9 +24,15 @@ it.each(['first_order','investment','free'] as const)('gives the real %s first s
  const h=await life(approach)
  try{
   const before=h.controller.exportSaved(),html=h.render(),label={first_order:'回应这封委托',investment:'看看这笔钱，准备怎样安排',free:'今天，先把时间留给什么'}[approach]
-  expect(html).toContain(label);expect(html).toContain('opening-attempt-scene')
-  expect(html).toContain('opening-object-action');expect(html).not.toContain('走近这件事')
+  const expected={first_order:{scene:'first-order',state:'offer'},investment:{scene:'market',state:'market-opening'},free:{scene:'free',state:'choose'}}[approach]
+  expect(html).toContain(label);expect(html).toContain('data-scene="'+expected.scene+'"');expect(html).toContain('data-state="'+expected.state+'"');expect(html).toContain('data-perspective="entry"')
+  // The visible thought and foreground object retain the same complete action name;
+  // the object no longer needs a second visible copy of that control's caption.
+  const buttons=html.match(/<button\b[^>]*>/g)??[],main=buttons.find(tag=>tag.includes('aria-label="'+label+'"')),object=buttons.find(tag=>tag.includes('data-copy-mode="tableau"'))
+  expect(main).toBeDefined();expect(main).not.toContain('disabled=""')
+  expect(object).toContain(' '+label+'"');expect(object).not.toContain('disabled=""');expect(html).not.toContain('走近这件事')
   expect(html).not.toContain('<dialog');expect(h.request).not.toHaveBeenCalled();expect(h.controller.exportSaved()).toBe(before)
+  expect(h.p().features.firstOrder.status).toBe('available');expect(h.p().features.firstOrder.result).toMatchObject({paymentFen:0,directCostFen:0});expect(h.p().view.budget).toMatchObject({available:4,reserved:0})
   if(approach!=='first_order'){
    expect(html).toContain('data-entry-paper="'+(approach==='free'?'calendar':'market')+'"')
    expect(html).not.toContain('data-first-order-phase=')
@@ -41,14 +47,15 @@ it('offers every original reply and retains the saved receipt with explicit next
  try{
   const choices=()=>renderToStaticMarkup(<OpeningAttemptChoices p={h.p()} attempt={openingAttempt(h.p())!} panel="offer" onClose={vi.fn()} onInspect={vi.fn()} onMarket={vi.fn()} onExplore={vi.fn()} onFocus={vi.fn()} onNavigate={vi.fn()}/>)
   expect(choices()).toContain('接下这笔手工单');expect(choices()).toContain('婉拒这笔报价');expect(choices()).toContain('略过这次委托')
-  await h.send('StartFirstOrder',{});expect(h.render()).toContain('data-first-order-phase="planned"')
-  await h.send('AdvanceTime',{date:'2020-01-05'});expect(h.render()).toContain('data-first-order-phase="running"')
+  await h.send('StartFirstOrder',{});expect(h.render()).toContain('data-first-order-phase="planned"');expect(h.p().features.firstOrder.result).toMatchObject({paymentFen:0,directCostFen:0})
+  await h.send('AdvanceTime',{date:'2020-01-05'});expect(h.render()).toContain('data-first-order-phase="running"');expect(h.p().features.firstOrder.result).toMatchObject({paymentFen:0,directCostFen:50000})
   await h.send('AdvanceTime',{date:'2020-01-19'});expect(h.render()).toContain('data-first-order-phase="delivery"')
   await h.send('SubmitDelivery',{contractId:h.p().features.firstOrder.contractId});expect(h.render()).toContain('data-first-order-phase="feedback"')
   await h.send('AdvanceTime',{date:'2020-01-20'})
   const raw=h.controller.exportSaved(),html=h.render(),attempt=openingAttempt(h.p())!
   expect(html).toContain('data-first-order-phase="paid"');expect(html).toContain('¥1,300');expect(html).toContain('2020-01-20')
-  expect(html).toContain('接下来的日子，想怎样继续');expect(html).not.toContain('看看这份手艺，还能用在哪里')
+  expect(html).toContain('收好这次结果，回到今天安排日子');expect(html).toContain('看看这份经历，还能通向哪些尝试');expect(html).not.toContain('看看这份手艺，还能用在哪里')
+  expect(h.p().features.firstOrder.result).toMatchObject({paymentFen:130000,directCostFen:50000,netOrderFen:80000})
   expect(new Set(attempt.nextChoices.map(choice=>choice.screen)).size).toBeGreaterThan(2)
   expect(h.request).not.toHaveBeenCalled();expect(h.controller.exportSaved()).toBe(raw)
  }finally{await h.close()}

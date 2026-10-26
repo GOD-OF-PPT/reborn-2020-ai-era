@@ -24,11 +24,15 @@ it('makes the actual first-order commitment, delivery and cash separate playable
  try{
   expect(roomMoment(snapshot()).stage).toBe('offer');expect(render()).toContain('回应这封委托');expect(render()).toContain('先保留这一季的工作')
   await send('WorkQuarter',{});await send('StartFirstOrder',{})
-  expect(roomMoment(snapshot())).toMatchObject({stage:'planned',wait:{date:'2020-01-05'}});expect(snapshot().features.firstOrder.result.paymentFen).toBe(0)
-  expect(render()).not.toContain('先保留这一季的工作');expect(render()).toContain('还没有交付或回款')
+  expect(roomMoment(snapshot())).toMatchObject({stage:'planned',wait:{date:'2020-01-05'}});expect(snapshot().features.firstOrder.result).toMatchObject({paymentFen:0,directCostFen:0})
+  expect(snapshot().view.budget).toMatchObject({available:1,reserved:1})
+  const planned=render()
+  expect(planned).not.toContain('先保留这一季的工作');expect(planned).toContain('已安排 · 尚未开工')
+  expect(planned).toContain('已预留制作¥500 / 1点');expect(planned).toContain('尚未实际支付制作费')
+  expect(planned).toContain('2020-01-05开工');expect(planned).toContain('2020-01-19前提交')
   await send('AdvanceTime',{date:'2020-01-19'})
   expect(roomMoment(snapshot())).toMatchObject({stage:'delivery',command:{kind:'SubmitDelivery',payload:{contractId:snapshot().features.firstOrder.contractId}}})
-  expect(render()).toContain('把这份作品交给客户');expect(snapshot().features.firstOrder.result.paymentFen).toBe(0)
+  expect(render()).toContain('把这份作品交给客户');expect(snapshot().features.firstOrder.result).toMatchObject({paymentFen:0,directCostFen:50000})
   await send('SubmitDelivery',{contractId:snapshot().features.firstOrder.contractId});expect(roomMoment(snapshot()).stage).toBe('waiting')
   await send('AdvanceTime',{date:'2020-01-20'})
   expect(roomMoment(snapshot()).stage).toBe('paid');expect(snapshot().features.firstOrder.result).toMatchObject({paymentFen:130000,directCostFen:50000,netOrderFen:80000})
@@ -46,7 +50,13 @@ it('keeps a real readonly current moment from submitting while its original info
   const html=renderToStaticMarkup(<RoomMoment p={{controller,view:{...view,readOnly:true},features,accountId:'personal',request:()=>{throw Error('READ_ONLY_RENDER_MUST_NOT_SUBMIT')}}} headingRef={null} onNavigate={()=>{}} onExplore={()=>{}}/>)
   // This readonly display copy also has a stale snapshot identity; neither surface can dispatch.
   // The actual stable readonly reader and its UI-only choices are covered in shared-action.test.tsx.
-  expect(html.match(/<button[^>]*aria-label="回应这封委托"[^>]*>/)?.[0]).toContain('disabled=""');expect(html).toContain('¥500');expect(html).toContain('个人制作成本¥500 · 1点');expect(controller.exportSaved()).toBe(saved)
+  expect(html.match(/<button[^>]*aria-label="回应这封委托"[^>]*>/)?.[0]).toContain('disabled=""')
+  const object=html.match(/<button[^>]*data-protection="readonly"[^>]*>/)?.[0]
+  expect(object).toContain('disabled=""');expect(object).toContain('aria-label="电脑里的手工委托 回应这封委托"')
+  expect(html).toContain('制作需¥500 / 1点');expect(html).toContain('尚未接单，实际制作费与本单行动占用均为0')
+  expect(html).toContain('2020-01-05前答复');expect(html).toContain('2020-01-19前提交')
+  expect(features.firstOrder.result).toMatchObject({paymentFen:0,directCostFen:0});expect(view.budget).toMatchObject({available:4,reserved:0})
+  expect(controller.exportSaved()).toBe(saved)
  }finally{await controller.close();await store.close()}
 },20000)
 

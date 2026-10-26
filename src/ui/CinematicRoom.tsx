@@ -18,7 +18,7 @@ import {SeasonRecollection} from './SeasonRecollection.tsx'
 import {makeSharedAction} from './shared-action.ts'
 import {dayPerspectiveCurrent,type DayPerspective} from './day-perspective.ts'
 
-type Props=GamePanelProps&{initialToday?:DayPerspective|null;headingRef:Ref<HTMLHeadingElement>;notice:string|null;timeEcho?:ReactNode;onNavigate:NavigateScene;onPeople:(id?:LifePerson)=>void;onYear:()=>void;onJourney?:()=>void;openingFocus?:OpeningFocus|null;focusQuarter?:string|null|undefined;focusNotice?:string|null|undefined;focusRequiresChoice?:boolean|undefined;onOpeningFocus?:(focus:OpeningFocus|null)=>void}
+type Props=GamePanelProps&{initialToday?:DayPerspective|null;todayPerspective?:DayPerspective|null;onTodayPerspective?:(perspective:DayPerspective|null)=>void;headingRef:Ref<HTMLHeadingElement>;notice:string|null;timeEcho?:ReactNode;onNavigate:NavigateScene;onPeople:(id?:LifePerson)=>void;onYear:()=>void;onJourney?:()=>void;openingFocus?:OpeningFocus|null;focusQuarter?:string|null|undefined;focusNotice?:string|null|undefined;focusRequiresChoice?:boolean|undefined;onOpeningFocus?:(focus:OpeningFocus|null)=>void}
 const spots=[['routes','电脑 · 经营','新的机会，都从一次尝试开始。',76,49],['quarter','门外 · 安排','工作与时间，仍由你决定。',37,40],['memory','书架 · 记忆','记得趋势，不是答案。',22,48],['life','床边 · 生活','也留一些时间，给自己。',21,65]] as const
 type Spot=typeof spots[number][0]
 const inspection:Record<Spot,{speaker:string;line:string;hint:string}>={
@@ -32,7 +32,8 @@ const ecoContractStatus={production:'制作中',review:'等待客户复核',reje
 
 export function CinematicRoom(p:Props){
  const [responsibilities,setResponsibilities]=useState(false),[exploring,setExploring]=useState(false),[records,setRecords]=useState(false)
- const [recollection,setRecollection]=useState(false),[todayAt,setTodayAt]=useState<DayPerspective|null>(()=>p.initialToday?.runId===p.view.runId?p.initialToday:null)
+ const [recollection,setRecollection]=useState(false),[localTodayAt,setLocalTodayAt]=useState<DayPerspective|null>(()=>p.initialToday?.runId===p.view.runId?p.initialToday:null)
+ const todayAt=p.onTodayPerspective?p.todayPerspective??null:localTodayAt,setTodayAt=p.onTodayPerspective??setLocalTodayAt
  const momentRoot=useRef<HTMLDivElement>(null)
  const [hovered,setHovered]=useState<Spot|null>(null),[focused,setFocused]=useState<Spot|null>(null)
  const inspected=hovered??focused,spot=spots.find(([screen])=>screen===inspected),look=inspected?inspection[inspected]:null
@@ -40,7 +41,7 @@ export function CinematicRoom(p:Props){
  const opening=view.phase==='playing'
  const showToday=()=>makeSharedAction(p,'回到今天',()=>{setRecollection(false);setExploring(false);setTodayAt(w.pause||w.progression.requiresDelivery?null:{runId:view.runId,revision:view.revision})},{allowReadOnly:true}).activate()
  const returnToFocus=()=>setTodayAt(null)
- useEffect(()=>{if(todayAt&&!dayPerspectiveCurrent(view,todayAt))setTodayAt(null)},[todayAt,view])
+ useEffect(()=>{if(todayAt&&!dayPerspectiveCurrent(view,todayAt))setTodayAt(null)},[todayAt,view,setTodayAt])
  const season=sceneSeason(w.quarter)
  useEffect(()=>{
   const key=(event:KeyboardEvent)=>{

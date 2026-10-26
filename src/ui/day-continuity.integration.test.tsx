@@ -85,7 +85,7 @@ it('renders today after an actual life result without auto arranging work, anoth
   const p=h.p(),job=p.features.life.jobs[0]!,focus:OpeningFocus={runId:p.view.runId,kind:'life',accountId:'personal',selection:'rest',entityId:job.id},today=todayThread(p,focus)!
   expect(today.primary.classification).toBe('result')
   const before=h.controller.exportSaved(),html=renderToStaticMarkup(<TodayScene p={p} today={today} headingRef={null} onFocus={never} onPrepare={never} onResume={never} onExplore={never} onRecollection={never} onNavigate={never}/>)
-  expect(html).toContain('今天，仍由你安排');expect(html).toContain('data-day-kind="today"');expect(html).toContain('不新增安排，让原日子继续')
+  expect(html).toContain('接下来仍留一点时间给自己');expect(html).toContain('2020-01-08实际完成，投入¥0');expect(html).toContain('给生活留一段真实的日子');expect(html).toContain('data-day-kind="today"');expect(html).toContain('不新增安排，让原日子继续')
   expect(html).not.toContain('aria-label="保留这一季的工作"');expect(html).not.toContain('核对并留出七天休整');expect(html).not.toContain('核对并提交买单')
   expect(h.controller.exportSaved()).toBe(before)
  }finally{await h.close()}
