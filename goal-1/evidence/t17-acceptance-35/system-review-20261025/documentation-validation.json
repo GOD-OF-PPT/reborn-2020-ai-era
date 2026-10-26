@@ -1,0 +1,78 @@
+{
+  "at": "2026-10-26T02:04:30.727Z",
+  "newMarkdownScope": {
+    "documents": 12,
+    "localLinks": 39,
+    "designResources": 2,
+    "failures": 0,
+    "excluded": "unchanged history, verbatim raw user input and local-only preimages"
+  },
+  "planChecker": {
+    "exitCode": 0,
+    "tasks": 22,
+    "cases": 40,
+    "slices": 5,
+    "cashExamples": 10,
+    "equityExamples": 2,
+    "scope": "specification checks; not game execution or release"
+  },
+  "design": {
+    "at": "2026-10-26T02:02:17.184Z",
+    "scope": "Design-only HTML; not game implementation, playtest, save failure injection or compatibility tests",
+    "eightFullAXStates": [
+      {
+        "state": "ready",
+        "expectedHeading": null,
+        "fullAXConfirmed": true
+      },
+      {
+        "state": "source",
+        "expectedHeading": "先看来源，再写这次拟报价。",
+        "fullAXConfirmed": true
+      },
+      {
+        "state": "shortfall",
+        "expectedHeading": "这次推广，还差 ¥480.64。",
+        "fullAXConfirmed": true
+      },
+      {
+        "state": "draft",
+        "expectedHeading": "这份决定，还留着空白。",
+        "fullAXConfirmed": true
+      },
+      {
+        "state": "confirm",
+        "expectedHeading": "先看清，这次准备答应什么。",
+        "fullAXConfirmed": true
+      },
+      {
+        "state": "saved",
+        "expectedHeading": "保存后，物件才留下新约定。",
+        "fullAXConfirmed": true
+      },
+      {
+        "state": "candidate",
+        "expectedHeading": "还没有保存下来。",
+        "fullAXConfirmed": true
+      },
+      {
+        "state": "today",
+        "expectedHeading": "教案收好，今天仍由你安排。",
+        "fullAXConfirmed": true
+      }
+    ],
+    "embeddedJSSyntax": true,
+    "gameStorageOrCommandConnection": false,
+    "visuals": {
+      "confirmed": [
+        "design-r3-ready.jpg",
+        "design-r3-shortfall.jpg",
+        "design-r2-candidate.jpg"
+      ],
+      "r2Caveat": "R2 shortfall screenshot captured earlier ready paint although fullAX is correct; original retained. R2 eight images not claimed each to match AX. Final ready/shortfall recaptured separately as R3."
+    }
+  },
+  "compatibilityDevelopmentAndTests": 0,
+  "runtimeTestsAndBuildsThisReview": 0,
+  "reason": "runtime unchanged; only documentation and isolated design artifact"
+}
