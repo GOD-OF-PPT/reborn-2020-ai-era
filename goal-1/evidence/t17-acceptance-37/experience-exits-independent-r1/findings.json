@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-27T00:36:34.731Z",
+  "findings": [
+    {
+      "priority": 2,
+      "file": "src/ui/RelaySceneChoice.tsx",
+      "line": 117,
+      "title": "新增日期校验缺少isoDate导入",
+      "state": "reported_pending_owner_fix",
+      "evidence": "complete import list has no isoDate; call inside catch currently degrades all terms to unknown; no tsc executed",
+      "minimumFix": "import isoDate from ../core/calendar.ts"
+    }
+  ],
+  "otherConfirmedProductP1P2": [],
+  "executedChecks": 0
+}

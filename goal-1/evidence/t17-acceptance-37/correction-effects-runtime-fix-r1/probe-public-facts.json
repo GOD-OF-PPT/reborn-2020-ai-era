@@ -1,0 +1,69 @@
+{
+  "at": "2026-10-26T22:38:21.319Z",
+  "status": "diagnostic_only_no_product_change",
+  "raw": {
+    "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/a10-saved102-after-original-candidate-retry.json",
+    "bytes": 2751861,
+    "sha256": "abe77f4e93e712ed697ddfc0071e25c0b12700e1d1cd9270d49d0561ec5562cc",
+    "mode": 420
+  },
+  "runId": "normal-relay-technical_employee-ee9cb440",
+  "revision": 102,
+  "date": "2025-03-07",
+  "actualEffects": {
+    "status": "partial",
+    "customerStatus": "unavailable",
+    "customerReason": "该更正的原现金退还、客户余额或原单引用尚未核齐；未知部分不按零或已经结清处理。",
+    "supplierStatus": "known",
+    "supplierRestoredAssetFen": 202
+  },
+  "originalCashRefund": {
+    "operationId": "rly:b089d8bc6a68928b0823ba4436d87441",
+    "kind": "refund_delivered",
+    "settlement": "cash",
+    "amountFen": 606,
+    "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+    "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+    "contractId": "rly:4f2315c72376d421c714c14aa81b9b87",
+    "sourceEventId": "rly:74f69ecae52761965ccc78dd565ad1c1",
+    "date": "2025-03-07",
+    "reservationId": "rly:67f0097bd4eea277fbde0579d3c9a248",
+    "obligationId": "rly:89ff55227cf2a1a5bd4c7ac2a4bbdba5"
+  },
+  "originalPayable": {
+    "id": "rly:89ff55227cf2a1a5bd4c7ac2a4bbdba5",
+    "kind": "refund_delivered",
+    "amountFen": 606,
+    "remainingFen": 0,
+    "originOperationId": "rly:b089d8bc6a68928b0823ba4436d87441",
+    "protectionReservationId": "rly:67f0097bd4eea277fbde0579d3c9a248",
+    "sourceEventId": "rly:74f69ecae52761965ccc78dd565ad1c1",
+    "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+    "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+    "contractId": "rly:4f2315c72376d421c714c14aa81b9b87"
+  },
+  "actualCash": [
+    {
+      "id": "rly:b089d8bc6a68928b0823ba4436d87441",
+      "order": 349,
+      "lineIndex": 0,
+      "date": "2025-03-07",
+      "accountId": "ops:d85d2aa1cc29968ea1f91bb3f0d29ad2",
+      "amountFen": -606,
+      "scopeBusinessId": "ops:60e1e4f1a8f744bbf167073569038995",
+      "businessId": "ops:60e1e4f1a8f744bbf167073569038995",
+      "contractId": "rly:4f2315c72376d421c714c14aa81b9b87",
+      "sourceId": "rly:74f69ecae52761965ccc78dd565ad1c1",
+      "referenceId": "rly:89ff55227cf2a1a5bd4c7ac2a4bbdba5"
+    }
+  ],
+  "positiveProjectionReservationMatches": [],
+  "positiveProjectionReservationMatchCount": 0,
+  "cashPaidFen": 606,
+  "cashPlusRemainingEquals606": true,
+  "originalReservationIdsMatch": true,
+  "cashRefsMatchPayable": true,
+  "failedCondition": "customerEffects calls one(finance.reservations.filter(id===operation.reservationId));actual public positive-amount projection gives[] for the already fullypaid606 refund.",
+  "projectionContract": "Workbench finance.reservations filters sameaccount && amountFen>0; it does not expose historical released0 rows.",
+  "roundtripStillExact": true
+}

@@ -1,0 +1,3 @@
+# 原closure重复引用的静态作者补正
+
+原formal source-before/after.references确有重复path（原runner和helper等多次入引用），原合同有同序完整重复身份；不能用requireIdentitySet拒重路径来比较该实际记录。未运行r1context前静审发现该harness不适配；r2改为完整sequence按长度和每个index的path/bytes/SHA/mode精确比较，并另逐原contract六closure同序匹配，重复引用原样保，新增tracking才去重且同path不同identity拒。未放松任何字节/集合/模式，没改原proof或facts。原r1候选not_run保前像，Root只能选r2三文件/GO模板。R6factstail逆去唯一tracked增加后仍与原字节精确同。

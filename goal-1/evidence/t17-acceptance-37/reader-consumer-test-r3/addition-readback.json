@@ -1,0 +1,64 @@
+{
+  "at": "2026-10-26T16:16:05.600Z",
+  "before": {
+    "path": "goal-1/evidence/t17-acceptance-37/reader-consumer-test-r3/RelayRecordBook.test.tsx.r2-before",
+    "bytes": 31529,
+    "sha256": "b828206868966dcb68d9c1589c9d8013dd3ea804d700d3335730787c9d67716c",
+    "mode": 420
+  },
+  "after": {
+    "path": "src/ui/RelayRecordBook.test.tsx",
+    "bytes": 34638,
+    "sha256": "e5f59c466527c44a9ee8af64dc674047e8fa012f9846fe28dead7cc11b6ca410",
+    "mode": 420
+  },
+  "addedImports": [
+    "import {relayFocusFor} from './relay-player-thread.ts'\n",
+    "import {playerThread} from './player-thread.ts'\n",
+    "import {threadPurpose} from './thread-purpose.ts'\n"
+  ],
+  "addedCase": {
+    "path": "goal-1/evidence/t17-acceptance-37/reader-consumer-test-r3/added-case.txt",
+    "bytes": 2956,
+    "sha256": "f29f1dbbc895ef653816a456bcda7ab9d5d1553492466b4a4e2daf5322c02ddc",
+    "mode": 420
+  },
+  "existing14CasesAndAllRemainingBytesEqualR2": true,
+  "caseCountBefore": 14,
+  "caseCountAfter": 15,
+  "newCaseTitle": "keeps a real corrected ticket and its original support attached to their own purpose, source and completion date",
+  "unchangedResponseFiles": [
+    {
+      "path": "src/ui/relay-response-draft.ts",
+      "bytes": 20841,
+      "sha256": "f67c965d4838139ac247c9952231570f80f853a9f8888281e87ebb9410cb638e",
+      "mode": 420
+    },
+    {
+      "path": "src/ui/RelayResponseEditor.tsx",
+      "bytes": 12281,
+      "sha256": "b05101443302b9cf1324f2a7095e37eb263d3accb6ea954aeabe9f716f1f8885",
+      "mode": 420
+    },
+    {
+      "path": "src/ui/RelayResponseEditor.test.tsx",
+      "bytes": 27124,
+      "sha256": "7bf38c638c7fef7fd9078bcfdde3ceb6c58c73f45d89b483c6a7ec8bbf746356",
+      "mode": 420
+    }
+  ],
+  "rootPurposeSourceAtAuthoring": {
+    "path": "src/ui/thread-purpose.ts",
+    "bytes": 25024,
+    "sha256": "73066579ad3674d00eb0801d5c4b70b6d217ca3cc657cc2253363704893af93f",
+    "mode": 420
+  },
+  "scope": "one added consumer case plus three pure function imports; actual old91 public producer view, no display fixture in this new case",
+  "testsRun": false,
+  "typecheckRun": false,
+  "buildRun": false,
+  "browserRun": false,
+  "gitRun": false,
+  "sourceFrozen": true,
+  "compatibility": 0
+}

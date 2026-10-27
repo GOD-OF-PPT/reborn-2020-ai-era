@@ -1,0 +1,18 @@
+{
+  "originalCaseCount": 2,
+  "newCaseCount": 3,
+  "oldAssertionsRetainedExactly": [
+    "expect(editor.props.target).toEqual(business);expect(chosen).not.toHaveBeenCalled();expect(text(rows)).toContain('当前用量价¥0.05，周期支持基准¥0');expect(text(rows)).toContain('已过原期限，续签须另行决定')",
+    "expect(memory.read(p.view.runId,scope)).toEqual({...emptyRelaySceneDraft(),customerIds:[p.features.relay!.customers[1]!.id]})",
+    "expect(elements(tree).filter(e=>e.type==='input'&&e.props.type==='checkbox').map(e=>e.props.checked)).toEqual([false,true,false,false,false,false])",
+    "expect(memory.read(p.view.runId,scope)!.customerIds).toEqual([p.features.relay!.customers[1]!.id]);expect(p.request).not.toHaveBeenCalled();expect(controller.exportSaved()).toBe(raw)",
+    "expect(elements(tree).some(e=>e.type===RelayServiceChoice)).toBe(false);expect(chosen).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled();expect(controller.exportSaved()).toBe(raw)"
+  ],
+  "invalidTargetCaseByteEqual": true,
+  "controllerSetup20sLineByteEqual": true,
+  "oldCoverageCase": "Original6checkboxes/checked none/select customer2/empty payload/same memory/cancel reopen/inspect business service/no target callback/no request/raw preserved under explicit public-view May31 coverage fixture. No imported/saved term change or claim of original service eligibility.",
+  "newActual115Case": "Actual allshort, explicit radio/renew empty terms, explicit May31/postpaid100000? credit10000fen, captured original command payload+confirm and current original Controller preview allowed, cancel returns same condition then original period without service draft/pin/RAW mutation.",
+  "correctCreditFen": 10000,
+  "driver": "Actually executes new Conditions + ResponseEditor/RenewFields/CommandButton with same original callbacks, no product changes.",
+  "testAndEngineering": "not_run"
+}

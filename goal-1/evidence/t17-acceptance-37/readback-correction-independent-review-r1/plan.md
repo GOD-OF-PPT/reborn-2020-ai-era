@@ -1,0 +1,1 @@
+完整读R3三个源/未授权GOTEMPLATE/逻辑证明及原R6和原formal真实结果，用纯文件diff核facts tail逐字，只接受授权和元数据跟踪/新output包裹变更。追原已绿Create/原outerfalse/33结果、原source前后完整sequence（保合法duplicates）、620+11STOP、14trees/Node窄例外、精确RootGO/新目录/自身身份及一次终态。输出有据阻断或限定下次Root exactGO，0自身执行；R1/R2静态草稿不混选中R3。

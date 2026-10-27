@@ -1,0 +1,1 @@
+请只读独立审response的Today真实反馈修复：experience-implementation-r1/today-continuity-fix-r1三文件/freeze/raw，2产品today-thread.ts24713B/b0dd713… TodayScene14933B/770d4… 新8case17103B/5d98c…；避免只是115特判/删真实工作与债/unknown，原shared Clock费用/readonly候选/书签/两主体不变，纯normalprotected/asset不算新服务。你不能改源、0工程/Browser；guard新同级review如需，给一组成审。state已审你新期helperdate补正，请源继续freeze。

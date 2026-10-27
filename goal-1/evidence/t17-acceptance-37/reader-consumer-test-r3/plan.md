@@ -1,0 +1,7 @@
+# 同一U4-B：单票与原支持的目的consumer用例
+
+Root新增thread-purpose的period+meter与period+job/batch细分。此子项只给RelayRecordBook.test.tsx增加1个consumer case及必要纯函数import，不动其它源或原case/断言/门槛，不运行checks/Browser/Git。
+
+复用已有old91官方codec/producer公开view，选同一原期已更正meter与实际已完成support，通过relayFocusFor→playerThread→threadPurpose检查单票更正日期/新应收应付仍继续，以及独立原支持自己的完成日；Reader同原target保持原更正/支持记录，查看不发新request或写游戏档。新case不使用quantityFixture等display变体，不把旧完整前史冒本轮新Native。
+
+先保R2完整前像，再加imports/单case；逆去新增内容后须逐字恢复R2，旧14项及全部字节/门槛不变。Root统一r3Gate/type/tests。

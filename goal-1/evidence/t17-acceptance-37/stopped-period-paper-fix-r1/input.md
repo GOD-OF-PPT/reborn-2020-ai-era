@@ -1,0 +1,1 @@
+Root授权同U4B真实stop95状态增量，仅continuity pureperiod audit-waiting paper.line在有效stoppedAt≤view.date且同原period时明确本期请求已停，保原audit/support/scope/责任/phase动作优先级，不能仅jobcancelled判StopPeriod。Root独占progress title/line。本Owner新单独1consumer case使用实际s05raw；不改negativeeffects原审或其5cases/20ssetup；不运行工程/Browser/Git，不改其它source/master/旧证据。

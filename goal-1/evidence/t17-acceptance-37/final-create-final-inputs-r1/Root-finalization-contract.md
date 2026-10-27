@@ -1,0 +1,22 @@
+# Root最终化合同（本根不是GO）
+
+本根保存14个已停producer的实际完整tree、97份有原manifest行的capture、39份不同raw字节及43fresh角色。原literal origin/source完整保；sourceRole只旁列，native_saved_ui→saved_ui有原manifest行SHA与cut依据。相同run/revision分岔使用完整公开receipt元数据SHA的opaque prefix-node；旧family另存，不把new87与旧fullCollect87、R7/R8两个115/100混拼。
+
+35组实际receipt前缀→追加段共54本轮已保存命令，0新Create；此是已发生Native计数的metadata反查，不是此脚本执行成果。unsaved_candidate102可进行历史原文审核，但永不计为新保存；physical两份仅只读；import15/current1/backup/reentry均不新增命令。R7quote115与R7bulk103之间恢复了不同原分支，不能接成连续经营。
+
+原positive35严格旧15keys；negative31严格旧25keys。fresh R7/R8/R9/R10分别13/10/4/16keys，expectedChecks12/9/5/7仅预期公式，尚无新green。原35/31结果不可扩给fresh同字节别名。canonical来源表和state R6完整facts同时绑定，86图/AX仅来源引用不算JSON视觉验收。s09错误source的赔付0保原，原journal line80更正身份常显。
+
+## 本根候选的拒绝运行条件
+
+root-final-spec.CANDIDATE.json保持final:false、authorizedBy:null、auditDirectory:null、freshRegistryOutput:null；fresh-facts-spec-r6.CANDIDATE.json仍final:false/authorizedBy:null。registry.CANDIDATE.json是人工可审形状且state DRAFT，unique history/command count故意为null；禁止仅翻状态把它冒充builder产物。旧verifier的唯一完整payload trie保持原字节，未来真实builder动态计算前缀数，不预填或改原report。
+
+## Root必须完成的实际字段与顺序
+
+1. 先独审这四helper adapter和R6entry唯一import修改；采纳97roles、六scope、canonical及R6四profile。不改旧helper/原state冻结源。新IO只允许真实当前process.execPath在repo外；要逐路径regular/no-symlink及bytes/SHA/mode匹配。R8–10仅用其真实完整journal末producer_stop、lineSHA与原cut.topnewGameplayCommands，不伪造cut.last。原base stop与physicalreaderclosed规则保。
+2. Root最后停止所有mutable文档writer后，另建fresh最终spec文件和fresh最终facts文件。facts按已采纳原内容只改final:true/authorizedBy:/root；wiring.freshSpec更新为其完整identity，referenceFiles中以最终facts替代旧候选事实身份。freshSpec与canonicalSourceContract都必须是完整identity对象并列referenceFiles，不能只放path/说明文字。
+3. Root选尚不存在的full-create-audit-rN及fresh registry输出，spec必须准确填auditDirectory、freshRegistryOutput、authorizedBy:/root、final:true和原operation。Root最终三master/AGENTS/docs36/root37tasks/validation/current immutable sourceFreeze等当前权威，如需引用，按真实finalSTOP身份新增到referenceFiles，且在mutableFinalReferences中各自显式role:final_snapshot_until_runner_terminal；从该快照至runner终态不再写引用的mutable文件。当前本根明确没有绑定这些尚在推进文本。
+4. 对current-official-runtime-metadata完整127/901/P326数组再核真实当前字节/模式/集合。完整901包括真实Node executable；127官方闭包不等于620全部UI。派生101仅dependency，其历史before/after127/901/P326/37refs/3authority与原118逐字相同成功proof保原；旧tasks5618只历史，不要求今天回滚，不重做派生Create。
+5. 经Root精确授权运行本根filesystem-only builder，另文件输出真实registry（不能用本根DRAFT冒名）；Root读新registry和输入完整集合，授权freeze至全新formal根。独立审真实frozen-contract后，由Root另写准确GO，才允许唯一正式runner。此准备未执行builder/freeze/engine/readback，也没有GO。
+6. 原Create/verifier失败保留第一次command/report/terminal并按明确原因单独决策，不把失败覆盖重跑。若Create已绿但readback出错，只允许fresh readback-only纠正并绑定同冻结合同，不重复Create。源/输入/依赖/树漂移保错误并停止，不偷更新冻结合同；不能事后删状态复造历史。
+
+原18文件/原verifier/产品/master/P3/所有Native树和旧证据未修改。本根metadata读回非完全作者隔离（作者参与过UI/test），也非真人/视觉/完整U4B/C-S4-R/PNG/兼容验收。整个U4B仍开，兼容工作0。

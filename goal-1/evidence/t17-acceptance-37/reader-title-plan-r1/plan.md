@@ -1,0 +1,7 @@
+# Native R1票据标题可读性最小修复计划（尚未改源）
+
+Root原190全回归76635仍运行。本轮只读现源与原n02/n03证据，准备标题/完整原引用分离的最小patch候选，严格不改产品、不执行tests/type/build/browser/Git/投影。Root三文件已完整读取；所有写入仅本fresh子目录并逐次guard祖先。
+
+customerName只返回本站原客户业务序号；独立customerRef在原依据继续列fullID。audit用原job日期/本站原auditJobs序；同客户同due的invoice与collection按业务内原数组序号及开单/实收日期区分，不随筛选重新编号。key/recordId/target/原操作/金额/状态/排序均保持。Root另负责picker回应/等待初筛与period焦点直达、support重复及插画分段，本候选不接管consumer。
+
+先核每处移出标题的字段在原lines/ref有完整去处，给比较必要事实与pending语义建议；原全回归终态后Root才能另授权实际修及必要回归。候选patch是设计数据，不等于运行时或测试通过。

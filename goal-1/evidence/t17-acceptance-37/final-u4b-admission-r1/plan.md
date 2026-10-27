@@ -1,0 +1,1 @@
+先只读实际R3correction result/process/child/wrapper和完整metadata前后序列，纯fs/identity核620+11authority+14native tree当前值；立即报RootSTOP窗成立，权威后续合法写另分时间窗，不冒永久same。再读当前能力地图/CS4R独审、37合同/36门槛、工程各实际日志/类型与非UI复用源bridge、Native/formal及图审边界，逐责判限定是否就绪。保outerfalse与一次绿Create/原33和补正33不同层，0第二Create，不因截图自动测关真人/资产/goal。未知缺口成组交Root，不预写true；admission与Git交付/最终封存保全分离。

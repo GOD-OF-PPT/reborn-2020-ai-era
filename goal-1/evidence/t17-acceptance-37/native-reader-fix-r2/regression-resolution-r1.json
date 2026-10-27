@@ -1,0 +1,65 @@
+{
+  "at": "2026-10-26T17:54:59.239Z",
+  "originalResult": {
+    "path": "goal-1/evidence/t17-acceptance-37/u4b-all-original-r1.result.json",
+    "bytes": 441,
+    "sha256": "97f8cdb5d7e706348a6cd7228687a93c765812e71cd4d98596edefe1cdf0467c",
+    "mode": 420,
+    "gitMode": "100644"
+  },
+  "fileCount": 190,
+  "originalCases": 1268,
+  "originalPassed": 1263,
+  "originalFailed": 5,
+  "sourceScope": 599,
+  "firstFullBatch": "red retained",
+  "resolutions": [
+    {
+      "case": "RelayServiceChoice callback",
+      "class": "product callback-contract regression",
+      "fix": "no recordId -> preserve original two arguments; explicit record key -> third argument"
+    },
+    {
+      "case": "funded customer next",
+      "class": "product next-step regression",
+      "fix": "restore original next-service intent, do not send funded customer directly to refund/renew reader"
+    },
+    {
+      "case": "historical meter",
+      "class": "conservative historical display behavior regression",
+      "fix": "incomplete/mismatched original completed-audit metadata remains historical readonly record with explicit reason, not a newly ongoing task; no future receivable wait or new correction"
+    },
+    {
+      "case": "relay-player-thread record label",
+      "class": "intentional presented label change",
+      "fix": "one incidental old literal updated to actual specific original-service ticket reader; all money/date/AP/save/pin/retry assertions kept",
+      "original": {
+        "path": "goal-1/evidence/t17-acceptance-37/native-reader-fix-r2/relay-player-thread.test.ts.before",
+        "bytes": 9201,
+        "sha256": "835471e210f89a744534e838e9e02ff4054577cb227bca6126f33f11761ba488",
+        "mode": 420,
+        "gitMode": "100644"
+      },
+      "current": {
+        "path": "src/ui/relay-player-thread.test.ts",
+        "bytes": 9207,
+        "sha256": "49295563e3e91ec9133c46d4762c9de03b9cac4540fe504f80922967dd64913b",
+        "mode": 420,
+        "gitMode": "100644"
+      }
+    },
+    {
+      "case": "scene-domain-results original 5000ms",
+      "class": "actual timeout, diagnosis pending",
+      "fix": "same original complete file and unchanged gates will be rerun after frozen affected changes; no current pass claimed"
+    }
+  ],
+  "nativeFixes": {
+    "default": "only no explicit record and no saved UI reading position: same parent public progress suggests original current ticket",
+    "picker": "initial truly ongoing/unsettled rows, unknown meters are readable reports rather than commissioned wait; all original133 still explicitly reachable",
+    "titles": "human stable original sequence, IDs fully retained in original evidence",
+    "material": "same-sized foreground indivisible and earlier in body; duplicate state text emitted once; original responsibility/money fully visible"
+  },
+  "compatibility": 0,
+  "taskComplete": false
+}

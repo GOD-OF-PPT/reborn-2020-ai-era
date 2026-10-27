@@ -1,0 +1,7 @@
+# 同原票等待与可选收款
+
+新增case实际65=64pass/1fail，原按钮被公开Nov8原单早停而非Nov14复核开工，并不证明原日期/费用被越过；原Progress/处境/唯一本批等待已过。测试日期校正依原public helpers另记。
+
+同时依据AGENTS27/28和完整游戏取舍，单计量/原任务的玩家也应能明确先等同一原复核，待收款原单保留，不能强迫逐日点到期票。原relayDeferredFeedback只接受整period，本片扩至严格同target的原job或本meter唯一active audit；同一原ClockAdvance仍核费用/原屏障，平行教学保原保守早停，不自动收款或推进。Book默认保已知早停，额外显选继续原反馈放同分页body，避免把更多Clock按钮挤在固定footer。整period原行为不变，借此不机械扩展未知未来分类。
+
+这是同一active-audit等待缺口的完整体验收口，不是改核心/放松日期或测试门槛。仅使用已公开的原job.start/complete和已知原单；原source前像已保，实际Native/回归仍待。

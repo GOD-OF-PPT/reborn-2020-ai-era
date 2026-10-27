@@ -1,0 +1,7 @@
+# 一项同对象目的consumer增量
+
+仅给RelayRecordBook.test.tsx新增1个it与relayFocusFor/playerThread/threadPurpose三个必要import。去除这1项完整增量和3行import后，整文件逐字恢复R2前像；旧14项case/所有断言/既有setup与时限不变，现在15项。生产源码未改。
+
+新case复用beforeAll已有old91官方codec/producer视图，选择同一原期里已更正meter与实际已完成support：relayFocusFor→playerThread→threadPurpose输出须分别指向这一张原票/本票已保存更正/新增应收应付按各自日期，以及这一份原支持/自己的实际完成日。再由真实Reader消费相同target核原更正和支持记录，原inspect完整target保持，查看无request且不写当前测试档。新case不使用quantityFixture或paymentEchoFixture，不冒未更正正常前史或新Native。
+
+[杠精审查] 静态增量通过：测试的是原focus到主线目的和Reader的同对象接线，不是仅检查源码字符串；没有改既有case或绕原门槛。未运行tests/type/build/Browser/Git，仍待Root统一r3Gate/type/consumer与Native。本文件再次冻结。

@@ -1,0 +1,3 @@
+# R3候选最终静态收窄（未执行）
+
+R2保原未执行。R3为所有requireIdentity和privatePreimage/master读补symlink祖先拒绝，缺masterentry先明确拒绝再读suffix；feature限定产品/普通docs而不带Root37记录，record限定完整Root37 seal payload+marker及三master（普通recorddocs须明确），不得record阶段漏整根或产品重复归属。此明确采用旧U0R实际feature→record模式，post/finalignoredproof仍独立新根真实事后写；不预填Root最终文件数/commitSHA。当前全部候选无语法/运行检查，Root独立静审后需另精确manifest/phaseGO才可用。

@@ -1,0 +1,14 @@
+# Root最终需填写的真实字段
+
+唯一候选closeout-r4.candidate.mjs。当前三个r1—r3仅未执行静态前像，不能选旧CLI替代。manifest state须frozen、task U4-B，baseHead8545eece；phase分别feature/record/seal，parent为当阶段真实HEAD（feature=8545完整SHA，record=真实featurecommit，不能预填）。candidateLibrary必须精确本候选文件identity；boundReferences包含R25参数化lib和实际guard及所有本轮helper/config/输入，不能调用旧source/preserve。
+
+1. ordinary为Root独立审核的当前owned普通文件完整identity列表（不是目录），包含字节/SHA/mode；feature只产品/普通docs，record完整Root37 seal payload+marker及可选独占recorddocs，三master由算法单独构建，不在ordinary。不得夹P326/root19/root35/private.delivery/originalinput，currentrelay-records是本task授权owned，原21252只preimages保。
+2. sourceFiles为最终构建绑定的src/assets/public+config完整集合，configPaths/extraFiles明确；数量按实际最终树，不预填611或旧584。所有finalEngineering真实已终态exit0/signalnull（旧红只作为原件留Root37，不塞最终成功gate），当前64394与浏览器/Root写者活动时不可能ready。
+3. producers每原producer cut完整identity，其原cut.last为producer-stop或reader-closed、原tree逐file同；finalNativeRegistry由Root最终单一inputcut冻结，producerCuts与producers精确同集，原候选/物理/backup/import/reentry分支角色保。全部writersStopped/EngineeringTerminal只有真实完成后才true。
+4. finalNativeCreate真实原Create审核结果（passed或allByteEqual真），publicReadback真实passed，coverage文件task=U4-B/limitedTaskReady=true需完整原R2/R3/C-S4-R逐条实际映射，independentAdmission scope=U4-B/admitted=true，finalVisual scope=U4-B/completed=true/claimsHumanApproval=false。Root若既有结果schema不同，先真实另wrapper绑定原结果，不篡改旧结果或造true；本候选不自行证明人类趣味/美术认可。
+5. docsClassification须绑定这次实际result/stdout/stderr，accepted/unclassifiedCount0、actualExitCode与原result一致、wholeDocsPassed等于actualexit0。旧51红只历史，不将它预填成当前；新增逐字绝对SKILL输入可能增加同策略红，必须实跑分类原source，不能改原用户原文凑0。
+6. masterRegistry取Root最新实际owned-master-suffixes-rN.json完整identity（当前r4各suffix11875B，未来可r5）；entry.path/suffix/suffixBytes/sha256/currentBytes/currentSha256/beforeSha/headSha都由代码精确核。privatePreimage读baseline条目.privatePreimage.path（非整个object），只读.delivery/t17-u4b-preimages-8545eece；原2304B/14LF/d6d2…唯一插入去掉后精确等8545blob，working=private原图+ownsuffix；intended仅8545blob+suffix，工作树完全不写。
+7. 每阶段outputDirectory是已创建fresh独立t17-u4b-post…/final…，postRoots只本task新post，不可排除旧marker；privateIntendedDirectory另fresh.delivery/t17-u4b-intended-…，通过post祖先guard+private祖先拒symlink后wx写stage-only文本；不复制P3原插入到public证据。ignoredOwnedPaths是实际Gitcheck-ignore --no-index -v -z读出的完整owned忽略集，不只猜.log；phase前后和commit后逐blob/mode/实际pattern核，不遗失忽略日志。
+8. sealRoot仅当前Root37、finalRootTree是所有真实writer停后完整tree，先两次读一致＋gates齐才wx marker；seal不写未来feature/recordSHA。phaseGO与独审另fresh写、绑定manifest/plan/expectedHead与actualcommitmessage file。stage只精确NULpathspec，hash-object -w --no-filters --真实文件，不stdin。遇脏index就停，不reset，不gitaddall，不删历史/旧P3。
+
+标准顺序复用U0R：最终正确性/图/coverage/独审都齐→feature代码/普通docs显选准备/暂存/实际提交和读回→真实feature完成记录与最新ownmaster后缀→Root37最终原证据停止并封存→record完整证据＋选择性三master提交及读回→独立post/finalignoredproof保持actualSHA与parent，post自提交/封存及最终ignored证明由Root另独立意图，不能用本库candidateSeal封存post（它只许可Root37）或倒写sealed根未来SHA。上一步尚未发生时保持未完成，不以候选存在申请task关闭。

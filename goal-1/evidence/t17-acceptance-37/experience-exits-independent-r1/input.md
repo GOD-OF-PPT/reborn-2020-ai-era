@@ -1,0 +1,1 @@
+Root授权同U4B只读独审新增5源与2consumer具体出口：精确closed纯period→同UI Today，next-service不choose business书签而同biz原ServiceChoice，独立空稿generation/原确认、原Clock/旧责任/readonly候选/账户scope/取消与原册往返。0工程/候选/回放/Browser/Git写；不改源/master，不作全树冻结。

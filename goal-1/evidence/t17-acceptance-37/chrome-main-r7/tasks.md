@@ -1,0 +1,5 @@
+- [ ] Currentstation100 reentryraw preserve/restore99 actualnewstop confirm/result/readonlystate truthful.
+- [ ] Knownnegative singlecashrefund+supplierasset newsource actualsaved, oldreports/prices/protection/AP preserved.
+- [ ] Existingstopped95 currentfullframe, quote114 negotiated-not-effective→Apr9 actualeffect/currentterms, draft/savebook protections.
+- [ ] Exports/reentry/rawaliases/settings restored/currentwholeart independentreview; stopproducer before finalfreeze.
+- U4B/C-S4-R/goalnotcomplete by this setup.

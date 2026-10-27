@@ -1,0 +1,15 @@
+# 实际正式终态有界独审：原outerfalse保，已绿Create不再运行
+
+确认现有唯一实际失败为外层collector输出命名碰撞；未发现原规则回放或33公开事实算法失败证据。此结论只读已有实际artifact/源和当前身份，不执行engine/readback，不改原formal根或冻结权威。后续补正只能新根readback-only，不能再次Create。
+
+1. 原full-create-audit-r1/result.json12914B/SHA229ada8a0cb9848c9fc63f27011e274e1f8293a14396ccf2ecf7f66aaa25ee89仍passed:false，error精确EEXIST readback-terminal.json。executions只记录replay，其余officialSourceIdentity/completeReplay/publicReadbackWiringValid均true，所有官方/901/P3/refs/inputs/snapshots/authority differences[]。不能把此原结果改称一次全绿或补造缺失外层进程terminal。
+
+2. 原replay-terminal明确实际exit0/signalnull/errornull，wall1009032ms；正常原Create报告94508B/SHA5408129ddb579bf952315e16fd951e713ccd846b3fb909164a591a601d7db946实际1creation/178postCreate unique/97artifact/15literal import_buffer，97条各fullNormalCreatePrefixByteEqual:true，allByteEqual:true，127官方source hash与原frozencontract全等。该原完整Create已经通过，54是已有Native保存命令贡献，不是新重玩或97新增命令。
+
+3. readback-result9910B/SHA243f1624c58d350410b00185077536c3254068bd87d5638cef940fb9202996d4实际passed:true/33checks33passed/errornull/diff[]，绑定原合同854921B/387aa69f…；stdout JSON与该result全字段同，原outer.publicReadback也完全同。六scope保positive35/negative31继承原15/25keysets，fresh12/9/5/7各全部通过。child自己readback-terminal exit0/33/33存在；它是child写出的终态资料，外层OS process status/signal未成功存入外层executions，不能事后当不存在的process terminal已收。原stderr仅NodeExperimentalWarning。
+
+4. 两行源确证顺序：registered child最后put('readback-terminal.json',…)随后stdout/退出；outerspawn返回后先put readback-stdout/readback-stderr，再put(output,name+'-terminal.json',terminal)，这在name=readback时同名，原guard+wx触EEXIST，发生在executions.push(terminal)之前。故外层passed计算executions.length!==2且error非null，真实false正确。原事实33代码和原contract并无此命名修补，后续应把process collector终态独立命名，不能覆盖child原终态。
+
+5. 另只读核当前R26完整620源/素材/配置与原immutablefreeze，每path/bytes/hash/mode同；再核原source-before/source-after所有7数组逐identity同及当前全2175唯一文件无漂移。14producer全部files/dirs/modes仍精确等原cut，11当前finalSTOP authority及完整references现值未改。620全产品源保全单列，未由official127替代；原beforeafter为实际run窗口证据，而当前额外身份核只是现时补证，不许改futureSTOP。
+
+补正边界：Root另在新根授权readback-only replacement，必须独立绑定原合同、已绿replay/report、原outerfalse/child33、replacement自身份/独审/新output/GO。其事实33逻辑应不改；读取原contract.publicReadback的身份仍核原entry，不偷换原contract。新collector process终态与childreadback-terminal分名、wx全部新根；若再失败保原，不重跑green Create。不合称33+33为66新事实。新候选准备齐后另定向静审，本报告不是其运行GO。

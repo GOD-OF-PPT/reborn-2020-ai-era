@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-26T22:58:19.970Z",
+  "source": {
+    "path": "goal-1/evidence/t17-acceptance-36/http-preparation-r2/http-readback.mjs",
+    "bytes": 19775,
+    "sha256": "6564598ac9c7ee8dfc8af01f8dae2668dfe40a9c0d8dd87567a3e2f0d213d490",
+    "mode": 420
+  },
+  "candidate": {
+    "path": "/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-37/production-r7-http-readback-r1/http-readback.mjs",
+    "bytes": 19915,
+    "sha256": "888a7862e3301923eedbbbc6cc60dddd16341c37aeee5fed458ccb0fec07b66a",
+    "mode": 420
+  },
+  "edits": [
+    {
+      "from": "inputRoot='goal-1/evidence/t17-acceptance-36',build='.delivery/t17-u0r-r10'",
+      "to": "inputRoot='goal-1/evidence/t17-acceptance-37',build='.delivery/t17-u4b-r7'"
+    },
+    {
+      "from": "dirname(absoluteOut)!==resolve(repo,inputRoot)",
+      "to": "dirname(absoluteOut)!==dirname(fileURLToPath(import.meta.url))"
+    },
+    {
+      "from": "U0R_FRESH_DELIVERY_SIBLING_REQUIRED",
+      "to": "U4B_R7_FRESH_OWNED_DELIVERY_CHILD_REQUIRED"
+    },
+    {
+      "from": "const authorityPath=inputRoot+'/u0r-build-r10.source-after.json',beforeAuthorityPath=inputRoot+'/u0r-build-r10.source-before.json',buildResultPath=inputRoot+'/u0r-build-r10.result.json',baselinePath=inputRoot+'/baseline.json',runnerPath=inputRoot+'/run-long-step-r2.mjs',nativeRegistryPath=inputRoot+'/native-inputs.json';",
+      "to": "const authorityPath=inputRoot+'/u4b-build-r7.source-after.json',beforeAuthorityPath=inputRoot+'/u4b-build-r7.source-before.json',buildResultPath=inputRoot+'/u4b-build-r7.result.json',baselinePath=inputRoot+'/baseline.json',runnerPath=inputRoot+'/run-long-step-r21.mjs',nativeRegistryPath=inputRoot+'/native-inputs-r1.json';"
+    },
+    {
+      "from": "inputRoot+'/test-gate-identity-r2.json'",
+      "to": "inputRoot+'/test-gate-identity-r21.json'"
+    },
+    {
+      "from": "prefix.role!=='known previous saved-history input; not new UI progression'",
+      "to": "prefix.role!=='existing normal-history input; prior evidence, not a new Create or current Native action'"
+    },
+    {
+      "from": "if(registry.sourceBinding!==undefined)bind(registry.sourceBinding,'sourceBinding');",
+      "to": "if(registry.sourceBinding!==undefined&&typeof registry.sourceBinding==='object'&&registry.sourceBinding!==null)bind(registry.sourceBinding,'sourceBinding');"
+    },
+    {
+      "from": "SUCCESSFUL_FROZEN_U0R_BUILD_REQUIRED",
+      "to": "SUCCESSFUL_FROZEN_U4B_R7_BUILD_REQUIRED"
+    },
+    {
+      "from": "argv:['rtk','proxy','node',relative(repo,fileURLToPath(import.meta.url))",
+      "to": "argv:['rtk','proxy',process.execPath,relative(repo,fileURLToPath(import.meta.url))"
+    }
+  ],
+  "nativeRegistrySourceBinding": "Current root37 registry uses a policy string, not a file identity. Do not pretend to bind that string; actual build/before-after/source/extra/core/P326 and exact registered prefix rows remain mandatory.",
+  "scope": "Only current R7 artifact/metadata/output parameters and exact registry-role shape, no rule/scan/HTTP/hash protection relaxed"
+}

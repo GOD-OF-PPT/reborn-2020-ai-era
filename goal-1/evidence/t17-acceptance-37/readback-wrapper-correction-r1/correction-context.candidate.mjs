@@ -1,0 +1,29 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import {fileURLToPath} from 'node:url'
+import {read,requireIdentity,identityEqual,requireIdentitySet,requireStringSet,requireProducerTree,requireProducerStop,validatePublicReadbackResult,guard,repo} from '../final-create-final-inputs-r1/audit-io.mjs'
+
+// Filesystem authorization/identity bridge only. No engine, codec or commands.
+export function correctionContext(goPath,role){
+ if(process.version!=='v22.12.0'||!['runner','replacement'].includes(role)||typeof goPath!=='string')throw Error('EXACT_NODE22_CORRECTION_ROLE_AND_GO_REQUIRED')
+ const goData=read(goPath),go=JSON.parse(goData.bytes.toString('utf8')),directory='goal-1/evidence/t17-acceptance-37/full-create-audit-r1'
+ if(go.authorizedBy!=='/root'||go.operation!=='one_public_readback_only_after_green_original_create'||go.originalAuditDirectory!==directory||typeof go.outputDirectory!=='string'||!/^goal-1\/evidence\/t17-acceptance-37\/readback-wrapper-correction-run-r[1-9][0-9]*$/.test(go.outputDirectory)||go.newCreateExecutions!==0||go.originalCreateMustNotRepeat!==true)throw Error('EXACT_ROOT_READBACK_ONLY_CORRECTION_GO_REQUIRED')
+ const required={frozenContract:directory+'/frozen-contract.json',replayReport:directory+'/report/normal-browser-export-audit.json',replayTerminal:directory+'/replay-terminal.json',originalOuterResult:directory+'/result.json',originalOuterTerminal:directory+'/terminal.json',originalReadbackResult:directory+'/readback-result.json',originalReadbackTerminal:directory+'/readback-terminal.json',originalSourceBefore:directory+'/source-before.json',originalSourceAfter:directory+'/source-after.json'}
+ const data={};for(const [key,expected]of Object.entries(required)){if(go[key]?.path!==expected)throw Error('EXACT_ORIGINAL_CORRECTION_INPUT_REQUIRED:'+key);data[key]=requireIdentity(go[key])}
+ for(const key of ['replacementScript','correctionRunner','correctionSupport','independentReview'])data[key]=requireIdentity(go[key])
+ const self=read(path.relative(repo,fileURLToPath(import.meta.url)).split(path.sep).join('/'))
+ if(!identityEqual(self.identity,go.correctionSupport))throw Error('EXACT_CORRECTION_SUPPORT_IDENTITY_REQUIRED')
+ const contractData=data.frozenContract,contract=JSON.parse(contractData.bytes.toString('utf8')),report=JSON.parse(data.replayReport.bytes.toString('utf8')),replay=JSON.parse(data.replayTerminal.bytes.toString('utf8')),outer=JSON.parse(data.originalOuterResult.bytes.toString('utf8')),outerTerminal=JSON.parse(data.originalOuterTerminal.bytes.toString('utf8')),oldReadback=JSON.parse(data.originalReadbackResult.bytes.toString('utf8')),oldChild=JSON.parse(data.originalReadbackTerminal.bytes.toString('utf8')),before=JSON.parse(data.originalSourceBefore.bytes.toString('utf8')),after=JSON.parse(data.originalSourceAfter.bytes.toString('utf8'))
+ if(contract.directory!==directory||replay.exitCode!==0||replay.signal!==null||replay.error!==null||report.inputDirectory!==directory+'/input'||report.allByteEqual!==true||report.creations!==contract.expectedReplay.creationHistories||report.executedUniqueCommands!==contract.expectedReplay.uniqueHistoricalCommands||report.files!==contract.expectedReplay.artifactRows||report.inputBuffers!==contract.expectedReplay.literalImportBufferRows||Object.keys(report.sourceHashes).length!==contract.officialSources.length||contract.officialSources.some(r=>report.sourceHashes[r.path]!==r.sha256))throw Error('EXACT_GREEN_ORIGINAL_FULL_CREATE_REPORT_REQUIRED_NO_SECOND_CREATE')
+ if(outer.passed!==false||outerTerminal.exitCode!==1||outer.completeReplay!==true||outer.officialSourceIdentity!==true||outer.publicReadbackWiringValid!==true||outer.executions?.length!==1||outer.executions[0].name!=='replay'||outer.executions[0].exitCode!==0||outer.error?.name!=='Error'||!outer.error.message.startsWith('EEXIST:')||!outer.error.message.includes(directory+'/readback-terminal.json'))throw Error('EXACT_ORIGINAL_TERMINAL_FILENAME_COLLISION_REQUIRED')
+ const closedKeys=['officialSources','dependencies','p3','references','inputs','snapshots','executionAuthority'];requireStringSet(Object.keys(before),closedKeys,'ORIGINAL_BEFORE_CLOSURE_REQUIRED');requireStringSet(Object.keys(after),closedKeys,'ORIGINAL_AFTER_CLOSURE_REQUIRED')
+ for(const key of closedKeys){requireIdentitySet(before[key],after[key],'ORIGINAL_EXECUTION_WINDOW_CHANGED:'+key);if(!Array.isArray(outer.differences?.[key])||outer.differences[key].length)throw Error('ORIGINAL_EXECUTION_DIFFERENCE_NOT_EMPTY:'+key)}
+ if(oldReadback.passed!==true||oldReadback.checks!==33||oldReadback.passedChecks!==33||oldReadback.error!==null||oldReadback.failedChecks?.length!==0||oldChild.exitCode!==0||oldChild.checks!==33||oldChild.passedChecks!==33)throw Error('ORIGINAL_PUBLIC_READBACK33_MUST_ALREADY_HAVE_PASSED')
+ validatePublicReadbackResult(oldReadback,contract,contractData.identity)
+ const originals=[...contract.officialSources,...contract.dependencies,...contract.p3,...contract.references,...contract.originalInputs,...contract.snapshots,...before.executionAuthority,...Object.values(data).map(d=>d.identity),goData.identity]
+ const unique=new Map();for(const row of originals){const previous=unique.get(row.path);if(previous&&!identityEqual(previous,row))throw Error('CONFLICTING_REGISTERED_CORRECTION_IDENTITY:'+row.path);unique.set(row.path,row)}
+ const tracked=[...unique.values()];for(const row of tracked)requireIdentity(row)
+ const verify=()=>{for(const row of tracked)requireIdentity(row);for(const row of contract.producerCuts){const observed=requireProducerTree(row);requireProducerStop(observed.cut,row,observed.tree)}}
+ verify()
+ return {go,goData,directory,out:path.resolve(repo,go.outputDirectory),contractData,contract,tracked,verify,scriptData:role==='runner'?data.correctionRunner:data.replacementScript,oldReadbackChecks:33,guard}
+}

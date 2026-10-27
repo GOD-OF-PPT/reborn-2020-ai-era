@@ -1,0 +1,85 @@
+--- goal-1/evidence/t17-acceptance-37/station-stop-confirmation-fix-r1/RelayResponseCommandDetails.tsx.before
++++ src/ui/RelayResponseCommandDetails.tsx
+@@ -9,10 +9,46 @@
+ const one=<T,>(rows:readonly T[])=>rows.length===1?rows[0]:undefined
+ 
+ /** These are captured original facts for the original confirmation, not an alternative preview. */
+-export function relayResponseCommandDetails({command,relay,accountName}:{command:CommandEnvelope;relay:Relay;accountName:(id:string)=>string}):ReactNode{
++export function relayResponseCommandDetails({command,relay,accountName,view,finance}:{command:CommandEnvelope;relay:Relay;accountName:(id:string)=>string;view?:GamePanelProps['view']|undefined;finance?:GamePanelProps['features']['workbench']['finance']|undefined}):ReactNode{
+  if(!relay)return null
+  if(command.payload===null||typeof command.payload!=='object'||Array.isArray(command.payload)||Object.values(Object.getOwnPropertyDescriptors(command.payload)).some(d=>d.get!==undefined||d.set!==undefined))return null
+  const body=command.payload as Record<string,unknown>,book=relay.casebook?.status==='ready'&&relay.casebook.runId===command.runId&&relay.casebook.revision===command.expectedRevision?relay.casebook:null
++  if(command.kind==='StopRelayStation'){
++   const business=one(relay.businesses.filter(b=>b.id===body.businessId)),captured=view&&view.runId===command.runId&&view.revision===command.expectedRevision?view:undefined
++   if(!business||!captured||!one(captured.operations?.businesses.filter(b=>b.id===business.id&&b.accountId===business.accountId)??[]))return <section className="confirmation-context"><h3>停下这间原站，先核对原任务与旧款</h3><p className="warning-box">这次停站的原企业、账户或确认时画面尚未完整对齐；任务、已用投入与原余额未知，没有把它们记成零。原停站仍按本次原核对裁定。</p></section>
++   const account=one(captured.accounts.filter(a=>a.accountId===business.accountId)),capturedFinance=one(finance?.filter(a=>a.accountId===business.accountId)??[]),history=book?.asOf===captured.date?book:null
++   const accountFinance=account&&capturedFinance&&capturedFinance.cashFen===account.cashFen&&capturedFinance.heldFen===account.heldFen&&capturedFinance.availableFen===account.availableFen&&capturedFinance.payableFen===account.payableFen&&capturedFinance.receivableFen===account.receivableFen&&capturedFinance.supplierPrepaidFen===account.supplierPrepaidFen?capturedFinance:undefined
++   const workers=captured.operations?.workers.filter(w=>w.sponsorBusinessId===business.id&&w.to===null)??[],jobs=captured.operations?.jobs??[],ownJobs=jobs.filter(j=>j.businessId===business.id),active=ownJobs.filter(j=>j.status==='planned'||j.status==='running')
++   const otherJobs=jobs.filter(j=>j.businessId!==business.id&&(j.status==='planned'||j.status==='running')&&workers.some(w=>j.resources.includes(w.id)))
++   const label=(definitionId:string)=>definitionId.startsWith('relay-support-')?'原支持':definitionId==='relay-meter-audit'?'原计量复核':definitionId==='relay-service'?'原服务':'原经营任务'
++   const actionFor=(job:(typeof jobs)[number])=>{
++    const action=one(history?.actions.filter(a=>a.jobId===job.id||a.definition.id===job.actionId)??[])
++    return jobs.filter(j=>j.id===job.id).length===1&&action&&action.jobId===job.id&&action.definition.id===job.actionId&&action.scopeBusinessId===business.id&&action.definition.businessId===business.id&&action.definition.accountId===business.accountId&&action.definition.startAt===job.startAt&&action.definition.completeAt===job.completeAt&&Number.isSafeInteger(action.definition.costFen)&&action.definition.costFen>=0&&Number.isSafeInteger(action.definition.actionPoints)&&action.definition.actionPoints>=0?action:undefined
++   }
++   const retained=ownJobs.filter(j=>['completed','interrupted','cancelled'].includes(j.status)&&actionFor(j)?.executedAt!==null&&actionFor(j)!==undefined)
++   const obligations=history?.obligationHistory.filter(o=>o.scopeBusinessId===business.id&&o.accountId===business.accountId&&o.remainingFen>0)
++   return <section className="confirmation-context relay-station-stop-terms">
++    <h3>停站会停下原任务，已用投入与旧款继续</h3>
++    <p>{accountName(business.accountId)} · 原确认日期{captured.date}。本次停止本站后续流量并进入收尾，不等于关闭账户、结清原合同或完成支持。</p>
++    <h4>这次会停下哪些原安排</h4>
++    {active.length?<ul>{active.map(job=>{
++     const action=actionFor(job),reserve=action?one(accountFinance?.reservations.filter(r=>r.id===action.definition.cashReservationId&&r.accountId===business.accountId&&r.originId===action.definition.id&&r.kind==='plan'&&r.status==='active')??[]):undefined
++     const planned=job.status==='planned'&&action?.status==='reserved'&&action.executedAt===null,running=job.status==='running'&&action?.status==='executed'&&action.executedAt!==null&&action.executedAt<=captured.date
++     return <li key={job.id}>{label(job.definitionId)} · {job.startAt}—{job.completeAt}。{planned?<>尚未开工；停站会取消这份原安排。原承诺成本{moneyText(action.definition.costFen)}、{action.definition.actionPoints}点；当前对应现金预留{reserve?moneyText(reserve.amountFen):'尚未取得，金额未知'}，取消后的释放以原账为准。</>:running?<>实际开工日{action.executedAt}；停站会中断这份原任务。已用原成本{moneyText(action.definition.costFen)}、{action.definition.actionPoints}点不退回；实付与尚欠按原账分列。</>:<>原行动或预留引用尚不能唯一核对；会停止原任务，已用与未用金额未知，不按零处理。</>}<details><summary>核对这份会停止的原任务</summary><p>原任务 {job.id}；原行动 {job.actionId}；原占款 {action?.definition.cashReservationId??'尚未取得'}。</p></details></li>
++    })}</ul>:<p>当前公开记录没有本站尚未开工或进行中的原任务；既往投入与旧责任仍保留。</p>}
++    {!history?<p className="warning-box">逐笔原行动与付款明细尚未取得或不属于这次确认；已用成本、预留释放与本站旧义务明细未知，不补成零。</p>:null}
++    <p>已中断的原支持不会免费补做；已经发生的支持费用、赔付、退款和更正仍沿各自原单保留，停站不把未完成支持补记成完成。</p>
++    {retained.length?<details><summary>已完成或中断的原投入，不因停站退回</summary>{retained.map(job=>{const action=actionFor(job)!;return <p key={job.id}>{label(job.definitionId)} · 原任务 {job.id}；实际开工{action.executedAt}，原成本{moneyText(action.definition.costFen)}、{action.definition.actionPoints}点已经使用；原状态{job.status==='completed'?'已完成':job.status==='interrupted'?'已中断':'已取消但有实际开工'}继续保留。</p>})}</details>:null}
++    <h4>原员工与已经发生的维护、工资</h4>
++    {workers.length?<ul>{workers.map(worker=><li key={worker.id}>本站原员工 {worker.id}（{worker.definitionId}）将按{captured.date}离岗；原月薪基准{moneyText(worker.monthlyWageFen)}，已在岗工资仍按原实际日期结算，不由本页按月薪另算一次。</li>)}</ul>:<p>当前公开记录没有本站仍在岗的原员工；既往工资与欠款仍按原记录保留。</p>}
++    {otherJobs.length?<p>这些其它主体的原排程也使用上述员工，离岗会按原规则中断：{otherJobs.map(j=>j.id).join('、')}。各自成本与未付仍归原主体，本页不挪入本站金额。</p>:null}
++    <p>本账户截至{captured.date}已发生未出账成本：{accountFinance?moneyText(accountFinance.accruedCostFen):'尚未取得，金额未知'}。这是本账户公开累计值，可能含其它已发生项，不冒称全部归本站，也不是这次保证支付的现金额。</p>
++    <p>停站会按实际日期结算原维护及在岗工资；“停站新增费用”不等于现金变化为零。实际付款、保护限制和仍欠金额由原规则与保存后的原流水核定，本页不模拟停站或重算工资。</p>
++    <h4>这些原款不会因停站消失</h4>
++    {account?<><p>本账户原现金{moneyText(account.cashFen)}；已占款{moneyText(account.heldFen)}；当前可花{moneyText(account.availableFen)}。保护需求（含客户保护与冻结）{moneyText(account.protectionRequiredFen)}；其中客户未消费预款负债{moneyText(account.prepaidLiabilityFen)}。</p><p>本账户原应收{moneyText(account.receivableFen)}；原应付{moneyText(account.payableFen)}；未用供应资产与贷项{moneyText(account.supplierPrepaidFen)}。应收和供应资产不等于可花现金，停站不会自动收款、退款或取回资产。</p></>:<p className="warning-box">本账户原资金、保护、应收应付与供应资产尚未唯一取得，金额未知，不记为零。</p>}
++    {obligations?.length?<details><summary>本站仍未付的原义务</summary>{obligations.map(debt=><p key={debt.id}>原义务 {debt.id} · {debt.date} · 原金额{moneyText(debt.amountFen)}，仍欠{moneyText(debt.remainingFen)}；原来源 {debt.sourceEventId}、原操作 {debt.originOperationId}继续保留。</p>)}</details>:history?<p>逐笔本站原账没有列出未付义务；本账户及其它主体的义务仍分别核对。</p>:null}
++   </section>
++  }
+  const monetary=['CollectRelayReceivable','RefundRelayBalance','RefundRelaySupplier','PayObligation'].includes(command.kind)
+  if(monetary&&(typeof body.amountFen!=='number'||!Number.isSafeInteger(body.amountFen)||body.amountFen<=0))return <p className="warning-box">本次金额尚未完整核对，请返回原票重新确认。</p>
+  if(command.kind==='RenewRelayCustomer'){
+--- goal-1/evidence/t17-acceptance-37/station-stop-confirmation-fix-r1/RelayCommandDetails.tsx.before
++++ src/ui/RelayCommandDetails.tsx
+@@ -9,9 +9,9 @@
+ import {relayResponseCommandDetails} from './RelayResponseCommandDetails.tsx'
+ 
+ /** The caller supplies the same captured public snapshot as the original confirmation. */
+-export function RelayCommandDetails({command,relay,workers,accountName}:{command:CommandEnvelope;relay:GamePanelProps['features']['relay'];workers:readonly WorkerInstance[];accountName:(id:string)=>string}){
++export function RelayCommandDetails({command,relay,workers,accountName,view,finance}:{command:CommandEnvelope;relay:GamePanelProps['features']['relay'];workers:readonly WorkerInstance[];accountName:(id:string)=>string;view?:GamePanelProps['view']|undefined;finance?:GamePanelProps['features']['workbench']['finance']|undefined}){
+  if(!relay)return null
+- const response=relayResponseCommandDetails({command,relay,accountName})
++  const response=relayResponseCommandDetails({command,relay,accountName,view,finance})
+  if(response)return response
+  if(command.kind==='TopUpRelaySupplier'){
+   const p=command.payload as {businessId:string;supplierId:string;amountFen:number},business=relay.businesses.find(b=>b.id===p.businessId),supplier=relay.catalog.suppliers.find(s=>s.id===p.supplierId)
+--- goal-1/evidence/t17-acceptance-37/station-stop-confirmation-fix-r1/CommandDetails.tsx.before
++++ src/ui/CommandDetails.tsx
+@@ -25,7 +25,7 @@
+  <LifeCommandDetails command={command} confirm={confirm} features={features} view={view}/>
+  <VideoCommandDetails command={command} video={features.video} date={view.date} view={view} finance={features.workbench.finance}/>
+  <CourseCommandDetails command={command} course={features.course} workers={view.operations?.workers??[]} view={view} confirm={confirm} accountName={accountName}/>
+- <RelayCommandDetails command={command} relay={features.relay} workers={view.operations?.workers??[]} accountName={accountName}/>
++  <RelayCommandDetails command={command} relay={features.relay} workers={view.operations?.workers??[]} accountName={accountName} view={view} finance={features.workbench.finance}/>
+  {command.kind==='FundBusiness'||command.kind==='DistributeProfit'?<section className="confirmation-context"><h3>本次转账不产生一份新利润</h3><p>{command.kind==='FundBusiness'?'个人账户 → '+(business?accountName(business.accountId):'指定企业账户'):(business?accountName(business.accountId):'指定企业账户')+' → 个人账户'}，实际金额{moneyText(typeof p.amountFen==='number'?p.amountFen:null)}。转入资金不计业务收入，已确认利润也不等于当前可分配现金。</p></section>:null}
+  {opening?<section className="confirmation-context"><h3>资本转入之后，还要实际准备和经营</h3><p>由个人转入新{opening.name}账户{moneyText(typeof p.capitalFen==='number'?p.capitalFen:null)}，不是收入或费用。每月维护基准{moneyText(opening.requirements.monthlyMaintenanceFen)}按实际日期发生，工资、资格、产能和原义务另行核对。</p></section>:null}
+  {command.kind==='WorkQuarter'?<section className="confirmation-context"><h3>现在不会提前收到工资</h3><p>本季度全月在岗基准{moneyText(features.workbench.employmentMonthlySalaryFen)}，按实际在岗日期在月末到账。当前确认只安排本季，不自动接受下一季工作或其他业务。</p></section>:null}
+--- goal-1/evidence/t17-acceptance-37/station-stop-confirmation-fix-r1/confirmation-money.ts.before
++++ src/ui/confirmation-money.ts
+@@ -1,6 +1,7 @@
+ import type {CommandEnvelope} from '../core/run-types.ts'
+ import type {CommandPreview} from '../core/commands.ts'
+ export function confirmationMoney(command:CommandEnvelope,preview:CommandPreview){
++  if(command.kind==='StopRelayStation')return {label:'停站新增费用（原维护与工资结算另核）',amountFen:preview.upfrontCostFen}
+  if(command.kind==='RefundCourseLearners')return {label:'本次新增操作费用（学员退款另列）',amountFen:preview.upfrontCostFen}
+  const p=typeof command.payload==='object'&&command.payload!==null?command.payload as Record<string,unknown>:{}
+  const amount=(key:string)=>typeof p[key]==='number'&&Number.isSafeInteger(p[key])&&(p[key] as number)>=0?p[key] as number:null

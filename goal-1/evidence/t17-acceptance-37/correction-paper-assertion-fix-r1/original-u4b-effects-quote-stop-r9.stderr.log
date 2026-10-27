@@ -1,0 +1,302 @@
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 18 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/relay-correction-effects.test.ts > reads the saved single negative correction as actual606 cash refund and202 restored supplier asset while keeping the original customer protection
+AssertionError: expected 'partial' to be 'known' // Object.is equality
+
+Expected: "known"
+Received: "partial"
+
+ ❯ src/ui/relay-correction-effects.test.ts:51:19
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/18]⎯
+
+ FAIL  src/ui/relay-correction-effects.test.ts > keeps the historical202 restoration separate from later101 asset return and505 current pool after other corrections and old obligations
+AssertionError: expected { status: 'unavailable', …(17) } to match object { status: 'known', …(2) }
+(15 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "refundDueFen": 0,
+-   "refundPaidFen": 606,
+-   "status": "known",
++   "refundDueFen": null,
++   "refundPaidFen": null,
++   "status": "unavailable",
+  }
+
+ ❯ src/ui/relay-correction-effects.test.ts:66:22
+     64|  for(const [f,current]of [[neg103,101],[neg109,505]] as const){
+     65|   const e=effect(f)
+     66|   expect(e.customer).toMatchObject({status:'known',refundPaidFen:606,r…
+       |                      ^
+     67|   expect(e.supplier).toMatchObject({status:'known',restoredAssetFen:20…
+     68|   expect(e.supplier.pools[0]!.currentRemainingFen).toBe(current)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/18]⎯
+
+ FAIL  src/ui/relay-correction-effects.test.ts > publishes linked money facts in the correction first layer without changing original record identity or losing original IDs
+AssertionError: expected '2025-03-07追加；原报告 1112单位 → 已核 1011单位该更…' to contain '累计实际退 ¥6.06'
+
+Expected: "累计实际退 ¥6.06"
+Received: "2025-03-07追加；原报告 1112单位 → 已核 1011单位该更正的原现金退还、客户余额或原单引用尚未核齐；未知部分不按零或已经结清处理。该更正冲减原供应未付 ¥0；恢复供应未用资产/贷项 ¥2.02，没有因此收到供应现金。该供应当前本站跨期未用资产/贷项 ¥2.02；当前余额不全部归于这张更正。客户收入调整 -¥6.06；供应成本调整 -¥2.02；不是本次现金实收本次原义务 2025-03-07到期；当前尚欠 ¥0"
+
+ ❯ src/ui/relay-correction-effects.test.ts:92:74
+     90|  const rows=relayRecordRows(neg102.p,neg102.target),row=rows.rows.find…
+     91|  expect(rows.reason).toBeNull();expect(row.recordId).toBe(neg102.corre…
+     92|  expect(row.target).toEqual(neg102.target);expect(row.summary!.join(''…
+       |                                                                          ^
+     93|  expect(row.lines.join('\n')).toContain(neg102.target.meterId!);expect…
+     94|  for(const id of correction(neg102).operationIds)expect(row.lines.join…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/18]⎯
+
+ FAIL  src/ui/relay-correction-effects.test.ts > distinguishes registered cash refund, actual laterPay and remaining matched protection without using historical due status as current debt
+AssertionError: expected { status: 'unavailable', …(17) } to match object { status: 'known', …(4) }
+(13 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "refundDueFen": 606,
+-   "refundPaidFen": 0,
+-   "refundProtectedFen": 606,
+-   "refundRegisteredFen": 606,
+-   "status": "known",
++   "refundDueFen": null,
++   "refundPaidFen": null,
++   "refundProtectedFen": null,
++   "refundRegisteredFen": null,
++   "status": "unavailable",
+  }
+
+ ❯ src/ui/relay-correction-effects.test.ts:110:26
+    108| it('distinguishes registered cash refund, actual laterPay and remainin…
+    109|  const unpaid=effects(unpaidRefund()),part=effects(laterRefundPay(unpa…
+    110|  expect(unpaid.customer).toMatchObject({status:'known',refundRegistere…
+       |                          ^
+    111|  expect(part.customer).toMatchObject({status:'known',refundInitiallyPa…
+    112|  expect(all.customer).toMatchObject({status:'known',refundPaidFen:606,…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/18]⎯
+
+ FAIL  src/ui/relay-correction-effects.test.ts > keeps a mixed original receivable reversal and cash refund as separate consequences of one negative adjustment
+AssertionError: expected { status: 'unavailable', …(17) } to match object { status: 'known', …(5) }
+(12 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "incomeDeltaFen": -606,
+-   "receivableReversedFen": 100,
+-   "refundDueFen": 0,
+-   "refundPaidFen": 506,
+-   "refundRegisteredFen": 506,
+-   "status": "known",
++   "incomeDeltaFen": null,
++   "receivableReversedFen": null,
++   "refundDueFen": null,
++   "refundPaidFen": null,
++   "refundRegisteredFen": null,
++   "status": "unavailable",
+  }
+
+ ❯ src/ui/relay-correction-effects.test.ts:145:21
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/18]⎯
+
+ FAIL  src/ui/relay-correction-effects.test.ts > keeps the other side known when only supplier-ref is unavailable
+ FAIL  src/ui/relay-correction-effects.test.ts > keeps the other side known when only supplier-missing-op is unavailable
+AssertionError: expected 'unavailable' to be 'partial' // Object.is equality
+
+Expected: "partial"
+Received: "unavailable"
+
+ ❯ src/ui/relay-correction-effects.test.ts:155:19
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/18]⎯
+
+ FAIL  src/ui/relay-correction-effects.test.ts > reads negative supplier reductions from exact paid/debt facts as unpaid reversal or mixed debt and asset without min or balance-only inference
+AssertionError: expected null to be 606 // Object.is equality
+
+- Expected:
+606
+
++ Received:
+null
+
+ ❯ src/ui/relay-correction-effects.test.ts:175:40
+    173|  expect(unpaid.supplier).toMatchObject({status:'known',reversedFen:202…
+    174|  expect(mixed.supplier).toMatchObject({status:'known',reversedFen:202,…
+    175|  expect(unpaid.customer.refundPaidFen).toBe(606);expect(mixed.customer…
+       |                                        ^
+    176| })
+    177|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/18]⎯
+
+ FAIL  src/ui/relay-correction-effects.test.ts > refuses a per-correction supplier split when more than one reverse shares the original cost, retaining the customer result
+AssertionError: expected 'unavailable' to be 'partial' // Object.is equality
+
+Expected: "partial"
+Received: "unavailable"
+
+ ❯ src/ui/relay-correction-effects.test.ts:180:19
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/18]⎯
+
+ FAIL  src/ui/relay-correction-effects.test.ts > reads reversal of an originally consumed supplier asset as asset restoration instead of payable reduction or supplier cash
+AssertionError: expected null to be 606 // Object.is equality
+
+- Expected:
+606
+
++ Received:
+null
+
+ ❯ src/ui/relay-correction-effects.test.ts:191:35
+    189|  expect(e.supplier).toMatchObject({status:'known',reversedFen:202,redu…
+    190|  expect(e.supplier.reversals[0]!.sourceKind).toBe('consume_supplier');…
+    191|  expect(e.customer.refundPaidFen).toBe(606)
+       |                                   ^
+    192| })
+    193|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/18]⎯
+
+ FAIL  src/ui/relay-correction-effects.test.ts > keeps an old committed snapshot under candidate protection and allows readonly history without publishing a new success
+AssertionError: expected { status: 'partial', …(7) } to match object { status: 'known', …(2) }
+(34 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "customer": {
+-     "refundPaidFen": 606,
++     "refundPaidFen": null,
+    },
+-   "status": "known",
++   "status": "partial",
+    "supplier": {
+      "restoredAssetFen": 202,
+    },
+  }
+
+ ❯ src/ui/relay-correction-effects.test.ts:217:77
+    215|  const old={...old101.p,view:{...old101.p.view,hasCandidate:true,saveS…
+    216|  expect(relayCorrectionEffects(old,old101.target,neg102.correctionId).…
+    217|  expect(relayCorrectionEffects(readOnly,neg102.target,neg102.correctio…
+       |                                                                             ^
+    218|  expect(effect(neg102).summary.join('')).not.toContain('本次');expect(ef…
+    219| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/18]⎯
+
+ FAIL  src/ui/relay-correction-effects.test.ts > does not consume hidden meter truth or mutate any of the seven actual original authorities
+AssertionError: expected 'partial' to be 'known' // Object.is equality
+
+Expected: "known"
+Received: "partial"
+
+ ❯ src/ui/relay-correction-effects.test.ts:225:34
+    223|  Object.defineProperty(publicMeter,'actualUnits',{get(){throw Error('U…
+    224|  const guarded=change(p,r=>({...r,meters:r.meters.map(m=>m.id===meter.…
+    225|  expect(effects(guarded).status).toBe('known')
+       |                                  ^
+    226|  for(const f of [pos103,pos106,old101,neg102,neg103,neg104,neg109])exp…
+    227| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/18]⎯
+
+ FAIL  src/ui/relay-correction-paper-effects.test.tsx > prints the saved negative correction cash refund and restored supplier asset beside the unchanged original report and adjustment
+AssertionError: expected 'partial' to be 'known' // Object.is equality
+
+Expected: "known"
+Received: "partial"
+
+ ❯ src/ui/relay-correction-paper-effects.test.tsx:31:25
+     29| it('prints the saved negative correction cash refund and restored supp…
+     30|  const art=paper(negative),html=markup(art),effects=relayCorrectionEff…
+     31|  expect(effects.status).toBe('known');expect(art).toMatchObject({phase…
+       |                         ^
+     32|  expect(art.line).toContain('原报告 1112');expect(art.line).toContain('原已…
+     33|  expect(art.paymentLabel).toContain('客户收入调整 '+moneyText(-606));expect(…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/18]⎯
+
+ FAIL  src/ui/relay-correction-paper-effects.test.tsx > keeps each known side visible when only the other original operation chain is unavailable, and retains the adjustment even when both are unknown
+AssertionError: expected 'unavailable' to be 'known' // Object.is equality
+
+Expected: "known"
+Received: "unavailable"
+
+ ❯ src/ui/relay-correction-paper-effects.test.tsx:54:114
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/18]⎯
+
+ FAIL  src/ui/relay-correction-paper-effects.test.tsx > publishes positive original new receivable and supplier due dates without turning their adjustments into cash received
+AssertionError: expected '<span class="relay-paper-notes"><span…' to contain '应付'
+
+Expected: "应付"
+Received: "<span class="relay-paper-notes"><span class="relay-paper-date">2025-01-04</span><span class="relay-paper-ticket-note" data-relay-ticket="correction">追加更正附票</span><span class="relay-paper-scope-note">同一原期的记录</span><span class="relay-paper-line">原报告 136 · 原已核实计 151</span><span class="relay-paper-payment-note" data-payment-nature="correction">客户收入调整 ¥1.20 · 供应成本调整 ¥0.60；不是本次现金实收</span><span class="relay-paper-responsibility">该更正新增原应收 ¥1.20；2025-01-04开单 / 2025-01-18到期；当前净未收 ¥1.20。；该更正客户收入调整 ¥1.20；收款仍沿原单实际发生，不重复确认收入。；该更正新增供应成本 ¥0.60；2025-01-04登记 / 2025-01-11到期；原现金已付 ¥0，原贷项抵付 ¥0，当前尚欠 ¥0.60。；该供应当前本站跨期未用资产/贷项 ¥60；当前余额不全部归于这张更正。</span></span>"
+
+ ❯ src/ui/relay-correction-paper-effects.test.tsx:71:140
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/18]⎯
+
+ FAIL  src/ui/relay-correction-result.test.tsx > puts the actual consumed-money cash refund and restored supplier asset in the same visible first sentence after the original retry
+AssertionError: expected '客户原款去向尚待核齐；恢复供应未用资产¥2.02（尚未变现金）' to contain '原多计款实际退客户¥6.06，尚欠¥0'
+
+Expected: "原多计款实际退客户¥6.06，尚欠¥0"
+Received: "客户原款去向尚待核齐；恢复供应未用资产¥2.02（尚未变现金）"
+
+ ❯ src/ui/relay-correction-result.test.tsx:36:29
+     34|  const before=frames[2]!,after=frames[3]!,text=echo(before,after)!
+     35|  expect(after.view.revision).toBe(before.view.revision+1)
+     36|  expect(text.split('。')[0]).toContain('原多计款实际退客户¥6.06，尚欠¥0')
+       |                             ^
+     37|  expect(text.split('。')[0]).toContain('恢复供应未用资产¥2.02（尚未变现金）')
+     38|  expect(text).toContain('不是退回充值余额')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/18]⎯
+
+ FAIL  src/ui/relay-correction-result.test.tsx > reports bulk cash refunds and new receivables separately instead of assigning their net income change to cash
+AssertionError: expected '客户原款去向尚待核齐；恢复供应未用资产¥8.08（尚未变现金）；供应更正成…' to contain '原多计款实际退客户¥24.24，尚欠¥0'
+
+Expected: "原多计款实际退客户¥24.24，尚欠¥0"
+Received: "客户原款去向尚待核齐；恢复供应未用资产¥8.08（尚未变现金）；供应更正成本¥4.04，现金已付¥0、资产冲抵¥0、尚欠¥4.04"
+
+ ❯ src/ui/relay-correction-result.test.tsx:64:29
+     62|  expect(added.reduce((n,c)=>n+c.customerDeltaFen,0)).toBe(-1212)
+     63|  expect(text).toContain('已按167条原计量追加更正记录')
+     64|  expect(text.split('。')[0]).toContain('原多计款实际退客户¥24.24，尚欠¥0')
+       |                             ^
+     65|  expect(text.split('。')[0]).toContain('新增原应收¥12.12，2025-03-21到期')
+     66|  expect(text.split('。')[0]).toContain('恢复供应未用资产¥8.08（尚未变现金）')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/18]⎯
+
+ FAIL  src/ui/relay-quote-effective-wait.test.tsx > does not invent an effective-date wait for rejected, incomplete, malformed or already-effective public quote variants
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/relay-quote-effective-wait.test.tsx:111:1
+    109| })
+    110|
+    111| it('does not invent an effective-date wait for rejected, incomplete, m…
+       | ^
+    112|  const base=props(),original=completed.controller.exportSaved()
+    113|  const variants:readonly {label:string;update:(q:Relay['quotes'][numbe…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/18]⎯
+

@@ -1,0 +1,11 @@
+ const support=after.features.relay!.casebook!.actions.find(a=>a.jobId===period(after).supportJobId)!
+ const batches=after.features.relay!.auditJobs.filter(batch=>batch.businessId===period(after).businessId&&batch.periodIds.includes(period(after).id)&&batch.job?.definitionId==='relay-meter-audit'&&batch.job.startAt==='2024-11-14')
+ expect(batches).toHaveLength(1);const batch=batches[0]!
+ expect(batch.periodIds).toEqual([period(after).id]);expect(batch.meterCount).toBe(1)
+ expect(batch.job).toMatchObject({id:batch.jobId,businessId:period(after).businessId,definitionId:'relay-meter-audit',status:'planned',startAt:'2024-11-14'})
+ const auditRows=after.features.relay!.audits.filter(row=>row.jobId===batch.jobId)
+ expect(auditRows).toHaveLength(1);expect(auditRows[0]).toMatchObject({businessId:period(after).businessId,completedAt:null})
+ expect(after.features.relay!.meters.filter(meter=>meter.id===auditRows[0]!.meterId&&meter.periodId===period(after).id)).toHaveLength(1)
+ const actions=after.features.relay!.casebook!.actions.filter(action=>action.jobId===batch.jobId)
+ expect(actions).toHaveLength(1);const audit=actions[0]!
+ expect(audit).toMatchObject({jobId:batch.jobId,scopeBusinessId:period(after).businessId,status:'reserved',executedAt:null,definition:{id:batch.job!.actionId,accountId:after.accountId,businessId:period(after).businessId,startAt:'2024-11-14'}})

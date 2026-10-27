@@ -1,0 +1,23 @@
+import fs from 'node:fs';
+import {spawn} from 'node:child_process';
+import {resolve,dirname,relative} from 'node:path';
+import {tree,ident} from '../t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs';
+import {assertBrowserEvidenceWritable as guard} from '../../../scripts/browser_evidence_guard.mjs';
+const root='goal-1/evidence/t17-acceptance-37',[name,...argv]=process.argv.slice(2);
+if(!/^[a-zA-Z0-9_.-]+$/.test(name??'')||!argv.length)throw Error('STEP_AND_ARGV_REQUIRED');guard(root);
+const sources=()=>[...tree('src').files,...tree('assets').files,...tree('public').files,...['package.json','package-lock.json','tsconfig.json','tsconfig.app.json','tsconfig.core.json','tsconfig.node.json','vite.config.ts','vitest.config.ts','index.html'].map(ident)].sort((a,b)=>a.path.localeCompare(b.path));
+const put=(suffix,value)=>{guard(root);fs.writeFileSync(resolve(root,name+'.'+suffix),JSON.stringify(value,null,2)+'\n',{flag:'wx'})};
+const configOriginal=JSON.parse(fs.readFileSync(root+'/baseline.json','utf8')).sourceAndAssets.find(row=>row.path==='vitest.config.ts'),configNow=ident('vitest.config.ts');
+if(!configOriginal||['bytes','sha256','mode'].some(k=>configOriginal[k]!==configNow[k]))throw Error('ORIGINAL_UNIT_GATE_CHANGED');
+const before=sources(),raw=before.filter(f=>/^src\/.*\.[cm]?[jt]sx?$/.test(f.path)).flatMap(f=>[...fs.readFileSync(f.path,'utf8').matchAll(/from\s*['"]([^'"]+\?raw)['"]/g)].map(m=>relative(process.cwd(),resolve(dirname(f.path),m[1].split('?')[0]))));
+const declared=JSON.parse(fs.readFileSync(root+'/declared-unit-inputs.json','utf8'));
+const extraPaths=[root+'/run-long-step-r15.mjs',root+'/baseline.json',root+'/declared-unit-inputs.json',root+'/test-gate-identity-r15.json',...declared.inputs.map(row=>row.path),...tree('scripts').files.filter(r=>/\.(ts|mjs|js|py)$/.test(r.path)&&!r.path.includes('/__pycache__/')).map(r=>r.path),...tree('planning').files.map(r=>r.path),...raw];
+const extra=[...new Set(extraPaths)].sort().map(ident);put('source-before.json',{files:before,extra});
+const logs={};for(const kind of ['stdout','stderr']){guard(root);logs[kind]=fs.openSync(resolve(root,name+'.'+kind+'.log'),'wx')}
+const start=Date.now(),child=spawn('rtk',['proxy',...argv],{cwd:process.cwd(),stdio:['ignore','pipe','pipe']});
+put('started.json',{at:new Date().toISOString(),cwd:process.cwd(),argv:['rtk','proxy',...argv],parentPid:process.pid,childPid:child.pid,sourceCount:before.length,originalVitestConfigUnmodified:true,testGateIdentity:root+'/test-gate-identity-r15.json'});
+for(const kind of ['stdout','stderr'])child[kind].on('data',chunk=>{guard(root);fs.writeSync(logs[kind],chunk);process[kind].write(chunk)});
+let error=null;const ended=await new Promise(resolve=>{child.once('error',e=>{error=String(e);resolve({code:null,signal:null})});child.once('close',(code,signal)=>resolve({code,signal}))});
+for(const fd of Object.values(logs))fs.closeSync(fd);
+const after=sources(),sourceUnchanged=JSON.stringify(before)===JSON.stringify(after),extraSame=extra.every(row=>{const now=ident(row.path);return row.bytes===now.bytes&&row.sha256===now.sha256&&row.mode===now.mode});put('source-after.json',{files:after,extraSame});
+const result={at:new Date().toISOString(),argv:['rtk','proxy',...argv],exitCode:ended.code,signal:ended.signal,wallMs:Date.now()-start,sourceCount:before.length,sourceUnchanged,extraSame,error};put('result.json',result);console.log(JSON.stringify(result));process.exitCode=ended.code===0&&sourceUnchanged&&extraSame&&!error?0:ended.code||1;

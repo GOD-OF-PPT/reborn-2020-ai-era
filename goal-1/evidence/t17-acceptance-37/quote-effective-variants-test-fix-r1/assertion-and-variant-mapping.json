@@ -1,0 +1,139 @@
+{
+  "method": "Static exact-text preservation over authorized test before/after only; no runtime test evaluation.",
+  "oldGroupedCase": "does not invent an effective-date wait for rejected, incomplete, malformed or already-effective public quote variants",
+  "newPreRegisteredTemplate": "does not invent an effective-date wait for public quote variant $label",
+  "oldItCases": 5,
+  "newItCases": 12,
+  "oldIndependentVariantScenarios": 8,
+  "newRegisteredVariantCases": 8,
+  "other4CasesPrefixSuffixByteEqual": true,
+  "variantDefinitionsByteTextEqual": true,
+  "variantAssertionLinesByteTextEqual": true,
+  "assertionLines": [
+    "expect(clocks(ui)).toHaveLength(0)",
+    "if(variant.state){expect(model.reason).toBeNull();expect(ticket!.state).toBe(variant.state);expect(relayRecordNeedsReply(p,completed.target,ticket!)).toBe(false)}",
+    "if(variant.label==='all-rejected')expect(ui.text()).toContain('没有待生效的新报价')",
+    "if(variant.label==='missing-responses')expect(ui.text()).toContain('不把未知当零接受')",
+    "expect(p.request).not.toHaveBeenCalled()",
+    "expect(completed.controller.exportSaved()).toBe(original)"
+  ],
+  "cases": [
+    {
+      "label": "all-rejected",
+      "oldForIterationIndex": 0,
+      "newItEachRegisteredIndex": 0,
+      "definition": "{label:'all-rejected',update:q=>({...q,responses:q.responses.map(r=>({...r,accepted:false}))}),state:'客户全部拒绝，原约继续'},",
+      "samePerVariantAssertions": [
+        "expect(clocks(ui)).toHaveLength(0)",
+        "if(variant.state){expect(model.reason).toBeNull();expect(ticket!.state).toBe(variant.state);expect(relayRecordNeedsReply(p,completed.target,ticket!)).toBe(false)}",
+        "if(variant.label==='all-rejected')expect(ui.text()).toContain('没有待生效的新报价')",
+        "if(variant.label==='missing-responses')expect(ui.text()).toContain('不把未知当零接受')",
+        "expect(p.request).not.toHaveBeenCalled()",
+        "expect(completed.controller.exportSaved()).toBe(original)"
+      ]
+    },
+    {
+      "label": "missing-responses",
+      "oldForIterationIndex": 1,
+      "newItEachRegisteredIndex": 1,
+      "definition": "{label:'missing-responses',update:q=>({...q,responses:[]}),state:'原完成与答复尚待核定'},",
+      "samePerVariantAssertions": [
+        "expect(clocks(ui)).toHaveLength(0)",
+        "if(variant.state){expect(model.reason).toBeNull();expect(ticket!.state).toBe(variant.state);expect(relayRecordNeedsReply(p,completed.target,ticket!)).toBe(false)}",
+        "if(variant.label==='all-rejected')expect(ui.text()).toContain('没有待生效的新报价')",
+        "if(variant.label==='missing-responses')expect(ui.text()).toContain('不把未知当零接受')",
+        "expect(p.request).not.toHaveBeenCalled()",
+        "expect(completed.controller.exportSaved()).toBe(original)"
+      ]
+    },
+    {
+      "label": "duplicate-responses",
+      "oldForIterationIndex": 2,
+      "newItEachRegisteredIndex": 2,
+      "definition": "{label:'duplicate-responses',update:q=>({...q,responses:[...q.responses,...q.responses]}),state:'原完成与答复尚待核定'},",
+      "samePerVariantAssertions": [
+        "expect(clocks(ui)).toHaveLength(0)",
+        "if(variant.state){expect(model.reason).toBeNull();expect(ticket!.state).toBe(variant.state);expect(relayRecordNeedsReply(p,completed.target,ticket!)).toBe(false)}",
+        "if(variant.label==='all-rejected')expect(ui.text()).toContain('没有待生效的新报价')",
+        "if(variant.label==='missing-responses')expect(ui.text()).toContain('不把未知当零接受')",
+        "expect(p.request).not.toHaveBeenCalled()",
+        "expect(completed.controller.exportSaved()).toBe(original)"
+      ]
+    },
+    {
+      "label": "future-completion",
+      "oldForIterationIndex": 3,
+      "newItEachRegisteredIndex": 3,
+      "definition": "{label:'future-completion',update:q=>({...q,completedAt:'2025-04-10'}),state:'原完成与答复尚待核定'},",
+      "samePerVariantAssertions": [
+        "expect(clocks(ui)).toHaveLength(0)",
+        "if(variant.state){expect(model.reason).toBeNull();expect(ticket!.state).toBe(variant.state);expect(relayRecordNeedsReply(p,completed.target,ticket!)).toBe(false)}",
+        "if(variant.label==='all-rejected')expect(ui.text()).toContain('没有待生效的新报价')",
+        "if(variant.label==='missing-responses')expect(ui.text()).toContain('不把未知当零接受')",
+        "expect(p.request).not.toHaveBeenCalled()",
+        "expect(completed.controller.exportSaved()).toBe(original)"
+      ]
+    },
+    {
+      "label": "invalid-effective-date",
+      "oldForIterationIndex": 4,
+      "newItEachRegisteredIndex": 4,
+      "definition": "{label:'invalid-effective-date',update:q=>({...q,effectiveAt:'2025-02-30'}),state:'原完成与答复尚待核定'},",
+      "samePerVariantAssertions": [
+        "expect(clocks(ui)).toHaveLength(0)",
+        "if(variant.state){expect(model.reason).toBeNull();expect(ticket!.state).toBe(variant.state);expect(relayRecordNeedsReply(p,completed.target,ticket!)).toBe(false)}",
+        "if(variant.label==='all-rejected')expect(ui.text()).toContain('没有待生效的新报价')",
+        "if(variant.label==='missing-responses')expect(ui.text()).toContain('不把未知当零接受')",
+        "expect(p.request).not.toHaveBeenCalled()",
+        "expect(completed.controller.exportSaved()).toBe(original)"
+      ]
+    },
+    {
+      "label": "wrong-job",
+      "oldForIterationIndex": 5,
+      "newItEachRegisteredIndex": 5,
+      "definition": "{label:'wrong-job',update:q=>({...q,job:q.job?{...q.job,id:'different-original-job'}:null})},",
+      "samePerVariantAssertions": [
+        "expect(clocks(ui)).toHaveLength(0)",
+        "if(variant.state){expect(model.reason).toBeNull();expect(ticket!.state).toBe(variant.state);expect(relayRecordNeedsReply(p,completed.target,ticket!)).toBe(false)}",
+        "if(variant.label==='all-rejected')expect(ui.text()).toContain('没有待生效的新报价')",
+        "if(variant.label==='missing-responses')expect(ui.text()).toContain('不把未知当零接受')",
+        "expect(p.request).not.toHaveBeenCalled()",
+        "expect(completed.controller.exportSaved()).toBe(original)"
+      ]
+    },
+    {
+      "label": "wrong-response-customer",
+      "oldForIterationIndex": 6,
+      "newItEachRegisteredIndex": 6,
+      "definition": "{label:'wrong-response-customer',update:q=>({...q,responses:q.responses.map(r=>({...r,customerId:'another-customer'}))}),state:'原完成与答复尚待核定'},",
+      "samePerVariantAssertions": [
+        "expect(clocks(ui)).toHaveLength(0)",
+        "if(variant.state){expect(model.reason).toBeNull();expect(ticket!.state).toBe(variant.state);expect(relayRecordNeedsReply(p,completed.target,ticket!)).toBe(false)}",
+        "if(variant.label==='all-rejected')expect(ui.text()).toContain('没有待生效的新报价')",
+        "if(variant.label==='missing-responses')expect(ui.text()).toContain('不把未知当零接受')",
+        "expect(p.request).not.toHaveBeenCalled()",
+        "expect(completed.controller.exportSaved()).toBe(original)"
+      ]
+    },
+    {
+      "label": "already-effective",
+      "oldForIterationIndex": 7,
+      "newItEachRegisteredIndex": 7,
+      "definition": "{label:'already-effective',update:q=>({...q,effectiveAt:'2025-04-08'}),state:'原报价已经生效'},",
+      "samePerVariantAssertions": [
+        "expect(clocks(ui)).toHaveLength(0)",
+        "if(variant.state){expect(model.reason).toBeNull();expect(ticket!.state).toBe(variant.state);expect(relayRecordNeedsReply(p,completed.target,ticket!)).toBe(false)}",
+        "if(variant.label==='all-rejected')expect(ui.text()).toContain('没有待生效的新报价')",
+        "if(variant.label==='missing-responses')expect(ui.text()).toContain('不把未知当零接受')",
+        "expect(p.request).not.toHaveBeenCalled()",
+        "expect(completed.controller.exportSaved()).toBe(original)"
+      ]
+    }
+  ],
+  "defaultPerCaseTimeoutMs": 5000,
+  "perCaseTimeoutOverrideAdded": false,
+  "beforeAllHookMs": 20000,
+  "setupUnchanged": true,
+  "controllerIsolation": "Each case gets new props/request; unique label owns hook slots; no save/submit call, each separately checks current exportSaved==its original raw. Shared setup uses same two real controllers; no new fixture/codec execution was performed by this static script."
+}

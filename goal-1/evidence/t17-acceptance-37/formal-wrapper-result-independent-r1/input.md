@@ -1,0 +1,1 @@
+Root实际formal终态outerfalse，green replay+33child，疑只runner同名readback-terminal EEXIST。只读独核原实际result/log/report/两个put源及当前620/Native/STOP身份；Create已绿绝不再跑，不改oldformal/当前authority/产品，补正候选另等独审/准确GO。本根仅只读结果核与证据，0codec/engine/readback/Browser执行。

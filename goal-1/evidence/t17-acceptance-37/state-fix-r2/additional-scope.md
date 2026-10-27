@@ -1,0 +1,3 @@
+# Root追加的同组供应链P2修复
+
+Root明确将art只读跨审第二项纳入当前R2：供应row只按pool/sourceSupplier筛movements漏手动PayObligation。只在模型建立同pool incur/settle的原obligationId引用闭包，纳入同主体原pay操作及精确cash reference/account/id，按原operations顺序并列，抵账仍非现金。新增明确public-view fixture核所付原债与同账户另一供应付款不串。原义务单票完整保留，不动producer/core；不运行任何检查。

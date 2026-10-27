@@ -1,0 +1,52 @@
+import {beforeAll,expect,it} from 'vitest'
+import {createCampaignCodec} from '../application/campaign.ts'
+import {projectRun} from '../core/commands.ts'
+import type {GameRun} from '../core/run-types.ts'
+import type {PlayingView,PlayFeatures} from './game-types.ts'
+import {relayResponseSceneResult} from './relay-response-result.ts'
+import before99 from '../../goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6/i06-saved99-support-interrupted-real-settlement.json?raw'
+import after100 from '../../goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6/i10-saved100-explicit-station-stop-old-protection-and-debt.json?raw'
+
+const codec=createCampaignCodec()
+let beforeRun:GameRun,afterRun:GameRun,before:PlayingView,after:PlayingView
+beforeAll(()=>{
+ const frame=(run:GameRun):PlayingView=>({...projectRun(run),features:codec.registry.runtime!.project!(run),saveStatus:'saved',busy:false,readOnly:false,readOnlyReason:null,hasCandidate:false,pendingRevision:null})
+ beforeRun=codec.import(before99);afterRun=codec.import(after100);before=frame(beforeRun);after=frame(afterRun)
+},20000)
+const f=(view:PlayingView)=>view.features as unknown as PlayFeatures
+const text=(current=after)=>relayResponseSceneResult('StopRelayStation',before,current)
+
+it('explains the actual maintenance cash settlement after zero-point station closure without calling the preview zero a zero cash change',()=>{
+ expect(after.revision).toBe(before.revision+1);expect(after.date).toBe('2025-03-05');expect(after.budget).toEqual(before.budget)
+ expect(after.budget).toMatchObject({available:0,reserved:0,spent:4})
+ const old=f(before).relay!.businesses[0]!,business=f(after).relay!.businesses.find(b=>b.id===old.id)!
+ expect(business.lifecycle).toBe('winding_down')
+ expect(old.funds.cashFen-business.funds.cashFen).toBe(4838)
+ expect(text()).toContain('本站已转入收尾；原维护及工资实际支付¥48.38，尚欠¥0。')
+ expect(text()).toContain('客户原保护¥15,757.36、原应收¥121.32')
+ expect(business.funds.prepaidLiabilityFen).toBe(old.funds.prepaidLiabilityFen)
+ expect(business.funds.receivableFen).toBe(old.funds.receivableFen)
+ expect(text()).toContain('停站没有退回已开工投入或已用行动')
+})
+
+it('does not borrow a payment result from an unsaved candidate, readonly frame, reentry or a mismatched final command',()=>{
+ for(const patch of [{hasCandidate:true},{busy:true},{readOnly:true},{saveStatus:'unsaved' as const},{revision:after.revision+1},{receipts:[...after.receipts.slice(0,-1),{...after.receipts.at(-1)!,kind:'PauseRelayTraffic'}]}])expect(text({...after,...patch})).toBeNull()
+ expect(relayResponseSceneResult('StopRelayStation',after,after)).toBeNull()
+})
+
+it('refuses to assign the account cash difference when the original maintenance payment reference is absent or foreign',()=>{
+ const features=f(after),relay=features.relay!,book=relay.casebook!,newCash=book.transactions.filter(t=>!f(before).relay!.casebook!.transactions.some(old=>old.id===t.id&&old.lineIndex===t.lineIndex))
+ expect(newCash).toHaveLength(1)
+ for(const transactions of [book.transactions.filter(t=>t.id!==newCash[0]!.id),book.transactions.map(t=>t.id===newCash[0]!.id?{...t,referenceId:'another-obligation'}:t)]){
+  expect(text({...after,features:{...features,relay:{...relay,casebook:{...book,transactions}}}})).toBeNull()
+ }
+})
+
+it('keeps station closing distinct from closing the enterprise or silently clearing the original customer contracts',()=>{
+ const relay=f(after).relay!,business=relay.businesses[0]!
+ expect(relay.stations.find(s=>s.businessId===business.id)?.trafficPaused).toBe(true)
+ expect(relay.customers.filter(c=>c.businessId===business.id&&c.closedAt===null)).toHaveLength(6)
+ expect(business.funds.prepaidLiabilityFen).toBe(1575736)
+ expect(text()).toContain('旧客户款不会自动收取或退还')
+ expect(codec.export(beforeRun)).toBe(before99);expect(codec.export(afterRun)).toBe(after100)
+})

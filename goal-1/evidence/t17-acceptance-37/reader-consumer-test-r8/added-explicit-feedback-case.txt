@@ -1,0 +1,18 @@
+
+it('lets an explicit deferred audit wait request the original Clock date while retaining the earlier invoice and saved bytes',()=>{
+ const p=auditProps(),request=vi.fn<GamePanelProps['request']>(),raw=auditController.exportSaved(),deferred=relayDeferredFeedback(p,auditTarget),safeDate=relayReviewDate(p,playableAdvanceDate(p.features.workbench,p.view.date,auditStart))
+ expect(deferred).toEqual({date:auditStart,label:'先继续原复核，待收款仍保留'});expect(safeDate).toBe('2024-11-08')
+ const original:CommandEnvelope={runId:p.view.runId,actorId:'player',commandId:'display-preview',expectedRevision:p.view.revision,kind:'AdvanceTime',payload:{date:auditStart}}
+ expect(p.controller.preview(original).allowed).toBe(true)
+ const commitments=p.controller.clockCommitments(original)
+ expect(commitments).toMatchObject({runId:p.view.runId,sourceRevision:p.view.revision,from:p.view.date,target:auditStart})
+ const ui=consumerDriver('reader-explicit-deferred-audit-clock',()=>RelayRecordBook({p:{...p,request},target:auditTarget})),label='先继续原复核，待收款仍保留 · '+auditStart
+ expect(ui.all().some(e=>e.type==='button'&&text(e.props.children).includes(safeDate!))).toBe(true)
+ const main=ui.all().find(e=>typeof e.type==='function'&&e.type.name==='CommandButton'&&e.props.className==='clock-main'&&(e.props.payload as {date?:string}|undefined)?.date===auditStart),review=ui.all().find(e=>typeof e.type==='function'&&e.type.name==='CommandButton'&&e.props.className==='clock-review'&&(e.props.payload as {date?:string}|undefined)?.date===auditStart)
+ if(!main||!review)throw Error('ORIGINAL_DEFERRED_CLOCK_BINDINGS_REQUIRED')
+ expect(main.props.confirm).toBe(false);expect(review.props.confirm).toBe(true)
+ expect(ui.button(label).props.disabled).toBe(false);ui.click(label)
+ expect(request).toHaveBeenCalledExactlyOnceWith('AdvanceTime',{date:auditStart},main.props.label,false)
+ expect(p.features.relay!.receivables.find(i=>i.id==='rly:26fafc4431c01d61357e398bfe54d47b')).toMatchObject({dueAt:'2024-11-08',amountFen:720,collectedFen:0,reversedFen:0})
+ expect(auditController.exportSaved()).toBe(raw);expect(auditController.snapshot.view!.date).toBe(p.view.date);expect(auditController.snapshot.view!.budget).toEqual(p.view.budget)
+})

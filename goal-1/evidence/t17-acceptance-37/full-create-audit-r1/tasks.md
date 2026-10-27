@@ -1,0 +1,4 @@
+- [ ] Validate exact frozen contract/Root GO/independent review and all source, dependency, P3, producer-tree and input identities.
+- [ ] Execute original full-Create verifier once; preserve literal report and failure.
+- [ ] Only after verifier success, execute registered public readback once; compare source/input snapshots and exact scope coverage.
+- [ ] Preserve all terminal/error artifacts; readback failure permits readback-only correction, never repeat green Create. No gameplay/compatibility/Browser runs here.

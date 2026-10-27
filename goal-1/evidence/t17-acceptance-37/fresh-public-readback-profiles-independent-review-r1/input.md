@@ -1,0 +1,1 @@
+R10图审及能力CS4R组后，定向独审state新R6 final4profiles（fresh-public-readback-final-profiles-r1）：硬R7/R8/R9/R10各全keys/43capture4+2+0+0、typedcanonical sources真实scope +stopadapterliteralproducer_stop不伪last、auditunits逆链、R8缺图职责转R10、R9部分不冒完整、unknown/字段穷举/无未来模板绿。0执行/import/syntax。Root后fullfreeze/RootGO才一次engine，factsSpec113770B finalfalse授权空，不因模板挡只读metadata静审。

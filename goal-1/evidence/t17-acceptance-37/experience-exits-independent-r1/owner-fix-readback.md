@@ -1,0 +1,5 @@
+Root报告修复后，已只读重读RelaySceneChoice全部import与next-service段：显式import isoDate现存在，原已报P2在当前源码静态消除；原业务/lifecycle严格来源及金额不变，仅面向玩家正文调整。没有执行type，不称编译已过。
+
+本轮首末只有RelaySceneChoice一份文件不同，记录是合法Owner修复，不称原scope完全相同。OpeningMoment既有本轮(dayActive||relayClosed)已在初审源内，relayClosed只在未中断/未失效/非legacy成立，季度主动作仍排relayPrimary前，物件与主操作同binding。重读未发现新的确定P1/P2。
+
+最终限定结论：此前缺import已静态修妥，具体出口/同一UI Today/同biz新期空稿/取消与原册/原确认和权限保护无剩余已知阻断；等待Root统一工程和当前Chrome真实同经历，非最终GO/任务关闭。初review/原P2报告保原，不倒写。

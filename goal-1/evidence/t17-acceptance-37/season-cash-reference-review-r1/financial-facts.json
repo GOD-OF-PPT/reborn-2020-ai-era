@@ -1,0 +1,1072 @@
+{
+  "kind": "bounded_json_and_static_source_readback",
+  "createdAt": "2026-10-26T20:55:37.850994+00:00",
+  "verdict": "suspected_Nov7_amount_moved_to_Nov17_not_supported",
+  "productionOrHelperExecution": false,
+  "authorIsolation": "prior U4B response UI/test author; current readback does not execute audited production projection",
+  "proof": [
+    {
+      "receipt": {
+        "actorId": "player",
+        "causeIds": [
+          "cause:command-ca1b977b-8d70-4c60-8f7c-a72c993a98d3",
+          "rly:a7e69decc8890eda7442b4951b257d1d",
+          "rly:16a554e0c991487f6dfb1d17190a7160"
+        ],
+        "commandId": "command-ca1b977b-8d70-4c60-8f7c-a72c993a98d3",
+        "date": "2024-11-07",
+        "kind": "CollectRelayReceivable",
+        "ledgerReceiptCountAfter": 252,
+        "payloadHash": "606c262969bee342e5e52e7bcf3ae677afffc63f77cec5ef3fdb53a96cc48284",
+        "revisionAfter": 87,
+        "revisionBefore": 86,
+        "runId": "normal-relay-technical_employee-ee9cb440",
+        "summary": "中转决策已保存：CollectRelayReceivable",
+        "transactionIds": [
+          "rly:a7e69decc8890eda7442b4951b257d1d"
+        ]
+      },
+      "originalSignatureDecoded": {
+        "actorId": "player",
+        "kind": "CollectRelayReceivable",
+        "payload": {
+          "amountFen": 608,
+          "receivableId": "rly:a258aded1a35adb514cc71781b991437"
+        },
+        "runId": "normal-relay-technical_employee-ee9cb440"
+      },
+      "financialRows": [
+        {
+          "transaction": {
+            "businessId": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+            "contractId": "rly:1fa39660348987364a58485031f01d8e",
+            "date": "2024-11-07",
+            "id": "rly:a7e69decc8890eda7442b4951b257d1d",
+            "lines": [
+              {
+                "accountId": "world",
+                "deltaFen": -608
+              },
+              {
+                "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+                "deltaFen": 608
+              }
+            ],
+            "referenceId": "rly:1fa39660348987364a58485031f01d8e",
+            "sourceEventId": "rly:a258aded1a35adb514cc71781b991437"
+          },
+          "visibleCause": {
+            "commandId": "command-ca1b977b-8d70-4c60-8f7c-a72c993a98d3",
+            "date": "2024-11-07",
+            "domain": "operations",
+            "id": "rly:a7e69decc8890eda7442b4951b257d1d",
+            "parentIds": [],
+            "sourceEventId": "rly:a258aded1a35adb514cc71781b991437",
+            "visibility": "visible",
+            "visibleSummary": "中转账目：collect_receivable"
+          },
+          "collection": {
+            "amountFen": 608,
+            "date": "2024-11-07",
+            "id": "rly:16a554e0c991487f6dfb1d17190a7160",
+            "operationId": "rly:a7e69decc8890eda7442b4951b257d1d",
+            "receivableId": "rly:a258aded1a35adb514cc71781b991437"
+          }
+        }
+      ]
+    },
+    {
+      "receipt": {
+        "actorId": "player",
+        "causeIds": [
+          "cause:command-293ac077-f48c-4447-a4a1-5408e30338ea",
+          "rly:123eab1a96afa89da94e3f4095fa9625",
+          "rly:209e88ab55dd14af962c5a6d604bebac",
+          "rly:4e75a9dd0e3fe26cb98e3ecff98551ac"
+        ],
+        "commandId": "command-293ac077-f48c-4447-a4a1-5408e30338ea",
+        "date": "2024-11-17",
+        "kind": "CollectRelayDue",
+        "ledgerReceiptCountAfter": 258,
+        "payloadHash": "99f850830788caed58af5c040f01a2dfcdeb80495ea7685991f05467ef9a865f",
+        "revisionAfter": 92,
+        "revisionBefore": 91,
+        "runId": "normal-relay-technical_employee-ee9cb440",
+        "summary": "中转决策已保存：CollectRelayDue",
+        "transactionIds": [
+          "rly:123eab1a96afa89da94e3f4095fa9625",
+          "rly:209e88ab55dd14af962c5a6d604bebac"
+        ]
+      },
+      "originalSignatureDecoded": {
+        "actorId": "player",
+        "kind": "CollectRelayDue",
+        "payload": {
+          "customerId": "rly:1fa39660348987364a58485031f01d8e"
+        },
+        "runId": "normal-relay-technical_employee-ee9cb440"
+      },
+      "financialRows": [
+        {
+          "transaction": {
+            "businessId": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+            "contractId": "rly:1fa39660348987364a58485031f01d8e",
+            "date": "2024-11-17",
+            "id": "rly:123eab1a96afa89da94e3f4095fa9625",
+            "lines": [
+              {
+                "accountId": "world",
+                "deltaFen": -608
+              },
+              {
+                "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+                "deltaFen": 608
+              }
+            ],
+            "referenceId": "rly:1fa39660348987364a58485031f01d8e",
+            "sourceEventId": "rly:a258aded1a35adb514cc71781b991437"
+          },
+          "visibleCause": {
+            "commandId": "command-293ac077-f48c-4447-a4a1-5408e30338ea",
+            "date": "2024-11-17",
+            "domain": "operations",
+            "id": "rly:123eab1a96afa89da94e3f4095fa9625",
+            "parentIds": [],
+            "sourceEventId": "rly:a258aded1a35adb514cc71781b991437",
+            "visibility": "visible",
+            "visibleSummary": "中转账目：collect_receivable"
+          },
+          "collection": {
+            "amountFen": 608,
+            "date": "2024-11-17",
+            "id": "rly:c3da5a19e40203561ff6c23922193d13",
+            "operationId": "rly:123eab1a96afa89da94e3f4095fa9625",
+            "receivableId": "rly:a258aded1a35adb514cc71781b991437"
+          }
+        },
+        {
+          "transaction": {
+            "businessId": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+            "contractId": "rly:1fa39660348987364a58485031f01d8e",
+            "date": "2024-11-17",
+            "id": "rly:209e88ab55dd14af962c5a6d604bebac",
+            "lines": [
+              {
+                "accountId": "world",
+                "deltaFen": -720
+              },
+              {
+                "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+                "deltaFen": 720
+              }
+            ],
+            "referenceId": "rly:1fa39660348987364a58485031f01d8e",
+            "sourceEventId": "rly:26fafc4431c01d61357e398bfe54d47b"
+          },
+          "visibleCause": {
+            "commandId": "command-293ac077-f48c-4447-a4a1-5408e30338ea",
+            "date": "2024-11-17",
+            "domain": "operations",
+            "id": "rly:209e88ab55dd14af962c5a6d604bebac",
+            "parentIds": [],
+            "sourceEventId": "rly:26fafc4431c01d61357e398bfe54d47b",
+            "visibility": "visible",
+            "visibleSummary": "中转账目：collect_receivable"
+          },
+          "collection": {
+            "amountFen": 720,
+            "date": "2024-11-17",
+            "id": "rly:90003b40c652355471e9d55131b231ad",
+            "operationId": "rly:209e88ab55dd14af962c5a6d604bebac",
+            "receivableId": "rly:26fafc4431c01d61357e398bfe54d47b"
+          }
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "receipt87.date",
+      "expected": "2024-11-07",
+      "actual": "2024-11-07",
+      "equal": true
+    },
+    {
+      "name": "receipt87.kind",
+      "expected": "CollectRelayReceivable",
+      "actual": "CollectRelayReceivable",
+      "equal": true
+    },
+    {
+      "name": "receipt87.payload",
+      "expected": {
+        "amountFen": 608,
+        "receivableId": "rly:a258aded1a35adb514cc71781b991437"
+      },
+      "actual": {
+        "amountFen": 608,
+        "receivableId": "rly:a258aded1a35adb514cc71781b991437"
+      },
+      "equal": true
+    },
+    {
+      "name": "receipt87.transactionCount",
+      "expected": 1,
+      "actual": 1,
+      "equal": true
+    },
+    {
+      "name": "rly:a7e69decc8890eda7442b4951b257d1d.collectionCount",
+      "expected": 1,
+      "actual": 1,
+      "equal": true
+    },
+    {
+      "name": "rly:a7e69decc8890eda7442b4951b257d1d.dateMatchesReceipt",
+      "expected": "2024-11-07",
+      "actual": "2024-11-07",
+      "equal": true
+    },
+    {
+      "name": "rly:a7e69decc8890eda7442b4951b257d1d.causeDate",
+      "expected": "2024-11-07",
+      "actual": "2024-11-07",
+      "equal": true
+    },
+    {
+      "name": "rly:a7e69decc8890eda7442b4951b257d1d.causeCommandId",
+      "expected": "command-ca1b977b-8d70-4c60-8f7c-a72c993a98d3",
+      "actual": "command-ca1b977b-8d70-4c60-8f7c-a72c993a98d3",
+      "equal": true
+    },
+    {
+      "name": "rly:a7e69decc8890eda7442b4951b257d1d.causeSource",
+      "expected": "rly:a258aded1a35adb514cc71781b991437",
+      "actual": "rly:a258aded1a35adb514cc71781b991437",
+      "equal": true
+    },
+    {
+      "name": "rly:a7e69decc8890eda7442b4951b257d1d.business",
+      "expected": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+      "actual": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+      "equal": true
+    },
+    {
+      "name": "rly:a7e69decc8890eda7442b4951b257d1d.customer",
+      "expected": "rly:1fa39660348987364a58485031f01d8e",
+      "actual": "rly:1fa39660348987364a58485031f01d8e",
+      "equal": true
+    },
+    {
+      "name": "rly:a7e69decc8890eda7442b4951b257d1d.twoLegs",
+      "expected": [
+        {
+          "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+          "deltaFen": 608
+        },
+        {
+          "accountId": "world",
+          "deltaFen": -608
+        }
+      ],
+      "actual": [
+        {
+          "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+          "deltaFen": 608
+        },
+        {
+          "accountId": "world",
+          "deltaFen": -608
+        }
+      ],
+      "equal": true
+    },
+    {
+      "name": "rly:a7e69decc8890eda7442b4951b257d1d.collectionDate",
+      "expected": "2024-11-07",
+      "actual": "2024-11-07",
+      "equal": true
+    },
+    {
+      "name": "rly:a7e69decc8890eda7442b4951b257d1d.collectionAmount",
+      "expected": 608,
+      "actual": 608,
+      "equal": true
+    },
+    {
+      "name": "rly:a7e69decc8890eda7442b4951b257d1d.collectionOriginalInvoice",
+      "expected": "rly:a258aded1a35adb514cc71781b991437",
+      "actual": "rly:a258aded1a35adb514cc71781b991437",
+      "equal": true
+    },
+    {
+      "name": "receipt87.companyCashTotalFen",
+      "expected": 608,
+      "actual": 608,
+      "equal": true
+    },
+    {
+      "name": "receipt92.date",
+      "expected": "2024-11-17",
+      "actual": "2024-11-17",
+      "equal": true
+    },
+    {
+      "name": "receipt92.kind",
+      "expected": "CollectRelayDue",
+      "actual": "CollectRelayDue",
+      "equal": true
+    },
+    {
+      "name": "receipt92.payload",
+      "expected": {
+        "customerId": "rly:1fa39660348987364a58485031f01d8e"
+      },
+      "actual": {
+        "customerId": "rly:1fa39660348987364a58485031f01d8e"
+      },
+      "equal": true
+    },
+    {
+      "name": "receipt92.transactionCount",
+      "expected": 2,
+      "actual": 2,
+      "equal": true
+    },
+    {
+      "name": "rly:123eab1a96afa89da94e3f4095fa9625.collectionCount",
+      "expected": 1,
+      "actual": 1,
+      "equal": true
+    },
+    {
+      "name": "rly:123eab1a96afa89da94e3f4095fa9625.dateMatchesReceipt",
+      "expected": "2024-11-17",
+      "actual": "2024-11-17",
+      "equal": true
+    },
+    {
+      "name": "rly:123eab1a96afa89da94e3f4095fa9625.causeDate",
+      "expected": "2024-11-17",
+      "actual": "2024-11-17",
+      "equal": true
+    },
+    {
+      "name": "rly:123eab1a96afa89da94e3f4095fa9625.causeCommandId",
+      "expected": "command-293ac077-f48c-4447-a4a1-5408e30338ea",
+      "actual": "command-293ac077-f48c-4447-a4a1-5408e30338ea",
+      "equal": true
+    },
+    {
+      "name": "rly:123eab1a96afa89da94e3f4095fa9625.causeSource",
+      "expected": "rly:a258aded1a35adb514cc71781b991437",
+      "actual": "rly:a258aded1a35adb514cc71781b991437",
+      "equal": true
+    },
+    {
+      "name": "rly:123eab1a96afa89da94e3f4095fa9625.business",
+      "expected": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+      "actual": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+      "equal": true
+    },
+    {
+      "name": "rly:123eab1a96afa89da94e3f4095fa9625.customer",
+      "expected": "rly:1fa39660348987364a58485031f01d8e",
+      "actual": "rly:1fa39660348987364a58485031f01d8e",
+      "equal": true
+    },
+    {
+      "name": "rly:123eab1a96afa89da94e3f4095fa9625.twoLegs",
+      "expected": [
+        {
+          "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+          "deltaFen": 608
+        },
+        {
+          "accountId": "world",
+          "deltaFen": -608
+        }
+      ],
+      "actual": [
+        {
+          "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+          "deltaFen": 608
+        },
+        {
+          "accountId": "world",
+          "deltaFen": -608
+        }
+      ],
+      "equal": true
+    },
+    {
+      "name": "rly:123eab1a96afa89da94e3f4095fa9625.collectionDate",
+      "expected": "2024-11-17",
+      "actual": "2024-11-17",
+      "equal": true
+    },
+    {
+      "name": "rly:123eab1a96afa89da94e3f4095fa9625.collectionAmount",
+      "expected": 608,
+      "actual": 608,
+      "equal": true
+    },
+    {
+      "name": "rly:123eab1a96afa89da94e3f4095fa9625.collectionOriginalInvoice",
+      "expected": "rly:a258aded1a35adb514cc71781b991437",
+      "actual": "rly:a258aded1a35adb514cc71781b991437",
+      "equal": true
+    },
+    {
+      "name": "rly:209e88ab55dd14af962c5a6d604bebac.collectionCount",
+      "expected": 1,
+      "actual": 1,
+      "equal": true
+    },
+    {
+      "name": "rly:209e88ab55dd14af962c5a6d604bebac.dateMatchesReceipt",
+      "expected": "2024-11-17",
+      "actual": "2024-11-17",
+      "equal": true
+    },
+    {
+      "name": "rly:209e88ab55dd14af962c5a6d604bebac.causeDate",
+      "expected": "2024-11-17",
+      "actual": "2024-11-17",
+      "equal": true
+    },
+    {
+      "name": "rly:209e88ab55dd14af962c5a6d604bebac.causeCommandId",
+      "expected": "command-293ac077-f48c-4447-a4a1-5408e30338ea",
+      "actual": "command-293ac077-f48c-4447-a4a1-5408e30338ea",
+      "equal": true
+    },
+    {
+      "name": "rly:209e88ab55dd14af962c5a6d604bebac.causeSource",
+      "expected": "rly:26fafc4431c01d61357e398bfe54d47b",
+      "actual": "rly:26fafc4431c01d61357e398bfe54d47b",
+      "equal": true
+    },
+    {
+      "name": "rly:209e88ab55dd14af962c5a6d604bebac.business",
+      "expected": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+      "actual": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+      "equal": true
+    },
+    {
+      "name": "rly:209e88ab55dd14af962c5a6d604bebac.customer",
+      "expected": "rly:1fa39660348987364a58485031f01d8e",
+      "actual": "rly:1fa39660348987364a58485031f01d8e",
+      "equal": true
+    },
+    {
+      "name": "rly:209e88ab55dd14af962c5a6d604bebac.twoLegs",
+      "expected": [
+        {
+          "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+          "deltaFen": 720
+        },
+        {
+          "accountId": "world",
+          "deltaFen": -720
+        }
+      ],
+      "actual": [
+        {
+          "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+          "deltaFen": 720
+        },
+        {
+          "accountId": "world",
+          "deltaFen": -720
+        }
+      ],
+      "equal": true
+    },
+    {
+      "name": "rly:209e88ab55dd14af962c5a6d604bebac.collectionDate",
+      "expected": "2024-11-17",
+      "actual": "2024-11-17",
+      "equal": true
+    },
+    {
+      "name": "rly:209e88ab55dd14af962c5a6d604bebac.collectionAmount",
+      "expected": 720,
+      "actual": 720,
+      "equal": true
+    },
+    {
+      "name": "rly:209e88ab55dd14af962c5a6d604bebac.collectionOriginalInvoice",
+      "expected": "rly:26fafc4431c01d61357e398bfe54d47b",
+      "actual": "rly:26fafc4431c01d61357e398bfe54d47b",
+      "equal": true
+    },
+    {
+      "name": "receipt92.companyCashTotalFen",
+      "expected": 1328,
+      "actual": 1328,
+      "equal": true
+    },
+    {
+      "name": "sameInvoiceTwoDifferent608TransactionIds",
+      "expected": true,
+      "actual": true,
+      "equal": true
+    },
+    {
+      "name": "source103PrefixReceipts",
+      "expected": {
+        "receipts": 103,
+        "sha256": "2f4f2a1cc631334c74241011642706a604a86f772f801420c7b963f464ec2c9e"
+      },
+      "actual": {
+        "receipts": 103,
+        "sha256": "2f4f2a1cc631334c74241011642706a604a86f772f801420c7b963f464ec2c9e"
+      },
+      "equal": true
+    },
+    {
+      "name": "rly:a7e69decc8890eda7442b4951b257d1d.sameFinancialFact103to107",
+      "expected": {
+        "businessId": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+        "contractId": "rly:1fa39660348987364a58485031f01d8e",
+        "date": "2024-11-07",
+        "id": "rly:a7e69decc8890eda7442b4951b257d1d",
+        "lines": [
+          {
+            "accountId": "world",
+            "deltaFen": -608
+          },
+          {
+            "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+            "deltaFen": 608
+          }
+        ],
+        "referenceId": "rly:1fa39660348987364a58485031f01d8e",
+        "sourceEventId": "rly:a258aded1a35adb514cc71781b991437"
+      },
+      "actual": {
+        "businessId": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+        "contractId": "rly:1fa39660348987364a58485031f01d8e",
+        "date": "2024-11-07",
+        "id": "rly:a7e69decc8890eda7442b4951b257d1d",
+        "lines": [
+          {
+            "accountId": "world",
+            "deltaFen": -608
+          },
+          {
+            "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+            "deltaFen": 608
+          }
+        ],
+        "referenceId": "rly:1fa39660348987364a58485031f01d8e",
+        "sourceEventId": "rly:a258aded1a35adb514cc71781b991437"
+      },
+      "equal": true
+    },
+    {
+      "name": "rly:123eab1a96afa89da94e3f4095fa9625.sameFinancialFact103to107",
+      "expected": {
+        "businessId": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+        "contractId": "rly:1fa39660348987364a58485031f01d8e",
+        "date": "2024-11-17",
+        "id": "rly:123eab1a96afa89da94e3f4095fa9625",
+        "lines": [
+          {
+            "accountId": "world",
+            "deltaFen": -608
+          },
+          {
+            "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+            "deltaFen": 608
+          }
+        ],
+        "referenceId": "rly:1fa39660348987364a58485031f01d8e",
+        "sourceEventId": "rly:a258aded1a35adb514cc71781b991437"
+      },
+      "actual": {
+        "businessId": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+        "contractId": "rly:1fa39660348987364a58485031f01d8e",
+        "date": "2024-11-17",
+        "id": "rly:123eab1a96afa89da94e3f4095fa9625",
+        "lines": [
+          {
+            "accountId": "world",
+            "deltaFen": -608
+          },
+          {
+            "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+            "deltaFen": 608
+          }
+        ],
+        "referenceId": "rly:1fa39660348987364a58485031f01d8e",
+        "sourceEventId": "rly:a258aded1a35adb514cc71781b991437"
+      },
+      "equal": true
+    },
+    {
+      "name": "rly:209e88ab55dd14af962c5a6d604bebac.sameFinancialFact103to107",
+      "expected": {
+        "businessId": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+        "contractId": "rly:1fa39660348987364a58485031f01d8e",
+        "date": "2024-11-17",
+        "id": "rly:209e88ab55dd14af962c5a6d604bebac",
+        "lines": [
+          {
+            "accountId": "world",
+            "deltaFen": -720
+          },
+          {
+            "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+            "deltaFen": 720
+          }
+        ],
+        "referenceId": "rly:1fa39660348987364a58485031f01d8e",
+        "sourceEventId": "rly:26fafc4431c01d61357e398bfe54d47b"
+      },
+      "actual": {
+        "businessId": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+        "contractId": "rly:1fa39660348987364a58485031f01d8e",
+        "date": "2024-11-17",
+        "id": "rly:209e88ab55dd14af962c5a6d604bebac",
+        "lines": [
+          {
+            "accountId": "world",
+            "deltaFen": -720
+          },
+          {
+            "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+            "deltaFen": 720
+          }
+        ],
+        "referenceId": "rly:1fa39660348987364a58485031f01d8e",
+        "sourceEventId": "rly:26fafc4431c01d61357e398bfe54d47b"
+      },
+      "equal": true
+    },
+    {
+      "name": "q4CashNodeCount",
+      "expected": 20,
+      "actual": 20,
+      "equal": true
+    },
+    {
+      "name": "firstQ4PaymentNodeId",
+      "expected": "relay-cash:rly:123eab1a96afa89da94e3f4095fa9625",
+      "actual": "relay-cash:rly:123eab1a96afa89da94e3f4095fa9625",
+      "equal": true
+    },
+    {
+      "name": "firstQ4PaymentDate",
+      "expected": "2024-11-17",
+      "actual": "2024-11-17",
+      "equal": true
+    },
+    {
+      "name": "firstQ4PaymentAmountFen",
+      "expected": 608,
+      "actual": 608,
+      "equal": true
+    },
+    {
+      "name": "nov17PositiveCustomerCashRowsFen",
+      "expected": [
+        608,
+        720,
+        10000
+      ],
+      "actual": [
+        608,
+        720,
+        10000
+      ],
+      "equal": true
+    },
+    {
+      "name": "u4b-build-r4.source-before.json:src/application/workbench-projection.ts",
+      "expected": {
+        "path": "src/application/workbench-projection.ts",
+        "bytes": 11136,
+        "sha256": "36a6092bee23b9509b26a7ff04535518cd0d5717aa4bbaacbf0e2be8c944b4a1",
+        "mode": 420
+      },
+      "actual": {
+        "path": "src/application/workbench-projection.ts",
+        "bytes": 11136,
+        "sha256": "36a6092bee23b9509b26a7ff04535518cd0d5717aa4bbaacbf0e2be8c944b4a1",
+        "mode": 420
+      },
+      "equal": true
+    },
+    {
+      "name": "u4b-build-r4.source-before.json:src/ui/season-thread.ts",
+      "expected": {
+        "path": "src/ui/season-thread.ts",
+        "bytes": 49560,
+        "sha256": "afd39e3e38eff0eb9fa02e71cc3d5437592775753e962c49e1efe5aa1b166811",
+        "mode": 420
+      },
+      "actual": {
+        "path": "src/ui/season-thread.ts",
+        "bytes": 49560,
+        "sha256": "afd39e3e38eff0eb9fa02e71cc3d5437592775753e962c49e1efe5aa1b166811",
+        "mode": 420
+      },
+      "equal": true
+    },
+    {
+      "name": "u4b-build-r4.source-before.json:src/ui/SeasonRecollection.tsx",
+      "expected": {
+        "path": "src/ui/SeasonRecollection.tsx",
+        "bytes": 7916,
+        "sha256": "84650ca62641f80cea71e7df4dd1e60983d0f23fb2ab55bef82bc8f54734408f",
+        "mode": 420
+      },
+      "actual": {
+        "path": "src/ui/SeasonRecollection.tsx",
+        "bytes": 7916,
+        "sha256": "84650ca62641f80cea71e7df4dd1e60983d0f23fb2ab55bef82bc8f54734408f",
+        "mode": 420
+      },
+      "equal": true
+    },
+    {
+      "name": "u4b-build-r4.source-after.json:src/application/workbench-projection.ts",
+      "expected": {
+        "path": "src/application/workbench-projection.ts",
+        "bytes": 11136,
+        "sha256": "36a6092bee23b9509b26a7ff04535518cd0d5717aa4bbaacbf0e2be8c944b4a1",
+        "mode": 420
+      },
+      "actual": {
+        "path": "src/application/workbench-projection.ts",
+        "bytes": 11136,
+        "sha256": "36a6092bee23b9509b26a7ff04535518cd0d5717aa4bbaacbf0e2be8c944b4a1",
+        "mode": 420
+      },
+      "equal": true
+    },
+    {
+      "name": "u4b-build-r4.source-after.json:src/ui/season-thread.ts",
+      "expected": {
+        "path": "src/ui/season-thread.ts",
+        "bytes": 49560,
+        "sha256": "afd39e3e38eff0eb9fa02e71cc3d5437592775753e962c49e1efe5aa1b166811",
+        "mode": 420
+      },
+      "actual": {
+        "path": "src/ui/season-thread.ts",
+        "bytes": 49560,
+        "sha256": "afd39e3e38eff0eb9fa02e71cc3d5437592775753e962c49e1efe5aa1b166811",
+        "mode": 420
+      },
+      "equal": true
+    },
+    {
+      "name": "u4b-build-r4.source-after.json:src/ui/SeasonRecollection.tsx",
+      "expected": {
+        "path": "src/ui/SeasonRecollection.tsx",
+        "bytes": 7916,
+        "sha256": "84650ca62641f80cea71e7df4dd1e60983d0f23fb2ab55bef82bc8f54734408f",
+        "mode": 420
+      },
+      "actual": {
+        "path": "src/ui/SeasonRecollection.tsx",
+        "bytes": 7916,
+        "sha256": "84650ca62641f80cea71e7df4dd1e60983d0f23fb2ab55bef82bc8f54734408f",
+        "mode": 420
+      },
+      "equal": true
+    }
+  ],
+  "checkCount": 59,
+  "equalCount": 59,
+  "q4PositiveCustomerCashRowsByStaticOrdering": [
+    {
+      "id": "relay-cash:rly:123eab1a96afa89da94e3f4095fa9625",
+      "transactionId": "rly:123eab1a96afa89da94e3f4095fa9625",
+      "date": "2024-11-17",
+      "amountFen": 608,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:a258aded1a35adb514cc71781b991437"
+    },
+    {
+      "id": "relay-cash:rly:209e88ab55dd14af962c5a6d604bebac",
+      "transactionId": "rly:209e88ab55dd14af962c5a6d604bebac",
+      "date": "2024-11-17",
+      "amountFen": 720,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:26fafc4431c01d61357e398bfe54d47b"
+    },
+    {
+      "id": "relay-cash:rly:e9b5e6764fef62cdb45b6d95e93f243d",
+      "transactionId": "rly:e9b5e6764fef62cdb45b6d95e93f243d",
+      "date": "2024-11-17",
+      "amountFen": 10000,
+      "customerId": "rly:2f5e722db637f3df25d72b565e1d27f1",
+      "invoiceOrCustomerSource": "rly:2f5e722db637f3df25d72b565e1d27f1"
+    },
+    {
+      "id": "relay-cash:rly:a7e69decc8890eda7442b4951b257d1d",
+      "transactionId": "rly:a7e69decc8890eda7442b4951b257d1d",
+      "date": "2024-11-07",
+      "amountFen": 608,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:a258aded1a35adb514cc71781b991437"
+    },
+    {
+      "id": "relay-cash:rly:30386b4a7d7ab73bde17177e9f0bd23e",
+      "transactionId": "rly:30386b4a7d7ab73bde17177e9f0bd23e",
+      "date": "2024-11-06",
+      "amountFen": 1208,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:447dee44446230c6d387d3f6c45cd7c6"
+    },
+    {
+      "id": "relay-cash:rly:3cb28435d559c8744eedfd7d651a9b93",
+      "transactionId": "rly:3cb28435d559c8744eedfd7d651a9b93",
+      "date": "2024-11-06",
+      "amountFen": 1216,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:084070cd922b3bacf6a95523fe32c7fe"
+    },
+    {
+      "id": "relay-cash:rly:476d007777127a3ea8c83ab7e63b5bd3",
+      "transactionId": "rly:476d007777127a3ea8c83ab7e63b5bd3",
+      "date": "2024-11-06",
+      "amountFen": 1216,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:c4d1e880a0b95837ea3797a92edc0cd3"
+    },
+    {
+      "id": "relay-cash:rly:6a7c49223912e618771032be92eeade1",
+      "transactionId": "rly:6a7c49223912e618771032be92eeade1",
+      "date": "2024-11-06",
+      "amountFen": 1216,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:6066023a03579816af0ed0a4bf816c11"
+    },
+    {
+      "id": "relay-cash:rly:6ff0f282e56dbc0def6939f61429eeb7",
+      "transactionId": "rly:6ff0f282e56dbc0def6939f61429eeb7",
+      "date": "2024-11-06",
+      "amountFen": 1088,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:7facd4b3caa9ea9da815c443fec01952"
+    },
+    {
+      "id": "relay-cash:rly:85a79dbd99f21b3575646b7caf3353c6",
+      "transactionId": "rly:85a79dbd99f21b3575646b7caf3353c6",
+      "date": "2024-11-06",
+      "amountFen": 1208,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:04e463a97da4e27953fd83a84b4b58d8"
+    },
+    {
+      "id": "relay-cash:rly:8896e66afc80fd5a82cec974dbb16bfc",
+      "transactionId": "rly:8896e66afc80fd5a82cec974dbb16bfc",
+      "date": "2024-11-06",
+      "amountFen": 1216,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:426e4a8858bb0b2034ae2fe75f2e60fd"
+    },
+    {
+      "id": "relay-cash:rly:8958f83810ad82f9a8b0c2bcec98e667",
+      "transactionId": "rly:8958f83810ad82f9a8b0c2bcec98e667",
+      "date": "2024-11-06",
+      "amountFen": 1208,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:f616f041a90ad43ee6df103ce5acefa8"
+    },
+    {
+      "id": "relay-cash:rly:8a2d2bdec2f86057b26f02b2a62856d7",
+      "transactionId": "rly:8a2d2bdec2f86057b26f02b2a62856d7",
+      "date": "2024-11-06",
+      "amountFen": 1208,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:965aa5971d251a5fa6bba4dc0d7f804a"
+    },
+    {
+      "id": "relay-cash:rly:cdf8f3f8a56b0aa2d62538d1a925c90b",
+      "transactionId": "rly:cdf8f3f8a56b0aa2d62538d1a925c90b",
+      "date": "2024-11-06",
+      "amountFen": 1208,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:38937bae7ca15f2b711eac66ed8bff71"
+    },
+    {
+      "id": "relay-cash:rly:cf4031ea07467931707040e92fb64246",
+      "transactionId": "rly:cf4031ea07467931707040e92fb64246",
+      "date": "2024-11-06",
+      "amountFen": 1216,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:49f40e4ca9be128802f2caa878314598"
+    },
+    {
+      "id": "relay-cash:rly:d0e94ef8ede6378069286fee13e43f13",
+      "transactionId": "rly:d0e94ef8ede6378069286fee13e43f13",
+      "date": "2024-11-06",
+      "amountFen": 1216,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:5836fc2af0839cc31df58fd58d7c4d43"
+    },
+    {
+      "id": "relay-cash:rly:e3db17161e526532a377d4fd5a9e868d",
+      "transactionId": "rly:e3db17161e526532a377d4fd5a9e868d",
+      "date": "2024-11-06",
+      "amountFen": 1216,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:326ab1c685f264359b0feb17e779dae8"
+    },
+    {
+      "id": "relay-cash:rly:f04e0afd4be7d9a7c82961617757b9fb",
+      "transactionId": "rly:f04e0afd4be7d9a7c82961617757b9fb",
+      "date": "2024-11-06",
+      "amountFen": 1216,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:851bc320fd80bd255ea377ada4e18db2"
+    },
+    {
+      "id": "relay-cash:rly:f9251bbbfc21357fcb198105a5463e6b",
+      "transactionId": "rly:f9251bbbfc21357fcb198105a5463e6b",
+      "date": "2024-11-06",
+      "amountFen": 1208,
+      "customerId": "rly:1fa39660348987364a58485031f01d8e",
+      "invoiceOrCustomerSource": "rly:7b9e2e0e476fa18ca6cf06020346b4dc"
+    },
+    {
+      "id": "relay-cash:rly:e23297aab20a8043cf2694d03fc6cf40",
+      "transactionId": "rly:e23297aab20a8043cf2694d03fc6cf40",
+      "date": "2024-10-08",
+      "amountFen": 20000,
+      "customerId": "rly:2f5e722db637f3df25d72b565e1d27f1",
+      "invoiceOrCustomerSource": "rly:2f5e722db637f3df25d72b565e1d27f1"
+    }
+  ],
+  "r4BuildSourceBindings": [
+    {
+      "manifest": "u4b-build-r4.source-before.json",
+      "boundSource": {
+        "path": "src/application/workbench-projection.ts",
+        "bytes": 11136,
+        "sha256": "36a6092bee23b9509b26a7ff04535518cd0d5717aa4bbaacbf0e2be8c944b4a1",
+        "mode": 420
+      },
+      "currentSource": {
+        "path": "src/application/workbench-projection.ts",
+        "bytes": 11136,
+        "sha256": "36a6092bee23b9509b26a7ff04535518cd0d5717aa4bbaacbf0e2be8c944b4a1",
+        "mode": 420
+      }
+    },
+    {
+      "manifest": "u4b-build-r4.source-before.json",
+      "boundSource": {
+        "path": "src/ui/season-thread.ts",
+        "bytes": 49560,
+        "sha256": "afd39e3e38eff0eb9fa02e71cc3d5437592775753e962c49e1efe5aa1b166811",
+        "mode": 420
+      },
+      "currentSource": {
+        "path": "src/ui/season-thread.ts",
+        "bytes": 49560,
+        "sha256": "afd39e3e38eff0eb9fa02e71cc3d5437592775753e962c49e1efe5aa1b166811",
+        "mode": 420
+      }
+    },
+    {
+      "manifest": "u4b-build-r4.source-before.json",
+      "boundSource": {
+        "path": "src/ui/SeasonRecollection.tsx",
+        "bytes": 7916,
+        "sha256": "84650ca62641f80cea71e7df4dd1e60983d0f23fb2ab55bef82bc8f54734408f",
+        "mode": 420
+      },
+      "currentSource": {
+        "path": "src/ui/SeasonRecollection.tsx",
+        "bytes": 7916,
+        "sha256": "84650ca62641f80cea71e7df4dd1e60983d0f23fb2ab55bef82bc8f54734408f",
+        "mode": 420
+      }
+    },
+    {
+      "manifest": "u4b-build-r4.source-after.json",
+      "boundSource": {
+        "path": "src/application/workbench-projection.ts",
+        "bytes": 11136,
+        "sha256": "36a6092bee23b9509b26a7ff04535518cd0d5717aa4bbaacbf0e2be8c944b4a1",
+        "mode": 420
+      },
+      "currentSource": {
+        "path": "src/application/workbench-projection.ts",
+        "bytes": 11136,
+        "sha256": "36a6092bee23b9509b26a7ff04535518cd0d5717aa4bbaacbf0e2be8c944b4a1",
+        "mode": 420
+      }
+    },
+    {
+      "manifest": "u4b-build-r4.source-after.json",
+      "boundSource": {
+        "path": "src/ui/season-thread.ts",
+        "bytes": 49560,
+        "sha256": "afd39e3e38eff0eb9fa02e71cc3d5437592775753e962c49e1efe5aa1b166811",
+        "mode": 420
+      },
+      "currentSource": {
+        "path": "src/ui/season-thread.ts",
+        "bytes": 49560,
+        "sha256": "afd39e3e38eff0eb9fa02e71cc3d5437592775753e962c49e1efe5aa1b166811",
+        "mode": 420
+      }
+    },
+    {
+      "manifest": "u4b-build-r4.source-after.json",
+      "boundSource": {
+        "path": "src/ui/SeasonRecollection.tsx",
+        "bytes": 7916,
+        "sha256": "84650ca62641f80cea71e7df4dd1e60983d0f23fb2ab55bef82bc8f54734408f",
+        "mode": 420
+      },
+      "currentSource": {
+        "path": "src/ui/SeasonRecollection.tsx",
+        "bytes": 7916,
+        "sha256": "84650ca62641f80cea71e7df4dd1e60983d0f23fb2ab55bef82bc8f54734408f",
+        "mode": 420
+      }
+    }
+  ],
+  "actualSeasonAXRecovery": {
+    "scannedFiles": 27,
+    "phrase": "本次现金流入",
+    "matches": [],
+    "limitation": "Parent observed Dec31 Season AX phrase; this bounded directory scan did not independently recover the original Season phrase. Original confirmation/result AX separately support13.28."
+  },
+  "manualSourceTrace": [
+    {
+      "path": "src/application/workbench-projection.ts",
+      "line": 45,
+      "fact": "Public transaction id/date/account line delta/source/contract copied from original ledger."
+    },
+    {
+      "path": "src/ui/season-thread.ts",
+      "line": 232,
+      "fact": "One node per positive original customer transaction; tx.date, amountFen, id used together."
+    },
+    {
+      "path": "src/ui/season-thread.ts",
+      "line": 271,
+      "fact": "Date descending then node id; first source kind payment selected in three-node focus budget."
+    },
+    {
+      "path": "src/ui/SeasonRecollection.tsx",
+      "line": 36,
+      "fact": "Renders node.date and node.line together; sourceRefs disclose same tx id/date."
+    },
+    {
+      "path": "src/ui/SeasonRecollection.tsx",
+      "line": 38,
+      "fact": "All nodes remain explicitly available, including other same-day original rows."
+    }
+  ]
+}

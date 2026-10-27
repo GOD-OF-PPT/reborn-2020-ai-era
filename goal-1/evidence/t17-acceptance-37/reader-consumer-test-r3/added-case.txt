@@ -1,0 +1,21 @@
+
+it('keeps a real corrected ticket and its original support attached to their own purpose, source and completion date',()=>{
+ // The original91 view is an actual old normal history already completed and
+ // corrected. This case does not use the public quantity/payment variants.
+ const p=panelProps(audited),relay=p.features.relay!,base=targetFor(p),period=relay.periods.find(row=>row.businessId===base.businessId&&row.supportJob?.status==='completed'&&relay.meters.some(m=>m.periodId===row.id&&m.correctionId!==null))!,support=period.supportJob!,meter=relay.meters.find(m=>m.periodId===period.id&&m.correctionId!==null)!,correction=relay.corrections.find(c=>c.id===meter.correctionId&&c.meterId===meter.id)!,request=vi.fn(),raw=controller.exportSaved()
+ expect(period).toBeDefined();expect(support.status).toBe('completed');expect(correction).toBeDefined()
+ const meterTarget:RelaySceneTarget={...base,kind:'period',periodId:period.id,meterId:meter.id},meterFocus=relayFocusFor(p,meterTarget),meterThread=playerThread(p,meterFocus),meterPurpose=threadPurpose(p,meterThread)
+ expect(meterThread.focusScope).not.toBe('invalid');expect(meterThread.inspect.target?.relayTarget).toEqual(meterTarget)
+ expect(meterThread.attempt).toBe(meterPurpose.attempt);expect(meterThread.finishWhen).toBe(meterPurpose.finishWhen)
+ expect(meterPurpose.attempt).toContain('这一张原票');expect(meterPurpose.attempt).toContain('追加的更正')
+ expect(meterPurpose.finishWhen).toContain(correction.date);expect(meterPurpose.finishWhen).toContain('本票更正');expect(meterPurpose.finishWhen).toContain('新增应收应付');expect(meterPurpose.finishWhen).toContain('自己的原日期')
+ const meterReader=driver('reader-purpose-original-meter',()=>RelayRecordBook({p:{...p,request},target:meterTarget}))
+ expect(meterReader.text()).toContain('更正');expect(meterReader.text()).toContain(meter.date)
+ const supportTarget:RelaySceneTarget={...base,kind:'period',periodId:period.id,jobId:support.id},supportFocus=relayFocusFor(p,supportTarget),supportThread=playerThread(p,supportFocus),supportPurpose=threadPurpose(p,supportThread)
+ expect(supportThread.focusScope).not.toBe('invalid');expect(supportThread.inspect.target?.relayTarget).toEqual(supportTarget)
+ expect(supportThread.attempt).toBe(supportPurpose.attempt);expect(supportThread.finishWhen).toBe(supportPurpose.finishWhen)
+ expect(supportPurpose.attempt).toContain('这一份原支持');expect(supportPurpose.finishWhen).toContain(support.completeAt);expect(supportPurpose.finishWhen).toContain('已完成这份原任务');expect(supportPurpose.finishWhen).toContain('分别处理')
+ const supportReader=driver('reader-purpose-original-support',()=>RelayRecordBook({p:{...p,request},target:supportTarget}))
+ expect(supportReader.text()).toContain('原支持');expect(supportReader.text()).toContain(support.completeAt)
+ expect(request).not.toHaveBeenCalled();expect(controller.exportSaved()).toBe(raw)
+})

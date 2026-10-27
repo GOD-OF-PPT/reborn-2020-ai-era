@@ -1,0 +1,1 @@
+SceneChoice对明确meter/job/application/audience的record意图给精确typed行key，不让普通读页记忆换对象；原册显式recordId仍最高优先。Reader.original根据当前回应原label控件或原facts发原revealBookTarget语义导航，不改分页测量/尺寸/兼容；取消/翻页不反复抢焦点。加invoice与对应meter的明确只读互翻，使用唯一typed元数据，不自动执行审计/收款。原金额/引用/全部原册/候选保护与原33/新2/共有Pay不删。

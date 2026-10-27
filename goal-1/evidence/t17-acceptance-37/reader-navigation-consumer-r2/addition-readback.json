@@ -1,0 +1,67 @@
+{
+  "at": "2026-10-26T18:45:40.333Z",
+  "before": {
+    "path": "goal-1/evidence/t17-acceptance-37/reader-navigation-consumer-r2/RelayRecordBook.test.tsx.before",
+    "bytes": 64387,
+    "sha256": "ec22cdc67f3d034d55942daf675875d7db733253b34478ea8b3a7fce11b3a061",
+    "mode": 420
+  },
+  "after": {
+    "path": "src/ui/RelayRecordBook.test.tsx",
+    "bytes": 69292,
+    "sha256": "f3100496b86f5f1e0f46d8b5d947506774a801ebeb1c18db4cd7dd1150b0d168",
+    "mode": 420
+  },
+  "addedCases": {
+    "path": "goal-1/evidence/t17-acceptance-37/reader-navigation-consumer-r2/added-navigation-cases.txt",
+    "bytes": 4905,
+    "sha256": "de6d58b245bfb240166ba74e3c9e8d4f8298a33630c346e0b49e7b242ee1dd20",
+    "mode": 420
+  },
+  "original26AndAllDriverSetupGateBytesEqual": true,
+  "exactInverseEqualsBefore": true,
+  "caseCountBefore": 26,
+  "caseCountAfter": 28,
+  "addedCaseTitles": [
+    "opens an explicitly requested original meter from SceneChoice despite its remembered invoice and preserves an explicit Panel invoice key",
+    "reads from an original invoice to its exact source meter and back while preserving the explicit amount draft and ticket key"
+  ],
+  "newImports": 0,
+  "newSetups": 0,
+  "newBusinessCommands": 0,
+  "sourceAtAuthoring": [
+    {
+      "path": "src/ui/RelaySceneChoice.tsx",
+      "bytes": 20978,
+      "sha256": "5c81321909a8c0db63f7a87c7ac28608e4a4db2e4954a377a2a33b5bf8b63999",
+      "mode": 420
+    },
+    {
+      "path": "src/ui/RelayRecordBook.tsx",
+      "bytes": 24249,
+      "sha256": "377c6d2e061425557b512ac93b40b8cfae92c74d647552994f5c2ad879df239a",
+      "mode": 420
+    },
+    {
+      "path": "src/ui/RelayPanel.tsx",
+      "bytes": 28882,
+      "sha256": "55dd9795447af32f26439a98edd4f2c5b0fe25319db1f21312ac06becff67c0d",
+      "mode": 420
+    },
+    {
+      "path": "src/ui/relay-records.ts",
+      "bytes": 54818,
+      "sha256": "5bc796c2798dfedfe727403bef72340654c411ae8b361f32eb1e8fa9be67eadc",
+      "mode": 420
+    }
+  ],
+  "testsRun": false,
+  "typecheckRun": false,
+  "buildRun": false,
+  "browserRun": false,
+  "gitRun": false,
+  "sourceFrozen": true,
+  "compatibility": 0,
+  "productChanged": false,
+  "limits": "Only local real React consumer/reading/draft code; N5 semantic DOM reveal and actual App/Chrome still belong to Root Native verification. Old passing type/build/suites do not prove this new source."
+}

@@ -1,0 +1,3 @@
+- [ ] Narrow exact one-command guard to new financial/start additions; preserve original public completion recap.
+- [ ] Add one actual multi-commit interval negative attribution case, original19 assertions unchanged.
+- [ ] Root current type/targeted checks after active prefix replay terminal, new candidate later.

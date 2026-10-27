@@ -1,0 +1,1 @@
+N5补完整决定：原册inline Reader把本次回应的原CommandButton放在实际填写body之后、原依据之前；金额字段与本次核对不再被总header/长原依据分到前后两页。近景Dialog仍用同view.actions固定footer，不复制动作或另造request。原全部事实/ID/高级原册继续原分页，未缩字/裁切/滚动或改全局ScreenBook。类型R8原0发生在此前像，当前此JSX重组须新源检查；尚未称Native R4通过。

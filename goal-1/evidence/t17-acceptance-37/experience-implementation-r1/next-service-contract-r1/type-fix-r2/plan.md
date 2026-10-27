@@ -1,0 +1,3 @@
+# R23测试专用无效结构类型边界
+
+只改新test一处runtime构造的changed公共视图为as unknown as PlayFeatures；测试特意传无效serviceDays0，原正式catalog类型28保持不变。注释明确非保存/非正常生产投影，仅核未知输入拒绝与无默认覆盖。所有14case/expect/门槛不动，前像/原type红保，逆替及expect行相等证明；production二源首末hash同。0工程/Browser，交Root仅重type。

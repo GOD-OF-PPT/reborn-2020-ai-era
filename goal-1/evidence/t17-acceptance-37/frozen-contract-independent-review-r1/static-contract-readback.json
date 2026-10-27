@@ -1,0 +1,1415 @@
+{
+  "at": "2026-10-27T04:07:56.028Z",
+  "checks": [
+    {
+      "name": "all_declared_frozen_file_bytes_hash_mode_and_no_symlink_before_review",
+      "passed": true,
+      "actual": {
+        "declaredRows": 2432,
+        "uniqueFiles": 1695,
+        "failures": []
+      },
+      "expected": "all actual frozen identities match now; not future through-run proof"
+    },
+    {
+      "name": "exact_contract_root_registry_and_snapshot",
+      "passed": true,
+      "actual": {
+        "registry": {
+          "path": "goal-1/evidence/t17-acceptance-37/root-final-preflight-r1/actual-final-registry.json",
+          "bytes": 651929,
+          "sha256": "a7e08027b33443c2d16ad59cad88514fba7e6b47126913b64a642598497772e4",
+          "mode": 420
+        },
+        "snapshot": {
+          "path": "goal-1/evidence/t17-acceptance-37/full-create-audit-r1/root-registry.snapshot.json",
+          "bytes": 651929,
+          "sha256": "a7e08027b33443c2d16ad59cad88514fba7e6b47126913b64a642598497772e4",
+          "mode": 420
+        },
+        "records": 97
+      },
+      "expected": "actual builder registry byte snapshot and all97 records"
+    },
+    {
+      "name": "root_final_spec_and_facts_authorization_exact",
+      "passed": true,
+      "actual": {
+        "spec": {
+          "path": "goal-1/evidence/t17-acceptance-37/root-final-preflight-r1/root-final-spec.json",
+          "bytes": 214746,
+          "sha256": "b43a96fa775e5ea09b3886e0624349bea4471cc62bf0eb2c205e244155882578",
+          "mode": 420
+        },
+        "facts": {
+          "path": "goal-1/evidence/t17-acceptance-37/root-final-preflight-r1/fresh-facts-final.json",
+          "bytes": 113772,
+          "sha256": "9b91d2da85bd42dc015c3eb21b1f037152805a77998ca6aba9c359bbb0499712",
+          "mode": 420
+        },
+        "final": true,
+        "factsFinal": true,
+        "stillNoGO": true
+      },
+      "expected": "Root final metadata adopted; independent exact runner GO remains separate"
+    },
+    {
+      "name": "exact_final_scope_counts",
+      "passed": true,
+      "actual": {
+        "records": 97,
+        "cuts": 14,
+        "fresh": 43,
+        "official": 127,
+        "dependencies": 901,
+        "p3": 26,
+        "original": 126,
+        "snapshots": 125,
+        "references": 1100,
+        "mutable": 11
+      },
+      "expected": "97/14/43/127/901/P326/126/125/1100/11"
+    },
+    {
+      "name": "every_original_capture_manifest_literal_role_branch_and_snapshot_exact",
+      "passed": true,
+      "actual": {
+        "failures": [],
+        "records": 97,
+        "rawStates": 39,
+        "literalOrigins": {
+          "saved_ui": 24,
+          "current_buffer": 1,
+          "native_saved_ui": 54,
+          "import_buffer": 15,
+          "unsaved_candidate": 1,
+          "physical_readonly": 2
+        }
+      },
+      "expected": "all97 original paths/lines/roles and fullbytes mapped; raw39 notnewcommands"
+    },
+    {
+      "name": "normal_creation_and_unique_complete_receipt_prefix_metadata",
+      "passed": true,
+      "actual": {
+        "creationMetadataRoots": 1,
+        "uniquePostCreatePrefixes": 178,
+        "artifactRows": 97,
+        "literalImportBuffers": 15,
+        "expected": {
+          "creationHistories": 1,
+          "uniqueHistoricalCommands": 178,
+          "artifactRows": 97,
+          "literalImportBufferRows": 15
+        }
+      },
+      "expected": "metadata 1root/178 unique postCreate prefixes/97rows/15literal buffers, not actual replay"
+    },
+    {
+      "name": "all_eleven_finalSTOP_authorities_currently_exact_and_referenced",
+      "passed": true,
+      "actual": {
+        "authorities": [
+          {
+            "identity": {
+              "path": "goal-1/input.md",
+              "bytes": 61,
+              "sha256": "20c73f8fec1a17a39606fc854126c59f949cddc6f8342ec2d55eb999c10a70b1",
+              "mode": 420,
+              "gitMode": "100644"
+            },
+            "role": "final_snapshot_until_runner_terminal"
+          },
+          {
+            "identity": {
+              "path": "goal-1/plan.md",
+              "bytes": 190619,
+              "sha256": "cba349467984673a053e2b533e17c3ec518e41251f14c69980051b86dcdf7224",
+              "mode": 420,
+              "gitMode": "100644"
+            },
+            "role": "final_snapshot_until_runner_terminal"
+          },
+          {
+            "identity": {
+              "path": "goal-1/t17-plan.md",
+              "bytes": 185168,
+              "sha256": "dee40133b8cadfa29cef4019eaf17479e8485bf405b242935b83d2ec27a401e4",
+              "mode": 420,
+              "gitMode": "100644"
+            },
+            "role": "final_snapshot_until_runner_terminal"
+          },
+          {
+            "identity": {
+              "path": "goal-1/tasks.md",
+              "bytes": 299871,
+              "sha256": "5e42b1558d09572dfff6245fa4f6e2c5a35ee9b7a848b505011790735da6d667",
+              "mode": 420,
+              "gitMode": "100644"
+            },
+            "role": "final_snapshot_until_runner_terminal"
+          },
+          {
+            "identity": {
+              "path": "AGENTS.md",
+              "bytes": 36064,
+              "sha256": "a61c5a8b4f23112b5672e84290c9643395a520650714a509f57010a89166760d",
+              "mode": 420,
+              "gitMode": "100644"
+            },
+            "role": "final_snapshot_until_runner_terminal"
+          },
+          {
+            "identity": {
+              "path": "docs/36-mainline-and-art-reconstruction-plan.md",
+              "bytes": 121214,
+              "sha256": "789ba5d732fa5a4a6f828841a7bf6cdd12c679b228153ec22829ee98f50a6c6c",
+              "mode": 420,
+              "gitMode": "100644"
+            },
+            "role": "final_snapshot_until_runner_terminal"
+          },
+          {
+            "identity": {
+              "path": "goal-1/evidence/t17-acceptance-37/input.md",
+              "bytes": 1020,
+              "sha256": "1ede0b3d1f5f0404f944bebd96d20abd0173b120001002978a04899579c077f6",
+              "mode": 420,
+              "gitMode": "100644"
+            },
+            "role": "final_snapshot_until_runner_terminal"
+          },
+          {
+            "identity": {
+              "path": "goal-1/evidence/t17-acceptance-37/plan.md",
+              "bytes": 6601,
+              "sha256": "a212304a7376670004479ae136a359dadf18340dae2bec50c40a1eff496b3956",
+              "mode": 420,
+              "gitMode": "100644"
+            },
+            "role": "final_snapshot_until_runner_terminal"
+          },
+          {
+            "identity": {
+              "path": "goal-1/evidence/t17-acceptance-37/tasks.md",
+              "bytes": 22248,
+              "sha256": "be24f299134c9021153225df4c20cd712e16203cfb263931dc2a1f9b1923c706",
+              "mode": 420,
+              "gitMode": "100644"
+            },
+            "role": "final_snapshot_until_runner_terminal"
+          },
+          {
+            "identity": {
+              "path": "goal-1/evidence/t17-acceptance-37/validation.md",
+              "bytes": 6530,
+              "sha256": "d95b78653e1bd9564806f77e41ca958c8779d023790c7c665911cf882b260180",
+              "mode": 420,
+              "gitMode": "100644"
+            },
+            "role": "final_snapshot_until_runner_terminal"
+          },
+          {
+            "identity": {
+              "path": "goal-1/evidence/t17-acceptance-37/owned-master-suffixes-r7.json",
+              "bytes": 79622,
+              "sha256": "9c0f488dbf4ed81f10bd7aa61605e0a436ff89d73a91c6d2c60eb12e5885c200",
+              "mode": 420,
+              "gitMode": "100644"
+            },
+            "role": "final_snapshot_until_runner_terminal"
+          }
+        ],
+        "errors": []
+      },
+      "expected": "all finalSTOP identities held now; Root must hold through future terminal"
+    },
+    {
+      "name": "all_fourteen_actual_producer_full_trees_and_stop_or_closed_reader",
+      "passed": true,
+      "actual": {
+        "trees": [
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r1",
+            "files": 18,
+            "validTree": true,
+            "stopped": true,
+            "stopType": "producer-stop",
+            "newCommands": 0,
+            "proof": null,
+            "captureRows": 4
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r2",
+            "files": 18,
+            "validTree": true,
+            "stopped": true,
+            "stopType": "producer-stop",
+            "newCommands": 1,
+            "proof": null,
+            "captureRows": 2
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r3",
+            "files": 15,
+            "validTree": true,
+            "stopped": true,
+            "stopType": "producer-stop",
+            "newCommands": 0,
+            "proof": null,
+            "captureRows": 1
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r4",
+            "files": 73,
+            "validTree": true,
+            "stopped": true,
+            "stopType": "producer-stop",
+            "newCommands": 20,
+            "proof": null,
+            "captureRows": 13
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r5",
+            "files": 16,
+            "validTree": true,
+            "stopped": true,
+            "stopType": "producer-stop",
+            "newCommands": 1,
+            "proof": null,
+            "captureRows": 4
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r6",
+            "files": 23,
+            "validTree": true,
+            "stopped": true,
+            "stopType": "producer-stop",
+            "newCommands": 5,
+            "proof": null,
+            "captureRows": 5
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6",
+            "files": 39,
+            "validTree": true,
+            "stopped": true,
+            "stopType": "producer-stop",
+            "newCommands": 13,
+            "proof": null,
+            "captureRows": 11
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-negative-physical-r6",
+            "files": 16,
+            "validTree": true,
+            "stopped": true,
+            "stopType": "reader-closed",
+            "newCommands": 0,
+            "proof": null,
+            "captureRows": 2
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6",
+            "files": 20,
+            "validTree": true,
+            "stopped": true,
+            "stopType": "producer-stop",
+            "newCommands": 5,
+            "proof": null,
+            "captureRows": 6
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6",
+            "files": 22,
+            "validTree": true,
+            "stopped": true,
+            "stopType": "producer-stop",
+            "newCommands": 3,
+            "proof": null,
+            "captureRows": 6
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r7",
+            "files": 39,
+            "validTree": true,
+            "stopped": true,
+            "stopType": "producer-stop",
+            "newCommands": 4,
+            "proof": null,
+            "captureRows": 13
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r8",
+            "files": 47,
+            "validTree": true,
+            "stopped": true,
+            "stopType": "producer_stop",
+            "newCommands": 2,
+            "proof": {
+              "lastLine": true,
+              "lineSHA": true,
+              "type": "producer_stop",
+              "count": 2,
+              "valid": true
+            },
+            "captureRows": 10
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r9",
+            "files": 14,
+            "validTree": true,
+            "stopped": true,
+            "stopType": "producer_stop",
+            "newCommands": 0,
+            "proof": {
+              "lastLine": true,
+              "lineSHA": true,
+              "type": "producer_stop",
+              "count": 0,
+              "valid": true
+            },
+            "captureRows": 4
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r10",
+            "files": 54,
+            "validTree": true,
+            "stopped": true,
+            "stopType": "producer_stop",
+            "newCommands": 0,
+            "proof": {
+              "lastLine": true,
+              "lineSHA": true,
+              "type": "producer_stop",
+              "count": 0,
+              "valid": true
+            },
+            "captureRows": 16
+          }
+        ]
+      },
+      "expected": "completefiles/dirs/modes + original stop or exact final journal proof;97captures allproducer"
+    },
+    {
+      "name": "actual_new_native_counts_not_export_or_history_counts",
+      "passed": true,
+      "actual": {
+        "newCommandContributions": [
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r1",
+            "count": 0
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r2",
+            "count": 1
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r3",
+            "count": 0
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r4",
+            "count": 20
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r5",
+            "count": 1
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r6",
+            "count": 5
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6",
+            "count": 13
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-negative-physical-r6",
+            "count": 0
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6",
+            "count": 5
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6",
+            "count": 3
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r7",
+            "count": 4
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r8",
+            "count": 2
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r9",
+            "count": 0
+          },
+          {
+            "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r10",
+            "count": 0
+          }
+        ],
+        "total": 54,
+        "newNativeCreates": 0
+      },
+      "expected": "actualNative54saved/0Create; retry/candidate/import/physical/alias0"
+    }
+  ],
+  "failed": [],
+  "scope": "Only finite JSON/header/receipt metadata/identity and tree checks; no candidate/product import, replay, financial algorithm or browser execution.",
+  "counts": {
+    "records": 97,
+    "cuts": 14,
+    "fresh": 43,
+    "official": 127,
+    "dependencies": 901,
+    "p3": 26,
+    "original": 126,
+    "snapshots": 125,
+    "references": 1100,
+    "mutable": 11
+  },
+  "trees": [
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r1",
+      "files": 18,
+      "validTree": true,
+      "stopped": true,
+      "stopType": "producer-stop",
+      "newCommands": 0,
+      "proof": null,
+      "captureRows": 4
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r2",
+      "files": 18,
+      "validTree": true,
+      "stopped": true,
+      "stopType": "producer-stop",
+      "newCommands": 1,
+      "proof": null,
+      "captureRows": 2
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r3",
+      "files": 15,
+      "validTree": true,
+      "stopped": true,
+      "stopType": "producer-stop",
+      "newCommands": 0,
+      "proof": null,
+      "captureRows": 1
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r4",
+      "files": 73,
+      "validTree": true,
+      "stopped": true,
+      "stopType": "producer-stop",
+      "newCommands": 20,
+      "proof": null,
+      "captureRows": 13
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r5",
+      "files": 16,
+      "validTree": true,
+      "stopped": true,
+      "stopType": "producer-stop",
+      "newCommands": 1,
+      "proof": null,
+      "captureRows": 4
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r6",
+      "files": 23,
+      "validTree": true,
+      "stopped": true,
+      "stopType": "producer-stop",
+      "newCommands": 5,
+      "proof": null,
+      "captureRows": 5
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6",
+      "files": 39,
+      "validTree": true,
+      "stopped": true,
+      "stopType": "producer-stop",
+      "newCommands": 13,
+      "proof": null,
+      "captureRows": 11
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-negative-physical-r6",
+      "files": 16,
+      "validTree": true,
+      "stopped": true,
+      "stopType": "reader-closed",
+      "newCommands": 0,
+      "proof": null,
+      "captureRows": 2
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6",
+      "files": 20,
+      "validTree": true,
+      "stopped": true,
+      "stopType": "producer-stop",
+      "newCommands": 5,
+      "proof": null,
+      "captureRows": 6
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6",
+      "files": 22,
+      "validTree": true,
+      "stopped": true,
+      "stopType": "producer-stop",
+      "newCommands": 3,
+      "proof": null,
+      "captureRows": 6
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r7",
+      "files": 39,
+      "validTree": true,
+      "stopped": true,
+      "stopType": "producer-stop",
+      "newCommands": 4,
+      "proof": null,
+      "captureRows": 13
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r8",
+      "files": 47,
+      "validTree": true,
+      "stopped": true,
+      "stopType": "producer_stop",
+      "newCommands": 2,
+      "proof": {
+        "lastLine": true,
+        "lineSHA": true,
+        "type": "producer_stop",
+        "count": 2,
+        "valid": true
+      },
+      "captureRows": 10
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r9",
+      "files": 14,
+      "validTree": true,
+      "stopped": true,
+      "stopType": "producer_stop",
+      "newCommands": 0,
+      "proof": {
+        "lastLine": true,
+        "lineSHA": true,
+        "type": "producer_stop",
+        "count": 0,
+        "valid": true
+      },
+      "captureRows": 4
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r10",
+      "files": 54,
+      "validTree": true,
+      "stopped": true,
+      "stopType": "producer_stop",
+      "newCommands": 0,
+      "proof": {
+        "lastLine": true,
+        "lineSHA": true,
+        "type": "producer_stop",
+        "count": 0,
+        "valid": true
+      },
+      "captureRows": 16
+    }
+  ],
+  "branchNodes": [
+    {
+      "key": "chrome-main-r1:n04-original87-before-restore.json",
+      "origin": "saved_ui",
+      "revision": 87,
+      "branchId": "relay-history-ff11a1962a6b0c341cbc02af",
+      "rawSHA": "a19914f5a148d3dd3572a526f27effccbc74a8722dc28d8721e8a1ed7506720f",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r1:n05-original86-visible-import-buffer.json",
+      "origin": "current_buffer",
+      "revision": 86,
+      "branchId": "relay-history-b3ade6b834a630d5faf93813",
+      "rawSHA": "0c920c297ef5e1477d587e87c8fb78fa72dbc5234eeaa1b5be4590460bcf353f",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r1:n06-original87-retained-backup.json",
+      "origin": "saved_ui",
+      "revision": 87,
+      "branchId": "relay-history-ff11a1962a6b0c341cbc02af",
+      "rawSHA": "a19914f5a148d3dd3572a526f27effccbc74a8722dc28d8721e8a1ed7506720f",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r1:n07-original86-after-ui-restore.json",
+      "origin": "saved_ui",
+      "revision": 86,
+      "branchId": "relay-history-b3ade6b834a630d5faf93813",
+      "rawSHA": "0c920c297ef5e1477d587e87c8fb78fa72dbc5234eeaa1b5be4590460bcf353f",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r2:n06-r2-saved87-first-real-partial-collection.json",
+      "origin": "saved_ui",
+      "revision": 87,
+      "branchId": "relay-history-6f9cd1ea115d43c56b71756e",
+      "rawSHA": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r2:n07-r2-reentered87-original-continue.json",
+      "origin": "saved_ui",
+      "revision": 87,
+      "branchId": "relay-history-6f9cd1ea115d43c56b71756e",
+      "rawSHA": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r3:n05-r3-saved87-after-reading-and304draft.json",
+      "origin": "saved_ui",
+      "revision": 87,
+      "branchId": "relay-history-6f9cd1ea115d43c56b71756e",
+      "rawSHA": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r4:n06-r4-saved88-single-meter-audit-planned.json",
+      "origin": "saved_ui",
+      "revision": 88,
+      "branchId": "relay-history-58a9baa944830628b6c4ca17",
+      "rawSHA": "b82ec7968013c365f832e96172054841bc50d91372c5f33ef80a2af4465b9e80",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r4:n09-r4-saved89-support-actual-completion.json",
+      "origin": "saved_ui",
+      "revision": 89,
+      "branchId": "relay-history-e3c789ae88a0108cc660b566",
+      "rawSHA": "e2456a6d49099b6822725ee4f88f110b63bf4fa17e93f7998315ad50ffd739c1",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r4:n11-r4-saved90-audit-actually-started.json",
+      "origin": "saved_ui",
+      "revision": 90,
+      "branchId": "relay-history-5388edc9a8b0b14e08b5ddd3",
+      "rawSHA": "0e7e47ea06d2dd1820ccd7dea6b85acd244f9b5f4873e9f2f3921c12c9b63b81",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r4:n14-r4-saved91-single-audit-completed-zero-difference.json",
+      "origin": "saved_ui",
+      "revision": 91,
+      "branchId": "relay-history-60ef9944440a45db833e08b1",
+      "rawSHA": "2c1ef9a599b9eb1da13fc1f0e646a4b9e025c23056eec8c7a487076b81439acd",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r4:n17-r4-saved92-all-current-due-collected-period-financial-closed.json",
+      "origin": "saved_ui",
+      "revision": 92,
+      "branchId": "relay-history-8867c0606be758c3e16542bc",
+      "rawSHA": "8b6383a372aa343aadf35d006063bdf868a550d78ce392ab94285e1a986fe89c",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r4:n19-r4-saved93-future-quarter-33-audit-planned.json",
+      "origin": "native_saved_ui",
+      "revision": 93,
+      "branchId": "relay-history-b64b446f8dffbc25e0d4cb2a",
+      "rawSHA": "dac83d460fdf4323bb1785cb4710ad031fa4610fc4d1588a9eb89b37c66d7fe8",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r4:n22-r4-saved95-customer-recharge100-refund40.json",
+      "origin": "native_saved_ui",
+      "revision": 95,
+      "branchId": "relay-history-c3027c32234e79046190c51d",
+      "rawSHA": "d938c5fc11cadd2765ed78eab8db05e5001f8cc06d76183a9530e36212cb01eb",
+      "newNativeSavedCommands": 2
+    },
+    {
+      "key": "chrome-main-r4:n24-r4-saved97-supplier-topup100-return40.json",
+      "origin": "native_saved_ui",
+      "revision": 97,
+      "branchId": "relay-history-1c1b2285844dae7b940b29b8",
+      "rawSHA": "332a7bcbbc3a03d9326991b863ad52a5d4b767dbf43abfbd6acaa1e101eeadbf",
+      "newNativeSavedCommands": 2
+    },
+    {
+      "key": "chrome-main-r4:n29-r4-saved102-33-audit-completed-known-difference.json",
+      "origin": "native_saved_ui",
+      "revision": 102,
+      "branchId": "relay-history-82ad7f261a0510a2340e8138",
+      "rawSHA": "33966089e0b7040f88ee0cf58311a5a4b9b30dfd693baa0afc8c8e2cb451ebb6",
+      "newNativeSavedCommands": 5
+    },
+    {
+      "key": "chrome-main-r4:n32-r4-saved103-positive-single-correction-new-due.json",
+      "origin": "native_saved_ui",
+      "revision": 103,
+      "branchId": "relay-history-0325e345bbaec38a6334a885",
+      "rawSHA": "1169e675467ffdc931da9ae0bbdd4f4e3abcb9445700d0c32e9e371f13eb6b0a",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r4:n36-r4-saved106-new-correction-invoice-partial-collection.json",
+      "origin": "native_saved_ui",
+      "revision": 106,
+      "branchId": "relay-history-9a4899b26d8ac8aca58eacb2",
+      "rawSHA": "2f0229c4ebdd47f0cf5262615d7d1df68c3d7aadbe80c69285c627498f6dbd29",
+      "newNativeSavedCommands": 3
+    },
+    {
+      "key": "chrome-main-r4:n39-r4-saved107-fully-collected-current-period-life-return.json",
+      "origin": "native_saved_ui",
+      "revision": 107,
+      "branchId": "relay-history-aa7dc8bf818d203f8bfc95a4",
+      "rawSHA": "f10af900ef4ac4b02e8484bd0f876dbd7efcde9cea45561350025b87b75a5d73",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r4:n40-r4-reentered107-byte-identical.json",
+      "origin": "native_saved_ui",
+      "revision": 107,
+      "branchId": "relay-history-aa7dc8bf818d203f8bfc95a4",
+      "rawSHA": "f10af900ef4ac4b02e8484bd0f876dbd7efcde9cea45561350025b87b75a5d73",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r5:r5-02-original107-current-build-unchanged.json",
+      "origin": "native_saved_ui",
+      "revision": 107,
+      "branchId": "relay-history-aa7dc8bf818d203f8bfc95a4",
+      "rawSHA": "f10af900ef4ac4b02e8484bd0f876dbd7efcde9cea45561350025b87b75a5d73",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r5:r5-03-visible-import-buffer88.json",
+      "origin": "import_buffer",
+      "revision": 88,
+      "branchId": "relay-history-58a9baa944830628b6c4ca17",
+      "rawSHA": "b82ec7968013c365f832e96172054841bc50d91372c5f33ef80a2af4465b9e80",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r5:r5-04-preserved-backup107-before-restore.json",
+      "origin": "saved_ui",
+      "revision": 107,
+      "branchId": "relay-history-aa7dc8bf818d203f8bfc95a4",
+      "rawSHA": "f10af900ef4ac4b02e8484bd0f876dbd7efcde9cea45561350025b87b75a5d73",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r5:r5-07-saved-new89-support-finance-same-new-command.json",
+      "origin": "native_saved_ui",
+      "revision": 89,
+      "branchId": "relay-history-bd55a4a4fc7f559edec504f5",
+      "rawSHA": "657eb8fe302c81b3c2aa12b13eff6c1e9467f12038c8a2100b17e1105be4f445",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r6:r6-01-original-r5-new89-unchanged.json",
+      "origin": "native_saved_ui",
+      "revision": 89,
+      "branchId": "relay-history-bd55a4a4fc7f559edec504f5",
+      "rawSHA": "657eb8fe302c81b3c2aa12b13eff6c1e9467f12038c8a2100b17e1105be4f445",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r6:r6-02-import-buffer88-exact.json",
+      "origin": "import_buffer",
+      "revision": 88,
+      "branchId": "relay-history-58a9baa944830628b6c4ca17",
+      "rawSHA": "b82ec7968013c365f832e96172054841bc50d91372c5f33ef80a2af4465b9e80",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r6:r6-06-saved92-receipts-closed-review33.json",
+      "origin": "native_saved_ui",
+      "revision": 92,
+      "branchId": "relay-history-0e0f19e2dd23682d94b9664b",
+      "rawSHA": "67a1e70baddc82c5c9c2fdefeff7e6c28c8ebf8c5a8f8fa3c1d037107d6cacef",
+      "newNativeSavedCommands": 4
+    },
+    {
+      "key": "chrome-main-r6:r6-10-new93-future-audit-planned-original-paper.json",
+      "origin": "native_saved_ui",
+      "revision": 93,
+      "branchId": "relay-history-a974d144b587739acbe2f420",
+      "rawSHA": "8fa7d64947319785aae675946213ad4d0c750b3cbca83f29a185980e10ce88d4",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r6:r6-11-reentered-new93-exact.json",
+      "origin": "native_saved_ui",
+      "revision": 93,
+      "branchId": "relay-history-a974d144b587739acbe2f420",
+      "rawSHA": "8fa7d64947319785aae675946213ad4d0c750b3cbca83f29a185980e10ce88d4",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-negative-atomic-r6:a01-visible-derived101-import-buffer.json",
+      "origin": "import_buffer",
+      "revision": 101,
+      "branchId": "relay-history-44bb7b7daedeab476f59bd6f",
+      "rawSHA": "f4198064bd757791d1fd73ef825db2e21f034e42959f5cabddbe02bd72cdfedc",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-negative-atomic-r6:a03-saved101-before-negative-correction.json",
+      "origin": "native_saved_ui",
+      "revision": 101,
+      "branchId": "relay-history-44bb7b7daedeab476f59bd6f",
+      "rawSHA": "f4198064bd757791d1fd73ef825db2e21f034e42959f5cabddbe02bd72cdfedc",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-negative-atomic-r6:a06-old101-after-real-head-abort.json",
+      "origin": "native_saved_ui",
+      "revision": 101,
+      "branchId": "relay-history-44bb7b7daedeab476f59bd6f",
+      "rawSHA": "f4198064bd757791d1fd73ef825db2e21f034e42959f5cabddbe02bd72cdfedc",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-negative-atomic-r6:a07-unsaved-negative-correction-candidate102.json",
+      "origin": "unsaved_candidate",
+      "revision": 102,
+      "branchId": "relay-history-3350b903f44174fd5775b8d7",
+      "rawSHA": "abe77f4e93e712ed697ddfc0071e25c0b12700e1d1cd9270d49d0561ec5562cc",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-negative-atomic-r6:a10-saved102-after-original-candidate-retry.json",
+      "origin": "native_saved_ui",
+      "revision": 102,
+      "branchId": "relay-history-3350b903f44174fd5775b8d7",
+      "rawSHA": "abe77f4e93e712ed697ddfc0071e25c0b12700e1d1cd9270d49d0561ec5562cc",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-negative-atomic-r6:a13-saved103-negative-supplier-credit-partial-return.json",
+      "origin": "native_saved_ui",
+      "revision": 103,
+      "branchId": "relay-history-ffa673cd9e92c8f86aec4a7e",
+      "rawSHA": "ae84a3fa7e9181b36b80ff22786a662c5c948eca791556d79f6bc35042706d08",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-negative-atomic-r6:a15-saved104-rest-period-correction-for-old-responsibilities.json",
+      "origin": "native_saved_ui",
+      "revision": 104,
+      "branchId": "relay-history-2e8f40e7829fb7ee35b8ccd2",
+      "rawSHA": "3f72132c9ba3e63258fee7f2299e3d3529c362bfe2834cfbdd50076be22e0ff9",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-negative-atomic-r6:a16-saved109-all-period-due-collected-after-corrections.json",
+      "origin": "native_saved_ui",
+      "revision": 109,
+      "branchId": "relay-history-6d91038734329600ede8bcfb",
+      "rawSHA": "f89bb2a7ec72e529b28baf314ecd58efd418bcc2b9deea7e559e23015726322a",
+      "newNativeSavedCommands": 5
+    },
+    {
+      "key": "chrome-negative-atomic-r6:a18-saved110-explicit-renewal-postpaid-old-prepay-protected.json",
+      "origin": "native_saved_ui",
+      "revision": 110,
+      "branchId": "relay-history-780d3033c88aa90c52472fa6",
+      "rawSHA": "ec4971ed5b4843da0b5a7546960d3dc975e799f2bf40147af65800acd0b241e9",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-negative-atomic-r6:a20-saved111-explicit-future-requote-planned.json",
+      "origin": "native_saved_ui",
+      "revision": 111,
+      "branchId": "relay-history-399b4b41ada05d13a7c053f4",
+      "rawSHA": "7db67d537a662b83253e1d290a117a5021c0fb6a4dbc3ac61145c872b3246297",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-negative-atomic-r6:a22-saved114-requote-accepted-before-effective.json",
+      "origin": "native_saved_ui",
+      "revision": 114,
+      "branchId": "relay-history-aa9fb6a1e2c22fbc4bb01792",
+      "rawSHA": "08077a1f1ceb6526d292342d6467494939d6fa526843281a9017ac11d4e5a5de",
+      "newNativeSavedCommands": 3
+    },
+    {
+      "key": "chrome-negative-physical-r6:p04-fresh-physical-readonly-old101.json",
+      "origin": "physical_readonly",
+      "revision": 101,
+      "branchId": "relay-history-44bb7b7daedeab476f59bd6f",
+      "rawSHA": "f4198064bd757791d1fd73ef825db2e21f034e42959f5cabddbe02bd72cdfedc",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-negative-physical-r6:p05-fresh-physical-readonly-new102.json",
+      "origin": "physical_readonly",
+      "revision": 102,
+      "branchId": "relay-history-3350b903f44174fd5775b8d7",
+      "rawSHA": "abe77f4e93e712ed697ddfc0071e25c0b12700e1d1cd9270d49d0561ec5562cc",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-service-stop-r6:s01-current-r6-new93-before-original-branch-restore.json",
+      "origin": "native_saved_ui",
+      "revision": 93,
+      "branchId": "relay-history-a974d144b587739acbe2f420",
+      "rawSHA": "8fa7d64947319785aae675946213ad4d0c750b3cbca83f29a185980e10ce88d4",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-service-stop-r6:s02-visible-original-stop93-import-buffer.json",
+      "origin": "import_buffer",
+      "revision": 93,
+      "branchId": "relay-history-8d5068c8e1e32c74c27f51d8",
+      "rawSHA": "4aecbd255fdc098e06636110460113410ab245bcf09e3c77cec8f830de5e451e",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-service-stop-r6:s03-backup-preserved-r6-new93.json",
+      "origin": "saved_ui",
+      "revision": 93,
+      "branchId": "relay-history-a974d144b587739acbe2f420",
+      "rawSHA": "8fa7d64947319785aae675946213ad4d0c750b3cbca83f29a185980e10ce88d4",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-service-stop-r6:s05-saved95-zeroap-stopped-period-original-support-retained.json",
+      "origin": "native_saved_ui",
+      "revision": 95,
+      "branchId": "relay-history-743f5d35b4fa6b6b2ad20e1e",
+      "rawSHA": "020e66c05fc66804dcb7deaaf87d261e3a1d51809d4e1e4a88a88215846df42c",
+      "newNativeSavedCommands": 2
+    },
+    {
+      "key": "chrome-service-stop-r6:s07-saved97-original-support-actually-started-after-stop.json",
+      "origin": "native_saved_ui",
+      "revision": 97,
+      "branchId": "relay-history-d7dd557d7463ae7f774db9bf",
+      "rawSHA": "9ac9690bf4013a5fb6bc76a535add63831d974203c68e562fa81ffa3f2f33935",
+      "newNativeSavedCommands": 2
+    },
+    {
+      "key": "chrome-service-stop-r6:s09-saved98-stopped-service-one-day-full-support-fee.json",
+      "origin": "native_saved_ui",
+      "revision": 98,
+      "branchId": "relay-history-4ea806a18386a527596b2330",
+      "rawSHA": "01eee37de953e5f40377f6a416d37a34acec3bf6e52b1a6e6b6a64a8af2bb663",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-support-interrupt-r6:i01-visible-actual97-import-buffer.json",
+      "origin": "import_buffer",
+      "revision": 97,
+      "branchId": "relay-history-d7dd557d7463ae7f774db9bf",
+      "rawSHA": "9ac9690bf4013a5fb6bc76a535add63831d974203c68e562fa81ffa3f2f33935",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-support-interrupt-r6:i02-original98-full-support-backup.json",
+      "origin": "saved_ui",
+      "revision": 98,
+      "branchId": "relay-history-4ea806a18386a527596b2330",
+      "rawSHA": "01eee37de953e5f40377f6a416d37a34acec3bf6e52b1a6e6b6a64a8af2bb663",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-support-interrupt-r6:i04-saved98-support-interrupted-after-real-start.json",
+      "origin": "native_saved_ui",
+      "revision": 98,
+      "branchId": "relay-history-807cce03dc04c690078008db",
+      "rawSHA": "ccfb57733ce20c6b9ee1d22b01b7da99a228f53dca144d92763bc8caf17ee62f",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-support-interrupt-r6:i06-saved99-support-interrupted-real-settlement.json",
+      "origin": "native_saved_ui",
+      "revision": 99,
+      "branchId": "relay-history-a3427309c723daba0a7d53e8",
+      "rawSHA": "2d93804a597113af41344da95f52eae11521496bb49133daa0130744bb93d68e",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-support-interrupt-r6:i10-saved100-explicit-station-stop-old-protection-and-debt.json",
+      "origin": "native_saved_ui",
+      "revision": 100,
+      "branchId": "relay-history-fd4dc5f509335700d20ed159",
+      "rawSHA": "e3cb5ffef17c96866ef419c38bd4b7c9c01319fd0f44498116c1b5a8a0856de5",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-support-interrupt-r6:i11-reentered100-station-stop-exact.json",
+      "origin": "native_saved_ui",
+      "revision": 100,
+      "branchId": "relay-history-fd4dc5f509335700d20ed159",
+      "rawSHA": "e3cb5ffef17c96866ef419c38bd4b7c9c01319fd0f44498116c1b5a8a0856de5",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r7:r7-01-current-old100-new-build-unchanged.json",
+      "origin": "native_saved_ui",
+      "revision": 100,
+      "branchId": "relay-history-fd4dc5f509335700d20ed159",
+      "rawSHA": "e3cb5ffef17c96866ef419c38bd4b7c9c01319fd0f44498116c1b5a8a0856de5",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r7:r7-03-visible-original99-import-buffer.json",
+      "origin": "import_buffer",
+      "revision": 99,
+      "branchId": "relay-history-a3427309c723daba0a7d53e8",
+      "rawSHA": "2d93804a597113af41344da95f52eae11521496bb49133daa0130744bb93d68e",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r7:r7-04-preserved-old100-backup-before-new-stop.json",
+      "origin": "saved_ui",
+      "revision": 100,
+      "branchId": "relay-history-fd4dc5f509335700d20ed159",
+      "rawSHA": "e3cb5ffef17c96866ef419c38bd4b7c9c01319fd0f44498116c1b5a8a0856de5",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r7:r7-08-new100-station-stop-actual4838.json",
+      "origin": "native_saved_ui",
+      "revision": 100,
+      "branchId": "relay-history-2faa1ee37a9c7ff74ba8d711",
+      "rawSHA": "459bb55d46fac51931aba01898759304fc29c0ba259728002fd328ee62bb8d5d",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r7:r7-09-visible-derived-negative101-buffer.json",
+      "origin": "import_buffer",
+      "revision": 101,
+      "branchId": "relay-history-44bb7b7daedeab476f59bd6f",
+      "rawSHA": "f4198064bd757791d1fd73ef825db2e21f034e42959f5cabddbe02bd72cdfedc",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r7:r7-10-preserved-new100-backup-before-negative.json",
+      "origin": "saved_ui",
+      "revision": 100,
+      "branchId": "relay-history-2faa1ee37a9c7ff74ba8d711",
+      "rawSHA": "459bb55d46fac51931aba01898759304fc29c0ba259728002fd328ee62bb8d5d",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r7:r7-11-saved101-after-negative-confirm-cancel.json",
+      "origin": "native_saved_ui",
+      "revision": 101,
+      "branchId": "relay-history-44bb7b7daedeab476f59bd6f",
+      "rawSHA": "f4198064bd757791d1fd73ef825db2e21f034e42959f5cabddbe02bd72cdfedc",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r7:r7-13-new102-negative-cash-and-asset-linked.json",
+      "origin": "native_saved_ui",
+      "revision": 102,
+      "branchId": "relay-history-5e782c132bba7020ac42889c",
+      "rawSHA": "86c07b78cbbbb84847407a80dd484e75d338ef2094f4b8a6508a4331c15c1b9f",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r7:r7-16-new103-bulk-cash-refunds-not-net-income.json",
+      "origin": "native_saved_ui",
+      "revision": 103,
+      "branchId": "relay-history-12f88dc992cbf2c592c82436",
+      "rawSHA": "38b2712cdafe382e3fdda08772fb60c18830cbae9c251283dc59c02a97a098ab",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r7:r7-17-visible-actual114-quote-import-buffer.json",
+      "origin": "import_buffer",
+      "revision": 114,
+      "branchId": "relay-history-aa9fb6a1e2c22fbc4bb01792",
+      "rawSHA": "08077a1f1ceb6526d292342d6467494939d6fa526843281a9017ac11d4e5a5de",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r7:r7-18-preserved-bulk103-backup-before-quote.json",
+      "origin": "saved_ui",
+      "revision": 103,
+      "branchId": "relay-history-12f88dc992cbf2c592c82436",
+      "rawSHA": "38b2712cdafe382e3fdda08772fb60c18830cbae9c251283dc59c02a97a098ab",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r7:r7-22-new115-quote-actually-effective-no-cash-ap-change.json",
+      "origin": "native_saved_ui",
+      "revision": 115,
+      "branchId": "relay-history-4072c95d2b7f6f6071e87932",
+      "rawSHA": "c1309f4182d929f5e3ca020042fe70ee71f9b9252454446d368852f9a11d8a54",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r7:r7-23-reentered-new115-exact.json",
+      "origin": "native_saved_ui",
+      "revision": 115,
+      "branchId": "relay-history-4072c95d2b7f6f6071e87932",
+      "rawSHA": "c1309f4182d929f5e3ca020042fe70ee71f9b9252454446d368852f9a11d8a54",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r8:r8-05-old115-after-today-and-draft-cancel.json",
+      "origin": "native_saved_ui",
+      "revision": 115,
+      "branchId": "relay-history-4072c95d2b7f6f6071e87932",
+      "rawSHA": "c1309f4182d929f5e3ca020042fe70ee71f9b9252454446d368852f9a11d8a54",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r8:r8-07-visible-original114-buffer.json",
+      "origin": "import_buffer",
+      "revision": 114,
+      "branchId": "relay-history-aa9fb6a1e2c22fbc4bb01792",
+      "rawSHA": "08077a1f1ceb6526d292342d6467494939d6fa526843281a9017ac11d4e5a5de",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r8:r8-08-old115-backup-before-quote-wait.json",
+      "origin": "saved_ui",
+      "revision": 115,
+      "branchId": "relay-history-4072c95d2b7f6f6071e87932",
+      "rawSHA": "c1309f4182d929f5e3ca020042fe70ee71f9b9252454446d368852f9a11d8a54",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r8:r8-13-new115-actual-quote-effective.json",
+      "origin": "native_saved_ui",
+      "revision": 115,
+      "branchId": "relay-history-6e53cad45234b7ebaa7206a5",
+      "rawSHA": "844fc2d570a571ac1c44ff3f5cfc68caea00ac1a60503fc2f147dd0b5e20074c",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r8:r8-14-reentered-own-new115-exact.json",
+      "origin": "native_saved_ui",
+      "revision": 115,
+      "branchId": "relay-history-6e53cad45234b7ebaa7206a5",
+      "rawSHA": "844fc2d570a571ac1c44ff3f5cfc68caea00ac1a60503fc2f147dd0b5e20074c",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r8:r8-15-visible-original99-before-stop-buffer.json",
+      "origin": "import_buffer",
+      "revision": 99,
+      "branchId": "relay-history-a3427309c723daba0a7d53e8",
+      "rawSHA": "2d93804a597113af41344da95f52eae11521496bb49133daa0130744bb93d68e",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r8:r8-16-own-new115-backup-before-stop.json",
+      "origin": "saved_ui",
+      "revision": 115,
+      "branchId": "relay-history-6e53cad45234b7ebaa7206a5",
+      "rawSHA": "844fc2d570a571ac1c44ff3f5cfc68caea00ac1a60503fc2f147dd0b5e20074c",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r8:r8-19-old99-stop-confirm-cancel-exact.json",
+      "origin": "native_saved_ui",
+      "revision": 99,
+      "branchId": "relay-history-a3427309c723daba0a7d53e8",
+      "rawSHA": "2d93804a597113af41344da95f52eae11521496bb49133daa0130744bb93d68e",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r8:r8-24-new100-real-stop-maintenance4838.json",
+      "origin": "native_saved_ui",
+      "revision": 100,
+      "branchId": "relay-history-49fa1cce823b72ab9997ef65",
+      "rawSHA": "5952c217e54cd5e97ef25bb1794fc7e8cd9c981815c2a91b7e5ffcb483c85a9a",
+      "newNativeSavedCommands": 1
+    },
+    {
+      "key": "chrome-main-r8:r8-25-reentered-own-new100-exact.json",
+      "origin": "native_saved_ui",
+      "revision": 100,
+      "branchId": "relay-history-49fa1cce823b72ab9997ef65",
+      "rawSHA": "5952c217e54cd5e97ef25bb1794fc7e8cd9c981815c2a91b7e5ffcb483c85a9a",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r9:r9-01-original-r8-own100-at-new-build.json",
+      "origin": "native_saved_ui",
+      "revision": 100,
+      "branchId": "relay-history-49fa1cce823b72ab9997ef65",
+      "rawSHA": "5952c217e54cd5e97ef25bb1794fc7e8cd9c981815c2a91b7e5ffcb483c85a9a",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r9:r9-02-visible-canonical-r7-115-buffer.json",
+      "origin": "import_buffer",
+      "revision": 115,
+      "branchId": "relay-history-4072c95d2b7f6f6071e87932",
+      "rawSHA": "c1309f4182d929f5e3ca020042fe70ee71f9b9252454446d368852f9a11d8a54",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r9:r9-03-r8-own100-preserved-backup.json",
+      "origin": "saved_ui",
+      "revision": 100,
+      "branchId": "relay-history-49fa1cce823b72ab9997ef65",
+      "rawSHA": "5952c217e54cd5e97ef25bb1794fc7e8cd9c981815c2a91b7e5ffcb483c85a9a",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r9:r9-06-canonical115-after-corrected-today.json",
+      "origin": "native_saved_ui",
+      "revision": 115,
+      "branchId": "relay-history-4072c95d2b7f6f6071e87932",
+      "rawSHA": "c1309f4182d929f5e3ca020042fe70ee71f9b9252454446d368852f9a11d8a54",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r10:r10-06-original115-after-renew-confirm-cancel.json",
+      "origin": "native_saved_ui",
+      "revision": 115,
+      "branchId": "relay-history-4072c95d2b7f6f6071e87932",
+      "rawSHA": "c1309f4182d929f5e3ca020042fe70ee71f9b9252454446d368852f9a11d8a54",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r10:r10-07-working89-input.json",
+      "origin": "import_buffer",
+      "revision": 89,
+      "branchId": "relay-history-e3c789ae88a0108cc660b566",
+      "rawSHA": "e2456a6d49099b6822725ee4f88f110b63bf4fa17e93f7998315ad50ffd739c1",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r10:r10-07-working89-previous-backup.json",
+      "origin": "saved_ui",
+      "revision": 115,
+      "branchId": "relay-history-4072c95d2b7f6f6071e87932",
+      "rawSHA": "c1309f4182d929f5e3ca020042fe70ee71f9b9252454446d368852f9a11d8a54",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r10:r10-10-working89-readback-exact.json",
+      "origin": "native_saved_ui",
+      "revision": 89,
+      "branchId": "relay-history-e3c789ae88a0108cc660b566",
+      "rawSHA": "e2456a6d49099b6822725ee4f88f110b63bf4fa17e93f7998315ad50ffd739c1",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r10:r10-11-settled92-input.json",
+      "origin": "import_buffer",
+      "revision": 92,
+      "branchId": "relay-history-0e0f19e2dd23682d94b9664b",
+      "rawSHA": "67a1e70baddc82c5c9c2fdefeff7e6c28c8ebf8c5a8f8fa3c1d037107d6cacef",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r10:r10-11-settled92-previous-backup.json",
+      "origin": "saved_ui",
+      "revision": 89,
+      "branchId": "relay-history-e3c789ae88a0108cc660b566",
+      "rawSHA": "e2456a6d49099b6822725ee4f88f110b63bf4fa17e93f7998315ad50ffd739c1",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r10:r10-13-settled92-readback-exact.json",
+      "origin": "native_saved_ui",
+      "revision": 92,
+      "branchId": "relay-history-0e0f19e2dd23682d94b9664b",
+      "rawSHA": "67a1e70baddc82c5c9c2fdefeff7e6c28c8ebf8c5a8f8fa3c1d037107d6cacef",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r10:r10-14-stopped95-input.json",
+      "origin": "import_buffer",
+      "revision": 95,
+      "branchId": "relay-history-743f5d35b4fa6b6b2ad20e1e",
+      "rawSHA": "020e66c05fc66804dcb7deaaf87d261e3a1d51809d4e1e4a88a88215846df42c",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r10:r10-15-settled92-preserved-backup.json",
+      "origin": "saved_ui",
+      "revision": 92,
+      "branchId": "relay-history-0e0f19e2dd23682d94b9664b",
+      "rawSHA": "67a1e70baddc82c5c9c2fdefeff7e6c28c8ebf8c5a8f8fa3c1d037107d6cacef",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r10:r10-18-stopped95-readback-exact.json",
+      "origin": "native_saved_ui",
+      "revision": 95,
+      "branchId": "relay-history-743f5d35b4fa6b6b2ad20e1e",
+      "rawSHA": "020e66c05fc66804dcb7deaaf87d261e3a1d51809d4e1e4a88a88215846df42c",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r10:r10-20-stopped95-after-preferences-restored.json",
+      "origin": "native_saved_ui",
+      "revision": 95,
+      "branchId": "relay-history-743f5d35b4fa6b6b2ad20e1e",
+      "rawSHA": "020e66c05fc66804dcb7deaaf87d261e3a1d51809d4e1e4a88a88215846df42c",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r10:r10-21-return-canonical115-input.json",
+      "origin": "import_buffer",
+      "revision": 115,
+      "branchId": "relay-history-4072c95d2b7f6f6071e87932",
+      "rawSHA": "c1309f4182d929f5e3ca020042fe70ee71f9b9252454446d368852f9a11d8a54",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r10:r10-22-stopped95-preserved-backup.json",
+      "origin": "saved_ui",
+      "revision": 95,
+      "branchId": "relay-history-743f5d35b4fa6b6b2ad20e1e",
+      "rawSHA": "020e66c05fc66804dcb7deaaf87d261e3a1d51809d4e1e4a88a88215846df42c",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r10:r10-25-original115-after-composition-restores-and-today.json",
+      "origin": "native_saved_ui",
+      "revision": 115,
+      "branchId": "relay-history-4072c95d2b7f6f6071e87932",
+      "rawSHA": "c1309f4182d929f5e3ca020042fe70ee71f9b9252454446d368852f9a11d8a54",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r10:r10-27-original115-after-business-entry-read.json",
+      "origin": "native_saved_ui",
+      "revision": 115,
+      "branchId": "relay-history-4072c95d2b7f6f6071e87932",
+      "rawSHA": "c1309f4182d929f5e3ca020042fe70ee71f9b9252454446d368852f9a11d8a54",
+      "newNativeSavedCommands": 0
+    },
+    {
+      "key": "chrome-main-r10:r10-28-final-original115-reentry-exact.json",
+      "origin": "native_saved_ui",
+      "revision": 115,
+      "branchId": "relay-history-4072c95d2b7f6f6071e87932",
+      "rawSHA": "c1309f4182d929f5e3ca020042fe70ee71f9b9252454446d368852f9a11d8a54",
+      "newNativeSavedCommands": 0
+    }
+  ]
+}

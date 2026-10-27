@@ -1,0 +1,1 @@
+Root授权限定只读完整原33能力/字段迁移核定。对root33/capability-map-r1.md、baseline HEAD8545eece与当前consumer，逐项保原字段/实例等待中断/确认/结果/同对象App接线。新增N1 CorrectRelayUsage、N2 CollectRelayReceivable与共有PayObligation单列；不加ReportRelayUsage。核续签重谈取消/跨册草稿/完整原账/收退范围/stage缺失。仅新目录文档/身份；不改源/master/旧证据、不执行test/type/build/browser/投影/Git写、不预勾任务。

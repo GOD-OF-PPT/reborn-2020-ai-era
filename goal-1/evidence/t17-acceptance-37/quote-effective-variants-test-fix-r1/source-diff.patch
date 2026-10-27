@@ -1,0 +1,32 @@
+--- goal-1/evidence/t17-acceptance-37/quote-effective-variants-test-fix-r1/relay-quote-effective-wait.before.test.tsx
++++ src/ui/relay-quote-effective-wait.test.tsx
+@@ -108,9 +108,7 @@
+  expect(planned.controller.exportSaved()).toBe(original)
+ })
+ 
+-it('does not invent an effective-date wait for rejected, incomplete, malformed or already-effective public quote variants',()=>{
+- const base=props(),original=completed.controller.exportSaved()
+- const variants:readonly {label:string;update:(q:Relay['quotes'][number])=>Relay['quotes'][number];state?:string}[]=[
++const quotePublicVariants:readonly {label:string;update:(q:Relay['quotes'][number])=>Relay['quotes'][number];state?:string}[]=[
+   {label:'all-rejected',update:q=>({...q,responses:q.responses.map(r=>({...r,accepted:false}))}),state:'客户全部拒绝，原约继续'},
+   {label:'missing-responses',update:q=>({...q,responses:[]}),state:'原完成与答复尚待核定'},
+   {label:'duplicate-responses',update:q=>({...q,responses:[...q.responses,...q.responses]}),state:'原完成与答复尚待核定'},
+@@ -119,15 +117,15 @@
+   {label:'wrong-job',update:q=>({...q,job:q.job?{...q.job,id:'different-original-job'}:null})},
+   {label:'wrong-response-customer',update:q=>({...q,responses:q.responses.map(r=>({...r,customerId:'another-customer'}))}),state:'原完成与答复尚待核定'},
+   {label:'already-effective',update:q=>({...q,effectiveAt:'2025-04-08'}),state:'原报价已经生效'},
+- ]
+- for(const variant of variants){
++]
++it.each(quotePublicVariants)('does not invent an effective-date wait for public quote variant $label',variant=>{
++ const base=props(),original=completed.controller.exportSaved()
+   const p=altered(base,variant.update),ui=reader('public-quote-'+variant.label,p,completed.target),model=relayRecordRows(p,completed.target),ticket=model.rows.find(r=>r.key===recordKey)
+   expect(clocks(ui)).toHaveLength(0)
+   if(variant.state){expect(model.reason).toBeNull();expect(ticket!.state).toBe(variant.state);expect(relayRecordNeedsReply(p,completed.target,ticket!)).toBe(false)}
+   if(variant.label==='all-rejected')expect(ui.text()).toContain('没有待生效的新报价')
+   if(variant.label==='missing-responses')expect(ui.text()).toContain('不把未知当零接受')
+   expect(p.request).not.toHaveBeenCalled()
+- }
+  expect(completed.controller.exportSaved()).toBe(original)
+ })
+ 

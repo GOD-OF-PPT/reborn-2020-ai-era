@@ -1,0 +1,66 @@
+import type {ReactNode} from 'react'
+import type {CommandEnvelope} from '../core/run-types.ts'
+import type {GamePanelProps} from './game-types.ts'
+import {moneyText} from './game-text.ts'
+import {RELAY_JOBS} from '../content/relay.ts'
+import {relayAuditCompletion} from './relay-audit-dates.ts'
+
+type Relay=GamePanelProps['features']['relay']
+const one=<T,>(rows:readonly T[])=>rows.length===1?rows[0]:undefined
+
+/** These are captured original facts for the original confirmation, not an alternative preview. */
+export function relayResponseCommandDetails({command,relay,accountName}:{command:CommandEnvelope;relay:Relay;accountName:(id:string)=>string}):ReactNode{
+ if(!relay)return null
+ if(command.payload===null||typeof command.payload!=='object'||Array.isArray(command.payload)||Object.values(Object.getOwnPropertyDescriptors(command.payload)).some(d=>d.get!==undefined||d.set!==undefined))return null
+ const body=command.payload as Record<string,unknown>,book=relay.casebook?.status==='ready'&&relay.casebook.runId===command.runId&&relay.casebook.revision===command.expectedRevision?relay.casebook:null
+ const monetary=['CollectRelayReceivable','RefundRelayBalance','RefundRelaySupplier','PayObligation'].includes(command.kind)
+ if(monetary&&(typeof body.amountFen!=='number'||!Number.isSafeInteger(body.amountFen)||body.amountFen<=0))return <p className="warning-box">本次金额尚未完整核对，请返回原票重新确认。</p>
+ if(command.kind==='RenewRelayCustomer'){
+  const customer=one(relay.customers.filter(c=>c.id===body.customerId)),business=customer?one(relay.businesses.filter(b=>b.id===customer.businessId)):undefined
+  if(!customer||!business||typeof body.termEnd!=='string'||typeof body.mode!=='string'||!['prepaid','postpaid'].includes(body.mode)||typeof body.creditLimitFen!=='number'||!Number.isSafeInteger(body.creditLimitFen)||body.creditLimitFen<0||body.mode==='prepaid'&&body.creditLimitFen!==0)return <p className="warning-box">本次续签的原客户、新期限或收款条件尚未完整对齐，请返回核对。</p>
+  const number=relay.customers.filter(c=>c.businessId===business.id).findIndex(c=>c.id===customer.id)+1
+  return <section className="confirmation-context"><h3>这次续签，重新写清客户{number}的条件</h3><p>{accountName(business.accountId)} · 原合同至{customer.termEnd}，目前{customer.mode==='prepaid'?'先充值后消费':'后付信用，上限'+moneyText(customer.creditLimitFen)}。</p><p>本次显选的新有效期：<strong>{body.termEnd}</strong>；新收款条件：<strong>{body.mode==='prepaid'?'先充值后消费':'后付信用'}</strong>；本次后付信用上限：<strong>{moneyText(body.creditLimitFen)}</strong>。</p><p>当前已生效收费{moneyText(customer.activeTerms.unitPriceFen)}/千模拟token、周期支持基准{moneyText(customer.activeTerms.serviceFeeFen)}仍按原条款；本次续签不替你重谈报价、充值或安排服务。</p><p>这位客户尚未消费的旧余额{moneyText(customer.balance.prepaidFen)}及其保护、原应收{moneyText(customer.balance.receivableFen)}都继续保留；改收款模式不抹旧预款或旧债。</p></section>
+ }
+ if(command.kind==='StartRelayRequote'){
+  const business=one(relay.businesses.filter(b=>b.id===body.businessId)),offer=one(relay.catalog.offers.filter(o=>o.id===body.offerKind)),definition=RELAY_JOBS.find(j=>j.id==='relay-requote')
+  const ids=Array.isArray(body.customerIds)&&body.customerIds.every((id:unknown)=>typeof id==='string')?body.customerIds as string[]:null,resources=Array.isArray(body.resources)&&body.resources.every((id:unknown)=>typeof id==='string')?body.resources as string[]:null
+  if(!business||!offer||!definition||!ids?.length||new Set(ids).size!==ids.length||!resources?.length||new Set(resources).size!==resources.length||typeof body.startAt!=='string'||typeof body.effectiveAt!=='string'||typeof body.unitPriceFen!=='number'||!Number.isSafeInteger(body.unitPriceFen)||body.unitPriceFen<=0)return <p className="warning-box">本次拟谈客户、方案、价格或资源日期尚未完整对齐，请返回核对。</p>
+  const clients=relay.customers.filter(c=>c.businessId===business.id),selected=ids.map(id=>one(clients.filter(c=>c.id===id)))
+  if(selected.some(c=>!c))return <p className="warning-box">本次有一份原客户合同已不能唯一核定；没有删去他或换成另一位。</p>
+  return <section className="confirmation-context"><h3>与这些原客户，谈一份明确的未来报价</h3><p>{accountName(business.accountId)} · 本次{ids.length}份原合同，拟谈方案：<strong>{offer.label}</strong>；拟用量价<strong>{moneyText(body.unitPriceFen)}/千模拟token</strong>，周期支持基准<strong>{moneyText(offer.serviceFeeFen)}</strong>。</p><ul>{selected.map(c=><li key={c!.id}>客户{clients.findIndex(row=>row.id===c!.id)+1} · 原合同至{c!.termEnd} · 当前用量价{moneyText(c!.activeTerms.unitPriceFen)}、原支持基准{moneyText(c!.activeTerms.serviceFeeFen)}。</li>)}</ul><p>本次资源：{resources.map(id=>one(relay.resources.filter(r=>r.id===id))?.label??'原资源现需重新核对（'+id+'）').join('、')}；拟开工{body.startAt}，预计完成{relayAuditCompletion(body.startAt,definition.durationDays)??'日期待核对'}。最早拟生效日：<strong>{body.effectiveAt}</strong>。</p><p>本任务原标准费用{moneyText(definition.costFen)}、{definition.actionPoints}点、{definition.durationDays}日；工资与其它已承诺排程另计。保存后只是已安排，客户仍可接受或拒绝；生效前原价、已经发生的用量和已确认本期支持费都不追改。</p></section>
+ }
+ if(command.kind==='CollectRelayReceivable'){
+  const invoice=one(relay.receivables.filter(i=>i.id===body.receivableId)),customer=invoice?one(relay.customers.filter(c=>c.id===invoice.customerId)):undefined,business=customer?one(relay.businesses.filter(b=>b.id===customer.businessId)):undefined
+  if(!invoice||!customer||!business)return <p className="warning-box">原单、客户与账户没有唯一对齐，请返回核对；没有改收另一张原单。</p>
+  const number=relay.customers.filter(c=>c.businessId===business.id).findIndex(c=>c.id===customer.id)+1
+  return <section className="confirmation-context"><h3>只收这一张原单的显选金额</h3><p>{accountName(business.accountId)} · 客户{number} · 原开单{invoice.date}，原到期日{invoice.dueAt}。</p><p>原金额{moneyText(invoice.amountFen)}；已实收{moneyText(invoice.collectedFen)}；已冲回{moneyText(invoice.reversedFen)}；净未收{moneyText(invoice.amountFen-invoice.collectedFen-invoice.reversedFen)}。本次拟收{moneyText(Number(body.amountFen))}。</p><p>本次只办理这张原单；其它到期或未来原单保留。原客户全部到期收款是另一项决定，不能与本单范围混用；到账不再确认一次收入。</p><details><summary>核对这一张原单的引用</summary><p>原单 {invoice.id}；原来源 {invoice.sourceId}；原开单操作 {invoice.operationId}。</p></details></section>
+ }
+ if(command.kind==='CorrectRelayUsage'){
+  const audit=one(relay.audits.filter(a=>a.id===body.auditId)),meter=audit?one(relay.meters.filter(m=>m.id===audit.meterId)):undefined
+  if(!audit||!meter||audit.completedAt===null||audit.actualUnits===null||meter.auditedUnits===null||audit.actualUnits!==meter.auditedUnits||body.correctUnits!==meter.auditedUnits)return <p className="warning-box">这张票的已完成复核与实计未唯一对齐，请返回核对原依据。</p>
+  return <section className="confirmation-context"><h3>只追加这一张票的原更正</h3><p>{meter.date}原报告{meter.reportedUnits}单位；{audit.completedAt}实际完成的独立复核为{meter.auditedUnits}单位。原收费{moneyText(meter.unitPriceFen)}、原供价{moneyText(meter.unitCostFen)}和各自版本保留。</p><p>本次只按这份已核实计追加更正，不覆盖原报告或把整期全部更正。账目差额、客户退款或应收、供应贷项或应付分别发生；新增单据按自己的开单日和到期日继续，不从旧计量日期重推。</p><details><summary>核对这一次复核的引用</summary><p>原计量 {meter.id}；原复核 {audit.id}；原批次任务 {audit.jobId}。</p></details></section>
+ }
+ if(command.kind==='RefundRelayBalance'){
+  const customer=one(relay.customers.filter(c=>c.id===body.customerId)),business=customer?one(relay.businesses.filter(b=>b.id===customer.businessId)):undefined
+  if(!customer||!business)return null
+  return <section className="confirmation-context"><h3>退还客户未消费的原款</h3><p>{accountName(business.accountId)}拟退还{moneyText(Number(body.amountFen))}；这位客户原未消费余额为{moneyText(customer.balance.prepaidFen)}，仍受保护。</p><p>这是未消费原款退还，不是新费用或利润。原规则按充值批次处理保护与退款；确认后须分看实际现金已付和仍待支付的原义务。已消费后的更正退款、旧应收及原支持不被这一项删除。</p></section>
+ }
+ if(command.kind==='RefundRelaySupplier'){
+  const business=one(relay.businesses.filter(b=>b.id===body.businessId)),supplier=one(relay.catalog.suppliers.filter(s=>s.id===body.supplierId)),option=one(relay.supplyOptions.filter(o=>o.businessId===body.businessId&&o.supplierId===body.supplierId))
+  if(!business||!supplier||!option)return null
+  return <section className="confirmation-context"><h3>核对本站供应资产的这次退回</h3><p>{accountName(business.accountId)} · {supplier.label} · 本次拟取回{moneyText(Number(body.amountFen))}；该供应当前未用资产与调账贷项共{moneyText(option.credit?.remainingFen??0)}。</p><p>这是一间站跨期共用的资产池，不全属于眼前本期。实际退回才增加原账户现金，不确认服务收入；已经消耗的成本、该供应未付{moneyText(option.outstandingFen)}及客户保护继续保留。</p></section>
+ }
+ if(command.kind==='PayObligation'&&book){
+  const debt=one(book.obligationHistory.filter(o=>o.id===body.obligationId&&o.accountId===body.accountId)),business=debt?one(relay.businesses.filter(b=>b.id===debt.scopeBusinessId)):undefined
+  if(!debt||!business)return null
+  return <section className="confirmation-context"><h3>偿还这一笔已经存在的原义务</h3><p>{accountName(debt.accountId)} · 原义务日期{debt.date}，原金额{moneyText(debt.amountFen)}，目前剩余{moneyText(debt.remainingFen)}；本次显选支付{moneyText(Number(body.amountFen))}。</p><p>这是旧账付款，不再确认一遍费用。剩余金额继续关联同一原义务；实际可花、允许使用的保护及原付款条件仍由本次原核对裁定，不用未来应收填缺口。</p><details><summary>核对这笔旧账的来源</summary><p>原义务 {debt.id}；原费用或退款操作 {debt.originOperationId}；原来源 {debt.sourceEventId}。</p></details></section>
+ }
+ if((command.kind==='InterruptJob'||command.kind==='StopRelayPeriod')&&book){
+  const period=command.kind==='StopRelayPeriod'?one(relay.periods.filter(p=>p.id===body.periodId)):undefined
+  const actions=book.actions.filter(a=>command.kind==='InterruptJob'?a.jobId===body.jobId:a.jobId===period?.jobId)
+  if(actions.length!==1)return null
+  const action=actions[0]!,support=period?.supportJob
+  return <section className="confirmation-context"><h3>{command.kind==='StopRelayPeriod'?'停止本期请求，原支持另行继续':'停止这一份原任务，保留真实投入'}</h3><p>原行动{action.definition.startAt}—{action.definition.completeAt}；该次原定费用{moneyText(action.definition.costFen)}、{action.definition.actionPoints}点。{action.executedAt===null?'尚无实际开工记录；原预留与取消结果按原账核对。':'实际开工日'+action.executedAt+'，已执行的行动和已耗投入不退回。'}</p>{support?<p>本期原支持仍是独立任务：{support.startAt}—{support.completeAt}，{support.status==='completed'?'已实际完成':support.status==='running'?'实际进行中':support.status==='planned'?'已经预留，尚未开工':'已停止，原费用和后果保留'}；停止请求不等于支持已兑现。</p>:null}<p>原费用实付与尚欠、客户保护、供应资产、退款和应收应付继续留在原账；等待不会免费补做中断的支持。</p></section>
+ }
+ return null
+}

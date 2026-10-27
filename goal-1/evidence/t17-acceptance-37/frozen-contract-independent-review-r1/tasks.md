@@ -1,0 +1,3 @@
+- [ ] 真实冻结根/registry/spec/facts及完整身份集合只读验证。
+- [ ] 角色/分支/旧继承和fresh/wiring/authority/once边界静态复核。
+- [ ] 新本根结论与实际首末身份交Root，0正式运行。

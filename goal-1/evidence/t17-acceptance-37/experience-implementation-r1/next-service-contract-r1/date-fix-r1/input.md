@@ -1,0 +1,1 @@
+state完整单组已交 next-service-contract-independent-r1唯一P1。授权guard新next-service-contract-r1/date-fix-r1保前像/审查原件后仅helper负一天改等价addDays(from, serviceDays-1)，不改core/期限门槛/14测试断言和原gate。修后writer停交state定向补读，0工程。Root会单独适配旧RelayNextServiceJourney2case新真实先决consumer展开（原原始test前像保），不会删旧空稿/取消/全payload/原档保护断言。

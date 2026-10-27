@@ -1,0 +1,1 @@
+Root授权currentR7后仅只读2产品+2新test priority增量与旧R7 r7-02/05/06及r7-12/14/15图片。R7 whole112UI814 actual0/611same是旧批身份；N8 stop前缀造成原choice.line去重失效、N9未出账成本48.38在确认第2页，Root全批终态后仅2UI+2newtest修，freezeR19/607same桥已写，type18活不得改src/checks/Browser/Git。核行为完整事实未缩水、预期顺序与R7图/R8未验区别，guard新目录交有限静态准入，不冒814为新R8绿。

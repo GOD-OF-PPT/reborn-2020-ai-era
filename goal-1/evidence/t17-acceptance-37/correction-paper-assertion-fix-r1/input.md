@@ -1,0 +1,1 @@
+Root授权仅relay-correction-paper-effects.test.tsx positive新AR/AP case中一条过度字面expect html contains应付，改核原Jan11到期/当前尚欠¥0.60/新增供应成本¥0.60。保所有金额日期/phase/原id/收款反断言与其余case逐字，不改helper产品文案，不执行工程/Browser/Git。17文件187case实际169pass/18fail原红保；paper另2客户helperunavailable失败不松断言、不纳此修。新同级三文件/前像/oldred/逆替证明后freeze。

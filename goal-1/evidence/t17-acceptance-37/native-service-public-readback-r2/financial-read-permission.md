@@ -1,0 +1,1 @@
+Root explicit follow-up: 允许仅为JSON独立原财务引用解析已发生金融receipt.signature白名单字段kind/id/account/business/contract/source/date/ref/prepayment/obligation/amount，特别settle_supplier_credit；同此前公开casebook受控只读接缝，不输出完整signature/seed/未审truth，不运行规则。请独立核自动冲抵确切kind/金额/原credit/obligation及非cash非新cost。

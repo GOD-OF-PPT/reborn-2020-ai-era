@@ -1,0 +1,52 @@
+--- root36/http-preparation-r2/http-readback.mjs
++++ current-R7/http-readback.mjs
+@@ -3,17 +3,17 @@
+ import{createHash}from'node:crypto';
+ import{resolve,dirname,relative,basename}from'node:path';
+ import{assertBrowserEvidenceWritable as guard}from'../../../../scripts/browser_evidence_guard.mjs';
+-const repo=resolve(dirname(fileURLToPath(import.meta.url)),'../../../..'),inputRoot='goal-1/evidence/t17-acceptance-36',build='.delivery/t17-u0r-r10';
++const repo=resolve(dirname(fileURLToPath(import.meta.url)),'../../../..'),inputRoot='goal-1/evidence/t17-acceptance-37',build='.delivery/t17-u4b-r7';
+ if(process.cwd()!==repo)throw Error('RUN_FROM_CURRENT_REPOSITORY_REQUIRED');
+ const [outputFlag,outputValue,urlFlag,urlValue,...unused]=process.argv.slice(2);
+ if(outputFlag!=='--output-dir'||!outputValue||urlFlag!=='--base-url'||!urlValue||unused.length)throw Error('FRESH_OUTPUT_AND_EXPLICIT_BASE_URL_REQUIRED');
+ const absoluteOut=resolve(repo,outputValue),out=relative(repo,absoluteOut),selectedUrl=new URL(urlValue);
+-if(dirname(absoluteOut)!==resolve(repo,inputRoot)||!/^delivery-readback-r[1-9][0-9]*$/.test(basename(absoluteOut)))throw Error('U0R_FRESH_DELIVERY_SIBLING_REQUIRED');
++if(dirname(absoluteOut)!==dirname(fileURLToPath(import.meta.url))||!/^delivery-readback-r[1-9][0-9]*$/.test(basename(absoluteOut)))throw Error('U4B_R7_FRESH_OWNED_DELIVERY_CHILD_REQUIRED');
+ if(selectedUrl.protocol!=='http:'||!['127.0.0.1','localhost'].includes(selectedUrl.hostname)||!['5387'].includes(selectedUrl.port)||selectedUrl.pathname!=='/'||selectedUrl.search||selectedUrl.hash||selectedUrl.username||selectedUrl.password)throw Error('ONLY_DECLARED_LOCAL_5387_ROOT_URL_ALLOWED');
+ const baseUrl=selectedUrl.href,preparationDirectory=dirname(fileURLToPath(import.meta.url));
+ guard(inputRoot);if(existsSync(absoluteOut))throw Error('PRESERVE_EXISTING_DELIVERY_USE_FRESH_SIBLING');mkdirSync(absoluteOut);guard(absoluteOut);
+ for(const name of ['http-readback.mjs','marker-inputs.json']){guard(absoluteOut);writeFileSync(absoluteOut+'/'+name,readFileSync(name==='http-readback.mjs'?fileURLToPath(import.meta.url):preparationDirectory+'/'+name),{flag:'wx'})}
+-const authorityPath=inputRoot+'/u0r-build-r10.source-after.json',beforeAuthorityPath=inputRoot+'/u0r-build-r10.source-before.json',buildResultPath=inputRoot+'/u0r-build-r10.result.json',baselinePath=inputRoot+'/baseline.json',runnerPath=inputRoot+'/run-long-step-r2.mjs',nativeRegistryPath=inputRoot+'/native-inputs.json';
++const authorityPath=inputRoot+'/u4b-build-r7.source-after.json',beforeAuthorityPath=inputRoot+'/u4b-build-r7.source-before.json',buildResultPath=inputRoot+'/u4b-build-r7.result.json',baselinePath=inputRoot+'/baseline.json',runnerPath=inputRoot+'/run-long-step-r21.mjs',nativeRegistryPath=inputRoot+'/native-inputs-r1.json';
+ const started=new Date().toISOString(),hash=b=>createHash('sha256').update(b).digest('hex');
+ const write=(name,value)=>{guard(out);writeFileSync(out+'/'+name,JSON.stringify(value,null,2)+'\n',{flag:'wx'})};
+ const identify=path=>{const s=lstatSync(path);if(s.isSymbolicLink()||!s.isFile())throw Error('REGULAR_FILE_REQUIRED:'+path);const b=readFileSync(path);return{path,bytes:b.length,mode:s.mode&0o777,sha256:hash(b)}};
+@@ -26,7 +26,7 @@
+ const extraTree=files=>{
+  const raw=files.filter(f=>/^src\/.*\.[cm]?[jt]sx?$/.test(f.path)).flatMap(f=>[...readFileSync(f.path,'utf8').matchAll(/from\s*['"]([^'"]+\?raw)['"]/g)].map(m=>relative(process.cwd(),resolve(dirname(f.path),m[1].split('?')[0]))));
+  const declaredPath=inputRoot+'/declared-unit-inputs.json',declared=JSON.parse(readFileSync(declaredPath,'utf8'));
+- const extraPaths=[runnerPath,baselinePath,declaredPath,inputRoot+'/test-gate-identity-r2.json',...declared.inputs.map(row=>row.path),...tree('scripts').files.filter(r=>/\.(ts|mjs|js|py)$/.test(r.path)&&!r.path.includes('/__pycache__/')).map(r=>r.path),...tree('planning').files.map(r=>r.path),...raw];
++ const extraPaths=[runnerPath,baselinePath,declaredPath,inputRoot+'/test-gate-identity-r21.json',...declared.inputs.map(row=>row.path),...tree('scripts').files.filter(r=>/\.(ts|mjs|js|py)$/.test(r.path)&&!r.path.includes('/__pycache__/')).map(r=>r.path),...tree('planning').files.map(r=>r.path),...raw];
+  return [...new Set(extraPaths)].sort().map(identify);
+ };
+ const originalImagesPath='goal-1/evidence/t17-acceptance-33/delivery-readback-r3/asset-originals.json';
+@@ -39,15 +39,15 @@
+  };
+  if(!Array.isArray(registry.inputs)||!registry.inputs.length)throw Error('ACTUAL_NATIVE_REGISTRY_REQUIRED');
+  for(const prefix of registry.inputs){
+-  if(prefix.role!=='known previous saved-history input; not new UI progression')throw Error('OLD_PREFIX_NOT_NEW_HISTORY_REQUIRED');bind(prefix,prefix.path);const header=JSON.parse(readFileSync(prefix.path,'utf8'));if(header.runId!==prefix.runId||header.revision!==prefix.revision)throw Error('OLD_PREFIX_PUBLIC_HEADER_MISMATCH');if(prefix.manifest!==undefined)bind(prefix.manifest,prefix.path+':manifest');
++  if(prefix.role!=='existing normal-history input; prior evidence, not a new Create or current Native action')throw Error('OLD_PREFIX_NOT_NEW_HISTORY_REQUIRED');bind(prefix,prefix.path);const header=JSON.parse(readFileSync(prefix.path,'utf8'));if(header.runId!==prefix.runId||header.revision!==prefix.revision)throw Error('OLD_PREFIX_PUBLIC_HEADER_MISMATCH');if(prefix.manifest!==undefined)bind(prefix.manifest,prefix.path+':manifest');
+  }
+- if(registry.sourceBinding!==undefined)bind(registry.sourceBinding,'sourceBinding');
++ if(registry.sourceBinding!==undefined&&typeof registry.sourceBinding==='object'&&registry.sourceBinding!==null)bind(registry.sourceBinding,'sourceBinding');
+  return [...rows.values()].sort((a,b)=>a.path.localeCompare(b.path));
+ }
+ const legacyTree=()=>[...new Map([...legacyInputs.map(identify),...nativeReferenceRows()].map(row=>[row.path,row])).values()].sort((a,b)=>a.path.localeCompare(b.path));
+ async function main(){
+- guard(out);write('command.json',{at:new Date().toISOString(),cwd:repo,argv:['rtk','proxy','node',relative(repo,fileURLToPath(import.meta.url)),'--output-dir',out,'--base-url',baseUrl],node:process.version,build,selectedPort:selectedUrl.port,scope:'Only the explicitly selected static local build; no Native/DB/browser action or compatibility matrix.'});const br=JSON.parse(readFileSync(buildResultPath,'utf8')),authority=JSON.parse(readFileSync(authorityPath,'utf8')),beforeAuthority=JSON.parse(readFileSync(beforeAuthorityPath,'utf8')),baseline=JSON.parse(readFileSync(baselinePath,'utf8'));
+- if(br.exitCode!==0||!br.sourceUnchanged||!br.extraSame||br.argv.at(-1)!==build||!authority.extraSame)throw Error('SUCCESSFUL_FROZEN_U0R_BUILD_REQUIRED');
++ guard(out);write('command.json',{at:new Date().toISOString(),cwd:repo,argv:['rtk','proxy',process.execPath,relative(repo,fileURLToPath(import.meta.url)),'--output-dir',out,'--base-url',baseUrl],node:process.version,build,selectedPort:selectedUrl.port,scope:'Only the explicitly selected static local build; no Native/DB/browser action or compatibility matrix.'});const br=JSON.parse(readFileSync(buildResultPath,'utf8')),authority=JSON.parse(readFileSync(authorityPath,'utf8')),beforeAuthority=JSON.parse(readFileSync(beforeAuthorityPath,'utf8')),baseline=JSON.parse(readFileSync(baselinePath,'utf8'));
++ if(br.exitCode!==0||!br.sourceUnchanged||!br.extraSame||br.argv.at(-1)!==build||!authority.extraSame)throw Error('SUCCESSFUL_FROZEN_U4B_R7_BUILD_REQUIRED');
+  const authorityIdentitiesBefore=[authorityPath,beforeAuthorityPath,buildResultPath,baselinePath].map(identify),expected=normalize(authority.files),buildSourcePairEqual=same(normalize(beforeAuthority.files),expected),expectedExtra=normalize(beforeAuthority.extra),sourcesBefore=sourceTree(),extrasBefore=extraTree(sourcesBefore),artifactsBefore=tree(build),legacyBefore=legacyTree();
+  const coreExpected=normalize(baseline.sourceAndAssets.filter(r=>r.path.startsWith('src/core/'))),coreBefore=tree('src/core').files,p3Expected=normalize(baseline.p3),p3Before=baseline.p3.map(r=>identify(r.path));
+  const sourceDelta=delta(expected,sourcesBefore),extraDelta=delta(expectedExtra,extrasBefore),coreDelta=delta(coreExpected,coreBefore),p3Delta=delta(p3Expected,p3Before);

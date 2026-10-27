@@ -1,0 +1,1 @@
+Root授权只读独审correction-result-integration-r1/station-stop-result-fix-r1/stopped-period-mainline-fix-r1及当前response-result/progress。当前freezeR16=611/type15活，不改源或工程/browser/Git；检查exactcommit/单bulk scope/局部unknown/实际现金资产性质、停站仅自身预留取消/已耗保、原维护工资真实引用/副作用、valid停止日期与原phase动作顺序。6+4+paper1新case not_run，旧19保。仅新目录guard wx报告具体P1/P2或有限静态意见，不做任务完成审。

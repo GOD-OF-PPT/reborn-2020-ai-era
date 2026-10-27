@@ -1,0 +1,1054 @@
+{
+  "at": "2026-10-26T18:25:15.848Z",
+  "status": "passed",
+  "checks": 51,
+  "passed": 51,
+  "failed": 0,
+  "error": null,
+  "results": [
+    {
+      "name": "input before86 fixed bytes/SHA/mode",
+      "expected": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r1/n07-original86-after-ui-restore.json",
+        "bytes": 1429116,
+        "sha256": "0c920c297ef5e1477d587e87c8fb78fa72dbc5234eeaa1b5be4590460bcf353f",
+        "mode": 420
+      },
+      "actual": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r1/n07-original86-after-ui-restore.json",
+        "bytes": 1429116,
+        "sha256": "0c920c297ef5e1477d587e87c8fb78fa72dbc5234eeaa1b5be4590460bcf353f",
+        "mode": 420
+      },
+      "passed": true
+    },
+    {
+      "name": "input partial87 fixed bytes/SHA/mode",
+      "expected": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r2/n06-r2-saved87-first-real-partial-collection.json",
+        "bytes": 1432821,
+        "sha256": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+        "mode": 420
+      },
+      "actual": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r2/n06-r2-saved87-first-real-partial-collection.json",
+        "bytes": 1432821,
+        "sha256": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+        "mode": 420
+      },
+      "passed": true
+    },
+    {
+      "name": "input reentered87 fixed bytes/SHA/mode",
+      "expected": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r2/n07-r2-reentered87-original-continue.json",
+        "bytes": 1432821,
+        "sha256": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+        "mode": 420
+      },
+      "actual": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r2/n07-r2-reentered87-original-continue.json",
+        "bytes": 1432821,
+        "sha256": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+        "mode": 420
+      },
+      "passed": true
+    },
+    {
+      "name": "input oldFullCollect87 fixed bytes/SHA/mode",
+      "expected": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r1/n04-original87-before-restore.json",
+        "bytes": 1432764,
+        "sha256": "a19914f5a148d3dd3572a526f27effccbc74a8722dc28d8721e8a1ed7506720f",
+        "mode": 420
+      },
+      "actual": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r1/n04-original87-before-restore.json",
+        "bytes": 1432764,
+        "sha256": "a19914f5a148d3dd3572a526f27effccbc74a8722dc28d8721e8a1ed7506720f",
+        "mode": 420
+      },
+      "passed": true
+    },
+    {
+      "name": "one new command, original 86 receipts remain the exact prefix",
+      "expected": {
+        "newCommands": 1,
+        "originalPrefix": {
+          "rows": 86,
+          "bytes": 89302,
+          "sha256": "0f5e7c2f3bebadc0b5ce6544dfba7c78f125c1455820cc36658912923c562768"
+        }
+      },
+      "actual": {
+        "newCommands": 1,
+        "originalPrefix": {
+          "rows": 86,
+          "bytes": 89302,
+          "sha256": "0f5e7c2f3bebadc0b5ce6544dfba7c78f125c1455820cc36658912923c562768"
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "same run and one revision, original date remains",
+      "expected": {
+        "runBefore": "normal-relay-technical_employee-ee9cb440",
+        "runAfter": "normal-relay-technical_employee-ee9cb440",
+        "envelopeBefore": 86,
+        "stateBefore": 86,
+        "envelopeAfter": 87,
+        "stateAfter": 87,
+        "dateBefore": "2024-11-07",
+        "dateAfter": "2024-11-07"
+      },
+      "actual": {
+        "runBefore": "normal-relay-technical_employee-ee9cb440",
+        "runAfter": "normal-relay-technical_employee-ee9cb440",
+        "envelopeBefore": 86,
+        "stateBefore": 86,
+        "envelopeAfter": 87,
+        "stateAfter": 87,
+        "dateBefore": "2024-11-07",
+        "dateAfter": "2024-11-07"
+      },
+      "passed": true
+    },
+    {
+      "name": "complete new receipt identity",
+      "expected": {
+        "runId": "normal-relay-technical_employee-ee9cb440",
+        "actorId": "player",
+        "commandId": "command-ca1b977b-8d70-4c60-8f7c-a72c993a98d3",
+        "kind": "CollectRelayReceivable",
+        "revisionBefore": 86,
+        "revisionAfter": 87,
+        "date": "2024-11-07"
+      },
+      "actual": {
+        "runId": "normal-relay-technical_employee-ee9cb440",
+        "actorId": "player",
+        "commandId": "command-ca1b977b-8d70-4c60-8f7c-a72c993a98d3",
+        "kind": "CollectRelayReceivable",
+        "revisionBefore": 86,
+        "revisionAfter": 87,
+        "date": "2024-11-07"
+      },
+      "passed": true
+    },
+    {
+      "name": "complete signed command payload is only this invoice and 608 fen",
+      "expected": {
+        "actorId": "player",
+        "kind": "CollectRelayReceivable",
+        "payload": {
+          "amountFen": 608,
+          "receivableId": "rly:a258aded1a35adb514cc71781b991437"
+        },
+        "runId": "normal-relay-technical_employee-ee9cb440"
+      },
+      "actual": {
+        "actorId": "player",
+        "kind": "CollectRelayReceivable",
+        "payload": {
+          "amountFen": 608,
+          "receivableId": "rly:a258aded1a35adb514cc71781b991437"
+        },
+        "runId": "normal-relay-technical_employee-ee9cb440"
+      },
+      "passed": true
+    },
+    {
+      "name": "original payload signature hash independently matches receipt",
+      "expected": "606c262969bee342e5e52e7bcf3ae677afffc63f77cec5ef3fdb53a96cc48284",
+      "actual": "606c262969bee342e5e52e7bcf3ae677afffc63f77cec5ef3fdb53a96cc48284",
+      "passed": true
+    },
+    {
+      "name": "same original invoice/customer/business/account/date chain",
+      "expected": {
+        "invoiceId": "rly:a258aded1a35adb514cc71781b991437",
+        "customerBefore": "rly:1fa39660348987364a58485031f01d8e",
+        "customerAfter": "rly:1fa39660348987364a58485031f01d8e",
+        "businessBefore": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+        "businessAfter": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+        "accountBefore": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+        "accountAfter": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+        "route": "api_relay",
+        "definition": "relay-station",
+        "invoiceSource": "rly:701848bd02b6c63b6d4fffaf950e1d94",
+        "invoiceDate": "2024-10-24",
+        "dueAt": "2024-11-07"
+      },
+      "actual": {
+        "invoiceId": "rly:a258aded1a35adb514cc71781b991437",
+        "customerBefore": "rly:1fa39660348987364a58485031f01d8e",
+        "customerAfter": "rly:1fa39660348987364a58485031f01d8e",
+        "businessBefore": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+        "businessAfter": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+        "accountBefore": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+        "accountAfter": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+        "route": "api_relay",
+        "definition": "relay-station",
+        "invoiceSource": "rly:701848bd02b6c63b6d4fffaf950e1d94",
+        "invoiceDate": "2024-10-24",
+        "dueAt": "2024-11-07"
+      },
+      "passed": true
+    },
+    {
+      "name": "original invoice fields unchanged except collected amount",
+      "expected": {
+        "amountFen": 1216,
+        "collectedFen": 608,
+        "customerId": "rly:1fa39660348987364a58485031f01d8e",
+        "date": "2024-10-24",
+        "dueAt": "2024-11-07",
+        "id": "rly:a258aded1a35adb514cc71781b991437",
+        "operationId": "rly:e66bf611b673f0e45c71d8322ada8583",
+        "reversedFen": 0,
+        "sourceId": "rly:701848bd02b6c63b6d4fffaf950e1d94"
+      },
+      "actual": {
+        "amountFen": 1216,
+        "collectedFen": 608,
+        "customerId": "rly:1fa39660348987364a58485031f01d8e",
+        "date": "2024-10-24",
+        "dueAt": "2024-11-07",
+        "id": "rly:a258aded1a35adb514cc71781b991437",
+        "operationId": "rly:e66bf611b673f0e45c71d8322ada8583",
+        "reversedFen": 0,
+        "sourceId": "rly:701848bd02b6c63b6d4fffaf950e1d94"
+      },
+      "passed": true
+    },
+    {
+      "name": "one invoice actually received 608, original 1216 leaves 608",
+      "expected": {
+        "originalFen": 1216,
+        "collectedBefore": 0,
+        "collectedAfter": 608,
+        "reversedBefore": 0,
+        "reversedAfter": 0,
+        "remainingBefore": 1216,
+        "remainingAfter": 608
+      },
+      "actual": {
+        "originalFen": 1216,
+        "collectedBefore": 0,
+        "collectedAfter": 608,
+        "reversedBefore": 0,
+        "reversedAfter": 0,
+        "remainingBefore": 1216,
+        "remainingAfter": 608
+      },
+      "passed": true
+    },
+    {
+      "name": "all other original invoices remain exactly unchanged",
+      "expected": {
+        "rows": 16,
+        "bytes": 4717,
+        "sha256": "56d7b4613932fcfcfb4b3cfe28f08da5eb88c02e702b3c74a4ac5131e39b2a97"
+      },
+      "actual": {
+        "rows": 16,
+        "bytes": 4717,
+        "sha256": "56d7b4613932fcfcfb4b3cfe28f08da5eb88c02e702b3c74a4ac5131e39b2a97"
+      },
+      "passed": true
+    },
+    {
+      "name": "all prior cash transactions retain exact ordered prefix",
+      "expected": {
+        "rows": 177,
+        "bytes": 52581,
+        "sha256": "fc8ab316748aa53886241ecea0e3d5e3a0cd3c13c2aef55ac910d90c0e3644f6"
+      },
+      "actual": {
+        "rows": 177,
+        "bytes": 52581,
+        "sha256": "fc8ab316748aa53886241ecea0e3d5e3a0cd3c13c2aef55ac910d90c0e3644f6"
+      },
+      "passed": true
+    },
+    {
+      "name": "receipt and new transaction refer to this same single operation",
+      "expected": [
+        "rly:a7e69decc8890eda7442b4951b257d1d"
+      ],
+      "actual": [
+        "rly:a7e69decc8890eda7442b4951b257d1d"
+      ],
+      "passed": true
+    },
+    {
+      "name": "new cash transaction complete source/reference/two legs",
+      "expected": {
+        "businessId": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+        "contractId": "rly:1fa39660348987364a58485031f01d8e",
+        "date": "2024-11-07",
+        "id": "rly:a7e69decc8890eda7442b4951b257d1d",
+        "lines": [
+          {
+            "accountId": "world",
+            "deltaFen": -608
+          },
+          {
+            "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+            "deltaFen": 608
+          }
+        ],
+        "referenceId": "rly:1fa39660348987364a58485031f01d8e",
+        "sourceEventId": "rly:a258aded1a35adb514cc71781b991437"
+      },
+      "actual": {
+        "businessId": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+        "contractId": "rly:1fa39660348987364a58485031f01d8e",
+        "date": "2024-11-07",
+        "id": "rly:a7e69decc8890eda7442b4951b257d1d",
+        "lines": [
+          {
+            "accountId": "world",
+            "deltaFen": -608
+          },
+          {
+            "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+            "deltaFen": 608
+          }
+        ],
+        "referenceId": "rly:1fa39660348987364a58485031f01d8e",
+        "sourceEventId": "rly:a258aded1a35adb514cc71781b991437"
+      },
+      "passed": true
+    },
+    {
+      "name": "new cash legs balance to zero",
+      "expected": 0,
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "name": "all prior ledger receipts retain exact ordered prefix",
+      "expected": {
+        "rows": 251,
+        "bytes": 120600,
+        "sha256": "5f40c2073d4b44d16dfbffc029e41faf50d627b37348818104c8b44f428867ee"
+      },
+      "actual": {
+        "rows": 251,
+        "bytes": 120600,
+        "sha256": "5f40c2073d4b44d16dfbffc029e41faf50d627b37348818104c8b44f428867ee"
+      },
+      "passed": true
+    },
+    {
+      "name": "one original collect_receivable applied, same account/customer and 608 fen",
+      "expected": {
+        "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+        "contractId": "rly:1fa39660348987364a58485031f01d8e",
+        "id": "rly:a7e69decc8890eda7442b4951b257d1d",
+        "kind": "collect_receivable",
+        "status": "applied"
+      },
+      "actual": {
+        "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+        "contractId": "rly:1fa39660348987364a58485031f01d8e",
+        "id": "rly:a7e69decc8890eda7442b4951b257d1d",
+        "kind": "collect_receivable",
+        "status": "applied"
+      },
+      "passed": true
+    },
+    {
+      "name": "complete applied financial operation matches original invoice",
+      "expected": {
+        "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+        "amountFen": 608,
+        "businessId": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+        "contractId": "rly:1fa39660348987364a58485031f01d8e",
+        "date": "2024-11-07",
+        "id": "rly:a7e69decc8890eda7442b4951b257d1d",
+        "kind": "collect_receivable",
+        "sourceEventId": "rly:a258aded1a35adb514cc71781b991437"
+      },
+      "actual": {
+        "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+        "amountFen": 608,
+        "businessId": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+        "contractId": "rly:1fa39660348987364a58485031f01d8e",
+        "date": "2024-11-07",
+        "id": "rly:a7e69decc8890eda7442b4951b257d1d",
+        "kind": "collect_receivable",
+        "sourceEventId": "rly:a258aded1a35adb514cc71781b991437"
+      },
+      "passed": true
+    },
+    {
+      "name": "command receipt ledger count points to actual ledger tail",
+      "expected": 252,
+      "actual": 252,
+      "passed": true
+    },
+    {
+      "name": "economy receipt tail is exactly the same new financial operation",
+      "expected": {
+        "prefix": {
+          "rows": 312,
+          "bytes": 117410,
+          "sha256": "22bba669499b8e96e63e295fede63a69686b202181f34a94a3f5a322db38e862"
+        },
+        "tail": [
+          {
+            "id": "rly:a7e69decc8890eda7442b4951b257d1d",
+            "signature": "{\"accountId\":\"ops:ef38539ec47df2b4efab6763c0c5bdf8\",\"amountFen\":608,\"businessId\":\"ops:bb7f1c37abbfc1d51a6ca6ca76da18b5\",\"contractId\":\"rly:1fa39660348987364a58485031f01d8e\",\"date\":\"2024-11-07\",\"id\":\"rly:a7e69decc8890eda7442b4951b257d1d\",\"kind\":\"collect_receivable\",\"sourceEventId\":\"rly:a258aded1a35adb514cc71781b991437\"}"
+          }
+        ]
+      },
+      "actual": {
+        "prefix": {
+          "rows": 312,
+          "bytes": 117410,
+          "sha256": "22bba669499b8e96e63e295fede63a69686b202181f34a94a3f5a322db38e862"
+        },
+        "tail": [
+          {
+            "id": "rly:a7e69decc8890eda7442b4951b257d1d",
+            "signature": "{\"accountId\":\"ops:ef38539ec47df2b4efab6763c0c5bdf8\",\"amountFen\":608,\"businessId\":\"ops:bb7f1c37abbfc1d51a6ca6ca76da18b5\",\"contractId\":\"rly:1fa39660348987364a58485031f01d8e\",\"date\":\"2024-11-07\",\"id\":\"rly:a7e69decc8890eda7442b4951b257d1d\",\"kind\":\"collect_receivable\",\"sourceEventId\":\"rly:a258aded1a35adb514cc71781b991437\"}"
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "all old relay collections retain original sequence",
+      "expected": {
+        "rows": 15,
+        "bytes": 2851,
+        "sha256": "50ac2ac409076fff245cfdf5bba1e54362b24f83efd2a0458376b198c88f2139"
+      },
+      "actual": {
+        "rows": 15,
+        "bytes": 2851,
+        "sha256": "50ac2ac409076fff245cfdf5bba1e54362b24f83efd2a0458376b198c88f2139"
+      },
+      "passed": true
+    },
+    {
+      "name": "new relay collection complete original row",
+      "expected": {
+        "amountFen": 608,
+        "date": "2024-11-07",
+        "id": "rly:16a554e0c991487f6dfb1d17190a7160",
+        "operationId": "rly:a7e69decc8890eda7442b4951b257d1d",
+        "receivableId": "rly:a258aded1a35adb514cc71781b991437"
+      },
+      "actual": {
+        "amountFen": 608,
+        "date": "2024-11-07",
+        "id": "rly:16a554e0c991487f6dfb1d17190a7160",
+        "operationId": "rly:a7e69decc8890eda7442b4951b257d1d",
+        "receivableId": "rly:a258aded1a35adb514cc71781b991437"
+      },
+      "passed": true
+    },
+    {
+      "name": "customer total AR falls by 608; recognized income and prepaid protection unchanged",
+      "expected": {
+        "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+        "businessId": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+        "counterpartyId": "world",
+        "id": "rly:1fa39660348987364a58485031f01d8e",
+        "prepaidFen": 0,
+        "protectionReservationId": null,
+        "receivableFen": 1328,
+        "recognizedIncomeFen": 20000
+      },
+      "actual": {
+        "accountId": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+        "businessId": "ops:bb7f1c37abbfc1d51a6ca6ca76da18b5",
+        "counterpartyId": "world",
+        "id": "rly:1fa39660348987364a58485031f01d8e",
+        "prepaidFen": 0,
+        "protectionReservationId": null,
+        "receivableFen": 1328,
+        "recognizedIncomeFen": 20000
+      },
+      "passed": true
+    },
+    {
+      "name": "customer total AR original 1936 becomes 1328; recognized income remains 20000",
+      "expected": {
+        "arBefore": 1936,
+        "arAfter": 1328,
+        "incomeBefore": 20000,
+        "incomeAfter": 20000,
+        "prepaidBefore": 0,
+        "prepaidAfter": 0
+      },
+      "actual": {
+        "arBefore": 1936,
+        "arAfter": 1328,
+        "incomeBefore": 20000,
+        "incomeAfter": 20000,
+        "prepaidBefore": 0,
+        "prepaidAfter": 0
+      },
+      "passed": true
+    },
+    {
+      "name": "all other customer contract balances unchanged",
+      "expected": {
+        "rows": 1,
+        "bytes": 301,
+        "sha256": "3b34a390bb97b268ae4ef99be670a6c90a227a3a3cd00aeba94c3b068ee41a99"
+      },
+      "actual": {
+        "rows": 1,
+        "bytes": 301,
+        "sha256": "3b34a390bb97b268ae4ef99be670a6c90a227a3a3cd00aeba94c3b068ee41a99"
+      },
+      "passed": true
+    },
+    {
+      "name": "future customer invoice remains 720 fen, not collected early",
+      "expected": {
+        "records": [
+          {
+            "id": "rly:26fafc4431c01d61357e398bfe54d47b",
+            "dueAt": "2024-11-08",
+            "amountFen": 720,
+            "collectedFen": 0,
+            "reversedFen": 0,
+            "remainingFen": 720
+          }
+        ],
+        "remainingFen": 720
+      },
+      "actual": {
+        "records": [
+          {
+            "id": "rly:26fafc4431c01d61357e398bfe54d47b",
+            "dueAt": "2024-11-08",
+            "amountFen": 720,
+            "collectedFen": 0,
+            "reversedFen": 0,
+            "remainingFen": 720
+          }
+        ],
+        "remainingFen": 720
+      },
+      "passed": true
+    },
+    {
+      "name": "business cash 2152581 becomes 2153189, exactly 608 more",
+      "expected": {
+        "beforeFen": 2152581,
+        "afterFen": 2153189,
+        "deltaFen": 608
+      },
+      "actual": {
+        "beforeFen": 2152581,
+        "afterFen": 2153189,
+        "deltaFen": 608
+      },
+      "passed": true
+    },
+    {
+      "name": "all cash accounts change only the two declared legs",
+      "expected": [
+        {
+          "balanceFen": 22000000,
+          "id": "personal",
+          "kind": "personal"
+        },
+        {
+          "balanceFen": -24153189,
+          "id": "world",
+          "kind": "external"
+        },
+        {
+          "balanceFen": 2153189,
+          "id": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+          "kind": "business"
+        }
+      ],
+      "actual": [
+        {
+          "balanceFen": 22000000,
+          "id": "personal",
+          "kind": "personal"
+        },
+        {
+          "balanceFen": -24153189,
+          "id": "world",
+          "kind": "external"
+        },
+        {
+          "balanceFen": 2153189,
+          "id": "ops:ef38539ec47df2b4efab6763c0c5bdf8",
+          "kind": "business"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "personal cash remains exactly 22000000 fen",
+      "expected": {
+        "beforeFen": 22000000,
+        "afterFen": 22000000
+      },
+      "actual": {
+        "beforeFen": 22000000,
+        "afterFen": 22000000
+      },
+      "passed": true
+    },
+    {
+      "name": "all income metric entries unchanged, no income recognized twice",
+      "expected": {
+        "rows": 91,
+        "bytes": 26373,
+        "sha256": "c350ff3290fe1c322d2f67bf64b9bc1b375d063d006745bb59119e208a50810f"
+      },
+      "actual": {
+        "rows": 91,
+        "bytes": 26373,
+        "sha256": "c350ff3290fe1c322d2f67bf64b9bc1b375d063d006745bb59119e208a50810f"
+      },
+      "passed": true
+    },
+    {
+      "name": "all cost metric entries unchanged, no new expense",
+      "expected": {
+        "rows": 102,
+        "bytes": 24950,
+        "sha256": "686dc9a66276aedd05476b311dba188cc95fddfa12fe3dc163695b6cc6a367cb"
+      },
+      "actual": {
+        "rows": 102,
+        "bytes": 24950,
+        "sha256": "686dc9a66276aedd05476b311dba188cc95fddfa12fe3dc163695b6cc6a367cb"
+      },
+      "passed": true
+    },
+    {
+      "name": "complete ordered metric sequence unchanged",
+      "expected": {
+        "rows": 193,
+        "bytes": 51322,
+        "sha256": "58549485a6957bfe2752de90f0f6300ec25700819abeaa4401899e5157ca5c5d"
+      },
+      "actual": {
+        "rows": 193,
+        "bytes": 51322,
+        "sha256": "58549485a6957bfe2752de90f0f6300ec25700819abeaa4401899e5157ca5c5d"
+      },
+      "passed": true
+    },
+    {
+      "name": "all AP action records and definitions exactly unchanged",
+      "expected": {
+        "rows": 24,
+        "bytes": 10160,
+        "sha256": "7894c75bf97ab5a1394f402a10d8e6ec98b43d821963aedfbd4ebd59e2b1cc1c"
+      },
+      "actual": {
+        "rows": 24,
+        "bytes": 10160,
+        "sha256": "7894c75bf97ab5a1394f402a10d8e6ec98b43d821963aedfbd4ebd59e2b1cc1c"
+      },
+      "passed": true
+    },
+    {
+      "name": "all cash reservations including customer protection unchanged",
+      "expected": {
+        "rows": 6,
+        "bytes": 1186,
+        "sha256": "2e81b7c52f9c09a8632b1f86843e95a8ac32e67d26efc5d1f94d408f8c22e631"
+      },
+      "actual": {
+        "rows": 6,
+        "bytes": 1186,
+        "sha256": "2e81b7c52f9c09a8632b1f86843e95a8ac32e67d26efc5d1f94d408f8c22e631"
+      },
+      "passed": true
+    },
+    {
+      "name": "all actual service/support jobs unchanged",
+      "expected": {
+        "rows": 5,
+        "bytes": 1827,
+        "sha256": "cc8336a01f9370a2309d3df21c92a7aebcd3dcb5d917d9ead7c84869c539541a"
+      },
+      "actual": {
+        "rows": 5,
+        "bytes": 1827,
+        "sha256": "cc8336a01f9370a2309d3df21c92a7aebcd3dcb5d917d9ead7c84869c539541a"
+      },
+      "passed": true
+    },
+    {
+      "name": "recorded Q4 action-point facts remain 3 executed, 0 reserved",
+      "expected": {
+        "before": {
+          "quarter": "2024-Q4",
+          "records": 3,
+          "executedActionPoints": 3,
+          "reservedActionPoints": 0
+        },
+        "after": {
+          "quarter": "2024-Q4",
+          "records": 3,
+          "executedActionPoints": 3,
+          "reservedActionPoints": 0
+        }
+      },
+      "actual": {
+        "before": {
+          "quarter": "2024-Q4",
+          "records": 3,
+          "executedActionPoints": 3,
+          "reservedActionPoints": 0
+        },
+        "after": {
+          "quarter": "2024-Q4",
+          "records": 3,
+          "executedActionPoints": 3,
+          "reservedActionPoints": 0
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "all obligations unchanged, no debt silently removed",
+      "expected": {
+        "rows": 97,
+        "bytes": 32821,
+        "sha256": "63672b90a26b6733590d4c10ffa437b98b2212b13cb18dd831fefc740b4d7082"
+      },
+      "actual": {
+        "rows": 97,
+        "bytes": 32821,
+        "sha256": "63672b90a26b6733590d4c10ffa437b98b2212b13cb18dd831fefc740b4d7082"
+      },
+      "passed": true
+    },
+    {
+      "name": "all supplier prepaid assets unchanged",
+      "expected": {
+        "rows": 0,
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "actual": {
+        "rows": 0,
+        "bytes": 2,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "passed": true
+    },
+    {
+      "name": "customer original terms and business identity unchanged",
+      "expected": {
+        "customer": {
+          "rows": null,
+          "bytes": 735,
+          "sha256": "30841ac6fae6f64c94b177a0e16fc192069d7a883cdca5680b86a68d526b2df5"
+        },
+        "business": {
+          "rows": null,
+          "bytes": 624,
+          "sha256": "e064c9db1e486a7365a82a9b89d5a965472226b34392c07b717b56b53e8687de"
+        }
+      },
+      "actual": {
+        "customer": {
+          "rows": null,
+          "bytes": 735,
+          "sha256": "30841ac6fae6f64c94b177a0e16fc192069d7a883cdca5680b86a68d526b2df5"
+        },
+        "business": {
+          "rows": null,
+          "bytes": 624,
+          "sha256": "e064c9db1e486a7365a82a9b89d5a965472226b34392c07b717b56b53e8687de"
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "reentered87 is byte-for-byte the saved partial87",
+      "expected": {
+        "bytes": 1432821,
+        "sha256": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+        "rawEqual": true
+      },
+      "actual": {
+        "bytes": 1432821,
+        "sha256": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+        "rawEqual": true
+      },
+      "passed": true
+    },
+    {
+      "name": "old fullCollect87 shares only the original86 receipt prefix",
+      "expected": {
+        "prefix": {
+          "rows": 86,
+          "bytes": 89302,
+          "sha256": "0f5e7c2f3bebadc0b5ce6544dfba7c78f125c1455820cc36658912923c562768"
+        },
+        "referenceTailCommands": 1
+      },
+      "actual": {
+        "prefix": {
+          "rows": 86,
+          "bytes": 89302,
+          "sha256": "0f5e7c2f3bebadc0b5ce6544dfba7c78f125c1455820cc36658912923c562768"
+        },
+        "referenceTailCommands": 1
+      },
+      "passed": true
+    },
+    {
+      "name": "two revision87 branches are distinct commands, not consecutive commands",
+      "expected": {
+        "partial": {
+          "revision": 87,
+          "commandId": "command-ca1b977b-8d70-4c60-8f7c-a72c993a98d3",
+          "kind": "CollectRelayReceivable",
+          "payload": {
+            "amountFen": 608,
+            "receivableId": "rly:a258aded1a35adb514cc71781b991437"
+          }
+        },
+        "oldReference": {
+          "revision": 87,
+          "commandId": "command-8cd71c87-4342-492a-b02f-35d947a72da0",
+          "kind": "CollectRelayDue",
+          "payload": {
+            "customerId": "rly:1fa39660348987364a58485031f01d8e"
+          }
+        }
+      },
+      "actual": {
+        "partial": {
+          "revision": 87,
+          "commandId": "command-ca1b977b-8d70-4c60-8f7c-a72c993a98d3",
+          "kind": "CollectRelayReceivable",
+          "payload": {
+            "amountFen": 608,
+            "receivableId": "rly:a258aded1a35adb514cc71781b991437"
+          }
+        },
+        "oldReference": {
+          "revision": 87,
+          "commandId": "command-8cd71c87-4342-492a-b02f-35d947a72da0",
+          "kind": "CollectRelayDue",
+          "payload": {
+            "customerId": "rly:1fa39660348987364a58485031f01d8e"
+          }
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "old full branch collected1216 versus current partial608 on the same original invoice",
+      "expected": {
+        "originalFen": 1216,
+        "oldFullCollectedFen": 1216,
+        "oldFullRemainingFen": 0,
+        "currentPartialCollectedFen": 608,
+        "currentPartialRemainingFen": 608
+      },
+      "actual": {
+        "originalFen": 1216,
+        "oldFullCollectedFen": 1216,
+        "oldFullRemainingFen": 0,
+        "currentPartialCollectedFen": 608,
+        "currentPartialRemainingFen": 608
+      },
+      "passed": true
+    },
+    {
+      "name": "old full branch cash is a reference result, not the current partial branch cash",
+      "expected": {
+        "oldFullBusinessCashFen": 2153797,
+        "currentPartialBusinessCashFen": 2153189,
+        "differenceFen": 608
+      },
+      "actual": {
+        "oldFullBusinessCashFen": 2153797,
+        "currentPartialBusinessCashFen": 2153189,
+        "differenceFen": 608
+      },
+      "passed": true
+    },
+    {
+      "name": "distinct full87 and partial87 raw hashes remain bound to their own branches",
+      "expected": {
+        "partial87": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+        "oldFull87": "a19914f5a148d3dd3572a526f27effccbc74a8722dc28d8721e8a1ed7506720f",
+        "different": true
+      },
+      "actual": {
+        "partial87": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+        "oldFull87": "a19914f5a148d3dd3572a526f27effccbc74a8722dc28d8721e8a1ed7506720f",
+        "different": true
+      },
+      "passed": true
+    },
+    {
+      "name": "input before86 final identity equals initial",
+      "expected": {
+        "role": "before86",
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r1/n07-original86-after-ui-restore.json",
+        "bytes": 1429116,
+        "sha256": "0c920c297ef5e1477d587e87c8fb78fa72dbc5234eeaa1b5be4590460bcf353f",
+        "mode": 420
+      },
+      "actual": {
+        "role": "before86",
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r1/n07-original86-after-ui-restore.json",
+        "bytes": 1429116,
+        "sha256": "0c920c297ef5e1477d587e87c8fb78fa72dbc5234eeaa1b5be4590460bcf353f",
+        "mode": 420
+      },
+      "passed": true
+    },
+    {
+      "name": "input partial87 final identity equals initial",
+      "expected": {
+        "role": "partial87",
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r2/n06-r2-saved87-first-real-partial-collection.json",
+        "bytes": 1432821,
+        "sha256": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+        "mode": 420
+      },
+      "actual": {
+        "role": "partial87",
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r2/n06-r2-saved87-first-real-partial-collection.json",
+        "bytes": 1432821,
+        "sha256": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+        "mode": 420
+      },
+      "passed": true
+    },
+    {
+      "name": "input reentered87 final identity equals initial",
+      "expected": {
+        "role": "reentered87",
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r2/n07-r2-reentered87-original-continue.json",
+        "bytes": 1432821,
+        "sha256": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+        "mode": 420
+      },
+      "actual": {
+        "role": "reentered87",
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r2/n07-r2-reentered87-original-continue.json",
+        "bytes": 1432821,
+        "sha256": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+        "mode": 420
+      },
+      "passed": true
+    },
+    {
+      "name": "input oldFullCollect87 final identity equals initial",
+      "expected": {
+        "role": "oldFullCollect87",
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r1/n04-original87-before-restore.json",
+        "bytes": 1432764,
+        "sha256": "a19914f5a148d3dd3572a526f27effccbc74a8722dc28d8721e8a1ed7506720f",
+        "mode": 420
+      },
+      "actual": {
+        "role": "oldFullCollect87",
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r1/n04-original87-before-restore.json",
+        "bytes": 1432764,
+        "sha256": "a19914f5a148d3dd3572a526f27effccbc74a8722dc28d8721e8a1ed7506720f",
+        "mode": 420
+      },
+      "passed": true
+    }
+  ],
+  "inputs": {
+    "before": [
+      {
+        "role": "before86",
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r1/n07-original86-after-ui-restore.json",
+        "bytes": 1429116,
+        "sha256": "0c920c297ef5e1477d587e87c8fb78fa72dbc5234eeaa1b5be4590460bcf353f",
+        "mode": 420
+      },
+      {
+        "role": "partial87",
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r2/n06-r2-saved87-first-real-partial-collection.json",
+        "bytes": 1432821,
+        "sha256": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+        "mode": 420
+      },
+      {
+        "role": "reentered87",
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r2/n07-r2-reentered87-original-continue.json",
+        "bytes": 1432821,
+        "sha256": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+        "mode": 420
+      },
+      {
+        "role": "oldFullCollect87",
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r1/n04-original87-before-restore.json",
+        "bytes": 1432764,
+        "sha256": "a19914f5a148d3dd3572a526f27effccbc74a8722dc28d8721e8a1ed7506720f",
+        "mode": 420
+      }
+    ],
+    "after": [
+      {
+        "role": "before86",
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r1/n07-original86-after-ui-restore.json",
+        "bytes": 1429116,
+        "sha256": "0c920c297ef5e1477d587e87c8fb78fa72dbc5234eeaa1b5be4590460bcf353f",
+        "mode": 420
+      },
+      {
+        "role": "partial87",
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r2/n06-r2-saved87-first-real-partial-collection.json",
+        "bytes": 1432821,
+        "sha256": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+        "mode": 420
+      },
+      {
+        "role": "reentered87",
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r2/n07-r2-reentered87-original-continue.json",
+        "bytes": 1432821,
+        "sha256": "5d675264ef67ba9b599e5ba3041072c8d814c02cc5e1655404c8fd860415a57d",
+        "mode": 420
+      },
+      {
+        "role": "oldFullCollect87",
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r1/n04-original87-before-restore.json",
+        "bytes": 1432764,
+        "sha256": "a19914f5a148d3dd3572a526f27effccbc74a8722dc28d8721e8a1ed7506720f",
+        "mode": 420
+      }
+    ]
+  },
+  "counts": {
+    "newGameplayCommandsInThisComparedInterval": 1,
+    "newCreateCommandsInThisInterval": 0,
+    "oldFull87ReferenceBranches": 1,
+    "reenteredRawAliases": 1
+  },
+  "bounds": {
+    "jsonOnly": true,
+    "productionProjectionOrRuntimeInvoked": false,
+    "coreSourceRead": false,
+    "originalNativeOrJournalModified": false,
+    "productModified": false,
+    "formalCompleteCreateAudit": false,
+    "human": false,
+    "fullyAuthorIsolated": false,
+    "priorAuthorParticipation": "This reader previously implemented the UI response module and consumer test code; calculation is independent of production projection, not fully author-isolated."
+  },
+  "scope": "Only the actual 86 -> partial87 single-invoice 608fen interval and its reentry alias; old full87 stays a separate reference branch. Does not prove complete service, atomic save, all U4-B, or entire goal."
+}

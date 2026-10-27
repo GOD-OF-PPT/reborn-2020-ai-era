@@ -1,0 +1,3 @@
+- [ ] 真实四cut/原manifest/public finite identity/source roles与前像完整登记。
+- [ ] R6四显式profile+known facts spec+canonical表/Root wiring候选。
+- [ ] 静态冻结交response/art，所有执行not_run，不关U4B/goal。

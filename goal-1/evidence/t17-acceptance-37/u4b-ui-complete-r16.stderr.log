@@ -1,0 +1,67 @@
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/scene-domain-results.test.ts [ src/ui/scene-domain-results.test.ts ]
+Error: Hook timed out in 10000ms.
+If this is a long-running hook, pass a timeout value as the last argument or configure it globally with "hookTimeout".
+ ❯ src/ui/scene-domain-results.test.ts:185:1
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/RelayServiceChoice.test.tsx > allows only today for an old-meter audit in the explicit finite-epilogue display and original-preview variant
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/RelayServiceChoice.test.tsx:249:1
+    247| },20000)
+    248|
+    249| it('allows only today for an old-meter audit in the explicit finite-ep…
+       | ^
+    250|  hooks.slots.clear()
+    251|  const {p,target,controller}=planned,raw=controller.exportSaved()!,cod…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  src/ui/opening-attempt.test.ts > shows the saved technical_employee first order from reservation to one atomic receipt and explicit next directions
+ FAIL  src/ui/opening-attempt.test.ts > shows the saved content_employee first order from reservation to one atomic receipt and explicit next directions
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/opening-attempt.test.ts:43:60
+     41| })
+     42|
+     43| it.each(['technical_employee','content_employee'] as const)('shows the…
+       |                                                            ^
+     44|  const h=await normal('paid-'+background,'first_order',background)
+     45|  try{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  src/ui/relay-quote-effective-wait.test.tsx > keeps the real accepted114 quote pending until Apr9 and requests only its original Clock advance
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/relay-quote-effective-wait.test.tsx:82:1
+     80| const clocks=(ui:ReturnType<typeof reader>)=>ui.all().filter(e=>typeof…
+     81|
+     82| it('keeps the real accepted114 quote pending until Apr9 and requests o…
+       | ^
+     83|  const p=props(),q=quote(p),original=completed.controller.exportSaved(…
+     84|  expect(q).toMatchObject({completedAt:'2025-04-08',effectiveAt:'2025-0…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  src/ui/relay-quote-effective-wait.test.tsx > keeps the real planned111 responses unknown and waits on the original task through its quarter barrier
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/ui/relay-quote-effective-wait.test.tsx:102:1
+    100| })
+    101|
+    102| it('keeps the real planned111 responses unknown and waits on the origi…
+       | ^
+    103|  const p=props(planned),q=quote(p),ticket=row(p,planned.target),origin…
+    104|  expect(q.completedAt).toBeNull();expect(q.responses).toEqual([]);expe…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+

@@ -1,0 +1,1 @@
+沿R6 profiles→response adapters顺序，都是本轮正式一次审核的准入静审，不发GO。只读final-create-final-inputs-r1四helper实际适配差异及R6copy唯一import，0执行/import/syntax/工程/Browser/Git。Root后用最终Source/43fresh/97total/14cuts/input/完整runtime依赖精确校验，再自行签exactRootGO；spec/data组装与Root最终STOP另层，不以候选授权空阻止本地metadata静审。

@@ -1,0 +1,5 @@
+# 已停本期与尚待原复核并存
+
+原target已严格resolve到same period，再仅按真实有效stoppedAt（ISO日期且≤today）显示已停请求。audit-waiting的原planned/running优先级仍保，line说明已停与尚待复核并存；fallback service stopped也按同真实stop日期前缀明示，不让jobcancelled冒StopPeriod。原支持planned独立日期行、scope原复核AP/资金、全部责任/付款不删。
+
+新增独立single test从实际R6 s05 saved95导入公开投影，直接renderNotes核停止/原复核Mar5—8与支持Feb25—Mar4同在；公开null/未来/非法stopdate反例不说已停；原unknown实计保。新setup20s、case默认5s，不改已冻结5case文件。静审交新continuity最终identity，Root统一checks。

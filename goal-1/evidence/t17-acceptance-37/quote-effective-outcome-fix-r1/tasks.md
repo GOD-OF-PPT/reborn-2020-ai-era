@@ -1,0 +1,3 @@
+- [ ] Exactpublicquoteeffective savedresult, neutralaboutincome/nextnewservice.
+- [ ] Actual114/115consumer and invalidpublication guards preserve rawbytes.
+- [ ] Rootuniformtype/target/build andactualR8samewaitfirstnotice; no current814claimfornewsource.

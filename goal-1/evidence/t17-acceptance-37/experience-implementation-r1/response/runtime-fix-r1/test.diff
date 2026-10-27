@@ -1,0 +1,90 @@
+--- relay-record-meaning.before.test.tsx
++++ src/ui/relay-record-meaning.test.tsx
+@@ -13,6 +13,7 @@
+ import {createRelayRecordMemory} from './relay-record-memory.ts'
+ import {createRelayResponseDraftMemory} from './relay-response-draft.ts'
+ import {moneyText} from './game-text.ts'
++import type {SharedActionBinding} from './shared-action.ts'
+ import source86 from '../../goal-1/evidence/t17-acceptance-37/chrome-main-r1/n07-original86-after-ui-restore.json?raw'
+ import source114 from '../../goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/a22-saved114-requote-accepted-before-effective.json?raw'
+ import source115 from '../../goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-22-new115-quote-actually-effective-no-cash-ap-change.json?raw'
+@@ -37,11 +38,11 @@
+ }
+ function text(value:unknown):string{if(typeof value==='string'||typeof value==='number')return String(value);if(Array.isArray(value))return value.map(text).join('');return isValidElement<Record<string,unknown>>(value)?text(value.props.children):''}
+ function reader(name:string,p:GamePanelProps,target:RelaySceneTarget,key:string){
+- let tree:unknown
+- const refresh=()=>{tree=mounted(name,()=>RelayRecordBook({p,target,initialRecordKey:key,children:view=><>{view.body}{view.actions}</>}))},all=()=>elements(tree,name)
++ let tree:unknown,title:string|undefined,expanded:Element[]|undefined
++ const refresh=()=>{tree=mounted(name,()=>RelayRecordBook({p,target,initialRecordKey:key,children:view=>{title=view.title;return <>{view.body}{view.actions}</>}}));expanded=undefined},all=()=>expanded??(expanded=elements(tree,name))
+  refresh()
+  const labels=()=>all().filter(e=>e.type==='label'&&elements(e,name+'/radio').some(e=>e.type==='input'&&e.props.type==='radio'))
+- return {all,refresh,text:()=>all().map(e=>text(e.props.children)).join(' '),keys:()=>labels().map(e=>e.key),
++ return {all,refresh,title:()=>title,text:()=>all().map(e=>text(e.props.children)).join(' '),keys:()=>labels().map(e=>e.key),
+   button(label:string){const e=all().find(e=>e.type==='button'&&text(e.props.children).includes(label));if(!e)throw Error('MEANING_BUTTON_REQUIRED:'+label);return e},
+   click(label:string){const e=all().find(e=>e.type==='button'&&text(e.props.children).includes(label));if(!e||e.props.disabled||typeof e.props.onClick!=='function')throw Error('MEANING_ENABLED_BUTTON_REQUIRED:'+label);e.props.onClick();refresh()},
+   filter(value:string){const e=all().find(e=>e.type==='select');if(!e||e.props.disabled||typeof e.props.onChange!=='function')throw Error('MEANING_FILTER_REQUIRED');e.props.onChange({target:{value}});refresh()},
+@@ -81,19 +82,40 @@
+  expect(JSON.stringify(rows(p,current.target))).toBe(before);expect(current.controller.exportSaved()).toBe(source115)
+ })
+ 
+-it('keeps all actual115 rows reachable across four reading groups and original kind filters with protection always visible',()=>{
++it('keeps normal actual115 balances out of the default response and wait list while protection remains visible',()=>{
+  const p=props(),{customerRow,supplierRow,all}=assets(p),start=all.find(r=>r.kind==='service')!,ui=reader('actual115-reading-filters',p,current.target,start.key)
+  ui.click('翻另一张同对象的原票');expect(ui.keys()).not.toContain(customerRow.key);expect(ui.keys()).not.toContain(supplierRow.key);expect(ui.text()).toContain('未消费客户预款');expect(ui.text()).toContain('正常留存不要求')
+- ui.filter('meaning:optional');expect(ui.keys()).toContain(supplierRow.key);ui.pick(supplierRow.key);ui.click('明确翻开这一张原票');expect(ui.text()).toContain('可选处理');expect(ui.text()).toContain('正常留存不是未完成任务');expect(ui.button('核对这项供应，本次取回多少本站资产')).toBeDefined()
+- ui.click('翻另一张同对象的原票');ui.filter('meaning:retained');expect(ui.keys()).toContain(customerRow.key)
+- ui.filter('');expect([...ui.keys()].sort()).toEqual(all.map(r=>r.key).sort());ui.filter('customer');expect([...ui.keys()].sort()).toEqual(all.filter(r=>r.kind==='customer').map(r=>r.key).sort())
+- ui.pick(customerRow.key);ui.filter('supplier');expect(ui.button('明确翻开这一张原票').props.disabled).toBe(true);expect(ui.text()).toContain('没有代换')
++ expect(p.request).not.toHaveBeenCalled();expect(current.controller.exportSaved()).toBe(source115)
++})
++
++it.each(['respond','waiting','optional','retained'] as const)('keeps the complete actual115 %s group reachable with original keys and protection',meaning=>{
++ const p=props(),{customerRow,supplierRow,all}=assets(p),start=all.find(r=>r.kind==='service')!,ui=reader('actual115-meaning-'+meaning,p,current.target,start.key)
++ ui.click('翻另一张同对象的原票');ui.filter('meaning:'+meaning)
++ expect([...ui.keys()].sort()).toEqual(all.filter(row=>relayRecordReading(p,current.target,row).meaning===meaning).map(row=>row.key).sort())
++ expect(ui.text()).toContain('未消费客户预款');expect(ui.text()).toContain('正常留存不要求')
++ if(meaning==='optional'){expect(ui.keys()).toContain(supplierRow.key);ui.pick(supplierRow.key);ui.click('明确翻开这一张原票');expect(ui.text()).toContain('可选处理');expect(ui.text()).toContain('正常留存不是未完成任务');expect(ui.button('核对这项供应，本次取回多少本站资产')).toBeDefined()}
++ if(meaning==='retained')expect(ui.keys()).toContain(customerRow.key)
++ expect(p.request).not.toHaveBeenCalled();expect(current.controller.exportSaved()).toBe(source115)
++})
++
++it.each(['','customer','supplier'] as const)('preserves the actual115 original kind filter %s without silently replacing a picked record',kind=>{
++ const p=props(),{customerRow,all}=assets(p),start=all.find(r=>r.kind==='service')!,ui=reader('actual115-kind-'+(kind||'all'),p,current.target,start.key)
++ ui.click('翻另一张同对象的原票');ui.filter(kind)
++ expect([...ui.keys()].sort()).toEqual(all.filter(row=>!kind||row.kind===kind).map(row=>row.key).sort())
++ if(kind==='customer'){expect([...ui.keys()].sort()).toEqual(all.filter(r=>r.kind==='customer').map(r=>r.key).sort());ui.pick(customerRow.key);ui.filter('supplier');expect(ui.button('明确翻开这一张原票').props.disabled).toBe(true);expect(ui.text()).toContain('没有代换')}
++ if(kind==='')expect([...ui.keys()].sort()).toEqual(all.map(r=>r.key).sort())
++ expect(p.request).not.toHaveBeenCalled();expect(current.controller.exportSaved()).toBe(source115)
++})
++
++it('partitions every actual115 original row into exactly one reading group without losing any original field or key',()=>{
++ const p=props(),all=rows(p,current.target),before=JSON.stringify(all),groups=['respond','waiting','optional','retained'] as const,keys=groups.flatMap(meaning=>all.filter(row=>relayRecordReading(p,current.target,row).meaning===meaning).map(row=>row.key))
++ expect(keys).toHaveLength(all.length);expect(new Set(keys).size).toBe(all.length);expect([...keys].sort()).toEqual(all.map(row=>row.key).sort());expect(JSON.stringify(rows(p,current.target))).toBe(before)
+  expect(p.request).not.toHaveBeenCalled();expect(current.controller.exportSaved()).toBe(source115)
+ })
+ 
+ it('retains the actual115 refund decision, original payload and same-customer amount draft after classifying its balance as retained',()=>{
+  const p=props(),{customer,customerRow}=assets(p),ui=reader('actual115-retained-customer-refund',p,current.target,customerRow.key),before=current.controller.exportSaved()
+- expect(ui.text()).toContain('留存依据');ui.click('核对这位客户，本次退还多少未消费原款');ui.edit('本次退还客户金额','0.01');ui.click('先收起本次填写，仍留这张原票');expect(ui.text()).toContain(customerRow.title)
++ expect(ui.text()).toContain('留存依据');ui.click('核对这位客户，本次退还多少未消费原款');ui.edit('本次退还客户金额','0.01');ui.click('先收起本次填写，仍留这张原票');expect(ui.title()).toBe(customerRow.title);expect(ui.text()).toContain(customer.id);expect(ui.text()).toContain(customer.termEnd);expect(ui.text()).toContain(moneyText(customer.balance.prepaidFen))
+  ui.click('核对这位客户，本次退还多少未消费原款');expect(ui.value('本次退还客户金额')).toBe('0.01');const button=ui.button('核对退还这位客户的未消费原款');expect(button.props.disabled).toBe(false);ui.click('核对退还这位客户的未消费原款')
+  expect(p.request).toHaveBeenCalledExactlyOnceWith('RefundRelayBalance',{customerId:customer.id,amountFen:1},'核对退还这位客户的未消费原款',true)
+  expect(current.controller.preview(current.controller.prepare('RefundRelayBalance',{customerId:customer.id,amountFen:1})).allowed).toBe(true);expect(current.controller.exportSaved()).toBe(before)
+@@ -126,9 +148,15 @@
+ 
+ it('keeps an explicitly missing record missing and a stable readonly balance readable while its original refund remains disabled',()=>{
+  const base=props(),{customerRow}=assets(base),view={...base.view,readOnly:true,saveStatus:'read_only' as const},controller=new Proxy(base.controller,{get(target,key){if(key==='snapshot')return {...target.snapshot,view};const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value}}),p={...base,controller,view,request:vi.fn<GamePanelProps['request']>()},ui=reader('readonly-retained-balance',p,current.target,customerRow.key)
+- expect(ui.text()).toContain('留存依据');expect(ui.text()).toContain('未消费客户预款');ui.click('核对这位客户，本次退还多少未消费原款');const button=ui.button('核对退还这位客户的未消费原款');expect(button.props.disabled).toBe(true)
++ expect(ui.text()).toContain('留存依据');expect(ui.text()).toContain('未消费客户预款');ui.click('核对这位客户，本次退还多少未消费原款');expect(ui.button('先填清这次回应，再核对决定').props.disabled).toBe(true);expect(ui.text()).toContain('先明确填写这一次的金额（元），不会自动办理全部。')
++ ui.edit('本次退还客户金额','0.01');const button=ui.button('核对退还这位客户的未消费原款');expect(button.props.disabled).toBe(true)
++ const component=ui.all().find(node=>typeof node.type==='function'&&node.type.name==='CommandButton'&&node.props.kind==='RefundRelayBalance')
++ if(!component||typeof component.type!=='function')throw Error('ORIGINAL_READONLY_REFUND_COMMAND_REQUIRED')
++ const captured:{binding:SharedActionBinding|null}={binding:null},render=component.type as (props:Record<string,unknown>)=>unknown
++ render({...component.props,renderAction:(binding:SharedActionBinding,node:unknown)=>{captured.binding=binding;return node}})
++ expect(captured.binding?.disabled).toBe(true);expect(captured.binding?.reason).toBe('当前只读，仍可翻阅原记录。')
+  if(typeof button.props.onClick!=='function')throw Error('ORIGINAL_READONLY_REFUND_HANDLER_REQUIRED')
+- button.props.onClick();expect(p.request).not.toHaveBeenCalled()
++ button.props.onClick();captured.binding?.activate();expect(p.request).not.toHaveBeenCalled()
+  base.relayRecordMemory!.write(current.target,customerRow.key)
+  const missing=reader('explicit-missing-record',base,current.target,'customer:missing-original');expect(missing.text()).toContain('原来指定的票现已不能唯一找到');expect(missing.all().some(e=>e.type==='input'&&e.props.inputMode==='decimal')).toBe(false)
+  expect(current.controller.exportSaved()).toBe(source115)

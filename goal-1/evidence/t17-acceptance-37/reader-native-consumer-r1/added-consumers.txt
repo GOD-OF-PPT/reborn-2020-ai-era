@@ -1,0 +1,64 @@
+
+// Additional fixed normal-prefix readers are isolated from the original
+// five-save setup. They import existing bytes and execute no business command.
+type NativeReaderFixture={controller:GameController;store:IndexedDbRunStore;props:()=>GamePanelProps;target:Extract<RelaySceneTarget,{kind:'period'}>;raw:string}
+let nativeReader86:NativeReaderFixture|undefined,nativeReader87:NativeReaderFixture|undefined
+async function originalReaderPrefix(raw:string,name:string):Promise<NativeReaderFixture>{
+ const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name}),controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=>name+'-import'})
+ await controller.initialize();await controller.importNew(raw)
+ const view=controller.snapshot.view!,f=features(view),business=f.relay!.businesses[0]!,station=f.relay!.stations.find(s=>s.businessId===business.id)!,period=f.relay!.periods.find(p=>p.businessId===business.id&&p.from==='2024-10-09')!,recordMemory=createRelayRecordMemory(view.runId),draftMemory=createRelayResponseDraftMemory(view.runId)
+ expect(period).toBeDefined();expect(controller.exportSaved()).toBe(raw)
+ const target:Extract<RelaySceneTarget,{kind:'period'}>={kind:'period',runId:view.runId,accountId:business.accountId,businessId:business.id,stationId:station.id,periodId:period.id}
+ const props=():GamePanelProps=>{const current=controller.snapshot.view!;return {controller,view:current,features:features(current),accountId:business.accountId,request:vi.fn<GamePanelProps['request']>(),textOnly:true,relayRecordMemory:recordMemory,relayResponseDraftMemory:draftMemory}}
+ return {controller,store,props,target,raw}
+}
+beforeAll(async()=>{nativeReader86=await originalReaderPrefix(source86,'reader-native-technical86');nativeReader87=await originalReaderPrefix(source87,'reader-native-technical87')},20000)
+afterAll(async()=>{for(const fixture of [nativeReader86,nativeReader87])if(fixture)await fixture.controller.close()})
+const ticketRadios=(ui:ReturnType<typeof consumerDriver>)=>ui.all().filter(e=>e.type==='label'&&consumerElements(e,'native-ticket-label').some(child=>child.type==='input'&&child.props.type==='radio'))
+
+it('opens the real technical86 parent period at its due original invoice with an empty amount and cancels without a write',()=>{
+ const fixture=nativeReader86!,p=fixture.props(),target=fixture.target,relay=p.features.relay!,model=relayRecordRows(p,target),due=model.rows.find(row=>row.kind==='receivable'&&row.periodId===target.periodId&&row.attention==='due')!,request=vi.fn<GamePanelProps['request']>(),raw=fixture.controller.exportSaved(),ui=consumerDriver('native-parent86-due-first',()=>RelayRecordBook({p:{...p,request},target}))
+ expect(model.reason).toBeNull();expect(p.view.revision).toBe(86);expect(due).toBeDefined();expect(due.key).toBe('receivable:'+due.receivableId)
+ expect(relayRecordSuggestedKey(p,target,model.rows)).toBe(due.key)
+ expect(ui.all().find(e=>e.type==='h3')?.props.children).toBe('这张原单，这次先收多少？')
+ expect(ui.all().find(e=>e.type==='input'&&e.props.inputMode==='decimal')?.props.value).toBe('')
+ expect(ui.text()).toContain(due.receivableId!);expect(relay.receivables.find(i=>i.id===due.receivableId)).toMatchObject({dueAt:'2024-11-07',amountFen:1216,collectedFen:0,reversedFen:0})
+ ui.click('先收起本次填写，仍留这张原票');expect(ui.text()).toContain(due.receivableId!)
+ expect(ui.all().filter(e=>e.type==='input'&&e.props.inputMode==='decimal')).toHaveLength(0)
+ ui.click('核对这张原单，本次先收多少');expect(ui.all().find(e=>e.type==='input'&&e.props.inputMode==='decimal')?.props.value).toBe('')
+ expect(request).not.toHaveBeenCalled();expect(fixture.controller.exportSaved()).toBe(raw);expect(raw).toBe(fixture.raw);expect(fixture.controller.snapshot.view).toBe(p.view)
+})
+
+it('opens the real technical87 parent at its active support and keeps unknown reports out of waiting while all tickets remain selectable',()=>{
+ const fixture=nativeReader87!,p=fixture.props(),target=fixture.target,relay=p.features.relay!,model=relayRecordRows(p,target),period=relay.periods.find(period=>period.id===target.periodId)!,support=model.rows.find(row=>row.kind==='support'&&row.periodId===period.id)!,service=model.rows.find(row=>row.kind==='service'&&row.periodId===period.id)!,unknown=model.rows.filter(row=>row.kind==='meter'&&relay.meters.some(m=>m.id===row.meterId&&m.auditedUnits===null)),request=vi.fn<GamePanelProps['request']>(),raw=fixture.controller.exportSaved(),ui=consumerDriver('native-parent87-support-and-picker',()=>RelayRecordBook({p:{...p,request},target}))
+ expect(model.reason).toBeNull();expect(p.view.revision).toBe(87);expect(period.job?.status).toBe('completed');expect(period.supportJob?.status).toBe('running')
+ expect(relayRecordSuggestedKey(p,target,model.rows)).toBe(support.key);expect(support.key).toBe('support:'+period.id);expect(service.key).toBe('service:'+period.id)
+ expect(ui.all().find(e=>e.type==='h3')?.props.children).toBe(support.title);expect(ui.text()).toContain(period.supportJob!.completeAt)
+ expect(unknown).toHaveLength(56);expect(unknown.every(row=>!relayRecordNeedsReply(p,target,row))).toBe(true)
+ ui.click('翻另一张同对象的原票')
+ expect(ui.all().find(e=>e.type==='select')?.props.value).toBe('open')
+ const openRows=model.rows.filter(row=>relayRecordNeedsReply(p,target,row)),openKeys=ticketRadios(ui).map(label=>label.key).sort()
+ expect(openKeys).toEqual(openRows.map(row=>row.key).sort());expect(openKeys).toContain(support.key);expect(unknown.some(row=>openKeys.includes(row.key))).toBe(false)
+ ui.edit('在同对象内按票种翻阅','')
+ expect(ticketRadios(ui).map(label=>label.key).sort()).toEqual(model.rows.map(row=>row.key).sort())
+ ui.edit('在同对象内按票种翻阅','meter')
+ expect(ticketRadios(ui).map(label=>label.key).sort()).toEqual(unknown.map(row=>row.key).sort());expect(ticketRadios(ui)).toHaveLength(56)
+ expect(relayRecordRows(p,target).rows.filter(row=>row.kind==='meter').map(row=>row.key)).toEqual(model.rows.filter(row=>row.kind==='meter').map(row=>row.key))
+ expect(request).not.toHaveBeenCalled();expect(fixture.controller.exportSaved()).toBe(raw);expect(raw).toBe(fixture.raw)
+})
+
+it('keeps explicit and remembered original service keys ahead of suggestions and never substitutes a missing specified ticket',()=>{
+ const fixture=nativeReader87!,p=fixture.props(),target=fixture.target,model=relayRecordRows(p,target),service=model.rows.find(row=>row.kind==='service'&&row.periodId===target.periodId)!,support=model.rows.find(row=>row.kind==='support'&&row.periodId===target.periodId)!,request=vi.fn<GamePanelProps['request']>(),raw=fixture.controller.exportSaved()
+ expect(relayRecordSuggestedKey(p,target,model.rows)).toBe(support.key)
+ expect(p.relayRecordMemory!.write(target,service.key)).toBe(true)
+ const remembered=consumerDriver('native-parent87-remember-service',()=>RelayRecordBook({p:{...p,request},target}))
+ expect(remembered.all().find(e=>e.type==='h3')?.props.children).toBe(service.title);expect(p.relayRecordMemory!.read(target)).toBe(service.key)
+ expect(p.relayRecordMemory!.write(target,support.key)).toBe(true)
+ const explicit=consumerDriver('native-parent87-explicit-service',()=>RelayRecordBook({p:{...p,request},target,initialRecordKey:service.key}))
+ expect(explicit.all().find(e=>e.type==='h3')?.props.children).toBe(service.title)
+ const missing=consumerDriver('native-parent87-missing-explicit',()=>RelayRecordBook({p:{...p,request},target,initialRecordKey:'service:missing-original-period'}))
+ expect(missing.text()).toContain('没有换成第一张');expect(missing.button('明确翻开这一张原票').props.disabled).toBe(true)
+ expect(missing.all().find(e=>e.type==='h3')?.props.children).toBe('这份约定里，先翻哪一张原票？')
+ expect(relayRecordRows(p,target).rows.find(row=>row.key===service.key)?.recordId).toBe(target.periodId);expect(relayRecordRows(p,target).rows.find(row=>row.key===support.key)?.recordId).toBe(target.periodId)
+ expect(request).not.toHaveBeenCalled();expect(fixture.controller.exportSaved()).toBe(raw);expect(raw).toBe(fixture.raw)
+})

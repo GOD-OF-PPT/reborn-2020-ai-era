@@ -1,0 +1,294 @@
+import {afterAll,beforeAll,expect,it,vi} from 'vitest'
+import {isValidElement,type ReactElement} from 'react'
+import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
+import {createCampaignCodec} from '../application/campaign.ts'
+import {GameController} from '../application/game-controller.ts'
+import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
+import {projectRun} from '../core/commands.ts'
+import {relayId} from '../core/relay.ts'
+import {operatingId} from '../core/operations.ts'
+import {addDays} from '../core/calendar.ts'
+import type {CommandEnvelope} from '../core/run-types.ts'
+import type {RelayCasebookHistory,RelayCasebookOperation,RelayCasebookObligation} from '../application/relay-casebook-projection.ts'
+import type {GamePanelProps,PlayFeatures,PlayingView} from './game-types.ts'
+import type {RelaySceneTarget} from './relay-scene-target.ts'
+import {relayFocusFor} from './relay-player-thread.ts'
+import {playerThread} from './player-thread.ts'
+import {threadPurpose} from './thread-purpose.ts'
+import {RelayRecordBook} from './RelayRecordBook.tsx'
+import {RelaySceneChoice} from './RelaySceneChoice.tsx'
+import RelayPanel from './RelayPanel.tsx'
+import {relayRecordRows} from './relay-records.ts'
+import {createRelayRecordMemory,relayCasebookRecordId} from './relay-record-memory.ts'
+import {createRelayResponseDraftMemory,relayResponseScopeForTarget} from './relay-response-draft.ts'
+import {relayTicketCorrection} from './relay-ticket-command.ts'
+import {relayResponseSceneResult} from './relay-response-result.ts'
+import {relayResponseCommandDetails} from './RelayResponseCommandDetails.tsx'
+import source86 from '../../goal-1/evidence/t17-acceptance-36/chrome-service-r2/r7-05-saved86-after-original-wait.json?raw'
+import closed91 from '../../goal-1/evidence/t17-acceptance-33/chrome-main-r1/r5-saved91-full-service-closed.json?raw'
+
+// Original normal exports provide the actual producer/reader/command path.
+// The separately named public projection variants below are counterexamples;
+// they are never imported, saved, or called a new normal history or Native run.
+const hooks=vi.hoisted(()=>({slots:new Map<string,unknown[]>(),current:[] as unknown[],index:0,ids:0}))
+vi.mock('react',async importOriginal=>{
+ const actual=await importOriginal<typeof import('react')>()
+ const state=<T,>(initial:T|(()=>T))=>{const index=hooks.index++,values=hooks.current;if(!(index in values))values[index]=typeof initial==='function'?(initial as ()=>T)():initial;return [values[index] as T,(next:T|((old:T)=>T))=>{values[index]=typeof next==='function'?(next as (old:T)=>T)(values[index] as T):next}] as const}
+ return {...actual,useState:state,useRef:<T,>(initial:T)=>state(()=>({current:initial}))[0],useId:()=>state(()=> 'reader-test-'+(++hooks.ids))[0],useEffect:()=>{}}
+})
+function mounted<T>(key:string,render:()=>T):T{const previous=hooks.current,index=hooks.index;hooks.current=hooks.slots.get(key)??[];hooks.slots.set(key,hooks.current);hooks.index=0;try{return render()}finally{hooks.current=previous;hooks.index=index}}
+type Element=ReactElement<Record<string,unknown>>
+const driven=new Set(['RelayRecordBook','RelayResponseEditor','RelayRenewFields','RelayRequoteFields','CommandButton','RelayPanelScope'])
+function elements(value:unknown,path:string):Element[]{
+ if(Array.isArray(value))return value.flatMap((child,index)=>elements(child,path+'/'+index))
+ if(!isValidElement<Record<string,unknown>>(value))return []
+ const own=[value,...elements(value.props.children,path+'/children'),...elements(value.props.footer,path+'/footer')]
+ if(typeof value.type==='function'&&driven.has(value.type.name)){const component=value.type as (props:Record<string,unknown>)=>unknown;own.push(...elements(mounted(path+':'+component.name,()=>component(value.props)),path+'/render'))}
+ return own
+}
+function text(value:unknown):string{if(typeof value==='string'||typeof value==='number')return String(value);if(Array.isArray(value))return value.map(text).join('');return isValidElement<Record<string,unknown>>(value)?text(value.props.children):''}
+function driver(name:string,render:()=>unknown){
+ let tree:unknown;const all=()=>elements(tree,name),refresh=()=>{tree=mounted(name,render)};refresh()
+ return {refresh,all,text:()=>all().map(node=>text(node.props.children)).join(' '),
+  button(label:string){const node=all().find(e=>e.type==='button'&&text(e.props.children).includes(label));if(!node)throw Error('BUTTON_REQUIRED:'+label);return node},
+  click(label:string){const node=all().find(e=>e.type==='button'&&text(e.props.children).includes(label));if(!node||node.props.disabled||typeof node.props.onClick!=='function')throw Error('ENABLED_BUTTON_REQUIRED:'+label);node.props.onClick();refresh()},
+  edit(label:string,value:string){const parent=all().find(e=>e.type==='label'&&text(e.props.children).includes(label)),node=parent&&elements(parent,name+'/field').find(e=>e.type==='input'||e.type==='select');if(!node||typeof node.props.onChange!=='function'||node.props.disabled)throw Error('EDITABLE_FIELD_REQUIRED:'+label);node.props.onChange({target:{value}});refresh()},
+  pick(title:string){const parent=all().find(e=>e.type==='label'&&text(e.props.children).startsWith(title)),node=parent&&elements(parent,name+'/radio').find(e=>e.type==='input'&&e.props.type==='radio');if(!node||typeof node.props.onChange!=='function')throw Error('ORIGINAL_TICKET_RADIO_REQUIRED:'+title);node.props.onChange();refresh()},
+ }
+}
+const codec=createCampaignCodec()
+type Relay=NonNullable<PlayFeatures['relay']>
+let controller:GameController,store:IndexedDbRunStore,initial:PlayingView,audited:PlayingView,reenteredRaw:string
+type Pair={before:PlayingView;after:PlayingView;command:CommandEnvelope;target:RelaySceneTarget;recordKey:string;request:ReturnType<typeof vi.fn>;oldButton:Element;beforeRaw:string;afterRaw:string;amountFen:number}
+let collection:Pair,customerRefund:Pair,supplierRefund:Pair
+const features=(view:PlayingView)=>view.features as unknown as PlayFeatures
+function panelProps(view=controller.snapshot.view!):GamePanelProps{const f=features(view),business=f.relay!.businesses[0]!;return {controller,view,features:f,accountId:business.accountId,request:vi.fn(),textOnly:true,relayResponseDraftMemory:createRelayResponseDraftMemory(view.runId),relayRecordMemory:createRelayRecordMemory(view.runId)}}
+function targetFor(p:GamePanelProps):Extract<RelaySceneTarget,{kind:'business'}>{const b=p.features.relay!.businesses[0]!,station=p.features.relay!.stations.find(s=>s.businessId===b.id)!;return {kind:'business',runId:p.view.runId,accountId:b.accountId,businessId:b.id,stationId:station.id}}
+function rowFor(p:GamePanelProps,target:RelaySceneTarget,kind:string,id:string){const model=relayRecordRows(p,target);if(model.reason)throw Error(model.reason);const rows=model.rows.filter(r=>r.kind===kind&&(r.recordId===id||r.receivableId===id||r.customerId===id||r.supplierId===id));if(rows.length!==1)throw Error('UNIQUE_ORIGINAL_ROW_REQUIRED:'+kind);return rows[0]!}
+const amountText=(amount:number)=>Math.floor(amount/100)+'.'+String(amount%100).padStart(2,'0')
+async function saveOriginal(kind:string,payload:unknown){const command=controller.prepare(kind,payload);expect(controller.preview(command).allowed).toBe(true);expect((await controller.submit(command)).status).toBe('saved');return command}
+async function saveReader(name:string,target:RelaySceneTarget,recordKey:string,open:string|null,field:string,amountFen:number,submit:string):Promise<Pair>{
+ const before=controller.snapshot.view!,p=panelProps(before),request=vi.fn(),beforeRaw=controller.exportSaved(),ui=driver(name,()=>RelayRecordBook({p:{...p,request},target,initialRecordKey:recordKey}))
+ expect(p.features.relay!.casebook?.status).toBe('ready')
+ if(open)ui.click(open)
+ ui.edit(field,amountText(amountFen));const oldButton=ui.button(submit);expect(oldButton.props.disabled).toBe(false)
+ ui.click(submit);expect(request).toHaveBeenCalledTimes(1);expect(controller.exportSaved()).toBe(beforeRaw)
+ const [kind,payload,,confirm]=request.mock.calls[0]!
+ expect(confirm).toBe(true);const command=await saveOriginal(kind,payload)
+ return {before,after:controller.snapshot.view!,command,target,recordKey,request,oldButton,beforeRaw,afterRaw:controller.exportSaved(),amountFen}
+}
+beforeAll(async()=>{
+ store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'relay-reader-normal86'})
+ let sequence=0;controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=> 'relay-reader-'+(++sequence)})
+ await controller.initialize();await controller.importNew(source86);initial=controller.snapshot.view!
+ expect(controller.exportSaved()).toBe(source86)
+ let p=panelProps(),target=targetFor(p),relay=p.features.relay!,invoice=relay.receivables.find(i=>i.dueAt<=p.view.date&&i.amountFen-i.collectedFen-i.reversedFen>=2)!
+ expect(invoice).toBeDefined();const row=rowFor(p,target,'receivable',invoice.id),amount=Math.floor((invoice.amountFen-invoice.collectedFen-invoice.reversedFen)/2)
+ collection=await saveReader('reader-actual-collection',target,row.key,null,'本次收取金额',amount,'核对这张原单，本次只收显选金额')
+ p=panelProps();target=targetFor(p);relay=p.features.relay!
+ const prepaid=relay.customers.find(c=>c.businessId===target.businessId&&c.mode==='prepaid'&&c.closedAt===null)!
+ expect(prepaid).toBeDefined();await saveOriginal('RechargeRelayCustomer',{customerId:prepaid.id,amountFen:100})
+ p=panelProps();const customerTarget:RelaySceneTarget={...target,kind:'customer',customerId:prepaid.id},customerRow=rowFor(p,customerTarget,'customer',prepaid.id)
+ customerRefund=await saveReader('reader-actual-customer-refund',customerTarget,customerRow.key,'核对这位客户，本次退还多少未消费原款','本次退还客户金额',50,'核对退还这位客户的未消费原款')
+ p=panelProps();target=targetFor(p);const supplier=p.features.relay!.supplyOptions.find(s=>s.businessId===target.businessId&&s.permitted)!
+ expect(supplier).toBeDefined();await saveOriginal('TopUpRelaySupplier',{businessId:target.businessId,supplierId:supplier.supplierId,amountFen:100})
+ p=panelProps();const supplierRow=rowFor(p,target,'supplier',supplier.supplierId)
+ supplierRefund=await saveReader('reader-actual-supplier-refund',target,supplierRow.key,'核对这项供应，本次取回多少本站资产','本次取回供应资产',50,'核对取回此供应的未用资产')
+ const latest=controller.exportSaved(),runId=controller.snapshot.view!.runId;await controller.home();await controller.continueLife(runId);reenteredRaw=controller.exportSaved();expect(reenteredRaw).toBe(latest)
+ const original=codec.import(closed91),projected=codec.registry.runtime?.project?.(original);if(!projected)throw Error('ORIGINAL_PUBLIC_PRODUCER_REQUIRED')
+ audited={...projectRun(original),features:projected,saveStatus:'saved',busy:false,readOnly:false,readOnlyReason:null,hasCandidate:false,pendingRevision:null}
+},20000)
+afterAll(async()=>{if(controller)await controller.close();else if(store)await store.close()})
+
+function alter(view:PlayingView,change:(relay:Relay)=>Relay):PlayingView{const f=features(view);return {...view,features:{...f,relay:change(f.relay!)} as typeof view.features}}
+function alterBook(view:PlayingView,change:(book:RelayCasebookHistory)=>RelayCasebookHistory):PlayingView{return alter(view,r=>{if(!r.casebook)throw Error('ORIGINAL_CASEBOOK_REQUIRED');return {...r,casebook:change(r.casebook)}})}
+function expectNoResult(kind:string,pair:Pick<Pair,'before'|'after'>,variants:readonly PlayingView[]){for(const current of variants)expect(relayResponseSceneResult(kind,pair.before,current)).toBeNull()}
+
+it('drives the real Reader through explicit partial collection and original durable save without extra income, AP or date',()=>{
+ expect(initial.revision).toBe(86);expect(initial.date).toBe('2024-11-07')
+ const before=features(collection.before).relay!,after=features(collection.after).relay!,payload=collection.command.payload as {receivableId:string;amountFen:number},invoice=after.receivables.find(i=>i.id===payload.receivableId)!,old=before.receivables.find(i=>i.id===invoice.id)!,customer=after.customers.find(c=>c.id===invoice.customerId)!,oldCustomer=before.customers.find(c=>c.id===customer.id)!,business=after.businesses.find(b=>b.id===customer.businessId)!,oldBusiness=before.businesses.find(b=>b.id===business.id)!
+ expect(collection.command.kind).toBe('CollectRelayReceivable');expect(payload.amountFen).toBe(collection.amountFen)
+ expect(invoice.collectedFen-old.collectedFen).toBe(collection.amountFen);expect(invoice.amountFen-invoice.collectedFen-invoice.reversedFen).toBe(old.amountFen-old.collectedFen-old.reversedFen-collection.amountFen)
+ expect(customer.balance.recognizedIncomeFen).toBe(oldCustomer.balance.recognizedIncomeFen);expect(business.funds.cashFen-oldBusiness.funds.cashFen).toBe(collection.amountFen)
+ expect(collection.after.date).toBe(collection.before.date);expect(collection.after.budget).toEqual(collection.before.budget)
+ expect(reenteredRaw).toBe(supplierRefund.afterRaw)
+ if(typeof collection.oldButton.props.onClick!=='function')throw Error('ORIGINAL_SHARED_BINDING_REQUIRED')
+ collection.oldButton.props.onClick();expect(collection.request).toHaveBeenCalledTimes(1)
+})
+
+it('keeps real customer refund and supplier asset return separate from service income',()=>{
+ expect(customerRefund.command).toMatchObject({kind:'RefundRelayBalance',payload:{amountFen:50}})
+ expect(supplierRefund.command).toMatchObject({kind:'RefundRelaySupplier',payload:{amountFen:50}})
+ for(const pair of [customerRefund,supplierRefund]){expect(pair.after.date).toBe(pair.before.date);expect(pair.after.budget).toEqual(pair.before.budget)}
+ const customerPayload=customerRefund.command.payload as {customerId:string},cb=features(customerRefund.before).relay!,ca=features(customerRefund.after).relay!,oldCustomer=cb.customers.find(c=>c.id===customerPayload.customerId)!,customer=ca.customers.find(c=>c.id===customerPayload.customerId)!
+ expect(oldCustomer.balance.prepaidFen-customer.balance.prepaidFen).toBe(50);expect(customer.balance.recognizedIncomeFen).toBe(oldCustomer.balance.recognizedIncomeFen)
+ const supplierPayload=supplierRefund.command.payload as {businessId:string;supplierId:string},sb=features(supplierRefund.before).relay!,sa=features(supplierRefund.after).relay!,oldPool=sb.supplyOptions.find(s=>s.businessId===supplierPayload.businessId&&s.supplierId===supplierPayload.supplierId)!.credit!,pool=sa.supplyOptions.find(s=>s.businessId===supplierPayload.businessId&&s.supplierId===supplierPayload.supplierId)!.credit!
+ expect(oldPool.remainingFen-pool.remainingFen).toBe(50);expect(sa.businesses.find(b=>b.id===supplierPayload.businessId)!.metrics.incomeFen).toBe(sb.businesses.find(b=>b.id===supplierPayload.businessId)!.metrics.incomeFen)
+})
+
+it('does not fall back from a missing explicit recordKey and requires another deliberate ticket choice',()=>{
+ const p=panelProps(),target=targetFor(p),request=vi.fn(),before=controller.exportSaved(),ui=driver('reader-missing-key',()=>RelayRecordBook({p:{...p,request},target,initialRecordKey:'receivable:missing-original-ticket'}))
+ expect(ui.text()).toContain('没有换成第一张');expect(ui.button('明确翻开这一张原票').props.disabled).toBe(true)
+ expect(ui.all().filter(e=>e.type==='input'&&e.props.inputMode==='decimal')).toHaveLength(0)
+ const invoice=p.features.relay!.receivables.find(i=>i.dueAt<=p.view.date&&i.amountFen>i.collectedFen+i.reversedFen)!,row=rowFor(p,target,'receivable',invoice.id)
+ ui.pick(row.title);expect(request).not.toHaveBeenCalled();ui.click('明确翻开这一张原票')
+ expect(ui.all().some(e=>e.type==='input'&&e.props.inputMode==='decimal')).toBe(true)
+ expect(p.relayRecordMemory!.read(target)).toBe(row.key);expect(controller.exportSaved()).toBe(before)
+})
+
+it('passes the exact SceneChoice record to the original Panel initialFocusId and shares the same invoice draft',()=>{
+ const p=panelProps(),base=targetFor(p),invoice=p.features.relay!.receivables.find(i=>i.dueAt<=p.view.date&&i.amountFen>i.collectedFen+i.reversedFen)!,meter=p.features.relay!.meters.find(m=>m.id===invoice.sourceId)!,target:RelaySceneTarget={...base,kind:'period',periodId:meter.periodId,meterId:meter.id},inspect=vi.fn(),request=vi.fn(),before=controller.exportSaved()
+ const near=driver('reader-scene-choice',()=>RelaySceneChoice({p:{...p,request},target,onInspect:inspect,children:open=><button type="button" onClick={()=>open('record')}>明确翻开原票</button>}))
+ near.click('明确翻开原票');near.click('翻另一张同对象的原票')
+ const row=rowFor(p,target,'receivable',invoice.id);near.pick(row.title);near.click('明确翻开这一张原票');near.edit('本次收取金额','0.01');near.click('翻到同对象完整原册中的这一张')
+ expect(inspect).toHaveBeenCalledTimes(1);const [original,slot,focusId]=inspect.mock.calls[0]!
+ expect(original).toEqual(row.target??target);expect(slot).toBeUndefined();expect(focusId).toBe(relayCasebookRecordId(row.key))
+ const book=driver('reader-original-panel',()=>RelayPanel({...p,request,initialTarget:original,initialFocusId:focusId}))
+ expect(book.all().find(e=>e.type==='details'&&e.props.className==='panel relay-original-ticket')?.props.open).toBe(true)
+ expect(book.all().find(e=>e.type==='input'&&e.props.inputMode==='decimal')?.props.value).toBe('0.01')
+ const scope=relayResponseScopeForTarget(p,original,{kind:'receivable',id:invoice.id},'collect').scope!
+ expect(p.relayResponseDraftMemory!.read(p.view.runId,scope)?.amount).toBe('0.01');expect(request).not.toHaveBeenCalled();expect(controller.exportSaved()).toBe(before)
+})
+
+it('keeps reading and entered money while the original command binding blocks candidate, read-only and conflict snapshots',()=>{
+ const original=panelProps(),target=targetFor(original),invoice=original.features.relay!.receivables.find(i=>i.dueAt<=original.view.date&&i.amountFen>i.collectedFen+i.reversedFen)!,key=rowFor(original,target,'receivable',invoice.id).key,before=controller.exportSaved()
+ for(const patch of [{hasCandidate:true},{readOnly:true,saveStatus:'read_only' as const},{saveStatus:'conflict' as const}]){
+  const view={...original.view,...patch},request=vi.fn(),p={...original,view,request},ui=driver('reader-locked-'+JSON.stringify(patch),()=>RelayRecordBook({p,target,initialRecordKey:key}))
+  ui.edit('本次收取金额','0.01');const button=ui.button('核对这张原单，本次只收显选金额');expect(button.props.disabled).toBe(true)
+  if(typeof button.props.onClick!=='function')throw Error('ORIGINAL_BINDING_REQUIRED')
+  button.props.onClick();expect(request).not.toHaveBeenCalled()
+ }
+ expect(controller.exportSaved()).toBe(before)
+})
+
+function quantityFixture(){
+ const p=panelProps(audited),relay=p.features.relay!,base=targetFor(p),meter=relay.meters.find(m=>m.auditedUnits!==null&&relay.audits.filter(a=>a.meterId===m.id&&a.completedAt!==null).length===1)!,audit=relay.audits.find(a=>a.meterId===meter.id&&a.completedAt!==null)!,target:RelaySceneTarget={...base,kind:'period',periodId:meter.periodId,meterId:meter.id}
+ // A public quantity counterexample, not a replayed uncorrected normal save.
+ const changed={...relay,meters:relay.meters.map(m=>m.id===meter.id?{...m,reportedUnits:0,auditedUnits:0,correctionId:null}:m),audits:relay.audits.map(a=>a.id===audit.id?{...a,actualUnits:0}:a),corrections:relay.corrections.filter(c=>c.meterId!==meter.id)}
+ return {p:{...p,features:{...p.features,relay:changed}},target,meter:changed.meters.find(m=>m.id===meter.id)!,audit:changed.audits.find(a=>a.id===audit.id)!}
+}
+it('copies a uniquely completed zero-valued public audit without treating zero as unknown or silently changing batch',()=>{
+ const {p,target,meter,audit}=quantityFixture()
+ expect(relayTicketCorrection(p,target).command).toBeNull()
+ expect(relayTicketCorrection(p,target,true).command).toMatchObject({kind:'CorrectRelayUsage',payload:{auditId:audit.id,correctUnits:0},confirm:true})
+ const command={runId:p.view.runId,actorId:'player',commandId:'zero-quantity-confirmation-fixture',expectedRevision:p.view.revision,kind:'CorrectRelayUsage',payload:{auditId:audit.id,correctUnits:0}},detail=relayResponseCommandDetails({command,relay:p.features.relay,accountName:id=>id}),words=text(detail)
+ expect(words).toContain('原报告0单位');expect(words).toContain('独立复核为0单位');expect(words).toContain(meter.id);expect(words).toContain(audit.id);expect(words).toContain(audit.jobId)
+ const relay=p.features.relay!,variants=[{...relay,audits:[...relay.audits,{...audit,id:'another-completed-audit'}]},{...relay,audits:relay.audits.map(a=>a.id===audit.id?{...a,actualUnits:1}:a)},{...relay,auditJobs:relay.auditJobs.map(a=>a.jobId===audit.jobId?{...a,meterCount:a.meterCount+1}:a)},{...relay,audits:relay.audits.map(a=>a.id===audit.id?{...a,completedAt:addDays(p.view.date,1)}:a)}]
+ for(const variant of variants)expect(relayTicketCorrection({...p,features:{...p.features,relay:variant}},target,true).command).toBeNull()
+})
+
+it('renders a real already-corrected single meter as its saved record and does not offer another correction',()=>{
+ const p=panelProps(audited),base=targetFor(p),meter=p.features.relay!.meters.find(m=>m.correctionId!==null)!,target:RelaySceneTarget={...base,kind:'period',periodId:meter.periodId,meterId:meter.id},request=vi.fn(),ui=driver('reader-original-corrected',()=>RelayRecordBook({p:{...p,request},target}))
+ expect(ui.text()).toContain('更正');expect(ui.all().filter(e=>e.type==='button'&&/按这份.*更正这一张/.test(text(e.props.children)))).toHaveLength(0)
+ expect(request).not.toHaveBeenCalled()
+})
+
+it('shows the captured single-invoice confirmation source and preserves the distinction from all-customer collection',()=>{
+ const relay=features(collection.before).relay!,payload=collection.command.payload as {receivableId:string},invoice=relay.receivables.find(i=>i.id===payload.receivableId)!,detail=relayResponseCommandDetails({command:collection.command,relay,accountName:id=>id}),words=text(detail)
+ expect(words).toContain(invoice.id);expect(words).toContain(invoice.sourceId);expect(words).toContain(invoice.operationId);expect(words).toContain(invoice.date);expect(words).toContain(invoice.dueAt)
+ expect(words).toContain('本次只办理这张原单');expect(words).toContain('全部到期收款是另一项决定')
+})
+
+it('publishes cash echoes only for the actual original collection, customer refund and supplier return',()=>{
+ for(const [kind,pair,phrase] of [['CollectRelayReceivable',collection,'本单净未收还剩'],['RefundRelayBalance',customerRefund,'退款登记'],['RefundRelaySupplier',supplierRefund,'资产实际退回']] as const){
+  expect(relayResponseSceneResult(kind,pair.before,pair.after)).toContain(phrase)
+  const last=pair.after.receipts.at(-1)!
+  expectNoResult(kind,pair,[{...pair.after,hasCandidate:true},{...pair.after,saveStatus:'unsaved'},{...pair.after,saveStatus:'read_only',readOnly:true},{...pair.after,revision:pair.after.revision+1},{...pair.after,receipts:[...pair.after.receipts.slice(0,-1),{...last,kind:'another-kind'}]},{...pair.after,receipts:[...pair.after.receipts.slice(0,-1),{...last,revisionAfter:last.revisionAfter-1}]}])
+  expect(relayResponseSceneResult(kind,{...pair.before,runId:'another-life'},pair.after)).toBeNull()
+ }
+})
+
+it('rejects a collection borrowed from unrelated cash, another owner or a different operation date',()=>{
+ const book=features(collection.after).relay!.casebook!,id=relayId(collection.command.commandId,'CollectRelayReceivable'),receipt=book.collections.find(c=>c.id===id)!,operation=receipt.operationId,oldDate=addDays(collection.after.date,-1)
+ const variants=[
+  alterBook(collection.after,b=>({...b,collections:b.collections.map(c=>c.id===id?{...c,operationId:'unrelated-positive-cash'}:c),operations:b.operations.map(o=>o.id===operation?{...o,id:'unrelated-positive-cash'}:o),transactions:b.transactions.map(t=>t.id===operation?{...t,id:'unrelated-positive-cash'}:t)})),
+  alterBook(collection.after,b=>({...b,collections:b.collections.map(c=>c.id===id?{...c,date:oldDate}:c)})),
+  alterBook(collection.after,b=>({...b,operations:b.operations.map(o=>o.id===operation?{...o,date:oldDate}:o)})),
+  alterBook(collection.after,b=>({...b,transactions:b.transactions.map(t=>t.id===operation?{...t,date:oldDate}:t)})),
+  alterBook(collection.after,b=>({...b,operations:b.operations.map(o=>o.id===operation?{...o,accountId:'another-account'}:o)})),
+  alterBook(collection.after,b=>({...b,collections:b.collections.map(c=>c.id===id?{...c,scopeBusinessId:'another-business'}:c)})),
+ ]
+ expectNoResult('CollectRelayReceivable',collection,variants)
+})
+
+it('rejects a customer refund whose batch reference, amount or date does not belong to this original refund',()=>{
+ const relay=features(customerRefund.after).relay!,id=relayId(customerRefund.command.commandId,'RefundRelayBalance'),refund=relay.refunds.find(r=>r.id===id)!,op=refund.operationIds[0]!,oldDate=addDays(customerRefund.after.date,-1)
+ expectNoResult('RefundRelayBalance',customerRefund,[
+  alter(customerRefund.after,r=>({...r,refunds:r.refunds.map(row=>row.id===id?{...row,date:oldDate}:row)})),
+  alterBook(customerRefund.after,b=>({...b,operations:b.operations.map(o=>o.id===op?{...o,referenceId:'unrelated-recharge-operation'}:o)})),
+  alterBook(customerRefund.after,b=>({...b,operations:b.operations.map(o=>o.id===op?{...o,amountFen:(o.amountFen??0)+1}:o)})),
+  alterBook(customerRefund.after,b=>({...b,operations:b.operations.map(o=>o.id===op?{...o,date:oldDate}:o)})),
+  alterBook(customerRefund.after,b=>({...b,transactions:b.transactions.map(t=>t.id===op?{...t,date:oldDate}:t)})),
+ ])
+})
+
+it('rejects supplier asset echoes for another source, account or date even if the cash amount happens to match',()=>{
+ const id=relayId('supplier-refund',relayId(supplierRefund.command.commandId,'RefundRelaySupplier')),oldDate=addDays(supplierRefund.after.date,-1)
+ expectNoResult('RefundRelaySupplier',supplierRefund,[
+  alterBook(supplierRefund.after,b=>({...b,operations:b.operations.map(o=>o.id===id?{...o,sourceEventId:'another-supplier'}:o)})),
+  alterBook(supplierRefund.after,b=>({...b,operations:b.operations.map(o=>o.id===id?{...o,accountId:'another-account'}:o)})),
+  alterBook(supplierRefund.after,b=>({...b,operations:b.operations.map(o=>o.id===id?{...o,date:oldDate}:o)})),
+  alterBook(supplierRefund.after,b=>({...b,transactions:b.transactions.map(t=>t.id===id?{...t,date:oldDate}:t)})),
+ ])
+})
+
+function paymentEchoFixture(){
+ // A targeted public financial fixture, not a stored-state reconstruction;
+ // only the echo's public input fields are supplied, never imported/submitted.
+ const source=collection.before,f=features(source),relay=f.relay!,book=relay.casebook!,cost=book.operations.find(o=>o.kind==='incur_supplier_usage')!,business=relay.businesses.find(b=>b.id===cost.scopeBusinessId)!,commandId='reader-payment-public-fixture',operationId=operatingId(commandId,'PayObligation'),lastOrder=Math.max(...book.operations.map(o=>o.order)),debt:RelayCasebookObligation={id:'reader-public-debt',accountId:business.accountId,businessId:business.id,scopeBusinessId:business.id,contractId:null,counterpartyId:'world',date:addDays(source.date,7),sourceEventId:cost.sourceEventId,originOperationId:'reader-public-original-cost',kind:'expense',amountFen:100,remainingFen:100,protectionReservationId:null}
+ const expense:RelayCasebookOperation={...cost,id:debt.originOperationId,order:lastOrder+1,date:source.date,amountFen:100,obligationId:debt.id,dueAt:debt.date}
+ const before=alterBook(source,b=>({...b,obligationHistory:[...b.obligationHistory,debt],operations:[...b.operations,expense]}))
+ const operation:RelayCasebookOperation={id:operationId,kind:'pay_obligation',status:'applied',order:lastOrder+2,date:source.date,accountId:business.accountId,businessId:null,scopeBusinessId:business.id,contractId:null,sourceEventId:commandId,referenceId:null,amountFen:50,prepaymentId:null,obligationId:debt.id,dueAt:null,reservationId:null,originId:null,newOriginId:null,counterpartyId:null,targetAccountId:null,bucket:null,settlement:null}
+ const afterBase={...before,revision:before.revision+1,receipts:[...before.receipts,{commandId,kind:'PayObligation',revisionAfter:before.revision+1,summary:'Public payment fixture only'}]}
+ const after=alterBook(afterBase,b=>({...b,revision:afterBase.revision,obligationHistory:b.obligationHistory.map(o=>o.id===debt.id?{...o,remainingFen:50}:o),operations:[...b.operations,operation],transactions:[...b.transactions,{id:operationId,order:Math.max(...b.transactions.map(t=>t.order))+1,lineIndex:0,date:source.date,accountId:business.accountId,amountFen:-50,scopeBusinessId:business.id,businessId:business.id,contractId:null,sourceId:commandId,referenceId:debt.id}]}))
+ return {before,after,operationId,commandId}
+}
+it('requires the shared original PayObligation canonical identity and source instead of accepting any new payment row',()=>{
+ const pair=paymentEchoFixture();expect(relayResponseSceneResult('PayObligation',pair.before,pair.after)).toContain('原义务实际支付')
+ expectNoResult('PayObligation',pair,[
+  alterBook(pair.after,b=>({...b,operations:b.operations.map(o=>o.id===pair.operationId?{...o,id:'unrelated-payment'}:o),transactions:b.transactions.map(t=>t.id===pair.operationId?{...t,id:'unrelated-payment'}:t)})),
+  alterBook(pair.after,b=>({...b,operations:b.operations.map(o=>o.id===pair.operationId?{...o,sourceEventId:'another-command'}:o)})),
+  alterBook(pair.after,b=>({...b,operations:b.operations.map(o=>o.id===pair.operationId?{...o,date:addDays(pair.after.date,-1)}:o)})),
+  alterBook(pair.after,b=>({...b,transactions:b.transactions.map(t=>t.id===pair.operationId?{...t,date:addDays(pair.after.date,-1)}:t)})),
+  {...pair.after,hasCandidate:true},
+ ])
+})
+
+function correctionEchoFixture(){
+ const {p,target,meter,audit}=quantityFixture(),before={...p.view,features:p.features as typeof p.view.features},commandId='reader-zero-correction-public-fixture',id=relayId(commandId,'CorrectRelayUsage'),correction={id,meterId:meter.id,auditId:audit.id,date:before.date,originalReportedUnits:0,correctUnits:0,customerDeltaFen:0,supplierDeltaFen:0,operationIds:[]},base={...before,revision:before.revision+1,receipts:[...before.receipts,{commandId,kind:'CorrectRelayUsage',revisionAfter:before.revision+1,summary:'Public zero correction fixture only'}]}
+ const after=alter(base,r=>({...r,meters:r.meters.map(m=>m.id===meter.id?{...m,correctionId:id}:m),corrections:[...r.corrections,correction],...(r.casebook?{casebook:{...r.casebook,revision:base.revision}}:{})}))
+ return {before,after,target,id,meter,audit}
+}
+it('ties a correction echo to the original completed single audit, owner and correction date',()=>{
+ const pair=correctionEchoFixture();expect(relayResponseSceneResult('CorrectRelayUsage',pair.before,pair.after)).toContain('这一张原票')
+ expectNoResult('CorrectRelayUsage',pair,[
+  alter(pair.after,r=>({...r,corrections:r.corrections.map(c=>c.id===pair.id?{...c,date:addDays(pair.after.date,-1)}:c)})),
+  alter(pair.after,r=>({...r,meters:r.meters.map(m=>m.id===pair.meter.id?{...m,customerId:'another-customer'}:m)})),
+  alter(pair.after,r=>({...r,meters:r.meters.map(m=>m.id===pair.meter.id?{...m,periodId:'another-period'}:m)})),
+  {...pair.after,hasCandidate:true},
+ ])
+ const wrong=alter(pair.before,r=>({...r,auditJobs:r.auditJobs.map(a=>a.jobId===pair.audit.jobId?{...a,meterCount:a.meterCount+1}:a)}))
+ expect(relayResponseSceneResult('CorrectRelayUsage',wrong,pair.after)).toBeNull()
+})
+
+it('keeps a real corrected ticket and its original support attached to their own purpose, source and completion date',()=>{
+ // The original91 view is an actual old normal history already completed and
+ // corrected. This case does not use the public quantity/payment variants.
+ const p=panelProps(audited),relay=p.features.relay!,base=targetFor(p),period=relay.periods.find(row=>row.businessId===base.businessId&&row.supportJob?.status==='completed'&&relay.meters.some(m=>m.periodId===row.id&&m.correctionId!==null))!,support=period.supportJob!,meter=relay.meters.find(m=>m.periodId===period.id&&m.correctionId!==null)!,correction=relay.corrections.find(c=>c.id===meter.correctionId&&c.meterId===meter.id)!,request=vi.fn(),raw=controller.exportSaved()
+ expect(period).toBeDefined();expect(support.status).toBe('completed');expect(correction).toBeDefined()
+ const meterTarget:RelaySceneTarget={...base,kind:'period',periodId:period.id,meterId:meter.id},meterFocus=relayFocusFor(p,meterTarget),meterThread=playerThread(p,meterFocus),meterPurpose=threadPurpose(p,meterThread)
+ expect(meterThread.focusScope).not.toBe('invalid');expect(meterThread.inspect.target?.relayTarget).toEqual(meterTarget)
+ expect(meterThread.attempt).toBe(meterPurpose.attempt);expect(meterThread.finishWhen).toBe(meterPurpose.finishWhen)
+ expect(meterPurpose.attempt).toContain('这一张原票');expect(meterPurpose.attempt).toContain('追加的更正')
+ expect(meterPurpose.finishWhen).toContain(correction.date);expect(meterPurpose.finishWhen).toContain('本票更正');expect(meterPurpose.finishWhen).toContain('新增应收应付');expect(meterPurpose.finishWhen).toContain('自己的原日期')
+ const meterReader=driver('reader-purpose-original-meter',()=>RelayRecordBook({p:{...p,request},target:meterTarget}))
+ expect(meterReader.text()).toContain('更正');expect(meterReader.text()).toContain(meter.date)
+ const supportTarget:RelaySceneTarget={...base,kind:'period',periodId:period.id,jobId:support.id},supportFocus=relayFocusFor(p,supportTarget),supportThread=playerThread(p,supportFocus),supportPurpose=threadPurpose(p,supportThread)
+ expect(supportThread.focusScope).not.toBe('invalid');expect(supportThread.inspect.target?.relayTarget).toEqual(supportTarget)
+ expect(supportThread.attempt).toBe(supportPurpose.attempt);expect(supportThread.finishWhen).toBe(supportPurpose.finishWhen)
+ expect(supportPurpose.attempt).toContain('这一份原支持');expect(supportPurpose.finishWhen).toContain(support.completeAt);expect(supportPurpose.finishWhen).toContain('已完成这份原任务');expect(supportPurpose.finishWhen).toContain('分别处理')
+ const supportReader=driver('reader-purpose-original-support',()=>RelayRecordBook({p:{...p,request},target:supportTarget}))
+ expect(supportReader.text()).toContain('原支持');expect(supportReader.text()).toContain(support.completeAt)
+ expect(request).not.toHaveBeenCalled();expect(controller.exportSaved()).toBe(raw)
+})

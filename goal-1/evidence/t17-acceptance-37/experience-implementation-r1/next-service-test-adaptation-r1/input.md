@@ -1,0 +1,3 @@
+# 原委派逐字
+
+你Today源已freeze，谢谢。授权仅适配Root新增 src/ui/RelayNextServiceJourney.test.tsx 与新先决consumer（你不再写Today产品）：原第1真实115现在应走short→显选原Renew，原‘有coverage才ServiceChoice空稿/取消/同原册保稿/无pin/raw不变’职责不能删，可显式public-view反例把一位termEnd设合法May31（清楚不是新存档/历史）测试新分支，再新真实115case核无自动选客/无ServiceChoice、显选Renew空稿/取消等；现art新14case可复用但不要删原6checkbox空选/金额payload/同draftmemory/原inspect business service/原target不改/invalid targets断言。driver应真正展开新的RelayNextServiceConditions组件，旧模式Root原2case前像先guard保存，需扩大分3case可但不放时限config/不改产品、无as绕过。0工程/Browser，完成freeze停writer；Root统一R9检查。

@@ -1,0 +1,9 @@
+# 两新test类型定向补正
+
+Root实际u4b-type-r1为exit2/37733ms，599源初末同；原报告及两文件R1前像已按原字节登记。原红不改写。
+
+仅三处修改：ResponseEditor.test移除未用relayResponseContext import，businessTarget真实返回型收窄为Extract business；RecordBook.test的targetFor同样收窄为Extract business。两个helper的原实现确实只return kind business的基础身份，这不是把非法period fixture强行断言为合法。没有改生产PeriodRecord的jobId/meterId互斥union，没有新增as来消错。
+
+将这三处精确逆变后，两完整test均逐字等于R1前像；13与14个it标题/所有断言、beforeAll20秒及其余字节完全保持。两个生产response模块与原R2身份逐bytes/SHA/mode同。所有其它Root/代理源、旧证据、P3、三master未触碰。
+
+[杠精审查] 通过本次静态修复范围：消除的是业务目标helper的宽类型表达与一个未用绑定，未减少任何要验证的情形或放宽运行门槛。没有运行tsc/tests/build/Browser/Git，修后是否通过必须由Root新轮实际检查证明。本两test重新冻结。

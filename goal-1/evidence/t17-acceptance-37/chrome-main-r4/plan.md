@@ -1,0 +1,1 @@
+R4承接同真实partial87，修N5原册语义定位到当前回应控件并将同原动作在inline紧随填写、N6明确meter/job记录不被generic读页记忆换票；invoice和对应meter明确互翻不执行命令。新75case/typeR9/buildR4已运行，实际新Chrome仍须核；用新同级日志，旧R1/R2/R3已stop/harness均null，不追加。沿同服务继续真实原支持/独立复核/已核差额/收退款及下一生活，原AP/钱/日期/保存不变，compat0。

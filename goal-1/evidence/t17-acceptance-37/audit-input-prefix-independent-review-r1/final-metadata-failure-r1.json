@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-26T20:43:50.262839+00:00",
+  "operation": "Reviewer metadata-finalization assertion, not candidate execution",
+  "observedTerminal": {
+    "exitCode": 1,
+    "stderr": "Traceback (most recent call last): File \"<stdin>\", line 55, in <module> AssertionError"
+  },
+  "reason": "Original review-finalization expected zero binding drift. Actual Root-updated root37/tasks.md differs from contract references.",
+  "drift": [
+    {
+      "expected": {
+        "path": "goal-1/evidence/t17-acceptance-37/tasks.md",
+        "bytes": 2728,
+        "sha256": "56d9a13fc6eaa3fc1ea25f8a2c58368af1c768f58fb53edf3cf76288141ed838",
+        "mode": 420
+      },
+      "actual": {
+        "path": "goal-1/evidence/t17-acceptance-37/tasks.md",
+        "bytes": 5618,
+        "sha256": "6a6df5f55f853bbee631db0ade7479905443b321c405e1771715f6126bb31bd6",
+        "mode": 420
+      }
+    }
+  ],
+  "otherDeclaredGroupsDrift": {
+    "officialSources": 0,
+    "dependencies": 0,
+    "p3": 0
+  },
+  "draftReport": {
+    "path": "goal-1/evidence/t17-acceptance-37/audit-input-prefix-independent-review-r1/review.md",
+    "bytes": 7013,
+    "sha256": "a935901bc2ea258e3f2165e97fc067185b6bb073ecbaa58cded2deae77557091",
+    "mode": 420
+  },
+  "draftAdmissionNotFinal": true,
+  "candidateExecuted": false,
+  "syntaxOrReplayOrCodecExecuted": false,
+  "sourceOrOldFileModifiedByReviewer": false
+}

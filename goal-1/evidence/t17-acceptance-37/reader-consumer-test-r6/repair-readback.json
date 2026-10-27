@@ -1,0 +1,59 @@
+{
+  "at": "2026-10-26T17:07:37.606Z",
+  "before": {
+    "path": "goal-1/evidence/t17-acceptance-37/reader-consumer-test-r6/RelayRecordBook.test.tsx.r5-before",
+    "bytes": 50417,
+    "sha256": "6fc6dce43d548d4bb868cb2d64c0fde05acc71cc083c9f08c900427e49f4f5cd",
+    "mode": 420
+  },
+  "after": {
+    "path": "src/ui/RelayRecordBook.test.tsx",
+    "bytes": 50461,
+    "sha256": "e0c8f5fe0d234aa58020605cabcce6b6b08477e1cb195db4bc88ca849f9e9360",
+    "mode": 420
+  },
+  "exactInverseEqualsR5": true,
+  "changes": [
+    {
+      "before": "import {afterAll,beforeAll,expect,it,vi} from 'vitest'",
+      "after": "import {afterAll,beforeAll,expect,it,vi,type Mock} from 'vitest'"
+    },
+    {
+      "before": "oldAdvanceRequest:ReturnType<typeof vi.fn>",
+      "after": "oldAdvanceRequest:Mock<GamePanelProps['request']>"
+    },
+    {
+      "before": "oldAdvanceRequest=vi.fn();",
+      "after": "oldAdvanceRequest=vi.fn<GamePanelProps['request']>();"
+    }
+  ],
+  "caseCount": 21,
+  "allAssertionsAndGatesOtherwiseByteEqual": true,
+  "rawTypeFailure": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/reader-consumer-test-r6/u4b-type-r3.result.json.original",
+      "bytes": 327,
+      "sha256": "9e6b24f95f0e3c5061b1507ea32388d622a11ab4dfffd3ec22f4cb5d0a5446de",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/reader-consumer-test-r6/u4b-type-r3.stdout.log.original",
+      "bytes": 481,
+      "sha256": "c29e96d55aed2bac1fb856767067cbbca3135f06e71a6e529e4513bac3aca695",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/reader-consumer-test-r6/u4b-type-r3.stderr.log.original",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420
+    }
+  ],
+  "testsRun": false,
+  "typecheckRun": false,
+  "buildRun": false,
+  "browserRun": false,
+  "gitRun": false,
+  "sourceFrozen": true,
+  "compatibility": 0
+}

@@ -1,0 +1,3 @@
+续接 U4-B #8，只读规划审核，不修改源/masters或运行检查/Browser/replay。请完整逐块读取 goal-1 input/plan/tasks 与 root37三文件（不得以tail替代），然后审阅 root37/full-create-preparation-r1、deep-branch-input-preparation-r1 recommendations、原Create/codec记录接口，提出最小且真实的单次正常输入重放方案：以原root27 normal118完整Create历史截到第一笔实际负差额 CorrectRelayUsage 之前 revision（不得手工删除/回退已保存状态、不得扫描seed/private truth），保留完整正常记录身份，未来新Chrome才能实际执行单更正。先确认合法可行性与确切源文件/命令序号，通过静态原receipt公开载荷/记录定位；不执行重放，不新建脚本，不读未复核隐藏actual/queue/seed。若不可行明确说明。新同级guarded audit-input-prefix-review-r1交回，原历史不计当前新动作。
+
+Root 后续分工澄清：本代理完整读 plan.md（168848B）、input 与 root37 三文件；tasks 由 art 完整读，各角色不重复全量两份，Root 汇总覆盖。

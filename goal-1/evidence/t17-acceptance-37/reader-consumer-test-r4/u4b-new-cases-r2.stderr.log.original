@@ -1,0 +1,93 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/RelayRecordBook.test.tsx > drives the real Reader through explicit partial collection and original durable save without extra income, AP or date
+AssertionError: expected "vi.fn()" to be called 1 times, but got 0 times
+ ❯ src/ui/RelayRecordBook.test.tsx:117:66
+    115|  expect(reenteredRaw).toBe(supplierRefund.afterRaw)
+    116|  if(typeof collection.oldButton.props.onClick!=='function')throw Error…
+    117|  collection.oldButton.props.onClick();expect(collection.request).toHav…
+       |                                                                  ^
+    118| })
+    119|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  src/ui/RelayRecordBook.test.tsx > rejects a collection borrowed from unrelated cash, another owner or a different operation date
+RuleError: INVALID_DAY_COUNT
+ ❯ requireRule src/core/errors.ts:12:25
+     10|
+     11| export function requireRule(condition: unknown, code: string): asserts…
+     12|   if (!condition) throw new RuleError(code)
+       |                         ^
+     13| }
+     14|
+ ❯ Module.addDays src/core/calendar.ts:25:3
+ ❯ src/ui/RelayRecordBook.test.tsx:203:206
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  src/ui/RelayRecordBook.test.tsx > rejects a customer refund whose batch reference, amount or date does not belong to this original refund
+RuleError: INVALID_DAY_COUNT
+ ❯ requireRule src/core/errors.ts:12:25
+     10|
+     11| export function requireRule(condition: unknown, code: string): asserts…
+     12|   if (!condition) throw new RuleError(code)
+       |                         ^
+     13| }
+     14|
+ ❯ Module.addDays src/core/calendar.ts:25:3
+ ❯ src/ui/RelayRecordBook.test.tsx:216:194
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  src/ui/RelayRecordBook.test.tsx > rejects supplier asset echoes for another source, account or date even if the cash amount happens to match
+RuleError: INVALID_DAY_COUNT
+ ❯ requireRule src/core/errors.ts:12:25
+     10|
+     11| export function requireRule(condition: unknown, code: string): asserts…
+     12|   if (!condition) throw new RuleError(code)
+       |                         ^
+     13| }
+     14|
+ ❯ Module.addDays src/core/calendar.ts:25:3
+ ❯ src/ui/RelayRecordBook.test.tsx:227:110
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  src/ui/RelayRecordBook.test.tsx > requires the shared original PayObligation canonical identity and source instead of accepting any new payment row
+RuleError: INVALID_DAY_COUNT
+ ❯ requireRule src/core/errors.ts:12:25
+     10|
+     11| export function requireRule(condition: unknown, code: string): asserts…
+     12|   if (!condition) throw new RuleError(code)
+       |                         ^
+     13| }
+     14|
+ ❯ Module.addDays src/core/calendar.ts:25:3
+ ❯ src/ui/RelayRecordBook.test.tsx:252:100
+ ❯ src/ui/RelayRecordBook.test.tsx:252:58
+ ❯ src/ui/RelayRecordBook.test.tsx:105:208
+ ❯ alter src/ui/RelayRecordBook.test.tsx:104:134
+ ❯ alterBook src/ui/RelayRecordBook.test.tsx:105:114
+ ❯ src/ui/RelayRecordBook.test.tsx:252:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  src/ui/RelayRecordBook.test.tsx > ties a correction echo to the original completed single audit, owner and correction date
+RuleError: INVALID_DAY_COUNT
+ ❯ requireRule src/core/errors.ts:12:25
+     10|
+     11| export function requireRule(condition: unknown, code: string): asserts…
+     12|   if (!condition) throw new RuleError(code)
+       |                         ^
+     13| }
+     14|
+ ❯ Module.addDays src/core/calendar.ts:25:3
+ ❯ src/ui/RelayRecordBook.test.tsx:266:89
+ ❯ src/ui/RelayRecordBook.test.tsx:266:56
+ ❯ alter src/ui/RelayRecordBook.test.tsx:104:134
+ ❯ src/ui/RelayRecordBook.test.tsx:266:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+

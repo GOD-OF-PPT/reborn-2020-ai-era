@@ -1,0 +1,168 @@
+import {afterAll,beforeAll,expect,it} from 'vitest'
+import {readFileSync,lstatSync} from 'node:fs'
+import {createHash} from 'node:crypto'
+import {createCampaignCodec} from '../application/campaign.ts'
+import {projectRun} from '../core/commands.ts'
+import type {GameRun} from '../core/run-types.ts'
+import type {PlayingView,PlayFeatures} from './game-types.ts'
+import type {RelaySceneTarget} from './relay-scene-target.ts'
+import {savedSceneResult} from './scene-result.ts'
+import {relaySupportSettlement} from './relay-support-settlement.ts'
+import {moneyText} from './game-text.ts'
+import raw88 from '../../goal-1/evidence/t17-acceptance-37/chrome-main-r4/n06-r4-saved88-single-meter-audit-planned.json?raw'
+import raw89 from '../../goal-1/evidence/t17-acceptance-37/chrome-main-r4/n09-r4-saved89-support-actual-completion.json?raw'
+import raw90 from '../../goal-1/evidence/t17-acceptance-37/chrome-main-r4/n11-r4-saved90-audit-actually-started.json?raw'
+
+// Existing actual Native exports, not another Chrome play or complete-Create
+// audit. The original codec and public producer run only when this test runs.
+const authorities=[
+ {revision:88,path:'goal-1/evidence/t17-acceptance-37/chrome-main-r4/n06-r4-saved88-single-meter-audit-planned.json',raw:raw88,bytes:1437894,sha256:'b82ec7968013c365f832e96172054841bc50d91372c5f33ef80a2af4465b9e80',mode:420},
+ {revision:89,path:'goal-1/evidence/t17-acceptance-37/chrome-main-r4/n09-r4-saved89-support-actual-completion.json',raw:raw89,bytes:1448933,sha256:'e2456a6d49099b6822725ee4f88f110b63bf4fa17e93f7998315ad50ffd739c1',mode:420},
+ {revision:90,path:'goal-1/evidence/t17-acceptance-37/chrome-main-r4/n11-r4-saved90-audit-actually-started.json',raw:raw90,bytes:1452703,sha256:'0e7e47ea06d2dd1820ccd7dea6b85acd244f9b5f4873e9f2f3921c12c9b63b81',mode:420},
+] as const
+const accountId='ops:ef38539ec47df2b4efab6763c0c5bdf8',businessId='ops:bb7f1c37abbfc1d51a6ca6ca76da18b5',periodId='rly:f0b021b3e0b75ccdae0eae2e2d6f4700'
+let codec:ReturnType<typeof createCampaignCodec>
+type Relay=NonNullable<PlayFeatures['relay']>
+type Frame={run:GameRun;view:PlayingView;features:PlayFeatures;raw:string}
+let frame88:Frame,frame89:Frame,frame90:Frame,target:Extract<RelaySceneTarget,{kind:'period'}>
+let inputBefore:ReturnType<typeof identity>[]=[]
+function identity(path:string){const stat=lstatSync(path),bytes=readFileSync(path);expect(stat.isFile()).toBe(true);expect(stat.isSymbolicLink()).toBe(false);return {path,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),mode:stat.mode&511}}
+function frame(raw:string):Frame{
+ const run=codec.import(raw),projection=codec.registry.runtime?.project?.(run)
+ if(!projection)throw Error('ACTUAL_PUBLIC_CAMPAIGN_PRODUCER_REQUIRED')
+ const features=projection as unknown as PlayFeatures,view:PlayingView={...projectRun(run),features:projection,saveStatus:'saved',busy:false,readOnly:false,readOnlyReason:null,hasCandidate:false,pendingRevision:null}
+ expect(features.relay?.casebook?.status).toBe('ready')
+ expect(codec.export(run)).toBe(raw)
+ return {run,view,features,raw}
+}
+beforeAll(()=>{
+ codec=createCampaignCodec()
+ inputBefore=authorities.map(source=>{const actual=identity(source.path);expect(actual).toEqual({path:source.path,bytes:source.bytes,sha256:source.sha256,mode:source.mode});expect(readFileSync(source.path,'utf8')).toBe(source.raw);return actual})
+ frame88=frame(raw88);frame89=frame(raw89);frame90=frame(raw90)
+ const relay=frame89.features.relay!,periods=relay.periods.filter(period=>period.id===periodId&&period.businessId===businessId),stations=relay.stations.filter(station=>station.businessId===businessId)
+ expect(periods).toHaveLength(1);expect(stations).toHaveLength(1)
+ target={kind:'period',runId:frame89.view.runId,accountId,businessId,stationId:stations[0]!.id,periodId}
+},20000)
+afterAll(()=>{if(inputBefore.length)expect(authorities.map(source=>identity(source.path))).toEqual(inputBefore)})
+const context=(value:Frame)=>({view:value.view,features:value.features,accountId})
+const period=(value:Frame)=>value.features.relay!.periods.find(row=>row.id===periodId)!
+const account=(value:Frame)=>value.view.accounts.find(row=>row.accountId===accountId)!
+const finance=(value:Frame)=>value.features.workbench.finance.find(row=>row.accountId===accountId)!
+function alter(value:Frame,update:(relay:Relay)=>Relay):Frame{const features={...value.features,relay:update(value.features.relay!)};return {...value,features,view:{...value.view,features}}}
+const story=(before:Frame,current:Frame)=>savedSceneResult('AdvanceTime','沿原承诺继续',before.view,current.view)
+const compensationPhrase='本期服务后果已形成赔付成本 '
+const incomePhrase='本期支持已确认收入 '
+
+it('publishes the actual 88 to 89 support settlement as zero support income and 200 compensation, retaining the original completion explanation',()=>{
+ const before=relaySupportSettlement(context(frame88),target),settlement=relaySupportSettlement(context(frame89),target),message=story(frame88,frame89)
+ expect(frame88.view.revision).toBe(88);expect(frame89.view.revision).toBe(89)
+ expect(period(frame88).supportJob?.status).toBe('running');expect(period(frame89).supportJob?.status).toBe('completed')
+ expect(before).toMatchObject({status:'pending',incomeFen:null,compensationCostFen:null,compensationPaidFen:null,compensationDueFen:null})
+ expect(settlement).toMatchObject({status:'known',settledAt:'2024-11-13',incomeFen:0,compensationCostFen:20000,compensationPaidFen:20000,compensationDueFen:0})
+ for(const line of settlement.summary)expect(message).toContain(line)
+ expect(message).toContain('1段原支持已实际完成');expect(message).toContain('完成不等于客户已经付款')
+ expect(message).toContain(incomePhrase+moneyText(0)+'，不是本次现金回款')
+ expect(message).toContain(compensationPhrase+moneyText(20000));expect(message).toContain('实际已付 '+moneyText(20000)+'，尚欠 '+moneyText(0))
+ expect(message).toContain('原支持任务投入与这笔赔付分列');expect(message).not.toContain(compensationPhrase+moneyText(170000))
+ expect(message).not.toContain('客户实际付来了');expect(message).not.toContain('原支持已于')
+})
+
+it('keeps the original support cost, actual compensation cash, old receivable and reserved audit separate across the real completion',()=>{
+ const before=account(frame88),after=account(frame89),message=story(frame88,frame89),oldBook=frame88.features.relay!.casebook!,book=frame89.features.relay!.casebook!,supportBefore=oldBook.actions.find(action=>action.jobId===period(frame88).supportJobId)!,supportAfter=book.actions.find(action=>action.jobId===period(frame89).supportJobId)!
+ expect(frame88.view.date).toBe('2024-11-07');expect(frame89.view.date).toBe('2024-11-13')
+ expect(before).toMatchObject({cashFen:2153189,availableFen:2143189,receivableFen:1328})
+ expect(after).toMatchObject({cashFen:2133189,availableFen:2123189,receivableFen:1328})
+ expect(after.cashFen-before.cashFen).toBe(-20000);expect(after.availableFen-before.availableFen).toBe(-20000)
+ expect(frame88.view.budget).toMatchObject({available:0,reserved:1,spent:3});expect(frame89.view.budget).toEqual(frame88.view.budget)
+ expect(frame89.view.accounts.find(row=>row.accountId==='personal')).toEqual(frame88.view.accounts.find(row=>row.accountId==='personal'))
+ expect(supportBefore).toMatchObject({status:'executed',executedAt:'2024-11-06',definition:{costFen:150000,actionPoints:1}})
+ expect(supportAfter).toMatchObject({status:'completed',executedAt:'2024-11-06',finishedAt:'2024-11-13'})
+ expect(supportAfter.definition).toEqual(supportBefore.definition)
+ expect(message).not.toContain('原支持已于2024-11-13实际开工')
+ expect(finance(frame89).metrics.filter(metric=>metric.sourceEventId===periodId&&metric.kind==='income').reduce((sum,metric)=>sum+metric.deltaFen,0)).toBe(0)
+ expect(finance(frame89).metrics.filter(metric=>metric.sourceEventId===periodId&&metric.kind==='cost').reduce((sum,metric)=>sum+metric.deltaFen,0)).toBe(20000)
+ expect(codec.export(frame88.run)).toBe(raw88);expect(codec.export(frame89.run)).toBe(raw89)
+})
+
+it('publishes the actual Nov14 audit start as the same reserved 100 and one point becoming used while available cash remains unchanged',()=>{
+ const beforeBook=frame89.features.relay!.casebook!,book=frame90.features.relay!.casebook!,audit=frame90.features.relay!.auditJobs.find(batch=>batch.job?.startAt==='2024-11-14')!,before=beforeBook.actions.find(action=>action.jobId===audit.jobId)!,after=book.actions.find(action=>action.jobId===audit.jobId)!,message=story(frame89,frame90)
+ expect(frame90.view.revision).toBe(frame89.view.revision+1);expect(frame90.view.date).toBe('2024-11-14')
+ expect(before).toMatchObject({status:'reserved',executedAt:null,definition:{startAt:'2024-11-14',completeAt:'2024-11-17',costFen:10000,actionPoints:1}})
+ expect(after).toMatchObject({status:'executed',executedAt:'2024-11-14'});expect(after.definition).toEqual(before.definition)
+ expect(message).toContain('原复核已于2024-11-14实际开工');expect(message).toContain('原预留的'+moneyText(10000)+'与开工季度1点已按原账转为实际使用');expect(message).toContain('没有再次预留同一笔钱或行动')
+ expect(account(frame89)).toMatchObject({cashFen:2133189,availableFen:2123189});expect(account(frame90)).toMatchObject({cashFen:2123189,availableFen:2123189})
+ expect(frame89.view.budget).toMatchObject({available:0,reserved:1,spent:3});expect(frame90.view.budget).toMatchObject({available:0,reserved:0,spent:4})
+ const reserved=(value:Frame)=>finance(value).reservations.filter(row=>row.originId===after.definition.id&&row.status==='active').reduce((sum,row)=>sum+row.amountFen,0)
+ expect(reserved(frame89)).toBe(10000);expect(reserved(frame90)).toBe(0)
+ expect(finance(frame90).metrics.filter(metric=>metric.sourceEventId===periodId)).toEqual(finance(frame89).metrics.filter(metric=>metric.sourceEventId===periodId))
+ expect(relaySupportSettlement(context(frame90),target)).toMatchObject({status:'known',incomeFen:0,compensationCostFen:20000,compensationPaidFen:20000,compensationDueFen:0})
+ expect(message).not.toContain(compensationPhrase);expect(message).not.toContain('原支持已于');expect(message).not.toContain('原预留的'+moneyText(150000)+'与开工季度1点已按原账转为实际使用');expect(message).not.toContain('1段原支持已实际完成')
+ expect(account(frame90).receivableFen).toBe(1328);expect(codec.export(frame90.run)).toBe(raw90)
+})
+
+it('does not borrow a support settlement or action-start success from reentry, candidates, unsaved frames or mismatched last receipts',()=>{
+ // Explicit public-view guard counterexamples; none is imported as a new save.
+ const withoutPrevious=savedSceneResult('AdvanceTime','尚无前次原提交',null,frame89.view)
+ expect(withoutPrevious).toContain('尚未核定新的完整保存');expect(withoutPrevious).not.toContain(compensationPhrase)
+ for(const pair of [{before:frame88,current:frame89},{before:frame89,current:frame90}]){
+  const last=pair.current.view.receipts.at(-1)!,view=pair.current.view
+  const variants:readonly (PlayingView|null)[]=[
+   {...view,hasCandidate:true}, {...view,saveStatus:'unsaved'}, {...view,saveStatus:'read_only',readOnly:true},
+   {...view,revision:pair.before.view.revision},
+   {...view,revision:view.revision+1,receipts:[...view.receipts.slice(0,-1),{...last,revisionAfter:view.revision+1}]},
+   {...view,receipts:[...view.receipts.slice(0,-1),{...last,kind:'ReadNews'}]},
+   {...view,receipts:[...view.receipts.slice(0,-1),{...last,revisionAfter:view.revision-1}]},
+  ]
+  for(const current of variants){
+   if(!current)throw Error('PUBLIC_FRAME_REQUIRED')
+   const message=savedSceneResult('AdvanceTime','这里只读回原画面',pair.before.view,current)
+   expect(message).not.toContain(compensationPhrase);expect(message).not.toContain(incomePhrase);expect(message).not.toContain('原复核已于')
+  }
+  for(const reentry of [view,{...view}]){
+   const message=savedSceneResult('AdvanceTime','重进同一原保存',view,reentry)
+   expect(message).toContain('尚未核定新的完整保存');expect(message).not.toContain(compensationPhrase);expect(message).not.toContain('原复核已于')
+  }
+ }
+})
+
+it('preserves the generic actual support completion when settlement history is unavailable, without inventing zero money',()=>{
+ const {casebook:original,...legacy}=frame89.features.relay!
+ expect(original).toBeDefined()
+ const unavailable=alter(frame89,relay=>({...relay,casebook:{...original!,status:'unavailable',reason:'此份原支持明细尚未核齐'}})),missing=alter(frame89,()=>legacy)
+ for(const current of [missing,unavailable]){
+  const settlement=relaySupportSettlement(context(current),target),message=story(frame88,current)
+  expect(settlement).toMatchObject({status:'unavailable',incomeFen:null,compensationCostFen:null,compensationPaidFen:null,compensationDueFen:null})
+  expect(message).toContain('1段原支持已实际完成');expect(message).toContain(settlement.reason!)
+  expect(message).not.toContain(incomePhrase);expect(message).not.toContain(compensationPhrase+moneyText(0));expect(message).not.toContain('尚欠 '+moneyText(0))
+ }
+ expect(codec.export(frame89.run)).toBe(raw89)
+})
+
+it('publishes an existing settled consequence after an interrupted support without calling that support completed',()=>{
+ // Public-view status/reference fixture only. The 200 cost is the existing
+ // authority's linked fact, not a prediction of a new interruption's penalty.
+ const supportId=period(frame89).supportJobId,current=alter(frame89,relay=>({...relay,periods:relay.periods.map(row=>row.id===periodId?{...row,supportJob:row.supportJob?{...row.supportJob,status:'interrupted' as const,releasedAt:'2024-11-12'}:null}:row),casebook:{...relay.casebook!,actions:relay.casebook!.actions.map(action=>action.jobId===supportId?{...action,status:'interrupted' as const,finishedAt:'2024-11-12'}:action)}}))
+ const jobs=current.view.operations!.jobs.map(job=>job.id===supportId?{...job,status:'interrupted' as const,releasedAt:'2024-11-12'}:job)
+ current.view={...current.view,operations:{...current.view.operations!,jobs}}
+ const settlement=relaySupportSettlement(context(current),target),message=story(frame88,current)
+ expect(settlement).toMatchObject({status:'known',settledAt:'2024-11-13',incomeFen:0,compensationCostFen:20000,compensationPaidFen:20000,compensationDueFen:0})
+ expect(message).toContain('原支持未完整兑现，2024-11-13已处理原结算');expect(message).toContain(compensationPhrase+moneyText(20000))
+ expect(message).not.toContain('1段原支持已实际完成');expect(message).not.toContain('原支持于2024-11-13实际完成')
+ expect(codec.export(frame89.run)).toBe(raw89)
+})
+
+it('does not invent an audit opening when its original action definition or history identity no longer matches',()=>{
+ // Public action/history counterexamples, not different accepted game records.
+ const actual=frame90.features.relay!,audit=actual.auditJobs.find(batch=>batch.job?.startAt==='2024-11-14')!,variants=[
+  alter(frame90,relay=>({...relay,casebook:{...relay.casebook!,actions:relay.casebook!.actions.map(action=>action.jobId===audit.jobId?{...action,definition:{...action.definition,costFen:10001}}:action)}})),
+  alter(frame90,relay=>({...relay,casebook:{...relay.casebook!,revision:relay.casebook!.revision+1}})),
+ ]
+ for(const current of variants){const message=story(frame89,current);expect(message).not.toContain('原复核已于2024-11-14实际开工');expect(message).not.toContain(compensationPhrase)}
+ expect(codec.export(frame90.run)).toBe(raw90)
+})
+
+it('keeps the three actual raw authorities unchanged throughout the summary consumers and their public counterexamples',()=>{
+ expect([frame88.view.revision,frame89.view.revision,frame90.view.revision]).toEqual([88,89,90])
+ for(const value of [frame88,frame89,frame90])expect(codec.export(value.run)).toBe(value.raw)
+ expect(authorities.map(source=>identity(source.path))).toEqual(inputBefore)
+})

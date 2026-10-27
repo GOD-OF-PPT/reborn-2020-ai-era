@@ -1,0 +1,3 @@
+- [ ] Exact captured saved stop consequence, original bills and amounts only.
+- [ ] Actual confirmation/result separate checks after Owners freeze.
+- [ ] No code or cumulative completion until meaningful regressions and currentNative.

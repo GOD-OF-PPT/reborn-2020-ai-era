@@ -1,0 +1,2 @@
+- [ ] Fresh readonly old101 through original Continue, exact old raw and visible prohibited writes.
+- [ ] Close old reader; fresh readonly new102 after writer original retry, equals candidate.

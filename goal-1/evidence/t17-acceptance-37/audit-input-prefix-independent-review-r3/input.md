@@ -1,0 +1,3 @@
+# R3增量独立复核委派（逐字）
+
+Root已最小R3切新cut，路径同prepare：derive-prefix-once-r3.mjs15949B/586bd2d074b0a839d6daa92ce4bd23604d6e3b9b886a1be150faf8b59e55f019，仅contract literal r2→r3（reverseLiteralEqualsPrior=true）；frozen-contract-r3.json275026B/14f73d95ba3bf83b7dc264bdc21ef72daaabde423819c017fb782024db2befdf，37refs=旧35当前identities+R3script+R2contract，唯一旧refs变化root37tasks正当追加。cut-refresh-r3.json。R2初稿及实际漂移/失败保。请只读独立R3增量+37refs当前/127/901/P326审后新wx final-r3-verdict.md/json，明确只准Root准确GO后一次输入生成，不运行。Root从现在到运行终态不改任何bound refs，特别root37tasks；现art最后只是UItest unknown桥，不在official127。

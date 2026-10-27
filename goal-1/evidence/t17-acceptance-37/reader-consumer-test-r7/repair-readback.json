@@ -1,0 +1,50 @@
+{
+  "at": "2026-10-26T17:13:45.757Z",
+  "before": {
+    "path": "goal-1/evidence/t17-acceptance-37/reader-consumer-test-r7/RelayRecordBook.test.tsx.r6-before",
+    "bytes": 50461,
+    "sha256": "e0c8f5fe0d234aa58020605cabcce6b6b08477e1cb195db4bc88ca849f9e9360",
+    "mode": 420
+  },
+  "after": {
+    "path": "src/ui/RelayRecordBook.test.tsx",
+    "bytes": 51339,
+    "sha256": "32a1167019b2d9edfe6f5875d2eb7950f016de6fcfeab5e3d5fd218aabcbfb02",
+    "mode": 420
+  },
+  "exactInverseEqualsR6": true,
+  "imports": [
+    "import {playableAdvanceDate} from '../application/playable-advance.ts'\n",
+    "import {relayReviewDate} from './relay-scene-clock.ts'\n"
+  ],
+  "oneWrongButtonDateAssertReplaced": true,
+  "strongerSafeDateAndExactOriginalInvoiceAssertions": true,
+  "preservedOriginalJobAndBatchAssertions": [
+    "expect(progress.wait?.date).toBe(auditStart)",
+    "expect(existing.job?.startAt).toBe(auditStart)",
+    "expect(existing.batch?.meterCount).toBe(1)",
+    "expect(meter.auditedUnits).toBeNull()",
+    "expect(purpose.finishWhen).toContain(existing.job!.completeAt)",
+    "expect(request).not.toHaveBeenCalled();expect(auditController.exportSaved()).toBe(raw)"
+  ],
+  "caseCount": 21,
+  "rawRed": {
+    "files": 6,
+    "cases": 65,
+    "passed": 64,
+    "failed": 1,
+    "exitCode": 1,
+    "wallMs": 23948,
+    "sourceCount": 599,
+    "sourceUnchanged": true,
+    "extraSame": true
+  },
+  "testsRun": false,
+  "typecheckRun": false,
+  "buildRun": false,
+  "browserRun": false,
+  "gitRun": false,
+  "sourceFrozen": true,
+  "compatibility": 0,
+  "productChanged": false
+}

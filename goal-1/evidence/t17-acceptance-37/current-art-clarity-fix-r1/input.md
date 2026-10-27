@@ -1,0 +1,1 @@
+Root授权同U4-B内部建议2/3最小实现，仅relay-scene-progress.ts和必要relay-continuity.ts（Paper若无需则不改）+一个新独立test3-5cases。本期status closed且同本期原单净额0才并列财务已结/未核；planned audit同public job/casebook action+资金原reservation表达原日期/AP/资金/开工季度，原89本季res1和93未来2025Q1/current res0分开。不改原命令phase优先级/规则/全部责任，不改N7/scene-result/其它源/master，不跑工程/browser/Git。8文件104case原103pass/1选择器红留Root，不冒全绿。

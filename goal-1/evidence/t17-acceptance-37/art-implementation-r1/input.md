@@ -1,0 +1,1 @@
+设计准入implementation-seams-r1后授权唯一U4-B内部物件实施：仅RelayServicePaper.tsx、relay-service-paper.css、relay-continuity.ts及必要paper/continuity测试；保原phase/state/data属性/优先级、正交ticket/paymentNature、后付与真实旧保护并存、并列有归属责任、独立支持中断，逐票selection失效return undefined，不回落默认。当前现金回响须receipt/command/revision/规范op/source唯一证，casebook只读已公开安全事实，不猜隐藏split。禁止其它产品/三master/P3/旧root35/36/活源检查；Root统一运行测试/build/browser/Git。

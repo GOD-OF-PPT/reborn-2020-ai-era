@@ -1,0 +1,128 @@
+{
+  "at": "2026-10-27T05:05:32.204Z",
+  "passed": true,
+  "correctionResult": {
+    "path": "goal-1/evidence/t17-acceptance-37/readback-wrapper-correction-run-r1/correction-result.json",
+    "bytes": 2413,
+    "sha256": "f780b3748c91575fcd9a9e38528733e010c1c230705263dbe9acb17b8f9a67a7",
+    "mode": 420
+  },
+  "processTerminal": {
+    "at": "2026-10-27T05:02:52.299Z",
+    "argv": [
+      "rtk",
+      "proxy",
+      "env",
+      "U4B_READBACK_CORRECTION_GO=goal-1/evidence/t17-u4b-post-commit-01/root-readback-correction-go-r1.json",
+      "/Users/gordon/.nvm/versions/node/v22.12.0/bin/node",
+      "--experimental-strip-types",
+      "goal-1/evidence/t17-acceptance-37/readback-wrapper-correction-r1/replacement-readback-r3.candidate.mjs"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "error": null,
+    "wallMs": 11472
+  },
+  "wrapperTerminal": {
+    "at": "2026-10-27T05:02:56.201Z",
+    "passed": true,
+    "exitCode": 0,
+    "wallMs": 15374
+  },
+  "readbackResult": {
+    "path": "goal-1/evidence/t17-acceptance-37/readback-wrapper-correction-run-r1/readback-result.json",
+    "bytes": 9910,
+    "sha256": "c0f31a4e95cbc7eef8e6d48ecb7e16321de0915c537b761cb262873c8a7a199d",
+    "mode": 420
+  },
+  "same33Not66": true,
+  "newCreateExecutions": 0,
+  "newNativeCommands": 0,
+  "originalOuterFalse": {
+    "path": "goal-1/evidence/t17-acceptance-37/full-create-audit-r1/result.json",
+    "bytes": 12914,
+    "sha256": "229ada8a0cb9848c9fc63f27011e274e1f8293a14396ccf2ecf7f66aaa25ee89",
+    "mode": 420
+  },
+  "metadataSequenceSame": true,
+  "beforeCount": 2190,
+  "afterCount": 2190,
+  "source620Count": 620,
+  "mutableAuthorityCount": 11,
+  "uniqueCurrentIdentityCount": 2190,
+  "differences": [],
+  "nativeTrees": [
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r1",
+      "files": 18,
+      "exact": true
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r2",
+      "files": 18,
+      "exact": true
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r3",
+      "files": 15,
+      "exact": true
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r4",
+      "files": 73,
+      "exact": true
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r5",
+      "files": 16,
+      "exact": true
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r6",
+      "files": 23,
+      "exact": true
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6",
+      "files": 39,
+      "exact": true
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-negative-physical-r6",
+      "files": 16,
+      "exact": true
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6",
+      "files": 20,
+      "exact": true
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6",
+      "files": 22,
+      "exact": true
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r7",
+      "files": 39,
+      "exact": true
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r8",
+      "files": 47,
+      "exact": true
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r9",
+      "files": 14,
+      "exact": true
+    },
+    {
+      "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r10",
+      "files": 54,
+      "exact": true
+    }
+  ],
+  "meaning": "STOP window verified through actual correction terminal and current independent readback. Root may release document writers only after receiving this; later legitimate edits must be recorded as after-window rather than claiming perpetual identity sameness.",
+  "ownCodecEngineReadbackBrowserGitExecutions": 0
+}

@@ -1,0 +1,4 @@
+- [ ] Preserve currentR6 new93/backup and import fixed original stop93 via originalUI.
+- [ ] Original service actual partial days, realaudit reservation/0AP finite stop, support actualstart/partial interruption.
+- [ ] Actual settlement, known costs/fees/protection/currentdateAP and explicit stopstation, old responsibilities.
+- [ ] Export inputs/results/reentry, stop producer; original normalCreate plus independent publicreadback later.

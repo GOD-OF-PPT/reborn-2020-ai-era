@@ -1,0 +1,1 @@
+Root授权只读查看本轮Chrome n01/n02/n03，当前190回归仍运行且所有产品源冻结。最小完整修缮建议/候选patch仅文档：同对象默认当前回应、原ID留依据不占列表、插画不可跨页、首层不复述。无explicit/memory才按period当前progress建议原support/audit/due票；changeTicket作为阅读动作常显，完整133原账仍可原分页到达，不删责任/缩字/滚动。源修改等Root后续授权，不运行测试/构建/浏览器/Git。

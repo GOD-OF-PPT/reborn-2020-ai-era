@@ -1,0 +1,4 @@
+- [ ] Preserve actual98 and exact originalUI backup; restore97 actualsupportstart.
+- [ ] Actual support interrupt with spent1500/1AP retained, originalsettlement later.
+- [ ] Explicit stopstation after originalsettlement, oldresponsibilities remain; raw/reentry exact.
+- [ ] Producer stop; fullCreate/independentpublicfacts and final code Native after fresh freeze remain.

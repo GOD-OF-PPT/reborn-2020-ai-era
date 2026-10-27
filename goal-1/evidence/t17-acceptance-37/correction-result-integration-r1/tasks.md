@@ -1,0 +1,3 @@
+- [ ] Root single/bulk saved-result integration with locally known/unknown money nature.
+- [ ] New actual consumer cases; no existing assertions loosened.
+- [ ] Unified frozen-source engineering and freshNative actualfinancialfirst outcome, not oldR6.

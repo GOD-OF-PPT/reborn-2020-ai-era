@@ -1,0 +1,304 @@
+{
+  "at": "2026-10-27T04:44:20.636Z",
+  "checks": [
+    {
+      "name": "outerfalse_preserved_and_only_collector_EEXIST",
+      "passed": true,
+      "actual": {
+        "outerIdentity": {
+          "path": "goal-1/evidence/t17-acceptance-37/full-create-audit-r1/result.json",
+          "bytes": 12914,
+          "sha256": "229ada8a0cb9848c9fc63f27011e274e1f8293a14396ccf2ecf7f66aaa25ee89",
+          "mode": 420
+        },
+        "passed": false,
+        "error": {
+          "name": "Error",
+          "message": "EEXIST: file already exists, open '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-37/full-create-audit-r1/readback-terminal.json'",
+          "stack": "Error: EEXIST: file already exists, open '/Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-37/full-create-audit-r1/readback-terminal.json'\n    at Object.openSync (node:fs:561:18)\n    at Object.writeFileSync (node:fs:2358:35)\n    at put (file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-37/final-create-final-inputs-r1/audit-io.mjs:21:208)\n    at file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-37/final-create-final-inputs-r1/run-once-candidate.mjs:19:366\n    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)"
+        },
+        "recordedExecutions": [
+          {
+            "name": "replay",
+            "exitCode": 0,
+            "signal": null,
+            "error": null
+          }
+        ],
+        "officialSourceIdentity": true,
+        "completeReplay": true,
+        "publicWiringValid": true,
+        "differences": {
+          "officialSources": [],
+          "dependencies": [],
+          "p3": [],
+          "references": [],
+          "inputs": [],
+          "snapshots": [],
+          "executionAuthority": []
+        }
+      }
+    },
+    {
+      "name": "actual_fullCreate_original_single_verifier_terminal_and97_exactraw_report",
+      "passed": true,
+      "actual": {
+        "terminal": {
+          "name": "replay",
+          "argv": [
+            "rtk",
+            "proxy",
+            "env",
+            "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-37/full-create-audit-r1/input",
+            "/Users/gordon/.nvm/versions/node/v22.12.0/bin/node",
+            "--experimental-strip-types",
+            "scripts/verify_normal_browser_exports.ts",
+            "--output-dir",
+            "goal-1/evidence/t17-acceptance-37/full-create-audit-r1/report"
+          ],
+          "exitCode": 0,
+          "signal": null,
+          "error": null,
+          "wallMs": 1009032
+        },
+        "report": {
+          "path": "goal-1/evidence/t17-acceptance-37/full-create-audit-r1/report/normal-browser-export-audit.json",
+          "bytes": 94508,
+          "sha256": "5408129ddb579bf952315e16fd951e713ccd846b3fb909164a591a601d7db946",
+          "mode": 420
+        },
+        "scope": {
+          "creations": 1,
+          "postCreate": 178,
+          "raws": 97,
+          "literalBuffers": 15,
+          "allByteEqual": true,
+          "records": 97,
+          "official127": true
+        }
+      }
+    },
+    {
+      "name": "child33_fresh_checks_actualgreen_with_exact_contract_and_stdout",
+      "passed": true,
+      "actual": {
+        "result": {
+          "path": "goal-1/evidence/t17-acceptance-37/full-create-audit-r1/readback-result.json",
+          "bytes": 9910,
+          "sha256": "243f1624c58d350410b00185077536c3254068bd87d5638cef940fb9202996d4",
+          "mode": 420
+        },
+        "terminal": {
+          "at": "2026-10-27T04:32:48.372Z",
+          "exitCode": 0,
+          "checks": 33,
+          "passedChecks": 33
+        },
+        "coverage": [
+          {
+            "scope": "positive_service",
+            "mode": "inherited_result",
+            "checks": 35,
+            "passedChecks": 35,
+            "failedChecks": 0,
+            "captures": 15
+          },
+          {
+            "scope": "negative_stop_and_atomic",
+            "mode": "inherited_result",
+            "checks": 31,
+            "passedChecks": 31,
+            "failedChecks": 0,
+            "captures": 25
+          },
+          {
+            "scope": "fresh_R7",
+            "mode": "fresh_readback",
+            "checks": 12,
+            "passedChecks": 12,
+            "failedChecks": 0,
+            "captures": 13
+          },
+          {
+            "scope": "fresh_R8",
+            "mode": "fresh_readback",
+            "checks": 9,
+            "passedChecks": 9,
+            "failedChecks": 0,
+            "captures": 10
+          },
+          {
+            "scope": "fresh_R9",
+            "mode": "fresh_readback",
+            "checks": 5,
+            "passedChecks": 5,
+            "failedChecks": 0,
+            "captures": 4
+          },
+          {
+            "scope": "fresh_R10",
+            "mode": "fresh_readback",
+            "checks": 7,
+            "passedChecks": 7,
+            "failedChecks": 0,
+            "captures": 16
+          }
+        ],
+        "notNew66": true
+      }
+    },
+    {
+      "name": "all_outer_before_after_declared_identity_arrays_exact",
+      "passed": true,
+      "actual": {
+        "officialSources": {
+          "before": 127,
+          "after": 127
+        },
+        "dependencies": {
+          "before": 901,
+          "after": 901
+        },
+        "p3": {
+          "before": 26,
+          "after": 26
+        },
+        "references": {
+          "before": 1100,
+          "after": 1100
+        },
+        "inputs": {
+          "before": 126,
+          "after": 126
+        },
+        "snapshots": {
+          "before": 125,
+          "after": 125
+        },
+        "executionAuthority": {
+          "before": 3,
+          "after": 3
+        }
+      }
+    },
+    {
+      "name": "current620_and_all_formal_inputs_dependencies_STOP_now_no_drift",
+      "passed": true,
+      "actual": {
+        "source620": 620,
+        "uniqueIdentities": 2175,
+        "differences": [],
+        "limit": "Through-run assertions come from original source-before/after; current full620 is separately compared with immutableR26, not substituted by127."
+      }
+    },
+    {
+      "name": "all14_native_producer_actual_fulltrees_still_exact_after_formal",
+      "passed": true,
+      "actual": [
+        {
+          "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r1",
+          "files": 18,
+          "exact": true
+        },
+        {
+          "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r2",
+          "files": 18,
+          "exact": true
+        },
+        {
+          "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r3",
+          "files": 15,
+          "exact": true
+        },
+        {
+          "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r4",
+          "files": 73,
+          "exact": true
+        },
+        {
+          "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r5",
+          "files": 16,
+          "exact": true
+        },
+        {
+          "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r6",
+          "files": 23,
+          "exact": true
+        },
+        {
+          "directory": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6",
+          "files": 39,
+          "exact": true
+        },
+        {
+          "directory": "goal-1/evidence/t17-acceptance-37/chrome-negative-physical-r6",
+          "files": 16,
+          "exact": true
+        },
+        {
+          "directory": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6",
+          "files": 20,
+          "exact": true
+        },
+        {
+          "directory": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6",
+          "files": 22,
+          "exact": true
+        },
+        {
+          "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r7",
+          "files": 39,
+          "exact": true
+        },
+        {
+          "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r8",
+          "files": 47,
+          "exact": true
+        },
+        {
+          "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r9",
+          "files": 14,
+          "exact": true
+        },
+        {
+          "directory": "goal-1/evidence/t17-acceptance-37/chrome-main-r10",
+          "files": 54,
+          "exact": true
+        }
+      ]
+    },
+    {
+      "name": "exact_output_namespace_collision_in_sources",
+      "passed": true,
+      "actual": {
+        "childWrites": "put('readback-terminal.json',...) before child console.log/exit",
+        "outerWrites": "put(output,name+'-terminal.json',terminal) with name==='readback' before executions.push(terminal)",
+        "guard": "fs.writeFileSync flag wx rejects existing child terminal",
+        "order": "readback stdout/stderr are already written by parent, but parent process terminal collision prevents append to executions and final passed"
+      }
+    },
+    {
+      "name": "stderr_has_only_expected_node_experimentalwarning",
+      "passed": true,
+      "actual": {
+        "replay": {
+          "path": "goal-1/evidence/t17-acceptance-37/full-create-audit-r1/replay-stderr.log",
+          "bytes": 177,
+          "sha256": "4a465c93c79e65498f09b3c244ab7c01b0a9503502d019d57b510e069b344d4b",
+          "mode": 420
+        },
+        "readback": {
+          "path": "goal-1/evidence/t17-acceptance-37/full-create-audit-r1/readback-stderr.log",
+          "bytes": 176,
+          "sha256": "470fc13af107997d08303ba0b916f5d06fce7fe6169133f4f8598f0b629ae432",
+          "mode": 420
+        },
+        "readbackProcessTerminalMissing": true,
+        "limit": "Child terminal+stdout confirm completed own script, but missing parent process status/signal cannot be retroactively invented."
+      }
+    }
+  ],
+  "failures": [],
+  "currentUniqueIdentities": 2175,
+  "ownCodecEngineReadbackBrowserRuns": 0
+}

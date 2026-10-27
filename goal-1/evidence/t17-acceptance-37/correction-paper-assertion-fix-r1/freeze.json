@@ -1,0 +1,44 @@
+{
+  "at": "2026-10-26T22:37:31.034Z",
+  "status": "single-positive-paper-literal-assertion-repaired-writer-frozen",
+  "file": {
+    "path": "src/ui/relay-correction-paper-effects.test.tsx",
+    "bytes": 9816,
+    "sha256": "bc3b720d7e87fc2b422f8b2d2e31934b742b7526fb3abb40991cd7b7ed8125fe",
+    "mode": 420
+  },
+  "exactOnlyReplacement": true,
+  "inverseWholeFileEqualBefore": true,
+  "oldAssertion": "expect(html).toContain('应付')",
+  "newAssertions": "expect(html).toContain('2025-01-11到期');expect(html).toContain('当前尚欠 '+moneyText(60));expect(html).toContain('新增供应成本 '+moneyText(60))",
+  "cases": 5,
+  "otherCasesOrLogicChanges": 0,
+  "originalAmountsDatesPhasesIdsAndNoCollectionAssertionsRetained": true,
+  "setupMs": 20000,
+  "caseTimeout": "default5000ms",
+  "oldRed": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/u4b-effects-quote-stop-r9.stderr.log",
+      "bytes": 15060,
+      "sha256": "1d563b72abbbaa1af9a5f91944b73d70784a8586e9bb3841afed5e21d62fc6f7",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/u4b-effects-quote-stop-r9.result.json",
+      "bytes": 1115,
+      "sha256": "bd9909870ccf4996e54f5b05f8db571e479473cec6e44f8b1bbc9684021f2496",
+      "mode": 420
+    }
+  ],
+  "unresolvedFailures": "The two real customer/helper unavailable failures are untouched and remain diagnostic work for the shared effect owner; no assertion relaxed there",
+  "operations": {
+    "productWrites": 0,
+    "tests": 0,
+    "type": 0,
+    "build": 0,
+    "browser": 0,
+    "git": 0,
+    "compatibility": 0
+  },
+  "remaining": "Root runs coordinated checks after owners freeze; no test pass claimed"
+}

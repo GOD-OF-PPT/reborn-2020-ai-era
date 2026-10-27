@@ -1,0 +1,15 @@
+
+
+it('keeps an invoice source meter as original evidence without offering a different meter response',()=>{
+ const p=panelProps(),v=p.features.relay!,target=targetFor(p),invoice=v.receivables.find(i=>i.dueAt<=p.view.date&&i.amountFen>i.collectedFen+i.reversedFen&&v.meters.some(m=>m.id===i.sourceId&&m.auditedUnits===null))!
+ expect(invoice).toBeDefined();const row=rowFor(p,target,'receivable',invoice.id),raw=controller.exportSaved(),request=vi.fn<GamePanelProps['request']>(),ui=consumerDriver('reader-native-invoice-meter-context',()=>RelayRecordBook({p:{...p,request},target,initialRecordKey:row.key}))
+ expect(row.meterId).toBe(invoice.sourceId);expect(row.lines.join(' ')).toContain(invoice.sourceId)
+ ui.click('先收起本次填写，仍留这张原票')
+ expect(ui.text()).not.toContain('这张票的实计尚未独立复核，不能提前更正。')
+ expect(ui.all().some(e=>e.type==='button'&&text(e.props.children).includes('为这一张已发生的原票，安排独立复核'))).toBe(false)
+ expect(ui.all().some(e=>typeof e.type==='function'&&e.type.name==='CommandButton'&&e.props.kind==='CorrectRelayUsage')).toBe(false)
+ expect(ui.all().some(e=>e.type==='button'&&text(e.props.children).includes('先继续原复核'))).toBe(false)
+ ui.click('核对这张原单，本次先收多少');ui.edit('本次收取金额','0.01');ui.click('核对这张原单，本次只收显选金额')
+ expect(request).toHaveBeenCalledExactlyOnceWith('CollectRelayReceivable',{receivableId:invoice.id,amountFen:1},expect.any(String),true)
+ expect(controller.exportSaved()).toBe(raw)
+})

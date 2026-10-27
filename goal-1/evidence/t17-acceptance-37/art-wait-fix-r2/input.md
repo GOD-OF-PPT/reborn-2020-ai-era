@@ -1,0 +1,1 @@
+Root授权consumer审修复：只改relay-continuity.ts及relay-continuity.deep.test.tsx。未知原meter已有planned/running audit时使用relayTicketAudit同一原任务等待；保原书签、原未核不画reviewed/更正、总batch计数/本票包含/原日期，歧义明确未知。新增1有意义case保旧6case字节与门槛。不改其它产品/旧R1记录，不跑checks/Browser/Git；fresh R2保前像与新freeze。

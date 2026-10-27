@@ -1,0 +1,7 @@
+# 当前收口适配（不执行）
+
+先保旧r4字节并只读复核实际620source、r7三个master后缀、127/901正式冻结合同与14cuts。唯一确定适配是ready原cut.last不能识别R1explicitProducerStop/R8–10producer_stop；新r5只复用已审auditIO两个纯导出函数，actual registry里的role/proof必须逐项精确一致，拒未知schema/漏physical。原五P2/原始保护/各阶段GO/真实gate均不降。
+
+manifest仅NOT_FROZEN形状，ordinary63产品+AGENTS/docs36；sourceFiles620完整freeze，三master另选HEAD+ownr7后缀不进ordinary，P326全排，旧relay-records已原tracked授权owned例外保历史preimage。用纯FS重新核master和配置/源码身份，不运行Git/candidate/import或工程。正式Create/publicreadback/coverage/admission/visual/docs分类缺口明确空，未来featureSHA不填写；recordroot精确树只全部writer最终停后另填。
+
+独立新目录写证据guard+wx，Root与art审实际r4→r5diff/manifest，不改任何原refs/master/Native/cut。最终实际执行manifest和GO由Root另选，当前任务未完成。

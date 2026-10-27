@@ -1,0 +1,15 @@
+# Selected R5-final：原两P2已对应补正，仅限定静态通过
+
+范围为fresh-public-readback-fix-r1/fresh-public-readback-candidate-r5-final.mjs 47480B / 3d58efd496c1f533217bf008066aecb26ef7a9dc13c0811e56fccbdf9e0a4e7b。未import/执行/syntax该入口，没有codec/工程/Browser。producer及最终facts仍未final，不给予GO。
+
+A：completedAudit先按全局audit ID唯一、同business/meter、合法completedAt<=当前、唯一同业务relay-meter-audit job completed及日期相等核定，之后才读取audit.actualUnits并要求safe非负整数。single_negative及bulk_remaining都调用correctionAuditChain；beforeMeter原未更正、afterMeter同身份/客户/period，原已完成audit/job/actual前后相同，payload/correction.correctUnits等actual；afterMeter.correctionId反指新增correction，原公开报告/条款/价格/供应/交付/cost/due引用不改。bulk新增meter唯一、全部原correction保持、总数old+new。原A缺口在此静态切面已补，未以as/0/未审actual代替。
+
+B：R8强制五purpose各恰一组；每组政策限制固定revision、原source类型与required/allowed semanticRole。members/key双向精确等集且key/角色各唯一；与recordFacts同semanticRole，newNativeSavedCommands=0，原run/revision/business/period/account/branch均同source；同时原raw和receipt metadata相等。source本身绑定approvedFixedSources完整身份表与finalregistry行，表经wiring.canonicalSourceContract+references绑定，并再次同代码常量精确比。old99不能用115字节冒用，92/95也不能被115组冒用；因每capture recordFacts.semanticRole唯一且各purpose允许角色不同，任意同一key组也不能同时充两种用途。原B缺口在此静态切面已补。
+
+当前模板仍final=false/authorizedBy=null；R8 cut/keys/recordFacts/cases等待实际输入，不是预填通过。R5新增canonicalSourceContract须Root最终spec.referenceFiles与wiring一并绑定；当前builder/freeze原样保扩展字段，R5入口会对缺引用拒绝。未预造R8输入hash或新命令计数。
+
+有限后验责任：required stopped95/settled92/closed115核的是三份真实公开处境与原文未变，并不自动等于working/settled/kept三种视觉均已看到；working89明确另为可选组，仅Root真正捕获并填写后才有该working原文对应。三种大轮廓/第一页/草稿字段/UI书签由Root当前自然窗另核；JSON不承担视觉结论。R5旧金融35/31继承/真实退款2424与新AR1212/当前依赖和历史901边界没有在本次重新运行。
+
+新期3产品/测试另Owner建议：state独审纯helper的to<=termEnd+1端点、未知日期/同主体与原Renew preview链；response独审显选续签取消/原册往返双draft identity及原pin。由Root独立当前实图核玩家第一步与实际输入，作者不自验美术。
+
+结论：原两P2限定静态通过，可进入Root最终真实producer/spec/引用完整切面的独审准备；不构成当前执行准入或任何GO。产品源/旧候选/旧审未写。只新建本独立复审目录；U4-B/goal保持ACTIVE。

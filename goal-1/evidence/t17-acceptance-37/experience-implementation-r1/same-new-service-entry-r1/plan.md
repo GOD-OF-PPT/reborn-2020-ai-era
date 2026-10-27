@@ -1,0 +1,5 @@
+# 新一期所有近景入口共用同一先决核对
+
+R9静态续接核对：closed parent的新期入口已核原期限，但business主念头service入口仍直接旧ServiceChoice，导致同一决定两套前提表达。只将editable business service分支复用同RelayNextServiceConditions；原完整原册/原ServiceChoice底层仍不动。保原显选另一原服务picker为可选footer，两入口同作用域/同草稿/原确认与有限保护。
+
+原ServiceChoice7case不删断言/时限，只让其wrapper驱动展开新Conditions（原有效期covers时仍真正ServiceChoice），保原“明确翻选另一份原服务”能力。type/fullUI原R16已实际终态620same：115file841pass、5原timeout与27hookskip保，尚不改重跑门槛；此小接线后新freeze/定向核，原未触影响按sourcebridge分层。0兼容/规则钱数/新承诺。

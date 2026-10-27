@@ -1,0 +1,1 @@
+承接R2实际部分收608分后的真实新87（SHA5d675264…），原SaveExit/reload/Continue87逐字同。R2 producer已stop/h37r2=null，全部新动作/写此新根。R3仅Book实际选中meter才展示该计量复核/更正；invoice的meterId继续只是原依据。先复验N4，再沿同一服务/原支持/原复核/逐票更正/收退款与下一去向，原AP/钱/日期/确认/保存继续，所有compat0。

@@ -990,3 +990,136 @@ R9完整97UI为639/642，3项原5秒超时保红；同584源/158引用两个原�
 - [杠精审查] 通过本片限定准入，独立复核未见新确定P1/P2；此前空间/客户序号/收款scope/4名及1of2出版/问句绑定问题均已具体修。自主Native与有限美术审不能代真人理解、趣味或美术认可。P326、root19 1197/110、root35完整78、124普通/2符号旧marker及旧模型保持，master各原2304B插入仅工作树。记录封存和选择性记录提交/提交后保全另按root36/closeout-r1及新同级t17-u0r-post-commit-01实际产物核，不预填未发生的提交。
 
 本片只计第7项；下一U4-B第8→U5第9→C-UX09；U6/U7/U8→C-UX12完整接回U4-B/U5/U6；U9后新体验累计完整接回U7/U8/U9（非T18）。原T17余项、原PNG0/3、正式真人0、P3正式62/22、M01待用户明确恢复、T18最终最大review及完整E01—E18 goal全部保留。兼容开发测试0，无push/deploy/外部资源或权限变更。REPEAT本片复用既有guard/Native/回放/closeout资产；证据不足或已有覆盖的全局技能/自动化不新建。
+
+
+## 2026-10-26｜U4-B第8项实际开工（未完成）
+
+上一U0-R本地878ce49e/8f306ec0/8545eece及逐blob/封存/远端读回是progress。当前唯一任务U4-B第8项，具体三文件见[evidence/t17-acceptance-37](evidence/t17-acceptance-37/plan.md)。584源/P326/root19精确1197/110/root35完整78/126普通与2符号marker/最新root36和post完整payload、原input61B及三master各原2304B/14LF插入先于源码建基线，前像仅.delivery。
+
+本片沿整幕合同交具体客户/单计量/跨期复核batch/追加更正/分单部分实收/客户部分退款/供应预付贷项退回/支持中断/停止旧债及结果生活去向，保原33正式UI并首次接2个既有core API，不把十类记录目录当主线。完整逐幕/字段动作/状态映射已先设计；必要application只读casebook补原充值实收续签、原动作投入与财务引用，Root接campaign/consumer，原P326和core/schema/规则/随机/保存格式不改。只在该受控读投影白名单解码财务原操作，UI不读signature或隐藏事实，不推演未来。
+
+当前仅开始模型/显选表单/物件与Root接线的同任务内部文件分工，尚未运行或冒通过本片检查/Native/原文审核/独立审；U4-B/R2/R3/C-S4-R不勾。下一仍U5第9→C-UX09，后续完整原组合、T17余项、P3正式62/22、PNG0/3/真人0、M01待明确恢复/T18最后与完整E01—E18目标保持ACTIVE。兼容开发测试0，无push/deploy/新外部资源。
+
+
+## 2026-10-27｜U4-B真实逐票接线与R1体验复核（仍未完成）
+
+唯一第8项继续。新增application只读casebook/原财务引用、完整记录typed元数据/首层事实、6mode显选回应、同run独立草稿/读页记忆、Reader与房间/原册/原确认/保存回响及专用纸件状态已实际写源。原33正式UI＋首次UI的2个既有core API及共有Pay分列，不新增规则/存档schema或隐藏读取；P326/core保持。独立静审2模型＋5consumer具体P2已分组修，原红/原前像/定向只读复核保留。
+
+首type红和新增58/65/66各轮驱动/日期补正原件保；6新文件66case实际全过，R5类型/构建R1各0，599源/extra初末同。随后190适用原门槛实际完成1268=1263pass/5fail，185文件过/5红（原回调额外undefined、已付客户next被改、旧阅读文案、完成audit不一致的历史显示、1项原5秒timeout），原配置/时限/worker/isolation均保，整个book-layout排除。前三具体行为已修回原合同，阅读文案仅一处字面断言更新，全部原钱/AP/日期/retry/保存断言逐字保；市场原超时另待同原完整文件，不冒一次全绿或性能通过。
+
+当前自然Chrome1/5387已实际加载R1：原87先导出，原UI恢复原86时上一有效备份87逐字同、可见输入buffer和保存后86均逐字同；当前0新经营命令。实图发现默认Reader读已完成service而非仍运行support、optional选择列表133条28页带技术ID、装饰物在分页处被拆。R1 producer已明确stop，harness置null、18文件/4exports实际cut登记；新图/后续动作必须新同级producer，旧原日志不追加，不以工程绿代美术或Native通过。
+
+等待190真正终态后，R2已接同parent公开阶段首次建议（explicit/记忆优先、失效不回落）、真正待回应/等待初筛和完整all显选、human稳定原单/收据编号且完整ID留原依据、原尺寸物件原子分页及精确状态去重/常显读页。新3模型＋3真实Reader consumer只编写不冒通过，R6类型实际0；当前11完整受影响文件6463实际运行，未观终态不重启或改源。R2新构建/实际画面、完整服务/受挫退出/真实原子旧新与只读原retry/重进/完整Create和独立公开账务、C-S4-R累计/精确提交封存仍待。
+
+U4-B/R2/R3/C-S4-R均未勾，旧U0-R完成不重复计数。下一U5第9→C-UX09及后续完整组合、原T17余项、P3正式62/22、PNG原0/3、真人0/理解趣味和美术认可、M01待用户明确恢复、T18最后和完整goal持续ACTIVE。全部兼容开发测试0，无push/deploy/权限或外部资源。
+
+
+## 2026-10-27｜U4-B真实跨季服务与单票回应（仍未完成）
+
+当前唯一第8项继续。原11受影响文件为10完整122pass/1文件27skip（原10秒hook超时），同599源/163引用单独原完整27case通过，不能合称一次149或190全绿；R3新73、R4新75分别通过，类型R9/构建R4实际0。原限时/worker/isolation不变，book-layout整文件不执行。N7支持结算/开工解释写源后，typeR10两Node测试导入错保原、单test改固定raw后R11实际0；8文件104case为103pass/1新测试把Action definitionId误当job类型，已沿公开batch→jobId修新查询。最小财务/未核并列及开工季度预留说明另写2UI/5新case，当前603源/193适用文件，typeR12实际运行，尚未冒终态或新构建通过。
+
+当前Chrome同分支原86后真实87—107共21条新保存命令（R2为1、R4为20），不是新Create。先单款608fen、安排单计量复核100元/1点；原支持Nov13完成，原账赔付200元实付，不与原1500支持投入混算；Nov14复核开工、Nov17实际152等于152不强制更正，实收原余1328fen。本期余33原记录显选2025Jan1—4/100元与新季1点预留；客户另充值100退40仍保护60，供应自有预付100取40仍资产60，无收入/AP赠送。Dec27原事件/年末/Jan1屏障及生活费4000均实际处理；Jan4复核才公开136→151一条差额，单CorrectRelayUsage追加客户120fen应收Jan18/供应60fen应付Jan11。手动Pay原30fen后，原到期余30fen由供应资产冲抵，资产59.70/不再成本；Jan18仅新单部分收60再显选CollectDue余60。最终本期原账closed、保护60/供应59.70/企业可花20486.07/新季AP3分别保，显选Life再Today无新承诺。原107保存退出/reload/Continue读回1571422B/SHAf10af900…逐字同。
+
+R4实际同幅图/AX及原票/原确认均保；N5同原册金额与命令直达、N6精确计量不被记忆换票已实核。R4只599源旧构建，不把新N7或后加clarity当已见；支持完成只泛述的200元解释缺口由新helper/故事补，等新R5实图。R4 producer已stop、h/shot均null，完整cut另存。原118正常历史负差额前缀101仅准备可审单次完整重建候选和独立静审，尚未重放或生成新输入；正式完整Create/独立最终公开账务、受挫/支持中断/真实head.put后abort/物理只读与原retry、C-S4-R累计/整体交付保全均仍待，不勾U4-B/R2/R3。
+
+[杠精审查] 本轮未申请完成，现以具体Native缺口修源，不用21条命令或绿测代整体验收；旧红/旧图/工具超时及新查询错误保原。P326、原input61B、旧证据、三master原P3插入和全部后续责任保持；兼容开发测试0，正式真人0/原PNG0/3。下一仍U5后C-UX09，后续完整累计组合、T17余项/M01待明确恢复/T18最后及全E01—E18目标ACTIVE，无push/deploy/新外部资源。
+
+
+## 2026-10-27｜U4-B完整后果、负更正与停止分支（仍未完成）
+
+唯一第8项继续；GameStudio Shared/UI体验合同新增36号10.10与AGENTS32—34。先在可见首句交实际代价，原款已结与未核计量并列，当前可用/原任务及开工季度预留分开，请求停止/支持中断/复核并存，未来报价谈妥与生效分开。原33能力＋既有API的2个首次UI与SharedPay保，不新增规则钱数、账本、权限、schema或随机。
+
+R4单分支87—107加R5另新89、R6另88后新89—93及负/停/中断分支已实际48条新保存（各producer cut为1+20+1+5+13+5+3），新Create0；不是导出数量或同runId合并历史。R6实图已把支持赔付200/实际付200/尚欠0放主幕首句，原1500投入另列；标题和纸件同明本期财务已结33原计量待核、未来2025Q1预留非本季、原预留转实际不重复扣款。新93正常退出/reload/Continue1474032B/SHA8fa7d649…同。原105UI 740/741仅legacy跨2revision完成回响被新金融+1gate误抹，原19断言未改、收窄新金融/开工归因后原门槛10文件129实际通过，类型R14/构建R6各0；旧红保，不冒一次105全绿。
+
+负输入经准确RootGO/独审后仅一次原Create+117原命令完整重建118逐字等原，再从内存发布101（2744389B/f4198064…），60.248秒，127官方源/901依赖/P326与引用初末同；只是合法派生前史，不是新Native人生。真实DEV单CorrectUsage1112→1011在head.put后abort，旧101/另fresh只读物理101逐字同；原candidate102与原retry saved102/另fresh物理102均2751861B/abe77f4e…同。实际已消费款现金退606fen/原预款保护717578不变，供应恢复202fen资产；随后部分取回101、原整期仅补剩167更正、新原款等自己的到期后收齐、客户2续签Apr30/后付100及旧prepaid178334保，未来报价单客户Apr1—8/Apr9生效另定。原114在Apr8完成且接受1of1，当前仍旧有效6fen/支持500；不提前称生效或新服务。物理reader625/629已实关，DEV43750实停130，生产R6仍固定603编译源。
+
+受挫分支由root27真实stop93（与当前同runId但前史分岔）经原恢复/备份精确保留，再显选Mar5单计量audit预留最后1点，0可用AP停本期，原3000/1点已耗不退；Feb25原支持1500/1点真开工。完整支持到Mar4形成实际服务收入10716fen（7144原预款消费/3572新AR）和赔付60000fen实付，仍五张可审原供应记录未委托；168总计量含162停止/受阻零报告，不能说只有六条总记录或已全审。原s09来源描述误写赔付0，原manifest/raw保；同journal明确更正与s10实际AX/图为600/107.16，不隐藏错误。另从真实97恢复的中断分支：98实际InterruptJob、99Mar5原结算支持收入0/赔付600实付及audit100/1点开工，100显选停站再结原维护48.38现金，保护15757.36/AR121.32与旧责任保，原audit中断且已用点不退；100重进1401725B/e3cb5ffe…同。
+
+正向纯JSON35/35与新增负/停/中断纯JSON31/31各一次实际exit0，来源/支付引用/预留/原价/部分实收和新日期分层核，后者48冻结文件无漂移，并保s09误写false分类；不同脚本/作者边界明确，不冒产品重放或完全作者隔离。正式最终完整Create/当前最终图与C-S4-R累计尚待；先前为输入派生的一次118审核不顶替它。
+
+新共享更正后果/Reader/附票/回响、报价待生效原Clock、停止主述、停站确认与原维护支付解释已写实际源。611源/112UI＋88非UI适用200文件（整book-layout排除），类型R15仅3新test结构桥红，修后R16实际0。17文件187case真实169pass/18fail：已清退款零保护行不在原正额列表，readhelper错误要求它（客户侧连带多红）；纸件一新字面“应付”断言不当；quote8反例单it原5秒超时。原红保，原30模型case和全部钱/日期/未知断言不删；已清606与原债引用全齐才允许缺零行，未清仍需active正额；新增7反例，paper改核Jan11/尚欠0.60，quote8反例分别注册各5秒且expect保。当前R17类型session63735实际运行，未观终态不重开，后续新case/最终构建和实图不冒通过。
+
+独审Root新结果发现两P2：停站豁免整budget、非法Feb30被正则当已停；已按原quarter/total/spent＋本站本季planned原预留释放精确核、严格isoDate修，并保原阶段/命令/旁路和独立已核部分；R2限定静态复核通过，尚不顶替工程/Native。P326、原input61B及旧seal/原三master2304B插入保，当前源码/证据尚未提交，U4-B/R2/R3/C-S4-R不勾。下一仍U5→C-UX09，原后续完整累计、T17余项、P3正式62/22、原PNG0/3、真人0/美术认可、M01须明确恢复、T18最后与全目标ACTIVE；兼容开发测试0，无push/deploy/外部资源。
+
+
+## 2026-10-27｜试玩主线与系统美术方案复核（U4-B内部，不计新任务）
+
+用户“主线流程不清晰；美术交互/TA/UI需要系统性优化”的现有试玩负反馈已经成立，正式预登记样本0不是延后处理理由。本轮使用Game Studio Shared/UI、Foundations、Playtest，分工连续全读原goal三文件及t17-plan、root37三文件、当前AGENTS与36号第10节，方案与原顺序一起核。当前Chrome仅只读看R7/115/2025Apr9完整图和AX，0新经营命令；原R7 producer仍cut，不追加旧日志。新三文件及完整方案见[evidence/t17-acceptance-37/system-design-r2](evidence/t17-acceptance-37/system-design-r2/refinement.md)，36号增10.11保10.10与旧文不改。
+
+当前明确缺口：完成态先开next才能回今天，相近阅读入口和历史说明重复，原报价等待的结果未直接成为主回响；原已累计停站费用阅读优先待新构建实见，正常客户余额/供应资产与“仍需回应或正在等”混列有任务化呈现风险。后两项原状态/款项责任不因此删除，不能伪造真人误认。新方案用同一真实回执分支的遇见/取舍/承诺/等待/回响/转向作验收单位，当前115拟将合起服务单与主按钮同绑“合上这一期，回到今天”；原票轻阅读、新一期独立条件/新稿及责任/Clock分别保。新期不默认旧客户/供应/预算/支持，Today只UI视角、原主体书签/存档与保护保持。
+
+美术在当前U4-B先交履约等待、财务已结事实未核、停止收好三种整幕，轮廓/摆放/接触影/同动作与全状态材质一起交；原票需回应/等待/可选/留存只改呈现意义，不改门槛或减少原行。基本可见反馈随片，成套声音仍U9。独立主线/美术/能力复核并对最新全文方案反证后限定通过；最后补同run须同一实际receipt分支，不能把同runId分岔合并。本轮未改产品源、未制作新图/音频、未新增产品检查、未执行正式候选或回放、全部兼容开发测试0。603份产品源/资产初末身份核，文档局部链接核；这是设计准入，不是实现或真人认可。
+
+已有R19类型结果实际exit0/611源初末同，结束早于N11设计前像，因此不能为当前N11新源背书；现图也仅R7，N8—N11与本轮115改稿还须新工程/构建/同幅实际经历。当前唯一第8项U4-B未完成、未提交；原R2/R3/C-S4-R、正式完整Create/独立公开读回与收口继续。随后仍U5第9→C-UX09，U6/U7/U8→C-UX12完整接回原U4-B/U5/U6，U9后完整接回原U7/U8/U9，再原T17余项/M01待用户明确恢复/T18最后。P3正式62/22、原三PNG0/3、正式真人理解/趣味/美术认可及全E01—E18 goal ACTIVE均保，无push/deploy或新增外部资源。
+
+[杠精审查] 本轮方案范围通过：没有用换按钮名代整幕，没有删强制责任、资金保护和完整能力，没有以样本0否认已收到的负反馈；设计与现图/未构建源严格分开。实施仍待按本方案逐字段迁移和同分支实际核验，不申请U4-B或goal完成。
+
+
+## 2026-10-27｜U4-B方案进入真实画面实施（仍未完成）
+
+当前第8项继续，具体前置三文件在experience-implementation-r1，Root/美术/原票分工同任务内部实现：完成态主念头与物件同绑“合上这一期，回到今天”，下一期条件直入同企业独立新稿、旧期pin保；原票需回应/等待/可选/留存按公开事实分层，正常预款/供应资产不再冒必须清空任务，保护与真实债/unknown常显；三构图以working展开、settled未核另联、kept合拢表达，原phase/state/notes/钱与责任不减。N11报价生效首句接原activeTerms/receipt单+1，原generic完成跨revision保；停止仍有wait时原Clock优先于又开next摘要，原command/保存/费用gate继续。
+
+617源冻结R20 type真实exit2为新增exactoptional/readonly fixture/lifecycle Record调用，分Owner最小四文件修后R21与R22分别0、源extra初末同。R12定向14file114为111pass/3fail全部新增meaning驱动：单it超5s/未读外Dialog标题/空草稿disabled形状，完整红保；原门槛不改，拆独立case保原expect/真实title与valid readonly绑定后meaning单文件21/21实际过，后续5file34/34实际过。Root先前其余13file101通过分列，不冒一次14全绿。原R7 whole112UI814保旧身份，当前新wholeUI未跑。R8 build实际0/440模块/48artifact，617源与extra同，bigchunk原warning保、不冒性能。
+
+R8固定617构建5387已实际替旧35469(terminal130)，新58302活。完成态纸件直接Today，客户2新期draft选中/取消仍保，原UI导出115逐字c1309…不变。现图暴露Today仍将operating但无未完服务的站当“1件已答应/继续这期服务”，以及Apr9最早Apr10起28日至May8而原全部客户期限不足，玩家先填四步才原拒；两缺口已先落plan并分别交Today及合同先决修缮，尚未新构建/实图，不拿R8冒修后验收。新期helper负addDays误用经独审P1发现，作者最小改等价from+days-1、core不变；14新case尚待统一工程，原审/前像保。
+
+R8另真实恢复114（可见buffer08077…/旧115原备份c1309…），原报价等待Apr9实际保存自己新115（2912610B/844fc2d570a571ac1c44ff3f5cfc68caea00ac1a60503fc2f147dd0b5e20074c）；主回响首次明确客户2价5fen/支持0实际生效，原旧期书签Q1/现金/保护717578/供应505/AP3保，正常保存退出/reload/Continue逐字同。此为独立末command0dc50ef7，不与R7同115混。source说明一处“原841?”笔误已在同journal显式更正、raw/manifest不改。
+
+R8再恢复实际99（1395376B/2d938…，保自己115原备份844fc2…），停站确认第一页现在实际可见新增0与已发生未出账48.38；取消后原99逐字同。重新原确认实际StopStation新100（1401725B/5952c217e54cd5e97ef25bb1794fc7e8cd9c981815c2a91b7e5ffcb483c85a9a），维护48.38实付，原runningaudit中断，0AP/4spent不退；客户保护15757.36/AR121.32与旧责任仍在，正常重进逐字同。R8cut实际47file/10capture/2new，总Native54；h37r8/shotnull，未取89/92/95三其它构图不得假称通过，后续freshR9补。工具Page.enable观察超时后先看真实modal才继续，原raw读取在错误route拒后回住处再导，radio在另页需翻页非重执行命令，错误与恢复均保。
+
+N11前像旧文件实际Buffer JSON126696B，可还原14499B/39229949…精确同历史source；新旁证已还原，旧容器不覆盖、不称文件本体原字节copy。N11、Root出口与原审核5P2修包分别有限静态无已知阻断，NOT_GO；fresh公开JSON候选又独审2P2为auditcorrectUnits逆链与R8用途别名边界，作者R5补后限定静审通过，仍0执行。R8未有三构图，未来facts合同必须如实分scope并另纳R9，不能伪造原R5要求。最终完整Create尚未执行，原35/31绿只原exact keysets，不给新captures继承。
+
+原P326/input61B/原testconfig与依赖配置实际核未变，全部旧seal/三master原2304B插入保。当前源码/证据未提交，U4-B原R2/R3/C-S4-R、完整原文/新独立读回、最终同源整幕/图审/保全仍待；下一U5第9及C-UX09/后续完整组合/T17余/P3正式62/22/PNG0of3/真人理解趣味美术认可0/M01须明确恢复/T18最后与全goal ACTIVE保，compat开发测试0，无push/deploy/外部资源。
+
+[杠精审查] 未申请任务完成：真实图已证明部分去向/反馈改善，也暴露新具体主线断点，继续修而不以21/34绿或54命令收工。类型和驱动红与修后分层，原独审P1与候选P2保留，不冒新界面整体验收。
+
+
+## 2026-10-27｜U4-B当前R10自主体验/累计与正式审核前STOP（仍未完成）
+
+最终产品source-freeze-r26实际620项，原config/依赖/P326/input保持。R25类型0/35.391秒，shared入口R17三file24case0，App/原Book/主线扩大6file49case0，R10build0/441modules/48artifact原bigchunk warning保持。R16完整119UI实际115file841pass/5原timeout+27原hookskip保原红；随后原完整domain27/opening13/quote12各单文件通过，原ServiceChoice7随R17亦全过，均原5s/10s/2workers/isolation门槛、不拼一次全绿。原88非UI只能依准确闭包身份条件保，不声称新跑。Python77、content初始化、plan/competitive分别实际0；工具发布场景FakeCommands仅演示文字，实际gh/lsremote仍PUBLIC/defaultmain/9bf4399a…未push。
+
+R9原620仅old own1005952…/canonical115恢复与修后Today0新，cut14file4raw；R10 final620两新服务近景入口共用先决，独审原firstPeriod误称上一期已收P2已中性化，picker仍预看确认后才换UI关注。当前原115Apr9首屏实见最早Apr10—May8/原期限最低May7、六份都不足，显选customer2原Renew空稿，再显选May31/postpaid100元，原确认0费用0AP/旧1783.34保护与0AR分别列，实际返回调整/条件/重开保稿、原期pin保，未保存续约。date fill只有DOM值时沿原native键盘段编辑才入React稿并实核原确认日期，不注入事件/读内部状态。business入口另通过原picker显选同站实际同先决，取消原raw保持。
+
+R10四真实原上下文已分别当前自然Chrome核：working89原R4e2456…展开工作联/原13.28到期款/Nov14—17 audit100及预留1点；settled92原R6_67a1e7…低位实收联/独立竖未核联与33未核/ClockNov20/回Today同幅；stopped95020e66…合拢请求但supportFeb25—Mar4/auditMar5—8与本季0可用2预留、原保护15757.36/AR121.32/AP121.32、ClockFeb11八项已知待付完整；closed115原c1309…主/物件直Today/新期旁路/单轻原票。每个input/恢复前backup/readback逐字同，历史分支不拼成新经营成功。文本/减少动效同信息/动作实看后恢复false/false；最终原115正常saveExit/reload/Continue仍2912610B/c1309f…同，0新业务命令。一次CUA60秒超时真实kernelreset后先核实际phase已检查未confirm及已写文件，再恢复同Chrome标签原流程，不盲重按；错误/重绑日志与原manifest均保。
+
+R10 producer实际stop/cut54file16capture0新，h10/shotnull；R8/R9/R10各2/0/0，R7—R10合43fresh capture/6新，所有14已停producer合97capture/39不同raw/54新保存/0NativeCreate。当前preview57361 .delivery/R10活，其余owned preview已实际terminal130；所有Native写者停。R10独立九图/AX有限通过，三种轮廓确明显不同，主要动作/责任/Clock完整可读；真实人类理解/趣味/美术认可仍0，SVG纸纹/暖光/折面厚度/接触影成套统一留U9具体后续，非当前基本可操作性延期。原19图HTTP与source、kit唯一映射保；当前49GET全200逐bytes同/有限2normalID33DEV/raw指纹0hit，620/184extra/105core/P326等初末同。
+
+原33+N1/N2/SharedPay最终有界审已按完整载荷/每实例consumer→原确认→App prepare/preview/submit/saved追链，无确定删能力/字段/等待中断缺口。原27路径实际13同14变，额外5supporting独立全同，不写粗估16/11。R2/R3/C-S4-R按positive、负差额/供应资产/退款、部分服务完整支持107.16与600赔付、真实支持中断0收入600赔付、0AP/停站48.38、真实head.put后abort/物理只读旧新/原retry分别证据分层，620源的保存核心/原App链未改变之处按精确身份保，不称R10重做故障。多期batch无合法正常输入仅读型反例/特殊退款资金不足欠款后付Native未发生保持未盖，不编造有利档/seed。
+
+AGENTS增35—37及36号10.12记具体体验经验和限定范围，validation.md为in_progress。资料checker实际R1 164条中64是Root自有docs36前像md放异目录导致链接上下文错误；已原字节115396B/f3f643…按数据重命名document.before.txt保模式/基线/relocation与旧红，未改checker/input/旧sealed。R2实际仍102=97原输入repo外SKILL链接策略拒绝（真实本机目标存在）+5旧负例/符号marker，无其它错误；当前AGENTS/docs36/validation共96本地链接实际存在，不称资料全绿或旧51完全复现。后续新增原input副本会另增策略红，按实际窗口报告。
+
+正式输入四profile/窄adapter已成组独审无已知P1/P2：R7原四新金融transition、R8真实quote/stop+别名、R9仅其0cmd部分、R10完整0cmd当前状态/续签取消各分scope，禁止把R8缺图假填。原35/31只旧exact15/25keys沿用不重跑；43fresh另33预期check只是公式，不预报绿。新stopProof只适配原R8—10顶层cut与原journal末producer_stop/lineSHA，Node外部只exact当前executable身份/无symlink，不泛开repo外读；原5P2fulltree/fresh/inherited/derived历史901/当前runtime字节合同保持。97 roles/14完整tree/127official/901deps/P326/477引用候选均已准备静态核，builder/freeze/Create/freshJSON目前执行0，DRAFT/authnull未翻作产物，Root正式前新finalfacts/spec/真实metadata registry→freeze→实际冻结合同独审→exactGO才一次engine后读回。当前正式最终审核未过前不勾任务。
+
+本次STOP窗将完整当前master/AGENTS/docs36/root37tasks/validation等按准确身份冻结至正式runner终态，期间不写，之后只append实际终态；原P326/input61/全部旧seal/root19/root35/原三master2304B插入保。本地feature/record仍无新提交，下一当前U4-B原R2/R3/C-S4R正式收口/选择性提交/封存/post保全；之后才U5第9→C-UX09与原完整后续。P3正式62/22、PNG0of3/正式真人0、全部T17/M01须明确恢复/T18最后和全E01—E18 goal ACTIVE继续，兼容开发测试0，无push/deploy/外部资源。
+
+[杠精审查] 当前自主实现、限定图审/原能力与受影响检查无已知确定阻断；未申请U4-B完成，最终完整Create/freshJSON与收口保全是实在剩余工作，不用静态候选或数值多冒通过。原红/旧source误写更正/工具错误均不抹，下一按真实停止窗精确执行。
+
+
+## 2026-10-27｜U4-B正式原文审核已过、包装补正实际收口（仍待提交保全）
+
+当前唯一第8项继续，原STOP窗口由独立final-u4b-admission-r1/stop-window-verification.json实际核完后释放文档writer。原full-create-audit-r1完整Create审核实际exit0/1009032ms，1原创建历史、178唯一历史命令、97份raw及15份原可见输入全部逐字一致，127官方源码同。不是97条本轮新命令；全部Native仍54条新保存/0新Create，14producer已停。原第一次pureJSON child33/33通过、旧35/31仅原exact15/25keys结果沿用；四fresh scope12/9/5/7独立读回。
+
+原外层真实exit1/1016551ms完整保：child先写readback-terminal.json，外层同名wx在executions.push前撞EEXIST，不能抹原false或编造缺失OS终态。独审与Root精确GO后，仅在新readback-wrapper-correction-run-r1执行同33事实的纯JSON补正，外层correction-process-terminal.json分名；实际process0/signalnull/errornull11472ms，wrapper0/15374ms、33/33/wiringtrue/diff[]，新Create0/新Native0。原33与补正33是同一批重算，不冒66新case，原fullCreate不重跑。完整2190身份、620源/11STOP及14tree在真实窗口首末同；之后合法追加文档以新版本记，不声称旧冻结权威永久same。
+
+原119UI红/后单文件原门槛复跑、最终R25类型/R10构建及App49、Python77/content/plan/competitive各准确层级保；docsR2仍102分类红，后续收口新原input副本须按实际再查、不预设102或旧51。Root另有GO准备JSON字段顺序/guard误传filename两次执行前拒，以及repository emitter字面\n格式问题；均原错误与修正保在独立post，不改受审候选、原合同/原false或来源数据。
+
+目前继续最终R2/R3/C-S4-R限定覆盖与独立准入、实际资料分类、65自有路径选择性feature提交→真实blob/parent证明→任务限定完成记录→root37实际停写精确封存→record与post保全。没有提前勾U4-B，没有新第9项。下一仍U5第9→C-UX09，后完整累计组合/T17余/P3正式62/22/PNG0of3/真人主线趣味美术认可0/M01须用户明确恢复/T18最后及整个goal ACTIVE；全部兼容开发测试0，无push/deploy/外部资源。
+
+[杠精审查] 正式事实审核与包装补正范围通过；不以原outerfalse抹实绿，也不以读回全绿冒真人、美术最终认可或全任务完成。提交与保全尚待真实执行。
+
+
+## 2026-10-27｜U4-B第8项限定自主实施已完成，代码已提交
+
+- [x] U4-B：当前服务经历、逐票回应和整幕主线的自主实施/限定验收完成。本地feature实际223da4b3582b34b383ec182215bcd5a5ac564158，单parent8545eeceb3ee8b61107ace5d0a17c426ed8a5c99，精确65自有文件的blob字节/SHA与Git模式均同，index已空。63产品（27原改/36新）＋AGENTS/docs36，原P326与其它未提交工作不入本feature。测试源是原P3在场的当前工作树，不冒裸HEAD独立通过。
+
+完整同对象正向服务、零差额/跨季33复核/单差额更正/分单部分与全到期实收、负更正退款/供应资产和贷项、完整支持107.16与600赔付/真实中断0收入600赔付、0AP停站48.38、真实head.put后abort/旧物理只读/原retry/重进各准确前缀和原文分列。原33＋既有N1/N2/SharedPay及12组R2/R3/C-S4-R限定准入在evidence/t17-acceptance-37/final-u4b-admission-r1，不把无合法正常多期batch、退款短款后付及非零部分支持时长收入说成Native实做。
+
+完整Create实际1原创建/178历史/97原文/15buffer逐字同；原outer EEXIST exit1保，首次child33与补正同33分别真绿，补正实际process0/wrapper0/0新Create。620源码最终类型/构建/入口与App49及三个原完整超时文件均按真实身份通过，原119UI红/841pass/5timeout/27hookskip和88非UI闭包精确复用不拼全绿。最新docsR3实exit1/78956ms，103=98逐字原输入外SKILL策略拒＋5旧负例/符号marker，other0，wholeDocsPassedfalse；没改原输入或旧证据求绿。
+
+玩家结果可由主念头/合拢物件同一动作回今天，新期先核合同与资源并显选原确认，原草稿和旧期保；工作/财务结清但未核/停止独立责任三轮廓与原Clock当前自然Chrome实际核。原支持、已知成本、受挫与保护现金不消失，不造空站新约。自主九整幅图与24来源有限图审完成，原kit/新纸层纹理、折面/边厚/暖光接触影及成套声音动效继续U9，正式真人理解/趣味/美术认可0、原PNG0/3保。
+
+本条写入时仅代码提交与既有检查已实际完成；root37停写/精确封存、record和独立post保全随后执行，不预报未来SHA或通过。最终真实交付终态见独立evidence/t17-u4b-post-commit-01；若保全未通过仍在本片内修缮，不提前开U5。原三master的2304B/14LF P3插入只留工作树，提交仅HEAD8545＋本片最新后缀；原input61B/P326/root19/root35/126旧marker＋2符号与最新旧payload继续保。
+
+下一实际实施U5第9→C-UX09完整U0-R/U4-B/U5，后U6/U7/U8→C-UX12接回原U4-B/U5/U6；U9后新体验累计接回原U7/U8/U9，再原T17余项/M01须用户明确恢复/T18最后。P3正式62/22及新界面五路线24季整体体验、原PNG/真人与全部goal责任不关闭，E01—E18 goal ACTIVE。所有页面兼容开发测试仍0，无push/deploy/新外部资源。
+
+[杠精审查] 通过（限定U4-B自主实施与原R2/R3/C-S4-R覆盖：确定缺陷已修并有实际复核；完整字段、原款/权限/保存链及真实后果保，未用分类菜单/账务绿替主线或真人认可；原红及未验边界明确留后续）。不声称整作完美、无未知bug或发布完成。

@@ -1,0 +1,1 @@
+Root要求U4-B#8当前画面只读审阅：先全量逐块读goal input/tasks与root37三文件；最新分工主plan全量归state agent（本Owner已读1-360，不重复历史）。再view_image核root37/chrome-main-r4 n07/n08/n16完整图及AX，结合A长日重启/36最新方案，仅最多3项真实可见主线/整幕/TA信息缺口与具体修法/原绑定不变量。优先赔付原因、财务闭合仍33可审、未来1AP预留区别。N7/helper已接尚未R5，不拿旧图证明新效果。无源/master/旧证据写或工程检查/browser/兼容。

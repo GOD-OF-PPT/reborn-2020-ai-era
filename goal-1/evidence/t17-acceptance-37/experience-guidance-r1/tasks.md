@@ -1,0 +1,3 @@
+- [ ] Add concise reusable experience constraints with exact existingloop boundaries.
+- [ ] Add concrete UI/TA/state/verification contract to36 without marking currentU4B complete.
+- [ ] Targeteddocument validation at closeout, preserve originalglobaldocsred.

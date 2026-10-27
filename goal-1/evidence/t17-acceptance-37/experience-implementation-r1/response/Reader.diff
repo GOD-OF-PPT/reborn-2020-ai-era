@@ -1,0 +1,101 @@
+--- RelayRecordBook.before.tsx
++++ src/ui/RelayRecordBook.tsx
+@@ -10,7 +10,6 @@
+ import {CommandButton} from './CommandButton.tsx'
+ import {ClockAdvance} from './ClockAdvance.tsx'
+ import {playableAdvanceDate} from '../application/playable-advance.ts'
+-import {isoDate} from '../core/calendar.ts'
+ import {relayReviewDate,relayReviewLabel,relayDeferredFeedback} from './relay-scene-clock.ts'
+ import {relayTicketAudit,relayTicketCorrection} from './relay-ticket-command.ts'
+ import {relayPaperFor,type RelayPaperSelection} from './relay-continuity.ts'
+@@ -19,6 +18,7 @@
+ import {makeSharedAction} from './shared-action.ts'
+ import {revealBookTarget} from './ScreenBook.tsx'
+ import {relaySceneProgress,relayAuditableMeters} from './relay-scene-progress.ts'
++import {relayRecordReading,relayRecordMeaningLabels,relayRecordProtectionText,relayRecordQuoteEffectiveDate,type RelayRecordMeaning} from './relay-record-meaning.ts'
+ import './relay-record-book.css'
+ 
+ export interface RelayRecordBookView{title:string;body:ReactNode;actions:ReactNode}
+@@ -38,34 +38,11 @@
+  children?:((view:RelayRecordBookView)=>ReactNode)|undefined
+ }
+ 
+-function quoteEffectiveDate(p:GamePanelProps,target:RelaySceneTarget,row:RelayRecordRow):string|null{
+- const v=p.features.relay
+- if(!v||row.kind!=='quote'||!row.quoteId||!row.jobId)return null
+- if(resolveRelaySceneTarget(v,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations}).status!=='valid')return null
+- const quotes=v.quotes.filter(q=>q.id===row.quoteId&&q.businessId===target.businessId&&q.jobId===row.jobId),q=quotes.length===1?quotes[0]:undefined
+- const jobs=p.view.operations?.jobs.filter(j=>j.id===row.jobId&&j.businessId===target.businessId)??[],job=jobs.length===1?jobs[0]:undefined
+- if(!q||!job||job.status!=='completed'||q.completedAt===null||q.job?.id!==job.id||q.job.businessId!==target.businessId||q.job.status!=='completed')return null
+- try{isoDate(p.view.date);isoDate(q.completedAt);isoDate(q.effectiveAt);isoDate(job.completeAt)}catch{return null}
+- if(job.completeAt>q.completedAt||q.completedAt>p.view.date||q.effectiveAt<=p.view.date||!q.customerIds.length||new Set(q.customerIds).size!==q.customerIds.length)return null
+- if(q.customerIds.some(id=>v.customers.filter(c=>c.id===id&&c.businessId===target.businessId).length!==1)||q.responses.length!==q.customerIds.length||new Set(q.responses.map(r=>r.customerId)).size!==q.customerIds.length||q.responses.some(r=>!q.customerIds.includes(r.customerId)||typeof r.accepted!=='boolean')||!q.responses.some(r=>r.accepted))return null
+- return q.effectiveAt
+-}
+-
++/** Compatibility bridge: this is a reading suggestion, never a completion gate. */
+ export function relayRecordNeedsReply(p:GamePanelProps,target:RelaySceneTarget,row:RelayRecordRow):boolean{
+- const v=p.features.relay
+- if(!v)return false
+- if(row.attention==='due'||row.attention==='known')return true
+- if(row.kind==='quote'&&quoteEffectiveDate(p,target,row)!==null)return true
+- if(row.jobId&&p.view.operations?.jobs.some(j=>j.id===row.jobId&&j.businessId===target.businessId&&['planned','running'].includes(j.status)))return true
+- if(row.kind==='application')return v.applications.some(a=>a.id===row.applicationId&&!a.read&&a.job?.status==='completed')
+- if(row.kind==='receivable')return v.receivables.some(i=>i.id===row.receivableId&&i.amountFen>i.collectedFen+i.reversedFen)
+- if(row.kind==='customer')return v.customers.some(c=>c.id===row.customerId&&c.businessId===target.businessId&&(c.balance.prepaidFen>0||c.dueReceivableFen>0))
+- if(row.kind==='supplier')return v.supplyOptions.some(s=>s.businessId===target.businessId&&s.supplierId===row.supplierId&&((s.credit?.remainingFen??0)>0||s.outstandingFen>0))
+- const history=v.casebook?.status==='ready'&&v.casebook.runId===p.view.runId&&v.casebook.revision===p.view.revision&&v.casebook.asOf===p.view.date?v.casebook:null
+- if(row.kind==='obligation')return history?history.obligationHistory.some(o=>o.id===row.obligationId&&o.scopeBusinessId===target.businessId&&o.remainingFen>0):p.features.workbench.finance.some(f=>f.accountId===target.accountId&&f.obligations.some(o=>o.id===row.obligationId&&o.remainingFen>0))
+- if(row.kind==='refund'&&history){const refund=v.refunds.find(r=>r.id===row.refundId);return !!refund&&history.obligationHistory.some(o=>o.scopeBusinessId===target.businessId&&refund.operationIds.includes(o.originOperationId)&&o.remainingFen>0)}
+- // An unreviewed report is available to read; it is not a task already commissioned or a due payment.
+- return false
++ if(!p.features.relay)return false
++ const meaning=relayRecordReading(p,target,row).meaning
++ return meaning==='respond'||meaning==='waiting'
+ }
+ 
+ export function relayRecordSuggestedKey(p:GamePanelProps,target:RelaySceneTarget,rows:readonly RelayRecordRow[]):string|undefined{
+@@ -153,27 +130,30 @@
+  const finish=(view:RelayRecordBookView)=>children?children(view):<section className="relay-ticket-book" aria-label={view.title}><h3>{view.title}</h3>{view.actions}{view.body}</section>
+  if(!valid)return finish({title:'这份原票，需要先核对来源',body:<p ref={unavailableRef} id={bookId+'-unavailable'} className="warning-box" role="status">{model.reason??resolved.reason??'原中转资料尚未取得；没有换到另一张票。'}</p>,actions:null})
+  const selectedMissing=reading.key!==undefined&&!row
++ const protection=relayRecordProtectionText(p,target)
+  const changeTicket=<button type="button" disabled={busy} onClick={()=>update({picker:true,draft:null})}>翻另一张同对象的原票</button>
+  if(reading.picker||!row){
+-  const kinds=[...new Set(rows.map(r=>r.kind))],openRows=rows.filter(r=>relayRecordNeedsReply(p,target,r)),visible=reading.filter==='open'?openRows:reading.filter?rows.filter(r=>r.kind===reading.filter):rows,picked=rows.find(r=>r.key===reading.draft),visiblePick=picked&&visible.some(r=>r.key===picked.key)
++   const meanings:readonly RelayRecordMeaning[]=['respond','waiting','optional','retained'],presentations=new Map(rows.map(r=>[r.key,relayRecordReading(p,target,r)])),kinds=[...new Set(rows.map(r=>r.kind))],openRows=rows.filter(r=>['respond','waiting'].includes(presentations.get(r.key)!.meaning)),visible=reading.filter==='open'?openRows:reading.filter.startsWith('meaning:')?rows.filter(r=>'meaning:'+presentations.get(r.key)!.meaning===reading.filter):reading.filter?rows.filter(r=>r.kind===reading.filter):rows,picked=rows.find(r=>r.key===reading.draft),visiblePick=picked&&visible.some(r=>r.key===picked.key)
+   return finish({title:'这份约定里，先翻哪一张原票？',body:<section ref={pickerRef} id={bookId+'-picker'} className="relay-ticket-picker">
+    {blockedReason?<p className="warning-box" role="status">{blockedReason}</p>:null}
+    {selectedMissing?<p className="warning-box" role="status">原来指定的票现已不能唯一找到；没有换成第一张。请明确重选，或保留原关注去核对完整原册。</p>:!rows.length?<p role="status">这份对象暂没有取得可核的逐票明细；没有把空白说成责任已经结清。</p>:null}
+    <p>只翻同一人生、账户与中转站的原记录；选择票根不会收付款、改日期或接受新约定。</p>
+-   <label className="field">在同对象内按票种翻阅<select value={reading.filter} disabled={busy} onChange={e=>update({filter:e.target.value})}><option value="open">仍需回应或正在等 · {openRows.length}</option><option value="">全部原票，含已结记录 · {rows.length}</option>{kinds.map(kind=><option key={kind} value={kind}>{relayRecordKindLabel(kind)} · {rows.filter(r=>r.kind===kind).length}</option>)}</select></label>
++    <p className="field-help">{protection}</p><p>回应、等待、可选与留存只帮助翻阅，不要求清空列表；实际到期责任、原保护与全部操作仍按原账。</p>
++    <label className="field">在同对象内按票种翻阅<select value={reading.filter} disabled={busy} onChange={e=>update({filter:e.target.value})}><option value="open">眼前的回应与等待 · {openRows.length}</option>{meanings.map(meaning=><option key={meaning} value={'meaning:'+meaning}>{relayRecordMeaningLabels[meaning]} · {rows.filter(r=>presentations.get(r.key)!.meaning===meaning).length}</option>)}<option value="">全部原票，含已结记录 · {rows.length}</option>{kinds.map(kind=><option key={kind} value={kind}>{relayRecordKindLabel(kind)} · {rows.filter(r=>r.kind===kind).length}</option>)}</select></label>
+    {!visible.length&&reading.filter==='open'?<p role="status">这份原约当前没有列到待回应或正在等的票；仍可明确翻看全部原票和已结依据。未复核计量另按票种翻阅，不冒充已委托的等待。</p>:null}
+-   <fieldset><legend>先预看，再明确翻开</legend>{visible.map(r=><label className="radio-line" key={r.key}><input type="radio" name={radioName} checked={reading.draft===r.key} onChange={()=>update({draft:r.key})}/><span>{r.title}<small>{r.state} · {r.ownership==='station'?'本站旁账，非全部归本期':'这一对象的原记录'}</small>{[...new Set(r.summary??[])].filter(line=>line!==r.state).slice(0,2).map((line,index)=><small key={index}>{line}</small>)}</span></label>)}</fieldset>
++    <fieldset><legend>先预看，再明确翻开</legend>{visible.map(r=>{const presentation=presentations.get(r.key)!;return <label className="radio-line" key={r.key}><input type="radio" name={radioName} checked={reading.draft===r.key} onChange={()=>update({draft:r.key})}/><span>{r.title}<small>{relayRecordMeaningLabels[presentation.meaning]} · {presentation.reason}</small><small>{r.state} · {r.ownership==='station'?'本站旁账，非全部归本期':'这一对象的原记录'}</small>{[...new Set(r.summary??[])].filter(line=>line!==r.state).slice(0,2).map((line,index)=><small key={index}>{line}</small>)}</span></label>})}</fieldset>
+    {picked?<p role="status">待翻开：{picked.title}。{!visiblePick?'当前筛选没有这张票，请明确重选或查看全部；没有代换。':''}</p>:null}
+    {!original&&onFullRecord?<button type="button" disabled={busy} onClick={()=>inspect(target,reading.key??'')}>先核对同对象的完整原册 ↗</button>:null}
+   </section>,actions:<div className="button-row"><button type="button" disabled={!picked||!visiblePick||busy} onClick={()=>{if(picked&&visiblePick&&!busy)choose(picked.key)}}>明确翻开这一张原票</button>{row?<button type="button" onClick={()=>update({picker:false,draft:null})}>仍留原来这一张</button>:null}</div>})
+  }
+- const art=relayPaperFor(p,target,paperSelection(row)),ownerNote=row.ownership==='station'?'这是本站同主体的旁账，未全部归入眼前本期。':'这一张票仍属于原来的对象。'
++  const art=relayPaperFor(p,target,paperSelection(row)),ownerNote=row.ownership==='station'?'这是本站同主体的旁账，未全部归入眼前本期。':'这一张票仍属于原来的对象。',selectedMeaning=relayRecordReading(p,target,row)
+  const sourceMeters=row.kind==='receivable'&&row.meterId?rows.filter(r=>r.kind==='meter'&&r.meterId===row.meterId):[]
+  const sourceInvoices=row.kind==='meter'&&row.meterId?rows.filter(r=>r.kind==='receivable'&&r.meterId===row.meterId):[]
+  const facts=<section ref={factsRef} id={bookId+'-facts'} className="relay-ticket-facts" aria-label="这张原票的记录与依据">
+   <div className="relay-ticket-heading"><span>{relayRecordKindLabel(row.kind)} / 本局虚构</span><span>{row.date??'本站当前原账'}</span></div>
+   {art&&!p.textOnly?<div className="relay-ticket-illustration"><RelayServicePaper art={art}/></div>:null}
+   <p className="relay-ticket-state" data-attention={row.attention}>{row.state}</p><p className="relay-ticket-owner">{ownerNote}</p>
++   <p className="field-help">{relayRecordMeaningLabels[selectedMeaning.meaning]} · {selectedMeaning.reason}</p><p className="field-help">{protection}</p>
+   {[...new Set(row.summary??[])].filter(line=>line!==row.state).map((line,index)=><p key={'summary-'+index}>{line.startsWith('原日程 ')&&line.endsWith('；'+row.state)?line.slice(0,-('；'+row.state).length):line}</p>)}
+   {sourceMeters.length===1?<button type="button" onClick={()=>choose(sourceMeters[0]!.key)}>翻看这张原单对应的原计量票</button>:null}
+   {sourceInvoices.map(invoiceRow=><button type="button" key={invoiceRow.key} onClick={()=>choose(invoiceRow.key)}>翻回对应原单：{invoiceRow.title}</button>)}
+@@ -194,7 +174,7 @@
+  const meterTarget:RelaySceneTarget|undefined=row.kind==='meter'&&row.meterId&&row.periodId?{...businessTarget,kind:'period',periodId:row.periodId,meterId:row.meterId}:undefined
+  const existing=meterTarget?relayTicketAudit(p,meterTarget):null
+  const job=row.jobId?p.view.operations?.jobs.find(j=>j.id===row.jobId&&j.businessId===target.businessId):existing?.job??undefined
+-  const effectiveDate=quoteEffectiveDate(p,target,row)
++   const effectiveDate=relayRecordQuoteEffectiveDate(p,target,row)
+   const nextDate=job&&(job.status==='planned'||job.status==='running')?(job.status==='planned'?job.startAt:job.completeAt):effectiveDate??(invoice&&invoice.amountFen>invoice.collectedFen+invoice.reversedFen&&invoice.dueAt>p.view.date?invoice.dueAt:null)
+  const next=nextDate?relayReviewDate(p,playableAdvanceDate(p.features.workbench,p.view.date,nextDate)):null
+  const correction=meterTarget?relayTicketCorrection(p,meterTarget):null

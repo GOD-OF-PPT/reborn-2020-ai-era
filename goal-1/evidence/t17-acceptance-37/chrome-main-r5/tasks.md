@@ -1,0 +1,3 @@
+- [ ] Load currentR5 and verify current107 original raw unchanged.
+- [ ] Actual support consequence and planned/financial review clarity; native failure/negative continuation remain.
+- No U4B/R2R3/C-S4-R completion claim.

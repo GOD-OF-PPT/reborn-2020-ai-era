@@ -1,0 +1,832 @@
+{
+  "at": "2026-10-27T05:17:59.080Z",
+  "task": "U4-B",
+  "limitedTaskReady": true,
+  "scope": "current implementation and autonomous U4-B R2/R3/C-S4-R bounded evidence; permits selective task delivery closeout, not all-branch Native or wholegoal acceptance",
+  "originalAbilities": {
+    "count": 33,
+    "allPreservedStaticConsumerTrace": true,
+    "notAllFreshNativeExecuted": true,
+    "items": [
+      {
+        "number": 1,
+        "commandAndOriginalFields": "OpenRelayStation capitalFen",
+        "currentConsumerChain": "SceneChoice/Panel null personal→PreparationEditor open→preparation builder.amount parseFen；空稿原确认，不自动营业。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 2,
+        "commandAndOriginalFields": "FundBusiness businessId,amountFen",
+        "currentConsumerChain": "Panel BusinessLedger company→capital editor；原企业ID/自有转资/确认，不记收入。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 3,
+        "commandAndOriginalFields": "StartRelayPreparation businessId,preparation,resources[],startAt",
+        "currentConsumerChain": "basics/materials分别构造；Panel逐preparations原article含RelayJob，不以一个任务代全部实例。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 4,
+        "commandAndOriginalFields": "ApplyRelaySupply businessId,supplierId,resources[],startAt",
+        "currentConsumerChain": "application显选原供应/资源/日；每家applications.map原id和RelayJob，未读批准未知。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 5,
+        "commandAndOriginalFields": "ReadRelaySupplyDecision applicationId",
+        "currentConsumerChain": "Panel每原申请；focused progress只实际完成未读回信原id→ThreadAction CommandButton；免费读信语义保。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 6,
+        "commandAndOriginalFields": "StartRelayAdapter businessId,supplierId,resources[],startAt",
+        "currentConsumerChain": "原adapter editor及每条adapter RelayJob；基础验证/独立适配原记录分清。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 7,
+        "commandAndOriginalFields": "ActivateBusiness businessId",
+        "currentConsumerChain": "Panel preparing分支与JourneyAction原command；原preview核准备资本条件，不自动获客。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 8,
+        "commandAndOriginalFields": "StartRelayMarketing businessId,segment,mode；paid resources[],startAt；video_referral videoCohortIds[]",
+        "currentConsumerChain": "PreparationEditor原三客群与两方式；builder按mode分支；Intake逐audience article/id/创建完成/members/RelayJob齐。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 9,
+        "commandAndOriginalFields": "SetRelayOffer businessId,offerKind,unitPriceFen",
+        "currentConsumerChain": "offer editor原catalog两方案，原保存offer供具体签约选择；不改旧价。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 10,
+        "commandAndOriginalFields": "SignRelayCustomers businessId,audienceId,offerId,personIds[],termEnd,mode,creditLimitFen",
+        "currentConsumerChain": "customers editor名单/逐位潜客/条款显选；预付信用0，后付需填可0；原personIDs非slice默认。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 11,
+        "commandAndOriginalFields": "RechargeRelayCustomer customerId,amountFen",
+        "currentConsumerChain": "原customer-funds editor及Book客户其它决定；原月限/保护说明/等额负债确认，不作收入。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "current_task_actual_selected_branches; not every possible payload"
+      },
+      {
+        "number": 12,
+        "commandAndOriginalFields": "TopUpRelaySupplier businessId,supplierId,amountFen",
+        "currentConsumerChain": "supplier-funds显选原池；资产转移确认及原现有供价/权限保。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "current_task_actual_selected_branches; not every possible payload"
+      },
+      {
+        "number": 13,
+        "commandAndOriginalFields": "RefundRelaySupplier businessId,supplierId,amountFen(原全部remaining)",
+        "currentConsumerChain": "Panel SupplierFunds credit>0全额仍原按钮；Book response另可部分，无全额能力缩水。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "current_task_actual_selected_branches; not every possible payload"
+      },
+      {
+        "number": 14,
+        "commandAndOriginalFields": "StartRelayServicePeriod businessId,customerIds[],supplierIds[],resources[],startAt,maxUnits,maxSupplierCostFen,supportMode,deploymentId",
+        "currentConsumerChain": "原ServiceChoice/scene-draft同字节，四支持/部署/先后备援/零预算保；新SceneChoice两business/closed出口先核合同窗口，有covers仍原编辑器，不改原执行gate；原Panel完整表仍可读。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 15,
+        "commandAndOriginalFields": "StartRelayAudit meterId或periodId,resources[],startAt",
+        "currentConsumerChain": "原AuditEditor builder二选一；Book meter与原period可显选；已委托meter通过ticketAudit保同job/fullbatch等待，不重复委托，cancelled/interrupted不一概阻新委托。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "current_task_actual_selected_branches; not every possible payload"
+      },
+      {
+        "number": 16,
+        "commandAndOriginalFields": "CorrectRelayPeriod periodId",
+        "currentConsumerChain": "Panel每期按钮及progress原已知差额→ThreadAction；N1不替代整期；closed不blanket禁原允许动作。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "current_task_actual_selected_branches; not every possible payload"
+      },
+      {
+        "number": 17,
+        "commandAndOriginalFields": "CollectRelayDue customerId",
+        "currentConsumerChain": "Panel每客户/Book客户/progress原期到期原单决定；confirm明确同客户全部到期可跨期，未来原单保，不重收入。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "current_task_actual_selected_branches; not every possible payload"
+      },
+      {
+        "number": 18,
+        "commandAndOriginalFields": "RefundRelayBalance customerId,amountFen(原全prepaid)",
+        "currentConsumerChain": "Panel原客户余额全额按钮保；Book response新增部分；原充值batch/现金/尚欠/保护分别核。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "current_task_actual_selected_branches; not every possible payload"
+      },
+      {
+        "number": 19,
+        "commandAndOriginalFields": "CloseRelayCustomer customerId",
+        "currentConsumerChain": "Panel逐原客户及Book其它决定；原preview结清门槛，不以展示阶段额外禁止。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 20,
+        "commandAndOriginalFields": "RenewRelayCustomer customerId,termEnd,mode,creditLimitFen",
+        "currentConsumerChain": "Panel/Book/新期条件同原Response renew；全字段空稿显选，原零信用；confirmation保旧价/旧保护。新期helper最低term采用from+serviceDays-1，仅先决说明，原core门槛不变。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "current_task_actual_selected_branches; not every possible payload"
+      },
+      {
+        "number": 21,
+        "commandAndOriginalFields": "StartRelayRequote businessId,customerIds[],offerKind,unitPriceFen,effectiveAt,resources[],startAt",
+        "currentConsumerChain": "Panel RequoteForm及Book同business Response；所有报价/资源日期显选，不静默删失效选择；每quote原RelayJob等待/中断/接受与生效分开。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "current_task_actual_selected_branches; not every possible payload"
+      },
+      {
+        "number": 22,
+        "commandAndOriginalFields": "PauseBusiness businessId",
+        "currentConsumerChain": "Panel operating、SceneChoice more同主体；不抹原履约或替PauseTraffic。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 23,
+        "commandAndOriginalFields": "ResumeBusiness businessId",
+        "currentConsumerChain": "Panel paused分支原按钮/preview，不缩成恢复请求。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 24,
+        "commandAndOriginalFields": "PauseRelayTraffic businessId",
+        "currentConsumerChain": "Panel station.trafficPaused=false原分支；停止请求而原支持旧款继续。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 25,
+        "commandAndOriginalFields": "ResumeRelayTraffic businessId",
+        "currentConsumerChain": "Panel paused=true原分支；原批准范围/原preview保，不扩权。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 26,
+        "commandAndOriginalFields": "StopRelayPeriod periodId",
+        "currentConsumerChain": "每PeriodCard及Book服务原票；支持独立，已耗成本点数保。合法原stoppedAt<=today仅改主述不改phase/Clock门槛。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "current_task_actual_selected_branches; not every possible payload"
+      },
+      {
+        "number": 27,
+        "commandAndOriginalFields": "StopRelayStation businessId",
+        "currentConsumerChain": "Panel非winding_down和SceneChoice more；confirm完整tasks/未开工预留/已用costAP/原employee/payroll/48.38原累计及保护债；result仅exact saved canonical真实bill/debt/cash出版。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "current_task_actual_selected_branches; not every possible payload"
+      },
+      {
+        "number": 28,
+        "commandAndOriginalFields": "CloseBusiness businessId",
+        "currentConsumerChain": "Panel winding_down原分支，原旧债/资产结清门槛，不以纸形stopped冒业务closed；Archive闭企业仍读。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 29,
+        "commandAndOriginalFields": "AcknowledgeRelayMarket businessId",
+        "currentConsumerChain": "Panel changes逐原date/anchor未确认section及原command；旧报价/未来权限重核保，普通通知不换原期pin。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 30,
+        "commandAndOriginalFields": "HireWorker businessId,definitionId assistant-zhou",
+        "currentConsumerChain": "原resources招聘details原command/500元1点工资说明保；不发免费注意力。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 31,
+        "commandAndOriginalFields": "DismissWorker workerId",
+        "currentConsumerChain": "原workers.filter(to===null)逐位枚举/自身workerId/结算confirm保，未按当前一站随意删全局原在岗范围。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "inherited_original_R2_U4A_and_or_static_rule_consumer_preservation; no claim of fresh_execution_each_ability"
+      },
+      {
+        "number": 32,
+        "commandAndOriginalFields": "InterruptJob jobId",
+        "currentConsumerChain": "所有prep/application/adapter/audience/service/support/audit/requote原RelayJob逐实例；Book同原job或已有meter audit.job，planned/running原停止，不混服务/支持。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "current_task_actual_selected_branches; not every possible payload"
+      },
+      {
+        "number": 33,
+        "commandAndOriginalFields": "AdvanceTime date",
+        "currentConsumerChain": "原RelayJob.completeAt、ThreadAction/Book原start/complete/due/effective；Clock原commitment/费用/季度/交付/有限尾声屏障保。新增quote生效反馈不模拟未来或补旧收入。",
+        "implementationCoverage": "preserved_static_consumer_trace_with_original_preview_confirm_save",
+        "evidence": [
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md",
+          "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+        ],
+        "nativeCoverage": "current_task_actual_selected_branches; not every possible payload"
+      }
+    ],
+    "additionalExistingAPIs": [
+      {
+        "kind": "CorrectRelayUsage",
+        "payload": [
+          "auditId",
+          "correctUnits"
+        ],
+        "state": "actualsinglepositive_and_negative_knownaudit_originalconfirm_preserved"
+      },
+      {
+        "kind": "CollectRelayReceivable",
+        "payload": [
+          "receivableId",
+          "amountFen"
+        ],
+        "state": "actualpartial_originalinvoice_only_notincome"
+      },
+      {
+        "kind": "PayObligation",
+        "payload": [
+          "accountId",
+          "obligationId",
+          "amountFen"
+        ],
+        "state": "actualsupplierpartialpay_originalsharedAPI_no_newcost"
+      }
+    ]
+  },
+  "requirements": [
+    {
+      "key": "R2-preparation-two-backgrounds",
+      "responsibility": "资本/技术/材料/许可/亲读/启用/获客/报价/固定身份签约",
+      "status": "implementation_and_autonomous_evidence_complete_with_inherited_scope",
+      "layers": [
+        "current exact source/33 consumer preservation",
+        "root33 technical65→91 and content120→132 lawful actual history, separate backgrounds",
+        "current fullCreate validates selected current97 prefixes; not new two-background Create here"
+      ],
+      "evidence": [
+        "goal-1/evidence/t17-acceptance-33/validation.md",
+        "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/current-capability-map.md"
+      ],
+      "limits": [
+        "no claim this task freshly executed all33 or all two-background branches"
+      ]
+    },
+    {
+      "key": "R2-explicit-service-and-funds",
+      "responsibility": "服务/支持显选、预付后付、供额/备援/容量/预算和原投入",
+      "status": "covered_limited_autonomous",
+      "layers": [
+        "ServiceChoice/draft original fields and saved generation maintained",
+        "R4 same-branch86→107 service/support/audit/actual repayment and Life/Today",
+        "R4 client100 topup/40refund/60protected; supplier100/40/60asset"
+      ],
+      "evidence": [
+        "goal-1/evidence/t17-acceptance-37/native-service-public-readback-r2/result.json",
+        "goal-1/evidence/t17-acceptance-37/u4b-shared-service-entry-r17.result.json"
+      ],
+      "limits": [
+        "four support/deployment modes retain original permission previews; no new Native permission expansion claimed"
+      ]
+    },
+    {
+      "key": "R3-single-object-mainline",
+      "responsibility": "同run/账户/企业/期/客户/原票、Today/结果/生活/新期、原册同稿",
+      "status": "covered_limited_autonomous",
+      "layers": [
+        "strict target resolver/invalid no fallback/shared UI memory",
+        "actual R2 single partial6.08/confirm cancel/draft and R4 full service loop then Life/Today",
+        "R10 final source closed physical prop→Today; same business and closed period prerequisite paths→explicit originalRenew May31/postpaid100 confirm and cancel raw115 same",
+        "one-cover boundary direct service selection is explicitly public fixture"
+      ],
+      "evidence": [
+        "goal-1/evidence/t17-acceptance-37/native-r10-producer-cut.json",
+        "goal-1/evidence/t17-acceptance-37/u4b-shared-entry-app-regression-r21.result.json",
+        "goal-1/evidence/t17-acceptance-37/same-new-service-entry-independent-r1/review.md"
+      ],
+      "limits": [
+        "R10 actual newRenew/newService commands0; draft cancel not renewal success",
+        "UI/human understanding not inferred from byte equality"
+      ]
+    },
+    {
+      "key": "R3-audit-batch-and-unknown",
+      "responsibility": "单计量/整期复核、未知/零差额、跨季、已结财务未核并列",
+      "status": "covered_limited_autonomous_with_explicit_native_bound",
+      "layers": [
+        "R4 single original152=152 no forced correction",
+        "R4 other33 original audit futureQ1 reserved→actual1AP/100→Jan4 completed; total34 audited of56 not all56",
+        "full batch periodIds/count/subset and meter known0 read types preserved"
+      ],
+      "evidence": [
+        "goal-1/evidence/t17-acceptance-37/native-service-public-readback-r2/result.json",
+        "goal-1/evidence/t17-acceptance-37/native-r10-producer-cut.json",
+        "goal-1/evidence/t17-acceptance-37/capability-and-cs4r-final-review-r1/review.md"
+      ],
+      "limits": [
+        "multi-period batch has no legal current normal command generator/input; Native multi-period batch not executed; current read/model/controlled-public-counterexample coverage only"
+      ]
+    },
+    {
+      "key": "R3-correction-money-and-own-due",
+      "responsibility": "单/整期更正原量原价、追加AR/AP、正负现金/资产与日期",
+      "status": "covered_limited_autonomous",
+      "layers": [
+        "R4 positive136→151 income+120/cost+60 newARJan18/newAPJan11; partialcash distinct",
+        "negative actual singlecash606/prepaid717578 same/assetrestore202, then actual101 supplierreturn",
+        "R7 remaining167 refundcash2424/newAR1212/supplierasset808/newcost404; netincome-1212 not cash",
+        "shared effects independently known/unavailable sides exact audit/op/debt/cash references"
+      ],
+      "evidence": [
+        "goal-1/evidence/t17-acceptance-37/full-create-audit-r1/report/normal-browser-export-audit.json",
+        "goal-1/evidence/t17-acceptance-37/readback-wrapper-correction-run-r1/readback-result.json",
+        "goal-1/evidence/t17-acceptance-37/native-negative-and-stop-public-readback-r1/result.json"
+      ],
+      "limits": [
+        "different same-run/revision branches not stitched; actual cash refund cases were fully paid, not manufactured shortfall"
+      ]
+    },
+    {
+      "key": "R3-collect-refund-renew-quote",
+      "responsibility": "单款部分与客户全到期、未消费退款、旧保护后付续签、未来报价生效",
+      "status": "covered_limited_autonomous_with_explicit_native_bound",
+      "layers": [
+        "N2 receivableId+explicit amount; CollectDue remains customer all due acrossperiods",
+        "real customer100 refund40 retained60; new120 invoice collect60 then Due60; negative108/109 cash87608+86396 no second revenue",
+        "actual110 Apr30/postpaid100 retains old178334 balance/protection; actual114accepted Apr8 still old6fen/support500, R7/R8 own115 Apr9 actual5/fee0",
+        "R10 proposedMay31 cancelled, no committed new term"
+      ],
+      "evidence": [
+        "goal-1/evidence/t17-acceptance-37/native-service-public-readback-r2/result.json",
+        "goal-1/evidence/t17-acceptance-37/native-negative-and-stop-public-readback-r1/result.json",
+        "goal-1/evidence/t17-acceptance-37/readback-wrapper-correction-run-r1/readback-result.json"
+      ],
+      "limits": [
+        "refund insufficient funds→payable→later payment Native did not happen; only meaningful model/public-counterexample/ref preservation, not falsely covered by supplier Pay"
+      ]
+    },
+    {
+      "key": "R3-supplier-asset-credit-pay",
+      "responsibility": "供应预付/贷项/退款/冲债/手动Pay原序与归属",
+      "status": "covered_limited_autonomous",
+      "layers": [
+        "real supplytopup100/refund40 as asset transfer not income",
+        "R4 newAP60 partialPay30 cash then originalcreditsettle30 noncash asset6000→5970 costnotrepeated",
+        "negative asset202 partialreturn101; bulkrestores808 then404 automaticcreditsettle noncash909→505",
+        "record supply ticket includes original manualpay closure/op order/cash source"
+      ],
+      "evidence": [
+        "goal-1/evidence/t17-acceptance-37/native-service-public-readback-r2/result.json",
+        "goal-1/evidence/t17-acceptance-37/native-negative-and-stop-public-readback-r1/result.json",
+        "goal-1/evidence/t17-acceptance-37/readback-wrapper-correction-run-r1/readback-result.json"
+      ],
+      "limits": [
+        "whole pool balance never used to infer one correction; special unmatched/unknown source stays unknown"
+      ]
+    },
+    {
+      "key": "R3-stopping-support-and-old-debts",
+      "responsibility": "暂停/停本期/中断支持/停站/收尾/原义务、0AP与已耗保留",
+      "status": "covered_limited_autonomous",
+      "layers": [
+        "actual0AP StopPeriod after audit lastAP; spentservice3000/1 not refunded, support1500/1 and audit100/1 reservations separate",
+        "full support after onlyone servicedday earns10716 (7144 oldprepaid/3572AR) and60000comp paid; s09 falsecomp0 originalsource explicitly corrected, not rewritten",
+        "separate actualrunning support interrupted spent1500/AP retained→income0/60000paid/audit actualstart→StopStation maintenance4838 cash withprotect1575736/AR12132/auditinterrupt",
+        "R7/R8 each actual new100 exact independent branch; R10 stopped95 reads support/audit wait without freecompletion"
+      ],
+      "evidence": [
+        "goal-1/evidence/t17-acceptance-37/native-negative-and-stop-public-readback-r1/result.json",
+        "goal-1/evidence/t17-acceptance-37/native-r8-producer-cut.json",
+        "goal-1/evidence/t17-acceptance-37/native-r10-producer-cut.json"
+      ],
+      "limits": [
+        "partial-service-day nonzero supportfee is actual; nonzero partial-support-work-time fee not occurred/promised",
+        "CloseBusiness original debt/asset gate preserved but no new actual close while obligations remain"
+      ]
+    },
+    {
+      "key": "R3-atomic-save-readonly-retry",
+      "responsibility": "真实head.put后abort/候选旧场景/物理只读旧新/原retry/正常重进",
+      "status": "covered_limited_autonomous",
+      "layers": [
+        "actualnegative101 head.put abort→candidate102; freshphysicalold101 same, readonly no write",
+        "originalretry persists candidateonce; freshphysicalnew102 exactlycandidate; readerclosed",
+        "finalsource source/permission/consumer chain preserved and currentApp tests; finalR10 normalSaveExit/reloadContinue samecanonical115"
+      ],
+      "evidence": [
+        "goal-1/evidence/t17-acceptance-37/native-negative-atomic-r6/exports.jsonl",
+        "goal-1/evidence/t17-acceptance-37/native-negative-physical-r6/exports.jsonl",
+        "goal-1/evidence/t17-acceptance-37/full-create-audit-r1/report/normal-browser-export-audit.json",
+        "goal-1/evidence/t17-acceptance-37/u4b-shared-entry-app-regression-r21.result.json"
+      ],
+      "limits": [
+        "finalR10 did not newly reenact abort; actual old fault causalNative evidence plus exact save-chain source bridge, not bytes-only causality"
+      ]
+    },
+    {
+      "key": "CS4R-art-and-interaction",
+      "responsibility": "一屏整幕/六态/物件同动作/分意义原票/真实回响/文本减少动效",
+      "status": "current_natural_window_limited_autonomous_visual_and_input_evidence",
+      "layers": [
+        "R10 ninefullscreens+AX and real input logs; workfoliowide, settledunreviewed independentleaf, stopped/closed kept different silhouettes",
+        "shared foreground prop+thought directToday, onebooklink, prerequisite beforefourstep, originalClock and liabilities visible",
+        "text/reducedmotion real95 mode then restored falsefalse",
+        "49HTTP/19originalimages bytes equal; bounded raw/DEV literal checks0"
+      ],
+      "evidence": [
+        "goal-1/evidence/t17-acceptance-37/r10-current-art-independent-review-r1/review.md",
+        "goal-1/evidence/t17-acceptance-37/production-r10-http-readback-r1/delivery-readback-r1/result.json",
+        "goal-1/evidence/t17-acceptance-37/native-r10-producer-cut.json"
+      ],
+      "limits": [
+        "not independent click of everybutton by image reviewer",
+        "papertexture/foldthickness/warmcontactshadow coherence and sound/motion suite remainU9",
+        "organizedhuman0/PNGoriginalbytes0of3"
+      ]
+    },
+    {
+      "key": "CS4R-engineering-and-regression",
+      "responsibility": "受影响累计回归/原规则闭包/类型构建/失败保留",
+      "status": "layered_accepted_results_not_single_full_green",
+      "layers": [
+        "finaltypeR25/buildR10 actual0; targetedR17 3files24 andR21 6files49 actual0",
+        "R16 whole119 UI115files841pass/4failedfiles5timeouttests+27hookskipped; originalcomplete domain27/opening13/quote12/ServiceChoice7 rerun atsame5s/10s/2workers/isolation pass",
+        "88nonUI conditionalexact reuse of original190batch88nonUI passed; same263 nonUIclosure+config+163importedinputs",
+        "Python77/content/plan/competitive actual0; check_docsR2 actual1 with97 outsideSKILL preserved inputs+5 oldnegative/symbol artifacts"
+      ],
+      "evidence": [
+        "goal-1/evidence/t17-acceptance-37/u4b-ui-complete-r16.result.json",
+        "goal-1/evidence/t17-acceptance-37/u4b-timeout-domain-r18.result.json",
+        "goal-1/evidence/t17-acceptance-37/u4b-timeout-opening-r19.result.json",
+        "goal-1/evidence/t17-acceptance-37/u4b-timeout-quote-r20.result.json",
+        "goal-1/evidence/t17-acceptance-37/final-u4b-admission-r1/non-ui-reuse-r2.json"
+      ],
+      "limits": [
+        "no single119/UI207 allgreen claimed; book-layout wholeexcluded; no new88execution",
+        "docs global still notgreen; Root finalnewdocs scan may add same-policy input copies, cannot overwriteold102identity"
+      ]
+    },
+    {
+      "key": "CS4R-completeCreate-and-publicReadback",
+      "responsibility": "全部真实原文Create/分支/角色/公开财务/元数据与原false保全",
+      "status": "actual_passed_with_preserved_outer_failure_and_clean_readback_only_correction",
+      "layers": [
+        "originalexact97/14cut/39raw/1Create178postprefix/15literalbuffer allByteEqual source127 match actualreplay0; no secondCreate",
+        "originalchildfresh33actualgreen; outerfalse only terminalfilenameEEXIST remainsfalse",
+        "newindependentlyreviewed RootGO R3 readbackonly process0/wrapper0 same33passed andwiringtrue/alltracked2190diff0; no Create/newNative",
+        "STOP current620/11authority/14trees independently verified beforelegitdocsrelease"
+      ],
+      "evidence": [
+        "goal-1/evidence/t17-acceptance-37/full-create-audit-r1/replay-terminal.json",
+        "goal-1/evidence/t17-acceptance-37/full-create-audit-r1/result.json",
+        "goal-1/evidence/t17-acceptance-37/full-create-audit-r1/report/normal-browser-export-audit.json",
+        "goal-1/evidence/t17-acceptance-37/readback-wrapper-correction-run-r1/correction-result.json",
+        "goal-1/evidence/t17-acceptance-37/final-u4b-admission-r1/stop-window-verification.json"
+      ],
+      "limits": [
+        "originalouterfalse never flipped togreen; same33 not66newchecks",
+        "source620 distinct from official127; raw39 vs97captures vs54newNative saves kept separate"
+      ]
+    }
+  ],
+  "engineering": {
+    "source620": {
+      "path": "goal-1/evidence/t17-acceptance-37/source-freeze-r26.json",
+      "bytes": 116367,
+      "sha256": "d326444b56bdd9931247c317f8f0ed4b7d8c1a3848eabf519ac41e913dab1ea4",
+      "mode": 420
+    },
+    "testGate": {
+      "path": "goal-1/evidence/t17-acceptance-37/test-gate-identity-r29.json",
+      "bytes": 46256,
+      "sha256": "10e3763df5c61838cfdf11e78a55fd788a17fd354773a87402162f6eb1919fee",
+      "mode": 420
+    },
+    "results": [
+      {
+        "name": "u4b-type-r25",
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/u4b-type-r25.result.json",
+          "bytes": 327,
+          "sha256": "e04bb4f2c8a9519aa40641cc476f6e4c2094542ee043d6a84374d7523864ee0c",
+          "mode": 420
+        },
+        "exitCode": 0,
+        "sourceUnchanged": true,
+        "extraSame": true
+      },
+      {
+        "name": "u4b-shared-service-entry-r17",
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/u4b-shared-service-entry-r17.result.json",
+          "bytes": 467,
+          "sha256": "f88c1e32c8e4aba3361fecd0a450e81c77bf0c2ce6625a26dbbf73a4c11018b7",
+          "mode": 420
+        },
+        "exitCode": 0,
+        "sourceUnchanged": true,
+        "extraSame": true
+      },
+      {
+        "name": "u4b-shared-entry-app-regression-r21",
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/u4b-shared-entry-app-regression-r21.result.json",
+          "bytes": 565,
+          "sha256": "6c19cb5428b1f1a585e37dbbe9ce0c8d01c4e7e3392e5ad51f6a4eb7edc13b4a",
+          "mode": 420
+        },
+        "exitCode": 0,
+        "sourceUnchanged": true,
+        "extraSame": true
+      },
+      {
+        "name": "u4b-build-r10",
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/u4b-build-r10.result.json",
+          "bytes": 372,
+          "sha256": "dc33ddc67022dda4048a535f56074fa17407ce6b4b570f512a71fa51bf2f425c",
+          "mode": 420
+        },
+        "exitCode": 0,
+        "sourceUnchanged": true,
+        "extraSame": true
+      },
+      {
+        "name": "u4b-timeout-domain-r18",
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/u4b-timeout-domain-r18.result.json",
+          "bytes": 370,
+          "sha256": "163f51dc984e6205ae5e96cd575415f5203d24db40d8ff4a9478f8dcc8374d1e",
+          "mode": 420
+        },
+        "exitCode": 0,
+        "sourceUnchanged": true,
+        "extraSame": true
+      },
+      {
+        "name": "u4b-timeout-opening-r19",
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/u4b-timeout-opening-r19.result.json",
+          "bytes": 365,
+          "sha256": "64a8cc6c4de5cc23711a05c22a80b6f36faa26e90f710c01ac235f8849830346",
+          "mode": 420
+        },
+        "exitCode": 0,
+        "sourceUnchanged": true,
+        "extraSame": true
+      },
+      {
+        "name": "u4b-timeout-quote-r20",
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/u4b-timeout-quote-r20.result.json",
+          "bytes": 377,
+          "sha256": "d0df3e3bcd4b47eb48bb2bdc6c0be33b04a151cdc6bddf742b5618113eab6d70",
+          "mode": 420
+        },
+        "exitCode": 0,
+        "sourceUnchanged": true,
+        "extraSame": true
+      },
+      {
+        "name": "u4b-python-tools-r1",
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/u4b-python-tools-r1.result.json",
+          "bytes": 339,
+          "sha256": "ed10797a6e251ccc5834c1557710d96210c035bb520b17b1d95f65b9d4902151",
+          "mode": 420
+        },
+        "exitCode": 0,
+        "sourceUnchanged": true,
+        "extraSame": true
+      },
+      {
+        "name": "u4b-content-r1",
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/u4b-content-r1.result.json",
+          "bytes": 346,
+          "sha256": "ca79c04c74056fce0e7de621e9bd630b25067e854ae0fb4d7c86dadbf49a8c09",
+          "mode": 420
+        },
+        "exitCode": 0,
+        "sourceUnchanged": true,
+        "extraSame": true
+      },
+      {
+        "name": "u4b-plan-final-r1",
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/u4b-plan-final-r1.result.json",
+          "bytes": 272,
+          "sha256": "9feea189585864219834ea159045831dab49456cf0083313d08a7170f10452c1",
+          "mode": 420
+        },
+        "exitCode": 0,
+        "sourceUnchanged": true,
+        "extraSame": true
+      },
+      {
+        "name": "u4b-competitive-final-r1",
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/u4b-competitive-final-r1.result.json",
+          "bytes": 286,
+          "sha256": "9c3d4c8d4caf6440e4fb2f63d37f70e4bdb1781b6830cc616d6c0a58e504d8f8",
+          "mode": 420
+        },
+        "exitCode": 0,
+        "sourceUnchanged": true,
+        "extraSame": true
+      }
+    ],
+    "wholeUI": {
+      "result": {
+        "path": "goal-1/evidence/t17-acceptance-37/u4b-ui-complete-r16.result.json",
+        "bytes": 393,
+        "sha256": "df3aefc7f7273d8e06d4f71154f4f0352064b711cbdd8b12cc029b61a5d88342",
+        "mode": 420
+      },
+      "exitCode": 1,
+      "passedFiles": 115,
+      "failedFiles": 4,
+      "passedCases": 841,
+      "timedOutCases": 5,
+      "hookSkippedCases": 27,
+      "originalTimeoutMs": 5000,
+      "originalHookTimeoutMs": 10000,
+      "separateOriginalWholeFilesPassed": {
+        "domain": 27,
+        "opening": 13,
+        "quoteEffectiveWait": 12,
+        "serviceChoice": 7
+      },
+      "singleWholeGreen": false
+    },
+    "nonUIReuse": {
+      "path": "goal-1/evidence/t17-acceptance-37/final-u4b-admission-r1/non-ui-reuse-r2.json",
+      "bytes": 69846,
+      "sha256": "0847c10c24d683e41c790041b5e18764f1b0e35c6fbed68eca7625085e9a634b",
+      "mode": 420
+    },
+    "docsGlobalPassed": false
+  },
+  "finalStopWindow": {
+    "path": "goal-1/evidence/t17-acceptance-37/final-u4b-admission-r1/stop-window-verification.json",
+    "bytes": 3823,
+    "sha256": "dfc27c8fa32782d197f1ebc48fd52f1fea2da61eaea839ec776a762929149cc5",
+    "mode": 420
+  },
+  "remaining": {
+    "path": "goal-1/evidence/t17-acceptance-37/final-u4b-admission-r1/remaining.json",
+    "bytes": 2912,
+    "sha256": "b8003481a48a09074b216c5e2a8a7a66121a5cdfc5b109eed7a3df6d51c3ca47",
+    "mode": 420
+  },
+  "afterStopAuthorityUpdates": "Root append-only release after actual correction terminal independently verified; earlier contract/ownedr7 snapshots remain historical; currentownedr8 and postrelease refs separately attached in final review.",
+  "wholeGoalComplete": false,
+  "featureCommitAndRecordSealDone": false,
+  "ownNewTestsBuildBrowserEngineRuns": 0
+}

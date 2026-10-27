@@ -1,0 +1,13 @@
+# 已核根因与最小修复
+
+Root原R9真实17file/187case为169pass/18fail，611源与extra初末同；stderr只打印17个展开编号，原header/stdout/result各保18不重写。12model与Rootresult/paper的现金退款失败共因customer unavailable；另paper缺“应付”措辞/quote单5秒超时归其它Owner，本作者不改其文件或原断言。
+
+一次只读fixednegative102探针真实exit0/1.921002309秒（tool9aa00d），confirmedtrue；helper原customerunavailable、supplierknown，原refund606cash与debtremaining0、operation.reservationId===debt.protectionReservationId、samecash.ref/source/date/customer/account/business均齐，而finance.reservations匹配0条。相关125官方产品源+ownhelper/test/resolver等初末无漂移；完整原102codecexport仍abe77f4e…同。探针仅诊断，不是修后绿。
+
+src/application/workbench-projection.ts45明定只发表sameaccount&&amountFen>0的reservations；我此前customerEffects却对已付清退款仍强求one()released0。真实合法0行被当缺失引用，因此所有正常cashrefund被降unknown；不是原账缺钱/错ref。另公共未付fixture原map()正额列表也无法把不存在的0行变为active606，后Pay fixture付清仍保了不该发表的0行。模型接口误用与fixture误建分列，不能改projection或伪补历史released来凑通过。
+
+修复只helper与其test：先保原operation/debt保护ID相等、kind/date/scope、现金直接/后Paycanonical/ref/source/amount全齐及paid+remaining=登记额。当前remaining>0仍要求恰一active正额保护sameaccount/origin/kind/amount；无行不当0。remaining=0且原现金已核全额时允许正额列表无该项，当前受约束未付保护0来自原余欠而非历史status猜测；若显式legacy/publicfixture含恰一released0仍strict核，重复/active0/正额矛盾均customerunknown，不封原命令。full lines明确不推断历史释放状态。
+
+公共未付fixture改显式追加active606保护（filter旧ID后append唯一匹配），后Pay减少正额至0时从正额投影删除。原30case题目/金额606/717578保护/202资产/未知与反例/默认5秒/新setup20秒全保，Root先前asunknownas桥保；另7展开case专门锁真实无0行、显式released0、缺正额/错额/错原债/active0/矛盾正额/重复0。原30中的wrongPay反例先前虽过，但在customer统一unknown时不能单独证明错字段guard生效，Root须按修后统一重验原全部case。
+
+本作者没有运行修后probe或unit/type/build/Browser/Git，没有改Rootconsumer/paper/quote、records/旧13case、application/core/P326/schema/master/旧封存。Root统一工程红绿与下一候选实图继续，不以诊断exit0冒修复已验，U4B/C-S4-R/全goal仍不关，compat0。

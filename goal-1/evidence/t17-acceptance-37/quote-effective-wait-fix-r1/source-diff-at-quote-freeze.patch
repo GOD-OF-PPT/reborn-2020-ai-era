@@ -1,0 +1,122 @@
+--- goal-1/evidence/t17-acceptance-37/quote-effective-wait-fix-r1/RelayRecordBook.before.tsx
++++ src/ui/RelayRecordBook.tsx
+@@ -10,6 +10,7 @@
+ import {CommandButton} from './CommandButton.tsx'
+ import {ClockAdvance} from './ClockAdvance.tsx'
+ import {playableAdvanceDate} from '../application/playable-advance.ts'
++import {isoDate} from '../core/calendar.ts'
+ import {relayReviewDate,relayReviewLabel,relayDeferredFeedback} from './relay-scene-clock.ts'
+ import {relayTicketAudit,relayTicketCorrection} from './relay-ticket-command.ts'
+ import {relayPaperFor,type RelayPaperSelection} from './relay-continuity.ts'
+@@ -37,10 +38,24 @@
+  children?:((view:RelayRecordBookView)=>ReactNode)|undefined
+ }
+ 
++function quoteEffectiveDate(p:GamePanelProps,target:RelaySceneTarget,row:RelayRecordRow):string|null{
++ const v=p.features.relay
++ if(!v||row.kind!=='quote'||!row.quoteId||!row.jobId)return null
++ if(resolveRelaySceneTarget(v,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations}).status!=='valid')return null
++ const quotes=v.quotes.filter(q=>q.id===row.quoteId&&q.businessId===target.businessId&&q.jobId===row.jobId),q=quotes.length===1?quotes[0]:undefined
++ const jobs=p.view.operations?.jobs.filter(j=>j.id===row.jobId&&j.businessId===target.businessId)??[],job=jobs.length===1?jobs[0]:undefined
++ if(!q||!job||job.status!=='completed'||q.completedAt===null||q.job?.id!==job.id||q.job.businessId!==target.businessId||q.job.status!=='completed')return null
++ try{isoDate(p.view.date);isoDate(q.completedAt);isoDate(q.effectiveAt);isoDate(job.completeAt)}catch{return null}
++ if(job.completeAt>q.completedAt||q.completedAt>p.view.date||q.effectiveAt<=p.view.date||!q.customerIds.length||new Set(q.customerIds).size!==q.customerIds.length)return null
++ if(q.customerIds.some(id=>v.customers.filter(c=>c.id===id&&c.businessId===target.businessId).length!==1)||q.responses.length!==q.customerIds.length||new Set(q.responses.map(r=>r.customerId)).size!==q.customerIds.length||q.responses.some(r=>!q.customerIds.includes(r.customerId)||typeof r.accepted!=='boolean')||!q.responses.some(r=>r.accepted))return null
++ return q.effectiveAt
++}
++
+ export function relayRecordNeedsReply(p:GamePanelProps,target:RelaySceneTarget,row:RelayRecordRow):boolean{
+  const v=p.features.relay
+  if(!v)return false
+  if(row.attention==='due'||row.attention==='known')return true
++ if(row.kind==='quote'&&quoteEffectiveDate(p,target,row)!==null)return true
+  if(row.jobId&&p.view.operations?.jobs.some(j=>j.id===row.jobId&&j.businessId===target.businessId&&['planned','running'].includes(j.status)))return true
+  if(row.kind==='application')return v.applications.some(a=>a.id===row.applicationId&&!a.read&&a.job?.status==='completed')
+  if(row.kind==='receivable')return v.receivables.some(i=>i.id===row.receivableId&&i.amountFen>i.collectedFen+i.reversedFen)
+@@ -179,14 +194,15 @@
+  const meterTarget:RelaySceneTarget|undefined=row.kind==='meter'&&row.meterId&&row.periodId?{...businessTarget,kind:'period',periodId:row.periodId,meterId:row.meterId}:undefined
+  const existing=meterTarget?relayTicketAudit(p,meterTarget):null
+  const job=row.jobId?p.view.operations?.jobs.find(j=>j.id===row.jobId&&j.businessId===target.businessId):existing?.job??undefined
+- const nextDate=job&&(job.status==='planned'||job.status==='running')?(job.status==='planned'?job.startAt:job.completeAt):invoice&&invoice.amountFen>invoice.collectedFen+invoice.reversedFen&&invoice.dueAt>p.view.date?invoice.dueAt:null
++  const effectiveDate=quoteEffectiveDate(p,target,row)
++  const nextDate=job&&(job.status==='planned'||job.status==='running')?(job.status==='planned'?job.startAt:job.completeAt):effectiveDate??(invoice&&invoice.amountFen>invoice.collectedFen+invoice.reversedFen&&invoice.dueAt>p.view.date?invoice.dueAt:null)
+  const next=nextDate?relayReviewDate(p,playableAdvanceDate(p.features.workbench,p.view.date,nextDate)):null
+  const correction=meterTarget?relayTicketCorrection(p,meterTarget):null
+  const batchRows=existing?.job?rows.filter(r=>r.kind==='audit'&&r.jobId===existing.job!.id):[]
+  const deferred=job&&(job.status==='planned'||job.status==='running')?relayDeferredFeedback(p,meterTarget??row.target??target):null
+  const auditNotice=existing?.job&&existing.batch?<p role="status">这张票已在{existing.job.startAt}—{existing.job.completeAt}的同一份复核中，完整批次{existing.batch.meterCount}条；实际完成后才看实计，不重复委托。</p>:existing?.reason?<p className="warning-box" role="status">{existing.reason}</p>:null
+  const actions=<div className="relay-ticket-decisions">
+-  {next?<ClockAdvance p={p} date={next} label={relayReviewLabel(p,next,job?'到这份原任务的下一反馈':'先到这笔原款的约定日期')+' · '+next}/>:null}
++   {next?<ClockAdvance p={p} date={next} label={relayReviewLabel(p,next,effectiveDate?next===effectiveDate?'等这份已谈妥的原报价生效':'先到原日历停点，再等这份报价生效':job?'到这份原任务的下一反馈':'先到这笔原款的约定日期')+' · '+next}/>:null}
+   {row.kind==='meter'&&meterTarget&&!existing?.job&&!existing?.reason&&v.meters.find(m=>m.id===row.meterId)?.auditedUnits===null?<button type="button" onClick={()=>update({editor:{kind:'audit',target:meterTarget}})}>为这一张已发生的原票，安排独立复核</button>:null}
+   {correction?.command?<CommandButton {...p} {...correction.command}/>:correction?.reason?<p className="field-help" role="status">{correction.reason}</p>:null}
+   {row.kind==='receivable'&&invoice&&invoice.amountFen>invoice.collectedFen+invoice.reversedFen&&invoice.dueAt<=p.view.date?<button type="button" onClick={()=>response('collect',{kind:'receivable',id:invoice.id})}>核对这张原单，本次先收多少</button>:null}
+--- goal-1/evidence/t17-acceptance-37/quote-effective-wait-fix-r1/relay-records.before-quote.ts
++++ src/ui/relay-records.ts
+@@ -4,6 +4,7 @@
+ import {moneyText,reasonText} from './game-text.ts'
+ import type {RelayCasebookHistory} from '../application/relay-casebook-projection.ts'
+ import {relaySupportSettlement,type RelaySupportSettlement} from './relay-support-settlement.ts'
++import {relayCorrectionEffects,type RelayCorrectionEffects} from './relay-correction-effects.ts'
+ 
+ export type RelayRecordKind='preparation'|'application'|'adapter'|'audience'|'customer'|'recharge'|'renewal'|'service'|'support'|'audit'|'meter'|'correction'|'receivable'|'collection'|'refund'|'supplier'|'obligation'|'quote'
+ export interface RelayRecordRow{
+@@ -107,6 +108,8 @@
+  ]}
+  const supportSettlements=new Map<string,RelaySupportSettlement>()
+  const settlement=(periodId:string)=>{let result=supportSettlements.get(periodId);if(!result){result=relaySupportSettlement(p,periodTarget(periodId));supportSettlements.set(periodId,result)}return result}
++ const correctionEffectsCache=new Map<string,RelayCorrectionEffects>()
++ const correctionEffects=(id:string)=>{let result=correctionEffectsCache.get(id);if(!result){const c=relay.corrections.find(c=>c.id===id)!,m=relay.meters.find(m=>m.id===c.meterId)!;result=relayCorrectionEffects(p,periodTarget(m.periodId,{meterId:m.id}),id);correctionEffectsCache.set(id,result)}return result}
+  for(const list of [relay.preparations,relay.applications,relay.adapters,relay.quotes] as const)for(const item of list.filter(r=>r.businessId===business.id))checkJob(item.job,item.jobId)
+  for(const item of relay.audiences.filter(a=>a.businessId===business.id&&a.jobId!==null))checkJob(item.job,item.jobId!)
+  const refundDetails=(refund:Refund)=>{
+@@ -135,6 +138,7 @@
+   ]}
+   if(row.kind==='correction'){const c=relay!.corrections.find(c=>c.id===row.correctionId)!,newInvoices=relay!.receivables.filter(r=>c.operationIds.includes(r.operationId)),newDebts=history?.obligationHistory.filter(o=>o.scopeBusinessId===business.id&&c.operationIds.includes(o.originOperationId))??[];return [
+    c.date+'追加；原报告 '+c.originalReportedUnits+'单位 → 已核 '+c.correctUnits+'单位',
++   ...correctionEffects(c.id).summary,
+    '客户收入调整 '+moneyText(c.customerDeltaFen)+'；供应成本调整 '+moneyText(c.supplierDeltaFen)+'；不是本次现金实收',
+    ...newInvoices.map(r=>'追加原单 '+r.date+'开单 / '+r.dueAt+'到期；净未收 '+moneyText(r.amountFen-r.collectedFen-r.reversedFen)),
+    ...newDebts.map(o=>'本次原义务 '+o.date+'到期；当前尚欠 '+moneyText(o.remainingFen)),...(!history?historyNote:[]),
+@@ -173,7 +177,13 @@
+   if(row.kind==='application'){const a=relay!.applications.find(a=>a.id===row.applicationId)!;result.push(a.read?(a.approved?'已亲读批准，许可至 '+shown(a.expiresAt):'已亲读未获批准；申请成本保留'):'回信尚未亲读，批准与有效期未知。')}
+   if(row.kind==='audit')result.push('原完整批次 '+relay!.auditJobs.find(a=>a.jobId===row.jobId)!.meterCount+'条，涉及 '+(row.periodIds?.length??0)+'期；当前子集不代表全部批次。')
+   if(row.kind==='service'||row.kind==='support'){const period=relay!.periods.find(t=>t.id===row.periodId)!;result.push('原范围 '+period.from+'—'+period.to+'；'+period.customerIds.length+'位客户；容量上限 '+period.maxUnits+'，供应预算上限 '+moneyText(period.maxSupplierCostFen));result.push(...settlement(period.id).summary)}
+-  if(row.kind==='quote'){const q=relay!.quotes.find(q=>q.id===row.quoteId)!;result.push('拟生效 '+q.effectiveAt+'；单位价 '+moneyText(q.unitPriceFen)+'；周期支持基准 '+moneyText(q.serviceFeeFen));result.push(q.completedAt!==null&&q.completedAt<=p.view.date&&q.job?.status==='completed'?'实际接受 '+q.responses.filter(r=>r.accepted).length+' / '+q.responses.length+'位，拒绝者保旧约。':'重谈尚未实际完成，答复未知；旧约照常。')}
++  if(row.kind==='quote'){
++   const q=relay!.quotes.find(q=>q.id===row.quoteId)!,validDates=[q.completedAt,q.effectiveAt,q.job?.completeAt,p.view.date].every(d=>typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&Number(d.slice(0,4))>=1&&Number.isFinite(Date.parse(d+'T00:00:00Z'))&&new Date(d+'T00:00:00Z').toISOString().slice(0,10)===d)
++   const known=validDates&&q.completedAt!==null&&q.completedAt<=p.view.date&&q.job?.status==='completed'&&q.job.completeAt<=q.completedAt&&q.job.id===q.jobId&&q.job.businessId===business.id&&q.customerIds.length>0&&new Set(q.customerIds).size===q.customerIds.length&&q.customerIds.every(id=>relay!.customers.filter(c=>c.id===id&&c.businessId===business.id).length===1)&&q.responses.length===q.customerIds.length&&new Set(q.responses.map(r=>r.customerId)).size===q.customerIds.length&&q.responses.every(r=>q.customerIds.includes(r.customerId)&&typeof r.accepted==='boolean')
++   result.push('拟定生效日 '+q.effectiveAt+'；拟谈单位价 '+moneyText(q.unitPriceFen)+'；周期支持基准 '+moneyText(q.serviceFeeFen))
++   result.push(known?(q.responses.some(r=>r.accepted)?(q.effectiveAt>p.view.date?'已经谈妥，尚未生效；到'+q.effectiveAt+'才适用于接受者后续用量。':'原报价已经生效，仅适用于接受者的后续用量。')+'实际接受 '+q.responses.filter(r=>r.accepted).length+' / '+q.customerIds.length+'位，拒绝者保旧约。':'客户全部拒绝；没有待生效的新报价，原合同与旧款继续。'):q.completedAt===null?'重谈尚未实际完成，答复未知；旧约照常。':'原完成或答复来源尚不能完整核定；不把未知当零接受或报价已生效。')
++   result.push(...q.customerIds.flatMap(id=>relay!.customers.filter(c=>c.id===id&&c.businessId===business.id).map(c=>customerRef(c.id)+'当前有效原价 '+moneyText(c.activeTerms.unitPriceFen)+'；原支持周期基准 '+moneyText(c.activeTerms.serviceFeeFen)+'，已发生计量与本期支持原报价不追改。')))
++  }
+   return result
+  }
+  const businessTarget:RelaySceneTarget={...base,kind:'business'}
+@@ -263,6 +273,7 @@
+    '客户收入调整 '+moneyText(correction.customerDeltaFen)+'；供应成本调整 '+moneyText(correction.supplierDeltaFen)+'；调整不是本次实收',
+    '本次原账操作 '+refs(correction.operationIds),
+    '新增应收/应付按新单自己的日期与到期日；负向供应调整可能冲应付或恢复资产，当前公开引用不能逐笔区分的部分不推断。',
++   ...correctionEffects(correction.id).lines,
+   ]})
+  }
+  const invoices=relay.receivables.filter(invoice=>customerIds.has(invoice.customerId)&&(target.kind==='business'||target.kind==='customer'||target.kind==='audience'||sourceIds.has(invoice.sourceId)))
+@@ -338,13 +349,15 @@
+  }
+  if(!childJob&&!childMeter){
+   for(const quote of relay.quotes.filter(row=>row.businessId===business.id&&(target.kind==='business'||row.customerIds.some(id=>customerIds.has(id))))){
+-   const known=quote.completedAt!==null&&quote.completedAt<=p.view.date&&quote.job?.status==='completed',ownership=target.kind==='period'?'station':'object'
+-   add({key:'quote:'+quote.id,recordId:quote.id,kind:'quote',quoteId:quote.id,jobId:quote.jobId,title:(ownership==='station'?'本站未来报价 · ':'原未来报价 · ')+quote.effectiveAt,date:quote.createdAt,state:quote.job?jobStates[quote.job.status]:'原谈判任务未知',attention:waiting(quote.job)?'pending':'record',ownership,...withTarget(businessTarget),lines:[
++   const validDates=[quote.completedAt,quote.effectiveAt,quote.job?.completeAt,p.view.date].every(d=>typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&Number(d.slice(0,4))>=1&&Number.isFinite(Date.parse(d+'T00:00:00Z'))&&new Date(d+'T00:00:00Z').toISOString().slice(0,10)===d)
++   const known=validDates&&quote.completedAt!==null&&quote.completedAt<=p.view.date&&quote.job?.status==='completed'&&quote.job.completeAt<=quote.completedAt&&quote.job.id===quote.jobId&&quote.job.businessId===business.id&&quote.customerIds.length>0&&new Set(quote.customerIds).size===quote.customerIds.length&&quote.customerIds.every(id=>relay.customers.filter(c=>c.id===id&&c.businessId===business.id).length===1)&&quote.responses.length===quote.customerIds.length&&new Set(quote.responses.map(r=>r.customerId)).size===quote.customerIds.length&&quote.responses.every(r=>quote.customerIds.includes(r.customerId)&&typeof r.accepted==='boolean'),accepted=known?quote.responses.filter(r=>r.accepted).length:null,ownership=target.kind==='period'?'station':'object'
++   const state=known?accepted===0?'客户全部拒绝，原约继续':quote.effectiveAt>p.view.date?'已经谈妥，尚未生效':'原报价已经生效':quote.completedAt!==null?'原完成与答复尚待核定':quote.job?jobStates[quote.job.status]:'原谈判任务未知'
++   add({key:'quote:'+quote.id,recordId:quote.id,kind:'quote',quoteId:quote.id,jobId:quote.jobId,title:(ownership==='station'?'本站未来报价 · ':'原未来报价 · ')+quote.effectiveAt,date:quote.createdAt,state,attention:waiting(quote.job)||known&&accepted!==0&&quote.effectiveAt>p.view.date?'pending':'record',ownership,...withTarget(businessTarget),lines:[
+     '原报价谈判 '+quote.id+'；原企业 '+quote.businessId+'；原任务 '+quote.jobId+'；创建 '+quote.createdAt+'；拟生效 '+quote.effectiveAt+'；实际完成 '+shown(quote.completedAt),
+     '原客户 '+refs(quote.customerIds.map(customerRef))+'；原方案 '+quote.offerId+'；拟谈单位价 '+moneyText(quote.unitPriceFen)+'；周期支持基准 '+moneyText(quote.serviceFeeFen),
+     '原资源 '+refs(quote.job?.resources??[])+'；原日程 '+shown(quote.job?.startAt)+'—'+shown(quote.job?.completeAt)+'；原行动 '+shown(quote.job?.actionId)+'；实际释放 '+shown(quote.job?.releasedAt),
+     ...jobLines(quote.job),
+-    ...(known?quote.responses.map(response=>customerRef(response.customerId)+' · '+(response.accepted?'实际接受未来方案':'实际拒绝，旧约保留')):['结果尚未实际完成，客户答复未知；未读取或推断隐藏响应。']),
++    ...(known?[state+'；实际接受 '+accepted+' / '+quote.customerIds.length+'位。',...quote.responses.map(response=>customerRef(response.customerId)+' · '+(response.accepted?quote.effectiveAt>p.view.date?'实际接受，尚待原生效日':'实际接受，原生效日已到':'实际拒绝，旧约保留'))]:[quote.completedAt===null?'结果尚未实际完成，客户答复未知；未读取或推断隐藏响应。':'原完成或答复来源不完整，保持未知，不补造接受结果。']),
+     '未来报价不追改已发生计量的原价或已确认本期支持报价；新合同与续签仍独立决定。',
+    ]})
+   }

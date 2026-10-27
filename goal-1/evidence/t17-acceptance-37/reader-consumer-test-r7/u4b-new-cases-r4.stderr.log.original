@@ -1,0 +1,22 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/RelayRecordBook.test.tsx > keeps a genuinely arranged single-meter audit as the same wait across progress, Reader, purpose and focus-open
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/ui/RelayRecordBook.test.tsx:371:91
+    369|  expect(ui.text()).toContain('同一份复核');expect(ui.text()).toContain('实际完…
+    370|  expect(ui.all().filter(e=>e.type==='button'&&text(e.props.children).i…
+    371|  expect(ui.all().some(e=>e.type==='button'&&text(e.props.children).inc…
+       |                                                                                           ^
+    372|  ui.click('翻开这一次已委托的完整复核批次');expect(ui.text()).toContain(auditJobId)
+    373|  expect(request).not.toHaveBeenCalled();expect(auditController.exportS…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

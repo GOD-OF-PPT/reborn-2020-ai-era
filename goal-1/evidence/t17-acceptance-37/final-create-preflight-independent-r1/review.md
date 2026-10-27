@@ -1,0 +1,27 @@
+# 结论：暂不准最终registry/freeze/正式engine GO
+
+发现5项同一组P2，详见findings.json。全部是读取候选源码可确定的验收或来源绑定缺口；没有执行syntax/builder/freeze/codec/verifier/readback/工程/Browser/Git，也没有构造反例文件或改变作者候选。本代理未作者当前response这一组；此前曾作者旧fullCreate准备和两份原JSON算术读回，继承原账不冒完全作者隔离。
+
+1. **P2-A｜新批次fresh范围未绑定原producer。** builderR2第16/18行只要求到R7，io57只要求名为current_r7_facts的freshscope，42行其recordKeys可任意已有key。因而R7真实capturerows不必进入新facts，未来R8也无强制cut或freshscope，静态能通过门槛。应由Root最终明确完整producer/freshproducer集合（含实际R7与未来R8），builder/freeze同时核每freshscope精确覆盖对应producer原最终capture keys；没cut/没facts就拒，当前不造active cut。
+2. **P2-B｜继承只核子集，能附带未经检查的新raw。** io53仅对旧manifest逐raw找final对应，但没有反向阻止继承scope.recordKeys加新R7/R8。validate67随后照这个扩大列表核结果仍可成功。必须从旧manifest的精确identity/manifest行及最终原来源推导继承keys精确集合，禁额外不同原件；同bytes别名不能借35/31声称新事实，新增scope全fresh。
+3. **P2-C｜“exact cut”未精确比tree。** builder25—29与freeze20—23只核已列files，不扫描现在的完整files/directories/modes。新增未列文件/空目录或目录mode变化而原manifest/journal不动会漏检，不能说原producer树没变。两步首末都要filesystem-only拒symlink、支持R1.files树/其它.tree，完整集合和bytes/mode比较；不修改原cut或清理差异。
+4. **P2-D｜derived101缺当时source窗proof。** builder64、freeze38—42只强制raw/provenance/result，未要求当时source-before/after及differences/error与source/runtime窗。已有真实proof应直接绑定：两份历史sourceproof均270321B/SHA9c3955b277b025c76d7c8db3d675b2af12aa6d7eab97508adc42c6480773e7bc，当时127source/901deps/P32626与全部引用/授权窗同；result明确1Create/117proposed/逐字118/原101。历史tasks行是5618B/6a6df5…，现在合法增长，不能递归拿它require当前同或回滚；只验证proof文件及其内部当时两窗与原result一致。原始派生执行不重跑、不叫newCreate/capture。
+5. **P2-E｜runtime由registry到freeze只比count。** builder70丢掉已扫描的完整runtimeidentity，仅expectedDependencyFiles；freeze15比较901数目，随后记录新扫描的bytes。两步间同数量不同字节无法发现；即使runner后续严格绑定contract，也不能回称与之前已冻结registry同runtime。应把完整dependencies数组存registry，freeze逐path/bytes/SHA/mode+集合与Node身份精确比较，实际数量再派生。
+
+这些问题应一次成组修后再独立定向复核；当前不写最终spec/registry/contract/GO，不因template或metadata文档存在声称当前可执行。root-fields/spec契约也应同时更新，以免代码修了仍手工遗漏R8或误把继承scope放大。
+
+## 已正确的限定切面
+
+当前9主writer（R1—R6六根+negative/service-stop/support-interrupt三根）和physical closed-reader另分身份；R1 stop在explicitProducerStop、其它last字段均有适配，physical last reader-closed无须改成producer-stop。writer各新保存来自cut.newGameplayCommands，physicalnewCreate/newSaves为0，Native总由Root有据贡献而非预填48/捕获数；spec还须用最终新facts按真实receipt验证这些贡献。本轮没有计算最终uniquecommands或新的Native总数。
+
+manifest行原origin/source/lineSHA、cut索引及rawbytes匹配有保留；native_saved_ui→saved_ui只是旁sourceRole与原manifest/cut映射，snapshot.origin仍原literal，不倒灌原verifier。原verify脚本严格只有origin===import_buffer计inputBuffers；它保recordedOrigin，不认识的来源也不自动改字面或填伪0。冻结完整源列表动态发现127与依赖扫描能力已在，需补完整runtime数组跨阶段绑定。
+
+官方verifier已只读全文对照：Create完整signature+commandId+versions决定根，完整canonical命令含payload/commandId/expectedRevision决定children，复用前核commandText与cachedraw，各capture末态逐字；相同runId或normal-relay-N不会拼不同payload的经营分支。metadata inventory用整条原signature哈希/完整前缀累计，不仅命令ID，当前分支计数方向安全。byteEqualGroups按bytes/SHA并逐Buffer.equals核，同字节别名不算新动作；distinctBranchPairs仅Root有据显选，没伪造runId。
+
+正35实际15capture/14raw/31input，负31实际25capture/16raw/48input，原result均passed且计数保持；io会逐原frozen输入和每raw identity核，不重跑旧once脚本，这方向正确，但需P2-B禁止扩scope。s09原source赔付0错误明确要求原journal source-label-correction引用，原source不会覆盖；freeze RoleLedger保该纠错，真实600与107.16仍由原31/原AX证明而非builder重算。
+
+runner11有command/result唯一标记、所有输出guard+wx，原verifier→entry严格顺序；expectedReplay/inputBuffers对原report核同，不把role倒填report。原engine成功而readback失败时原report/terminal已保，文档明确另freshreadback-correction不重跑runner/Create；没有自动重启覆写路径。若提前throw/解析错误导致无result，应靠实际外层terminal和已有日志判执行范围，不能说没执行。当前entry本身尚未交付/独审，本protocol不是会计算法通过。
+
+## 身份/操作边界
+
+只读作者包18文件、相关旧proof元数据及官方verifier，无活R7/R8完整exports/tree读取；currenttype18/611源/R8delta不改。旧prefix历史sourceproof只做文件身份/结构读取，没有读未审meter真值/queue/seed或新投影。保存本审首末身份后停writer；全部syntax/candidate/工程/codec/Browser/Git写为0，Root37最终formal验收及U4B/C-S4-R/goal均未准完成，compat0。

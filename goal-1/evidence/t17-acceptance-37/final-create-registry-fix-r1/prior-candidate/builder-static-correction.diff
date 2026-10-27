@@ -1,0 +1,33 @@
+--- build-final-registry-candidate.mjs (unexecuted first draft)
++++ build-final-registry-candidate-r2.mjs (sole current candidate)
+@@ -6,7 +6,7 @@
+ // FUTURE filesystem-only builder. Root must supply a final spec after R7 stops.
+ // No product/codec/registry/verifier/readback import or process spawning occurs.
+ if(process.argv.length!==8||process.argv[2]!=='--spec'||process.argv[4]!=='--fresh-registry-output'||process.argv[6]!=='--cut-r7')throw Error('EXPLICIT_ROOT_SPEC_FRESH_REGISTRY_AND_R7_CUT_REQUIRED')
+-const specPath=process.argv[3],freshRegistryOutput=process.argv[5],cutR7=process.argv[7],spec=json(specPath)
++const specPath=process.argv[3],freshRegistryOutput=process.argv[5],cutR7=process.argv[7],specData=read(specPath),spec=JSON.parse(specData.bytes.toString('utf8'))
+ const root='goal-1/evidence/t17-acceptance-37',output=path.resolve(repo,freshRegistryOutput),outputRelative=path.relative(repo,output).split(path.sep).join('/')
+ if(process.version!=='v22.12.0'||spec.authorizedBy!=='/root'||spec.operation!=='build_final_registry_metadata_only'||spec.freshRegistryOutput!==freshRegistryOutput||spec.cutR7!==cutR7||outputRelative!==freshRegistryOutput||!outputRelative.startsWith(root+'/')||!/^[a-zA-Z0-9_.-]+\.json$/.test(path.basename(output)))throw Error('EXACT_ROOT_BUILDER_AUTHORITY_REQUIRED')
+ guard(path.dirname(output));if(fs.existsSync(output))throw Error('FRESH_REGISTRY_OUTPUT_MUST_NOT_EXIST')
+@@ -18,10 +18,10 @@
+ if(new Set(directories).size!==directories.length||expectedRoots.some(n=>!directories.includes(n))||spec.producers.filter(p=>p.directory===root+'/chrome-main-r7'&&p.cut?.path===cutR7&&p.captureRole==='stopped_writer').length!==1)throw Error('ALL_KNOWN_PRODUCERS_AND_EXACT_STOPPED_R7_REQUIRED')
+ const roleKeys=spec.recordRoles.map(r=>r.key)
+ if(new Set(roleKeys).size!==roleKeys.length)throw Error('UNIQUE_EXPLICIT_CAPTURE_ROLE_KEYS_REQUIRED')
+-const originalRows=[],references=[read(specPath).identity],producerCuts=[],journals=[],records=[],seenKeys=new Set(),nativeEvidence=[]
++const originalRows=[],references=[specData.identity],producerCuts=[],journals=[],records=[],seenKeys=new Set(),nativeEvidence=[]
+ const official=sources(),runtime=dependencies()
+ for(const producer of spec.producers){
+- if(typeof producer.directory!=='string'||!producer.directory.startsWith(root+'/chrome-')||!['stopped_writer','closed_physical_reader'].includes(producer.captureRole))throw Error('EXPLICIT_PRODUCER_DIRECTORY_ROLE_REQUIRED')
++ if(typeof producer.directory!=='string'||!/^goal-1\/evidence\/t17-acceptance-37\/chrome-[a-zA-Z0-9-]+$/.test(producer.directory)||!['stopped_writer','closed_physical_reader'].includes(producer.captureRole))throw Error('EXPLICIT_PRODUCER_DIRECTORY_ROLE_REQUIRED')
+  const cutData=requireIdentity(producer.cut),cut=JSON.parse(cutData.bytes.toString('utf8')),last=cut.explicitProducerStop??cut.last,files=cut.tree?.files??cut.files?.files
+  if(cut.directory!==producer.directory||!Array.isArray(files)||producer.captureRole==='stopped_writer'&&last?.type!=='producer-stop'||producer.captureRole==='closed_physical_reader'&&last?.type!=='reader-closed')throw Error('ACTUAL_COMPLETE_PRODUCER_STOP_OR_READER_CLOSE_REQUIRED:'+producer.directory)
+  guard(producer.directory)
+@@ -66,7 +66,7 @@
+ const inventory=receiptInventory(records),aliases=new Map()
+ for(const record of records){const key=record.identity.bytes+':'+record.identity.sha256;if(!aliases.has(key))aliases.set(key,[]);aliases.get(key).push(record)}
+ const byteEqualGroups=[...aliases.values()].filter(group=>group.length>1).map(group=>{const first=requireIdentity(group[0].identity).bytes;if(group.some(row=>!requireIdentity(row.identity).bytes.equals(first)))throw Error('ALIAS_BYTES_DIFFER_DESPITE_HASH');return group.map(r=>r.key)})
+-const here=path.dirname(fileURLToPath(import.meta.url));for(const n of ['build-final-registry-candidate.mjs','audit-io.mjs','freeze-final-cut.mjs','run-once-candidate.mjs'])references.push(read(path.relative(repo,path.join(here,n)).split(path.sep).join('/')).identity)
++const here=path.dirname(fileURLToPath(import.meta.url));references.push(read(path.relative(repo,fileURLToPath(import.meta.url)).split(path.sep).join('/')).identity);for(const n of ['audit-io.mjs','freeze-final-cut.mjs','run-once-candidate.mjs'])references.push(read(path.relative(repo,path.join(here,n)).split(path.sep).join('/')).identity)
+ const registry={state:'frozen',frozenBy:'/root',scope:'U4-B-only',outputDirectory:spec.auditDirectory,formalPlan:spec.formalPlan,formalTasks:spec.formalTasks,officialSources:official,expectedOfficialSourceCount:official.length,expectedDependencyFiles:runtime.length,records,producerCuts,journals,referenceFiles:[...new Map(references.map(r=>[r.path,r])).values()],derivedInputDependencies:spec.derivedInputDependencies,publicReadback:spec.publicReadback,publicReadbackWiring:spec.publicReadbackWiring,expectedReplay:{creationHistories:inventory.creationHistories,uniqueHistoricalCommands:inventory.uniquePostCreatePrefixes,artifactRows:inventory.artifactRows,literalImportBufferRows:records.filter(r=>r.origin==='import_buffer').length},newNativeCreates:totalCreates,newNativeSavedCommands:totalSaves,byteEqualGroups,distinctBranchPairs:spec.distinctBranchPairs??[],sourceRoleCounts:Object.fromEntries([...new Set(records.map(r=>r.sourceRole))].map(role=>[role,records.filter(r=>r.sourceRole===role).length])),literalOriginCounts:Object.fromEntries([...new Set(records.map(r=>r.origin))].map(origin=>[origin,records.filter(r=>r.origin===origin).length])),nativeContributions:spec.nativeContributions,policy:'Original origin/source strings and verifier are unchanged. Old literal inputBuffers counts import_buffer only; role ledger separately preserves current_buffer/candidate/physical/backup/reentry. This filesystem registry is not formal replay, does not create a GO and never reclassifies a derived dependency as Native.'}
+ if(sourceDiff(official,sources()).length||sourceDiff(runtime,dependencies()).length)throw Error('SOURCE_OR_RUNTIME_CHANGED_DURING_REGISTRY_METADATA_BUILD')
+ for(const identity of [...references,...originalRows])requireIdentity(identity)

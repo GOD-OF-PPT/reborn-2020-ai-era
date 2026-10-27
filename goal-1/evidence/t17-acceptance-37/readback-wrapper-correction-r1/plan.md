@@ -1,0 +1,7 @@
+# 只读回包装补正（本轮不运行）
+
+先保存实际原runner/registeredR6entry及原失败/绿replay/33结果来源身份，明确两个put同名碰撞。新entry只改授权/输入输出与metadata闭包，不改R6事实算法或33case；originalauditDirectory/frozencontract仍原根，output只fresh新根，replacement自身由Root correctionGO独立绑定，不假写原contract.publicReadback。
+
+RootGO需原合同identity、绿replayreport/terminal、原outer失败/child33结果、replacementScript/wrapper/independentReview/freshoutput及operation准确。保持原source127/dependencies901/P326/完整refs/inputs/snapshots+14tree前后核，新增GO/replacement/report/review跟踪。新wrapper只spawn readbackentry，0Create，外层process终态命名correction-process-terminal.json，child原readback-terminal.json名保。全部输出guard+wx，不写原formal根。
+
+候选与GOTEMPLATE保持未授权not_run，不检查syntax/import/engine/Browser/Git；Root/state/art定向审后另精确GO运行。若读回补正失败保第一次输出，不能因此第二Create。原outerfalse/33green证据保，不合称66新case或全任务完成。

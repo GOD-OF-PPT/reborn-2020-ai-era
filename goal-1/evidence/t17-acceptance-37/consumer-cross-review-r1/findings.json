@@ -1,0 +1,88 @@
+{
+  "at": "2026-10-26T16:40:33.081Z",
+  "scope": "Read-only cross-owner consumer review, pre-fix candidate slices and controlled source changes",
+  "findings": [
+    {
+      "id": "C-P2-01",
+      "priority": 2,
+      "owner": "Root",
+      "status": "accepted_by_Root_pending_fix_and_verification",
+      "file": "src/ui/RelayPanel.tsx",
+      "trigger": "Book full-record footer from a specified invoice ticket inside RelayPanel",
+      "evidence": "onFullRecord={(next,_record,preparation)=>choose(next,preparation)} drops recordKey. App.selectRelayRecord clears relayRecordId; RelayPanel key includes initialFocusId, so remount loses specified invoice reading and returns to meter/default entry.",
+      "required": "Carry original recordKey/initialFocusId to owned parent state or explicitly retain the same ticket; do not silently substitute another ticket. Draft memory must stay canonical."
+    },
+    {
+      "id": "C-P2-02",
+      "priority": 2,
+      "owner": "Root",
+      "status": "accepted_by_Root_pending_fix_and_verification",
+      "files": [
+        "src/ui/RelayRecordBook.tsx",
+        "src/ui/relay-scene-progress.ts",
+        "src/ui/thread-purpose.ts"
+      ],
+      "trigger": "Revisit a meter whose independent audit job is already planned/running and auditedUnits is still null",
+      "evidence": "Book audits only checks auditedUnits===null to offer another audit; meter row has no active audit wait. SceneProgress meter branch and Purpose unknown-meter text do not bind existing active audit. Core rejects duplicate work, but next action/waiting object is wrong.",
+      "required": "Resolve unique original active audit/batch/job; show its actual committed start/complete date and original wait/read action. Only no-active meters may start new audit. Unknown actual units remain unknown."
+    },
+    {
+      "id": "C-P2-03",
+      "priority": 2,
+      "owner": "Root",
+      "status": "accepted_by_Root_pending_fix_and_verification",
+      "files": [
+        "src/ui/RelayResponseCommandDetails.tsx",
+        "src/ui/CommandDetails.tsx"
+      ],
+      "trigger": "Confirm a fully specified RenewRelayCustomer response",
+      "evidence": "Editor passes termEnd/mode/creditLimitFen with confirm:true, but final captured confirmation has no Renew-specific details. Generic account/zero-fee text omits these actual new contract conditions.",
+      "required": "Publish same original customer/old conditions and exact selected new end/payment mode/credit in the original confirmation; preserve old prepayments/receivables and original core preview."
+    },
+    {
+      "id": "C-P2-04",
+      "priority": 2,
+      "owner": "Root",
+      "status": "accepted_by_Root_pending_fix_and_verification",
+      "files": [
+        "src/ui/CommandDetails.tsx",
+        "src/ui/RelayResponseCommandDetails.tsx"
+      ],
+      "trigger": "Confirm StartRelayRequote with explicit selected customers and offerKind",
+      "evidence": "Existing confirmation lists only customer count/unit price/effectiveAt, omitting selected customer identities and charging mode/service-fee commitment. These are materially different contract choices.",
+      "required": "Show original customer ordinals/contracts, exact offer kind/support baseline, selected resources/start/effective date in captured original confirmation; no new rule or payload changes."
+    },
+    {
+      "id": "C-P2-05",
+      "priority": 2,
+      "owner": "Root",
+      "status": "reported_for_same_fix_group",
+      "file": "src/ui/RelayPanel.tsx",
+      "trigger": "A retained original RelayJob advance handler after controller publishes a newer saved view",
+      "evidence": "RelayJob direct props.request(AdvanceTime,job.completeAt) uses locked(old flags/controller.busy), not click-time same-view guard. App.request prepares from latest snapshot, accepting an old UI date intent if original preview permits. Core money/barriers remain enforced, but old snapshot activation contract is bypassed.",
+      "required": "Use the same makeSharedAction/original ClockAdvance source-view binding before requesting the unchanged original date/fee review."
+    }
+  ],
+  "authorModelFindings": [
+    {
+      "id": "MODEL-P2-01",
+      "source": "art cross-owner review",
+      "status": "source fixed under Root authorization in state-fix-r2; not independently tested here"
+    },
+    {
+      "id": "MODEL-P2-02",
+      "source": "art cross-owner review",
+      "status": "source fixed under Root authorization in state-fix-r2; not independently tested here"
+    }
+  ],
+  "operations": {
+    "tests": 0,
+    "typecheck": 0,
+    "build": 0,
+    "browser": 0,
+    "git": 0,
+    "projection": 0,
+    "RootProductWritesByReviewer": 0
+  },
+  "limits": "No acceptance of later Root fixes or runtime pass. Own model R2 and Root declared after-type-R1 changes are separate identities, not one frozen source."
+}

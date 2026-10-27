@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-26T20:20:45.036769+00:00",
+  "action": "Fresh repair tasks.md completion update",
+  "actual": "The initial tasks.md was created with xb. The final completion update called the real JS ancestor guard again, then Path.write_text on this same owned, unsealed tasks.md, without an exclusive-create flag.",
+  "deviation": "One mutable tasks update did not follow the delegated wx-only evidence-write condition.",
+  "correction": "Do not describe every write as wx. This boundary is preserved in a new guard-checked exclusive-create file; no existing record is rewritten to conceal it.",
+  "currentTasks": {
+    "path": "goal-1/evidence/t17-acceptance-37/support-story-type-fix-r1/tasks.md",
+    "bytes": 680,
+    "sha256": "df21fe450f1b9c11ab567c74f0f0fecdf58a81b743202805113da95bf17f013d",
+    "mode": 420
+  },
+  "affectedScope": "Only the new support-story-type-fix-r1/tasks.md. No Native/raw/journal, sealed evidence, product, other test, master or P3 was touched by this completion update.",
+  "realGuardExecutedBeforeUpdate": true,
+  "sourceFixUnchanged": {
+    "path": "src/ui/relay-support-story.test.ts",
+    "bytes": 16205,
+    "sha256": "4cc252f87ebe5f14625b97183f6cbd127f4592568ec36966f9cbb176c24424b0",
+    "mode": 420
+  },
+  "remaining": "Root can decide whether any further record-format action is needed; no product or test execution was performed."
+}

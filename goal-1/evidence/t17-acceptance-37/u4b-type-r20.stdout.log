@@ -1,0 +1,39 @@
+src/ui/relay-continuity.ts(209,27): error TS2322: Type '{ composition: undefined; heading: string; dateLabel?: string; line?: string; supportLabel?: string; responsibility?: string; paymentLabel?: string; actionHint?: string; historical?: boolean; support?: RelayPaperSupportState; ... 9 more ...; state: "running" | ... 2 more ... | "choice"; } | ... 4 more ... | { ...; }' is not assignable to type 'RelayServicePaperState | undefined'.
+  Type '{ composition: undefined; heading: string; dateLabel?: string; line?: string; supportLabel?: string; responsibility?: string; paymentLabel?: string; actionHint?: string; historical?: boolean; support?: RelayPaperSupportState; ... 9 more ...; state: "choice" | "planned" | "running" | "ready"; }' is not assignable to type 'RelayServicePaperState | undefined'.
+    Type '{ composition: undefined; heading: string; dateLabel?: string; line?: string; supportLabel?: string; responsibility?: string; paymentLabel?: string; actionHint?: string; historical?: boolean; support?: RelayPaperSupportState; ... 9 more ...; state: "choice" | "planned" | "running" | "ready"; }' is not assignable to type 'RelayPaperLabels & { phase: "preparation"; state: "running" | "ready" | "planned" | "choice"; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+      Type '{ composition: undefined; heading: string; dateLabel?: string; line?: string; supportLabel?: string; responsibility?: string; paymentLabel?: string; actionHint?: string; historical?: boolean; support?: RelayPaperSupportState; ... 9 more ...; state: "choice" | "planned" | "running" | "ready"; }' is not assignable to type 'RelayPaperLabels' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+        Types of property 'composition' are incompatible.
+          Type 'undefined' is not assignable to type 'RelayPaperComposition'.
+src/ui/relay-continuity.ts(211,8): error TS2322: Type 'RelayServicePaperState | { composition: { kind: "kept"; reason: "stopped" | "closed"; }; } | { composition: { kind: "working"; }; } | undefined' is not assignable to type 'RelayServicePaperState'.
+  Type 'undefined' is not assignable to type 'RelayServicePaperState'.
+src/ui/relay-continuity.ts(211,37): error TS18048: 'art' is possibly 'undefined'.
+src/ui/relay-continuity.ts(211,60): error TS18048: 'art' is possibly 'undefined'.
+src/ui/relay-continuity.ts(211,82): error TS18048: 'art' is possibly 'undefined'.
+src/ui/relay-continuity.ts(211,106): error TS18048: 'art' is possibly 'undefined'.
+src/ui/relay-continuity.ts(211,129): error TS18048: 'art' is possibly 'undefined'.
+src/ui/relay-continuity.ts(212,44): error TS18048: 'art' is possibly 'undefined'.
+src/ui/relay-continuity.ts(213,4): error TS18048: 'art' is possibly 'undefined'.
+src/ui/relay-continuity.ts(213,27): error TS18048: 'art' is possibly 'undefined'.
+src/ui/relay-continuity.ts(219,41): error TS2322: Type '{ composition: { kind: "kept"; reason: "stopped"; }; } | { composition: { kind: "kept"; reason: "stopped"; }; heading: string; dateLabel?: string; line?: string; supportLabel?: string; responsibility?: string; ... 13 more ...; state: "running" | ... 2 more ... | "choice"; } | ... 4 more ... | { ...; }' is not assignable to type 'RelayServicePaperState | undefined'.
+  Type '{ composition: { kind: "kept"; reason: "stopped"; }; }' is not assignable to type 'RelayServicePaperState | undefined'.
+    Type '{ composition: { kind: "kept"; reason: "stopped"; }; }' is not assignable to type 'RelayPaperLabels & { phase: "result"; state: "receivable" | "stopped" | "closed" | "received"; }'.
+      Property 'heading' is missing in type '{ composition: { kind: "kept"; reason: "stopped"; }; }' but required in type 'RelayPaperLabels'.
+src/ui/relay-continuity.ts(225,4): error TS2322: Type '{ composition: { kind: "settled-unreviewed"; unreviewedCount: number; retained: "received" | "recorded"; }; } | { composition: { kind: "settled-unreviewed"; unreviewedCount: number; retained: "received" | "recorded"; }; ... 18 more ...; state: "running" | ... 2 more ... | "choice"; } | ... 4 more ... | { ...; }' is not assignable to type 'RelayServicePaperState | undefined'.
+  Type '{ composition: { kind: "settled-unreviewed"; unreviewedCount: number; retained: "received" | "recorded"; }; }' is not assignable to type 'RelayServicePaperState | undefined'.
+    Type '{ composition: { kind: "settled-unreviewed"; unreviewedCount: number; retained: "received" | "recorded"; }; }' is not assignable to type 'RelayPaperLabels & { phase: "result"; state: "receivable" | "stopped" | "closed" | "received"; }'.
+      Property 'heading' is missing in type '{ composition: { kind: "settled-unreviewed"; unreviewedCount: number; retained: "received" | "recorded"; }; }' but required in type 'RelayPaperLabels'.
+src/ui/relay-continuity.ts(229,143): error TS2322: Type '{ composition: { kind: "kept"; reason: "closed"; }; } | { composition: { kind: "kept"; reason: "closed"; }; heading: string; dateLabel?: string; line?: string; supportLabel?: string; responsibility?: string; ... 13 more ...; state: "running" | ... 2 more ... | "choice"; } | ... 4 more ... | { ...; }' is not assignable to type 'RelayServicePaperState | undefined'.
+  Type '{ composition: { kind: "kept"; reason: "closed"; }; }' is not assignable to type 'RelayServicePaperState | undefined'.
+    Type '{ composition: { kind: "kept"; reason: "closed"; }; }' is not assignable to type 'RelayPaperLabels & { phase: "result"; state: "receivable" | "stopped" | "closed" | "received"; }'.
+      Property 'heading' is missing in type '{ composition: { kind: "kept"; reason: "closed"; }; }' but required in type 'RelayPaperLabels'.
+src/ui/relay-continuity.ts(230,2): error TS2322: Type '{ composition: { kind: "working"; }; } | { composition: { kind: "working"; }; heading: string; dateLabel?: string; line?: string; supportLabel?: string; responsibility?: string; paymentLabel?: string; ... 12 more ...; state: "running" | ... 2 more ... | "choice"; } | ... 4 more ... | { ...; }' is not assignable to type 'RelayServicePaperState | undefined'.
+  Type '{ composition: { kind: "working"; }; }' is not assignable to type 'RelayServicePaperState | undefined'.
+    Type '{ composition: { kind: "working"; }; }' is not assignable to type 'RelayPaperLabels & { phase: "result"; state: "receivable" | "stopped" | "closed" | "received"; }'.
+      Property 'heading' is missing in type '{ composition: { kind: "working"; }; }' but required in type 'RelayPaperLabels'.
+src/ui/relay-paper-composition.test.tsx(29,31): error TS2375: Type '{ kind: "work"; appearance: "relay"; title: string; displayTitle: string; detail: string; stageLabel: string; actionLabel: string; onActivate: Mock<Procedure>; disabled: boolean; protection: "readonly" | ... 1 more ... | undefined; textOnly: boolean; copyMode: "tableau"; relayPaper: RelayServicePaperState; }' is not assignable to type 'OpeningObjectProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'protection' are incompatible.
+    Type '"readonly" | "unsaved" | undefined' is not assignable to type 'OpeningObjectProtection'.
+      Type 'undefined' is not assignable to type 'OpeningObjectProtection'.
+src/ui/relay-record-meaning.test.tsx(148,4): error TS2540: Cannot assign to 'view' because it is a read-only property.
+src/ui/RelaySceneChoice.tsx(116,11): error TS2349: This expression is not callable.
+  Type 'Record<string, string>' has no call signatures.

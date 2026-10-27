@@ -1,0 +1,11 @@
+# 首次原票与待回应列表的3项consumer增量
+
+只新增3项test及必要独立读前史setup/2行import；未改任何产品或其它test。去除新增块/import后整文件逐字恢复本轮前像54381B/SHA c843542cdf65546155a8ca82a0318978d6f32a0ed63d88d091b009a31a3214ac，包括Root后来校正Nov13原停点的旧case，不回退早期R8版本。原22case/所有断言/driver/五次保存setup/时限门槛逐字保持，现在25项。
+
+新增两controller只在fake IndexedDB导入固定真实旧normal86/87原文、读取当前provider视图、关闭，无新经营命令；不重复原5save，不把存储导入冒新Create或本轮Native。
+
+1. 86纯period无显式票/阅读记忆，实际Reader直接进入唯一已到期原单，amount空；原单Oct24/Nov7/1216分及零实收冲回保，收起/重开仍同票空稿，不request、不写原文。
+2. 87纯period无新显选，实际Reader首先active原support（service已completed），再翻票默认open。unknown56条原meter逐条不被needsReply判为已委托等待，实际radio key集合等公开应回应集合；显选all/meter后完整所有原记录与56条原meter仍可达，key稳定。没有把未知当0或删除原计量。
+3. 同target记忆指定旧service时优先于active support建议；再把记忆设support而显式key设旧service，Reader仍读明确旧service。指定missing key时显示原失效/未确认选择，不回落到记忆或建议；没有依赖不运行的React effect来断言阅读记忆永久不变。仅检优先级与原key/无业务写。
+
+[杠精审查] 静态增量通过：沿真实Reader→Editor/Clock组件消费，不仅是helper输出；helper只用于核实际picker完整集合。原固定前史元数据已静态核，但本次没有运行tests/type/build/Browser/Git，25case不等于已通过。所有旧红与Root后续运行身份保留。测试文件最终冻结，兼容/几何开发测试0，完整U4-B/C-S4-R与真人美术认可仍由整体主任务验证。

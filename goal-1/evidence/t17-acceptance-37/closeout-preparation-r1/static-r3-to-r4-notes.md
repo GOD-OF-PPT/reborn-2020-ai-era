@@ -1,0 +1,3 @@
+# R4候选执行身份绑定（未执行）
+
+最后补候选自身与复用依赖实际文件绑定：Root final-own manifest必须带candidateLibrary精确identity，执行时其path须等import.meta.url对应真实本库；boundReferences必须包括真实guard与只复用R25参数化lib，所有Root声明配置/输入/helper在每phase前后source检查重读。防Root已审R4而实际导入其它文件或复用依赖变更；不把候选静态写码当语法/阶段通过。R1—R3全未执行原件保留，唯一交独审候选为closeout-r4.candidate.mjs（与master后缀r4是不同命名域，后缀registry仍动态可r5）。

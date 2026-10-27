@@ -1,0 +1,11 @@
+原五P2的有界源码复核：未发现五项仍存的确定P1/P2；仅静态路径通过，不是正式准入GO。完整阅读4候选/合同/response，0import/语法/候选/engine/readback/工程/Browser/Git执行；没有最终registry/spec/contract/GO写入。
+
+A requireFinalProducerSet要求Root显式complete inventory，R7/R8至少fresh，完整producer与completeDirectories等集、所有非base未来root必须fresh。requireFreshProducerScopes将每fresh原producer的全部recordKeys与其scope精确等集，producer唯一覆盖；不能只列标题漏输入。
+B inherited positive35/negative31逐原manifest raw核frozen.inputs、path/bytes/SHA/mode、manifest身份/line/lineSHA/origin/source/run/revision且唯一；required.recordKeys与expectedKeys严格等集，不得将额外新alias当继承旧绿。
+C requireProducerTree用lstat递归，拒symlink/special，核根/空目录/全文件和目录mode精确等集，builder/freeze首末及runner前后调用；原stop/readerclosed/role检查仍在。
+D derived101强制原source-before/after270321B/9c3955窗相同、内部127/901/P32626/refs37/auth3同历史contract，result117/terminal/provenance/raw/full118结果匹配，角色0新Create/命令，不重做派生。历史tasks5618在原proof内部核，不将当前路径旧字节冒历史same；当前任务引用另有mutable final snapshot冻结策略。
+E registry存完整runtimeDependencies，freeze以requireIdentitySet核全path/bytes/SHA/mode等集而非只count，进入前后bindings。
+
+原literal source/origin仍保，仅side role mapping将native_saved_ui映成saved_ui；unknown与缓冲不能伪0。branch仍由完整receipt signature payload历史指纹核，非仅commandID拼接。runner一次marker/engine后readback顺序/失败原输出和readback-only新根补正均保。
+
+待最终Root spec/registry entries、全部最终producer cut/tree、准确最新source/deps/P326 freeze、public readback entry与独立最终contract审齐，Native总数实际cuts计算不预填48。候选源码静审不是R7/R8当前树冻结或已执行证据。Root真实stop+工程terminal后另授权；失败保原件。

@@ -1,0 +1,1 @@
+只在实际选中meter票时构造可互动meterTarget，原单/收据/更正行的meterId只是来源元数据，不能借它生成独立复核等待/更正动作。保现有选meter实际等待/更正与所有money/date/AP/candidate保护。添加一个真实旧前史consumer回归，不改既有25case；NativeR2实际失败截图与1新保存/重进原字节保。

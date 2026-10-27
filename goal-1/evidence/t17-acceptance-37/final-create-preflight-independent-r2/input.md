@@ -1,0 +1,1 @@
+继续当前唯一U4B。Root授权只读独立复核当前未验N11：scene-result.ts effectiveRelayQuoteResults、relay-quote-result.test.ts与quote-effective-outcome-fix-r1设计/实际114/115公开raw；可另静态追final-create-registry-fix-r1对原5P2的拒绝路径。禁止执行候选/工程/回放/Browser，不改产品/master/作者包，不全树冻结；本目录仅Bounded source-only review of fiveP2 fixes;nofinalregistry/spec/GO，limitedstatic不是GO。

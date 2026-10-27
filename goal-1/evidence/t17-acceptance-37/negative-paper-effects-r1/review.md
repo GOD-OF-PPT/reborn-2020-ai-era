@@ -1,0 +1,9 @@
+# 更正附票后果静态交回
+
+完整负向后果设计已读，直接与state owner定型API后才接：relayCorrectionEffects(p,target,correction.id).summary。唯一continuity产品增量是import和selected correction分支的共享summary并入inherited responsibilities；原report/known/delta/phase audit/state corrected/ticket correction/paymentNature、所有原保护/责任及canonical currentCollection/refund/supplier识别一字未动。Paper/CSS/records/N7/result/core/app/masters未写，没有新资金计算。
+
+Summary采用原更正历史中性措辞，可讲累计退款/当前余欠，不能在later103将pool101冒成恢复101，不能因lastreceipt变为RefundSupplier或外来receipt而重播该更正。本分支未加任何“本次已收/本次更正”成功标记，原当前回响由Root严格receipt发布链独立负责。Helper一侧unknown仍可见另一侧已知事实；两侧未知也不删除原收入/成本调整与原报告。
+
+5个新真实consumer用例（新file单独）已写：negative saved102可见实际退款6.06/恢复2.02和保护717578原值；later103池1.01与历史恢复2.02不同；单侧错现金/供方引用或缺canonicalop及双未知；positive103新AR Jan18/AP Jan11；old101 candidate不出版新correction、committed102的candidate/readonly/外来lastreceipt中性原后果可读。用例直接render RelayServicePaperNotes并核实际金额语义，非只helper字段。setup20s预登记，所有case默认5s，旧test/门槛未改。
+
+[杠精审查] 静态范围通过；未执行任何工程/Browser/Git，不能称5case或shared producer已通过。静态读producer时发现仅一侧缺op全层unknown及自动供应pay canonical路径，两点已交原state owner处理，不越Owner修改；其最终source/test冻结由其另交。当前freeze记录的helper只是只读切面。Root统一新type/build/定向及新实图组合、完整原文/保存角色核定后才评准入。本writer停止，旧设计/红/前像/原Nativecut不回写。

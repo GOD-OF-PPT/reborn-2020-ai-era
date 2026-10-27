@@ -1,0 +1,3 @@
+# 收尾写入实际边界
+
+前一次仅文件收尾命令已guard+wx写完root-cause/tasks-completion/freeze/handoff及probe-tool-terminal，随后最后console打印引用不存在的局部变量original13Test抛ReferenceError、退出1。全部产物真实存在且源码冻结identity本次只读复核同；不是产品/type/测试或probe失败，没有覆盖旧文件或再次运行probe。此备注另wx保原事实，不改前一次产物。

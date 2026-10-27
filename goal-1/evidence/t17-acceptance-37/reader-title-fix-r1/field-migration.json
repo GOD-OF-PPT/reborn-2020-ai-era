@@ -1,0 +1,60 @@
+{
+  "at": "2026-10-26T17:52:52.416Z",
+  "migration": [
+    {
+      "field": "full customer id",
+      "from": "customerName in first-layer titles",
+      "to": [
+        "customer row original customer/person/source IDs",
+        "meter/refund/receivable lines explicit customerId",
+        "period customer lines via customerRef",
+        "period fee quotes via customerRef",
+        "quote customer list and response lines via customerRef"
+      ]
+    },
+    {
+      "field": "full original audit jobId",
+      "from": "audit title",
+      "to": [
+        "row.recordId/jobId and unchanged key",
+        "audit first original task/business/count/periodIds line",
+        "original action/job date/resource and per-meter audit references"
+      ]
+    },
+    {
+      "field": "invoice original id and order",
+      "from": "full id implied by title",
+      "to": [
+        "row.recordId/receivableId/key/target unchanged",
+        "original receivable/customer/source/operation lines",
+        "new title business-wide original invoice sequence/date/due/net amount"
+      ]
+    },
+    {
+      "field": "collection original id and operation",
+      "from": "customer long id title",
+      "to": [
+        "row.recordId/collectionId/receivableId/key unchanged",
+        "original collection/invoice/cash operation lines",
+        "new business-wide original receipt sequence/actual date/actual amount title"
+      ]
+    }
+  ],
+  "stableNumbering": {
+    "customers": "business filtered original relay.customers order, never current picker subset",
+    "audits": "business filtered original relay.auditJobs order",
+    "invoices": "business customers mapped against complete original relay.receivables order",
+    "collections": "business complete casebook.collections order"
+  },
+  "unchangedByExactCandidate": [
+    "key",
+    "recordId",
+    "target",
+    "original operation payloads",
+    "business money and dates",
+    "row sorting comparator",
+    "responsibility ownership",
+    "current focus/bookmark/draft memory"
+  ],
+  "actualRegressionAuthority": "Root full190 actual exit1; original red preserved. This author did not execute a check."
+}

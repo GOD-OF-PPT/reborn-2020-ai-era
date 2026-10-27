@@ -1,0 +1,173 @@
+import type {GamePanelProps} from './game-types.ts'
+import type {ProductionJob} from '../core/operations-types.ts'
+import {resolveRelaySceneTarget,type RelaySceneTarget} from './relay-scene-target.ts'
+import {moneyText,reasonText} from './game-text.ts'
+
+export type RelayRecordKind='service'|'support'|'audit'|'meter'|'correction'|'receivable'|'refund'|'supplier'|'obligation'|'quote'
+export interface RelayRecordRow{
+ key:string
+ kind:RelayRecordKind
+ title:string
+ date:string|null
+ state:string
+ lines:string[]
+ attention:'due'|'known'|'pending'|'record'
+ ownership:'object'|'station'
+ customerId?:string
+ supplierId?:string
+ target?:RelaySceneTarget
+}
+type Input=Pick<GamePanelProps,'view'|'features'|'accountId'>
+const kinds:readonly RelayRecordKind[]=['service','support','audit','meter','correction','receivable','refund','supplier','obligation','quote']
+const jobStates:Record<ProductionJob['status'],string>={planned:'已预留，尚未开工',running:'实际进行中',completed:'已经实际完成',interrupted:'已经中断，已耗投入保留',cancelled:'原安排已取消，旧责任另核'}
+const refs=(values:readonly string[])=>values.length?values.join('、'):'无公开引用'
+const shown=(value:string|null|undefined)=>value??'未公开或尚无记录'
+const waiting=(job:ProductionJob|null)=>job?.status==='planned'||job?.status==='running'
+
+/** Only saved public rows are read. This model never previews or creates a command. */
+export function relayRecordRows(p:Input,target:RelaySceneTarget|null):{reason:string|null;rows:RelayRecordRow[]}{
+ const relay=p.features.relay,resolved=resolveRelaySceneTarget(relay,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})
+ if(resolved.status!=='valid'||!relay||!target)return {reason:resolved.reason??'先明确选择一份原服务或本站记录；没有翻到另一间站。',rows:[]}
+ if(target.kind==='application')return {reason:null,rows:[]}
+ const business=resolved.business!,ownPeriods=relay.periods.filter(period=>period.businessId===business.id)
+ const ownCustomers=relay.customers.filter(customer=>customer.businessId===business.id)
+ const customerIds=new Set(target.kind==='customer'?[target.customerId]:target.kind==='audience'?ownCustomers.filter(customer=>customer.originAudienceId===target.audienceId).map(customer=>customer.id):target.kind==='period'?resolved.period!.customerIds:ownCustomers.map(customer=>customer.id))
+ const childJob=target.kind==='period'&&target.jobId!==undefined,childMeter=target.kind==='period'&&target.meterId!==undefined
+ const selectedAudit=childJob?resolved.audit:null
+ const periods=target.kind==='period'?(selectedAudit?ownPeriods.filter(period=>selectedAudit.periodIds.includes(period.id)):[resolved.period!]):ownPeriods.filter(period=>target.kind==='business'||period.customerIds.some(id=>customerIds.has(id)))
+ const periodIds=new Set(periods.map(period=>period.id))
+ const selectedAuditMeters=new Set(selectedAudit?relay.audits.filter(audit=>audit.jobId===selectedAudit.jobId&&audit.businessId===business.id).map(audit=>audit.meterId):[])
+ if(selectedAudit)for(const meter of relay.meters)if(periodIds.has(meter.periodId)&&selectedAuditMeters.has(meter.id))customerIds.add(meter.customerId)
+ const meters=relay.meters.filter(meter=>periodIds.has(meter.periodId)&&(childMeter?meter.id===target.meterId:selectedAudit?selectedAuditMeters.has(meter.id):childJob?false:customerIds.has(meter.customerId)))
+ const meterIds=new Set(meters.map(meter=>meter.id)),rows:RelayRecordRow[]=[]
+ const base={runId:target.runId,accountId:target.accountId,businessId:target.businessId,stationId:target.stationId}
+ const periodTarget=(periodId:string,child?:{meterId:string}|{jobId:string}):RelaySceneTarget=>({...base,kind:'period',periodId,...child})
+ const safeTarget=(candidate:RelaySceneTarget):RelaySceneTarget|undefined=>resolveRelaySceneTarget(relay,candidate,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations}).status==='valid'?candidate:undefined
+ const withTarget=(candidate:RelaySceneTarget)=>{const checked=safeTarget(candidate);return checked?{target:checked}:{}}
+ const customerName=(id:string)=>{const index=ownCustomers.findIndex(customer=>customer.id===id);return index<0?'原客户 '+id:'客户'+(index+1)+' · '+id}
+ const supplierName=(id:string|null)=>id===null?'未形成供应服务':relay.catalog.suppliers.find(supplier=>supplier.id===id)?.label??'原供应 '+id
+ const add=(row:RelayRecordRow)=>rows.push(row)
+ const sourceIds=new Set<string>()
+ for(const period of periods){
+  if(!childMeter&&!childJob)sourceIds.add(period.id)
+  for(const [kind,job] of [['service',period.job],['support',period.supportJob]] as const){
+   if(childMeter||childJob&&job?.id!==target.jobId)continue
+   if(job){sourceIds.add(job.id);sourceIds.add(job.actionId)}
+   const support=kind==='support',state=job?jobStates[job.status]:'原任务记录未知，不能认作已完成'
+   add({key:kind+':'+period.id,kind,title:(support?'原支持':'原服务')+' · '+period.from+'—'+period.to,date:job?.startAt??period.from,state,
+    attention:waiting(job)?'pending':'record',ownership:'object',...(job?withTarget(periodTarget(period.id,{jobId:job.id})):withTarget(periodTarget(period.id))),lines:[
+     '原账期 '+period.id+'；账期状态 '+period.status+'；创建 '+period.createdAt+'；原范围 '+period.from+'—'+period.to,
+     '原任务 '+shown(job?.id)+'；任务定义 '+shown(job?.definitionId)+'；原行动 '+shown(job?.actionId)+'；原合同引用 '+shown(job?.contractId),
+     '原资源 '+refs(job?.resources??[])+'；原日程 '+shown(job?.startAt)+'—'+shown(job?.completeAt)+'；实际释放 '+shown(job?.releasedAt)+'；原输出 '+shown(job?.outputId),
+     '原客户 '+refs(period.customerIds.map(customerName))+'；供应先后 '+refs(period.supplierIds.map(id=>supplierName(id)+' · '+id)),
+     '容量上限 '+period.maxUnits+'单位；供应预算上限 '+moneyText(period.maxSupplierCostFen)+'；均不等于实际用量或成本',
+     '实际已记录 '+period.observedDays+'日；报告 '+period.reportedUnits+'单位；有停止或不足原因 '+period.failedDays+'日；本期计量 '+period.meterCount+'条，已复核 '+period.auditedMeters+'条，原已知不一致 '+period.knownCorrections+'条',
+     '原支持方式 '+period.supportMode+'；服务任务 '+period.jobId+'；支持任务 '+period.supportJobId+'；实际停期 '+shown(period.stoppedAt),
+     '原支持费处理日 '+shown(period.feePostedAt)+'；原赔付处理日 '+shown(period.compensatedAt)+'；有处理记录不等于所有钱已实付',
+     ...period.feeQuotes.map(quote=>'原支持报价 '+customerName(quote.customerId)+'；条款 '+quote.termsId+'；周期基准 '+moneyText(quote.amountFen)+'，实际支持与已服务日另核'),
+     ...(support?['支持与服务是两份原任务；中断不会等待免费重做，支持费、赔付和旧应付仍按实际原账处理。']:['报告不代替独立实计；未服务不计用量收入，停止不退还已耗投入。']),
+     ...relay.observations.filter(observation=>observation.periodId===period.id).map(observation=>'原观测 '+observation.id+' · '+observation.date+'；故障域 '+observation.domain+'；供应 '+refs(observation.supplierIds)+'；原因 '+reasonText(observation.reason)),
+    ]})
+  }
+ }
+ for(const meter of meters){
+  sourceIds.add(meter.id);if(meter.costOperationId)sourceIds.add(meter.costOperationId)
+  const known=meter.auditedUnits!==null,pending=known&&meter.auditedUnits!==meter.reportedUnits&&meter.correctionId===null
+  add({key:'meter:'+meter.id,kind:'meter',title:meter.date+' · '+customerName(meter.customerId)+'的原计量',date:meter.date,state:meter.correctionId?'原更正已经追加':pending?'已知差额仍待更正':known?'已有独立复核':'实计待独立复核',attention:pending?'known':known?'record':'pending',ownership:'object',customerId:meter.customerId,...(meter.supplierId?{supplierId:meter.supplierId}:{}),...withTarget(periodTarget(meter.periodId,{meterId:meter.id})),lines:[
+   '原计量 '+meter.id+'；原期 '+meter.periodId+'；原客户 '+meter.customerId+'；日期 '+meter.date,
+   '原报告 '+meter.reportedUnits+'单位；'+(known?'原独立复核实计 '+meter.auditedUnits+'单位':'实计未知，未读隐藏真值；没有把未知写成0'),
+   '冻结收费 '+moneyText(meter.unitPriceFen)+'/千模拟token；原条款 '+meter.termsId+'；原供应 '+supplierName(meter.supplierId)+'；供应身份 '+shown(meter.supplierId),
+   '冻结供价 '+moneyText(meter.unitCostFen)+'/千模拟token；供价版本 '+shown(meter.rateId)+'；供应付款方式 '+shown(meter.supplierBilling)+'；原供应到期日 '+shown(meter.supplierDueAt),
+   '原原因 '+(meter.reason===null?'原记录无停止或不足原因':reasonText(meter.reason)+'（'+meter.reason+'）')+'；原交付引用 '+refs(meter.deliveryIds),
+   '原供应成本操作 '+shown(meter.costOperationId)+'；追加更正 '+shown(meter.correctionId)+'；原量和原价不覆盖',
+  ]})
+ }
+ const relevantAudits=relay.auditJobs.filter(audit=>audit.businessId===business.id&&(selectedAudit?audit.jobId===selectedAudit.jobId:relay.audits.some(row=>row.jobId===audit.jobId&&meterIds.has(row.meterId))))
+ for(const batch of relevantAudits){
+  const all=relay.audits.filter(audit=>audit.jobId===batch.jobId&&audit.businessId===business.id),job=batch.job
+  const completed=job?.status==='completed'&&batch.completed
+  const candidatePeriod=target.kind==='period'&&batch.periodIds.includes(target.periodId)?target.periodId:batch.periodIds.length===1?batch.periodIds[0]:undefined
+  add({key:'audit:'+batch.jobId,kind:'audit',title:'原复核批次 · '+batch.jobId,date:job?.startAt??null,state:job?jobStates[job.status]:'原复核任务未知',attention:waiting(job)?'pending':'record',ownership:'object',...(candidatePeriod?withTarget(periodTarget(candidatePeriod,{jobId:batch.jobId})):{}),lines:[
+   '原任务 '+batch.jobId+'；原企业 '+batch.businessId+'；完整批次 '+batch.meterCount+'条；全部原期 '+refs(batch.periodIds),
+   '该批次可能跨原期；下列引用是完整原批次，不是眼前筛选条数，也不是再委托。',
+   '原资源 '+refs(job?.resources??[])+'；原日程 '+shown(job?.startAt)+'—'+shown(job?.completeAt)+'；原行动 '+shown(job?.actionId)+'；实际释放 '+shown(job?.releasedAt),
+   '公开批次完成标记 '+(batch.completed?'已完成':'未全部完成')+'；'+(completed?'已经实际复核，差额更正仍是独立决定':'未实际完成的实计仍未知，已耗成本与原记录保留'),
+   ...all.map(audit=>{const meter=relay.meters.find(row=>row.id===audit.meterId);const revealed=completed&&audit.completedAt!==null&&audit.completedAt<=p.view.date&&meter?.auditedUnits!==null&&meter?.auditedUnits!==undefined;return '原审计 '+audit.id+'；原计量 '+audit.meterId+'；原期 '+shown(meter?.periodId)+'；原客户 '+shown(meter?.customerId)+'；完成 '+shown(audit.completedAt)+'；'+(revealed?'已公开实计 '+meter.auditedUnits+'单位':'实计待实际复核')})
+  ]})
+ }
+ for(const correction of relay.corrections.filter(row=>meterIds.has(row.meterId))){
+  const meter=meters.find(row=>row.id===correction.meterId)!
+  for(const operationId of correction.operationIds)sourceIds.add(operationId)
+  add({key:'correction:'+correction.id,kind:'correction',title:correction.date+' · 原计量的追加更正',date:correction.date,state:'更正已经保存，结算与实收仍分别核对',attention:'record',ownership:'object',customerId:meter.customerId,...(meter.supplierId?{supplierId:meter.supplierId}:{}),...withTarget(periodTarget(meter.periodId,{meterId:meter.id})),lines:[
+   '原更正 '+correction.id+'；原计量 '+correction.meterId+'；原审计 '+correction.auditId+'；追加日期 '+correction.date,
+   '保留原报告 '+correction.originalReportedUnits+'单位；原已核更正实计 '+correction.correctUnits+'单位；未重写原条款 '+meter.termsId+'或供价版本 '+shown(meter.rateId),
+   '客户收入调整 '+moneyText(correction.customerDeltaFen)+'；供应成本调整 '+moneyText(correction.supplierDeltaFen)+'；调整不是本次实收',
+   '本次原账操作 '+refs(correction.operationIds),
+   '新增应收/应付按新单自己的日期与到期日；负向供应调整可能冲应付或恢复资产，当前公开引用不能逐笔区分的部分不推断。',
+  ]})
+ }
+ const invoices=relay.receivables.filter(invoice=>customerIds.has(invoice.customerId)&&(target.kind==='business'||target.kind==='customer'||target.kind==='audience'||sourceIds.has(invoice.sourceId)))
+ for(const invoice of invoices){
+  const remaining=invoice.amountFen-invoice.collectedFen-invoice.reversedFen,due=remaining>0&&invoice.dueAt<=p.view.date
+  const cash=p.features.workbench.finance.find(finance=>finance.accountId===target.accountId)?.transactions.filter(transaction=>transaction.sourceId===invoice.id)??[]
+  add({key:'receivable:'+invoice.id,kind:'receivable',title:customerName(invoice.customerId)+' · '+invoice.dueAt+'原单',date:invoice.date,state:remaining===0?'原单净未收为0':due?'原单已经到期，收款仍由你决定':'原单尚未到期，不能提前使用',attention:due?'due':remaining>0?'pending':'record',ownership:'object',customerId:invoice.customerId,lines:[
+   '原应收 '+invoice.id+'；客户 '+invoice.customerId+'；来源 '+invoice.sourceId+'；原开单操作 '+invoice.operationId,
+   '开单 '+invoice.date+'；原到期日 '+invoice.dueAt+'；原金额 '+moneyText(invoice.amountFen)+'；累计实收 '+moneyText(invoice.collectedFen)+'；累计冲回 '+moneyText(invoice.reversedFen)+'；净未收 '+moneyText(remaining),
+   '此单是原收入与债权，不是新的奖励。CollectRelayDue按该客户全部已到期原单收取，可能跨期；这里不选择部分金额。',
+   ...cash.map(transaction=>'相关公开现金变动 '+transaction.id+' · '+transaction.date+' · '+moneyText(transaction.amountFen)+'；原来源 '+transaction.sourceId+'；原主体 '+shown(transaction.businessId)+'；原合同 '+shown(transaction.contractId)),
+   ...(cash.length?['现金变动按原引用列示，不因金额正负推断收入或更正性质。']:['当前公开现金列表没有该单的逐笔变动；不编造收款日期或回执。']),
+  ]})
+ }
+ if(!childJob||selectedAudit){
+  for(const refund of relay.refunds.filter(row=>customerIds.has(row.customerId))){
+   const ownership=target.kind==='business'||target.kind==='customer'||target.kind==='audience'?'object':'station'
+   add({key:'refund:'+refund.id,kind:'refund',title:(ownership==='station'?'本站客户退款 · ':'客户退款 · ')+customerName(refund.customerId),date:refund.date,state:'原退款已记录，实际支付与保护按原账核对',attention:'record',ownership,customerId:refund.customerId,lines:[
+    '原退款 '+refund.id+'；原客户 '+refund.customerId+'；记录日期 '+refund.date+'；原退款金额 '+moneyText(refund.amountFen),
+    '原充值批次引用 '+refs(refund.rechargeIds)+'；原操作引用 '+refs(refund.operationIds),
+    ...(ownership==='station'?['这是本站同客户的退款记录；公开退款未绑定本期或该计量，不归作本期新增退款。']:[]),
+    '公开阅读没有提供每个充值批次的拆分金额，不推算批次用量、保护释放或本次实际支付结果。',
+   ]})
+  }
+ }
+ const supplierIds=new Set(target.kind==='business'?relay.supplyOptions.filter(option=>option.businessId===business.id).map(option=>option.supplierId):childMeter?meters.flatMap(meter=>meter.supplierId?[meter.supplierId]:[]):periods.flatMap(period=>period.supplierIds))
+ for(const supplierId of supplierIds){
+  const supplier=relay.catalog.suppliers.find(row=>row.id===supplierId),option=relay.supplyOptions.find(row=>row.businessId===business.id&&row.supplierId===supplierId)
+  if(!supplier||!option)continue
+  const credit=option.credit
+  add({key:'supplier:'+business.id+':'+supplierId,kind:'supplier',title:'本站供应资产 · '+supplier.label,date:null,state:'当前本站余额，不能全部归为眼前本期',attention:option.outstandingFen>0?'known':'record',ownership:'station',supplierId,lines:[
+   '本站 '+business.id+'；原供应 '+supplier.id+'；故障域 '+supplier.failureDomain+'；付款方式 '+supplier.billing+'；当前公开可用 '+(supplier.available?'是':'否'),
+   '当前已亲读许可有效 '+(option.permitted?'是':'否')+'；已有实际适配 '+(option.adapted?'是':'否')+'；供应信用上限 '+moneyText(supplier.creditLimitFen),
+   credit?'原供应资金池 '+credit.id+'；原账户 '+credit.accountId+'；原企业 '+credit.businessId+'；原交易对方 '+credit.counterpartyId+'；累计入池 '+moneyText(credit.paidFen)+'；当前未用资产/贷项 '+moneyText(credit.remainingFen):'当前没有公开供应资金池记录；不虚构充值或贷项来源。',
+   '该供应当前未付 '+moneyText(option.outstandingFen)+'；本金转供应资产、实际消耗成本、应付与资产退回分别发生。',
+   supplier.currentRate?'当前公开报价版本 '+supplier.currentRate.id+'；原生效 '+supplier.currentRate.from+'；原历史锚点 '+supplier.currentRate.anchorId+'；单位供价 '+moneyText(supplier.currentRate.unitCostFen)+'；基准 '+moneyText(supplier.currentRate.benchmarkFen):'当前没有本局已公开报价；不补造现价或未来价。',
+   '本站供应池跨期共用；不能把当前全部资产或未付额算作本期更正。原许可、未来新供应和权限仍须独立决定。',
+  ]})
+ }
+ const obligations=p.features.workbench.finance.find(finance=>finance.accountId===business.accountId)?.obligations.filter(obligation=>obligation.accountId===business.accountId&&(obligation.businessId===business.id||business.company&&obligation.businessId===null))??[]
+ for(const obligation of obligations){
+  const belongs=target.kind==='business'||sourceIds.has(obligation.sourceEventId)||target.kind==='customer'&&obligation.contractId===target.customerId
+  const ownership=belongs?'object':'station',due=obligation.date<=p.view.date&&obligation.remainingFen>0
+  add({key:'obligation:'+obligation.id,kind:'obligation',title:(belongs?'原未结义务 · ':'本站原义务 · ')+obligation.date,date:obligation.date,state:due?'已到期未结，原责任仍在':'原未结义务保留',attention:due?'due':'pending',ownership,lines:[
+   '原义务 '+obligation.id+'；原来源 '+obligation.sourceEventId+'；原操作 '+obligation.originOperationId+'；类型 '+obligation.kind,
+   '原账户 '+obligation.accountId+'；原企业 '+shown(obligation.businessId)+'；原客户/合同 '+shown(obligation.contractId)+'；原交易对方 '+obligation.counterpartyId,
+   '原义务日期 '+obligation.date+'；原金额 '+moneyText(obligation.amountFen)+'；当前未结 '+moneyText(obligation.remainingFen)+'；原保护引用 '+shown(obligation.protectionReservationId),
+   ...(belongs?[]:['公开来源未将此笔唯一绑定眼前本期/计量；这是本站原义务，不冒称本期新增费用。']),
+   '仅用原允许账户与保护支付；资金不足保原欠款，不挪客户未消费保护，不用未来应收填当期缺口。',
+  ]})
+ }
+ if(!childJob&&!childMeter){
+  for(const quote of relay.quotes.filter(row=>row.businessId===business.id&&(target.kind==='business'||row.customerIds.some(id=>customerIds.has(id))))){
+   const known=quote.completedAt!==null&&quote.completedAt<=p.view.date&&quote.job?.status==='completed',ownership=target.kind==='period'?'station':'object'
+   add({key:'quote:'+quote.id,kind:'quote',title:(ownership==='station'?'本站未来报价 · ':'原未来报价 · ')+quote.effectiveAt,date:quote.createdAt,state:quote.job?jobStates[quote.job.status]:'原谈判任务未知',attention:waiting(quote.job)?'pending':'record',ownership,lines:[
+    '原报价谈判 '+quote.id+'；原企业 '+quote.businessId+'；原任务 '+quote.jobId+'；创建 '+quote.createdAt+'；拟生效 '+quote.effectiveAt+'；实际完成 '+shown(quote.completedAt),
+    '原客户 '+refs(quote.customerIds.map(customerName))+'；原方案 '+quote.offerId+'；拟谈单位价 '+moneyText(quote.unitPriceFen)+'；周期支持基准 '+moneyText(quote.serviceFeeFen),
+    '原资源 '+refs(quote.job?.resources??[])+'；原日程 '+shown(quote.job?.startAt)+'—'+shown(quote.job?.completeAt)+'；原行动 '+shown(quote.job?.actionId)+'；实际释放 '+shown(quote.job?.releasedAt),
+    ...(known?quote.responses.map(response=>customerName(response.customerId)+' · '+(response.accepted?'实际接受未来方案':'实际拒绝，旧约保留')):['结果尚未实际完成，客户答复未知；未读取或推断隐藏响应。']),
+    '未来报价不追改已发生计量的原价或已确认本期支持报价；新合同与续签仍独立决定。',
+   ]})
+  }
+ }
+ rows.sort((a,b)=>kinds.indexOf(a.kind)-kinds.indexOf(b.kind)||(a.date??'').localeCompare(b.date??'')||a.key.localeCompare(b.key))
+ if(new Set(rows.map(row=>row.key)).size!==rows.length)return {reason:'原公开记录身份重复，先核对原对象；没有选用其中另一条。',rows:[]}
+ return {reason:null,rows}
+}

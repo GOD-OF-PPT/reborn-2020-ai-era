@@ -1,0 +1,1 @@
+有界补读唯一date-fix三文件/freeze、helper及原非负addDays、Journey当前3case和测试适配合同；读取Root已完成r15/类型r24真实结果仅引用，不重跑/继承全树。核原P1逆替source全文身份、May7合同含尾边界，确认新驱动真实short与显式publiccovers夹具不混身份。只新本根写review/身份，原独审P1和当前候选保原。0源码/master/工程/Browser/codec/审核候选执行，不等待或重启Root活119UI。

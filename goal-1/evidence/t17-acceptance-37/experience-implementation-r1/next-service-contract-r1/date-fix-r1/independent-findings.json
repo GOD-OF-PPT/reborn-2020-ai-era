@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-27T01:22:56.961Z",
+  "findings": [
+    {
+      "priority": 1,
+      "file": "src/ui/relay-next-service-contract.ts",
+      "line": 31,
+      "title": "negative addDays makes every normal earliest window unavailable",
+      "sourceEvidence": {
+        "call": "minimumTermEnd:addDays(to,-1)",
+        "originalGate": "src/core/calendar.ts addDays count>=0"
+      },
+      "impact": "normal115 has no contract window/customers/renewal or service entry",
+      "minimumFix": "addDays(from,v.catalog.serviceDays-1)",
+      "status": "reported_to_Root_pending_owner_fix",
+      "execution": "not_run"
+    }
+  ],
+  "otherConfirmedProductP1P2": [],
+  "oldConsumerAdaptation": "RelayNextServiceJourney first actual115 case and its pure helper need to expand new prerequisite component and assert short→renewal path; original money/draft/pin gates remain"
+}

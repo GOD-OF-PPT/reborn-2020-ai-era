@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-27T04:15:55.078Z",
+  "cwd": "/Users/gordon/githome/reborn-2020-ai-era",
+  "rootGo": {
+    "path": "goal-1/evidence/t17-acceptance-37/root-final-preflight-r1/root-execution-go-r1.json",
+    "bytes": 2097,
+    "sha256": "515f4c3f419767fb3d4a4ac9f273c06d9296192c648477dcd310dbe20891b5cc",
+    "mode": 420
+  },
+  "independentReview": {
+    "path": "goal-1/evidence/t17-acceptance-37/frozen-contract-independent-review-r1/verdict.json",
+    "bytes": 1483,
+    "sha256": "e4370dd082e62b620a740b8b370038f4ca4cac81ad76d3efc54e345c1cbf1f5e",
+    "mode": 420,
+    "gitMode": "100644"
+  },
+  "commands": [
+    {
+      "name": "replay",
+      "argv": [
+        "rtk",
+        "proxy",
+        "env",
+        "NATIVE_EXPORT_INPUT_DIRECTORY=goal-1/evidence/t17-acceptance-37/full-create-audit-r1/input",
+        "/Users/gordon/.nvm/versions/node/v22.12.0/bin/node",
+        "--experimental-strip-types",
+        "scripts/verify_normal_browser_exports.ts",
+        "--output-dir",
+        "goal-1/evidence/t17-acceptance-37/full-create-audit-r1/report"
+      ]
+    },
+    {
+      "name": "readback",
+      "argv": [
+        "rtk",
+        "proxy",
+        "env",
+        "U4B_AUDIT_DIRECTORY=goal-1/evidence/t17-acceptance-37/full-create-audit-r1",
+        "/Users/gordon/.nvm/versions/node/v22.12.0/bin/node",
+        "--experimental-strip-types",
+        "goal-1/evidence/t17-acceptance-37/final-create-final-inputs-r1/fresh-public-readback-candidate-r6.mjs"
+      ]
+    }
+  ],
+  "limits": "Canonical old normal Create replay and public readback only. Original verifier performs read-only git rev-parse/output identity guards internally. No new Native gameplay, UI checks or compatibility acceptance."
+}

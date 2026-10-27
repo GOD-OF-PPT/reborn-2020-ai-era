@@ -1,0 +1,4 @@
+- [ ] OriginalUI input101 and explicit target, no generated rewards or newlife.
+- [ ] Actual negative single correction abort/old/readonly/physical/candidate/original retry/new exact.
+- [ ] Negative customer credit and supplier asset own partial refund/return, distinguish cash/income/cost.
+- [ ] Fresh exports and stop before final formalCreate; U4B/C-S4-R remains open.

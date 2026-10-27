@@ -1,0 +1,57 @@
+--- goal-1/evidence/t17-acceptance-37/full-create-refinement-r2/audit-io.mjs
++++ goal-1/evidence/t17-acceptance-37/final-create-registry-preparation-r1/audit-io.mjs
+@@ -42,14 +42,20 @@
+   if(typeof r.scope!=='string'||ids.has(r.scope)||!['inherited_result','fresh_readback'].includes(r.mode)||!Array.isArray(r.recordKeys)||!r.recordKeys.length||new Set(r.recordKeys).size!==r.recordKeys.length||r.recordKeys.some(k=>!known.has(k))||!Number.isSafeInteger(r.expectedChecks)||r.expectedChecks<1)throw Error('EXACT_READBACK_SCOPE_RECORD_KEYS_AND_CHECK_COUNT_REQUIRED')
+   ids.add(r.scope)
+   if(r.mode==='inherited_result'){
+-   if(r.scope!=='positive_service'||r.expectedChecks!==35)throw Error('ONLY_EXISTING_POSITIVE35_MAY_BE_INHERITED')
++   const fixedChecks=r.scope==='positive_service'?35:r.scope==='negative_stop_and_atomic'?31:null
++   if(fixedChecks===null||r.expectedChecks!==fixedChecks)throw Error('ONLY_EXACT_POSITIVE35_OR_NEGATIVE_STOP31_MAY_BE_INHERITED')
+    for(const key of ['result','facts','manifest','frozenInputs','script','terminal'])references.push(requireIdentity(r.inheritance?.[key]).identity)
+    const result=json(r.inheritance.result.path)
+-   if(result.passed!==true||result.exitCode!==0||result.checks!==35||result.passedChecks!==35||result.failedChecks?.length!==0||result.error!==null)throw Error('PASSED_POSITIVE35_ARTIFACT_REQUIRED')
++   if(result.passed!==true||result.exitCode!==0||result.checks!==fixedChecks||result.passedChecks!==fixedChecks||result.failedChecks?.length!==0||result.error!==null)throw Error('PASSED_FIXED_JSON_READBACK_ARTIFACT_REQUIRED')
++   const manifest=json(r.inheritance.manifest.path),frozen=json(r.inheritance.frozenInputs.path)
++   if(!Array.isArray(manifest.records)||!Array.isArray(frozen.inputs)||manifest.records.length!==result.rawRows)throw Error('EXACT_INHERITED_CAPTURE_MANIFEST_REQUIRED')
++   for(const input of frozen.inputs)references.push(requireIdentity(input).identity)
++   for(const record of manifest.records){requireIdentity(record.identity);if(!frozen.inputs.some(input=>identityEqual(input,record.identity)))throw Error('INHERITED_RAW_NOT_IN_FROZEN_INPUTS');const actual=records.filter(row=>identityEqual(row.identity,record.identity)&&r.recordKeys.includes(row.key));if(!actual.length)throw Error('INHERITED_RAW_MISSING_FINAL_RECORD_ROLE')}
++   references.push(...manifest.records.map(record=>record.identity))
+   }
+  }
+- for(const scope of ['positive_service','negative_correction','save_fault_and_retry'])if(!ids.has(scope))throw Error('REQUIRED_BRANCH_READBACK_MISSING:'+scope)
+- for(const r of wiring.requirements)if(r.scope!=='positive_service'&&r.mode!=='fresh_readback')throw Error('POSITIVE35_CANNOT_COVER_NEGATIVE_OR_STORAGE_FAULT')
++ for(const scope of ['positive_service','negative_stop_and_atomic','current_r7_facts'])if(!ids.has(scope))throw Error('REQUIRED_BRANCH_READBACK_MISSING:'+scope)
++ for(const r of wiring.requirements)if(!['positive_service','negative_stop_and_atomic'].includes(r.scope)&&r.mode!=='fresh_readback')throw Error('EXISTING_JSON_READBACK_CANNOT_COVER_CURRENT_R7_FACTS')
+  return references
+ }
+ export function validatePublicReadbackResult(report,contract,contractIdentity){
+@@ -59,7 +65,7 @@
+  for(const required of contract.publicReadbackWiring.requirements){
+   const matches=report.coverage.filter(r=>r.scope===required.scope),row=matches.length===1?matches[0]:null
+   if(!row||row.mode!==required.mode||row.passed!==true||!Array.isArray(row.recordKeys)||canonicalKeys(row.recordKeys)!==canonicalKeys(required.recordKeys)||row.checks!==required.expectedChecks||row.passedChecks!==row.checks||row.failedChecks!==0)throw Error('PUBLIC_READBACK_SCOPE_RESULT_MISMATCH:'+required.scope)
+-  if(required.mode==='inherited_result'&&(!identityEqual(row.reusedResult,required.inheritance.result)||!identityEqual(row.reusedFacts,required.inheritance.facts)))throw Error('EXACT_POSITIVE35_INHERITANCE_REQUIRED')
++  if(required.mode==='inherited_result'&&(!identityEqual(row.reusedResult,required.inheritance.result)||!identityEqual(row.reusedFacts,required.inheritance.facts)))throw Error('EXACT_INHERITED_READBACK_IDENTITIES_REQUIRED')
+  }
+  return true
+ }
+--- goal-1/evidence/t17-acceptance-37/full-create-refinement-r2/freeze-final-cut.mjs
++++ goal-1/evidence/t17-acceptance-37/final-create-registry-preparation-r1/freeze-final-cut.mjs
+@@ -18,7 +18,8 @@
+ const referenceRows=[read(registryPath).identity,requireIdentity(registry.publicReadback).identity,...registry.referenceFiles.map(r=>requireIdentity(r).identity),...registry.producerCuts.map(r=>requireIdentity(r).identity)]
+ const cutFiles=new Map()
+ for(const row of registry.producerCuts){const cut=JSON.parse(requireIdentity(row).bytes.toString('utf8')),stop=cut.explicitProducerStop??cut.last,files=cut.tree?.files??cut.files?.files
+- if(stop?.type!=='producer-stop'||!Array.isArray(files))throw Error('EXPLICIT_COMPLETED_PRODUCER_CUT_REQUIRED:'+row.path)
++ const closedReader=row.captureRole==='closed_physical_reader'&&stop?.type==='reader-closed'
++ if((stop?.type!=='producer-stop'&&!closedReader)||!Array.isArray(files))throw Error('EXPLICIT_COMPLETED_PRODUCER_OR_CLOSED_READER_CUT_REQUIRED:'+row.path)
+  for(const file of files){requireIdentity(file);cutFiles.set(file.path,file);referenceRows.push(file)}
+ }
+ const readbackReferences=requirePublicReadbackWiring(registry.publicReadbackWiring,registry.records)
+@@ -53,7 +54,7 @@
+ for(const record of registry.records){if(!groups.has(record.snapshotFolder))groups.set(record.snapshotFolder,[]);groups.get(record.snapshotFolder).push(record)}
+ for(const [folder,records]of groups){mkdir(output,'input/'+folder);const lines=[];for(const record of records){const raw=requireIdentity(record.identity);put(output,'input/'+folder+'/'+record.snapshotFile,raw.bytes);snapshots.push(read(directory+'/input/'+folder+'/'+record.snapshotFile).identity);lines.push(JSON.stringify({file:record.snapshotFile,origin:record.origin,source:record.source,bytes:record.identity.bytes,sha256:record.identity.sha256,runId:record.runId,revision:record.revision}))}put(output,'input/'+folder+'/exports.jsonl',lines.join('\n')+'\n');snapshots.push(read(directory+'/input/'+folder+'/exports.jsonl').identity)}
+ for(let i=0;i<journalRoles.length;i++){put(output,'journal-'+String(i+1).padStart(2,'0')+'.snapshot.jsonl',requireIdentity(journalRoles[i].identity).bytes);snapshots.push(read(directory+'/journal-'+String(i+1).padStart(2,'0')+'.snapshot.jsonl').identity)}
+-put(output,'role-ledger.json',{records:registry.records.map(r=>({key:r.key,origin:r.origin,sourceRole:sourceRoleFor(r),sourceRoleMapping:r.sourceRoleMapping??null,auditRole:r.auditRole,branchId:r.branchId,runId:r.runId,revision:r.revision,identity:r.identity,newNativeSavedCommands:r.newNativeSavedCommands??null,notCountedAsNew:r.notCountedAsNew??null})),byteEqualGroups:registry.byteEqualGroups??[],distinctBranchPairs:registry.distinctBranchPairs??[],newNativeCreates:registry.newNativeCreates,newNativeSavedCommands:registry.newNativeSavedCommands,limit:'New-command totals are Root-declared Native scope, checked later against independent public readback; metadata-prefix counts are historical replay work, not new gameplay.'})
++put(output,'role-ledger.json',{records:registry.records.map(r=>({key:r.key,origin:r.origin,sourceRole:sourceRoleFor(r),sourceRoleMapping:r.sourceRoleMapping??null,auditRole:r.auditRole,captureRole:r.captureRole??null,sourceClaimCorrection:r.sourceClaimCorrection??null,branchId:r.branchId,runId:r.runId,revision:r.revision,identity:r.identity,newNativeSavedCommands:r.newNativeSavedCommands??null,notCountedAsNew:r.notCountedAsNew??null})),byteEqualGroups:registry.byteEqualGroups??[],distinctBranchPairs:registry.distinctBranchPairs??[],newNativeCreates:registry.newNativeCreates,newNativeSavedCommands:registry.newNativeSavedCommands,limit:'New-command totals are Root-declared Native scope, checked later against independent public readback; metadata-prefix counts are historical replay work, not new gameplay.'})
+ put(output,'receipt-metadata-inventory.json',inventory)
+ put(output,'derived-input-dependencies.json',{dependencies:derivedDependencies,notReplayCaptureRows:true,newNativeCreates:0,newNativeSavedCommands:0})
+ const here=path.dirname(fileURLToPath(import.meta.url)),helperNames=['audit-io.mjs','freeze-final-cut.mjs','run-once-candidate.mjs'].map(n=>path.relative(repo,path.join(here,n)).split(path.sep).join('/'))

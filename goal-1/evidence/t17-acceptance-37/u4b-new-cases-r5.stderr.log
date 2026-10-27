@@ -1,0 +1,44 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/RelayRecordBook.test.tsx > keeps a genuinely arranged single-meter audit as the same wait across progress, Reader, purpose and focus-open
+AssertionError: expected { date: '2024-11-13', …(1) } to deeply equal { date: '2024-11-14', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "date": "2024-11-14",
+-   "label": "先继续原复核，待收款仍保留",
++   "date": "2024-11-13",
++   "label": "先到原日历停点，待收款仍保留",
+  }
+
+ ❯ src/ui/RelayRecordBook.test.tsx:380:19
+    378|  expect(ui.all().some(e=>e.type==='button'&&text(e.props.children).inc…
+    379|  const deferred=relayDeferredFeedback(p,auditTarget)
+    380|  expect(deferred).toEqual({date:auditStart,label:'先继续原复核，待收款仍保留'})
+       |                   ^
+    381|  expect(ui.all().some(e=>e.type==='button'&&text(e.props.children).inc…
+    382|  ui.click('翻开这一次已委托的完整复核批次');expect(ui.text()).toContain(auditJobId)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/ui/RelayRecordBook.test.tsx > lets an explicit deferred audit wait request the original Clock date while retaining the earlier invoice and saved bytes
+AssertionError: expected { date: '2024-11-13', …(1) } to deeply equal { date: '2024-11-14', …(1) }
+
+- Expected
++ Received
+
+  {
+-   "date": "2024-11-14",
+-   "label": "先继续原复核，待收款仍保留",
++   "date": "2024-11-13",
++   "label": "先到原日历停点，待收款仍保留",
+  }
+
+ ❯ src/ui/RelayRecordBook.test.tsx:426:19
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

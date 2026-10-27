@@ -1,0 +1,111 @@
+
+// New consumer-fix cases use a separately scoped walker and controller. The
+// original 15 cases, their driver, and their five-save setup remain untouched.
+const consumerDriven=new Set([...driven,'RelayPreparationEditor','PreparationFields','SupplierField','SelectField','RelayPreparationSchedule','RelayBusiness','RelayPeriodCard','RelayJob','ClockAdvance','RelayCommandDetails'])
+function consumerElements(value:unknown,path:string):Element[]{
+ if(Array.isArray(value))return value.flatMap((child,index)=>consumerElements(child,path+'/'+index))
+ if(!isValidElement<Record<string,unknown>>(value))return []
+ const own=[value,...consumerElements(value.props.children,path+'/children'),...consumerElements(value.props.footer,path+'/footer')]
+ if(typeof value.type==='function'&&consumerDriven.has(value.type.name)){const component=value.type as (props:Record<string,unknown>)=>unknown;own.push(...consumerElements(mounted(path+':'+component.name,()=>component(value.props)),path+'/render'))}
+ return own
+}
+function consumerDriver(name:string,render:()=>unknown){
+ let tree:unknown;const all=()=>consumerElements(tree,name),refresh=()=>{tree=mounted(name,render)};refresh()
+ return {refresh,all,text:()=>all().map(node=>text(node.props.children)).join(' '),
+  button(label:string){const node=all().find(e=>e.type==='button'&&text(e.props.children).includes(label));if(!node)throw Error('CONSUMER_BUTTON_REQUIRED:'+label);return node},
+  click(label:string){const node=all().find(e=>e.type==='button'&&text(e.props.children).includes(label));if(!node||node.props.disabled||typeof node.props.onClick!=='function')throw Error('CONSUMER_ENABLED_BUTTON_REQUIRED:'+label);node.props.onClick();refresh()},
+  edit(label:string,value:string){const parent=all().find(e=>e.type==='label'&&text(e.props.children).includes(label)),node=parent&&consumerElements(parent,name+'/field').find(e=>e.type==='input'||e.type==='select');if(!node||typeof node.props.onChange!=='function'||node.props.disabled)throw Error('CONSUMER_EDITABLE_FIELD_REQUIRED:'+label);node.props.onChange({target:{value}});refresh()},
+ }
+}
+let auditController:GameController,auditStore:IndexedDbRunStore,auditBefore:PlayingView,auditAfter:PlayingView,auditTarget:Extract<RelaySceneTarget,{kind:'period'}>,auditStart:string,auditJobId:string,oldAdvance:Element,oldAdvanceCalls:unknown[][],oldAdvanceRequest:ReturnType<typeof vi.fn>
+beforeAll(async()=>{
+ const auditCodec=createCampaignCodec();auditStore=new IndexedDbRunStore({codec:auditCodec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'reader-single-meter-original86'})
+ let sequence=0;auditController=new GameController({codec:auditCodec,store:auditStore,locks:new MemoryWriterAccess(),id:()=> 'reader-single-audit-'+(++sequence)})
+ await auditController.initialize();await auditController.importNew(source86);auditBefore=auditController.snapshot.view!
+ const f=features(auditBefore),business=f.relay!.businesses[0]!,station=f.relay!.stations.find(s=>s.businessId===business.id)!,period=f.relay!.periods.find(p=>p.businessId===business.id&&p.from==='2024-10-09')!,meter=f.relay!.meters.find(m=>m.periodId===period.id&&m.supplierId!==null&&m.auditedUnits===null&&!f.relay!.audits.some(a=>a.meterId===m.id))!
+ expect(meter).toBeDefined()
+ auditTarget={kind:'period',runId:auditBefore.runId,accountId:business.accountId,businessId:business.id,stationId:station.id,periodId:period.id,meterId:meter.id}
+ const dates=[auditBefore.date,...(auditBefore.operations?.jobs.filter(job=>['planned','running'].includes(job.status)&&job.resources.includes('player-production')).map(job=>job.completeAt)??[])].sort()
+ auditStart=addDays(dates.at(-1)!,1)
+ expect(auditStart.slice(0,4)).toBe('2024')
+ oldAdvanceRequest=vi.fn();const p:GamePanelProps={controller:auditController,view:auditBefore,features:f,accountId:business.accountId,request:oldAdvanceRequest,textOnly:true},panel=consumerDriver('reader-old-original-job',()=>RelayPanel({...p,initialTarget:auditTarget}))
+ oldAdvance=panel.button('推进到本项中转任务完成');expect(oldAdvance.props.disabled).toBe(false)
+ panel.click('推进到本项中转任务完成');expect(oldAdvanceRequest).toHaveBeenCalledTimes(1)
+ oldAdvanceCalls=oldAdvanceRequest.mock.calls.map(row=>[...row])
+ const command=auditController.prepare('StartRelayAudit',{meterId:meter.id,resources:['player-production'],startAt:auditStart})
+ expect(auditController.preview(command).allowed).toBe(true);expect((await auditController.submit(command)).status).toBe('saved');auditAfter=auditController.snapshot.view!
+ const jobs=features(auditAfter).relay!.auditJobs.filter(row=>!f.relay!.auditJobs.some(old=>old.jobId===row.jobId));expect(jobs).toHaveLength(1);auditJobId=jobs[0]!.jobId
+},20000)
+afterAll(async()=>{if(auditController)await auditController.close();else if(auditStore)await auditStore.close()})
+function auditProps(view=auditController.snapshot.view!):GamePanelProps{const f=features(view);return {controller:auditController,view,features:f,accountId:auditTarget.accountId,request:vi.fn(),textOnly:true,relayRecordMemory:createRelayRecordMemory(view.runId),relayResponseDraftMemory:createRelayResponseDraftMemory(view.runId)}}
+
+it('expands the same original invoice evidence in the Panel without losing its specified ticket or amount draft',()=>{
+ const p=panelProps(),base=targetFor(p),invoice=p.features.relay!.receivables.find(i=>i.dueAt<=p.view.date&&i.amountFen>i.collectedFen+i.reversedFen)!,meter=p.features.relay!.meters.find(m=>m.id===invoice.sourceId)!,target:RelaySceneTarget={...base,kind:'period',periodId:meter.periodId,meterId:meter.id},row=rowFor(p,target,'receivable',invoice.id),request=vi.fn(),change=vi.fn(),before=controller.exportSaved(),ui=consumerDriver('reader-original-evidence-retains-ticket',()=>RelayPanel({...p,request,initialTarget:target,initialFocusId:relayCasebookRecordId(row.key),onTargetChange:change}))
+ ui.edit('本次收取金额','0.02');ui.click('展开这张票的完整原依据')
+ expect(ui.all().find(node=>node.type==='details'&&node.props.className==='relay-ticket-evidence')?.props.open).toBe(true)
+ expect(ui.all().find(node=>node.type==='input'&&node.props.inputMode==='decimal')?.props.value).toBe('0.02')
+ expect(ui.text()).toContain(invoice.id);expect(ui.text()).toContain(invoice.sourceId);expect(change).not.toHaveBeenCalled();expect(request).not.toHaveBeenCalled()
+ const scope=relayResponseScopeForTarget(p,target,{kind:'receivable',id:invoice.id},'collect').scope!
+ expect(p.relayResponseDraftMemory!.read(p.view.runId,scope)?.amount).toBe('0.02');expect(controller.exportSaved()).toBe(before)
+})
+
+it('keeps the encoded customer ticket when an explicit preparation view returns through the Panel callback',()=>{
+ const p=panelProps(),base=targetFor(p),customer=p.features.relay!.customers.find(c=>c.businessId===base.businessId&&c.closedAt===null)!,target:RelaySceneTarget={...base,kind:'customer',customerId:customer.id},row=rowFor(p,target,'customer',customer.id),request=vi.fn(),change=vi.fn(),before=controller.exportSaved(),ui=consumerDriver('reader-original-preparation-key',()=>RelayPanel({...p,request,initialTarget:target,initialFocusId:relayCasebookRecordId(row.key),onTargetChange:change}))
+ ui.click('另核这位客户的一次充值');ui.click('翻看同对象原册，保留这份草稿')
+ expect(change).toHaveBeenCalledExactlyOnceWith(target,'customer-funds',relayCasebookRecordId(row.key))
+ expect(request).not.toHaveBeenCalled();expect(controller.exportSaved()).toBe(before)
+})
+
+it('keeps a genuinely arranged single-meter audit as the same wait across progress, Reader, purpose and focus-open',()=>{
+ const p=auditProps(),v=p.features.relay!,meter=v.meters.find(row=>row.id===auditTarget.meterId)!,existing=relayTicketAudit(p,auditTarget),raw=auditController.exportSaved(),request=vi.fn()
+ expect(auditAfter.revision).toBe(auditBefore.revision+1);expect(auditAfter.date).toBe(auditBefore.date);expect(meter.auditedUnits).toBeNull()
+ expect(existing.reason).toBeNull();expect(existing.job?.id).toBe(auditJobId);expect(existing.job?.status).toBe('planned');expect(existing.job?.startAt).toBe(auditStart);expect(existing.batch?.meterCount).toBe(1)
+ const progress=relaySceneProgress(v,p.view.date,auditTarget,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})!
+ expect(progress.phase).toBe('audit-waiting');expect(progress.wait?.date).toBe(auditStart);expect(progress.command).toBeNull();expect(progress.recordId).toBe(meter.id)
+ const focus=relayFocusFor(p,auditTarget),thread=playerThread(p,focus),purpose=threadPurpose(p,thread)
+ expect(relayFocusOpen(p,focus)).toBe(true);expect(purpose.attempt).toContain('已经委托');expect(purpose.finishWhen).toContain(auditStart);expect(purpose.finishWhen).toContain(existing.job!.completeAt);expect(purpose.finishWhen).toContain('不重复安排')
+ const ui=consumerDriver('reader-existing-meter-audit',()=>RelayRecordBook({p:{...p,request},target:auditTarget}))
+ expect(ui.text()).toContain('同一份复核');expect(ui.text()).toContain('实际完成后才看实计')
+ expect(ui.all().filter(e=>e.type==='button'&&text(e.props.children).includes('为这一张已发生的原票，安排独立复核'))).toHaveLength(0)
+ expect(ui.all().some(e=>e.type==='button'&&text(e.props.children).includes(auditStart))).toBe(true)
+ ui.click('翻开这一次已委托的完整复核批次');expect(ui.text()).toContain(auditJobId)
+ expect(request).not.toHaveBeenCalled();expect(auditController.exportSaved()).toBe(raw)
+})
+
+it('keeps ambiguous pending audit evidence explicit instead of choosing a job or offering another commission',()=>{
+ // Deliberate public projection ambiguity, not an imported or saved history.
+ const original=auditProps(),v=original.features.relay!,audit=v.audits.find(a=>a.jobId===auditJobId&&a.meterId===auditTarget.meterId)!,batch=v.auditJobs.find(a=>a.jobId===auditJobId)!,job=batch.job!,otherJob={...job,id:'public-other-audit-job',actionId:'public-other-audit-action'},view={...original.view,operations:{...original.view.operations!,jobs:[...original.view.operations!.jobs,otherJob]}},relay={...v,audits:[...v.audits,{...audit,id:'public-other-audit-reference',jobId:otherJob.id}],auditJobs:[...v.auditJobs,{...batch,jobId:otherJob.id,job:otherJob}]},p={...original,view,features:{...original.features,relay}},request=vi.fn(),raw=auditController.exportSaved()
+ const existing=relayTicketAudit(p,auditTarget);expect(existing.job).toBeNull();expect(existing.reason).toContain('多份')
+ const progress=relaySceneProgress(relay,view.date,auditTarget,{runId:view.runId,accountId:p.accountId,operations:view.operations})!,focus=relayFocusFor(p,auditTarget),thread=playerThread(p,focus)
+ expect(progress.wait).toBeNull();expect(progress.command).toBeNull();expect(threadPurpose(p,thread).attempt).toContain('核对');expect(relayFocusOpen(p,focus)).toBe(true)
+ const ui=consumerDriver('reader-ambiguous-meter-audit',()=>RelayRecordBook({p:{...p,request},target:auditTarget}))
+ expect(ui.text()).toContain('多份');expect(ui.all().filter(e=>e.type==='button'&&text(e.props.children).includes('为这一张已发生的原票，安排独立复核'))).toHaveLength(0)
+ expect(relay.meters.find(m=>m.id===auditTarget.meterId)!.auditedUnits).toBeNull();expect(request).not.toHaveBeenCalled();expect(auditController.exportSaved()).toBe(raw)
+})
+
+it('renders captured renewal and requote terms through the real CommandDetails without rebinding to a newer public view',()=>{
+ const p=panelProps(collection.before),v=p.features.relay!,base=targetFor(p),customer=v.customers.find(c=>c.businessId===base.businessId)!,resource=v.resources.find(r=>r.id==='player-production')!,offer=v.catalog.offers.find(o=>o.id==='managed_support')!,raw=controller.exportSaved(),account=(id:string)=>'原账户 '+id
+ const renew:CommandEnvelope={runId:p.view.runId,actorId:'player',commandId:'captured-renewal-details',expectedRevision:p.view.revision,kind:'RenewRelayCustomer',payload:{customerId:customer.id,termEnd:'2025-01-01',mode:'postpaid',creditLimitFen:12345}},requote:CommandEnvelope={runId:p.view.runId,actorId:'player',commandId:'captured-requote-details',expectedRevision:p.view.revision,kind:'StartRelayRequote',payload:{businessId:base.businessId,customerIds:[customer.id],offerKind:'managed_support',unitPriceFen:7,effectiveAt:'2024-11-21',resources:['player-production'],startAt:'2024-11-13'}}
+ const preview=(command:CommandEnvelope)=>controller.preview(command)
+ const render=(command:CommandEnvelope,name:string)=>consumerDriver(name,()=>CommandDetails({command,confirm:preview(command),features:p.features,view:p.view,accountName:account,clock:null})).text()
+ const renewal=render(renew,'reader-captured-renewal'),quote=render(requote,'reader-captured-requote'),number=v.customers.filter(c=>c.businessId===base.businessId).findIndex(c=>c.id===customer.id)+1
+ expect(renewal).toContain('客户'+number);expect(renewal).toContain(customer.termEnd);expect(renewal).toContain('2025-01-01');expect(renewal).toContain('后付信用');expect(renewal).toContain(moneyText(12345));expect(renewal).toContain('旧余额')
+ expect(quote).toContain('客户'+number);expect(quote).toContain(offer.label);expect(quote).toContain(moneyText(7));expect(quote).toContain(resource.label);expect(quote).toContain('2024-11-13');expect(quote).toContain('2024-11-20');expect(quote).toContain('2024-11-21');expect(quote).toContain('1点');expect(quote).toContain('7日')
+ const altered=alter(p.view,r=>({...r,customers:r.customers.map(c=>c.id===customer.id?{...c,termEnd:'2025-12-31',creditLimitFen:99999}:c),resources:r.resources.map(r=>r.id===resource.id?{...r,label:'后来资源标签不应串入'}:r)}))
+ expect(features(altered).relay!.customers.find(c=>c.id===customer.id)!.termEnd).toBe('2025-12-31')
+ expect(render(renew,'reader-captured-renewal-after-new-view')).toBe(renewal);expect(render(requote,'reader-captured-requote-after-new-view')).toBe(quote);expect(quote).not.toContain('后来资源标签不应串入')
+ for(const patch of [{hasCandidate:true},{readOnly:true,saveStatus:'read_only' as const}]){
+  const view={...p.view,...patch},ui=consumerDriver('reader-confirmation-readonly-'+JSON.stringify(patch),()=>CommandDetails({command:renew,confirm:preview(renew),features:p.features,view,accountName:account,clock:null}))
+  expect(ui.text()).toContain('2025-01-01');expect(ui.all().filter(e=>e.type==='button')).toHaveLength(0)
+ }
+ expect(controller.exportSaved()).toBe(raw)
+})
+
+it('keeps the original Panel job-advance payload but refuses the saved handler after another revision commits',()=>{
+ expect(oldAdvanceCalls).toHaveLength(1)
+ const [kind,payload,label]=oldAdvanceCalls[0]!,jobDates=auditBefore.operations!.jobs.filter(j=>['planned','running'].includes(j.status)).map(j=>j.completeAt)
+ expect(kind).toBe('AdvanceTime');expect(label).toBe('推进到本项中转任务实际完成');expect(jobDates).toContain((payload as {date:string}).date)
+ const raw=auditController.exportSaved(),baseline=oldAdvanceRequest.mock.calls.length
+ if(typeof oldAdvance.props.onClick!=='function')throw Error('ORIGINAL_PANEL_JOB_HANDLER_REQUIRED')
+ oldAdvance.props.onClick();expect(oldAdvanceRequest).toHaveBeenCalledTimes(baseline);expect(auditController.exportSaved()).toBe(raw)
+})

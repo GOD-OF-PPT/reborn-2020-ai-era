@@ -1,0 +1,608 @@
+{
+  "apiVersion": "u4b-public-readback-v1",
+  "requirements": [
+    {
+      "scope": "fresh_R7",
+      "mode": "fresh_readback",
+      "producerDirectories": [
+        "goal-1/evidence/t17-acceptance-37/chrome-main-r7"
+      ],
+      "recordKeys": [
+        "chrome-main-r7:r7-01-current-old100-new-build-unchanged.json",
+        "chrome-main-r7:r7-03-visible-original99-import-buffer.json",
+        "chrome-main-r7:r7-04-preserved-old100-backup-before-new-stop.json",
+        "chrome-main-r7:r7-08-new100-station-stop-actual4838.json",
+        "chrome-main-r7:r7-09-visible-derived-negative101-buffer.json",
+        "chrome-main-r7:r7-10-preserved-new100-backup-before-negative.json",
+        "chrome-main-r7:r7-11-saved101-after-negative-confirm-cancel.json",
+        "chrome-main-r7:r7-13-new102-negative-cash-and-asset-linked.json",
+        "chrome-main-r7:r7-16-new103-bulk-cash-refunds-not-net-income.json",
+        "chrome-main-r7:r7-17-visible-actual114-quote-import-buffer.json",
+        "chrome-main-r7:r7-18-preserved-bulk103-backup-before-quote.json",
+        "chrome-main-r7:r7-22-new115-quote-actually-effective-no-cash-ap-change.json",
+        "chrome-main-r7:r7-23-reentered-new115-exact.json"
+      ],
+      "expectedChecks": 12
+    },
+    {
+      "scope": "fresh_R8",
+      "mode": "fresh_readback",
+      "producerDirectories": [
+        "goal-1/evidence/t17-acceptance-37/chrome-main-r8"
+      ],
+      "recordKeys": [
+        "chrome-main-r8:r8-05-old115-after-today-and-draft-cancel.json",
+        "chrome-main-r8:r8-07-visible-original114-buffer.json",
+        "chrome-main-r8:r8-08-old115-backup-before-quote-wait.json",
+        "chrome-main-r8:r8-13-new115-actual-quote-effective.json",
+        "chrome-main-r8:r8-14-reentered-own-new115-exact.json",
+        "chrome-main-r8:r8-15-visible-original99-before-stop-buffer.json",
+        "chrome-main-r8:r8-16-own-new115-backup-before-stop.json",
+        "chrome-main-r8:r8-19-old99-stop-confirm-cancel-exact.json",
+        "chrome-main-r8:r8-24-new100-real-stop-maintenance4838.json",
+        "chrome-main-r8:r8-25-reentered-own-new100-exact.json"
+      ],
+      "expectedChecks": 9
+    },
+    {
+      "scope": "fresh_R9",
+      "mode": "fresh_readback",
+      "producerDirectories": [
+        "goal-1/evidence/t17-acceptance-37/chrome-main-r9"
+      ],
+      "recordKeys": [
+        "chrome-main-r9:r9-01-original-r8-own100-at-new-build.json",
+        "chrome-main-r9:r9-02-visible-canonical-r7-115-buffer.json",
+        "chrome-main-r9:r9-03-r8-own100-preserved-backup.json",
+        "chrome-main-r9:r9-06-canonical115-after-corrected-today.json"
+      ],
+      "expectedChecks": 5
+    },
+    {
+      "scope": "fresh_R10",
+      "mode": "fresh_readback",
+      "producerDirectories": [
+        "goal-1/evidence/t17-acceptance-37/chrome-main-r10"
+      ],
+      "recordKeys": [
+        "chrome-main-r10:r10-06-original115-after-renew-confirm-cancel.json",
+        "chrome-main-r10:r10-07-working89-input.json",
+        "chrome-main-r10:r10-07-working89-previous-backup.json",
+        "chrome-main-r10:r10-10-working89-readback-exact.json",
+        "chrome-main-r10:r10-11-settled92-input.json",
+        "chrome-main-r10:r10-11-settled92-previous-backup.json",
+        "chrome-main-r10:r10-13-settled92-readback-exact.json",
+        "chrome-main-r10:r10-14-stopped95-input.json",
+        "chrome-main-r10:r10-15-settled92-preserved-backup.json",
+        "chrome-main-r10:r10-18-stopped95-readback-exact.json",
+        "chrome-main-r10:r10-20-stopped95-after-preferences-restored.json",
+        "chrome-main-r10:r10-21-return-canonical115-input.json",
+        "chrome-main-r10:r10-22-stopped95-preserved-backup.json",
+        "chrome-main-r10:r10-25-original115-after-composition-restores-and-today.json",
+        "chrome-main-r10:r10-27-original115-after-business-entry-read.json",
+        "chrome-main-r10:r10-28-final-original115-reentry-exact.json"
+      ],
+      "expectedChecks": 7
+    }
+  ],
+  "freshSpec": "Root must use actual final:true authorizedBy:/root copy identity after adopting exact roles; this candidate is not execution authority.",
+  "canonicalSourceContract": "Root must bind canonical-source-contract-r6.json actual identity plus referenceFiles",
+  "observationsAlreadyListedAsReferences": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-02-station-closing-purpose-duplicate-scope-line.ax.txt",
+      "bytes": 3093,
+      "sha256": "874ca98d951585d9a64546cbf10d5951178c2ca848fc2ee09d735b00d228a31d",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-02-station-closing-purpose-duplicate-scope-line.jpg",
+      "bytes": 168619,
+      "sha256": "128f84a621c13caaac93ed58491508150241beb1171aca2a1bb868a8ff88a0ef",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-05-station-stop-confirm-actual-prior-accrual4838.ax.txt",
+      "bytes": 4348,
+      "sha256": "bafcc4e8addb25d545dab3e628ea157c95ce040a019508bb7a1adb91cf2506cc",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-05-station-stop-confirm-actual-prior-accrual4838.jpg",
+      "bytes": 60105,
+      "sha256": "ac09f53ee288452169e099c501f6f9d80661dd318d48a74f99544abd4c1266b1",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-06-stop-confirm-existing4838-on-second-page.ax.txt",
+      "bytes": 4700,
+      "sha256": "fc36e1670dd5184bd070a61bcd1bc1e96b31388295d0c883a3b322f1a843c544",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-06-stop-confirm-existing4838-on-second-page.jpg",
+      "bytes": 89828,
+      "sha256": "9a3c2a77ae178742954bd1fc16b3658a6bafe38c121b23da6bd666f23592f847",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-07-new100-original-maintenance-paid-echo4838.ax.txt",
+      "bytes": 1869,
+      "sha256": "ceedc38f7a09644c31f44a2c601ded3f1f4f050ac87d45ef088044ca6465267e",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-07-new100-original-maintenance-paid-echo4838.jpg",
+      "bytes": 67249,
+      "sha256": "bfac5b9465ef6aa7927bcb4eebad2aaeeb7229c16d0d4205473c1146f6c7fa29",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-12-new102-cash-refund606-and-supplier-asset202-first.ax.txt",
+      "bytes": 3108,
+      "sha256": "b63e2e5a7a953a43e8c4b208053f073cf21496d94c169b0babd85dea4a65c3a7",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-12-new102-cash-refund606-and-supplier-asset202-first.jpg",
+      "bytes": 164811,
+      "sha256": "1903dbf2a565c451c8aa2d17797691a6d285e0508e76d76e3b5268d607be3bd9",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-14-negative-appendix-money-natures-visible.ax.txt",
+      "bytes": 1974,
+      "sha256": "1641b3cbcb197a2f0075177d3a267d487ee12ef59c7db2627c7494c4eeddf902",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-14-negative-appendix-money-natures-visible.jpg",
+      "bytes": 75818,
+      "sha256": "8df464ec458c78b7ed40a1722c17d8a88ea301e72491105b68b2c6195e5e2c6a",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-15-new103-bulk-refunds-and-receivables-separate.ax.txt",
+      "bytes": 3257,
+      "sha256": "f4b4ba9984d31879ec9c89e481bae4e02dbf4dafabc613b640bf547001b46bd9",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-15-new103-bulk-refunds-and-receivables-separate.jpg",
+      "bytes": 174882,
+      "sha256": "a727511a9bfe5c0fbe86fa4f0e017cecdee2b362cf494cfc64d7015bffeccdb6",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-19-quote-accepted-not-effective-current-old-price.ax.txt",
+      "bytes": 2092,
+      "sha256": "b6da0003bb74edb88b234ae920b6f37dc0bde7a4c22017c08ee2c2083b5b3c90",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-19-quote-accepted-not-effective-current-old-price.jpg",
+      "bytes": 77276,
+      "sha256": "67a311e8f66e214750044c46c3f0aa97f9b0c986cdd7988a5f92e314161b2374",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-20-new115-quote-now-effective-old-period-fee-kept.ax.txt",
+      "bytes": 1610,
+      "sha256": "957715acb0cdd85b2b7d020b11167c611f2b79388cacc3b90a00a86292276f5d",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-20-new115-quote-now-effective-old-period-fee-kept.jpg",
+      "bytes": 75509,
+      "sha256": "e16acd4f8c2277ac612d3a80ea76eae7f04610b266ccb7cb801fae424f826112",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-21-quote-effective-wait-return-generic-echo.ax.txt",
+      "bytes": 3320,
+      "sha256": "c8cebe906825f619b29800d9c9f64bae2635a3df4b942a8567ed59bd370848d7",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r7/r7-21-quote-effective-wait-return-generic-echo.jpg",
+      "bytes": 164945,
+      "sha256": "83971d55239323a7e56527ffc9d29a199b9aac8ae37306c5df6a7fa24e42b0e3",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-01-finished-period-direct-today.ax.txt",
+      "bytes": 3016,
+      "sha256": "53d2cb97d398965eb06bb4407ea6b9ececcb7f6489cb38f3956b86f128466f98",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-01-finished-period-direct-today.jpg",
+      "bytes": 158055,
+      "sha256": "82894a953ec448260522fe3ea38cb96899afed7e7520c5593131508185846ef6",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-02-new-period-explicit-current-conditions.ax.txt",
+      "bytes": 3194,
+      "sha256": "7d5ae94f3b72fe348e1409d2bd9f2fde81ce13f0c92b51fcb8fd4d3884628c90",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-02-new-period-explicit-current-conditions.jpg",
+      "bytes": 71519,
+      "sha256": "1a6c0b126b5b2c0d5939627e874837cae2b5b99fc24f06b51608e52809bd4f8f",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-03-explicit-customer-draft-retained-after-cancel.ax.txt",
+      "bytes": 3183,
+      "sha256": "5029a5a97b58919e93fb980d088793f97ddcc86d4638cc3ef497565e09b3416f",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-03-explicit-customer-draft-retained-after-cancel.jpg",
+      "bytes": 71936,
+      "sha256": "8e1941aeefcf00da14715a349934ce2aa23677c8ad162f081b587529f1fb945b",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-04-paper-direct-today-original-bookmark-kept.ax.txt",
+      "bytes": 2437,
+      "sha256": "1a3202dfe1cc29bdd0dc5c08ff70e3b74bbb07f6d3fb2bcac6b3770bac6c4380",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-04-paper-direct-today-original-bookmark-kept.jpg",
+      "bytes": 139138,
+      "sha256": "5080afe0a512cd9f51f8c051bf8ec34ad573f3a91a9646cdb666df21b5d4d8c2",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-06-one-original-ticket-normal-balances-not-tasks.ax.txt",
+      "bytes": 2409,
+      "sha256": "35d42333199288d469168d8823276d2acb3ac84bd4cac13d28e3bfac33136c44",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-06-one-original-ticket-normal-balances-not-tasks.jpg",
+      "bytes": 81200,
+      "sha256": "1f526e3acdb929b7b17bc9c79db4653f9c074236ae57e5021c6446d850064ba8",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-10-quote-picker-page1-action-position.ax.txt",
+      "bytes": 2698,
+      "sha256": "b20f19d3fb89400bc35b2d6317f7ce87854337b40a1078821bbed7a824d0184b",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-10-quote-picker-page1-action-position.jpg",
+      "bytes": 58668,
+      "sha256": "a289a9446c479d36d96748a62d45d7a6dc09df3f1f0ca55b1b9a847dc7003fb6",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-11-original-quote-accepted-not-effective.ax.txt",
+      "bytes": 2233,
+      "sha256": "d20f6a1369f2d3a55c35700f02c50e35c077dd6e2725a75ccab10ea67910c7e5",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-11-original-quote-accepted-not-effective.jpg",
+      "bytes": 79577,
+      "sha256": "bf400cb9c139c598244d65572ec2143a4ee6ff83adbcfa43fb4984e2e7986467",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-12-new115-quote-effective-specific-saved-result.ax.txt",
+      "bytes": 3228,
+      "sha256": "bc39d87daaac242d7173e9da32aaf8bdfa91054f28b2f4bb69d17904c3a4385d",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-12-new115-quote-effective-specific-saved-result.jpg",
+      "bytes": 161038,
+      "sha256": "c14722043fc01e91d6ffbe979771437bda55a8c7d3d3f4c777d4e350ce02c733",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-17-original-station-stop-entry.ax.txt",
+      "bytes": 15079,
+      "sha256": "1cb85145183533f4ffd72731b45e9c424205e0b4b150ca38729ba67f13a10974",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-17-original-station-stop-entry.jpg",
+      "bytes": 64833,
+      "sha256": "2d4a252bdfc583bff98eaae1c44cc6c18889d09c8c9c995310d7592e2fed024b",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-18-stop-confirm-first-page-prior-accrual4838.ax.txt",
+      "bytes": 4339,
+      "sha256": "f0473309ce08799af9b802015cebab923505eb7af340d8ab666da0e0bdf4acd6",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-18-stop-confirm-first-page-prior-accrual4838.jpg",
+      "bytes": 68145,
+      "sha256": "2f72937f747a8c3352273cc0eed30364b0560751ea58ed659955483950082ed7",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-20-stop-confirm-original-job-costs.ax.txt",
+      "bytes": 4691,
+      "sha256": "f37b0bea5e5064135a0b0bb135745a5d34d1b97e22b96a3290a17e92fae00530",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-20-stop-confirm-original-job-costs.jpg",
+      "bytes": 87098,
+      "sha256": "527bc9cdcb380a2a29bdbd0a9f09cfdf32f7d83b1f554c96d309015f30704bb0",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-21-stop-confirm-original-balances-and-obligations.ax.txt",
+      "bytes": 4394,
+      "sha256": "b39a09e43eb2758c0efbaaaed9fcbc1aef7aea75373473a306d08546170808da",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-21-stop-confirm-original-balances-and-obligations.jpg",
+      "bytes": 46662,
+      "sha256": "db443852d52840033153b3d08982218602214b4335da78986831bb3d4433400d",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-22-new100-real-prior-maintenance-paid4838.ax.txt",
+      "bytes": 1869,
+      "sha256": "ceedc38f7a09644c31f44a2c601ded3f1f4f050ac87d45ef088044ca6465267e",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-22-new100-real-prior-maintenance-paid4838.jpg",
+      "bytes": 67085,
+      "sha256": "e07756fc82ceed6571132744a1384c99218f9c95f8109e031bda5631083cbdf5",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-23-new100-winding-down-and-original-responsibilities.ax.txt",
+      "bytes": 3083,
+      "sha256": "9573f8b07ff9d2c1f89a652daa2846c65306fa3932243da905673cf8c8f2361f",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-23-new100-winding-down-and-original-responsibilities.jpg",
+      "bytes": 159958,
+      "sha256": "9182c07f695b3f5c2967f6bfd91e4a29121b00d9e0330501eb8246832f368a4c",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-26-final-own100-normal-reentry.ax.txt",
+      "bytes": 3042,
+      "sha256": "e78ef1846001b1ef1d58aa9930df67185f91aca0befe52fdde0eb9167d1edbad",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r8/r8-26-final-own100-normal-reentry.jpg",
+      "bytes": 159994,
+      "sha256": "cfb27360fdabdcad7a0b00db9608b5d8cd1fd1b6806e786a0d2245ff6f072c7e",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r9/r9-04-explicit-closed-period-history-choice.ax.txt",
+      "bytes": 13189,
+      "sha256": "01e35d185d9b8f7af5663e40ab4c61a75b2a751a2030fcf6ab91975096e2bedb",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r9/r9-04-explicit-closed-period-history-choice.jpg",
+      "bytes": 74617,
+      "sha256": "487333bd886450e4f990fb0596323e226d8193b5185d419471f6b229fbd1a04f",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r9/r9-05-today-no-false-service-promise.ax.txt",
+      "bytes": 2497,
+      "sha256": "fd54627477a8750763739e3c15ac1e1a845631ce2f39dbe41779b671920a6072",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r9/r9-05-today-no-false-service-promise.jpg",
+      "bytes": 142834,
+      "sha256": "bd69b4560fe3d3b3fe4bc92b10f1a55925135c3d02ab5168edf03c27e159f4c4",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-01-new-period-prerequisite-window.ax.txt",
+      "bytes": 3646,
+      "sha256": "9356cee9b95b92ea6bd1a09b0b29fb7629e377c8bb01a24a43a5f38de8836b77",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-01-new-period-prerequisite-window.jpg",
+      "bytes": 87452,
+      "sha256": "e39cf12c9f6243678b1e30751a0baeb4f7bf2787708dab6432eebcd4812901e9",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-02-explicit-customer2-original-renewal-blank.ax.txt",
+      "bytes": 2271,
+      "sha256": "5283eb06bc05e97347d8a1751c33f75cc97a5f74f16dca98aa0ad7899838e5af",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-02-explicit-customer2-original-renewal-blank.jpg",
+      "bytes": 67578,
+      "sha256": "cad16ccbac8c12f5cdb91b71c4feddc85128f89772d0d3f86b0f31e075ecc994",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-03-original-renewal-confirm-explicit-may31-credit100.ax.txt",
+      "bytes": 2333,
+      "sha256": "306b7418e8a61abdafac25170ac50f9ad29e2cb0cfb26fe182a2c509dd8498a0",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-03-original-renewal-confirm-explicit-may31-credit100.jpg",
+      "bytes": 61989,
+      "sha256": "533ed31e77e90e8a036b321bd33dc3bf72b20e96d11f994df7503f79ed315374",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-04-original-renewal-confirm-protected-old-balance.ax.txt",
+      "bytes": 2382,
+      "sha256": "37ab7034a236e6d74d5cc1b698d5d322abbd60b443d05880df9f7b40571134aa",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-04-original-renewal-confirm-protected-old-balance.jpg",
+      "bytes": 44215,
+      "sha256": "f78f3a994cc0a344030ad6aa4e47cf175603577ca12a20de55a73cc0359be407",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-05-cancel-and-return-same-renewal-draft.ax.txt",
+      "bytes": 2238,
+      "sha256": "c10a05471a9fc37dbd257d04cff7fa16100d752a5e4986abb583c743ad3a9e88",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-05-cancel-and-return-same-renewal-draft.jpg",
+      "bytes": 68320,
+      "sha256": "f7009de7a7b34dc30152217478d025d69bd90d1ccce3affc8dc3085b1964b6b6",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-08-original-working-period-selection.ax.txt",
+      "bytes": 4758,
+      "sha256": "abc3bdb3d1f31dacee866270dd7b224e04b8ef82f768f4aae3ed26c113876624",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-08-original-working-period-selection.jpg",
+      "bytes": 66053,
+      "sha256": "1f296d9dd36f66d6a09a658bc48d3f3deff8b111e803d1b00411cf185c707131",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-09-working89-expanded-original-folio.ax.txt",
+      "bytes": 3217,
+      "sha256": "cf0cca202bed43c37768e27b94b6aff82aecd8248639875654209c71e2701c98",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-09-working89-expanded-original-folio.jpg",
+      "bytes": 170689,
+      "sha256": "2ddd2baec24028f4c81dcef71472c2735e020c7a14941ea8a00ef5789efc304d",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-12-settled92-financial-closed-unreviewed33.ax.txt",
+      "bytes": 3353,
+      "sha256": "e850f5fb11ae3c872340a4fff0a6279900c3f7bb3bc07f2916451eb0f814cef3",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-12-settled92-financial-closed-unreviewed33.jpg",
+      "bytes": 167065,
+      "sha256": "969961f022204ab87aa699341b7f9ff49abf4c1eeeca9922ca5836b2c2e64dfb",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-16-stopped95-original-period-choice.ax.txt",
+      "bytes": 5634,
+      "sha256": "0e5a7096abd7c04e057e0ada35eb4a5efb6c728a7a8a3650c5e1a134b14a26d6",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-16-stopped95-original-period-choice.jpg",
+      "bytes": 65849,
+      "sha256": "d711f032c581cc2ca688e8f95e07cc5382b256919b532ba609e6858e79776dd0",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-17-stopped95-independent-support-and-audit-kept.ax.txt",
+      "bytes": 3366,
+      "sha256": "740074bfc495fb2e5de69a96ce3e5d2c29625d40d3a32ba9e8a21fe20b6c816a",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-17-stopped95-independent-support-and-audit-kept.jpg",
+      "bytes": 172308,
+      "sha256": "1f48fdbf72e52ab623ae7be0608faf7e70b614bd52573619a2378eec3c53aa43",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-19-stopped95-text-reduced-motion-same-records.ax.txt",
+      "bytes": 3374,
+      "sha256": "259dafda0c01941706a45e3ea513cc5345bb11273b77a23fcb300c0d7923cdce",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-19-stopped95-text-reduced-motion-same-records.jpg",
+      "bytes": 95262,
+      "sha256": "a54b6a1a9a3afd3a6614c91a020fab2b4958c68ecb3dd1df54061581dd8550f2",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-23-closed115-kept-folio-current.ax.txt",
+      "bytes": 3088,
+      "sha256": "48a0cefa79219fb4e1ad67b8c191fbcff400df041fa0b32d998c6afa17534185",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-23-closed115-kept-folio-current.jpg",
+      "bytes": 158367,
+      "sha256": "d95602f988f540be5dbd46fb9f47a07320427b377ce31dfe78837a0bade5d29a",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-24-canonical115-corrected-today-directions.ax.txt",
+      "bytes": 2497,
+      "sha256": "fd54627477a8750763739e3c15ac1e1a845631ce2f39dbe41779b671920a6072",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-24-canonical115-corrected-today-directions.jpg",
+      "bytes": 142816,
+      "sha256": "a03bb2b891f208d5d29f93bde606a27f65c65bf34d8981c77bceba727ea834d3",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-26-business-and-period-entries-same-conditions.ax.txt",
+      "bytes": 3645,
+      "sha256": "e4a96c3aee3f7f4a3018ad2a05868de300b19df82272523bf555f4b107a6c72e",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-26-business-and-period-entries-same-conditions.jpg",
+      "bytes": 87262,
+      "sha256": "8b30a0eac5152f38c565cc6c17c5c3c13f56f2fabe257bfbeb98b7db2979c6c9",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-29-final-current-room-after-normal-reentry.ax.txt",
+      "bytes": 2780,
+      "sha256": "c736b8a4202ccff23830a5e05334f749723ceba38f30f42cf7bf954635fe69ac",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-29-final-current-room-after-normal-reentry.jpg",
+      "bytes": 151120,
+      "sha256": "150cfb9e60ba892cc47328564ffb1f823428c84c0375d08341b209031c4b32d4",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-30-final-closed-period-direct-today.ax.txt",
+      "bytes": 2945,
+      "sha256": "520e5810b7381174dffcf551150ac9f57b88d83c7b374d3277854bd771abe4d9",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/chrome-main-r10/r10-30-final-closed-period-direct-today.jpg",
+      "bytes": 157924,
+      "sha256": "e7d15f2bd2adbdfbac37930d885418863deeeb42c7276af4495d9b238ab9502e",
+      "mode": 420
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+# 更正附票后果
+
+先同state owner对齐唯一relayCorrectionEffects(p,target,correctionId)合同后，仅selected correction分支接summary可见原Notes；保原audit/corrected/ticket/paymentNature/原报告实计/delta、inherited责任和全原引用。客户/供应一侧未知不把另一侧已知后果吞掉；helper返回未知时仍原调整可读，真实0与missing分开。只读旧更正显示中性累计事实；本次标记仅匹配同revision canonical原CorrectRelayUsage receipt，候选叠态保已保存view。
+
+新独立consumer用真实negative102/103和positiveR4 103固定raw；候选旧101/已saved102 overlay、futurepool变化、两侧独立unknown与正AR/due可见，case3-5，setup20s/case默认5s。只是写test，Root统一运行。原type红/其它owner/旧evidence不改，不新Paper shape/CSS或素材；回滚本continuity增量与新test。

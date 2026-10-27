@@ -1,0 +1,3 @@
+- [ ] CurrentR6 original89 read unchanged, preserved backup, restore88 with original UI.
+- [ ] New actual support200 short echo visible plus original100 audit/AP and financial-closed33/futureQ1 state.
+- [ ] Export actual sources and stop before next producer; U4B remains open.

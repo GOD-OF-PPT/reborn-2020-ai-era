@@ -1,0 +1,21 @@
+.relay-ticket-book{--ticket-ink:#493e2c;--ticket-rule:#ab9974;position:relative;color:inherit}
+.relay-ticket-heading{display:flex;justify-content:space-between;gap:1rem;padding-bottom:.65rem;border-bottom:1px solid var(--ticket-rule);font-size:.88em;letter-spacing:.06em}
+.relay-ticket-state{font-family:var(--font-display,serif);font-size:1.18em;line-height:1.65;margin:1rem 0 .5rem}
+.relay-ticket-state[data-attention="due"],.relay-ticket-state[data-attention="known"]{color:#873e31;border-left:3px solid #873e31;padding-left:.7rem}
+.relay-ticket-owner{line-height:1.7;color:inherit}
+.relay-ticket-illustration{position:relative;width:260px;max-width:100%;height:174px;margin:.5rem auto 1rem;pointer-events:none}
+.relay-ticket-illustration .relay-service-art{position:absolute;inset:0;display:block;width:100%;height:100%;aspect-ratio:1536/1024}
+.relay-ticket-evidence{margin:1rem 0;border-top:1px solid var(--ticket-rule);padding-top:.65rem}
+.relay-ticket-evidence p{line-height:1.8;overflow-wrap:anywhere}
+.relay-ticket-reading-actions,.relay-ticket-response-actions,.relay-ticket-decisions{display:flex;flex-wrap:wrap;align-items:flex-start;gap:.75rem}
+.relay-ticket-reading-actions{margin-top:1.2rem;padding-top:.75rem;border-top:1px solid var(--ticket-rule)}
+.relay-ticket-decisions>details{flex-basis:100%;border-top:1px solid var(--ticket-rule);padding-top:.65rem}
+.relay-ticket-decisions>details[open]{display:flex;flex-wrap:wrap;gap:.75rem}
+.relay-ticket-decisions>details>summary{flex-basis:100%;cursor:pointer}
+.relay-ticket-picker .radio-line{align-items:flex-start;padding:.9rem 0;border-bottom:1px solid var(--ticket-rule)}
+.relay-ticket-picker .radio-line small{display:block;line-height:1.7;margin-top:.35rem}
+.relay-ticket-book button:focus-visible,.relay-ticket-picker button:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+.relay-ticket-book button:disabled{cursor:not-allowed}
+.relay-ticket-response-actions>.command{margin:0}
+.relay-ticket-other{margin:1rem 0;border-top:1px solid var(--ticket-rule);padding-top:.65rem}
+.relay-ticket-other[open]>button,.relay-ticket-other[open]>.command{margin:.7rem .7rem .2rem 0}

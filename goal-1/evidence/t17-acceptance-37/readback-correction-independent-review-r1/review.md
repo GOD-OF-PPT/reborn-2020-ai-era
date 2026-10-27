@@ -1,0 +1,27 @@
+# R3只读回补正候选独审：限定允许Root另发exact GO
+
+当前未发现确定P1/P2阻断。仅允许Root在保持原finalSTOP和原完整Create绿证据的前提下，另发精确绑定选定R3三文件及全新output的readback-only GO；本审不发GO、不执行候选/codec/engine/读回，不改原formal/11权威。U4-B最终admission仍待实际补正终态及完整覆盖判断，未预标admittedtrue。
+
+## 事实与身份不变
+
+选定correction-context-r3.candidate.mjs7585B/28479c41efdf27dd4b0a47fc07712b4e11d9a765dc90d1f261f2b42402cc2698、replacement-readback-r3.candidate.mjs59949B/fc2a0d5ed1793e0213bd2034b87237b5c41b2dc51ea4d85b5aa7273a430c7eb9、run-readback-only-r3.candidate.mjs4324B/36ac8fb7a97adcfbecfd2dfed1a8165470cf6d60155e1dac8864e81913df4b74，均与source-freeze7481B/44a8bc7d…同；R1/r2仅未运行静态草稿，不纳选定命令。
+
+独立字节核：从原registered R6的requirePublicReadbackWiring调用至所有profile/事实/原输出出版结尾，replacement只增加correction.tracked；逆去该一处后原tail与新tail完全同，均SHA8a14800d6a161783ba512438e84329374d561a5fcb0985071dde741d7d8b1ba1。原43fresh keys/typedsource/biz/period/branch、完成audit后实计/逆向引用、606/202/2424/1212/808/404/4838/quote、旧35/31exact与33检查逻辑未改。不把补正33称66新事实。
+
+## 只读回授权接缝
+
+correctionContext要求Node22.12.0、role runner/replacement、Root authorizedBy=/root及operation one_public_readback_only_after_green_original_create；originalAuditDirectory硬定原full-create-audit-r1、新output仅同级readback-wrapper-correction-run-rN、newCreateExecutions0且originalCreateMustNotRepeat=true。9原证据path固定并核完整identity，含合同/绿report与replayterminal/原outerfalse和terminal/原child33和terminal/原sourcebeforeafter。又以原RootGO（来自原executionAuthority）确认其原合同与原metadata authorization/620source/实际registry读回。
+
+contract still保原publicReadback identity，replacement自身改由新GO.replacementScript精确绑定，原entry仍在contract.references被逐字核；context自文件等go.correctionSupport，wrapper自文件等go.correctionRunner，replacement自文件等replacementScript，独审identity和GO文件本身也跟踪，不偷改原合同或假装replacement是原registered entry。当前模板author/output/review均null，不能执行。
+
+绿Create必须report sourceHashes等原127、1creation/178post/97artifact/15buffers/allByteEqual，实际replay exit0/signalnull/errornull；outer必须保原false/EEXIST命名碰撞/只replay execution/completeReplay/publicWiringtrue，原child33已过且同contract coverage校验。不能仅凭一个成功标签绕过原完整证据。
+
+原sourcebefore/sourceafter七组按完整sequence逐identity核（references原1100含577合法重复，不能错用拒重集合）；六组还必须逐序等原frozenContract。之后tracking按path去重但任何同path不同bytes/hash/mode拒，完整原127/901/P326/refs/inputs/snapshots/原authority/620files/11STOP和新GO/三文件/review/原report结果共同跟踪，未来前后verify核全部14producer fulltree+stopproof。当前本审全部原冻结及候选identity无漂移、620/11权威未改；不冒未来through-run。Node外部身份仍经已审的仅current realpath executable特例，其他外读不开放。
+
+## 输出和实际进程终态
+
+wrapper只spawn一次已登记replacement，代码无Create/verifier/codec/产品command调用；新output必须不存在，guard祖先+mkdir后全部wx。replacement只写此新output，输入directory仍原formal根、0写原输入/contract/原false。旧33childterminal仍readback-terminal.json，外层collector新名correction-process-terminal.json、process stdout/stderr和wrapperterminal另名，不重现原冲突。
+
+最终passed要求真实spawn exit0/signalnull/errornull、原contract六scope exact coverage/33passed/errornull及全tracking/tree无漂移；失败保第一次新输出，原已绿Create绝不重跑。预检前失败可能不产生新output，仍须由Root保存真实外部命令终态，不把未开始补正称通过。当前本审0syntax/import/工程/Browser/读回执行；Root可独立syntax-only结果另记，不能由它冒实际运行。
+
+[限定结论] 选定R3可供Root下一次精确readback-only GO，须使用本次独审身份和实际新输出；原outerfalse229ada8a…/原child33true243f1624…/replay绿5408129d…保持，补正的干净process终态另有原件。等补正实际终态后才继续U4-B限定admission/覆盖，完整goal不因此关闭。

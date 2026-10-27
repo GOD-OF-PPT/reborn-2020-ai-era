@@ -1,0 +1,242 @@
+import type {GamePanelProps} from './game-types.ts'
+import {relayPaperResponsibilities,type RelayServicePaperState,type RelayPaperSupportState} from './RelayServicePaper.tsx'
+import {resolveRelaySceneTarget,type RelaySceneTarget} from './relay-scene-target.ts'
+import {relaySceneProgress,relayAuditableMeters} from './relay-scene-progress.ts'
+import {relayTicketAudit} from './relay-ticket-command.ts'
+import {moneyText} from './game-text.ts'
+import {relayId} from '../core/relay.ts'
+import type {RelayCasebookHistory} from '../application/relay-casebook-projection.ts'
+
+type Input=Pick<GamePanelProps,'view'|'features'|'accountId'>
+type Relay=NonNullable<Input['features']['relay']>
+type Invoice=Relay['receivables'][number]
+export type RelayPaperSelection={readonly kind:'receivable'|'refund'|'supplier'|'correction'|'obligation'|'audit'|'meter';readonly recordId:string}
+const one=<T>(rows:readonly T[]):T|null=>rows.length===1?rows[0]!:null
+const unique=(ids:readonly string[])=>new Set(ids).size===ids.length
+function casebookFor(p:Input):RelayCasebookHistory|null{
+ const book=(p.features.relay as (Relay&{readonly casebook?:RelayCasebookHistory})|null)?.casebook
+ return book?.status==='ready'&&book.runId===p.view.runId&&book.revision===p.view.revision&&book.asOf===p.view.date&&[book.operations,book.transactions,book.obligationHistory,book.collections,book.recharges,book.renewals,book.actions].every(Array.isArray)?book:null
+}
+function currentReceipt(p:Input){
+ const receipt=p.view.receipts.at(-1)
+ // Session publishes only the committed view. A later unsaved candidate adds
+ // protection over that same old revision; it must not erase its saved receipt.
+ return receipt?.revisionAfter===p.view.revision?receipt:null
+}
+function currentCollection(p:Input,invoices:readonly Invoice[],businessId:string,accountId:string):number{
+ const receipt=currentReceipt(p)
+ if(!receipt||!['CollectRelayDue','CollectRelayReceivable'].includes(receipt.kind)||!unique(invoices.map(row=>row.id)))return 0
+ const finance=one(p.features.workbench.finance.filter(row=>row.accountId===accountId))
+ if(!finance)return 0
+ const command=relayId(receipt.commandId,receipt.kind),rows=finance.transactions.filter(tx=>invoices.some(invoice=>invoice.id===tx.sourceId)&&tx.id===(receipt.kind==='CollectRelayDue'?relayId('collect',command,tx.sourceId):relayId('collect',command)))
+ if(!rows.length||!unique(rows.map(row=>row.id))||rows.some(tx=>tx.businessId!==businessId||tx.date!==p.view.date||tx.amountFen<=0||invoices.filter(invoice=>invoice.id===tx.sourceId&&invoice.customerId===tx.contractId&&invoice.dueAt<=p.view.date).length!==1))return 0
+ return rows.reduce((sum,row)=>sum+row.amountFen,0)
+}
+function refundHistory(p:Input,refund:Relay['refunds'][number],businessId:string,accountId:string):{paidFen:number;dueFen:number}|null{
+ const book=casebookFor(p)
+ if(!book||!refund.operationIds.length||!unique(refund.operationIds))return null
+ const operations=refund.operationIds.map(id=>one(book.operations.filter(row=>row.id===id&&row.scopeBusinessId===businessId&&row.accountId===accountId&&row.contractId===refund.customerId&&row.sourceEventId===refund.customerId&&row.kind==='refund_undelivered')))
+ if(operations.some(row=>row===null))return null
+ const actual=operations.flatMap(row=>row?[row]:[])
+ if(actual.some(row=>row.amountFen===null||row.obligationId===null)||actual.reduce((sum,row)=>sum+row.amountFen!,0)!==refund.amountFen)return null
+ const obligations=actual.map(op=>one(book.obligationHistory.filter(row=>row.id===op.obligationId&&row.originOperationId===op.id&&row.scopeBusinessId===businessId&&row.accountId===accountId&&row.contractId===refund.customerId&&row.amountFen===op.amountFen)))
+ if(obligations.some(row=>row===null))return null
+ const bound=obligations.flatMap(row=>row?[row]:[]),cash=book.transactions.filter(tx=>tx.accountId===accountId&&tx.scopeBusinessId===businessId&&bound.some(obligation=>obligation.id===tx.referenceId))
+ if(!unique(cash.map(tx=>tx.id+'|'+tx.lineIndex))||cash.some(tx=>{
+  const op=one(book.operations.filter(row=>row.id===tx.id&&row.scopeBusinessId===businessId&&row.accountId===accountId&&(refund.operationIds.includes(row.id)||row.kind==='pay_obligation'&&bound.some(obligation=>obligation.id===row.obligationId))))
+  return tx.businessId!==businessId||tx.contractId!==refund.customerId||tx.amountFen>=0||!op||tx.sourceId!==op.sourceEventId||tx.date!==op.date
+ }))return null
+ const paidFen=cash.reduce((sum,tx)=>sum-tx.amountFen,0),dueFen=bound.reduce((sum,row)=>sum+row.remainingFen,0)
+ return paidFen+dueFen===refund.amountFen?{paidFen,dueFen}:null
+}
+function currentRefund(p:Input,businessId:string,accountId:string,customerIds:readonly string[]):{refund:Relay['refunds'][number];paidFen:number;dueFen:number}|null{
+ const receipt=currentReceipt(p),v=p.features.relay
+ if(!receipt||receipt.kind!=='RefundRelayBalance'||!v)return null
+ const refund=one(v.refunds.filter(row=>row.id===relayId(receipt.commandId,receipt.kind)&&row.date===p.view.date&&customerIds.includes(row.customerId)))
+ if(!refund||v.customers.filter(row=>row.id===refund.customerId&&row.businessId===businessId).length!==1)return null
+ const history=refundHistory(p,refund,businessId,accountId)
+ return history?{refund,...history}:null
+}
+function currentSupplierReturn(p:Input,businessId:string,accountId:string,supplierId?:string):{supplierId:string;amountFen:number}|null{
+ const receipt=currentReceipt(p),book=casebookFor(p),v=p.features.relay
+ if(!receipt||receipt.kind!=='RefundRelaySupplier'||!book||!v)return null
+ const id=relayId('supplier-refund',relayId(receipt.commandId,receipt.kind)),op=one(book.operations.filter(row=>row.id===id&&row.kind==='refund_supplier'&&row.scopeBusinessId===businessId&&row.accountId===accountId))
+ if(!op||op.amountFen===null||op.amountFen<=0||op.date!==p.view.date||supplierId!==undefined&&supplierId!==op.sourceEventId||v.catalog.suppliers.filter(row=>row.id===op.sourceEventId).length!==1)return null
+ const option=one(v.supplyOptions.filter(row=>row.businessId===businessId&&row.supplierId===op.sourceEventId))
+ if(!option?.credit||option.credit.id!==op.prepaymentId)return null
+ const cash=one(book.transactions.filter(tx=>tx.id===id&&tx.accountId===accountId&&tx.scopeBusinessId===businessId))
+ return cash&&cash.businessId===businessId&&cash.sourceId===op.sourceEventId&&cash.date===op.date&&cash.amountFen===op.amountFen?{supplierId:op.sourceEventId,amountFen:op.amountFen}:null
+}
+function selectionShape(value:RelayPaperSelection):boolean{
+ if(!value||typeof value!=='object'||Array.isArray(value)||Object.values(Object.getOwnPropertyDescriptors(value)).some(row=>row.get||row.set))return false
+ if(Object.getPrototypeOf(value)!==Object.prototype&&Object.getPrototypeOf(value)!==null)return false
+ return Object.keys(value).length===2&&Object.hasOwn(value,'kind')&&Object.hasOwn(value,'recordId')&&['receivable','refund','supplier','correction','obligation','audit','meter'].includes(value.kind)&&typeof value.recordId==='string'&&value.recordId.trim().length>0&&value.recordId.length<=512
+}
+
+type MeterWaitPaper=Pick<RelayServicePaperState,'dateLabel'|'line'|'scopeLabel'|'responsibilities'>&{phase:'audit';state:'reported'|'planned'|'running'}
+/** A meter keeps its own identity while the original commissioned batch is still waiting. */
+function meterWaitPaper(p:Input,target:RelaySceneTarget,meter:Relay['meters'][number]):MeterWaitPaper|null{
+ const leaf:RelaySceneTarget={kind:'period',runId:target.runId,accountId:target.accountId,businessId:target.businessId,stationId:target.stationId,periodId:meter.periodId,meterId:meter.id},audit=relayTicketAudit(p,leaf)
+ if(audit.reason)return {phase:'audit',state:'reported',dateLabel:meter.date,scopeLabel:'原复核来源待核对 · 没有换到另一批',line:'原报告 '+meter.reportedUnits+' · 实计仍待独立复核',responsibilities:[audit.reason]}
+ if(!audit.job||!audit.batch||!['planned','running'].includes(audit.job.status))return null
+ const state=audit.job.status==='planned'?'planned':'running'
+ return {phase:'audit',state,dateLabel:'原复核 '+audit.job.startAt+'—'+audit.job.completeAt,scopeLabel:'原完整批次 '+audit.batch.meterCount+'条 · 本票包含在这次复核中',line:meter.date+'原报告 '+meter.reportedUnits+' · '+(state==='planned'?'这张票已委托复核，尚未开工':'这张票正在原批次中复核')+' · 实计仍待独立复核'}
+}
+
+/** A record selection is already explicit. Invalid ownership never falls back to the main paper. */
+function selectedPaperFor(p:Input,target:RelaySceneTarget|null|undefined,selection:RelayPaperSelection):RelayServicePaperState|undefined{
+ if(!selectionShape(selection)||!target)return undefined
+ const v=p.features.relay,r=resolveRelaySceneTarget(v,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})
+ if(!v||r.status!=='valid'||!r.business)return undefined
+ if(target.kind==='application'&&(selection.kind!=='supplier'||selection.recordId!==r.application?.supplierId))return undefined
+ const businessId=target.businessId,accountId=target.accountId,base=relayPaperFor(p,target)
+ if(!base)return undefined
+ const inherited=relayPaperResponsibilities(base)
+ const customers=v.customers.filter(row=>row.businessId===businessId)
+ const customerAllowed=(id:string)=>customers.filter(row=>row.id===id&&(target.kind!=='customer'||target.customerId===id)&&(target.kind!=='audience'||row.originAudienceId===target.audienceId)&&(target.kind!=='period'||r.period!.customerIds.includes(id))).length===1
+ const periodAllowed=(id:string)=>v.periods.filter(row=>row.id===id&&row.businessId===businessId&&(target.kind!=='period'||(r.audit?r.audit.periodIds.includes(id):target.periodId===id))).length===1
+ const meterAllowed=(m:Relay['meters'][number])=>periodAllowed(m.periodId)&&customerAllowed(m.customerId)&&(target.kind!=='period'||target.meterId===undefined||target.meterId===m.id)&&(target.kind!=='period'||target.jobId===undefined||!!r.audit&&v.audits.some(a=>a.jobId===r.audit!.jobId&&a.meterId===m.id))
+ const invoiceAllowed=(invoice:Invoice)=>{
+  if(!customerAllowed(invoice.customerId)||invoice.date>p.view.date)return false
+  const meter=one(v.meters.filter(m=>m.id===invoice.sourceId&&m.customerId===invoice.customerId&&meterAllowed(m))),period=one(v.periods.filter(row=>row.id===invoice.sourceId&&row.customerIds.includes(invoice.customerId)&&periodAllowed(row.id)))
+  return !!meter||!!period
+ }
+ const scopeLabel=target.kind==='period'?'同一原期的记录':'本站同一原对象'
+ if(selection.kind==='meter'){
+  const meter=one(v.meters.filter(row=>row.id===selection.recordId&&meterAllowed(row)))
+  if(!meter)return undefined
+  const known=meter.auditedUnits!==null,pending=known&&meter.auditedUnits!==meter.reportedUnits&&meter.correctionId===null
+  if(known&&!v.audits.some(a=>a.meterId===meter.id&&a.completedAt!==null&&a.completedAt<=p.view.date&&v.auditJobs.some(batch=>batch.jobId===a.jobId&&batch.job?.status==='completed'&&batch.job.completeAt<=p.view.date)))return undefined
+  const waiting=!known?meterWaitPaper(p,target,meter):null
+  if(waiting)return {...base,...waiting,ticket:'meter',ticketLabel:'这一张原计量',responsibilities:[...inherited,...(waiting.responsibilities??[])]}
+  return {...base,phase:'audit',state:meter.correctionId?'corrected':known?'reviewed':'reported',ticket:'meter',ticketLabel:'这一张原计量',scopeLabel,dateLabel:meter.date,line:'原报告 '+meter.reportedUnits+' · '+(known?'独立复核实计 '+meter.auditedUnits:'实计待独立复核'),responsibilities:[...inherited,...(pending?['这张原计量的已知差额尚待更正']:[])]}
+ }
+ if(selection.kind==='audit'){
+  const batch=one(v.auditJobs.filter(row=>row.jobId===selection.recordId&&row.businessId===businessId&&row.periodIds.some(periodAllowed))),job=batch?.job
+  if(!batch||!job||target.kind==='period'&&target.jobId!==undefined&&target.jobId!==job.id)return undefined
+  const all=v.audits.filter(row=>row.jobId===batch.jobId&&row.businessId===businessId),inScope=all.filter(a=>v.meters.some(m=>m.id===a.meterId&&meterAllowed(m)))
+  if(all.length!==batch.meterCount||!unique(all.map(row=>row.id))||!unique(all.map(row=>row.meterId))||all.some(a=>v.meters.filter(m=>m.id===a.meterId&&v.periods.some(period=>period.id===m.periodId&&period.businessId===businessId)).length!==1))return undefined
+  const completed=job.status==='completed'&&job.completeAt<=p.view.date&&batch.completed&&all.every(a=>a.completedAt!==null&&a.completedAt<=p.view.date&&v.meters.some(m=>m.id===a.meterId&&m.auditedUnits!==null))
+  if(job.status==='completed'&&!completed)return undefined
+  return {...base,phase:'audit',state:job.status==='planned'?'planned':job.status==='running'?'running':completed?'reviewed':'reported',ticket:'audit-batch',ticketLabel:'这一次原复核批次',scopeLabel:'完整批次 '+batch.meterCount+'条 · 当前对象范围 '+inScope.length+'条',dateLabel:job.startAt+'—'+job.completeAt,line:completed?'原批次已实际完成 · 后来计量仍另核':job.status==='cancelled'?'原复核安排已取消 · 不提前揭示实计':job.status==='interrupted'?'原复核已中断 · 已耗投入保留':'原复核尚未实际完成 · 实计仍待核'}
+ }
+ if(selection.kind==='correction'){
+  const correction=one(v.corrections.filter(row=>row.id===selection.recordId&&row.date<=p.view.date)),meter=correction?one(v.meters.filter(row=>row.id===correction.meterId&&row.correctionId===correction.id&&meterAllowed(row))):null
+  if(!correction||!meter||meter.auditedUnits===null||meter.auditedUnits!==correction.correctUnits||v.audits.filter(row=>row.id===correction.auditId&&row.meterId===meter.id&&row.completedAt!==null&&row.completedAt<=p.view.date).length!==1)return undefined
+  return {...base,phase:'audit',state:'corrected',ticket:'correction',paymentNature:'correction',ticketLabel:'追加更正附票',scopeLabel,dateLabel:correction.date,line:'原报告 '+correction.originalReportedUnits+' · 原已核实计 '+correction.correctUnits,paymentLabel:'客户收入调整 '+moneyText(correction.customerDeltaFen)+' · 供应成本调整 '+moneyText(correction.supplierDeltaFen)+'；不是本次现金实收'}
+ }
+ if(selection.kind==='receivable'){
+  const invoice=one(v.receivables.filter(row=>row.id===selection.recordId&&invoiceAllowed(row)))
+  if(!invoice)return undefined
+  const remaining=invoice.amountFen-invoice.collectedFen-invoice.reversedFen,received=currentCollection(p,[invoice],businessId,accountId)
+  if(![invoice.amountFen,invoice.collectedFen,invoice.reversedFen,remaining].every(amount=>Number.isSafeInteger(amount)&&amount>=0))return undefined
+  return {...base,phase:'result',state:received>0?'received':remaining>0?'receivable':'closed',ticket:invoice.collectedFen>0&&remaining>0?'partial-receipt':'receivable',paymentNature:received>0?'collection':'credit',ticketLabel:remaining>0?'这张原单仍有未收':'这张原单净未收为0',scopeLabel,dateLabel:'原开单 '+invoice.date+' · 到期 '+invoice.dueAt,line:'原金额 '+moneyText(invoice.amountFen)+' · 累计实收 '+moneyText(invoice.collectedFen)+' · 原冲回 '+moneyText(invoice.reversedFen),paymentLabel:(received>0?'本次实际收取本单 '+moneyText(received)+' · ':'')+'本单净未收 '+moneyText(remaining),responsibilities:[...inherited,...(remaining>0&&invoice.dueAt<=p.view.date?['这张原单已到期，收款仍须明确决定']:[])]}
+ }
+ if(selection.kind==='refund'){
+  const refund=one(v.refunds.filter(row=>row.id===selection.recordId&&row.date<=p.view.date&&customerAllowed(row.customerId)))
+  if(!refund)return undefined
+  const history=refundHistory(p,refund,businessId,accountId),receipt=currentReceipt(p),isCurrent=receipt?.kind==='RefundRelayBalance'&&refund.id===relayId(receipt.commandId,receipt.kind)
+  return {...base,phase:'result',state:history?.paidFen?history.dueFen>0?'receivable':'received':'receivable',ticket:'customer-refund',paymentNature:'customer-refund',ticketLabel:'退还原客户的记录',scopeLabel:target.kind==='period'?'本站该客户退款 · 未唯一归入本期':'这位原客户的退款',dateLabel:refund.date,line:(isCurrent?'本次':'原')+'退款登记 '+moneyText(refund.amountFen),paymentLabel:history?'已实际退 '+moneyText(history.paidFen)+' · 原退款应付 '+moneyText(history.dueFen):'实际付款与未结退款暂不可逐笔核对 · 原账仍保留',responsibilities:[...inherited,...(history?.dueFen?['原退款尚有应付 '+moneyText(history.dueFen)]:[])]}
+ }
+ if(selection.kind==='supplier'){
+  const supplier=one(v.catalog.suppliers.filter(row=>row.id===selection.recordId)),option=one(v.supplyOptions.filter(row=>row.businessId===businessId&&row.supplierId===selection.recordId))
+  const allowed=target.kind!=='period'||(target.meterId!==undefined?r.meter?.supplierId===selection.recordId:r.period!.supplierIds.includes(selection.recordId))
+  if(!supplier||!option||!allowed)return undefined
+  if(option.credit&&(option.credit.accountId!==accountId||option.credit.businessId!==businessId))return undefined
+  const returned=currentSupplierReturn(p,businessId,accountId,supplier.id)
+  const labels={...base,ticketLabel:supplier.label+'的本站资产',scopeLabel:'本站跨期共用供应池 · 不能全部归本期',line:supplier.billing==='prepaid'?'供应预付后实际消耗':'原用量后账期付款',paymentLabel:(returned?'本次取回原供应资产 '+moneyText(returned.amountFen)+' · ':'')+'当前未用资产/贷项 '+moneyText(option.credit?.remainingFen??0),responsibilities:[...inherited,...(option.outstandingFen>0?['该供应原未付 '+moneyText(option.outstandingFen)]:[])]}
+  return returned?{...labels,phase:'result',state:'received',ticket:'supplier-return',paymentNature:'supplier-return'}:{...labels,phase:'preparation',state:'ready',ticket:'supplier-asset',paymentNature:'supplier-asset'}
+ }
+ const book=casebookFor(p),obligation=book?one(book.obligationHistory.filter(row=>row.id===selection.recordId&&row.scopeBusinessId===businessId&&row.accountId===accountId)):null
+ if(selection.kind!=='obligation'||!obligation)return undefined
+ const period=r.period,sourceIds=new Set(period?[period.id,period.jobId,period.supportJobId,...v.meters.filter(m=>m.periodId===period.id).flatMap(m=>[m.id,...(m.costOperationId?[m.costOperationId]:[])])]:[])
+ const own=target.kind==='business'||target.kind==='customer'&&obligation.contractId===target.customerId||sourceIds.has(obligation.sourceEventId)
+ return {...base,phase:'result',state:obligation.remainingFen>0?'receivable':'closed',ticket:'obligation',ticketLabel:'原义务与实际未结',scopeLabel:own?'同一原对象的义务':'本站另有原义务 · 未唯一归本期',dateLabel:'原义务日期 '+obligation.date,line:'原金额 '+moneyText(obligation.amountFen)+' · 原类型 '+obligation.kind,paymentLabel:'当前未结 '+moneyText(obligation.remainingFen),responsibilities:[...inherited,...(obligation.remainingFen>0?[obligation.date<=p.view.date?'这笔原义务已到期，未付仍保留':'这笔已存在的原义务尚待约定日期']:[])]}
+}
+
+export function relayMoneyFor(p:Input,target:RelaySceneTarget|null|undefined):string|null{
+ if(!target)return null
+ const r=resolveRelaySceneTarget(p.features.relay,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})
+ if(r.status!=='valid'||!r.business)return null
+ const f=r.business.funds
+ return (r.business.company?'企业可花':'个人可花')+moneyText(f.availableFen)+' · 本账户客户未消费保护'+moneyText(f.prepaidLiabilityFen)
+  +(f.receivableFen>0?' · 原客户应收'+moneyText(f.receivableFen):'')
+  +(f.supplierPrepaidFen>0?' · 供应资产'+moneyText(f.supplierPrepaidFen):'')
+  +(f.payableFen>0?' · 原应付'+moneyText(f.payableFen):'')
+}
+/** Art receives only saved public facts; its shape cannot disclose an unread or unaudited result. */
+export function relayPaperFor(p:Input,target:RelaySceneTarget|null|undefined,selection?:RelayPaperSelection):RelayServicePaperState|undefined{
+ if(selection!==undefined)return selectedPaperFor(p,target,selection)
+ const art=baseRelayPaperFor(p,target),v=p.features.relay
+ if(!art||!target||!v||!['business','customer','period'].includes(target.kind))return art
+ if(target.kind==='period'&&(target.jobId!==undefined||target.meterId!==undefined))return art
+ const r=resolveRelaySceneTarget(v,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})
+ if(r.status!=='valid'||!r.business)return art
+ const ids=target.kind==='customer'?[target.customerId]:r.period?.customerIds??v.customers.filter(c=>c.businessId===target.businessId).map(c=>c.id),refund=currentRefund(p,target.businessId,target.accountId,ids)
+ if(refund)return {...art,ticket:'customer-refund',paymentNature:'customer-refund',ticketLabel:'本站该客户的原退款',scopeLabel:'退款来自原客户充值，不全部归本期',paymentLabel:'本次退款登记 '+moneyText(refund.refund.amountFen)+' · 已实际退 '+moneyText(refund.paidFen)+' · 原退款应付 '+moneyText(refund.dueFen)+(art.paymentLabel?'；'+art.paymentLabel:''),responsibilities:[...relayPaperResponsibilities(art),...(refund.dueFen>0?['原退款尚有应付 '+moneyText(refund.dueFen)]:[])]}
+ const supplier=currentSupplierReturn(p,target.businessId,target.accountId)
+ if(supplier&&(target.kind==='business'||r.period?.supplierIds.includes(supplier.supplierId)))return {...art,ticket:'supplier-return',paymentNature:'supplier-return',ticketLabel:'本站供应资产退回',scopeLabel:'本站跨期共用供应池，不是本期新增收入',paymentLabel:'本次取回原供应资产 '+moneyText(supplier.amountFen)+(art.paymentLabel?'；'+art.paymentLabel:'')}
+ return art
+}
+function baseRelayPaperFor(p:Input,target:RelaySceneTarget|null|undefined):RelayServicePaperState|undefined{
+ if(target===undefined)return undefined
+ const v=p.features.relay,r=resolveRelaySceneTarget(v,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})
+ if(r.status==='invalid'||!v)return undefined
+ if(target===null)return {phase:'preparation',state:'choice',heading:''}
+ const progress=relaySceneProgress(v,p.view.date,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})!
+ const base={heading:'',...(progress.historical?{historical:true}:{})}
+ if(r.job&&['cancelled','interrupted'].includes(r.job.status))return {...base,phase:'result',state:'stopped',dateLabel:r.job.releasedAt??r.job.startAt,line:target.kind==='application'?'原申请已停止 · 未读结果仍不揭示':target.kind==='audience'?'原获客已停止 · 没有新名单':'这份原任务已停止 · 已耗投入保留',...(r.job.definitionId.startsWith('relay-support-')?{support:'stopped' as const,supportStatus:r.job.status as 'cancelled'|'interrupted',supportLabel:r.job.status==='cancelled'?'原支持安排已取消 · 等待不会自动补做':'原支持已中断 · 已耗投入与旧承诺保留'}:{})}
+ if(target.kind==='period'&&r.meter){
+  const m=r.meter,known=m.auditedUnits!==null,pending=known&&m.auditedUnits!==m.reportedUnits&&m.correctionId===null
+  const waiting=!known?meterWaitPaper(p,target,m):null
+  if(waiting)return {...base,...waiting,ticket:'meter',ticketLabel:'这一张原计量'}
+  return {...base,phase:'audit',state:m.correctionId?'corrected':known?'reviewed':'reported',ticket:'meter',ticketLabel:'这一张原计量',dateLabel:m.date,line:'这条原报告 '+m.reportedUnits+' · '+(known?'原复核实计 '+m.auditedUnits:'实计待独立复核'),...(pending?{responsibility:'这条原记录的已知差额尚待更正'}:{})}
+ }
+ if(target.kind==='period'&&r.job){
+  const j=r.job,dates=j.startAt+'—'+j.completeAt
+  if(r.audit)return {...base,phase:'audit',state:j.status==='planned'?'planned':j.status==='running'?'running':'reviewed',ticket:'audit-batch',ticketLabel:'这一次原复核批次',dateLabel:dates,line:j.status==='completed'?'这次原批次已实际复核 '+r.audit.meterCount+'条':'只覆盖这次原批次的 '+r.audit.meterCount+'条已有计量'}
+  const support=j.definitionId.startsWith('relay-support-'),state=j.status==='planned'?'planned':j.status==='running'?'running':'ended'
+  return {...base,phase:'service',state,dateLabel:dates,line:(support?'这份原支持':'这份原服务')+(j.status==='completed'?'已实际完成':j.status==='planned'?'已预留，尚未开工':'仍在进行'),...(support?{support:j.status==='completed'?'completed' as const:state==='planned'?'planned' as const:'running' as const,supportStatus:j.status,supportLabel:j.status==='completed'?'这份原支持已实际完成':j.status==='planned'?'这份原支持尚未开工':'这份原支持仍在进行'}:{})}
+ }
+ if(r.application){
+  const a=r.application
+  return {...base,phase:'permission',state:!a.read?'unread':a.approved===true?'approved':a.approved===false?'declined':'read-pending',dateLabel:a.job?.status==='planned'?'申请开工 '+a.job.startAt:a.job?.status==='running'?'审查反馈 '+a.job.completeAt:a.read?'亲读原回信':'待亲手拆信',line:!a.read?'未读回信 · 结果尚未揭示':a.approved===true?'本局原许可 · 用途与适配另核':a.approved===false?'原申请未获许可 · 成本保留':'原回信仍待核对'}
+ }
+ if(r.audience){
+  if(r.audience.job&&['planned','running'].includes(r.audience.job.status))return {...base,phase:'preparation',state:r.audience.job.status==='planned'?'planned':'running',dateLabel:r.audience.job.startAt+'—'+r.audience.job.completeAt,line:'原获客尚在安排中 · 名单未形成'}
+  return {...base,phase:'commitment',state:'choice',dateLabel:r.audience.completedAt??r.audience.createdAt,line:r.audience.completedAt===null?'原获客尚待核对':r.audience.members.length+'位实际潜客 · 签约另定'}
+ }
+ if(target.kind==='customer'&&r.customer){
+  const customer=r.customer,prepaid=customer.balance.prepaidFen,credit=customer.mode==='postpaid'
+  return {...base,phase:'commitment',state:prepaid>0?'funded':'agreed',ticket:credit?'customer-credit':'customer-prepaid',paymentNature:credit?'credit':'prepayment',hasPrepaidProtection:prepaid>0,ticketLabel:credit?'原后付信用约定':'原预付客户约定',dateLabel:'原合同至 '+customer.termEnd,line:'客户'+(v.customers.filter(row=>row.businessId===customer.businessId).findIndex(row=>row.id===customer.id)+1)+'的原合同',paymentLabel:credit?'后付信用上限 '+moneyText(customer.creditLimitFen)+' · 原未回款 '+moneyText(customer.balance.receivableFen):'未消费预款 '+moneyText(prepaid)+' · 仍属客户保护',...(credit&&prepaid>0?{protectedBalanceLabel:'另有真实旧预款 '+moneyText(prepaid)+'仍受保护'}:{}),responsibilities:customer.dueReceivableFen>0?['这位原客户到期款 '+moneyText(customer.dueReceivableFen)+'待明确收取']:[]}
+ }
+ if(r.period){
+  const period=r.period,job=period.job,support=period.supportJob
+  const supportState:RelayPaperSupportState=support?.status==='planned'?'planned':support?.status==='running'?'running':support?.status==='completed'?'completed':support?'stopped':'pending'
+  const supportLabel=support?.status==='planned'?'原支持 '+support.startAt+'—'+support.completeAt:support?.status==='running'?'原支持仍在进行 · '+support.completeAt:support?.status==='completed'?'原支持已实际完成':support?.status==='cancelled'?'原支持安排已取消 · 等待不会自动补做':support?'原支持已中断 · 按原记录核对':'原支持尚待核对'
+  const meters=v.meters.filter(m=>m.periodId===period.id),sources=new Set([period.id,...meters.map(m=>m.id)]),invoices=v.receivables.filter(i=>sources.has(i.sourceId)),due=invoices.filter(i=>i.dueAt<=p.view.date).reduce((n,i)=>n+i.amountFen-i.collectedFen-i.reversedFen,0),unpaid=invoices.reduce((n,i)=>n+i.amountFen-i.collectedFen-i.reversedFen,0),collected=invoices.reduce((n,i)=>n+i.collectedFen,0),corrections=meters.filter(m=>m.auditedUnits!==null&&m.auditedUnits!==m.reportedUnits&&m.correctionId===null).length
+  const supportUnsettled=!!support&&['cancelled','interrupted'].includes(support.status)&&period.status!=='closed'&&(period.feePostedAt===null||period.compensatedAt===null)
+  const responsibilities=[...(corrections?[corrections+'条本期已知差额仍待更正']:[]),...(due>0?['本期原到期应收 '+moneyText(due)+'待明确收取']:[]),...(supportUnsettled?['原支持已停止，原支持费与赔付处理仍待核对']:[]),...(r.business!.funds.payableFen>0?['本账户原应付 '+moneyText(r.business!.funds.payableFen)+'仍保留，不能全部归本期']:[])]
+  const labels={...base,support:supportState,supportLabel,...(support?{supportStatus:support.status}:{}),responsibilities,dateLabel:period.from+'—'+period.to}
+  // The public receipt exposes commandId, not private transactionIds. Correlate
+  // actual public ledger rows with the canonical original operation identity.
+  const receivedNow=currentCollection(p,invoices,target.businessId,target.accountId)
+  if(receivedNow>0){
+   const unreviewed=relayAuditableMeters(v,period.id).length
+   return {...labels,phase:'result',state:'received',ticket:unpaid>0?'partial-receipt':'receivable',paymentNature:'collection',line:corrections?'这次原款已收 · 已知差额仍待更正':unreviewed?'这次原款已收 · '+unreviewed+'条记录仍待独立复核':period.status==='closed'?'本期按原账结束 · 企业与客户余额另列':'这次已经实际收到 · 服务与复核仍分别继续',paymentLabel:'本次收到本期原单 '+moneyText(receivedNow)+(unpaid>0?' · 原单未收 '+moneyText(unpaid):'')}
+  }
+  if(progress.phase==='audit-waiting')return {...labels,phase:'audit',state:v.auditJobs.some(a=>a.periodIds.includes(period.id)&&a.job?.status==='running')?'running':'planned',line:'原报告可查 · 复核尚未完成'}
+  if(progress.phase==='audit-ready'||progress.phase==='correction')return {...labels,phase:'audit',state:corrections?'reviewed':period.auditedMeters>0?'reviewed':period.meterCount>0?'reported':'unmetered',line:corrections?'独立复核已揭示差额':period.auditedMeters>0?'已有原复核 · 后来计量仍另核':'报告不代替独立实计'}
+  if(progress.phase==='collection'||progress.phase==='settling'||period.status==='closed')return {...labels,phase:'result',state:unpaid>0?'receivable':period.status==='closed'?'closed':'receivable',line:period.status==='closed'?'本期按原账结束 · 企业与客户余额另列':progress.phase==='settling'?'原应收尚待到期 · 实际到账另核':'原单与实际收款分别发生',paymentLabel:unpaid>0?'本期原单未收 '+moneyText(unpaid)+(collected>0?' · 原单累计实收 '+moneyText(collected):''):collected>0?'本期原单累计实收 '+moneyText(collected):'原支持与用量收入留在原账'}
+  return {...labels,phase:'service',state:job?.status==='planned'?'planned':job?.status==='running'?'running':period.stoppedAt!==null||job?.status==='interrupted'||job?.status==='cancelled'?'stopped':'ended',line:'已记录 '+period.observedDays+'日 · 报告 '+period.reportedUnits+'单位'}
+ }
+ const preparation=v.preparations.find(a=>a.businessId===target.businessId&&a.job&&['planned','running'].includes(a.job.status)),application=v.applications.find(a=>a.businessId===target.businessId&&!a.read&&a.job&&['planned','running','completed'].includes(a.job.status)),adapter=v.adapters.find(a=>a.businessId===target.businessId&&a.job&&['planned','running'].includes(a.job.status))
+ if(application&&!preparation)return {...base,phase:'permission',state:'unread',...(application.job?.completeAt?{dateLabel:application.job.completeAt}:{}),line:application.job?.status==='completed'?'原审查已完成 · 等亲手读信':'原申请已安排 · 不预告结果'}
+ if(preparation?.job||adapter?.job){const job=preparation?.job??adapter!.job!;return {...base,phase:'preparation',state:job.status==='planned'?'planned':'running',dateLabel:job.startAt+'—'+job.completeAt,line:preparation?.kind==='basics'?'技术基础的真实准备':preparation?'申请材料的真实准备':'已许可供应的实际适配'}}
+ if(r.business!.lifecycle==='closed'||r.business!.lifecycle==='winding_down'||r.business!.lifecycle==='paused'||r.station!.trafficPaused){
+  const f=r.business!.funds,due=v.customers.filter(c=>c.businessId===target.businessId).reduce((sum,c)=>sum+c.dueReceivableFen,0)
+  const responsibilities=[...(f.prepaidLiabilityFen>0?['本站客户未消费保护 '+moneyText(f.prepaidLiabilityFen)+'仍保留']:[]),...(f.payableFen>0?['本账户原应付 '+moneyText(f.payableFen)+'仍保留']:[]),...(due>0?['本站原客户到期款 '+moneyText(due)+'尚待明确收取']:[])]
+  return {...base,phase:'result',state:r.business!.lifecycle==='closed'?'closed':'stopped',line:'停止与旧记录分别保留',...(f.supplierPrepaidFen>0||f.receivableFen>0?{paymentLabel:'本站供应资产 '+moneyText(f.supplierPrepaidFen)+' · 原应收 '+moneyText(f.receivableFen)}:{}),responsibilities}
+ }
+ return {...base,phase:'preparation',state:r.business!.lifecycle==='operating'?'ready':'choice',line:r.business!.lifecycle==='operating'?'本站已启用 · 客户与服务另定':'技术、材料、许可与资本分别核对'}
+}

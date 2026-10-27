@@ -1,0 +1,1 @@
+Root只读独立审art新期先决修复：experience-implementation-r1/next-service-contract-r1三文件/freeze、新helper/test与RelaySceneChoice28768B/c2357…；核原期限/offbyone/epilogue/低资源/草稿与request/原册，0产品写/工程/Browser，不改或执行R5候选。实际新helper名relay-next-service-contract.ts，Root消息conditions.ts为描述名称，按作者freeze真实路径审。

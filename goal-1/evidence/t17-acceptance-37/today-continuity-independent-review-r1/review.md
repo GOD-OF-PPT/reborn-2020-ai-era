@@ -1,0 +1,15 @@
+# Today续接修复：限定静态复核未见确定阻断
+
+审today-thread.ts24713B/b0dd71344ca7783d1424d6de24d3ba26797262ffbcfac305201b0ba46ea6a0f1、TodayScene14933B/770d4ed45d8ea871a6867c8356d9da517edd277cae12c539b5b27ca54219b7bf、新8case17103B/5d98c98e15ec937a46db7de9a835db977893c665c5d1d8eac126f64e8877e16a，实际fs/hash核同作者freeze。没有执行这些文件或任何产品检查。
+
+结论只覆盖此差异：没有revision115/固定客户数/日期特判；删除的是“无openchild且business非closed就补一份service promise”的规则。替代依据是当前公开任务/未读回应/原AR与原债/来源核定。正常prepaid保护及supplier asset本身不再新增ongoing，却仍在原season.remaining和原账；原账户尚未出账成本用finance原accruedCostFen另说明，不手算、保证支付或当新服务。
+
+真实工作未被营业方向吞掉：原period/application/audience逐身份检查；period中原服务/支持/独立audit active保真实job日期与refs，已停止支持而结算未发生仍保后果等待/未知；未被这些child覆盖的preparation/adapter/quote active job另有business continuation。已完成谈妥且未生效quote先验原completed job/客户接受集合再读公开responses，并保生效日，不画新服务。原money按账户/business/casebook身份与当期公开原invoice净额核，来源冲突或缺finance保unknown；AR/AP之外的实际付款门槛仍在原账户/CommandButton。
+
+完整旧债与任务的去处：season.remaining原构造保留所有账户未付义务、资金缺口、job/source refs、原客户余额/应收，Today没有过滤该原数组；新accrual只追加。ongoing聚焦同一父期可能只先介绍其中一份active原job，不宣称其他支持/audit被清；8case实际95/89检查其原remaining仍有support/audit refs。原生完整界面仍须核原Clock与责任入口实际清晰，静态refs不是可见通过。
+
+TodayScene仅把唯一relay ongoing的主动作改按typed continuation；period/support/audit/application/audience/task/money/unknown分别命名，不再统称“继续这期原服务”。原主button与calendar object仍同primary.activate，choose只回调onFocus而不request；个人Today视角/原focus账户不被切换为另一站。多企业/同账户原债不能唯一解释时保unknown而不把账户余额冒本站新服务。原方向数组和wait函数本次按前像实比逐字同；Clock JSX/费用/屏障handler未改，makeSharedAction原readonly/candidate/stale/busy保护继续。
+
+8新case作者仅写未跑：正常115、95停止后支持+audit、89支持后audit、111真实报价等待，以及preparing无任务/原债/unknown/readonly-candidate消费者覆盖；没有用这些独立历史分支冒一次连续Native。case setup20s、it原5s保持。本审未新增执行或语法/codec/Browser，不将作者8case当已通过。
+
+剩余后验：Root统一type/新定向/受影响旧consumer与新构建当前窗口，看Today从原书签进入时主目标、等待、钱/unknown、原Clock/阅读入口是否说同一事；原R8编译617图片不能证明此新源。实际有多项task、跨主体或长责任组合应按既有原验收片，不因本静审关闭。只同级写本审稿，未改作者源/旧记录/master，未发现须当前成组修的新P1/P2。我的新期3源也仍冻结，由state独审和Root后验，不自评其美术。

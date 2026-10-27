@@ -1,0 +1,3 @@
+- [ ] Preserve realN8/N9 frames and original814 terminal.
+- [ ] Update sharedsame-line dedup contract and originalknowncost reading priority, retaining alltext.
+- [ ] Exactsourcebridge/type/appropriateaffectedtests/build and actualR8 samewindow firstpage; no current814samebatchclaim for laterR8.

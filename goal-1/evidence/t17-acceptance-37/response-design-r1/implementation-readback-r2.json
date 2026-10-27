@@ -1,0 +1,58 @@
+{
+  "at": "2026-10-26T15:04:50.630Z",
+  "previous": "implementation-readback.json",
+  "change": "Root authorized pay/obligation shared original UI reuse; original R1 files retained in pre-pay-r1",
+  "rows": [
+    {
+      "path": "src/ui/relay-response-draft.ts",
+      "bytes": 20841,
+      "lines": 219,
+      "sha256": "f67c965d4838139ac247c9952231570f80f853a9f8888281e87ebb9410cb638e",
+      "mode": 420
+    },
+    {
+      "path": "src/ui/RelayResponseEditor.tsx",
+      "bytes": 12281,
+      "lines": 93,
+      "sha256": "b05101443302b9cf1324f2a7095e37eb263d3accb6ea954aeabe9f716f1f8885",
+      "mode": 420
+    },
+    {
+      "path": "src/ui/RelayResponseEditor.test.tsx",
+      "bytes": 27118,
+      "lines": 253,
+      "sha256": "4ea506db5c34f87f18fbe046c8f472eb9f49ded89751b517807f041b6d08b083",
+      "mode": 420
+    }
+  ],
+  "testCaseTitles": [
+    "keeps one copied canonical draft across entry paths but isolates life, owner, ticket and response",
+    "resolves the same real invoice from business, customer, period and meter without splitting its draft",
+    "rejects wrong owners, mismatched children, duplicate or missing invoice sources without another-row fallback",
+    "accepts only an explicit positive integer-fen amount within this original net receivable and its due date",
+    "keeps refund amounts tied to the selected public customer or supplier pool without mistaking a changed payment mode for erased protection",
+    "requires every new renewal term and every requote selection without silently removing stale people or resources",
+    "binds explicit partial payment to the original obligation and account without inventing a future-due prohibition",
+    "uses an undeclared-business obligation only when its controlled company account identifies this station uniquely",
+    "starts the payment input empty and keeps its explicit fill while the original preview refuses a merely forged public debt",
+    "keeps entered money through near/book remounts and explicit all-filling without performing or confirming a game command",
+    "shows retained unavailable requote selections until the player explicitly removes them",
+    "routes a real partial collection through the original explicit request, saves that amount once, and rejects its stale old binding",
+    "keeps valid original response drafts while the original binding blocks candidate, read-only and conflict snapshots"
+  ],
+  "testsWritten": 13,
+  "testsRun": false,
+  "typecheckRun": false,
+  "buildRun": false,
+  "browserRun": false,
+  "gitRun": false,
+  "compatibility": 0,
+  "sourceFrozen": true,
+  "scope": "only three new source files and own new unsealed evidence",
+  "notes": [
+    "casebook optional only assists original ownership; original base sufficient remains usable",
+    "future obligation due date is not a new UI prohibition",
+    "public pay snapshot fixture is not real incurred or paid debt",
+    "Root must run actual consumer, core and Native verification"
+  ]
+}

@@ -1,0 +1,1 @@
+只读已声明具体source/合同与固定原raw，分别核同对象/单次saved/日期有效条款/保护与费用，以及五P2逐条静态拒绝路径。记录仅这些文件身份窗，其他Owner正在不同UI文件写，不宣称全611树恒定。没有模块import/syntax/测试/codec/实际facts算法/回放/Browser/Git写或最终registry/contract/GO。新输出均祖先guard+wx，确定问题成组否则有限通过，原U4B与全部未验责任留。

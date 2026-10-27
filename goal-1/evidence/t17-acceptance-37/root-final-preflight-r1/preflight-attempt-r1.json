@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-27T04:00:14.437Z",
+  "scope": "Root own filesystem preflight, not metadata builder/freeze or engine",
+  "result": "refused before any final files written",
+  "reportedError": "producer tree drift chrome-main-r1",
+  "actualCause": "Root check only read cut.tree, but original R1 complete tree lives in cut.files; approved IO already supports both",
+  "noActualProducerDriftClaim": true,
+  "followup": "reread original cut shape and use complete files/directories/directoryModes identity sets without weakening fields",
+  "finalFilesAlreadyWritten": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/root-final-preflight-r1/root-final-spec.json",
+      "exists": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/root-final-preflight-r1/fresh-facts-final.json",
+      "exists": false
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/root-final-preflight-r1/actual-final-registry.json",
+      "exists": false
+    }
+  ],
+  "engineRuns": 0,
+  "builderRuns": 0,
+  "freezeRuns": 0
+}

@@ -1,0 +1,97 @@
+{
+  "at": "2026-10-26T23:38:05.680Z",
+  "decision": "NOT_READY_FOR_FINAL_BUILD_FREEZE_OR_ENGINE_GO",
+  "findings": [
+    {
+      "id": "P2-A",
+      "priority": 2,
+      "title": "新批次freshcoverage没有绑定原producer，R8可遗漏",
+      "files": [
+        {
+          "path": "goal-1/evidence/t17-acceptance-37/final-create-registry-preparation-r1/build-final-registry-candidate-r2.mjs",
+          "line": 16
+        },
+        {
+          "path": "goal-1/evidence/t17-acceptance-37/final-create-registry-preparation-r1/audit-io.mjs",
+          "line": 57
+        }
+      ],
+      "trigger": "当前实现只硬列到R7，且current_r7_facts只检查scope名和fresh模式，recordKeys只须存在于任意最终records。合法spec可把旧86当current_r7_facts，R7真实keys不进该scope；未来R8也可不列producer或不建freshscope而通过这些metadata门槛。",
+      "impact": "正式engine可能核了每raw，但最终公开新事实仍未覆盖当前R7或未来R8，旧35/31不能替。",
+      "fix": "Root显式声明最终完整producer列表/全部新增freshproducer（R7、未来R8），builder与freeze共同核这些roots的actualcut、每scope.recordKeys精确等各freshproducer最终原capture集合，缺cut或缺freshscope直接拒；不在现active时造cut。"
+    },
+    {
+      "id": "P2-B",
+      "priority": 2,
+      "title": "继承scope只核旧raw是子集，能把新raw夹进35/31覆盖",
+      "files": [
+        {
+          "path": "goal-1/evidence/t17-acceptance-37/final-create-registry-preparation-r1/audit-io.mjs",
+          "line": 53
+        },
+        {
+          "path": "goal-1/evidence/t17-acceptance-37/final-create-registry-preparation-r1/audit-io.mjs",
+          "line": 67
+        }
+      ],
+      "trigger": "requirePublicReadbackWiring逐旧manifest.records证明有对应finalrole，但未反向限定该scope.recordKeys。把R8/R7额外key追加positive_service.recordKeys时，只要旧15raw仍有对应，继承仍接受，report再照这个扩大key列表回填即可匹配。",
+      "impact": "35或31既有检查被声明覆盖未执行的新输入；记录身份原件相同并不能证明这些额外raw。",
+      "fix": "继承scope允许的key集合必须精确从原manifest每个identity+原manifest行/capture来源匹配finalrecords推导，禁止额外不同identity记录；同bytes不同来源别名应只标alias无新事实，不能当原35/31验过；其余新key只能freshscope。"
+    },
+    {
+      "id": "P2-C",
+      "priority": 2,
+      "title": "cut只核已列文件，不核实际完整tree集合和目录",
+      "files": [
+        {
+          "path": "goal-1/evidence/t17-acceptance-37/final-create-registry-preparation-r1/build-final-registry-candidate-r2.mjs",
+          "line": 25
+        },
+        {
+          "path": "goal-1/evidence/t17-acceptance-37/final-create-registry-preparation-r1/freeze-final-cut.mjs",
+          "line": 20
+        }
+      ],
+      "trigger": "两处只遍历cut.tree.files或files.files并requireIdentity，没有重新枚举该producer目录与cut的files/directories/directoryModes精确比较。cut后新增文件或空目录、目录mode变化且manifest/journal旧文件不改时，当前循环不会发现。",
+      "impact": "不能据此称exactproducer cut或writer完全停止；正式输入可能遗漏该源后续原件，违背latejournal/完整树保全合同。",
+      "fix": "在builder首末与freeze首末仅filesystem扫描并拒symlink，分别支持R1 cut.files树和其它cut.tree形状，逐files/dirs/modes精确集合+字节核；新增/删空目录/mode差应拒，不写或删原producer。"
+    },
+    {
+      "id": "P2-D",
+      "priority": 2,
+      "title": "派生101继承没有强制绑定当时sourcebefore/after证明",
+      "files": [
+        {
+          "path": "goal-1/evidence/t17-acceptance-37/final-create-registry-preparation-r1/build-final-registry-candidate-r2.mjs",
+          "line": 64
+        },
+        {
+          "path": "goal-1/evidence/t17-acceptance-37/final-create-registry-preparation-r1/freeze-final-cut.mjs",
+          "line": 38
+        }
+      ],
+      "trigger": "dependency只要求raw/provenance/result，freeze检查passed与prefixbytes后只保原118/manifest/seal；当时source-before.json/source-after.json、其相同127/901/P326/引用proof与result.differences/error没有强制进入依赖/验证。",
+      "impact": "按本轮明确合同，无法完整追溯那次唯一117后续/118逐字锚定所使用的实际source/runtime窗；也容易误用当前已增长tasks.md作过去源同的替代。",
+      "fix": "dependency显式历史sourceBefore/sourceAfter及原执行contract/terminal（若作为实际proof）identity；只核这些历史proof文件原字节和内部两窗/原result之间一致、原source127/deps901/P326等真实范围，绝不对其中历史references逐条要求当前文件同，更不重跑Create派生。实际两proof均270321B/9c3955…，历史Root37tasks为5618B/6a6df5…，当前合法增量不应被回滚。"
+    },
+    {
+      "id": "P2-E",
+      "priority": 2,
+      "title": "builder冻结runtime只留下数量，freeze能静默换成同数量不同字节依赖",
+      "files": [
+        {
+          "path": "goal-1/evidence/t17-acceptance-37/final-create-registry-preparation-r1/build-final-registry-candidate-r2.mjs",
+          "line": 70
+        },
+        {
+          "path": "goal-1/evidence/t17-acceptance-37/final-create-registry-preparation-r1/freeze-final-cut.mjs",
+          "line": 15
+        }
+      ],
+      "trigger": "builder已经实际dependencies()取得901个完整identity，却只保存expectedDependencyFiles；freeze只比数量，然后把那一刻新扫描的hash写contract。同数量依赖或Node字节在两步之间改变不会被registry→freeze比较发现。",
+      "impact": "最终contract会锁住新runtime，runner内仍可稳定，但不能证明它是Root前一步已冻结/审阅registry的同一runtimecut；数量901不是字节绑定。",
+      "fix": "registry保存实际完整runtimeDependencies identity数组，freeze先sourceDiff精确等集/path/bytes/SHA/mode（包括Node），再把相同数组写contract；数量仍实际发现，不预填901或只凭count。"
+    }
+  ],
+  "scope": "Response currentbuilderR2/io/freeze/run only,not authorcode; noexecutionorcandidatechange."
+}

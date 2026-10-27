@@ -1,0 +1,269 @@
+--- goal-1/evidence/t17-acceptance-37/final-create-registry-preparation-r1/build-final-registry-candidate-r2.mjs
++++ goal-1/evidence/t17-acceptance-37/final-create-registry-fix-r1/build-final-registry-candidate.mjs
+@@ -1,28 +1,25 @@
+ import fs from 'node:fs'
+ import path from 'node:path'
+ import {fileURLToPath} from 'node:url'
+-import {repo,read,json,sha,guard,requireIdentity,identityEqual,sources,dependencies,sourceDiff,receiptInventory,sourceRoleFor,requirePublicReadbackWiring} from './audit-io.mjs'
++import {repo,read,json,sha,guard,requireIdentity,identityEqual,sources,dependencies,sourceDiff,receiptInventory,sourceRoleFor,requirePublicReadbackWiring,requireFinalProducerSet,requireProducerTree,requireIdentitySet,requireDerivedPrefixProof,requireMutableFinalReferences} from './audit-io.mjs'
+ 
+ // FUTURE filesystem-only builder. Root must supply a final spec after R7 stops.
+ // No product/codec/registry/verifier/readback import or process spawning occurs.
+-if(process.argv.length!==8||process.argv[2]!=='--spec'||process.argv[4]!=='--fresh-registry-output'||process.argv[6]!=='--cut-r7')throw Error('EXPLICIT_ROOT_SPEC_FRESH_REGISTRY_AND_R7_CUT_REQUIRED')
+-const specPath=process.argv[3],freshRegistryOutput=process.argv[5],cutR7=process.argv[7],specData=read(specPath),spec=JSON.parse(specData.bytes.toString('utf8'))
++if(process.argv.length!==6||process.argv[2]!=='--spec'||process.argv[4]!=='--fresh-registry-output')throw Error('EXPLICIT_ROOT_FINAL_SPEC_AND_FRESH_REGISTRY_REQUIRED')
++const specPath=process.argv[3],freshRegistryOutput=process.argv[5],specData=read(specPath),spec=JSON.parse(specData.bytes.toString('utf8'))
+ const root='goal-1/evidence/t17-acceptance-37',output=path.resolve(repo,freshRegistryOutput),outputRelative=path.relative(repo,output).split(path.sep).join('/')
+-if(process.version!=='v22.12.0'||spec.authorizedBy!=='/root'||spec.operation!=='build_final_registry_metadata_only'||spec.freshRegistryOutput!==freshRegistryOutput||spec.cutR7!==cutR7||outputRelative!==freshRegistryOutput||!outputRelative.startsWith(root+'/')||!/^[a-zA-Z0-9_.-]+\.json$/.test(path.basename(output)))throw Error('EXACT_ROOT_BUILDER_AUTHORITY_REQUIRED')
++if(process.version!=='v22.12.0'||spec.authorizedBy!=='/root'||spec.operation!=='build_final_registry_metadata_only'||spec.freshRegistryOutput!==freshRegistryOutput||outputRelative!==freshRegistryOutput||!outputRelative.startsWith(root+'/')||!/^[a-zA-Z0-9_.-]+\.json$/.test(path.basename(output)))throw Error('EXACT_ROOT_BUILDER_AUTHORITY_REQUIRED')
+ guard(path.dirname(output));if(fs.existsSync(output))throw Error('FRESH_REGISTRY_OUTPUT_MUST_NOT_EXIST')
+-if(!fs.existsSync(path.resolve(repo,cutR7)))throw Error('R7_PRODUCER_CUT_NOT_YET_AVAILABLE')
+ if(!Array.isArray(spec.producers)||!Array.isArray(spec.recordRoles)||!spec.publicReadback||!spec.publicReadbackWiring||!Array.isArray(spec.referenceFiles)||!Array.isArray(spec.derivedInputDependencies)||!Array.isArray(spec.nativeContributions)||typeof spec.formalPlan!=='string'||!spec.formalPlan.trim()||typeof spec.formalTasks!=='string'||!spec.formalTasks.trim())throw Error('FINAL_SOURCE_ROLES_DERIVED_READBACK_AND_PLAN_REQUIRED')
+ if(!/^goal-1\/evidence\/t17-acceptance-37\/full-create-audit-r[1-9][0-9]*$/.test(spec.auditDirectory))throw Error('FRESH_FORMAL_DIRECTORY_NAME_REQUIRED')
+-const expectedRoots=['chrome-main-r1','chrome-main-r2','chrome-main-r3','chrome-main-r4','chrome-main-r5','chrome-main-r6','chrome-negative-atomic-r6','chrome-negative-physical-r6','chrome-service-stop-r6','chrome-support-interrupt-r6','chrome-main-r7'].map(n=>root+'/'+n)
+-const directories=spec.producers.map(p=>p.directory)
+-if(new Set(directories).size!==directories.length||expectedRoots.some(n=>!directories.includes(n))||spec.producers.filter(p=>p.directory===root+'/chrome-main-r7'&&p.cut?.path===cutR7&&p.captureRole==='stopped_writer').length!==1)throw Error('ALL_KNOWN_PRODUCERS_AND_EXACT_STOPPED_R7_REQUIRED')
++requireFinalProducerSet(spec.finalProducerSet,spec.producers)
+ const roleKeys=spec.recordRoles.map(r=>r.key)
+ if(new Set(roleKeys).size!==roleKeys.length)throw Error('UNIQUE_EXPLICIT_CAPTURE_ROLE_KEYS_REQUIRED')
+ const originalRows=[],references=[specData.identity],producerCuts=[],journals=[],records=[],seenKeys=new Set(),nativeEvidence=[]
+ const official=sources(),runtime=dependencies()
+ for(const producer of spec.producers){
+  if(typeof producer.directory!=='string'||!/^goal-1\/evidence\/t17-acceptance-37\/chrome-[a-zA-Z0-9-]+$/.test(producer.directory)||!['stopped_writer','closed_physical_reader'].includes(producer.captureRole))throw Error('EXPLICIT_PRODUCER_DIRECTORY_ROLE_REQUIRED')
+- const cutData=requireIdentity(producer.cut),cut=JSON.parse(cutData.bytes.toString('utf8')),last=cut.explicitProducerStop??cut.last,files=cut.tree?.files??cut.files?.files
++ const observed=requireProducerTree(producer.cut),cutData={identity:observed.identity},cut=observed.cut,last=cut.explicitProducerStop??cut.last,files=observed.tree.files
+  if(cut.directory!==producer.directory||!Array.isArray(files)||producer.captureRole==='stopped_writer'&&last?.type!=='producer-stop'||producer.captureRole==='closed_physical_reader'&&last?.type!=='reader-closed')throw Error('ACTUAL_COMPLETE_PRODUCER_STOP_OR_READER_CLOSE_REQUIRED:'+producer.directory)
+  guard(producer.directory)
+  const index=new Map()
+@@ -30,7 +27,7 @@
+  const manifestPath=producer.directory+'/exports.jsonl',manifest=read(manifestPath)
+  if(!identityEqual(index.get(manifestPath),manifest.identity))throw Error('EXACT_COMPLETE_MANIFEST_NOT_IN_CUT')
+  references.push(cutData.identity);originalRows.push(manifest.identity)
+- producerCuts.push({...cutData.identity,captureRole:producer.captureRole})
++ producerCuts.push({...cutData.identity,directory:producer.directory,captureRole:producer.captureRole})
+  if(producer.captureRole==='stopped_writer'){
+   if(!Number.isSafeInteger(last.newGameplayCommands)||last.newGameplayCommands<0)throw Error('EXACT_NATIVE_NEW_SAVE_CONTRIBUTION_REQUIRED')
+   nativeEvidence.push({directory:producer.directory,newNativeSavedCommands:last.newGameplayCommands})
+@@ -47,7 +44,7 @@
+   const chosen=role[0],raw=read(producer.directory+'/'+file)
+   if(!identityEqual(index.get(raw.identity.path),raw.identity)||entry.bytes!==raw.identity.bytes||entry.sha256!==raw.identity.sha256)throw Error('RAW_CAPTURE_BYTES_NOT_EXACT_ORIGINAL_CUT')
+   const recordedManifest={identity:manifest.identity,line:i+1,lineSha256:sha(lines[i])}
+-  const record={key,identity:raw.identity,manifest:recordedManifest,origin:entry.origin,source:entry.source,sourceRole:chosen.sourceRole,auditRole:chosen.auditRole,branchId:chosen.branchId,runId:entry.runId,revision:entry.revision,snapshotFolder:path.basename(producer.directory),snapshotFile:file,captureRole:producer.captureRole,captureCut:cutData.identity,newNativeSavedCommands:chosen.newNativeSavedCommands,notCountedAsNew:chosen.notCountedAsNew}
++  const record={key,producerDirectory:producer.directory,identity:raw.identity,manifest:recordedManifest,origin:entry.origin,source:entry.source,sourceRole:chosen.sourceRole,auditRole:chosen.auditRole,branchId:chosen.branchId,runId:entry.runId,revision:entry.revision,snapshotFolder:path.basename(producer.directory),snapshotFile:file,captureRole:producer.captureRole,captureCut:cutData.identity,newNativeSavedCommands:chosen.newNativeSavedCommands,notCountedAsNew:chosen.notCountedAsNew}
+   if(entry.origin==='native_saved_ui')record.sourceRoleMapping={from:'native_saved_ui',to:'saved_ui',rule:'exact_original_manifest_and_stopped_producer_cut',manifestPath,manifestLine:i+1,manifestLineSha256:recordedManifest.lineSha256,cut:cutData.identity,explanation:chosen.sourceRoleExplanation}
+   sourceRoleFor(record)
+   if(chosen.sourceClaimCorrection){const correction=requireIdentity(chosen.sourceClaimCorrection.identity),line=correction.bytes.toString('utf8').split('\n').filter(Boolean)[chosen.sourceClaimCorrection.line-1],event=line?JSON.parse(line):null;if(!line||sha(line)!==chosen.sourceClaimCorrection.lineSha256||event?.type!=='source-label-correction'||event.file!==file)throw Error('EXACT_ORIGINAL_SOURCE_LABEL_CORRECTION_REQUIRED');record.sourceClaimCorrection=chosen.sourceClaimCorrection;references.push(correction.identity)}
+@@ -61,14 +58,16 @@
+ for(const producer of spec.producers){const contribution=spec.nativeContributions.find(c=>c.directory===producer.directory),actual=nativeEvidence.find(c=>c.directory===producer.directory);if(!contribution||contribution.newNativeSavedCommands!==(actual?.newNativeSavedCommands??0)||producer.captureRole==='closed_physical_reader'&&contribution.newNativeCreates!==0)throw Error('ROOT_NATIVE_SAVE_COUNTS_MUST_MATCH_STOPPED_PRODUCER')}
+ const totalCreates=spec.nativeContributions.reduce((n,c)=>n+c.newNativeCreates,0),totalSaves=spec.nativeContributions.reduce((n,c)=>n+c.newNativeSavedCommands,0)
+ if(spec.newNativeCreates!==totalCreates||spec.newNativeSavedCommands!==totalSaves)throw Error('ROOT_NATIVE_TOTALS_MUST_MATCH_EXPLICIT_PRODUCER_CONTRIBUTIONS')
+-for(const dependency of spec.derivedInputDependencies){if(dependency.role!=='derived_normal_prefix_input_only'||dependency.newNativeCreates!==0||dependency.newNativeSavedCommands!==0||records.some(r=>r.identity.path===dependency.identity.path))throw Error('DERIVED_PREFIX_NOT_A_NATIVE_CAPTURE');references.push(requireIdentity(dependency.identity).identity,requireIdentity(dependency.provenance).identity,requireIdentity(dependency.result).identity)}
+-references.push(requireIdentity(spec.publicReadback).identity,...requirePublicReadbackWiring(spec.publicReadbackWiring,records),...spec.referenceFiles.map(r=>requireIdentity(r).identity))
++for(const dependency of spec.derivedInputDependencies){if(records.some(r=>r.identity.path===dependency.identity.path))throw Error('DERIVED_PREFIX_NOT_A_NATIVE_CAPTURE');references.push(...requireDerivedPrefixProof(dependency))}
++references.push(requireIdentity(spec.publicReadback).identity,...requirePublicReadbackWiring(spec.publicReadbackWiring,records,spec.finalProducerSet),...spec.referenceFiles.map(r=>requireIdentity(r).identity))
+ const inventory=receiptInventory(records),aliases=new Map()
+ for(const record of records){const key=record.identity.bytes+':'+record.identity.sha256;if(!aliases.has(key))aliases.set(key,[]);aliases.get(key).push(record)}
+ const byteEqualGroups=[...aliases.values()].filter(group=>group.length>1).map(group=>{const first=requireIdentity(group[0].identity).bytes;if(group.some(row=>!requireIdentity(row.identity).bytes.equals(first)))throw Error('ALIAS_BYTES_DIFFER_DESPITE_HASH');return group.map(r=>r.key)})
+ const here=path.dirname(fileURLToPath(import.meta.url));references.push(read(path.relative(repo,fileURLToPath(import.meta.url)).split(path.sep).join('/')).identity);for(const n of ['audit-io.mjs','freeze-final-cut.mjs','run-once-candidate.mjs'])references.push(read(path.relative(repo,path.join(here,n)).split(path.sep).join('/')).identity)
+-const registry={state:'frozen',frozenBy:'/root',scope:'U4-B-only',outputDirectory:spec.auditDirectory,formalPlan:spec.formalPlan,formalTasks:spec.formalTasks,officialSources:official,expectedOfficialSourceCount:official.length,expectedDependencyFiles:runtime.length,records,producerCuts,journals,referenceFiles:[...new Map(references.map(r=>[r.path,r])).values()],derivedInputDependencies:spec.derivedInputDependencies,publicReadback:spec.publicReadback,publicReadbackWiring:spec.publicReadbackWiring,expectedReplay:{creationHistories:inventory.creationHistories,uniqueHistoricalCommands:inventory.uniquePostCreatePrefixes,artifactRows:inventory.artifactRows,literalImportBufferRows:records.filter(r=>r.origin==='import_buffer').length},newNativeCreates:totalCreates,newNativeSavedCommands:totalSaves,byteEqualGroups,distinctBranchPairs:spec.distinctBranchPairs??[],sourceRoleCounts:Object.fromEntries([...new Set(records.map(r=>r.sourceRole))].map(role=>[role,records.filter(r=>r.sourceRole===role).length])),literalOriginCounts:Object.fromEntries([...new Set(records.map(r=>r.origin))].map(origin=>[origin,records.filter(r=>r.origin===origin).length])),nativeContributions:spec.nativeContributions,policy:'Original origin/source strings and verifier are unchanged. Old literal inputBuffers counts import_buffer only; role ledger separately preserves current_buffer/candidate/physical/backup/reentry. This filesystem registry is not formal replay, does not create a GO and never reclassifies a derived dependency as Native.'}
++requireMutableFinalReferences(references,spec.mutableFinalReferences)
++const registry={state:'frozen',frozenBy:'/root',scope:'U4-B-only',outputDirectory:spec.auditDirectory,formalPlan:spec.formalPlan,formalTasks:spec.formalTasks,officialSources:official,runtimeDependencies:runtime,finalProducerSet:spec.finalProducerSet,mutableFinalReferences:spec.mutableFinalReferences??[],expectedOfficialSourceCount:official.length,expectedDependencyFiles:runtime.length,records,producerCuts,journals,referenceFiles:[...new Map(references.map(r=>[r.path,r])).values()],derivedInputDependencies:spec.derivedInputDependencies,publicReadback:spec.publicReadback,publicReadbackWiring:spec.publicReadbackWiring,expectedReplay:{creationHistories:inventory.creationHistories,uniqueHistoricalCommands:inventory.uniquePostCreatePrefixes,artifactRows:inventory.artifactRows,literalImportBufferRows:records.filter(r=>r.origin==='import_buffer').length},newNativeCreates:totalCreates,newNativeSavedCommands:totalSaves,byteEqualGroups,distinctBranchPairs:spec.distinctBranchPairs??[],sourceRoleCounts:Object.fromEntries([...new Set(records.map(r=>r.sourceRole))].map(role=>[role,records.filter(r=>r.sourceRole===role).length])),literalOriginCounts:Object.fromEntries([...new Set(records.map(r=>r.origin))].map(origin=>[origin,records.filter(r=>r.origin===origin).length])),nativeContributions:spec.nativeContributions,policy:'Original origin/source strings and verifier are unchanged. Old literal inputBuffers counts import_buffer only; role ledger separately preserves current_buffer/candidate/physical/backup/reentry. This filesystem registry is not formal replay, does not create a GO and never reclassifies a derived dependency as Native.'}
+ if(sourceDiff(official,sources()).length||sourceDiff(runtime,dependencies()).length)throw Error('SOURCE_OR_RUNTIME_CHANGED_DURING_REGISTRY_METADATA_BUILD')
+ for(const identity of [...references,...originalRows])requireIdentity(identity)
++for(const producer of spec.producers)requireProducerTree(producer.cut)
+ guard(path.dirname(output));fs.writeFileSync(output,JSON.stringify(registry,null,2)+'\n',{flag:'wx'})
+ console.log(JSON.stringify({registry:read(freshRegistryOutput).identity,formalFreezeExecuted:false,formalReplayExecuted:false,publicReadbackExecuted:false,rootGoCreated:false}))
+--- goal-1/evidence/t17-acceptance-37/final-create-registry-preparation-r1/audit-io.mjs
++++ goal-1/evidence/t17-acceptance-37/final-create-registry-fix-r1/audit-io.mjs
+@@ -35,7 +35,7 @@
+  }
+  return expected
+ }
+-export function requirePublicReadbackWiring(wiring,records){
++export function requirePublicReadbackWiring(wiring,records,producerPolicy){
+  if(wiring?.apiVersion!=='u4b-public-readback-v1'||!Array.isArray(wiring.requirements)||!wiring.requirements.length)throw Error('FIXED_PUBLIC_READBACK_WIRING_REQUIRED')
+  const ids=new Set(),known=new Set(records.map(r=>r.key)),references=[]
+  for(const r of wiring.requirements){
+@@ -50,22 +50,93 @@
+    const manifest=json(r.inheritance.manifest.path),frozen=json(r.inheritance.frozenInputs.path)
+    if(!Array.isArray(manifest.records)||!Array.isArray(frozen.inputs)||manifest.records.length!==result.rawRows)throw Error('EXACT_INHERITED_CAPTURE_MANIFEST_REQUIRED')
+    for(const input of frozen.inputs)references.push(requireIdentity(input).identity)
+-   for(const record of manifest.records){requireIdentity(record.identity);if(!frozen.inputs.some(input=>identityEqual(input,record.identity)))throw Error('INHERITED_RAW_NOT_IN_FROZEN_INPUTS');const actual=records.filter(row=>identityEqual(row.identity,record.identity)&&r.recordKeys.includes(row.key));if(!actual.length)throw Error('INHERITED_RAW_MISSING_FINAL_RECORD_ROLE')}
++   const expectedKeys=[]
++   for(const record of manifest.records){
++    requireIdentity(record.identity);if(!frozen.inputs.some(input=>identityEqual(input,record.identity)))throw Error('INHERITED_RAW_NOT_IN_FROZEN_INPUTS')
++    const actual=records.filter(row=>identityEqual(row.identity,record.identity)&&identityEqual(row.manifest?.identity,record.manifest?.identity)&&row.manifest?.line===(record.manifest?.line??record.manifest?.line1)&&row.manifest?.lineSha256===record.manifest?.lineSha256&&row.origin===record.origin&&row.source===record.source&&row.runId===record.runId&&row.revision===record.revision)
++    if(actual.length!==1)throw Error('INHERITED_EXACT_ORIGINAL_CAPTURE_NOT_UNIQUE')
++    expectedKeys.push(actual[0].key)
++   }
++   requireStringSet(r.recordKeys,expectedKeys,'INHERITED_SCOPE_MUST_EQUAL_EXACT_ORIGINAL_CAPTURE_KEYS')
+    references.push(...manifest.records.map(record=>record.identity))
+   }
+  }
+- for(const scope of ['positive_service','negative_stop_and_atomic','current_r7_facts'])if(!ids.has(scope))throw Error('REQUIRED_BRANCH_READBACK_MISSING:'+scope)
++ for(const scope of ['positive_service','negative_stop_and_atomic'])if(!ids.has(scope))throw Error('REQUIRED_BRANCH_READBACK_MISSING:'+scope)
++ requireFreshProducerScopes(producerPolicy,records,wiring)
+  for(const r of wiring.requirements)if(!['positive_service','negative_stop_and_atomic'].includes(r.scope)&&r.mode!=='fresh_readback')throw Error('EXISTING_JSON_READBACK_CANNOT_COVER_CURRENT_R7_FACTS')
+  return references
+ }
+ export function validatePublicReadbackResult(report,contract,contractIdentity){
+- requirePublicReadbackWiring(contract.publicReadbackWiring,contract.records)
++ requirePublicReadbackWiring(contract.publicReadbackWiring,contract.records,contract.finalProducerSet)
+  if(report?.passed!==true||report.auditDirectory!==contract.directory||!identityEqual(report.contract,contractIdentity)||!Array.isArray(report.coverage)||report.coverage.length!==contract.publicReadbackWiring.requirements.length)throw Error('EXACT_CONTRACT_PUBLIC_READBACK_RESULT_REQUIRED')
+  const canonicalKeys=a=>JSON.stringify([...a].sort())
+  for(const required of contract.publicReadbackWiring.requirements){
+   const matches=report.coverage.filter(r=>r.scope===required.scope),row=matches.length===1?matches[0]:null
+   if(!row||row.mode!==required.mode||row.passed!==true||!Array.isArray(row.recordKeys)||canonicalKeys(row.recordKeys)!==canonicalKeys(required.recordKeys)||row.checks!==required.expectedChecks||row.passedChecks!==row.checks||row.failedChecks!==0)throw Error('PUBLIC_READBACK_SCOPE_RESULT_MISMATCH:'+required.scope)
++  if(required.mode==='fresh_readback')requireStringSet(row.producerDirectories,required.producerDirectories,'FRESH_RESULT_PRODUCER_SET_CHANGED')
+   if(required.mode==='inherited_result'&&(!identityEqual(row.reusedResult,required.inheritance.result)||!identityEqual(row.reusedFacts,required.inheritance.facts)))throw Error('EXACT_INHERITED_READBACK_IDENTITIES_REQUIRED')
+  }
+  return true
+ }
++
++// Filesystem/metadata guards shared by builder, freeze and final result checks.
++export function requireStringSet(actual,expected,label){
++ if(!Array.isArray(actual)||!Array.isArray(expected)||actual.some(x=>typeof x!=='string')||expected.some(x=>typeof x!=='string')||new Set(actual).size!==actual.length||new Set(expected).size!==expected.length||actual.length!==expected.length||actual.some(x=>!expected.includes(x)))throw Error(label)
++}
++export function requireIdentitySet(actual,expected,label){
++ if(!Array.isArray(actual)||!Array.isArray(expected)||new Set(actual.map(r=>r.path)).size!==actual.length||new Set(expected.map(r=>r.path)).size!==expected.length||actual.length!==expected.length||sourceDiff(actual,expected).length)throw Error(label)
++}
++export function requireFinalProducerSet(policy,producers){
++ const base=['chrome-main-r1','chrome-main-r2','chrome-main-r3','chrome-main-r4','chrome-main-r5','chrome-main-r6','chrome-negative-atomic-r6','chrome-negative-physical-r6','chrome-service-stop-r6','chrome-support-interrupt-r6'].map(n=>'goal-1/evidence/t17-acceptance-37/'+n)
++ const requiredFresh=['chrome-main-r7','chrome-main-r8'].map(n=>'goal-1/evidence/t17-acceptance-37/'+n)
++ if(policy?.declaredCompleteBy!=='/root'||policy.finalInventoryComplete!==true)throw Error('ROOT_FINAL_ALL_PRODUCERS_DECLARATION_REQUIRED')
++ requireStringSet(policy.completeDirectories,producers.map(p=>p.directory),'FINAL_PRODUCER_LIST_MUST_EQUAL_ALL_SPEC_PRODUCERS')
++ if([...base,...requiredFresh].some(d=>!policy.completeDirectories.includes(d))||!Array.isArray(policy.freshDirectories)||new Set(policy.freshDirectories).size!==policy.freshDirectories.length||requiredFresh.some(d=>!policy.freshDirectories.includes(d))||policy.freshDirectories.some(d=>!policy.completeDirectories.includes(d))||policy.completeDirectories.some(d=>!base.includes(d)&&!policy.freshDirectories.includes(d)))throw Error('R7_R8_AND_ALL_LATER_PRODUCERS_MUST_HAVE_FRESH_FACTS')
++}
++export function requireFreshProducerScopes(policy,records,wiring){
++ if(!policy||!Array.isArray(policy.freshDirectories)||!Array.isArray(policy.completeDirectories))throw Error('FINAL_PRODUCER_COVERAGE_POLICY_REQUIRED')
++ const assigned=[]
++ for(const row of records){const directory=path.posix.dirname(row.identity.path);if(row.producerDirectory!==directory||!policy.completeDirectories.includes(directory))throw Error('CAPTURE_ORIGINAL_PRODUCER_DIRECTORY_REQUIRED')}
++ for(const scope of wiring.requirements.filter(r=>r.mode==='fresh_readback')){
++  if(!Array.isArray(scope.producerDirectories)||!scope.producerDirectories.length||new Set(scope.producerDirectories).size!==scope.producerDirectories.length||scope.producerDirectories.some(d=>!policy.freshDirectories.includes(d)))throw Error('FRESH_SCOPE_EXPLICIT_NEW_PRODUCERS_REQUIRED')
++  const expected=records.filter(r=>scope.producerDirectories.includes(r.producerDirectory)).map(r=>r.key)
++  if(!expected.length)throw Error('FRESH_PRODUCER_MUST_HAVE_ACTUAL_CAPTURE_ROWS')
++  requireStringSet(scope.recordKeys,expected,'FRESH_SCOPE_MUST_EQUAL_PRODUCER_COMPLETE_CAPTURE_KEYS')
++  assigned.push(...scope.producerDirectories)
++ }
++ requireStringSet(assigned,policy.freshDirectories,'EVERY_FRESH_PRODUCER_MUST_BE_COVERED_EXACTLY_ONCE')
++}
++export function requireProducerTree(cutIdentity){
++ const data=requireIdentity(cutIdentity),cut=JSON.parse(data.bytes.toString('utf8')),tree=cut.tree??cut.files,base=cut.directory
++ if(typeof base!=='string'||!/^goal-1\/evidence\/t17-acceptance-37\/chrome-[a-zA-Z0-9-]+$/.test(base)||!Array.isArray(tree?.files)||!Array.isArray(tree.directories)||!Array.isArray(tree.directoryModes))throw Error('COMPLETE_PRODUCER_TREE_WITH_DIRECTORY_MODES_REQUIRED')
++ const actual={files:[],directories:[],directoryModes:[]}
++ const visit=relative=>{const absolute=path.resolve(repo,relative),stat=fs.lstatSync(absolute);if(stat.isSymbolicLink())throw Error('PRODUCER_TREE_SYMLINK_FORBIDDEN:'+relative);if(stat.isDirectory()){actual.directories.push(relative);actual.directoryModes.push({path:relative,mode:stat.mode&0o777});for(const name of fs.readdirSync(absolute).sort())visit(relative+'/'+name)}else if(stat.isFile())actual.files.push(read(relative).identity);else throw Error('PRODUCER_TREE_SPECIAL_FILE_FORBIDDEN:'+relative)}
++ visit(base)
++ requireIdentitySet(actual.files,tree.files,'PRODUCER_TREE_FILE_SET_BYTES_OR_MODE_CHANGED')
++ requireStringSet(actual.directories,tree.directories,'PRODUCER_TREE_DIRECTORY_SET_CHANGED')
++ requireStringSet(tree.directoryModes.map(r=>r.path),tree.directories,'PRODUCER_CUT_DIRECTORY_MODE_SET_INCOMPLETE')
++ if(!tree.directories.includes(base)||actual.directoryModes.some(r=>tree.directoryModes.find(x=>x.path===r.path)?.mode!==r.mode))throw Error('PRODUCER_TREE_DIRECTORY_MODE_CHANGED')
++ return {cut,identity:data.identity,tree:actual}
++}
++export function requireMutableFinalReferences(references,declared){
++ const target='goal-1/evidence/t17-acceptance-37/tasks.md',rows=references.filter(r=>r.path===target),policies=declared??[]
++ if(rows.length&&policies.filter(p=>p.role==='final_snapshot_until_runner_terminal'&&identityEqual(p.identity,rows[0])).length!==1)throw Error('CURRENT_TASKS_REQUIRES_EXPLICIT_MUTABLE_FINAL_SNAPSHOT')
++ for(const p of policies){if(p.role!=='final_snapshot_until_runner_terminal'||!references.some(r=>identityEqual(r,p.identity)))throw Error('MUTABLE_FINAL_REFERENCE_POLICY_MISMATCH');requireIdentity(p.identity)}
++}
++export function requireDerivedPrefixProof(d){
++ if(d.role!=='derived_normal_prefix_input_only'||d.newNativeCreates!==0||d.newNativeSavedCommands!==0)throw Error('DERIVED_INPUT_ONLY_ROLE_REQUIRED')
++ const before=requireIdentity(d.sourceBefore),after=requireIdentity(d.sourceAfter),contractData=requireIdentity(d.executionContract),terminal=json(requireIdentity(d.terminal).identity.path),raw=requireIdentity(d.identity),result=json(requireIdentity(d.result).identity.path),provenance=json(requireIdentity(d.provenance).identity.path)
++ const prefixRoot='goal-1/evidence/t17-acceptance-37/audit-input-prefix-run-r1/',proofSHA='9c3955b277b025c76d7c8db3d675b2af12aa6d7eab97508adc42c6480773e7bc'
++ if(before.identity.path!==prefixRoot+'source-before.json'||after.identity.path!==prefixRoot+'source-after.json'||before.identity.bytes!==270321||after.identity.bytes!==270321||before.identity.sha256!==proofSHA||after.identity.sha256!==proofSHA||!before.bytes.equals(after.bytes))throw Error('EXACT_HISTORICAL_DERIVATION_WINDOW_PROOFS_REQUIRED')
++ const first=JSON.parse(before.bytes.toString('utf8')),last=JSON.parse(after.bytes.toString('utf8')),historical=JSON.parse(contractData.bytes.toString('utf8'))
++ for(const key of ['officialSources','dependencies','p3','references','authority'])requireIdentitySet(first[key],last[key],'HISTORICAL_DERIVATION_WINDOW_CHANGED:'+key)
++ if(first.officialSources.length!==127||first.dependencies.length!==901||first.p3.length!==26||first.references.length!==37||first.authority.length!==3||!first.authority.some(r=>identityEqual(r,contractData.identity)))throw Error('ORIGINAL_127_901_P326_REFERENCE_AUTHORITY_WINDOW_REQUIRED')
++ for(const key of ['officialSources','dependencies','p3','references'])requireIdentitySet(first[key],historical[key],'HISTORICAL_CONTRACT_WINDOW_MISMATCH:'+key)
++ const oldTasks=first.references.find(r=>r.path==='goal-1/evidence/t17-acceptance-37/tasks.md')
++ if(oldTasks?.bytes!==5618||oldTasks.sha256!=='6a6df5f55f853bbee631db0ade7479905443b321c405e1771715f6126bb31bd6')throw Error('HISTORICAL_TASKS_IDENTITY_MUST_STAY_HISTORICAL')
++ if(result.passed!==true||result.error!==null||result.full118ByteEqual!==true||result.prefixPublished!==true||result.actualHistoricalCreateAttempts!==1||result.actualHistoricalCreateCompletions!==1||result.attemptedHistoricalPostCreateCommands!==117||result.successfulHistoricalPostCreateCommands!==117||result.proposedHistoricalCommands!==117||result.newNativeCreates!==0||result.newNativeCommands!==0||result.persistentHeadWrites!==0||terminal.exitCode!==0||terminal.passed!==true||!result.differences||['officialSources','dependencies','p3','references','authority'].some(k=>!Array.isArray(result.differences[k])||result.differences[k].length!==0)||!identityEqual(result.prefix,raw.identity))throw Error('ORIGINAL_DERIVATION_SUCCESS_COUNTS_AND_EMPTY_DIFFERENCES_REQUIRED')
++ if(provenance.role!=='derived_normal_prefix'||provenance.fullEndpointByteEqual!==true||provenance.newNativeCreates!==0||provenance.newNativeCommands!==0||provenance.persistentHeadWrites!==0||provenance.selectedPrefix?.bytes!==raw.identity.bytes||provenance.selectedPrefix?.sha256!==raw.identity.sha256||!identityEqual(provenance.source,historical.original)||!identityEqual(provenance.originalManifest?.identity,historical.originalManifest?.identity)||!identityEqual(provenance.originalSeal,historical.originalSeal))throw Error('ORIGINAL_DERIVED_PREFIX_PROVENANCE_REQUIRED')
++ // These proof files and immutable authority/originals are current references.
++ // first.references are historical facts: never require today's tasks/source to equal them.
++ return [d.identity,d.provenance,d.result,d.sourceBefore,d.sourceAfter,d.executionContract,d.terminal,...first.authority,historical.original,historical.originalManifest.identity,historical.originalSeal].map(r=>requireIdentity(r).identity)
++}
+--- goal-1/evidence/t17-acceptance-37/final-create-registry-preparation-r1/freeze-final-cut.mjs
++++ goal-1/evidence/t17-acceptance-37/final-create-registry-fix-r1/freeze-final-cut.mjs
+@@ -1,7 +1,7 @@
+ import fs from 'node:fs'
+ import path from 'node:path'
+ import {fileURLToPath} from 'node:url'
+-import {read,sha,sources,dependencies,guard,repo,identityEqual,requireIdentity,sourceDiff,outputRoot,put,mkdir,json,receiptInventory,sourceRoleFor,requirePublicReadbackWiring} from './audit-io.mjs'
++import {read,sha,sources,dependencies,guard,repo,identityEqual,requireIdentity,sourceDiff,outputRoot,put,mkdir,json,receiptInventory,sourceRoleFor,requirePublicReadbackWiring,requireFinalProducerSet,requireProducerTree,requireIdentitySet,requireDerivedPrefixProof,requireMutableFinalReferences} from './audit-io.mjs'
+ 
+ // Future-only freeze candidate. Running this file is not authorized by preparation.
+ if(process.argv.length!==6||process.argv[2]!=='--registry'||process.argv[4]!=='--output-dir')throw Error('EXPLICIT_ROOT_FROZEN_REGISTRY_AND_FRESH_OUTPUT_REQUIRED')
+@@ -12,17 +12,21 @@
+ if(fs.existsSync(output))throw Error('FORMAL_ROOT_MUST_NOT_EXIST')
+ const official=sources(),runtimeDependencies=dependencies(),baseline=json('goal-1/evidence/t17-acceptance-37/baseline.json')
+ if(sourceDiff(official,registry.officialSources??[]).length||official.length!==registry.expectedOfficialSourceCount)throw Error('FINAL_OFFICIAL_SOURCE_CUT_CHANGED')
+-if(runtimeDependencies.length!==registry.expectedDependencyFiles)throw Error('FINAL_DEPENDENCY_COUNT_CHANGED')
++requireIdentitySet(runtimeDependencies,registry.runtimeDependencies,'FINAL_DEPENDENCY_IDENTITY_SET_BYTES_OR_MODE_CHANGED')
++if(runtimeDependencies.length!==registry.expectedDependencyFiles||registry.runtimeDependencies.length!==registry.expectedDependencyFiles)throw Error('FINAL_DEPENDENCY_COUNT_CHANGED')
++requireFinalProducerSet(registry.finalProducerSet,registry.producerCuts)
++requireMutableFinalReferences(registry.referenceFiles,registry.mutableFinalReferences)
+ const p3=baseline.p3.map(r=>{const expected={path:r.path,bytes:r.bytes,sha256:r.sha256,mode:r.mode};requireIdentity(expected);return expected})
+ if(p3.length!==26)throw Error('ORIGINAL_P326_REQUIRED')
+ const referenceRows=[read(registryPath).identity,requireIdentity(registry.publicReadback).identity,...registry.referenceFiles.map(r=>requireIdentity(r).identity),...registry.producerCuts.map(r=>requireIdentity(r).identity)]
+ const cutFiles=new Map()
+-for(const row of registry.producerCuts){const cut=JSON.parse(requireIdentity(row).bytes.toString('utf8')),stop=cut.explicitProducerStop??cut.last,files=cut.tree?.files??cut.files?.files
++for(const row of registry.producerCuts){const observed=requireProducerTree(row),cut=observed.cut,stop=cut.explicitProducerStop??cut.last,files=observed.tree.files
++ if(cut.directory!==row.directory)throw Error('PRODUCER_CUT_DIRECTORY_DECLARATION_CHANGED')
+  const closedReader=row.captureRole==='closed_physical_reader'&&stop?.type==='reader-closed'
+  if((stop?.type!=='producer-stop'&&!closedReader)||!Array.isArray(files))throw Error('EXPLICIT_COMPLETED_PRODUCER_OR_CLOSED_READER_CUT_REQUIRED:'+row.path)
+  for(const file of files){requireIdentity(file);cutFiles.set(file.path,file);referenceRows.push(file)}
+ }
+-const readbackReferences=requirePublicReadbackWiring(registry.publicReadbackWiring,registry.records)
++const readbackReferences=requirePublicReadbackWiring(registry.publicReadbackWiring,registry.records,registry.finalProducerSet)
+ referenceRows.push(...readbackReferences)
+ const recordKeys=new Set(),destinationKeys=new Set(),originalInputRows=[],manifestCache=new Map(),journalRoles=[]
+ for(const record of registry.records){
+@@ -36,10 +40,8 @@
+ }
+ const derivedDependencies=[]
+ for(const dependency of registry.derivedInputDependencies??[]){
+- if(dependency.role!=='derived_normal_prefix_input_only'||dependency.newNativeCreates!==0||dependency.newNativeSavedCommands!==0||registry.records.some(r=>r.identity.path===dependency.identity.path))throw Error('DERIVED_PREFIX_IS_INPUT_DEPENDENCY_NOT_NATIVE_CAPTURE')
+- const raw=requireIdentity(dependency.identity),provenance=JSON.parse(requireIdentity(dependency.provenance).bytes.toString('utf8')),result=JSON.parse(requireIdentity(dependency.result).bytes.toString('utf8'))
+- if(provenance.role!=='derived_normal_prefix'||provenance.fullEndpointByteEqual!==true||provenance.newNativeCreates!==0||provenance.newNativeCommands!==0||provenance.persistentHeadWrites!==0||result.passed!==true||result.full118ByteEqual!==true||result.prefixPublished!==true||result.newNativeCreates!==0||result.newNativeCommands!==0||result.persistentHeadWrites!==0||!identityEqual(result.prefix,raw.identity)||provenance.selectedPrefix?.bytes!==raw.identity.bytes||provenance.selectedPrefix?.sha256!==raw.identity.sha256)throw Error('PASSED_ORIGINAL_COMPLETE_PREFIX_PROVENANCE_REQUIRED')
+- originalInputRows.push(raw.identity);referenceRows.push(dependency.provenance,dependency.result,provenance.source,provenance.originalManifest.identity,provenance.originalSeal);derivedDependencies.push(dependency)
++ if(registry.records.some(r=>r.identity.path===dependency.identity.path))throw Error('DERIVED_PREFIX_IS_INPUT_DEPENDENCY_NOT_NATIVE_CAPTURE')
++ const proof=requireDerivedPrefixProof(dependency);originalInputRows.push(requireIdentity(dependency.identity).identity);referenceRows.push(...proof);derivedDependencies.push(dependency)
+ }
+ for(const value of manifestCache.values())originalInputRows.push(value.identity)
+ for(const journal of registry.journals??[]){const original=requireIdentity(journal.identity);if(journal.producerStopped!==true||typeof journal.auditRole!=='string')throw Error('STOPPED_JOURNAL_ROLE_REQUIRED');originalInputRows.push(original.identity);journalRoles.push(journal)}
+@@ -62,5 +64,7 @@
+ const originalInputs=[...new Map(originalInputRows.map(r=>[r.path,r])).values()]
+ if(sourceDiff(official,sources()).length||sourceDiff(runtimeDependencies,dependencies()).length)throw Error('SOURCE_OR_RUNTIME_CHANGED_DURING_FINAL_FREEZE')
+ for(const row of [...p3,...references,...originalInputs,...snapshots])requireIdentity(row)
+-put(output,'frozen-contract.json',{at:new Date().toISOString(),directory,rootRegistry:read(registryPath).identity,officialSources:official,dependencies:runtimeDependencies,p3,references,originalInputs,snapshots,expectedReplay:expected,publicReadback:registry.publicReadback,publicReadbackWiring:registry.publicReadbackWiring,derivedInputDependencies:derivedDependencies,records:registry.records,journals:journalRoles,scriptPolicy:'Original verifier is unchanged and uses dynamic sourceHashes. Canonical Create command executes only after Root separate GO and independent review. Readback is a separately registered reviewed script.',sourceCount:official.length,newNativeCreates:registry.newNativeCreates,newNativeSavedCommands:registry.newNativeSavedCommands,preparationDoesNotAuthorizeExecution:true})
++for(const row of registry.producerCuts)requireProducerTree(row)
++put(output,'mutable-final-reference-policy.json',{references:registry.mutableFinalReferences??[],meaning:'Current final snapshots are held unchanged through runner terminal; historical derivation references remain internal history and are not requeried against current files.'})
++put(output,'frozen-contract.json',{at:new Date().toISOString(),directory,rootRegistry:read(registryPath).identity,officialSources:official,dependencies:runtimeDependencies,p3,references,originalInputs,snapshots,expectedReplay:expected,publicReadback:registry.publicReadback,publicReadbackWiring:registry.publicReadbackWiring,finalProducerSet:registry.finalProducerSet,producerCuts:registry.producerCuts,mutableFinalReferences:registry.mutableFinalReferences??[],derivedInputDependencies:derivedDependencies,records:registry.records,journals:journalRoles,scriptPolicy:'Original verifier is unchanged and uses dynamic sourceHashes. Canonical Create command executes only after Root separate GO and independent review. Readback is a separately registered reviewed script.',sourceCount:official.length,newNativeCreates:registry.newNativeCreates,newNativeSavedCommands:registry.newNativeSavedCommands,preparationDoesNotAuthorizeExecution:true})
+ console.log(JSON.stringify({preparedFinalCut:true,directory,officialSources:official.length,p3:p3.length,dependencies:runtimeDependencies.length,inventory:{creationHistories:inventory.creationHistories,uniquePostCreatePrefixes:inventory.uniquePostCreatePrefixes,artifactRows:inventory.artifactRows},formalExecutionStarted:false}))
+--- goal-1/evidence/t17-acceptance-37/final-create-registry-preparation-r1/run-once-candidate.mjs
++++ goal-1/evidence/t17-acceptance-37/final-create-registry-fix-r1/run-once-candidate.mjs
+@@ -1,13 +1,15 @@
+ import fs from 'node:fs'
+ import path from 'node:path'
+ import {spawnSync} from 'node:child_process'
+-import {read,json,guard,repo,sourceDiff,identityEqual,requireIdentity,outputRoot,put,bindings,bindingDiff,validatePublicReadbackResult} from './audit-io.mjs'
++import {read,json,guard,repo,sourceDiff,identityEqual,requireIdentity,outputRoot,put,bindings,bindingDiff,validatePublicReadbackResult,requireProducerTree,requireFinalProducerSet} from './audit-io.mjs'
+ 
+ // This runner is a future candidate, not an executable approval in the preparation task.
+ if(process.argv.length!==6||process.argv[2]!=='--audit-directory'||process.argv[4]!=='--root-go')throw Error('EXPLICIT_FROZEN_DIRECTORY_AND_ROOT_GO_REQUIRED')
+ const directory=process.argv[3],output=outputRoot(directory),contract=json(directory+'/frozen-contract.json'),go=json(process.argv[5])
+ if(contract.directory!==directory||go.authorizedBy!=='/root'||go.auditDirectory!==directory||go.operation!=='one_full_create_then_one_public_readback'||!identityEqual(go.contract,read(directory+'/frozen-contract.json').identity)||!go.independentReview)throw Error('EXACT_ROOT_EXECUTION_GO_AND_REVIEW_REQUIRED')
+ requireIdentity(go.independentReview);requireIdentity(contract.publicReadback)
++requireFinalProducerSet(contract.finalProducerSet,contract.producerCuts)
++for(const row of contract.producerCuts)requireProducerTree(row)
+ guard(output);if(fs.existsSync(path.join(output,'command.json'))||fs.existsSync(path.join(output,'result.json')))throw Error('ONE_FORMAL_EXECUTION_ONLY')
+ const authorityRows=[read(process.argv[5]).identity,go.independentReview,read(directory+'/frozen-contract.json').identity],before={...bindings(contract),executionAuthority:authorityRows},expectedBindings={officialSources:contract.officialSources,dependencies:contract.dependencies,p3:contract.p3,references:contract.references,inputs:contract.originalInputs,snapshots:contract.snapshots,executionAuthority:authorityRows}
+ for(const key of Object.keys(before))if(sourceDiff(before[key],expectedBindings[key]).length)throw Error('FINAL_FROZEN_INPUT_CHANGED:'+key)
+@@ -16,7 +18,7 @@
+ let error=null
+ try{for(const [name,args]of commands){guard(output);const started=Date.now(),r=spawnSync('rtk',args,{cwd:repo,encoding:'utf8',maxBuffer:64*1024*1024}),terminal={name,argv:['rtk',...args],exitCode:r.status,signal:r.signal,error:r.error?.message??null,wallMs:Date.now()-started};put(output,name+'-stdout.log',r.stdout??'');put(output,name+'-stderr.log',r.stderr??'');put(output,name+'-terminal.json',terminal);executions.push(terminal);if(terminal.exitCode!==0||terminal.signal||terminal.error)throw Error('FORMAL_STEP_FAILED:'+name)}}catch(failure){error={name:failure.name,message:failure.message,stack:failure.stack}}
+ let after=null,differences=null
+-try{after={...bindings(contract),executionAuthority:authorityRows.map(row=>read(row.path).identity)};differences=bindingDiff(before,after);put(output,'source-after.json',after)}catch(failure){error??={name:failure.name,message:failure.message,stack:failure.stack}}
++try{for(const row of contract.producerCuts)requireProducerTree(row);after={...bindings(contract),executionAuthority:authorityRows.map(row=>read(row.path).identity)};differences=bindingDiff(before,after);put(output,'source-after.json',after)}catch(failure){error??={name:failure.name,message:failure.message,stack:failure.stack}}
+ const reportFile=path.join(output,'report/normal-browser-export-audit.json'),report=fs.existsSync(reportFile)?JSON.parse(fs.readFileSync(reportFile,'utf8')):null,readbackFile=path.join(output,'readback-result.json'),readback=fs.existsSync(readbackFile)?JSON.parse(fs.readFileSync(readbackFile,'utf8')):null,expected=contract.expectedReplay
+ const officialSourceIdentity=!!report&&Object.keys(report.sourceHashes).length===contract.officialSources.length&&contract.officialSources.every(r=>report.sourceHashes[r.path]===r.sha256)
+ const completeReplay=!!report&&report.creations===expected.creationHistories&&report.executedUniqueCommands===expected.uniqueHistoricalCommands&&report.files===expected.artifactRows&&report.inputBuffers===expected.literalImportBufferRows&&report.allByteEqual===true

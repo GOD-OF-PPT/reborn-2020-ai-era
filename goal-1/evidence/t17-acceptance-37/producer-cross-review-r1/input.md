@@ -1,0 +1,1 @@
+只读跨Owner审relay-casebook-projection/relay-records与两新测试及Root game-types/campaign接线；完整读state-design合同与Rootseams补充。重点最小白名单/不泄hidden/rawsignature/未来义务与原支持投入、同业务账户/资本双腿/退款后付/供应贷项原序、正常source误拒与summary责任默认可见。仅本目录input/plan/review及源首末hash，不改产品/检查/Browser/Git；Root活源变化注明切面，不冒最终准入。

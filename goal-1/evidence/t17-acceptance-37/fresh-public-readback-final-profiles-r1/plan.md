@@ -1,0 +1,3 @@
+保R5真实前像与原两P2有限审查，R6只按真实R7/R8/R9/R10四cut/完整原manifest具体化profile与typed原source；R8没有三构图，职责按真实capture转R10，R9仅当前已捕Today/恢复，不冒最终新入口。新未知producer仍拒。逐capture完整identity/origin/source/原行/branch/auditRole/semanticRole/同biz/period，经营pair完整原receipt prefix；非经营typed原source exact byte aliases0new。金融原606/202/2424/1212/808/404/4838及报价current5/fee0门槛不改，audit已完成才读actual/aftermeter逆链保。旧35/31不重新执行，当前源/全部依赖由最终Root统一freeze，不固定历史901。
+
+现R8—R10 cut无last，而顶层capture/contribution+原journal末producer-stop真实存在；只在四已声明profile适配实际schema，不改旧cut/不放宽stop。候选/具体facts spec/role映射+canonical资料交response组装，art定向静审，Root最终allcut/spec另GO一次。0import/syntax/engine/readback/Browser/Git/产品/master写。

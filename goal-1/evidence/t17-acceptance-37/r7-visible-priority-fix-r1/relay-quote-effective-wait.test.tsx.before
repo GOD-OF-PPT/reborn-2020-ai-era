@@ -1,0 +1,152 @@
+import {afterAll,beforeAll,expect,it,vi} from 'vitest'
+import {isValidElement,type ReactElement} from 'react'
+import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
+import {createCampaignCodec} from '../application/campaign.ts'
+import {GameController} from '../application/game-controller.ts'
+import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
+import {playableAdvanceDate} from '../application/playable-advance.ts'
+import type {GamePanelProps,PlayFeatures,PlayingView} from './game-types.ts'
+import type {RelaySceneTarget} from './relay-scene-target.ts'
+import {RelayRecordBook,relayRecordNeedsReply} from './RelayRecordBook.tsx'
+import {relayRecordRows} from './relay-records.ts'
+import {relayReviewDate} from './relay-scene-clock.ts'
+import {createRelayRecordMemory} from './relay-record-memory.ts'
+import {moneyText} from './game-text.ts'
+import raw111 from '../../goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/a20-saved111-explicit-future-requote-planned.json?raw'
+import raw114 from '../../goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/a22-saved114-requote-accepted-before-effective.json?raw'
+
+// Two actual saved Native captures. Their fixed filesystem SHA/mode are in
+// quote-effective-wait-fix-r1; runtime imports below occur only in this test.
+const quoteId='rly:ae174caa5b7cf8e01f7c66c6191aa1ff',recordKey='quote:'+quoteId
+const hooks=vi.hoisted(()=>({slots:new Map<string,unknown[]>(),current:[] as unknown[],index:0,ids:0}))
+vi.mock('react',async importOriginal=>{
+ const actual=await importOriginal<typeof import('react')>()
+ const state=<T,>(initial:T|(()=>T))=>{const index=hooks.index++,values=hooks.current;if(!(index in values))values[index]=typeof initial==='function'?(initial as ()=>T)():initial;return [values[index] as T,(next:T|((old:T)=>T))=>{values[index]=typeof next==='function'?(next as (old:T)=>T)(values[index] as T):next}] as const}
+ return {...actual,useState:state,useRef:<T,>(initial:T)=>state(()=>({current:initial}))[0],useId:()=>state(()=> 'quote-wait-'+(++hooks.ids))[0],useEffect:()=>{},useMemo:<T,>(factory:()=>T)=>factory()}
+})
+function mounted<T>(key:string,render:()=>T):T{const previous=hooks.current,index=hooks.index;hooks.current=hooks.slots.get(key)??[];hooks.slots.set(key,hooks.current);hooks.index=0;try{return render()}finally{hooks.current=previous;hooks.index=index}}
+type Element=ReactElement<Record<string,unknown>>
+const driven=new Set(['RelayRecordBook','ClockAdvance','CommandButton'])
+function elements(value:unknown,path:string):Element[]{
+ if(Array.isArray(value))return value.flatMap((child,index)=>elements(child,path+'/'+index))
+ if(!isValidElement<Record<string,unknown>>(value))return []
+ const own=[value,...elements(value.props.children,path+'/children'),...elements(value.props.footer,path+'/footer')]
+ if(typeof value.type==='function'&&driven.has(value.type.name)){const component=value.type as (props:Record<string,unknown>)=>unknown;own.push(...elements(mounted(path+':'+component.name,()=>component(value.props)),path+'/render'))}
+ return own
+}
+function text(value:unknown):string{if(typeof value==='string'||typeof value==='number')return String(value);if(Array.isArray(value))return value.map(text).join('');return isValidElement<Record<string,unknown>>(value)?text(value.props.children):''}
+function reader(name:string,p:GamePanelProps,target:RelaySceneTarget){
+ let tree:unknown
+ const refresh=()=>{tree=mounted(name,()=>RelayRecordBook({p,target,initialRecordKey:recordKey,children:view=><>{view.body}{view.actions}</>}))},all=()=>elements(tree,name)
+ refresh()
+ return {all,text:()=>all().map(e=>text(e.props.children)).join(' '),
+  button(label:string){const e=all().find(e=>e.type==='button'&&text(e.props.children).includes(label));if(!e)throw Error('QUOTE_BUTTON_REQUIRED:'+label);return e},
+  click(label:string){const e=all().find(e=>e.type==='button'&&text(e.props.children).includes(label));if(!e||e.props.disabled||typeof e.props.onClick!=='function')throw Error('ENABLED_QUOTE_BUTTON_REQUIRED:'+label);e.props.onClick();refresh()},
+ }
+}
+type Relay=NonNullable<PlayFeatures['relay']>
+type BusinessTarget=Extract<RelaySceneTarget,{kind:'business'}>
+type Frame={controller:GameController;view:PlayingView;features:PlayFeatures;raw:string;target:BusinessTarget}
+let planned:Frame,completed:Frame
+const frames:Frame[]=[]
+async function load(raw:string,revision:number):Promise<Frame>{
+ const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'quote-effective-'+revision})
+ let sequence=0
+ const controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=> 'quote-wait-'+revision+'-'+(++sequence)})
+ await controller.initialize();await controller.importNew(raw)
+ const view=controller.snapshot.view!,features=view.features as unknown as PlayFeatures,q=features.relay!.quotes.find(q=>q.id===quoteId)!
+ expect(view.revision).toBe(revision);expect(controller.exportSaved()).toBe(raw);expect(q).toBeDefined();expect(features.relay!.casebook?.status).toBe('ready')
+ const business=features.relay!.businesses.find(b=>b.id===q.businessId)!,stations=features.relay!.stations.filter(s=>s.businessId===business.id)
+ expect(stations).toHaveLength(1)
+ const target:BusinessTarget={kind:'business',runId:view.runId,accountId:business.accountId,businessId:business.id,stationId:stations[0]!.id}
+ const frame={controller,view,features,raw,target};frames.push(frame);return frame
+}
+beforeAll(async()=>{
+ expect(new TextEncoder().encode(raw111).byteLength).toBe(2896973);expect(new TextEncoder().encode(raw114).byteLength).toBe(2911678)
+ planned=await load(raw111,111);completed=await load(raw114,114)
+ expect(planned.view.date).toBe('2025-03-21');expect(completed.view.date).toBe('2025-04-08')
+ expect(completed.view.receipts.slice(0,planned.view.receipts.length)).toEqual(planned.view.receipts)
+},20000)
+afterAll(async()=>{for(const frame of frames)await frame.controller.close()})
+function props(frame=completed):GamePanelProps{return {controller:frame.controller,view:frame.view,features:frame.features,accountId:frame.target.accountId,request:vi.fn<GamePanelProps['request']>(),textOnly:true,relayRecordMemory:createRelayRecordMemory(frame.view.runId)}}
+function quote(p:GamePanelProps){return p.features.relay!.quotes.find(q=>q.id===quoteId)!}
+function row(p:GamePanelProps,target=completed.target){const model=relayRecordRows(p,target);expect(model.reason).toBeNull();const rows=model.rows.filter(r=>r.key===recordKey);expect(rows).toHaveLength(1);return rows[0]!}
+function altered(p:GamePanelProps,update:(q:Relay['quotes'][number])=>Relay['quotes'][number]):GamePanelProps{
+ // Explicit public-view counterexamples, never imported/saved as another run.
+ const features={...p.features,relay:{...p.features.relay!,quotes:p.features.relay!.quotes.map(q=>q.id===quoteId?update(q):q)}}
+ return {...p,features,view:{...p.view,features:features as unknown as PlayingView['features']}}
+}
+const clocks=(ui:ReturnType<typeof reader>)=>ui.all().filter(e=>typeof e.type==='function'&&e.type.name==='CommandButton'&&e.props.kind==='AdvanceTime')
+
+it('keeps the real accepted114 quote pending until Apr9 and requests only its original Clock advance',()=>{
+ const p=props(),q=quote(p),original=completed.controller.exportSaved(),ticket=row(p),request=p.request
+ expect(q).toMatchObject({completedAt:'2025-04-08',effectiveAt:'2025-04-09',unitPriceFen:5,serviceFeeFen:0})
+ expect(q.responses).toEqual([{customerId:q.customerIds[0]!,accepted:true}]);expect(ticket.state).toBe('已经谈妥，尚未生效')
+ expect(relayRecordNeedsReply(p,completed.target,ticket)).toBe(true)
+ expect(p.features.relay!.periods.find(period=>period.id==='rly:503e6b6995b626f7c3bec7a0dd02e180')).toMatchObject({status:'closed',from:'2025-01-28',to:'2025-02-25'})
+ p.relayRecordMemory!.write(completed.target,recordKey)
+ const customer=p.features.relay!.customers.find(c=>c.id===q.customerIds[0])!
+ expect(customer.activeTerms).toMatchObject({unitPriceFen:6,serviceFeeFen:50000});expect(customer.termEnd).toBe('2025-04-30')
+ const ui=reader('actual-accepted114-quote',p,completed.target),label='等这份已谈妥的原报价生效 · 2025-04-09'
+ expect(ui.text()).toContain('已经谈妥，尚未生效');expect(ui.text()).toContain('实际接受 1 / 1位');expect(ui.text()).toContain('当前有效原价 '+moneyText(6));expect(ui.text()).toContain('原支持周期基准 '+moneyText(50000))
+ const main=clocks(ui).find(e=>e.props.className==='clock-main')!
+ expect(main.props.payload).toEqual({date:'2025-04-09'});expect(main.props.confirm).toBe(false)
+ ui.click(label);expect(request).toHaveBeenCalledExactlyOnceWith('AdvanceTime',{date:'2025-04-09'},main.props.label,false)
+ ui.click('翻另一张同对象的原票');expect(ui.text()).toContain(ticket.title);expect(ui.text()).toContain('已经谈妥，尚未生效')
+ expect(request).toHaveBeenCalledTimes(1);expect(p.relayRecordMemory!.read(completed.target)).toBe(recordKey);expect(completed.controller.exportSaved()).toBe(original)
+})
+
+it('keeps the real planned111 responses unknown and waits on the original task through its quarter barrier',()=>{
+ const p=props(planned),q=quote(p),ticket=row(p,planned.target),original=planned.controller.exportSaved()
+ expect(q.completedAt).toBeNull();expect(q.responses).toEqual([]);expect(q.job).toMatchObject({status:'planned',startAt:'2025-04-01',completeAt:'2025-04-08'})
+ const ui=reader('actual-planned111-quote',p,planned.target),safe=relayReviewDate(p,playableAdvanceDate(p.features.workbench,p.view.date,q.job!.startAt))
+ expect(ticket.state).toBe('已预留，尚未开工');expect(ui.text()).toContain('答复未知');expect(ui.text()).not.toContain('实际接受 1 / 1位');expect(ui.text()).not.toContain('已经谈妥，尚未生效')
+ expect(safe).toBe('2025-03-31');const main=clocks(ui).find(e=>e.props.className==='clock-main')!
+ expect(main.props.payload).toEqual({date:safe});expect(main.props.payload).not.toEqual({date:'2025-04-09'})
+ ui.click('到这份原任务的下一反馈 · '+safe);expect(p.request).toHaveBeenCalledExactlyOnceWith('AdvanceTime',{date:safe},main.props.label,main.props.confirm)
+ expect(planned.controller.exportSaved()).toBe(original)
+})
+
+const quotePublicVariants:readonly {label:string;update:(q:Relay['quotes'][number])=>Relay['quotes'][number];state?:string}[]=[
+  {label:'all-rejected',update:q=>({...q,responses:q.responses.map(r=>({...r,accepted:false}))}),state:'客户全部拒绝，原约继续'},
+  {label:'missing-responses',update:q=>({...q,responses:[]}),state:'原完成与答复尚待核定'},
+  {label:'duplicate-responses',update:q=>({...q,responses:[...q.responses,...q.responses]}),state:'原完成与答复尚待核定'},
+  {label:'future-completion',update:q=>({...q,completedAt:'2025-04-10'}),state:'原完成与答复尚待核定'},
+  {label:'invalid-effective-date',update:q=>({...q,effectiveAt:'2025-02-30'}),state:'原完成与答复尚待核定'},
+  {label:'wrong-job',update:q=>({...q,job:q.job?{...q.job,id:'different-original-job'}:null})},
+  {label:'wrong-response-customer',update:q=>({...q,responses:q.responses.map(r=>({...r,customerId:'another-customer'}))}),state:'原完成与答复尚待核定'},
+  {label:'already-effective',update:q=>({...q,effectiveAt:'2025-04-08'}),state:'原报价已经生效'},
+]
+it.each(quotePublicVariants)('does not invent an effective-date wait for public quote variant $label',variant=>{
+ const base=props(),original=completed.controller.exportSaved()
+  const p=altered(base,variant.update),ui=reader('public-quote-'+variant.label,p,completed.target),model=relayRecordRows(p,completed.target),ticket=model.rows.find(r=>r.key===recordKey)
+  expect(clocks(ui)).toHaveLength(0)
+  if(variant.state){expect(model.reason).toBeNull();expect(ticket!.state).toBe(variant.state);expect(relayRecordNeedsReply(p,completed.target,ticket!)).toBe(false)}
+  if(variant.label==='all-rejected')expect(ui.text()).toContain('没有待生效的新报价')
+  if(variant.label==='missing-responses')expect(ui.text()).toContain('不把未知当零接受')
+  expect(p.request).not.toHaveBeenCalled()
+ expect(completed.controller.exportSaved()).toBe(original)
+})
+
+it('retains original hard calendar stops instead of jumping from a completed quote to a later effective date',()=>{
+ const p=altered(props(),q=>({...q,effectiveAt:'2025-07-01'})),ui=reader('public-quote-quarter-stop',p,completed.target),safe=relayReviewDate(p,playableAdvanceDate(p.features.workbench,p.view.date,'2025-07-01'))
+ expect(safe).toBe('2025-06-30');const main=clocks(ui).find(e=>e.props.className==='clock-main')!
+ expect(main.props.payload).toEqual({date:safe});expect(ui.text()).toContain('先到原日历停点，再等这份报价生效 · '+safe)
+ expect(p.request).not.toHaveBeenCalled();expect(completed.controller.exportSaved()).toBe(raw114)
+})
+
+it('keeps quote reading available but refuses readonly, candidate and stale wait handlers without any new commitment',()=>{
+ const base=props(),original=completed.controller.exportSaved(),label='等这份已谈妥的原报价生效 · 2025-04-09'
+ for(const patch of [{readOnly:true,saveStatus:'read_only' as const},{hasCandidate:true}]){
+  const view={...base.view,...patch},controller=new Proxy(base.controller,{get(target,key){if(key==='snapshot')return {...target.snapshot,view};const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value}}),p={...base,view,controller,request:vi.fn<GamePanelProps['request']>()},ui=reader('protected-quote-'+JSON.stringify(patch),p,completed.target),button=ui.button(label)
+  expect(ui.text()).toContain('已经谈妥，尚未生效');expect(button.props.disabled).toBe(true)
+  if(typeof button.props.onClick!=='function')throw Error('QUOTE_WAIT_HANDLER_REQUIRED')
+  button.props.onClick();expect(p.request).not.toHaveBeenCalled()
+ }
+ let current=base.view
+ const controller=new Proxy(base.controller,{get(target,key){if(key==='snapshot')return {...target.snapshot,view:current};const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value}}),p={...base,controller,request:vi.fn<GamePanelProps['request']>()},ui=reader('stale-quote-wait',p,completed.target),button=ui.button(label)
+ expect(button.props.disabled).toBe(false);current={...base.view,revision:base.view.revision+1}
+ if(typeof button.props.onClick!=='function')throw Error('QUOTE_WAIT_HANDLER_REQUIRED')
+ button.props.onClick();expect(p.request).not.toHaveBeenCalled();expect(completed.controller.exportSaved()).toBe(original)
+})

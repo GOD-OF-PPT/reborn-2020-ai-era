@@ -1,0 +1,120 @@
+--- goal-1/evidence/t17-acceptance-37/full-create-preparation-r1/audit-io.mjs
++++ goal-1/evidence/t17-acceptance-37/full-create-refinement-r2/audit-io.mjs
+@@ -24,3 +24,42 @@
+ }
+ export function bindings(contract){return {officialSources:sources(),dependencies:dependencies(),p3:contract.p3.map(r=>read(r.path).identity),references:contract.references.map(r=>read(r.path).identity),inputs:contract.originalInputs.map(r=>read(r.path).identity),snapshots:contract.snapshots.map(r=>read(r.path).identity)}}
+ export function bindingDiff(before,after){return Object.fromEntries(Object.keys(before).map(key=>[key,sourceDiff(before[key],after[key])]))}
++
++// Future-only metadata/readback protocol adapters. No financial algorithm or product import.
++export function sourceRoleFor(record){
++ const expected=record.origin==='native_saved_ui'?'saved_ui':record.origin
++ if(record.sourceRole!==expected)throw Error('EXPLICIT_SOURCE_ROLE_REQUIRED:'+record.key)
++ if(record.origin==='native_saved_ui'){
++  const m=record.sourceRoleMapping
++  if(!record.manifest||m?.from!=='native_saved_ui'||m.to!=='saved_ui'||m.rule!=='exact_original_manifest_and_stopped_producer_cut'||m.manifestPath!==record.manifest.identity.path||m.manifestLine!==record.manifest.line||m.manifestLineSha256!==record.manifest.lineSha256||typeof m.explanation!=='string'||!m.explanation.trim())throw Error('EVIDENCED_NATIVE_SAVED_UI_ROLE_MAPPING_REQUIRED:'+record.key)
++ }
++ return expected
++}
++export function requirePublicReadbackWiring(wiring,records){
++ if(wiring?.apiVersion!=='u4b-public-readback-v1'||!Array.isArray(wiring.requirements)||!wiring.requirements.length)throw Error('FIXED_PUBLIC_READBACK_WIRING_REQUIRED')
++ const ids=new Set(),known=new Set(records.map(r=>r.key)),references=[]
++ for(const r of wiring.requirements){
++  if(typeof r.scope!=='string'||ids.has(r.scope)||!['inherited_result','fresh_readback'].includes(r.mode)||!Array.isArray(r.recordKeys)||!r.recordKeys.length||new Set(r.recordKeys).size!==r.recordKeys.length||r.recordKeys.some(k=>!known.has(k))||!Number.isSafeInteger(r.expectedChecks)||r.expectedChecks<1)throw Error('EXACT_READBACK_SCOPE_RECORD_KEYS_AND_CHECK_COUNT_REQUIRED')
++  ids.add(r.scope)
++  if(r.mode==='inherited_result'){
++   if(r.scope!=='positive_service'||r.expectedChecks!==35)throw Error('ONLY_EXISTING_POSITIVE35_MAY_BE_INHERITED')
++   for(const key of ['result','facts','manifest','frozenInputs','script','terminal'])references.push(requireIdentity(r.inheritance?.[key]).identity)
++   const result=json(r.inheritance.result.path)
++   if(result.passed!==true||result.exitCode!==0||result.checks!==35||result.passedChecks!==35||result.failedChecks?.length!==0||result.error!==null)throw Error('PASSED_POSITIVE35_ARTIFACT_REQUIRED')
++  }
++ }
++ for(const scope of ['positive_service','negative_correction','save_fault_and_retry'])if(!ids.has(scope))throw Error('REQUIRED_BRANCH_READBACK_MISSING:'+scope)
++ for(const r of wiring.requirements)if(r.scope!=='positive_service'&&r.mode!=='fresh_readback')throw Error('POSITIVE35_CANNOT_COVER_NEGATIVE_OR_STORAGE_FAULT')
++ return references
++}
++export function validatePublicReadbackResult(report,contract,contractIdentity){
++ requirePublicReadbackWiring(contract.publicReadbackWiring,contract.records)
++ if(report?.passed!==true||report.auditDirectory!==contract.directory||!identityEqual(report.contract,contractIdentity)||!Array.isArray(report.coverage)||report.coverage.length!==contract.publicReadbackWiring.requirements.length)throw Error('EXACT_CONTRACT_PUBLIC_READBACK_RESULT_REQUIRED')
++ const canonicalKeys=a=>JSON.stringify([...a].sort())
++ for(const required of contract.publicReadbackWiring.requirements){
++  const matches=report.coverage.filter(r=>r.scope===required.scope),row=matches.length===1?matches[0]:null
++  if(!row||row.mode!==required.mode||row.passed!==true||!Array.isArray(row.recordKeys)||canonicalKeys(row.recordKeys)!==canonicalKeys(required.recordKeys)||row.checks!==required.expectedChecks||row.passedChecks!==row.checks||row.failedChecks!==0)throw Error('PUBLIC_READBACK_SCOPE_RESULT_MISMATCH:'+required.scope)
++  if(required.mode==='inherited_result'&&(!identityEqual(row.reusedResult,required.inheritance.result)||!identityEqual(row.reusedFacts,required.inheritance.facts)))throw Error('EXACT_POSITIVE35_INHERITANCE_REQUIRED')
++ }
++ return true
++}
+--- goal-1/evidence/t17-acceptance-37/full-create-preparation-r1/freeze-final-cut.mjs
++++ goal-1/evidence/t17-acceptance-37/full-create-refinement-r2/freeze-final-cut.mjs
+@@ -1,7 +1,7 @@
+ import fs from 'node:fs'
+ import path from 'node:path'
+ import {fileURLToPath} from 'node:url'
+-import {read,sha,sources,dependencies,guard,repo,identityEqual,requireIdentity,sourceDiff,outputRoot,put,mkdir,json,receiptInventory} from './audit-io.mjs'
++import {read,sha,sources,dependencies,guard,repo,identityEqual,requireIdentity,sourceDiff,outputRoot,put,mkdir,json,receiptInventory,sourceRoleFor,requirePublicReadbackWiring} from './audit-io.mjs'
+ 
+ // Future-only freeze candidate. Running this file is not authorized by preparation.
+ if(process.argv.length!==6||process.argv[2]!=='--registry'||process.argv[4]!=='--output-dir')throw Error('EXPLICIT_ROOT_FROZEN_REGISTRY_AND_FRESH_OUTPUT_REQUIRED')
+@@ -21,15 +21,24 @@
+  if(stop?.type!=='producer-stop'||!Array.isArray(files))throw Error('EXPLICIT_COMPLETED_PRODUCER_CUT_REQUIRED:'+row.path)
+  for(const file of files){requireIdentity(file);cutFiles.set(file.path,file);referenceRows.push(file)}
+ }
++const readbackReferences=requirePublicReadbackWiring(registry.publicReadbackWiring,registry.records)
++referenceRows.push(...readbackReferences)
+ const recordKeys=new Set(),destinationKeys=new Set(),originalInputRows=[],manifestCache=new Map(),journalRoles=[]
+ for(const record of registry.records){
+  if(typeof record.key!=='string'||recordKeys.has(record.key)||typeof record.branchId!=='string'||typeof record.auditRole!=='string'||typeof record.source!=='string'||!record.source.trim()||!/^chrome-[a-zA-Z0-9-]+$/.test(record.snapshotFolder)||!/^[a-zA-Z0-9_.-]+\.json$/.test(record.snapshotFile))throw Error('EXPLICIT_UNIQUE_RECORD_ROLE_BRANCH_REQUIRED')
+- recordKeys.add(record.key);const destination=record.snapshotFolder+'/'+record.snapshotFile;if(destinationKeys.has(destination))throw Error('DUPLICATE_SNAPSHOT_DESTINATION');destinationKeys.add(destination)
++ sourceRoleFor(record);recordKeys.add(record.key);const destination=record.snapshotFolder+'/'+record.snapshotFile;if(destinationKeys.has(destination))throw Error('DUPLICATE_SNAPSHOT_DESTINATION');destinationKeys.add(destination)
+  requireIdentity(record.identity);originalInputRows.push(record.identity)
+  if(record.origin!=='historical_source_reference'&&!identityEqual(cutFiles.get(record.identity.path),record.identity))throw Error('CAPTURE_NOT_IN_EXACT_STOPPED_PRODUCER_CUT:'+record.key)
+  if(record.manifest){const manifest=requireIdentity(record.manifest.identity);if(!manifestCache.has(record.manifest.identity.path))manifestCache.set(record.manifest.identity.path,manifest);const lines=manifest.bytes.toString('utf8').split('\n').filter(Boolean),line=lines[record.manifest.line-1],row=line?JSON.parse(line):null
+   if(!row||sha(line)!==record.manifest.lineSha256||row.file!==path.basename(record.identity.path)||row.origin!==record.origin||row.source!==record.source||row.bytes!==record.identity.bytes||row.sha256!==record.identity.sha256||row.runId!==record.runId||row.revision!==record.revision)throw Error('EXACT_ORIGINAL_MANIFEST_LINE_REQUIRED:'+record.key)
+  }else if(record.origin!=='historical_source_reference')throw Error('CAPTURE_WITH_ORIGINAL_MANIFEST_REQUIRED')
++}
++const derivedDependencies=[]
++for(const dependency of registry.derivedInputDependencies??[]){
++ if(dependency.role!=='derived_normal_prefix_input_only'||dependency.newNativeCreates!==0||dependency.newNativeSavedCommands!==0||registry.records.some(r=>r.identity.path===dependency.identity.path))throw Error('DERIVED_PREFIX_IS_INPUT_DEPENDENCY_NOT_NATIVE_CAPTURE')
++ const raw=requireIdentity(dependency.identity),provenance=JSON.parse(requireIdentity(dependency.provenance).bytes.toString('utf8')),result=JSON.parse(requireIdentity(dependency.result).bytes.toString('utf8'))
++ if(provenance.role!=='derived_normal_prefix'||provenance.fullEndpointByteEqual!==true||provenance.newNativeCreates!==0||provenance.newNativeCommands!==0||provenance.persistentHeadWrites!==0||result.passed!==true||result.full118ByteEqual!==true||result.prefixPublished!==true||result.newNativeCreates!==0||result.newNativeCommands!==0||result.persistentHeadWrites!==0||!identityEqual(result.prefix,raw.identity)||provenance.selectedPrefix?.bytes!==raw.identity.bytes||provenance.selectedPrefix?.sha256!==raw.identity.sha256)throw Error('PASSED_ORIGINAL_COMPLETE_PREFIX_PROVENANCE_REQUIRED')
++ originalInputRows.push(raw.identity);referenceRows.push(dependency.provenance,dependency.result,provenance.source,provenance.originalManifest.identity,provenance.originalSeal);derivedDependencies.push(dependency)
+ }
+ for(const value of manifestCache.values())originalInputRows.push(value.identity)
+ for(const journal of registry.journals??[]){const original=requireIdentity(journal.identity);if(journal.producerStopped!==true||typeof journal.auditRole!=='string')throw Error('STOPPED_JOURNAL_ROLE_REQUIRED');originalInputRows.push(original.identity);journalRoles.push(journal)}
+@@ -44,12 +53,13 @@
+ for(const record of registry.records){if(!groups.has(record.snapshotFolder))groups.set(record.snapshotFolder,[]);groups.get(record.snapshotFolder).push(record)}
+ for(const [folder,records]of groups){mkdir(output,'input/'+folder);const lines=[];for(const record of records){const raw=requireIdentity(record.identity);put(output,'input/'+folder+'/'+record.snapshotFile,raw.bytes);snapshots.push(read(directory+'/input/'+folder+'/'+record.snapshotFile).identity);lines.push(JSON.stringify({file:record.snapshotFile,origin:record.origin,source:record.source,bytes:record.identity.bytes,sha256:record.identity.sha256,runId:record.runId,revision:record.revision}))}put(output,'input/'+folder+'/exports.jsonl',lines.join('\n')+'\n');snapshots.push(read(directory+'/input/'+folder+'/exports.jsonl').identity)}
+ for(let i=0;i<journalRoles.length;i++){put(output,'journal-'+String(i+1).padStart(2,'0')+'.snapshot.jsonl',requireIdentity(journalRoles[i].identity).bytes);snapshots.push(read(directory+'/journal-'+String(i+1).padStart(2,'0')+'.snapshot.jsonl').identity)}
+-put(output,'role-ledger.json',{records:registry.records.map(r=>({key:r.key,origin:r.origin,auditRole:r.auditRole,branchId:r.branchId,runId:r.runId,revision:r.revision,identity:r.identity,newNativeSavedCommands:r.newNativeSavedCommands??null,notCountedAsNew:r.notCountedAsNew??null})),byteEqualGroups:registry.byteEqualGroups??[],distinctBranchPairs:registry.distinctBranchPairs??[],newNativeCreates:registry.newNativeCreates,newNativeSavedCommands:registry.newNativeSavedCommands,limit:'New-command totals are Root-declared Native scope, checked later against independent public readback; metadata-prefix counts are historical replay work, not new gameplay.'})
++put(output,'role-ledger.json',{records:registry.records.map(r=>({key:r.key,origin:r.origin,sourceRole:sourceRoleFor(r),sourceRoleMapping:r.sourceRoleMapping??null,auditRole:r.auditRole,branchId:r.branchId,runId:r.runId,revision:r.revision,identity:r.identity,newNativeSavedCommands:r.newNativeSavedCommands??null,notCountedAsNew:r.notCountedAsNew??null})),byteEqualGroups:registry.byteEqualGroups??[],distinctBranchPairs:registry.distinctBranchPairs??[],newNativeCreates:registry.newNativeCreates,newNativeSavedCommands:registry.newNativeSavedCommands,limit:'New-command totals are Root-declared Native scope, checked later against independent public readback; metadata-prefix counts are historical replay work, not new gameplay.'})
+ put(output,'receipt-metadata-inventory.json',inventory)
++put(output,'derived-input-dependencies.json',{dependencies:derivedDependencies,notReplayCaptureRows:true,newNativeCreates:0,newNativeSavedCommands:0})
+ const here=path.dirname(fileURLToPath(import.meta.url)),helperNames=['audit-io.mjs','freeze-final-cut.mjs','run-once-candidate.mjs'].map(n=>path.relative(repo,path.join(here,n)).split(path.sep).join('/'))
+ const references=[...referenceRows,...helperNames.map(n=>read(n).identity),read('goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/io.mjs').identity,read('scripts/browser_evidence_guard.mjs').identity,...['package.json','package-lock.json','tsconfig.json','tsconfig.app.json','tsconfig.core.json','vite.config.ts'].filter(n=>fs.existsSync(path.join(repo,n))).map(n=>read(n).identity)]
+ const originalInputs=[...new Map(originalInputRows.map(r=>[r.path,r])).values()]
+ if(sourceDiff(official,sources()).length||sourceDiff(runtimeDependencies,dependencies()).length)throw Error('SOURCE_OR_RUNTIME_CHANGED_DURING_FINAL_FREEZE')
+ for(const row of [...p3,...references,...originalInputs,...snapshots])requireIdentity(row)
+-put(output,'frozen-contract.json',{at:new Date().toISOString(),directory,rootRegistry:read(registryPath).identity,officialSources:official,dependencies:runtimeDependencies,p3,references,originalInputs,snapshots,expectedReplay:expected,publicReadback:registry.publicReadback,records:registry.records,journals:journalRoles,scriptPolicy:'Original verifier is unchanged and uses dynamic sourceHashes. Canonical Create command executes only after Root separate GO and independent review. Readback is a separately registered reviewed script.',sourceCount:official.length,newNativeCreates:registry.newNativeCreates,newNativeSavedCommands:registry.newNativeSavedCommands,preparationDoesNotAuthorizeExecution:true})
++put(output,'frozen-contract.json',{at:new Date().toISOString(),directory,rootRegistry:read(registryPath).identity,officialSources:official,dependencies:runtimeDependencies,p3,references,originalInputs,snapshots,expectedReplay:expected,publicReadback:registry.publicReadback,publicReadbackWiring:registry.publicReadbackWiring,derivedInputDependencies:derivedDependencies,records:registry.records,journals:journalRoles,scriptPolicy:'Original verifier is unchanged and uses dynamic sourceHashes. Canonical Create command executes only after Root separate GO and independent review. Readback is a separately registered reviewed script.',sourceCount:official.length,newNativeCreates:registry.newNativeCreates,newNativeSavedCommands:registry.newNativeSavedCommands,preparationDoesNotAuthorizeExecution:true})
+ console.log(JSON.stringify({preparedFinalCut:true,directory,officialSources:official.length,p3:p3.length,dependencies:runtimeDependencies.length,inventory:{creationHistories:inventory.creationHistories,uniquePostCreatePrefixes:inventory.uniquePostCreatePrefixes,artifactRows:inventory.artifactRows},formalExecutionStarted:false}))
+--- goal-1/evidence/t17-acceptance-37/full-create-preparation-r1/run-once-candidate.mjs
++++ goal-1/evidence/t17-acceptance-37/full-create-refinement-r2/run-once-candidate.mjs
+@@ -1,7 +1,7 @@
+ import fs from 'node:fs'
+ import path from 'node:path'
+ import {spawnSync} from 'node:child_process'
+-import {read,json,guard,repo,sourceDiff,identityEqual,requireIdentity,outputRoot,put,bindings,bindingDiff} from './audit-io.mjs'
++import {read,json,guard,repo,sourceDiff,identityEqual,requireIdentity,outputRoot,put,bindings,bindingDiff,validatePublicReadbackResult} from './audit-io.mjs'
+ 
+ // This runner is a future candidate, not an executable approval in the preparation task.
+ if(process.argv.length!==6||process.argv[2]!=='--audit-directory'||process.argv[4]!=='--root-go')throw Error('EXPLICIT_FROZEN_DIRECTORY_AND_ROOT_GO_REQUIRED')
+@@ -20,6 +20,8 @@
+ const reportFile=path.join(output,'report/normal-browser-export-audit.json'),report=fs.existsSync(reportFile)?JSON.parse(fs.readFileSync(reportFile,'utf8')):null,readbackFile=path.join(output,'readback-result.json'),readback=fs.existsSync(readbackFile)?JSON.parse(fs.readFileSync(readbackFile,'utf8')):null,expected=contract.expectedReplay
+ const officialSourceIdentity=!!report&&Object.keys(report.sourceHashes).length===contract.officialSources.length&&contract.officialSources.every(r=>report.sourceHashes[r.path]===r.sha256)
+ const completeReplay=!!report&&report.creations===expected.creationHistories&&report.executedUniqueCommands===expected.uniqueHistoricalCommands&&report.files===expected.artifactRows&&report.inputBuffers===expected.literalImportBufferRows&&report.allByteEqual===true
+-const passed=error===null&&executions.length===2&&executions.every(r=>r.exitCode===0&&r.signal===null&&r.error===null)&&differences!==null&&Object.values(differences).every(rows=>rows.length===0)&&officialSourceIdentity&&completeReplay&&readback?.passed===true
+-const result={at:new Date().toISOString(),passed,wallMs:Date.now()-began,executions,officialSourceIdentity,officialSourceCount:contract.officialSources.length,completeReplay,replay:report?{normalCreationHistories:report.creations,uniqueHistoricalCommands:report.executedUniqueCommands,artifactRows:report.files,literalImportBuffers:report.inputBuffers,allByteEqual:report.allByteEqual}:null,newNativeCreates:contract.newNativeCreates,newNativeSavedCommands:contract.newNativeSavedCommands,publicReadback:readback,differences,error,limits:'Role/canonical-history/public-account proof only. Replayed historical receipts are not new Native commands; same run/revision divergent branches are never concatenated. Existing faults/physical/locks belong separate Native producer. Preserve failed reports before a fresh targeted helper correction; do not rerun a green full Create merely for a public-readback helper error.'}
++let publicReadbackWiringValid=false
++try{publicReadbackWiringValid=validatePublicReadbackResult(readback,contract,read(directory+'/frozen-contract.json').identity)}catch(failure){error??={name:failure.name,message:failure.message,stack:failure.stack}}
++const passed=publicReadbackWiringValid&&error===null&&executions.length===2&&executions.every(r=>r.exitCode===0&&r.signal===null&&r.error===null)&&differences!==null&&Object.values(differences).every(rows=>rows.length===0)&&officialSourceIdentity&&completeReplay&&readback?.passed===true
++const result={at:new Date().toISOString(),passed,wallMs:Date.now()-began,executions,officialSourceIdentity,officialSourceCount:contract.officialSources.length,completeReplay,replay:report?{normalCreationHistories:report.creations,uniqueHistoricalCommands:report.executedUniqueCommands,artifactRows:report.files,literalImportBuffers:report.inputBuffers,allByteEqual:report.allByteEqual}:null,newNativeCreates:contract.newNativeCreates,newNativeSavedCommands:contract.newNativeSavedCommands,publicReadback:readback,publicReadbackWiringValid,differences,error,limits:'Role/canonical-history/public-account proof only. Replayed historical receipts are not new Native commands; same run/revision divergent branches are never concatenated. Existing faults/physical/locks belong separate Native producer. Preserve failed reports before a fresh targeted helper correction; do not rerun a green full Create merely for a public-readback helper error.'}
+ put(output,'result.json',result);put(output,'terminal.json',{at:result.at,exitCode:passed?0:1,wallMs:result.wallMs,passed});console.log(JSON.stringify(result));if(!passed)process.exitCode=1

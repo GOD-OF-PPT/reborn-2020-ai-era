@@ -1,0 +1,707 @@
+{
+  "at": "2026-10-26T22:29:21.950Z",
+  "records": [
+    {
+      "key": "a01",
+      "folder": "chrome-negative-atomic-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/a01-visible-derived101-import-buffer.json",
+        "bytes": 2744389,
+        "sha256": "f4198064bd757791d1fd73ef825db2e21f034e42959f5cabddbe02bd72cdfedc",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/exports.jsonl",
+          "bytes": 5016,
+          "sha256": "326f3fd49e99340837b7e1264d45ab17dbc6205937e4102b741281694d010c89",
+          "mode": 420
+        },
+        "line1": 1,
+        "lineSha256": "5c361bc3ad67f9f9e9cdad1c4d5644e7e52d3aa29266b8dc6ebd18cb02e02a8f"
+      },
+      "origin": "import_buffer",
+      "source": "原UI可见输入buffer；来源为一次完整118原历史重放后保留101，派生输入不是原Native保存或本轮新Create",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 101,
+      "branch": "derived101-single-negative-retry-saved-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "a03",
+      "folder": "chrome-negative-atomic-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/a03-saved101-before-negative-correction.json",
+        "bytes": 2744389,
+        "sha256": "f4198064bd757791d1fd73ef825db2e21f034e42959f5cabddbe02bd72cdfedc",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/exports.jsonl",
+          "bytes": 5016,
+          "sha256": "326f3fd49e99340837b7e1264d45ab17dbc6205937e4102b741281694d010c89",
+          "mode": 420
+        },
+        "line1": 2,
+        "lineSha256": "c491f435b5c6743b0bc4999ec292258621500af6f60450166ed2130e6bb8b6a1"
+      },
+      "origin": "native_saved_ui",
+      "source": "原可见导入重试后当前已保存101，重新装入原storageTest接缝为待触发；仅原101输入读回，不是新Create或经营命令",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 101,
+      "branch": "derived101-single-negative-retry-saved-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "a06",
+      "folder": "chrome-negative-atomic-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/a06-old101-after-real-head-abort.json",
+        "bytes": 2744389,
+        "sha256": "f4198064bd757791d1fd73ef825db2e21f034e42959f5cabddbe02bd72cdfedc",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/exports.jsonl",
+          "bytes": 5016,
+          "sha256": "326f3fd49e99340837b7e1264d45ab17dbc6205937e4102b741281694d010c89",
+          "mode": 420
+        },
+        "line1": 3,
+        "lineSha256": "c44444ab6f0a8d03a1af60694a91a1cd1bbb26256b0aa403e3cf69fa028a9bca"
+      },
+      "origin": "native_saved_ui",
+      "source": "实际singleCorrectUsage head.put成功后事务abort；原未保存处理导出的旧已保存101，不是candidate",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 101,
+      "branch": "derived101-single-negative-retry-saved-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "a07",
+      "folder": "chrome-negative-atomic-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/a07-unsaved-negative-correction-candidate102.json",
+        "bytes": 2751861,
+        "sha256": "abe77f4e93e712ed697ddfc0071e25c0b12700e1d1cd9270d49d0561ec5562cc",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/exports.jsonl",
+          "bytes": 5016,
+          "sha256": "326f3fd49e99340837b7e1264d45ab17dbc6205937e4102b741281694d010c89",
+          "mode": 420
+        },
+        "line1": 4,
+        "lineSha256": "89bd246c2a2c1be6c47bd491ea446483ecb2ca9fac6c1b03216f29ba484e5c23"
+      },
+      "origin": "unsaved_candidate",
+      "source": "实际singleCorrectUsage已提出102但原head事务中止，候选未保存；原old101场景必须保持，原retry后才出版",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 102,
+      "branch": "derived101-single-negative-retry-saved-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "a10",
+      "folder": "chrome-negative-atomic-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/a10-saved102-after-original-candidate-retry.json",
+        "bytes": 2751861,
+        "sha256": "abe77f4e93e712ed697ddfc0071e25c0b12700e1d1cd9270d49d0561ec5562cc",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/exports.jsonl",
+          "bytes": 5016,
+          "sha256": "326f3fd49e99340837b7e1264d45ab17dbc6205937e4102b741281694d010c89",
+          "mode": 420
+        },
+        "line1": 5,
+        "lineSha256": "276dba6f4093db843ad8b32c604da69a3836e7a9a4a2695c230ad6775353ae9a"
+      },
+      "origin": "native_saved_ui",
+      "source": "writer原候选重试实际保存102，与未保存候选及fresh物理新102核同，未重新执行更正或抽取结果；实际原已消费款现金退还606fen/供应贷项资产202fen，非充值信用恢复",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 102,
+      "branch": "derived101-single-negative-retry-saved-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "a13",
+      "folder": "chrome-negative-atomic-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/a13-saved103-negative-supplier-credit-partial-return.json",
+        "bytes": 2755156,
+        "sha256": "ae84a3fa7e9181b36b80ff22786a662c5c948eca791556d79f6bc35042706d08",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/exports.jsonl",
+          "bytes": 5016,
+          "sha256": "326f3fd49e99340837b7e1264d45ab17dbc6205937e4102b741281694d010c89",
+          "mode": 420
+        },
+        "line1": 6,
+        "lineSha256": "71b8585b6daa08a7ee4a87d91d088bfb2f846c57eb000e626dc26d4e867c006a"
+      },
+      "origin": "native_saved_ui",
+      "source": "同负单更正102后显选RefundRelaySupplier101fen，供应贷项202→101，实际现金回原账户101fen，不新增收入成本/AP；旧6差额与未收/客户保护仍在",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 103,
+      "branch": "derived101-single-negative-retry-saved-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "a15",
+      "folder": "chrome-negative-atomic-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/a15-saved104-rest-period-correction-for-old-responsibilities.json",
+        "bytes": 2839801,
+        "sha256": "3f72132c9ba3e63258fee7f2299e3d3529c362bfe2834cfbdd50076be22e0ff9",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/exports.jsonl",
+          "bytes": 5016,
+          "sha256": "326f3fd49e99340837b7e1264d45ab17dbc6205937e4102b741281694d010c89",
+          "mode": 420
+        },
+        "line1": 7,
+        "lineSha256": "7181bd9a58ba65514e2c1f6a23b778110a1b6e6b2174e2ecfbd18c30a2f701dd"
+      },
+      "origin": "native_saved_ui",
+      "source": "单negative102已保/103只退供应101fen后，104显选原CorrectRelayPeriod处理剩余已完成审计167条（含零差额），不是重复单票；新增原AR/债/退款/贷项均各自保留，给原续签条件重新核对，当前未收款未启新期",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 104,
+      "branch": "derived101-single-negative-retry-saved-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "a16",
+      "folder": "chrome-negative-atomic-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/a16-saved109-all-period-due-collected-after-corrections.json",
+        "bytes": 2890311,
+        "sha256": "f89bb2a7ec72e529b28baf314ecd58efd418bcc2b9deea7e559e23015726322a",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/exports.jsonl",
+          "bytes": 5016,
+          "sha256": "326f3fd49e99340837b7e1264d45ab17dbc6205937e4102b741281694d010c89",
+          "mode": 420
+        },
+        "line1": 8,
+        "lineSha256": "9ad34d2dcc4fc9f99147ec636f4279c163c7a71d30240200f82fd3fe75e332e2"
+      },
+      "origin": "native_saved_ui",
+      "source": "同一负分支104剩余167已核更正后，105Mar10、106Mar18、107Mar21沿原日历/供应asset结应付；108收客户5原到期87608fen、109收客户6原86396fen，原period closed；保护717578/供应资产505fen仍在，不重复收入",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 109,
+      "branch": "derived101-single-negative-retry-saved-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "a18",
+      "folder": "chrome-negative-atomic-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/a18-saved110-explicit-renewal-postpaid-old-prepay-protected.json",
+        "bytes": 2892107,
+        "sha256": "ec4971ed5b4843da0b5a7546960d3dc975e799f2bf40147af65800acd0b241e9",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/exports.jsonl",
+          "bytes": 5016,
+          "sha256": "326f3fd49e99340837b7e1264d45ab17dbc6205937e4102b741281694d010c89",
+          "mode": 420
+        },
+        "line1": 9,
+        "lineSha256": "f2d0d9b5f8ef407663aadea9b215f8c4ddfeb982deb66a345c94d8021f53b14a"
+      },
+      "origin": "native_saved_ui",
+      "source": "原客户2草稿Apr30/后付上限100经取消/原更正/等款/收齐后仍同身份；110仅RenewRelayCustomer，当前Mar21无AP/现金/收费变动，旧预款178334与全保护717578保留，不自动新服务或充值",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 110,
+      "branch": "derived101-single-negative-retry-saved-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "a20",
+      "folder": "chrome-negative-atomic-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/a20-saved111-explicit-future-requote-planned.json",
+        "bytes": 2896973,
+        "sha256": "7db67d537a662b83253e1d290a117a5021c0fb6a4dbc3ac61145c872b3246297",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/exports.jsonl",
+          "bytes": 5016,
+          "sha256": "326f3fd49e99340837b7e1264d45ab17dbc6205937e4102b741281694d010c89",
+          "mode": 420
+        },
+        "line1": 10,
+        "lineSha256": "af7047ee613faaab83fa714d64770607afb007968eefa9789af6aa29d40c2469"
+      },
+      "origin": "native_saved_ui",
+      "source": "原客户2续签后显选单客户/纯用量5fen/本人Apr1—8/Apr9才可生效，111仅StartRelayRequote计划；Q2预留1点，当前Q1AP0，当前旧价6fen/支持500和已完成期fee不变，没提前客户接受或开新期",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 111,
+      "branch": "derived101-single-negative-retry-saved-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "a22",
+      "folder": "chrome-negative-atomic-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/a22-saved114-requote-accepted-before-effective.json",
+        "bytes": 2911678,
+        "sha256": "08077a1f1ceb6526d292342d6467494939d6fa526843281a9017ac11d4e5a5de",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-atomic-r6/exports.jsonl",
+          "bytes": 5016,
+          "sha256": "326f3fd49e99340837b7e1264d45ab17dbc6205937e4102b741281694d010c89",
+          "mode": 420
+        },
+        "line1": 11,
+        "lineSha256": "b1da615ee66663337d7b3a0abd17c0de2a0ddb57eaadacea76a450750ef03eb3"
+      },
+      "origin": "native_saved_ui",
+      "source": "负更正同分支111安排单客户未来报价，112Mar31原维护300、113Apr1个人4000/原Q2预留1点实际开工、114Apr8完成且原客户已接受1of1；拟Apr9生效，当前Apr8仍原有效6fen/原支持500，旧期原收费不重算，保护717578/供应资产505保持",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 114,
+      "branch": "derived101-single-negative-retry-saved-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "p04",
+      "folder": "chrome-negative-physical-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-physical-r6/p04-fresh-physical-readonly-old101.json",
+        "bytes": 2744389,
+        "sha256": "f4198064bd757791d1fd73ef825db2e21f034e42959f5cabddbe02bd72cdfedc",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-physical-r6/exports.jsonl",
+          "bytes": 805,
+          "sha256": "b537ebe3f773aaed83ffda37b288844ecbc0a55bed5071099f571e5ac98de56d",
+          "mode": 420
+        },
+        "line1": 1,
+        "lineSha256": "cb847d4c1819b21760797bbfbc22672f9185624d1ab51dc1438cc364fb0ddb89"
+      },
+      "origin": "physical_readonly",
+      "source": "全新625标签仅原Continue，writer622持未保存102；无导入或接管，通过原导出实际物理旧101；同原负票可翻但更正禁用",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 101,
+      "branch": "derived101-single-negative-retry-saved-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "p05",
+      "folder": "chrome-negative-physical-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-physical-r6/p05-fresh-physical-readonly-new102.json",
+        "bytes": 2751861,
+        "sha256": "abe77f4e93e712ed697ddfc0071e25c0b12700e1d1cd9270d49d0561ec5562cc",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-negative-physical-r6/exports.jsonl",
+          "bytes": 805,
+          "sha256": "b537ebe3f773aaed83ffda37b288844ecbc0a55bed5071099f571e5ac98de56d",
+          "mode": 420
+        },
+        "line1": 2,
+        "lineSha256": "ca73f4e9a171db99047137dd4cf121fb0fa788ae3abb41b6c1ac6ee1d7d6c38c"
+      },
+      "origin": "physical_readonly",
+      "source": "fresh629原Continue只读，writer原retry后物理新102；导出打开原文时连接延迟，观察确认后继续可见分块读取，无导入或接管",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 102,
+      "branch": "derived101-single-negative-retry-saved-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "s01",
+      "folder": "chrome-service-stop-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6/s01-current-r6-new93-before-original-branch-restore.json",
+        "bytes": 1474032,
+        "sha256": "8fa7d64947319785aae675946213ad4d0c750b3cbca83f29a185980e10ce88d4",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6/exports.jsonl",
+          "bytes": 2716,
+          "sha256": "498dd57474a132be033e98bc0af286eaf25bbb519741689fc75fe5ec9528953a",
+          "mode": 420
+        },
+        "line1": 1,
+        "lineSha256": "6ea10e4dc454dfd0e6d59f96cac743c28eae12d22a0e317b896f3a79591ac7e4"
+      },
+      "origin": "native_saved_ui",
+      "source": "继续原R6自然production当前new93，恢复另一已验证原stop93前保全；同runId不代表同经营前史",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 93,
+      "branch": "currentR6-main93-preservation",
+      "sourceClaimError": null
+    },
+    {
+      "key": "s02",
+      "folder": "chrome-service-stop-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6/s02-visible-original-stop93-import-buffer.json",
+        "bytes": 1197820,
+        "sha256": "4aecbd255fdc098e06636110460113410ab245bcf09e3c77cec8f830de5e451e",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6/exports.jsonl",
+          "bytes": 2716,
+          "sha256": "498dd57474a132be033e98bc0af286eaf25bbb519741689fc75fe5ec9528953a",
+          "mode": 420
+        },
+        "line1": 2,
+        "lineSha256": "13714cd0658a9cd460a428383d29c4da04698f57a33145a7d09ad5bdeee148fa"
+      },
+      "origin": "import_buffer",
+      "source": "root27 directNative原stop93合法前史可见buffer1197820B，尚未恢复；与当前new93不同分支逐字保",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 93,
+      "branch": "original-stop93-fullsupport-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "s03",
+      "folder": "chrome-service-stop-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6/s03-backup-preserved-r6-new93.json",
+        "bytes": 1474032,
+        "sha256": "8fa7d64947319785aae675946213ad4d0c750b3cbca83f29a185980e10ce88d4",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6/exports.jsonl",
+          "bytes": 2716,
+          "sha256": "498dd57474a132be033e98bc0af286eaf25bbb519741689fc75fe5ec9528953a",
+          "mode": 420
+        },
+        "line1": 3,
+        "lineSha256": "476397c4edcbee745d253e560c7e29bb9b4ef36b5b42742a45e9a6e1db213a04"
+      },
+      "origin": "saved_ui",
+      "source": "原恢复stop93前currentR6新93由原UI保上一备份，原字节不合并经营历史",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 93,
+      "branch": "currentR6-main93-preservation",
+      "sourceClaimError": null
+    },
+    {
+      "key": "s05",
+      "folder": "chrome-service-stop-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6/s05-saved95-zeroap-stopped-period-original-support-retained.json",
+        "bytes": 1205749,
+        "sha256": "020e66c05fc66804dcb7deaaf87d261e3a1d51809d4e1e4a88a88215846df42c",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6/exports.jsonl",
+          "bytes": 2716,
+          "sha256": "498dd57474a132be033e98bc0af286eaf25bbb519741689fc75fe5ec9528953a",
+          "mode": 420
+        },
+        "line1": 4,
+        "lineSha256": "922213b7bb5e6a1b70ee26ae5df349d0b0d0bd901294e77e3cc1b87beca43418"
+      },
+      "origin": "native_saved_ui",
+      "source": "当前原stop93新分支94显选单已发生meter的Mar5审计预留最后1点/100元，95在0可用AP原StopRelayPeriod；Jan28仅1日6报告后停止，服务3000/1AP已耗不退，原支持Feb25–Mar4仍planned/1500+1AP预留，未知结算不预告",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 95,
+      "branch": "original-stop93-fullsupport-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "s07",
+      "folder": "chrome-service-stop-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6/s07-saved97-original-support-actually-started-after-stop.json",
+        "bytes": 1364469,
+        "sha256": "9ac9690bf4013a5fb6bc76a535add63831d974203c68e562fa81ffa3f2f33935",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6/exports.jsonl",
+          "bytes": 2716,
+          "sha256": "498dd57474a132be033e98bc0af286eaf25bbb519741689fc75fe5ec9528953a",
+          "mode": 420
+        },
+        "line1": 5,
+        "lineSha256": "a60e90f00478ea9fc17e8f2ff7faa95f59766d9715df5b102ebbcd418a080403"
+      },
+      "origin": "native_saved_ui",
+      "source": "同服务有限停95后96推进Feb11原供应款/Jan维护/Feb生活费照付，97原Advance至Feb25，支持实际开工1500与预留1AP转已用，可用仍0/剩audit预留1；仍只有原Jan28六报告，报价500未先变收入，原应收待取",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 97,
+      "branch": "original-stop93-fullsupport-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "s09",
+      "folder": "chrome-service-stop-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6/s09-saved98-stopped-service-one-day-full-support-fee.json",
+        "bytes": 1403350,
+        "sha256": "01eee37de953e5f40377f6a416d37a34acec3bf6e52b1a6e6b6a64a8af2bb663",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-service-stop-r6/exports.jsonl",
+          "bytes": 2716,
+          "sha256": "498dd57474a132be033e98bc0af286eaf25bbb519741689fc75fe5ec9528953a",
+          "mode": 420
+        },
+        "line1": 6,
+        "lineSha256": "d9f38a653266ce339b05baca155b781c03c7d79b8390d7f0b7ea60a6d7da00b0"
+      },
+      "origin": "native_saved_ui",
+      "source": "原stop93新94audit预留/95零APStopPeriod后96Feb11/97Feb25支持真开工/98Mar4支持实际完成；原六客户每份500报价按仅实际一日服务形成真实支持收入合计10716fen，赔付实际0；现金实收与原应收未来日分列，不是报价全额或保证。原auditMar5仍planned100/1AP，5张未委托计量未知",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 98,
+      "branch": "original-stop93-fullsupport-branch",
+      "sourceClaimError": "Originalsource phrase赔付实际0 is false; preserve and classify via source-label-correction+actualraw+s10AX"
+    },
+    {
+      "key": "i01",
+      "folder": "chrome-support-interrupt-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6/i01-visible-actual97-import-buffer.json",
+        "bytes": 1364469,
+        "sha256": "9ac9690bf4013a5fb6bc76a535add63831d974203c68e562fa81ffa3f2f33935",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6/exports.jsonl",
+          "bytes": 2817,
+          "sha256": "f0b9740847693022cc4119bf162aec4a72f6d3df4ff42482e8a2f437804cf938",
+          "mode": 420
+        },
+        "line1": 1,
+        "lineSha256": "5a31373bdc85bd5f4d6a08b29fb8f316f1258c5c833d710f070b4c3bb58dedb9"
+      },
+      "origin": "import_buffer",
+      "source": "原有限停服务分支真实97支持已经实际开工，恢复98前已保原98及赔付600/收入107.16；本buffer是当前原97别名，不是新Create或新命令",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 97,
+      "branch": "same-stop97-interrupted-support-new98-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "i02",
+      "folder": "chrome-support-interrupt-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6/i02-original98-full-support-backup.json",
+        "bytes": 1403350,
+        "sha256": "01eee37de953e5f40377f6a416d37a34acec3bf6e52b1a6e6b6a64a8af2bb663",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6/exports.jsonl",
+          "bytes": 2817,
+          "sha256": "f0b9740847693022cc4119bf162aec4a72f6d3df4ff42482e8a2f437804cf938",
+          "mode": 420
+        },
+        "line1": 2,
+        "lineSha256": "527e29bc2ef5b610cf3c293e0b71f398c2f3c09c5308872cbac08ed57de7bb07"
+      },
+      "origin": "saved_ui",
+      "source": "恢复97前原98完整支持结算分支由原UI备份，原赔付600/收入107.16真实来源同原s09，不与将来的中断98合并",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 98,
+      "branch": "fullsupport98-backup-alias",
+      "sourceClaimError": null
+    },
+    {
+      "key": "i04",
+      "folder": "chrome-support-interrupt-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6/i04-saved98-support-interrupted-after-real-start.json",
+        "bytes": 1366753,
+        "sha256": "ccfb57733ce20c6b9ee1d22b01b7da99a228f53dca144d92763bc8caf17ee62f",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6/exports.jsonl",
+          "bytes": 2817,
+          "sha256": "f0b9740847693022cc4119bf162aec4a72f6d3df4ff42482e8a2f437804cf938",
+          "mode": 420
+        },
+        "line1": 3,
+        "lineSha256": "6383873574ff219b9a9a1cca3005a85928f5ad9dfe3336b9785dc14c6ac3c067"
+      },
+      "origin": "native_saved_ui",
+      "source": "真实97Feb25支持已开工后98显选InterruptJob，原1500元/1AP已耗保留，audit仍预留100/1AP，可用0；结算尚未到Mar4，不提前声称完成/服务收入或赔付结果；与完整支持原98为不同末命令分支",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 98,
+      "branch": "same-stop97-interrupted-support-new98-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "i06",
+      "folder": "chrome-support-interrupt-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6/i06-saved99-support-interrupted-real-settlement.json",
+        "bytes": 1395376,
+        "sha256": "2d93804a597113af41344da95f52eae11521496bb49133daa0130744bb93d68e",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6/exports.jsonl",
+          "bytes": 2817,
+          "sha256": "f0b9740847693022cc4119bf162aec4a72f6d3df4ff42482e8a2f437804cf938",
+          "mode": 420
+        },
+        "line1": 4,
+        "lineSha256": "6306a715a9c31786fa93e3aa25d653253a67c69c7c2f61bb074a5994fd0aeb48"
+      },
+      "origin": "native_saved_ui",
+      "source": "原支持真实开工后98中断；99原Advance至Mar5，期间Mar4原结算已实际发生，不称支持完成；原费用/生活费与独立auditMar5开工各自原账，实际收入赔付只以本raw/public支持记录核，不预填金额",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 99,
+      "branch": "same-stop97-interrupted-support-new98-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "i10",
+      "folder": "chrome-support-interrupt-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6/i10-saved100-explicit-station-stop-old-protection-and-debt.json",
+        "bytes": 1401725,
+        "sha256": "e3cb5ffef17c96866ef419c38bd4b7c9c01319fd0f44498116c1b5a8a0856de5",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6/exports.jsonl",
+          "bytes": 2817,
+          "sha256": "f0b9740847693022cc4119bf162aec4a72f6d3df4ff42482e8a2f437804cf938",
+          "mode": 420
+        },
+        "line1": 5,
+        "lineSha256": "203ffdc877dfae64fd02851a79cd4bbc249d4b0def7393d04c64c2c1c437d493"
+      },
+      "origin": "native_saved_ui",
+      "source": "当前原支持中断后99Mar5已真实结算：支持收入0/赔付600元实付，原support1500与audit100已耗不退；100显选StopRelayStation，原3月维护已有成本48.38实际结算现金，原保护1575736fen/应收12132fen保留，企业winding_down且原runningaudit中断，无新AP或自动退款",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 100,
+      "branch": "same-stop97-interrupted-support-new98-branch",
+      "sourceClaimError": null
+    },
+    {
+      "key": "i11",
+      "folder": "chrome-support-interrupt-r6",
+      "identity": {
+        "path": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6/i11-reentered100-station-stop-exact.json",
+        "bytes": 1401725,
+        "sha256": "e3cb5ffef17c96866ef419c38bd4b7c9c01319fd0f44498116c1b5a8a0856de5",
+        "mode": 420
+      },
+      "manifest": {
+        "identity": {
+          "path": "goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6/exports.jsonl",
+          "bytes": 2817,
+          "sha256": "f0b9740847693022cc4119bf162aec4a72f6d3df4ff42482e8a2f437804cf938",
+          "mode": 420
+        },
+        "line1": 6,
+        "lineSha256": "59bf0d394282055ec3ad09215651756e23eb0b8a6c8a8ff8b7a33c363561fa14"
+      },
+      "origin": "native_saved_ui",
+      "source": "已正常退出/reload/Continue，100停站原文逐字同；原保护1575736/AR12132及已付维护48.38保持，旧支持/服务中断与审计中断不变，不自动退款收款或关闭企业",
+      "runId": "normal-relay-technical_employee-ee9cb440",
+      "revision": 100,
+      "branch": "same-stop97-interrupted-support-new98-branch",
+      "sourceClaimError": null
+    }
+  ],
+  "producerCuts": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/native-r2-producer-cut.json",
+      "bytes": 6828,
+      "sha256": "2e1a162a97c4d3640ff2489fcbfc329c0a16598e6e345adbf93d57b1a4f7a4ef",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/native-r4-producer-cut.json",
+      "bytes": 27260,
+      "sha256": "0f7da3205d025aca603b6adc3eced4462eefa6d10ac6ad0e97cbe1d03b3c67fe",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/native-r5-producer-cut.json",
+      "bytes": 7216,
+      "sha256": "6ebec55e265582dc20a3603edffa5508b8ac5981aafe7ac9bcdd20f02f4e2384",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/native-r6-producer-cut.json",
+      "bytes": 9589,
+      "sha256": "80fc535c0d5a1d4e7811fffeefb47e95170b171c038b20c06e951abde3f67246",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/native-negative-atomic-r6-producer-cut.json",
+      "bytes": 18131,
+      "sha256": "b08697951d591565f612e4ad6eeba5c342e6cd280a8b47e269c9b7212234a9b2",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/native-negative-physical-r6-producer-cut.json",
+      "bytes": 6187,
+      "sha256": "c141484c6301a776c452d0eada3a6133fcd457e24b91bff2f1e9308559e4a6a1",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/native-service-stop-r6-producer-cut.json",
+      "bytes": 10311,
+      "sha256": "20d697901215d19553ce27426c2cb7d177b2dab6a1e07206372d09bf5c7f9e14",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/native-support-interrupt-r6-producer-cut.json",
+      "bytes": 10827,
+      "sha256": "735303a0c503d6a35fab28e8dd0c8f6dac859d6fb407a7d381e5551ff9389932",
+      "mode": 420
+    }
+  ],
+  "branchRolePolicy": "Candidates/physical/import/backup/reentry retain originalorigin,source,branch and are not new commands. R4-positive prior35 inherited by report identity only,not executed again.",
+  "falseSourceClaim": "s09 source compensation0 explicitly false; source/raw untouched, source-label-correction and s10AX pinned."
+}

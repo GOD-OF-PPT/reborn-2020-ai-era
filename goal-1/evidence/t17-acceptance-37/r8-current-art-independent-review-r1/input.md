@@ -1,0 +1,1 @@
+R8实际新图/cut已完成（compiled617、10raw/2新、当前source620准备R9），请只读看R8完整JPEG r8-01 finished、r8-12 quoteeffect、r8-18确认第一页48.38、r8-23停止责任，和sourcebinding+cut确认旧新。给有界视觉/交互审：首层/操作/责任/Clock当前组合、三轮廓clear度（R8仅kept，不冒working92）、原图是否只小标签变化、明显材质/遮挡问题。R8Today误servicepromise与新期合同缺条件已修源，别重复当未修代码但仍保旧实图缺陷。不要写源或工程/Browser，可guard新只读review目录；R9实图后另定向复审变化。

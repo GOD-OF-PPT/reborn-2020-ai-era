@@ -1,0 +1,3 @@
+- [ ] 实际correction终态与完整STOP窗口只读核定并及时报Root。
+- [ ] 原33/R2/R3/C-S4-R覆盖及工程/Native/正式Create与公开读回层次独立核。
+- [ ] 只按实际门槛写限定coverage/admission与全部remaining，0工程或源码写。

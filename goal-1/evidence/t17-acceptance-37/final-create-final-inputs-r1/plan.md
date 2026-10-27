@@ -1,0 +1,11 @@
+# 实际最终输入准备，非正式执行
+
+只读已停14个producer roots（base10/freshR7–R10四根）的实际cut、原完整tree/manifest/capture/header/receipt公开元数据，实际逐bytes/mode/dirs集合核；全原origin/source/lineSHA保。按state冻结的43fresh canonical profile/nodebranch标签统一所有同源old alias，末态branch节点与前后经营family分别说明。同run/revision不够定分支，完整receipt前缀另核。
+
+继承positive35旧15capture与negative_stop31旧25capture按原path/manifest行来源exact映射，禁止把fresh别名塞继承；派生101只依赖其不可变历史127/901/P326两窗和原成功proof，不重做Create、不拿5618旧tasks要求当前回滚。当前官方127/依赖901按实际metadata字节数组绑定；原P326/旧helper/产品/masters只读。
+
+实际R8/R9/R10cut无last而journal末literal producer_stop，需要本根复制旧已审4helper并仅加明确stopProof适配，核原journal最终行及cut.top贡献，不改旧cut或伪补cut.last。其余五P2fulltree/freshscope/exactinherit/历史proof/runtimeguard保。
+
+先三文件/旧4helper前像；再实际inventory/97?全行以实际最终元数据算，不预填未来raw/unique；等待state R6 profiles+spec+wiring freeze后接实际recordRoles。Root task/master/sourceFreeze等可变引用只列待finalSTOP，最终spec状态在Root停写前保持DRAFT_NOT_FINAL/明确pending，不能写假最终registry/contract/GO。
+
+三小项后静态逐原source/树/继承/branch/canonical/动态计数反查并Root交回；0syntax/import/engine/builder/freeze/readback/Browser/Git/源写，Node仅guard。Root另独审具体最终窗与GO后方唯一formalengine；readback失败只补读回不再Create。compat0/U4B仍不关。

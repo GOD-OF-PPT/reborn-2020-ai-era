@@ -1,0 +1,7 @@
+# 仅新增Journey测试适配
+
+完整读取实际新RelayNextServiceConditions（export在RelaySceneChoice）与原contract及art14consumer。仅改Root新RelayNextServiceJourney.test.tsx，art14case/所有产品不写。原第1保业务draft覆盖：显式public-view把原同企业一客户termEnd改May31（不import/save、原Controller仍115）使已知covers，原6checkbox全空/显选原customer2/memory原payload/取消重开/原inspect(business,service)/pin与raw不变全部保。
+
+另实际115严格allshortcase真实展开Conditions，没有ServiceChoice/自动客户；显选原客户2→Renew空term/mode/credit，填显选May31/后付100，取消条件保两份稿/原期，重开Renew原金额条件保；不实际request/自动续签。原invalid指定目标case完整保。原2case成为3case，setup20s/it默认5s不改；driver递归实际Conditions/ResponseEditor/RenewFields/CommandButton，不用源码字面替消费者。
+
+三小项后静态原断言映射/只测试差异/保护源身份freeze交Root。guardwx前像先于改，0工程/type/browser/codec脚本/Git，不把当前案例/原14已编写当已通过。

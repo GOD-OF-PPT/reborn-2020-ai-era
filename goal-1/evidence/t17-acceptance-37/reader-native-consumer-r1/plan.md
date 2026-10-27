@@ -1,0 +1,7 @@
+# 同一U4-B：Native暴露的首次原票和待回应列表consumer
+
+Root已修同任务Native3缺口与190原红，当前只新增Book.test的3个consumer case及必要import/独立读前史setup；不改产品/其它test，不重复原5save，不运行checks/type/build/Browser/Git。以当前磁盘22case为前像，保Root后来已校正的Nov13硬停点断言，不回退旧R8版本。
+
+独立controller各导入固定真实normal86/87原文（仅test存储/continue，无新经营命令），取得当前原provider视图：纯period86第一次直达已到期原单空金额，收起/重开不写；87第一次直达active原支持而不是completed服务。待回应筛选默认open，仅原due/known/active/实际未结，不把56条实计未知报告当已委托等待；all/meter显选后原56条与全记录完整，原key稳定。
+
+显式initialRecordKey和同target记忆继续优先于建议，旧service可保阅读；显式失效key不回落memory/suggestion。测试驱动实际Reader→Editor/Clock/原按钮，helper仅用于比对公开集合，不用helper结果冒实际consumer。原22case/driver/断言/setup和门槛逐字保持，逆去增量须全文件恢复前像。Root统一R2构建/Chrome复核；本增量不扩设计或整体验收。

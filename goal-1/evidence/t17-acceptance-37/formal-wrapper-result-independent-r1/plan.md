@@ -1,0 +1,1 @@
+读取固定真实outer/replay/readback结果与stdout/stderr/源，核原一次回放报告scope和127 source/inputHashes、33子结果+wiring/childterminal、outer source前后全diff与当前620/Native/authority身份；确认名字碰撞发生于child已返回后外层process terminal收集，保outerfalse/缺失process terminal真实边界。只fs/hash/JSON/guard/wx，新同级审稿，不改原formal或任何冻结authority。新readback-only候选待作者freeze后另只读审，不自行执行。

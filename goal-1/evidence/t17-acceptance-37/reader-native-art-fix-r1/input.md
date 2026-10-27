@@ -1,0 +1,1 @@
+Root授权原190终态后的同一U4-B局部实图修缮：只改src/ui/relay-record-book.css。原图n03插画跨页；Root另独占Reader默认focus/常显阅读/去重/插画DOM顺序，将图移heading后保原260×174。本Owner仅高specificity inline-block/float right/avoid-column+clear，所有责任自然DOM，无缩字/裁切/滚动/ScreenBook/其它源或新素材，不跑tests/type/build/browser/Git。原1901268=1263pass/5fail保原输出，不冒全绿。

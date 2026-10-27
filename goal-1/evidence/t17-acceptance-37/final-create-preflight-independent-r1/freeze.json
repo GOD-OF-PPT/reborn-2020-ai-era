@@ -1,0 +1,100 @@
+{
+  "at": "2026-10-26T23:38:05.689Z",
+  "decision": "NOT_READY_PENDING_GROUPED_P2_FIXES",
+  "findingCount": 5,
+  "findings": [
+    {
+      "id": "P2-A",
+      "priority": 2,
+      "title": "新批次freshcoverage没有绑定原producer，R8可遗漏"
+    },
+    {
+      "id": "P2-B",
+      "priority": 2,
+      "title": "继承scope只核旧raw是子集，能把新raw夹进35/31覆盖"
+    },
+    {
+      "id": "P2-C",
+      "priority": 2,
+      "title": "cut只核已列文件，不核实际完整tree集合和目录"
+    },
+    {
+      "id": "P2-D",
+      "priority": 2,
+      "title": "派生101继承没有强制绑定当时sourcebefore/after证明"
+    },
+    {
+      "id": "P2-E",
+      "priority": 2,
+      "title": "builder冻结runtime只留下数量，freeze能静默换成同数量不同字节依赖"
+    }
+  ],
+  "authorPackageInputCount": 18,
+  "authorPackageDrifts": [],
+  "outputs": [
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/final-create-preflight-independent-r1/findings.json",
+      "bytes": 6397,
+      "sha256": "c8a5dcf9f5b03054ad64b8c9c0e3896e350388f32cf16973dfe4cc65b0f229c7",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/final-create-preflight-independent-r1/input.md",
+      "bytes": 1285,
+      "sha256": "49f2057726cf70c9752ca4a9c4db71d409d38d498552002de018270e004c7427",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/final-create-preflight-independent-r1/inputs-after.json",
+      "bytes": 4507,
+      "sha256": "84d1f89fbf8052e6972b6bbce7221b866519760143e7a7144f36b53a0e1e4ac1",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/final-create-preflight-independent-r1/inputs-before.json",
+      "bytes": 4589,
+      "sha256": "d6b566694632302586c0402a02d33cdac8732a349375e98a4a3dcfc0093d01f9",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/final-create-preflight-independent-r1/plan.md",
+      "bytes": 1007,
+      "sha256": "2a5e71fe5dc249c12b16d61d0074cadcf5a4dc7166069c3f17024bbd4b6d3241",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/final-create-preflight-independent-r1/review.md",
+      "bytes": 6166,
+      "sha256": "abd1c8b0afeba512edebbe8f5abb2da2e0eda2b926a594c905bd534f96844ef1",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/final-create-preflight-independent-r1/tasks-completion.md",
+      "bytes": 710,
+      "sha256": "75b7e731fe9d0dba227df6aa8086883b28150b6562dbfbc007a353fe3171d4ab",
+      "mode": 420
+    },
+    {
+      "path": "goal-1/evidence/t17-acceptance-37/final-create-preflight-independent-r1/tasks.md",
+      "bytes": 441,
+      "sha256": "08960723a6314c09f9f5bc7a6a52c5084c5719debab8c5a42372cc9115206d31",
+      "mode": 420
+    }
+  ],
+  "operations": {
+    "syntax": 0,
+    "builder": 0,
+    "freeze": 0,
+    "codec": 0,
+    "verifier": 0,
+    "readback": 0,
+    "engineering": 0,
+    "browser": 0,
+    "gitWrites": 0,
+    "authorSourceWrites": 0,
+    "productWrites": 0,
+    "masterWrites": 0,
+    "oldEvidenceWrites": 0,
+    "finalRegistryContractGoCreated": 0
+  }
+}

@@ -1,0 +1,38 @@
+--- a/src/ui/relay-records.ts
++++ b/src/ui/relay-records.ts
+@@ -3,6 +3,7 @@
+ import {resolveRelaySceneTarget,type RelaySceneTarget} from './relay-scene-target.ts'
+ import {moneyText,reasonText} from './game-text.ts'
+ import type {RelayCasebookHistory} from '../application/relay-casebook-projection.ts'
++import {relaySupportSettlement,type RelaySupportSettlement} from './relay-support-settlement.ts'
+ 
+ export type RelayRecordKind='preparation'|'application'|'adapter'|'audience'|'customer'|'recharge'|'renewal'|'service'|'support'|'audit'|'meter'|'correction'|'receivable'|'collection'|'refund'|'supplier'|'obligation'|'quote'
+ export interface RelayRecordRow{
+@@ -104,6 +105,8 @@
+   ...(action?['原行动状态 '+({draft:'尚未预留',reserved:'已经预留',executed:'已经实际执行',completed:'已经实际完成',interrupted:'已经中断',cancelled:'已经取消'}[action.status])+'；原工作投入 '+moneyText(action.definition.costFen)+' / '+action.definition.actionPoints+'点；预留 '+action.plannedAt+'；实际执行 '+shown(action.executedAt)+'；实际结束 '+shown(action.finishedAt),'原占款 '+action.definition.cashReservationId+'；原执行日程 '+action.definition.startAt+'—'+action.definition.completeAt+'；原结算日期 '+action.definition.settlementAt]:historyNote),
+   ...metrics.map(m=>'原成本记录 '+m.operationId+' · '+m.date+' · '+moneyText(m.deltaFen)+'；实际现金与尚欠费用另核'),
+  ]}
++ const supportSettlements=new Map<string,RelaySupportSettlement>()
++ const settlement=(periodId:string)=>{let result=supportSettlements.get(periodId);if(!result){result=relaySupportSettlement(p,periodTarget(periodId));supportSettlements.set(periodId,result)}return result}
+  for(const list of [relay.preparations,relay.applications,relay.adapters,relay.quotes] as const)for(const item of list.filter(r=>r.businessId===business.id))checkJob(item.job,item.jobId)
+  for(const item of relay.audiences.filter(a=>a.businessId===business.id&&a.jobId!==null))checkJob(item.job,item.jobId!)
+  const refundDetails=(refund:Refund)=>{
+@@ -169,7 +172,7 @@
+   }
+   if(row.kind==='application'){const a=relay!.applications.find(a=>a.id===row.applicationId)!;result.push(a.read?(a.approved?'已亲读批准，许可至 '+shown(a.expiresAt):'已亲读未获批准；申请成本保留'):'回信尚未亲读，批准与有效期未知。')}
+   if(row.kind==='audit')result.push('原完整批次 '+relay!.auditJobs.find(a=>a.jobId===row.jobId)!.meterCount+'条，涉及 '+(row.periodIds?.length??0)+'期；当前子集不代表全部批次。')
+-  if(row.kind==='service'||row.kind==='support'){const period=relay!.periods.find(t=>t.id===row.periodId)!;result.push('原范围 '+period.from+'—'+period.to+'；'+period.customerIds.length+'位客户；容量上限 '+period.maxUnits+'，供应预算上限 '+moneyText(period.maxSupplierCostFen));if(row.kind==='support')result.push(finance?'本期原支持已确认收入 '+moneyText(finance.metrics.filter(m=>m.sourceEventId===period.id&&m.kind==='income').reduce((n,m)=>n+m.deltaFen,0))+'；支持费与本次现金到账分开。':'原支持收入明细尚未取得，不能当成零收入。')}
++  if(row.kind==='service'||row.kind==='support'){const period=relay!.periods.find(t=>t.id===row.periodId)!;result.push('原范围 '+period.from+'—'+period.to+'；'+period.customerIds.length+'位客户；容量上限 '+period.maxUnits+'，供应预算上限 '+moneyText(period.maxSupplierCostFen));result.push(...settlement(period.id).summary)}
+   if(row.kind==='quote'){const q=relay!.quotes.find(q=>q.id===row.quoteId)!;result.push('拟生效 '+q.effectiveAt+'；单位价 '+moneyText(q.unitPriceFen)+'；周期支持基准 '+moneyText(q.serviceFeeFen));result.push(q.completedAt!==null&&q.completedAt<=p.view.date&&q.job?.status==='completed'?'实际接受 '+q.responses.filter(r=>r.accepted).length+' / '+q.responses.length+'位，拒绝者保旧约。':'重谈尚未实际完成，答复未知；旧约照常。')}
+   return result
+  }
+@@ -210,8 +213,8 @@
+      '原支持方式 '+plainState[period.supportMode]+'；服务任务 '+period.jobId+'；支持任务 '+period.supportJobId+'；实际停期 '+shown(period.stoppedAt),
+      '原支持费处理日 '+shown(period.feePostedAt)+'；原赔付处理日 '+shown(period.compensatedAt)+'；有处理记录不等于所有钱已实付',
+      ...period.feeQuotes.map(quote=>'原支持报价 '+customerRef(quote.customerId)+'；条款 '+quote.termsId+'；周期基准 '+moneyText(quote.amountFen)+'，实际支持与已服务日另核'),
+-     ...(support?(finance?.metrics.filter(m=>m.sourceEventId===period.id&&m.kind==='income')??[]).map(m=>'原支持已确认收入 '+moneyText(m.deltaFen)+' · '+m.date+'；操作 '+m.operationId+'；客户/合同 '+shown(m.contractId)+'；这不是本次现金到账'):[]),
+      ...jobLines(job),
++     ...settlement(period.id).lines,
+      ...(support?['支持与服务是两份原任务；中断不会等待免费重做，支持费、赔付和旧应付仍按实际原账处理。']:['报告不代替独立实计；未服务不计用量收入，停止不退还已耗投入。']),
+      ...relay.observations.filter(observation=>observation.periodId===period.id).map(observation=>'原观测 '+observation.id+' · '+observation.date+'；故障域 '+observation.domain+'；供应 '+refs(observation.supplierIds)+'；原因 '+reasonText(observation.reason)),
+     ]})

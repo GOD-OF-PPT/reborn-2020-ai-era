@@ -1,0 +1,14 @@
+# Consumer exact interface（源已冻结，尚未检查）
+
+import {relayCorrectionEffects,type RelayCorrectionEffects} from './relay-correction-effects.ts'
+const effects=relayCorrectionEffects(p,originalTarget,originalCorrectionId)
+
+顶层status known|partial|unavailable、reason、identity|null、customer/supplier各独立status known|unavailable、reason/summary/lines/sourceRefs，以及顶层合并summary/lines/sourceRefs。原sourceRefs字段kind/id/date/accountId/businessId/customerId?/amountFen?，完整类型在源码导出。
+
+customer: incomeDeltaFen/prepaidConsumedFen/receivableAddedFen/receivableReversedFen/refundRegisteredFen/refundInitiallyPaidFen/refundLaterPaidFen/refundPaidFen/refundDueFen/refundProtectedFen全部number|null；invoices、reversedInvoices、refunds为readonly原结构数组。invoice字段remainingFen（不是currentRemainingFen）；refund字段totalCashPaidFen/remainingFen/initialCashPaidFen/laterCashPaidFen/currentProtectedFen。
+
+supplier: costDeltaFen/expenseAddedFen/cashPaidFen/creditSettledFen/dueFen/reversedFen/reducedUnpaidFen/restoredAssetFen全部number|null；expenses、reversals、pools为readonly原结构数组。pool字段currentRemainingFen，reversal字段sourceKind/reducedUnpaidFen/restoredAssetFen。唯一原reference无法单条拆（多reverse）时该侧unavailable、所有该侧金额null，另一侧仍保。没有从balance净差认钱或控制业务allowed。
+
+summary全部历史语气“该更正/累计/当前”，Reader/paper可直接用，即便旧committed正受另候选保护也可读旧历史。helper不以readOnly禁读；它只匹配已提交view的run/revision/asOf与原target/完成audit，不消费candidate。不发命令/新成功回响。Rootresponse publication仍另保sameRun/saved/noCandidate/+1/lastReceipt kind/revision/canonical新correction/目标旧报告价格等原guard；不要仅拿helper known就播本次成功。Root负责结果、art负责continuity，各自原consumer测试，不在本作者scope修改。
+
+records在原summary日期/report之后插effects.summary，并在完整原lines追加effects.lines，当次模型调用内cache同correction，跨revision不留cache。原key/recordId/target/排序/所有旧字段与原13case不删。最终records为58185B/08fd70bc32a097c88026945dabc2f949db1634f596729b31d4070033620f2d4c，另含response经Root授权的quote-only两分支；不是本作者单独修改或前像至末只有correction。两个owner writer均已停。

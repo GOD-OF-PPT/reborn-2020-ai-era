@@ -1,0 +1,3 @@
+- [ ] Typebridges only in2newtests; original typeR15 red retained.
+- [ ] ExactStopStation budget consistency and strict stoppedAt source validation.
+- [ ] New meaningful guardcounterexamples; uniformsource freeze/type/targetedunits after review.

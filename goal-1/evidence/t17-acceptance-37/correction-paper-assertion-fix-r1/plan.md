@@ -1,0 +1,3 @@
+# 新paper单一字面断言补正
+
+先保新test当前完整前像与原187case红输出。实际positiveNotes已明确新增供应成本0.60/Jan11到期/尚欠0.60，不需产品为了一个应付字换文案。只替换该唯一literal assert为3个更明确金额/到期/未付语义断言；原新AR1.20与Jan18/Jan11日期、corrected/correction性质、非实收反断言、原raw导出等全部保。逆替整份after回before逐字证明没有其它case变化。Root统一后续检查，原其余helper真假失败继续其Owner修。

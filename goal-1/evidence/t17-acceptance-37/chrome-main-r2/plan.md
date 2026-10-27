@@ -1,0 +1,1 @@
+R1实际阅读/材质问题修后，在同Chrome1自然窗口/5387同原DB核新R2。先以R1已恢复的原86为基线，原87备份逐字保，当前尚无本轮经营命令。纯period首次对应同已到期原单/原支持，explicit/memory优先；完整all/原ID可到，物件整块/责任Clock/取消草稿与原confirmed commands/persist分层。所有动作/写入guard本新根，不追加R1 journal；compat0，真人0。

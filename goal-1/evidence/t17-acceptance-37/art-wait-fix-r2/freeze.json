@@ -1,0 +1,75 @@
+{
+  "at": "2026-10-26T17:01:51.766Z",
+  "status": "static-review-complete-source-frozen-await-root-checks",
+  "task": "Unique U4-B internal consumer wait repair only; not task completion",
+  "files": [
+    {
+      "path": "src/ui/relay-continuity.ts",
+      "bytes": 33198,
+      "sha256": "922fc59846b88c005e437f4780011333fd2fc492057d7fa2249f4b4f34249fda",
+      "mode": 420
+    },
+    {
+      "path": "src/ui/relay-continuity.deep.test.tsx",
+      "bytes": 15257,
+      "sha256": "6c223de564de5f1106befb1e86a064ddfea425dc47bac69d7408a834af5d8c64",
+      "mode": 420
+    }
+  ],
+  "helper": {
+    "path": "src/ui/relay-ticket-command.ts",
+    "bytes": 5699,
+    "sha256": "e0f3b3dfe7dab09bcb20c967d18f07bb60c60177793a29b744f9bc3d969fee73",
+    "mode": 420,
+    "sameAsRead": true
+  },
+  "r1OtherSources": [
+    {
+      "path": "src/ui/RelayServicePaper.tsx",
+      "same": true
+    },
+    {
+      "path": "src/ui/relay-service-paper.css",
+      "same": true
+    },
+    {
+      "path": "src/ui/RelayServicePaper.deep.test.tsx",
+      "same": true
+    }
+  ],
+  "originalSixCasePrefix": {
+    "bytes": 11266,
+    "sha256": "4c7ceba4a4034fe1dafd87f1f0fc8a3eb4619d67ea9e4ce6aa22d4bf4e09c396",
+    "unchanged": true
+  },
+  "writtenCases": {
+    "existingConsumerCases": 6,
+    "newIndependentPublicDisplayCases": 1
+  },
+  "behavior": [
+    "Default meter and explicitly selected meter use relayTicketAudit for one original planned/running batch",
+    "Original meter bookmark remains; only internal helper input is the exact typed original meter leaf",
+    "Original batch start/complete, complete count and this-meter inclusion visibly published; original reported meter date and quantity retained",
+    "Unknown remains unaudited; no new audited truth/correction or request; ambiguous source stays reported with visible reason",
+    "Cancelled/interrupted old audits do not continue a wait or block one valid new explicit commission; no product Paper/CSS or shape change"
+  ],
+  "staticReview": [
+    "Only the two authorized product/test paths changed by this R2 writer",
+    "Old six tests are preserved as a byte-identical full prefix; no timeout/config/worker change",
+    "New one case explicitly public presentation fixture over original normal94, not an executed saved audit loop",
+    "New case covers both entry points and planned/running, old cancelled/interrupted followed by new original batch, stopped only, duplicate batch ambiguity, no request/saved raw/bookmark mutation"
+  ],
+  "operations": {
+    "tests": 0,
+    "typecheck": 0,
+    "build": 0,
+    "browser": 0,
+    "git": 0,
+    "compatibility": 0
+  },
+  "remaining": [
+    "Root runs type/build and targeted tests under coordinated frozen source",
+    "Root actual same-run audit waits and natural Chrome/full notes/Clock/record consumer validation",
+    "Original U4-B/R2/R3/C-S4-R/goal/human/PNG/M01/T18 responsibilities remain"
+  ]
+}

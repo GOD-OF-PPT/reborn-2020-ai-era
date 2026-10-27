@@ -1,0 +1,36 @@
+# 最小准备修订：代码候选可读，正式执行仍待输入齐备
+
+已完整静读R1三helper和execution-candidate、原verify_normal_browser_exports及正向35/35、prefix派生元数据。当前实际runner文件名就是run-once-candidate.mjs；原执行文档第9行与freeze.helperNames均匹配。没有run-once.mjs这个R1文件，摘要的旧称不应成为新命令。新同级保留三相同文件名，均只候选、未解析/运行。
+
+## 改动范围
+
+- audit-io.mjs原26行完整保留，只加sourceRoleFor与独立读回输出协议校验；没有新会计算法、codec、投影或规则导入。
+- freeze-final-cut.mjs保原完整source/deps/P326/manifest/cut/snapshot/metadata/branch/alias校验，新增显式来源role、derived101输入依赖登记、最终publicReadbackWiring绑定；不执行经营。
+- run-once-candidate.mjs保原一次verifier→一次readback及全部terminal/首末绑定，另要求readback结果覆盖正式固定各scope/recordKeys/checks，防只拿passed:true或正向35冒负向/故障。
+- 原verify_normal_browser_exports.ts逐字不改；候选diff仅本目录三文件。没有最终registry/contract/GO或正式audit根，没有未来最终unique命令数。
+
+## 原来源role不得改写
+
+原manifest的origin/source/file/bytes/SHA/run/revision、完整manifest行SHA和producer stopped cut仍原字面核。native_saved_ui是R4生产者实际字面，不是错误；新sourceRole显式等saved_ui，另sourceRoleMapping逐字段列from/to/rule/原manifestPath/行号/行SHA/解释，由原manifest+已停cut支持。role-ledger同时保origin、sourceRole、mapping及更具体auditRole/branchId；不能原地把原manifest的native_saved_ui替换成saved_ui。saved_ui、current_buffer、candidate/physical等其余origin保原字面，具体用途继续auditRole。
+
+旧verifier只对origin严格等import_buffer计inputBuffers；current_buffer不因此改称import_buffer，native_saved_ui也不参与该计数。Root expectedReplay.literalImportBufferRows必须仅统计旧字面import_buffer；可见导入buffer/已保存/备份/重进/候选/物理角色另在ledger数，二者不相互冒充。
+
+## derived101依赖与分支
+
+已实际生成的101是派生输入依赖，identity2744389B/f4198064bd757791d1fd73ef825db2e21f034e42959f5cabddbe02bd72cdfedc；Root此前一次Create+117历史post到118逐字等原后才发布该内存前缀。候选只收derivedInputDependencies的identity+provenance+passed result+原118/manifest/seal引用，拒同derived路径再作为records；不写入input/chrome-*，不增加正式capture行/新Create/新Native计数。以后R6真实屏幕buffer或Restore导出是另一份真实capture，按自己的原manifest/source/role登记，其原字节可与101相等；后续真实单Correct102才是新分支保存。原118whole-period102不与新single102串联。
+
+静态分支核：R4positive107、oldnegative118、oldfailed93、derived101首Create signature/commandId/versions实际同，positive与后三者前65份receipt完整同后分岔；所读四件两两未见同commandId异payload。它们不是不同runId，但也不是一条连续经营史。原verifier根键完整creation signature+versions，子键完整canonical command含payload/run/actor/kind/commandId/expectedRevision，且cached.commandText作碰撞复核；同ID不同payload不会复用同孩子。最后每份原raw逐字核，不把不同企业/账期的事实并账。无须改原verifier或伪造runId。
+
+默认最小组织可保持同一次verifier的原prefix trie：它只复用完全同原前缀，仍逐artifact核自己的完整Create来源；branchId/原folder/原role持续分离。若Root要求不同经营分支必须各物理独立Create调用，则同一次外wrapper内显式replayGroups→各自input/report各调原verifier，各保完整源与原始root/runId；不得把各组共享历史executedUniqueCommands简单相加声称全局unique。该保守调用组织需Root另选择、最终冻结对应每组expectedReplay；本候选未擅加多次正式执行或预填统计。
+
+## 独立公开读回如何接
+
+R1 runner已有ext publicReadback.path调用，但不能直接把readback-once-r2.mjs塞入：旧脚本硬编码旧输出目录且已once执行，重复会被拒；其result35/35只核当前正向15capture/14state/21新保存，不含负差额或物理故障。本候选使用publicReadbackWiring要求positive_service明确继承该原result/facts/manifest/frozenInputs/script/terminal完整身份，并要求negative_correction与save_fault_and_retry有各自fresh_readback。最终Root仍需一份真正审过的独立公开readback入口，按冻结新raw执行自己的公开断言，写U4B_AUDIT_DIRECTORY/readback-result.json。协议与准确字段见root-final-fields.md；三helper只核接线和原件身份，不替代独立业务断言。
+
+当前未来最终raw/cut/readback入口未齐，候选故意拒绝缺完整字段或覆盖的registry；不能称‘正式资产已全部可执行’。已有正向35成果可有据继承，但不为适配输出路径重跑旧脚本，不把旧35计本轮新执行，也不以它代负向/原子。
+
+## 静态风险及执行边界
+
+三候选not_run，syntax也not_run；仍须Root最终独立读审和确切GO后才freeze/正式运行。代码只在本目录，不改原helper/产品/三master/P3/原manifest/Native。Node22仅guard。源角色声明与readback覆盖报告最终仍须独立读者查其真实生成器，而非接受声明即财务通过。旧runner在开头preflight或末尾报告JSON读取异常时可能没有最终result，因此外层真实进程terminal必须保存；不能因无result假设Create没发生再跑。失败规则见failure-policy.md。
+
+文件写入准备脚本最初一次Python列表语法错误，整段未执行/未创建目录；修正后仅fs/hash/guard写候选，未运行候选或产品。该错误不算工程/产品失败。

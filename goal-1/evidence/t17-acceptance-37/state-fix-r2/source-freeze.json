@@ -1,0 +1,91 @@
+{
+  "at": "2026-10-26T16:18:51.571Z",
+  "status": "R2_frozen_for_Root_validation",
+  "originalTypeResult": {
+    "path": "goal-1/evidence/t17-acceptance-37/u4b-type-r1.result.json",
+    "bytes": 327,
+    "sha256": "a9de4859f4fbade0343f9b5e92034094fd7f0e6083b290143fbd3efb8b559f7f",
+    "mode": 420
+  },
+  "originalTypeStdout": {
+    "path": "goal-1/evidence/t17-acceptance-37/u4b-type-r1.stdout.log",
+    "bytes": 10992,
+    "sha256": "74742916b785ba27fa8cb6347a825aaa445a454571293839390a46bc8dbb0ca8",
+    "mode": 420
+  },
+  "fixed": [
+    {
+      "path": "src/ui/relay-records.ts",
+      "bytes": 53982,
+      "sha256": "67e7072022ccb4e952336dafd59063f695f5945b866d5b97648af72440638267",
+      "mode": 420
+    },
+    {
+      "path": "src/ui/relay-records.test.ts",
+      "bytes": 19594,
+      "sha256": "600c3570ccd29e76b56176066a3c162f3b6d6e00bad88cdce1eaa75c93f27a18",
+      "mode": 420
+    }
+  ],
+  "applicationUnchanged": [
+    {
+      "before": {
+        "path": "src/application/relay-casebook-projection.ts",
+        "bytes": 23113,
+        "sha256": "7ef9c6d9c3dba358a515a7c114884988106221318fdc4eceb028e0211d8d74ed",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/application/relay-casebook-projection.ts",
+        "bytes": 23113,
+        "sha256": "7ef9c6d9c3dba358a515a7c114884988106221318fdc4eceb028e0211d8d74ed",
+        "mode": 420
+      }
+    },
+    {
+      "before": {
+        "path": "src/application/relay-casebook-projection.test.ts",
+        "bytes": 8266,
+        "sha256": "0828094233815b3c65c02a3c5fa521b7c1296081691779cf56a805654868eddf",
+        "mode": 420
+      },
+      "current": {
+        "path": "src/application/relay-casebook-projection.test.ts",
+        "bytes": 8266,
+        "sha256": "0828094233815b3c65c02a3c5fa521b7c1296081691779cf56a805654868eddf",
+        "mode": 420
+      }
+    }
+  ],
+  "issues": [
+    {
+      "id": "MODEL-P2-01",
+      "finding": "cancelled never-executed action was described as actual spent execution",
+      "change": "Explicit cancelled/executedAt/status wording, actual normal80 original service plan then Stop before start regression"
+    },
+    {
+      "id": "MODEL-P2-02",
+      "finding": "supplier history omitted manual pay_obligation without prepaymentId/sourceSupplier",
+      "change": "Same-pool original invoice obligation closure, same owner/account/id/ref/source/date cash, ordered alongside reversal and noncash credit settlement"
+    }
+  ],
+  "testTypeChanges": [
+    "projected features explicit unknown boundary",
+    "whole period target narrow fixture, legal leaf constructions no broad job/meter spreading",
+    "deliberate invalid mixed child input marked unknown hostile boundary"
+  ],
+  "testCasesAuthored": {
+    "model": 10,
+    "applicationUnchanged": 10,
+    "executedByAuthor": 0
+  },
+  "executions": {
+    "tests": 0,
+    "typecheck": 0,
+    "build": 0,
+    "browser": 0,
+    "git": 0,
+    "codecOrProjection": 0
+  },
+  "limit": "Root original type-R1 exit2 and frozen source snapshot are retained unchanged. R2 is source correction and new tests authored only; no passing claim."
+}

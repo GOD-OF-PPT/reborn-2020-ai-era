@@ -1,0 +1,13 @@
+--- relay-record-meaning.before.test.tsx
++++ src/ui/relay-record-meaning.test.tsx
+@@ -144,8 +144,8 @@
+ 
+ it('retains the disclosed settlement wait after an original support interruption rather than calling its consequences complete',()=>{
+  // Public-view stopped-support counterexample, not another normal save.
+- const base=props(original),support=rows(base,original.target).find(row=>row.kind==='support'&&base.view.operations!.jobs.some(job=>job.id===row.jobId&&job.status==='running'))!,job=base.view.operations!.jobs.find(job=>job.id===support.jobId)!,stopped={...job,status:'interrupted' as const,releasedAt:base.view.date},p=alter(base,v=>({...v,periods:v.periods.map(period=>period.supportJobId===job.id?{...period,supportJob:stopped}:period)}))
+- p.view={...p.view,operations:{...base.view.operations!,jobs:base.view.operations!.jobs.map(old=>old.id===job.id?stopped:old)}}
++ const base=props(original),support=rows(base,original.target).find(row=>row.kind==='support'&&base.view.operations!.jobs.some(job=>job.id===row.jobId&&job.status==='running'))!,job=base.view.operations!.jobs.find(job=>job.id===support.jobId)!,stopped={...job,status:'interrupted' as const,releasedAt:base.view.date},scoped=alter(base,v=>({...v,periods:v.periods.map(period=>period.supportJobId===job.id?{...period,supportJob:stopped}:period)}))
++ const p={...scoped,view:{...scoped.view,operations:{...base.view.operations!,jobs:base.view.operations!.jobs.map(old=>old.id===job.id?stopped:old)}}}
+  const result=relayRecordReading(p,original.target,support)
+  expect(result).toMatchObject({meaning:'waiting',unknown:false});expect(result.reason).toContain('原结算日 '+job.completeAt);expect(result.reason).toContain('不是免费补做支持');expect(result.reason).toContain('不预告结算金额')
+  expect(p.request).not.toHaveBeenCalled();expect(original.controller.exportSaved()).toBe(source86)

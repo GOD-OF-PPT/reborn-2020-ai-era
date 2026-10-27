@@ -1,0 +1,19 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/relay-scene-result.test.ts > preserves all newly completed public jobs when one clock advance spans both service and support
+AssertionError: expected '2025-02-13。已经确认的安排按真实日期发生，眼前又多了一次选择。' to contain '1段原支持已实际完成'
+
+Expected: "1段原支持已实际完成"
+Received: "2025-02-13。已经确认的安排按真实日期发生，眼前又多了一次选择。"
+
+ ❯ src/ui/relay-scene-result.test.ts:164:15
+    162| it('preserves all newly completed public jobs when one clock advance s…
+    163|  const text=receipt('AdvanceTime',frames.planned,frames.supportDone)
+    164|  expect(text).toContain('1段原支持已实际完成')
+       |               ^
+    165|  expect(text).toContain('1段计量周期已经结束')
+    166|  expect(text).toContain('累计报告用量')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

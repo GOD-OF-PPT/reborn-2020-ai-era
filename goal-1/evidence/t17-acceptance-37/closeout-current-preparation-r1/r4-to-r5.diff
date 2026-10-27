@@ -1,0 +1,29 @@
+--- frozen-r4
++++ new-r5
+@@ -4,6 +4,7 @@
+ import {fileURLToPath} from 'node:url'
+ import {repo,tree,ident,hash,json,git,put,verifySeal,blobOid,proof,safe,bytes} from '../../t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs'
+ import {assertBrowserEvidenceWritable as guard} from '../../../../scripts/browser_evidence_guard.mjs'
++import {requireProducerTree,requireProducerStop} from '../final-create-final-inputs-r1/audit-io.mjs'
+ 
+ // CANDIDATE ONLY. This module has no entrypoint and calls no phase at import.
+ // Do not call old root25/root36 source(), preserve(), uiDelta(), or their CLIs.
+@@ -20,10 +21,16 @@
+ function repositoryIdentity(m,expectedHead){const actual={head:head(),branch:git(['branch','--show-current']).toString().trim(),remote:git(['remote','get-url','origin']).toString().trim()};if(actual.head!==expectedHead||actual.branch!==m.baselineData.branch||actual.remote!==m.baselineData.remote||git(['rev-parse','--show-object-format']).toString().trim()!=='sha1')throw Error('HEAD_BRANCH_REMOTE_OR_OBJECT_FORMAT_CHANGED');requireIdentity(m.repository.currentReadback);const readback=json(m.repository.currentReadback.path);if(readback.owner!=='GOD-OF-PPT'||readback.name!=='reborn-2020-ai-era'||readback.visibility!=='PUBLIC')throw Error('ACTUAL_PUBLIC_VISIBILITY_READBACK_REQUIRED');return actual}
+ function ready(m){
+  if(m.allWritersStopped!==true||m.allEngineeringTerminal!==true||m.compatibility!==0||m.wholeGoalComplete!==false)throw Error('FINAL_WRITERS_TERMINAL_AND_LIMITED_SCOPE_REQUIRED')
+- for(const p of m.producers){requireIdentity(p.cut);const cut=json(p.cut.path),files=cut.tree?.files??cut.files?.files;if(!['producer-stop','reader-closed'].includes(cut.last?.type)||!Array.isArray(files)||!files.length)throw Error('EXPLICIT_FINISHED_PRODUCER_CUT_REQUIRED');for(const row of files)requireIdentity(row)}
+  requireIdentity(m.finalNativeRegistry);const registry=json(m.finalNativeRegistry.path);if(registry.state!=='frozen'||registry.frozenBy!=='/root'||!Array.isArray(registry.producerCuts)||!registry.producerCuts.length)throw Error('FINAL_NATIVE_INPUT_REGISTRY_REQUIRED');exact(registry.producerCuts.map(r=>r.path),m.producers.map(r=>r.cut.path));for(const row of registry.producerCuts)requireIdentity(row)
++ for(const p of m.producers){
++  requireIdentity(p.cut)
++  const matches=registry.producerCuts.filter(r=>same(r,p.cut)&&r.directory===p.directory&&r.captureRole===p.captureRole&&equal(r.captureStopProof??null,p.captureStopProof??null))
++  if(matches.length!==1)throw Error('EXACT_FINAL_REGISTRY_PRODUCER_ROLE_AND_STOP_PROOF_REQUIRED')
++  const observed=requireProducerTree(matches[0]);if(observed.cut.directory!==p.directory||!observed.tree.files.length)throw Error('EXPLICIT_FINISHED_PRODUCER_CUT_REQUIRED')
++  requireProducerStop(observed.cut,matches[0],observed.tree)
++ }
+  if(!m.finalEngineering.length)throw Error('FINAL_ENGINEERING_TERMINALS_REQUIRED');for(const row of m.finalEngineering){requireIdentity(row);const t=json(row.path);if(t.exitCode!==0||t.signal!==null||t.error)throw Error('FINAL_ENGINEERING_NOT_SUCCESSFUL:'+row.path)}
+- const requiredHelperPaths=['scripts/browser_evidence_guard.mjs','goal-1/evidence/t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs'];for(const p of requiredHelperPaths)if(!m.boundReferences.some(r=>r.path===p))throw Error('REUSED_HELPER_IDENTITY_REQUIRED');
++ const requiredHelperPaths=['scripts/browser_evidence_guard.mjs','goal-1/evidence/t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs','goal-1/evidence/t17-acceptance-37/final-create-final-inputs-r1/audit-io.mjs','goal-1/evidence/t17-acceptance-36/normal-continuity-audit-r1/io.mjs'];for(const p of requiredHelperPaths)if(!m.boundReferences.some(r=>r.path===p))throw Error('REUSED_HELPER_IDENTITY_REQUIRED');
+  const roles=['finalNativeCreate','publicReadback','coverage','independentAdmission','finalVisual'];for(const role of roles){const row=m[role];requireIdentity(row);const result=json(row.path);if(role==='finalNativeCreate'){if(result.passed!==true&&result.allByteEqual!==true)throw Error('FINAL_COMPLETE_CREATE_NOT_PASSED')}else if(role==='publicReadback'){if(result.passed!==true)throw Error('FINAL_PUBLIC_READBACK_NOT_PASSED')}else if(role==='coverage'){if(result.task!=='U4-B'||result.limitedTaskReady!==true)throw Error('FULL_R2R3_CS4R_COVERAGE_NOT_READY')}else if(role==='independentAdmission'){if(result.scope!=='U4-B'||result.admitted!==true)throw Error('LIMITED_INDEPENDENT_ADMISSION_REQUIRED')}else if(result.scope!=='U4-B'||result.completed!==true||result.claimsHumanApproval!==false)throw Error('ACTUAL_FINAL_VISUAL_SCOPE_REQUIRED')}
+  requireIdentity(m.docsClassification);const docs=json(m.docsClassification.path);requireIdentity(docs.actualResult);requireIdentity(docs.stdout);requireIdentity(docs.stderr);const actual=json(docs.actualResult.path);if(docs.accepted!==true||docs.unclassifiedCount!==0||actual.exitCode!==docs.actualExitCode||docs.wholeDocsPassed!==(actual.exitCode===0))throw Error('ACTUAL_DOC_ERRORS_MUST_BE_CLASSIFIED_NOT_PRESET51')
+  return {producers:m.producers.length,engineering:m.finalEngineering.length,registry:m.finalNativeRegistry,create:m.finalNativeCreate,publicReadback:m.publicReadback,coverage:m.coverage,admission:m.independentAdmission,visual:m.finalVisual,docs:m.docsClassification}

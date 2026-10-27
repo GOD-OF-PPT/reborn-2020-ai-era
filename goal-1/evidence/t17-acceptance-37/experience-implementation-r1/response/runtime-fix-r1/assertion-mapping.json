@@ -1,0 +1,109 @@
+{
+  "scope": "Only new relay-record-meaning.test.tsx harness correction",
+  "originalRegisteredCases": 13,
+  "newRegisteredCases": 21,
+  "splitFilterGroup": {
+    "oldGroupedCaseCount": 1,
+    "newCases": {
+      "defaultOpen": 1,
+      "meaningEach": 4,
+      "originalKindEach": 3,
+      "pureSelectorUnion": 1
+    },
+    "allOriginalExpectExpressions": [
+      {
+        "old": "expect(ui.keys()).not.toContain(customerRow.key)",
+        "retainedTextually": true
+      },
+      {
+        "old": "expect(ui.keys()).not.toContain(supplierRow.key)",
+        "retainedTextually": true
+      },
+      {
+        "old": "expect(ui.text()).toContain('未消费客户预款')",
+        "retainedTextually": true
+      },
+      {
+        "old": "expect(ui.text()).toContain('正常留存不要求')",
+        "retainedTextually": true
+      },
+      {
+        "old": "expect(ui.keys()).toContain(supplierRow.key)",
+        "retainedTextually": true
+      },
+      {
+        "old": "expect(ui.text()).toContain('可选处理')",
+        "retainedTextually": true
+      },
+      {
+        "old": "expect(ui.text()).toContain('正常留存不是未完成任务')",
+        "retainedTextually": true
+      },
+      {
+        "old": "expect(ui.button('核对这项供应，本次取回多少本站资产')).toBeDefined()",
+        "retainedTextually": true
+      },
+      {
+        "old": "expect(ui.keys()).toContain(customerRow.key)",
+        "retainedTextually": true
+      },
+      {
+        "old": "expect([...ui.keys()].sort()).toEqual(all.map(r=>r.key).sort())",
+        "retainedTextually": true
+      },
+      {
+        "old": "expect([...ui.keys()].sort()).toEqual(all.filter(r=>r.kind==='customer').map(r=>r.key).sort())",
+        "retainedTextually": true
+      },
+      {
+        "old": "expect(ui.button('明确翻开这一张原票').props.disabled).toBe(true)",
+        "retainedTextually": true
+      },
+      {
+        "old": "expect(ui.text()).toContain('没有代换')",
+        "retainedTextually": true
+      },
+      {
+        "old": "expect(p.request).not.toHaveBeenCalled()",
+        "retainedTextually": true
+      },
+      {
+        "old": "expect(current.controller.exportSaved()).toBe(source115)",
+        "retainedTextually": true
+      }
+    ],
+    "meaningGroups": [
+      "respond",
+      "waiting",
+      "optional",
+      "retained"
+    ],
+    "originalKindFilters": [
+      "",
+      "customer",
+      "supplier"
+    ],
+    "union": "Pure selector exact keys length/distinct count/full all keys and unchanged serialized row fields; no extra render."
+  },
+  "oldTitleAssertion": "expect(ui.text()).toContain(customerRow.title)",
+  "replacementTitleAssertion": "expect(ui.title()).toBe(customerRow.title)",
+  "titleJustification": "Reader children view.title is the exact title consumed by the enclosing Dialog; old test consumed body/actions only. It additionally now checks customer ID, term end and prepaid balance in actual body. Product title/body unchanged.",
+  "readonly": {
+    "blank": "Actual disabled fill-amount placeholder plus exact original issue; no Refund CommandButton exists before explicit amount.",
+    "filled": "Read-only UI may hold an explicit amount; actual original Refund CommandButton remains disabled.",
+    "binding": "Actual same command component renderAction provides disabled=true/readOnly reason; both original DOM onClick and original binding.activate are forced and request spy stays0.",
+    "oldHandlerAndRequestAssertionsRetained": true
+  },
+  "driver": "Real component tree expanded once per refresh; pure query calls reuse it, each onClick/edit/filter/pick still refreshes. No product gate or field altered.",
+  "setup20sLineUnchanged": true,
+  "defaultEachTimeoutMs": 5000,
+  "timeoutWorkerIsolateConfigChanges": false,
+  "unchangedCaseBlocks": [
+    "it('classifies the actual115",
+    "it('distinguishes real86",
+    "it('keeps the actual accepted114",
+    "it.each(['future'",
+    "it('does not turn a candidate",
+    "it('retains the disclosed settlement"
+  ]
+}

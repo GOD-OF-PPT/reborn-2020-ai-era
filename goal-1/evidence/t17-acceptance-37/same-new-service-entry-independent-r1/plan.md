@@ -1,0 +1,1 @@
+读父experience-implementation-r1 input/tasks（其三文件已有）和本片same-new-service-entry-r1 plan/两原前像，再定向diff两个源文件，追current/biz/account resolution→同Conditions→原service草稿/renew/确认；picker guarded read仅setPicker，明确confirm才changeTarget。核候选/只读/取消/其它scope与原test正文/限时保持。报告真实P1/P2/限定结论，不拿R16原完整批当新源绿。
