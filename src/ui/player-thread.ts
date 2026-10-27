@@ -15,6 +15,8 @@ import {courseFocusFor,resolveCourseFocus,courseFocusQuarter,courseFocusOpen,cou
 import type {RelaySceneTarget} from './relay-scene-target.ts'
 import {relayFocusFor,resolveRelayFocus,relayFocusQuarter,relayFocusOpen,relayFocusResultDate,relayPlayerScene,relayFocusFromSaved} from './relay-player-thread.ts'
 import {threadPurpose} from './thread-purpose.ts'
+import type {EcosystemSceneTarget} from './ecosystem-scene-target.ts'
+import {ecosystemCurrentDecision,ecosystemFocusFor,ecosystemFocusTargets,resolveEcosystemFocus,ecosystemFocusQuarter,ecosystemFocusOpen,ecosystemFocusResultDate,ecosystemPlayerScene,ecosystemFocusFromSaved} from './ecosystem-player-thread.ts'
 
 type Input=Pick<GamePanelProps,'view'|'features'>
 type Identity={readonly runId:string;readonly accountId:string;readonly entityId:string|null;readonly businessId?:string}
@@ -25,9 +27,10 @@ export type OpeningFocus=Identity&(
  |{readonly kind:'video';readonly videoTarget:VideoSceneTarget|null}
  |{readonly kind:'course';readonly courseTarget:CourseSceneTarget|null}
  |{readonly kind:'relay';readonly relayTarget:RelaySceneTarget|null}
+ |{readonly kind:'ecosystem';readonly ecosystemTarget:EcosystemSceneTarget|null}
 )
 export type ThreadCommand={readonly kind:string;readonly payload:unknown;readonly label:string;readonly confirm:boolean}
-export type ThreadResultRef={readonly kind:'job'|'contract'|'payment'|'fill'|'settlement'|'research'|'payroll'|'promise'|'marketing'|'publication'|'course'|'outline'|'license'|'business'|'audience'|'cohort'|'enrollment'|'refund'|'operation'|'application'|'customer'|'period'|'meter'|'audit'|'correction'|'receivable';readonly id:string;readonly date:string|null}
+export type ThreadResultRef={readonly kind:'job'|'contract'|'payment'|'fill'|'settlement'|'research'|'payroll'|'promise'|'marketing'|'publication'|'course'|'outline'|'license'|'business'|'audience'|'cohort'|'enrollment'|'refund'|'operation'|'application'|'customer'|'period'|'meter'|'audit'|'correction'|'receivable'|'preparation'|'adapter'|'outreach'|'lead';readonly id:string;readonly date:string|null}
 export interface PlayerThreadView{
  readonly wish:{readonly id:Input['view']['playerProfile']['wishId'];readonly label:string}
  readonly approach:Input['view']['playerProfile']['approach']
@@ -76,6 +79,7 @@ function marketEntity(p:Input,id:string){
 const accountMarket=(p:Input,accountId:string)=>accountId==='personal'?p.features.market:{...p.features.market,researches:[]}
 
 function invalidFocus(p:Input,f:OpeningFocus):string|null{
+ if(f.kind==='ecosystem')return resolveEcosystemFocus(p,f).reason
  if(f.kind==='relay')return resolveRelayFocus(p,f).reason
  if(f.kind==='course')return resolveCourseFocus(p,f).reason
  if(f.kind==='video')return resolveVideoFocus(p,f).reason
@@ -110,6 +114,7 @@ function invalidFocus(p:Input,f:OpeningFocus):string|null{
 }
 
 function resolvedFocus(p:Input,f:OpeningFocus):OpeningFocus{
+ if(f.kind==='ecosystem')return resolveEcosystemFocus(p,f).focus
  if(f.kind==='relay')return resolveRelayFocus(p,f).focus
  if(f.kind==='course')return resolveCourseFocus(p,f).focus
  if(f.kind==='video')return resolveVideoFocus(p,f).focus
@@ -141,6 +146,12 @@ export function openingFocusFor(p:Input,screen:Screen,target?:SceneTarget):Openi
  if(screen==='market')focus={...base,kind:'market'}
  else if(screen==='relay')focus=relayFocusFor(p,target?.relayTarget??null,target?.accountId)
  else if(screen==='course')focus=courseFocusFor(p,target?.courseTarget??null,target?.accountId)
+ else if(screen==='deepseek'){
+  if(target?.deepseekPane==='equity')return null
+  if(target?.ecosystemTarget!==undefined)focus=ecosystemFocusFor(p,target.ecosystemTarget,target.accountId)
+  else if(target?.recordId){const rows=ecosystemFocusTargets(p).filter(r=>(r.target.kind==='business'?r.target.businessId:r.target.recordId)===target.recordId);focus=rows.length===1?ecosystemFocusFor(p,rows[0]!.target,target.accountId):{...ecosystemFocusFor(p,null,target.accountId),entityId:target.recordId}}
+  else focus=ecosystemFocusFor(p,null,target?.accountId)
+ }
  else if(screen==='life')focus={...base,kind:'life',selection:target?.lifeSelection==='rest'||target?.lifeSelection==='workspace'?target.lifeSelection:target?.personId??'tang-ying'}
  else if(screen==='quarter')focus={...base,kind:base.entityId!==null&&[p.features.firstOrder.offerId,p.features.firstOrder.contractId,p.features.firstOrder.jobId].includes(base.entityId)?'first-order':'work'}
  else if(screen==='video'){
@@ -218,6 +229,7 @@ function defaultFocus(p:Input):Recovery{
 }
 
 function focusEntry(p:Input,f:OpeningFocus){
+ if(f.kind==='ecosystem')return f.ecosystemTarget===null
  if(f.kind==='relay')return f.relayTarget===null
  if(f.kind==='course')return f.courseTarget===null
  if(f.kind==='video')return f.videoTarget===null||f.videoTarget.workId===undefined&&f.videoTarget.contractId===undefined&&f.videoTarget.marketingId===undefined
@@ -226,6 +238,7 @@ function focusEntry(p:Input,f:OpeningFocus){
  return f.kind==='first-order'&&p.features.firstOrder.status==='available'&&p.features.firstOrder.contractId===null
 }
 function originQuarter(p:Input,f:OpeningFocus):string|null{
+ if(f.kind==='ecosystem')return ecosystemFocusQuarter(p,f)
  if(f.kind==='relay')return relayFocusQuarter(p,f)
  if(f.kind==='course')return courseFocusQuarter(p,f)
  if(f.kind==='video')return videoFocusQuarter(p,f)
@@ -249,6 +262,7 @@ function originQuarter(p:Input,f:OpeningFocus):string|null{
  return null
 }
 function focusOpen(p:Input,f:OpeningFocus){
+ if(f.kind==='ecosystem')return ecosystemFocusOpen(p,f)
  if(f.kind==='relay')return relayFocusOpen(p,f)
  if(f.kind==='course')return courseFocusOpen(p,f)
  if(f.kind==='video')return videoFocusOpen(p,f)
@@ -271,6 +285,7 @@ function marketOrderResults(p:Input,f:Extract<OpeningFocus,{kind:'market'}>){
  return {fills,settlements}
 }
 function focusResultDate(p:Input,f:OpeningFocus):string|null{
+ if(f.kind==='ecosystem')return ecosystemFocusResultDate(p,f)
  if(f.kind==='relay')return relayFocusResultDate(p,f)
  if(f.kind==='course')return courseFocusResultDate(p,f)
  if(f.kind==='video')return videoFocusResultDate(p,f)
@@ -379,13 +394,14 @@ export function playerThread(p:Input,requested?:OpeningFocus|null,requestedQuart
  const reason=invalidFocus(p,focus)??(requestedQuarter&&(!/^202[0-5]-Q[1-4]$/.test(requestedQuarter)||requestedQuarter>quarter)?'这份关注的季度无效或尚未到来，请重新选择。':requestedQuarter&&requestedQuarter<quarter&&entry?'上季只留下了一个方向，本季仍需重新选择；没有自动安排新的工作。':null)
  const resolved=reason?focus:resolvedFocus(p,focus)
  const resultDate=focusResultDate(p,resolved)
- const focusQuarter=originQuarter(p,resolved),scope:PlayerThreadView['focusScope']=reason?'invalid':focusEntry(p,resolved)?'entry':focusQuarter&&focusQuarter<quarter?focusOpen(p,resolved)?'carry':resultDate&&resultDate>=p.features.workbench.quarterStart?'current':'history':'current'
+ const currentEcology=resolved.kind==='ecosystem'&&ecosystemCurrentDecision(p,resolved)
+ const focusQuarter=originQuarter(p,resolved),scope:PlayerThreadView['focusScope']=reason?'invalid':focusEntry(p,resolved)?'entry':currentEcology?'current':focusQuarter&&focusQuarter<quarter?focusOpen(p,resolved)?'carry':resultDate&&resultDate>=p.features.workbench.quarterStart?'current':'history':'current'
  const common={wish:{id:p.view.playerProfile.wishId,label:wishes[p.view.playerProfile.wishId]},approach:p.view.playerProfile.approach,yearQuestion:questions[Number(p.view.date.slice(0,4))-2020]??'原来的事，想怎样收好？',responsibilityOverrideNeeded:responsibility(p),focusQuarter,focusScope:scope,legacyFallbackRequired:!requested&&legacyPending(p)}
  const present=(thread:Omit<PlayerThreadView,'attempt'|'finishWhen'>):PlayerThreadView=>({...thread,...threadPurpose(p,thread)})
  if(reason)return present({...common,focus,focusStatus:'invalid',invalidReason:reason,stage:'unavailable',object:'原来的关注对象',title:'先找回刚才那件事。',line:reason,detail:'没有自动接受、换主体或替换对象。请明确选择下一件事。',outcome:'none',inspect:{screen:'routes',label:'重新选择眼前的方向'},resultRefs:[]})
  if(recovery?.needsReview)return present({...common,focus,focusStatus:'default',invalidReason:null,stage:'review-choice',object:'本季已经留下的安排',title:'有几件真实的事，可以先回看。',line:`本季有${recovery.count}项实际安排。请先选择想继续看哪一件。`,detail:'原记录都保留，尚未替你选定一件；翻阅不会重新安排或付费。',outcome:'none',inspect:{screen:'quarter',label:'翻看本季实际安排，选择一件继续',target:{accountId:'personal'}},resultRefs:[]})
- let scene=resolved.kind==='relay'?relayPlayerScene(p,resolved):resolved.kind==='course'?coursePlayerScene(p,resolved):resolved.kind==='video'?videoPlayerScene(p,resolved):resolved.kind==='first-order'?firstScene(p):resolved.kind==='market'?marketScene(p,resolved):resolved.kind==='life'?lifeScene(p,resolved):resolved.kind==='work'?workScene(p,resolved):freeScene()
- if(focusQuarter&&focusQuarter<quarter)scene={...scene,object:(scope==='history'?'回看':'始于')+focusQuarter+' · '+scene.object,line:(scope==='history'?'这是'+focusQuarter+'的原记录，旧收支不会重记为本季收入。':scope==='carry'?'这件事从'+focusQuarter+'留下，仍按原约定继续。':'这项安排始于'+focusQuarter+'，本季出现以下实际反馈。')+scene.line}
+ let scene=resolved.kind==='ecosystem'?ecosystemPlayerScene(p,resolved):resolved.kind==='relay'?relayPlayerScene(p,resolved):resolved.kind==='course'?coursePlayerScene(p,resolved):resolved.kind==='video'?videoPlayerScene(p,resolved):resolved.kind==='first-order'?firstScene(p):resolved.kind==='market'?marketScene(p,resolved):resolved.kind==='life'?lifeScene(p,resolved):resolved.kind==='work'?workScene(p,resolved):freeScene()
+ if(focusQuarter&&focusQuarter<quarter)scene={...scene,object:(currentEcology?'来源':scope==='history'?'回看':'始于')+focusQuarter+' · '+scene.object,line:(currentEcology?'原对象来自'+focusQuarter+'，这里核对截至今天的公开条件；尚未因此接受新承诺。':scope==='history'?'这是'+focusQuarter+'的原记录，旧收支不会重记为本季收入。':scope==='carry'?'这件事从'+focusQuarter+'留下，仍按原约定继续。':'这项安排始于'+focusQuarter+'，本季出现以下实际反馈。')+scene.line}
  return present({...common,...scene,focus:resolved,focusStatus:requested?'valid':'default',invalidReason:null})
 }
 
@@ -398,6 +414,7 @@ export function openingFocusAfterSave(previous:Input,current:Input,kind:string,p
   ||view.phase!=='playing'||!/^202[0-5]-Q[1-4]$/.test(current.features.workbench.quarter)
   ||last?.kind!==kind||last.revisionAfter!==view.revision)return existing
  const body=payloadRecord(payload);if(!body)return existing
+ const ecosystem=ecosystemFocusFromSaved(previous,current,kind,body,existing?.kind==='ecosystem'?existing:null);if(ecosystem)return ecosystem
  const relay=relayFocusFromSaved(previous,current,kind,body,existing?.kind==='relay'?existing:null);if(relay)return relay
  const course=courseFocusFromSaved(previous,current,kind,body,existing?.kind==='course'?existing:null);if(course)return course
  const video=videoFocusFromSaved(previous,current,kind,body);if(video)return video

@@ -9,6 +9,8 @@ import {courseFocusFor,courseSceneContext} from './course-player-thread.ts'
 import {courseTargetReason,type CourseSceneTarget} from './course-scene-progress.ts'
 import {relayBusinessTarget,relayFocusFor,relayFocusOpen} from './relay-player-thread.ts'
 import type {RelaySceneTarget} from './relay-scene-target.ts'
+import {ecosystemFocusFor,ecosystemFocusTargets} from './ecosystem-player-thread.ts'
+import {ecosystemTargetEntity} from './ecosystem-scene-target.ts'
 
 export type SeasonInput=Pick<GamePanelProps,'view'|'features'>
 type Inspect={screen:Screen;label:string;target?:SceneTarget}
@@ -38,7 +40,7 @@ export interface SeasonRecollectionView{
  readonly nodes:readonly SeasonEchoNode[];readonly allNodes:readonly SeasonEchoNode[];readonly remaining:readonly SeasonPendingItem[]
  readonly nextQuestion:string;readonly nextQuarterDate:string|null
 }
-const focusId=(f:OpeningFocus)=>[f.kind,f.accountId,f.entityId??('selection' in f?f.selection:'entry'),...(f.kind==='relay'&&f.relayTarget?[f.relayTarget.businessId,f.relayTarget.stationId,f.relayTarget.kind==='period'?f.relayTarget.periodId:'']:[])].join('|')
+const focusId=(f:OpeningFocus)=>[f.kind,f.accountId,f.entityId??('selection' in f?f.selection:'entry'),...(f.kind==='ecosystem'&&f.ecosystemTarget?[f.ecosystemTarget.businessId,f.ecosystemTarget.kind]:[]),...(f.kind==='relay'&&f.relayTarget?[f.relayTarget.businessId,f.relayTarget.stationId,f.relayTarget.kind==='period'?f.relayTarget.periodId:'']:[])].join('|')
 
 /** Choosing a bookmark is separate from executing any of its original commands. */
 export function seasonFocusChoices(p:SeasonInput):readonly SeasonFocusChoice[]{
@@ -58,6 +60,8 @@ export function seasonFocusChoices(p:SeasonInput):readonly SeasonFocusChoice[]{
  add({...base,kind:'video',videoTarget:null},null,'从一个真实账号与视频尝试开始')
  add({...base,kind:'course',courseTarget:null},null,'从一份明确的课程准备开始')
  add(relayFocusFor(p),null,'先选择同一笔中转服务与原站点')
+ add(ecosystemFocusFor(p),null,'从一次具体生态合作开始')
+ for(const row of ecosystemFocusTargets(p))add(ecosystemFocusFor(p,row.target),row.date,row.label)
  for(const business of f.relay?.businesses??[]){const identity=relayBusinessTarget(p,business.id);if(!identity)continue
   add(relayFocusFor(p,identity),f.relay!.stations.find(s=>s.id===identity.stationId)?.createdAt??null,'原中转站 · 服务与原账')
   for(const application of f.relay!.applications.filter(a=>a.businessId===business.id))add(relayFocusFor(p,{...identity,kind:'application',applicationId:application.id}),application.appliedAt,'这份供应申请与实际回信')
@@ -101,6 +105,7 @@ export function seasonFocusAfterSave(previous:SeasonInput,current:SeasonInput,ki
  if(!pinned||existing===null||candidate===existing||candidate===null)return candidate
  if(existing.kind==='course'&&candidate.kind==='course'&&existing.runId===candidate.runId&&existing.courseTarget===null&&kind==='OpenCourseStudio')return candidate
  if(existing.kind==='relay'&&candidate.kind==='relay'&&existing.runId===candidate.runId&&existing.relayTarget===null&&kind==='OpenRelayStation')return candidate
+ if(existing.kind==='ecosystem'&&candidate.kind==='ecosystem'&&existing.runId===candidate.runId&&existing.ecosystemTarget===null&&kind==='OpenEcosystemService')return candidate
  // An empty opening calendar is a choice of freedom, not a pin to an object that never existed.
  // Follow only the player's explicit, saved first arrangement; a preview/cancellation never reaches here.
  const explicitMarketAccount=candidate.kind==='market'&&['PlanStockOrder','PlaceStockOrder'].includes(kind)
@@ -111,6 +116,18 @@ export function seasonFocusAfterSave(previous:SeasonInput,current:SeasonInput,ki
  if(existing.kind==='life'&&(candidate.kind!=='life'||existing.selection!==candidate.selection))return existing
  // Refreshing the outcome of the same object is not a new primary selection or quarter.
  if(candidate.entityId===existing.entityId)return existing
+ if(existing.kind==='ecosystem'&&candidate.kind==='ecosystem'){
+  const old=existing.ecosystemTarget,next=candidate.ecosystemTarget,v=current.features.deepseek
+  if(!old||!next||old.businessId!==next.businessId)return existing
+  if(old.kind==='business'&&['StartEcosystemPreparation','StartEcosystemAdaptation','StartEcoOutreach'].includes(kind))return candidate
+  if(['preparation','adapter'].includes(old.kind)&&['ActivateBusiness','StartEcosystemPreparation','StartEcosystemAdaptation','StartEcoOutreach'].includes(kind))return candidate
+  if((old.kind==='outreach'||old.kind==='lead')&&next.kind==='contract'&&kind==='AcceptEcoContract'){
+   const c=v?.contracts.find(c=>c.id===ecosystemTargetEntity(next)),l=c?v?.leads.find(l=>l.id===c.leadId):null
+   if(l&&(old.kind==='lead'?old.recordId===l.id:old.recordId===l.outreachId))return candidate
+  }
+  if(old.kind==='delivery'&&next.kind==='contract'&&v?.deliveries.some(d=>d.id===old.recordId&&d.contractId===ecosystemTargetEntity(next)))return candidate
+  return existing
+ }
  if(existing.kind==='relay'&&candidate.kind==='relay'){
   const old=existing.relayTarget,next=candidate.relayTarget
   if(!old||!next||old.businessId!==next.businessId||old.stationId!==next.stationId)return existing

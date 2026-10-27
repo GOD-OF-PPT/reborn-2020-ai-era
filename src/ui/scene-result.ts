@@ -8,6 +8,8 @@ import {relayResponseSceneResult} from './relay-response-result.ts'
 import {relaySupportSettlement} from './relay-support-settlement.ts'
 import {isoDate} from '../core/calendar.ts'
 import {MONEY_LIMIT} from '../core/money.ts'
+import {ecosystemSceneResult} from './ecosystem-scene-result.ts'
+import {sceneCashResult} from './scene-cash-result.ts'
 
 type Relay=NonNullable<PlayFeatures['relay']>
 const originalDay=(value:unknown):value is string=>{try{return typeof value==='string'&&isoDate(value)===value}catch{return false}}
@@ -155,7 +157,9 @@ export function savedSceneResult(kind:string,label:string,previous:PlayingView|n
  const course=courseSceneResult(kind,previous,current)
  const video=videoSceneResult(kind,previous,current)
  const relayResponse=relayResponseSceneResult(kind,previous,current)
+ const ecosystem=ecosystemSceneResult(kind,previous,current)
  if(relayResponse)return relayResponse
+ if(ecosystem&&kind!=='AdvanceTime')return ecosystem
  if(kind==='WorkQuarter')return `这一季的工作已经安排好。月末才按实际在岗日期发薪；你还留着${current.budget.available}点，可以做自己的选择。`
  if(kind==='StartFirstOrder')return `你接下了这份手工小单。${first.dates.startAt}开工，${first.dates.submitBy}前完成并提交。${first.status==='planned'?`本次预留制作费${moneyText(first.terms.costFen)}和${first.terms.actionPoints}点，开工时才实际使用。`:first.status==='running'?`制作已经开工，已付制作费${moneyText(first.result.directCostFen)}，使用${first.terms.actionPoints}点。`:''}客户的钱还没有到账。`
  if(kind==='SubmitDelivery')return '作品交出去了。接下来，等客户真正复核；验收和到账还会留下各自的日期。'
@@ -169,6 +173,7 @@ export function savedSceneResult(kind:string,label:string,previous:PlayingView|n
  if(relayCommand)return relayCommand
  if(kind==='AdvanceTime'){
   const parts:string[]=[]
+  if(ecosystem)parts.push(ecosystem)
   if(first.result.paymentFen>0&&(before?.firstOrder.result.paymentFen??0)===0)parts.push(`${current.date}，客户实际付来了${moneyText(first.result.paymentFen)}。制作成本${moneyText(first.result.directCostFen)}，这一单净得${moneyText(first.result.netOrderFen)}。`)
   if(first.status==='awaiting_submission'&&before?.firstOrder.status!=='awaiting_submission')parts.push(`${current.date}，这份作品已经做完。下一步，要由你亲手交给客户。`)
   if(f.workbench.pause&&!domain)parts.push(`${current.date}，日子在这里停了一下。${f.workbench.progression.barrierLabel??'有一件需要你面对的事。'}`)
@@ -179,6 +184,13 @@ export function savedSceneResult(kind:string,label:string,previous:PlayingView|n
   if(course)parts.push(course)
   if(video)parts.push(video)
   if(parts.length)return parts.join(' ')
+  const last=current.receipts.at(-1)
+  if(current.revision===previous.revision+1&&!current.readOnly&&!current.busy&&last?.kind===kind&&last.revisionAfter===current.revision){
+   const businesses=current.operations?.businesses??[],names:Record<string,string>={ai_stock:'模拟投资',ai_video:'视频工作室',ai_course:'课程工作室',api_relay:'API中转站',deepseek_opportunity:'生态服务'}
+   const label=(accountId:string)=>{if(accountId==='personal')return '个人';const rows=businesses.filter(b=>b.accountId===accountId);if(rows.length!==1)return '原企业账户';const b=rows[0]!,peers=businesses.filter(n=>n.route===b.route);return (names[b.route]??'原企业')+(peers.length>1?' '+(peers.findIndex(n=>n.id===b.id)+1):'')}
+   const cash=sceneCashResult(before?.workbench.finance??[],f.workbench.finance,previous.date,current.date,label)
+   if(cash)return current.date+'，'+cash
+  }
   return `${current.date}。已经确认的安排按真实日期发生，眼前又多了一次选择。`
  }
  if(domain)return domain

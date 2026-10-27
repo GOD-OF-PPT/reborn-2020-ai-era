@@ -15,6 +15,7 @@ import {addDays} from '../core/calendar.ts'
 import {RoomTableau} from './RoomTableau.tsx'
 import {sceneMeaning} from './scene-meaning.ts'
 import {relayBusinessTarget} from './relay-player-thread.ts'
+import {ecosystemCalendarStatus,ecosystemUiStatus} from './ecosystem-ui-status.ts'
 import './today-scene.css'
 
 type Props={p:GamePanelProps;today:TodayThreadView;headingRef:Ref<HTMLHeadingElement>;feedback?:ReactNode;onFocus:(focus:OpeningFocus)=>void;onPrepare:(focus:OpeningFocus)=>void;onResume:()=>void;onExplore:()=>void;onRecollection:()=>void;onNavigate:NavigateScene}
@@ -35,8 +36,12 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
  const continuing=today.ongoing.filter(item=>!(item.focus.kind==='market'&&item.focus.entityKind==='position'&&!item.wait))
  const one=continuing.length===1?continuing[0]:null
  const relayContinuation=one?.focus.kind==='relay'?one.relayContinuation:undefined
+ const continuation=relayContinuation??one?.ecosystemContinuation
+ const hasMoney=continuing.some(item=>item.relayContinuation?.kind==='money'||item.ecosystemContinuation?.kind==='money')
+ const statusFeedback=today.primary.thread.focus.kind==='ecosystem'?ecosystemUiStatus(feedback,p.view.date):null
+ const calendarStatus=today.primary.thread.focus.kind==='ecosystem'?ecosystemCalendarStatus(feedback,p.view.date):null
  const primary=p.features.workbench.atQuarterEnd?ui('看看这一季，实际留下了什么',onRecollection)
-  :one?ui(one.focus.kind==='relay'?relayContinuation?.label??'回到这份原中转事项':'继续'+({work:'这季的工作',life:'这段生活安排',course:'这份教学约定',video:'这份作品',market:'这份模拟委托',free:'原来的安排','first-order':'这份委托'}[one.focus.kind]),()=>choose(one.focus))
+  :one?ui(one.focus.kind==='relay'?relayContinuation?.label??'回到这份原中转事项':one.ecosystemContinuation?.label??'继续'+({work:'这季的工作',life:'这段生活安排',course:'这份教学约定',video:'这份作品',market:'这份模拟委托',ecosystem:'这份原生态事项',free:'原来的安排','first-order':'这份委托'}[one.focus.kind]),()=>choose(one.focus))
   :continuing.length>1?ui('选回一件未完的约定',()=>setPage('ongoing'))
   :ui('给生活留一段真实的日子',()=>prepare('life'))
  const meaning=sceneMeaning({...p,accountId:today.primary.thread.focus.accountId},today.primary.thread)
@@ -53,16 +58,16 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
  return <VideoSceneChoice p={videoProps} {...(videoTarget?{target:videoTarget}:{})} onTargetChange={target=>{const next=openingFocusFor(p,'video',{videoTarget:target});if(next)onPrepare(next)}} onToday={()=>setPage(null)} onLife={()=>{setPage(null);onNavigate('life',{accountId:'personal'})}} onInspect={target=>{setPage(null);const owner=p.features.video?.channels.find(c=>c.id===target?.channelId);onNavigate('video',{openRecord:true,...(target?{videoTarget:target}:{}),accountId:owner?.accountId??videoProps.accountId})}}>{openVideo=><CourseSceneChoice p={courseProps} target={courseFocus?.courseTarget??null} onTarget={target=>{const next=openingFocusFor(p,'course',{courseTarget:target});if(next)onPrepare(next)}} onToday={()=>setPage(null)} onLife={()=>{setPage(null);onNavigate('life',{accountId:'personal'})}} onInspect={(target,slot,teachingSlot)=>{setPage(null);const owner=p.features.course?.businesses.find(b=>b.id===target?.businessId);onNavigate('course',{openRecord:true,courseTarget:target,accountId:owner?.accountId??courseProps.accountId,...(slot?{courseDraftSlot:slot}:{}),...(teachingSlot?{courseTeachingSlot:teachingSlot}:{})})}}>{openCourse=><MarketSceneChoice p={commandProps} onFullRecord={()=>onNavigate('market',{accountId:'personal',openRecord:true})}>{openOrder=><>
   <RoomTableau scene="today" state={today.primary.classification} perspective="today" textOnly={p.textOnly===true}
    intention={<p className="opening-room-intention"><span>我想{today.primary.thread.wish.label}</span>{button('回到书签里的那件事 ↗',onResume)}{button('翻季度留页 ↗',onRecollection)}</p>}
-   heading={<header className="moment-heading"><p>{p.features.workbench.quarter} / 今天的日历</p><h1 ref={localHeading} tabIndex={-1}>{one?relayContinuation?.kind==='unknown'?'原站的责任，先核清来源。':relayContinuation?.kind==='money'?'这些原款，仍要分别核对。':'这份约定，今天还在继续。':continuing.length>1?'今天，还有几件答应过的事。':meaning?.title??'今天，仍由你安排。'}</h1></header>}
+   heading={<header className="moment-heading"><p>{p.features.workbench.quarter} / 今天的日历</p><h1 ref={localHeading} tabIndex={-1}>{one?continuation?.kind==='unknown'?'原站的责任，先核清来源。':continuation?.kind==='money'?'这些原款，仍要分别核对。':'这份约定，今天还在继续。':continuing.length>1?hasMoney?'今天，原安排与旧款都在。':'今天，还有几件答应过的事。':meaning?.title??'今天，仍由你安排。'}</h1></header>}
    context={<><p className="opening-room-stage">今天 {p.view.date} · 旧书签和原约定仍保留</p>{meaning?.question?<p className="tableau-question">{meaning.question}</p>:null}</>}
-   feedback={feedback?<div className={typeof feedback==='string'?'moment-status':'moment-feedback'}>{feedback}</div>:null}
-   facts={<><p className="moment-line">{meaning?.situation??(relayContinuation?one!.line:!continuing.length&&p.features.relay?.businesses.length?today.line:today.ongoing.length?'还有'+today.ongoing.length+'件已经答应的事，正在照约定继续。':'原来的结果已经留下；接下来的日子，可以自己安排。')}</p>{one?<p className="moment-terms">仍在继续：{one.title.replace(/[。！？]$/u,'')}{one.wait?' · 下一反馈 '+one.wait.date:''}。</p>:null}{dueTotal>0?<p className="relay-scene-money">原客户款已到期、尚未收取 {moneyText(dueTotal)}。<button type="button" className="scene-text-action" onClick={ui('翻看这些原客户款',()=>setPage('ongoing')).activate}>逐位翻回原客户 ↗</button></p>:null}</>}
+   feedback={!statusFeedback&&!calendarStatus&&feedback?<div className={typeof feedback==='string'?'moment-status':'moment-feedback'}>{feedback}</div>:null}
+   facts={<><p className="moment-line">{meaning?.situation??(continuation?one!.line:hasMoney||!continuing.length&&p.features.relay?.businesses.length?today.line:today.ongoing.length?'还有'+today.ongoing.length+'件已经答应的事，正在照约定继续。':'原来的结果已经留下；接下来的日子，可以自己安排。')}</p>{one?<p className="moment-terms">{continuation?.kind==='money'?'原款仍保留：':'仍在继续：'}{one.title.replace(/[。！？]$/u,'')}{one.wait?' · 下一反馈 '+one.wait.date:''}。</p>:null}{dueTotal>0?<p className="relay-scene-money">原客户款已到期、尚未收取 {moneyText(dueTotal)}。<button type="button" className="scene-text-action" onClick={ui('翻看这些原客户款',()=>setPage('ongoing')).activate}>逐位翻回原客户 ↗</button></p>:null}</>}
    decisions={<><div className="command moment-decision moment-primary"><button type="button" disabled={primary.disabled} onClick={primary.activate}><b aria-hidden="true">01</b><span>{primary.label}<small>先看具体对象与代价，新的承诺仍由你确认</small></span><i aria-hidden="true">→</i></button>{primary.reason?<small className="reason">{primary.reason}</small>:null}</div>
     {today.wait?<div className="moment-wait"><ClockAdvance p={p} date={today.wait.date} label={'不新增安排，让原日子继续 · '+today.wait.date} room showReason={!p.view.readOnly&&!p.view.hasCandidate&&p.view.saveStatus!=='conflict'}/></div>:button('翻看今天的日历',()=>onNavigate('quarter',{accountId:p.accountId}),'原费用、期限和未完约定都在这里')}
     <button type="button" className="moment-explore" onClick={ui('环顾房间，想想别的可能',onExplore).activate}>环顾房间，想想别的可能 <span aria-hidden="true">↗</span></button>
    </>}
    object={<OpeningObject copyMode="tableau" kind="calendar" title="今天的日历" displayTitle="" detail={p.view.date} stageLabel="今天 · 仍可安排" actionLabel={primary.label} onActivate={primary.activate} disabled={primary.disabled} textOnly={p.textOnly===true} dayPaper={{kind:'today',state:'ongoing'}} {...(p.view.readOnly?{protection:'readonly' as const}:p.view.hasCandidate||p.view.saveStatus==='conflict'?{protection:'unsaved' as const}:{})}/>}
-   record={<button type="button" className="scene-text-action" onClick={ui('看看工作、其它尝试与原约定',()=>setPage('directions')).activate}>看看工作、其它尝试与原约定 ↗</button>}
+   record={<><button type="button" className="scene-text-action" onClick={ui('看看工作、其它尝试与原约定',()=>setPage('directions')).activate}>看看工作、其它尝试与原约定 ↗</button>{statusFeedback?<p className="moment-status" role="status">{statusFeedback}</p>:null}{calendarStatus?<div className="ecosystem-reading-status">{calendarStatus}</div>:null}</>}
   />
   {page?<Dialog title={page==='directions'?'今天，想把时间留给什么？':page==='life'?'给生活留出一段真实的日子':page==='market'?'给自己的模拟判断划一个边界':'这些原安排，仍在继续'} className="opening-paper today-choice-paper" onClose={()=>setPage(null)} footer={<div className="today-choice-footer">{page!=='directions'?button('返回今天的选择',()=>setPage('directions')):null}{button('先不新增安排，合上这一页',()=>setPage(null))}</div>}>
    <p className="opening-paper-date">今天 {p.view.date} · {p.features.workbench.quarter}</p>
@@ -73,6 +78,7 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
     {button('给一次视频尝试留出日子',()=>{setPage(null);openVideo('select-account')},'明确选择账号和具体作品；新的客户、素材与投入仍由你决定')}
     {button('把做过的事，准备成一堂课',()=>{setPage(null);openCourse('objects')},'明确选择教室与教案；案例、大纲、素材范围和样课分别准备，不自动招生')}
     {button('看看谁需要一份可靠的服务',()=>{const focus=openingFocusFor(p,'relay',{relayTarget:null,accountId:'personal'});if(focus)choose(focus)},'先核对自有资本、供应与客户承诺；不自动开站或充值')}
+    {button('去听一份具体的合作请求',()=>{const focus=openingFocusFor(p,'deepseek',{ecosystemTarget:null,accountId:'personal',deepseekPane:'ecosystem'});if(focus)choose(focus)},'先选原企业、模型用途和真实需求；合同与投入另行显选，不自动开启架空融资')}
     {button('准备自己的下一份模拟判断',()=>prepare('market'),'研究、显选委托，或先保留现金')}
    </div></>:null}
    {page==='life'?<><p>留给自己的时间也要作取舍。已经在进行的安排仍在原日历上，新安排不返行动或增加收入。</p><div className="today-commitments">{(['rest','workspace'] as const).map(kind=>{const terms=p.features.life.work[kind];return <article key={kind}><h3>{terms.title}</h3><p>个人{moneyText(terms.costFen)} · {terms.points}点 · {terms.days}日；今天开始，最早{addDays(p.view.date,terms.days)}实际完成。</p><CommandButton {...commandProps} kind="StartLifeWork" payload={{kind,personId:null,reference:null}} label={kind==='rest'?'核对并留出七天休整':'核对并改善桌椅与照明'} confirm/></article>})}</div>{button('看看相识的人与全部生活记录',()=>{setPage(null);onNavigate('life',{accountId:'personal'})})}</>:null}
