@@ -54,7 +54,7 @@ it('publishes the actual normal service identity only after original retry, keep
   const html=renderToStaticMarkup(createElement(OpeningMoment,{p:{...current,controller,accountId:identity.accountId,request:()=>{throw Error('RELAY_SCENE_RENDER_MUST_NOT_EXECUTE')}},headingRef:null,fallback:roomMoment(current),focus:next,onFocus:()=>{},onNavigate:()=>{},onExplore:()=>{}}))
   expect(current.view.budget.available).toBe(1)
   expect(html).toContain('relay-service-kit-v1.png');expect(html).not.toContain('video-making-kit-v1.png')
-  expect(html).toContain('本期服务单');expect(html).toContain('翻阅这一段的记录与代价');expect(html).toContain('眼前物件与同对象原记录');expect(html).not.toContain('先保留这一季的工作')
+  expect(html).toContain('本期服务单');expect(html).toContain('翻看同一份服务的原票与回应');expect(html).toContain('眼前物件与同对象原记录');expect(html).not.toContain('先保留这一季的工作')
   expect(controller.exportSaved()).toBe(beforeRead)
   const advance=controller.prepare('AdvanceTime',{date:'2025-01-28'});expect((await controller.submit(advance)).status).toBe('saved')
   const running=input(controller.snapshot.view!)

@@ -1,0 +1,219 @@
+import {useRef,useState,type Dispatch,type SetStateAction} from 'react'
+import type {GamePanelProps} from './game-types.ts'
+import {resolveRelaySceneTarget,type RelaySceneTarget} from './relay-scene-target.ts'
+import {isoDate} from '../core/calendar.ts'
+import {parseMoneyInput} from './money-input.ts'
+import {playableThrough} from './game-text.ts'
+
+export type RelayResponseMode='collect'|'customer-refund'|'supplier-refund'|'renew'|'requote'|'pay'
+export type RelayResponseSubject={readonly kind:'receivable'|'customer'|'supplier'|'business'|'obligation';readonly id:string}
+export interface RelayResponseScope{
+ readonly accountId:string
+ readonly businessId:string
+ readonly stationId:string
+ readonly mode:RelayResponseMode
+ readonly subjectKind:RelayResponseSubject['kind']
+ readonly subjectId:string
+}
+export interface RelayResponseDraft{
+ amount:string
+ termEnd:string
+ paymentMode:''|'prepaid'|'postpaid'
+ creditLimit:string
+ customerIds:string[]
+ offerKind:''|'low_margin'|'managed_support'
+ unitPrice:string
+ resources:string[]
+ startAt:string
+ effectiveAt:string
+}
+export const emptyRelayResponseDraft=():RelayResponseDraft=>({amount:'',termEnd:'',paymentMode:'',creditLimit:'',customerIds:[],offerKind:'',unitPrice:'',resources:[],startAt:'',effectiveAt:''})
+const copy=(draft:RelayResponseDraft):RelayResponseDraft=>({...draft,customerIds:[...draft.customerIds],resources:[...draft.resources]})
+export function relayResponseDraftKey(runId:string,scope:RelayResponseScope):string{
+ return JSON.stringify([runId,scope.accountId,scope.businessId,scope.stationId,scope.mode,scope.subjectKind,scope.subjectId])
+}
+export interface RelayResponseDraftMemory{
+ read(runId:string,scope:RelayResponseScope):RelayResponseDraft|undefined
+ write(runId:string,scope:RelayResponseScope,draft:RelayResponseDraft):boolean
+}
+/** Pages and revisions do not create another draft for the same original ticket. */
+export function createRelayResponseDraftMemory(runId:string):RelayResponseDraftMemory{
+ const drafts=new Map<string,RelayResponseDraft>()
+ return {
+  read(requested,scope){if(requested!==runId)return undefined;const draft=drafts.get(relayResponseDraftKey(runId,scope));return draft?copy(draft):undefined},
+  write(requested,scope,draft){if(requested!==runId)return false;drafts.set(relayResponseDraftKey(runId,scope),copy(draft));return true},
+ }
+}
+export type RelayResponseDraftUpdate=Dispatch<SetStateAction<RelayResponseDraft>>
+export function useRelayResponseDraft(runId:string,scope:RelayResponseScope|null,memory?:RelayResponseDraftMemory):readonly [RelayResponseDraft,RelayResponseDraftUpdate]{
+ const key=scope?relayResponseDraftKey(runId,scope):JSON.stringify([runId,null]),read=()=>scope?memory?.read(runId,scope)??emptyRelayResponseDraft():emptyRelayResponseDraft()
+ const [stored,setStored]=useState(()=>({key,draft:read()})),draft=scope?memory?.read(runId,scope)??(stored.key===key?stored.draft:read()):read(),latest=useRef({key,draft})
+ latest.current={key,draft}
+ const update:RelayResponseDraftUpdate=value=>{
+  if(!scope||latest.current.key!==key)return
+  const previous=memory?.read(runId,scope)??(latest.current.key===key?latest.current.draft:read()),next=copy(typeof value==='function'?value(copy(previous)):value)
+  memory?.write(runId,scope,next);latest.current={key,draft:next};setStored({key,draft:next})
+ }
+ return [draft,update]
+}
+
+type Input=Pick<GamePanelProps,'view'|'features'|'accountId'>
+type Relay=NonNullable<Input['features']['relay']>
+type Customer=Relay['customers'][number]
+type Receivable=Relay['receivables'][number]
+type Supplier=Relay['catalog']['suppliers'][number]
+type SupplyOption=Relay['supplyOptions'][number]
+type Obligation=Input['features']['workbench']['finance'][number]['obligations'][number]
+interface ResponseContext{
+ scope:RelayResponseScope|null
+ reason:string|null
+ customer:Customer|null
+ receivable:Receivable|null
+ supplier:Supplier|null
+ supplyOption:SupplyOption|null
+ obligation:Obligation|null
+}
+const modes:readonly string[]=['collect','customer-refund','supplier-refund','renew','requote','pay']
+const one=<T>(rows:readonly T[]):T|null=>rows.length===1?rows[0]!:null
+const unique=(ids:readonly string[])=>new Set(ids).size===ids.length
+const identifier=(value:unknown):value is string=>typeof value==='string'&&value.length>0&&value.length<=512&&value.trim().length>0&&!/[\u0000-\u001f\u007f]/.test(value)
+const validDate=(value:string)=>{try{isoDate(value);return true}catch{return false}}
+const moneyValue=(value:number)=>Number.isSafeInteger(value)&&value>=0
+const creditAmount=(value:string)=>/^0+(?:\.0{1,2})?$/.test(value)?0:parseMoneyInput(value)
+function subjectShape(subject:RelayResponseSubject):boolean{
+ if(!subject||typeof subject!=='object'||Array.isArray(subject))return false
+ const prototype=Object.getPrototypeOf(subject)
+ if(prototype!==Object.prototype&&prototype!==null||Object.values(Object.getOwnPropertyDescriptors(subject)).some(row=>row.get!==undefined||row.set!==undefined))return false
+ return Object.keys(subject).length===2&&Object.hasOwn(subject,'kind')&&Object.hasOwn(subject,'id')&&identifier(subject.id)&&['receivable','customer','supplier','business','obligation'].includes(subject.kind)
+}
+
+/** Resolve the original owner and the displayed parent; neither is filled from a different row. */
+export function relayResponseContext(p:Input,target:RelaySceneTarget,subject:RelayResponseSubject,mode:RelayResponseMode):ResponseContext{
+ const empty={scope:null,customer:null,receivable:null,supplier:null,supplyOption:null,obligation:null}
+ const bad=(reason:string):ResponseContext=>({...empty,reason})
+ if(!modes.includes(mode)||!subjectShape(subject))return bad('这份回应的原对象或办理方式不完整，请回原票重新选择。')
+ const expected=mode==='collect'?'receivable':mode==='supplier-refund'?'supplier':mode==='requote'?'business':mode==='pay'?'obligation':'customer'
+ if(subject.kind!==expected)return bad('这项回应与原票种类不匹配，没有换成另一份记录。')
+ const relay=p.features.relay,resolved=resolveRelaySceneTarget(relay,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})
+ if(!relay||resolved.status!=='valid'||!target)return bad(resolved.reason??'原服务对象尚未取得，请明确选回同一份记录。')
+ if(p.view.accounts.filter(account=>account.accountId===target.accountId).length!==1)return bad('原账户不再唯一可达，请重新核对；没有改用另一份账。')
+ if(target.kind==='application'||target.kind==='audience')return bad('这里仍是原回信；请先明确翻到客户、账期或本站，再办理这项回应。')
+ const base={runId:target.runId,accountId:target.accountId,businessId:target.businessId,stationId:target.stationId}
+ const childCustomer=(id:string)=>{
+  const actual=one(relay.customers.filter(row=>row.id===id))
+  if(!actual||actual.businessId!==target.businessId)return null
+  const selected:RelaySceneTarget={...base,kind:'customer',customerId:actual.id}
+  return resolveRelaySceneTarget(relay,selected,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations}).status==='valid'?actual:null
+ }
+ const periodIds=target.kind==='period'?(resolved.audit?.periodIds??[target.periodId]):[]
+ const periods=periodIds.map(id=>one(relay.periods.filter(row=>row.id===id&&row.businessId===target.businessId)))
+ if(periods.some(row=>row===null))return bad('原批次或账期的所属记录不唯一，请先核对原对象。')
+ const allowedCustomer=(id:string)=>target.kind==='business'||target.kind==='customer'?target.kind==='business'||target.customerId===id:resolved.meter?resolved.meter.customerId===id:periods.some(row=>row!.customerIds.includes(id))
+ const allowedSupplier=(id:string)=>target.kind==='business'||target.kind==='period'&&(resolved.meter?resolved.meter.supplierId===id:periods.some(row=>row!.supplierIds.includes(id)))
+ let customer:Customer|null=null,receivable:Receivable|null=null,supplier:Supplier|null=null,supplyOption:SupplyOption|null=null,obligation:Obligation|null=null
+ if(subject.kind==='business'){
+  if(subject.id!==target.businessId||target.kind!=='business')return bad('未来报价须明确翻到这间站，再逐位选择原客户；没有借另一张票更换范围。')
+ }
+ if(subject.kind==='customer'){
+  customer=childCustomer(subject.id)
+  if(!customer||!allowedCustomer(customer.id))return bad('这位原客户不属于当前票或原批次，没有换人办理。')
+  if(!moneyValue(customer.balance.prepaidFen)||!moneyValue(customer.balance.receivableFen))return bad('原客户金额尚未完整核对，不能用另一份余额替代。')
+ }
+ if(subject.kind==='receivable'){
+  receivable=one(relay.receivables.filter(row=>row.id===subject.id))
+  customer=receivable?childCustomer(receivable.customerId):null
+  if(!receivable||!customer||!allowedCustomer(customer.id))return bad('这张原应收或原客户不属于当前对象，没有换到另一张单。')
+  const sourceMeters=relay.meters.filter(row=>row.id===receivable!.sourceId),sourcePeriods=relay.periods.filter(row=>row.id===receivable!.sourceId)
+  if(sourceMeters.length+sourcePeriods.length!==1)return bad('原单来源缺失或不唯一，请先核对原票；没有推算所属账期。')
+  const sourceMeter=sourceMeters[0],sourcePeriod=sourcePeriods[0]??(sourceMeter?one(relay.periods.filter(row=>row.id===sourceMeter.periodId)):null)
+  if(!sourcePeriod||sourcePeriod.businessId!==target.businessId||!sourcePeriod.customerIds.includes(customer.id)||sourceMeter&&sourceMeter.customerId!==customer.id)return bad('原单、客户和原服务来源不匹配，请先核对。')
+  const sourceTarget:RelaySceneTarget={...base,kind:'period',periodId:sourcePeriod.id,...(sourceMeter?{meterId:sourceMeter.id}:{})}
+  if(resolveRelaySceneTarget(relay,sourceTarget,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations}).status!=='valid')return bad('原单的完整服务来源已失效，没有替换为最新账期。')
+  if(target.kind==='period'&&(!periodIds.includes(sourcePeriod.id)||target.meterId!==undefined&&sourceMeter?.id!==target.meterId))return bad('这张原单不属于眼前计量或原批次，请明确翻到它自己的原记录。')
+  if(!validDate(receivable.date)||!validDate(receivable.dueAt)||receivable.date>p.view.date||![receivable.amountFen,receivable.collectedFen,receivable.reversedFen].every(moneyValue)||receivable.collectedFen+receivable.reversedFen>receivable.amountFen)return bad('原单的日期或金额尚未完整核对，不能把未知写成零。')
+ }
+ if(subject.kind==='supplier'){
+  supplier=one(relay.catalog.suppliers.filter(row=>row.id===subject.id))
+  supplyOption=one(relay.supplyOptions.filter(row=>row.businessId===target.businessId&&row.supplierId===subject.id))
+  if(!supplier||!supplyOption||!allowedSupplier(supplier.id))return bad('这项供应资产不属于眼前原服务，请明确翻回本站或对应供应。')
+  const credit=supplyOption.credit
+  if(credit&&(credit.accountId!==target.accountId||credit.businessId!==target.businessId||!moneyValue(credit.remainingFen)||relay.supplyOptions.filter(row=>row.credit?.id===credit.id).length!==1))return bad('原供应资产池身份或金额不唯一，不能取另一家的余额。')
+ }
+ if(subject.kind==='obligation'){
+  const finance=one(p.features.workbench.finance.filter(row=>row.accountId===target.accountId))
+  obligation=finance?one(finance.obligations.filter(row=>row.id===subject.id)):null
+  if(!obligation)return bad('这张原欠款不在当前未结清单，先核对它自己的原历史；没有选择另一张单。')
+  if(obligation.accountId!==target.accountId||!validDate(obligation.date)||!moneyValue(obligation.amountFen)||!moneyValue(obligation.remainingFen)||obligation.remainingFen<=0||obligation.remainingFen>obligation.amountFen)return bad('原欠款账户或未结金额尚未完整核对，不能改用另一份账。')
+  const business=resolved.business!,history=relay.casebook,historyRows=history?.status==='ready'&&history.runId===p.view.runId&&history.revision===p.view.revision&&history.asOf===p.view.date&&Array.isArray(history.obligationHistory)?history.obligationHistory.filter(row=>row.id===obligation!.id):[]
+  const historyOwner=historyRows.length===1?historyRows[0]:null
+  const agrees=historyOwner&&historyOwner.accountId===obligation.accountId&&historyOwner.businessId===obligation.businessId&&historyOwner.contractId===obligation.contractId&&historyOwner.counterpartyId===obligation.counterpartyId&&historyOwner.kind===obligation.kind&&historyOwner.date===obligation.date&&historyOwner.sourceEventId===obligation.sourceEventId&&historyOwner.originOperationId===obligation.originOperationId&&historyOwner.amountFen===obligation.amountFen&&historyOwner.remainingFen===obligation.remainingFen&&historyOwner.protectionReservationId===obligation.protectionReservationId&&historyOwner.scopeBusinessId===business.id
+  const sameCompany=business.company&&p.view.operations!.businesses.filter(row=>row.company&&row.accountId===target.accountId).length===1
+  if(obligation.businessId!==business.id&&!(obligation.businessId===null&&(sameCompany||agrees)))return bad('这张原欠款没有唯一归到当前站点，没有挪用另一主体付款。')
+  const linkedCustomers=obligation.contractId===null?[]:relay.customers.filter(row=>row.id===obligation!.contractId)
+  if(linkedCustomers.length>1||linkedCustomers.length===1&&linkedCustomers[0]!.businessId!==business.id)return bad('原欠款的客户引用与本站不匹配，请先核对原责任。')
+  if(target.kind==='customer'&&obligation.contractId!==target.customerId)return bad('这张原欠款没有绑定眼前客户，请明确翻到它的原对象或本站责任。')
+  if(target.kind==='period'){
+   const relatedMeters=relay.meters.filter(row=>periodIds.includes(row.periodId)&&(target.meterId===undefined||row.id===target.meterId)),meterIds=new Set(relatedMeters.map(row=>row.id))
+   const sources=new Set<string>(target.meterId===undefined?periodIds:[])
+   for(const row of relatedMeters){sources.add(row.id);for(const id of row.deliveryIds)sources.add(id);if(row.costOperationId)sources.add(row.costOperationId)}
+   for(const row of relay.corrections.filter(row=>meterIds.has(row.meterId))){sources.add(row.id);for(const id of row.operationIds)sources.add(id)}
+   for(const row of relay.receivables.filter(row=>sources.has(row.sourceId))){sources.add(row.id);sources.add(row.operationId)}
+   if(target.meterId===undefined)for(const row of periods)for(const job of [row!.job,row!.supportJob])if(job){sources.add(job.id);sources.add(job.actionId)}
+   if(resolved.audit?.job){sources.add(resolved.audit.job.id);sources.add(resolved.audit.job.actionId)}
+   if(!sources.has(obligation.sourceEventId)&&!sources.has(obligation.originOperationId))return bad('这笔是本站另外的原责任，尚未唯一绑定眼前账期或计量；请明确翻到本站再办理。')
+  }
+ }
+ const scope:RelayResponseScope={accountId:target.accountId,businessId:target.businessId,stationId:target.stationId,mode,subjectKind:subject.kind,subjectId:subject.id}
+ return {scope,reason:null,customer,receivable,supplier,supplyOption,obligation}
+}
+export function relayResponseScopeForTarget(p:Input,target:RelaySceneTarget,subject:RelayResponseSubject,mode:RelayResponseMode):{scope:RelayResponseScope|null;reason:string|null}{
+ const {scope,reason}=relayResponseContext(p,target,subject,mode);return {scope,reason}
+}
+
+export function relayResponseDraftIssue(p:Input,target:RelaySceneTarget,subject:RelayResponseSubject,mode:RelayResponseMode,draft:RelayResponseDraft):string|null{
+ const context=relayResponseContext(p,target,subject,mode)
+ if(context.reason)return context.reason
+ const relay=p.features.relay!
+ if(mode==='collect'||mode==='customer-refund'||mode==='supplier-refund'||mode==='pay'){
+  const amount=parseMoneyInput(draft.amount)
+  if(amount===null)return '先明确填写这一次的金额（元），不会自动办理全部。'
+  if(mode==='collect'){
+   const invoice=context.receivable!,remaining=invoice.amountFen-invoice.collectedFen-invoice.reversedFen
+   if(invoice.dueAt>p.view.date)return '这张原单尚未到期，仍按原到期日等候，不能提前收取。'
+   if(amount>remaining)return '本次金额超过这张原单净未收；原填写保留，请明确调整。'
+  }else if(mode==='pay'){
+   if(amount>context.obligation!.remainingFen)return '本次金额超过这张原欠款的未结额；原填写保留，请明确调整。'
+  }else if(mode==='customer-refund'){
+   if(amount>context.customer!.balance.prepaidFen)return '本次金额超过这位客户未消费的原余额；已消费部分不能用此处退还。'
+  }else if(amount>(context.supplyOption!.credit?.remainingFen??0))return '本次金额超过此供应当前未用资产；没有改用另一项供应或客户保护。'
+  return null
+ }
+ if(mode==='renew'){
+  const customer=context.customer!
+  if(!validDate(draft.termEnd)||draft.termEnd<p.view.date||draft.termEnd<=customer.termEnd||draft.termEnd>playableThrough)return '先明确选择比原期限更晚的有效续签日期；原日期保留，不自动顺延。'
+  if(!['prepaid','postpaid'].includes(draft.paymentMode))return '先明确选择这次续签的预付或后付条件。'
+  if(draft.paymentMode==='postpaid'&&creditAmount(draft.creditLimit)===null)return '先明确填写新的后付信用上限（元，可明确填0）。'
+  return null
+ }
+ if(!draft.customerIds.length)return '先逐位明确选择这次愿意谈未来报价的原客户。'
+ if(!unique(draft.customerIds)||draft.customerIds.some(id=>{const rows=relay.customers.filter(row=>row.id===id);return rows.length!==1||rows[0]!.businessId!==target.businessId||rows[0]!.closedAt!==null}))return '原客户选择已失效、重复或跨主体；原稿保留，请明确调整，未代你删选。'
+ if(!relay.catalog.offers.some(offer=>offer.id===draft.offerKind)||relay.catalog.offers.filter(offer=>offer.id===draft.offerKind).length!==1)return '先明确选择这次拟谈的收费方案。'
+ if(!/^\d+$/.test(draft.unitPrice)||!Number.isSafeInteger(Number(draft.unitPrice))||Number(draft.unitPrice)<1)return '先明确填写拟谈用量单价（分/千模拟token），不自动采用旧价。'
+ if(!draft.resources.length)return '先明确选择本次实际谈判资源。'
+ if(!unique(draft.resources)||draft.resources.some(id=>relay.resources.filter(row=>row.id===id).length!==1))return '原资源已经不可用或重复，原稿保留，请明确重选；没有改给本人。'
+ if(!validDate(draft.startAt)||draft.startAt<p.view.date||draft.startAt>playableThrough)return '先明确选择有效的谈判开工日；原日期保留，没有改成今天。'
+ if(!validDate(draft.effectiveAt)||draft.effectiveAt<p.view.date||draft.effectiveAt>playableThrough)return '先明确选择未来报价的有效生效日期；没有自动顺延。'
+ return null
+}
+export interface RelayResponseCommand{readonly kind:string;readonly payload:unknown;readonly label:string;readonly confirm:true}
+/** Input validation does not replace the original preview, permission or atomic save. */
+export function relayResponseDraftCommand(p:Input,target:RelaySceneTarget,subject:RelayResponseSubject,mode:RelayResponseMode,draft:RelayResponseDraft):RelayResponseCommand|null{
+ if(relayResponseDraftIssue(p,target,subject,mode,draft))return null
+ const result=(kind:string,payload:unknown,label:string):RelayResponseCommand=>({kind,payload,label,confirm:true})
+ if(mode==='collect')return result('CollectRelayReceivable',{receivableId:subject.id,amountFen:parseMoneyInput(draft.amount)!},'核对这张原单，本次只收显选金额')
+ if(mode==='customer-refund')return result('RefundRelayBalance',{customerId:subject.id,amountFen:parseMoneyInput(draft.amount)!},'核对退还这位客户的未消费原款')
+ if(mode==='supplier-refund')return result('RefundRelaySupplier',{businessId:target.businessId,supplierId:subject.id,amountFen:parseMoneyInput(draft.amount)!},'核对取回此供应的未用资产')
+ if(mode==='pay')return result('PayObligation',{accountId:target.accountId,obligationId:subject.id,amountFen:parseMoneyInput(draft.amount)!},'核对这张原欠款，本次只付显选金额')
+ if(mode==='renew')return result('RenewRelayCustomer',{customerId:subject.id,termEnd:draft.termEnd,mode:draft.paymentMode,creditLimitFen:draft.paymentMode==='postpaid'?creditAmount(draft.creditLimit)!:0},'核对这位客户新的期限与收款条件')
+ return result('StartRelayRequote',{businessId:target.businessId,customerIds:[...draft.customerIds],offerKind:draft.offerKind,unitPriceFen:Number(draft.unitPrice),effectiveAt:draft.effectiveAt,resources:[...draft.resources],startAt:draft.startAt},'核对这些原客户的未来报价谈判')
+}

@@ -96,3 +96,63 @@
 .text-mode .opening-object[data-relay-phase][data-relay-state][data-kind=receipt]>.opening-object-copy{border:0;background:transparent}
 .opening-object[data-relay-phase][data-relay-state][data-text-only=true]>.opening-object-copy::before,
 .text-mode .opening-object[data-relay-phase][data-relay-state]>.opening-object-copy::before{display:none}
+
+/* Orthogonal ticket materials keep a cash receipt, a credit promise and an asset distinct. */
+.relay-service-art .relay-credit-leaf{fill:#e1dfc7;stroke:#8f9a80;stroke-width:4}
+.relay-service-art .relay-credit-fold{fill:#c4cbb2;stroke:#8f9a80;stroke-width:4}
+.relay-service-art .relay-correction-leaf{fill:#e8d4b4;stroke:#a7805a;stroke-width:4}
+.relay-service-art .relay-received-half{fill:#efe6c9;stroke:#a18b64;stroke-width:4}
+.relay-service-art .relay-torn-edge{stroke:#a18b64;stroke-width:5;stroke-linecap:round}
+.relay-service-art .relay-refund-leaf{fill:#e6d9c0;stroke:#a58d73;stroke-width:4}
+.relay-service-art .relay-refund-direction{stroke:#9d7257;stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
+.relay-service-art .relay-asset-cover{fill:#aebcad;stroke:#6e8578;stroke-width:5}
+.relay-service-art .relay-asset-leaf{fill:#e5dec4;stroke:#9b9a7c;stroke-width:4}
+.relay-service-art .relay-asset-binding{stroke:#718778;stroke-width:8;stroke-linecap:round}
+.relay-service-art .relay-asset-direction{stroke:#738a72;stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
+.relay-service-art .relay-support-fold-line{stroke:#817c65;stroke-width:5;stroke-linecap:round}
+.relay-service-art .relay-support-break{stroke:#95694f;stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
+.relay-service-art [data-support-status=cancelled] .relay-support-leaf{fill:#c8c2ac;stroke-dasharray:14 10}
+.relay-service-art [data-support-status=interrupted] .relay-support-leaf{fill:#c1b69d;stroke:#9d8064}
+.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-ticket-note{color:#4d5e45;border-left:2px solid #9e8d5f}
+.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-scope-note{color:#68664b;border-bottom-style:dashed}
+.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-protection-note{color:#485b3e;border-left:3px solid #83916f;background:linear-gradient(110deg,#dedfc3,#cbd0ae)}
+.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-payment-note[data-payment-nature=credit]{border-left:2px dashed #80937d;background:linear-gradient(110deg,#e0e1c9,#ced3b8);color:#455b45}
+.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-payment-note[data-payment-nature=collection]{border-left:3px double #a48c59;color:#665536}
+.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-payment-note[data-payment-nature=customer-refund]{border-left:3px solid #a47f65;background:linear-gradient(110deg,#e5d6bd,#d6c3a5);color:#72513c}
+.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-payment-note:is([data-payment-nature=supplier-asset],[data-payment-nature=supplier-return]){border-left:3px double #7a927e;background:linear-gradient(110deg,#e0dfc5,#cbd1b6);color:#465e49}
+.opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-support-note:is([data-support-state=stopped]){border-left:2px dashed #8f866b;color:#655f46}
+/* The composed room has no general paper backing; each new fact retains an explicit material. */
+.opening-room .room-tableau .opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-ticket-note{padding:0;border:0;background:none;color:#e0dac1}
+.opening-room .room-tableau .opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-scope-note{padding:0 0 3px;border:0;border-bottom:1px dashed #b19d6d77;background:none;color:#c7ccb4}
+.opening-room .room-tableau .opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-protection-note{padding:4px 8px;border:1px solid #9b9971;border-left:3px solid #83916f;background:linear-gradient(110deg,#dedfc3,#cbd0ae);color:#485b3e}
+.opening-room .room-tableau .opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-payment-note[data-payment-nature=credit]{border-left:2px dashed #80937d;background:linear-gradient(110deg,#e0e1c9,#ced3b8);color:#455b45}
+.opening-room .room-tableau .opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-payment-note[data-payment-nature=customer-refund]{border-left:3px solid #a47f65;background:linear-gradient(110deg,#e5d6bd,#d6c3a5);color:#72513c}
+.opening-room .room-tableau .opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-payment-note:is([data-payment-nature=supplier-asset],[data-payment-nature=supplier-return]){border-left:3px double #7a927e;background:linear-gradient(110deg,#e0dfc5,#cbd1b6);color:#465e49}
+.opening-room .room-tableau .opening-object[data-relay-phase][data-relay-state] .relay-paper-notes>.relay-paper-support-note[data-support-state=stopped]{padding-left:7px;border-left:2px dashed #b29d7f;color:#dfd0af;background:none}
+
+
+/* Three saved-state silhouettes share the existing kit, tray, lens and ground contact. */
+.relay-service-art[data-relay-composition] .relay-folio-contact{fill:#18221a;opacity:.36}
+.relay-service-art[data-relay-composition] .relay-folio-under{fill:#ad9974;stroke:#746345;stroke-width:7;stroke-linejoin:round}
+.relay-service-art[data-relay-composition] .relay-folio-leaf{fill:#efe3c7;stroke:#b09a6e;stroke-width:7;stroke-linejoin:round}
+.relay-service-art[data-relay-composition] .relay-folio-leaf-warm{fill:#d8c6a1;stroke:#a18a5e;stroke-width:7;stroke-linejoin:round}
+.relay-service-art[data-relay-composition] .relay-folio-spine{stroke:#7e7255;stroke-width:15;stroke-linecap:round}
+.relay-service-art[data-relay-composition] .relay-folio-rule{stroke:#8c8c6f;stroke-width:8;stroke-linecap:round}
+.relay-service-art[data-relay-composition] .relay-folio-awaiting{stroke:#9b8e68;stroke-width:8;stroke-dasharray:18 14;stroke-linecap:round}
+.relay-service-art[data-relay-composition] .relay-folio-tool{stroke:#687460;stroke-width:13;stroke-linecap:round;stroke-linejoin:round}
+.relay-service-art[data-relay-composition] .relay-folio-cover{fill:#c2b18e;stroke:#8f7954;stroke-width:8;stroke-linejoin:round}
+.relay-service-art[data-relay-composition] .relay-folio-flap{fill:#d7c8a6;stroke:#9c8760;stroke-width:7;stroke-linejoin:round}
+.relay-service-art[data-relay-composition] .relay-folio-tie{stroke:#83765a;stroke-width:13;stroke-linecap:round}
+.relay-service-art[data-relay-composition] .relay-folio-retained-leaf{fill:#e9dfc4;stroke:#aa946b;stroke-width:7;stroke-linejoin:round}
+.relay-service-art[data-relay-composition] .relay-folio-double-rule{stroke:#7e886f;stroke-width:9;stroke-linecap:round}
+.relay-service-art[data-relay-composition] .relay-folio-unreviewed-frame{stroke:#aa9b78;stroke-width:7;stroke-dasharray:5 18;stroke-linejoin:round}
+.relay-service-art[data-relay-composition] .relay-folio-clip{stroke:#ac8e57;stroke-width:12;stroke-linecap:round}
+.relay-service-art[data-relay-composition] .relay-folio-stopped{fill:#b4ae98;stroke:#817963}
+.relay-service-art[data-relay-composition] .relay-folio-kept-tab{fill:#dfd3b4;stroke:#a18e64;stroke-width:6}
+.relay-service-art[data-relay-composition=settled-unreviewed] .relay-folio-active-edge{stroke:#a79b74}
+.relay-service-art[data-relay-composition=kept][data-relay-kept=stopped] .relay-folio-flap{fill:#c8c1a9;stroke:#8d8369}
+.opening-object[data-relay-phase][data-relay-state]:is(:hover,:focus-visible):not(:disabled) .relay-service-art[data-relay-composition] .relay-folio-active-edge{stroke:#e8cb87;stroke-width:10}
+.opening-object[data-relay-phase][data-relay-state]:active:not(:disabled) .relay-service-art[data-relay-composition] .relay-folio-active-edge{stroke:#d7b568;stroke-width:10}
+.opening-object[data-relay-phase][data-relay-state]:disabled .relay-service-art[data-relay-composition] .relay-folio-active-edge{stroke:#9b957b;stroke-dasharray:18 10}
+.opening-object[data-relay-phase][data-relay-state][data-protection=readonly] .relay-service-art[data-relay-composition] .relay-folio-kept-tab{stroke:#879578;stroke-width:9}
+.opening-object[data-relay-phase][data-relay-state][data-protection=unsaved] .relay-service-art[data-relay-composition] .relay-folio-kept-tab{stroke:#9d8c68;stroke-dasharray:8 7}

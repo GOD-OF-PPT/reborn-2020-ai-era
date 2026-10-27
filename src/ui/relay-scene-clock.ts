@@ -4,6 +4,7 @@ import type {RelaySceneProgress} from './relay-scene-progress.ts'
 import type {GamePanelProps} from './game-types.ts'
 import {courseWaitDate} from './course-wait-date.ts'
 import {resolveRelaySceneTarget,type RelaySceneTarget} from './relay-scene-target.ts'
+import {relayTicketAudit} from './relay-ticket-command.ts'
 
 function parallelTeachingReview(p:Pick<GamePanelProps,'view'|'features'>,date:string):string|null{
  const course=p.features.course
@@ -49,10 +50,10 @@ export function relayReviewLabel(p:Pick<GamePanelProps,'view'|'features'>,date:s
  */
 export function relayDeferredFeedback(p:Pick<GamePanelProps,'view'|'features'|'accountId'>,target:RelaySceneTarget|null|undefined):{date:string;label:string}|null{
  const w=p.features.workbench
- if(p.view.phase!=='playing'||w.atQuarterEnd||w.pause!==null||w.progression.requiresDelivery||target?.kind!=='period'||target.jobId||target.meterId)return null
+ if(p.view.phase!=='playing'||w.atQuarterEnd||w.pause!==null||w.progression.requiresDelivery||target?.kind!=='period')return null
  const r=resolveRelaySceneTarget(p.features.relay,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})
  if(r.status!=='valid'||!r.period)return null
- const jobs=[r.period.job,r.period.supportJob,...p.features.relay!.auditJobs.filter(a=>a.periodIds.includes(r.period!.id)).map(a=>a.job)]
+ const jobs=target.jobId!==undefined?[r.job]:target.meterId!==undefined?[relayTicketAudit(p,target).job]:[r.period.job,r.period.supportJob,...p.features.relay!.auditJobs.filter(a=>a.periodIds.includes(r.period!.id)).map(a=>a.job)]
  const feedback=jobs.filter(j=>j&&['planned','running'].includes(j.status)).map(j=>({date:j!.status==='planned'?j!.startAt:j!.completeAt,kind:j!.definitionId.startsWith('relay-support-')?'支持':j!.definitionId==='relay-meter-audit'?'复核':'服务'})).filter(j=>j.date>p.view.date).sort((a,b)=>a.date.localeCompare(b.date))[0]
  if(!feedback)return null
  const date=parallelTeachingReview(p,playableAdvanceDate(w,p.view.date,feedback.date))

@@ -4,6 +4,7 @@ import type {OpeningFocus,PlayerThreadView} from './player-thread.ts'
 import {relaySceneProgress} from './relay-scene-progress.ts'
 import {resolveRelaySceneTarget,relayTargetEntity,type RelaySceneTarget,type RelaySceneContext} from './relay-scene-target.ts'
 import {relayJourneyAction,relayJourneyScene} from './relay-journey.ts'
+import {relayTicketAudit} from './relay-ticket-command.ts'
 
 type Input=Pick<GamePanelProps,'view'|'features'>
 export type RelayOpeningFocus=Extract<OpeningFocus,{kind:'relay'}>
@@ -45,8 +46,10 @@ export function relayFocusOpen(p:Input,f:RelayOpeningFocus):boolean{
  if(t.kind==='audience')return r.audience!.completedAt===null&&!!r.audience!.job&&['planned','running'].includes(r.audience!.job.status)
  if(t.kind==='customer')return r.customer!.closedAt===null||r.customer!.balance.prepaidFen>0||r.customer!.balance.receivableFen>0
  if(t.kind==='business')return r.business!.lifecycle!=='closed'
+ if(r.meter){const audit=relayTicketAudit({...p,accountId:f.accountId},t);if(audit.job)return true}
  const period=r.period!,sourceIds=new Set([period.id,...v.meters.filter(m=>m.periodId===period.id).map(m=>m.id)])
  return ['planned','running','support','settling'].includes(period.status)||[period.job,period.supportJob].some(j=>j&&['planned','running'].includes(j.status))
+  ||v.auditJobs.some(a=>a.businessId===t.businessId&&a.periodIds.includes(period.id)&&a.job&&['planned','running'].includes(a.job.status)&&resolveRelaySceneTarget(v,{kind:'period',runId:t.runId,accountId:t.accountId,businessId:t.businessId,stationId:t.stationId,periodId:period.id,jobId:a.jobId},relaySceneContext(p,f.accountId)).status==='valid')
   ||v.receivables.some(row=>sourceIds.has(row.sourceId)&&row.amountFen>row.collectedFen+row.reversedFen)
   ||v.meters.some(m=>m.periodId===period.id&&m.auditedUnits!==null&&m.auditedUnits!==m.reportedUnits&&m.correctionId===null)
 }

@@ -1,15 +1,18 @@
 import type {CommandEnvelope} from '../core/run-types.ts'
-import type {RelayProjection} from '../core/relay-projection.ts'
+import type {GamePanelProps} from './game-types.ts'
 import type {WorkerInstance} from '../core/operations-types.ts'
 import {RELAY_JOBS} from '../content/relay.ts'
 import {relayAuditCompletion} from './relay-audit-dates.ts'
 import {relayAuditableMeters} from './relay-scene-progress.ts'
 import {courseResourceLabel} from './course-resource-labels.ts'
 import {moneyText} from './game-text.ts'
+import {relayResponseCommandDetails} from './RelayResponseCommandDetails.tsx'
 
 /** The caller supplies the same captured public snapshot as the original confirmation. */
-export function RelayCommandDetails({command,relay,workers,accountName}:{command:CommandEnvelope;relay:RelayProjection;workers:readonly WorkerInstance[];accountName:(id:string)=>string}){
+export function RelayCommandDetails({command,relay,workers,accountName,view,finance}:{command:CommandEnvelope;relay:GamePanelProps['features']['relay'];workers:readonly WorkerInstance[];accountName:(id:string)=>string;view?:GamePanelProps['view']|undefined;finance?:GamePanelProps['features']['workbench']['finance']|undefined}){
  if(!relay)return null
+  const response=relayResponseCommandDetails({command,relay,accountName,view,finance})
+ if(response)return response
  if(command.kind==='TopUpRelaySupplier'){
   const p=command.payload as {businessId:string;supplierId:string;amountFen:number},business=relay.businesses.find(b=>b.id===p.businessId),supplier=relay.catalog.suppliers.find(s=>s.id===p.supplierId)
   if(!business||!supplier)return null

@@ -10,8 +10,15 @@ import {CommandButton} from './CommandButton.tsx'
 import {ClockAdvance} from './ClockAdvance.tsx'
 import {playableAdvanceDate} from '../application/playable-advance.ts'
 import {relayReviewDate,relayReviewLabel,relayDeferredFeedback} from './relay-scene-clock.ts'
-import {relayJourneyAction,relayJourneyScene,type RelayChoiceIntent} from './relay-journey.ts'
+import {relayJourneyAction,relayJourneyScene,relayClosedPeriodTarget,type RelayChoiceIntent} from './relay-journey.ts'
+import {RELAY_JOBS} from '../content/relay.ts'
 import {RelayAuditEditor,RelayServiceChoice,relayChoiceContext} from './RelayServiceChoice.tsx'
+import {RelayRecordBook,relayRecordSuggestedKey} from './RelayRecordBook.tsx'
+import {relayRecordRows} from './relay-records.ts'
+import {relayCasebookRecordId} from './relay-record-memory.ts'
+import {RelayResponseEditor} from './RelayResponseEditor.tsx'
+import {relayNextServiceContract} from './relay-next-service-contract.ts'
+import {makeSharedAction} from './shared-action.ts'
 
 /** Opening an original ticket is optional; it never performs or confirms an operation. */
 export function RelayServiceLetter({p,progress,onNext,onFullRecord}:{p:GamePanelProps;progress:RelaySceneProgress;onNext:()=>void;onFullRecord:()=>void}){
@@ -72,11 +79,38 @@ export interface RelaySceneChoiceProps{
  target:RelaySceneTarget|null|undefined
  blockedReason?:string|null|undefined
  onTargetChange?:((target:RelaySceneTarget|null)=>void)|undefined
- onInspect:(target:RelaySceneTarget|null,slot?:RelayChoiceDraftSlot)=>void
+ onInspect:(target:RelaySceneTarget|null,slot?:RelayChoiceDraftSlot,recordId?:string)=>void
  onToday?:(()=>void)|undefined
  onLife?:(()=>void)|undefined
  children:(open:(intent?:RelayChoiceIntent)=>void)=>ReactNode
 }
+type NextServiceProps={p:GamePanelProps;target:Extract<RelaySceneTarget,{kind:'business'}>;blockedReason?:string|null|undefined;onInspect:RelaySceneChoiceProps['onInspect'];onClose:()=>void;onPickAnother?:(()=>void)|undefined}
+/** A renewal is another explicit original response, never a change of the room's bookmark. */
+export function RelayNextServiceConditions({p,target,blockedReason,onInspect,onClose,onPickAnother}:NextServiceProps){
+ const scope=JSON.stringify([p.view.runId,target]),[selected,setSelected]=useState<{scope:string;id:string|null}>({scope,id:null}),[renewing,setRenewing]=useState<{scope:string;id:string}|null>(null),name=useId()
+ const contract=relayNextServiceContract(p,target),v=p.features.relay,business=v?.businesses.find(b=>b.id===target.businessId),service=RELAY_JOBS.find(job=>job.id==='relay-service')!
+ const pick=selected.scope===scope?selected.id:null,renewId=renewing?.scope===scope?renewing.id:null,customer=renewId?v?.customers.filter(c=>c.id===renewId&&c.businessId===target.businessId):[]
+ const read=(activate:()=>void)=>makeSharedAction(p,'核对同企业新一期的原条件',activate,{allowReadOnly:true}).activate(),busy=makeSharedAction(p,'核对同企业新一期的原条件',()=>{},{allowReadOnly:true}).disabled
+ const same=contract.reason===null&&!!business,terms=contract.reason===null?v?.customers.filter(c=>c.businessId===target.businessId)??[]:[],canDraft=contract.customers.some(c=>c.coverage==='covers')
+ const inspect=()=>read(()=>onInspect(target,'service'))
+ const pickAnother=onPickAnother?<button type="button" disabled={busy} onClick={()=>read(onPickAnother)}>明确翻选另一份原服务</button>:null
+ const introduction=<section aria-label="拟新一期前，先看清当前条件"><p>这是一次新的服务约定。已有原期与未完约定继续保留，客户余额仍需留给客户；客户、线路顺序、预算与支持都由你明确选择。</p>
+  {same&&business?<><p>本站{lifecycleText[business.lifecycle]}；当前可花{moneyText(business.funds.availableFen)}，客户保护{moneyText(business.funds.prepaidLiabilityFen)}，供应资产{moneyText(business.funds.supplierPrepaidFen)}。本季可用{p.view.budget.available}点，开工和支持要分别留出所在季度的时间。</p>
+  <p>服务本身需{moneyText(service.costFen)}、{service.actionPoints}点、{v!.catalog.serviceDays}日；支持方式与额外投入另行显选。期限够用后，资金、供应、资源和所选日期还要一起核对。</p></>:null}
+  {contract.window?<p role="status">今天之后最早可明确安排{contract.window.from}—{contract.window.to}，后者是原服务结束边界；按原合同规则，有效期至少须到{contract.window.minimumTermEnd}。这里没有替你填入开工日或续签日期。</p>:<p role="status" className="warning-box">{contract.reason}</p>}
+  {same&&!canDraft?<p role="status">目前没有一份已核原合同能覆盖这个最早窗口。先明确核对一位原客户的续签条件，或合上保留草稿；先把原期限谈清，再写新的服务安排。</p>:same?<p>已有原合同能覆盖最早窗口，可以直接显选本期客户，不强制续签。选更晚日期仍需重新核对覆盖范围。</p>:null}
+  {same?<fieldset><legend>若要续签，先明确选择一位原客户</legend>{contract.customers.map(c=><label className="radio-line" key={c.id}><input type="radio" name={name} checked={pick===c.id} disabled={busy} onChange={()=>read(()=>setSelected({scope,id:c.id}))}/><span>客户{c.number} · 原合同至{c.termEnd}<small>{c.reason}</small></span></label>)}</fieldset>:null}
+  {same?<button type="button" disabled={busy||pick===null||terms.filter(c=>c.id===pick).length!==1} onClick={()=>{if(pick!==null&&terms.filter(c=>c.id===pick).length===1)read(()=>setRenewing({scope,id:pick}))}}>明确核对这位原客户的续签条件</button>:null}
+  <details><summary>核对客户当前有效条款与旧余额</summary>{terms.map((c,index)=>{const condition=contract.customers.find(row=>row.id===c.id),known=condition?.termsKnown===true;return <p key={c.id}>客户{index+1} · 合同至{c.termEnd}{condition?.coverage==='closed'?' · 原合同已关闭':condition&&condition.coverage!=='unknown'&&c.termEnd<p.view.date?' · 已过原期限，续签须另行决定':''}；{known?'当前用量价'+moneyText(c.activeTerms.unitPriceFen)+'，周期支持基准'+moneyText(c.activeTerms.serviceFeeFen)+'，生效于'+c.activeTerms.effectiveAt+'；原来源 '+c.activeTerms.sourceId:'当前有效报价需回原合同核对'}；原预款仍保护{moneyText(c.balance.prepaidFen)}，原应收{moneyText(c.balance.receivableFen)}。</p>})}<p>谈妥但尚未生效的新报价不替换当前价；旧计量与原支持不重算。</p></details>
+ </section>
+ if(renewId&&same&&customer?.length===1)return <RelayResponseEditor p={p} target={target} subject={{kind:'customer',id:renewId}} mode="renew" blockedReason={blockedReason}>{view=><Dialog title={view.title} className="opening-paper relay-choice-paper" onClose={()=>read(()=>setRenewing(null))} footer={<>{view.actions}<button type="button" onClick={()=>read(()=>setRenewing(null))}>返回同企业新期条件，保留两份草稿</button><button type="button" disabled={busy} onClick={inspect}>翻看同企业原册，保留两份草稿</button><button type="button" onClick={onClose}>合上续签，仍留原期书签</button></>}>
+  <p>只核客户{contract.customers.find(c=>c.id===renewId)?.number}的原续签；没有开新服务、收款或清除旧余额。取消后仍回同一企业的新期条件，原期书签不变。</p>{view.body}
+ </Dialog>}</RelayResponseEditor>
+ if(renewId&&(!same||customer?.length!==1))return <Dialog title="先找回，这位原客户" className="opening-paper relay-choice-paper" onClose={onClose} footer={<><button type="button" onClick={()=>read(()=>setRenewing(null))}>返回原企业条件，明确重选</button><button type="button" onClick={onClose}>合上，保留原期书签</button></>}><p role="status" className="warning-box">原来选择的续签客户已经不能唯一核对；没有换成另一位，也没有继续另一份服务。</p></Dialog>
+ if(!same||!canDraft)return <Dialog title="先看清，新一期能否守住原约" className="opening-paper relay-choice-paper" onClose={onClose} footer={<><button type="button" disabled={busy} onClick={inspect}>翻看同企业原册，保留这份草稿</button>{pickAnother}<button type="button" onClick={onClose}>先合上，保留草稿与原期书签</button></>}>{blockedReason?<p role="status" className="warning-box">{blockedReason}</p>:null}{introduction}{renewId?<p role="status" className="warning-box">原来选择的续签客户已经不能唯一核对；没有换成另一位。</p>:null}</Dialog>
+ return <RelayServiceChoice p={p} target={target} blockedReason={blockedReason} onInspect={onInspect} onClose={onClose}>{view=><Dialog title={view.title} className="opening-paper relay-choice-paper" onClose={onClose} footer={<>{view.actions}{pickAnother}</>}>{introduction}{view.body}</Dialog>}</RelayServiceChoice>
+}
+
 /** Every entrance keeps the original identity and the same explicit editor. */
 export function RelaySceneChoice({p,target,blockedReason,onTargetChange,onInspect,onToday,onLife,children}:RelaySceneChoiceProps){
  const sourceKey=p.view.runId+'|'+JSON.stringify(target),source=useRef({key:sourceKey,version:0})
@@ -88,7 +122,7 @@ export function RelaySceneChoice({p,target,blockedReason,onTargetChange,onInspec
  useEffect(()=>{if(p.view.hasCandidate||p.view.saveStatus==='conflict'||open&&p.view.revision!==openedRevision.current&&p.view.saveStatus==='saved')setOpen(false)},[p.view.hasCandidate,p.view.saveStatus,p.view.revision,open])
  const choose=(next:RelaySceneTarget|null)=>{if(bookmarkLocked(p))return;setLocal({version:source.current.version,target:next});onTargetChange?.(next);setPicker(false);setRequested(undefined)}
  const activate=(intent?:RelayChoiceIntent)=>{openedRevision.current=p.view.revision;setRequested(intent);setPicker(intent==='objects'||current===undefined||resolution?.status==='invalid');setOpen(true)}
- const inspect=(value:RelaySceneTarget|null,slot?:RelayChoiceDraftSlot)=>{setOpen(false);onInspect(value,slot)}
+ const inspect=(value:RelaySceneTarget|null,slot?:RelayChoiceDraftSlot,recordId?:string)=>{setOpen(false);if(recordId!==undefined)onInspect(value,slot,recordId);else onInspect(value,slot)}
  const journey=relayJourneyAction(scopedP,current),slot=requested??journey.intent,valid=resolution?.status==='valid'&&current!==null&&current!==undefined
  const decision=progress&&!progress.historical&&!progress.wait&&!progress.command?relayJourneyScene(journey):null
  const original=valid&&current.kind==='period'&&(current.jobId!==undefined||current.meterId!==undefined)
@@ -98,8 +132,17 @@ export function RelaySceneChoice({p,target,blockedReason,onTargetChange,onInspec
  const select=(next:RelaySceneTarget|null,intent?:RelayChoiceIntent)=>{choose(next);setRequested(intent)}
  let content:ReactNode=null
  if(open&&picker)content=<Dialog title="先找回，同一份原服务" className="opening-paper relay-choice-paper" onClose={close}><p role="status">{resolution?.reason??'明确选择原站点、回信、客户或账期；翻阅不签约、不充值。'}</p><RelayTargetPicker p={p} current={current} onConfirm={next=>select(next,next===null?'open':undefined)}/><button type="button" onClick={close}>先合上，不换对象</button></Dialog>
+ else if(open&&valid&&current&&slot==='record'){
+  const exact=current.kind==='application'||current.kind==='audience'||current.kind==='period'&&(current.meterId!==undefined||current.jobId!==undefined)
+  const key=exact?relayRecordSuggestedKey(scopedP,current,relayRecordRows(scopedP,current).rows):undefined
+  content=<RelayRecordBook p={scopedP} target={current} initialRecordKey={key} blockedReason={blockedReason} onFullRecord={(next,record,preparation)=>inspect(next,preparation,record?relayCasebookRecordId(record):undefined)}>{view=><Dialog title={view.title} className="opening-paper relay-choice-paper" onClose={close} footer={<>{view.actions}<button type="button" onClick={close}>先合上，保留原票与填写</button></>}>{view.body}</Dialog>}</RelayRecordBook>
+ }
+ else if(open&&slot==='next-service'){
+  const nextTarget=relayClosedPeriodTarget(scopedP,current)
+  content=nextTarget?<RelayNextServiceConditions p={scopedP} target={nextTarget} blockedReason={blockedReason} onInspect={inspect} onClose={close} onPickAnother={()=>setPicker(true)}/>:<Dialog title="先找回，这一期的实际结果" className="opening-paper relay-choice-paper" onClose={close}><p role="status">原期来源或状态已经变化；没有换到另一间站，也没有沿旧画面拟新约。先翻回同一份原记录，再明确决定。</p><button type="button" onClick={close}>回到原场景，不新增安排</button></Dialog>
+ }
  else if(open&&isRelayPreparationSlot(slot)&&current!==undefined&&resolution?.status!=='invalid')content=<RelayPreparationEditor p={scopedP} target={current} slot={slot} blockedReason={blockedReason} onInspect={inspect} onClose={close}>{view=><Dialog title={view.title} className="opening-paper relay-choice-paper" onClose={close} footer={<>{view.actions}<button type="button" onClick={()=>setRequested('more')}>看看本站的其他选择</button></>}>{view.body}</Dialog>}</RelayPreparationEditor>
- else if(open&&editable&&current)content=slot==='service'?<RelayServiceChoice p={scopedP} target={current} blockedReason={blockedReason} onInspect={inspect} onClose={close}>{view=><Dialog title={view.title} className="opening-paper relay-choice-paper" onClose={close} footer={<>{view.actions}<button type="button" onClick={()=>setPicker(true)}>明确翻选另一份原服务</button></>}>{view.body}</Dialog>}</RelayServiceChoice>:<RelayAuditEditor p={scopedP} target={current} blockedReason={blockedReason} onInspect={inspect} onClose={close}>{view=><Dialog title={view.title} className="opening-paper relay-choice-paper" onClose={close} footer={<>{view.actions}<button type="button" onClick={()=>setPicker(true)}>明确翻选另一份原服务</button></>}>{view.body}</Dialog>}</RelayAuditEditor>
+ else if(open&&editable&&current)content=slot==='service'&&current.kind==='business'?<RelayNextServiceConditions p={scopedP} target={current} blockedReason={blockedReason} onInspect={inspect} onClose={close} onPickAnother={()=>setPicker(true)}/>:<RelayAuditEditor p={scopedP} target={current} blockedReason={blockedReason} onInspect={inspect} onClose={close}>{view=><Dialog title={view.title} className="opening-paper relay-choice-paper" onClose={close} footer={<>{view.actions}<button type="button" onClick={()=>setPicker(true)}>明确翻选另一份原服务</button></>}>{view.body}</Dialog>}</RelayAuditEditor>
  else if(open){
   const job=resolution?.job,meter=resolution?.meter,period=resolution?.period,customer=resolution?.customer
   const nextPeriod=valid&&current.kind==='period'?{kind:'period' as const,runId:current.runId,accountId:current.accountId,businessId:current.businessId,stationId:current.stationId,periodId:current.periodId}:null
@@ -119,6 +162,7 @@ export function RelaySceneChoice({p,target,blockedReason,onTargetChange,onInspec
    {slot==='more'&&businessTarget?options.map(([intent,label])=><button type="button" key={intent} disabled={bookmarkLocked(p)} onClick={()=>select(intent==='customers'&&current?.kind==='audience'||intent==='customer-funds'&&current?.kind==='customer'?current:businessTarget,intent)}>{label}</button>):null}
    {slot!=='more'&&businessTarget&&current?.kind!=='business'&&!original?<button type="button" disabled={bookmarkLocked(p)} onClick={()=>select(businessTarget)}>继续核对本站的当前准备与约定</button>:null}
    {slot!=='more'&&businessTarget?<button type="button" disabled={bookmarkLocked(p)} onClick={()=>setRequested('more')}>核对新的尝试、收缩或停止方式</button>:null}
+   {valid?<button type="button" onClick={()=>setRequested('record')}>翻开同一对象的原票，逐项回应</button>:null}
    {slot==='more'&&businessTarget&&business?.lifecycle==='operating'?<CommandButton {...scopedP} kind="PauseBusiness" payload={{businessId:businessTarget.businessId}} label="先暂停接受新合同，保留已有责任" confirm/>:null}
    {slot==='more'&&businessTarget&&business?.lifecycle!=='closed'&&business?.lifecycle!=='winding_down'?<CommandButton {...scopedP} kind="StopRelayStation" payload={{businessId:businessTarget.businessId}} label="核对并停站收尾，旧余额与欠款保留" confirm/>:null}
    {onToday?<button type="button" disabled={bookmarkLocked(p)} onClick={()=>{close();onToday()}}>回到今天，看看接下来的日子</button>:null}

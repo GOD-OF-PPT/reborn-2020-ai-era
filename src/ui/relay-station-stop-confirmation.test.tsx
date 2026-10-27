@@ -1,0 +1,128 @@
+import {afterAll,beforeAll,expect,it} from 'vitest'
+import {isValidElement,type ReactElement} from 'react'
+import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
+import {createCampaignCodec} from '../application/campaign.ts'
+import {GameController} from '../application/game-controller.ts'
+import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
+import {projectRun,type CommandPreview} from '../core/commands.ts'
+import type {CommandEnvelope} from '../core/run-types.ts'
+import type {RelayCasebookHistory} from '../application/relay-casebook-projection.ts'
+import type {PlayFeatures,PlayingView} from './game-types.ts'
+import {CommandDetails} from './CommandDetails.tsx'
+import {RelayCommandDetails} from './RelayCommandDetails.tsx'
+import {relayResponseCommandDetails} from './RelayResponseCommandDetails.tsx'
+import {confirmationMoney} from './confirmation-money.ts'
+import {moneyText} from './game-text.ts'
+import raw99 from '../../goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6/i06-saved99-support-interrupted-real-settlement.json?raw'
+import raw100 from '../../goal-1/evidence/t17-acceptance-37/chrome-support-interrupt-r6/i10-saved100-explicit-station-stop-old-protection-and-debt.json?raw'
+
+// Fixed actual Native before/after captures. SHA/mode are separately frozen in
+// station-stop-confirmation-fix-r1. These setup imports are not another Native
+// run or full-Create replay, and the public fixture cases never become saves.
+const businessId='ops:60e1e4f1a8f744bbf167073569038995',accountId='ops:d85d2aa1cc29968ea1f91bb3f0d29ad2'
+type Frame={view:PlayingView;features:PlayFeatures;raw:string}
+type Element=ReactElement<Record<string,unknown>>
+type Relay=NonNullable<PlayFeatures['relay']>
+let codec:ReturnType<typeof createCampaignCodec>,controller:GameController,before:Frame,after:Frame,command:CommandEnvelope,preview:CommandPreview
+const accountName=(id:string)=>'原账户 '+id
+const features=(view:PlayingView)=>view.features as unknown as PlayFeatures
+function elements(value:unknown):Element[]{
+ if(Array.isArray(value))return value.flatMap(elements)
+ if(!isValidElement<Record<string,unknown>>(value))return []
+ const result=[value,...elements(value.props.children)]
+ if(typeof value.type==='function'&&value.type.name==='RelayCommandDetails'){
+  const component=value.type as (props:Record<string,unknown>)=>unknown
+  result.push(...elements(component(value.props)))
+ }
+ return result
+}
+function text(value:unknown):string{if(typeof value==='string'||typeof value==='number')return String(value);if(Array.isArray(value))return value.map(text).join('');return isValidElement<Record<string,unknown>>(value)?text(value.props.children):''}
+function details(frame=before,currentCommand=command){return CommandDetails({command:currentCommand,confirm:preview,features:frame.features,view:frame.view,accountName,clock:null})}
+function stopText(frame=before){const nodes=elements(details(frame)),section=nodes.find(e=>e.type==='section'&&e.props.className==='confirmation-context relay-station-stop-terms');if(!section)throw Error('REAL_STOP_CONFIRMATION_SECTION_REQUIRED');return text(section)}
+function alter(update:(relay:Relay)=>Relay,view=before.view):Frame{
+ const next={...before.features,relay:update(before.features.relay!)}
+ return {...before,features:next,view:{...view,features:next as unknown as PlayingView['features']}}
+}
+const book=(frame=before)=>frame.features.relay!.casebook!
+const account=(frame=before)=>frame.view.accounts.find(a=>a.accountId===accountId)!
+const finance=(frame=before)=>frame.features.workbench.finance.find(a=>a.accountId===accountId)!
+beforeAll(async()=>{
+ codec=createCampaignCodec();const store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'station-stop-confirmation-original99'})
+ let sequence=0;controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=> 'station-stop-confirmation-'+(++sequence)})
+ await controller.initialize();await controller.importNew(raw99)
+ const view=controller.snapshot.view!;before={view,features:features(view),raw:raw99}
+ const run=codec.import(raw100),projection=codec.registry.runtime?.project?.(run)
+ if(!projection)throw Error('ACTUAL_PUBLIC_AFTER_STOP_PRODUCER_REQUIRED')
+ after={view:{...projectRun(run),features:projection,saveStatus:'saved',busy:false,readOnly:false,readOnlyReason:null,hasCandidate:false,pendingRevision:null},features:projection as unknown as PlayFeatures,raw:raw100}
+ expect(new TextEncoder().encode(raw99).byteLength).toBe(1395376);expect(new TextEncoder().encode(raw100).byteLength).toBe(1401725)
+ expect(view.revision).toBe(99);expect(after.view.revision).toBe(100);expect(view.date).toBe('2025-03-05');expect(after.view.date).toBe(view.date)
+ expect(book().status).toBe('ready');expect(book(after).status).toBe('ready');expect(codec.export(run)).toBe(raw100);expect(controller.exportSaved()).toBe(raw99)
+ command=controller.prepare('StopRelayStation',{businessId});preview=controller.preview(command)
+},20000)
+afterAll(async()=>{if(controller)await controller.close()})
+
+it('explains the actual zero-AP stop99 through CommandDetails while preserving costs, protection, old debt and supplier assets',()=>{
+ expect(before.view.budget).toMatchObject({available:0,reserved:0,spent:4});expect(preview.allowed).toBe(true);expect(preview.upfrontCostFen).toBe(0)
+ const tree=details(),nodes=elements(tree),relayNode=nodes.find(e=>typeof e.type==='function'&&e.type.name==='RelayCommandDetails')!,body=stopText(),audit=before.view.operations!.jobs.find(j=>j.businessId===businessId&&j.definitionId==='relay-meter-audit'&&j.status==='running')!,action=book().actions.find(a=>a.jobId===audit.id)!
+ expect(relayNode.props.view).toBe(before.view);expect(relayNode.props.finance).toBe(before.features.workbench.finance)
+ expect(body).toContain(audit.id);expect(body).toContain('原计量复核');expect(body).toContain('实际开工日'+action.executedAt);expect(body).toContain('已用原成本'+moneyText(action.definition.costFen));expect(body).toContain(action.definition.actionPoints+'点不退回')
+ expect(body).toContain('原支持');expect(body).toContain('原状态已中断继续保留');expect(body).toContain('原成本'+moneyText(150000))
+ for(const value of [account().cashFen,account().heldFen,account().availableFen,account().protectionRequiredFen,account().prepaidLiabilityFen,account().receivableFen,account().payableFen,account().supplierPrepaidFen])expect(body).toContain(moneyText(value))
+ expect(account()).toMatchObject({protectionRequiredFen:1575736,receivableFen:12132})
+ expect(body).toContain('本账户截至2025-03-05已发生未出账成本：'+moneyText(finance().accruedCostFen));expect(body).toContain('这份账户的累计费用，其他经营仍各自记账')
+ expect(body.indexOf('已发生未出账成本')).toBeLessThan(body.indexOf('这次会停下哪些原安排'))
+ expect(finance().accruedCostFen).toBeGreaterThan(0);expect(body).toContain('“停站新增费用”不等于现金变化为零');expect(body).toContain('未到账的收入不能用来还款')
+ for(const debt of book().obligationHistory.filter(d=>d.scopeBusinessId===businessId&&d.remainingFen>0))expect(body).toContain(debt.id)
+ expect(elements(details()).filter(e=>e.type==='button')).toHaveLength(0);expect(controller.exportSaved()).toBe(raw99)
+})
+
+it('separates the original zero new fee from the actual later 48.38 maintenance payment without rebinding the captured confirmation',()=>{
+ const captured=details(),capturedText=text(elements(captured).find(e=>e.type==='section'&&e.props.className==='confirmation-context relay-station-stop-terms'))
+ expect(confirmationMoney(command,preview)).toEqual({label:'停站新增费用（原维护与工资结算另核）',amountFen:0})
+ expect(account(after).cashFen-account().cashFen).toBe(-4838);expect(account(after).protectionRequiredFen).toBe(account().protectionRequiredFen);expect(account(after).receivableFen).toBe(account().receivableFen);expect(after.view.budget).toEqual(before.view.budget)
+ expect(after.features.relay!.businesses.find(b=>b.id===businessId)!.lifecycle).toBe('winding_down')
+ expect(stopText()).toBe(capturedText);expect(before.features.workbench.finance).not.toBe(after.features.workbench.finance)
+ const later=elements(details(after)).map(e=>text(e)).join(' ')
+ expect(later).toContain('原企业、账户或确认时画面尚未完整对齐');expect(later).not.toContain('本账户截至2025-03-05已发生未出账成本：'+moneyText(finance(after).accruedCostFen))
+ expect(controller.exportSaved()).toBe(raw99)
+})
+
+it('distinguishes an explicit public planned reservation from used running work and discloses sponsored worker effects',()=>{
+ // Display-only counterexample: no new task/employee is imported or submitted.
+ const sourceJob=before.view.operations!.jobs.find(j=>j.businessId===businessId&&j.status==='running')!,sourceAction=book().actions.find(a=>a.jobId===sourceJob.id)!,plannedJob={...sourceJob,id:'public-planned-support',actionId:'public-planned-action',definitionId:'relay-support-guided',status:'planned' as const,startAt:'2025-03-06',completeAt:'2025-03-13'},plannedAction={...sourceAction,jobId:plannedJob.id,status:'reserved' as const,executedAt:null,finishedAt:null,definition:{...sourceAction.definition,id:plannedJob.actionId,startAt:plannedJob.startAt,completeAt:plannedJob.completeAt,settlementAt:plannedJob.startAt,costFen:777,actionPoints:1,cashReservationId:'public-planned-reserve'}}
+ const worker={id:'public-station-worker',definitionId:'public-worker-definition',sponsorBusinessId:businessId,from:'2025-03-01',to:null,units:1,monthlyWageFen:12345},otherJob={...plannedJob,id:'public-other-business-job',actionId:'public-other-action',businessId:'another-public-business',resources:[worker.id]}
+ const next=alter(relay=>({...relay,casebook:{...book(),actions:[...book().actions,plannedAction]}}),{...before.view,operations:{...before.view.operations!,jobs:[...before.view.operations!.jobs,plannedJob,otherJob],workers:[...before.view.operations!.workers,worker]}})
+ next.features={...next.features,workbench:{...next.features.workbench,finance:next.features.workbench.finance.map(f=>f.accountId===accountId?{...f,reservations:[...f.reservations,{id:'public-planned-reserve',accountId,kind:'plan' as const,originId:plannedJob.actionId,amountFen:777,status:'active' as const}]}:f)}}
+ next.view={...next.view,features:next.features as unknown as PlayingView['features']}
+ const body=stopText(next)
+ expect(body).toContain('尚未开工；停站会取消这份原安排');expect(body).toContain('原承诺成本'+moneyText(777)+'、1点');expect(body).toContain('当前对应现金预留'+moneyText(777));expect(body).toContain(plannedJob.id)
+ expect(body).toContain('停站会中断这份原任务');expect(body).toContain(sourceJob.id);expect(body).toContain('已用原成本'+moneyText(sourceAction.definition.costFen))
+ expect(body).toContain(worker.id);expect(body).toContain('原月薪基准'+moneyText(12345));expect(body).toContain(otherJob.id);expect(body).toContain('各自成本与未付仍归原主体')
+ expect(controller.exportSaved()).toBe(raw99)
+})
+
+it('keeps missing, stale, duplicated or wrong-owner public action and finance sources unknown instead of inventing zeros',()=>{
+ const active=before.view.operations!.jobs.find(j=>j.businessId===businessId&&j.status==='running')!,original=book().actions.find(a=>a.jobId===active.id)!
+ const unavailable:RelayCasebookHistory={...book(),status:'unavailable',reason:'本例原明细缺失',actions:[],obligationHistory:[]}
+ for(const [name,history] of [
+  ['unavailable',unavailable],['stale',{...book(),asOf:'2025-03-04'}],['wrong-owner',{...book(),actions:book().actions.map(a=>a.jobId===active.id?{...a,scopeBusinessId:'other-business'}:a)}],['duplicated',{...book(),actions:[...book().actions,original]}],
+ ] as const){
+  const frame=alter(relay=>({...relay,casebook:history})),body=stopText(frame)
+  expect(body,name).toContain('已用与未用金额未知，不按零处理');expect(body,name).not.toContain('已用原成本'+moneyText(0))
+ }
+ const absent=relayResponseCommandDetails({command,relay:before.features.relay,accountName,view:before.view})
+ expect(text(absent)).toContain('已发生未出账成本：尚未取得，金额未知');expect(text(absent)).not.toContain('已发生未出账成本：'+moneyText(0))
+ const mismatched=relayResponseCommandDetails({command,relay:before.features.relay,accountName,view:before.view,finance:after.features.workbench.finance})
+ expect(text(mismatched)).toContain('已发生未出账成本：尚未取得，金额未知');expect(controller.exportSaved()).toBe(raw99)
+})
+
+it('preserves callers without optional context and leaves other confirmation money semantics unchanged',()=>{
+ const legacy=RelayCommandDetails({command,relay:before.features.relay,workers:before.view.operations!.workers,accountName})
+ expect(text(legacy)).toContain('任务、已用投入与原余额未知');expect(text(legacy)).not.toContain('原现金'+moneyText(0))
+ const customer=before.features.relay!.customers[0]!,collect:CommandEnvelope={...command,kind:'CollectRelayDue',payload:{customerId:customer.id}}
+ expect(text(RelayCommandDetails({command:collect,relay:before.features.relay,workers:[],accountName}))).toContain('全部已到期原单')
+ expect(confirmationMoney({...command,kind:'AdvanceTime',payload:{date:'2025-03-06'}},preview)).toEqual({label:'推进本身费用（途中原费用逐项列在下方）',amountFen:preview.upfrontCostFen})
+ expect(confirmationMoney({...command,kind:'PayObligation',payload:{amountFen:30}},preview)).toEqual({label:'偿还原有义务（不再确认一遍费用）',amountFen:30})
+ expect(controller.preview(command).allowed).toBe(true);expect(controller.exportSaved()).toBe(raw99)
+})

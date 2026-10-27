@@ -10,7 +10,7 @@ import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
 import {abortAfterHeadWrite} from '../testing/abort-after-write.ts'
 import type {GamePanelProps,PlayFeatures} from './game-types.ts'
 import {RelayAuditEditor,RelayDraftDate,RelayDraftResources,RelayServiceChoice,RelayServiceFields,relayAuditDraftCommand,relayDraftScopeForTarget,relayServiceDraftCommand} from './RelayServiceChoice.tsx'
-import {RelaySceneChoice,RelayTargetPicker} from './RelaySceneChoice.tsx'
+import {RelaySceneChoice,RelayTargetPicker,RelayNextServiceConditions} from './RelaySceneChoice.tsx'
 import {CommandButton} from './CommandButton.tsx'
 import {createRelaySceneDraftMemory,emptyRelaySceneDraft} from './relay-scene-draft.ts'
 import type {RelaySceneTarget} from './relay-scene-target.ts'
@@ -36,7 +36,7 @@ function mounted<T>(name:string,render:()=>T):T{
  try{return render()}finally{hooks.current=previous;hooks.index=index}
 }
 type Element=ReactElement<Record<string,unknown>>
-const childrenToDrive=new Set<unknown>([RelayServiceFields,RelayDraftResources,RelayDraftDate,RelayServiceChoice,RelayAuditEditor,RelayTargetPicker,CommandButton])
+const childrenToDrive=new Set<unknown>([RelayServiceFields,RelayDraftResources,RelayDraftDate,RelayServiceChoice,RelayAuditEditor,RelayTargetPicker,RelayNextServiceConditions,CommandButton])
 function elements(value:unknown):Element[]{
  if(Array.isArray(value))return value.flatMap(elements)
  if(!isValidElement<Record<string,unknown>>(value))return []

@@ -3,7 +3,7 @@ import type {RelayChoiceDraftSlot} from './relay-preparation-draft.ts'
 import {relaySceneProgress} from './relay-scene-progress.ts'
 import {resolveRelaySceneTarget,type RelaySceneTarget} from './relay-scene-target.ts'
 
-export type RelayChoiceIntent=RelayChoiceDraftSlot|'objects'|'record'|'next'|'more'
+export type RelayChoiceIntent=RelayChoiceDraftSlot|'objects'|'record'|'next'|'next-service'|'more'
 export interface RelayJourneyAction{
  readonly intent:RelayChoiceIntent
  readonly label:string
@@ -30,6 +30,16 @@ export function relayJourneyScene(action:RelayJourneyAction):{title:string;line:
 }
 type Input=Pick<GamePanelProps,'view'|'features'|'accountId'>
 
+/** Leaving a completed reading never closes a business or clears its old obligations. */
+export function relayClosedPeriodTarget(p:Input,target:RelaySceneTarget|null|undefined):Extract<RelaySceneTarget,{kind:'business'}>|null{
+ if(!target||target.kind!=='period'||target.jobId!==undefined||target.meterId!==undefined)return null
+ const resolved=resolveRelaySceneTarget(p.features.relay,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})
+ if(resolved.status!=='valid'||resolved.period?.status!=='closed')return null
+ const progress=relaySceneProgress(p.features.relay,p.view.date,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})
+ if(progress?.phase!=='period-closed'||progress.command||progress.wait)return null
+ return {kind:'business',runId:target.runId,accountId:target.accountId,businessId:target.businessId,stationId:target.stationId}
+}
+
 /** Suggest one kind of decision from public saved facts. Never selects its form values. */
 export function relayJourneyAction(p:Input,target:RelaySceneTarget|null|undefined):RelayJourneyAction{
  const choose=(intent:RelayChoiceIntent,label:string,caption:string):RelayJourneyAction=>({intent,label,caption})
@@ -39,7 +49,7 @@ export function relayJourneyAction(p:Input,target:RelaySceneTarget|null|undefine
  if(target===null)return v.businesses.length?choose('objects','先选回哪一份服务，留在眼前','原站点、客户和账期逐份选择；另作新准备也由你明确决定。'):choose('open','先决定，这次投入多少钱','从自己的钱开始；材料、许可、获客与服务还需分别投入。')
  const progress=relaySceneProgress(v,p.view.date,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})
  if(target.kind==='period'){
-  if(target.jobId||target.meterId)return choose('next','回到同一期，看看接下来的事','保留这份原任务或计量，再显选本期当前记录。')
+  if(target.jobId||target.meterId)return choose('record',target.meterId?'翻开这一张原票，再决定怎样回应':'核对这一份原任务与留下的约定','只翻同一对象；复核、更正、中断与收款仍分别由你确认。')
   if(progress?.intent==='audit')return choose('audit','给这期原账，安排一次独立核对','显选原资源和日期，只复核已经发生的记录。')
   return choose('next','看看本期还留下什么，再决定下一步','服务、支持、原款与旧余额分别核对；新一期另行显选。')
  }
@@ -48,7 +58,7 @@ export function relayJourneyAction(p:Input,target:RelaySceneTarget|null|undefine
  if(['closed','winding_down','paused'].includes(business.lifecycle)||r.station?.trafficPaused)return choose('next','看清停下之后，仍要面对什么','原支持、余额、资产与欠款保留，恢复与退出独立决定。')
  if(target.kind==='customer'){
   if(r.customer?.closedAt===null&&r.customer.termEnd>=p.view.date&&r.customer.mode==='prepaid'&&r.customer.balance.prepaidFen===0)return choose('customer-funds','核对这位客户，本次要充多少','实收预款与等额保护并列；充值不确认服务收入。')
-  return choose('next','收好这份客户约定，选择下一步','服务和新的客户条款仍须另外决定。')
+  return choose('next','收好这份客户约定，选择下一步','服务和新的客户条款仍须另外决定；原款与退款可以逐票核对。')
  }
  if(target.kind==='audience'){
   if(r.audience?.completedAt===null)return choose('record','翻看这次获客的原安排','名单尚未实际形成，不能提前签约。')

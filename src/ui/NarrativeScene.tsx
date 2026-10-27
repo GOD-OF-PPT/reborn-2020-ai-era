@@ -179,7 +179,7 @@ export function NarrativeScene(p:Props){
  const encounterScreen=['market','deepseek','life'].includes(p.screen)
  const bookContext=p.screen==='course'&&courseProgress?.preparation?view.runId+':course-preparation:'+(courseProgress.preparation.businessId??'new')+':'+courseProgress.preparation.phase:encounterScreen?view.runId+':'+view.revision+':'+(lifeProgress?.selection??marketResearchTarget?.focus.entityId??marketProgress?.entityId??deepseekProgress?.entityId??''):p.receipt&&p.receiptKind!=='AdvanceTime'?p.receipt:'choosing'
  const openCourse=()=>p.onOpen('course',{...(courseProgress?.recordId?{recordId:courseProgress.recordId}:{}),...(p.courseTarget!==undefined?{courseTarget:p.courseTarget}:{})})
- const openRelay=(target:RelaySceneTarget|null=relayTarget!==undefined?relayTarget:relayProgress?.target??null,slot?:RelayChoiceDraftSlot)=>p.onOpen('relay',{accountId:target?.accountId??relayAccount,relayTarget:target,...(slot?{relayDraftSlot:slot}:{})})
+ const openRelay=(target:RelaySceneTarget|null=relayTarget!==undefined?relayTarget:relayProgress?.target??null,slot?:RelayChoiceDraftSlot,recordId?:string)=>p.onOpen('relay',{accountId:target?.accountId??relayAccount,relayTarget:target,...(slot?{relayDraftSlot:slot}:{}),...(recordId?{recordId}:{})})
  const nextRelayPeriod=()=>{
   const target=relayProgress?.target,periodIds=relayProgress?.periodIds
   if(!target||!periodIds?.length)return

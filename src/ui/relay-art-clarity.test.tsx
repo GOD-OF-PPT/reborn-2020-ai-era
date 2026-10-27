@@ -1,0 +1,77 @@
+import {beforeAll,expect,it} from 'vitest'
+import {renderToStaticMarkup} from 'react-dom/server'
+import {createCampaignCodec} from '../application/campaign.ts'
+import {projectRun} from '../core/commands.ts'
+import {relayPaperFor} from './relay-continuity.ts'
+import {relaySceneProgress} from './relay-scene-progress.ts'
+import {RelayServicePaperNotes} from './RelayServicePaper.tsx'
+import saved89 from '../../goal-1/evidence/t17-acceptance-37/chrome-main-r4/n09-r4-saved89-support-actual-completion.json?raw'
+import saved90 from '../../goal-1/evidence/t17-acceptance-37/chrome-main-r4/n11-r4-saved90-audit-actually-started.json?raw'
+import saved92 from '../../goal-1/evidence/t17-acceptance-37/chrome-main-r4/n17-r4-saved92-all-current-due-collected-period-financial-closed.json?raw'
+import saved93 from '../../goal-1/evidence/t17-acceptance-37/chrome-main-r4/n19-r4-saved93-future-quarter-33-audit-planned.json?raw'
+
+type Input=Parameters<typeof relayPaperFor>[0]
+const codec=createCampaignCodec()
+function original(raw:string){
+ const run=codec.import(raw),features=codec.registry.runtime!.project!(run) as unknown as Input['features'],relay=features.relay!,period=relay.periods.find(t=>t.from==='2024-10-09'&&t.to==='2024-11-06')!,business=relay.businesses.find(b=>b.id===period.businessId)!,station=relay.stations.find(s=>s.businessId===business.id)!
+ const p:Input={accountId:business.accountId,features,view:{...projectRun(run),busy:false,readOnly:false,hasCandidate:false,saveStatus:'saved'} as Input['view']},target={kind:'period' as const,runId:run.runId,accountId:business.accountId,businessId:business.id,stationId:station.id,periodId:period.id}
+ return {run,p,target,period,raw}
+}
+type Fixture=ReturnType<typeof original>
+let current:Fixture,future:Fixture,closed:Fixture,started:Fixture
+beforeAll(()=>{current=original(saved89)})
+beforeAll(()=>{started=original(saved90)})
+beforeAll(()=>{closed=original(saved92)})
+beforeAll(()=>{future=original(saved93)})
+const scene=(f:Fixture,p:Input=f.p)=>relaySceneProgress(p.features.relay,p.view.date,f.target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})!
+const notes=(p:Input,target:Fixture['target'])=>renderToStaticMarkup(<RelayServicePaperNotes art={relayPaperFor(p,target)!}/>)
+
+it('publishes real period92 financial closure beside its 33 still unreviewed records without changing the saved receipt phase',()=>{
+ const {p,target}=closed,before=codec.export(closed.run),progress=scene(closed),art=relayPaperFor(p,target)!
+ expect(progress.phase).toBe('audit-ready');expect(progress.title).toContain('本期财务已结');expect(progress.title).toContain('33条原计量仍待复核')
+ expect(progress.audit).toEqual({businessId:target.businessId,periodId:target.periodId});expect(progress.command).toBeNull()
+ expect(art.phase).toBe('result');expect(art.state).toBe('received');expect(art.line).toContain('本期财务已结');expect(art.line).toContain('33条记录仍待独立复核')
+ expect(notes(p,target)).toContain('本次收到本期原单');expect(p.view.budget.available).toBe(0)
+ expect(codec.export(closed.run)).toBe(before);expect(before).toBe(saved92)
+})
+
+it('does not turn a nonclosed, incomplete or foreign-source public period into financial closure',()=>{
+ const {p,target,period}=closed,v=p.features.relay!,invoice=v.receivables.find(r=>r.sourceId===period.id||v.meters.some(m=>m.id===r.sourceId&&m.periodId===period.id))!
+ // Bounded public display counterexamples only, never imported or saved as normal history.
+ const variants:Input[]=[
+  {...p,features:{...p.features,relay:{...v,periods:v.periods.map(t=>t.id===period.id?{...t,status:'settling' as const}:t)}}},
+  {...p,features:{...p.features,relay:{...v,receivables:v.receivables.filter(r=>r.sourceId!==period.id&&!v.meters.some(m=>m.id===r.sourceId&&m.periodId===period.id))}}},
+  {...p,features:{...p.features,relay:{...v,receivables:v.receivables.map(r=>r.id===invoice.id?{...r,amountFen:Number.NaN}:r)}}},
+  {...p,features:{...p.features,relay:{...v,receivables:v.receivables.map(r=>r.id===invoice.id?{...r,customerId:'another-station-customer'}:r)}}},
+ ]
+ for(const input of variants){expect(scene(closed,input).title).not.toContain('本期财务已结');expect(notes(input,target)).not.toContain('本期财务已结')}
+ expect(codec.export(closed.run)).toBe(saved92)
+})
+
+it('labels the real same-quarter original audit reservation, rather than the completed support or total budget',()=>{
+ const {p,target}=current,v=p.features.relay!,batch=v.auditJobs.find(a=>a.job?.status==='planned')!,auditTarget={...target,jobId:batch.jobId},action=v.casebook!.actions.find(a=>a.jobId===batch.jobId)!
+ expect(p.view.budget.available).toBe(0);expect(p.view.budget.reserved).toBe(1);expect(action.definition.actionPoints).toBe(1)
+ for(const art of [relayPaperFor(p,target),relayPaperFor(p,auditTarget),relayPaperFor(p,target,{kind:'audit',recordId:batch.jobId})]){
+  expect(art!.scopeLabel).toContain('原复核 2024-11-14—2024-11-17');expect(art!.scopeLabel).toContain('本季2024-Q4已预留1点 / ¥100')
+  expect(renderToStaticMarkup(<RelayServicePaperNotes art={art!}/>)).toContain('本季2024-Q4已预留1点')
+ }
+ expect(scene(current).phase).toBe('collection');expect(scene(current).command?.kind).toBe('CollectRelayDue')
+ expect(codec.export(current.run)).toBe(saved89)
+})
+
+it('names the real future opening quarter even when todays available and reserved action totals are both zero',()=>{
+ const {p,target}=future,v=p.features.relay!,batch=v.auditJobs.find(a=>a.job?.status==='planned')!,action=v.casebook!.actions.find(a=>a.jobId===batch.jobId)!,art=relayPaperFor(p,target)!
+ expect(p.view.budget.available).toBe(0);expect(p.view.budget.reserved).toBe(0);expect(action.status).toBe('reserved')
+ expect(art.phase).toBe('audit');expect(art.state).toBe('planned');expect(art.scopeLabel).toContain('原复核 '+batch.job!.startAt+'—'+batch.job!.completeAt)
+ expect(art.scopeLabel).toContain('2025-Q1开工季度（非本季）已预留1点 / ¥100');expect(art.scopeLabel).not.toContain('本季2024-Q4已预留')
+ expect(notes(p,target)).toContain('2025-Q1开工季度（非本季）');expect(scene(future).phase).toBe('audit-waiting')
+ expect(codec.export(future.run)).toBe(saved93)
+})
+
+it('never keeps a reservation caption after actual start or guesses one from mismatched or unavailable public history',()=>{
+ expect(relayPaperFor(started.p,started.target)?.scopeLabel??'').not.toContain('已预留')
+ const {p,target}=current,v=p.features.relay!,book=v.casebook!,batch=v.auditJobs.find(a=>a.job?.status==='planned')!
+ const foreign={...p,features:{...p.features,relay:{...v,casebook:{...book,actions:book.actions.map(a=>a.jobId===batch.jobId?{...a,definition:{...a.definition,accountId:'another-account'}}:a)}}}},unknown={...p,features:{...p.features,relay:{...v,casebook:{...book,status:'unavailable' as const,reason:'Explicit unavailable history display counterexample'}}}},stale={...p,features:{...p.features,relay:{...v,casebook:{...book,revision:book.revision+1}}}}
+ for(const input of [foreign,unknown,stale]){expect(input.view.budget.reserved).toBe(1);expect(relayPaperFor(input,target)?.scopeLabel??'').not.toContain('已预留')}
+ expect(codec.export(started.run)).toBe(saved90);expect(codec.export(current.run)).toBe(saved89)
+})

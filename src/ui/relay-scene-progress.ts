@@ -1,6 +1,8 @@
 import type {RelayProjection} from '../core/relay-projection.ts'
 import {moneyText} from './game-text.ts'
 import {resolveRelaySceneTarget,relayTargetEntity,type RelaySceneTarget,type RelaySceneContext,type RelayTargetResolution} from './relay-scene-target.ts'
+import {relayTicketAuditFor,relayTicketCorrectionFor,type RelayTicketCommand} from './relay-ticket-command.ts'
+import {isoDate} from '../core/calendar.ts'
 export type {RelaySceneTarget,RelaySceneContext} from './relay-scene-target.ts'
 
 type Relay=NonNullable<RelayProjection>
@@ -9,6 +11,7 @@ type Job=NonNullable<Relay['preparations'][number]['job']>
 export type RelayScenePhase='invalid'|'opening'|'preparation'|'supplier-letter'|'supply'|'marketing'|'intake'|'terms'|'funding'|'planning'|'planned'|'service'|'support'|'audit-waiting'|'audit-ready'|'correction'|'collection'|'settling'|'market-change'|'paused'|'stopping'|'closed'|'period-closed'|'records'
 export interface RelaySceneResultRef{readonly kind:'job'|'business'|'application'|'audience'|'customer'|'period'|'meter'|'audit'|'correction'|'receivable'|'operation';readonly id:string;readonly date:string|null}
 export type RelaySceneCommand=
+ |RelayTicketCommand
  |{readonly kind:'ReadRelaySupplyDecision';readonly payload:{readonly applicationId:string};readonly confirm:false}
  |{readonly kind:'CorrectRelayPeriod';readonly payload:{readonly periodId:string};readonly confirm:true}
  |{readonly kind:'CollectRelayDue';readonly payload:{readonly customerId:string};readonly confirm:true}
@@ -37,6 +40,7 @@ export interface RelaySceneProgress{
 }
 
 const active=(job:Job|null|undefined):job is Job&{status:'planned'|'running'}=>!!job&&(job.status==='planned'||job.status==='running')
+function stoppedOnOrBefore(value:string|null,date:string){try{return value!==null&&isoDate(value)===value&&value<=date}catch{return false}}
 function jobNext(job:Job,date:string):string|null{
  if(job.status==='planned'&&job.startAt>=date)return job.startAt
  if(job.completeAt<date)return null
@@ -53,6 +57,18 @@ export function relayAuditableMeters(relay:Relay,periodId:string){
   return !!job&&['planned','running','completed'].includes(job.status)
  }))
 }
+/** The period's public closure never settles another period or the whole station. */
+export function relayPeriodFinanciallyClosed(relay:RelayProjection,periodId:string,date:string):boolean{
+ const matches=relay?.periods.filter(p=>p.id===periodId)??[],period=matches.length===1?matches[0]:undefined
+ if(!relay||!period||period.status!=='closed'||typeof period.feePostedAt!=='string'||typeof period.compensatedAt!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(period.feePostedAt)||!/^\d{4}-\d{2}-\d{2}$/.test(period.compensatedAt)||period.feePostedAt>date||period.compensatedAt>date)return false
+ const meters=relay.meters.filter(m=>m.periodId===period.id)
+ if(new Set(meters.map(m=>m.id)).size!==meters.length||meters.some(m=>relay.meters.filter(other=>other.id===m.id).length!==1))return false
+ const sources=new Set([period.id,...meters.map(m=>m.id)]),invoices=relay.receivables.filter(r=>sources.has(r.sourceId))
+ if(!invoices.length||new Set(invoices.map(r=>r.id)).size!==invoices.length)return false
+ return invoices.every(r=>relay.receivables.filter(other=>other.id===r.id).length===1&&period.customerIds.includes(r.customerId)&&relay.customers.filter(c=>c.id===r.customerId&&c.businessId===period.businessId).length===1
+  &&/^\d{4}-\d{2}-\d{2}$/.test(r.date)&&r.date<=date&&[r.amountFen,r.collectedFen,r.reversedFen].every(n=>Number.isSafeInteger(n)&&n>=0)&&r.amountFen-r.collectedFen-r.reversedFen===0)
+}
+
 function selectedPeriod(relay:Relay,preferredId:string|null|undefined,businessId:string|undefined):Period|undefined{
  const preferred=preferredId?relay.periods.find(p=>p.id===preferredId):undefined
  if(preferred)return preferred
@@ -182,6 +198,17 @@ function focusedRelaySceneProgress(relay:RelayProjection,date:string,target:Rela
  if(t.kind==='period'&&resolved.meter){
   const meter=resolved.meter,known=meter.auditedUnits!==null
   const scene=bound(recordScene(value,'records','这一天的原计量，仍在这期票根上。',`${meter.date}，原报告${meter.reportedUnits}单位；${known?'独立复核实计'+meter.auditedUnits+'单位':'实计待核'}。原价格和引用保留，查看不会更正或收款。`,'翻看这条原计量与原账'),value,resolved)
+  const existing=relayTicketAuditFor(value,date,t,context)
+  if(existing.job&&existing.batch){
+   const waiting=jobRecord(value,date,{...resolved,job:existing.job,audit:existing.batch})
+   return {...waiting,historical:false,title:'这一张票，已经在独立核对中了。',line:`原委托${existing.job.startAt}—${existing.job.completeAt}；这张票属于同一次${existing.batch.meterCount}条的原复核，实计须等实际完成。没有再安排第二次委托。`,recordId:meter.id,resultRefs:[...waiting.resultRefs,{kind:'meter',id:meter.id,date:meter.date}]}
+  }
+  if(existing.reason)return {...scene,historical:true,line:scene.line+' '+existing.reason,resultRefs:[...scene.resultRefs,{kind:'meter',id:meter.id,date:meter.date}],recordId:meter.id}
+  const pending=known&&meter.reportedUnits!==meter.auditedUnits&&meter.correctionId===null
+  if(pending){
+   const correction=relayTicketCorrectionFor(value,date,t,context)
+   return {...scene,phase:'correction',historical:false,title:'这一张原票，留下了一处已知差额。',line:`${meter.date}，原报告${meter.reportedUnits}单位，独立实计${meter.auditedUnits}单位。原量和原价保留；这里只核对这一张票，整期更正另作决定。`+(correction.reason?' '+correction.reason:''),choice:{title:'核对这张票的原复核依据',line:'更正只追加原记录；应收、应付与实际现金仍分别处理。',label:correction.command?.label??'翻开这张票的原依据'},command:correction.command,outcome:'none',resultRefs:[...scene.resultRefs,{kind:'meter',id:meter.id,date:meter.date}],recordId:meter.id}
+  }
   return {...scene,historical:true,outcome:known?'actual':'none',resultRefs:[...scene.resultRefs,{kind:'meter',id:meter.id,date:meter.date}],recordId:meter.id}
  }
  if(t.kind==='application'){
@@ -226,6 +253,20 @@ function focusedRelaySceneProgress(relay:RelayProjection,date:string,target:Rela
   }
   // A period may close before an independent audit. Do not erase original allowed follow-up actions by lifecycle alone.
   if(progress.phase==='closed'&&relayAuditableMeters(value,period.id).length)progress={...recordScene(value,'audit-ready','这一期原计量，仍可核对独立依据。','企业状态与原计量分别保留；是否能新安排复核仍由原预览核验，已知更正、应收应付不会因关闭消失。','核对本期原复核条件'),audit:{businessId:business.id,periodId:period.id}}
+  if((progress.phase==='audit-ready'||progress.phase==='audit-waiting')&&relayPeriodFinanciallyClosed(value,period.id,date))progress={...progress,title:progress.phase==='audit-ready'?'本期财务已结，'+relayAuditableMeters(value,period.id).length+'条原计量仍待复核。':'本期财务已结，原复核尚未完成。'}
+  const requestsStopped=stoppedOnOrBefore(period.stoppedAt,date)
+  if(requestsStopped||business.lifecycle==='winding_down'){
+   const stoppedTitles:Partial<Record<RelayScenePhase,string>>={
+    'audit-waiting':'请求已停，原复核还在等待。','audit-ready':'请求已停，已有计量仍可复核。',
+    support:'请求已停，原支持仍须继续。',collection:'请求已停，原客户款仍待收取。',
+    correction:'请求已停，原差额仍须面对。',settling:'请求已停，原责任仍待核对。',
+   }
+   const title=stoppedTitles[progress.phase]
+   if(title){
+    const line=(business.lifecycle==='winding_down'?'本站已转入经营收尾，原余额与责任保留。':'')+(requestsStopped?'本期后续请求已于'+period.stoppedAt+'停止。':'')+progress.line
+    progress={...progress,title:business.lifecycle==='winding_down'?title.replace('请求已停','本站收尾'):title,line,choice:progress.choice.line===progress.line?{...progress.choice,line}:progress.choice}
+   }
+  }
  }
  const result=bound(progress,value,resolved)
  if(futureReceivable)return {...result,outcome:result.outcome==='non-success'?'non-success':'pending',wait:{date:futureReceivable.dueAt,label:progress.choice.label},resultRefs:[...result.resultRefs,{kind:'receivable',id:futureReceivable.id,date:futureReceivable.date}]}

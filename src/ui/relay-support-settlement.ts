@@ -1,0 +1,101 @@
+import type {GamePanelProps} from './game-types.ts'
+import type {RelayCasebookTransaction} from '../application/relay-casebook-projection.ts'
+import {resolveRelaySceneTarget,type RelaySceneTarget} from './relay-scene-target.ts'
+import {relayId} from '../core/relay.ts'
+import {operatingId} from '../core/operations.ts'
+import {MONEY_LIMIT} from '../core/money.ts'
+import {moneyText} from './game-text.ts'
+
+type Input=Pick<GamePanelProps,'view'|'features'|'accountId'>
+export interface RelaySupportSettlementSourceRef{
+ readonly kind:'period'|'job'|'operation'|'obligation'|'transaction'|'metric'
+ readonly id:string
+ readonly date:string|null
+ readonly accountId:string
+ readonly businessId:string
+ readonly customerId?:string
+ readonly amountFen?:number
+}
+export interface RelaySupportSettlement{
+ readonly status:'pending'|'known'|'unavailable'
+ readonly reason:string|null
+ readonly periodId:string|null
+ readonly businessId:string|null
+ readonly accountId:string|null
+ readonly supportJobId:string|null
+ readonly settledAt:string|null
+ readonly incomeFen:number|null
+ readonly compensationCostFen:number|null
+ readonly compensationPaidFen:number|null
+ readonly compensationDueFen:number|null
+ readonly summary:readonly string[]
+ readonly lines:readonly string[]
+ readonly sourceRefs:readonly RelaySupportSettlementSourceRef[]
+}
+const safeMoney=(value:number)=>Number.isSafeInteger(value)&&value>=0&&value<=MONEY_LIMIT
+const day=(value:string)=>/^\d{4}-\d{2}-\d{2}$/.test(value)&&Number.isFinite(Date.parse(value+'T00:00:00Z'))&&new Date(value+'T00:00:00Z').toISOString().slice(0,10)===value
+function insist(value:unknown):asserts value{if(!value)throw Error('SUPPORT_ORIGINAL_SOURCE_MISMATCH')}
+function unique<T>(rows:readonly T[],key:(row:T)=>string):Map<string,T>{const map=new Map<string,T>();for(const row of rows){const id=key(row);insist(typeof id==='string'&&id.length>0&&!map.has(id));map.set(id,row)}return map}
+function total(values:readonly number[]){let result=0;for(const value of values){insist(Number.isSafeInteger(value)&&Math.abs(value)<=MONEY_LIMIT);result+=value;insist(Number.isSafeInteger(result)&&Math.abs(result)<=MONEY_LIMIT)}return result}
+const unknown=(reason:string):RelaySupportSettlement=>({status:'unavailable',reason,periodId:null,businessId:null,accountId:null,supportJobId:null,settledAt:null,incomeFen:null,compensationCostFen:null,compensationPaidFen:null,compensationDueFen:null,summary:[reason],lines:['原支持结算尚未取得完整可核依据；没有将未列明的收入、赔付或付款写成零。'],sourceRefs:[]})
+
+/** Read only existing public settlement facts. This does not calculate service loss or predict compensation. */
+export function relaySupportSettlement(p:Input,target:RelaySceneTarget):RelaySupportSettlement{
+ try{return readSettlement(p,target)}catch{return unknown('本期支持的原成本、付款或责任引用尚未核齐；先保留原账，不把未知说成已结清。')}}
+function readSettlement(p:Input,target:RelaySceneTarget):RelaySupportSettlement{
+ const relay=p.features.relay,resolved=resolveRelaySceneTarget(relay,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})
+ if(!relay||resolved.status!=='valid'||target.kind!=='period'||!resolved.period||!resolved.business)return unknown(resolved.reason??'请先明确这份支持所属的原服务期与账户；没有换到另一期。')
+ const period=resolved.period,business=resolved.business,support=period.supportJob,book=relay.casebook,today=p.view.date
+ insist(support&&day(today)&&day(period.createdAt)&&period.createdAt<=today&&period.businessId===business.id&&business.accountId===p.accountId&&p.view.accounts.filter(a=>a.accountId===business.accountId).length===1&&(support.releasedAt===null||day(support.releasedAt)&&support.releasedAt<=today))
+ if(!book||book.status!=='ready'||book.runId!==p.view.runId||book.revision!==p.view.revision||book.asOf!==today)return unknown(book?.reason??'本期支持的逐笔原结算依据尚未取得；原账继续保留，不能猜已经赔付或尚欠多少。')
+ const finances=p.features.workbench.finance.filter(f=>f.accountId===business.accountId);insist(finances.length===1)
+ const finance=finances[0]!,customers=unique(relay.customers,c=>c.id),operations=unique(book.operations,o=>o.id),debts=unique(book.obligationHistory,o=>o.id)
+ unique(book.transactions,t=>t.id+':'+t.lineIndex)
+ insist(period.customerIds.every(id=>customers.get(id)?.businessId===business.id))
+ const identity={periodId:period.id,businessId:business.id,accountId:business.accountId,supportJobId:support.id},baseRefs:RelaySupportSettlementSourceRef[]=[{kind:'period',id:period.id,date:period.createdAt,accountId:business.accountId,businessId:business.id},{kind:'job',id:support.id,date:support.status==='completed'?support.completeAt:support.releasedAt,accountId:business.accountId,businessId:business.id}]
+ const posted=period.feePostedAt!==null&&day(period.feePostedAt)&&period.feePostedAt<=today,compensated=period.compensatedAt!==null&&day(period.compensatedAt)&&period.compensatedAt<=today
+ if(!posted||!compensated)return {status:'pending',reason:null,...identity,settledAt:null,incomeFen:null,compensationCostFen:null,compensationPaidFen:null,compensationDueFen:null,summary:['本期原支持及其结算仍待实际处理；目前不预告支持收入或赔付金额。','原支持任务投入、原应收与已承诺日期继续；尚未形成的赔付不能当作零。'],lines:['原期 '+period.id+'；原支持任务 '+support.id+'；原约定 '+support.startAt+'—'+support.completeAt,'原支持费处理日 '+(posted?period.feePostedAt:'尚未发生')+'；原赔付处理日 '+(compensated?period.compensatedAt:'尚未发生')+'；完成之前不推算服务损失、收入或赔付。'],sourceRefs:baseRefs}
+ insist(period.feePostedAt===period.compensatedAt&&period.compensatedAt===support.completeAt&&!['planned','running'].includes(support.status))
+ const settledAt=period.compensatedAt!
+ const owner=(row:{scopeBusinessId:string;accountId:string})=>row.scopeBusinessId===business.id&&row.accountId===business.accountId
+ const metricOwner=(m:typeof finance.metrics[number])=>m.businessId===business.id&&m.accountId===business.accountId&&day(m.date)&&m.date<=today
+ const periodMetrics=finance.metrics.filter(m=>m.sourceEventId===period.id),income=periodMetrics.filter(m=>m.kind==='income'),cost=periodMetrics.filter(m=>m.kind==='cost')
+ unique(income,m=>m.operationId);unique(cost,m=>m.operationId)
+ const sourceRefs=[...baseRefs],lines:string[]=['原期 '+period.id+'；原支持 '+support.id+'；实际结算日 '+settledAt,'原支持费处理日 '+period.feePostedAt+'；原赔付处理日 '+period.compensatedAt+'；已处理不等于收入全部到账或赔付全部付清。']
+ const ref=(kind:RelaySupportSettlementSourceRef['kind'],id:string,date:string,amountFen?:number,customerId?:string)=>sourceRefs.push({kind,id,date,accountId:business.accountId,businessId:business.id,...(amountFen===undefined?{}:{amountFen}),...(customerId?{customerId}:{})})
+ for(const metric of income){const operation=operations.get(metric.operationId);insist(metricOwner(metric)&&metric.date>=period.feePostedAt!&&operation&&owner(operation)&&operation.businessId===business.id&&operation.sourceEventId===period.id&&operation.date===metric.date&&operation.contractId!==null&&period.customerIds.includes(operation.contractId)&&metric.contractId===operation.contractId&&operation.amountFen!==null)
+  insist(metric.deltaFen>=0?['deliver_prepaid','deliver_on_credit'].includes(operation.kind)&&metric.deltaFen===operation.amountFen:operation.kind==='refund_delivered'&&-metric.deltaFen===operation.amountFen)
+  lines.push('原支持收入记录 '+metric.operationId+' · '+metric.date+' · '+moneyText(metric.deltaFen)+'；原客户 '+metric.contractId+'；原操作性质 '+operation.kind+'；收入不是本次现金回款。');ref('metric',metric.operationId,metric.date,metric.deltaFen,metric.contractId);ref('operation',operation.id,operation.date,operation.amountFen,operation.contractId)
+ }
+ for(const operation of book.operations.filter(o=>o.sourceEventId===period.id&&['deliver_prepaid','deliver_on_credit','refund_delivered'].includes(o.kind)))insist(owner(operation)&&income.filter(m=>m.operationId===operation.id).length===1)
+ const expected=new Map(period.customerIds.map(id=>[relayId('service-compensation',period.id,id),id]))
+ const compensation=book.operations.filter(o=>expected.has(o.id))
+ for(const metric of cost)insist(metricOwner(metric)&&expected.has(metric.operationId))
+ for(const operation of book.operations.filter(o=>o.sourceEventId===period.id&&o.kind==='due_expense'))insist(expected.has(operation.id))
+ const paidValues:number[]=[],dueValues:number[]=[],costValues:number[]=[]
+ for(const operation of compensation){
+  const customerId=expected.get(operation.id)!,debtId=relayId('compensation-due',operation.id),debt=debts.get(debtId),metrics=cost.filter(m=>m.operationId===operation.id)
+  insist(owner(operation)&&operation.businessId===business.id&&operation.kind==='due_expense'&&operation.contractId===null&&operation.referenceId===null&&operation.counterpartyId==='world'&&operation.sourceEventId===period.id&&operation.date===settledAt&&operation.obligationId===debtId&&operation.amountFen!==null&&safeMoney(operation.amountFen)&&operation.amountFen>0)
+  insist(metrics.length===1&&metrics[0]!.date===operation.date&&metrics[0]!.deltaFen===operation.amountFen&&metrics[0]!.contractId===null&&metrics[0]!.referenceId===null)
+  insist(debt&&owner(debt)&&debt.businessId===business.id&&debt.contractId===null&&debt.counterpartyId===operation.counterpartyId&&debt.kind==='expense'&&debt.sourceEventId===period.id&&debt.originOperationId===operation.id&&debt.date===operation.date&&debt.amountFen===operation.amountFen&&safeMoney(debt.remainingFen)&&debt.remainingFen<=debt.amountFen&&debt.protectionReservationId===null)
+  const later=book.operations.filter(o=>o.kind==='pay_obligation'&&o.obligationId===debt.id),cash:RelayCasebookTransaction[]=[]
+  for(const payment of later)insist(owner(payment)&&(payment.businessId===null||payment.businessId===business.id)&&payment.contractId===null&&day(payment.date)&&payment.date>=operation.date&&payment.date<=today&&payment.amountFen!==null&&safeMoney(payment.amountFen)&&payment.amountFen>0&&payment.id===operatingId(payment.sourceEventId,'PayObligation'))
+  for(const payment of [operation,...later]){
+   const transactions=book.transactions.filter(t=>t.id===payment.id)
+   insist(transactions.length<2&&(payment.kind==='due_expense'||transactions.length===1))
+   for(const transaction of transactions){insist(owner(transaction)&&transaction.businessId===business.id&&transaction.contractId===null&&transaction.referenceId===debt.id&&transaction.sourceId===payment.sourceEventId&&transaction.date===payment.date&&transaction.amountFen<0&&safeMoney(-transaction.amountFen)&&payment.amountFen!==null&&-transaction.amountFen<=payment.amountFen&&(payment.kind==='due_expense'||-transaction.amountFen===payment.amountFen));cash.push(transaction)}
+  }
+  const paid=total(cash.map(t=>-t.amountFen));insist(paid+debt.remainingFen===operation.amountFen)
+  const ordinal=relay.customers.filter(c=>c.businessId===business.id).findIndex(c=>c.id===customerId)+1
+  lines.push('客户'+ordinal+'原服务后果赔付 '+operation.id+' · '+operation.date+'；已确认成本 '+moneyText(operation.amountFen)+'，实际已付 '+moneyText(paid)+'，尚欠 '+moneyText(debt.remainingFen)+'；原客户 '+customerId)
+  lines.push('原成本记录 '+metrics[0]!.operationId+'；原义务 '+debt.id+'；原义务来源 '+debt.sourceEventId+'；原额 '+moneyText(debt.amountFen)+'；原处理结果 '+(operation.status==='due'?'当时形成待付义务':'当时已应用')+'不代替当前余欠。')
+  ref('operation',operation.id,operation.date,operation.amountFen,customerId);ref('metric',metrics[0]!.operationId,metrics[0]!.date,metrics[0]!.deltaFen,customerId);ref('obligation',debt.id,debt.date,debt.remainingFen,customerId)
+  for(const payment of later){lines.push('后续原付款操作 '+payment.id+' · '+payment.date+' · '+moneyText(payment.amountFen!)+'；原来源 '+payment.sourceEventId+'；原义务 '+debt.id+'，不再确认一遍成本。');ref('operation',payment.id,payment.date,payment.amountFen!,customerId)}
+  for(const transaction of cash){lines.push('原赔付实际现金 '+transaction.id+' · '+transaction.date+' · '+moneyText(transaction.amountFen)+'；原账户 '+transaction.accountId+'；原义务引用 '+transaction.referenceId+'；原来源 '+transaction.sourceId);ref('transaction',transaction.id,transaction.date,transaction.amountFen,customerId)}
+  costValues.push(operation.amountFen);paidValues.push(paid);dueValues.push(debt.remainingFen)
+ }
+ insist(cost.length===compensation.length)
+ const incomeFen=total(income.map(m=>m.deltaFen)),compensationCostFen=total(costValues),compensationPaidFen=total(paidValues),compensationDueFen=total(dueValues)
+ insist(compensationPaidFen+compensationDueFen===compensationCostFen)
+ return {status:'known',reason:null,...identity,settledAt,incomeFen,compensationCostFen,compensationPaidFen,compensationDueFen,summary:['本期服务后果已形成赔付成本 '+moneyText(compensationCostFen)+'；实际已付 '+moneyText(compensationPaidFen)+'，尚欠 '+moneyText(compensationDueFen)+'。',(support.status==='completed'?'原支持于'+support.completeAt+'实际完成':'原支持未完整兑现，'+settledAt+'已处理原结算')+'；本期支持已确认收入 '+moneyText(incomeFen)+'，不是本次现金回款。','原支持任务投入与这笔赔付分列；这笔赔付只计一次成本，旧应收不会因支持完成自动收取。'],lines,sourceRefs}
+}

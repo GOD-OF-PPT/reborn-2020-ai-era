@@ -4,6 +4,40 @@ import {RELAY_JOBS} from '../content/relay.ts'
 import {domainSceneResult} from './scene-domain-results.ts'
 import {courseSceneResult} from './course-scene-result.ts'
 import {videoSceneResult} from './video-scene-result.ts'
+import {relayResponseSceneResult} from './relay-response-result.ts'
+import {relaySupportSettlement} from './relay-support-settlement.ts'
+import {isoDate} from '../core/calendar.ts'
+import {MONEY_LIMIT} from '../core/money.ts'
+
+type Relay=NonNullable<PlayFeatures['relay']>
+const originalDay=(value:unknown):value is string=>{try{return typeof value==='string'&&isoDate(value)===value}catch{return false}}
+
+/** A quoted price becomes a result only when the committed current terms actually use it. */
+function effectiveRelayQuoteResults(previous:PlayingView,current:PlayingView,before:Relay,after:Relay):string[]{
+ if(current.readOnly||current.busy||!Array.isArray(before.quotes)||!Array.isArray(after.quotes))return []
+ const parts:string[]=[]
+ for(const quote of after.quotes){
+  const originals=before.quotes.filter(q=>q.id===quote.id),old=originals.length===1?originals[0]:undefined,job=quote.job
+  if(!old||after.quotes.filter(q=>q.id===quote.id).length!==1||!originalDay(quote.effectiveAt)||quote.effectiveAt<=previous.date||quote.effectiveAt>current.date||!originalDay(quote.completedAt)||quote.completedAt>=quote.effectiveAt||quote.completedAt>current.date||!job||job.id!==quote.jobId||job.definitionId!=='relay-requote'||job.businessId!==quote.businessId||job.status!=='completed'||job.completeAt!==quote.completedAt)continue
+  if(old.businessId!==quote.businessId||old.jobId!==quote.jobId||old.createdAt!==quote.createdAt||old.effectiveAt!==quote.effectiveAt||old.offerId!==quote.offerId||old.unitPriceFen!==quote.unitPriceFen||old.serviceFeeFen!==quote.serviceFeeFen||JSON.stringify(old.customerIds)!==JSON.stringify(quote.customerIds)||after.quotes.filter(q=>q.jobId===quote.jobId).length!==1)continue
+  if(!Number.isSafeInteger(quote.unitPriceFen)||quote.unitPriceFen<1||quote.unitPriceFen>100||!Number.isSafeInteger(quote.serviceFeeFen)||quote.serviceFeeFen<0||quote.serviceFeeFen>MONEY_LIMIT||!quote.customerIds.length||new Set(quote.customerIds).size!==quote.customerIds.length||quote.responses.length!==quote.customerIds.length||new Set(quote.responses.map(r=>r.customerId)).size!==quote.customerIds.length||quote.responses.some(r=>!quote.customerIds.includes(r.customerId)||typeof r.accepted!=='boolean'))continue
+  const businesses=after.businesses.filter(b=>b.id===quote.businessId),business=businesses.length===1?businesses[0]:undefined,oldBusinesses=before.businesses.filter(b=>b.id===quote.businessId)
+  if(!business||oldBusinesses.length!==1||oldBusinesses[0]!.accountId!==business.accountId||current.accounts.filter(a=>a.accountId===business.accountId).length!==1||previous.accounts.filter(a=>a.accountId===business.accountId).length!==1)continue
+  const currentJobs=current.operations?.jobs.filter(j=>j.id===job.id&&j.businessId===business.id)??[],originalJobs=previous.operations?.jobs.filter(j=>j.id===old.jobId&&j.businessId===business.id)??[]
+  if(currentJobs.length!==1||originalJobs.length!==1||currentJobs[0]!.status!=='completed'||currentJobs[0]!.definitionId!==job.definitionId||currentJobs[0]!.actionId!==job.actionId||currentJobs[0]!.startAt!==job.startAt||currentJobs[0]!.completeAt!==job.completeAt||originalJobs[0]!.actionId!==job.actionId)continue
+  const accepted=quote.responses.filter(r=>r.accepted)
+  if(!accepted.length)continue
+  const names:string[]=[]
+  for(const response of accepted){
+   const customers=after.customers.filter(c=>c.id===response.customerId&&c.businessId===business.id),originalCustomers=before.customers.filter(c=>c.id===response.customerId&&c.businessId===business.id),customer=customers.length===1?customers[0]:undefined
+   if(!customer||originalCustomers.length!==1||!originalDay(originalCustomers[0]!.activeTerms.effectiveAt)||originalCustomers[0]!.activeTerms.effectiveAt>previous.date||customer.activeTerms.sourceId!==quote.id||customer.activeTerms.effectiveAt!==quote.effectiveAt||customer.activeTerms.unitPriceFen!==quote.unitPriceFen||customer.activeTerms.serviceFeeFen!==quote.serviceFeeFen){names.length=0;break}
+   names.push('客户'+(after.customers.filter(c=>c.businessId===business.id).findIndex(c=>c.id===customer.id)+1))
+  }
+  if(names.length!==accepted.length)continue
+  parts.push(`与${names.join('、')}谈妥的报价已于${quote.effectiveAt}生效；后续用量价${moneyText(quote.unitPriceFen)}，周期支持基准${moneyText(quote.serviceFeeFen)}。旧计量和本期支持仍按原报价核对，下一期服务另行决定；报价生效本身没有现金入账`)
+ }
+ return parts
+}
 
 function committedRelayChange(previous:PlayingView|null,current:PlayingView){
  if(!previous||previous.runId!==current.runId||current.revision<=previous.revision||current.saveStatus!=='saved'||current.hasCandidate)return null
@@ -78,13 +112,35 @@ function relayCommandResult(kind:string,previous:PlayingView|null,current:Playin
 function relayTimeResult(previous:PlayingView|null,current:PlayingView):string|null{
  const change=committedRelayChange(previous,current)
  if(!change)return null
- const {before,after}=change,parts:string[]=[]
+ const last=current.receipts.at(-1)
+ if(!previous||last?.kind!=='AdvanceTime'||last.revisionAfter!==current.revision||current.date<previous.date)return null
+ const singleAdvance=current.revision===previous.revision+1
+ const {before,after,features}=change,parts:string[]=[]
+ if(singleAdvance)parts.push(...effectiveRelayQuoteResults(previous,current,before,after))
+ const oldBook=before.casebook,book=after.casebook
+ if(singleAdvance&&oldBook?.status==='ready'&&book?.status==='ready'&&oldBook.runId===previous.runId&&oldBook.revision===previous.revision&&oldBook.asOf===previous.date&&book.runId===current.runId&&book.revision===current.revision&&book.asOf===current.date&&new Set(book.actions.map(a=>a.jobId)).size===book.actions.length&&new Set(oldBook.actions.map(a=>a.jobId)).size===oldBook.actions.length){
+  for(const action of book.actions){
+   const prior=oldBook.actions.find(a=>a.jobId===action.jobId),jobs=current.operations?.jobs.filter(j=>j.id===action.jobId&&j.businessId===action.scopeBusinessId)??[]
+   if(!prior||prior.status!=='reserved'||prior.executedAt!==null||!['executed','completed'].includes(action.status)||action.executedAt===null||action.executedAt<previous.date||action.executedAt>current.date||JSON.stringify(prior.definition)!==JSON.stringify(action.definition)||jobs.length!==1||jobs[0]!.actionId!==action.definition.id||prior.scopeBusinessId!==action.scopeBusinessId)continue
+   const definition=jobs[0]!.definitionId,label=definition==='relay-meter-audit'?'原复核':definition.startsWith('relay-support-')?'原支持':definition==='relay-service'?'原服务':definition==='relay-application'?'原供应申请':definition==='relay-marketing'?'原获客':definition==='relay-adapter'?'原线路适配':definition==='relay-requote'?'原报价谈判':'原中转准备'
+   parts.push(`${label}已于${action.executedAt}实际开工；原预留的${moneyText(action.definition.costFen)}与开工季度${action.definition.actionPoints}点已按原账转为实际使用，没有再次预留同一笔钱或行动`)
+  }
+ }
  const audits=after.auditJobs.filter(audit=>audit.completed&&audit.job?.status==='completed'&&audit.job.completeAt<=current.date
   &&before.auditJobs.some(old=>old.jobId===audit.jobId&&(old.job?.status==='planned'||old.job?.status==='running')))
  if(audits.length)parts.push(`${audits.length}份独立复核已实际完成，${audits.reduce((sum,audit)=>sum+audit.meterCount,0)}条原计量已有本次结果；差额仍须另行确认更正`)
  const supported=after.periods.filter(period=>period.supportJob?.status==='completed'&&period.supportJob.completeAt<=current.date
   &&before.periods.some(old=>old.id===period.id&&old.supportJob?.id===period.supportJob?.id&&(old.supportJob?.status==='planned'||old.supportJob?.status==='running')))
  if(supported.length)parts.push(`${supported.length}段原支持已实际完成，服务费与旧责任仍按原账核对，完成不等于客户已经付款`)
+ const settled=singleAdvance?after.periods.filter(period=>period.feePostedAt!==null&&period.compensatedAt!==null&&before.periods.some(old=>old.id===period.id&&old.supportJobId===period.supportJobId&&(old.feePostedAt===null||old.compensatedAt===null))):[]
+ for(const period of settled){
+  const businesses=after.businesses.filter(b=>b.id===period.businessId),stations=after.stations.filter(s=>s.businessId===period.businessId)
+  if(businesses.length!==1||stations.length!==1)continue
+  const accountId=businesses[0]!.accountId,target={kind:'period' as const,runId:current.runId,accountId,businessId:period.businessId,stationId:stations[0]!.id,periodId:period.id}
+  const settlement=relaySupportSettlement({view:current,features,accountId},target)
+  if(settlement.status==='known')parts.unshift(settlement.summary.join('；'))
+  else if(settlement.reason)parts.push(settlement.reason)
+ }
  const served=after.periods.filter(period=>period.job?.status==='completed'&&period.job.completeAt<=current.date
   &&before.periods.some(old=>old.id===period.id&&old.job?.id===period.job?.id&&(old.job?.status==='planned'||old.job?.status==='running')))
  if(served.length)parts.push(`${served.length}段计量周期已经结束，累计报告用量${served.reduce((sum,period)=>sum+period.reportedUnits,0)}；报告不代替独立实计，原支持与回款各按记录核对`)
@@ -98,6 +154,8 @@ export function savedSceneResult(kind:string,label:string,previous:PlayingView|n
  const domain=domainSceneResult(kind,previous,current)
  const course=courseSceneResult(kind,previous,current)
  const video=videoSceneResult(kind,previous,current)
+ const relayResponse=relayResponseSceneResult(kind,previous,current)
+ if(relayResponse)return relayResponse
  if(kind==='WorkQuarter')return `这一季的工作已经安排好。月末才按实际在岗日期发薪；你还留着${current.budget.available}点，可以做自己的选择。`
  if(kind==='StartFirstOrder')return `你接下了这份手工小单。${first.dates.startAt}开工，${first.dates.submitBy}前完成并提交。${first.status==='planned'?`本次预留制作费${moneyText(first.terms.costFen)}和${first.terms.actionPoints}点，开工时才实际使用。`:first.status==='running'?`制作已经开工，已付制作费${moneyText(first.result.directCostFen)}，使用${first.terms.actionPoints}点。`:''}客户的钱还没有到账。`
  if(kind==='SubmitDelivery')return '作品交出去了。接下来，等客户真正复核；验收和到账还会留下各自的日期。'

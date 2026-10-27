@@ -1,0 +1,148 @@
+import {beforeAll,expect,it} from 'vitest'
+import {createCampaignCodec,campaignRelay} from '../application/campaign.ts'
+import {projectRelay} from '../core/relay-projection.ts'
+import {projectRun} from '../core/commands.ts'
+import type {GameRun} from '../core/run-types.ts'
+import type {RelayCasebookOperation,RelayCasebookTransaction} from '../application/relay-casebook-projection.ts'
+import {enrichRelayCasebook} from '../application/relay-casebook-projection.ts'
+import {relayId} from '../core/relay.ts'
+import {operatingId} from '../core/operations.ts'
+import {relaySupportSettlement} from './relay-support-settlement.ts'
+import {relayRecordRows} from './relay-records.ts'
+import type {RelaySceneTarget} from './relay-scene-target.ts'
+import {moneyText} from './game-text.ts'
+import original88 from '../../goal-1/evidence/t17-acceptance-37/chrome-main-r4/n06-r4-saved88-single-meter-audit-planned.json?raw'
+import original89 from '../../goal-1/evidence/t17-acceptance-37/chrome-main-r4/n09-r4-saved89-support-actual-completion.json?raw'
+
+type Input=Parameters<typeof relaySupportSettlement>[0]
+type Relay=NonNullable<Input['features']['relay']>
+type History=NonNullable<Relay['casebook']>
+const codec=createCampaignCodec()
+let beforeRun:GameRun,afterRun:GameRun,before:Input,after:Input,target:RelaySceneTarget
+function input(run:GameRun):Input{
+ const features=codec.registry.runtime!.project!(run) as unknown as Input['features'],relay=enrichRelayCasebook(run,projectRelay(run,campaignRelay))!,period=relay.periods.find(p=>p.from==='2024-10-09'&&p.to==='2024-11-06')!,business=relay.businesses.find(b=>b.id===period.businessId)!
+ return {view:{...projectRun(run),busy:false,readOnly:false,hasCandidate:false,saveStatus:'saved'} as Input['view'],features:{...features,relay},accountId:business.accountId}
+}
+beforeAll(()=>{
+ beforeRun=codec.import(original88);afterRun=codec.import(original89);before=input(beforeRun);after=input(afterRun)
+ const relay=after.features.relay!,period=relay.periods.find(p=>p.from==='2024-10-09'&&p.to==='2024-11-06')!,station=relay.stations.find(s=>s.businessId===period.businessId)!
+ target={kind:'period',runId:after.view.runId,accountId:after.accountId,businessId:period.businessId,stationId:station.id,periodId:period.id}
+},20000)
+const period=(p:Input)=>p.features.relay!.periods.find(p=>p.id===(target as Extract<RelaySceneTarget,{kind:'period'}>).periodId)!
+const costs=(p:Input)=>new Set(period(p).customerIds.map(id=>relayId('service-compensation',period(p).id,id)))
+function withHistory(p:Input,history:History):Input{return {...p,features:{...p.features,relay:{...p.features.relay!,casebook:history}}}}
+function unpaidFrame():Input{
+ // This is an explicit public financial-reference fixture, not a new normal campaign or Native result.
+ const history=after.features.relay!.casebook!,ids=costs(after),operations=history.operations.map(o=>ids.has(o.id)?{...o,status:'due' as const}:o),obligationHistory=history.obligationHistory.map(o=>ids.has(o.originOperationId)?{...o,remainingFen:o.amountFen}:o),transactions=history.transactions.filter(t=>!ids.has(t.id))
+ const p=withHistory(after,{...history,operations,obligationHistory,transactions})
+ return {...p,view:{...p.view,accounts:p.view.accounts.map(a=>a.accountId===p.accountId?{...a,cashFen:0,availableFen:0}:a)},features:{...p.features,workbench:{...p.features.workbench,finance:p.features.workbench.finance.map(f=>f.accountId===p.accountId?{...f,cashFen:0,availableFen:0}:f)}}}
+}
+function withPayment(p:Input,amountFen:number,suffix:string):Input{
+ const history=p.features.relay!.casebook!,debt=history.obligationHistory.find(o=>costs(p).has(o.originOperationId)&&o.remainingFen>=amountFen)!,source='public-support-pay-'+suffix,id=operatingId(source,'PayObligation'),original=history.operations.find(o=>o.id===debt.originOperationId)!,seed=after.features.relay!.casebook!.transactions.find(t=>t.id===debt.originOperationId)!
+ const operation:RelayCasebookOperation={...original,id,kind:'pay_obligation',status:amountFen<debt.remainingFen?'due':'applied',order:Math.max(...history.operations.map(o=>o.order))+1,sourceEventId:source,businessId:null,amountFen,obligationId:debt.id,referenceId:null,date:p.view.date}
+ const transaction:RelayCasebookTransaction={...seed,id,order:Math.max(...history.transactions.map(t=>t.order))+1,lineIndex:0,sourceId:source,referenceId:debt.id,amountFen:-amountFen,date:p.view.date}
+ return withHistory(p,{...history,operations:[...history.operations,operation],transactions:[...history.transactions,transaction],obligationHistory:history.obligationHistory.map(o=>o.id===debt.id?{...o,remainingFen:o.remainingFen-amountFen}:o)})
+}
+
+it('keeps the real pre-settlement support and future compensation unknown instead of publishing zero',()=>{
+ const actual=relaySupportSettlement(before,target)
+ expect(before.view.date).toBe('2024-11-07');expect(period(before).supportJob!.status).toBe('running')
+ expect(actual).toMatchObject({status:'pending',incomeFen:null,compensationCostFen:null,compensationPaidFen:null,compensationDueFen:null,settledAt:null})
+ expect(actual.summary.join('')).toContain('不预告');expect(actual.summary.join('')).not.toContain(moneyText(0))
+ const future={...before,features:{...before.features,relay:{...before.features.relay!,periods:before.features.relay!.periods.map(p=>p.id===period(before).id?{...p,feePostedAt:'2024-11-13',compensatedAt:'2024-11-13'}:p)}}}
+ expect(relaySupportSettlement(future,target).status).toBe('pending')
+ expect(codec.export(beforeRun)).toBe(original88)
+})
+
+it('explains the actual normal 88 to 89 support consequence as 200 cost and cash, separate from the original job and untouched receivable',()=>{
+ const result=relaySupportSettlement(after,target),beforeAccount=before.view.accounts.find(a=>a.accountId===before.accountId)!,afterAccount=after.view.accounts.find(a=>a.accountId===after.accountId)!,finance=after.features.workbench.finance.find(f=>f.accountId===after.accountId)!
+ expect(result).toMatchObject({status:'known',periodId:period(after).id,settledAt:'2024-11-13',compensationCostFen:20000,compensationPaidFen:20000,compensationDueFen:0})
+ expect(after.view.revision).toBe(before.view.revision+1);expect(after.view.date).toBe('2024-11-13');expect(afterAccount.cashFen-beforeAccount.cashFen).toBe(-20000);expect(afterAccount.availableFen-beforeAccount.availableFen).toBe(-20000)
+ expect(afterAccount.receivableFen).toBe(1328);expect(afterAccount.receivableFen).toBe(beforeAccount.receivableFen)
+ expect(after.view.accounts.find(a=>a.accountId==='personal')).toEqual(before.view.accounts.find(a=>a.accountId==='personal'))
+ expect(after.view.budget).toEqual(before.view.budget)
+ const support=after.features.relay!.casebook!.actions.find(a=>a.jobId===period(after).supportJobId)!
+ const batches=after.features.relay!.auditJobs.filter(batch=>batch.businessId===period(after).businessId&&batch.periodIds.includes(period(after).id)&&batch.job?.definitionId==='relay-meter-audit'&&batch.job.startAt==='2024-11-14')
+ expect(batches).toHaveLength(1);const batch=batches[0]!
+ expect(batch.periodIds).toEqual([period(after).id]);expect(batch.meterCount).toBe(1)
+ expect(batch.job).toMatchObject({id:batch.jobId,businessId:period(after).businessId,definitionId:'relay-meter-audit',status:'planned',startAt:'2024-11-14'})
+ const auditRows=after.features.relay!.audits.filter(row=>row.jobId===batch.jobId)
+ expect(auditRows).toHaveLength(1);expect(auditRows[0]).toMatchObject({businessId:period(after).businessId,completedAt:null})
+ expect(after.features.relay!.meters.filter(meter=>meter.id===auditRows[0]!.meterId&&meter.periodId===period(after).id)).toHaveLength(1)
+ const actions=after.features.relay!.casebook!.actions.filter(action=>action.jobId===batch.jobId)
+ expect(actions).toHaveLength(1);const audit=actions[0]!
+ expect(audit).toMatchObject({jobId:batch.jobId,scopeBusinessId:period(after).businessId,status:'reserved',executedAt:null,definition:{id:batch.job!.actionId,accountId:after.accountId,businessId:period(after).businessId,startAt:'2024-11-14'}})
+ expect(support.definition.costFen).toBe(150000);expect(audit.definition.costFen).toBe(10000);expect(audit.definition.actionPoints).toBe(1)
+ expect(result.incomeFen).toBe(finance.metrics.filter(m=>m.sourceEventId===period(after).id&&m.kind==='income').reduce((n,m)=>n+m.deltaFen,0))
+ expect(result.summary.join('')).toContain(moneyText(20000));expect(result.summary.join('')).toContain('原支持任务投入与这笔赔付分列')
+ expect(result.summary[0]).toBe('本期服务后果已形成赔付成本 '+moneyText(20000)+'；实际已付 '+moneyText(20000)+'，尚欠 '+moneyText(0)+'。')
+ for(const ref of result.sourceRefs.filter(r=>['operation','obligation','transaction'].includes(r.kind)))expect(result.lines.join('\n')).toContain(ref.id)
+ expect(codec.export(afterRun)).toBe(original89)
+})
+
+it('keeps the existing 1500 support action, new 200 compensation and full original IDs in both service and support records',()=>{
+ const rows=relayRecordRows(after,target)
+ expect(rows.reason).toBeNull()
+ for(const kind of ['service','support']){const row=rows.rows.find(r=>r.kind===kind&&r.periodId===period(after).id)!
+  expect(row.summary!.join('')).toContain('赔付成本 '+moneyText(20000));expect(row.summary!.join('')).toContain('实际已付 '+moneyText(20000))
+  expect(row.lines.join('\n')).toContain(period(after).id);expect(row.lines.join('\n')).toContain(period(after).supportJobId)
+ }
+ const support=rows.rows.find(r=>r.kind==='support'&&r.periodId===period(after).id)!
+ expect(support.lines.join('\n')).toContain('原工作投入 '+moneyText(150000))
+ expect(support.summary!.join('')).not.toContain('赔付成本 '+moneyText(170000))
+})
+
+it('returns unknown for absent, unavailable or stale casebook rather than assuming no compensation',()=>{
+ const relay=after.features.relay!,{casebook:ignored,...legacy}=relay
+ expect(ignored).toBeDefined()
+ for(const value of [legacy,{...relay,casebook:{...ignored!,status:'unavailable' as const,reason:'原历史尚未核齐'}},{...relay,casebook:{...ignored!,revision:ignored!.revision+1}}]){
+  const result=relaySupportSettlement({...after,features:{...after.features,relay:value}},target)
+  expect(result.status).toBe('unavailable');expect(result.compensationCostFen).toBeNull();expect(result.compensationPaidFen).toBeNull();expect(result.compensationDueFen).toBeNull()
+ }
+})
+
+it('reads an explicitly unpaid original consequence as cost plus remaining debt, not as cash already paid',()=>{
+ const result=relaySupportSettlement(unpaidFrame(),target)
+ expect(result).toMatchObject({status:'known',compensationCostFen:20000,compensationPaidFen:0,compensationDueFen:20000})
+ expect(result.summary.join('')).toContain('尚欠 '+moneyText(20000))
+ expect(result.sourceRefs.filter(r=>r.kind==='transaction')).toEqual([])
+ expect(codec.export(afterRun)).toBe(original89)
+})
+
+it('links a later partial original Pay to the same obligation without adding another compensation cost',()=>{
+ const p=withPayment(unpaidFrame(),3000,'partial'),result=relaySupportSettlement(p,target)
+ expect(result).toMatchObject({status:'known',compensationCostFen:20000,compensationPaidFen:3000,compensationDueFen:17000})
+ const payment=p.features.relay!.casebook!.operations.at(-1)!
+ expect(result.lines.join('\n')).toContain(payment.id);expect(result.lines.join('\n')).toContain(payment.obligationId!)
+ expect(result.sourceRefs.some(r=>r.kind==='transaction'&&r.id===payment.id&&r.amountFen===-3000)).toBe(true)
+})
+
+it('does not mistake the historical due receipt status for a current debt after the exact later payments clear it',()=>{
+ const first=withPayment(unpaidFrame(),10000,'clear-first'),p=withPayment(first,10000,'clear-second'),history=p.features.relay!.casebook!
+ expect(history.operations.filter(o=>costs(p).has(o.id)).every(o=>o.status==='due')).toBe(true)
+ expect(relaySupportSettlement(p,target)).toMatchObject({status:'known',compensationCostFen:20000,compensationPaidFen:20000,compensationDueFen:0})
+})
+
+it.each(['missing-operation','missing-obligation','duplicate-operation','duplicate-cost','wrong-business','wrong-period','wrong-cost'] as const)('rejects %s in the original support reference chain',variant=>{
+ const history=after.features.relay!.casebook!,op=history.operations.find(o=>costs(after).has(o.id))!,finance=after.features.workbench.finance.find(f=>f.accountId===after.accountId)!,metric=finance.metrics.find(m=>m.operationId===op.id)!
+ const changed:History={...history,operations:variant==='missing-operation'?history.operations.filter(o=>o.id!==op.id):variant==='duplicate-operation'?[...history.operations,op]:history.operations.map(o=>o.id===op.id&&variant==='wrong-business'?{...o,scopeBusinessId:'another-business'}:o.id===op.id&&variant==='wrong-period'?{...o,sourceEventId:'another-period'}:o),obligationHistory:variant==='missing-obligation'?history.obligationHistory.filter(o=>o.id!==op.obligationId):history.obligationHistory}
+ let p=withHistory(after,changed)
+ if(variant==='duplicate-cost'||variant==='wrong-cost')p={...p,features:{...p.features,workbench:{...p.features.workbench,finance:p.features.workbench.finance.map(f=>f.accountId!==p.accountId?f:{...f,metrics:variant==='duplicate-cost'?[...f.metrics,metric]:f.metrics.map(m=>m===metric?{...m,deltaFen:m.deltaFen+1}:m)})}}}
+ expect(relaySupportSettlement(p,target)).toMatchObject({status:'unavailable',incomeFen:null,compensationCostFen:null,compensationPaidFen:null,compensationDueFen:null})
+ expect(codec.export(afterRun)).toBe(original89)
+})
+
+it.each(['reference','account','source','date','amount','canonical-id'] as const)('rejects a later payment with wrong %s even when the aggregate paid amount looks plausible',variant=>{
+ const p=withPayment(unpaidFrame(),3000,'wrong-'+variant),history=p.features.relay!.casebook!,operation=history.operations.at(-1)!,transaction=history.transactions.find(t=>t.id===operation.id)!
+ const changed=withHistory(p,{...history,operations:history.operations.map(o=>o.id===operation.id&&variant==='canonical-id'?{...o,id:'made-up-pay-operation'}:o),transactions:history.transactions.map(t=>t===transaction?{...t,...(variant==='reference'?{referenceId:'another-obligation'}:variant==='account'?{accountId:'personal'}:variant==='source'?{sourceId:'another-command'}:variant==='date'?{date:'2024-11-12'}:variant==='amount'?{amountFen:-2999}:{id:'made-up-pay-operation'})}:t)})
+ expect(relaySupportSettlement(changed,target).status).toBe('unavailable')
+})
+
+it('ignores another period on the same controlled account and does not inspect hidden meter loss or future state',()=>{
+ const history=after.features.relay!.casebook!,seed=history.operations.find(o=>costs(after).has(o.id))!,operation={...seed,id:'public-other-period-compensation',sourceEventId:'public-another-period',obligationId:'public-other-period-debt',amountFen:32100},finance=after.features.workbench.finance.find(f=>f.accountId===after.accountId)!,metric=finance.metrics.find(m=>m.operationId===seed.id)!
+ const p=withHistory(after,{...history,operations:[...history.operations,operation]}),frame={...p,features:{...p.features,workbench:{...p.features.workbench,finance:p.features.workbench.finance.map(f=>f===finance?{...f,metrics:[...f.metrics,{...metric,operationId:operation.id,sourceEventId:operation.sourceEventId,deltaFen:32100}]}:f)}}}
+ const relay={...frame.features.relay!};Object.defineProperty(relay,'meters',{get(){throw Error('HIDDEN_LOSS_READ_FORBIDDEN')}})
+ expect(relaySupportSettlement({...frame,features:{...frame.features,relay}},target)).toMatchObject({status:'known',compensationCostFen:20000,compensationPaidFen:20000,compensationDueFen:0})
+ expect(relaySupportSettlement(after,{...target,runId:'other-life'}).status).toBe('unavailable')
+ expect(codec.export(afterRun)).toBe(original89)
+})

@@ -4,6 +4,7 @@ import {resolveCourseFocus} from './course-player-thread.ts'
 import {relayJourneyAction,relayJourneyScene} from './relay-journey.ts'
 import {resolveRelaySceneTarget,relayTargetEntity} from './relay-scene-target.ts'
 import type {ProductionJob} from '../core/operations-types.ts'
+import {relayTicketAudit} from './relay-ticket-command.ts'
 
 type Input=Pick<GamePanelProps,'view'|'features'>
 type Thread=Pick<PlayerThreadView,'focus'|'focusScope'|'stage'|'outcome'|'responsibilityOverrideNeeded'>
@@ -43,6 +44,28 @@ function relayObjectPurpose(p:Input,thread:Thread):ThreadPurpose|null{
  }
  if(r.application&&r.job)return applicationPurpose(r.application,r.job)
  if(r.audience&&r.job&&r.audience.completedAt===null)return relayTaskPurpose('marketing',r.job,history)
+ if(r.period&&r.meter){
+  const meter=r.meter
+  const existing=relayTicketAudit({...p,accountId:f.accountId},t)
+  if(existing.reason)return purpose('先核对这一张票已经留下的复核依据。',existing.reason)
+  if(existing.job&&existing.batch)return purpose('留出这一张票已经委托的独立核对时间。',existing.job.startAt+'—'+existing.job.completeAt+'是同一份原委托；完整批次'+existing.batch.meterCount+'条，实际完成后才看实计，不重复安排。')
+  if(meter.correctionId!==null){
+   const rows=v.corrections.filter(c=>c.id===meter.correctionId&&c.meterId===meter.id&&c.date<=p.view.date)
+   return rows.length===1?purpose('收好这一张原票和已经追加的更正。',rows[0]!.date+'已留下本票更正；原量、原价与其它票保留，新增应收应付仍按自己的原日期。'):purpose('先核对这一张原票的更正依据。','原附票尚未唯一对齐；没有替换另一张，也不宣布款项已结清。')
+  }
+  if(meter.auditedUnits===null)return purpose((history?'回看':'核对')+'这一张已经发生、实计待核的原票。','明确选择原资源和日期后才能委托本票复核；阅读报告不产生实计、差额或收入。')
+  if(meter.auditedUnits!==meter.reportedUnits)return purpose('只回应这一张已经查出差额的原票。','按同一份实际复核明确决定本票更正；整期其它计量、原支持与应收应付分别继续。')
+  return purpose('收好这一张报告与实计相符的原票。','本票已独立核对相符，可以停留；不强迫制造金额调整，其它原票与账款另核。')
+ }
+ if(r.period&&r.job){
+  const job=r.job,support=job.id===r.period.supportJobId,label=r.audit?'这批原计量复核':support?'这一份原支持':'这一份原服务'
+  const subset=r.audit?v.audits.filter(a=>a.jobId===r.audit!.jobId&&v.meters.some(m=>m.id===a.meterId&&m.periodId===r.period!.id)).length:0
+  const scope=r.audit?'完整原批次'+r.audit.meterCount+'条，其中'+subset+'条属于当前原期；后来计量另核。':support?'完成的是这一份支持；用量、退款、费用和实际回款仍分别处理。':'服务与原支持是两份任务，核账与实收也分别继续。'
+  if(job.status==='planned')return purpose('把'+label+'留在原定的日子里。',job.startAt+'原定开工、'+job.completeAt+'预计完成；预留不是完成。'+scope)
+  if(job.status==='running')return purpose('按原资源把'+label+'认真做完。',job.completeAt+'是这份原任务的预计反馈日；须实际完成才呈现结果。'+scope)
+  if(job.status==='completed')return purpose('收好已经实际完成的'+label+'。',job.completeAt+'已完成这份原任务。'+scope)
+  return purpose(label+(job.status==='cancelled'?'未开工已取消，原记录仍在。':'已经中断，先看清留下什么。'),(job.releasedAt??job.startAt)+'已停止；原预留、实际投入与旧责任分别核对，等待不会免费补做。'+scope)
+ }
  if(t.kind!=='business')return null
  const jobs:{kind:RelayTaskKind;job:ProductionJob|null}[]=[]
  if(thread.stage==='relay-preparation')for(const row of v.preparations.filter(row=>row.businessId===t.businessId&&active(row.job)))jobs.push({kind:row.kind,job:relayPublicJob(p,t.businessId,row.job,row.jobId,row.kind==='basics'?'relay-basics':'relay-preparation')})
