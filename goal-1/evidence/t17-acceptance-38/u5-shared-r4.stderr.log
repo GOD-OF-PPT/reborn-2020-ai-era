@@ -1,0 +1,37 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/OpeningMoment.focus-book.test.tsx > keeps a pending radio across groups, cancels without focus changes and confirms only the explicitly previewed original object
+Error: REAL_FOCUS_HANDLER_REQUIRED:调整本季书签
+ ❯ click src/ui/OpeningMoment.focus-book.test.tsx:92:190
+
+ ❯ src/ui/OpeningMoment.focus-book.test.tsx:95:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/ui/today-thread.test.ts > offers only UI directions from a normal empty day and retains the exact primary and game bytes
+AssertionError: expected [ 'work', 'life', 'video', …(4) ] to deeply equal [ 'work', 'life', 'video', …(3) ]
+
+- Expected
++ Received
+
+@@ -2,7 +2,8 @@
+    "work",
+    "life",
+    "video",
+    "course",
+    "relay",
++   "ecosystem",
+    "market",
+  ]
+
+ ❯ src/ui/today-thread.test.ts:31:43
+     29|  expect(view.ongoing).toEqual([])
+     30|  expect(todayThread(p,{runId:p.view.runId,accountId:'personal',kind:'l…
+     31|  expect(view.directions.map(row=>row.id)).toEqual(['work','life','vide…
+       |                                           ^
+     32|  for(const original of ['work','life','video','market'])expect(view.di…
+     33|  expect(view.directions[2]).toMatchObject({id:'video',screen:'video'})
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

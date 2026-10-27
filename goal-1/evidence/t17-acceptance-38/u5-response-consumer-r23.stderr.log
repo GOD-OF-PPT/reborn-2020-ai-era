@@ -1,0 +1,54 @@
+stderr | src/ui/EcosystemResponse.test.tsx > first compares actual400 already paid, total800 and2 points to retry, or1500 refund with no support compensation
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+
+stderr | src/ui/EcosystemResponse.test.tsx > opens preparation only after the explicit retry choice and preserves exact resource/date through returning and reopening
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/EcosystemResponse.test.tsx > first compares actual400 already paid, total800 and2 points to retry, or1500 refund with no support compensation
+TypeError: Cannot read properties of null (reading 'useRef')
+ ❯ process.env.NODE_ENV.exports.useRef node_modules/react/cjs/react.development.js:1306:33
+ ❯ useEcosystemDraft src/ui/ecosystem-draft.ts:15:17
+     13| /** UI-only fields survive cancellation and reading. Date/revision cha…
+     14| export function useEcosystemDraft(p:GamePanelProps,target:EcosystemSce…
+     15|  const fallback=useRef<EcosystemDraftMemory>(new Map()),memory=p.ecosy…
+       |                 ^
+     16|  current.current=key
+     17|  const [,refresh]=useState(0),values=memory.get(key)??{}
+ ❯ Module.EcosystemSceneChoice src/ui/EcosystemSceneChoice.tsx:20:175
+ ❯ src/ui/EcosystemResponse.test.tsx:39:95
+ ❯ mounted src/ui/EcosystemResponse.test.tsx:25:189
+ ❯ Object.draw src/ui/EcosystemResponse.test.tsx:39:79
+ ❯ src/ui/EcosystemResponse.test.tsx:42:68
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/ui/EcosystemResponse.test.tsx > opens preparation only after the explicit retry choice and preserves exact resource/date through returning and reopening
+TypeError: Cannot read properties of null (reading 'useRef')
+ ❯ process.env.NODE_ENV.exports.useRef node_modules/react/cjs/react.development.js:1306:33
+ ❯ useEcosystemDraft src/ui/ecosystem-draft.ts:15:17
+     13| /** UI-only fields survive cancellation and reading. Date/revision cha…
+     14| export function useEcosystemDraft(p:GamePanelProps,target:EcosystemSce…
+     15|  const fallback=useRef<EcosystemDraftMemory>(new Map()),memory=p.ecosy…
+       |                 ^
+     16|  current.current=key
+     17|  const [,refresh]=useState(0),values=memory.get(key)??{}
+ ❯ Module.EcosystemSceneChoice src/ui/EcosystemSceneChoice.tsx:20:175
+ ❯ src/ui/EcosystemResponse.test.tsx:39:95
+ ❯ mounted src/ui/EcosystemResponse.test.tsx:25:189
+ ❯ Object.draw src/ui/EcosystemResponse.test.tsx:39:79
+ ❯ draw src/ui/EcosystemResponse.test.tsx:54:26
+ ❯ src/ui/EcosystemResponse.test.tsx:54:34
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

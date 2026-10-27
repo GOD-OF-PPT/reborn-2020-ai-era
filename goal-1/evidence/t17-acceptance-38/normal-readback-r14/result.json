@@ -1,0 +1,95 @@
+{
+  "at": "2026-10-27T16:32:02.880Z",
+  "scope": "Author-run pure JSON public financial readback, no engine/UI helper imported; not Native, full Create replay, formal independent acceptance or human playtest",
+  "correction": {
+    "previous": "goal-1/evidence/t17-acceptance-38/normal-service-r13/result.json",
+    "field": "rows[].paidCollectionsFen",
+    "reason": "R13 summary incorrectly filtered collection.contractId; original collection identifies its invoice by deliveryId. Preserve original executed driver/result and raw bytes. Use actualOriginalCollectionsFen in this independent readback.",
+    "previousSourceSummaryUsedForMoneyAcceptance": false
+  },
+  "backgrounds": 2,
+  "newNativeCreate": 0,
+  "allPublicChecksPassed": true,
+  "results": [
+    {
+      "backgroundId": "technical_employee",
+      "productId": "deployment",
+      "runId": "u5-r13-normal-technical_employee",
+      "revision": 84,
+      "stageDates": [
+        "2024-05-06",
+        "2024-07-01",
+        "2025-04-01"
+      ],
+      "contractId": "dsk:2a98c5cc3db487c6f7249db5676450d9",
+      "scope": "standard",
+      "status": "completed",
+      "priceFen": 1200000,
+      "prepaymentConsumedFen": 600000,
+      "recognizedProductionFen": 960000,
+      "recognizedSupportFen": 240000,
+      "actualOriginalCollectionsFen": 600000,
+      "remainingPrepaymentFen": 0,
+      "remainingReceivableFen": 0,
+      "directJobPaidFen": 300000,
+      "cashFen": 3616130,
+      "inputs": [
+        {
+          "file": "technical_employee-before-open.json",
+          "bytes": 926730,
+          "sha256": "f00b3843923591c96a8072b15a51ae492790a378e5b668f96eedeaafd611f7e2"
+        },
+        {
+          "file": "technical_employee-before-contract.json",
+          "bytes": 999797,
+          "sha256": "fde75086773ff9d23b66ccee45a0282ea7c5cd316b7d6fcc0a7ca17b0aac8582"
+        },
+        {
+          "file": "technical_employee-service-completed-before-equity.json",
+          "bytes": 1192181,
+          "sha256": "47fc209bb790ba8d46150b7138ca840cec583eab708aed01c6eda7f66658f75d"
+        }
+      ]
+    },
+    {
+      "backgroundId": "content_employee",
+      "productId": "training",
+      "runId": "u5-r13-normal-content_employee",
+      "revision": 87,
+      "stageDates": [
+        "2024-05-06",
+        "2024-07-01",
+        "2025-04-01"
+      ],
+      "contractId": "dsk:181c0080b85b0ce3f86bedeb1ddc386c",
+      "scope": "standard",
+      "status": "completed",
+      "priceFen": 600000,
+      "prepaymentConsumedFen": 300000,
+      "recognizedProductionFen": 480000,
+      "recognizedSupportFen": 120000,
+      "actualOriginalCollectionsFen": 300000,
+      "remainingPrepaymentFen": 0,
+      "remainingReceivableFen": 0,
+      "directJobPaidFen": 150000,
+      "cashFen": 3068388,
+      "inputs": [
+        {
+          "file": "content_employee-before-open.json",
+          "bytes": 926476,
+          "sha256": "9f4a567e9eb87d9fedb28146f62a3bf83521527e6c957b93ae3e528512832e73"
+        },
+        {
+          "file": "content_employee-before-contract.json",
+          "bytes": 1008628,
+          "sha256": "038f68f8e615cfe288ab4fba60487e5bbd64a730ec24048b9b082c8c1d376d58"
+        },
+        {
+          "file": "content_employee-service-completed-before-equity.json",
+          "bytes": 1213692,
+          "sha256": "ac5ef45c40595c14f516a306b8dc24122a8121f4a69d3fc2dd6cf6409d274137"
+        }
+      ]
+    }
+  ]
+}

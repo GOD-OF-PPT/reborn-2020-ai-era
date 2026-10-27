@@ -1,0 +1,196 @@
+{
+  "at": "2026-10-27T16:35:02.612Z",
+  "scope": "Separate original controller/session/codec/fake-IndexedDB functional run plus pure saved-focus consumers; no React handler execution, no browser storage, not the original5s unit batch or Native/human acceptance",
+  "unitTimeoutsRetained": [
+    "checks-r43-normal-original-save"
+  ],
+  "newNativeCreate": 0,
+  "newNativeCommands": 0,
+  "allFunctionalChecksPassed": true,
+  "rows": [
+    {
+      "backgroundId": "technical_employee",
+      "productId": "deployment",
+      "originalRevision": 70,
+      "savedRevision": 71,
+      "originalCommand": {
+        "runId": "u5-r13-normal-technical_employee",
+        "actorId": "player",
+        "commandId": "command-73dcf6e8-921b-4b2a-8f64-ed56281a4aee",
+        "expectedRevision": 70,
+        "kind": "AcceptEcoContract",
+        "payload": {
+          "leadId": "dsk:030a3ca77f4adbb14cab1605b86595cb",
+          "scope": "standard",
+          "resources": [
+            "player-production"
+          ],
+          "startAt": "2024-07-02"
+        }
+      },
+      "trace": {
+        "writeSucceeded": true,
+        "abortIssued": true
+      },
+      "oldRow": {
+        "file": "technical_employee-physical-old.json",
+        "origin": "controller_fake_idb_not_native",
+        "source": "Original physical IndexedDbRunStore API after actual abort; fake IndexedDB functional check, not browser",
+        "bytes": 999797,
+        "sha256": "fde75086773ff9d23b66ccee45a0282ea7c5cd316b7d6fcc0a7ca17b0aac8582",
+        "runId": "u5-r13-normal-technical_employee",
+        "revision": 70
+      },
+      "candidateRow": {
+        "file": "technical_employee-candidate.json",
+        "origin": "controller_fake_idb_not_native",
+        "source": "Original controller candidate exported after actual head.put abort; no re-evaluation",
+        "bytes": 1012073,
+        "sha256": "65815b90d9193f0b968cfc85ea4302d85675a6147cba3197ffef9763b5b9f10c",
+        "runId": "u5-r13-normal-technical_employee",
+        "revision": 71
+      },
+      "newRow": {
+        "file": "technical_employee-physical-new.json",
+        "origin": "controller_fake_idb_not_native",
+        "source": "Original physical new bytes after original candidate retry; fake IndexedDB, not browser",
+        "bytes": 1012073,
+        "sha256": "65815b90d9193f0b968cfc85ea4302d85675a6147cba3197ffef9763b5b9f10c",
+        "runId": "u5-r13-normal-technical_employee",
+        "revision": 71
+      },
+      "candidateExactlyCommitted": true,
+      "readerReadOnly": true,
+      "oldObjectPreservedBeforeSave": true,
+      "committedObjectAfterSave": {
+        "kind": "ecosystem",
+        "runId": "u5-r13-normal-technical_employee",
+        "accountId": "ops:4f126568310c962352c11aedf395d89c",
+        "entityId": "dsk:058af2bd9fc93aa8628b9b32b671fe4d",
+        "ecosystemTarget": {
+          "runId": "u5-r13-normal-technical_employee",
+          "accountId": "ops:4f126568310c962352c11aedf395d89c",
+          "businessId": "ops:2b793c9617dd060678e11dc51ccec9da",
+          "kind": "contract",
+          "recordId": "dsk:058af2bd9fc93aa8628b9b32b671fe4d"
+        },
+        "businessId": "ops:2b793c9617dd060678e11dc51ccec9da"
+      },
+      "marks": [
+        {
+          "phase": "original normal import",
+          "ms": 1167
+        },
+        {
+          "phase": "actual original head.put succeeded then aborted",
+          "ms": 1892
+        },
+        {
+          "phase": "old scene and physical old bytes verified",
+          "ms": 2225
+        },
+        {
+          "phase": "second controller read-only and old bytes verified",
+          "ms": 2858
+        },
+        {
+          "phase": "original retry physical new and reader reloaded",
+          "ms": 3945
+        }
+      ],
+      "wallMs": 3955
+    },
+    {
+      "backgroundId": "content_employee",
+      "productId": "training",
+      "originalRevision": 72,
+      "savedRevision": 73,
+      "originalCommand": {
+        "runId": "u5-r13-normal-content_employee",
+        "actorId": "player",
+        "commandId": "command-bdf38453-0ed1-4fcd-bc63-20d5bbd078fd",
+        "expectedRevision": 72,
+        "kind": "AcceptEcoContract",
+        "payload": {
+          "leadId": "dsk:b814af01ec816a846c5c30b329d0ca65",
+          "scope": "standard",
+          "resources": [
+            "player-production"
+          ],
+          "startAt": "2024-07-02"
+        }
+      },
+      "trace": {
+        "writeSucceeded": true,
+        "abortIssued": true
+      },
+      "oldRow": {
+        "file": "content_employee-physical-old.json",
+        "origin": "controller_fake_idb_not_native",
+        "source": "Original physical IndexedDbRunStore API after actual abort; fake IndexedDB functional check, not browser",
+        "bytes": 1008628,
+        "sha256": "038f68f8e615cfe288ab4fba60487e5bbd64a730ec24048b9b082c8c1d376d58",
+        "runId": "u5-r13-normal-content_employee",
+        "revision": 72
+      },
+      "candidateRow": {
+        "file": "content_employee-candidate.json",
+        "origin": "controller_fake_idb_not_native",
+        "source": "Original controller candidate exported after actual head.put abort; no re-evaluation",
+        "bytes": 1020885,
+        "sha256": "4037357e90cc1b1e82c5c866610e2563dd3b32bf38fbc4e43992ce0e70db02e2",
+        "runId": "u5-r13-normal-content_employee",
+        "revision": 73
+      },
+      "newRow": {
+        "file": "content_employee-physical-new.json",
+        "origin": "controller_fake_idb_not_native",
+        "source": "Original physical new bytes after original candidate retry; fake IndexedDB, not browser",
+        "bytes": 1020885,
+        "sha256": "4037357e90cc1b1e82c5c866610e2563dd3b32bf38fbc4e43992ce0e70db02e2",
+        "runId": "u5-r13-normal-content_employee",
+        "revision": 73
+      },
+      "candidateExactlyCommitted": true,
+      "readerReadOnly": true,
+      "oldObjectPreservedBeforeSave": true,
+      "committedObjectAfterSave": {
+        "kind": "ecosystem",
+        "runId": "u5-r13-normal-content_employee",
+        "accountId": "ops:4f126568310c962352c11aedf395d89c",
+        "entityId": "dsk:18ce5a4c1f20567aeac3e18ec288b682",
+        "ecosystemTarget": {
+          "runId": "u5-r13-normal-content_employee",
+          "accountId": "ops:4f126568310c962352c11aedf395d89c",
+          "businessId": "ops:2b793c9617dd060678e11dc51ccec9da",
+          "kind": "contract",
+          "recordId": "dsk:18ce5a4c1f20567aeac3e18ec288b682"
+        },
+        "businessId": "ops:2b793c9617dd060678e11dc51ccec9da"
+      },
+      "marks": [
+        {
+          "phase": "original normal import",
+          "ms": 767
+        },
+        {
+          "phase": "actual original head.put succeeded then aborted",
+          "ms": 1392
+        },
+        {
+          "phase": "old scene and physical old bytes verified",
+          "ms": 1736
+        },
+        {
+          "phase": "second controller read-only and old bytes verified",
+          "ms": 2283
+        },
+        {
+          "phase": "original retry physical new and reader reloaded",
+          "ms": 3127
+        }
+      ],
+      "wallMs": 3140
+    }
+  ]
+}

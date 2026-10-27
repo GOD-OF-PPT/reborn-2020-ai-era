@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import {spawn} from 'node:child_process';
+import {tree,ident} from '../t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs';
+import {assertBrowserEvidenceWritable as guard} from '../../../scripts/browser_evidence_guard.mjs';
+const root='goal-1/evidence/t17-acceptance-38',[name,...argv]=process.argv.slice(2);
+if(process.version!=='v22.12.0'||!/^[a-zA-Z0-9_.-]+$/.test(name??'')||!argv.length)throw Error('EXACT_NODE22_NAME_ARGV_REQUIRED');
+const baseline=JSON.parse(fs.readFileSync(root+'/baseline.json')),config=baseline.sourceAndAssets.find(r=>r.path==='vitest.config.ts');
+const same=(a,b)=>['bytes','sha256','mode'].every(k=>a[k]===b[k]);if(!same(ident(config.path),config))throw Error('ORIGINAL_VITEST_CONFIG_REQUIRED');
+const sources=()=>[...tree('src').files,...tree('assets').files,...tree('public').files,...['package.json','package-lock.json','tsconfig.json','tsconfig.app.json','tsconfig.core.json','tsconfig.node.json','vite.config.ts','vitest.config.ts','index.html'].map(ident)].sort((a,b)=>a.path.localeCompare(b.path));
+const put=(kind,value)=>{guard(root);fs.writeFileSync(root+'/'+name+'.'+kind,JSON.stringify(value,null,2)+String.fromCharCode(10),{flag:'wx'})};
+const before=sources(),runner=ident(root+'/run-step-r1.mjs');put('source-before.json',{files:before,runner});const fds={};for(const kind of ['stdout','stderr']){guard(root);fds[kind]=fs.openSync(root+'/'+name+'.'+kind+'.log','wx')}
+const start=Date.now(),child=spawn('rtk',['proxy',...argv],{stdio:['ignore','pipe','pipe']});put('started.json',{at:new Date().toISOString(),argv:['rtk','proxy',...argv],node:process.version,parentPid:process.pid,childPid:child.pid,sourceCount:before.length,compatibility:0,bookLayoutSelected:false});for(const kind of ['stdout','stderr'])child[kind].on('data',b=>{guard(root);fs.writeSync(fds[kind],b);process[kind].write(b)});
+let error=null;const ended=await new Promise(resolve=>{child.once('error',e=>{error=String(e);resolve({exitCode:null,signal:null})});child.once('close',(exitCode,signal)=>resolve({exitCode,signal}))});for(const fd of Object.values(fds))fs.closeSync(fd);const after=sources(),sourceUnchanged=JSON.stringify(before)===JSON.stringify(after),runnerUnchanged=same(ident(runner.path),runner);put('source-after.json',{files:after,runnerUnchanged});const result={at:new Date().toISOString(),...ended,error,wallMs:Date.now()-start,sourceCount:before.length,sourceUnchanged,runnerUnchanged,compatibility:0};put('result.json',result);console.log(JSON.stringify(result));process.exitCode=ended.exitCode===0&&sourceUnchanged&&runnerUnchanged&&!error?0:ended.exitCode||1;
