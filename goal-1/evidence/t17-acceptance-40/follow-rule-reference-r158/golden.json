@@ -1,0 +1,85 @@
+{
+  "at": "2026-10-28T20:20:54.484Z",
+  "input": "goal-1/evidence/t17-acceptance-40/follow-native-r153/saved121-public-round-undecided.json",
+  "inputBytes": 1281852,
+  "inputSha256": "1e2a7cac3c5c20f4edd39ee55edd21c3518454beba06f905bcb026386c0d46a5",
+  "source": ".delivery/t17-u6-recovery-r150",
+  "originalProduct": "0d582b12b66644fb62970b4f70e3ce4bea9642d5",
+  "cases": [
+    {
+      "name": "zero",
+      "command": {
+        "runId": "normal-deepseek-technical_employee",
+        "actorId": "player",
+        "commandId": "u6-follow-equivalence:zero",
+        "expectedRevision": 121,
+        "kind": "FollowEquityRound",
+        "payload": {
+          "agreementId": "dsk:6c70890edf1c41cdc2a0e08ba06a284d",
+          "amountFen": 0
+        }
+      },
+      "bytes": 1285052,
+      "sha256": "fa9bd5db1eb89c346af13562e9851b1e7b1df68e2068e0630e072de7d3cdf606",
+      "actual": {
+        "revision": 122,
+        "date": "2025-09-01",
+        "cashFen": 27163333,
+        "availableFen": 27163333,
+        "budget": {
+          "available": 1,
+          "quarter": "2025-Q3",
+          "reserved": 0,
+          "spent": 3,
+          "total": 4
+        },
+        "shares": 2500,
+        "costFen": 2000000,
+        "totalShares": 1562500,
+        "followDecision": "declined",
+        "followAmountFen": 0,
+        "lockUntil": "2027-04-15"
+      },
+      "randomUnchanged": true
+    },
+    {
+      "name": "partial",
+      "command": {
+        "runId": "normal-deepseek-technical_employee",
+        "actorId": "player",
+        "commandId": "u6-follow-equivalence:partial",
+        "expectedRevision": 121,
+        "kind": "FollowEquityRound",
+        "payload": {
+          "agreementId": "dsk:6c70890edf1c41cdc2a0e08ba06a284d",
+          "amountFen": 249600
+        }
+      },
+      "bytes": 1287347,
+      "sha256": "b6f9078f077a669f1b34a09b9e744efe9290f327b32b6e032b5b5726e1350a62",
+      "actual": {
+        "revision": 122,
+        "date": "2025-09-01",
+        "cashFen": 26913733,
+        "availableFen": 26913733,
+        "budget": {
+          "available": 1,
+          "quarter": "2025-Q3",
+          "reserved": 0,
+          "spent": 3,
+          "total": 4
+        },
+        "shares": 2812,
+        "costFen": 2249600,
+        "totalShares": 1562500,
+        "followDecision": "participated",
+        "followAmountFen": 249600,
+        "lockUntil": "2027-04-15"
+      },
+      "randomUnchanged": true
+    }
+  ],
+  "scope": "Two separate original core branches from the same already-public actual normal121, not two Native choices in one life and not future probes.",
+  "compatibility": 0,
+  "wholeU6Complete": false
+}

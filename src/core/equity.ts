@@ -1,4 +1,5 @@
 import {addDays,quarterOf} from './calendar.ts'
+import {equityFollowTerms,equityFollowAllocation} from './equity-follow-quote.ts'
 import {accountFunds} from './ledger.ts'
 import {cumulativeFee,sumMoney,money} from './money.ts'
 import {requireRule} from './errors.ts'
@@ -22,6 +23,7 @@ export class EquityRuntime{
  eligible(m:Context,businessId:string){return state(m).preparations.some(p=>p.kind==='eligibility'&&p.businessId===businessId&&done(m,p.jobId))}
  totalShares(m:Context){return state(m).rounds.at(-1)?.totalShares??this.catalog.initialShares}
  valuation(m:Context){return state(m).rounds.at(-1)?.valuationFen??this.catalog.initialPreMoneyFen}
+ followTerms(m:Context){return equityFollowTerms(this.catalog.followPreMoneyFen,this.catalog.followNewMoneyFen,this.totalShares(m))}
  terms(id:string){const t=this.catalog.terms.find(t=>t.id===id);requireRule(t,'UNKNOWN_EQUITY_TERMS');return t}
  exitQuote(m:Context,exitId:string,units:number,date:string){
   const e=state(m).exits.find(e=>e.id===exitId);requireRule(e&&e.unitPriceFen!==null,'EQUITY_NO_VALID_BUYER');const a=this.agreement(m,e.agreementId),gross=money(units*e.unitPriceFen),previousGross=sumMoney(m.economy.ledger.receipts.filter(r=>r.kind==='dispose_private_asset').map(r=>(JSON.parse(r.signature) as {grossFen:number}).grossFen)),fee=cumulativeFee(previousGross,gross,this.catalog.transferFeeBps);let left=units,basis=0
@@ -56,7 +58,7 @@ export class EquityRuntime{
    return allowed()
   }
   if(i.kind==='FollowEquityRound'){
-   const a=this.agreement(m,str(i.agreementId));requireRule(a.followDecision==='pending'&&date>=this.catalog.followAt&&date<=addDays(this.catalog.followAt,this.catalog.followDecisionDays),'EQUITY_FOLLOW_WINDOW_CLOSED');const amount=num(i.amountFen);if(amount>0)this.active(m,a.businessId);const price=this.catalog.followPreMoneyFen/this.totalShares(m);requireRule(amount===0||a.preemptive&&a.shares>0&&Number.isInteger(price)&&amount%price===0&&amount<=ratio(this.catalog.followNewMoneyFen,a.shares,this.totalShares(m)),'EQUITY_FOLLOW_RIGHT_REQUIRED');requireRule(accountFunds(m.economy.ledger,a.accountId).availableFen>=amount,'INSUFFICIENT_AVAILABLE_FUNDS');return {...allowed(),upfrontCostFen:amount}
+   const a=this.agreement(m,str(i.agreementId));requireRule(a.followDecision==='pending'&&date>=this.catalog.followAt&&date<=addDays(this.catalog.followAt,this.catalog.followDecisionDays),'EQUITY_FOLLOW_WINDOW_CLOSED');const amount=num(i.amountFen);if(amount>0)this.active(m,a.businessId);const price=this.followTerms(m).unitPriceFen;requireRule(amount===0||a.preemptive&&a.shares>0&&Number.isInteger(price)&&amount%price===0&&amount<=ratio(this.catalog.followNewMoneyFen,a.shares,this.totalShares(m)),'EQUITY_FOLLOW_RIGHT_REQUIRED');requireRule(accountFunds(m.economy.ledger,a.accountId).availableFen>=amount,'INSUFFICIENT_AVAILABLE_FUNDS');return {...allowed(),upfrontCostFen:amount}
   }
   if(i.kind==='ProposeEquityGovernance'){
    const a=this.agreement(m,str(i.agreementId));requireRule(a.board&&a.shares>0,'EQUITY_GOVERNANCE_RIGHT_REQUIRED');requireRule(!s.governance.some(g=>g.agreementId===a.id&&g.policy===i.policy),'EQUITY_GOVERNANCE_ALREADY_PROPOSED');return this.#job(m,i,a.businessId,'deepseek-governance',date)
@@ -116,7 +118,7 @@ export class EquityRuntime{
   requireRule(false,'UNKNOWN_EQUITY_COMMAND')
  }
  #follow<T extends OperatingModel>(m:T,a:DeepseekAgreement,amount:number,date:string,id:string,defaulted:boolean):T{
-  const s=state(m),oldTotal=this.totalShares(m),price=this.catalog.followPreMoneyFen/oldTotal,issued=this.catalog.followNewMoneyFen/price,newShares=amount/price,total=oldTotal+issued;requireRule(Number.isSafeInteger(issued)&&Number.isSafeInteger(newShares),'INVALID_EQUITY_ROUND_SHARES');let next=m;const operationId=did('follow-acquire',id)
+  const s=state(m),terms=this.followTerms(m),allocation=equityFollowAllocation(terms,a.shares,amount),issued=terms.issuedShares,newShares=allocation.newShares,total=allocation.totalSharesAfter;requireRule(Number.isSafeInteger(issued)&&Number.isSafeInteger(newShares),'INVALID_EQUITY_ROUND_SHARES');let next=m;const operationId=did('follow-acquire',id)
   if(amount>0)next=post(next,{id:operationId,sourceEventId:a.id,date,kind:'acquire_asset',accountId:a.accountId,counterpartyId:'world',businessId:a.businessId,investmentId:a.investmentId,assetId:a.subjectId,classification:'counterfactual',amountFen:amount,referenceId:'counterfactual-follow-on-new-capital'})
   next=patch(next,{agreements:s.agreements.map(v=>v.id===a.id?{...v,shares:v.shares+newShares,costFen:v.costFen+amount,followDecision:defaulted?'defaulted':amount>0?'participated':'declined',followAmountFen:amount,followAt:date,lots:amount>0?[...v.lots,{originId:operationId,shares:newShares,costFen:amount,remainingShares:newShares,remainingCostFen:amount}]:v.lots,acquisitionOperationIds:amount>0?[...v.acquisitionOperationIds,operationId]:v.acquisitionOperationIds}:v),rounds:[...s.rounds,{id,kind:'new_capital',agreementId:a.id,date,preMoneyFen:this.catalog.followPreMoneyFen,newMoneyFen:this.catalog.followNewMoneyFen,playerMoneyFen:amount,otherMoneyFen:this.catalog.followNewMoneyFen-amount,issuedShares:issued,transferredShares:0,totalShares:total,valuationFen:this.catalog.followPreMoneyFen+this.catalog.followNewMoneyFen}]})
   return post(next,{id:did('follow-mark',id),sourceEventId:a.id,date,kind:'value_asset',accountId:a.accountId,businessId:a.businessId,investmentId:a.investmentId,valueFen:ratio(this.valuation(next),a.shares+newShares,total)})

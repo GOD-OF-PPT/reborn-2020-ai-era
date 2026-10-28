@@ -103,3 +103,17 @@ it('keeps the real first delivery visible even when Today was requested through 
   expect(leaf).toContain('先回到待交付的作品');expect(h.controller.exportSaved()).toBe(before)
  }finally{await h.close()}
 },30000)
+
+
+it('gives Today a current purpose after old work while preserving its original bookmark and full history',async()=>{
+ const h=await normal('today-after-historical-work')
+ try{
+  await h.send('WorkQuarter',{});const period=h.p().features.workbench.employment[0]!
+  await h.advance('2020-04-01');const p=h.p(),before=h.controller.exportSaved(),focus:OpeningFocus={runId:p.view.runId,kind:'work',accountId:'personal',entityId:period.id},today=todayThread(p,focus,'2020-Q1')!
+  expect(today.primary.classification).toBe('history');expect(today.ongoing).toHaveLength(0)
+  const html=renderToStaticMarkup(<TodayScene p={p} today={today} headingRef={null} onFocus={never} onPrepare={never} onResume={never} onExplore={never} onRecollection={never} onNavigate={never}/>)
+  expect(html).toContain('今天，仍由你安排。');expect(html).not.toContain('这段工作的日子，留在原季度。');expect(html).not.toContain('合上旧页回到今天，再决定新的工作与生活吗？')
+  expect(html).toContain('2020-Q2');expect(html).toContain('给生活留一段真实的日子');expect(html).toContain('回到书签里的那件事')
+  expect(today.primary.thread.focus).toEqual(focus);expect(h.controller.exportSaved()).toBe(before)
+ }finally{await h.close()}
+})

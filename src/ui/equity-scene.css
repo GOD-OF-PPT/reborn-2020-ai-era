@@ -22,3 +22,32 @@
 .equity-terms-choice>span,.equity-terms-choice>span>span{display:block}.equity-terms-choice input{margin-top:7px}
 .equity-choice-resources{break-inside:auto}.equity-choice-resources>h3{break-after:avoid}
 .equity-scene-choice .command,.equity-scene-choice .field{break-inside:avoid}
+
+.equity-follow-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:16px 0;break-inside:avoid}
+.equity-follow-option{min-width:0;padding:14px 16px;border:1px solid #b6a06c77;border-top:3px double #cab078;background:linear-gradient(125deg,#c8ae7110,#102e2c33)}
+.equity-follow-option>h3{margin:0 0 9px;color:#ecd59f}.equity-follow-option>p{margin:7px 0}
+.equity-follow-option>.command{margin-top:12px}.equity-follow-option>.field{margin-top:12px}
+.equity-follow-presets{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin:9px 0}
+.cinema-app .equity-follow-presets>.scene-text-action{padding:4px 0;border:0;border-bottom:1px solid #bdac7d77;background:none;box-shadow:none;color:#e4cf9e;font:inherit;transform:none}
+.cinema-app .equity-follow-presets>.scene-text-action:hover{background:none;color:#f5e3b8;border-bottom-color:#f5d58f;transform:none}
+.cinema-app .equity-follow-presets>.scene-text-action:focus-visible{outline:2px solid #f0d8a1;outline-offset:3px;background:none;transform:none}
+.cinema-app .equity-follow-presets>.scene-text-action:disabled{color:#a6b49a;border-bottom-style:dashed;background:none;transform:none}
+
+.equity-financing-art{position:relative;display:block;isolation:isolate;aspect-ratio:3/2;pointer-events:none}
+.equity-financing-art>img,.equity-financing-art>svg{display:block;width:100%;height:100%;object-fit:contain}
+.equity-financing-art>img{position:absolute;inset:0;opacity:0}.equity-financing-art[data-image-state=ready]>img{opacity:1}
+.equity-financing-art[data-image-state=ready]>.equity-financing-fallback{opacity:0}
+.letter-contact{fill:#071d1b88}.letter-lining{fill:#294536;stroke:#9d855b;stroke-width:2}.letter-sheet{fill:#eee4ce;stroke:#bca67b;stroke-width:2}
+.letter-envelope{fill:#e1cfa9;stroke:#a48e65;stroke-width:2}.letter-fold{fill:none;stroke:#b7a07a;stroke-width:2}.letter-clip{fill:none;stroke:#9c7f43;stroke-width:4;stroke-linecap:round}
+
+.equity-paper-art>.equity-book-letter{position:absolute;left:6%;top:46%;width:43%;height:59%;z-index:2;filter:drop-shadow(1px 3px 2px #071b2355)}
+.cinema-app .cinematic-stage>.equity-follow-notice{position:absolute;z-index:5;top:48%;right:30.5%;display:flex;flex-direction:column;align-items:center;width:168px;gap:5px;padding:4px;color:#e5d4ab;background:transparent;border:1px solid transparent;box-shadow:none;text-align:center;transform:none;font:15px/1.65 var(--serif);cursor:pointer}
+.equity-follow-notice>.equity-financing-art{width:100%;height:112px;transition:transform .18s ease;transform-origin:50% 85%}
+.equity-notice-copy{display:flex;flex-direction:column;align-items:center;gap:3px}.equity-notice-copy>strong{padding:3px 8px;background:#e5d4b0;color:#50553a;border:1px solid #b39a68;font-weight:400}
+.equity-notice-copy>span{color:#eddbaf;font-size:15px}.equity-notice-copy>.equity-notice-protection{padding:3px 6px;border-left:3px double #acb494;background:#233e34;color:#dbe1c9}
+.cinema-app .cinematic-stage>.equity-follow-notice:hover{background:transparent;border-color:#d6b97466;box-shadow:none;transform:none}.equity-follow-notice:hover>.equity-financing-art{transform:translateY(-3px) rotate(-1deg)}
+.cinema-app .cinematic-stage>.equity-follow-notice:focus-visible{background:transparent;outline:2px solid #f0d89e;outline-offset:4px;border-color:#d9bd7d;box-shadow:none;transform:none}
+.cinema-app .cinematic-stage>.equity-follow-notice:active{background:transparent;border-color:#ead29b;box-shadow:none;transform:none}.equity-follow-notice:active>.equity-financing-art{transform:translateY(-1px)}
+.cinema-app .cinematic-stage>.equity-follow-notice:disabled{background:#17382e33;border:1px dashed #899c82;color:#d6dbc5;opacity:1;box-shadow:none;transform:none;cursor:default}.equity-follow-notice:disabled>.equity-financing-art{transform:none;filter:saturate(.7)}
+.cinema-app .cinematic-stage>.equity-follow-notice[data-text-only=true]{padding:12px;background:#17382e;border-color:#b69e6e}
+.reduced-motion .equity-follow-notice>.equity-financing-art{transition:none;transform:none}

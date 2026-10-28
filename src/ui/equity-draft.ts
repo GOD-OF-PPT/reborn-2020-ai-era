@@ -1,4 +1,4 @@
-import {useRef,useState} from 'react'
+import {useEffect,useRef,useState} from 'react'
 import type {GamePanelProps} from './game-types.ts'
 import type {EquityChoiceIntent} from './equity-journey.ts'
 import type {EquitySceneTarget} from './equity-scene-target.ts'
@@ -27,14 +27,16 @@ export function equityDraftKey(p:Pick<GamePanelProps,'view'|'features'|'accountI
 
 export function useEquityDraft(p:GamePanelProps,target:EquitySceneTarget|null,intent:EquityChoiceIntent){
  const fallback=useRef<EquityDraftMemory>(new Map()),memory=p.equityDraftMemory??fallback.current,key=equityDraftKey(p,target,intent)
- const scope=useRef({key,memory,intent})
+ const scope=useRef({key,memory,intent,live:true,retired:false})
  // An identity token, rather than just its string, also fences A→B→A callbacks.
- if(scope.current.key!==key||scope.current.memory!==memory||scope.current.intent!==intent)scope.current={key,memory,intent}
+ if(scope.current.key!==key||scope.current.memory!==memory||scope.current.intent!==intent)scope.current={key,memory,intent,live:true,retired:false}
  const captured=scope.current,[,refresh]=useState(0),values=memory.get(key)??{}
- const current=()=>scope.current===captured
+ useEffect(()=>{captured.live=true;return()=>{captured.live=false}},[captured])
+ const current=()=>scope.current===captured&&captured.live&&!captured.retired
+ const retire=()=>{captured.retired=true}
  const set=(name:string,value:string)=>makeSharedAction(p,'准备这次权益选择',()=>{
   if(!current())return
   memory.set(key,{...memory.get(key),...(intent==='relationship'||intent==='eligibility'?{preparation:intent}:{}),[name]:value});refresh(n=>n+1)
  },{allowReadOnly:true,canActivate:current}).activate()
- return {key,value:(name:string)=>name==='preparation'&&(intent==='relationship'||intent==='eligibility')?intent:values[name]??'',set,current}
+ return {key,value:(name:string)=>name==='preparation'&&(intent==='relationship'||intent==='eligibility')?intent:values[name]??'',set,current,retire}
 }

@@ -4,6 +4,7 @@ import type {GamePanelProps} from './game-types.ts'
 import {moneyText} from './game-text.ts'
 import {addDays} from '../core/calendar.ts'
 import {DEEPSEEK_JOBS} from '../content/deepseek.ts'
+import {equityFollowOffer,equityFollowPosition} from './equity-follow-offer.ts'
 
 type Props={command:CommandEnvelope;preview:CommandPreview;view:Pick<GamePanelProps['view'],'runId'|'revision'|'date'|'accounts'>;features:Pick<GamePanelProps['features'],'deepseek'>;accountName:(id:string)=>string}
 const one=<T,>(rows:readonly T[])=>rows.length===1?rows[0]:undefined
@@ -12,11 +13,18 @@ const amount=(value:unknown):value is number=>typeof value==='number'&&Number.is
 /** Captured with the original confirmation. It neither reads the controller
  * nor computes a new quote, fee, permission or committed cash result. */
 export function EquityDecisionFacts({command,preview,view,features,accountName}:Props){
- if(!['StartEquityNegotiation','SignEquityAgreement','AcceptEquityExit','CollectEquityExit'].includes(command.kind))return null
+ if(!['StartEquityNegotiation','SignEquityAgreement','FollowEquityRound','AcceptEquityExit','CollectEquityExit'].includes(command.kind))return null
  const capital=command.kind==='StartEquityNegotiation'||command.kind==='SignEquityAgreement'
- const bad=(reason:string)=><section className="warning-box"><h3>{capital?'先核对这份原参与条件':'先核对这笔原转让款'}</h3><p>{reason} 请返回这份原记录重新核对；没有换成另一笔款项。</p></section>
+ const bad=(reason:string)=><section className="warning-box"><h3>{capital||command.kind==='FollowEquityRound'?'先核对这份原参与条件':'先核对这笔原转让款'}</h3><p>{reason} 请返回这份原记录重新核对；没有换成另一笔款项。</p></section>
  if(command.runId!==view.runId||command.expectedRevision!==view.revision)return bad('这份确认已经不属于眼前的原记录。')
  const body=typeof command.payload==='object'&&command.payload!==null&&!Array.isArray(command.payload)?command.payload as Record<string,unknown>:{},v=features.deepseek
+ if(command.kind==='FollowEquityRound'){
+  const a=typeof body.agreementId==='string'?one(v?.agreements.filter(a=>a.id===body.agreementId)??[]):undefined
+  const b=a?one(v?.businesses.filter(b=>b.id===a.businessId&&b.accountId===a.accountId)??[]):undefined,account=a?one(view.accounts.filter(r=>r.accountId===a.accountId)):undefined
+  const q=a?equityFollowOffer({view,features},a):null,value=body.amountFen,position=q&&a&&amount(value)?equityFollowPosition(q,a,value):null
+  if(!preview.allowed||!a||!b||!account||!q||!position||!amount(value)||preview.upfrontCostFen!==value||!amount(account.availableFen)||account.availableFen<value)return bad('本轮原协议、整份报价、拟付本金或付款主体尚未完整核定。')
+  return <section className="equity-decision-facts" aria-label="本次原融资的实际选择"><p className="command-introduction">{accountName(a.accountId)} · {view.date} · 本次使用{preview.actionPoints}点 · 保存成功后可花{moneyText(account.availableFen-value)}。</p><dl className="command-facts"><div><dt>{value===0?'本次不新增付款':'本次实际追加本金'}</dt><dd>{moneyText(value)}</dd></div><div><dt>本次新增模拟股</dt><dd>{position.newShares}股</dd></div><div><dt>保存后持股 / 本轮总股本</dt><dd>{position.sharesAfter} / {position.totalSharesAfter}</dd></div><div><dt>本轮后持有比例（约）</dt><dd>{(position.holdingBps/100).toFixed(2)}%</dd></div></dl><p>原锁定至{a.lockUntil}；本次不延长原锁定。每份原报价{moneyText(q.unitPriceFen)}，本轮已公开新资本{moneyText(q.newMoneyFen)}。</p><p>{value===0?'保存成功后，不新增本金或股份，旧股按本轮新股本继续；这不是退款或投资收益。':'保存成功后才从原账户支付本次本金、增加本次股份；投资资产和估值不是现金收入。'} 原费用不重复支付，客户保护、旧款与未完约定仍按原记录保留。</p></section>
+ }
  if(capital){
   const signing=command.kind==='SignEquityAgreement',n=signing&&typeof body.negotiationId==='string'?one(v?.negotiations.filter(n=>n.id===body.negotiationId)??[]):undefined
   const invitationId=signing?n?.invitationId:body.invitationId,i=typeof invitationId==='string'?one(v?.invitations.filter(i=>i.id===invitationId)??[]):undefined

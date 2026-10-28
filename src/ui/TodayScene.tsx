@@ -44,7 +44,8 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
   :one?ui(one.focus.kind==='relay'?relayContinuation?.label??'回到这份原中转事项':one.ecosystemContinuation?.label??one.equityContinuation?.label??'继续'+({work:'这季的工作',life:'这段生活安排',course:'这份教学约定',video:'这份作品',market:'这份模拟委托',ecosystem:'这份原生态事项',equity:'这份架空权益与原款',free:'原来的安排','first-order':'这份委托'}[one.focus.kind]),()=>choose(one.focus))
   :continuing.length>1?ui('选回一件未完的约定',()=>setPage('ongoing'))
   :ui('给生活留一段真实的日子',()=>prepare('life'))
- const meaning=sceneMeaning({...p,accountId:today.primary.thread.focus.accountId},today.primary.thread)
+ const meaning=today.primary.classification==='history'?null:sceneMeaning({...p,accountId:today.primary.thread.focus.accountId},today.primary.thread)
+ const question=meaning?.question??today.question
  const dueCustomers=p.features.relay?.customers.filter(customer=>customer.dueReceivableFen>0)??[]
  const dueTotal=dueCustomers.reduce((sum,customer)=>sum+customer.dueReceivableFen,0)
  const button=(label:string,activate:()=>void,description?:string)=>{const action=ui(label,activate);return <button type="button" disabled={action.disabled} onClick={action.activate}>{label}{description?<span>{description}</span>:null}</button>}
@@ -59,7 +60,7 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
   <RoomTableau scene="today" state={today.primary.classification} perspective="today" textOnly={p.textOnly===true}
    intention={<p className="opening-room-intention"><span>我想{today.primary.thread.wish.label}</span>{button('回到书签里的那件事 ↗',onResume)}{button('翻季度留页 ↗',onRecollection)}</p>}
    heading={<header className="moment-heading"><p>{p.features.workbench.quarter} / 今天的日历</p><h1 ref={localHeading} tabIndex={-1}>{one?continuation?.kind==='unknown'?'原站的责任，先核清来源。':continuation?.kind==='money'?'这些原款，仍要分别核对。':'这份约定，今天还在继续。':continuing.length>1?hasMoney?'今天，原安排与旧款都在。':'今天，还有几件答应过的事。':meaning?.title??'今天，仍由你安排。'}</h1></header>}
-   context={<><p className="opening-room-stage">今天 {p.view.date} · 旧书签和原约定仍保留</p>{meaning?.question?<p className="tableau-question">{meaning.question}</p>:null}</>}
+   context={<><p className="opening-room-stage">今天 {p.view.date} · 旧书签和原约定仍保留</p>{question?<p className="tableau-question">{question}</p>:null}</>}
    feedback={!statusFeedback&&!calendarStatus&&feedback?<div className={typeof feedback==='string'?'moment-status':'moment-feedback'}>{feedback}</div>:null}
    facts={<><p className="moment-line">{meaning?.situation??(continuation?one!.line:hasMoney||!continuing.length&&p.features.relay?.businesses.length?today.line:today.ongoing.length?'还有'+today.ongoing.length+'件已经答应的事，正在照约定继续。':'原来的结果已经留下；接下来的日子，可以自己安排。')}</p>{one?<p className="moment-terms">{continuation?.kind==='money'?'原款仍保留：':'仍在继续：'}{one.title.replace(/[。！？]$/u,'')}{one.wait?' · 下一反馈 '+one.wait.date:''}。</p>:null}{dueTotal>0?<p className="relay-scene-money">原客户款已到期、尚未收取 {moneyText(dueTotal)}。<button type="button" className="scene-text-action" onClick={ui('翻看这些原客户款',()=>setPage('ongoing')).activate}>逐位翻回原客户 ↗</button></p>:null}</>}
    decisions={<><div className="command moment-decision moment-primary"><button type="button" disabled={primary.disabled} onClick={primary.activate}><b aria-hidden="true">01</b><span>{primary.label}<small>先看具体对象与代价，新的承诺仍由你确认</small></span><i aria-hidden="true">→</i></button>{primary.reason?<small className="reason">{primary.reason}</small>:null}</div>

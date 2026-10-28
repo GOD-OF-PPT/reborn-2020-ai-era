@@ -119,6 +119,16 @@ it('keeps an empty follow payment disabled while an independent explicit zero de
  expect(follow.controller.exportSaved()).toBe(before)
 })
 
+it('fills an actual whole-share half amount without paying and shares the same partial-principal draft with the original book',()=>{
+ const p=follow.p(),t=target(p,'agreement'),a=p.features.deepseek!.agreements[0]!,before=follow.controller.exportSaved(),scene=near(p,t,'follow','whole-share-draft')
+ const half=elements(scene.tree()).find(e=>e.type==='button'&&text(e.props.children).startsWith('试填约一半份额'))!
+ expect(half).toBeDefined();invoke(half,'onClick');scene.draw();expect(scene.field('本次愿意另行投入').props.value).toBe('2496');expect(p.request).not.toHaveBeenCalled()
+ const book=()=>render('follow-original-book',()=>EquityPanel({...p,assignment:{resources:[],startAt:''},initialTarget:t})),owner=elements(book()).find(e=>e.type==='label'&&text(e.props.children).startsWith('本次愿意另行投入'))!,input=elements(owner).find(e=>e.type==='input')!
+ expect(input.props.value).toBe('2496');invoke(input,'onChange',{currentTarget:{value:'2504'}});book();scene.draw();expect(scene.field('本次愿意另行投入').props.value).toBe('2504')
+ const payment=scene.button('FollowEquityRound',body=>body.amountFen===250400);expect(payment.props.disabled).toBe(false);invoke(payment,'onClick')
+ expect(p.request).toHaveBeenCalledWith('FollowEquityRound',{agreementId:a.id,amountFen:250400},expect.any(String),true);expect(follow.controller.exportSaved()).toBe(before)
+})
+
 it('explains an original lock and missing board right before asking the player to arrange an impossible action',()=>{
  const p=follow.p(),t=target(p,'agreement'),a=p.features.deepseek!.agreements[0]!,before=follow.controller.exportSaved()
  expect(a.board).toBe(false);expect(a.locked).toBe(true)
@@ -149,6 +159,14 @@ it('retains same-object drafts through a changed date and blocks stale A→B→A
  expect(equityDraftKey(changed,a,'negotiate')).toBe(first.key)
  expect(equityDraftKey({...p,accountId:'other-account'},a,'negotiate')).not.toBe(first.key)
  expect(equityDraftKey({...p,view:{...p.view,runId:'other-life'}},a,'negotiate')).not.toBe(first.key)
+})
+
+it('does not let an edit from a closed near instance overwrite the same original draft after reopening it',()=>{
+ const p=sign.p(),t=target(p,'invitation'),scene=near(p,t,'negotiate','closing-draft')
+ scene.change('拟支付的投资本金','20000');const old=scene.field('拟支付的投资本金');invoke(scene.tree(),'onClose')
+ const reopened=near(p,t,'negotiate','reopened-draft');expect(reopened.field('拟支付的投资本金').props.value).toBe('20000')
+ invoke(old,'onChange',{currentTarget:{value:'77777'}});reopened.draw();expect(reopened.field('拟支付的投资本金').props.value).toBe('20000')
+ expect(p.request).not.toHaveBeenCalled()
 })
 
 it('does not let an old edit or payment callback bypass a source, readonly or unsaved-candidate protection',()=>{
