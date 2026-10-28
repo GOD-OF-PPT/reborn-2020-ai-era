@@ -15,6 +15,7 @@ import {courseSceneContext} from './course-player-thread.ts'
 import {courseTeachingPaper} from './course-teaching-paper.ts'
 import {courseTeachingPaperFor,courseTeachingPaperLabel,courseTeachingMoneyFor,courseTeachingClosureFor} from './course-teaching-continuity.ts'
 import {courseRoomCopy} from './course-room-copy.ts'
+import {clockStopCopy} from './clock-stop-copy.ts'
 import {SceneTimeNotice,sceneTimeNarrative} from './SceneEcho.tsx'
 import {RelaySceneChoice} from './RelaySceneChoice.tsx'
 import {relaySceneProgress} from './relay-scene-progress.ts'
@@ -162,7 +163,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const requested=moment.wait?.date??w.progression.nextQuarterDate??w.progression.nextDate
  const ordinaryDate=canWait?playableAdvanceDate(w,p.view.date,requested):null
  const safeDate=thread.focus.kind==='relay'?relayReviewDate(p,ordinaryDate):ordinaryDate
- const originalWaitLabel=moment.wait&&safeDate===moment.wait.date?moment.wait.label:'先到日历上的下一处反馈'
+ const originalWaitLabel=moment.wait&&safeDate===moment.wait.date?moment.wait.label:clockStopCopy(p,safeDate)?.label??'先到日历上的下一处反馈'
  const waitLabel=thread.focus.kind==='relay'?relayReviewLabel(p,safeDate,originalWaitLabel):originalWaitLabel
  const employed=w.employment.some(e=>e.segments.some(s=>s.to===null))
  const terminal=p.view.date>=playableThrough
@@ -261,7 +262,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const courseComplete=course&&!interrupted&&!requiresChoice&&!legacy&&courseAttemptClosed(p,thread)
  const currentCohortContext=meaning&&course&&!courseComplete&&courseTarget?.kind==='cohort'&&courseTarget.jobId===undefined&&thread.focusScope!=='history'?meaning.situation:null
  const currentCohortUpdate=currentCohortContext!==null&&thread.stage==='course-cohort-update-required'&&meaning?.sourceRefs.some(ref=>ref.kind==='course-update')===true
- const cohortCopy=currentCohortContext&&thread.focusScope==='current'?courseRoomCopy(p,courseTarget):null
+ const cohortCopy=currentCohortContext&&(thread.focusScope==='current'||thread.focusScope==='carry')?courseRoomCopy(p,courseTarget):null
  const closedCopy=classArt?.phase==='closed'&&thread.focusScope!=='history'&&p.view.saveStatus==='saved'&&!p.view.hasCandidate?courseTeachingClosureFor(p,courseTarget):null
  // Only this class's complete closure-only receipt gets a shorter first layer.
  // A different result or any additional fact keeps its original presentation.

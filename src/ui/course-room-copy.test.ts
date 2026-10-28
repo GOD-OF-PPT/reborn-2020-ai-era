@@ -9,6 +9,7 @@ import type {CourseSceneTarget} from './course-scene-progress.ts'
 import {courseRoomCopy} from './course-room-copy.ts'
 import {courseSceneProgress} from './course-scene-progress.ts'
 import {courseSceneContext} from './course-player-thread.ts'
+import {clockStopCopy} from './clock-stop-copy.ts'
 import raw from '../../goal-1/evidence/t17-acceptance-39/same-run-course-relay-r73/stage-b-normal.json?raw'
 
 let controller:GameController,store:IndexedDbRunStore,p:Pick<GamePanelProps,'view'|'features'>
@@ -53,4 +54,14 @@ it('does not replace a missing or wrong-owner cohort with another available clas
  expect(courseRoomCopy(p,{...target,businessId:'another-business'})).toBeNull()
  expect(courseRoomCopy(p,null)).toBeNull()
  expect(controller.exportSaved()).toBe(raw)
+})
+
+it('names the original public relay service/support handoff at an already chosen date without advancing time or selecting another job',()=>{
+ const before=controller.exportSaved(),description=clockStopCopy(p,'2025-04-02')
+ expect(description?.label).toBe('先等这期中转服务与支持的交接')
+ expect(description?.jobIds).toHaveLength(2)
+ expect(clockStopCopy(p,'2025-04-03')).toBeNull()
+ const wrong={...p,features:{...p.features,relay:{...p.features.relay!,periods:p.features.relay!.periods.map(row=>({...row,supportJobId:'not-the-original-support'}))}}}
+ expect(clockStopCopy(wrong,'2025-04-02')).toBeNull()
+ expect(controller.exportSaved()).toBe(before)
 })
