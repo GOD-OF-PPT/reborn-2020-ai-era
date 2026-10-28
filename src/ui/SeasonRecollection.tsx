@@ -1,6 +1,6 @@
 import {useEffect,useRef,useState} from 'react'
 import type {GamePanelProps,NavigateScene} from './game-types.ts'
-import {seasonRecollection} from './season-thread.ts'
+import {seasonRecollection,type SeasonPendingItem} from './season-thread.ts'
 import {Dialog} from './Dialog.tsx'
 import {ClockAdvance} from './ClockAdvance.tsx'
 import type {OpeningFocus} from './player-thread.ts'
@@ -34,6 +34,12 @@ export function SeasonRecollection({p,quarter,onClose,onNavigate,onChooseFocus,f
  const closeRequest:GamePanelProps['request']=(...args)=>forwardClock(()=>p.request(...args))
  const requestWait:GamePanelProps['requestWait']=p.requestWait?(...args)=>forwardClock(()=>p.requestWait!(...args)):undefined
  const nearProps={...p,request:closeRequest,requestWait}
+ const pending=season.remaining.filter(item=>item.continuation!=='choice'&&item.continuation!=='retained'),choices=season.remaining.filter(item=>item.continuation==='choice'),retained=season.remaining.filter(item=>item.continuation==='retained')
+ const remainingRow=(item:SeasonPendingItem)=>{
+  const label=item.urgent?'需要先面对 · ':item.continuation==='retained'?'保留记录 · ':item.continuation==='choice'?'尚可选择 · ':item.continuation==='money'?'原款待收 · ':item.continuation==='unknown'?'原来源待核 · ':'原约定 · '
+  const focusLabel=item.continuation==='retained'?'把这份原记录放回眼前':item.continuation==='choice'?'把这个原选择放回眼前':'把这件仍待续的事放回眼前'
+  return <article key={item.id} data-urgent={item.urgent?'true':'false'}><p className="season-remaining-label">{label}{item.continuation==='retained'?'仍按原协议保留':item.dueAt??'日期沿原记录'}</p><h4>{item.title}</h4><p>{item.line}</p><button type="button" className="scene-text-action" onClick={()=>inspect(item.inspect.screen,item.inspect.target)}>{item.inspect.label} ↗</button>{item.focus&&onContinueFocus?<button type="button" disabled={sourceLocked} className="scene-text-action" onClick={()=>ui(focusLabel,()=>{close();onContinueFocus(item.focus!)}).activate()}>{focusLabel}</button>:null}<details><summary>核对原责任来源</summary>{item.sourceRefs.map(ref=><code key={ref.kind+':'+ref.id}>{ref.kind} · {ref.id}</code>)}</details></article>
+ }
  const footer=<div className="season-recollection-actions">
   {canEnter?<ClockAdvance p={nearProps} date={season.nextQuarterDate!} label={'核对旧约定，进入下一季 · '+season.nextQuarterDate} room/>:null}
   {onToday?<button type="button" disabled={today.disabled} onClick={today.activate}>{p.features.workbench.progression.requiresDelivery?'先回到待交付的作品':'合上'+season.quarter+'，回到今天'}</button>:!canEnter?<button type="button" onClick={close}>回到眼前这件事</button>:null}
@@ -45,7 +51,9 @@ export function SeasonRecollection({p,quarter,onClose,onNavigate,onChooseFocus,f
    {season.nodes.length?season.nodes.map(node=><article key={node.id} className="season-echo-leaf"><time>{node.date}</time><h3>{node.title}</h3><p>{node.line}</p><button type="button" className="scene-text-action" onClick={()=>inspect(node.inspect.screen,node.inspect.target)}>{node.inspect.label} ↗</button><details><summary>核对这项实际来源</summary>{node.sourceRefs.map(ref=><p key={ref.kind+':'+ref.id}><span>{ref.kind} · {ref.date??'原记录日期'}</span><code>{ref.id}</code></p>)}</details></article>):<p>本季暂没有足够的已确认结果，不用安排、浮盈或想象补一份回报。原工作与生活仍可继续。</p>}
   </section>
   {season.allNodes.length>season.nodes.length?<details className="season-all-echoes"><summary>翻看本季全部有据回响（{season.allNodes.length}）</summary>{season.allNodes.map(node=><article key={node.id}><time>{node.date}</time><h4>{node.title}</h4><p>{node.line}</p><button type="button" className="scene-text-action" onClick={()=>inspect(node.inspect.screen,node.inspect.target)}>{node.inspect.label} ↗</button><details><summary>本项来源</summary>{node.sourceRefs.map(ref=><code key={ref.kind+':'+ref.id}>{ref.kind} · {ref.id}</code>)}</details></article>)}</details>:null}
-  <section className="season-remaining" aria-label="原来未完的约定"><h3>截至今天，仍需面对的约定。</h3><p>以下是{p.view.date}的当前待续事项，与上方原季度已经发生的结果分开核对。</p>{season.remaining.length?season.remaining.map(item=><article key={item.id} data-urgent={item.urgent?'true':'false'}><p className="season-remaining-label">{item.urgent?'需要先面对 · ':'原约定 · '}{item.dueAt??'日期沿原记录'}</p><h4>{item.title}</h4><p>{item.line}</p><button type="button" className="scene-text-action" onClick={()=>inspect(item.inspect.screen,item.inspect.target)}>{item.inspect.label} ↗</button>{item.focus&&onContinueFocus?<button type="button" disabled={sourceLocked} className="scene-text-action" onClick={()=>ui('回到这件仍待续的事',()=>{close();onContinueFocus(item.focus!)}).activate()}>把这件仍待续的事放回眼前</button>:null}<details><summary>核对原责任来源</summary>{item.sourceRefs.map(ref=><code key={ref.kind+':'+ref.id}>{ref.kind} · {ref.id}</code>)}</details></article>):<p>当前公开记录中没有待续项。查看留页不会新增或清除责任。</p>}</section>
+  <section className="season-remaining" aria-label="原来未完的约定"><h3>截至今天，仍需面对的约定。</h3><p>以下是{p.view.date}的当前待续事项，与上方原季度已经发生的结果分开核对。</p>{pending.length?pending.map(remainingRow):<p>当前公开记录中没有待续项。查看留页不会新增或清除责任。</p>}</section>
+  {choices.length?<section className="season-remaining" aria-label="仍可决定的原选择"><h3>有些原选择，还可以慢慢决定。</h3><p>这些选择尚未替你接受新承诺。原截止日与默认处理仍按各自规则发生。</p>{choices.map(remainingRow)}</section>:null}
+  {retained.length?<section className="season-remaining" aria-label="仍保留的权益原记录"><h3>持股与原记录，还在。</h3><p>保留不要求新增付款、续约或清空。可以翻阅，也可以继续自己的工作和生活。</p>{retained.map(remainingRow)}</section>:null}
   <section className="season-next-question"><p className="opening-paper-date">把选择，留给接下来的自己</p><h3>{meaning?.question??season.nextQuestion}</h3>{meaning?<><p>{meaning.situation}</p><details><summary>核对这段处境的实际来源</summary>{meaning.sourceRefs.map(ref=><p key={ref.kind+':'+ref.id}>{ref.kind} · {ref.date??'原记录日期'} · <code>{ref.id}</code></p>)}</details></>:null}<p>可以继续原来的尝试，也可以改变关注。工作、交易、融资、招生和权限仍须各自决定。</p></section>
    <details><summary>原季度的来源与今天的完整安排</summary><p>上方保留{season.quarter}的有据节点与具体原对象；下面转看今天{p.view.date}的综合安排。全部原账、日期、费用、资格与未结责任仍以原记录为准。</p><button type="button" className="scene-text-action" onClick={()=>inspect('quarter',{accountId:p.accountId})}>转看今天（{p.features.workbench.quarter}）的全部安排与原账 ↗</button>{season.closeSourceId?<code>原季度结束来源 · {season.closeSourceId}</code>:<p>没有把本次阅读记作季度结束。</p>}</details>
  </Dialog>

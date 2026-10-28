@@ -62,7 +62,8 @@ function near(p:GamePanelProps,t:EquitySceneTarget,intent:EquityChoiceIntent,sco
  const field=(label:string)=>{const owner=elements(tree).find(e=>e.type==='label'&&text(e.props.children).startsWith(label)),input=owner&&elements(owner).find(e=>e.type==='input'||e.type==='select');if(!input)throw Error('REAL_FIELD_REQUIRED:'+label);return input}
  const change=(label:string,value:string)=>{invoke(field(label),'onChange',{currentTarget:{value},target:{value}});tree=draw()}
  const button=(kind:string,match:(payload:Record<string,unknown>)=>boolean=()=>true)=>{const node=elements(tree).find(e=>e.type===CommandButton&&e.props.kind===kind&&match(e.props.payload as Record<string,unknown>));if(!node)throw Error('ORIGINAL_COMMAND_REQUIRED:'+kind);return elements(Reflect.apply(CommandButton,undefined,[node.props])).find(e=>e.type==='button')!}
- return {callbacks,field,change,button,draw:()=>{tree=draw();return tree},tree:()=>tree}
+ const step=(label:string)=>{const button=elements(tree).find(e=>e.type==='button'&&text(e.props.children).startsWith(label));if(!button)throw Error('EXPLICIT_READING_STEP_REQUIRED:'+label);invoke(button,'onClick');tree=draw()}
+ return {callbacks,field,change,button,step,draw:()=>{tree=draw();return tree},tree:()=>tree}
 }
 
 it('keeps missing, duplicate and foreign-owner reading targets explicit rather than selecting the investor or first business',()=>{
@@ -111,8 +112,11 @@ it('shares exact original invitation and quote fields with the book and isolates
 it('keeps an empty follow payment disabled while an independent explicit zero decision remains legal',()=>{
  const p=follow.p(),a=p.features.deepseek!.agreements[0]!,t=target(p,'agreement'),before=follow.controller.exportSaved(),scene=near(p,t,'follow')
  const payment=()=>scene.button('FollowEquityRound',body=>body.amountFen!==0)
- expect(payment().props.disabled).toBe(true)
  const zero=scene.button('FollowEquityRound',body=>body.amountFen===0);expect(zero.props.disabled).toBe(false)
+ expect(elements(scene.tree()).filter(e=>e.type===CommandButton&&e.props.kind==='FollowEquityRound')).toHaveLength(1)
+ const choose=elements(scene.tree()).find(e=>e.type==='button'&&text(e.props.children).startsWith('我想追加一笔本金，先试算'))!
+ invoke(choose,'onClick');invoke(zero,'onClick');expect(p.request).not.toHaveBeenCalled()
+ scene.draw();expect(payment().props.disabled).toBe(true)
  scene.change('本次愿意另行投入','');expect(payment().props.disabled).toBe(true)
  scene.change('本次愿意另行投入','8');expect(payment().props.disabled).toBe(false);invoke(payment(),'onClick')
  expect(p.request).toHaveBeenCalledWith('FollowEquityRound',{agreementId:a.id,amountFen:800},expect.any(String),true)
@@ -121,12 +125,23 @@ it('keeps an empty follow payment disabled while an independent explicit zero de
 
 it('fills an actual whole-share half amount without paying and shares the same partial-principal draft with the original book',()=>{
  const p=follow.p(),t=target(p,'agreement'),a=p.features.deepseek!.agreements[0]!,before=follow.controller.exportSaved(),scene=near(p,t,'follow','whole-share-draft')
+ scene.step('我想追加一笔本金，先试算')
  const half=elements(scene.tree()).find(e=>e.type==='button'&&text(e.props.children).startsWith('试填约一半份额'))!
  expect(half).toBeDefined();invoke(half,'onClick');scene.draw();expect(scene.field('本次愿意另行投入').props.value).toBe('2496');expect(p.request).not.toHaveBeenCalled()
  const book=()=>render('follow-original-book',()=>EquityPanel({...p,assignment:{resources:[],startAt:''},initialTarget:t})),owner=elements(book()).find(e=>e.type==='label'&&text(e.props.children).startsWith('本次愿意另行投入'))!,input=elements(owner).find(e=>e.type==='input')!
  expect(input.props.value).toBe('2496');invoke(input,'onChange',{currentTarget:{value:'2504'}});book();scene.draw();expect(scene.field('本次愿意另行投入').props.value).toBe('2504')
  const payment=scene.button('FollowEquityRound',body=>body.amountFen===250400);expect(payment.props.disabled).toBe(false);invoke(payment,'onClick')
  expect(p.request).toHaveBeenCalledWith('FollowEquityRound',{agreementId:a.id,amountFen:250400},expect.any(String),true);expect(follow.controller.exportSaved()).toBe(before)
+})
+
+it('preserves the same principal through comparison and rejects callbacks from an earlier principal step at the same revision',()=>{
+ const p=follow.p(),t=target(p,'agreement'),before=follow.controller.exportSaved(),scene=near(p,t,'follow','follow-step-roundtrip')
+ scene.step('我想追加一笔本金，先试算');scene.change('本次愿意另行投入','8')
+ const oldEdit=scene.field('本次愿意另行投入'),oldPayment=scene.button('FollowEquityRound',body=>body.amountFen===800)
+ scene.step('回到两种选择');expect(scene.button('FollowEquityRound',body=>body.amountFen===0).props.disabled).toBe(false)
+ scene.step('我想追加一笔本金，先试算');expect(scene.field('本次愿意另行投入').props.value).toBe('8')
+ invoke(oldEdit,'onChange',{currentTarget:{value:'5000'}});invoke(oldPayment,'onClick');scene.draw()
+ expect(scene.field('本次愿意另行投入').props.value).toBe('8');expect(p.request).not.toHaveBeenCalled();expect(follow.controller.exportSaved()).toBe(before)
 })
 
 it('explains an original lock and missing board right before asking the player to arrange an impossible action',()=>{
@@ -171,6 +186,7 @@ it('does not let an edit from a closed near instance overwrite the same original
 
 it('does not let an old edit or payment callback bypass a source, readonly or unsaved-candidate protection',()=>{
  const p=follow.p(),t=target(p,'agreement'),scene=near(p,t,'follow'),memory=p.equityDraftMemory!
+ scene.step('我想追加一笔本金，先试算')
  scene.change('本次愿意另行投入','8');const payment=scene.button('FollowEquityRound',body=>body.amountFen===800),edit=scene.field('本次愿意另行投入'),key=equityDraftKey(p,t,'follow')
  const old=p.controller.snapshot.view
  // Projection-only counterexamples exercise the real source gate; they do not

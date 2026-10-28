@@ -1,0 +1,97 @@
+{
+  "at": "2026-10-28T23:08:27.673Z",
+  "originalSourceSha256": "8eae3989d383f4d15200fe5ee15d4b9728743e57e054483cb919f010991c3a56",
+  "scope": "pure UI order example, not a GameRun, gameplay or permission fixture",
+  "nodes": [
+    {
+      "id": "a",
+      "date": "2025-09-01",
+      "sequence": 1
+    },
+    {
+      "id": "b",
+      "date": "2025-09-01"
+    },
+    {
+      "id": "c",
+      "date": "2025-09-01",
+      "sequence": 2
+    }
+  ],
+  "orders": [
+    {
+      "input": [
+        "a",
+        "b",
+        "c"
+      ],
+      "output": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    {
+      "input": [
+        "a",
+        "c",
+        "b"
+      ],
+      "output": [
+        "b",
+        "c",
+        "a"
+      ]
+    },
+    {
+      "input": [
+        "b",
+        "a",
+        "c"
+      ],
+      "output": [
+        "c",
+        "a",
+        "b"
+      ]
+    },
+    {
+      "input": [
+        "b",
+        "c",
+        "a"
+      ],
+      "output": [
+        "b",
+        "c",
+        "a"
+      ]
+    },
+    {
+      "input": [
+        "c",
+        "a",
+        "b"
+      ],
+      "output": [
+        "c",
+        "a",
+        "b"
+      ]
+    },
+    {
+      "input": [
+        "c",
+        "b",
+        "a"
+      ],
+      "output": [
+        "a",
+        "b",
+        "c"
+      ]
+    }
+  ],
+  "distinctOldOrders": 3,
+  "compatibility": 0
+}

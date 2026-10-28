@@ -157,5 +157,8 @@ export function seasonMeaning(p:SceneMeaningInput,season:SeasonRecollectionView)
  if(!refs.length)return null
  const facts=[...(wages.length?['实际工资'+moneyText(wages.reduce((sum,row)=>sum+row.amountFen,0))]:[]),...(firstPaid?['手工单实际回款'+moneyText(first.result.paymentFen)]:[]),...(life.length?[life.length+'段生活安排实际完成']:[])]
  const history=season.quarter!==p.features.workbench.quarter
- return meaning(history?'这一季的选择，留在过去的日子。':'这季的选择，已经留下了真实结果。',facts.join('；')+'。'+(history?'上面是'+season.quarter+'的结果；':'')+'仍需面对的约定另按今天'+p.view.date+'核对。',season.remaining.length?'先续上仍答应的事，还是暂不新增承诺、给生活留余地？':wages.length?'下一段日子仍保留工作节奏，还是给自己的安排留些余地？':'继续这次尝试，还是把下一段时间留给工作或生活？',refs)
+ const unfinished=season.remaining.some(item=>!['retained','choice','unknown'].includes(item.continuation??'task')),choices=season.remaining.some(item=>item.continuation==='choice'),kept=season.remaining.some(item=>item.continuation==='retained'),unknown=season.remaining.some(item=>item.continuation==='unknown')
+ const question=season.quarter==='2025-Q4'?season.nextQuestion:unfinished?'先续上仍答应的事，还是暂不新增承诺、给生活留余地？':unknown?'先核对待核原记录，还是暂不新增承诺、给生活留余地？':choices?'先看看原选择，还是暂不新增承诺、给生活留余地？':wages.length?'下一段日子仍保留工作节奏，还是给自己的安排留些余地？':'继续这次尝试，还是把下一段时间留给工作或生活？'
+ const current=!unfinished&&kept?'原持股与保留记录仍在原册，不要求清空；待续事项仍按今天'+p.view.date+'核对。':'仍需面对的约定另按今天'+p.view.date+'核对。'
+ return meaning(history?'这一季的选择，留在过去的日子。':'这季的选择，已经留下了真实结果。',facts.join('；')+'。'+(history?'上面是'+season.quarter+'的结果；':'')+current,question,refs)
 }

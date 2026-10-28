@@ -12,6 +12,7 @@ import type {RelaySceneTarget} from './relay-scene-target.ts'
 import {ecosystemFocusFor,ecosystemFocusTargets} from './ecosystem-player-thread.ts'
 import {ecosystemTargetEntity} from './ecosystem-scene-target.ts'
 import {equityFocusFor,equityFocusTargets} from './equity-player-thread.ts'
+import {equitySeasonEchoes,equitySeasonContinuations} from './equity-season-echoes.ts'
 
 export type SeasonInput=Pick<GamePanelProps,'view'|'features'>
 type Inspect={screen:Screen;label:string;target?:SceneTarget}
@@ -33,8 +34,11 @@ function focusChoiceLine(line:string,detail:string):string{
  const first=line.trim(),second=detail.trim()
  return !second||first.includes(second)?first:!first||second.includes(first)?second:first+' '+second
 }
-export interface SeasonEchoNode{readonly id:string;readonly date:string;readonly title:string;readonly line:string;readonly sourceRefs:readonly SeasonSourceRef[];readonly inspect:Inspect}
-export interface SeasonPendingItem{readonly id:string;readonly title:string;readonly line:string;readonly dueAt:string|null;readonly accountId:string|null;readonly urgent:boolean;readonly sourceRefs:readonly SeasonSourceRef[];readonly focus:OpeningFocus|null;readonly inspect:Inspect}
+export interface SeasonEchoNode{readonly id:string;readonly date:string;readonly title:string;readonly line:string;readonly sourceRefs:readonly SeasonSourceRef[];readonly inspect:Inspect;readonly sequence?:number}
+export function seasonEchoOrder(a:Pick<SeasonEchoNode,'date'|'sequence'|'id'>,b:Pick<SeasonEchoNode,'date'|'sequence'|'id'>):number{
+ return b.date.localeCompare(a.date)||(b.sequence??-1)-(a.sequence??-1)||a.id.localeCompare(b.id)
+}
+export interface SeasonPendingItem{readonly id:string;readonly title:string;readonly line:string;readonly dueAt:string|null;readonly accountId:string|null;readonly urgent:boolean;readonly sourceRefs:readonly SeasonSourceRef[];readonly focus:OpeningFocus|null;readonly inspect:Inspect;readonly continuation?:'task'|'money'|'choice'|'retained'|'unknown'}
 export interface SeasonRecollectionView{
  readonly quarter:string;readonly from:string;readonly through:string;readonly asOf:string
  readonly closed:boolean;readonly atQuarterEnd:boolean;readonly closeSourceId:string|null
@@ -228,12 +232,13 @@ function remainingItems(p:SeasonInput):SeasonPendingItem[]{
   for(const customer of f.relay!.customers.filter(c=>c.businessId===business.id&&(c.balance.prepaidFen>0||c.balance.receivableFen>0))){const focus=relayFocusFor(p,{...identity,kind:'customer',customerId:customer.id}),thread=playerThread(p,focus);add({id:'relay-customer:'+customer.id,title:'这位原客户的余额与应收仍在',line:`未消费余额${moneyText(customer.balance.prepaidFen)}、原应收${moneyText(customer.balance.receivableFen)}；到期与实际收取另核，不因服务停下清零。`,dueAt:null,accountId:identity.accountId,urgent:customer.dueReceivableFen>0,sourceRefs:[{kind:'customer',id:customer.id,date:customer.signedAt}],focus,inspect:thread.inspect})}
  }
  for(const job of w.preparationJobs.filter(j=>j.status==='running'))add({id:'preparation:'+job.id,title:job.title,line:`原准备从${job.startAt}至${job.completeAt}，仍未完成；下一步沿原日历与准备记录。`,dueAt:job.completeAt,accountId:job.accountId,urgent:false,sourceRefs:[{kind:'preparation',id:job.id,date:job.startAt}],focus:null,inspect:{screen:'quarter',label:'翻看这项原准备',target:{accountId:job.accountId}}})
+ for(const item of equitySeasonContinuations(p))add(item)
  for(const job of view.operations?.jobs.filter(j=>j.id!==first.jobId&&['planned','running'].includes(j.status))??[]){
   const business=view.operations?.businesses.find(b=>b.id===job.businessId)
   add({id:'operation-job:'+job.id,title:'原经营工作仍在继续',line:`${job.startAt}—${job.completeAt}；安排还没有成为完成结果。`,dueAt:job.completeAt,accountId:business?.accountId??null,urgent:false,sourceRefs:[{kind:'job',id:job.id,date:job.startAt}],focus:null,inspect:{screen:business?screenForRoute(business.route):'quarter',label:'翻看这项工作的原记录',...(business?{target:{accountId:business.accountId}}:{})}})
  }
  // Original specialized business responsibilities stay reachable without pretending S2 has their new UI.
- for(const item of sceneThreads(f,view.date).filter(t=>t.screen!=='life')){
+ for(const item of sceneThreads(f,view.date).filter(t=>t.screen!=='life'&&!t.id.startsWith('equity:'))){
   const id=item.id.slice(item.id.indexOf(':')+1)
   add({id:item.id,title:item.title,line:item.detail+' 请翻阅对应业务的全部原记录。',dueAt:null,accountId:null,urgent:item.screen==='story',sourceRefs:[{kind:'record',id,date:null}],focus:null,inspect:{screen:item.screen,label:'翻看这项责任的全部原记录',...(item.personId?{target:{personId:item.personId}}:{})}})
  }
@@ -250,6 +255,7 @@ export function seasonRecollection(p:SeasonInput,quarter=p.features.workbench.qu
  const inPeriod=(date:string|null)=>date!==null&&date>=from&&date<=through
  const allNodes:SeasonEchoNode[]=[]
  const add=(node:SeasonEchoNode)=>{if(inPeriod(node.date)&&!allNodes.some(x=>x.id===node.id))allNodes.push(node)}
+ for(const node of equitySeasonEchoes(p))add(node)
  for(const business of f.relay?.businesses??[]){const identity=relayBusinessTarget(p,business.id);if(!identity)continue
   for(const period of f.relay!.periods.filter(row=>row.businessId===business.id)){
    const target:RelaySceneTarget={...identity,kind:'period',periodId:period.id},inspect:Inspect={screen:'relay',label:'翻看同一期服务与完整原账',target:{accountId:identity.accountId,relayTarget:target,openRecord:true}}
@@ -300,12 +306,13 @@ export function seasonRecollection(p:SeasonInput,quarter=p.features.workbench.qu
   if(c.reviewedAt)add({id:'video-review:'+c.id+':'+c.reviewedAt,date:c.reviewedAt,title:'原视频商单留下客户复核记录',line:'复核日期来自原合同；提交、认可、应收和实际回款没有合并。',sourceRefs:[{kind:'contract',id:c.id,date:c.reviewedAt}],inspect:{screen:'video',label:'翻看原客户反馈与条款',target}})
   if(c.settledAt){const payments=w.finance.find(a=>a.accountId===channel.accountId)?.transactions.filter(tx=>tx.date===c.settledAt&&tx.amountFen>0&&(tx.contractId===c.id||tx.sourceId===c.id))??[];add({id:'video-paid:'+c.id,date:c.settledAt,title:'这份视频商单已登记实际结算',line:payments.length?`本次原收款流水合计${moneyText(payments.reduce((n,tx)=>n+tx.amountFen,0))}；原预款、制作成本及费用另列。${c.paidCase?'':'原账仍有未付责任。'}`:'原合同已记录结算；实际预款、余款及费用逐项以原账核对，不按余额差补收入。',sourceRefs:[{kind:'contract',id:c.id,date:c.settledAt},...payments.map(tx=>({kind:'payment',id:tx.id,date:tx.date}))],inspect:{screen:'video',label:'翻看这份原单的结算与费用',target}})}
  }
- allNodes.sort((a,b)=>b.date.localeCompare(a.date)||a.id.localeCompare(b.id))
+ allNodes.sort(seasonEchoOrder)
  const nodes:SeasonEchoNode[]=[],kinds=new Set<string>()
  for(const node of allNodes){const kind=node.sourceRefs[0]?.kind??node.id;if(!kinds.has(kind)){nodes.push(node);kinds.add(kind)}if(nodes.length===3)break}
  for(const node of allNodes){if(nodes.length===3)break;if(!nodes.includes(node))nodes.push(node)}
  const remaining=remainingItems(p),wish=wishes[view.playerProfile.wishId]
  const nextQuarterDate=quarter===w.quarter&&w.atQuarterEnd?w.progression.nextQuarterDate:null
- const nextQuestion=quarter==='2025-Q4'?`六年之后，怎样守住“${wish}”？有限尾声只处理原来的事，不再开启新的季度或补充行动。`:`${nextQuarterDate?'下一季':'接下来'}，怎样让日子更接近“${wish}”？${remaining.length?'原来的约定仍在，可以先收好它们，再决定新的投入。':'可以继续熟悉的节奏，也可以重新选择把时间留给哪里。'}`
+ const unfinished=remaining.some(item=>!['retained','choice','unknown'].includes(item.continuation??'task')),choices=remaining.some(item=>item.continuation==='choice'),unknown=remaining.some(item=>item.continuation==='unknown')
+ const nextQuestion=quarter==='2025-Q4'?`六年之后，怎样守住“${wish}”？有限尾声只处理原来的事，不再开启新的季度或补充行动。`:`${nextQuarterDate?'下一季':'接下来'}，怎样让日子更接近“${wish}”？${unfinished?'原来的约定仍在，可以先收好它们，再决定新的投入。':unknown?'有些原记录的来源仍待核对，不以未知来源替你新增承诺。':choices?'仍有可考虑的原选择，不必自动接受；也可以给生活留下余地。':'可以继续熟悉的节奏，也可以重新选择把时间留给哪里。'}`
  return {quarter,from,through,asOf:view.date,closed,atQuarterEnd:quarter===w.quarter&&w.atQuarterEnd,closeSourceId:closed?chapter.closeSourceId:null,nodes,allNodes,remaining,nextQuestion,nextQuarterDate}
 }

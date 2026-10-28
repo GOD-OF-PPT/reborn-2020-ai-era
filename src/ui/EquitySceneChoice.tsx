@@ -1,4 +1,4 @@
-import {useId} from 'react'
+import {useEffect,useId,useRef} from 'react'
 import type {ReactNode} from 'react'
 import type {GamePanelProps} from './game-types.ts'
 import type {EquitySceneTarget} from './equity-scene-target.ts'
@@ -30,6 +30,8 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
  const today=()=>{if(!draft.current())return;close();onToday()}
  const amount=parseMoneyInput(draft.value('amount')),shares=positiveShares(draft.value('shares'))
  const followOffer=a?equityFollowOffer(p,a):null,zeroFollow=followOffer&&a?equityFollowPosition(followOffer,a,0):null,paidFollow=followOffer&&a&&amount!==null?equityFollowPosition(followOffer,a,amount):null
+ const followPrincipal=intent==='follow'&&p.view.phase==='playing'&&a?.followDecision==='pending'&&draft.value('followStep')==='principal',followInput=useRef<HTMLInputElement>(null)
+ useEffect(()=>{if(followPrincipal)followInput.current?.focus({preventScroll:true})},[followPrincipal,draft.key])
  const hasResource=!!v?.resources.some(row=>row.id===resource),hasAssignment=hasResource&&date!==''
  const commandProps={...p,request:((...args:Parameters<GamePanelProps['request']>)=>{if(!draft.current())return;close();p.request(...args)})}
  const ui=(label:string,line:string,activate:()=>void,key=label)=>{
@@ -42,7 +44,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
   return <button type="button" className="scene-text-action" disabled={action.disabled} onClick={action.activate}>{label}</button>
  }
  const command=(kind:string,payload:unknown,label:string,ready=true,hint='请先明确填写这次选择。')=><CommandButton {...commandProps} kind={kind} payload={payload} label={label} confirm renderAction={(binding)=><div className="command"><button type="button" disabled={binding.disabled||!ready} onClick={()=>{if(ready&&draft.current())binding.activate()}}>{label}</button>{!ready?<small className="reason">{hint}</small>:binding.reason?<small className="reason">{binding.reason}</small>:null}</div>}/>
- const field=(label:string,key:string,numeric=false)=><label className="field">{label}<input inputMode={numeric?'numeric':'decimal'} value={draft.value(key)} onChange={event=>draft.set(key,event.currentTarget.value)}/></label>
+ const field=(label:string,key:string,numeric=false)=><label className="field">{label}<input ref={intent==='follow'&&key==='amount'?followInput:undefined} inputMode={numeric?'numeric':'decimal'} value={draft.value(key)} onChange={event=>draft.set(key,event.currentTarget.value)}/></label>
  const resources=<section className="equity-choice-resources"><h3>这一次，实际投入哪些日子与资源？</h3><p>本季可用{p.view.budget.available}点，已为原约定预留{p.view.budget.reserved}点。费用、开工季度的行动与工资维护分别核对；安排不等于已经完成。</p><label className="field">本次实际资源<ResourceSelect options={v?.resources??[]} emptyLabel="先选择本次实际资源" value={resource} onChange={value=>draft.set('resource',value)}/></label>{resource&&!hasResource?<p className="reason">草稿中的原资源已不可用，请明确重新选择。</p>:null}<label className="field">本次开工日期<input type="date" min={p.view.date} max={p.view.phase==='epilogue'?p.view.date:'2025-12-31'} value={date} onChange={event=>draft.set('date',event.currentTarget.value)}/></label>{date&&date<p.view.date?<p className="reason">草稿里的开工日已经过去，确认前请重新核对；没有替你改成今天。</p>:null}</section>
  const businessTarget=b?{runId:p.view.runId,accountId:b.accountId,businessId:b.id,kind:'business' as const}:null
  const agreementTarget=a?{runId:p.view.runId,accountId:a.accountId,businessId:a.businessId,kind:'agreement' as const,recordId:a.id}:null
@@ -54,7 +56,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
  const holdingFacts=a?<><p>本协议仍持{a.shares}/{a.totalShares}模拟股（约{(a.holdingBps/100).toFixed(2)}%）；尚持有成本{moneyText(a.asset?.bookCostFen)}，账面值{moneyText(a.asset?.valueFen)}不能花。</p><p>锁定至{a.lockUntil}，{a.locked?'当前仍锁定':'锁定期已到，仍需独立买方'}；{a.board?a.shares>0?'一席董事，无单方控制':'原条款有席位，现已无股，不能提交会议':'无董事权'}，{a.preemptive?a.shares>0?'有原跟投权，仍按本轮条件决定':'现已无股，不能新增跟投':'无跟投权'}。原主体不随新的准备切换。</p></>:null
  const invalidSource=sourceInvalid||r.status==='invalid'
  const closing=p.view.phase==='epilogue',newClosingDecision=closing&&['prepare','relationship','eligibility','discover','negotiate','governance'].includes(intent)
- const title=invalidSource?'先找回原来那一份。':newClosingDecision?'常规篇已经结束，只沿原来的事项继续。':closing&&(intent==='actors'||intent==='objects')?'想收好哪一份原权益记录？':closing&&intent==='follow'?'核对原融资与不新增付款的选择。':intent==='holding'&&a?.shares===0?'收好原协议，看看各笔原款。':intent==='follow'&&a?.shares===0?'已无现持股，核对本轮原安排。':intent==='follow'&&a&&a.followDecision!=='pending'?'核对本协议的融资与原条款。':intent==='governance'&&a&&(!a.board||a.shares===0)?'先核对本协议当前的会议权利。':intent==='exit-request'&&a?.locked?'还在原锁定期，先看看这份安排。':intent==='exit-request'&&a&&!a.transferConsent?'先核对这份协议的原转让同意。':intent==='terms'&&n&&journey.phase!=='terms-accepted'?journey.title:intent==='relationship'?'为这份关系，留七天自己的时间。':intent==='eligibility'?'给本局资格，另留一份投入。':titles[intent]
+ const title=invalidSource?'先找回原来那一份。':newClosingDecision?'常规篇已经结束，只沿原来的事项继续。':closing&&(intent==='actors'||intent==='objects')?'想收好哪一份原权益记录？':closing&&intent==='follow'?'核对原融资与不新增付款的选择。':followPrincipal?(a?.shares===0?'已无现持股，先核对这笔试算。':'这笔本金，留多少给这次融资？'):intent==='holding'&&a?.shares===0?'收好原协议，看看各笔原款。':intent==='follow'&&a?.shares===0?'已无现持股，核对本轮原安排。':intent==='follow'&&a&&a.followDecision!=='pending'?'核对本协议的融资与原条款。':intent==='governance'&&a&&(!a.board||a.shares===0)?'先核对本协议当前的会议权利。':intent==='exit-request'&&a?.locked?'还在原锁定期，先看看这份安排。':intent==='exit-request'&&a&&!a.transferConsent?'先核对这份协议的原转让同意。':intent==='terms'&&n&&journey.phase!=='terms-accepted'?journey.title:intent==='relationship'?'为这份关系，留七天自己的时间。':intent==='eligibility'?'给本局资格，另留一份投入。':titles[intent]
  const contents:ReactNode=<>
   <p className="counterfactual-boundary">本局明确架空安排，不是现实公开申购。技术合作、服务合同、资金或中间费均不产生股份；估值和应收不能花。</p>
   {closing?<p>尾声只处理原来的事项，不再开始新的准备、投资或治理。仍沿用2025年第四季的四点行动，原生活费、工资与维护继续结算。</p>:null}
@@ -121,16 +123,18 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
    </>:null}
    {intent==='follow'&&a?<>
     <p>{a.followDecision==='pending'?'这轮融资最迟'+a.followDeadline+'决定。原持股'+a.shares+'股，原锁定至'+a.lockUntil+'；不跟投也是一个完整选择。':'当前没有待决定的本轮跟投；已发生结果保留。'}不会自动借款，也不以估值支付。</p>
-    <div className="equity-follow-options">
-     <section className="equity-follow-option"><h3>把现金留在自己手中</h3><p>本次不新增付款，也不新增股份。</p>{zeroFollow?<p>仍持{zeroFollow.sharesAfter} / {zeroFollow.totalSharesAfter}模拟股，约{(zeroFollow.holdingBps/100).toFixed(2)}%。</p>:null}{command('FollowEquityRound',{agreementId:a.id,amountFen:0},'明确不跟投，不新增付款，接受实际稀释')}</section>
-     {!closing?<section className="equity-follow-option"><h3>另留一笔自己的本金</h3>{!a.preemptive||a.shares===0?<p className="reason">本协议当前没有可新增付款的跟投权；原持股、原款与记录保留。</p>:null}
+    {!followPrincipal?<div className="equity-follow-options">
+     <section className="equity-follow-option"><h3>把现金留在自己手中</h3><p>本次新增付款0元、股份0股。{zeroFollow?<>仍持{zeroFollow.sharesAfter} / {zeroFollow.totalSharesAfter}模拟股，约{(zeroFollow.holdingBps/100).toFixed(2)}%。</>:null}</p>{command('FollowEquityRound',{agreementId:a.id,amountFen:0},'明确不跟投，不新增付款，接受实际稀释')}</section>
+     {!closing?<section className="equity-follow-option"><h3>另留一笔自己的本金</h3>{followOffer?<p>本轮每份{moneyText(followOffer.unitPriceFen)}、对应1模拟股；原整份本金上限{moneyText(followOffer.maxAmountFen)}。</p>:<p>原整份报价尚待核对；原册和当次原确认仍可查看。</p>}{!a.preemptive||a.shares===0?<p className="reason">本协议当前没有可新增付款的跟投权；原记录与原拒绝理由保留。</p>:null}{a.followDecision==='pending'?ui('我想追加一笔本金，先试算','先填写金额再核对；这里不付款。',()=>draft.set('followStep','principal')):go('holding','回看持股和本轮结果','当前没有待决定的跟投；原本金与各笔原款继续保留。')}</section>:null}
+    </div>:<section className="equity-follow-principal" aria-label="本轮本金试算">
+     {!a.preemptive||a.shares===0?<p className="reason">本协议当前没有可新增付款的跟投权；原持股、原款与记录保留。</p>:null}
       {followOffer?<p>本轮每份{moneyText(followOffer.unitPriceFen)}、对应1模拟股；按原持股份额计算的整份本金上限{moneyText(followOffer.maxAmountFen)}。</p>:<p className="reason">原整份报价尚待核对；原册和当次原确认仍可查看。</p>}
       {field('本次愿意另行投入的本金（元）','amount')}
       <div className="equity-follow-presets">{followOffer&&equityFollowHalfAmount(followOffer)>0?fillFollow('试填约一半份额 · '+moneyText(equityFollowHalfAmount(followOffer)),equityFollowHalfAmount(followOffer)):null}{fillFollow('填入原上限 · '+moneyText(a.followMaxFen),a.followMaxFen)}</div><p className="field-help">试填不付款，实际出资仍须原确认。</p>
       {followOffer&&amount!==null&&amount>0&&amount%followOffer.unitPriceFen!==0?<p className="reason">本轮须按每份{moneyText(followOffer.unitPriceFen)}填写整份本金；当前金额不是整份。</p>:paidFollow&&amount!==null&&amount>0?<p>按原报价试算：新增{paidFollow.newShares}股，合计{paidFollow.sharesAfter} / {paidFollow.totalSharesAfter}，约{(paidFollow.holdingBps/100).toFixed(2)}%；实际资格和付款仍看原确认。</p>:null}
       {command('FollowEquityRound',{agreementId:a.id,amountFen:amount??-1},'核对所填本金，明确付款参与本轮',amount!==null&&amount>0,'先填写大于零的本次本金；空稿不会变成不跟投。')}
-     </section>:null}
-    </div>
+      {ui('回到两种选择','保留这份本金草稿，重新比较；仍没有付款。',()=>draft.set('followStep','compare'))}
+    </section>}
     <details><summary>翻阅原持股、锁定与权利</summary>{holdingFacts}<p>已发生的费用和原责任不会因本次选择清除；本轮未新增现金收入。到期未选仍按原规则不付款并记录实际稀释。</p></details>
    </>:null}
    {intent==='governance'&&a?<>

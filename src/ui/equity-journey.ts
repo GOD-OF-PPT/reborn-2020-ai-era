@@ -1,10 +1,10 @@
 import type {GamePanelProps} from './game-types.ts'
 import {DEEPSEEK_JOBS} from '../content/deepseek.ts'
-import {deepseekId} from '../core/deepseek-state.ts'
 import {moneyText} from './game-text.ts'
 import {equityDirectCosts,equityBrokerFee,type EquityDirectCosts} from './equity-costs.ts'
 import type {SceneCommands} from '../application/scene-commands.ts'
 import {resolveEquitySceneTarget,type EquitySceneContext,type EquitySceneTarget,type EquityTargetResolution} from './equity-scene-target.ts'
+import {equityHistoryCommands} from './equity-public-history.ts'
 
 export type EquityChoiceIntent='actors'|'business'|'objects'|'prepare'|'relationship'|'eligibility'|'discover'|'fund'|'job'|'invitation'|'negotiate'|'terms'|'holding'|'follow'|'governance'|'exit-request'|'exit-accept'|'collect'|'record'|'next'
 export type EquityJourneyAction=
@@ -47,10 +47,8 @@ export function equityJourney(v:GamePanelProps['features']['deepseek'],target:Eq
  const costs=business?equityDirectCosts(business.id,business.accountId,context.operations?.jobs,context.finance,context.date):null
  const base:EquityJourney={resolution:r,phase:'entry',paper:'intention',title:'先决定，要不要留下这个假设。',line:'技术合作和购买服务不会产生股份。以下只是一段由你明确选择的架空融资情境。',object:'明确架空 · 一份参与想法',purpose:'比较一次架空参与的承担和自己的生活安排。',finishWhen:'每次承诺由你确认，实际结果按原规则发生。',facts:[],action:choice('actors','先选择这次准备的原主体'),active:false,decisionOpen:false,outcome:'none',originDate:null,resultDate:null,directCosts:costs}
  const commandDate=(kind:string,key:string,id:string,operationId?:string|null)=>{
-  const published=context.sceneCommands,source=context.source
-  if(!published||!source||published.version!==1||published.runId!==context.runId||published.committedRevision!==source.revision)return null
-  const rows=published.commands.filter(c=>c.kind===kind&&c.identifiers[key]===id&&c.date<=context.date&&(operationId===undefined||operationId===deepseekId(c.commandId,c.kind))&&source.receipts.filter(r=>r.commandId===c.commandId&&r.kind===c.kind&&r.revisionAfter===c.revisionAfter).length===1)
-  return rows.length===1&&published.commands.filter(c=>c.commandId===rows[0]!.commandId).length===1?rows[0]!.date:null
+  const rows=equityHistoryCommands(context,kind,key,id,operationId)
+  return rows.length===1?rows[0]!.date:null
  }
  if(r.status==='invalid')return {...base,phase:'unknown',paper:'stopped',title:'先找回原来那一份。',line:r.reason!,action:choice('objects','明确重新选择原权益记录')}
  if(context.phase==='epilogue'&&r.status==='entry')return {...base,phase:'tail-entry',paper:'kept',object:'明确架空的原事项',title:'原来的持股和款项，想怎样收好？',line:'只沿原协议、邀请、任务与款项继续；没有新的投资、季度预算或资格。',purpose:'明确选择原来那一份，再决定如何处理或保留。',finishWhen:'查看不付款或转让；也可以回尾声，保留原来的事项。',action:choice('objects','选择一份原持股、任务或款项')}
