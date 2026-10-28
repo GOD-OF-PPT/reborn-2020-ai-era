@@ -122,7 +122,7 @@ it('preserves callers without optional context and leaves other confirmation mon
  expect(text(legacy)).toContain('任务、已用投入与原余额未知');expect(text(legacy)).not.toContain('原现金'+moneyText(0))
  const customer=before.features.relay!.customers[0]!,collect:CommandEnvelope={...command,kind:'CollectRelayDue',payload:{customerId:customer.id}}
  expect(text(RelayCommandDetails({command:collect,relay:before.features.relay,workers:[],accountName}))).toContain('全部已到期原单')
- expect(confirmationMoney({...command,kind:'AdvanceTime',payload:{date:'2025-03-06'}},preview)).toEqual({label:'推进本身费用（途中原费用逐项列在下方）',amountFen:preview.upfrontCostFen})
+ expect(confirmationMoney({...command,kind:'AdvanceTime',payload:{date:'2025-03-06'}},preview)).toEqual({label:'推进本身费用（途中原费用另列）',amountFen:preview.upfrontCostFen})
  expect(confirmationMoney({...command,kind:'PayObligation',payload:{amountFen:30}},preview)).toEqual({label:'偿还原有义务（不再确认一遍费用）',amountFen:30})
  expect(controller.preview(command).allowed).toBe(true);expect(controller.exportSaved()).toBe(raw99)
 })
