@@ -17,6 +17,7 @@ export function courseTeachingPaperLabel(art:CourseTeachingPaperState):string{
  if(art.phase==='stopped')return '这次安排已停 · 原责任保留'
  if(art.phase==='refund')return (art.refundDueFen??0)>0?'原退款仍待支付':(art.feeDueFen??0)>0?'原结算费仍待支付':'原退款窗口仍在 · 尚未结清'
  if(art.phase==='support')return '支持与学习反馈'
+ if(art.phase==='update')return art.status==='planned'?'教案更新已安排 · 这班人的约定继续':art.status==='running'?'正在整理新教案 · 这班人的约定继续':'教案待更新 · 这班人的约定继续'
  if(art.phase==='teaching')return art.status==='planned'?'教学已安排 · 尚未开工':art.status==='running'?'教学进行中 · 尚未完成':art.status==='actual'?'这一段已交付 · 班期仍在':'这一段教学 · 待你安排'
  return '班期已约定 · 报名仍另定'
 }
@@ -68,6 +69,7 @@ export function courseTeachingPaperFor(p:Input,target:CourseSceneTarget|null):Co
  if(cohort.teachingCancelled||progress.outcome==='non-success')return {...facts,phase:'stopped',status:'actual'}
  if(money!==null&&(money.refundDueFen>0||money.feeDueFen>0)||progress.phase==='course-refund-window'||progress.phase==='course-cohort-settling')return {...facts,phase:'refund',status}
  if(progress.phase.startsWith('course-stage-'))return {...facts,phase:'teaching',status}
- if(['course-support-','course-recovery-','course-refresh-'].some(prefix=>progress.phase.startsWith(prefix))||progress.phase==='course-cohort-update-required')return {...facts,phase:'support',status}
+ if(progress.phase.startsWith('course-refresh-')||progress.phase==='course-cohort-update-required')return {...facts,phase:'update',status}
+ if(['course-support-','course-recovery-'].some(prefix=>progress.phase.startsWith(prefix)))return {...facts,phase:'support',status}
  return {...facts,phase:'cohort',status:progress.phase==='course-cohort-enroll'?'planned':status}
 }

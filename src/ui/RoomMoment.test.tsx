@@ -7,6 +7,7 @@ import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
 import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
 import type {PlayFeatures} from './game-types.ts'
 import {RoomMoment,roomMoment} from './RoomMoment.tsx'
+import {playerThread} from './player-thread.ts'
 import retainedRelayRaw from '../../goal-1/evidence/t17-acceptance-11/chrome-production-r12/r105-audit-correction-real-cash-saved.json?raw'
 import knownSignalRaw from '../../goal-1/evidence/t17-acceptance-07/chrome-film/signal-input-text-before-import.json?raw'
 import unreadSupplyRaw from '../../goal-1/evidence/t17-acceptance-11/normal-input-r1/chrome-normal-prefix-r1/r0071.json?raw'
@@ -105,7 +106,14 @@ it('prioritises actual old relay responsibilities at zero AP over offering unava
   const p={controller,view,features,accountId:'personal',request:()=>{throw Error('RENDER_MUST_NOT_SUBMIT')}}
   expect(roomMoment(p)).toMatchObject({stage:'commitment',inspect:{screen:'relay'}})
   const html=renderToStaticMarkup(<RoomMoment p={p} headingRef={null} onNavigate={()=>{}} onExplore={()=>{}}/>)
-  expect(html).toContain('未到期应收不能提前取用');expect(html).not.toContain('保留这一季的工作');expect(controller.exportSaved()).toBe(before)
+  const restored=playerThread(p)
+  expect(restored.focus).toMatchObject({kind:'relay',relayTarget:{kind:'period',periodId:'rly:03db53459f6d8827f8a5b5e83e0c034a'}})
+  expect(restored.wait?.date).toBe('2025-03-09')
+  const invoice=features.relay!.receivables.find(row=>restored.resultRefs.some(ref=>ref.kind==='receivable'&&ref.id===row.id))!
+  expect(invoice).toMatchObject({dueAt:'2025-03-09',amountFen:6066,collectedFen:0,reversedFen:0})
+  expect(controller.preview({runId:view.runId,actorId:'player',commandId:'display-early-collection',expectedRevision:view.revision,kind:'CollectRelayDue',payload:{customerId:invoice.customerId}}).allowed).toBe(false)
+  for(const fact of ['2025-03-09','¥60.66','原客户应收¥1,254.76','客户未消费保护¥7,175.78','原应付¥4.04'])expect(html).toContain(fact)
+  expect(html).not.toContain('保留这一季的工作');expect(controller.exportSaved()).toBe(before)
  }finally{await controller.close();await store.close()}
 },20000)
 

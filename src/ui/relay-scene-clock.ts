@@ -6,11 +6,11 @@ import {courseWaitDate} from './course-wait-date.ts'
 import {resolveRelaySceneTarget,type RelaySceneTarget} from './relay-scene-target.ts'
 import {relayTicketAudit} from './relay-ticket-command.ts'
 
-function parallelTeachingReview(p:Pick<GamePanelProps,'view'|'features'>,date:string):string|null{
+function parallelTeachingReview(p:Pick<GamePanelProps,'view'|'features'|'requestWait'>,date:string):string|null{
  const course=p.features.course
  const teaching=course?.cohorts.some(cohort=>cohort.closedAt===null)
   ||course?.courses.some(lesson=>lesson.refreshes.some(refresh=>!refresh.applied&&refresh.job&&['planned','running'].includes(refresh.job.status)))
- return teaching?courseWaitDate(p.features.workbench,p.view.date,date):date
+ return teaching?courseWaitDate(p.features.workbench,p.view.date,date,p.requestWait!==undefined):date
 }
 
 /** Pick the next public task feedback; the original clock still executes every intervening day. */

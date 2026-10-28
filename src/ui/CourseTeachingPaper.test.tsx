@@ -3,7 +3,7 @@ import {renderToStaticMarkup} from 'react-dom/server'
 import {CourseTeachingPaper,type CourseTeachingPaperState,type CourseTeachingPaperPhase} from './CourseTeachingPaper.tsx'
 
 const base:CourseTeachingPaperState={phase:'cohort',status:'choice',stages:null,protectedFen:null,needsHelp:null,refundDueFen:null,feeDueFen:null,closedAt:null}
-const phases:readonly CourseTeachingPaperPhase[]=['audience','cohort','teaching','support','refund','closed','stopped','history']
+const phases:readonly CourseTeachingPaperPhase[]=['audience','cohort','teaching','support','update','refund','closed','stopped','history']
 const render=(art:CourseTeachingPaperState)=>renderToStaticMarkup(<CourseTeachingPaper art={art}/>)
 const shapes=(html:string)=>(html.match(/<path\b[^>]*>/g)??[]).map(path=>path.replace(/ class="[^"]*"/g,'')).join('')
 

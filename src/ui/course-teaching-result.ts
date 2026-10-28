@@ -3,6 +3,7 @@ import type {ProductionJob} from '../core/operations-types.ts'
 import {MONEY_LIMIT} from '../core/money.ts'
 import type {PlayFeatures,PlayingView} from './game-types.ts'
 import {moneyText} from './game-text.ts'
+import {sceneCashResult} from './scene-cash-result.ts'
 
 type CourseView=NonNullable<CourseProjection>
 type Cohort=CourseView['cohorts'][number]
@@ -67,7 +68,10 @@ export function courseTeachingSceneResult(kind:string,previous:PlayingView|null,
  }
  if(kind==='StartCourseRefresh'){
   const rows=b.courses.flatMap(lesson=>lesson.refreshes.flatMap(refresh=>refresh.job&&active(refresh.job)&&a.courses.some(old=>old.id===lesson.id&&!old.refreshes.some(r=>r.jobId===refresh.jobId))?[{lesson,job:refresh.job}]:[]))
-  if(rows.length===1){const {lesson,job}=rows[0]!;return `「${lesson.name}」的这次原材料更新${scheduled(job)}。实际完成后才覆盖本次绑定的更新；旧班教学、支持与退款责任仍继续。`}
+  if(rows.length===1){
+   const {lesson,job}=rows[0]!,cash=sceneCashResult(before.workbench.finance,after.workbench.finance,previous.date,current.date,id=>id==='personal'?'个人':b.businesses.some(company=>company.accountId===id)?'课程':'经营')
+   return `${cash?cash+' ':''}「${lesson.name}」的这次原材料更新${scheduled(job)}。实际完成后才覆盖本次绑定的更新；旧班教学、支持与退款责任仍继续。`
+  }
  }
  if(kind==='InterruptJob'){
   const rows=b.cohorts.flatMap(cohort=>[...cohort.stageJobs.flat().filter((j):j is ProductionJob=>j!==null),...cohort.supportJobs.flatMap(s=>s.job?[s.job]:[])].flatMap(job=>{

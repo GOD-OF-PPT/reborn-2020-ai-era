@@ -55,7 +55,7 @@ describe('a public scene connects an actual choice with the next part of life',(
   const before=sceneMeaning(a.p,a.thread)!,after=sceneMeaning(b.p,b.thread)!
   expect(before.title).toContain('样课');expect(before.situation).toContain('还没有班期')
   expect(before.question).toContain('了解谁可能需要');expect(before.situation).not.toContain('意向')
-  expect(after.title).toContain('已经答应');expect(after.situation).toContain('2023-01-16班')
+  expect(b.thread.stage).toBe('course-stage-planned');expect(after.title).toBe('这一段，已经留在日历。');expect(after.situation).toContain('2023-01-16班')
   expect(after.question).toContain('教学和自己');expect(after.sourceRefs.some(ref=>ref.kind==='cohort'&&ref.id===b.co!.id)).toBe(true)
   expect(ready.controller.exportSaved()).toBe(oldA);expect(promised.controller.exportSaved()).toBe(oldB)
  })

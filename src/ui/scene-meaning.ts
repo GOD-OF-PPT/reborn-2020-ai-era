@@ -73,7 +73,12 @@ function courseMeaning(p:SceneMeaningInput,thread:PlayerThreadView):SceneMeaning
   refs.push(...unresolved.map(update=>ref('course-update',update.id,update.dueAt)))
   return meaning('这次已经来不及按原约定交完。',co.startAt+'班已交出'+delivered+'/'+co.stages.length+'段；原教学期限、已耗投入与学员退款责任仍在。','先核对停止与原退款收尾，还是暂不新增承诺、看看生活？',refs)
  }
- return meaning(retained.length?'这一次，已经答应了学员。':co.students.length?'原学员的退款与安排还留着。':'班期留下了，报名仍须另定。',co.startAt+'班，'+retained.length+'名留存学员，已交出'+delivered+'/'+co.stages.length+'段；原支持和退款期限照常。',retained.length?'接下来的时间怎样留给教学和自己？':'先核对原班安排，还是今天暂不增加新的承诺？',refs)
+ if(thread.stage==='course-cohort-update-required'&&unresolved.length){
+  refs.push(...unresolved.map(update=>ref('course-update',update.id,update.dueAt)))
+  const dueAt=unresolved.map(update=>update.dueAt).sort()[0]!
+  return meaning(retained.length?'旧课有更新，学员还在等。':'这堂课有更新，先看看答应过什么。',retained.length+'名学员仍在，已交出'+delivered+'/'+co.stages.length+'段；课后支持至'+co.supportCompleteAt+'。','更新期限'+dueAt+'；这一周怎样留给旧课和自己？',refs)
+ }
+ return meaning(thread.title,co.startAt+'班，'+retained.length+'名留存学员，已交出'+delivered+'/'+co.stages.length+'段；原支持和退款期限照常。',retained.length?'接下来的时间怎样留给教学和自己？':'先核对原班安排，还是今天暂不增加新的承诺？',refs)
 }
 
 function relayMeaning(p:SceneMeaningInput,thread:PlayerThreadView):SceneMeaning|null{

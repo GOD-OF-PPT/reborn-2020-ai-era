@@ -150,7 +150,7 @@ function relayTimeResult(previous:PlayingView|null,current:PlayingView):string|n
 }
 
 /** Called only after the controller reports a complete saved transaction. */
-export function savedSceneResult(kind:string,label:string,previous:PlayingView|null,current:PlayingView){
+export function savedSceneResult(kind:string,label:string,previous:PlayingView|null,current:PlayingView,options:{readonly includeCash?:boolean}={}){
  if(!previous||previous.runId!==current.runId||current.saveStatus!=='saved'||current.hasCandidate||current.revision<=previous.revision)return '尚未核定新的完整保存，眼前仍以上一次完整提交为准。'
  const f=current.features as unknown as PlayFeatures,before=previous?.features as unknown as PlayFeatures|undefined,first=f.firstOrder
  const domain=domainSceneResult(kind,previous,current)
@@ -185,7 +185,7 @@ export function savedSceneResult(kind:string,label:string,previous:PlayingView|n
   if(video)parts.push(video)
   if(parts.length)return parts.join(' ')
   const last=current.receipts.at(-1)
-  if(current.revision===previous.revision+1&&!current.readOnly&&!current.busy&&last?.kind===kind&&last.revisionAfter===current.revision){
+  if(options.includeCash!==false&&current.revision===previous.revision+1&&!current.readOnly&&!current.busy&&last?.kind===kind&&last.revisionAfter===current.revision){
    const businesses=current.operations?.businesses??[],names:Record<string,string>={ai_stock:'模拟投资',ai_video:'视频工作室',ai_course:'课程工作室',api_relay:'API中转站',deepseek_opportunity:'生态服务'}
    const label=(accountId:string)=>{if(accountId==='personal')return '个人';const rows=businesses.filter(b=>b.accountId===accountId);if(rows.length!==1)return '原企业账户';const b=rows[0]!,peers=businesses.filter(n=>n.route===b.route);return (names[b.route]??'原企业')+(peers.length>1?' '+(peers.findIndex(n=>n.id===b.id)+1):'')}
    const cash=sceneCashResult(before?.workbench.finance??[],f.workbench.finance,previous.date,current.date,label)

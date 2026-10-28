@@ -51,19 +51,26 @@ describe.each([{productId:'deployment',raw:deployment},{productId:'training',raw
   const [kind,body,,confirm]=(p.request as ReturnType<typeof vi.fn>).mock.calls[0]!,expected={leadId:target.kind==='lead'?target.recordId:'',scope:'standard',resources:['player-production'],startAt:'2024-07-02'}
   expect(kind).toBe('AcceptEcoContract');expect(body).toEqual(expected);expect(confirm).toBe(true)
   const command=controller.prepare(kind,body),oldFocus=ecosystemFocusFor(p,target),before=controller.snapshot.view!
+  const originalSceneCommands=(before.features as unknown as PlayFeatures).sceneCommands
+  expect(originalSceneCommands).toMatchObject({version:1,runId:before.runId,committedRevision:before.revision})
   expect(controller.preview(command).allowed).toBe(true);expect((await controller.submit(command)).status).toBe('unsaved');expect(fault.trace).toEqual({writeSucceeded:true,abortIssued:true})
   const candidate=controller.exportCandidate(),candidateView=controller.snapshot.view!,candidateInput={...p,view:candidateView,features:candidateView.features as unknown as PlayFeatures}
   expect(controller.exportSaved()).toBe(raw);expect(await physical.exportStored(before.runId)).toBe(raw)
   expect(candidateView.revision).toBe(before.revision);expect(candidateView.accounts).toEqual(before.accounts);expect(candidateView.budget).toEqual(before.budget)
+  expect(candidateInput.features.sceneCommands).toEqual(originalSceneCommands)
+  expect(candidateInput.features.sceneCommands!.commands.some(c=>c.commandId===command.commandId)).toBe(false)
   expect(ecosystemJourneyFor(candidateInput,oldFocus)).toMatchObject({phase:'lead-open',paper:'letter'})
   expect(ecosystemFocusFromSaved(p,candidateInput,kind,body,oldFocus)).toBeNull()
   reader=new GameController({codec:createCampaignCodec(),store:physical,locks});await reader.initialize();await reader.continueLife(before.runId)
   expect(reader.snapshot.view!.readOnly).toBe(true);expect(reader.exportSaved()).toBe(raw)
+  expect((reader.snapshot.view!.features as unknown as PlayFeatures).sceneCommands).toEqual(originalSceneCommands)
   expect(await reader.submit(reader.prepare('DeclineEcoLead',{leadId:expected.leadId}))).toMatchObject({status:'rejected',reasonCodes:['READ_ONLY_SESSION']})
   expect((await controller.retry()).status).toBe('saved');expect(controller.exportSaved()).toBe(candidate);expect(await physical.exportStored(before.runId)).toBe(candidate)
   const saved=controller.snapshot.view!,savedInput={...p,view:saved,features:saved.features as unknown as PlayFeatures},focus=ecosystemFocusFromSaved(p,savedInput,kind,body,oldFocus)!
   expect(saved.revision).toBe(before.revision+1);expect(focus.ecosystemTarget?.kind).toBe('contract');expect(ecosystemJourneyFor(savedInput,focus)).toMatchObject({phase:'production-planned',paper:'commitment'})
   const c=savedInput.features.deepseek!.contracts[0]!;expect(c.productId).toBe(productId);expect(c.balance!.prepaidFen).toBe(c.priceFen/2);expect(c.balance!.recognizedIncomeFen).toBe(0)
+  expect(savedInput.features.sceneCommands).toMatchObject({committedRevision:saved.revision})
+  expect(savedInput.features.sceneCommands!.commands.filter(c=>c.commandId===command.commandId)).toEqual([{commandId:command.commandId,kind:'AcceptEcoContract',date:saved.date,revisionAfter:saved.revision,identifiers:{leadId:expected.leadId}}])
   await reader.reload();expect(reader.exportSaved()).toBe(candidate);expect(reader.snapshot.view!.revision).toBe(saved.revision);expect(reader.snapshot.view!.readOnly).toBe(true)
  })
 })

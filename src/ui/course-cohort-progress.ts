@@ -87,11 +87,11 @@ export function courseCohortProgress(course:View,date:string,target:Target,conte
  const co=course.cohorts.find(co=>co.id===target.cohortId)!,identity=c.name+' · '+co.startAt+'班',paid=co.students.filter(s=>s.paidRemainingFen>0)
  refs.push({kind:'cohort',id:co.id,date:co.createdAt})
  if(target.jobId!==undefined){const job=courseCohortJob(course,co,target.jobId,context)!;refs.push({kind:'job',id:job.id,date:job.status==='completed'?job.completeAt:job.releasedAt??job.startAt});return jobScene(job,co.stages.some(st=>st.attempts.some(a=>a.jobId===job.id))?'stage':co.supportJobs.find(s=>s.jobId===job.id)?.recovery?'recovery':'support',identity)}
- const ledger=`冻结单价${moneyText(co.priceFen)} · 留存${paid.length}/${co.seatLimit}人；退款窗口至${co.refundUntil}。`
+ const ledger=`本班约定单价${moneyText(co.priceFen)} · 留存${paid.length}/${co.seatLimit}人；退款窗口至${co.refundUntil}。`
  if(co.closedAt!==null){const refunded=co.students.some(s=>s.refundedFen>0);return make('course-cohort-closed',!co.students.length?'这期没有等来学员。':!paid.length?'这堂课，以原退款收场。':refunded?'这堂课留下学习，也留下退款。':'这期的承诺与原账，已经收好。',`${identity} · ${co.closedAt}实际收尾。`,`${ledger}原结算费${moneyText(co.feeFen)}；学习、退款及购买身份保留，不是新的现金或重复收费资格。`,'翻看本班学习与原账',undefined,co.students.length&&!paid.length?'non-success':'actual')}
  if(co.feePostedAt!==null)return make('course-cohort-settling','课程窗口已过，原账仍待付清。',identity,`${ledger} ${co.feePostedAt}登记结算费${moneyText(co.feeFen)}；入账不是实付，原退款应付与费用必须继续核对。`,'翻看原费用与未付责任')
  const refresh=courseRefreshProgress(course,date,target,context);if(refresh)return refresh
- if(c.unresolvedUpdates.length)return make('course-cohort-update-required','工具已经变了，旧学员还在等。',`${identity} · 更新期限${c.unresolvedUpdates.map(u=>u.dueAt).sort()[0]}。`,`${ledger}更新不创造新购买资格；原教学、支持与退款继续，不能因新准备隐藏。`,'安排原更新或翻看旧责任','refresh')
+ if(c.unresolvedUpdates.length)return make('course-cohort-update-required','工具已经变了，旧学员还在等。',`${identity} · 更新期限${c.unresolvedUpdates.map(u=>u.dueAt).sort()[0]}。`,`${ledger}这次给已购学员补上新内容，学费不再收一次；已有购买记录、后面的教学、课后支持与退款约定仍保留。`,'安排更新，照顾已经答应的学员','refresh')
  if(co.teachingCancelled)return wait(make('course-teaching-cancelled','原教学停下了，未交付与退款仍在。',identity,`${ledger}未按期完成的教学不会免费补完；原退款记录可能仍有应付，任务与成本须另核。`,'核对原学员退款与安排',date<=co.refundUntil&&paid.length?'refund':undefined,'non-success'),addDays(co.refundUntil,1),'等原退款窗口后的结算，沿途责任照常')
  if(!paid.length){
   if(date<co.startAt&&co.status==='open'&&!co.enrollmentPaused&&!c.paused&&b.lifecycle==='operating')return make('course-cohort-enroll','班额已经约定，还要有人愿意来。',identity,`${ledger}当前未购买的实际意向${co.availablePeople.length}人；显选实际成员收受保护预款，预款不是收入，原支持已经预留。`,'明确本班实际报名成员','enroll')

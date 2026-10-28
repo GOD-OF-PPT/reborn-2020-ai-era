@@ -2,7 +2,7 @@ import coursePreparationKit from '../../assets/ui-redesign/cinematic/props/cours
 import type {CoursePaperStage} from './OpeningObject.tsx'
 import './course-teaching-art.css'
 
-export type CourseTeachingPaperPhase='audience'|'cohort'|'teaching'|'support'|'refund'|'closed'|'stopped'|'history'
+export type CourseTeachingPaperPhase='audience'|'cohort'|'teaching'|'support'|'update'|'refund'|'closed'|'stopped'|'history'
 export interface CourseTeachingPaperState{
  phase:CourseTeachingPaperPhase
  status:'choice'|'planned'|'running'|'actual'
@@ -42,6 +42,14 @@ export function CourseTeachingPaper({art}:{art:CourseTeachingPaperState}){
     <path className="teaching-art-seam" d="m1054 435-74 310"/>
     <path className="teaching-art-frame" d="m799 510 174-12-35 151-174-12z"/>
     <path className="teaching-art-ink" d="m1102 524 253 101m-267-55 208 83m-221-38 253 101"/>
+   </g>:null}
+   {art.phase==='update'?<g data-material="course-update-leaf-and-kept-class">
+    <path className="teaching-art-under" d="m801 527 586 157-65 226-586-157z"/>
+    <path className="teaching-art-kept" d="m820 495 579 173-67 214-579-173z"/>
+    <path className="teaching-art-warm-sheet" d="m1042 427 366 115-82 269-366-115z"/>
+    <path className="teaching-art-fold" d="m1351 524 57 18-18 60-39-18z"/>
+    <path className="teaching-art-pencil" d="m1076 495 227 73m-239-33 178 57m-192-15 227 73"/>
+    <path className="teaching-art-bookmark" d="m1300 753 55 16-36 122-18-24-32 9z"/>
    </g>:null}
    {art.phase==='support'?<g data-material="support-reply-and-kept-lesson">
     <path className="teaching-art-under" d="m783 524 597 162-66 239-597-162z"/>

@@ -31,8 +31,11 @@ import {relayBusinessTarget,relayFocusFor} from './relay-player-thread.ts'
 import {roomMoment} from './RoomMoment.tsx'
 import {todayThread} from './today-thread.ts'
 import {moneyText} from './game-text.ts'
+import {courseTeachingSceneResult} from './course-teaching-result.ts'
 import readyRaw from '../../goal-1/evidence/t17-acceptance-34/chrome-final-sample-r2/r2-saved86-current-final-preview.json?raw'
 import promised97Raw from '../../goal-1/evidence/t17-acceptance-32/chrome-main-r8/r8-saved97-original-backup.json?raw'
+import updated105Raw from '../../goal-1/evidence/t17-acceptance-39/chrome-wait-r4/r4-04-actual105-first-public-feedback.json?raw'
+import updated106Raw from '../../goal-1/evidence/t17-acceptance-39/chrome-update-r5/r5-06-actual106-refresh-started.json?raw'
 import firstRaw from '../../goal-1/evidence/t17-acceptance-29/chrome-atomic/atomic-before-life-r6.json?raw'
 import relayRaw from '../../goal-1/evidence/t17-acceptance-34/chrome-final-service-r2/r2-saved85-current-separate-record-entries.json?raw'
 import dueRelayRaw from '../../goal-1/evidence/t17-acceptance-33/chrome-main-r1/r4-saved83-mid-service-first-original-due.json?raw'
@@ -88,14 +91,16 @@ function room(p:GamePanelProps,focus:OpeningFocus){
 }
 
 describe('U0-R continuity keeps the original identity, amounts and guards',()=>{
- let ready:Fixture,promised97:Fixture,first:Fixture,relay:Fixture,dueRelay:Fixture,offer:Fixture
+ let ready:Fixture,promised97:Fixture,updated105:Fixture,updated106:Fixture,first:Fixture,relay:Fixture,dueRelay:Fixture,offer:Fixture
  beforeAll(async()=>{ready=await original('ready',readyRaw)})
  beforeAll(async()=>{promised97=await original('whole-class97',promised97Raw)})
+ beforeAll(async()=>{updated105=await original('whole-class105',updated105Raw)})
+ beforeAll(async()=>{updated106=await original('whole-class106',updated106Raw)})
  beforeAll(async()=>{first=await original('first',firstRaw)})
  beforeAll(async()=>{relay=await original('relay',relayRaw)})
  beforeAll(async()=>{dueRelay=await original('due-relay',dueRelayRaw)})
  beforeAll(async()=>{offer=await original('offer')})
- afterAll(async()=>{for(const fixture of [ready,promised97,first,relay,dueRelay,offer])await fixture?.close()})
+ afterAll(async()=>{for(const fixture of [ready,promised97,updated105,updated106,first,relay,dueRelay,offer])await fixture?.close()})
  it('uses one result-to-Today binding for the thought and object and preserves actual first-order costs',()=>{
   const p=first.p(),focus=openingFocusFor(p,'quarter',{recordId:p.features.firstOrder.contractId!})!,raw=first.controller.exportSaved(),driver=room(p,focus),rows=driver.render()
   const main=button(rows,'收好这次结果，回到今天安排日子'),object=rows.find(row=>row.type===OpeningObject)!
@@ -144,6 +149,37 @@ describe('U0-R continuity keeps the original identity, amounts and guards',()=>{
   expect(published).toContain('仍受保护¥398');expect(published).toContain('教学收入¥398')
   expect(published).toContain('4名留存学员');expect(published).toContain('已交出1/2段')
   expect(driver.onFocus).not.toHaveBeenCalled();expect(driver.onNavigate).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled();expect(promised97.controller.exportSaved()).toBe(raw)
+  expect(rows.some(row=>row.type==='button'&&text(row.props.children).includes('翻阅这一段的记录与代价'))).toBe(true)
+  click(button(rows,'看看能否留点时间给自己'))
+  expect(driver.onNavigate).toHaveBeenCalledExactlyOnceWith('life',{accountId:'personal',lifeSelection:'rest'})
+  expect(driver.onFocus).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled();expect(promised97.controller.exportSaved()).toBe(raw)
+ })
+ it('puts the real update in the room heading and shared object action while keeping the original class and every money nature',()=>{
+  const base=updated105.p(),lesson=base.features.course!.courses[0]!,cohort=base.features.course!.cohorts.find(row=>row.courseId===lesson.id)!,target={kind:'cohort' as const,businessId:lesson.businessId,courseId:lesson.id,cohortId:cohort.id},focus=courseFocusFor(base,target),p={...base,accountId:focus.accountId},raw=updated105.controller.exportSaved(),driver=room(p,focus),rows=driver.render()
+  expect(p.view).toMatchObject({revision:105,date:'2023-03-14'})
+  expect(playerThread(p,focus).stage).toBe('course-cohort-update-required')
+  expect(text(rows.find(row=>row.type==='h1')!.props.children)).toBe('旧课有更新，学员还在等。')
+  const published=rows.filter(row=>row.type==='p').map(row=>text(row.props.children)).join('\n')
+  for(const fact of ['2023-03-21','4名学员仍在','已交出1/2段','课后支持至2023-04-22','本班约定单价¥199','退款窗口至2023-04-29','累计预款¥995','已实际退¥199','仍受保护¥398','教学收入¥398','学费不再收一次'])expect(published).toContain(fact)
+  expect(published).not.toContain('不能因新准备隐藏');expect(published).not.toContain('更新不创造新购买资格')
+  expect(published.split(lesson.name).length-1).toBe(1)
+  const main=button(rows,'留一周，把课补上'),object=rows.find(row=>row.type===OpeningObject)!
+  expect(text(main.props.children)).toContain('¥2,000 / 1点 / 7日')
+  expect(object.props.onActivate).toBe(main.props.onClick)
+  expect(object.props.teachingPaper).toMatchObject({phase:'update',protectedFen:39800,stages:['completed','planned']})
+  click(main);(object.props.onActivate as ()=>void)()
+  expect(driver.onToday).not.toHaveBeenCalled();expect(driver.onFocus).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled();expect(updated105.controller.exportSaved()).toBe(raw)
+  click(button(rows,'看看能否留点时间给自己'))
+  expect(driver.onNavigate).toHaveBeenCalledExactlyOnceWith('life',{accountId:'personal',lifeSelection:'rest'})
+  expect(driver.onFocus).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled();expect(updated105.controller.exportSaved()).toBe(raw)
+ })
+ it('states the actual update payment in the first sentence without replacing protected tuition or declaring the class complete',()=>{
+  const before=updated105.p().view,after=updated106.p().view,raw=updated106.controller.exportSaved(),result=courseTeachingSceneResult('StartCourseRefresh',before,after)!
+  expect(result.split('。')[0]).toContain('课程实际付出¥2,000')
+  expect(result).toContain('已实际开工，尚未完成');expect(result).toContain('旧班教学、支持与退款责任仍继续')
+  expect(result).not.toContain('已实际完成');expect(result).not.toContain('实际收到')
+  expect(courseTeachingSceneResult('StartCourseRefresh',before,{...after,hasCandidate:true,saveStatus:'unsaved'})).toBeNull()
+  expect(updated106.controller.exportSaved()).toBe(raw)
  })
  it('lets App show personal cash in Today and restore the exact enterprise bookmark without a game command',()=>{
   const values=new Map<string,string>(),storage={getItem:(key:string)=>values.get(key)??null,setItem:(key:string,value:string)=>{values.set(key,value)}},scope:Scope={values:[],index:0},raw=ready.controller.exportSaved()

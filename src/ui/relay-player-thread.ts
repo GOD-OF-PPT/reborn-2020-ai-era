@@ -31,6 +31,17 @@ export function resolveRelayFocus(p:Input,f:RelayOpeningFocus):{focus:RelayOpeni
  if(f.businessId!==t.businessId||f.entityId!==relayTargetEntity(t))return bad('原服务关注与完整对象身份不一致，请重新选择。')
  return {focus:f,reason:null}
 }
+
+/** Auxiliary cash/terms work preserves the same established service, not a new customer story. */
+export function relayAuxiliaryContinuesFocus(p:Input,existing:RelayOpeningFocus,next:RelayOpeningFocus,kind:string):boolean{
+ const old=existing.relayTarget,target=next.relayTarget
+ if(!old||!target||existing.runId!==next.runId||existing.accountId!==next.accountId||old.businessId!==target.businessId||old.stationId!==target.stationId||resolveRelayFocus(p,existing).reason||resolveRelayFocus(p,next).reason)return false
+ if(target.kind==='customer'&&['CollectRelayDue','CollectRelayReceivable','RechargeRelayCustomer','RefundRelayBalance','CloseRelayCustomer','RenewRelayCustomer'].includes(kind)){
+  if(old.kind==='customer')return old.customerId===target.customerId
+  return old.kind==='period'&&(p.features.relay?.periods.filter(period=>period.id===old.periodId&&period.businessId===old.businessId&&period.customerIds.includes(target.customerId)).length===1)
+ }
+ return target.kind==='business'&&['StartRelayPreparation','StartRelayAdapter','SignRelayCustomers','SetRelayOffer','StartRelayRequote','TopUpRelaySupplier','RefundRelaySupplier','PauseRelayTraffic','ResumeRelayTraffic','StopRelayStation','AcknowledgeRelayMarket','FundBusiness','ActivateBusiness','PauseBusiness','ResumeBusiness','WindDownBusiness','CloseBusiness'].includes(kind)
+}
 function resolved(p:Input,f:RelayOpeningFocus){return resolveRelaySceneTarget(p.features.relay,f.relayTarget,relaySceneContext(p,f.accountId))}
 export function relayFocusQuarter(p:Input,f:RelayOpeningFocus):string|null{
  if(f.relayTarget===null)return p.features.workbench.quarter
@@ -96,7 +107,7 @@ export function relayFocusFromSaved(previous:Input,current:Input,kind:string,bod
   const receivable=v.receivables.find(r=>r.id===body.receivableId),customer=v.customers.find(c=>c.id===(body.customerId??receivable?.customerId)),identity=customer?base(customer.businessId):null
   const prior=customer?old.customers.find(c=>c.id===customer.id):undefined
   const changed=customer&&prior&&(kind==='CollectRelayDue'||kind==='CollectRelayReceivable'?v.receivables.some(r=>r.customerId===customer.id&&r.collectedFen>(old.receivables.find(o=>o.id===r.id)?.collectedFen??r.collectedFen)):kind==='RefundRelayBalance'?v.refunds.some(r=>r.customerId===customer.id&&!old.refunds.some(o=>o.id===r.id)):kind==='RechargeRelayCustomer'?customer.balance.prepaidFen>prior.balance.prepaidFen:kind==='CloseRelayCustomer'?customer.closedAt!==prior.closedAt:customer.termEnd!==prior.termEnd||customer.mode!==prior.mode||customer.creditLimitFen!==prior.creditLimitFen)
-  if(customer&&identity&&changed){const selected=keep(customer.businessId),t=selected?.relayTarget;if(t?.kind==='period'&&v.periods.some(p=>p.id===t.periodId&&p.customerIds.includes(customer.id))||t?.kind==='customer'&&t.customerId===customer.id)return selected!;target={...identity,kind:'customer',customerId:customer.id}}
+  if(customer&&identity&&changed){target={...identity,kind:'customer',customerId:customer.id};const selected=keep(customer.businessId);if(selected&&relayAuxiliaryContinuesFocus(current,selected,relayFocusFor(current,target),kind))return selected}
  }
  if(['InterruptJob','RescheduleJob'].includes(kind)){
   const before=previous.view.operations?.jobs.find(j=>j.id===body.jobId),after=current.view.operations?.jobs.find(j=>j.id===body.jobId)
@@ -106,7 +117,7 @@ export function relayFocusFromSaved(previous:Input,current:Input,kind:string,bod
   }
  }
  if(['StartRelayPreparation','StartRelayAdapter','SignRelayCustomers','SetRelayOffer','StartRelayRequote','TopUpRelaySupplier','RefundRelaySupplier','PauseRelayTraffic','ResumeRelayTraffic','StopRelayStation','AcknowledgeRelayMarket','FundBusiness','ActivateBusiness','PauseBusiness','ResumeBusiness','WindDownBusiness','CloseBusiness'].includes(kind)&&typeof body.businessId==='string'){
-  const identity=base(body.businessId);if(identity){const selected=keep(body.businessId);if(selected)return selected}
+  const identity=base(body.businessId);if(identity){const selected=keep(body.businessId);if(selected&&relayAuxiliaryContinuesFocus(current,selected,relayFocusFor(current,{...identity,kind:'business'}),kind))return selected}
  }
  if(kind==='ReadRelaySupplyDecision'){const a=v.applications.find(a=>a.id===body.applicationId&&a.read&&!old.applications.find(o=>o.id===a.id)?.read),identity=a?base(a.businessId):null;if(a&&identity){const selected=keep(a.businessId);if(selected?.relayTarget?.kind==='application'&&selected.relayTarget.applicationId===a.id)return selected;target={...identity,kind:'application',applicationId:a.id}}}
  if(!target)return null

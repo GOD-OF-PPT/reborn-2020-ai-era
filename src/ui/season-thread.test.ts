@@ -403,7 +403,9 @@ it('preserves original later-business pending and its complete responsibility se
  const h=await normal('legacy',retainedRelayRaw)
  try{
   const before=h.controller.exportSaved(),ordinary=playerThread(h.p())
-  expect(ordinary.legacyFallbackRequired).toBe(true)
+  expect(ordinary.legacyFallbackRequired).toBe(false)
+  expect(ordinary.focus).toMatchObject({kind:'relay',relayTarget:{kind:'period',periodId:'rly:03db53459f6d8827f8a5b5e83e0c034a'}})
+  expect(ordinary.wait?.date).toBe('2025-03-09')
   const explicit:OpeningFocus={runId:h.p().view.runId,kind:'work',accountId:'personal',entityId:null}
   expect(playerThread(h.p(),explicit).legacyFallbackRequired).toBe(false)
   const echo=seasonRecollection(h.p())!

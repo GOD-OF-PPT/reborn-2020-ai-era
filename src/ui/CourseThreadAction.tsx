@@ -9,6 +9,8 @@ import {courseAttemptClosed} from './thread-purpose.ts'
 import type {CourseChoiceIntent} from './CourseSceneChoice.tsx'
 import {courseSceneProgress} from './course-scene-progress.ts'
 import {resolveCourseFocus,courseSceneContext} from './course-player-thread.ts'
+import {COURSE_JOBS} from '../content/course.ts'
+import {moneyText} from './game-text.ts'
 
 type Primary={binding:SharedActionBinding;main:ReactNode}
 type Props={p:GamePanelProps;thread:PlayerThreadView;active:boolean;date:string|null;waitLabel:string;onChoose:(intent?:CourseChoiceIntent)=>void;onResult:()=>void;onToday:()=>void;children:(primary:Primary|null)=>ReactNode}
@@ -26,8 +28,16 @@ export function CourseThreadAction({p,thread,active,date,waitLabel,onChoose,onRe
  if(thread.focusScope==='history')return teaching?choice('看清这一段之后，决定怎样继续','翻回同一班的当前承诺，或保留这份实际结果',onResult):choice('合上这份教案留页，回到今天','保留原课程、样课尝试与书签，不重做准备',onToday)
  if(teaching&&thread.outcome==='non-success')return choice('看清停下之后，仍要面对什么','先决定退款与未完承诺，再考虑继续等待',onResult)
  if(thread.command)return <CommandButton {...p} {...thread.command} className="moment-decision moment-primary" showReason={showReason} renderAction={(binding,main)=>children({binding,main})}><b aria-hidden="true">01</b><span>{thread.command.label}<small>核对这间教室的条件，再由你决定</small></span><i aria-hidden="true">→</i></CommandButton>
+ if(teaching&&thread.stage==='course-cohort-update-required'){
+  const target=thread.focus.kind==='course'?thread.focus.courseTarget:null
+  const courseId=target&&'courseId' in target?target.courseId:null,businessId=target?.businessId
+  const lessons=p.features.course?.courses.filter(lesson=>lesson.id===courseId&&lesson.businessId===businessId)??[]
+  const lesson=lessons.length===1?lessons[0]:null,definition=lesson?COURSE_JOBS.find(job=>job.id===`course-refresh-${lesson.productId}-${lesson.topicId}`):null
+  const caption=definition?`每份教学资源${moneyText(definition.costFen)} / ${definition.actionPoints}点 / ${definition.durationDays}日；先选人手和开工日`:'先选这堂课、人手和开工日，再核对钱与时间'
+  return choice(definition?.durationDays===7?'留一周，把课补上':'安排人手，把课补上',caption,()=>onChoose())
+ }
  if(thread.wait&&date){
-  const next=teaching?courseWaitDate(p.features.workbench,p.view.date,date):date
+  const next=teaching?courseWaitDate(p.features.workbench,p.view.date,date,p.requestWait!==undefined):date
   if(next===null)return choice('先翻看这份等待的安排','当前日历停点需要重新核对',onChoose)
   const label=next<date?'先到日历上的这一日':waitLabel
   return <ClockAdvance p={p} date={next} label={label+' · '+next} room showReason={showReason} renderAction={binding=>children({binding,main:<div className="moment-wait moment-primary"><div className="clock-advance clock-advance-room">{binding.reviewNode}{binding.mainNode}</div></div>})}/>

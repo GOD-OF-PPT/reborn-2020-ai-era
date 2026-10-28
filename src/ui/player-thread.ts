@@ -8,12 +8,13 @@ import {marketId} from '../core/market.ts'
 import {operatingId} from '../core/operations-calendar.ts'
 import {quarterOf} from '../core/calendar.ts'
 import {sceneThreads} from './scene-thread-notes.ts'
+import {sceneCommandFocus} from './scene-command-focus.ts'
 import type {VideoSceneTarget} from './video-scene-progress.ts'
 import {resolveVideoFocus,videoTargetEntity,videoFocusQuarter,videoFocusOpen,videoFocusResultDate,videoPlayerScene,videoFocusFromSaved} from './video-player-thread.ts'
 import type {CourseSceneTarget} from './course-scene-progress.ts'
 import {courseFocusFor,resolveCourseFocus,courseFocusQuarter,courseFocusOpen,courseFocusResultDate,coursePlayerScene,courseFocusFromSaved} from './course-player-thread.ts'
 import type {RelaySceneTarget} from './relay-scene-target.ts'
-import {relayFocusFor,resolveRelayFocus,relayFocusQuarter,relayFocusOpen,relayFocusResultDate,relayPlayerScene,relayFocusFromSaved} from './relay-player-thread.ts'
+import {relayFocusFor,resolveRelayFocus,relayFocusQuarter,relayFocusOpen,relayFocusResultDate,relayPlayerScene,relayFocusFromSaved,relayAuxiliaryContinuesFocus} from './relay-player-thread.ts'
 import {threadPurpose} from './thread-purpose.ts'
 import type {EcosystemSceneTarget} from './ecosystem-scene-target.ts'
 import {ecosystemCurrentDecision,ecosystemFocusFor,ecosystemFocusTargets,resolveEcosystemFocus,ecosystemFocusQuarter,ecosystemFocusOpen,ecosystemFocusResultDate,ecosystemPlayerScene,ecosystemFocusFromSaved} from './ecosystem-player-thread.ts'
@@ -180,26 +181,44 @@ function recoveredFocus(p:Input):Recovery|null{
  const first=f.firstOrder,contract=view.operations?.contracts.find(c=>c.id===first.contractId)
  if(contract&&current(contract.acceptedAt))add(resolvedFocus(p,{...base,kind:'first-order'}),receipts.filter(r=>r.kind==='StartFirstOrder'&&operatingId(r.commandId+':accept','AcceptContract')===contract.id).map(r=>r.commandId))
  else if(first.decision&&['declined','skipped'].includes(first.decision.kind)&&current(first.decision.date))add(resolvedFocus(p,{...base,kind:'first-order'}),[])
- for(const job of f.life.jobs.filter(j=>current(j.startAt))){
+ for(const job of f.life.jobs.filter(j=>current(j.startAt)||j.status==='running'||j.status==='completed'&&current(j.completeAt))){
   add({...base,kind:'life',selection:job.personId??(job.kind==='workspace'?'workspace':'rest'),entityId:job.promiseId??job.id},[job.originCommandId,job.interruptedBy])
  }
  // An automatic new invitation has no responseCommandId and never replaces the completed work.
- for(const promise of f.life.promises.filter(o=>o.responseCommandId!==null&&current(o.acceptedAt??o.resolvedAt))){
+ for(const promise of f.life.promises.filter(o=>o.responseCommandId!==null&&(current(o.acceptedAt??o.resolvedAt)||o.status==='accepted'))){
   add({...base,kind:'life',selection:promise.personId,entityId:promise.id},[promise.responseCommandId])
  }
  for(const order of f.market.orders.filter(o=>current(o.submittedAt)))add({...base,kind:'market',accountId:order.accountId,entityId:order.id,entityKind:'order'},receipts.filter(r=>['PlaceStockOrder','PlanStockOrder','AmendStockOrder'].includes(r.kind)&&marketId('command',r.commandId)===order.id).map(r=>r.commandId))
  for(const research of f.market.researches.filter(r=>current(r.startAt)))add({...base,kind:'market',entityId:research.id,entityKind:'research'},receipts.filter(r=>r.kind==='ResearchMarket'&&marketId('command',r.commandId)===research.id).map(r=>r.commandId))
  for(const period of f.workbench.employment)add({...base,kind:'work',entityId:period.id},receipts.filter(r=>r.kind==='WorkQuarter'&&operatingId(r.commandId,'WorkQuarter')===period.id).map(r=>r.commandId))
- if(!candidates.length)return null
+ const published=f.sceneCommands,recoveredCommands=new Set<string>()
+ if(published?.version===1&&published.runId===view.runId&&published.committedRevision===view.revision){
+  const counts=new Map<string,number>();for(const row of published.commands)counts.set(row.commandId,(counts.get(row.commandId)??0)+1)
+  for(const row of published.commands){
+   const source=receipts.filter(r=>r.commandId===row.commandId&&r.kind===row.kind&&r.revisionAfter===row.revisionAfter)
+   if(counts.get(row.commandId)!==1||source.length!==1||row.date>view.date)continue
+   const found=sceneCommandFocus(p,row)
+   if(found===null)continue
+   const eligible=found.filter(focus=>{
+    const business=focus.kind==='course'&&focus.courseTarget?.kind==='studio'||focus.kind==='relay'&&focus.relayTarget?.kind==='business'||focus.kind==='ecosystem'&&focus.ecosystemTarget?.kind==='business'||focus.kind==='video'&&focus.videoTarget!==null&&!focus.videoTarget.workId&&!focus.videoTarget.contractId&&!focus.videoTarget.marketingId
+    return current(row.date)||!business&&(focusOpen(p,focus)||current(focusResultDate(p,focus)))
+   })
+   if(!current(row.date)&&!eligible.length)continue
+   recoveredCommands.add(row.commandId)
+   for(const focus of eligible)add(focus,[row.commandId])
+  }
+ }
+ if(!candidates.length)return recoveredCommands.size?{focus:{...base,kind:'free'},needsReview:true,count:0}:null
  let focus:OpeningFocus|null=null,uncertain=false
  const selecting=new Set(['StartFirstOrder','DeclineOffer','SkipOffer','CancelContract','InterruptJob','PlaceStockOrder','PlanStockOrder','AmendStockOrder','SubmitStockOrder','CancelStockOrder','ResearchMarket','StopMarketResearch','StartLifeWork','FulfillLifePromise','InterruptLifeWork','AcceptLifePromise','DeclineLifePromise'])
+ const courseContinuation=new Set(['StartCourseRefresh','PauseNewEnrollment','ResumeCourseEnrollment','StopCourseSales','RetireCourse'])
  for(const receipt of receipts){
   if(receipt.kind==='WorkQuarter'){
    const work=candidates.find(c=>c.focus.kind==='work')
    if(work&&!uncertain&&(focus?.kind==='work'||focus===null&&view.playerProfile.approach==='free'))focus=work.focus
    continue
   }
-  if(!selecting.has(receipt.kind))continue
+  if(!selecting.has(receipt.kind)&&!recoveredCommands.has(receipt.commandId))continue
   let matches=candidates.filter(c=>c.sources.has(receipt.commandId))
   // Submission/cancellation receipts omit payloads. Resolve only a unique compatible public object.
   if(!matches.length&&['SubmitStockOrder','CancelStockOrder','StopMarketResearch'].includes(receipt.kind))matches=candidates.filter(c=>{
@@ -208,10 +227,21 @@ function recoveredFocus(p:Input):Recovery|null{
    const order=f.market.orders.find(o=>o.id===c.focus.entityId)
    return !!order&&(receipt.kind==='CancelStockOrder'?order.status==='cancelled'&&order.reason==='PLAYER_CANCELLED':order.status!=='planned')
   })
-  if(matches.length===1){focus=matches[0]!.focus;uncertain=false}
+  if(matches.length===1){
+   const next=matches[0]!.focus,prior=focus?.kind==='course'?focus:null
+   // The original course-wide auxiliary command does not select another class.
+   // Retain only the already established exact class of this same course; an
+   // unknown source or an explicit different course still follows normal recovery.
+   const keepClass=!uncertain&&courseContinuation.has(receipt.kind)&&prior?.courseTarget?.kind==='cohort'&&next.kind==='course'&&next.courseTarget?.kind==='course'&&prior.runId===next.runId&&prior.accountId===next.accountId&&prior.businessId===next.businessId&&prior.courseTarget.courseId===next.courseTarget.courseId
+   const keepRelay=!uncertain&&focus?.kind==='relay'&&next.kind==='relay'&&relayAuxiliaryContinuesFocus(p,focus,next,receipt.kind)
+   if(!keepClass&&!keepRelay)focus=next
+   uncertain=false
+  }
+  else if(recoveredCommands.has(receipt.commandId)){focus=null;uncertain=true}
   else if(matches.length>1||candidates.length>1){focus=null;uncertain=true}
  }
  if(focus&&!uncertain)return {focus:resolvedFocus(p,focus),needsReview:false,count:candidates.length}
+ if(uncertain)return {focus:{...base,kind:'free'},needsReview:true,count:candidates.length}
  if(candidates.length===1){
   const only=candidates[0]!.focus
   if(only.kind==='work'&&view.playerProfile.approach!=='free')return null
@@ -396,7 +426,7 @@ export function playerThread(p:Input,requested?:OpeningFocus|null,requestedQuart
  const resultDate=focusResultDate(p,resolved)
  const currentEcology=resolved.kind==='ecosystem'&&ecosystemCurrentDecision(p,resolved)
  const focusQuarter=originQuarter(p,resolved),scope:PlayerThreadView['focusScope']=reason?'invalid':focusEntry(p,resolved)?'entry':currentEcology?'current':focusQuarter&&focusQuarter<quarter?focusOpen(p,resolved)?'carry':resultDate&&resultDate>=p.features.workbench.quarterStart?'current':'history':'current'
- const common={wish:{id:p.view.playerProfile.wishId,label:wishes[p.view.playerProfile.wishId]},approach:p.view.playerProfile.approach,yearQuestion:questions[Number(p.view.date.slice(0,4))-2020]??'原来的事，想怎样收好？',responsibilityOverrideNeeded:responsibility(p),focusQuarter,focusScope:scope,legacyFallbackRequired:!requested&&legacyPending(p)}
+ const common={wish:{id:p.view.playerProfile.wishId,label:wishes[p.view.playerProfile.wishId]},approach:p.view.playerProfile.approach,yearQuestion:questions[Number(p.view.date.slice(0,4))-2020]??'原来的事，想怎样收好？',responsibilityOverrideNeeded:responsibility(p),focusQuarter,focusScope:scope,legacyFallbackRequired:!requested&&resolved.kind==='free'&&!recovery?.needsReview&&legacyPending(p)}
  const present=(thread:Omit<PlayerThreadView,'attempt'|'finishWhen'>):PlayerThreadView=>({...thread,...threadPurpose(p,thread)})
  if(reason)return present({...common,focus,focusStatus:'invalid',invalidReason:reason,stage:'unavailable',object:'原来的关注对象',title:'先找回刚才那件事。',line:reason,detail:'没有自动接受、换主体或替换对象。请明确选择下一件事。',outcome:'none',inspect:{screen:'routes',label:'重新选择眼前的方向'},resultRefs:[]})
  if(recovery?.needsReview)return present({...common,focus,focusStatus:'default',invalidReason:null,stage:'review-choice',object:'本季已经留下的安排',title:'有几件真实的事，可以先回看。',line:`本季有${recovery.count}项实际安排。请先选择想继续看哪一件。`,detail:'原记录都保留，尚未替你选定一件；翻阅不会重新安排或付费。',outcome:'none',inspect:{screen:'quarter',label:'翻看本季实际安排，选择一件继续',target:{accountId:'personal'}},resultRefs:[]})
