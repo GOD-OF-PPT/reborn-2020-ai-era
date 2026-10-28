@@ -111,6 +111,17 @@ it('keeps an empty follow payment disabled while an independent explicit zero de
  expect(follow.controller.exportSaved()).toBe(before)
 })
 
+it('explains an original lock and missing board right before asking the player to arrange an impossible action',()=>{
+ const p=follow.p(),t=target(p,'agreement'),a=p.features.deepseek!.agreements[0]!,before=follow.controller.exportSaved()
+ expect(a.board).toBe(false);expect(a.locked).toBe(true)
+ const governance=near(p,t,'governance','no-board-title')
+ expect(governance.tree().props.title).toBe('先核对本协议当前的会议权利。')
+ expect(text(governance.tree())).toContain('当前没有可提出会议的董事权')
+ const locked=near(p,t,'exit-request','locked-title')
+ expect(locked.tree().props.title).toBe('还在原锁定期，先看看这份安排。')
+ expect(p.request).not.toHaveBeenCalled();expect(follow.controller.exportSaved()).toBe(before)
+})
+
 it('retains same-object drafts through a changed date and blocks stale A→B→A callbacks and a changed memory',()=>{
  const p=sign.p(),a=target(p,'invitation'),b={...a,recordId:'another-invitation'} as EquitySceneTarget,read=(t:EquitySceneTarget,props=p)=>render('draft-lifetime',()=>useEquityDraft(props,t,'negotiate'))
  const first=read(a);first.set('amount','20000');expect(read(a).value('amount')).toBe('20000')

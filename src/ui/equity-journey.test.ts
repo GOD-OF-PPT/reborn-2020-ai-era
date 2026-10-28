@@ -132,3 +132,23 @@ it('shows the actual broker cash separately and obtains free rejection dates onl
  expect(equityJourney(v,t,c)).toMatchObject({phase:'invitation-closed',resultDate:'2025-04-01',action:{kind:'today'}})
  expect(equityJourney(v,t,{...c,source:{...c.source!,revision:c.source!.revision-1}}).resultDate).toBeNull()
 })
+
+it('ends current holding after an actual full transfer, keeps each original credit separate and never substitutes signature or today for the sale date',()=>{
+ const s=signedEquity({},'liquidity',800000),{h,b,agreement}=s
+ h.send('AdvanceTime',{date:'2025-08-01'});h.send('RequestEquityExit',{agreementId:agreement.id,shares:agreement.shares,...dsAssignment('2025-08-01')})
+ h.send('AdvanceTime',{date:'2025-08-08'});const exit=h.run.deepseek!.exits[0]!
+ h.send('AcceptEquityExit',{exitId:exit.id,shares:agreement.shares});h.send('AdvanceTime',{date:'2025-08-09'})
+ const t=target(h,b.id,'agreement',agreement.id),c=context(h,b.accountId),v=projectDeepseek(h.run,h.deepseek)!,before=h.codec.export(h.run),scene=equityJourney(v,t,c)
+ expect(scene).toMatchObject({phase:'disposed',paper:'kept',active:false,resultDate:'2025-08-08',action:{kind:'choice',intent:'holding'}})
+ expect(scene.title).toContain('已经全部转出');expect(scene.line).toContain('不等于原款已经到账');expect(scene.facts.join(' ')).toContain('不是现金退款')
+ expect(v.exits[0]!.collectedFen).toBe(0);expect(v.exits[0]!.receivable!.remainingFen).toBeGreaterThan(0)
+ expect(equityJourney(v,t,{...c,sceneCommands:{...c.sceneCommands!,committedRevision:c.source!.revision-1}}).resultDate).toBeNull()
+ const wrong={...v,exits:v.exits.map(e=>({...e,operationId:'not-the-original-sale-operation'}))}
+ expect(equityJourney(wrong,t,c).resultDate).toBeNull();expect(h.codec.export(h.run)).toBe(before)
+ h.send('AdvanceTime',{date:'2025-09-01'})
+ const pending=equityJourney(projectDeepseek(h.run,h.deepseek),t,context(h,b.accountId))
+ expect(pending).toMatchObject({phase:'follow-without-holding',paper:'kept',decisionOpen:true,action:{kind:'choice',intent:'follow'}})
+ expect(pending.title).not.toContain('愿不愿再留一笔钱');expect(pending.line).toContain('没有可新增跟投的持股')
+ expect(h.preview('FollowEquityRound',{agreementId:agreement.id,amountFen:0}).allowed).toBe(true)
+ expect(h.preview('FollowEquityRound',{agreementId:agreement.id,amountFen:800}).allowed).toBe(false)
+})

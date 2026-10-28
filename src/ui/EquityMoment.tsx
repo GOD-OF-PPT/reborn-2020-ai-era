@@ -37,11 +37,11 @@ export function EquityMoment({p,focus,focusQuarter,headingRef,feedback,onFocus,o
   const currentDecision=equityCurrentDecision(p,focus),scope=currentDecision?'今天 '+p.view.date+(thread.focusQuarter?' · 原来源 '+thread.focusQuarter:''):thread.focusScope==='history'?'历史回看 · '+(thread.focusQuarter??'原日期'):thread.focusScope==='carry'?'旧安排继续 · '+thread.focusQuarter:'今天 '+p.view.date
   return <div className="ecosystem-stage equity-stage opening-room" data-exploring="false"><RoomTableau scene="equity" state={journey.phase} perspective={thread.focusScope} textOnly={p.textOnly}
    intention={<div className="opening-room-intention"><span>我想{wishes[p.view.playerProfile.wishId]}</span><button type="button" className="scene-text-action" onClick={()=>open('objects')}>换一份权益原对象 ↗</button>{onRecollection?<button type="button" className="scene-text-action" onClick={onRecollection}>翻本季留页 ↗</button>:null}</div>}
-   heading={<div className="moment-heading"><p className="moment-overline">{journey.object}</p><h1 ref={headingRef} tabIndex={-1}>{thread.focusStatus==='invalid'?thread.title:journey.title}</h1></div>}
-   context={<><p className="moment-stage-label">{scope}</p><p>{journey.line}</p></>}
-   feedback={feedback} facts={<>{thread.focusStatus==='invalid'&&thread.invalidReason?<p role="alert">{thread.invalidReason}</p>:null}{journey.facts.map(line=><p key={line}>{line}</p>)}</>}
+   heading={<div className="moment-heading"><p className="moment-overline">{thread.focusStatus==='invalid'?'待核对的权益原记录':journey.object}</p><h1 ref={headingRef} tabIndex={-1}>{thread.focusStatus==='invalid'?thread.title:journey.title}</h1></div>}
+   context={<><p className="moment-stage-label">{scope}</p><p>{thread.focusStatus==='invalid'?'先沿原记录核对这一次的阶段；原来的记录仍保留。':journey.line}</p></>}
+   feedback={feedback} facts={<>{thread.focusStatus==='invalid'?thread.invalidReason?<p role="alert">{thread.invalidReason}</p>:null:journey.facts.map(line=><p key={line}>{line}</p>)}</>}
    decisions={<>{main}<button type="button" className="moment-decision" disabled={secondary.disabled} onClick={secondary.activate}><b aria-hidden="true">02</b><span>{secondary.label}<small>{action.kind==='today'?'新的一笔投入仍由你另选并核对':'持股、原款和未完任务都按自己的记录继续'}</small></span><i aria-hidden="true">↗</i></button><button type="button" className="moment-explore" onClick={onExplore}>环顾房间，想想别的可能 ↗</button></>}
-   object={<EquityPaper p={p} journey={journey} binding={binding} {...(action.kind==='wait'?{actionHint:advance===null?binding.label:waitLabel}:{})}/>}
+   object={<EquityPaper p={p} journey={journey} binding={binding} unavailable={thread.focusStatus==='invalid'} {...(action.kind==='wait'?{actionHint:advance===null?binding.label:waitLabel}:{})}/>}
    record={<><button type="button" className="scene-text-action" disabled={record.disabled} onClick={record.activate}>{record.label} ↗</button>{binding.reason?<p className="reason">{binding.reason}</p>:null}</>}/>
    {activePanel?<EquitySceneChoice p={p} target={target} intent={activePanel} sourceInvalid={thread.focusStatus==='invalid'} sourceReason={thread.invalidReason??null} onClose={()=>setPanel(null)} onChoose={choose} onIntent={open} onInspect={inspect} onToday={today}/>:null}
   </div>
@@ -54,5 +54,5 @@ export function EquityMoment({p,focus,focusQuarter,headingRef,feedback,onFocus,o
   return decision(binding,button(binding,'原款、原任务和原日期仍保留，不自动完成或转让。'))
  }
  const binding=ui(action.label,action.kind==='today'?today:()=>open(action.intent))
- return decision(binding,button(binding,journey.finishWhen))
+ return decision(binding,button(binding,thread.focusStatus==='invalid'?'先核对原身份，重选只改变眼前的阅读位置。':journey.finishWhen))
 }

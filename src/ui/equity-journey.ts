@@ -1,5 +1,6 @@
 import type {GamePanelProps} from './game-types.ts'
 import {DEEPSEEK_JOBS} from '../content/deepseek.ts'
+import {deepseekId} from '../core/deepseek-state.ts'
 import {moneyText} from './game-text.ts'
 import {equityDirectCosts,equityBrokerFee,type EquityDirectCosts} from './equity-costs.ts'
 import type {SceneCommands} from '../application/scene-commands.ts'
@@ -44,10 +45,10 @@ export function equityJourney(v:GamePanelProps['features']['deepseek'],target:Eq
  const r=resolveEquitySceneTarget(v,target,context),business=r.business
  const costs=business?equityDirectCosts(business.id,business.accountId,context.operations?.jobs,context.finance,context.date):null
  const base:EquityJourney={resolution:r,phase:'entry',paper:'intention',title:'先决定，要不要留下这个假设。',line:'技术合作和购买服务不会产生股份。以下只是一段由你明确选择的架空融资情境。',object:'明确架空 · 一份参与想法',purpose:'比较一次架空参与的承担和自己的生活安排。',finishWhen:'每次承诺由你确认，实际结果按原规则发生。',facts:[],action:choice('actors','先选择这次准备的原主体'),active:false,decisionOpen:false,outcome:'none',originDate:null,resultDate:null,directCosts:costs}
- const commandDate=(kind:string,key:string,id:string)=>{
+ const commandDate=(kind:string,key:string,id:string,operationId?:string|null)=>{
   const published=context.sceneCommands,source=context.source
   if(!published||!source||published.version!==1||published.runId!==context.runId||published.committedRevision!==source.revision)return null
-  const rows=published.commands.filter(c=>c.kind===kind&&c.identifiers[key]===id&&c.date<=context.date&&source.receipts.filter(r=>r.commandId===c.commandId&&r.kind===c.kind&&r.revisionAfter===c.revisionAfter).length===1)
+  const rows=published.commands.filter(c=>c.kind===kind&&c.identifiers[key]===id&&c.date<=context.date&&(operationId===undefined||operationId===deepseekId(c.commandId,c.kind))&&source.receipts.filter(r=>r.commandId===c.commandId&&r.kind===c.kind&&r.revisionAfter===c.revisionAfter).length===1)
   return rows.length===1&&published.commands.filter(c=>c.commandId===rows[0]!.commandId).length===1?rows[0]!.date:null
  }
  if(r.status==='invalid')return {...base,phase:'unknown',paper:'stopped',title:'先找回原来那一份。',line:r.reason!,action:choice('objects','明确重新选择原权益记录')}
@@ -56,18 +57,18 @@ export function equityJourney(v:GamePanelProps['features']['deepseek'],target:Eq
  if(r.status==='entry')return {...base,title:'这次想法，由哪份自有钱承担？',line:'先选原个人准备分账或原生态企业。查看不创建股份，旧协议也不随新准备切换主体。',facts:['本局于'+v.counterfactualEnabledAt+'选择明确架空情境；协议、持有、治理和退出持续标识。']}
  const facts:string[]=[]
  const broker=r.invitation?equityBrokerFee(r.invitation,business!.accountId,context.finance,context.date):null
- const paid=[...(costs?.paidFen!==null&&costs?.paidFen!==undefined&&costs.paidFen>0?['本主体已付权益准备费'+moneyText(costs.paidFen)]:[]),...(broker?.paidFen!==null&&broker?.paidFen!==undefined&&broker.paidFen>0?['这封邀请中间服务费已付'+moneyText(broker.paidFen)]:[])]
+ const paid=[...(costs?.paidFen!==null&&costs?.paidFen!==undefined&&costs.paidFen>0?['本主体已付权益直接费用'+moneyText(costs.paidFen)]:[]),...(broker?.paidFen!==null&&broker?.paidFen!==undefined&&broker.paidFen>0?['这封邀请中间服务费已付'+moneyText(broker.paidFen)]:[])]
  if(paid.length)facts.push(paid.join('；')+'。不含投资本金、工资或维护。')
  if(broker?.reason)facts.push(broker.reason)
- if(costs?.reservedFen!==null&&costs?.reservedFen!==undefined&&costs.reservedFen>0)facts.push('同主体原准备仍预留'+moneyText(costs.reservedFen)+'，尚未作为实付费用。')
+ if(costs?.reservedFen!==null&&costs?.reservedFen!==undefined&&costs.reservedFen>0)facts.push('同主体原权益任务仍预留'+moneyText(costs.reservedFen)+'，尚未作为实付费用。')
  if(costs?.reason)facts.push(costs.reason)
  if(business!.funds.prepaidLiabilityFen>0)facts.push('客户未履约预款'+moneyText(business!.funds.prepaidLiabilityFen)+'仍有保护义务，不能用于这次参与。')
  const origin=r.preparation?r.job?.startAt??null:r.invitation?.createdAt??null
  const labels:Record<EquitySceneTarget['kind'],string>={business:'这次参与的准备主体',preparation:'本主体的关系或资格准备',invitation:'这一封架空邀请',negotiation:'这一份架空条款',agreement:'已签署的架空持股',governance:'这一份有限治理提案',exit:'这一笔架空转让'}
  const build=(part:Partial<EquityJourney>):EquityJourney=>{
   const phase=part.phase??base.phase
-  const purpose=phase.startsWith('preparation')?'把这份准备做到实际结果，再决定是否继续。':phase==='business'?'从这份自有钱与实际关系出发，决定下一步。':phase.startsWith('diligence')||phase.startsWith('invitation')?'核实这封邀请，再决定继续还是收起。':phase.startsWith('negotiation')||phase.startsWith('terms')?'比较这份具体条款，决定是否真正承诺本金。':phase==='follow'?'在原截止前决定本轮投入，也可以明确不跟投。':phase==='holding'?'保留真实持股和自己的生活，再决定下一次承担。':phase.startsWith('governance')?'按已有权利提出有限的提案，接受实际表决。':'看清本次转让、余股与原款，到账之后再作生活选择。'
-  const finishWhen=phase==='holding'?'持有不要求清空记录；新的治理或转让须另选。':phase==='follow'?'本次付款或明确不跟投后，看实际比例与余地。':phase.startsWith('governance')?'实际表决后，回原协议或自己的生活。':['quote','receivable','collection','collected','transfer-no-credit','no-buyer','quote-expired','exit-stopped'].includes(phase)?'转让、应收与实收分别发生；余股和未收款继续保留。':phase.startsWith('terms')?'只有实际付款签署后才会取得股份；拒绝也能继续生活。':'看到本次准备或回信的实际结果，再选择下一步。'
+  const purpose=phase.startsWith('preparation')?'把这份准备做到实际结果，再决定是否继续。':phase==='business'?'从这份自有钱与实际关系出发，决定下一步。':phase.startsWith('diligence')||phase.startsWith('invitation')?'核实这封邀请，再决定继续还是收起。':phase.startsWith('negotiation')||phase.startsWith('terms')?'比较这份具体条款，决定是否真正承诺本金。':phase.startsWith('follow')?'核对本轮当前能承担的原选择，也可以明确不新增付款。':phase==='holding'?'保留真实持股和自己的生活，再决定下一次承担。':phase.startsWith('governance')?'按已有权利提出有限的提案，接受实际表决。':'看清本次转让、余股与原款，再安排接下来的生活。'
+  const finishWhen=phase==='holding'?'持有不要求清空记录；新的治理或转让须另选。':phase.startsWith('follow')?'本次原选择确认后，看实际持股与余地。':phase.startsWith('governance')?'实际表决后，回原协议或自己的生活。':['quote','receivable','collection','collected','transfer-no-credit','no-buyer','quote-expired','exit-stopped','disposed'].includes(phase)?'转让、应收与实收分别发生；余股和未收款继续保留。':phase.startsWith('terms')?'只有实际付款签署后才会取得股份；拒绝也能继续生活。':'看到本次准备或回信的实际结果，再选择下一步。'
   return {...base,object:'明确架空 · '+(target?labels[target.kind]:'参与想法'),originDate:origin,purpose,finishWhen,...part,facts:[...facts,...(part.facts??[])]}
  }
  const task=(phase:string,paper:EquityPaperState,title:string,label:string,originDate:string|null):EquityJourney|null=>{
@@ -112,6 +113,12 @@ export function equityJourney(v:GamePanelProps['features']['deepseek'],target:Eq
  const a=r.agreement
  if(a){
   const holding=`仍持${a.shares}/${a.totalShares}模拟股（约${(a.holdingBps/100).toFixed(2)}%）；尚持有成本${moneyText(a.asset?.bookCostFen)}，账面值${moneyText(a.asset?.valueFen)}不能花。`
+  if(target?.kind==='agreement'&&a.shares===0){
+   const sales=v.exits.filter(e=>e.agreementId===a.id&&e.operationId!==null&&e.soldShares>0),dates=sales.map(e=>commandDate('AcceptEquityExit','exitId',e.id,e.operationId)).filter((date):date is string=>date!==null),sold=sales.reduce((sum,e)=>sum+e.soldShares,0)
+   const known=sales.length>0&&new Set(sales.map(e=>e.id)).size===sales.length&&new Set(sales.map(e=>e.operationId)).size===sales.length&&sales.every(e=>e.businessId===a.businessId)&&Number.isSafeInteger(sold)&&sold===a.disposedShares&&dates.length===sales.length
+   const pending=a.followDecision==='pending'
+   return build({phase:pending?'follow-without-holding':'disposed',paper:'kept',title:pending?'持股已经转出，本轮只核对旧安排。':'这份原持股，已经全部转出。',line:pending?'当前没有可新增跟投的持股；可明确不新增付款，或沿原到期安排继续。各笔转让原款仍分别保留。':'股份已经转出，不等于原款已经到账。每笔转让和应收仍按自己的原记录继续，生活也可以继续。',originDate:a.signedAt,resultDate:known?dates.sort().at(-1)??null:null,outcome:pending?'pending':'actual',decisionOpen:pending,action:choice(pending?'follow':'holding',pending?'核对本轮原安排，明确不新增付款':'核对原协议与各笔转让原款'),facts:[`原签署本金${moneyText(a.initialCostFen)}；已转出${a.disposedShares}模拟股，原转出持有成本${moneyText(a.disposedBasisFen)}。这不是现金退款或已经收回的本金。`,pending?'本轮原截止'+a.followDeadline+'，不会因查看自动付款或作出决定。':'现已没有这份协议的持股；原调查、会议和转让费用仍在原账。']})
+  }
   if(target?.kind==='agreement')return build({phase:a.followDecision==='pending'?'follow':'holding',paper:'holding',title:a.followDecision==='pending'?'愿不愿再留一笔钱，参与这次融资？':'这份权利已经持有，生活仍可继续。',line:a.followDecision==='pending'?'本轮最迟'+a.followDeadline+'决定；不跟投或逾期默认不付款，原股份按实际新增资本稀释。':'锁定和原权利仍在；持有本身不要求清空记录，也不等于有买方或可花现金。',originDate:a.signedAt,resultDate:a.followDecision&&a.followDecision!=='pending'?a.followAt:a.signedAt,outcome:a.followDecision==='pending'?'pending':'actual',decisionOpen:a.followDecision==='pending',action:choice(a.followDecision==='pending'?'follow':'holding',a.followDecision==='pending'?'比较本轮投入和明确不跟投':'看看本协议的权利、锁定与原选择'),facts:[holding,`原锁定至${a.lockUntil}；${a.board?'一席董事，无单方控制':'无董事权'}，${a.preemptive?'原条款有跟投权':'原条款无跟投权'}。`]})
   if(r.governance){const g=r.governance,pending=task('governance','governance','有限提案，尚未实际表决。','等这次原会议实际回应',g.createdAt);if(pending)return pending
    return build({phase:g.resolvedAt===null?'governance-stopped':'governance-result',paper:g.resolvedAt===null?'stopped':'governance',title:g.resolvedAt===null?'这次会议还没有留下表决结果。':g.approved?'有限提案已经按原范围通过。':'原董事会没有通过这份提案。',line:g.resolvedAt===null?'原股份和已发生成本保留，不能把未完成会议画成通过。':g.approved?g.policy==='independent_audit'?'本局已发生的资本用途核对已开放；没有取得单方研发控制。':'原用途/接手方限制按实际生效日影响新的退出申请，旧报价不追改。':'原股份及会议成本保留；少数席位不能替对手作决定。',originDate:g.createdAt,resultDate:g.resolvedAt,outcome:g.approved?'actual':'non-success',action:today(),facts:[holding]})

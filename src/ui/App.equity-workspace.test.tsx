@@ -84,6 +84,9 @@ it('retains a missing legacy record as an invalid focus with no write action unt
  const moment=run('missing-original-moment',()=>Reflect.apply(EquityMoment,undefined,[scene.props]))
  const tableau=elements(moment).find(e=>e.props.decisions!==undefined)!
  expect(text(tableau.props.decisions)).toContain('明确重选这份权益原记录')
+ expect((tableau.props.object as Element).props.unavailable).toBe(true)
+ expect(text(tableau.props.context)).not.toContain('先选原个人准备分账')
+ expect(text(tableau.props.facts)).not.toContain('权益直接费用')
  expect(elements(tableau.props.decisions).some(e=>typeof e.props.kind==='string')).toBe(false)
  invoke(h.book(),'onClose')
  const record=elements(tableau.props.record).find(e=>e.type==='button')!;invoke(record,'onClick')

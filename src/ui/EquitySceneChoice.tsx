@@ -39,8 +39,9 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
   const scene=equityJourneyFor(p,equityFocusFor(p,row.target))
   return ui(row.label,(row.target.accountId==='personal'?'个人账户':'原企业账户 · '+row.target.accountId.slice(-6))+' · '+(row.date??'原日期待核')+' · '+scene.title,()=>onChoose(row.target),JSON.stringify(row.target))
  }
- const holdingFacts=a?<><p>本协议仍持{a.shares}/{a.totalShares}模拟股（约{(a.holdingBps/100).toFixed(2)}%）；尚持有成本{moneyText(a.asset?.bookCostFen)}，账面值{moneyText(a.asset?.valueFen)}不能花。</p><p>锁定至{a.lockUntil}，{a.locked?'当前仍锁定':'锁定期已到，仍需独立买方'}；{a.board?'一席董事，无单方控制':'无董事权'}，{a.preemptive?'有原跟投权':'无跟投权'}。原主体不随新的准备切换。</p></>:null
+ const holdingFacts=a?<><p>本协议仍持{a.shares}/{a.totalShares}模拟股（约{(a.holdingBps/100).toFixed(2)}%）；尚持有成本{moneyText(a.asset?.bookCostFen)}，账面值{moneyText(a.asset?.valueFen)}不能花。</p><p>锁定至{a.lockUntil}，{a.locked?'当前仍锁定':'锁定期已到，仍需独立买方'}；{a.board?a.shares>0?'一席董事，无单方控制':'原条款有席位，现已无股，不能提交会议':'无董事权'}，{a.preemptive?a.shares>0?'有原跟投权，仍按本轮条件决定':'现已无股，不能新增跟投':'无跟投权'}。原主体不随新的准备切换。</p></>:null
  const invalidSource=sourceInvalid||r.status==='invalid'
+ const title=intent==='holding'&&a?.shares===0?'收好原协议，看看各笔原款。':intent==='follow'&&a?.shares===0?'已无现持股，核对本轮原安排。':intent==='follow'&&a&&a.followDecision!=='pending'?'核对本协议的融资与原条款。':intent==='governance'&&a&&(!a.board||a.shares===0)?'先核对本协议当前的会议权利。':intent==='exit-request'&&a?.locked?'还在原锁定期，先看看这份安排。':intent==='exit-request'&&a&&!a.transferConsent?'先核对这份协议的原转让同意。':intent==='terms'&&n&&n.respondedAt!==null&&n.accepted!==true?'对方未接受，原投入仍保留。':titles[intent]
  const contents:ReactNode=<>
   <p className="counterfactual-boundary">本局明确架空安排，不是现实公开申购。技术合作、服务合同、资金或中间费均不产生股份；估值和应收不能花。</p>
   {intent==='actors'||intent==='objects'?<>
@@ -95,7 +96,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
    {intent==='holding'&&a?<>
     <p>持有不要求做完所有记录才能离开。新的资金或权利决定由你另选；旧协议、费用与未收款继续保留。</p>
     {go('follow','核对本轮融资与跟投选择',a.followDecision==='pending'?'当前有待决定融资；不跟投也是独立明确选择。':'原融资仍按已经发生的阶段表示，不自动新增投入。')}
-    {go('governance','看看本协议能提出的有限提案','少数席位不能代替对方作决定。')}
+    {go('governance','核对本协议的会议权利','原条款和当前持股分别核对；查看不取得董事席位。')}
     {go('exit-request','核对锁定，先询问独立买方','提出申请不出售，仍可能没有买方。')}
     {rows.filter(row=>{const t=row.target;return t.kind==='governance'&&v!.governance.some(g=>g.id===t.recordId&&g.agreementId===a.id)||t.kind==='exit'&&v!.exits.some(e=>e.id===t.recordId&&e.agreementId===a.id)}).map(original)}
     {ui('收好这份持股，回到今天','生活可以继续，不自动跟投、转让或清掉旧约。',onToday)}
@@ -108,6 +109,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
     {command('FollowEquityRound',{agreementId:a.id,amountFen:amount??-1},'核对所填本金，明确付款参与本轮',amount!==null&&amount>0,'先填写大于零的本次本金；空稿不会变成不跟投。')}
    </>:null}
    {intent==='governance'&&a?<>
+    {!a.board||a.shares===0?<p>这份协议当前没有可提出会议的董事权。原条款和已发生会议仍可查看。</p>:null}
     <p>会议基础预算500元 / 1点 / 7日。原董事会可以拒绝；通过用途限制将从实际生效日起影响新的转让申请，旧报价不追改。</p>
     <label className="field">本次有限提案<select value={draft.value('policy')} onChange={event=>draft.set('policy',event.currentTarget.value)}><option value="">明确选择一项提案</option><option value="independent_audit">独立核对本局资本用途</option><option value="commercial_scope">限定研究用途与接手方</option></select></label>{resources}
     {command('ProposeEquityGovernance',{agreementId:a.id,policy:draft.value('policy'),...assignment},'明确提案与投入，安排这次有限会议',hasAssignment&&['independent_audit','commercial_scope'].includes(draft.value('policy')))}
@@ -146,5 +148,5 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
    {intent!=='record'?ui('翻阅同一份权益原册','完整条款、报告、旧费用与历史仍可查看。',onInspect):null}
   </>}
  </>
- return <Dialog title={titles[intent]} className="equity-scene-choice scene-choice-dialog" onClose={onClose}>{contents}</Dialog>
+ return <Dialog title={title} className="equity-scene-choice scene-choice-dialog" onClose={onClose}>{contents}</Dialog>
 }
