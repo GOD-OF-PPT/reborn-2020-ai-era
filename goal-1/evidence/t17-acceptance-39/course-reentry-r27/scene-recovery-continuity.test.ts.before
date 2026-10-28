@@ -1,0 +1,57 @@
+import {expect,it} from 'vitest'
+import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
+import {createCampaignCodec} from '../application/campaign.ts'
+import {GameController} from '../application/game-controller.ts'
+import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
+import {playerThread} from './player-thread.ts'
+import type {PlayFeatures} from './game-types.ts'
+import carry from '../../goal-1/evidence/t17-acceptance-36/chrome-normal-r1/n07-saved17-cross-quarter-old-job.json?raw'
+import sample from '../../goal-1/evidence/t17-acceptance-36/chrome-atomic-r1/a01-import-buffer86.json?raw'
+import video from '../../goal-1/evidence/t17-acceptance-23/chrome-r6/ai-saved-70-paid-r6.json?raw'
+import completedCarry from '../../goal-1/evidence/t17-acceptance-36/chrome-normal-r1/n09-saved18-life-complete.json?raw'
+
+// Retained normal original sources. Importing a local test store is not new Native play.
+async function imported(name:string,raw:string,check:(p:Parameters<typeof playerThread>[0])=>void){
+ const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'cux09-source-'+name}),controller=new GameController({codec,store,locks:new MemoryWriterAccess(),id:()=> 'cux09-'+name})
+ try{await controller.initialize();await controller.importNew(raw);const view=controller.snapshot.view!;check({view,features:view.features as unknown as PlayFeatures});expect(controller.exportSaved()).toBe(raw)}finally{await controller.close();await store.close()}
+}
+
+it('keeps the actual previous-quarter workspace job in front after April1 without renewing work or rewriting its source',async()=>{
+ await imported('carry',carry,p=>{
+  const job=p.features.life.jobs.find(j=>j.id==='life:719699f293d85e4fd27a700d7d9d1d3e')!,thread=playerThread(p)
+  expect(p.view.date).toBe('2020-04-01');expect(job).toMatchObject({status:'running',startAt:'2020-03-28',completeAt:'2020-04-04'})
+  expect(thread.focus).toMatchObject({kind:'life',entityId:job.id,selection:'workspace'})
+  expect(thread.focusQuarter).toBe('2020-Q1');expect(thread.focusScope).toBe('carry')
+  expect(thread.wait?.date).toBe('2020-04-04');expect(thread.legacyFallbackRequired).toBe(false)
+  expect(p.features.workbench.employment).toEqual([])
+ })
+})
+
+it('recovers the actual second sample attempt, preserving completed preparation without inventing a class or income',async()=>{
+ await imported('sample',sample,p=>{
+  const thread=playerThread(p)
+  expect(thread.focus).toMatchObject({kind:'course',entityId:'crs:77414d90c9272b27bdbf354d34cf4ff2',courseTarget:{kind:'course',courseId:'crs:60aafe5da1d987ede4868ffc2c3a469f',sampleJobId:'crs:77414d90c9272b27bdbf354d34cf4ff2'}})
+  expect(thread.stage).toBe('course-ready');expect(thread.legacyFallbackRequired).toBe(false)
+  expect(p.features.course!.cohorts).toEqual([])
+ })
+})
+
+it('keeps the completed carry result on reentry rather than replacing it with an empty calendar',async()=>{
+ await imported('completed-carry',completedCarry,p=>{
+  const thread=playerThread(p)
+  expect(p.view.date).toBe('2020-04-04')
+  expect(thread.focus).toMatchObject({kind:'life',entityId:'life:719699f293d85e4fd27a700d7d9d1d3e',selection:'workspace'})
+  expect(thread.outcome).toBe('actual');expect(thread.focusScope).toBe('current')
+  expect(thread.focusQuarter).toBe('2020-Q1');expect(thread.legacyFallbackRequired).toBe(false)
+ })
+})
+
+it('recovers the original paid AI commission instead of selecting the older manual work on the same channel',async()=>{
+ await imported('video',video,p=>{
+  const thread=playerThread(p)
+  expect(thread.focus).toMatchObject({kind:'video',entityId:'vid:05ccd9f89da3f63a998c1b2307bcf1d6',videoTarget:{channelId:'vid:1b8b8b648df6353c25412860736670c9',workId:'vid:01c1e94b003afd17b9e4423f78ccc7b9',contractId:'vid:05ccd9f89da3f63a998c1b2307bcf1d6'}})
+  expect(thread.legacyFallbackRequired).toBe(false)
+  expect(thread.focus.entityId).not.toBe('vid:6889207b61c61ee8a67b41c642a90c53')
+ })
+})

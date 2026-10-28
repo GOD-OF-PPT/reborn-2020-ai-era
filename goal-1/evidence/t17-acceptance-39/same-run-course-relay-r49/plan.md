@@ -1,0 +1,3 @@
+# 阶段A按原资格补正续接
+
+R48真实停在129 Jun20，缺原local_model_rights_and_hardware资格。输入原last-saved129完整字节，沿原ApplyVideoProgram/实际七日审核/Decide读回，不跳资格或挑seed。若未批准保真实拒绝和旧课待办，仍独立推进合法中转准备；批准才实际更新原课。按公开原背景补中转basics，保四点与日期容量。所有新命令使用不同前缀，不与既有历史ID冲突；不重复过去的资本或工资。阶段B仍待，兼容0。

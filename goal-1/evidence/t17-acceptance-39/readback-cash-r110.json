@@ -1,0 +1,106 @@
+{
+  "at": "2026-10-28T05:09:24.838413+00:00",
+  "scope": "Pure JSON facts from original UI exports; no game execution, model mutation or new Native commands",
+  "checks": [
+    {
+      "name": "same-original-receipt-prefix-170",
+      "passed": true,
+      "facts": {
+        "fromRevision": 168,
+        "toRevision": 170,
+        "newOriginalTimeCommands": 2
+      }
+    },
+    {
+      "name": "same-original-receipt-prefix-177",
+      "passed": true,
+      "facts": {
+        "fromRevision": 170,
+        "toRevision": 177,
+        "newOriginalTimeCommands": 7
+      }
+    },
+    {
+      "name": "same-original-receipt-prefix-193",
+      "passed": true,
+      "facts": {
+        "fromRevision": 177,
+        "toRevision": 193,
+        "newOriginalTimeCommands": 16
+      }
+    },
+    {
+      "name": "no-new-or-returned-actions",
+      "passed": true,
+      "facts": {
+        "originalActions": 43
+      }
+    },
+    {
+      "name": "actual-bank-cash-not-available-release",
+      "passed": true,
+      "facts": {
+        "accountDeltasFen": {
+          "personal": 0,
+          "ops:0ff547135b6bcc30fbb71fd65d3b0c8a": 0,
+          "ops:518fa032429dd30326fbf0ba2ce37f31": -5824
+        }
+      }
+    },
+    {
+      "name": "same-paid-class-remains-unfinished",
+      "passed": true,
+      "facts": {
+        "cohortId": "crs:179bc59c6ed7ab5eb7ab116ab5979a0e",
+        "students": 5,
+        "secondTeachingDelivered": false
+      }
+    },
+    {
+      "name": "tuition-protection-earned-income-separate",
+      "passed": true,
+      "facts": {
+        "receivedFen": 49500,
+        "protectedFen": 24750,
+        "recognizedIncomeFen": 24750
+      }
+    },
+    {
+      "name": "actual-original-cash-brief-once",
+      "passed": true,
+      "facts": {
+        "actualCashOutFen": 5824,
+        "visibleOccurrences": 1
+      }
+    },
+    {
+      "name": "original119-closed-result-facts",
+      "passed": true,
+      "facts": {
+        "closedAt": "2023-04-30",
+        "feeFen": 2985,
+        "refundFen": 39800,
+        "retained": 3,
+        "protectedFen": 0,
+        "recognizedIncomeFen": 59700
+      }
+    },
+    {
+      "name": "ui-reading-does-not-change-raw-l10-source24-native193",
+      "passed": true,
+      "facts": {
+        "sha256": "3135155c3b38ec3e0796a144f7b797cf225cd5b012bd6f858d04c0ba38aef484"
+      }
+    },
+    {
+      "name": "ui-reading-does-not-change-raw-c16-original-after-today119",
+      "passed": true,
+      "facts": {
+        "sha256": "3d6e537b07c6962d7238e963e2a43c2323989a63ee7444460d838f4ba7b0438e"
+      }
+    }
+  ],
+  "allPassed": true,
+  "compatibility": 0,
+  "wholeCUX09Complete": false
+}

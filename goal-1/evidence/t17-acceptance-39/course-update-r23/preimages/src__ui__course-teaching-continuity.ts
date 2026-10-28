@@ -1,0 +1,73 @@
+import type {GamePanelProps} from './game-types.ts'
+import type {CourseSceneTarget} from './course-scene-progress.ts'
+import {courseSceneProgress,courseTargetReason} from './course-scene-progress.ts'
+import {courseSceneContext} from './course-player-thread.ts'
+import {courseTeachingPaper} from './course-teaching-paper.ts'
+import {courseCohortFinancials} from './CourseTeachingDetails.tsx'
+import type {CourseTeachingPaperState} from './CourseTeachingPaper.tsx'
+import {moneyText} from './game-text.ts'
+
+type Input=Pick<GamePanelProps,'view'|'features'>
+const empty:Omit<CourseTeachingPaperState,'phase'|'status'>={stages:null,protectedFen:null,needsHelp:null,refundDueFen:null,feeDueFen:null,closedAt:null}
+
+export function courseTeachingPaperLabel(art:CourseTeachingPaperState):string{
+ if(art.phase==='audience')return art.status==='actual'?'受众已有记录 · 班期与报名另核':art.status==='planned'?'推广已安排 · 尚未形成意向':art.status==='running'?'推广进行中 · 尚未形成意向':'这次受众与报价'
+ if(art.phase==='closed')return '本班已实际结清'
+ if(art.phase==='history')return '这次尝试的实际留页'
+ if(art.phase==='stopped')return '这次安排已停 · 原责任保留'
+ if(art.phase==='refund')return (art.refundDueFen??0)>0?'原退款仍待支付':(art.feeDueFen??0)>0?'原结算费仍待支付':'原退款窗口仍在 · 尚未结清'
+ if(art.phase==='support')return '支持与学习反馈'
+ if(art.phase==='teaching')return art.status==='planned'?'教学已安排 · 尚未开工':art.status==='running'?'教学进行中 · 尚未完成':art.status==='actual'?'这一段已交付 · 班期仍在':'这一段教学 · 待你安排'
+ return '班期已约定 · 报名仍另定'
+}
+
+/** The first scene keeps tuition, protection and earned income together, even after reentry. */
+export function courseTeachingMoneyFor(p:Input,target:CourseSceneTarget|null):string|null{
+ const art=courseTeachingPaperFor(p,target)
+ if(!art||target?.kind!=='cohort'||art.phase==='history')return null
+ const money=courseCohortFinancials(p.features.course,p.view,target.cohortId)
+ return money?`累计预款${moneyText(money.receivedFen)}${money.refundPaidFen>0?' · 已实际退'+moneyText(money.refundPaidFen):''} · 仍受保护${moneyText(money.protectedFen)} · 教学收入${moneyText(money.recognizedFen)}`:'本班钱款暂不可完整核对，请翻阅班期账目。'
+}
+
+/** A settled class has one closure fact; the original record keeps every term. */
+export function courseTeachingClosureFor(p:Input,target:CourseSceneTarget|null){
+ if(target?.kind!=='cohort'||courseTeachingPaperFor(p,target)?.phase!=='closed')return null
+ const cohort=p.features.course?.cohorts.find(co=>co.id===target.cohortId),lesson=p.features.course?.courses.find(c=>c.id===cohort?.courseId),money=courseCohortFinancials(p.features.course,p.view,target.cohortId)
+ if(!cohort?.closedAt||!lesson||!money||money.totalDueFen!==0)return null
+ return {line:`本班于${cohort.closedAt}实际结清。`,terms:`留存${cohort.students.filter(s=>s.paidRemainingFen>0).length}/${cohort.students.length}人 · 结算费实付${moneyText(money.feePaidFen)} · 学习与退款明细仍可翻阅。`,originalEcho:`「${lesson.name}」· ${cohort.startAt}班已于${cohort.closedAt}实际结清${cohort.students.length===0?'，没有实际报名；原安排和成本仍保留':'；原学员的学习与退款记录仍可翻阅'}，没有自动开启新班。`}
+}
+
+/** Select shapes from this original public object, never from a future date or a different class. */
+export function courseTeachingPaperFor(p:Input,target:CourseSceneTarget|null):CourseTeachingPaperState|undefined{
+ const v=p.features.course
+ if(!v||!target||target.kind!=='audience'&&target.kind!=='cohort')return undefined
+ const context=courseSceneContext(p)
+ if(courseTargetReason(v,target,context))return undefined
+ const businesses=v.businesses.filter(b=>b.id===target.businessId),business=businesses[0]
+ if(businesses.length!==1||!business||p.view.accounts.filter(a=>a.accountId===business.accountId).length!==1)return undefined
+ const operations=p.view.operations?.businesses.filter(b=>b.id===business.id)??[]
+ if(operations.length!==1||operations[0]!.accountId!==business.accountId||operations[0]!.route!=='ai_course'||operations[0]!.definitionId!=='course-studio')return undefined
+ const progress=courseSceneProgress(v,p.view.date,target,context)
+ if(!progress||progress.invalidReason)return undefined
+ // The old attempt must not acquire the later class's delivery, money or support markings.
+ if(progress.historical)return {...empty,phase:'history',status:'actual'}
+ const status:CourseTeachingPaperState['status']=progress.phase.endsWith('-planned')?'planned':progress.phase.endsWith('-running')?'running':progress.outcome==='actual'||progress.outcome==='non-success'?'actual':'choice'
+ if(target.kind==='audience'){
+  const audience=v.audiences.find(a=>a.id===target.audienceId&&a.courseId===target.courseId)
+  if(!audience)return undefined
+  return {...empty,phase:audience.completedAt===null&&progress.outcome==='non-success'?'stopped':'audience',status:audience.completedAt!==null?'actual':status}
+ }
+ const cohort=v.cohorts.find(co=>co.id===target.cohortId&&co.courseId===target.courseId)
+ if(!cohort)return undefined
+ const money=courseCohortFinancials(v,p.view,cohort.id)
+ let paper:ReturnType<typeof courseTeachingPaper>
+ try{paper=courseTeachingPaper(p,target)}catch{return undefined}
+ if(!paper)return undefined
+ const facts:Omit<CourseTeachingPaperState,'phase'|'status'>={stages:paper.stages,protectedFen:money?.protectedFen??null,needsHelp:cohort.assessmentAt===null?null:paper.needsHelp,refundDueFen:money?.refundDueFen??null,feeDueFen:money?.feeDueFen??null,closedAt:cohort.closedAt}
+ if(cohort.closedAt!==null)return {...facts,phase:'closed',status:'actual'}
+ if(cohort.teachingCancelled||progress.outcome==='non-success')return {...facts,phase:'stopped',status:'actual'}
+ if(money!==null&&(money.refundDueFen>0||money.feeDueFen>0)||progress.phase==='course-refund-window'||progress.phase==='course-cohort-settling')return {...facts,phase:'refund',status}
+ if(progress.phase.startsWith('course-stage-'))return {...facts,phase:'teaching',status}
+ if(['course-support-','course-recovery-','course-refresh-'].some(prefix=>progress.phase.startsWith(prefix))||progress.phase==='course-cohort-update-required')return {...facts,phase:'support',status}
+ return {...facts,phase:'cohort',status:progress.phase==='course-cohort-enroll'?'planned':status}
+}

@@ -1,0 +1,494 @@
+import type {GamePanelProps,SceneTarget} from './game-types.ts'
+import type {Screen} from './Navigation.tsx'
+import type {LifeSceneSelection} from './life-scene-progress.ts'
+import {lifeSceneProgress} from './life-scene-progress.ts'
+import {marketSceneProgress} from './market-scene-progress.ts'
+import {moneyText,wishes} from './game-text.ts'
+import {marketId} from '../core/market.ts'
+import {operatingId} from '../core/operations-calendar.ts'
+import {quarterOf} from '../core/calendar.ts'
+import {sceneThreads} from './scene-thread-notes.ts'
+import {sceneCommandFocus} from './scene-command-focus.ts'
+import type {VideoSceneTarget} from './video-scene-progress.ts'
+import {resolveVideoFocus,videoTargetEntity,videoFocusQuarter,videoFocusOpen,videoFocusResultDate,videoPlayerScene,videoFocusFromSaved} from './video-player-thread.ts'
+import type {CourseSceneTarget} from './course-scene-progress.ts'
+import {courseFocusFor,resolveCourseFocus,courseFocusQuarter,courseFocusOpen,courseFocusResultDate,coursePlayerScene,courseFocusFromSaved} from './course-player-thread.ts'
+import type {RelaySceneTarget} from './relay-scene-target.ts'
+import {relayFocusFor,resolveRelayFocus,relayFocusQuarter,relayFocusOpen,relayFocusResultDate,relayPlayerScene,relayFocusFromSaved} from './relay-player-thread.ts'
+import {threadPurpose} from './thread-purpose.ts'
+import type {EcosystemSceneTarget} from './ecosystem-scene-target.ts'
+import {ecosystemCurrentDecision,ecosystemFocusFor,ecosystemFocusTargets,resolveEcosystemFocus,ecosystemFocusQuarter,ecosystemFocusOpen,ecosystemFocusResultDate,ecosystemPlayerScene,ecosystemFocusFromSaved} from './ecosystem-player-thread.ts'
+
+type Input=Pick<GamePanelProps,'view'|'features'>
+type Identity={readonly runId:string;readonly accountId:string;readonly entityId:string|null;readonly businessId?:string}
+export type OpeningFocus=Identity&(
+ |{readonly kind:'first-order'|'work'|'free'}
+ |{readonly kind:'market';readonly entityKind?:'order'|'settlement'|'position'|'research'}
+ |{readonly kind:'life';readonly selection:LifeSceneSelection}
+ |{readonly kind:'video';readonly videoTarget:VideoSceneTarget|null}
+ |{readonly kind:'course';readonly courseTarget:CourseSceneTarget|null}
+ |{readonly kind:'relay';readonly relayTarget:RelaySceneTarget|null}
+ |{readonly kind:'ecosystem';readonly ecosystemTarget:EcosystemSceneTarget|null}
+)
+export type ThreadCommand={readonly kind:string;readonly payload:unknown;readonly label:string;readonly confirm:boolean}
+export type ThreadResultRef={readonly kind:'job'|'contract'|'payment'|'fill'|'settlement'|'research'|'payroll'|'promise'|'marketing'|'publication'|'course'|'outline'|'license'|'business'|'audience'|'cohort'|'enrollment'|'refund'|'operation'|'application'|'customer'|'period'|'meter'|'audit'|'correction'|'receivable'|'preparation'|'adapter'|'outreach'|'lead';readonly id:string;readonly date:string|null}
+export interface PlayerThreadView{
+ readonly wish:{readonly id:Input['view']['playerProfile']['wishId'];readonly label:string}
+ readonly approach:Input['view']['playerProfile']['approach']
+ readonly yearQuestion:string
+ readonly attempt:string
+ readonly finishWhen:string
+ readonly focus:OpeningFocus
+ readonly focusStatus:'default'|'valid'|'invalid'
+ readonly focusQuarter:string|null
+ readonly focusScope:'entry'|'current'|'carry'|'history'|'invalid'
+ readonly legacyFallbackRequired:boolean
+ readonly invalidReason:string|null
+ readonly stage:string
+ readonly object:string
+ readonly title:string
+ readonly line:string
+ readonly detail:string
+ readonly outcome:'none'|'pending'|'actual'|'non-success'
+ readonly command?:ThreadCommand
+ readonly secondaryCommand?:ThreadCommand
+ readonly wait?:{readonly date:string;readonly label:string}
+ readonly inspect:{readonly screen:Screen;readonly label:string;readonly target?:SceneTarget}
+ readonly resultRefs:readonly ThreadResultRef[]
+ /** The caller must render the existing responsibility moment ahead of this ordinary thread. */
+ readonly responsibilityOverrideNeeded:boolean
+}
+type Scene=Pick<PlayerThreadView,'stage'|'object'|'title'|'line'|'detail'|'outcome'|'inspect'|'resultRefs'|'command'|'secondaryCommand'|'wait'>
+const questions=['怎样先站稳？','什么值得继续？','什么值得准备？','怎样参与变化？','哪些边界须亲自守？','六年留下了什么？'] as const
+
+function responsibility(p:Input){
+ const w=p.features.workbench
+ return w.pause!==null||w.progression.requiresDelivery
+  ||w.events.some(e=>e.isBlocking||e.presentation!=='ordinary')
+  ||w.finance.some(f=>f.protectionShortfallFen>0||f.commitmentShortfallFen>0||f.obligations.some(o=>o.remainingFen>0&&o.date<=p.view.date))
+  ||p.features.story.incidents.some(i=>i.resolvedAt===null&&!['normal','resolved'].includes(i.stage))
+}
+
+function marketEntity(p:Input,id:string){
+ const m=p.features.market
+ const order=m.orders.find(o=>o.id===id);if(order)return {accountId:order.accountId,entityKind:'order' as const}
+ const settlement=m.settlements.find(s=>s.id===id);if(settlement)return {accountId:settlement.accountId,entityKind:'settlement' as const}
+ const position=m.positions.find(s=>s.id===id);if(position)return {accountId:position.accountId,entityKind:'position' as const}
+ if(m.researches.some(r=>r.id===id))return {accountId:'personal',entityKind:'research' as const}
+ return null
+}
+const accountMarket=(p:Input,accountId:string)=>accountId==='personal'?p.features.market:{...p.features.market,researches:[]}
+
+function invalidFocus(p:Input,f:OpeningFocus):string|null{
+ if(f.kind==='ecosystem')return resolveEcosystemFocus(p,f).reason
+ if(f.kind==='relay')return resolveRelayFocus(p,f).reason
+ if(f.kind==='course')return resolveCourseFocus(p,f).reason
+ if(f.kind==='video')return resolveVideoFocus(p,f).reason
+ if(f.runId!==p.view.runId)return '这项关注来自另一段人生，请重新选择。'
+ if(!p.view.accounts.some(a=>a.accountId===f.accountId))return '原账户已不可达，请重新选择；没有切换到账户。'
+ if(f.kind!=='market'&&f.accountId!=='personal')return '这项个人安排与原账户不匹配，请重新选择。'
+ if(['life','work','free'].includes(f.kind)&&f.businessId)return '这项个人关注不绑定企业业务，请重新选择。'
+ if(f.kind==='first-order'){
+  const first=p.features.firstOrder
+  if(f.entityId!==null&&![first.offerId,first.contractId,first.jobId].includes(f.entityId))return '原首单对象不存在，没有换成另一份委托。'
+  if(f.businessId&&f.businessId!==first.businessId)return '原首单业务身份已失效，请重新选择。'
+ }
+ if(f.kind==='market'&&f.entityKind&&(!['order','settlement','position','research'].includes(f.entityKind)||f.entityId===null))return '原投资种类缺少匹配的实际对象，请重新选择。'
+ if(f.kind==='market'&&f.entityId!==null){
+  const entity=marketEntity(p,f.entityId)
+  if(!entity)return '原投资对象不存在或已不在公开记录中，请重新选择。'
+  if(entity.accountId!==f.accountId||f.entityKind&&entity.entityKind!==f.entityKind)return '原投资对象的账户或种类不匹配，没有替换委托。'
+ }
+ if(f.kind==='market'&&f.businessId&&(f.accountId==='personal'||!p.view.operations?.businesses.some(b=>b.company&&b.id===f.businessId&&b.accountId===f.accountId)))return '原投资主体与账户不匹配；个人模拟投资不绑定手工或其他业务，请重新选择。'
+ if(f.kind==='work'&&f.entityId!==null&&!p.view.operations?.employment.some(e=>e.id===f.entityId))return '原工作安排不存在，请重新选择。'
+ if(f.kind==='free'&&f.entityId!==null)return '自由入口不属于这份业务对象，请重新选择。'
+ if(f.kind==='life'){
+  const life=p.features.life
+  if(!['rest','workspace'].includes(f.selection)&&!life.people.some(person=>person.id===f.selection))return '原人物不存在，请重新选择。'
+  if(f.entityId!==null&&f.entityId!==f.selection){
+   const job=life.jobs.find(j=>j.id===f.entityId),promise=life.promises.find(o=>o.id===f.entityId)
+   const matches=job?(f.selection==='rest'||f.selection==='workspace'?job.personId===null&&job.kind===f.selection:job.personId===f.selection):promise?.personId===f.selection
+   if(!matches)return '原生活对象与人物或安排不匹配，没有替换为另一项约定。'
+  }
+ }
+ return null
+}
+
+function resolvedFocus(p:Input,f:OpeningFocus):OpeningFocus{
+ if(f.kind==='ecosystem')return resolveEcosystemFocus(p,f).focus
+ if(f.kind==='relay')return resolveRelayFocus(p,f).focus
+ if(f.kind==='course')return resolveCourseFocus(p,f).focus
+ if(f.kind==='video')return resolveVideoFocus(p,f).focus
+ if(f.kind==='first-order'){
+  const first=p.features.firstOrder
+  return {...f,entityId:first.contractId??first.offerId,...(first.businessId?{businessId:first.businessId}:{})}
+ }
+ if(f.kind==='market'){
+  const progress=marketSceneProgress(accountMarket(p,f.accountId),p.view.date,f.accountId,f.entityId)
+  const id=f.entityId??progress.entityId,entity=id?marketEntity(p,id):null
+  // Research belongs to the player even when another account's empty market is inspected.
+  const business=f.accountId==='personal'?undefined:p.view.operations?.businesses.find(b=>b.company&&b.accountId===f.accountId)
+  const owner=business?{businessId:business.id}:{}
+  if(entity&&entity.accountId===f.accountId)return {...f,...owner,entityId:id,entityKind:entity.entityKind}
+  return {...f,...owner,entityId:null}
+ }
+ if(f.kind==='life'&&(f.entityId===null||f.entityId===f.selection)){
+  const progress=lifeSceneProgress(p.features.life,p.view.date,f.selection)
+  return {...f,entityId:progress.sourceId}
+ }
+ if(f.kind==='work'&&f.entityId===null)return {...f,entityId:p.features.workbench.employment.filter(period=>period.quarter===p.features.workbench.quarter).at(-1)?.id??null}
+ return f
+}
+
+/** Capture only a navigated object. This function does not change focus, storage or simulation. */
+export function openingFocusFor(p:Input,screen:Screen,target?:SceneTarget):OpeningFocus|null{
+ const base={runId:p.view.runId,accountId:target?.accountId??'personal',entityId:target?.recordId??null}
+ let focus:OpeningFocus
+ if(screen==='market')focus={...base,kind:'market'}
+ else if(screen==='relay')focus=relayFocusFor(p,target?.relayTarget??null,target?.accountId)
+ else if(screen==='course')focus=courseFocusFor(p,target?.courseTarget??null,target?.accountId)
+ else if(screen==='deepseek'){
+  if(target?.deepseekPane==='equity')return null
+  if(target?.ecosystemTarget!==undefined)focus=ecosystemFocusFor(p,target.ecosystemTarget,target.accountId)
+  else if(target?.recordId){const rows=ecosystemFocusTargets(p).filter(r=>(r.target.kind==='business'?r.target.businessId:r.target.recordId)===target.recordId);focus=rows.length===1?ecosystemFocusFor(p,rows[0]!.target,target.accountId):{...ecosystemFocusFor(p,null,target.accountId),entityId:target.recordId}}
+  else focus=ecosystemFocusFor(p,null,target?.accountId)
+ }
+ else if(screen==='life')focus={...base,kind:'life',selection:target?.lifeSelection==='rest'||target?.lifeSelection==='workspace'?target.lifeSelection:target?.personId??'tang-ying'}
+ else if(screen==='quarter')focus={...base,kind:base.entityId!==null&&[p.features.firstOrder.offerId,p.features.firstOrder.contractId,p.features.firstOrder.jobId].includes(base.entityId)?'first-order':'work'}
+ else if(screen==='video'){
+  if(base.entityId!==null&&[p.features.firstOrder.offerId,p.features.firstOrder.contractId,p.features.firstOrder.jobId].includes(base.entityId))focus={...base,kind:'first-order'}
+  else {const t=target?.videoTarget??null,channel=p.features.video?.channels.find(c=>c.id===t?.channelId);focus={...base,kind:'video',accountId:target?.accountId??channel?.accountId??'personal',entityId:t?videoTargetEntity(t):null,videoTarget:t,...(channel?{businessId:channel.businessId}:{})}}
+ }
+ else return null
+ return invalidFocus(p,focus)?focus:resolvedFocus(p,focus)
+}
+
+type Recovery={focus:OpeningFocus;needsReview:boolean;count:number}
+function recoveredFocus(p:Input):Recovery|null{
+ const {view,features:f}=p,from=f.workbench.quarterStart
+ const current=(date:string|null)=>date!==null&&date>=from&&date<=view.date
+ const base={runId:view.runId,accountId:'personal',entityId:null}
+ const candidates:{focus:OpeningFocus;sources:Set<string>}[]=[]
+ const add=(focus:OpeningFocus,sources:readonly (string|null)[])=>{
+  if(invalidFocus(p,focus))return
+  const same=candidates.find(c=>c.focus.kind===focus.kind&&c.focus.accountId===focus.accountId&&c.focus.entityId===focus.entityId)
+  const record=same??{focus,sources:new Set<string>()};if(!same)candidates.push(record)
+  for(const source of sources)if(source!==null)record.sources.add(source)
+ }
+ // These public record IDs are derived by the original runtime from its public command receipt.
+ // Reusing the pure ID functions verifies that relation without executing or reading a rule model.
+ const receipts=view.receipts
+ const first=f.firstOrder,contract=view.operations?.contracts.find(c=>c.id===first.contractId)
+ if(contract&&current(contract.acceptedAt))add(resolvedFocus(p,{...base,kind:'first-order'}),receipts.filter(r=>r.kind==='StartFirstOrder'&&operatingId(r.commandId+':accept','AcceptContract')===contract.id).map(r=>r.commandId))
+ else if(first.decision&&['declined','skipped'].includes(first.decision.kind)&&current(first.decision.date))add(resolvedFocus(p,{...base,kind:'first-order'}),[])
+ for(const job of f.life.jobs.filter(j=>current(j.startAt)||j.status==='running'||j.status==='completed'&&current(j.completeAt))){
+  add({...base,kind:'life',selection:job.personId??(job.kind==='workspace'?'workspace':'rest'),entityId:job.promiseId??job.id},[job.originCommandId,job.interruptedBy])
+ }
+ // An automatic new invitation has no responseCommandId and never replaces the completed work.
+ for(const promise of f.life.promises.filter(o=>o.responseCommandId!==null&&(current(o.acceptedAt??o.resolvedAt)||o.status==='accepted'))){
+  add({...base,kind:'life',selection:promise.personId,entityId:promise.id},[promise.responseCommandId])
+ }
+ for(const order of f.market.orders.filter(o=>current(o.submittedAt)))add({...base,kind:'market',accountId:order.accountId,entityId:order.id,entityKind:'order'},receipts.filter(r=>['PlaceStockOrder','PlanStockOrder','AmendStockOrder'].includes(r.kind)&&marketId('command',r.commandId)===order.id).map(r=>r.commandId))
+ for(const research of f.market.researches.filter(r=>current(r.startAt)))add({...base,kind:'market',entityId:research.id,entityKind:'research'},receipts.filter(r=>r.kind==='ResearchMarket'&&marketId('command',r.commandId)===research.id).map(r=>r.commandId))
+ for(const period of f.workbench.employment)add({...base,kind:'work',entityId:period.id},receipts.filter(r=>r.kind==='WorkQuarter'&&operatingId(r.commandId,'WorkQuarter')===period.id).map(r=>r.commandId))
+ const published=f.sceneCommands,recoveredCommands=new Set<string>()
+ if(published?.version===1&&published.runId===view.runId&&published.committedRevision===view.revision){
+  const counts=new Map<string,number>();for(const row of published.commands)counts.set(row.commandId,(counts.get(row.commandId)??0)+1)
+  for(const row of published.commands){
+   const source=receipts.filter(r=>r.commandId===row.commandId&&r.kind===row.kind&&r.revisionAfter===row.revisionAfter)
+   if(counts.get(row.commandId)!==1||source.length!==1||row.date>view.date)continue
+   const found=sceneCommandFocus(p,row)
+   if(found===null)continue
+   const eligible=found.filter(focus=>{
+    const business=focus.kind==='course'&&focus.courseTarget?.kind==='studio'||focus.kind==='relay'&&focus.relayTarget?.kind==='business'||focus.kind==='ecosystem'&&focus.ecosystemTarget?.kind==='business'||focus.kind==='video'&&focus.videoTarget!==null&&!focus.videoTarget.workId&&!focus.videoTarget.contractId&&!focus.videoTarget.marketingId
+    return current(row.date)||!business&&(focusOpen(p,focus)||current(focusResultDate(p,focus)))
+   })
+   if(!current(row.date)&&!eligible.length)continue
+   recoveredCommands.add(row.commandId)
+   for(const focus of eligible)add(focus,[row.commandId])
+  }
+ }
+ if(!candidates.length)return recoveredCommands.size?{focus:{...base,kind:'free'},needsReview:true,count:0}:null
+ let focus:OpeningFocus|null=null,uncertain=false
+ const selecting=new Set(['StartFirstOrder','DeclineOffer','SkipOffer','CancelContract','InterruptJob','PlaceStockOrder','PlanStockOrder','AmendStockOrder','SubmitStockOrder','CancelStockOrder','ResearchMarket','StopMarketResearch','StartLifeWork','FulfillLifePromise','InterruptLifeWork','AcceptLifePromise','DeclineLifePromise'])
+ const courseContinuation=new Set(['StartCourseRefresh','PauseNewEnrollment','ResumeCourseEnrollment','StopCourseSales','RetireCourse'])
+ for(const receipt of receipts){
+  if(receipt.kind==='WorkQuarter'){
+   const work=candidates.find(c=>c.focus.kind==='work')
+   if(work&&!uncertain&&(focus?.kind==='work'||focus===null&&view.playerProfile.approach==='free'))focus=work.focus
+   continue
+  }
+  if(!selecting.has(receipt.kind)&&!recoveredCommands.has(receipt.commandId))continue
+  let matches=candidates.filter(c=>c.sources.has(receipt.commandId))
+  // Submission/cancellation receipts omit payloads. Resolve only a unique compatible public object.
+  if(!matches.length&&['SubmitStockOrder','CancelStockOrder','StopMarketResearch'].includes(receipt.kind))matches=candidates.filter(c=>{
+   if(c.focus.kind!=='market')return false
+   if(receipt.kind==='StopMarketResearch')return f.market.researches.some(r=>r.id===c.focus.entityId&&r.status==='interrupted')
+   const order=f.market.orders.find(o=>o.id===c.focus.entityId)
+   return !!order&&(receipt.kind==='CancelStockOrder'?order.status==='cancelled'&&order.reason==='PLAYER_CANCELLED':order.status!=='planned')
+  })
+  if(matches.length===1){
+   const next=matches[0]!.focus,prior=focus?.kind==='course'?focus:null
+   // The original course-wide auxiliary command does not select another class.
+   // Retain only the already established exact class of this same course; an
+   // unknown source or an explicit different course still follows normal recovery.
+   const keepClass=!uncertain&&courseContinuation.has(receipt.kind)&&prior?.courseTarget?.kind==='cohort'&&next.kind==='course'&&next.courseTarget?.kind==='course'&&prior.runId===next.runId&&prior.accountId===next.accountId&&prior.businessId===next.businessId&&prior.courseTarget.courseId===next.courseTarget.courseId
+   if(!keepClass)focus=next
+   uncertain=false
+  }
+  else if(recoveredCommands.has(receipt.commandId)){focus=null;uncertain=true}
+  else if(matches.length>1||candidates.length>1){focus=null;uncertain=true}
+ }
+ if(focus&&!uncertain)return {focus:resolvedFocus(p,focus),needsReview:false,count:candidates.length}
+ if(uncertain)return {focus:{...base,kind:'free'},needsReview:true,count:candidates.length}
+ if(candidates.length===1){
+  const only=candidates[0]!.focus
+  if(only.kind==='work'&&view.playerProfile.approach!=='free')return null
+  return {focus:resolvedFocus(p,only),needsReview:false,count:1}
+ }
+ return {focus:{...base,kind:'free'},needsReview:true,count:candidates.length}
+}
+
+function defaultFocus(p:Input):Recovery{
+ const base={runId:p.view.runId,accountId:'personal',entityId:null}
+ const recovered=recoveredFocus(p);if(recovered)return recovered
+ const opening=p.features.workbench.quarter==='2020-Q1'
+ const focus:OpeningFocus=opening&&p.view.playerProfile.approach==='investment'?{...base,kind:'market'}:opening&&p.view.playerProfile.approach==='first_order'?{...base,kind:'first-order'}:{...base,kind:'free'}
+ return {focus:resolvedFocus(p,focus),needsReview:false,count:0}
+}
+
+function focusEntry(p:Input,f:OpeningFocus){
+ if(f.kind==='ecosystem')return f.ecosystemTarget===null
+ if(f.kind==='relay')return f.relayTarget===null
+ if(f.kind==='course')return f.courseTarget===null
+ if(f.kind==='video')return f.videoTarget===null||f.videoTarget.workId===undefined&&f.videoTarget.contractId===undefined&&f.videoTarget.marketingId===undefined
+ if(f.kind==='free'||f.entityId===null)return true
+ if(f.kind==='life')return f.entityId===f.selection&&!p.features.life.jobs.some(j=>j.id===f.entityId)&&!p.features.life.promises.some(o=>o.id===f.entityId)
+ return f.kind==='first-order'&&p.features.firstOrder.status==='available'&&p.features.firstOrder.contractId===null
+}
+function originQuarter(p:Input,f:OpeningFocus):string|null{
+ if(f.kind==='ecosystem')return ecosystemFocusQuarter(p,f)
+ if(f.kind==='relay')return relayFocusQuarter(p,f)
+ if(f.kind==='course')return courseFocusQuarter(p,f)
+ if(f.kind==='video')return videoFocusQuarter(p,f)
+ const id=f.entityId
+ if(focusEntry(p,f))return p.features.workbench.quarter
+ if(f.kind==='work')return p.view.operations?.employment.find(e=>e.id===id)?.quarter??null
+ if(f.kind==='first-order')return '2020-Q1'
+ if(f.kind==='life'){
+  const job=p.features.life.jobs.find(j=>j.id===id),promise=p.features.life.promises.find(o=>o.id===id)
+  return job?quarterOf(job.startAt):promise?quarterOf(promise.offeredAt):null
+ }
+ if(f.kind==='market'){
+  const m=p.features.market,order=m.orders.find(o=>o.id===id),research=m.researches.find(r=>r.id===id),settlement=m.settlements.find(s=>s.id===id)
+  if(order)return quarterOf(order.submittedAt)
+  if(research)return quarterOf(research.startAt)
+  if(settlement){const fill=m.fills.find(x=>x.id===settlement.sourceId);return fill?quarterOf(fill.date):quarterOf(settlement.dueAt)}
+  const position=m.positions.find(x=>x.id===id),orders=position?new Set(m.orders.filter(o=>o.accountId===position.accountId&&o.symbol===position.symbol).map(o=>o.id)):null
+  const first=orders?m.fills.filter(x=>orders.has(x.orderId)).map(x=>x.date).sort()[0]:null
+  return first?quarterOf(first):null
+ }
+ return null
+}
+function focusOpen(p:Input,f:OpeningFocus){
+ if(f.kind==='ecosystem')return ecosystemFocusOpen(p,f)
+ if(f.kind==='relay')return relayFocusOpen(p,f)
+ if(f.kind==='course')return courseFocusOpen(p,f)
+ if(f.kind==='video')return videoFocusOpen(p,f)
+ const id=f.entityId
+ if(f.kind==='first-order')return ['planned','running','awaiting_submission','review','delivered'].includes(String(p.features.firstOrder.status))
+ if(f.kind==='work')return p.features.workbench.employment.some(e=>e.id===id&&e.segments.some(s=>s.to===null))
+ if(f.kind==='life')return p.features.life.jobs.some(j=>j.id===id&&j.status==='running')||p.features.life.promises.some(o=>o.id===id&&['offered','accepted'].includes(o.status))
+ if(f.kind==='market'){
+  const m=p.features.market
+  return m.orders.some(o=>o.id===id&&['planned','pending','partially_filled'].includes(o.status))||m.researches.some(r=>r.id===id&&r.status==='running')||m.settlements.some(s=>s.id===id&&s.paidAt===null)||m.positions.some(x=>x.id===id&&x.quantity>0)
+   ||marketOrderResults(p,f).settlements.some(settlement=>settlement.paidAt===null)
+ }
+ return false
+}
+function marketOrderResults(p:Input,f:Extract<OpeningFocus,{kind:'market'}>){
+ const market=p.features.market,order=market.orders.find(order=>order.id===f.entityId&&order.accountId===f.accountId),position=market.positions.find(position=>position.id===f.entityId&&position.accountId===f.accountId)
+ const symbol=order?.symbol??position?.symbol,orderIds=new Set(order?[order.id]:position?market.orders.filter(order=>order.accountId===f.accountId&&order.symbol===position.symbol).map(order=>order.id):[])
+ const fills=market.fills.filter(fill=>orderIds.has(fill.orderId)&&fill.date<=p.view.date),fillIds=new Set(fills.map(fill=>fill.id))
+ const settlements=market.settlements.filter(settlement=>settlement.accountId===f.accountId&&settlement.symbol===symbol&&settlement.kind==='sale'&&fillIds.has(settlement.sourceId))
+ return {fills,settlements}
+}
+function focusResultDate(p:Input,f:OpeningFocus):string|null{
+ if(f.kind==='ecosystem')return ecosystemFocusResultDate(p,f)
+ if(f.kind==='relay')return relayFocusResultDate(p,f)
+ if(f.kind==='course')return courseFocusResultDate(p,f)
+ if(f.kind==='video')return videoFocusResultDate(p,f)
+ const id=f.entityId
+ if(f.kind==='first-order'){const c=p.view.operations?.contracts.find(c=>c.id===p.features.firstOrder.contractId);return c?.settledAt??c?.reviewedAt??null}
+ if(f.kind==='work')return p.view.operations?.payroll.filter(x=>x.entityId===id&&x.kind==='salary'&&x.amountFen>0).map(x=>x.through).sort().at(-1)??null
+ if(f.kind==='life'){const j=p.features.life.jobs.find(j=>j.id===id),o=p.features.life.promises.find(o=>o.id===id);return j?.status==='completed'?j.completeAt:j?.releasedAt??o?.resolvedAt??null}
+ if(f.kind==='market'){
+  const m=p.features.market,r=m.researches.find(r=>r.id===id),s=m.settlements.find(s=>s.id===id&&s.accountId===f.accountId),results=marketOrderResults(p,f)
+  if(r?.status==='completed')return r.completeAt
+  const paidAt=[...results.settlements,...(s?[s]:[])].flatMap(row=>row.paidAt!==null&&row.paidAt<=p.view.date?[row.paidAt]:[])
+  return [...results.fills.map(fill=>fill.date),...paidAt].sort().at(-1)??null
+ }
+ return null
+}
+function legacyPending(p:Input){
+ const f=p.features
+ return sceneThreads(f,p.view.date).some(t=>['video','course','relay','deepseek','routines','story'].includes(t.screen))
+  ||(p.view.operations?.jobs.some(j=>j.id!==f.firstOrder.jobId&&['planned','running'].includes(j.status))??false)
+  ||f.story.jobs.some(j=>j.status==='running')
+  ||!!f.video?.works.some(w=>w.contractId===null&&w.abandonedAt===null&&!f.video!.publications.some(pub=>pub.workId===w.id))
+}
+
+function firstScene(p:Input):Scene{
+ const first=p.features.firstOrder,inspect={screen:'quarter' as const,label:'查看这份手工单与原记录',target:{accountId:'personal',recordId:first.contractId??first.offerId}}
+ const base={object:'电脑里的手工委托',detail:`个人制作成本${moneyText(first.terms.costFen)} · ${first.terms.actionPoints}点 · ${first.dates.startAt}—${first.dates.submitBy}`,inspect,resultRefs:[] as ThreadResultRef[]}
+ const command=(kind:string,payload:unknown,label:string):ThreadCommand=>({kind,payload,label,confirm:true})
+ const resultRefs:ThreadResultRef[]=[]
+ const job=p.view.operations?.jobs.find(j=>j.id===first.jobId),contract=p.view.operations?.contracts.find(c=>c.id===first.contractId)
+ if(job?.status==='completed'&&job.completeAt<=p.view.date)resultRefs.push({kind:'job',id:job.id,date:job.completeAt})
+ if(contract?.reviewedAt&&contract.reviewedAt<=p.view.date)resultRefs.push({kind:'contract',id:contract.id,date:contract.reviewedAt})
+ for(const tx of p.features.workbench.finance.find(a=>a.accountId==='personal')?.transactions??[]){
+  if(first.contractId!==null&&(tx.contractId===first.contractId||tx.sourceId===first.contractId)&&tx.amountFen>0&&tx.date<=p.view.date)resultRefs.push({kind:'payment',id:tx.id,date:tx.date})
+ }
+ const status=String(first.status)
+ if(status==='available')return {...base,stage:'offer',title:'有人想请你，剪一条短片。',line:`客户报价${moneyText(first.terms.priceFen)}；请在${first.dates.replyBy}前答复。也可以婉拒或跳过。`,outcome:'none',command:command('StartFirstOrder',{},'接下这笔手工单')}
+ if(status==='planned')return {...base,stage:'planned',title:'答应了，就给它留出日子。',line:`已预留制作费与${first.terms.actionPoints}点；${first.dates.startAt}才开工实际使用。还没有交付或回款。`,outcome:'pending',wait:{date:first.dates.startAt,label:'等这份作品开工'}}
+ if(status==='running')return {...base,stage:'running',title:'这条短片，正在一点点成形。',line:`已付制作成本${moneyText(first.result.directCostFen)}；${first.dates.submitBy}完成后仍须亲手提交。`,outcome:'pending',wait:{date:first.dates.submitBy,label:'等这份作品做完'}}
+ if(status==='awaiting_submission'&&!first.deadlineMissed)return {...base,stage:'delivery',title:'短片做好了。要发给客户吗？',line:'完成制作与交给客户是两回事；提交不再占用行动，复核与到账还在后面。',outcome:'pending',resultRefs,command:command('SubmitDelivery',{contractId:first.contractId},'把这份作品交给客户')}
+ if(status==='review'||status==='delivered')return {...base,stage:'waiting',title:status==='review'?'作品已经发出，等客户回信。':'客户已经验收，款项还要等到账。',line:'作品已经交出，不必重复提交。等客户复核与付款，也可以先看看生活里的人与事。',outcome:'pending',resultRefs,wait:{date:first.dates.earliestReviewAt>p.view.date?first.dates.earliestReviewAt:p.features.workbench.progression.nextDate,label:'等客户原反馈'}}
+ if(first.result.paymentFen>0)return {...base,stage:'paid',title:'第一笔回款，真的到了。',line:`客户实际支付${moneyText(first.result.paymentFen)}；制作成本${moneyText(first.result.directCostFen)}，本单净额${moneyText(first.result.netOrderFen)}。`,detail:'这次尝试离你在意的生活近了吗？仍可继续手艺、安排工作生活或了解另一条路。',outcome:'actual',resultRefs}
+ if(first.deadlineMissed)return {...base,stage:'missed',title:'原约定的交付日，已经过去。',line:'已做作品和实际成本仍在；可以按原合同取消或保留作品，不能补交领取教学款。',detail:'原约定的投入要求：'+base.detail,outcome:'non-success',resultRefs,...(first.contractId?{command:command('CancelContract',{contractId:first.contractId},'核对并取消这份逾期合同')}:{} )}
+ const titles:Record<string,string>={declined:'这笔报价，你已经婉拒。',skipped:'这次委托，你已经略过。',expired:'这笔报价，已经过了答复窗口。',unavailable:'这笔报价，已经不再可接受。',cancelled:'这份合同，已经按原记录取消。',interrupted:'这次制作，已经停在半路。',rejected:'这份作品没有被客户接受。'}
+ const notAccepted=first.contractId===null&&first.jobId===null&&first.result.directCostFen===0
+ return {...base,stage:status,title:titles[status]??'这份委托，先回到原记录。',line:notAccepted?'这次没有接单，没有支付制作费或占用行动。工作、生活和其他路线仍可选择。':`这次没有回款。制作实际已付${moneyText(first.result.directCostFen)}；已经发生的费用和行动按原记录保留。工作、生活和其他路线仍可选择。`,detail:(notAccepted?'原报价的投入要求：':'原约定的投入要求：')+base.detail,outcome:'non-success',resultRefs,...(status==='interrupted'&&first.contractId?{command:command('CancelContract',{contractId:first.contractId},'核对中断后的合同与旧义务')}:{} )}
+}
+
+function marketScene(p:Input,f:Extract<OpeningFocus,{kind:'market'}>):Scene{
+ const m=p.features.market,progress=marketSceneProgress(accountMarket(p,f.accountId),p.view.date,f.accountId,f.entityId)
+ const inspect={screen:'market' as const,label:'查看这份模拟投资与原记录',target:{accountId:f.accountId,...(f.entityId?{recordId:f.entityId}:{})}}
+ const research=m.researches.find(r=>r.id===f.entityId),resultRefs:ThreadResultRef[]=[]
+ if(research&&research.status!=='running')return {stage:'market-research-'+research.status,object:'原来的公开研究笔记',title:research.status==='completed'?'这次公开研究，已经完成。':'这次研究，已经中断。',line:'整理材料不会揭示未来价格，也没有替你下单；下一份委托仍需自己选择。',detail:'研究与买股分别发生，原成本和行动按实际记录保留。',outcome:research.status==='completed'?'actual':'non-success',inspect,resultRefs:research.status==='completed'?[{kind:'research',id:research.id,date:research.completeAt}]:[]}
+ const order=m.orders.find(o=>o.id===f.entityId),results=marketOrderResults(p,f)
+ for(const fill of results.fills)resultRefs.push({kind:'fill',id:fill.id,date:fill.date})
+ for(const settlement of results.settlements)if(settlement.paidAt!==null&&settlement.paidAt<=p.view.date)resultRefs.push({kind:'settlement',id:settlement.id,date:settlement.paidAt})
+ const settlement=m.settlements.find(s=>s.id===f.entityId)
+ if(settlement?.paidAt&&settlement.paidAt<=p.view.date)resultRefs.push({kind:'settlement',id:settlement.id,date:settlement.paidAt})
+ const rejected=order&&['cancelled','expired'].includes(order.status)
+ return {stage:'market-'+progress.phase,object:progress.phase==='opening'?'桌上的模拟市场资料':'原来的模拟委托与持仓',title:progress.title,line:progress.line,detail:progress.choice.line,outcome:rejected?'non-success':resultRefs.length||progress.phase==='position'?'actual':progress.active?'pending':'none',inspect,resultRefs,
+  ...(progress.command?{command:{...progress.command,label:progress.choice.label}}:{}),...(progress.secondaryCommand?{secondaryCommand:{...progress.secondaryCommand,label:'撤回这份委托的剩余部分'}}:{}),...(progress.nextDate?{wait:{date:progress.nextDate,label:progress.waitLabel??'等原市场安排的反馈'}}:{})}
+}
+
+function lifeScene(p:Input,f:Extract<OpeningFocus,{kind:'life'}>):Scene{
+ const life=p.features.life,progress=lifeSceneProgress(life,p.view.date,f.selection)
+ const personal=f.selection==='rest'||f.selection==='workspace'
+ const selectedJob=life.jobs.find(j=>j.id===f.entityId&&(personal?j.personId===null&&j.kind===f.selection:j.personId===f.selection))
+ const selectedPromise=life.promises.find(o=>o.id===f.entityId&&!personal&&o.personId===f.selection)
+ const recordId=selectedJob?.id??selectedPromise?.id
+ const target:SceneTarget={accountId:'personal',lifeSelection:personal?f.selection as 'rest'|'workspace':'person',...(!personal?{personId:f.selection as Exclude<LifeSceneSelection,'rest'|'workspace'>}:{}),...(recordId?{recordId}:{})}
+ const inspect={screen:'life' as const,label:'查看这次生活安排与原记录',target}
+ // A newly offered promise must not silently replace the completed job that the player was viewing.
+ const samePromise=selectedPromise!==undefined&&progress.promise?.id===selectedPromise.id
+ if(f.entityId!==progress.sourceId&&!samePromise&&(selectedJob||selectedPromise)){
+  const completed=selectedJob?.status==='completed'||selectedPromise?.status==='fulfilled'
+  const date=selectedJob?.status==='completed'?selectedJob.completeAt:selectedJob?.releasedAt??selectedPromise?.resolvedAt??null
+  return {stage:'life-'+(selectedJob?.status??selectedPromise!.status),object:'原来的生活安排',title:completed?'这次安排，已经留下真实经历。':'这项原安排，仍按原记录保留。',line:completed?'完成不返还行动或增加收益；新的邀请与下一次安排，仍需另行决定。':'查看原日期、已耗成本与约定；没有替换为另一项工作。',detail:'回看与继续安排分别选择，不因回看改写关系。',outcome:completed?'actual':selectedJob?.status==='running'||selectedPromise?.status==='accepted'?'pending':'non-success',inspect,resultRefs:completed&&f.entityId?[{kind:selectedJob?'job':'promise',id:f.entityId,date}]:[]}
+ }
+ const completed=progress.stage==='completed'
+ const failure=['interrupted','missed','expired','declined','npc-declined'].includes(progress.stage)
+ return {stage:'life-'+progress.stage,object:personal?'留给自己的日子':'与'+(progress.person?.name??'原人物')+'的安排',title:progress.title,line:progress.line,detail:progress.choice.line,outcome:completed?'actual':failure?'non-success':progress.job||progress.promise?'pending':'none',inspect,resultRefs:completed&&f.entityId?[{kind:progress.promise?'promise':'job',id:f.entityId,date:progress.promise?.resolvedAt??progress.job?.completeAt??null}]:[],
+  ...(progress.command?{command:{...progress.command,label:progress.choice.label}}:{}),...(progress.secondaryCommand?{secondaryCommand:{...progress.secondaryCommand,label:progress.secondaryCommand.kind==='DeclineLifePromise'?'婉拒这次邀请':'中断这次安排，保留原成本'}}:{}),...(progress.waitDate?{wait:{date:progress.waitDate,label:'等这次生活安排完成'}}:{})}
+}
+
+function workScene(p:Input,f:OpeningFocus):Scene{
+ const w=p.features.workbench,period=p.view.operations?.employment.find(e=>e.id===f.entityId)
+ const inspect={screen:'quarter' as const,label:'查看本季工作与原日历',target:{accountId:'personal',...(f.entityId?{recordId:f.entityId}:{})}}
+ if(!period)return {stage:'work-offer',object:'门外的工作与生活',title:'保留一份工作，也为自己留些余地。',line:'工作与副业可以按真实预算组合，不必二选一。',detail:'本季工作占2点；工资按实际在岗日，在月末结算。',outcome:'none',inspect,resultRefs:[],command:{kind:'WorkQuarter',payload:{},label:'保留这一季的工作',confirm:true}}
+ const payroll=p.view.operations?.payroll.filter(row=>row.kind==='salary'&&row.entityId===period.id&&row.amountFen>0&&row.through<=p.view.date)??[]
+ const active=period.quarter===w.quarter&&period.segments.some(s=>s.to===null)
+ const next=w.finance.find(a=>a.accountId==='personal')?.forecast.flows.find(flow=>flow.sourceId===period.id&&flow.amountFen>0&&flow.date>p.view.date&&flow.date<period.limit)
+ const latest=[...payroll].sort((a,b)=>b.through.localeCompare(a.through)||b.id.localeCompare(a.id))[0]
+ const totalFen=payroll.reduce((total,row)=>total+row.amountFen,0)
+ const line=latest?`截至${p.view.date}，${period.quarter}这段工作已实收工资合计${moneyText(totalFen)}；最近一笔是${latest.through}的${moneyText(latest.amountFen)}。`:active?'这段工作已经留好，工资仍须等原日历实际结算。':'原在岗日期与已耗行动保留；截至今天没有这段工作的工资实收记录。'
+ const calendar=period.quarter!==w.quarter?'这里回看原季度工作；当前季度的工作仍须另行决定。':w.atQuarterEnd?'本季日历已结算，下一季工作仍要另行决定。':active?'工作照原日历继续'+(next?'，下一次原反馈为'+next.date:'')+'；余下时间仍可留给生活或自己的尝试。':'这段原工作安排已结束，后续工作仍须另行决定。'
+ return {stage:payroll.length?'work-paid':active?'work-scheduled':'work-ended',object:'这一季留好的工作',title:payroll.length?'按实际在岗日，工资留下了记录。':active?'这一季的工作，已经留好。':'这段原工作安排，已经结束。',line,detail:calendar+'工资与经营收入分别核对；查看不会补发工资或恢复行动。',outcome:payroll.length?'actual':active?'pending':'none',inspect,resultRefs:payroll.map(row=>({kind:'payroll',id:row.id,date:row.through})),...(active&&next?{wait:{date:next.date,label:'等下一次原工作日历反馈'}}:{})}
+}
+
+function freeScene():Scene{
+ return {stage:'choose',object:'今天尚未写满的日历',title:'这一次，先决定怎样过日子。',line:'不必立刻接单或买股。可以保留工作、看看生活，也可以暂不新增承诺。',detail:'阅读与探索不消耗行动；原生活费用和已经答应的事仍照日历继续。',outcome:'none',inspect:{screen:'quarter',label:'看看工作、生活与本季安排',target:{accountId:'personal'}},resultRefs:[]}
+}
+
+/** Pure S1 presentation: never previews, executes, saves, samples randomness or reads hidden run state. */
+export function playerThread(p:Input,requested?:OpeningFocus|null,requestedQuarter?:string|null):PlayerThreadView{
+ const recovery=requested?null:defaultFocus(p),focus=requested??recovery!.focus
+ const quarter=p.features.workbench.quarter,entry=focusEntry(p,focus)
+ const reason=invalidFocus(p,focus)??(requestedQuarter&&(!/^202[0-5]-Q[1-4]$/.test(requestedQuarter)||requestedQuarter>quarter)?'这份关注的季度无效或尚未到来，请重新选择。':requestedQuarter&&requestedQuarter<quarter&&entry?'上季只留下了一个方向，本季仍需重新选择；没有自动安排新的工作。':null)
+ const resolved=reason?focus:resolvedFocus(p,focus)
+ const resultDate=focusResultDate(p,resolved)
+ const currentEcology=resolved.kind==='ecosystem'&&ecosystemCurrentDecision(p,resolved)
+ const focusQuarter=originQuarter(p,resolved),scope:PlayerThreadView['focusScope']=reason?'invalid':focusEntry(p,resolved)?'entry':currentEcology?'current':focusQuarter&&focusQuarter<quarter?focusOpen(p,resolved)?'carry':resultDate&&resultDate>=p.features.workbench.quarterStart?'current':'history':'current'
+ const common={wish:{id:p.view.playerProfile.wishId,label:wishes[p.view.playerProfile.wishId]},approach:p.view.playerProfile.approach,yearQuestion:questions[Number(p.view.date.slice(0,4))-2020]??'原来的事，想怎样收好？',responsibilityOverrideNeeded:responsibility(p),focusQuarter,focusScope:scope,legacyFallbackRequired:!requested&&resolved.kind==='free'&&!recovery?.needsReview&&legacyPending(p)}
+ const present=(thread:Omit<PlayerThreadView,'attempt'|'finishWhen'>):PlayerThreadView=>({...thread,...threadPurpose(p,thread)})
+ if(reason)return present({...common,focus,focusStatus:'invalid',invalidReason:reason,stage:'unavailable',object:'原来的关注对象',title:'先找回刚才那件事。',line:reason,detail:'没有自动接受、换主体或替换对象。请明确选择下一件事。',outcome:'none',inspect:{screen:'routes',label:'重新选择眼前的方向'},resultRefs:[]})
+ if(recovery?.needsReview)return present({...common,focus,focusStatus:'default',invalidReason:null,stage:'review-choice',object:'本季已经留下的安排',title:'有几件真实的事，可以先回看。',line:`本季有${recovery.count}项实际安排。请先选择想继续看哪一件。`,detail:'原记录都保留，尚未替你选定一件；翻阅不会重新安排或付费。',outcome:'none',inspect:{screen:'quarter',label:'翻看本季实际安排，选择一件继续',target:{accountId:'personal'}},resultRefs:[]})
+ let scene=resolved.kind==='ecosystem'?ecosystemPlayerScene(p,resolved):resolved.kind==='relay'?relayPlayerScene(p,resolved):resolved.kind==='course'?coursePlayerScene(p,resolved):resolved.kind==='video'?videoPlayerScene(p,resolved):resolved.kind==='first-order'?firstScene(p):resolved.kind==='market'?marketScene(p,resolved):resolved.kind==='life'?lifeScene(p,resolved):resolved.kind==='work'?workScene(p,resolved):freeScene()
+ if(focusQuarter&&focusQuarter<quarter)scene={...scene,object:(currentEcology?'来源':scope==='history'?'回看':'始于')+focusQuarter+' · '+scene.object,line:(currentEcology?'原对象来自'+focusQuarter+'，这里核对截至今天的公开条件；尚未因此接受新承诺。':scope==='history'?'这是'+focusQuarter+'的原记录，旧收支不会重记为本季收入。':scope==='carry'?'这件事从'+focusQuarter+'留下，仍按原约定继续。':'这项安排始于'+focusQuarter+'，本季出现以下实际反馈。')+scene.line}
+ return present({...common,...scene,focus:resolved,focusStatus:requested?'valid':'default',invalidReason:null})
+}
+
+const payloadRecord=(payload:unknown):Record<string,unknown>|null=>payload!==null&&typeof payload==='object'&&!Array.isArray(payload)?payload as Record<string,unknown>:null
+
+/** Follow an explicitly committed action, never a reading action, balance change or candidate. */
+export function openingFocusAfterSave(previous:Input,current:Input,kind:string,payload:unknown,existing:OpeningFocus|null):OpeningFocus|null{
+ const before=previous.view,view=current.view,last=view.receipts.at(-1)
+ if(before.runId!==view.runId||view.revision!==before.revision+1||view.saveStatus!=='saved'||view.hasCandidate||view.readOnly
+  ||view.phase!=='playing'||!/^202[0-5]-Q[1-4]$/.test(current.features.workbench.quarter)
+  ||last?.kind!==kind||last.revisionAfter!==view.revision)return existing
+ const body=payloadRecord(payload);if(!body)return existing
+ const ecosystem=ecosystemFocusFromSaved(previous,current,kind,body,existing?.kind==='ecosystem'?existing:null);if(ecosystem)return ecosystem
+ const relay=relayFocusFromSaved(previous,current,kind,body,existing?.kind==='relay'?existing:null);if(relay)return relay
+ const course=courseFocusFromSaved(previous,current,kind,body,existing?.kind==='course'?existing:null);if(course)return course
+ const video=videoFocusFromSaved(previous,current,kind,body);if(video)return video
+ const id=(key:string)=>typeof body[key]==='string'?body[key]:null
+ const base={runId:view.runId,accountId:'personal',entityId:null}
+ const first=current.features.firstOrder
+ if(kind==='StartFirstOrder'||(['DeclineOffer','SkipOffer'].includes(kind)&&id('offerId')===first.offerId)
+  ||kind==='CancelContract'&&first.contractId!==null&&id('contractId')===first.contractId
+  ||kind==='InterruptJob'&&first.jobId!==null&&id('jobId')===first.jobId){
+  if(kind==='StartFirstOrder'&&first.contractId===null)return existing
+  return resolvedFocus(current,{...base,kind:'first-order'})
+ }
+ const market=current.features.market,oldMarket=previous.features.market
+ if(kind==='PlaceStockOrder'||kind==='PlanStockOrder'||kind==='AmendStockOrder'){
+  const oldOrder=oldMarket.orders.find(o=>o.id===id('orderId'))
+  const accountId=kind==='AmendStockOrder'?oldOrder?.accountId:id('accountId')
+  if(!accountId||!view.accounts.some(a=>a.accountId===accountId))return existing
+  const order=market.orders.find(o=>!oldMarket.orders.some(old=>old.id===o.id)&&o.accountId===accountId
+   &&(kind==='AmendStockOrder'?o.replacesId===oldOrder?.id:o.symbol===id('symbol')&&o.side===id('side')))
+  return order?resolvedFocus(current,{...base,kind:'market',accountId,entityId:order.id,entityKind:'order'}):existing
+ }
+ if(kind==='SubmitStockOrder'||kind==='CancelStockOrder'){
+  const order=market.orders.find(o=>o.id===id('orderId')),old=oldMarket.orders.find(o=>o.id===id('orderId'))
+  return order&&old?.accountId===order.accountId?resolvedFocus(current,{...base,kind:'market',accountId:order.accountId,entityId:order.id,entityKind:'order'}):existing
+ }
+ if(kind==='ResearchMarket'||kind==='StopMarketResearch'){
+  const research=market.researches.find(r=>kind==='ResearchMarket'?!oldMarket.researches.some(old=>old.id===r.id)&&r.definitionId===id('definitionId'):r.id===id('researchId')&&oldMarket.researches.some(old=>old.id===r.id))
+  return research?{...base,kind:'market',entityId:research.id,entityKind:'research'}:existing
+ }
+ const life=current.features.life,oldLife=previous.features.life
+ if(kind==='StartLifeWork'||kind==='FulfillLifePromise'||kind==='InterruptLifeWork'){
+  const promise=kind==='FulfillLifePromise'?life.promises.find(o=>o.id===id('promiseId')):null
+  const job=life.jobs.find(j=>kind==='InterruptLifeWork'?j.id===id('jobId')&&oldLife.jobs.some(old=>old.id===j.id)
+   :!oldLife.jobs.some(old=>old.id===j.id)&&(promise?j.promiseId===promise.id:j.kind===id('kind')&&j.personId===(body.personId??null)))
+  if(!job||job.accountId!=='personal'||kind==='FulfillLifePromise'&&!promise)return existing
+  const selection=job.personId??(job.kind==='workspace'?'workspace':'rest')
+  return {...base,kind:'life',selection,entityId:promise?.id??job.id}
+ }
+ if(kind==='AcceptLifePromise'||kind==='DeclineLifePromise'){
+  const promise=life.promises.find(o=>o.id===id('promiseId'))
+  return promise&&oldLife.promises.some(o=>o.id===promise.id&&o.personId===promise.personId)?{...base,kind:'life',selection:promise.personId,entityId:promise.id}:existing
+ }
+ if(kind==='WorkQuarter'&&(existing?.runId===view.runId&&(existing.kind==='free'||existing.kind==='work')||existing===null&&view.playerProfile.approach==='free')){
+  const period=current.features.workbench.employment.at(-1)
+  return period?{...base,kind:'work',entityId:period.id}:existing
+ }
+ return existing
+}

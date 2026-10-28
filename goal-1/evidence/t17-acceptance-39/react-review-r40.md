@@ -1,0 +1,7 @@
+# React状态与保存边界复核
+
+按vercel-react-best-practices的effect依赖与事件监听规则复核。本片维持原view对象身份/run/revision/工作区来源的严格门槛；这些依赖承担防止旧画面动作与异步回响串对象的正确性，不为减少effect调用而删成不足以判定来源的原始字段。显示派生与SVG纸形不执行命令；新生活旁路只调用原navigateScene，App实际读取lifeSelection为rest，原确认仍独立。
+
+原Clock键盘监听从当前DOM按钮取实际动作，检查对话框、inert/disabled与event.defaultPrevented，保监听清理；没有为低收益去重增加SWR或新依赖。未引入新取数、网络瀑布、缓存或乐观游戏状态。App.requestCommand已经通过journeyIntent翻译原尾声动作，semantic仅在playing且原AdvanceTime时成立；不重复增加一个会干扰原尾声的执行入口。
+
+这是本片代码复核，不是性能、兼容、真人或完整发布验收。原所有兼容开发测试0，未改断点/尺寸/缩放或原生离页行为。

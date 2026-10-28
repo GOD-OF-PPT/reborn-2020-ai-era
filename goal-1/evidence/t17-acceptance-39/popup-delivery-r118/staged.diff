@@ -1,0 +1,185 @@
+diff --git a/assets/ui-redesign/cinematic/night-journal-modal-v1.png b/assets/ui-redesign/cinematic/night-journal-modal-v1.png
+new file mode 100644
+index 00000000..2bb08901
+Binary files /dev/null and b/assets/ui-redesign/cinematic/night-journal-modal-v1.png differ
+diff --git a/src/main.tsx b/src/main.tsx
+index 20eaa4dd..30f5877f 100644
+--- a/src/main.tsx
++++ b/src/main.tsx
+@@ -12,6 +12,7 @@ import './ui/scene-decisions.css'
+ import './ui/game-clarity.css'
+ import './ui/scene-encounters.css'
+ import './ui/opening-play.css'
++import './ui/night-journal.css'
+ 
+ const root = document.getElementById('root')
+ if (!root) throw new Error('Application root is missing')
+diff --git a/src/ui/App.tsx b/src/ui/App.tsx
+index 817d9261..69cc4415 100644
+--- a/src/ui/App.tsx
++++ b/src/ui/App.tsx
+@@ -377,8 +377,8 @@ export default function App({controller=null,startupError=null,diagnostics=null,
+  {tab!=='room'?<SceneThreads p={props} compact={!!ecosystemScene} onOpen={(screen,personId,incidentId)=>{if(screen==='story'&&incidentId){setStoryIncidentId(incidentId);navigate('story')}else navigate(screen,true);if(screen==='life'&&personId){setLifePane('people');setLifePerson(personId)}}}/>:null}
+  {workspaceOpen&&tab!=='room'&&tab!=='routes'?<Dialog title={screens.find(s=>s[0]===tab)![1]} className={'scene-workspace workspace-'+tab} onClose={()=>setWorkspaceOpen(false)}><p className="scene-sheet-caption">{view.phase==='playing'?'把接下来的日子安排仔细。合上这一页，回到眼前的生活。':'翻看原来的记录与责任。合上这一页，回到这段人生。'}</p><SectionNavigation screen={tab} onNavigate={screen=>navigate(screen,true)}/><label className="scene-sheet-account">查看哪一份账与安排<select value={accountId} onChange={event=>setAccountId(event.target.value)}>{!view.accounts.some(account=>account.accountId===accountId)?<option value={accountId} disabled>原账户已不可达，请重选</option>:null}{view.accounts.map(account=><option key={account.accountId} value={account.accountId}>{accountName(account.accountId)}</option>)}</select></label>{preparationReceipt?<p key="preparation-feedback" className="scene-sheet-caption" role="status"><strong>素材使用范围的准备已安排。</strong> {preparationReceipt.text}<br/><span>继续准备，已填内容仍在。授权任务仍要按约定日期完成。</span></p>:null}<div key="workspace-content" className="scene-workspace-content"><Suspense fallback={<p className="loading-panel" role="status">正在翻开这段生活…</p>}>{tab==='quarter'?<QuarterPanel {...props} initialRecordId={quarterRecordId} initialPhase="plan" onLife={()=>{setLifePane('today');setLifeSceneMode('person');setTab('life')}} onPeople={personId=>showPeople(personId??'tang-ying',true)} onDeepseek={()=>setTab('deepseek')} onCourse={()=>setTab('course')} onRelay={()=>setTab('relay')} onRoutines={()=>setTab('routines')} onStory={()=>setTab('story')} onMarket={()=>setTab('market')} guideHidden={settings.hiddenGuides.includes(view.runId)} onHideGuide={()=>saveSettings({...settings,hiddenGuides:[...new Set([...settings.hiddenGuides,view.runId])].slice(-100)})}/>:tab==='life'?<LifePanel key={view.runId} {...props} initialRecordId={lifeRecordId} initialPane={lifePane} initialPersonId={lifePerson} initialYear={lifeYear}/>:tab==='story'?<StoryPanel {...props}/>:tab==='market'?<MarketPanel key={accountId+':'+(marketRecordId??'')} {...props} initialRecordId={marketRecordId}/>:tab==='video'?<VideoPanel {...props} {...(videoTarget?{initialTarget:videoTarget}:{})} onTargetChange={selectVideoRecord}/>:tab==='course'?<CoursePanel {...props} {...(courseTarget!==undefined?{initialTarget:courseTarget}:{})} onTargetChange={selectCourseRecord} {...(courseDraftSlot?{initialDraftSlot:courseDraftSlot}:{})} {...(courseTeachingSlot?{initialTeachingSlot:courseTeachingSlot}:{})} {...(courseRecordId?{initialFocusId:courseRecordId}:{})}/>:tab==='relay'?<Suspense fallback={<p role="status">正在打开中转站…</p>}><RelayPanel {...props} {...(relayTarget!==undefined?{initialTarget:relayTarget}:{})} onTargetChange={selectRelayRecord} {...(relayDraftSlot?{initialDraftSlot:relayDraftSlot}:{})} {...(relayRecordId?{initialFocusId:relayRecordId}:{})}/></Suspense>:tab==='routines'?<Suspense fallback={<p role="status">正在载入例行计划…</p>}><RoutinesPanel {...props}/></Suspense>:tab==='deepseek'?<Suspense fallback={<p role="status">正在载入DeepSeek机会…</p>}><DeepseekPanel {...props} {...(ecosystemTarget?{initialBusinessId:ecosystemTarget.businessId}:{})} initialPane={deepseekTarget.pane} {...(deepseekTarget.recordId?{initialFocusId:deepseekTarget.recordId}:{})}/></Suspense>:tab==='memory'?<MemoryPanel {...props}/>:<FinancePanel key={accountId} {...props} onStorage={()=>openStorage()} onExport={()=>exportCurrent()} onBackup={()=>exportOriginal(view.runId,true)}/>}</Suspense></div></Dialog>:null}</>:<div className="entry-wrap"><Home key={entryKey} controller={controller} state={state} onStorage={()=>openStorage()} onExport={id=>exportOriginal(id)}/></div>}
+  {!openingRoom?<footer className="site-footer">本机人生 · 模拟市场 / 明确架空股权</footer>:null}
+- {modal?<Dialog footer={commandActions} title={modal.kind==='command'?modal.intent.label:modal.kind==='storage'?'本机存档与备份':modal.kind==='settings'?'显示与历史说明':modal.kind==='reload'?'重新读取前确认':'离开前处理未保存操作'} onClose={()=>setModal(null)} className={modal.kind==='command'?'command-review':''}>
+- {modal.kind==='command'&&confirm?<>{!videoCommission&&!courseTeaching&&!ecologyContract?<p className="command-introduction">先看看这项决定要用的钱与时间，再按原安排发生。</p>:null}<dl className={'command-facts'+(videoCommission?' video-money':courseTeaching?' course-money':'')}><div><dt>{clockCommand?'日历范围':'执行主体'}</dt><dd>{clockCommand?'各项原安排与原账户':accountName(view&&features?intentAccount(modal.intent.command,view,features):'personal')}</dd></div><div><dt>{confirm.actionAllocations?'跨日期注意力合计':scheduledStart&&scheduledStart!==view?.date?'开工季度行动':'本季行动'}</dt><dd>{confirm.actionPoints}点{confirm.actionAllocations?<ul>{confirm.actionAllocations.map((a,n)=><li key={a.date+String(n)}>{a.date} · {a.label}{a.actionPoints}点</li>)}</ul>:null}</dd></div><div><dt>{money?.label}</dt><dd>{moneyText(money?.amountFen??null)}</dd></div>{confirm.receivedPrepaymentFen!==undefined?<><div><dt>{modal.intent.command.kind==='RechargeRelayCustomer'?'收到客户充值':modal.intent.command.kind==='AcceptEcoContract'?'收到客户预款':'收到学员预款'}</dt><dd>{moneyText(confirm.receivedPrepaymentFen)}</dd></div><div><dt>新增客户保护</dt><dd>{moneyText(confirm.protectedIncreaseFen)}</dd></div><div><dt>{modal.intent.command.kind==='RechargeRelayCustomer'?'本次充值新增服务收入':modal.intent.command.kind==='AcceptEcoContract'?'本次预款新增服务收入':'本次报名新增课程收入'}</dt><dd>¥0 · {modal.intent.command.kind==='RechargeRelayCustomer'?'实际用量与支持交付后才确认':modal.intent.command.kind==='AcceptEcoContract'?'客户验收与实际支持后才确认':'完成教学阶段后才确认'}</dd></div></>:null}{confirm.releasedFen>0?<div><dt>原占款释放</dt><dd>{moneyText(confirm.releasedFen)}</dd></div>:null}{(confirm.accruedServiceFeeFen??0)>0?<div><dt>本主体原已用未出账服务费结算</dt><dd>{moneyText(confirm.accruedServiceFeeFen)} · 非新增服务承诺</dd></div>:null}{courseTeaching&&scheduledStart&&!combinedScheduledDate?<div><dt>当前日期 → 已选开工日期</dt><dd>{view?.date} → {scheduledStart}</dd></div>:<><div><dt>{combinedScheduledDate?(videoCommission?'接单与开工日期':'安排与开工日期'):'当前日期'}</dt><dd>{view?.date}</dd></div>{scheduledStart&&!combinedScheduledDate?<div><dt>已选开工日期</dt><dd>{scheduledStart}</dd></div>:null}</>}</dl>{modal.details}{ecologyContract?<p className="command-introduction">先看看这项决定要用的钱与时间，再按原安排发生。</p>:null}{pendingSubmission?.commandId===modal.intent.command.commandId?<p role="status">正在记下这一步，请稍候。</p>:null}{!confirm.allowed?<p role="alert" className="error-box">{reasonText(confirm.reasonCodes[0]??'STALE_REVISION')}</p>:null}</>:null}
++ {modal?<Dialog footer={commandActions} title={modal.kind==='command'?modal.intent.label:modal.kind==='storage'?'本机存档与备份':modal.kind==='settings'?'显示与历史说明':modal.kind==='reload'?'重新读取前确认':'离开前处理未保存操作'} onClose={()=>setModal(null)} className={modal.kind==='command'?'command-review':modal.kind==='settings'?'display-journal':modal.kind==='storage'?'storage-journal':'safety-journal'}>
++ {modal.kind==='command'&&confirm?<>{!videoCommission&&!courseTeaching&&!ecologyContract?<p className="command-introduction">先把代价看清，再作决定。</p>:null}<dl className={'command-facts'+(videoCommission?' video-money':courseTeaching?' course-money':'')}><div><dt>{clockCommand?'日历范围':'由谁承担'}</dt><dd>{clockCommand?'各项原安排与原账户':accountName(view&&features?intentAccount(modal.intent.command,view,features):'personal')}</dd></div><div><dt>{confirm.actionAllocations?'跨日期注意力合计':scheduledStart&&scheduledStart!==view?.date?'开工季度行动':'本季行动'}</dt><dd>{confirm.actionPoints}点{confirm.actionAllocations?<ul>{confirm.actionAllocations.map((a,n)=><li key={a.date+String(n)}>{a.date} · {a.label}{a.actionPoints}点</li>)}</ul>:null}</dd></div><div><dt>{money?.label}</dt><dd>{moneyText(money?.amountFen??null)}</dd></div>{confirm.receivedPrepaymentFen!==undefined?<><div><dt>{modal.intent.command.kind==='RechargeRelayCustomer'?'收到客户充值':modal.intent.command.kind==='AcceptEcoContract'?'收到客户预款':'收到学员预款'}</dt><dd>{moneyText(confirm.receivedPrepaymentFen)}</dd></div><div><dt>新增客户保护</dt><dd>{moneyText(confirm.protectedIncreaseFen)}</dd></div><div><dt>{modal.intent.command.kind==='RechargeRelayCustomer'?'本次充值新增服务收入':modal.intent.command.kind==='AcceptEcoContract'?'本次预款新增服务收入':'本次报名新增课程收入'}</dt><dd>¥0 · {modal.intent.command.kind==='RechargeRelayCustomer'?'实际用量与支持交付后才确认':modal.intent.command.kind==='AcceptEcoContract'?'客户验收与实际支持后才确认':'完成教学阶段后才确认'}</dd></div></>:null}{confirm.releasedFen>0?<div><dt>原占款释放</dt><dd>{moneyText(confirm.releasedFen)}</dd></div>:null}{(confirm.accruedServiceFeeFen??0)>0?<div><dt>本主体原已用未出账服务费结算</dt><dd>{moneyText(confirm.accruedServiceFeeFen)} · 非新增服务承诺</dd></div>:null}{courseTeaching&&scheduledStart&&!combinedScheduledDate?<div><dt>当前日期 → 已选开工日期</dt><dd>{view?.date} → {scheduledStart}</dd></div>:<><div><dt>{combinedScheduledDate?(videoCommission?'接单与开工日期':'安排与开工日期'):'当前日期'}</dt><dd>{view?.date}</dd></div>{scheduledStart&&!combinedScheduledDate?<div><dt>已选开工日期</dt><dd>{scheduledStart}</dd></div>:null}</>}</dl>{modal.details}{ecologyContract?<p className="command-introduction">先把代价看清，再作决定。</p>:null}{pendingSubmission?.commandId===modal.intent.command.commandId?<p role="status">正在记下这一步，请稍候。</p>:null}{!confirm.allowed?<p role="alert" className="error-box">{reasonText(confirm.reasonCodes[0]??'STALE_REVISION')}</p>:null}</>:null}
+  {modal.kind==='storage'&&controller?<StoragePanel controller={controller} initialText={modal.text} kind={modal.source} onDone={()=>setModal(null)}/>:null}
+  {modal.kind==='settings'?<div className="stack"><label className="radio-line"><input type="checkbox" checked={settings.textOnly} onChange={event=>saveSettings({...settings,textOnly:event.target.checked})}/>文本模式，简化场景装饰</label><label className="radio-line"><input type="checkbox" checked={settings.reducedMotion} onChange={event=>saveSettings({...settings,reducedMotion:event.target.checked})}/>减少动态效果</label>{settingsNotice?<p role="status">{settingsNotice}</p>:null}<p>真实历史节点标注日期与来源；股票名称和价格为明确模拟。DeepSeek直接股权只会在有资格与对方融资意愿的明确架空条件下提供，本体验没有现实申购入口。</p><p>显示、阅读、收藏和动画不会改变随机结果。切换设置也不会增加钱或行动。</p><p>存档只在本机；浏览器可能清理数据，请手动导出备份。导出的完整档可能包含私人备注与隐藏事实，请妥善保管。</p></div>:null}
+  {modal.kind==='exit'?<><p>离开将丢失尚未保存的候选。旧提交仍完整；建议先导出候选或重试保存。</p><div className="button-row"><button type="button" onClick={()=>setModal(null)}>留在当前人生</button><button type="button" onClick={()=>exportCurrent(true)}>先导出未保存候选</button><button type="button" className="danger" onClick={()=>{void controller?.home(true).then(()=>setModal(null)).catch(fail)}}>明确舍弃候选并返回入口</button></div></>:null}
+diff --git a/src/ui/Dialog.tsx b/src/ui/Dialog.tsx
+index ee0e3982..d6ae7589 100644
+--- a/src/ui/Dialog.tsx
++++ b/src/ui/Dialog.tsx
+@@ -6,7 +6,7 @@ export function Dialog({title,children,onClose,className='',footer}:{title:strin
+  const ref=useRef<HTMLDialogElement>(null),close=useRef(onClose);close.current=onClose
+  useLayoutEffect(()=>{const dialog=ref.current!,trigger=document.activeElement instanceof HTMLElement?document.activeElement:null;dialog.showModal();return ()=>{if(dialog.open)dialog.close();queueMicrotask(()=>{if(trigger?.isConnected&&trigger.getClientRects().length>0&&!(trigger instanceof HTMLButtonElement&&trigger.disabled))trigger.focus({preventScroll:true});else document.getElementById('main-content')?.focus({preventScroll:true})})}},[])
+  const keepFocus=(event:KeyboardEvent<HTMLDialogElement>)=>{if((event.target as HTMLElement).closest('dialog')!==event.currentTarget)return;if(event.key!=="Tab")return;const dialog=event.currentTarget,items=[...dialog.querySelectorAll<HTMLElement>("button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),summary,[tabindex]:not([tabindex=\"-1\"])")].filter(item=>item.tabIndex>=0&&!item.matches(":disabled")&&!item.inert&&!item.closest('[inert]')&&getComputedStyle(item).visibility!=='hidden'&&item.getClientRects().length>0),first=items[0],last=items.at(-1);if(!first){event.preventDefault();dialog.focus();return}if(event.shiftKey&&(document.activeElement===first||!dialog.contains(document.activeElement))){event.preventDefault();last?.focus()}else if(!event.shiftKey&&(document.activeElement===last||!dialog.contains(document.activeElement))){event.preventDefault();first.focus()}}
+- const content=<dialog ref={ref} onKeyDownCapture={keepFocus} className={'dialog '+className} aria-labelledby={titleId} onCancel={event=>{event.preventDefault();event.stopPropagation();close.current()}}><div className="dialog-heading"><h2 id={titleId}>{title}</h2><button type="button" aria-label="关闭对话框" onClick={onClose}>×</button></div><ScreenBook key={title} label={title}>{children}</ScreenBook>{footer}</dialog>
++ const content=<dialog ref={ref} onKeyDownCapture={keepFocus} className={'dialog '+className} aria-labelledby={titleId} onCancel={event=>{event.preventDefault();event.stopPropagation();close.current()}}><div className="dialog-heading"><div className="dialog-title-block"><span className="dialog-edition" aria-hidden="true">长日重启 <i/> 夜灯下的手记</span><h2 id={titleId}>{title}</h2></div><button type="button" aria-label="关闭对话框" onClick={onClose}>×</button></div><ScreenBook key={title} label={title}>{children}</ScreenBook>{footer}</dialog>
+  // A modal belongs to the stage, never to the multicolumn page that opened it.
+  const stage=typeof document==='undefined'?null:document.querySelector('.game-app')
+  return stage?createPortal(content,stage):content
+diff --git a/src/ui/StoragePanel.tsx b/src/ui/StoragePanel.tsx
+index d39b7b95..96ced5a0 100644
+--- a/src/ui/StoragePanel.tsx
++++ b/src/ui/StoragePanel.tsx
+@@ -11,11 +11,11 @@ export function StoragePanel({controller,initialText='',kind='import',onDone}:{c
+  const current=controller.snapshot.view,canRestore=preview&&current?.runId===preview.runId&&!current.hasCandidate&&!current.readOnly&&!current.busy
+  async function apply(mode:'new'|'restore'){setBusy(true);setError(null);try{if(mode==='new')await controller.importNew(text);else await controller.restore(text);onDone()}catch(error){fail(error)}finally{setBusy(false)}}
+  function download(){const url=URL.createObjectURL(new Blob([text],{type:'application/json'})),link=document.createElement('a');link.href=url;link.download=`reborn-2020-${kind}-save.json`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);setMessage('已请求浏览器下载，请确认文件已保存到本机。')}
+- return <div className="storage-panel"><p>{kind==='candidate'?'这是未提交的候选，不代表当前操作已经保存到本机。':'存档包含本局完整状态，可能含私人备注和隐藏事实。请只保存在你信任的位置。'}</p>
++ return <div className="storage-panel"><header className="journal-storage-intro"><p className="journal-section-label">随身册 / 人生底片</p><h3>{kind==='candidate'?'还没写进人生的这一刻。':kind==='import'?'从一份底片，接回那段日子。':'走过的日子，值得好好留存。'}</h3><p>{kind==='candidate'?'这是未提交的候选，不代表当前操作已经保存到本机。':'存档包含本局完整状态，可能含私人备注和隐藏事实。请只保存在你信任的位置。'}</p></header>
+  <label className="field">选择本机存档文件<input type="file" accept=".json,application/json" disabled={busy} onChange={event=>{const input=event.currentTarget,file=input.files?.[0];if(!file)return;if(file.size>MAX_SAVE_BYTES){setError(reasonText('SAVE_TOO_LARGE'));input.value='';return}setBusy(true);void file.text().then(value=>{setText(value);setPreview(null);setError(null)}).catch(fail).finally(()=>{setBusy(false);input.value=''})}}/></label>
+  <SaveTextPages text={text} onChange={value=>{setText(value);setPreview(null);setError(null)}}/>
+  {error?<p role="alert" className="error-box">{error}</p>:null}{message?<p role="status">{message}</p>:null}
+- <div className="button-row"><button type="button" disabled={!text||busy} onClick={inspect}>检查存档</button><button type="button" disabled={!text||busy} onClick={download}>下载这份存档</button><button type="button" disabled={!text||busy} onClick={()=>{const copying=navigator.clipboard?.writeText(text);if(!copying){setMessage('浏览器未提供复制接口。请下载整份存档，或打开只读原文并点击「全选完整原文」后复制；片段输入框不是整份存档。');return}void copying.then(()=>setMessage('已复制完整存档，请妥善保管。')).catch(()=>setMessage('浏览器未允许复制。请下载整份存档，或打开只读原文并点击「全选完整原文」后复制；片段输入框不是整份存档。'))}}>复制存档</button></div>
++ <div className="button-row journal-storage-actions"><button type="button" disabled={!text||busy} onClick={inspect}>检查存档</button><button type="button" disabled={!text||busy} onClick={download}>下载这份存档</button><button type="button" disabled={!text||busy} onClick={()=>{const copying=navigator.clipboard?.writeText(text);if(!copying){setMessage('浏览器未提供复制接口。请下载整份存档，或打开只读原文并点击「全选完整原文」后复制；片段输入框不是整份存档。');return}void copying.then(()=>setMessage('已复制完整存档，请妥善保管。')).catch(()=>setMessage('浏览器未允许复制。请下载整份存档，或打开只读原文并点击「全选完整原文」后复制；片段输入框不是整份存档。'))}}>复制存档</button></div>
+  {preview?<section className="import-review"><h3>导入前核对</h3><dl><div><dt>日期 / 提交</dt><dd>{preview.date} / {preview.revision}</dd></div><div><dt>背景</dt><dd>{backgroundNames[preview.backgroundId as keyof typeof backgroundNames]??preview.backgroundId}</dd></div><div><dt>人生愿望</dt><dd>{wishes[preview.playerProfile.wishId]}</dd></div><div><dt>人生标识</dt><dd className="identifier">{preview.runId}</dd></div></dl>{preview.origin==='fixture'?<p className="warning-box">这是隔离测试存档，不能把其中预设资源当作正常开局。</p>:null}
+  {!preview.alreadyExists&&!current?<button type="button" className="primary" disabled={busy} onClick={()=>{void apply('new')}}>确认导入为独立人生</button>:canRestore?<><p className="warning-box">将当前已保存的第{current!.revision}次提交恢复为第{preview.revision}次。替换前的提交会保留为备份；不会合并两份进度。</p><button type="button" className="danger" disabled={busy} onClick={()=>{void apply('restore')}}>确认恢复这份同一人生存档</button></>:<p>请先返回入口，或进入相应人生后再审阅恢复。未保存候选须先导出或处理；不会自动覆盖其他人生。</p>}
+  </section>:null}</div>
+diff --git a/src/ui/confirmation-money.ts b/src/ui/confirmation-money.ts
+index 4a0efa69..d9611578 100644
+--- a/src/ui/confirmation-money.ts
++++ b/src/ui/confirmation-money.ts
+@@ -16,7 +16,7 @@ export function confirmationMoney(command:CommandEnvelope,preview:CommandPreview
+  if(command.kind==='SignEquityAgreement'||command.kind==='FollowEquityRound')return {label:'投资本金支付（不计经营费用）',amountFen:preview.upfrontCostFen}
+  if(command.kind==='PayObligation')return {label:'偿还原有义务（不再确认一遍费用）',amountFen:amount('amountFen')}
+  if(command.kind==='TopUpRelaySupplier')return {label:'自有资金转为供应资产（未消费不是成本）',amountFen:amount('amountFen')}
+- if(command.kind==='AdvanceTime'||command.kind==='AdvanceEpilogueTime')return {label:'推进本身费用（途中原费用逐项列在下方）',amountFen:preview.upfrontCostFen}
++ if(command.kind==='AdvanceTime'||command.kind==='AdvanceEpilogueTime')return {label:'推进本身费用（途中原费用另列）',amountFen:preview.upfrontCostFen}
+  if(command.kind==='AcceptEquityExit')return {label:'本次即时现金支出（转让费用从价款扣除）',amountFen:preview.upfrontCostFen}
+  if(command.kind==='CancelEcoContract')return {label:'本次支持赔偿义务（现金不足则保留应付）',amountFen:preview.upfrontCostFen}
+  if(command.kind==='StartFirstOrder')return {label:'安排时预留的自有资金（开工后才付制作费）',amountFen:preview.upfrontCostFen}
+diff --git a/src/ui/night-journal.css b/src/ui/night-journal.css
+new file mode 100644
+index 00000000..1d361b4e
+--- /dev/null
++++ b/src/ui/night-journal.css
+@@ -0,0 +1,91 @@
++/* One journal material for every modal. The original book, focus and command authority stay intact. */
++.cinema-app .dialog{
++ --paper:#122c30;--sheet:#173337;--surface:#153135;--ink:#e9e5d7;--muted:#b8c2b7;
++ --gold:#d7b87d;--accent:#dfc38c;--border:#baac7e45;--blue:#e8d098;
++ color-scheme:dark;color:var(--ink);border:1px solid #ad976158;border-radius:3px;
++ background-color:#122c30;
++ background-image:linear-gradient(100deg,#081c2059,#0c24272b 55%,#071b1e59),url('../../assets/ui-redesign/cinematic/night-journal-modal-v1.png');
++ background-size:100% 100%;background-position:center;
++ box-shadow:0 32px 110px #000b,0 1px 0 #e7d7a82b,inset 0 0 50px #061b2459;
++ padding:26px 38px;
++}
++.cinema-app .dialog.scene-workspace,.cinema-app .dialog.scene-echo{background-color:#122c30;background-image:linear-gradient(100deg,#081c2059,#0c24272b 55%,#071b1e59),url('../../assets/ui-redesign/cinematic/night-journal-modal-v1.png');background-size:100% 100%;border:1px solid #ad976158;box-shadow:0 32px 110px #000b}
++.cinema-app .dialog::backdrop{background:#031317b8;backdrop-filter:blur(6px)}
++.cinema-app .dialog .dialog-heading{align-items:center;min-height:72px;padding:0 0 16px;margin-bottom:3px;border-bottom:1px solid #c7ad735c;background:none;gap:24px}
++.cinema-app .dialog-title-block{min-width:0}
++.cinema-app .dialog-edition{display:flex;align-items:center;gap:12px;color:#c7b681;font:10px/1.8 var(--serif);letter-spacing:3px}
++.dialog-edition i{display:block;width:28px;height:1px;background:#b8a16b6b}
++.cinema-app .dialog .dialog-heading h2{margin:6px 0 0;font:400 27px/1.5 var(--serif);letter-spacing:2px;color:#f0e4c7}
++.cinema-app .dialog .dialog-heading>button{width:38px;height:38px;border:1px solid #bda87555;border-radius:50%;background:#0b242966;color:#d9c590;font:25px/1 var(--serif);flex:none}
++.cinema-app .dialog .dialog-heading>button:hover{background:#425344;border-color:#dfc38c;color:#fff2d2}
++.cinema-app .dialog .book-index{color:var(--muted);border-bottom:1px solid #baa47422;margin-bottom:13px}
++.cinema-app .dialog .book-index>.book-binding{display:none}
++.cinema-app .dialog .book-index{justify-content:flex-end}
++.cinema-app .dialog :is(.book-binding,.book-hint,.book-index label){color:#bcc2aa}
++.cinema-app .dialog .book-binding{font-family:var(--serif);letter-spacing:1.2px}
++.cinema-app .dialog .book-flow{color:var(--ink)}
++.cinema-app .dialog[open] .book-flow :where(p,li,label,span,strong,blockquote){color:inherit}
++.cinema-app .dialog .book-flow :is(h2,h3,h4,legend){color:#e9dab4}
++.cinema-app .dialog .book-flow :is(small,.muted,.field-help,.scope-label,.scene-sheet-caption){color:var(--muted)}
++.cinema-app .dialog :is(.scene-dialog-intro,.command-introduction){color:#d9dfcc;font-family:var(--serif)}
++.cinema-app .dialog .command-introduction{border-left:2px solid #c7ad73;padding:5px 0 5px 14px;margin-bottom:17px;font-size:16px;line-height:1.85}
++.cinema-app .dialog .book-flow :is(button,a,summary){color:#e4c997}
++.cinema-app .dialog button{border-color:#bba36b70;border-radius:2px;background:#16363a44;color:#e4d5b5;box-shadow:none}
++.cinema-app .dialog button:hover:not(:disabled){background:#405449b3;border-color:#ddc486;color:#fff0ce;transform:none}
++.cinema-app .dialog button:disabled{opacity:.55;border-color:#a3ac9659;color:#b3bdad;background:#17323666}
++.cinema-app .dialog button.primary{background:linear-gradient(105deg,#d4b77c,#e4c995);border-color:#e1c38b;color:#183031;text-shadow:none}
++.cinema-app .dialog button.primary:hover:not(:disabled){background:#f0d8a7;color:#0c2428;border-color:#f8e5be}
++.cinema-app .dialog button.danger{background:#663b35;border-color:#c48972;color:#ffe0ca}
++.cinema-app .dialog button.danger:hover:not(:disabled){background:#834b3e;border-color:#e4ab8c;color:#fff1dc}
++.cinema-app .dialog :is(button,a,input,select,textarea,summary):focus-visible{outline:2px solid #f2dba0;outline-offset:4px}
++.cinema-app .dialog .book-flow :is(input:not([type=checkbox]):not([type=radio]),select,textarea),.cinema-app .dialog .book-index select,.cinema-app .dialog .book-page-counter input{background:#0c2429db;color:#f0e8d5;border:1px solid #9eaa8c80;border-bottom-color:#cbb987a6;border-radius:2px;box-shadow:inset 0 1px 7px #02151a4d;caret-color:#f2dba0}
++.cinema-app .dialog :is(input,textarea)::placeholder{color:#aab8af;opacity:1}
++.cinema-app .dialog :is(input[type=checkbox],input[type=radio]){accent-color:#ddc38c}
++.cinema-app .dialog input[type=file]::file-selector-button{background:#304a43;color:#e9d6aa;border:1px solid #c2ab766b;border-radius:2px;margin-right:14px;padding:5px 12px;cursor:pointer}
++.cinema-app .dialog :is(option,optgroup){background:#173337;color:#eee5d2}
++.cinema-app .dialog .book-flow :is(.panel,.side-note,.guide-card,.advance-panel,.life-person-record,.life-work-card,.receipt-card,.money-card,.research-grid>article,.business-grid>article,.counterfactual-boundary,.entry-memory,.result-equation,.financial-table th,.pane-navigation>button[aria-pressed=true]){background:#0b252a8c;border-color:#b3a47150;color:var(--ink);box-shadow:none}
++.cinema-app .dialog .book-flow :is(.warning-box,.course-paper-warning,.reason,.deadline-summary){color:#f0d0a1;border-color:#b38f61;background-color:#68502b26}
++.cinema-app .dialog .book-flow :is(.error-box,.unsaved-banner,.decision-blocking){background:#5e342c55;border-color:#c58d70;color:#f6d4c0}
++.cinema-app .dialog .book-flow :is(.global-alert,.saved-warning,.test-banner){color:#f6d4c0}
++.cinema-app .dialog .book-flow :is(.choice,.stock-browser>button,.decision-options>div,.routine-step-list>li){background:#173738aa;color:var(--ink);border-color:#b1a77b59}
++.cinema-app .dialog .book-flow :is(.choice:has(input:checked),.stock-browser>button[aria-pressed=true]){background:#405447;border-color:#e0c589;color:#f6e8c9}
++.cinema-app .dialog .book-flow :is(.tag,.save-badge){background:#1b3c39;color:#dec89d;border-color:#b6a37666}
++.cinema-app .dialog .book-flow .finance-answer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));background:#102a2e80;border-color:#b3a47150}
++.cinema-app .dialog .book-flow .finance-answer-grid>div{background:none;border:0;border-bottom:1px solid #b3a47140;padding:15px 18px;break-inside:avoid}
++.cinema-app .dialog .book-flow .finance-answer-grid>div:first-child{background:#6470551a;border-left:2px solid #cfb579}
++.cinema-app .dialog .book-flow .finance-answer-grid strong{color:#f0deb7;font:400 26px/1.5 Georgia,var(--serif)}
++.cinema-app .dialog .book-flow .finance-answer-grid .financial-negative{color:#efb59c}
++.cinema-app .dialog .scene-sheet-account{color:#c5cfb7}
++.cinema-app .dialog .book-flow :is(.scene-attention,.room-responsibilities,.scene-threads){background:none;color:var(--ink)}
++.cinema-app .dialog .book-flow :is(.scene-attention>div,.scene-threads li){color:var(--ink);border-color:#b49c6759}
++.cinema-app .dialog .book-flow :is(.season-focus-choice strong,.season-echo-leaf h3,.season-next-question h3){color:#e9dab4}
++.cinema-app .dialog .book-flow :is(.season-focus-choice span>span,.season-selection-note,.season-echo-leaf>p,.season-focus-notice){color:#c9d1bd}
++.cinema-app .dialog .book-flow :is(.season-choice-origin,.season-choice-date,.opening-paper-date,.course-paper-kicker,time){color:#c3b785}
++.cinema-app .dialog .book-flow dl{border-color:#b7a27140;padding:5px 0 10px}
++.cinema-app .dialog .book-flow dl>div{border-color:#b7a27140}
++.cinema-app .dialog .book-flow dt{color:#b7c2b2}
++.cinema-app .dialog .book-flow dd{color:#eee1c0;font-variant-numeric:tabular-nums}
++.cinema-app .dialog .book-flow .command-facts>div{padding:11px 4px;border-bottom:1px solid #b7a27138;background:none}
++.cinema-app .dialog .command-facts dd{font:400 19px/1.6 var(--serif);color:#f0ddb1}
++.cinema-app .dialog .command-facts>div:nth-child(3) dd{font-size:25px;color:#f2d59b}
++.cinema-app .dialog .confirmation-context{border-color:#b7a27159}
++.cinema-app .dialog :is(.dialog-actions,.echo-continue,.season-focus-footer,.season-recollection-actions,.opening-choice-footer){background:none;border-color:#baa57466}
++.cinema-app .dialog>.dialog-actions{padding-top:15px;margin-top:13px;gap:18px}
++.cinema-app .dialog>.dialog-actions>button:first-child{border:0;border-bottom:1px solid #bda87577;padding-inline:2px;background:none;color:#c3c9b7}
++.cinema-app .dialog>.dialog-actions>button.primary{min-width:184px;letter-spacing:1px}
++.cinema-app .dialog .book-pagination{border-color:#baa5745e}
++.cinema-app .dialog .book-pagination button{color:#e4c997;background:none;border:0;letter-spacing:1px}
++.cinema-app .dialog .book-pagination :is(.book-page-counter,small){color:#c5bea0}
++.cinema-app .dialog .book-page-counter input{font:17px/1.5 Georgia,var(--serif);text-align:center}
++.cinema-app .dialog.command-review{width:min(860px,84vw);height:82dvh;max-height:82dvh;inset:9vh 8vw;margin:auto}
++.cinema-app .dialog.display-journal{width:min(860px,84vw);height:70dvh;max-height:70dvh;inset:15vh 8vw;margin:auto}
++.cinema-app .dialog .journal-storage-intro{margin-bottom:20px;padding-bottom:15px;border-bottom:1px solid #b7a27140}
++.cinema-app .dialog .journal-storage-intro h3{font:400 23px/1.6 var(--serif);margin:3px 0 9px;color:#ebddba}
++.cinema-app .dialog .journal-storage-intro>p:last-child{max-width:68ch;color:#c0caba}
++.cinema-app .dialog .journal-section-label{font:11px/1.7 var(--serif);letter-spacing:2px;color:#c7b681;margin:0 0 6px}
++.cinema-app .dialog .storage-panel>.field{margin-block:16px 20px;color:#d8d0b4}
++.cinema-app .dialog .storage-panel .save-text-pages{padding-top:4px}
++.cinema-app .dialog .journal-storage-actions{padding-top:13px;border-top:1px solid #b7a27140}
++.cinema-app .dialog .journal-storage-actions>button:first-child{border-color:#d5b97e;background:#304b41;color:#f1dfb5}
++.cinema-app .dialog .full-save-text{color:#d7dfcf;background:#091f2573;border-left:1px solid #c1aa75;padding:14px 18px}
++.cinema-app.text-mode .dialog,.cinema-app.text-mode .dialog.scene-workspace,.cinema-app.text-mode .dialog.scene-echo{background-image:none;background-color:#122c30}
+diff --git a/src/ui/relay-station-stop-confirmation.test.tsx b/src/ui/relay-station-stop-confirmation.test.tsx
+index cb2cbec3..991aab7f 100644
+--- a/src/ui/relay-station-stop-confirmation.test.tsx
++++ b/src/ui/relay-station-stop-confirmation.test.tsx
+@@ -122,7 +122,7 @@ it('preserves callers without optional context and leaves other confirmation mon
+  expect(text(legacy)).toContain('任务、已用投入与原余额未知');expect(text(legacy)).not.toContain('原现金'+moneyText(0))
+  const customer=before.features.relay!.customers[0]!,collect:CommandEnvelope={...command,kind:'CollectRelayDue',payload:{customerId:customer.id}}
+  expect(text(RelayCommandDetails({command:collect,relay:before.features.relay,workers:[],accountName}))).toContain('全部已到期原单')
+- expect(confirmationMoney({...command,kind:'AdvanceTime',payload:{date:'2025-03-06'}},preview)).toEqual({label:'推进本身费用（途中原费用逐项列在下方）',amountFen:preview.upfrontCostFen})
++ expect(confirmationMoney({...command,kind:'AdvanceTime',payload:{date:'2025-03-06'}},preview)).toEqual({label:'推进本身费用（途中原费用另列）',amountFen:preview.upfrontCostFen})
+  expect(confirmationMoney({...command,kind:'PayObligation',payload:{amountFen:30}},preview)).toEqual({label:'偿还原有义务（不再确认一遍费用）',amountFen:30})
+  expect(controller.preview(command).allowed).toBe(true);expect(controller.exportSaved()).toBe(raw99)
+ })

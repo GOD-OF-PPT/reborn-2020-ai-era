@@ -1,0 +1,248 @@
+import {afterAll,beforeAll,describe,expect,it,vi} from 'vitest'
+import {isValidElement,type ComponentProps,type ReactElement} from 'react'
+import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
+import {createCampaignCodec} from '../application/campaign.ts'
+import {GameController} from '../application/game-controller.ts'
+import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
+import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
+import type {GamePanelProps,PlayFeatures} from './game-types.ts'
+import App from './App.tsx'
+import {CinematicRoom} from './CinematicRoom.tsx'
+import {OpeningMoment} from './OpeningMoment.tsx'
+import {OpeningObject} from './OpeningObject.tsx'
+import {OpeningAttemptAction} from './OpeningAttemptAction.tsx'
+import {OpeningAttemptChoices} from './OpeningAttemptChoices.tsx'
+import {DayThreadAction} from './DayThreadAction.tsx'
+import {VideoThreadAction} from './VideoThreadAction.tsx'
+import {CourseThreadAction} from './CourseThreadAction.tsx'
+import {RelayThreadAction} from './RelayThreadAction.tsx'
+import {RoomTableau} from './RoomTableau.tsx'
+import {TodayScene} from './TodayScene.tsx'
+import {Dialog} from './Dialog.tsx'
+import {CommandButton} from './CommandButton.tsx'
+import {ClockAdvance} from './ClockAdvance.tsx'
+import {MarketSceneChoice} from './MarketSceneChoice.tsx'
+import {VideoSceneChoice} from './VideoSceneChoice.tsx'
+import {CourseSceneChoice} from './CourseSceneChoice.tsx'
+import {RelaySceneChoice} from './RelaySceneChoice.tsx'
+import {openingFocusFor,playerThread,type OpeningFocus} from './player-thread.ts'
+import {courseFocusFor} from './course-player-thread.ts'
+import {relayBusinessTarget,relayFocusFor} from './relay-player-thread.ts'
+import {roomMoment} from './RoomMoment.tsx'
+import {todayThread} from './today-thread.ts'
+import {moneyText} from './game-text.ts'
+import {courseTeachingSceneResult} from './course-teaching-result.ts'
+import readyRaw from '../../goal-1/evidence/t17-acceptance-34/chrome-final-sample-r2/r2-saved86-current-final-preview.json?raw'
+import promised97Raw from '../../goal-1/evidence/t17-acceptance-32/chrome-main-r8/r8-saved97-original-backup.json?raw'
+import updated105Raw from '../../goal-1/evidence/t17-acceptance-39/chrome-wait-r4/r4-04-actual105-first-public-feedback.json?raw'
+import updated106Raw from '../../goal-1/evidence/t17-acceptance-39/chrome-update-r5/r5-06-actual106-refresh-started.json?raw'
+import firstRaw from '../../goal-1/evidence/t17-acceptance-29/chrome-atomic/atomic-before-life-r6.json?raw'
+import relayRaw from '../../goal-1/evidence/t17-acceptance-34/chrome-final-service-r2/r2-saved85-current-separate-record-entries.json?raw'
+import dueRelayRaw from '../../goal-1/evidence/t17-acceptance-33/chrome-main-r1/r4-saved83-mid-service-first-original-due.json?raw'
+
+// Real component handlers with explicit per-component hook scopes. This is not
+// mounted React, layout, effect, browser, or human-understanding evidence.
+const hooks=vi.hoisted(()=>({current:{values:[] as unknown[],index:0}}))
+vi.mock('react',async importOriginal=>{
+ const actual=await importOriginal<typeof import('react')>()
+ const state=<T,>(initial:T|(()=>T))=>{
+  const index=hooks.current.index++,values=hooks.current.values
+  if(!(index in values))values[index]=typeof initial==='function'?(initial as ()=>T)():initial
+  return [values[index] as T,(next:T|((old:T)=>T))=>{values[index]=typeof next==='function'?(next as (old:T)=>T)(values[index] as T):next}] as const
+ }
+ return {...actual,useState:state,useRef:<T,>(initial:T)=>state(()=>({current:initial}))[0],useMemo:<T,>(factory:()=>T)=>factory(),useId:()=> 'u0r-continuity',useEffect:()=>{},useImperativeHandle:()=>{},useSyncExternalStore:(_subscribe:unknown,getSnapshot:()=>unknown)=>getSnapshot()}
+})
+type Scope={values:unknown[];index:number}
+function within<T>(scope:Scope,render:()=>T):T{const previous=hooks.current;hooks.current=scope;scope.index=0;try{return render()}finally{hooks.current=previous}}
+type Element=ReactElement<Record<string,unknown>>
+const choiceWrappers=new Set<unknown>([MarketSceneChoice,VideoSceneChoice,CourseSceneChoice,RelaySceneChoice])
+const pureWrappers=new Set<unknown>([OpeningAttemptAction,DayThreadAction,VideoThreadAction,CourseThreadAction,RelayThreadAction,RoomTableau,OpeningAttemptChoices,CommandButton])
+function nodes(value:unknown,scopes=new Map<unknown,Scope>()):Element[]{
+ if(Array.isArray(value))return value.flatMap(item=>nodes(item,scopes))
+ if(!isValidElement<Record<string,unknown>>(value))return []
+ if(choiceWrappers.has(value.type)&&typeof value.props.children==='function')return nodes(value.props.children(()=>{}),scopes)
+ if((pureWrappers.has(value.type)||value.type===ClockAdvance)&&typeof value.type==='function'){
+  const component=value.type as (props:Record<string,unknown>)=>unknown,scope=scopes.get(value)??{values:[],index:0}
+  scopes.set(value,scope)
+  return [value,...nodes(within(scope,()=>component(value.props)),scopes)]
+ }
+ return [value,...nodes(value.props.children,scopes),...nodes(value.props.footer,scopes)]
+}
+function text(value:unknown):string{return typeof value==='string'||typeof value==='number'?String(value):Array.isArray(value)?value.map(text).join(''):isValidElement<Record<string,unknown>>(value)?text(value.props.children):''}
+function button(rows:Element[],label:string):Element{const found=rows.find(row=>row.type==='button'&&(row.props['aria-label']===label||text(row.props.children).includes(label)));if(!found)throw Error('ORIGINAL_BUTTON_REQUIRED:'+label);return found}
+function click(row:Element){if(row.props.disabled||typeof row.props.onClick!=='function')throw Error('ORIGINAL_ENABLED_HANDLER_REQUIRED');row.props.onClick()}
+async function original(name:string,raw?:string){
+ const codec=createCampaignCodec(),factory=new IDBFactory(),locks=new MemoryWriterAccess(),storeName='u0r-continuity-'+name,store=new IndexedDbRunStore({codec,factory,keyRange:IDBKeyRange,name:storeName})
+ let sequence=0
+ const controller=new GameController({codec,store,locks,id:()=>name+'-'+(++sequence)})
+ await controller.initialize()
+ if(raw)await controller.importNew(raw)
+ else await controller.newLife({backgroundId:'technical_employee',playerProfile:{wishId:'autonomy',approach:'first_order'},seed:'u0r-'+name})
+ const p=(reader=controller):GamePanelProps=>{const view=reader.snapshot.view!;return {controller:reader,view,features:view.features as unknown as PlayFeatures,accountId:'personal',request:vi.fn()}}
+ return {codec,factory,locks,storeName,controller,p,close:async()=>{await controller.close();await store.close()}}
+}
+type Fixture=Awaited<ReturnType<typeof original>>
+function courseFocus(p:GamePanelProps){const c=p.features.course!.courses[0]!;return courseFocusFor(p,{kind:'course',businessId:c.businessId,courseId:c.id,sampleJobId:c.sampleJobId!})}
+function room(p:GamePanelProps,focus:OpeningFocus){
+ const scope:Scope={values:[],index:0},onToday=vi.fn(),onFocus=vi.fn(),onNavigate=vi.fn(),onExplore=vi.fn()
+ let tree:ReturnType<typeof OpeningMoment>
+ const render=()=>{tree=within(scope,()=>OpeningMoment({p,focus,onFocus,onToday,onNavigate,onExplore,headingRef:null,fallback:roomMoment(p)}));return nodes(tree)}
+ return {render,onToday,onFocus,onNavigate,onExplore}
+}
+
+describe('U0-R continuity keeps the original identity, amounts and guards',()=>{
+ let ready:Fixture,promised97:Fixture,updated105:Fixture,updated106:Fixture,first:Fixture,relay:Fixture,dueRelay:Fixture,offer:Fixture
+ beforeAll(async()=>{ready=await original('ready',readyRaw)})
+ beforeAll(async()=>{promised97=await original('whole-class97',promised97Raw)})
+ beforeAll(async()=>{updated105=await original('whole-class105',updated105Raw)})
+ beforeAll(async()=>{updated106=await original('whole-class106',updated106Raw)})
+ beforeAll(async()=>{first=await original('first',firstRaw)})
+ beforeAll(async()=>{relay=await original('relay',relayRaw)})
+ beforeAll(async()=>{dueRelay=await original('due-relay',dueRelayRaw)})
+ beforeAll(async()=>{offer=await original('offer')})
+ afterAll(async()=>{for(const fixture of [ready,promised97,updated105,updated106,first,relay,dueRelay,offer])await fixture?.close()})
+ it('uses one result-to-Today binding for the thought and object and preserves actual first-order costs',()=>{
+  const p=first.p(),focus=openingFocusFor(p,'quarter',{recordId:p.features.firstOrder.contractId!})!,raw=first.controller.exportSaved(),driver=room(p,focus),rows=driver.render()
+  const main=button(rows,'收好这次结果，回到今天安排日子'),object=rows.find(row=>row.type===OpeningObject)!
+  expect(object.props.onActivate).toBe(main.props.onClick)
+  expect(rows.filter(row=>row.type==='p').map(row=>text(row.props.children)).join(' ')).toContain('本单实收¥1,300 · 制作直接成本¥500 · 本单净额¥800')
+  click(main);(object.props.onActivate as ()=>void)()
+  expect(driver.onToday).toHaveBeenCalledTimes(2);expect(driver.onFocus).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled()
+  expect(first.controller.exportSaved()).toBe(raw)
+ })
+ it('cancels the original offer decision without accepting, spending or changing its focus',()=>{
+  const p=offer.p(),focus=playerThread(p).focus,raw=offer.controller.exportSaved(),driver=room(p,focus)
+  click(button(driver.render(),'回应这封委托'))
+  const opened=driver.render(),dialog=opened.find(row=>row.type===Dialog&&row.props.title==='这封委托，怎样答复？')!
+  expect(dialog).toBeDefined();expect(opened.some(row=>row.type===CommandButton&&row.props.kind==='StartFirstOrder')).toBe(true)
+  click(button(opened,'先不决定，留在这里'))
+  const cancelled=driver.render()
+  expect(cancelled.some(row=>row.type===Dialog&&row.props.title==='这封委托，怎样答复？')).toBe(false)
+  expect(cancelled.find(row=>row.type===OpeningObject)!.props.actionLabel).toBe('回应这封委托')
+  expect(driver.onFocus).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled();expect(offer.controller.exportSaved()).toBe(raw)
+ })
+ it('keeps a ready course on the same object when its record is opened and cancelled',()=>{
+  const p=ready.p(),focus=courseFocus(p),driver=room(p,focus),raw=ready.controller.exportSaved(),rows=driver.render()
+  click(button(rows,'翻阅这一段的记录与代价'))
+  const open=driver.render(),dialog=open.find(row=>row.type===Dialog&&String(row.props.className).includes('tableau-source-record'))!
+  expect(text(dialog.props.children)).toContain(p.features.course!.courses[0]!.id)
+  ;(dialog.props.onClose as ()=>void)()
+  const after=driver.render(),beforeObject=rows.find(row=>row.type===OpeningObject)!,afterObject=after.find(row=>row.type===OpeningObject)!
+  expect(afterObject.props.title).toBe(beforeObject.props.title);expect(afterObject.props.actionLabel).toBe(beforeObject.props.actionLabel)
+  expect(driver.onFocus).not.toHaveBeenCalled();expect(driver.onNavigate).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled();expect(ready.controller.exportSaved()).toBe(raw)
+ })
+ it('publishes original97 whole-class learner continuity beside its unchanged planned teaching and original money',()=>{
+  // A separate complete normal saved history tests the room's actual publication,
+  // not the presence of a helper result or an individual historical job page.
+  const base=promised97.p(),lesson=base.features.course!.courses[0]!,cohort=base.features.course!.cohorts.find(row=>row.courseId===lesson.id)!
+  const target={kind:'cohort' as const,businessId:lesson.businessId,courseId:lesson.id,cohortId:cohort.id},focus=courseFocusFor(base,target),p={...base,accountId:focus.accountId},raw=promised97.controller.exportSaved(),driver=room(p,focus)
+  expect(p.view.revision).toBe(97);expect(p.view.date).toBe('2023-01-31')
+  expect(cohort.students.filter(student=>student.paidRemainingFen>0)).toHaveLength(4)
+  expect(cohort.stages).toHaveLength(2);expect(cohort.stages.filter(stage=>stage.deliveredAt!==null)).toHaveLength(1)
+  expect(playerThread(p,focus).focusScope).not.toBe('history');expect(playerThread(p,focus).inspect.target?.courseTarget).toEqual(target)
+  const rows=driver.render(),published=rows.filter(row=>row.type==='p').map(row=>text(row.props.children)).join('\n')
+  expect(rows.some(row=>row.type===RoomTableau)).toBe(true)
+  expect(rows.some(row=>row.type==='section'&&row.props['aria-label']==='眼前这一幕')).toBe(true)
+  expect(published).toContain('2023-04-01—2023-04-08');expect(published).toContain('¥0 / 1点 / 7日')
+  expect(published).toContain('已预留');expect(published).toContain('尚未实付或使用行动')
+  expect(published).toContain('累计预款¥995');expect(published).toContain('已实际退¥199')
+  expect(published).toContain('仍受保护¥398');expect(published).toContain('教学收入¥398')
+  expect(published).toContain('4名留存学员');expect(published).toContain('已交出1/2段')
+  expect(driver.onFocus).not.toHaveBeenCalled();expect(driver.onNavigate).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled();expect(promised97.controller.exportSaved()).toBe(raw)
+ })
+ it('puts the real update in the room heading and shared object action while keeping the original class and every money nature',()=>{
+  const base=updated105.p(),lesson=base.features.course!.courses[0]!,cohort=base.features.course!.cohorts.find(row=>row.courseId===lesson.id)!,target={kind:'cohort' as const,businessId:lesson.businessId,courseId:lesson.id,cohortId:cohort.id},focus=courseFocusFor(base,target),p={...base,accountId:focus.accountId},raw=updated105.controller.exportSaved(),driver=room(p,focus),rows=driver.render()
+  expect(p.view).toMatchObject({revision:105,date:'2023-03-14'})
+  expect(playerThread(p,focus).stage).toBe('course-cohort-update-required')
+  expect(text(rows.find(row=>row.type==='h1')!.props.children)).toBe('旧课有更新，学员还在等。')
+  const published=rows.filter(row=>row.type==='p').map(row=>text(row.props.children)).join('\n')
+  for(const fact of ['2023-03-21','4名留存学员','已交出1/2段','原支持至2023-04-22','冻结单价¥199','退款窗口至2023-04-29','累计预款¥995','已实际退¥199','仍受保护¥398','教学收入¥398'])expect(published).toContain(fact)
+  expect(published.split(lesson.name).length-1).toBe(1)
+  const main=button(rows,'核对这次更新的投入'),object=rows.find(row=>row.type===OpeningObject)!
+  expect(object.props.onActivate).toBe(main.props.onClick)
+  expect(object.props.teachingPaper).toMatchObject({phase:'update',protectedFen:39800,stages:['completed','planned']})
+  click(main);(object.props.onActivate as ()=>void)()
+  expect(driver.onToday).not.toHaveBeenCalled();expect(driver.onFocus).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled();expect(updated105.controller.exportSaved()).toBe(raw)
+ })
+ it('states the actual update payment in the first sentence without replacing protected tuition or declaring the class complete',()=>{
+  const before=updated105.p().view,after=updated106.p().view,raw=updated106.controller.exportSaved(),result=courseTeachingSceneResult('StartCourseRefresh',before,after)!
+  expect(result.split('。')[0]).toContain('课程实际付出¥2,000')
+  expect(result).toContain('已实际开工，尚未完成');expect(result).toContain('旧班教学、支持与退款责任仍继续')
+  expect(result).not.toContain('已实际完成');expect(result).not.toContain('实际收到')
+  expect(courseTeachingSceneResult('StartCourseRefresh',before,{...after,hasCandidate:true,saveStatus:'unsaved'})).toBeNull()
+  expect(updated106.controller.exportSaved()).toBe(raw)
+ })
+ it('lets App show personal cash in Today and restore the exact enterprise bookmark without a game command',()=>{
+  const values=new Map<string,string>(),storage={getItem:(key:string)=>values.get(key)??null,setItem:(key:string,value:string)=>{values.set(key,value)}},scope:Scope={values:[],index:0},raw=ready.controller.exportSaved()
+  const render=()=>nodes(within(scope,()=>App({controller:ready.controller,focusPreferenceStorage:storage})))
+  const roomProps=(rows:Element[])=>rows.find(row=>row.type===CinematicRoom)!.props as unknown as ComponentProps<typeof CinematicRoom>
+  let rows=render(),props=roomProps(rows)
+  const focus=courseFocus(ready.p())
+  props.onOpeningFocus!(focus);rows=render();props=roomProps(rows)
+  const enterprise=ready.p().view.accounts.find(account=>account.accountId===focus.accountId)!.availableFen,personal=ready.p().view.accounts.find(account=>account.accountId==='personal')!.availableFen
+  expect(rows.some(row=>row.type==='strong'&&text(row.props.children)==='企业可花 '+moneyText(enterprise))).toBe(true)
+  props.onTodayPerspective!({runId:ready.p().view.runId,revision:ready.p().view.revision});rows=render();props=roomProps(rows)
+  expect(rows.some(row=>row.type==='strong'&&text(row.props.children)==='个人可花 '+moneyText(personal))).toBe(true)
+  expect(props.openingFocus).toEqual(focus)
+  props.onTodayPerspective!(null);rows=render();props=roomProps(rows)
+  expect(rows.some(row=>row.type==='strong'&&text(row.props.children)==='企业可花 '+moneyText(enterprise))).toBe(true)
+  expect(props.openingFocus).toEqual(focus);expect(ready.controller.exportSaved()).toBe(raw)
+ })
+ it('does not offer current collection for original service85 while Today preserves its original period',()=>{
+  const p=relay.p(),period=p.features.relay!.periods[0]!,identity=relayBusinessTarget(p,period.businessId)!,focus=relayFocusFor(p,{...identity,kind:'period',periodId:period.id}),today=todayThread(p,focus)!,scope:Scope={values:[],index:0},onFocus=vi.fn(),onPrepare=vi.fn(),onResume=vi.fn(),raw=relay.controller.exportSaved()
+  const rows=nodes(within(scope,()=>TodayScene({p,today,headingRef:null,onFocus,onPrepare,onResume,onExplore:vi.fn(),onRecollection:vi.fn(),onNavigate:vi.fn()})))
+  expect(today.ongoing.some(item=>item.focus.kind==='relay'&&item.focus.relayTarget?.kind==='period'&&item.focus.relayTarget.periodId===period.id)).toBe(true)
+  expect(rows.some(row=>row.type===CommandButton&&String(row.props.kind).startsWith('CollectRelay'))).toBe(false)
+  expect(rows.some(row=>row.type==='p'&&text(row.props.children).includes('原客户款已到期、尚未收取'))).toBe(false)
+  click(button(rows,'回到书签里的那件事'))
+  expect(onResume).toHaveBeenCalledOnce();expect(onFocus).not.toHaveBeenCalled();expect(onPrepare).not.toHaveBeenCalled();expect(relay.controller.exportSaved()).toBe(raw)
+ })
+ it('takes an actual due-customer hint directly to the same original customer record without collecting or borrowing a different account',()=>{
+  const p=dueRelay.p(),v=p.features.relay!,period=v.periods[0]!,identity=relayBusinessTarget(p,period.businessId)!,focus=relayFocusFor(p,{...identity,kind:'period',periodId:period.id}),today=todayThread(p,focus)!,scope:Scope={values:[],index:0},onNavigate=vi.fn(),onFocus=vi.fn(),onPrepare=vi.fn(),raw=dueRelay.controller.exportSaved()
+  const customer=v.customers.find(customer=>customer.dueReceivableFen>0)!
+  let display=p
+  const render=()=>nodes(within(scope,()=>TodayScene({p:display,today,headingRef:null,onFocus,onPrepare,onResume:vi.fn(),onExplore:vi.fn(),onRecollection:vi.fn(),onNavigate})))
+  click(button(render(),'逐位翻回原客户'))
+  expect(customer.id).toBe(v.customers[1]!.id)
+  const duePage=render().map(row=>text(row.props.children)).join(' ')
+  expect(duePage).toContain('原客户2 · 已到期');expect(duePage).not.toContain('原客户1 · 已到期')
+  click(button(render(),'翻到这位原客户的到期款记录'))
+  expect(onNavigate).toHaveBeenCalledExactlyOnceWith('relay',{accountId:identity.accountId,relayTarget:{...identity,kind:'customer',customerId:customer.id},recordId:customer.id,openRecord:true})
+  expect(onFocus).not.toHaveBeenCalled();expect(onPrepare).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled();expect(dueRelay.controller.exportSaved()).toBe(raw)
+  // Missing public station relation is a navigation-policy variant, not a new game history.
+  display={...p,features:{...p.features,relay:{...v,stations:[]}}}
+  click(button(render(),'逐位翻回原客户'))
+  const missing=render()
+  expect(missing.some(row=>row.type==='button'&&text(row.props.children).includes('翻到这位原客户'))).toBe(false)
+  expect(missing.some(row=>row.type==='p'&&text(row.props.children).includes('没有换到另一客户或账户'))).toBe(true)
+  expect(onNavigate).toHaveBeenCalledTimes(1);expect(dueRelay.controller.exportSaved()).toBe(raw)
+ })
+ it('blocks result navigation for a candidate and an invalid identity instead of silently choosing another object',()=>{
+  const p=first.p(),focus=openingFocusFor(p,'quarter',{recordId:p.features.firstOrder.contractId!})!,raw=first.controller.exportSaved()
+  // Guard display variant only; no claim that this creates an actual save failure.
+  const candidate={...p,view:{...p.view,hasCandidate:true,saveStatus:'unsaved' as const}},driver=room(candidate,focus),main=button(driver.render(),'收好这次结果，回到今天安排日子')
+  expect(main.props.disabled).toBe(true);(main.props.onClick as ()=>void)();expect(driver.onToday).not.toHaveBeenCalled()
+  const invalid=room(p,{...focus,runId:'another-life'}),rows=invalid.render()
+  expect(rows.some(row=>row.type===TodayScene)).toBe(false);expect(rows.some(row=>row.type==='button'&&text(row.props.children).includes('收好这次结果'))).toBe(false)
+  expect(invalid.onFocus).not.toHaveBeenCalled();expect(first.controller.exportSaved()).toBe(raw)
+ })
+ it('permits real reader UI navigation while retaining original command rejection',async()=>{
+  const readerStore=new IndexedDbRunStore({codec:first.codec,factory:first.factory,keyRange:IDBKeyRange,name:first.storeName}),reader=new GameController({codec:first.codec,store:readerStore,locks:first.locks})
+  try{
+   await reader.initialize();await reader.continueLife(first.p().view.runId)
+   const p=first.p(reader),focus=openingFocusFor(p,'quarter',{recordId:p.features.firstOrder.contractId!})!,driver=room(p,focus),raw=reader.exportSaved()
+   expect(p.view.readOnly).toBe(true);const main=button(driver.render(),'收好这次结果，回到今天安排日子');expect(main.props.disabled).toBe(false);click(main)
+   expect(driver.onToday).toHaveBeenCalledOnce();expect(reader.preview(reader.prepare('StartLifeWork',{kind:'rest',personId:null,reference:null})).allowed).toBe(false)
+   expect(p.request).not.toHaveBeenCalled();expect(reader.exportSaved()).toBe(raw)
+  }finally{await reader.close();await readerStore.close()}
+ })
+ it('rejects an old rendered action after a real original time command changes the controller snapshot',async()=>{
+  const f=await original('stale',firstRaw)
+  try{
+   const p=f.p(),focus=openingFocusFor(p,'quarter',{recordId:p.features.firstOrder.contractId!})!,driver=room(p,focus),main=button(driver.render(),'收好这次结果，回到今天安排日子')
+   expect((await f.controller.submit(f.controller.prepare('AdvanceTime',{date:'2020-01-22'}))).status).toBe('saved')
+   const current=f.controller.exportSaved();(main.props.onClick as ()=>void)()
+   expect(driver.onToday).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(current)
+  }finally{await f.close()}
+ })
+})

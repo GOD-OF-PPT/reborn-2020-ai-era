@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-27T20:32:57.928Z",
+  "scope": "Bounded diagnosis only, not performance acceptance",
+  "observedImportMs": 4497.820938999999,
+  "defaultRecoverySamplesMs": [
+    20.90867900000012,
+    2.1952600000004168,
+    40.05913899999905
+  ],
+  "finding": "The observed 5-second failures include a ~4498ms original normalr91 codec/store import. Current recovered-focus calculation measured ~2-40ms. This evidence does not support a speculative semantic rewrite or a timeout increase.",
+  "action": "Run the unchanged complete original focus-book file alone, preserving both original failed cases and original config. Do not claim the old batch passed or general performance passed.",
+  "actualPublicVideoShapeCorrections": [
+    "settlement -> publicationId -> workId",
+    "production/corrections public jobs, no raw jobId/correctionJobs"
+  ],
+  "compatibility": 0
+}

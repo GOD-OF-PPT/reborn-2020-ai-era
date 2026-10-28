@@ -1,0 +1,1 @@
+把黄色背景的弹窗和其中内容按照游戏风格重新设计 [$imagegen](/Users/gordon/.codex/skills/.system/imagegen/SKILL.md) 

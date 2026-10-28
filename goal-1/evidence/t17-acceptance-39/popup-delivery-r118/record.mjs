@@ -1,0 +1,26 @@
+import fs from 'node:fs';
+import cp from 'node:child_process';
+import crypto from 'node:crypto';
+import {assertBrowserEvidenceWritable as guard} from '../../../../scripts/browser_evidence_guard.mjs';
+const root='goal-1/evidence/t17-acceptance-39',out=root+'/popup-delivery-r118';
+const git=(...args)=>cp.execFileSync('git',args,{maxBuffer:16*1024*1024});
+const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+const stage=JSON.parse(fs.readFileSync(out+'/stage.json'));
+const commit=git('rev-parse','HEAD').toString().trim();
+if(!commit.startsWith('e555436b')||git('diff','--cached','--name-only').toString().trim())throw Error('EXPECTED_MODAL_COMMIT_AND_EMPTY_INDEX_REQUIRED');
+const paths=git('diff-tree','--no-commit-id','--name-only','-r',commit).toString().trim().split('\n').sort();
+if(JSON.stringify(paths)!==JSON.stringify([...stage.paths].sort()))throw Error('EXACT_EIGHT_COMMIT_REQUIRED');
+for(const row of stage.worktreeBefore)if(sha(fs.readFileSync(row.path))!==row.sha256)throw Error('WORKTREE_CHANGED:'+row.path);
+const rows=stage.paths.map(path=>{const blob=git('show',commit+':'+path),expected=path==='src/ui/App.tsx'?stage.stagedAppSha256:stage.worktreeBefore.find(x=>x.path===path).sha256;if(sha(blob)!==expected)throw Error('COMMIT_BLOB_MISMATCH:'+path);return {path,bytes:blob.length,sha256:sha(blob)}});
+const preservation=JSON.parse(fs.readFileSync(root+'/preservation-popup-r119.json'));
+if(!preservation.allExact||preservation.currentSourceCount!==673)throw Error('FULL_PRESERVATION_REQUIRED');
+const report={at:new Date().toISOString(),commit,base:stage.base,paths:rows,committedProductFiles:8,worktreeUnchanged:true,p3Exact:26,originalInputExact:true,mastersOriginalPrefixAndInsertionExact:true,oldMarkersExact:128,latestSixPayloadsExact:true,sourceCount:673,sourceUnchanged:true,headEightFileCombinationIndependentlyTested:false,workingTreeEvidence:{typeR101:0,buildR24:0,popupR83:{passed:25,total:25},fullR104:{passed:1521,total:1522,pending:0,exitCode:1,onlyFailure:'original refund case timeout5s'},originalWholeFileR116:{passed:21,total:21,exitCode:0}},nativeProducer:'popup-final-r117',nativeCommands:0,compatibility:0,task:'C-UX09',taskComplete:false,goalComplete:false,push:false};
+guard(out);fs.writeFileSync(out+'/delivery.json',JSON.stringify(report,null,2)+'\n',{flag:'wx'});
+const note=`\n\n## 2026-10-28｜黄色弹窗美术已独立本地提交，C-UX09仍在实施\n\n用户本轮指定imagegen的黄色弹窗及内容重设计已限定交付，产品提交${commit}，8份素材/UI/原费用标签及同义断言。App索引从原14e0debf只取弹窗类型class、两处决定引言与“由谁承担”显示措辞，其余CUX工作树字节不改；不将这8份提交冒整个CUX feature完成。正式范围和原完整prompt见evidence/t17-acceptance-39/popup-delivery-r118/validation.md，原图/初验在popup-art-r76，新当前Chrome图在popup-final-r117。\n\n当前Build24再次实际查看账本两页、保护款/欠他人分列、原责任、费用确认及取消。取消后仍2025-03-31/193/行动1/4/可花3634.01，焦点返回原核对。最后原确认留供用户看，未提交游戏命令，producer117已stop不可追加。新纹理不是原PNG恢复。\n\n纠正原进展时态：R104已真实exit1/1240233ms，226完整文件1521/1522、0pending，唯一退款case原5秒超时；原完整文件R116同源21/21、exit0/38249ms，原时限不变。不能称全批绿或性能通过；当前Type101/Build24等证据仍同源在制工作树，不声称8份HEAD组合已独立重跑。最新preservation-popup-r119实际核原P326、input、三master前缀/2304插入、128旧marker/2符号、旧root19/35完整树与最新六完整payload、673源全部同。\n\n当前C-UX09仍唯一任务；其余产品、原33项/12责任完整覆盖准入、record/seal/post仍待，不开始U6。原三master所有原前缀/外来P3插入保，当前新增记录仅自有后缀，不stage外来插入。原PNG0/3、正式真人理解/趣味/美术认可0、P3正式62/22、T17余、M01待明确恢复/T18最后及整个goal ACTIVE保持；全部兼容开发测试0，无push/deploy或新委派。\n\n[杠精审查] 本次弹窗限定交付通过：深底子内容/输入/焦点/警告与原分页共同迁移，实际画面和真实取消已核，不只换背景；原浅底反例/文案失败/全批超时均保，不删字段或责任，不以截图冒真人认可。完整CUX task仍未完成。\n`;
+const baseline=JSON.parse(fs.readFileSync(root+'/baseline.json'));
+const masters=[];
+for(const row of baseline.masters){const before=fs.readFileSync(row.path);if(sha(before.subarray(0,row.bytes))!==row.sha256)throw Error('ORIGINAL_MASTER_PREFIX_CHANGED:'+row.path);fs.appendFileSync(row.path,note);const after=fs.readFileSync(row.path);masters.push({path:row.path,bytes:after.length,sha256:sha(after),ownCUX09SuffixOffset:row.bytes,ownCUX09SuffixBytes:after.length-row.bytes,ownCUX09SuffixSha256:sha(after.subarray(row.bytes)),p3InsertionWorkingTreeOnly:true})}
+guard(root);fs.writeFileSync(root+'/progress-r120.md',note,{flag:'wx'});
+guard(root);fs.writeFileSync(root+'/master-suffix-r120.json',JSON.stringify({at:new Date().toISOString(),baseline:baseline.head,currentCodeCommit:commit,rows:masters,notStaged:true,CUX09Complete:false},null,2)+'\n',{flag:'wx'});
+guard(root);fs.writeFileSync(root+'/current-progress-r10.json',JSON.stringify({at:new Date().toISOString(),head:commit,task:'C-UX09',status:'in_progress',popupRequest:'limited_delivered_local_commit',popupProductCommit:commit,fullR104:'terminal1_1521pass_1timeout',originalWholeFileR116:'terminal0_21pass',typeR101:'terminal0',buildR24:'terminal0',noActiveTestRunners:true,sourceCount:673,remaining:'current original33/12 capability admission; remaining feature/record/seal/post; no U6 yet',goal:'active',compatibility:0},null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify({commit,products:rows.length,source673Exact:true,allPreserved:true,masterNotesAppended:masters.length,CUX09Complete:false}));
