@@ -6,7 +6,7 @@ import {equityDirectCosts,equityBrokerFee,type EquityDirectCosts} from './equity
 import type {SceneCommands} from '../application/scene-commands.ts'
 import {resolveEquitySceneTarget,type EquitySceneContext,type EquitySceneTarget,type EquityTargetResolution} from './equity-scene-target.ts'
 
-export type EquityChoiceIntent='actors'|'business'|'objects'|'prepare'|'discover'|'fund'|'job'|'invitation'|'negotiate'|'terms'|'holding'|'follow'|'governance'|'exit-request'|'exit-accept'|'collect'|'record'|'next'
+export type EquityChoiceIntent='actors'|'business'|'objects'|'prepare'|'relationship'|'eligibility'|'discover'|'fund'|'job'|'invitation'|'negotiate'|'terms'|'holding'|'follow'|'governance'|'exit-request'|'exit-accept'|'collect'|'record'|'next'
 export type EquityJourneyAction=
  |{readonly kind:'choice';readonly intent:EquityChoiceIntent;readonly label:string}
  |{readonly kind:'command';readonly command:'EnableCounterfactualEquity';readonly payload:{readonly acknowledge:true};readonly confirm:true;readonly label:string}
@@ -84,13 +84,15 @@ export function equityJourney(v:GamePanelProps['features']['deepseek'],target:Eq
  if(target?.kind==='business'){
   if(context.phase==='epilogue')return build({phase:'business',paper:'kept',title:business!.lifecycle==='closed'?'原准备分账已经合上。':'这份原主体，还有哪些事项要收好？',line:'只沿本主体原来的任务、费用、持股与款项继续；尾声不开始新的关系、资格或投资。',purpose:'核对本主体的旧约与余地，再决定继续保留或实际收尾。',finishWhen:'回尾声保留全部原记录；新的收尾或转账仍由你确认。',originDate:business!.history[0]?.date??null,action:choice('business','核对原事项与收尾选择'),facts:['当前原主体可花'+moneyText(business!.funds.availableFen)+'；保护款与旧义务仍分别保留。']})
   const active=v.preparations.some(p=>p.businessId===business!.id&&['relationship','eligibility'].includes(p.kind)&&p.job&&['planned','running'].includes(p.job.status))
-  return build({phase:'business',paper:'preparation',title:business!.lifecycle==='closed'?'原准备分账已经合上。':!business!.related?'先让这份关系，真正成立。':'关系并不代替授权，还要看同一封邀请。',line:business!.lifecycle==='closed'?'原持股、转让和费用仍有各自记录；没有默认启用另一份主体。':active?'本主体仍有原准备在日历上，可以明确回到那一份，也可以先过自己的生活。':'邀请来源、付费尽调和本主体资格分别决定，不会因为资金或技术就取得股份。',originDate:business!.history[0]?.date??null,action:choice('business','核对这个主体的原条件与下一步'),facts:['当前原主体可花'+moneyText(business!.funds.availableFen)+'；准备和本金仍须分别确认。']})
+  const first=business!.lifecycle==='operating'&&!active&&!v.invitations.some(i=>i.businessId===business!.id)
+  return build({phase:'business',paper:'preparation',title:business!.lifecycle==='closed'?'原准备分账已经合上。':!business!.related?'先让这份关系，真正成立。':'关系并不代替授权，还要看同一封邀请。',line:business!.lifecycle==='closed'?'原持股、转让和费用仍有各自记录；没有默认启用另一份主体。':active?'本主体仍有原准备在日历上，可以明确回到那一份，也可以先过自己的生活。':'邀请来源、付费尽调和本主体资格分别决定，不会因为资金或技术就取得股份。',originDate:business!.history[0]?.date??null,action:first?choice(business!.related?'discover':'relationship',business!.related?'选择一次介绍的来源，先听再判断':'给这份关系准备，选自己的资源与日子'):choice('business','核对这个主体的原条件与下一步'),facts:['当前原主体可花'+moneyText(business!.funds.availableFen)+'；准备和本金仍须分别确认。']})
  }
  if(r.preparation){
   const name=r.preparation.kind==='relationship'?'关系准备':'本局参与资格',pending=task('preparation','preparation',name+'，已经留好日子。','等这份'+name+'实际完成',r.job!.startAt)
   if(pending)return pending
   const completed=r.job?.status==='completed'
-  return build({phase:completed?'preparation-completed':'preparation-stopped',paper:completed?'report':'stopped',title:completed?name+'已经完成。':'这份'+name+'已经停下。',line:completed?'准备成果已经留下，邀请、条款和实际付款仍分别决定；现在还没有因此多出股份。':'已经发生的成本与原记录保留；等候不会自动补做，也没有取得股份。',originDate:r.job?.startAt??null,resultDate:completed?r.job!.completeAt:r.job?.releasedAt??null,outcome:completed?'actual':'non-success',action:choice('business','回到同一主体，选择接下来的一步')})
+  const firstIntroduction=completed&&r.preparation.kind==='relationship'&&business!.lifecycle==='operating'&&!v.invitations.some(i=>i.businessId===business!.id)
+  return build({phase:completed?'preparation-completed':'preparation-stopped',paper:completed?'report':'stopped',title:completed?name+'已经完成。':'这份'+name+'已经停下。',line:completed?'准备成果已经留下，邀请、条款和实际付款仍分别决定；现在还没有因此多出股份。':'已经发生的成本与原记录保留；等候不会自动补做，也没有取得股份。',originDate:r.job?.startAt??null,resultDate:completed?r.job!.completeAt:r.job?.releasedAt??null,outcome:completed?'actual':'non-success',action:firstIntroduction?choice('discover','选择一次介绍的来源，先听再判断'):completed&&r.preparation.kind==='eligibility'?choice('objects','明确选回原邀请，再比较条款'):choice('business','回到同一主体，选择接下来的一步')})
  }
  if(target?.kind==='invitation'&&r.invitation){
   const i=r.invitation
@@ -103,7 +105,7 @@ export function equityJourney(v:GamePanelProps['features']['deepseek'],target:Eq
   if(context.phase==='epilogue')return build({phase:'tail-invitation',paper:i.reportAt===null?'letter':'report',title:'这封原邀请，仍有自己的来处。',line:'尾声不开始新的调查、资格或投资；原报告、费用和拒绝选择仍可核对。',originDate:i.createdAt,resultDate:i.reportAt,action:choice('invitation','核对原邀请与拒绝收起的选择'),facts:['原邀请有效至'+i.expiresAt+'；未公开的授权或意愿仍未核实。']})
   if(i.reportAt===null)return build({phase:r.job?'diligence-stopped':'invitation',paper:r.job?'stopped':'letter',title:r.job?'尽调还没有留下可用的报告。':'一封介绍，还不是可投资的承诺。',line:'授权与融资意愿都尚未核实。可以安排原尽调，也可以拒绝；中间服务费不产生股份、资格或同意。',originDate:i.createdAt,decisionOpen:true,outcome:r.job?'non-success':'none',action:choice('invitation','先比较尽调、拒绝与原风险选择'),facts:['原邀请最迟'+i.expiresAt+'；调查和新承诺都保自己的真实时间。',...(i.brokerPaymentId?['这封邀请已有原中间服务费记录，不能把它当作投资本金。']:[])]})
   const verified=i.authority===true&&i.financingConsent===true
-  return build({phase:verified?'diligence-completed':'diligence-rejected',paper:'report',title:verified?'授权和有条件意愿，已经分别核实。':i.authority===false?'这次没有核实到原对手授权。':'对方当前没有可确认的融资意愿。',line:verified?business!.eligible?'仍要比较条款与原日期，再决定是否付出下一次谈判成本。':'本主体资格仍须另行准备；已知报告不等于已经持股。':'这次调查已真实发生，原费用和记录保留；不能据此付款签出股份。',originDate:i.createdAt,resultDate:i.reportAt,outcome:verified?'actual':'non-success',decisionOpen:verified,action:verified?choice(business!.eligible?'negotiate':'prepare',business!.eligible?'比较这封邀请可谈的原条款':'核对本主体的资格准备'):today(),facts:['原邀请有效至'+i.expiresAt+'；授权、融资意愿、资格和谈判各自成立。']})
+  return build({phase:verified?'diligence-completed':'diligence-rejected',paper:'report',title:verified?'授权和有条件意愿，已经分别核实。':i.authority===false?'这次没有核实到原对手授权。':'对方当前没有可确认的融资意愿。',line:verified?business!.eligible?'仍要比较条款与原日期，再决定是否付出下一次谈判成本。':'本主体资格仍须另行准备；已知报告不等于已经持股。':'这次调查已真实发生，原费用和记录保留；不能据此付款签出股份。',originDate:i.createdAt,resultDate:i.reportAt,outcome:verified?'actual':'non-success',decisionOpen:verified,action:verified?choice(business!.eligible?'negotiate':'eligibility',business!.eligible?'比较这封邀请可谈的原条款':'给本局资格准备，另选资源与日子'):today(),facts:['原邀请有效至'+i.expiresAt+'；授权、融资意愿、资格和谈判各自成立。']})
  }
  if(target?.kind==='negotiation'&&r.negotiation){
   const n=r.negotiation,terms=v.catalog.terms.find(t=>t.id===n.termsId)!,pending=task('negotiation','terms','这份条款，还在等原回应。','等这份原谈判实际回应',n.createdAt)

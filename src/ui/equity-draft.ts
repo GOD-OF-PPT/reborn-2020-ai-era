@@ -10,6 +10,7 @@ export const createEquityDraftMemory=():EquityDraftMemory=>new Map()
 /** A new, actually published promise gets a fresh slot. A changed date,
  * revision, auxiliary save or failed candidate never constitutes a new promise. */
 export function equityDraftKey(p:Pick<GamePanelProps,'view'|'features'|'accountId'>,target:EquitySceneTarget|null,intent:EquityChoiceIntent):string{
+ if(intent==='relationship'||intent==='eligibility')intent='prepare'
  const v=p.features.deepseek,b=target?.businessId
  const generations=!v?[]:target===null&&intent==='actors'?v.businesses.filter(r=>r.definitionId==='deepseek-investor').map(r=>r.id)
   :intent==='prepare'?v.preparations.filter(r=>r.businessId===b&&['relationship','eligibility'].includes(r.kind)).map(r=>r.id)
@@ -26,14 +27,14 @@ export function equityDraftKey(p:Pick<GamePanelProps,'view'|'features'|'accountI
 
 export function useEquityDraft(p:GamePanelProps,target:EquitySceneTarget|null,intent:EquityChoiceIntent){
  const fallback=useRef<EquityDraftMemory>(new Map()),memory=p.equityDraftMemory??fallback.current,key=equityDraftKey(p,target,intent)
- const scope=useRef({key,memory})
+ const scope=useRef({key,memory,intent})
  // An identity token, rather than just its string, also fences A→B→A callbacks.
- if(scope.current.key!==key||scope.current.memory!==memory)scope.current={key,memory}
+ if(scope.current.key!==key||scope.current.memory!==memory||scope.current.intent!==intent)scope.current={key,memory,intent}
  const captured=scope.current,[,refresh]=useState(0),values=memory.get(key)??{}
  const current=()=>scope.current===captured
  const set=(name:string,value:string)=>makeSharedAction(p,'准备这次权益选择',()=>{
   if(!current())return
-  memory.set(key,{...memory.get(key),[name]:value});refresh(n=>n+1)
+  memory.set(key,{...memory.get(key),...(intent==='relationship'||intent==='eligibility'?{preparation:intent}:{}),[name]:value});refresh(n=>n+1)
  },{allowReadOnly:true,canActivate:current}).activate()
- return {key,value:(name:string)=>values[name]??'',set,current}
+ return {key,value:(name:string)=>name==='preparation'&&(intent==='relationship'||intent==='eligibility')?intent:values[name]??'',set,current}
 }

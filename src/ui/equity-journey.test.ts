@@ -40,8 +40,30 @@ it('waits on the original relationship job, shows actual cost state and ends pre
  expect(view().facts.join(' ')).toContain('开工季度1点');expect(view().directCosts?.paidFen).toBe(50000)
  h.send('AdvanceTime',{date:'2025-04-08'})
  const before=h.codec.export(h.run),done=view()
- expect(done).toMatchObject({phase:'preparation-completed',outcome:'actual',resultDate:'2025-04-08',active:false,action:{kind:'choice',intent:'business'}})
+ expect(done).toMatchObject({phase:'preparation-completed',outcome:'actual',resultDate:'2025-04-08',active:false,action:{kind:'choice',intent:'discover'}})
  expect(done.line).toContain('没有因此多出股份');expect(h.codec.export(h.run)).toBe(before)
+})
+
+it('connects first relationship and its actual result directly while retaining existing invitations, active jobs and closing as separate choices',()=>{
+ const h=createDeepseekFixture();h.send('AdvanceTime',{date:'2025-04-01'});h.send('EnableCounterfactualEquity',{acknowledge:true});h.send('OpenEquityDesk',{})
+ const b=h.run.operations!.businesses.at(-1)!,t:EquitySceneTarget={runId:h.run.runId,accountId:b.accountId,businessId:b.id,kind:'business'}
+ const scene=()=>equityJourney(projectDeepseek(h.run,h.deepseek),t,context(h,b.accountId))
+ expect(scene().action).toMatchObject({kind:'choice',intent:'relationship'})
+ h.send('StartEquityRelationship',{businessId:b.id,...dsAssignment('2025-04-01')})
+ expect(scene().action).toMatchObject({kind:'choice',intent:'business'})
+ h.send('AdvanceTime',{date:'2025-04-08'});expect(scene().action).toMatchObject({kind:'choice',intent:'discover'})
+ h.send('DiscoverEquityInvitation',{businessId:b.id,source:'referral'})
+ expect(scene().action).toMatchObject({kind:'choice',intent:'business'})
+ expect(equityJourney(projectDeepseek(h.run,h.deepseek),t,{...context(h,b.accountId),phase:'epilogue'}).action).toMatchObject({kind:'choice',intent:'business'})
+ const i=h.run.deepseek!.invitations[0]!
+ h.send('InvestigateEquityInvitation',{invitationId:i.id,...dsAssignment('2025-04-08')});h.send('AdvanceTime',{date:'2025-04-15'})
+ const invitation=target(h,b.id,'invitation',i.id),report=equityJourney(projectDeepseek(h.run,h.deepseek),invitation,context(h,b.accountId))
+ expect(report).toMatchObject({phase:'diligence-completed',action:{kind:'choice',intent:'eligibility'}})
+ h.send('StartEquityEligibility',{businessId:b.id,...dsAssignment('2025-04-15')});h.send('AdvanceTime',{date:'2025-04-22'})
+ const qualified=h.run.deepseek!.preparations.find(p=>p.kind==='eligibility')!,before=h.codec.export(h.run)
+ expect(equityJourney(projectDeepseek(h.run,h.deepseek),target(h,b.id,'preparation',qualified.id),context(h,b.accountId))).toMatchObject({phase:'preparation-completed',action:{kind:'choice',intent:'objects'}})
+ expect(equityJourney(projectDeepseek(h.run,h.deepseek),invitation,context(h,b.accountId)).action).toMatchObject({kind:'choice',intent:'negotiate'})
+ expect(h.codec.export(h.run)).toBe(before)
 })
 
 it('keeps the real4500 preparation cost separate from accepted terms and the later actually acquired asset',()=>{

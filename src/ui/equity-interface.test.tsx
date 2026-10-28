@@ -4,6 +4,7 @@ import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
 import signRaw from '../../goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-beforeEquitySign.json?raw'
 import signedRaw from '../../goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-signed.json?raw'
 import exitRaw from '../../goal-1/evidence/t16-epilogue/native-exit-prefix/normal-before-exit-accept.json?raw'
+import beforeContractRaw from '../../goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-beforeContract.json?raw'
 import {createCampaignCodec} from '../application/campaign.ts'
 import {GameController} from '../application/game-controller.ts'
 import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
@@ -177,4 +178,43 @@ it('uses the exact same main thought and paper action and keeps the selected ori
  invoke(choice,'onClose');invoke(main,'onClick');choice=elements(draw()).find(e=>e.type===EquitySceneChoice)!;expect(choice.props.intent).toBe('terms')
  invoke(choice,'onInspect');expect(onNavigate).toHaveBeenCalledWith('deepseek',{accountId:focus.accountId,deepseekPane:'equity',equityTarget:t,recordId:focus.entityId,openRecord:true})
  expect(p.request).not.toHaveBeenCalled();expect(onFocus).not.toHaveBeenCalled()
+})
+
+it('opens an unprepared actual normal enterprise relationship directly, preserves explicit fields in the original book and still requests the original confirmation without writing money or rights',async()=>{
+ const h=await setup('direct-preparation',beforeContractRaw)
+ try{
+  // This original July2024 enterprise is already operating. A personal desk
+  // cannot be opened before Jan2025; preserve that rejection rather than grant
+  // an account or move its date just to satisfy the component precondition.
+  expect((await h.controller.submit(h.controller.prepare('EnableCounterfactualEquity',{acknowledge:true}))).status).toBe('saved')
+  const actor=h.p().features.deepseek!.businesses[0]!,p={...h.p(),accountId:actor.accountId},t=equityFocusTargets(p).find(row=>row.target.kind==='business'&&row.target.businessId===actor.id)!.target,focus=equityFocusFor(p,t),before=h.controller.exportSaved()
+  const draw=()=>render('first-preparation-moment',()=>EquityMoment({p,focus,headingRef:null,onFocus:vi.fn(),onNavigate:vi.fn(),onExplore:vi.fn()}))
+  const tableau=elements(draw()).find(e=>e.type===RoomTableau)!,paper=tableau.props.object as Element,main=elements(tableau.props.decisions).find(e=>e.type==='button'&&String(e.props.className).includes('moment-primary'))!
+  expect(main.props.onClick).toBe((paper.props.binding as {activate:()=>void}).activate);invoke(main,'onClick')
+  expect(elements(draw()).find(e=>e.type===EquitySceneChoice)!.props.intent).toBe('relationship')
+  const form=near(p,t,'relationship','direct-normal-relationship')
+  expect(text(form.tree())).not.toContain('这次具体准备哪一项');expect(form.field('本次开工日期').props.value).toBe('')
+  expect(form.button('StartEquityRelationship').props.disabled).toBe(true)
+  form.change('本次开工日期',p.view.date)
+  const resource=elements(form.tree()).find(e=>typeof e.type==='function'&&e.props.emptyLabel==='先选择本次实际资源')!
+  invoke(resource,'onChange','player-production');form.draw()
+  expect(form.button('StartEquityRelationship').props.disabled).toBe(false);invoke(form.button('StartEquityRelationship'),'onClick')
+  expect(p.request).toHaveBeenCalledWith('StartEquityRelationship',{businessId:t.businessId,resources:['player-production'],startAt:p.view.date},expect.any(String),true)
+  expect(equityDraftKey(p,t,'relationship')).toBe(equityDraftKey(p,t,'prepare'))
+  const same=near(p,t,'relationship','direct-normal-relationship-reopened')
+  expect(same.field('本次开工日期').props.value).toBe(p.view.date)
+  const generic=near(p,t,'prepare','generic-original-preparation')
+  expect(generic.field('这次具体准备').props.value).toBe('relationship');expect(generic.field('本次开工日期').props.value).toBe(p.view.date)
+  const book=render('direct-preparation-original-book',()=>EquityPanel({...p,assignment:{resources:[],startAt:''},initialFocusId:t.businessId}))
+  expect(elements(book).some(e=>e.type==='input'&&e.props.type==='date'&&e.props.value===p.view.date)).toBe(true)
+  expect(h.controller.exportSaved()).toBe(before)
+ }finally{await h.close()}
+})
+
+it('fences callbacks between explicitly selected preparation kinds even though they share the same original business draft',()=>{
+ const p=sign.p(),t=target(p,'invitation'),read=(intent:EquityChoiceIntent)=>render('preparation-kind-fence',()=>useEquityDraft(p,t,intent))
+ const relation=read('relationship');relation.set('date','2025-07-01');expect(read('relationship').value('preparation')).toBe('relationship')
+ const eligibility=read('eligibility');expect(eligibility.key).toBe(relation.key);expect(eligibility.value('date')).toBe('2025-07-01');expect(eligibility.value('preparation')).toBe('eligibility')
+ relation.set('date','stale-relation');expect(read('eligibility').value('date')).toBe('2025-07-01')
+ const back=read('relationship');eligibility.set('date','stale-eligibility');expect(back.current()).toBe(true);expect(read('relationship').value('date')).toBe('2025-07-01')
 })

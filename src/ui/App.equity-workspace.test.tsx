@@ -13,6 +13,7 @@ import DeepseekPanel from './DeepseekPanel.tsx'
 import EquityPanel from './EquityPanel.tsx'
 import {EquityMoment} from './EquityMoment.tsx'
 import {EquitySceneChoice} from './EquitySceneChoice.tsx'
+import {EquityDecisionFacts} from './EquityDecisionFacts.tsx'
 import {Dialog} from './Dialog.tsx'
 import type {GamePanelProps,PlayFeatures} from './game-types.ts'
 import type {EquitySceneTarget} from './equity-scene-target.ts'
@@ -112,6 +113,20 @@ it('notifies App when the original book changes participation pane and explicitl
  const focus=h.scene().props.focus as {equityTarget:EquitySceneTarget}
  expect(focus.equityTarget).toEqual({runId:h.view.runId,accountId:h.b.accountId,businessId:h.b.id,kind:'business'})
  invoke(h.book(),'onClose');expect(h.room()).toBeDefined();expect((h.room().props.openingFocus as {equityTarget:EquitySceneTarget}).equityTarget).toEqual(focus.equityTarget);expect(h.controller.exportSaved()).toBe(before)
+})
+
+it('captures original negotiation and signing choices in the actual App confirmation and cancels without paying or changing rights',()=>{
+ const h=normal,before=h.controller.exportSaved()
+ invoke(h.room(),'onNavigate','deepseek',{accountId:h.b.accountId,deepseekPane:'equity',equityTarget:h.target})
+ const p=h.scene().props.p as GamePanelProps
+ for(const [kind,body] of [['StartEquityNegotiation',{invitationId:h.original.invitationId,acquisitionKind:'secondary',termsId:'liquidity',amountFen:800000,resources:['player-production'],startAt:h.view.date}],['SignEquityAgreement',{negotiationId:h.original.id}]] as const){
+  p.request(kind,body,'逐项核对原选择',true)
+  const modal=h.render().find(e=>e.type===Dialog&&e.props.title==='逐项核对原选择')!,facts=elements(modal).find(e=>e.type===EquityDecisionFacts)!
+  expect(facts).toBeDefined();expect(facts.props.view).toBe(h.controller.snapshot.view);expect(facts.props.features).toBe(h.controller.snapshot.view!.features)
+  expect(facts.props.command).toMatchObject({kind,payload:body,expectedRevision:93});expect(facts.props.preview).toMatchObject({allowed:true})
+  invoke(elements(modal).find(e=>e.type==='button'&&text(e.props.children)==='返回调整')!,'onClick')
+  expect(h.controller.exportSaved()).toBe(before)
+ }
 })
 
 it('retains the actual old terms after head.put abort, then follows only the original retry to its new agreement',async()=>{
