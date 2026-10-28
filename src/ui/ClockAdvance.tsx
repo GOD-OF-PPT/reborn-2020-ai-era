@@ -3,6 +3,7 @@ import type {GamePanelProps} from './game-types.ts'
 import {CommandButton} from './CommandButton.tsx'
 import {moneyText} from './game-text.ts'
 import type {SharedActionBinding} from './shared-action.ts'
+import {journeyIntent} from './journey-intent.ts'
 
 export interface ClockActionBinding extends SharedActionBinding{readonly caption:string;readonly mainNode:ReactNode;readonly reviewNode:ReactNode}
 
@@ -13,9 +14,10 @@ export function ClockAdvance({p,date,label,room=false,renderAction,showReason=tr
  const projection=useMemo(()=>{
   const v=p.view
   if(busy||v.busy||v.readOnly||v.hasCandidate||v.saveStatus!=='saved'||p.controller.snapshot.view!==v)return null
-  const command={runId:v.runId,actorId:'player',commandId:'display-preview',expectedRevision:v.revision,kind:'AdvanceTime',payload:{date}}
+  const intent=journeyIntent(v,'AdvanceTime',{date},label)
+  const command={runId:v.runId,actorId:'player',commandId:'display-preview',expectedRevision:v.revision,kind:intent.kind,payload:intent.payload}
   try{if(!p.controller.preview(command).allowed)return null;const result=p.controller.clockCommitments(command);return result.runId===v.runId&&result.sourceRevision===v.revision&&result.from===v.date?result:null}catch{return null}
- },[p.controller,p.view,date,busy])
+ },[p.controller,p.view,date,label,busy])
  const outflows=projection?.accounts.flatMap(a=>a.outflows.map(f=>({accountId:a.accountId,amountFen:-f.amountFen})))??[]
  const grouped=new Map<string,number>()
  for(const outflow of outflows)grouped.set(outflow.accountId,(grouped.get(outflow.accountId)??0)+outflow.amountFen)

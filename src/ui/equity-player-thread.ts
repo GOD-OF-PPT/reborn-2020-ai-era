@@ -14,7 +14,7 @@ export type EquityThreadInput={
 type Input=EquityThreadInput
 export type EquityOpeningFocus={readonly kind:'equity';readonly runId:string;readonly accountId:string;readonly entityId:string|null;readonly businessId?:string;readonly equityTarget:EquitySceneTarget|null}
 type Scene=Pick<PlayerThreadView,'stage'|'object'|'title'|'line'|'detail'|'outcome'|'inspect'|'resultRefs'|'command'|'secondaryCommand'|'wait'>
-export function equitySceneContext(p:Input,accountId:string):EquityJourneyContext{return {runId:p.view.runId,accountId,date:p.view.date,accounts:p.view.accounts,operations:p.view.operations,finance:p.features.workbench.finance,source:{revision:p.view.revision,receipts:p.view.receipts},...(p.features.sceneCommands?{sceneCommands:p.features.sceneCommands}:{})}}
+export function equitySceneContext(p:Input,accountId:string):EquityJourneyContext{return {runId:p.view.runId,accountId,date:p.view.date,phase:p.view.phase,accounts:p.view.accounts,operations:p.view.operations,finance:p.features.workbench.finance,source:{revision:p.view.revision,receipts:p.view.receipts},...(p.features.sceneCommands?{sceneCommands:p.features.sceneCommands}:{})}}
 export function equityFocusFor(p:Input,target:EquitySceneTarget|null=null,accountId?:string):EquityOpeningFocus{return {kind:'equity',runId:p.view.runId,accountId:accountId??target?.accountId??'personal',entityId:target?equityTargetEntity(target):null,equityTarget:target,...(target?{businessId:target.businessId}:{})}}
 export function resolveEquityFocus(p:Input,focus:EquityOpeningFocus):{focus:EquityOpeningFocus;reason:string|null}{
  if(focus.runId!==p.view.runId)return {focus,reason:'这份架空权益关注来自另一段人生，请重新选择。'}
@@ -84,7 +84,11 @@ export function equityCommandFocus(p:Input,c:SceneCommand):readonly OpeningFocus
 /** Only the exact saved public effect may follow a new original promise. */
 export function equityFocusFromSaved(previous:Input,current:Input,kind:string,body:Record<string,unknown>,existing:EquityOpeningFocus|null=null):EquityOpeningFocus|null{
  const before=previous.features.deepseek,v=current.features.deepseek,view=current.view,last=view.receipts.at(-1)
- if(!before||!v||previous.view.runId!==view.runId||view.revision!==previous.view.revision+1||view.saveStatus!=='saved'||view.hasCandidate||view.readOnly||view.phase!=='playing'||last?.kind!==kind||last.revisionAfter!==view.revision||existing&&resolveEquityFocus(previous,existing).reason)return null
+ const tail=view.phase==='epilogue'&&previous.view.phase==='epilogue'
+ if(!before||!v||previous.view.runId!==view.runId||view.revision!==previous.view.revision+1||view.saveStatus!=='saved'||view.hasCandidate||view.readOnly||view.phase!=='playing'&&!tail||last?.kind!==kind||last.revisionAfter!==view.revision||existing&&resolveEquityFocus(previous,existing).reason)return null
+ // Presentation following is narrower than the original command authority.
+ // It does not reopen new preparations, investments or governance in closing.
+ if(tail&&(!['RejectEquityInvitation','DeclineEquityTerms','RequestEquityExit','AcceptEquityExit','CollectEquityExit','FollowEquityRound','InterruptJob','RescheduleJob','FundBusiness','WindDownBusiness','CloseBusiness'].includes(kind)||kind==='FollowEquityRound'&&body.amountFen!==0))return null
  const id=deepseekId(last.commandId,kind),added=<T extends {id:string}>(old:readonly T[],rows:readonly T[],test:(r:T)=>boolean)=>{const found=rows.filter(r=>r.id===id&&!old.some(o=>o.id===r.id)&&test(r));return found.length===1?found[0]!:null}
  const make=(businessId:string,kind:EquitySceneTarget['kind'],recordId?:string):EquitySceneTarget|null=>{const found=v.businesses.filter(b=>b.id===businessId);if(found.length!==1)return null;const b=found[0]!,identity={runId:view.runId,accountId:b.accountId,businessId};return kind==='business'?{...identity,kind}:recordId?{...identity,kind,recordId}:null}
  const assignment=(job:{startAt:string;resources:readonly string[]}|null)=>!!job&&job.startAt===body.startAt&&Array.isArray(body.resources)&&job.resources.length===body.resources.length&&job.resources.every((r,i)=>r===(body.resources as unknown[])[i])

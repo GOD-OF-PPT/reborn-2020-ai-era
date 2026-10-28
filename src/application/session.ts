@@ -81,7 +81,7 @@ export class RunSession {
     const command=copyJson(raw),preview=this.preview(command)
     requireRule(preview.allowed,preview.reasonCodes[0]??'INVALID_PAYLOAD')
     requireRule(command.expectedRevision===this.#record.run.revision,'STALE_REVISION')
-    requireRule(command.kind==='AdvanceTime'&&typeof command.payload==='object'&&command.payload!==null&&'date'in command.payload&&typeof command.payload.date==='string','CLOCK_COMMAND_REQUIRED')
+    requireRule((command.kind==='AdvanceTime'||command.kind==='AdvanceEpilogueTime')&&typeof command.payload==='object'&&command.payload!==null&&'date'in command.payload&&typeof command.payload.date==='string','CLOCK_COMMAND_REQUIRED')
     const requestedPhase='phase'in command.payload?command.payload.phase:'snapshot',phase=DAY_PHASES.find(p=>p===requestedPhase)
     requireRule(phase,'INVALID_PAYLOAD')
     const runtime=this.#options.registry.runtime

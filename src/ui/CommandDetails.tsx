@@ -19,7 +19,7 @@ export function CommandDetails({command,confirm,features,view,accountName,clock}
  const worker=typeof p.definitionId==='string'?features.workbench.workerOptions.find(w=>w.id===p.definitionId):undefined
  const openRoute=command.kind==='OpenCourseStudio'?'ai_course':command.kind==='OpenRelayStation'?'api_relay':command.kind==='OpenEcosystemService'?'deepseek_opportunity':null,opening=features.workbench.routes.find(r=>r.id===openRoute)
  return <>
- {command.kind==='AdvanceTime'?clock?<ClockCommandDetails projection={clock} accountName={accountName}/>:<p className="warning-box">没有取得这一步的当前原承诺明细，请返回重新核对。</p>:null}
+ {['AdvanceTime','AdvanceEpilogueTime'].includes(command.kind)?clock?<ClockCommandDetails projection={clock} accountName={accountName}/>:<p className="warning-box">没有取得这一步的当前原承诺明细，请返回重新核对。</p>:null}
  <JourneyCommandDetails command={command} features={features}/>
  <StoryCommandDetails command={command} confirm={confirm} features={features} view={view} accountName={accountName}/>
  <LifeCommandDetails command={command} confirm={confirm} features={features} view={view}/>
