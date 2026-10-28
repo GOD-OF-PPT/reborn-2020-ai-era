@@ -11,6 +11,7 @@ import {relayBusinessTarget,relayFocusFor,relayFocusOpen} from './relay-player-t
 import type {RelaySceneTarget} from './relay-scene-target.ts'
 import {ecosystemFocusFor,ecosystemFocusTargets} from './ecosystem-player-thread.ts'
 import {ecosystemTargetEntity} from './ecosystem-scene-target.ts'
+import {equityFocusFor,equityFocusTargets} from './equity-player-thread.ts'
 
 export type SeasonInput=Pick<GamePanelProps,'view'|'features'>
 type Inspect={screen:Screen;label:string;target?:SceneTarget}
@@ -40,7 +41,7 @@ export interface SeasonRecollectionView{
  readonly nodes:readonly SeasonEchoNode[];readonly allNodes:readonly SeasonEchoNode[];readonly remaining:readonly SeasonPendingItem[]
  readonly nextQuestion:string;readonly nextQuarterDate:string|null
 }
-const focusId=(f:OpeningFocus)=>[f.kind,f.accountId,f.entityId??('selection' in f?f.selection:'entry'),...(f.kind==='ecosystem'&&f.ecosystemTarget?[f.ecosystemTarget.businessId,f.ecosystemTarget.kind]:[]),...(f.kind==='relay'&&f.relayTarget?[f.relayTarget.businessId,f.relayTarget.stationId,f.relayTarget.kind==='period'?f.relayTarget.periodId:'']:[])].join('|')
+const focusId=(f:OpeningFocus)=>[f.kind,f.accountId,f.entityId??('selection' in f?f.selection:'entry'),...(f.kind==='equity'&&f.equityTarget?[f.equityTarget.businessId,f.equityTarget.kind]:[]),...(f.kind==='ecosystem'&&f.ecosystemTarget?[f.ecosystemTarget.businessId,f.ecosystemTarget.kind]:[]),...(f.kind==='relay'&&f.relayTarget?[f.relayTarget.businessId,f.relayTarget.stationId,f.relayTarget.kind==='period'?f.relayTarget.periodId:'']:[])].join('|')
 
 /** Choosing a bookmark is separate from executing any of its original commands. */
 export function seasonFocusChoices(p:SeasonInput):readonly SeasonFocusChoice[]{
@@ -61,6 +62,8 @@ export function seasonFocusChoices(p:SeasonInput):readonly SeasonFocusChoice[]{
  add({...base,kind:'course',courseTarget:null},null,'从一份明确的课程准备开始')
  add(relayFocusFor(p),null,'先选择同一笔中转服务与原站点')
  add(ecosystemFocusFor(p),null,'从一次具体生态合作开始')
+ add(equityFocusFor(p),null,'先看清一次明确架空的权益选择')
+ for(const row of equityFocusTargets(p))add(equityFocusFor(p,row.target),row.date,row.label)
  for(const row of ecosystemFocusTargets(p))add(ecosystemFocusFor(p,row.target),row.date,row.label)
  for(const business of f.relay?.businesses??[]){const identity=relayBusinessTarget(p,business.id);if(!identity)continue
   add(relayFocusFor(p,identity),f.relay!.stations.find(s=>s.id===identity.stationId)?.createdAt??null,'原中转站 · 服务与原账')
@@ -106,6 +109,7 @@ export function seasonFocusAfterSave(previous:SeasonInput,current:SeasonInput,ki
  if(existing.kind==='course'&&candidate.kind==='course'&&existing.runId===candidate.runId&&existing.courseTarget===null&&kind==='OpenCourseStudio')return candidate
  if(existing.kind==='relay'&&candidate.kind==='relay'&&existing.runId===candidate.runId&&existing.relayTarget===null&&kind==='OpenRelayStation')return candidate
  if(existing.kind==='ecosystem'&&candidate.kind==='ecosystem'&&existing.runId===candidate.runId&&existing.ecosystemTarget===null&&kind==='OpenEcosystemService')return candidate
+ if(existing.kind==='equity'&&candidate.kind==='equity'&&existing.runId===candidate.runId&&existing.equityTarget===null&&kind==='OpenEquityDesk')return candidate
  // An empty opening calendar is a choice of freedom, not a pin to an object that never existed.
  // Follow only the player's explicit, saved first arrangement; a preview/cancellation never reaches here.
  const explicitMarketAccount=candidate.kind==='market'&&['PlanStockOrder','PlaceStockOrder'].includes(kind)
@@ -116,6 +120,17 @@ export function seasonFocusAfterSave(previous:SeasonInput,current:SeasonInput,ki
  if(existing.kind==='life'&&(candidate.kind!=='life'||existing.selection!==candidate.selection))return existing
  // Refreshing the outcome of the same object is not a new primary selection or quarter.
  if(candidate.entityId===existing.entityId)return existing
+ if(existing.kind==='equity'&&candidate.kind==='equity'){
+  const old=existing.equityTarget,next=candidate.equityTarget,v=current.features.deepseek
+  if(!old||!next||old.businessId!==next.businessId)return existing
+  if(old.kind==='business'&&['StartEquityRelationship','StartEquityEligibility','DiscoverEquityInvitation'].includes(kind))return candidate
+  if(old.kind==='invitation'&&next.kind==='preparation'&&kind==='StartEquityEligibility')return candidate
+  if(old.kind==='invitation'&&next.kind==='negotiation'&&kind==='StartEquityNegotiation'&&v?.negotiations.some(n=>n.id===next.recordId&&n.invitationId===old.recordId))return candidate
+  if(old.kind==='negotiation'&&next.kind==='agreement'&&kind==='SignEquityAgreement'&&v?.agreements.some(a=>a.id===next.recordId&&a.negotiationId===old.recordId))return candidate
+  if(old.kind==='agreement'&&next.kind==='governance'&&kind==='ProposeEquityGovernance'&&v?.governance.some(g=>g.id===next.recordId&&g.agreementId===old.recordId))return candidate
+  if(old.kind==='agreement'&&next.kind==='exit'&&kind==='RequestEquityExit'&&v?.exits.some(e=>e.id===next.recordId&&e.agreementId===old.recordId))return candidate
+  return existing
+ }
  if(existing.kind==='ecosystem'&&candidate.kind==='ecosystem'){
   const old=existing.ecosystemTarget,next=candidate.ecosystemTarget,v=current.features.deepseek
   if(!old||!next||old.businessId!==next.businessId)return existing

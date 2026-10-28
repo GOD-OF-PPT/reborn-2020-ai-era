@@ -3,6 +3,7 @@ import {openingFocusAfterSave,playerThread,type OpeningFocus} from './player-thr
 import {openingAttempt} from './opening-attempt.ts'
 import {courseAttemptClosed} from './thread-purpose.ts'
 import {relayClosedPeriodTarget} from './relay-journey.ts'
+import {equityJourneyFor} from './equity-player-thread.ts'
 
 type Input=Pick<GamePanelProps,'view'|'features'>
 
@@ -15,6 +16,7 @@ export function nextLifeFocusAfterResult(previous:Input,current:Input,kind:strin
  let finished=opening?.action.kind==='next-choice'||prior.outcome==='actual'&&!prior.command&&!prior.secondaryCommand&&!prior.wait
  if(prior.focus.kind==='course'&&prior.focus.courseTarget?.kind==='cohort')finished=courseAttemptClosed(previous,prior)
  if(prior.focus.kind==='relay'&&prior.focus.relayTarget?.kind==='period')finished=relayClosedPeriodTarget({...previous,accountId:prior.focus.accountId},prior.focus.relayTarget)!==null
+ if(prior.focus.kind==='equity'){const journey=equityJourneyFor(previous,prior.focus);finished=!journey.active&&!journey.decisionOpen&&['actual','non-success'].includes(journey.outcome)}
  if(!finished)return null
  const next=openingFocusAfterSave(previous,current,kind,payload,existing),receipt=current.view.receipts.at(-1)
  if(next?.kind!=='life'||next===existing||next.entityId===null||!receipt||typeof payload!=='object'||payload===null||Array.isArray(payload))return null

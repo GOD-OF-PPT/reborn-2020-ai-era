@@ -12,6 +12,7 @@ import type {ProductionJob} from '../core/operations-types.ts'
 import {isoDate} from '../core/calendar.ts'
 import {moneyText} from './game-text.ts'
 import {ecosystemFocusFor,ecosystemFocusTargets,ecosystemFocusOpen,ecosystemJourneyFor} from './ecosystem-player-thread.ts'
+import {equityFocusFor,equityFocusTargets,equityJourneyFor} from './equity-player-thread.ts'
 
 export type TodayThreadInput=Pick<GamePanelProps,'view'|'features'>
 export type TodayThreadClassification='entry'|'active'|'carry'|'result'|'history'|'invalid'|'other'
@@ -26,9 +27,10 @@ export interface TodayThreadItem{
  readonly sourceRefs:readonly ThreadResultRef[]
  readonly relayContinuation?:TodayRelayContinuation
  readonly ecosystemContinuation?:{readonly kind:'task'|'money';readonly label:string}
+ readonly equityContinuation?:{readonly kind:'task'|'money';readonly label:string}
 }
 export interface TodayRelayContinuation{readonly kind:'period'|'support'|'audit'|'application'|'audience'|'task'|'money'|'unknown';readonly label:string}
-export interface TodayDirection{readonly id:'work'|'life'|'market'|'video'|'course'|'relay'|'ecosystem';readonly label:string;readonly line:string;readonly screen:Screen}
+export interface TodayDirection{readonly id:'work'|'life'|'market'|'video'|'course'|'relay'|'ecosystem'|'equity';readonly label:string;readonly line:string;readonly screen:Screen}
 export interface TodayThreadView{
  readonly source:{readonly runId:string;readonly revision:number;readonly date:string;readonly quarter:string}
  readonly primary:{readonly thread:PlayerThreadView;readonly classification:TodayThreadClassification;readonly supported:boolean;readonly originQuarter:string|null;readonly sourceRefs:readonly ThreadResultRef[]}
@@ -42,7 +44,7 @@ export interface TodayThreadView{
  readonly responsibilityOverrideNeeded:boolean
 }
 
-const supported=(thread:PlayerThreadView)=>['free','work','life','market','video','relay','ecosystem'].includes(thread.focus.kind)||isCourseContinuityThread(thread)
+const supported=(thread:PlayerThreadView)=>['free','work','life','market','video','relay','ecosystem','equity'].includes(thread.focus.kind)||isCourseContinuityThread(thread)
 type RelayFocus=Extract<OpeningFocus,{kind:'relay'}>
 type RelayContinuation=TodayRelayContinuation&{readonly title?:string;readonly line?:string;readonly wait?:NonNullable<PlayerThreadView['wait']>;readonly sourceRefs?:readonly ThreadResultRef[]}
 const one=<T,>(rows:readonly T[])=>rows.length===1?rows[0]:undefined
@@ -104,7 +106,12 @@ function classification(p:TodayThreadInput,thread:PlayerThreadView):TodayThreadC
  if(!supported(thread))return 'other'
  if(f.kind==='free'||id===null||thread.focusScope==='entry')return 'entry'
  let open=false
- if(f.kind==='ecosystem'){
+ if(f.kind==='equity'){
+  const journey=equityJourneyFor(p,f)
+  if(f.equityTarget?.kind==='business'||journey.decisionOpen&&!journey.active)return 'entry'
+  open=journey.active
+ }
+ else if(f.kind==='ecosystem'){
   const t=f.ecosystemTarget,journey=ecosystemJourneyFor(p,f),b=journey.resolution.business
   if(t?.kind==='lead'&&journey.resolution.lead?.status==='open')return 'entry'
   if(t?.kind==='business'&&!journey.active&&b&&b.funds.receivableFen===0&&b.funds.payableFen===0&&['discovered','preparing','operating','paused'].includes(b.lifecycle))return 'entry'
@@ -163,6 +170,10 @@ function ongoing(p:TodayThreadInput):TodayThreadItem[]{
  const relay=p.features.relay
  const eco=p.features.deepseek
  if(eco){
+  for(const row of equityFocusTargets(p)){
+   const focus=equityFocusFor(p,row.target),journey=equityJourneyFor(p,focus)
+   if(journey.resolution.status==='valid'&&journey.active)candidates.push(focus)
+  }
   const targets=ecosystemFocusTargets(p),covered=new Set(eco.contracts.flatMap(c=>[c.productionJobId,c.supportJobId,...(c.remediationJobId?[c.remediationJobId]:[])]).concat(eco.preparations.map(r=>r.jobId),eco.adapters.map(r=>r.jobId),eco.outreaches.map(r=>r.jobId)))
   for(const row of targets){
    const t=row.target
@@ -204,10 +215,12 @@ function ongoing(p:TodayThreadInput):TodayThreadItem[]{
   seen.add(key)
    const relay=thread.focus.kind==='relay'?relayFacts.get(JSON.stringify(thread.focus))??relayContinuation(p,thread.focus):null
    const ecology=thread.focus.kind==='ecosystem'?ecosystemJourneyFor(p,thread.focus):null
+   const equity=thread.focus.kind==='equity'?equityJourneyFor(p,thread.focus):null
+   const equityMoney=equity&&(equity.resolution.exit?.receivable?.remainingFen??0)>0
    const financialEcology=ecology&&(ecology.phase==='original-money'||!!ecology.resolution.contract&&['completed','cancelled'].includes(ecology.resolution.contract.status))
    const ecologyMoneyLine=ecology&&financialEcology?ecology.line+' '+ecology.facts.join(' '):null
    const feedback=relay?.wait??thread.wait
-   items.push({focus:thread.focus,classification:state,title:relay?.title??thread.title,line:relay?.line??ecologyMoneyLine??thread.line,originQuarter:thread.focusQuarter,inspect:thread.inspect,sourceRefs:(relay?.sourceRefs??thread.resultRefs).map(ref=>({...ref})),...(feedback?{wait:{...feedback}}:{}),...(relay?{relayContinuation:{kind:relay.kind,label:relay.label}}:{}),...(ecology?{ecosystemContinuation:{kind:financialEcology?'money' as const:'task' as const,label:financialEcology?'核对这份原款与旧义务':'继续这份原生态安排'}}:{})})
+   items.push({focus:thread.focus,classification:state,title:relay?.title??thread.title,line:relay?.line??ecologyMoneyLine??thread.line,originQuarter:thread.focusQuarter,inspect:thread.inspect,sourceRefs:(relay?.sourceRefs??thread.resultRefs).map(ref=>({...ref})),...(feedback?{wait:{...feedback}}:{}),...(relay?{relayContinuation:{kind:relay.kind,label:relay.label}}:{}),...(ecology?{ecosystemContinuation:{kind:financialEcology?'money' as const:'task' as const,label:financialEcology?'核对这份原款与旧义务':'继续这份原生态安排'}}:{}),...(equity?{equityContinuation:{kind:equityMoney?'money' as const:'task' as const,label:equityMoney?'核对这笔架空转让原款':'继续这份原权益准备或调查'}}:{})})
  }
  return items
 }
@@ -227,6 +240,7 @@ const directions:readonly TodayDirection[]=[
  {id:'course',label:'把做过的事，认真准备成一堂课',line:'显选教案、已付案例与样课；资金、权利、工具资格和日期仍须核对，不自动招生。',screen:'course'},
  {id:'relay',label:'看看谁需要一份可靠的服务',line:'显选资本、供应和客户承诺，实际服务与核账后再决定下一次投入。',screen:'relay'},
  {id:'ecosystem',label:'去听一份具体的合作请求',line:'模型用途、真实需求、生产与支持分别核对；新的合同仍由你显选，不自动开启架空融资。',screen:'deepseek'},
+ {id:'equity',label:'看看明确架空的参与与原权益',line:'先看清性质、主体与实际条款；查看不创建邀请、资格、股份或现实申购。',screen:'deepseek'},
  {id:'market',label:'想想这笔钱的去处',line:'核对公开研究、原委托和持仓，再决定是否承担下一份模拟交易。',screen:'market'},
 ]
 
@@ -242,7 +256,7 @@ export function todayThread(p:TodayThreadInput,focus?:OpeningFocus|null,focusQua
  return {
   source:{runId:p.view.runId,revision:p.view.revision,date:p.view.date,quarter:p.features.workbench.quarter},
   primary:{thread,classification:state,supported:supported(thread),originQuarter:thread.focusQuarter,sourceRefs:thread.resultRefs.map(ref=>({...ref}))},
-   title:'回到今天，慢慢决定',line:(current.length?current.some(item=>item.relayContinuation&&['money','unknown'].includes(item.relayContinuation.kind)||item.ecosystemContinuation?.kind==='money')?'原安排与仍待核对的旧事项继续保留；今天的去向由你决定。':'已经答应的事仍照原约定继续；今天的去向由你决定。':'旧结果留在原记录。接下来的日子，可以重新选择。')+(remaining.some(item=>item.id.startsWith('today-relay-accrual:'))?'已发生的原维护、工资等未出账成本仍在原账，不因回到今天清除。':''),
+   title:'回到今天，慢慢决定',line:(current.length?current.some(item=>item.relayContinuation&&['money','unknown'].includes(item.relayContinuation.kind)||item.ecosystemContinuation?.kind==='money'||item.equityContinuation?.kind==='money')?'原安排与仍待核对的旧事项继续保留；今天的去向由你决定。':'已经答应的事仍照原约定继续；今天的去向由你决定。':'旧结果留在原记录。接下来的日子，可以重新选择。')+(remaining.some(item=>item.id.startsWith('today-relay-accrual:'))?'已发生的原维护、工资等未出账成本仍在原账，不因回到今天清除。':''),
    question:thread.focus.kind==='video'&&(state==='result'||state==='history')?'接下来是回应已有询价、做另一份作品，还是暂不新增制作？原结果与未完约定都留着。':thread.focus.kind==='course'&&(state==='result'||state==='history')?isCoursePreparationThread(thread)?'这份教学准备留下后，是先看下一步、另备一份教案，还是把日子留给生活？样课与招生、学费仍分别决定。':thread.focus.courseTarget?.kind==='cohort'?'这一班已经发生的学习与钱款都留着。先续上未完承诺，还是不再新增安排，把日子留给生活？':'这次实际受众已经留下。是否作出开班承诺、另定受众，或先回生活，仍由你明确决定。':season.nextQuestion,ongoing:current,directions:directions.map(direction=>({...direction})),remaining,wait:wait(p),responsibilityOverrideNeeded:thread.responsibilityOverrideNeeded,
  }
 }

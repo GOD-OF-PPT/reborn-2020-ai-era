@@ -48,6 +48,7 @@ import type {DayContinuityArt} from './DayContinuityPaper.tsx'
 import {RoomTableau} from './RoomTableau.tsx'
 import {sceneMeaning} from './scene-meaning.ts'
 import {EcosystemMoment} from './EcosystemMoment.tsx'
+import {EquityMoment} from './EquityMoment.tsx'
 
 type Props={p:GamePanelProps;headingRef:Ref<HTMLHeadingElement>;fallback:Moment;feedback?:ReactNode;focus?:OpeningFocus|null|undefined;focusQuarter?:string|null|undefined;focusNotice?:string|null|undefined;focusRequiresChoice?:boolean|undefined;onFocus?:((focus:OpeningFocus|null)=>void)|undefined;onNavigate:NavigateScene;onExplore:()=>void;onResponsibilities?:(()=>void)|undefined;onRecollection?:(()=>void)|undefined;todayView?:boolean|undefined;onToday?:(()=>void)|undefined;onReturnFocus?:(()=>void)|undefined}
 
@@ -274,6 +275,13 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const videoChooseIntent:VideoChoiceAction|undefined=thread.stage==='video-quality'?'rework':thread.stage==='video-ready-to-publish'?'publish':undefined
  const dayArt:DayContinuityArt|undefined=dayActive&&['work','life','market'].includes(thread.focus.kind)?{kind:thread.focus.kind as 'work'|'life'|'market',state:thread.focusScope==='history'?'history':day?.primary.classification==='result'?'result':thread.focusScope==='carry'?'carry':'ongoing'}:undefined
  if((todayView??dayPerspectiveCurrent(p.view,localTodayAt))&&day&&!thread.responsibilityOverrideNeeded&&!interrupted&&!requiresChoice&&!legacy)return <TodayScene p={p} today={day} headingRef={headingRef} feedback={feedback} onFocus={chooseToday} onPrepare={prepareToday} onResume={returnToFocus} onExplore={onExplore} onRecollection={openRecollection} onNavigate={onNavigate}/>
+ if(thread.focus.kind==='equity'&&!interrupted&&!unknownFocus&&!legacy){
+  const equityFocus=thread.focus
+  return <EquityMoment p={{...p,accountId:equityFocus.accountId}} focus={equityFocus} focusQuarter={focusQuarter} headingRef={headingRef} feedback={feedback} onFocus={next=>{
+   if(next.kind==='equity'&&JSON.stringify(next)===JSON.stringify(equityFocus))return
+   chooseFocus(next);if(!onFocus)setLocalQuarter(w.quarter)
+  }} onNavigate={onNavigate} onExplore={onExplore} onToday={onToday} onRecollection={onRecollection}/>
+ }
  if(thread.focus.kind==='ecosystem'&&!interrupted&&!unknownFocus&&!legacy){
   const ecosystemFocus=thread.focus
   return <EcosystemMoment p={{...p,accountId:ecosystemFocus.accountId}} focus={ecosystemFocus} focusQuarter={focusQuarter} headingRef={headingRef} feedback={feedback} onFocus={next=>{

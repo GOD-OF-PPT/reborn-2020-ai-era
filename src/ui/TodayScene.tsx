@@ -36,12 +36,12 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
  const continuing=today.ongoing.filter(item=>!(item.focus.kind==='market'&&item.focus.entityKind==='position'&&!item.wait))
  const one=continuing.length===1?continuing[0]:null
  const relayContinuation=one?.focus.kind==='relay'?one.relayContinuation:undefined
- const continuation=relayContinuation??one?.ecosystemContinuation
- const hasMoney=continuing.some(item=>item.relayContinuation?.kind==='money'||item.ecosystemContinuation?.kind==='money')
+ const continuation=relayContinuation??one?.ecosystemContinuation??one?.equityContinuation
+ const hasMoney=continuing.some(item=>item.relayContinuation?.kind==='money'||item.ecosystemContinuation?.kind==='money'||item.equityContinuation?.kind==='money')
  const statusFeedback=today.primary.thread.focus.kind==='ecosystem'?ecosystemUiStatus(feedback,p.view.date):null
  const calendarStatus=today.primary.thread.focus.kind==='ecosystem'?ecosystemCalendarStatus(feedback,p.view.date):null
  const primary=p.features.workbench.atQuarterEnd?ui('看看这一季，实际留下了什么',onRecollection)
-  :one?ui(one.focus.kind==='relay'?relayContinuation?.label??'回到这份原中转事项':one.ecosystemContinuation?.label??'继续'+({work:'这季的工作',life:'这段生活安排',course:'这份教学约定',video:'这份作品',market:'这份模拟委托',ecosystem:'这份原生态事项',free:'原来的安排','first-order':'这份委托'}[one.focus.kind]),()=>choose(one.focus))
+  :one?ui(one.focus.kind==='relay'?relayContinuation?.label??'回到这份原中转事项':one.ecosystemContinuation?.label??one.equityContinuation?.label??'继续'+({work:'这季的工作',life:'这段生活安排',course:'这份教学约定',video:'这份作品',market:'这份模拟委托',ecosystem:'这份原生态事项',equity:'这份架空权益与原款',free:'原来的安排','first-order':'这份委托'}[one.focus.kind]),()=>choose(one.focus))
   :continuing.length>1?ui('选回一件未完的约定',()=>setPage('ongoing'))
   :ui('给生活留一段真实的日子',()=>prepare('life'))
  const meaning=sceneMeaning({...p,accountId:today.primary.thread.focus.accountId},today.primary.thread)
@@ -79,6 +79,7 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
     {button('把做过的事，准备成一堂课',()=>{setPage(null);openCourse('objects')},'明确选择教室与教案；案例、大纲、素材范围和样课分别准备，不自动招生')}
     {button('看看谁需要一份可靠的服务',()=>{const focus=openingFocusFor(p,'relay',{relayTarget:null,accountId:'personal'});if(focus)choose(focus)},'先核对自有资本、供应与客户承诺；不自动开站或充值')}
     {button('去听一份具体的合作请求',()=>{const focus=openingFocusFor(p,'deepseek',{ecosystemTarget:null,accountId:'personal',deepseekPane:'ecosystem'});if(focus)choose(focus)},'先选原企业、模型用途和真实需求；合同与投入另行显选，不自动开启架空融资')}
+    {button('看看明确架空的参与与原权益',()=>{const focus=openingFocusFor(p,'deepseek',{equityTarget:null,accountId:'personal',deepseekPane:'equity'});if(focus)choose(focus)},'先看清性质和原主体；查看不产生资格、股份或现实申购')}
     {button('准备自己的下一份模拟判断',()=>prepare('market'),'研究、显选委托，或先保留现金')}
    </div></>:null}
    {page==='life'?<><p>留给自己的时间也要作取舍。已经在进行的安排仍在原日历上，新安排不返行动或增加收入。</p><div className="today-commitments">{(['rest','workspace'] as const).map(kind=>{const terms=p.features.life.work[kind];return <article key={kind}><h3>{terms.title}</h3><p>个人{moneyText(terms.costFen)} · {terms.points}点 · {terms.days}日；今天开始，最早{addDays(p.view.date,terms.days)}实际完成。</p><CommandButton {...commandProps} kind="StartLifeWork" payload={{kind,personId:null,reference:null}} label={kind==='rest'?'核对并留出七天休整':'核对并改善桌椅与照明'} confirm/></article>})}</div>{button('看看相识的人与全部生活记录',()=>{setPage(null);onNavigate('life',{accountId:'personal'})})}</>:null}

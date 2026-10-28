@@ -12,10 +12,12 @@ import {courseFocusFor,resolveCourseFocus} from './course-player-thread.ts'
 import type {CourseSceneTarget} from './course-scene-progress.ts'
 import {resolveVideoFocus,videoTargetEntity} from './video-player-thread.ts'
 import type {VideoSceneTarget} from './video-scene-progress.ts'
+import {equityCommandFocus} from './equity-player-thread.ts'
 type Input=Pick<GamePanelProps,'view'|'features'>
 
 /** null is an unrelated command; [] is a relevant source that cannot be uniquely matched. */
 export function sceneCommandFocus(p:Input,c:SceneCommand):readonly OpeningFocus[]|null{
+ const equity=equityCommandFocus(p,c);if(equity!==null)return equity
  const v=p.features.deepseek,r=p.features.relay,lessons=p.features.course,movies=p.features.video,f=c.identifiers
  const course=(target:CourseSceneTarget):OpeningFocus[]=>{const focus=courseFocusFor(p,target);return resolveCourseFocus(p,focus).reason?[]:[focus]}
  const lesson=(id:string|undefined):OpeningFocus[]=>{const rows=lessons?.courses.filter(x=>x.id===id)??[];return rows.length===1?course({kind:'course',businessId:rows[0]!.businessId,courseId:rows[0]!.id}):[]}

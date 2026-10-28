@@ -6,6 +6,7 @@ import {resolveRelaySceneTarget,relayTargetEntity} from './relay-scene-target.ts
 import type {ProductionJob} from '../core/operations-types.ts'
 import {relayTicketAudit} from './relay-ticket-command.ts'
 import {ecosystemJourneyFor} from './ecosystem-player-thread.ts'
+import {equityJourneyFor} from './equity-player-thread.ts'
 
 type Input=Pick<GamePanelProps,'view'|'features'>
 type Thread=Pick<PlayerThreadView,'focus'|'focusScope'|'stage'|'outcome'|'responsibilityOverrideNeeded'>
@@ -102,6 +103,7 @@ export function threadPurpose(p:Input,thread:Thread):ThreadPurpose{
  const relayObject=focus.kind==='relay'?relayObjectPurpose(p,thread):null
  if(relayObject)return relayObject
  if(thread.focusScope==='history'&&!courseAttemptClosed(p,thread))return purpose(outcome==='non-success'?'回看这次未完成的原尝试，再核对留下的责任。':'回看这次原尝试的实际经过，再决定今天怎样继续。','看清原记录即可合上留页；同对象的当前承诺仍须另行核对。')
+ if(focus.kind==='equity'){const journey=equityJourneyFor(p,focus);return purpose(journey.purpose,journey.finishWhen)}
  if(focus.kind==='ecosystem'){const journey=ecosystemJourneyFor(p,focus);return purpose(journey.purpose,journey.finishWhen)}
  if(focus.kind==='first-order'){
   if(stage==='paid')return purpose('收好这笔真实回款，再决定手艺和生活怎样继续。','本单已实际回款；下一份委托、工作或生活都须另行选择。')
