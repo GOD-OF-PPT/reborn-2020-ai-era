@@ -137,18 +137,20 @@ it('retains the actual old terms after head.put abort, then follows only the ori
  h.arm();request.request('SignEquityAgreement',{negotiationId:h.original.id},'本次实际签署',true)
  const modal=h.render().find(e=>e.type===Dialog&&e.props.title==='本次实际签署')!,decide=elements(modal).find(e=>e.type==='button'&&text(e.props.children)==='就这样决定 →')!
  invoke(decide,'onClick')
- for(let i=0;i<100&&!h.controller.snapshot.view!.hasCandidate;i++)await new Promise(resolve=>setTimeout(resolve,0))
- for(let i=0;i<100&&h.controller.snapshot.busy;i++)await new Promise(resolve=>setTimeout(resolve,0))
+ expect((await submit.mock.results.at(-1)!.value).status).toBe('unsaved')
+ // Wait for the original App dispatch/finally as well as the real Controller.
+ await new Promise(resolve=>setTimeout(resolve,0))
  expect(h.fault.trace).toEqual({writeSucceeded:true,abortIssued:true});expect(h.controller.snapshot.view!.revision).toBe(93);expect(h.controller.exportSaved()).toBe(before)
  expect(h.controller.exportCandidate()).not.toBe(before);expect((h.scene().props.focus as {equityTarget:EquitySceneTarget}).equityTarget).toEqual(h.target)
- const physical=await h.store.load(h.view.runId);expect(physical).not.toBeNull();expect(h.codec.export(physical!.run)).toBe(before)
+ // load already verifies the full envelope, receipt and log bundle. Compare
+ // its entire state with the actual exported state without sealing it again.
+ const physical=await h.store.load(h.view.runId);expect(physical).not.toBeNull();expect(physical!.run).toEqual(JSON.parse(before).state)
  const retry=h.render().find(e=>e.type==='button'&&text(e.props.children)==='重试保存原候选')!;invoke(retry,'onClick')
- for(let i=0;i<100&&h.controller.snapshot.view!.revision!==94;i++)await new Promise(resolve=>setTimeout(resolve,0))
- for(let i=0;i<100&&h.controller.snapshot.busy;i++)await new Promise(resolve=>setTimeout(resolve,0))
+ expect((await retryCall.mock.results.at(-1)!.value).status).toBe('saved')
  await new Promise(resolve=>setTimeout(resolve,0))
  const current=h.controller.snapshot.view!,agreement=(current.features as unknown as PlayFeatures).deepseek!.agreements[0]!,focus=h.scene().props.focus as {equityTarget:EquitySceneTarget}
  expect(current.revision).toBe(94);expect(current.hasCandidate).toBe(false);expect(focus.equityTarget).toEqual({runId:current.runId,accountId:agreement.accountId,businessId:agreement.businessId,kind:'agreement',recordId:agreement.id})
- expect(h.codec.export((await h.store.load(current.runId))!.run)).toBe(h.controller.exportSaved())
+ expect((await h.store.load(current.runId))!.run).toEqual(JSON.parse(h.controller.exportSaved()).state)
  expect(submit).toHaveBeenCalledTimes(1);expect(retryCall).toHaveBeenCalledTimes(1)
  submit.mockRestore();retryCall.mockRestore();
 })

@@ -58,7 +58,7 @@ beforeAll(async()=>{
  reading=await setup('reading');failed=await setup('abort',raw,true)
  const view=reading.controller.snapshot.view!,p:GamePanelProps={controller:reading.controller,view,features:view.features as unknown as PlayFeatures,accountId:'personal',request:()=>{throw Error('PREFIX_READING_MUST_NOT_ACT')}},target=quote(p),codec=reading.codec
  let model=codec.import(raw)
- const step=(kind:string,payload:unknown,commandId:string)=>{const result=evaluateCommand(model,{runId:model.runId,actorId:model.actorId,expectedRevision:model.revision,commandId,kind,payload},codec.registry,model.actorId);if(result.status!=='proposed')throw Error('ORIGINAL_NORMAL_PREFIX_REJECTED:'+kind);model=codec.import(codec.export(result.nextRun))}
+ const step=(kind:string,payload:unknown,commandId:string)=>{const result=evaluateCommand(model,{runId:model.runId,actorId:model.actorId,expectedRevision:model.revision,commandId,kind,payload},codec.registry,model.actorId);if(result.status!=='proposed')throw Error('ORIGINAL_NORMAL_PREFIX_REJECTED:'+kind);model=codec.validateRun(result.nextRun)}
  step('AcceptEquityExit',{exitId:target.kind==='exit'?target.recordId:'',shares:1000},'u6-tail-prefix-sale')
  const sale=codec.export(model),due=model.deepseek!.exits.find(e=>target.kind==='exit'&&e.id===target.recordId)!.dueAt!
  step('AdvanceEpilogueTime',{date:due},'u6-tail-prefix-wait')
@@ -101,7 +101,7 @@ it('keeps the original quote identity after an actual partial transfer without t
   expect(f.equityTarget).toEqual(t);expect(j.phase).toBe('receivable');expect(cash(p)).toBe(cash(before));expect(p.view.budget).toEqual(budget)
   expect(p.features.deepseek!.agreements.find(r=>r.id===a.id)!.shares).toBe(a.shares-1000)
   expect(p.controller.preview(p.controller.prepare('CollectEquityExit',{exitId:t.kind==='exit'?t.recordId:'',amountFen:1})).reasonCodes).toContain('EQUITY_EXIT_NOT_DUE')
-  expect(h.codec.export((await h.store.load(p.view.runId))!.run)).toBe(h.controller.exportSaved())
+  expect((await h.store.load(p.view.runId))!.run).toEqual(JSON.parse(h.controller.exportSaved()).state)
  }finally{await h.close()}
 })
 
@@ -122,7 +122,7 @@ it('uses the legal next finite date for an original credit and keeps its money, 
   expect((await h.confirm(String(modal.props.title))).status).toBe('saved')
   p=h.p();const j=equityJourneyFor(p,h.scene().props.focus as ReturnType<typeof equityFocusFor>);expect(j.phase).toBe('collection');expect(p.view.date).toBe(due);expect(cash(p)).toBe(cash(before));expect(p.view.budget).toEqual(budget)
   expect((h.scene().props.focus as ReturnType<typeof equityFocusFor>).equityTarget).toEqual(prefix.target)
-  expect(h.codec.export((await h.store.load(p.view.runId))!.run)).toBe(h.controller.exportSaved())
+  expect((await h.store.load(p.view.runId))!.run).toEqual(JSON.parse(h.controller.exportSaved()).state)
  }finally{await h.close()}
 })
 
@@ -138,7 +138,7 @@ it('collects an original due credit in explicit partial amounts before returning
    j=equityJourneyFor(p,h.scene().props.focus as ReturnType<typeof equityFocusFor>);expect(j.phase).toBe(index===0?'collection':'collected')
   }
   expect(j.action).toMatchObject({kind:'today',label:'收好原记录，回到尾声'});expect(p.view.budget).toEqual(budget)
-  expect(h.codec.export((await h.store.load(p.view.runId))!.run)).toBe(h.controller.exportSaved())
+  expect((await h.store.load(p.view.runId))!.run).toEqual(JSON.parse(h.controller.exportSaved()).state)
   invoke(h.scene(),'onToday');expect(h.draw().some(e=>typeof e.props.onOpenEquity==='function')).toBe(true)
   h.open();expect((h.scene().props.focus as ReturnType<typeof equityFocusFor>).equityTarget).toEqual(t)
   expect(equityJourneyFor(h.p(),h.scene().props.focus as ReturnType<typeof equityFocusFor>).phase).toBe('collected')
@@ -152,11 +152,11 @@ it('retains the original quote after a real head.put abort and changes paper onl
   expect((await h.confirm('核对未保存的部分转让')).status).toBe('unsaved')
   expect(h.fault.trace).toEqual({writeSucceeded:true,abortIssued:true});expect(h.controller.exportSaved()).toBe(before)
   expect(equityJourneyFor(h.p(),h.scene().props.focus as ReturnType<typeof equityFocusFor>).phase).toBe('quote')
-  expect(h.codec.export((await h.store.load(p.view.runId))!.run)).toBe(before)
+  expect((await h.store.load(p.view.runId))!.run).toEqual(JSON.parse(before).state)
   const candidate=h.controller.exportCandidate(),retry=h.draw().find(e=>e.type==='button'&&text(e.props.children)==='重试保存原候选')!,spy=vi.spyOn(h.controller,'retry')
   invoke(retry,'onClick');await spy.mock.results.at(-1)!.value;await Promise.resolve();spy.mockRestore()
   expect(h.controller.exportSaved()).toBe(candidate);expect(equityJourneyFor(h.p(),h.scene().props.focus as ReturnType<typeof equityFocusFor>).phase).toBe('receivable')
-  expect(h.codec.export((await h.store.load(p.view.runId))!.run)).toBe(candidate)
+  expect((await h.store.load(p.view.runId))!.run).toEqual(JSON.parse(candidate).state)
 })
 
 it('keeps an archived life on its original review until the independent resume confirmation succeeds',async()=>{
