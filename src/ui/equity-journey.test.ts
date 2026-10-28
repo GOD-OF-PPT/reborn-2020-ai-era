@@ -50,7 +50,10 @@ it('keeps the real4500 preparation cost separate from accepted terms and the lat
  expect(offered.directCosts?.paidFen).toBe(450000);expect(offered.facts.join(' ')).toContain('¥4,500');expect(h.run.deepseek!.agreements).toHaveLength(0)
  h.send('SignEquityAgreement',{negotiationId:negotiation.id});const a=h.run.deepseek!.agreements[0]!,holding=equityJourney(projectDeepseek(h.run,h.deepseek),target(h,b.id,'agreement',a.id),context(h,b.accountId))
  expect(holding).toMatchObject({phase:'holding',paper:'holding',active:false,outcome:'actual'});expect(holding.directCosts?.paidFen).toBe(450000);expect(holding.facts.join(' ')).toContain('账面值');expect(holding.facts.join(' ')).toContain('不能花');expect(holding.finishWhen).toContain('不要求清空记录')
- expect(scene()).toMatchObject({phase:'terms-closed',action:{kind:'today'}})
+ const closed=scene()
+ expect(closed).toMatchObject({phase:'terms-closed',action:{kind:'today'}})
+ expect(closed.purpose).toContain('已经签署');expect(closed.finishWhen).toContain('不重复付款');expect(closed.finishWhen).not.toContain('只有实际付款签署后')
+ expect(closed.facts.join(' ')).toContain('原条款本金¥2,000,000');expect(closed.facts.join(' ')).not.toContain('拟支付本金')
 })
 
 it('keeps an actually refused negotiation with spent costs and no sign command or automatic replacement',()=>{
@@ -58,6 +61,10 @@ it('keeps an actually refused negotiation with spent costs and no sign command o
  const scene=equityJourney(projectDeepseek(h.run,h.deepseek),t,context(h,b.accountId))
  expect(scene).toMatchObject({phase:'terms-rejected',outcome:'non-success',action:{kind:'choice',intent:'terms'}})
  expect(scene.directCosts?.paidFen).toBe(450000);expect(scene.title).not.toContain('条件谈妥');expect(h.run.deepseek!.agreements).toHaveLength(0);expect(h.codec.export(h.run)).toBe(before)
+ expect(scene.purpose).toContain('未接受');expect(scene.finishWhen).toContain('不会自动重谈')
+ h.send('DeclineEquityTerms',{negotiationId:negotiation.id})
+ const declined=equityJourney(projectDeepseek(h.run,h.deepseek),t,context(h,b.accountId))
+ expect(declined.purpose).toContain('已经拒绝');expect(declined.finishWhen).toContain('不重谈或新增付款');expect(declined.facts.join(' ')).not.toContain('拟支付本金')
 })
 
 it('does not turn an actual no-buyer reply into quote expiry or steal the selected exit for a new follow window',()=>{
@@ -119,6 +126,7 @@ it('does not offer real signature after the invitation expired during an otherwi
  expect(scene.resolution.negotiation?.accepted).toBe(true);expect(scene.resolution.invitation?.status).toBe('expired')
  expect(h.preview('SignEquityAgreement',{negotiationId:n.id}).allowed).toBe(false)
  expect(h.preview('DeclineEquityTerms',{negotiationId:n.id}).allowed).toBe(true)
+ expect(scene.purpose).toContain('不恢复签署');expect(scene.finishWhen).toContain('不恢复原邀请');expect(scene.facts.join(' ')).not.toContain('拟支付本金')
 })
 
 it('shows the actual broker cash separately and obtains free rejection dates only from same-source public command records',()=>{

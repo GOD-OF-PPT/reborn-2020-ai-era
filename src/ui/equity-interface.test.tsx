@@ -73,6 +73,13 @@ it('keeps missing, duplicate and foreign-owner reading targets explicit rather t
  expect(equityRecordSelection(duplicate,p.accountId,p.features.deepseek!.negotiations[0]!.id).reason).not.toBeNull()
  const tree=render('missing-book',()=>EquityPanel({...p,assignment:{resources:['player-production'],startAt:p.view.date},initialFocusId:'missing-invitation'}))
  expect(text(tree)).toContain('先找回原来这一份');expect(elements(tree).some(e=>e.type===CommandButton)).toBe(false)
+ // A resolvable target does not repair a mismatched outer source. The old
+ // near intent must neither claim ownership nor expose a new commitment.
+ for(const intent of ['terms','holding','collect','governance'] as const){
+  const invalid=render('invalid-near-'+intent,()=>EquitySceneChoice({p,target:selected,intent,sourceInvalid:true,sourceReason:'完整来源身份不一致，原记录保留。',onClose:vi.fn(),onChoose:vi.fn(),onIntent:vi.fn(),onInspect:vi.fn(),onToday:vi.fn()}))
+  expect(invalid.props.title).toBe('先找回原来那一份。');expect(text(invalid)).toContain('完整来源身份不一致')
+  expect(elements(invalid).some(e=>e.type===CommandButton)).toBe(false)
+ }
  expect(sign.controller.exportSaved()).toBe(before)
 })
 
@@ -120,6 +127,14 @@ it('explains an original lock and missing board right before asking the player t
  const locked=near(p,t,'exit-request','locked-title')
  expect(locked.tree().props.title).toBe('还在原锁定期，先看看这份安排。')
  expect(p.request).not.toHaveBeenCalled();expect(follow.controller.exportSaved()).toBe(before)
+ const oldTerms=near(p,target(p,'negotiation'),'terms','already-signed-terms')
+ expect(oldTerms.tree().props.title).toBe('本条款已经实际签署，持股另有原册。')
+ expect(text(oldTerms.tree())).toContain('原条款本金');expect(text(oldTerms.tree())).not.toContain('拟支付本金')
+ expect(oldTerms.button('SignEquityAgreement').props.disabled).toBe(true)
+ expect(oldTerms.button('DeclineEquityTerms').props.disabled).toBe(true)
+ const book=render('already-signed-book',()=>EquityPanel({...p,assignment:{resources:['player-production'],startAt:p.view.date}}))
+ const n=p.features.deepseek!.negotiations[0]!,history=elements(book).find(e=>e.type==='section'&&e.props.id===n.id)!
+ expect(history).toBeDefined();expect(text(history)).toContain('原条款本金');expect(text(history)).not.toContain('拟支付')
 })
 
 it('retains same-object drafts through a changed date and blocks stale A→B→A callbacks and a changed memory',()=>{

@@ -41,7 +41,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
  }
  const holdingFacts=a?<><p>本协议仍持{a.shares}/{a.totalShares}模拟股（约{(a.holdingBps/100).toFixed(2)}%）；尚持有成本{moneyText(a.asset?.bookCostFen)}，账面值{moneyText(a.asset?.valueFen)}不能花。</p><p>锁定至{a.lockUntil}，{a.locked?'当前仍锁定':'锁定期已到，仍需独立买方'}；{a.board?a.shares>0?'一席董事，无单方控制':'原条款有席位，现已无股，不能提交会议':'无董事权'}，{a.preemptive?a.shares>0?'有原跟投权，仍按本轮条件决定':'现已无股，不能新增跟投':'无跟投权'}。原主体不随新的准备切换。</p></>:null
  const invalidSource=sourceInvalid||r.status==='invalid'
- const title=intent==='holding'&&a?.shares===0?'收好原协议，看看各笔原款。':intent==='follow'&&a?.shares===0?'已无现持股，核对本轮原安排。':intent==='follow'&&a&&a.followDecision!=='pending'?'核对本协议的融资与原条款。':intent==='governance'&&a&&(!a.board||a.shares===0)?'先核对本协议当前的会议权利。':intent==='exit-request'&&a?.locked?'还在原锁定期，先看看这份安排。':intent==='exit-request'&&a&&!a.transferConsent?'先核对这份协议的原转让同意。':intent==='terms'&&n&&n.respondedAt!==null&&n.accepted!==true?'对方未接受，原投入仍保留。':titles[intent]
+ const title=invalidSource?'先找回原来那一份。':intent==='holding'&&a?.shares===0?'收好原协议，看看各笔原款。':intent==='follow'&&a?.shares===0?'已无现持股，核对本轮原安排。':intent==='follow'&&a&&a.followDecision!=='pending'?'核对本协议的融资与原条款。':intent==='governance'&&a&&(!a.board||a.shares===0)?'先核对本协议当前的会议权利。':intent==='exit-request'&&a?.locked?'还在原锁定期，先看看这份安排。':intent==='exit-request'&&a&&!a.transferConsent?'先核对这份协议的原转让同意。':intent==='terms'&&n&&journey.phase!=='terms-accepted'?journey.title:titles[intent]
  const contents:ReactNode=<>
   <p className="counterfactual-boundary">本局明确架空安排，不是现实公开申购。技术合作、服务合同、资金或中间费均不产生股份；估值和应收不能花。</p>
   {intent==='actors'||intent==='objects'?<>
@@ -51,7 +51,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
    {!invalidSource&&v?.counterfactualEnabledAt!==null?command('OpenEquityDesk',{},'另行建立个人准备分账，不领取资金或股份'):null}
    {invalidSource?ui('回到没有承诺的新入口','只明确重选阅读方向；原记录与费用保留，不建立分账或发出命令。',()=>onChoose(null)):null}
    {ui('合上这一页，回到今天','查看和选择准备方向不付款，也不取得股份。',onToday)}
-  </>:r.status!=='valid'?<><p role="alert">{r.reason??'先明确选择本次准备的主体，原协议和旧费用仍保留。'}</p>{go('actors','明确选择准备主体','没有默认换成另一家企业。')}</>:<>
+  </>:invalidSource||r.status!=='valid'?<><p role="alert">{sourceReason??r.reason??'先明确选择本次准备的主体，原协议和旧费用仍保留。'}</p>{go('actors','明确选择准备主体','没有默认换成另一家企业。')}</>:<>
    <p className="equity-choice-owner">本次原主体：{b!.accountId==='personal'?'个人账户 · 投资准备分账':'企业账户 · '+b!.accountId.slice(-6)}，可花{moneyText(b!.funds.availableFen)}；客户保护款{moneyText(b!.funds.prepaidLiabilityFen)}仍有独立义务。</p>
    {intent==='business'?<>
     <p>{b!.related?'已有真实关系准备或已付合作案例。':'尚无可谈判关系，只有资金或技术不够。'}{b!.eligible?'本局参与资格已经完成。':'本局参与资格仍须核对，不授予现实金融资格。'}</p>
@@ -88,7 +88,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
     {resources}{command('StartEquityNegotiation',{invitationId:i.id,acquisitionKind:draft.value('acquisition'),termsId:draft.value('terms'),amountFen:amount??-1,...assignment},'明确这些条件，安排七天谈判',hasAssignment&&amount!==null&&amount>0&&['new_capital','secondary'].includes(draft.value('acquisition'))&&v!.catalog.terms.some(t=>t.id===draft.value('terms')))}
    </>:null}
    {intent==='terms'&&n?<>
-    <p>{journey.line}</p><p>拟支付本金{moneyText(n.amountFen)} / {n.shares}模拟股 / {v!.catalog.terms.find(t=>t.id===n.termsId)?.label} / 条款有效至{n.expiresAt}；{n.kind==='new_capital'?'新增项目资本':'支付老股卖方，不增加项目资本'}。</p>
+    <p>{journey.line}</p><p>{n.closedAt!==null||n.expired||i?.status!=='open'?'原条款本金':'拟支付本金'}{moneyText(n.amountFen)} / {n.shares}模拟股 / {v!.catalog.terms.find(t=>t.id===n.termsId)?.label} / 条款有效至{n.expiresAt}；{n.kind==='new_capital'?'新增项目资本':'支付老股卖方，不增加项目资本'}。</p>
     {command('SignEquityAgreement',{negotiationId:n.id},'核对真实本金，另行支付并签署本协议')}
     {command('DeclineEquityTerms',{negotiationId:n.id},'不接受这份条款，原调查与谈判费用保留')}
    </>:null}
