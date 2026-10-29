@@ -68,28 +68,28 @@ afterAll(async()=>{await reader?.close();await normal?.controller.close();await 
 it('compares both effects before showing an empty original arrangement, without writing or choosing a default policy',()=>{
  const p=props(normal.controller),before=normal.controller.exportSaved(),ui=near(p)
  expect(text(ui.tree())).toContain('已经发生的资本用途报告');expect(text(ui.tree())).toContain('原报价不追改');expect(elements(ui.tree()).some(e=>e.type===CommandButton&&e.props.kind==='ProposeEquityGovernance')).toBe(false)
- ui.choose('先选「独立核对本局资本用途」');expect(ui.date().props.value).toBe('');expect(ui.resource().props.value).toBe('');expect(ui.pay().props.disabled).toBe(true)
+ ui.choose('查清资本去向');expect(ui.date().props.value).toBe('');expect(ui.resource().props.value).toBe('');expect(ui.pay().props.disabled).toBe(true)
  expect(p.request).not.toHaveBeenCalled();expect(normal.controller.exportSaved()).toBe(before)
 })
 
 it('preserves fields on return and retires old edits and payment before repaint and across a policy round trip',()=>{
- const p=props(normal.controller),ui=near(p),comparisonTitle=ui.tree().props.title;ui.choose('先选「独立核对本局资本用途」');expect(ui.tree().props.title).not.toBe(comparisonTitle);ui.assign()
+ const p=props(normal.controller),ui=near(p),comparisonTitle=ui.tree().props.title;ui.choose('查清资本去向');expect(ui.tree().props.title).not.toBe(comparisonTitle);ui.assign()
  const oldDate=ui.date(),oldPay=ui.pay(),back=elements(ui.tree()).find(e=>e.type==='button'&&text(e).startsWith('重新比较两项提案'))!
  invoke(back,'onClick');invoke(oldDate,'onChange',{currentTarget:{value:'2025-08-01'}});invoke(oldPay,'onClick');expect(p.request).not.toHaveBeenCalled();ui.render();expect(ui.tree().props.title).toBe(comparisonTitle)
- ui.choose('先选「限定研究用途与接手方」');expect(ui.date().props.value).toBe('2025-07-02');expect(ui.resource().props.value).toBe('player-production')
- ui.choose('重新比较两项提案');ui.choose('先选「独立核对本局资本用途」');invoke(oldPay,'onClick');expect(p.request).not.toHaveBeenCalled()
+ ui.choose('限定接手范围');expect(ui.date().props.value).toBe('2025-07-02');expect(ui.resource().props.value).toBe('player-production')
+ ui.choose('重新比较两项提案');ui.choose('查清资本去向');invoke(oldPay,'onClick');expect(p.request).not.toHaveBeenCalled()
  invoke(ui.pay(),'onClick');expect(p.request).toHaveBeenCalledWith('ProposeEquityGovernance',{agreementId:source.agreement.id,policy:'independent_audit',resources:['player-production'],startAt:'2025-07-02'},expect.any(String),true)
 })
 
 it('fills today only on an explicit choice while preserving manual future dates and leaving the resource and commitment independent',()=>{
- const p=props(normal.controller),before=normal.controller.exportSaved(),ui=near(p);ui.choose('先选「独立核对本局资本用途」')
+ const p=props(normal.controller),before=normal.controller.exportSaved(),ui=near(p);ui.choose('查清资本去向')
  expect(ui.date().props.value).toBe('');ui.choose('填入今天');expect(ui.date().props.value).toBe(p.view.date);expect(ui.resource().props.value).toBe('');expect(ui.pay().props.disabled).toBe(true)
- ui.assign();expect(ui.date().props.value).toBe('2025-07-02');ui.choose('重新比较两项提案');ui.choose('先选「限定研究用途与接手方」');expect(ui.date().props.value).toBe('2025-07-02')
+ ui.assign();expect(ui.date().props.value).toBe('2025-07-02');ui.choose('重新比较两项提案');ui.choose('限定接手范围');expect(ui.date().props.value).toBe('2025-07-02')
  ui.choose('填入今天');invoke(ui.pay(),'onClick');expect(p.request).toHaveBeenCalledWith('ProposeEquityGovernance',expect.objectContaining({policy:'commercial_scope',startAt:'2025-07-01',resources:['player-production']}),expect.any(String),true);expect(normal.controller.exportSaved()).toBe(before)
 })
 
 it('shares the chosen policy and exact resources/date with the original book and fences a book policy change before the next near repaint',()=>{
- const p=props(normal.controller),t=target(p),ui=near(p);ui.choose('先选「独立核对本局资本用途」');ui.assign();const oldPay=ui.pay()
+ const p=props(normal.controller),t=target(p),ui=near(p);ui.choose('查清资本去向');ui.assign();const oldPay=ui.pay()
  const book=()=>draw('governance-book',()=>EquityPanel({...p,assignment:{resources:[],startAt:''},initialTarget:t})),tree=book(),c=elements(tree).find(e=>e.type===CommandButton&&e.props.kind==='ProposeEquityGovernance'&&(e.props.payload as {policy:string}).policy==='commercial_scope')!
  expect(c.props.payload).toMatchObject({resources:['player-production'],startAt:'2025-07-02'});expect(c.props.confirm).toBe(true)
  invoke(elements(Reflect.apply(CommandButton,undefined,[c.props])).find(e=>e.type==='button')!,'onClick');expect(p.request).toHaveBeenCalledTimes(1)
@@ -98,12 +98,12 @@ it('shares the chosen policy and exact resources/date with the original book and
 })
 
 it('allows a real reader to compare and read the arrangement while the original proposal remains disabled',()=>{
- const p=props(reader),ui=near(p);expect(p.view.readOnly).toBe(true);ui.choose('先选「限定研究用途与接手方」');ui.assign()
+ const p=props(reader),ui=near(p);expect(p.view.readOnly).toBe(true);ui.choose('限定接手范围');ui.assign()
  expect(ui.pay().props.disabled).toBe(true);expect(text(ui.tree())).toContain('限定研究用途与接手方');expect(p.request).not.toHaveBeenCalled()
 })
 
 it('keeps the old draft generation after a real head.put abort and creates a new empty proposal slot only after the exact original retry',async()=>{
- const p=props(failed.controller),ui=near(p),key=equityDraftKey(p,target(p),'governance');ui.choose('先选「独立核对本局资本用途」');ui.assign();invoke(ui.pay(),'onClick')
+ const p=props(failed.controller),ui=near(p),key=equityDraftKey(p,target(p),'governance');ui.choose('查清资本去向');ui.assign();invoke(ui.pay(),'onClick')
  const [kind,payload]=(p.request as ReturnType<typeof vi.fn>).mock.calls[0]!,before=failed.controller.exportSaved();failed.arm()
  expect((await failed.controller.submit(failed.controller.prepare(kind,payload))).status).toBe('unsaved');expect(failed.fault.trace).toEqual({writeSucceeded:true,abortIssued:true});expect(failed.controller.exportSaved()).toBe(before)
  const old={...props(failed.controller),equityDraftMemory:p.equityDraftMemory!},oldKey=equityDraftKey(old,target(old),'governance');expect(oldKey).toBe(key);expect(p.equityDraftMemory!.get(key)?.policy).toBe('independent_audit')

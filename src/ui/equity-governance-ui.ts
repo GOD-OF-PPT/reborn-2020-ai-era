@@ -2,8 +2,8 @@ import {addDays} from '../core/calendar.ts'
 import type {EquityJourney} from './equity-journey.ts'
 
 export const EQUITY_GOVERNANCE_POLICIES=[
- {id:'independent_audit',label:'独立核对本局资本用途',question:'先核对，资本去了哪里。',effect:'若实际通过，开放本局已经发生的资本用途报告。',limit:'不揭示未来研发，也不取得单方控制。'},
- {id:'commercial_scope',label:'限定研究用途与接手方',question:'为以后的接手，划清边界。',effect:'若实际通过，从通过次日起影响新的退出申请；原报价不追改。',limit:'可能收窄后续接手范围，不保证退出、收入或控制权。'},
+ {id:'independent_audit',label:'独立核对本局资本用途',question:'先核对，资本去了哪里。',effect:'若实际通过，开放本局已经发生的资本用途报告。',limit:'不揭示未来研发，也不取得单方控制。',choiceLabel:'查清资本去向',choiceEffect:'通过后查阅已经发生的资本用途报告。',choiceLimit:'不揭示未来研发，不能单方控制。'},
+ {id:'commercial_scope',label:'限定研究用途与接手方',question:'为以后的接手，划清边界。',effect:'若实际通过，从通过次日起影响新的退出申请；原报价不追改。',limit:'可能收窄后续接手范围，不保证退出、收入或控制权。',choiceLabel:'限定接手范围',choiceEffect:'通过次日起影响新退出申请；原报价不追改。',choiceLimit:'接手范围可能变窄，不保证卖出。'},
 ] as const
 export const equityGovernancePolicy=(value:unknown)=>EQUITY_GOVERNANCE_POLICIES.find(p=>p.id===value)??null
 export function equityGovernanceEffectiveDate(date:string){try{return addDays(date,1)}catch{return null}}

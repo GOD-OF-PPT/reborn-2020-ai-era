@@ -55,16 +55,16 @@ it('exposes the same original display command and preview to a renderer without 
 it('keeps the blank transfer disabled and shows original net credit, cumulative fee and due date after an explicit share choice',()=>{
  const p=quote.p(),before=quote.controller.exportSaved(),ui=near(p,'exit-accept');expect(ui.pay().props.disabled).toBe(true)
  ui.edit('1000');expect(ui.pay().props.disabled).toBe(false);const actual=text(ui.action())
- for(const value of ['净应收¥6,896.70','2027-07-15','原总价¥7,110','转让费¥213.30','余1500股','现金不增加'])expect(actual).toContain(value)
+ for(const value of ['净应收 ¥6,896.70','2027-07-15','总价¥7,110','转让费¥213.30','余1500股','现在不增加现金'])expect(actual).toContain(value)
  invoke(ui.pay(),'onClick');expect(p.request).toHaveBeenCalledWith('AcceptEquityExit',{exitId:ui.e.id,shares:1000},expect.any(String),true);expect(quote.controller.exportSaved()).toBe(before)
 })
 it('keeps invalid or overlarge shares on the original refusal and permits a UI-only choice to retain the holding',()=>{
- const p=quote.p(),before=quote.controller.exportSaved(),ui=near(p,'exit-accept');ui.edit('99999999');expect(ui.pay().props.disabled).toBe(true);expect(text(ui.action())).not.toContain('形成净应收¥')
+ const p=quote.p(),before=quote.controller.exportSaved(),ui=near(p,'exit-accept');ui.edit('99999999');expect(ui.pay().props.disabled).toBe(true);expect(text(ui.action())).not.toContain('净应收 ')
  const keep=elements(ui.tree()).find(e=>e.type==='button'&&text(e).startsWith('先保留股份'))!;invoke(keep,'onClick');expect(ui.callbacks.onToday).toHaveBeenCalledOnce();expect(p.request).not.toHaveBeenCalled();expect(quote.controller.exportSaved()).toBe(before)
 })
 it('fills only the same original unpaid balance, keeps partial collection explicit and returns without collecting automatically',()=>{
  const p=due.p(),before=due.controller.exportSaved(),ui=near(p,'collect');expect(ui.pay().props.disabled).toBe(true)
- const fill=elements(ui.tree()).find(e=>e.type==='button'&&text(e).startsWith('填入本笔原未收余额'))!;invoke(fill,'onClick');ui.render();expect(ui.pay().props.disabled).toBe(false);expect((ui.command().props.payload as {amountFen:number}).amountFen).toBe(689670);expect(p.request).not.toHaveBeenCalled()
+ const fill=elements(ui.tree()).find(e=>e.type==='button'&&text(e).startsWith('填入余款'))!;invoke(fill,'onClick');ui.render();expect(ui.pay().props.disabled).toBe(false);expect((ui.command().props.payload as {amountFen:number}).amountFen).toBe(689670);expect(p.request).not.toHaveBeenCalled()
  ui.edit('3448.35');invoke(ui.pay(),'onClick');expect(p.request).toHaveBeenCalledWith('CollectEquityExit',{exitId:ui.e.id,amountFen:344835},expect.any(String),true);expect(due.controller.exportSaved()).toBe(before)
 })
 
