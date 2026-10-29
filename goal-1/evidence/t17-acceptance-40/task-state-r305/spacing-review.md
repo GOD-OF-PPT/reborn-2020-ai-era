@@ -1,0 +1,1 @@
+317静态cascade复核发现新通用class会覆盖closing既有column/align-end/gap6；317未上线，不冒真实tail回归红。318将间距限定非equity-record-navigation；普通主幕间距16，closing原规则逐字保。无尺寸/缩放/兼容或几何测试。318与317仅CSS选择器不同，类型同源按其精确范围复用，318独立构建/HTTP/当前画面核。

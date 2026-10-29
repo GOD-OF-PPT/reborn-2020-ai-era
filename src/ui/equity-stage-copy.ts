@@ -19,7 +19,7 @@ export function equityStageCopy(p:GamePanelProps,j:EquityJourney){
   boundary:['留一个不同的可能？','这是一段明确架空的融资经历。'],entry:['这次，用谁的钱参与？','先选自己的准备，或已有企业。'],'tail-entry':['还有哪些旧事想收好？','从一份持股或旧款继续。'],
   invitation:['一封还没查清的介绍','先核实来历，也可以把它收好。'],'diligence-stopped':['调查停下了','没有报告；重新调查要另留时间。'],'diligence-completed':['调查回信了','授权与有条件意愿已核实，下一步由你决定。'],'diligence-rejected':[i?.authority===false?'授权没能核实':'对方暂不愿融资',i?.authority===false?'这次调查已经结束。':'授权已核实，融资意愿未能确认。'],
   'invitation-closed':[i?.status==='used'?'介绍已经成了协议':i?.status==='declined'?'这封邀请收好了':'这封邀请到期了','已花的费用留在手记里。'],'invitation-closed-with-task':['邀请结束，调查还在','原调查仍按日历进行，可另行中断。'],'tail-invitation':['把这封旧介绍收好','可翻报告，或明确拒绝。'],
-  'preparation-completed':['这次准备完成了','下一次投入，仍由你选择。'],'preparation-stopped':['这份准备停下了','已经花掉的费用不会退回。'],
+  'preparation-completed':['这次准备完成了','下一次投入，仍由你选择。'],'preparation-stopped':[r.job?.status==='cancelled'?'这份安排取消了':'这份准备停下了',r.job?.status==='cancelled'?'还没开工，预留已经解除。':'已经投入的费用与行动不会退回。'],
   'terms-accepted':['对方答应了这些条件','真正付出本金，还是把这次谈判放下？'],'terms-rejected':['这次条件没谈妥','谈判已经结束，也可以先过自己的日子。'],'terms-closed':[n?.closedKind==='signed'?'协议已签，生活继续':'这份条款放下了','过去的投入和记录都在手记里。'],'terms-expired':['这份条件过期了','没有自动签署或付款。'],'terms-invitation-closed':['介绍已经失效','谈判回应仍在，这次不能再签署。'],'negotiation-stopped':['谈判停下了','没有接受回应，也没有取得股份。'],'terms-tail':['把旧条款收好','尾声只处理已有的事。'],
   holding:['这份持股，可以慢慢留着','下一笔投入，或下一段生活，由你决定。'],follow:['这轮融资，你想怎样选？','可以追加，也可以把现金留给生活。'],'follow-without-holding':['股份已转出，旧事还在','本轮只核对不新增付款的选择。'],disposed:['这份股份已经转出','各笔转让款仍要分别收取。'],
   'governance-result':[r.governance?.approved?'提案通过了':'提案没获通过',r.governance?.approved?r.governance.policy==='commercial_scope'?'用途限制按约定日期生效。':'这次资本用途报告已经开放。':'会议已经结束，股份和已花费用仍在。'],'governance-stopped':['会议停下了','没有表决结果。'],

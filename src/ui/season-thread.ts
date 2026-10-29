@@ -11,7 +11,7 @@ import {relayBusinessTarget,relayFocusFor,relayFocusOpen} from './relay-player-t
 import type {RelaySceneTarget} from './relay-scene-target.ts'
 import {ecosystemFocusFor,ecosystemFocusTargets} from './ecosystem-player-thread.ts'
 import {ecosystemTargetEntity} from './ecosystem-scene-target.ts'
-import {equityFocusFor,equityFocusTargets} from './equity-player-thread.ts'
+import {equityFocusFor,equityFocusTargets,equityFocusOpen} from './equity-player-thread.ts'
 import {equitySeasonEchoes,equitySeasonContinuations} from './equity-season-echoes.ts'
 
 export type SeasonInput=Pick<GamePanelProps,'view'|'features'>
@@ -128,6 +128,8 @@ export function seasonFocusAfterSave(previous:SeasonInput,current:SeasonInput,ki
   const old=existing.equityTarget,next=candidate.equityTarget,v=current.features.deepseek
   if(!old||!next||old.businessId!==next.businessId)return existing
   if(old.kind==='business'&&['StartEquityRelationship','StartEquityEligibility','DiscoverEquityInvitation'].includes(kind))return candidate
+  // A saved new promise continues an ended record in the same business; active pins stay put.
+  if(['StartEquityRelationship','StartEquityEligibility','DiscoverEquityInvitation'].includes(kind)&&!equityFocusOpen(previous,existing))return candidate
   if(old.kind==='invitation'&&next.kind==='preparation'&&kind==='StartEquityEligibility')return candidate
   if(old.kind==='invitation'&&next.kind==='negotiation'&&kind==='StartEquityNegotiation'&&v?.negotiations.some(n=>n.id===next.recordId&&n.invitationId===old.recordId))return candidate
   if(old.kind==='negotiation'&&next.kind==='agreement'&&kind==='SignEquityAgreement'&&v?.agreements.some(a=>a.id===next.recordId&&a.negotiationId===old.recordId))return candidate

@@ -19,6 +19,7 @@ import {equityBusinessContinuity} from './equity-business-continuity.ts'
 import {EquityBusinessContinuity} from './EquityBusinessContinuity.tsx'
 import {equityInvitationState,equityInvitationText} from './equity-invitation-ui.ts'
 import {equityStageCopy} from './equity-stage-copy.ts'
+import {equityDirectCosts} from './equity-costs.ts'
 
 type Props={p:GamePanelProps;target:EquitySceneTarget|null;intent:EquityChoiceIntent;sourceInvalid?:boolean;sourceReason?:string|null;onClose:()=>void;onChoose:(target:EquitySceneTarget|null)=>void;onIntent:(intent:EquityChoiceIntent)=>void;onInspect:()=>void;onToday:()=>void}
 const titles:Record<EquityChoiceIntent,string>={actors:'这次想法，由谁的自有钱承担？',objects:'想走近哪一份架空安排？',business:'先看看，这份想法的实际条件。',prepare:'给这一次准备，留好日子。',relationship:'为这份关系，留七天自己的时间。',eligibility:'给本局资格，另留一份投入。',discover:'这一次，想听哪一种介绍？',fund:'为这间企业，另留一笔自己的钱。',job:'这份安排，要不要继续等？',invitation:'一封介绍，还需要你的判断。',negotiate:'哪些条件，值得再谈一次？',terms:'条件有了回应，要不要真的承诺？',holding:'持有这份权利，生活仍可继续。',follow:'这一次融资，要不要再投入？',governance:'一席董事，想提出怎样的有限提案？','exit-request':'先问问，有没有愿意接手的人。','exit-accept':'这份报价，愿意实际转出多少？',collect:'这笔原款，这次想收回多少？',record:'翻开同一份权益原册。',next:'收好这一段，再想想接下来的日子。'}
@@ -38,6 +39,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
  const amount=parseMoneyInput(draft.value('amount')),shares=positiveShares(draft.value('shares'))
  const exitCash=e&&a?equityExitCash(e,a.accountId,equitySceneContext(p,p.accountId)):null
  const continuity=intent==='next'&&b?equityBusinessContinuity(p,b.id):null
+ const jobCost=intent==='job'&&r.job&&b?equityDirectCosts(b.id,b.accountId,p.view.operations?.jobs,p.features.workbench.finance,p.view.date).jobs.find(row=>row.id===r.job!.id):undefined
  const followOffer=a?equityFollowOffer(p,a):null,zeroFollow=followOffer&&a?equityFollowPosition(followOffer,a,0):null,paidFollow=followOffer&&a&&amount!==null?equityFollowPosition(followOffer,a,amount):null
  const followPrincipal=intent==='follow'&&p.view.phase==='playing'&&a?.followDecision==='pending'&&draft.value('followStep')==='principal',followInput=useRef<HTMLInputElement>(null)
  useEffect(()=>{if(followPrincipal)followInput.current?.focus({preventScroll:true})},[followPrincipal,draft.key])
@@ -77,7 +79,8 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
  const closing=p.view.phase==='epilogue',newClosingDecision=closing&&['prepare','relationship','eligibility','discover','negotiate','governance'].includes(intent)
  const governanceTitle=intent==='governance'&&a?(!a.board||a.shares===0?governanceArranging?'当前没有会议权利，只核对原安排。':'先核对本协议当前的会议权利。':governanceArranging&&governancePolicy?'为「'+governancePolicy.label+'」留好会议日子。':titles.governance):null
  const invitationTitle=intent==='invitation'?(invitationArranging?'为调查留几天。':i?.reportAt!==null&&i?.reportAt!==undefined?'回信到了，怎么选？':'查清楚，还是放下？'):null
- const title=invalidSource?'先找回原来那一份。':newClosingDecision?'常规篇已经结束，只沿原来的事项继续。':closing&&(intent==='actors'||intent==='objects')?'想收好哪一份原权益记录？':closing&&intent==='follow'?'核对原融资与不新增付款的选择。':followPrincipal?(a?.shares===0?'已无现持股，先核对这笔试算。':'这笔本金，留多少给这次融资？'):intent==='holding'&&a?.shares===0?'收好原协议，看看各笔原款。':intent==='follow'&&a?.shares===0?'已无现持股，核对本轮原安排。':intent==='follow'&&a&&a.followDecision!=='pending'?'核对本协议的融资与原条款。':governanceTitle!==null?governanceTitle:invitationTitle!==null?invitationTitle:intent==='exit-request'&&a?.locked?'还在原锁定期，先看看这份安排。':intent==='exit-request'&&a&&!a.transferConsent?'先核对这份协议的原转让同意。':intent==='terms'&&n&&journey.phase!=='terms-accepted'?journey.title:intent==='relationship'?'为这份关系，留七天自己的时间。':intent==='eligibility'?'给本局资格，另留一份投入。':titles[intent]
+ const jobTitle=intent==='job'&&r.job?({planned:'这份安排还没开工，要不要保留？',running:'已经投入的时间，要继续吗？',completed:'这次安排已经完成。',cancelled:'这次安排已经取消。',interrupted:'这次安排已经中断。'})[r.job.status]:null
+ const title=invalidSource?'先找回原来那一份。':newClosingDecision?'常规篇已经结束，只沿原来的事项继续。':closing&&(intent==='actors'||intent==='objects')?'想收好哪一份原权益记录？':closing&&intent==='follow'?'核对原融资与不新增付款的选择。':followPrincipal?(a?.shares===0?'已无现持股，先核对这笔试算。':'这笔本金，留多少给这次融资？'):intent==='holding'&&a?.shares===0?'收好原协议，看看各笔原款。':intent==='follow'&&a?.shares===0?'已无现持股，核对本轮原安排。':intent==='follow'&&a&&a.followDecision!=='pending'?'核对本协议的融资与原条款。':jobTitle!==null?jobTitle:governanceTitle!==null?governanceTitle:invitationTitle!==null?invitationTitle:intent==='exit-request'&&a?.locked?'还在原锁定期，先看看这份安排。':intent==='exit-request'&&a&&!a.transferConsent?'先核对这份协议的原转让同意。':intent==='terms'&&n&&journey.phase!=='terms-accepted'?journey.title:intent==='relationship'?'为这份关系，留七天自己的时间。':intent==='eligibility'?'给本局资格，另留一份投入。':titles[intent]
  const contents:ReactNode=<>
   <p className="counterfactual-boundary">明确架空情境 · 无现实申购</p>
   {closing?<p>尾声只处理原来的事项，不再开始新的准备、投资或治理。仍沿用2025年第四季的四点行动，原生活费、工资与维护继续结算。</p>:null}
@@ -221,7 +224,12 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
     <details><summary>本笔原款与账目</summary><p>本次收款不重复确认收益。未收余额、余股、旧费用与其它义务仍分别保留；不会自动收款。</p>{quietJobLink}{ui('翻开完整持股手记','',inspect)}</details>
    </>:null}
    {intent==='job'?<>
-    {r.job?<><p>{r.job.startAt}—{r.job.completeAt} · {({planned:'已预留，未开工',running:'实际进行中',completed:'已实际完成',cancelled:'未开工安排已取消',interrupted:'已经中断，原已花成本保留'})[r.job.status]}</p><p>中断不退已花费用，也不产生未完成的结果。</p>{command('InterruptJob',{jobId:r.job.id},'中断这次安排')}<div className="equity-assignment-decision">{resources}{command('RescheduleJob',{jobId:r.job.id,...assignment},'核对改期条件',hasAssignment)}</div><p>本路线日程固定，原改期拒绝理由仍保留。</p></>:<p>当前对象没有独立任务，请明确选择原来那一项。</p>}
+    {r.job?<>
+     <p>{r.job.startAt}—{r.job.completeAt} · {({planned:'已预留，尚未开工',running:'正在进行',completed:'已经完成',cancelled:'未开工安排已取消',interrupted:'已经中断'})[r.job.status]}</p>
+     <p>这次已付{moneyText(jobCost?.paidFen??null)} · 仍预留{moneyText(jobCost?.reservedFen??null)}{!jobCost||jobCost.paidFen===null||jobCost.reservedFen===null?' · 本次费用来源待核对':''}</p>
+     {activeJob?<>{ui('回到这次安排','沿原日历继续等待。',close)}{command('InterruptJob',{jobId:r.job.id},r.job.status==='planned'?'取消尚未开工的安排':'中断这次安排')}<p>{r.job.status==='planned'?'取消只解除这次未开工的预留；已付费用不退。':'已付费用和已用行动不退，中断不会补做结果。'}</p></>:<>{ui('回到生活','',today)}{ui('翻阅这次安排的记录','',inspect)}<p>这次已经结束，不再等待它完成；过去的投入仍在。</p></>}
+     <details><summary>原安排与改期条件</summary><p>本路线日程固定，原改期拒绝理由仍保留。</p><div className="equity-assignment-decision">{resources}{command('RescheduleJob',{jobId:r.job.id,...assignment},'核对改期条件',hasAssignment)}</div>{!activeJob?command('InterruptJob',{jobId:r.job.id},'核对已结束任务的停止条件'):null}{activeJob?ui('翻阅完整任务手记','',inspect):null}</details>
+    </>:<p>当前对象没有独立任务，请明确选择原来那一项。</p>}
    </>:null}
    {intent==='fund'?<>
     <p>个人自有钱 → 企业资本。不是费用或收入。</p>{field('另行转入的个人自有资本（元）','amount')}{command('FundBusiness',{businessId:b!.id,amountFen:amount??-1},'转入企业资本',amount!==null&&amount>0)}
@@ -243,7 +251,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
    </>:null}
    {intent==='record'?<><p>{journey.line}</p>{journey.facts.map(fact=><p key={fact}>{fact}</p>)}{r.governance?<p>本次提案{r.governance.resolvedAt===null?'尚无实际表决结果':r.governance.approved?'已经有限通过':'原董事会未通过'}，{r.governance.policy==='independent_audit'?'独立资本用途核对':'用途与接手方限制'}；不取得单方控制。</p>:null}{v?.auditedProjectReport?<p>已开放的本局资本用途核对（截至{v.auditedProjectReport.asOf}）：新增资本{moneyText(v.auditedProjectReport.newCapitalFen)}，老股卖方收款{moneyText(v.auditedProjectReport.secondaryPaymentFen)}，总模拟股数{v.auditedProjectReport.sharesOutstanding}；{v.auditedProjectReport.scope}。</p>:null}{ui('翻开完整原册与账目','同一主体和同一记录；只读查看。',inspect)}</>:null}
    {r.job&&intent!=='job'&&(activeJob||!['holding','follow','governance','exit-request','exit-accept','collect','terms'].includes(intent))?go('job',activeJob?'看看正在进行的安排':'翻阅本次安排记录',activeJob?'按本次日期和已留资源继续。':''):null}
-   {!['record','follow','holding','governance','exit-request','exit-accept','collect','prepare','relationship','eligibility','discover','negotiate','terms','fund'].includes(intent)?ui('翻开完整筹备手记','',inspect):null}
+   {!['record','follow','holding','governance','exit-request','exit-accept','collect','prepare','relationship','eligibility','discover','negotiate','terms','fund','job'].includes(intent)?ui('翻开完整筹备手记','',inspect):null}
    </>}
   </>}
  </>

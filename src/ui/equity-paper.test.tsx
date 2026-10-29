@@ -3,7 +3,9 @@ import {renderToStaticMarkup} from 'react-dom/server'
 import {projectRun} from '../core/commands.ts'
 import {projectDeepseek} from '../core/deepseek-projection.ts'
 import {projectWorkbench} from '../application/workbench-projection.ts'
-import {campaignMarket} from '../application/campaign.ts'
+import closedTermsRaw from '../../goal-1/evidence/t17-acceptance-40/remaining-terms-native-r297/actual94-after-decline.json?raw'
+import signTermsRaw from '../../goal-1/evidence/t16-c16-final-a1/replay/deepseek/t13-normal-technical_employee-beforeEquitySign.json?raw'
+import {createCampaignCodec,campaignDeepseek,campaignRuntime,campaignOperations,campaignMarket} from '../application/campaign.ts'
 import {projectSceneCommands} from '../application/scene-commands.ts'
 import {signedEquity,dsAssignment} from '../testing/deepseek-scenarios.ts'
 import {equityJourney} from './equity-journey.ts'
@@ -55,4 +57,13 @@ it('keeps the same meaningful lock text in text mode and the original committed 
  expect(readonly).toContain('只读 · 原记录保留');expect(readonly).toContain('data-equity-lock="locked"')
  const candidate=renderToStaticMarkup(<EquityPaper p={{view:{...p.view,hasCandidate:true,saveStatus:'unsaved'}}} journey={journey} binding={{...binding,disabled:true}}/>)
  expect(candidate).toContain('尚未保存 · 仍是上次物件');expect(candidate).toContain('data-equity-lock="locked"');expect(candidate).toContain('disabled=""')
+})
+
+
+it('dates actual retained declined terms as a past result instead of a live future deadline, while keeping a genuinely open quote active',()=>{
+ const codec=createCampaignCodec();for(const [raw,retained]of [[closedTermsRaw,true],[signTermsRaw,false]] as const){
+  const run=codec.import(raw),view=projectRun(run),v=projectDeepseek(run,campaignDeepseek)!,n=v.negotiations.at(-1)!,b=v.businesses.find(b=>b.id===n.businessId)!,target={runId:run.runId,accountId:b.accountId,businessId:b.id,kind:'negotiation' as const,recordId:n.id},journey=equityJourney(v,target,{runId:run.runId,accountId:b.accountId,date:view.date,accounts:view.accounts,operations:view.operations,finance:projectWorkbench(run,campaignRuntime,campaignOperations.catalog,campaignMarket.catalog).finance,source:{revision:view.revision,receipts:view.receipts},sceneCommands:projectSceneCommands(run)}),html=renderToStaticMarkup(<EquityPaper p={p} journey={journey} binding={binding}/>);
+  if(retained){expect(journey.phase).toBe('terms-closed');expect(html).toContain('已放下 2025-04-22');expect(html).not.toContain('条款至 2025-05-22');expect(journey.facts.join(' ')).toContain(n.expiresAt)}else{expect(journey.phase).toBe('terms-accepted');expect(html).toContain('条款至 '+n.expiresAt)}
+  expect(codec.export(run)).toBe(raw.trimEnd());expect(binding.activate).not.toHaveBeenCalled();
+ }
 })
