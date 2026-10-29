@@ -5,6 +5,7 @@ import {moneyText} from './game-text.ts'
 import {addDays} from '../core/calendar.ts'
 import {DEEPSEEK_JOBS} from '../content/deepseek.ts'
 import {equityFollowOffer,equityFollowPosition} from './equity-follow-offer.ts'
+import {equityGovernancePolicy} from './equity-governance-ui.ts'
 
 type Props={command:CommandEnvelope;preview:CommandPreview;view:Pick<GamePanelProps['view'],'runId'|'revision'|'date'|'accounts'>;features:Pick<GamePanelProps['features'],'deepseek'>;accountName:(id:string)=>string}
 const one=<T,>(rows:readonly T[])=>rows.length===1?rows[0]:undefined
@@ -13,11 +14,20 @@ const amount=(value:unknown):value is number=>typeof value==='number'&&Number.is
 /** Captured with the original confirmation. It neither reads the controller
  * nor computes a new quote, fee, permission or committed cash result. */
 export function EquityDecisionFacts({command,preview,view,features,accountName}:Props){
- if(!['StartEquityNegotiation','SignEquityAgreement','FollowEquityRound','AcceptEquityExit','CollectEquityExit'].includes(command.kind))return null
+ if(!['StartEquityNegotiation','SignEquityAgreement','FollowEquityRound','ProposeEquityGovernance','AcceptEquityExit','CollectEquityExit'].includes(command.kind))return null
  const capital=command.kind==='StartEquityNegotiation'||command.kind==='SignEquityAgreement'
- const bad=(reason:string)=><section className="warning-box"><h3>{capital||command.kind==='FollowEquityRound'?'先核对这份原参与条件':'先核对这笔原转让款'}</h3><p>{reason} 请返回这份原记录重新核对；没有换成另一笔款项。</p></section>
+ const bad=(reason:string)=><section className="warning-box"><h3>{command.kind==='ProposeEquityGovernance'?'先核对这份原会议安排':capital||command.kind==='FollowEquityRound'?'先核对这份原参与条件':'先核对这笔原转让款'}</h3><p>{reason} 请返回这份原记录重新核对；没有换成另一笔款项。</p></section>
  if(command.runId!==view.runId||command.expectedRevision!==view.revision)return bad('这份确认已经不属于眼前的原记录。')
  const body=typeof command.payload==='object'&&command.payload!==null&&!Array.isArray(command.payload)?command.payload as Record<string,unknown>:{},v=features.deepseek
+ if(command.kind==='ProposeEquityGovernance'){
+  const a=typeof body.agreementId==='string'?one(v?.agreements.filter(a=>a.id===body.agreementId)??[]):undefined,b=a?one(v?.businesses.filter(b=>b.id===a.businessId&&b.accountId===a.accountId)??[]):undefined,policy=equityGovernancePolicy(body.policy),job=DEEPSEEK_JOBS.find(j=>j.id==='deepseek-governance')
+  const resources=Array.isArray(body.resources)?body.resources.map(id=>one(v?.resources.filter(r=>r.id===id)??[])):[]
+  if(!preview.allowed||!a||!b||!a.board||a.shares===0||view.accounts.filter(r=>r.accountId===a.accountId).length!==1||!policy||!job||!amount(preview.upfrontCostFen)||typeof body.startAt!=='string'||body.startAt<view.date||preview.actionDate!==undefined&&preview.actionDate!==body.startAt||!resources.length||resources.some(r=>!r)||new Set(body.resources as string[]).size!==resources.length)return bad('本次原协议、政策、资源、开工日或会议预算尚未完整核定。')
+  let reply:string
+  try{reply=addDays(body.startAt,job.durationDays)}catch{return bad('原会议的开工与反馈日期尚未完整核定。')}
+  const planned=body.startAt>view.date
+  return <section className="equity-decision-facts" aria-label="本次原会议的实际选择"><p className="command-introduction">{accountName(a.accountId)} · {body.startAt}开会，按原安排{reply}等本次实际表决 · 开工季度{preview.actionPoints}点。</p><dl className="command-facts"><div><dt>本次有限提案</dt><dd>{policy.label}</dd></div><div><dt>{planned?'本次先预留会议预算':'本次实际会议支出'}</dt><dd>{moneyText(preview.upfrontCostFen)}</dd></div></dl><p>原资源：{resources.map(r=>r!.label).join('、')}。{policy.effect} {policy.limit}</p><p>尚未表决；保存安排不代表提案通过。{planned?'当前只预留原预算，实际开工才支付并使用开工季度行动。':'原费用在实际开工后保留，即使对手拒绝也不自动退还。'}本次不新增股份或现金收入、不解除原锁定，工资维护和旧义务分别结算。</p></section>
+ }
  if(command.kind==='FollowEquityRound'){
   const a=typeof body.agreementId==='string'?one(v?.agreements.filter(a=>a.id===body.agreementId)??[]):undefined
   const b=a?one(v?.businesses.filter(b=>b.id===a.businessId&&b.accountId===a.accountId)??[]):undefined,account=a?one(view.accounts.filter(r=>r.accountId===a.accountId)):undefined

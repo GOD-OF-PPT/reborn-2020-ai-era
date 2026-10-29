@@ -12,6 +12,8 @@ import {makeSharedAction} from './shared-action.ts'
 import {moneyText} from './game-text.ts'
 import {parseMoneyInput} from './money-input.ts'
 import {equityFollowOffer,equityFollowPosition,equityFollowHalfAmount} from './equity-follow-offer.ts'
+import {EQUITY_GOVERNANCE_POLICIES,equityGovernancePolicy} from './equity-governance-ui.ts'
+import {DEEPSEEK_JOBS} from '../content/deepseek.ts'
 
 type Props={p:GamePanelProps;target:EquitySceneTarget|null;intent:EquityChoiceIntent;sourceInvalid?:boolean;sourceReason?:string|null;onClose:()=>void;onChoose:(target:EquitySceneTarget|null)=>void;onIntent:(intent:EquityChoiceIntent)=>void;onInspect:()=>void;onToday:()=>void}
 const titles:Record<EquityChoiceIntent,string>={actors:'这次想法，由谁的自有钱承担？',objects:'想走近哪一份架空安排？',business:'先看看，这份想法的实际条件。',prepare:'给这一次准备，留好日子。',relationship:'为这份关系，留七天自己的时间。',eligibility:'给本局资格，另留一份投入。',discover:'这一次，想听哪一种介绍？',fund:'为这间企业，另留一笔自己的钱。',job:'这份安排，要不要继续等？',invitation:'一封介绍，还需要你的判断。',negotiate:'哪些条件，值得再谈一次？',terms:'条件有了回应，要不要真的承诺？',holding:'持有这份权利，生活仍可继续。',follow:'这一次融资，要不要再投入？',governance:'一席董事，想提出怎样的有限提案？','exit-request':'先问问，有没有愿意接手的人。','exit-accept':'这份报价，愿意实际转出多少？',collect:'这笔原款，这次想收回多少？',record:'翻开同一份权益原册。',next:'收好这一段，再想想接下来的日子。'}
@@ -32,6 +34,8 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
  const followOffer=a?equityFollowOffer(p,a):null,zeroFollow=followOffer&&a?equityFollowPosition(followOffer,a,0):null,paidFollow=followOffer&&a&&amount!==null?equityFollowPosition(followOffer,a,amount):null
  const followPrincipal=intent==='follow'&&p.view.phase==='playing'&&a?.followDecision==='pending'&&draft.value('followStep')==='principal',followInput=useRef<HTMLInputElement>(null)
  useEffect(()=>{if(followPrincipal)followInput.current?.focus({preventScroll:true})},[followPrincipal,draft.key])
+ const governancePolicy=equityGovernancePolicy(draft.value('policy')),governanceArranging=intent==='governance'&&governancePolicy!==null&&draft.value('governanceStep')==='arrange',governanceFields=useRef<HTMLDivElement>(null),governanceJob=DEEPSEEK_JOBS.find(j=>j.id==='deepseek-governance')
+ useEffect(()=>{if(intent!=='governance')return;const region=governanceFields.current,target=governanceArranging?region?.querySelector('select'):region?.querySelector<HTMLButtonElement>('[data-selected=true] button')??region?.querySelector('button');target?.focus({preventScroll:true})},[intent,governanceArranging,governancePolicy?.id,draft.key])
  const hasResource=!!v?.resources.some(row=>row.id===resource),hasAssignment=hasResource&&date!==''
  const commandProps={...p,request:((...args:Parameters<GamePanelProps['request']>)=>{if(!draft.current())return;close();p.request(...args)})}
  const ui=(label:string,line:string,activate:()=>void,key=label)=>{
@@ -42,6 +46,10 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
  const fillFollow=(label:string,value:number)=>{
   const action=makeSharedAction(p,label,()=>draft.set('amount',String(value/100)),{allowReadOnly:true,canActivate:draft.current})
   return <button type="button" className="scene-text-action" disabled={action.disabled} onClick={action.activate}>{label}</button>
+ }
+ const fillGovernanceToday=()=>{
+  const action=makeSharedAction(p,'填入今天 · '+p.view.date,()=>draft.set('date',p.view.date),{allowReadOnly:true,canActivate:draft.current})
+  return <button type="button" className="scene-text-action" disabled={action.disabled} onClick={action.activate}>{action.label} · 只填写，仍须确认</button>
  }
  const command=(kind:string,payload:unknown,label:string,ready=true,hint='请先明确填写这次选择。')=><CommandButton {...commandProps} kind={kind} payload={payload} label={label} confirm renderAction={(binding)=><div className="command"><button type="button" disabled={binding.disabled||!ready} onClick={()=>{if(ready&&draft.current())binding.activate()}}>{label}</button>{!ready?<small className="reason">{hint}</small>:binding.reason?<small className="reason">{binding.reason}</small>:null}</div>}/>
  const field=(label:string,key:string,numeric=false)=><label className="field">{label}<input ref={intent==='follow'&&key==='amount'?followInput:undefined} inputMode={numeric?'numeric':'decimal'} value={draft.value(key)} onChange={event=>draft.set(key,event.currentTarget.value)}/></label>
@@ -56,7 +64,8 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
  const holdingFacts=a?<><p>本协议仍持{a.shares}/{a.totalShares}模拟股（约{(a.holdingBps/100).toFixed(2)}%）；尚持有成本{moneyText(a.asset?.bookCostFen)}，账面值{moneyText(a.asset?.valueFen)}不能花。</p><p>锁定至{a.lockUntil}，{a.locked?'当前仍锁定':'锁定期已到，仍需独立买方'}；{a.board?a.shares>0?'一席董事，无单方控制':'原条款有席位，现已无股，不能提交会议':'无董事权'}，{a.preemptive?a.shares>0?'有原跟投权，仍按本轮条件决定':'现已无股，不能新增跟投':'无跟投权'}。原主体不随新的准备切换。</p></>:null
  const invalidSource=sourceInvalid||r.status==='invalid'
  const closing=p.view.phase==='epilogue',newClosingDecision=closing&&['prepare','relationship','eligibility','discover','negotiate','governance'].includes(intent)
- const title=invalidSource?'先找回原来那一份。':newClosingDecision?'常规篇已经结束，只沿原来的事项继续。':closing&&(intent==='actors'||intent==='objects')?'想收好哪一份原权益记录？':closing&&intent==='follow'?'核对原融资与不新增付款的选择。':followPrincipal?(a?.shares===0?'已无现持股，先核对这笔试算。':'这笔本金，留多少给这次融资？'):intent==='holding'&&a?.shares===0?'收好原协议，看看各笔原款。':intent==='follow'&&a?.shares===0?'已无现持股，核对本轮原安排。':intent==='follow'&&a&&a.followDecision!=='pending'?'核对本协议的融资与原条款。':intent==='governance'&&a&&(!a.board||a.shares===0)?'先核对本协议当前的会议权利。':intent==='exit-request'&&a?.locked?'还在原锁定期，先看看这份安排。':intent==='exit-request'&&a&&!a.transferConsent?'先核对这份协议的原转让同意。':intent==='terms'&&n&&journey.phase!=='terms-accepted'?journey.title:intent==='relationship'?'为这份关系，留七天自己的时间。':intent==='eligibility'?'给本局资格，另留一份投入。':titles[intent]
+ const governanceTitle=intent==='governance'&&a?(!a.board||a.shares===0?governanceArranging?'当前没有会议权利，只核对原安排。':'先核对本协议当前的会议权利。':governanceArranging&&governancePolicy?'为「'+governancePolicy.label+'」留好会议日子。':titles.governance):null
+ const title=invalidSource?'先找回原来那一份。':newClosingDecision?'常规篇已经结束，只沿原来的事项继续。':closing&&(intent==='actors'||intent==='objects')?'想收好哪一份原权益记录？':closing&&intent==='follow'?'核对原融资与不新增付款的选择。':followPrincipal?(a?.shares===0?'已无现持股，先核对这笔试算。':'这笔本金，留多少给这次融资？'):intent==='holding'&&a?.shares===0?'收好原协议，看看各笔原款。':intent==='follow'&&a?.shares===0?'已无现持股，核对本轮原安排。':intent==='follow'&&a&&a.followDecision!=='pending'?'核对本协议的融资与原条款。':governanceTitle!==null?governanceTitle:intent==='exit-request'&&a?.locked?'还在原锁定期，先看看这份安排。':intent==='exit-request'&&a&&!a.transferConsent?'先核对这份协议的原转让同意。':intent==='terms'&&n&&journey.phase!=='terms-accepted'?journey.title:intent==='relationship'?'为这份关系，留七天自己的时间。':intent==='eligibility'?'给本局资格，另留一份投入。':titles[intent]
  const contents:ReactNode=<>
   <p className="counterfactual-boundary">本局明确架空安排，不是现实公开申购。技术合作、服务合同、资金或中间费均不产生股份；估值和应收不能花。</p>
   {closing?<p>尾声只处理原来的事项，不再开始新的准备、投资或治理。仍沿用2025年第四季的四点行动，原生活费、工资与维护继续结算。</p>:null}
@@ -112,7 +121,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
     {!closing?command('SignEquityAgreement',{negotiationId:n.id},'核对真实本金，另行支付并签署本协议'):null}
     {command('DeclineEquityTerms',{negotiationId:n.id},'不接受这份条款，原调查与谈判费用保留')}
    </>:null}
-   {(intent==='holding'||intent==='governance'||intent==='exit-request')&&a?holdingFacts:null}
+   {(intent==='holding'||intent==='exit-request')&&a?holdingFacts:null}
    {intent==='holding'&&a?<>
     <p>持有不要求做完所有记录才能离开。新的资金或权利决定由你另选；旧协议、费用与未收款继续保留。</p>
     {go('follow','核对本轮融资与跟投选择',a.followDecision==='pending'?'当前有待决定融资；不跟投也是独立明确选择。':'原融资仍按已经发生的阶段表示，不自动新增投入。')}
@@ -141,9 +150,20 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
    </>:null}
    {intent==='governance'&&a?<>
     {!a.board||a.shares===0?<p>这份协议当前没有可提出会议的董事权。原条款和已发生会议仍可查看。</p>:null}
-    <p>会议基础预算500元 / 1点 / 7日。原董事会可以拒绝；通过用途限制将从实际生效日起影响新的转让申请，旧报价不追改。</p>
-    <label className="field">本次有限提案<select value={draft.value('policy')} onChange={event=>draft.set('policy',event.currentTarget.value)}><option value="">明确选择一项提案</option><option value="independent_audit">独立核对本局资本用途</option><option value="commercial_scope">限定研究用途与接手方</option></select></label>{resources}
-    {command('ProposeEquityGovernance',{agreementId:a.id,policy:draft.value('policy'),...assignment},'明确提案与投入，安排这次有限会议',hasAssignment&&['independent_audit','commercial_scope'].includes(draft.value('policy')))}
+    <p>原协议仍持{a.shares}模拟股；{a.board&&a.shares>0?'一席董事，无单方控制。':'当前不能以原条款代替实际会议权利。'}会议基础预算{moneyText(governanceJob?.costFen)} / 开工季度{governanceJob?.actionPoints??'待核'}点 / {governanceJob?.durationDays??'待核'}日，工资维护另列；对手仍可能拒绝。</p>
+    {!governanceArranging?<div className="equity-governance-options" aria-label="先比较这次有限提案" ref={governanceFields}>
+     {EQUITY_GOVERNANCE_POLICIES.map(policy=><section className="equity-governance-option" data-selected={governancePolicy?.id===policy.id?'true':undefined} key={policy.id}><h3>{policy.question}</h3><p>{policy.effect}</p><p>{policy.limit}</p>{ui('先选「'+policy.label+'」','随后再选资源和日期；现在不安排会议或付款。',()=>draft.patch({policy:policy.id,governanceStep:'arrange'}))}</section>)}
+    </div>:<>
+     <h3>本次想提出：{governancePolicy.label}</h3>
+     <div className="equity-governance-decision">
+      <p>本季可用{p.view.budget.available}点、原约预留{p.view.budget.reserved}点；这里先留好资源与日期，实际开工才支付原会议预算。</p>
+      <div className="equity-governance-fields" ref={governanceFields}><label className="field">本次实际资源<ResourceSelect options={v?.resources??[]} emptyLabel="先选择本次实际资源" value={resource} onChange={value=>draft.set('resource',value)}/></label><div className="equity-governance-date"><label className="field">本次开工日期<input type="date" min={p.view.date} max="2025-12-31" value={date} onChange={event=>draft.set('date',event.currentTarget.value)}/></label>{fillGovernanceToday()}</div></div>
+      {resource&&!hasResource?<p className="reason">草稿中的原资源已不可用，请明确重新选择。</p>:null}{date&&date<p.view.date?<p className="reason">草稿里的开工日已经过去；没有替你改成今天。</p>:null}
+      {command('ProposeEquityGovernance',{agreementId:a.id,policy:governancePolicy.id,...assignment},'核对「'+governancePolicy.label+'」与投入，再安排会议',hasAssignment)}
+     </div>
+     {ui('重新比较两项提案','保留这份政策、资源和日期；还没有安排新会议。',()=>draft.set('governanceStep','compare'))}
+    </>}
+    <details><summary>翻阅本协议现有持股与会议权利</summary>{holdingFacts}{governancePolicy?<p>{governancePolicy.effect} {governancePolicy.limit}</p>:null}<p>本次提案不增加股份、不解除原锁定，不删除旧费用、客户保护或原应收；实际通过后才有对应的本局政策。</p></details>
    </>:null}
    {intent==='exit-request'&&a?<>
     {closing&&a.locked?<><p>原锁定至{a.lockUntil}。等候沿原下一日期，仍结算原生活费与旧约，不免费跳到锁定结束。</p>{command('AdvanceTime',{date:a.lockUntil},'等原锁定到期，再核对独立买方')}</>:null}

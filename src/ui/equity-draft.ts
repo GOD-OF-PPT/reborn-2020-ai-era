@@ -6,6 +6,7 @@ import {makeSharedAction} from './shared-action.ts'
 
 export type EquityDraftMemory=Map<string,Readonly<Record<string,string>>>
 export const createEquityDraftMemory=():EquityDraftMemory=>new Map()
+const decisionStep=(intent:EquityChoiceIntent,values:Readonly<Record<string,string>>)=>intent==='follow'?values.followStep??'compare':intent==='governance'?JSON.stringify([values.governanceStep??'compare',values.policy??'']):null
 
 /** A new, actually published promise gets a fresh slot. A changed date,
  * revision, auxiliary save or failed candidate never constitutes a new promise. */
@@ -27,18 +28,20 @@ export function equityDraftKey(p:Pick<GamePanelProps,'view'|'features'|'accountI
 
 export function useEquityDraft(p:GamePanelProps,target:EquitySceneTarget|null,intent:EquityChoiceIntent){
  const fallback=useRef<EquityDraftMemory>(new Map()),memory=p.equityDraftMemory??fallback.current,key=equityDraftKey(p,target,intent)
- const values=memory.get(key)??{},step=intent==='follow'?values.followStep??'compare':null
+ const values=memory.get(key)??{},step=decisionStep(intent,values)
  const scope=useRef({key,memory,intent,step,live:true,retired:false})
  // An identity token, rather than just its string, also fences A→B→A callbacks.
  if(scope.current.key!==key||scope.current.memory!==memory||scope.current.intent!==intent||scope.current.step!==step)scope.current={key,memory,intent,step,live:true,retired:false}
  const captured=scope.current,[,refresh]=useState(0)
  useEffect(()=>{captured.live=true;return()=>{captured.live=false}},[captured])
- const current=()=>scope.current===captured&&captured.live&&!captured.retired
+ const current=()=>scope.current===captured&&captured.live&&!captured.retired&&decisionStep(intent,memory.get(key)??{})===step
  const retire=()=>{captured.retired=true}
- const set=(name:string,value:string)=>makeSharedAction(p,'准备这次权益选择',()=>{
+ const patch=(next:Readonly<Record<string,string>>)=>makeSharedAction(p,'准备这次权益选择',()=>{
   if(!current())return
-  memory.set(key,{...memory.get(key),...(intent==='relationship'||intent==='eligibility'?{preparation:intent}:{}),[name]:value});refresh(n=>n+1)
-  if(intent==='follow'&&name==='followStep'&&value!==step)captured.retired=true
+  const updated={...memory.get(key),...(intent==='relationship'||intent==='eligibility'?{preparation:intent}:{}),...next}
+  memory.set(key,updated);refresh(n=>n+1)
+  if(decisionStep(intent,updated)!==step)captured.retired=true
  },{allowReadOnly:true,canActivate:current}).activate()
- return {key,value:(name:string)=>name==='preparation'&&(intent==='relationship'||intent==='eligibility')?intent:values[name]??'',set,current,retire}
+ const set=(name:string,value:string)=>patch({[name]:value})
+ return {key,value:(name:string)=>name==='preparation'&&(intent==='relationship'||intent==='eligibility')?intent:values[name]??'',set,patch,current,retire}
 }

@@ -12,6 +12,7 @@
 .equity-leaf-shadow{fill:#0b211c66}.equity-leaf{fill:#e2d2ad;stroke:#a39265;stroke-width:1.5}.equity-ink{fill:none;stroke:#918360;stroke-width:2}
 .equity-lock{fill:#9b8757;stroke:#5a6244;stroke-width:3}.equity-pending{fill:none;stroke:#9b7956;stroke-width:3;stroke-dasharray:5 4}.equity-mark{fill:none;stroke:#83734b;stroke-width:2}.equity-kept{fill:none;stroke:#778060;stroke-width:3}
 .equity-lock[data-lock=unlocked]{fill:#b0ae7b;stroke:#677d56}.equity-open-shackle{fill:none}.equity-unknown{fill:none;stroke:#7f8569;stroke-width:2;stroke-dasharray:4 4}
+.equity-governance-stamp{fill:none;stroke:#957c4e;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}.equity-governance-stamp.vote-running{stroke:#8f8458}.equity-governance-stamp.vote-approved{stroke:#617c53}.equity-governance-stamp.vote-rejected{stroke:#a15c48;stroke-width:3}.equity-governance-stamp.vote-stopped{stroke:#7c8069;stroke-dasharray:7 3}
 .equity-cash-receipt{fill:#e9debf;stroke:#a18f60;stroke-width:1.5}.equity-received{fill:none;stroke:#677854;stroke-width:3}
 .equity-paper-copy{display:flex;flex-direction:column;align-items:center;gap:7px;color:#e7dfc4}
 .equity-paper-copy>:is(.equity-date,.equity-holding-note,.equity-money-note){padding:5px 9px;background:linear-gradient(110deg,#e9dcba,#d9c8a0);color:#4f553e;border:1px solid #b29c6e;box-shadow:1px 2px 2px #0a201a66}
@@ -29,6 +30,13 @@
 .equity-follow-option>.command{margin-top:12px}.equity-follow-option>.field{margin-top:12px}
 .cinema-app .book-flow .equity-follow-presets{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin:9px 0}
 .equity-follow-decision{break-inside:avoid}.equity-follow-decision>.field{margin:10px 0}.equity-follow-principal>.opening-next-choice{margin:12px 0}
+.cinema-app .book-flow .equity-governance-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:14px 0;break-inside:avoid}
+.equity-governance-option{padding:12px 15px;border:1px solid #b7a16d66;border-top:3px double #cab078;background:linear-gradient(125deg,#c8ae7110,#102e2c33)}
+.equity-governance-option[data-selected=true]{border-left:4px double #e0c68b}.equity-governance-option>h3{margin:0 0 8px;color:#ecd59f}.equity-governance-option>p{margin:7px 0}
+.equity-governance-option>.opening-next-choice{margin:10px 0 0}.equity-governance-decision{break-inside:avoid}
+.cinema-app .book-flow .equity-governance-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;break-inside:avoid}.equity-governance-fields>.field{min-width:0;margin:8px 0}
+.equity-governance-date>.field{margin:8px 0}.cinema-app .equity-governance-date>.scene-text-action{padding:4px 0;border:0;border-bottom:1px solid #bdac7d77;background:none;box-shadow:none;color:#e4cf9e;font:inherit;transform:none}
+.cinema-app .equity-governance-date>.scene-text-action:hover:not(:disabled){background:none;color:#f5e3b8;border-bottom-color:#f5d58f;transform:none}.cinema-app .equity-governance-date>.scene-text-action:focus-visible{outline:2px solid #f0d8a1;outline-offset:3px;background:none;transform:none}.cinema-app .equity-governance-date>.scene-text-action:disabled{color:#a6b49a;border-bottom-style:dashed;background:none;transform:none}
 .cinema-app .equity-follow-presets>.scene-text-action{padding:4px 0;border:0;border-bottom:1px solid #bdac7d77;background:none;box-shadow:none;color:#e4cf9e;font:inherit;transform:none}
 .cinema-app .equity-follow-presets>.scene-text-action:hover{background:none;color:#f5e3b8;border-bottom-color:#f5d58f;transform:none}
 .cinema-app .equity-follow-presets>.scene-text-action:focus-visible{outline:2px solid #f0d8a1;outline-offset:3px;background:none;transform:none}
