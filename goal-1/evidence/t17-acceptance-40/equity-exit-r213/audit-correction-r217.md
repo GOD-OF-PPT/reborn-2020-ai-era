@@ -1,0 +1,3 @@
+# 回放审核器字段纠正
+
+R215原Create146与七份UI/物理原文比较已经逐字通过，随后审核器把core agreement.costFen历史累计2000000误当尚持成本1200000而报ACTUAL_NORMAL_STATE_MISMATCH；还把真实命令AdvanceEpilogueTime误写AdvanceEpilogue。实际原档costFen=2000000，lots.remainingCostFen=1200000，disposedBasisFen=800000，现金9789670、1500股；UI正确显示尚持12000元。保留原审核脚本/result/stderr，另建R217纠正，仅核同一真实输入和字段，不改原档/规则。Native216 terminal中的costFen:1200000描述尚持成本而非core同名历史累计字段，newBusinessCommands中的AdvanceEpilogue也是描述别名；真实原receipt与本记录为准，终态保留不倒改。
