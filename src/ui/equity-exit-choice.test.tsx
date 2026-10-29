@@ -67,3 +67,8 @@ it('fills only the same original unpaid balance, keeps partial collection explic
  const fill=elements(ui.tree()).find(e=>e.type==='button'&&text(e).startsWith('填入本笔原未收余额'))!;invoke(fill,'onClick');ui.render();expect(ui.pay().props.disabled).toBe(false);expect((ui.command().props.payload as {amountFen:number}).amountFen).toBe(689670);expect(p.request).not.toHaveBeenCalled()
  ui.edit('3448.35');invoke(ui.pay(),'onClick');expect(p.request).toHaveBeenCalledWith('CollectEquityExit',{exitId:ui.e.id,amountFen:344835},expect.any(String),true);expect(due.controller.exportSaved()).toBe(before)
 })
+
+it('opens the same original business conditions from next without reselecting the subject or issuing a commitment',()=>{
+ const p=quote.p(),before=quote.controller.exportSaved(),e=p.features.deepseek!.exits.find(e=>e.buyerWilling===true&&e.operationId===null&&!e.quoteExpired)!,a=p.features.deepseek!.agreements.find(a=>a.id===e.agreementId)!,target:EquitySceneTarget={runId:p.view.runId,accountId:a.accountId,businessId:a.businessId,kind:'exit',recordId:e.id},onIntent=vi.fn(),onChoose=vi.fn();
+ const tree=draw('original-next-conditions',()=>EquitySceneChoice({p,target,intent:'next',onClose:vi.fn(),onChoose,onIntent,onInspect:vi.fn(),onToday:vi.fn()})),read=elements(tree).find(e=>e.type==='button'&&text(e).startsWith('回看同一主体的原条件和记录'))!;invoke(read,'onClick');expect(onIntent).toHaveBeenCalledWith('business');expect(onChoose).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled();expect(quote.controller.exportSaved()).toBe(before);
+})

@@ -115,7 +115,11 @@ export function equityFocusFromSaved(previous:Input,current:Input,kind:string,bo
   if(rows.length===1)next=make(rows[0]!.businessId,'exit',rows[0]!.id)
  }
  if(!next&&existing&&['InterruptJob','RescheduleJob'].includes(kind)&&equityJourneyFor(previous,existing).resolution.job?.id===body.jobId)next=existing.equityTarget
- if(!next&&existing&&['FundBusiness','WindDownBusiness','CloseBusiness','PauseBusiness','ResumeBusiness'].includes(kind)&&existing.businessId===body.businessId)next=existing.equityTarget
+ if(!next&&existing&&['WindDownBusiness','CloseBusiness'].includes(kind)&&existing.businessId===body.businessId){
+  const state=kind==='WindDownBusiness'?'winding_down':'closed',rows=v.businesses.filter(b=>b.id===body.businessId&&b.lifecycle===state&&b.history.at(-1)?.sourceId===last.commandId&&b.history.at(-1)?.date===view.date&&before.businesses.some(old=>old.id===b.id&&old.accountId===b.accountId&&old.lifecycle!==b.lifecycle))
+  if(rows.length===1)next=make(rows[0]!.id,'business')
+ }
+ if(!next&&existing&&['FundBusiness','PauseBusiness','ResumeBusiness'].includes(kind)&&existing.businessId===body.businessId)next=existing.equityTarget
  if(!next)return null
  const focus=equityFocusFor(current,next)
  return resolveEquityFocus(current,focus).reason===null?focus:null

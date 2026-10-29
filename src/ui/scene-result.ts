@@ -10,6 +10,7 @@ import {isoDate} from '../core/calendar.ts'
 import {MONEY_LIMIT} from '../core/money.ts'
 import {ecosystemSceneResult} from './ecosystem-scene-result.ts'
 import {sceneCashResult} from './scene-cash-result.ts'
+import {equitySharedResult} from './equity-shared-result.ts'
 
 type Relay=NonNullable<PlayFeatures['relay']>
 const originalDay=(value:unknown):value is string=>{try{return typeof value==='string'&&isoDate(value)===value}catch{return false}}
@@ -158,6 +159,8 @@ export function savedSceneResult(kind:string,label:string,previous:PlayingView|n
  const video=videoSceneResult(kind,previous,current)
  const relayResponse=relayResponseSceneResult(kind,previous,current)
  const ecosystem=ecosystemSceneResult(kind,previous,current)
+ const equityShared=equitySharedResult(kind,previous,current)
+ if(equityShared)return equityShared
  if(relayResponse)return relayResponse
  if(ecosystem&&kind!=='AdvanceTime')return ecosystem
  if(kind==='WorkQuarter')return `这一季的工作已经安排好。月末才按实际在岗日期发薪；你还留着${current.budget.available}点，可以做自己的选择。`

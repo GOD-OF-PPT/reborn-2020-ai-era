@@ -7,6 +7,7 @@ import {resolveEquitySceneTarget,type EquitySceneContext,type EquitySceneTarget,
 import {equityHistoryCommands} from './equity-public-history.ts'
 import {equityGovernancePolicy,equityGovernanceEffectiveDate} from './equity-governance-ui.ts'
 import {equityExitCash} from './equity-exit-cash.ts'
+import {equityRetainedFacts} from './equity-retained-facts.ts'
 
 export type EquityChoiceIntent='actors'|'business'|'objects'|'prepare'|'relationship'|'eligibility'|'discover'|'fund'|'job'|'invitation'|'negotiate'|'terms'|'holding'|'follow'|'governance'|'exit-request'|'exit-accept'|'collect'|'record'|'next'
 export type EquityJourneyAction=
@@ -82,17 +83,24 @@ export function equityJourney(v:GamePanelProps['features']['deepseek'],target:Eq
   return build({phase:phase+'-'+job.status,paper,title:job.status==='planned'?title:workingTitle,line:job.status==='planned'?'已经安排，尚未实际开工；原来的日子仍要照常过。':'正在按原安排进行，还没有收到完成后的回应。',originDate,outcome:'pending',active:true,facts:[job.startAt+'—'+job.completeAt+'；'+terms+(job.status==='planned'?'已预留，尚未实付本任务费用或使用开工行动。':'已经实际开工，后续回信或权利仍分别核对。')],action:next?{kind:'wait',date:next,label:job.status==='planned'&&job.startAt>context.date?'等这份安排实际开工':label}:choice('record','翻原任务，核对这次等待')})
  }
  if(target?.kind==='business'){
-  if(context.phase==='epilogue')return build({phase:'business',paper:'kept',title:business!.lifecycle==='closed'?'原准备分账已经合上。':'这份原主体，还有哪些事项要收好？',line:'只沿本主体原来的任务、费用、持股与款项继续；尾声不开始新的关系、资格或投资。',purpose:'核对本主体的旧约与余地，再决定继续保留或实际收尾。',finishWhen:'回尾声保留全部原记录；新的收尾或转账仍由你确认。',originDate:business!.history[0]?.date??null,action:choice('business','核对原事项与收尾选择'),facts:['当前原主体可花'+moneyText(business!.funds.availableFen)+'；保护款与旧义务仍分别保留。']})
-  const active=v.preparations.some(p=>p.businessId===business!.id&&['relationship','eligibility'].includes(p.kind)&&p.job&&['planned','running'].includes(p.job.status))
+  const retained=equityRetainedFacts(v,business!,context)
+  if(business!.lifecycle==='winding_down'||business!.lifecycle==='closed'){
+   const closed=business!.lifecycle==='closed',history=business!.history.filter(h=>h.state===(closed?'closed':'winding_down')),latest=history.at(-1)
+   return build({phase:closed?'business-closed':'business-winding-down',paper:'kept',title:closed?'这份原分账已经合上，日子仍可以继续。':'这份主体已经进入收尾，原记录仍在。',line:closed?'原准备、费用和人生历史仍保留；没有开启另一份主体，也没有新增收入。':'原任务按实际阶段停止，不会继续寻找新邀请；已经持有的股份、锁定与各笔原款分别保留。',purpose:closed?'本分账已经关闭，收好原记录，再选择自己的生活。':'核对停止后的原记录，保留持股、旧款与已经承担的责任。',finishWhen:'不要求为了回生活而清空持股；关闭仍按原资产和义务条件独立确认。',originDate:business!.history[0]?.date??null,resultDate:latest?.date===commandDate(closed?'CloseBusiness':'WindDownBusiness','businessId',business!.id)?latest?.date??null:null,outcome:'actual',action:closed?today():choice('next','看看原持股、款项与关闭条件'),facts:[...retained,'本账户当前可花'+moneyText(business!.funds.availableFen)+'；它不是本次收尾新增的收入。']})
+  }
+  if(context.phase==='epilogue')return build({phase:'business',paper:'kept',title:'这份原主体，还有哪些事项要收好？',line:'只沿本主体原来的任务、费用、持股与款项继续；尾声不开始新的关系、资格或投资。',purpose:'核对本主体的旧约与余地，再决定继续保留或实际收尾。',finishWhen:'回尾声保留全部原记录；新的收尾或转账仍由你确认。',originDate:business!.history[0]?.date??null,action:choice('business','核对原事项与收尾选择'),facts:[...retained,'当前原主体可花'+moneyText(business!.funds.availableFen)+'；保护款与旧义务仍分别保留。']})
+  const activeJobs=context.operations?.jobs.filter(j=>j.businessId===business!.id&&['planned','running'].includes(j.status))??[],active=activeJobs.length>0
+  if(active)return build({phase:'business',paper:'preparation',title:'这份原安排还在日历上，想怎样继续？',line:'本主体仍有已经安排或进行中的原任务。可以保留它们，过自己的日子；真正停止整份主体则须另行核对原影响。',purpose:'保留原安排，或看清停止整份主体的真实代价。',finishWhen:'原任务与已经付出的费用继续按各自记录；真正停止仍须独立确认。',originDate:business!.history[0]?.date??null,action:choice('next','保留原安排，或核对整份主体的收尾'),facts:[...retained,'本主体当前'+activeJobs.length+'份原任务仍在日历上；具体日期与投入保留在同一份原记录。']})
+  if(business!.lifecycle==='preparing'||business!.lifecycle==='discovered')return build({phase:'business',paper:'preparation',title:'这份原主体仍在准备，下一步由你决定。',line:'资金转入不代替实际准备；原材料、任务、关系与参与资格仍各自核对。可以先保留这份投入，也可以查看真实收尾条件。',purpose:'看清尚未完成的原准备和自有资金，再决定继续还是保留。',finishWhen:'翻阅条件不会自动安排新任务、取得股份或产生收入；新的承担仍须独立确认。',originDate:business!.history[0]?.date??null,action:choice('business','看看这份原准备的条件与去向'),facts:[...retained,'本账户当前可花'+moneyText(business!.funds.availableFen)+'；它仍是自己的资金，不代表准备已经完成。']})
   const first=business!.lifecycle==='operating'&&!active&&!v.invitations.some(i=>i.businessId===business!.id)
-  return build({phase:'business',paper:'preparation',title:business!.lifecycle==='closed'?'原准备分账已经合上。':!business!.related?'先让这份关系，真正成立。':'关系并不代替授权，还要看同一封邀请。',line:business!.lifecycle==='closed'?'原持股、转让和费用仍有各自记录；没有默认启用另一份主体。':active?'本主体仍有原准备在日历上，可以明确回到那一份，也可以先过自己的生活。':'邀请来源、付费尽调和本主体资格分别决定，不会因为资金或技术就取得股份。',originDate:business!.history[0]?.date??null,action:first?choice(business!.related?'discover':'relationship',business!.related?'选择一次介绍的来源，先听再判断':'给这份关系准备，选自己的资源与日子'):choice('business','核对这个主体的原条件与下一步'),facts:['当前原主体可花'+moneyText(business!.funds.availableFen)+'；准备和本金仍须分别确认。']})
+  return build({phase:'business',paper:'preparation',title:!business!.related?'先让这份关系，真正成立。':'关系并不代替授权，还要看同一封邀请。',line:active?'本主体仍有原准备在日历上，可以明确回到那一份，也可以先过自己的生活。':'邀请来源、付费尽调和本主体资格分别决定，不会因为资金或技术就取得股份。',originDate:business!.history[0]?.date??null,action:first?choice(business!.related?'discover':'relationship',business!.related?'选择一次介绍的来源，先听再判断':'给这份关系准备，选自己的资源与日子'):choice('business','核对这个主体的原条件与下一步'),facts:[...retained,'当前原主体可花'+moneyText(business!.funds.availableFen)+'；准备和本金仍须分别确认。']})
  }
  if(r.preparation){
   const name=r.preparation.kind==='relationship'?'关系准备':'本局参与资格',pending=task('preparation','preparation',name+'，已经留好日子。','等这份'+name+'实际完成',r.job!.startAt)
   if(pending)return pending
   const completed=r.job?.status==='completed'
   const firstIntroduction=completed&&r.preparation.kind==='relationship'&&business!.lifecycle==='operating'&&!v.invitations.some(i=>i.businessId===business!.id)
-  return build({phase:completed?'preparation-completed':'preparation-stopped',paper:completed?'report':'stopped',title:completed?name+'已经完成。':'这份'+name+'已经停下。',line:completed?'准备成果已经留下，邀请、条款和实际付款仍分别决定；现在还没有因此多出股份。':'已经发生的成本与原记录保留；等候不会自动补做，也没有取得股份。',originDate:r.job?.startAt??null,resultDate:completed?r.job!.completeAt:r.job?.releasedAt??null,outcome:completed?'actual':'non-success',action:firstIntroduction?choice('discover','选择一次介绍的来源，先听再判断'):completed&&r.preparation.kind==='eligibility'?choice('objects','明确选回原邀请，再比较条款'):choice('business','回到同一主体，选择接下来的一步')})
+  return build({phase:completed?'preparation-completed':'preparation-stopped',paper:completed?'report':'stopped',title:completed?name+'已经完成。':'这份'+name+'已经停下。',line:completed?'准备成果已经留下，邀请、条款和实际付款仍分别决定；现在还没有因此多出股份。':'已经发生的成本与原记录保留；等候不会自动补做，也没有取得股份。',purpose:completed?'本次准备成果已经留下，接下来是否继续由你另选。':'这份安排已经停下，保留原成本和记录，再选择自己的生活。',finishWhen:completed?'本次准备已经完成；邀请、调查与实际付款仍分别决定。':'这份安排已经停下，不再等不存在的完成；重新准备仍须显选，也可先回今天。',originDate:r.job?.startAt??null,resultDate:completed?r.job!.completeAt:r.job?.releasedAt??null,outcome:completed?'actual':'non-success',action:firstIntroduction?choice('discover','选择一次介绍的来源，先听再判断'):completed&&r.preparation.kind==='eligibility'?choice('objects','明确选回原邀请，再比较条款'):choice('business','回到同一主体，选择接下来的一步')})
  }
  if(target?.kind==='invitation'&&r.invitation){
   const i=r.invitation

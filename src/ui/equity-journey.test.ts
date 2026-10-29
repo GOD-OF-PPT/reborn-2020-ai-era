@@ -50,7 +50,7 @@ it('connects first relationship and its actual result directly while retaining e
  const scene=()=>equityJourney(projectDeepseek(h.run,h.deepseek),t,context(h,b.accountId))
  expect(scene().action).toMatchObject({kind:'choice',intent:'relationship'})
  h.send('StartEquityRelationship',{businessId:b.id,...dsAssignment('2025-04-01')})
- expect(scene().action).toMatchObject({kind:'choice',intent:'business'})
+ expect(scene().title).toContain('日历');expect(scene().action).toMatchObject({kind:'choice',intent:'next'})
  h.send('AdvanceTime',{date:'2025-04-08'});expect(scene().action).toMatchObject({kind:'choice',intent:'discover'})
  h.send('DiscoverEquityInvitation',{businessId:b.id,source:'referral'})
  expect(scene().action).toMatchObject({kind:'choice',intent:'business'})

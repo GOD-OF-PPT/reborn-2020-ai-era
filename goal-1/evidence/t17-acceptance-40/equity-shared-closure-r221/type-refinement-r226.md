@@ -1,0 +1,3 @@
+# 原严格类型检查的修缮
+
+R224完整scope文件11/11。随后严格tsc发现4项：停止/关闭early return后原business分支三处closed比较已成为不可达；新测试GamePanelProps类型导入未使用。保原stdout/result；仅移除已迁移到独立真实停止分支的三处重复比较和unused导入，不删除原关闭行为/断言或放宽tsconfig。R226冻结后重做工程与原完整相关消费者。首个大patch含不完整长行上下文而验证拒绝，0源码落盘，已按实际行重施，非测试失败。

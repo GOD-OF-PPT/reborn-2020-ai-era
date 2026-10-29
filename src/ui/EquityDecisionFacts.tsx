@@ -10,15 +10,25 @@ import {equityGovernancePolicy} from './equity-governance-ui.ts'
 type Props={command:CommandEnvelope;preview:CommandPreview;view:Pick<GamePanelProps['view'],'runId'|'revision'|'date'|'accounts'>;features:Pick<GamePanelProps['features'],'deepseek'>;accountName:(id:string)=>string}
 const one=<T,>(rows:readonly T[])=>rows.length===1?rows[0]:undefined
 const amount=(value:unknown):value is number=>typeof value==='number'&&Number.isSafeInteger(value)&&value>=0
+export const EQUITY_PLANNING_COMMANDS=new Set(['StartEquityRelationship','StartEquityEligibility','InvestigateEquityInvitation','RequestEquityExit'])
 
 /** Captured with the original confirmation. It neither reads the controller
  * nor computes a new quote, fee, permission or committed cash result. */
 export function EquityDecisionFacts({command,preview,view,features,accountName}:Props){
- if(!['StartEquityNegotiation','SignEquityAgreement','FollowEquityRound','ProposeEquityGovernance','AcceptEquityExit','CollectEquityExit'].includes(command.kind))return null
+ if(!EQUITY_PLANNING_COMMANDS.has(command.kind)&&!['StartEquityNegotiation','SignEquityAgreement','FollowEquityRound','ProposeEquityGovernance','AcceptEquityExit','CollectEquityExit'].includes(command.kind))return null
  const capital=command.kind==='StartEquityNegotiation'||command.kind==='SignEquityAgreement'
- const bad=(reason:string)=><section className="warning-box"><h3>{command.kind==='ProposeEquityGovernance'?'先核对这份原会议安排':capital||command.kind==='FollowEquityRound'?'先核对这份原参与条件':'先核对这笔原转让款'}</h3><p>{reason} 请返回这份原记录重新核对；没有换成另一笔款项。</p></section>
+ const bad=(reason:string)=><section className="warning-box"><h3>{EQUITY_PLANNING_COMMANDS.has(command.kind)?'先核对这一份原安排':command.kind==='ProposeEquityGovernance'?'先核对这份原会议安排':capital||command.kind==='FollowEquityRound'?'先核对这份原参与条件':'先核对这笔原转让款'}</h3><p>{reason} 请返回这份原记录重新核对；没有换成另一笔款项。</p></section>
  if(command.runId!==view.runId||command.expectedRevision!==view.revision)return bad('这份确认已经不属于眼前的原记录。')
  const body=typeof command.payload==='object'&&command.payload!==null&&!Array.isArray(command.payload)?command.payload as Record<string,unknown>:{},v=features.deepseek
+ if(EQUITY_PLANNING_COMMANDS.has(command.kind)){
+  const invitation=typeof body.invitationId==='string'?one(v?.invitations.filter(i=>i.id===body.invitationId)??[]):undefined,agreement=typeof body.agreementId==='string'?one(v?.agreements.filter(a=>a.id===body.agreementId)??[]):undefined,businessId=body.businessId??invitation?.businessId??agreement?.businessId,b=typeof businessId==='string'?one(v?.businesses.filter(b=>b.id===businessId)??[]):undefined
+  const termId=command.kind==='StartEquityRelationship'?'deepseek-relationship':command.kind==='StartEquityEligibility'?'deepseek-eligibility':command.kind==='InvestigateEquityInvitation'?'deepseek-diligence':'deepseek-exit',term=DEEPSEEK_JOBS.find(j=>j.id===termId),resources=Array.isArray(body.resources)?body.resources.map(id=>one(v?.resources.filter(r=>r.id===id)??[])):[]
+  if(!preview.allowed||!b||!term||view.accounts.filter(a=>a.accountId===b.accountId).length!==1||!amount(preview.upfrontCostFen)||typeof body.startAt!=='string'||body.startAt<view.date||preview.actionDate!==undefined&&preview.actionDate!==body.startAt||!resources.length||resources.some(r=>!r)||new Set(body.resources as unknown[]).size!==resources.length||command.kind==='InvestigateEquityInvitation'&&!invitation||command.kind==='RequestEquityExit'&&(!agreement||agreement.businessId!==b.id||!amount(body.shares)||body.shares<=0))return bad('原主体、资源、日期、费用或本次原对象尚未完整核定。')
+  let reply:string
+  try{reply=addDays(body.startAt,term.durationDays)}catch{return bad('原开工与反馈日期尚未完整核定。')}
+  const label=command.kind==='StartEquityRelationship'?'关系准备':command.kind==='StartEquityEligibility'?'本局参与资格':command.kind==='InvestigateEquityInvitation'?'这封原邀请的调查':'本次独立买方调查',planned=body.startAt>view.date
+  return <section className="equity-decision-facts"><p className="command-introduction">{accountName(b.accountId)} · {view.date} → {body.startAt}开工 · 按原安排{reply}等实际结果。</p><dl className="command-facts"><div><dt>这次实际安排</dt><dd>{label}</dd></div><div><dt>{planned?'先预留原任务预算':'本次实际开工预算'}</dt><dd>{moneyText(preview.upfrontCostFen)}</dd></div><div><dt>开工季度行动</dt><dd>{preview.actionPoints}点</dd></div><div><dt>本次原资源</dt><dd>{resources.map(r=>r!.label).join('、')}</dd></div></dl>{command.kind==='RequestEquityExit'?<p>本次询问{String(body.shares)}模拟股的独立买方；调查不出售股份或收钱，仍可能没有买方。</p>:null}<p>{planned?'目前尚未开工，原预算与开工季度行动先预留；实际开工后才支付与使用。':'实际开工后已耗费用和行动保留，停止也不自动退还。'}安排不等于完成，不产生股份、客户认可或现金收入；工资维护和旧约继续分别结算。</p></section>
+ }
  if(command.kind==='ProposeEquityGovernance'){
   const a=typeof body.agreementId==='string'?one(v?.agreements.filter(a=>a.id===body.agreementId)??[]):undefined,b=a?one(v?.businesses.filter(b=>b.id===a.businessId&&b.accountId===a.accountId)??[]):undefined,policy=equityGovernancePolicy(body.policy),job=DEEPSEEK_JOBS.find(j=>j.id==='deepseek-governance')
   const resources=Array.isArray(body.resources)?body.resources.map(id=>one(v?.resources.filter(r=>r.id===id)??[])):[]
