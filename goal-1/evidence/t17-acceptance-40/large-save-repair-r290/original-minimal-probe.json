@@ -1,0 +1,45 @@
+{
+  "at": "2026-10-29T15:27:38.907Z",
+  "originalSource": ".delivery/t17-u6-decision-copy-r283",
+  "originalValidateRunPassed": true,
+  "rawGameRunBytes": 12983482,
+  "nodes": 298776,
+  "maxInputBytes": 10485760,
+  "attempts": [
+    {
+      "code": "RuleError: SAVE_TOO_LARGE",
+      "wallMs": 1417.2765209999998
+    },
+    {
+      "code": "RuleError: SAVE_TOO_LARGE",
+      "wallMs": 1354.7941899999996
+    }
+  ],
+  "periods": 3,
+  "customers": 20,
+  "actualMeters": 1680,
+  "expectedMeters": 1680,
+  "duplicateMeters": 0,
+  "hasViewFeatures": false,
+  "largestFields": [
+    {
+      "key": "economy",
+      "bytes": 7810054
+    },
+    {
+      "key": "causes",
+      "bytes": 1383791
+    },
+    {
+      "key": "relay",
+      "bytes": 1154143
+    },
+    {
+      "key": "operations",
+      "bytes": 1041784
+    }
+  ],
+  "wallMs": 4367.125180999999,
+  "rootCause": "Legal complete history exceeds plain-text save envelope budget; no extra meter identities or view projection",
+  "compatibility": 0
+}

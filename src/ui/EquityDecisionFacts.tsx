@@ -16,9 +16,9 @@ export const EQUITY_PLANNING_COMMANDS=new Set(['StartEquityRelationship','StartE
 /** Captured with the original confirmation. It neither reads the controller
  * nor computes a new quote, fee, permission or committed cash result. */
 export function EquityDecisionFacts({command,preview,view,features,accountName}:Props){
- if(!EQUITY_INVITATION_DECISIONS.has(command.kind)&&!EQUITY_PLANNING_COMMANDS.has(command.kind)&&!['StartEquityNegotiation','SignEquityAgreement','FollowEquityRound','ProposeEquityGovernance','AcceptEquityExit','CollectEquityExit'].includes(command.kind))return null
+ if(!EQUITY_INVITATION_DECISIONS.has(command.kind)&&!EQUITY_PLANNING_COMMANDS.has(command.kind)&&!['StartEquityNegotiation','SignEquityAgreement','DeclineEquityTerms','FollowEquityRound','ProposeEquityGovernance','AcceptEquityExit','CollectEquityExit'].includes(command.kind))return null
  const capital=command.kind==='StartEquityNegotiation'||command.kind==='SignEquityAgreement'
- const bad=(reason:string)=><section className="warning-box"><h3>{EQUITY_INVITATION_DECISIONS.has(command.kind)?'先核对这一封原邀请':EQUITY_PLANNING_COMMANDS.has(command.kind)?'先核对这一份原安排':command.kind==='ProposeEquityGovernance'?'先核对这份原会议安排':capital||command.kind==='FollowEquityRound'?'先核对这份原参与条件':'先核对这笔原转让款'}</h3><p>{reason} 请返回这份原记录重新核对；没有换成另一笔款项。</p></section>
+ const bad=(reason:string)=><section className="warning-box"><h3>{EQUITY_INVITATION_DECISIONS.has(command.kind)?'先核对这一封原邀请':EQUITY_PLANNING_COMMANDS.has(command.kind)?'先核对这一份原安排':command.kind==='ProposeEquityGovernance'?'先核对这份原会议安排':capital||command.kind==='FollowEquityRound'||command.kind==='DeclineEquityTerms'?'先核对这份原参与条件':'先核对这笔原转让款'}</h3><p>{reason} 请返回这份原记录重新核对；没有换成另一笔款项。</p></section>
  if(command.runId!==view.runId||command.expectedRevision!==view.revision)return bad('这份确认已经不属于眼前的原记录。')
  const body=typeof command.payload==='object'&&command.payload!==null&&!Array.isArray(command.payload)?command.payload as Record<string,unknown>:{},v=features.deepseek
  if(command.kind==='DiscoverEquityInvitation'){
@@ -56,6 +56,11 @@ export function EquityDecisionFacts({command,preview,view,features,accountName}:
   const q=a?equityFollowOffer({view,features},a):null,value=body.amountFen,position=q&&a&&amount(value)?equityFollowPosition(q,a,value):null
   if(!preview.allowed||!a||!b||!account||!q||!position||!amount(value)||preview.upfrontCostFen!==value||!amount(account.availableFen)||account.availableFen<value)return bad('本轮原协议、整份报价、拟付本金或付款主体尚未完整核定。')
   return <section className="equity-decision-facts" aria-label="本次原融资的实际选择"><p className="command-introduction">{accountName(a.accountId)} · {view.date} · 本次使用{preview.actionPoints}点 · 保存成功后可花{moneyText(account.availableFen-value)}。</p><dl className="command-facts"><div><dt>{value===0?'本次不新增付款':'本次实际追加本金'}</dt><dd>{moneyText(value)}</dd></div><div><dt>本次新增模拟股</dt><dd>{position.newShares}股</dd></div><div><dt>保存后持股 / 本轮总股本</dt><dd>{position.sharesAfter} / {position.totalSharesAfter}</dd></div><div><dt>本轮后持有比例（约）</dt><dd>{(position.holdingBps/100).toFixed(2)}%</dd></div></dl><p>原锁定至{a.lockUntil}；本次不延长原锁定。每份原报价{moneyText(q.unitPriceFen)}，本轮已公开新资本{moneyText(q.newMoneyFen)}。</p><p>{value===0?'保存成功后，不新增本金或股份，旧股按本轮新股本继续；这不是退款或投资收益。':'保存成功后才从原账户支付本次本金、增加本次股份；投资资产和估值不是现金收入。'} 原费用不重复支付，客户保护、旧款与未完约定仍按原记录保留。</p></section>
+ }
+ if(command.kind==='DeclineEquityTerms'){
+  const n=typeof body.negotiationId==='string'?one(v?.negotiations.filter(n=>n.id===body.negotiationId)??[]):undefined,i=n?one(v?.invitations.filter(i=>i.id===n.invitationId&&i.businessId===n.businessId)??[]):undefined,b=n?one(v?.businesses.filter(b=>b.id===n.businessId)??[]):undefined
+  if(!preview.allowed||!n||!i||!b||n.closedAt!==null||n.respondedAt===null||n.respondedAt>view.date||n.expired||!amount(n.amountFen)||n.amountFen===0||view.accounts.filter(a=>a.accountId===b.accountId).length!==1||preview.upfrontCostFen!==0||preview.actionPoints!==0)return bad('本次条款、回应、主体或新增费用尚未完整核定。')
+  return <section className="equity-decision-facts" aria-label="本次放下条款的实际选择"><p className="command-introduction">{accountName(b.accountId)} · {view.date} · 条款至{n.expiresAt}</p><dl className="command-facts"><div><dt>本次新增费用</dt><dd>{moneyText(preview.upfrontCostFen)}</dd></div><div><dt>本次使用行动</dt><dd>{preview.actionPoints}点</dd></div><div><dt>本条款报价本金，尚未支付</dt><dd>{moneyText(n.amountFen)}</dd></div></dl><p>放下后不支付这笔报价本金，也不新增股份。已付调查与谈判费用不退；其它已确认安排和旧约继续保留。</p></section>
  }
  if(capital){
   const signing=command.kind==='SignEquityAgreement',n=signing&&typeof body.negotiationId==='string'?one(v?.negotiations.filter(n=>n.id===body.negotiationId)??[]):undefined

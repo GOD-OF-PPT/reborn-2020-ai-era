@@ -1,6 +1,6 @@
 import { requireRule, RuleError } from '../core/errors.ts'
 import { canonicalJson } from '../core/identity.ts'
-import { assertJsonInput } from '../core/json-input.ts'
+import { assertJsonInput,inspectJsonInput } from '../core/json-input.ts'
 import { hashValue, hashText, utf8Length } from '../core/hash.ts'
 import { assertGameRun } from '../core/run.ts'
 import { assertCompatible } from '../core/versions.ts'
@@ -11,8 +11,9 @@ import type { GameRun, VersionSet } from '../core/run-types.ts'
 import type { EconomyOperation } from '../core/economy.ts'
 import { isWorldOperation } from '../core/content-types.ts'
 import { envelopeSchema, eventSchema, parseEconomyOperation, parseLedgerOperation, runSchema } from './schemas.ts'
+import {MAX_ENCODED_SAVE_BYTES,MAX_LOGICAL_SAVE_BYTES,MAX_LOGICAL_SAVE_NODES,packSave,unpackSave,assertPackedMetadata,type SaveDocument} from './save-packing.ts'
 
-export const MAX_SAVE_BYTES = 10 * 1024 * 1024
+export const MAX_SAVE_BYTES = MAX_ENCODED_SAVE_BYTES
 export interface SaveEnvelope extends VersionSet {
   readonly saveVersion: 1
   readonly runId: string
@@ -20,6 +21,7 @@ export interface SaveEnvelope extends VersionSet {
   readonly checksum: string
   readonly state: GameRun
 }
+export interface PreparedSave {readonly envelope:SaveEnvelope;readonly storage:SaveDocument;readonly text:string}
 
 function parseSignature(value: string): unknown {
   try { return JSON.parse(value) } catch { throw new RuleError('INVALID_RECEIPT_SIGNATURE') }
@@ -61,7 +63,7 @@ export class RunCodec {
   }
 
   validateRun(value: unknown): GameRun {
-    assertJsonInput(value)
+    inspectJsonInput(value,MAX_LOGICAL_SAVE_NODES)
     const parsed = runSchema.safeParse(value)
     requireRule(parsed.success, 'INVALID_RUN_SHAPE')
     // Strict JSON schemas establish field types, followed by cross-record invariants.
@@ -232,13 +234,19 @@ export class RunCodec {
     const serialized = keys.length > 0 && keys.every(key => key > 'checksum')
       ? '{"checksum":' + JSON.stringify(checksum) + ',' + encodedBody.slice(1)
       : canonicalJson(envelope)
-    requireRule(utf8Length(serialized) <= MAX_SAVE_BYTES, 'SAVE_TOO_LARGE')
+    requireRule(utf8Length(serialized) <= MAX_LOGICAL_SAVE_BYTES, 'SAVE_TOO_LARGE')
     return {envelope,serialized}
   }
 
-  seal(run: GameRun): SaveEnvelope { return this.#sealed(run).envelope }
+  prepare(run:GameRun):PreparedSave{
+    const {envelope,serialized}=this.#sealed(run),nodes=inspectJsonInput(envelope,MAX_LOGICAL_SAVE_NODES),storage=packSave(envelope,serialized,nodes)
+    return{envelope,storage,text:storage===envelope?serialized:canonicalJson(storage)}
+  }
 
-  export(run: GameRun): string { return this.#sealed(run).serialized }
+  /** Logical state/checksum for callers; prepare/export provide the portable wire document. */
+  seal(run: GameRun): SaveEnvelope { return this.prepare(run).envelope }
+
+  export(run: GameRun): string { return this.prepare(run).text }
 
   readEnvelope(value: unknown): SaveEnvelope { return this.#readEnvelope(value, false) }
 
@@ -246,6 +254,24 @@ export class RunCodec {
     assertJsonInput(value)
     const encoded = fromJsonText ? encodeParsedJson(value) : canonicalJson(value)
     requireRule(utf8Length(encoded) <= MAX_SAVE_BYTES, 'SAVE_TOO_LARGE')
+    if(typeof value==='object'&&value!==null&&Reflect.get(value,'saveVersion')===2){
+      const unpacked=unpackSave(value,header=>assertCompatible(header,this.registry.versions))
+      let raw:unknown
+      try{raw=JSON.parse(unpacked.text)}catch{throw new RuleError('INVALID_SAVE_JSON')}
+      const envelope=this.#readLogicalEnvelope(raw,true,true)
+      assertPackedMetadata(envelope,unpacked.header)
+      return envelope
+    }
+    return this.#readLogicalEnvelope(value,fromJsonText,false,encoded)
+  }
+
+  #readLogicalEnvelope(value:unknown,fromJsonText:boolean,packed:boolean,checkedEncoded?:string):SaveEnvelope{
+    let encoded=checkedEncoded
+    if(encoded===undefined){
+      if(packed)inspectJsonInput(value,MAX_LOGICAL_SAVE_NODES);else assertJsonInput(value)
+      encoded=fromJsonText?encodeParsedJson(value):canonicalJson(value)
+      requireRule(utf8Length(encoded)<=(packed?MAX_LOGICAL_SAVE_BYTES:MAX_SAVE_BYTES),'SAVE_TOO_LARGE')
+    }
     requireRule(typeof value === 'object' && value !== null && Reflect.get(value, 'saveVersion') === 1, 'UNSUPPORTED_SAVE_VERSION')
     const parsed = envelopeSchema.safeParse(value)
     requireRule(parsed.success, 'INVALID_SAVE_ENVELOPE')

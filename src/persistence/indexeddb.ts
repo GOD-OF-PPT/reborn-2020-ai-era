@@ -4,7 +4,8 @@ import { canonicalJson } from '../core/identity.ts'
 import { commandIdentifier } from '../core/command-identity.ts'
 import { hashText } from '../core/hash.ts'
 import type { CommandReceipt, GameRun, ProposedRun } from '../core/run-types.ts'
-import { RunCodec, type SaveEnvelope } from './codec.ts'
+import { RunCodec } from './codec.ts'
+import type {SaveDocument} from './save-packing.ts'
 import { causeSchema, commandIdSchema, commandReceiptSchema } from './schemas.ts'
 
 const STORES = ['heads', 'backups', 'receipts', 'logs', 'imports'] as const
@@ -13,7 +14,7 @@ const rowSchema = z.strictObject({ runId: commandIdSchema, generation: generatio
 const receiptRowSchema = z.strictObject({ runId: commandIdSchema, commandId: commandIdSchema, receipt: commandReceiptSchema })
 const logRowSchema = z.strictObject({ runId: commandIdSchema, revision: generationSchema, causes: z.array(causeSchema) })
 const importRowSchema = z.strictObject({ runId: commandIdSchema, importId: commandIdSchema, actorId: commandIdSchema, payloadHash: z.string().regex(/^[0-9a-f]{64}$/), signature: z.string(), generationAfter: generationSchema, revisionAfter: generationSchema })
-interface StoredRow { readonly runId: string; readonly generation: number; readonly envelope: SaveEnvelope }
+interface StoredRow { readonly runId: string; readonly generation: number; readonly envelope: SaveDocument }
 export interface StoredRun { readonly run: GameRun; readonly generation: number }
 export interface CommitResult { readonly record: StoredRun; readonly receipt: CommandReceipt; readonly duplicate: boolean }
 export type ImportOptions = { readonly importId: string; readonly actorId: string } & (
@@ -101,7 +102,8 @@ export class IndexedDbRunStore implements RunStore {
     requireRule(parsed.success, 'INVALID_STORED_RECORD')
     const envelope = this.#codec.readEnvelope(parsed.data.envelope)
     requireRule(parsed.data.runId === envelope.runId, 'STORED_RUN_ID_MISMATCH')
-    const row = { runId: envelope.runId, generation: parsed.data.generation, envelope }
+    // readEnvelope verified this wire document; retain its exact physical form for backups.
+    const row = { runId: envelope.runId, generation: parsed.data.generation, envelope:parsed.data.envelope as SaveDocument }
     return { row, record: { run: envelope.state, generation: row.generation } }
   }
 
@@ -171,7 +173,7 @@ export class IndexedDbRunStore implements RunStore {
   }
 
   async create(run: GameRun): Promise<CommitResult> {
-    const envelope = this.#codec.seal(run)
+    const prepared=this.#codec.prepare(run),envelope=prepared.envelope
     const state = envelope.state
     requireRule(state.revision === 1 && state.receipts[0]?.kind === 'CreateRun', 'INVALID_NEW_RUN')
     const receipt = state.receipts[0]
@@ -188,7 +190,7 @@ export class IndexedDbRunStore implements RunStore {
             finish({ record: existing.record, receipt: first, duplicate: true })
             return
           }
-          const row: StoredRow = { runId: state.runId, generation: 1, envelope }
+          const row: StoredRow = { runId: state.runId, generation: 1, envelope:prepared.storage }
           transaction.objectStore('heads').add(row)
           this.#writeRecords(transaction, envelope.state, envelope.state.receipts)
           finish({ record: { run: envelope.state, generation: 1 }, receipt, duplicate: false })
@@ -198,7 +200,7 @@ export class IndexedDbRunStore implements RunStore {
   }
 
   async commit(proposal: ProposedRun, expectedGeneration: number): Promise<CommitResult> {
-    const envelope = this.#codec.seal(proposal.nextRun)
+    const prepared=this.#codec.prepare(proposal.nextRun),envelope=prepared.envelope
     const last = envelope.state.receipts.at(-1)
     requireRule(last && canonicalJson(last) === canonicalJson(proposal.receipt) && proposal.previousRevision + 1 === envelope.revision, 'INVALID_PROPOSAL')
     const previousRevision = proposal.previousRevision
@@ -226,7 +228,7 @@ export class IndexedDbRunStore implements RunStore {
               requireRule(current.record.generation < Number.MAX_SAFE_INTEGER, 'STORAGE_GENERATION_EXHAUSTED')
               const generation = current.record.generation + 1
               transaction.objectStore('backups').put(current.row)
-              transaction.objectStore('heads').put({ runId: envelope.runId, generation, envelope })
+              transaction.objectStore('heads').put({ runId: envelope.runId, generation, envelope:prepared.storage })
               this.#writeRecords(transaction, envelope.state, [last])
               finish({ record: { run: envelope.state, generation }, receipt: last, duplicate: false })
             } catch (error) { abort(error) }
@@ -242,7 +244,7 @@ export class IndexedDbRunStore implements RunStore {
     requireRule(requestOptions.mode === 'create' || requestOptions.mode === 'replace', 'INVALID_IMPORT_MODE')
     const run = this.#codec.import(text)
     requireRule(run.actorId === requestOptions.actorId, 'FORBIDDEN_ACTOR')
-    const envelope = this.#codec.seal(run)
+    const prepared=this.#codec.prepare(run),envelope=prepared.envelope
     const signature = canonicalJson({ runId: run.runId, actorId: requestOptions.actorId, mode: requestOptions.mode, checksum: envelope.checksum })
     const payloadHash = hashText(signature)
     return this.#transaction(STORES, 'readwrite', (transaction, finish, abort) => {
@@ -269,7 +271,7 @@ export class IndexedDbRunStore implements RunStore {
               if (current) transaction.objectStore('backups').put(current.row)
               transaction.objectStore('receipts').delete(this.#commandRange(run.runId))
               transaction.objectStore('logs').delete(this.#logRange(run.runId))
-              transaction.objectStore('heads').put({ runId: run.runId, generation, envelope })
+              transaction.objectStore('heads').put({ runId: run.runId, generation, envelope:prepared.storage })
               this.#writeRecords(transaction, run, run.receipts)
               transaction.objectStore('imports').put({ runId: run.runId, importId: requestOptions.importId, actorId: requestOptions.actorId, payloadHash, signature, generationAfter: generation, revisionAfter: run.revision })
               finish({ record: { run, generation }, duplicate: false, importId: requestOptions.importId })

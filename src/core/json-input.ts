@@ -1,11 +1,12 @@
 import { requireRule } from './errors.ts'
 import { canonicalJson } from './identity.ts'
 
-export function assertJsonInput(value: unknown): void {
+export function inspectJsonInput(value: unknown, maxNodes: number): number {
+  requireRule(Number.isSafeInteger(maxNodes)&&maxNodes>=1&&maxNodes<=5000000,'JSON_LIMIT_EXCEEDED')
   let nodes = 0
   function visit(item: unknown, depth: number): void {
     nodes += 1
-    requireRule(depth <= 32 && nodes <= 300000, 'JSON_LIMIT_EXCEEDED')
+    requireRule(depth <= 32 && nodes <= maxNodes, 'JSON_LIMIT_EXCEEDED')
     if (item === null || typeof item === 'string' || typeof item === 'boolean') return
     if (typeof item === 'number') { requireRule(Number.isFinite(item), 'INVALID_JSON_VALUE'); return }
     requireRule(typeof item === 'object' && item !== null, 'INVALID_JSON_VALUE')
@@ -23,6 +24,9 @@ export function assertJsonInput(value: unknown): void {
     }
   }
   visit(value, 0)
+  return nodes
 }
+
+export function assertJsonInput(value: unknown): void { inspectJsonInput(value,300000) }
 
 export function copyJson<T>(value: T): T { return JSON.parse(canonicalJson(value)) }

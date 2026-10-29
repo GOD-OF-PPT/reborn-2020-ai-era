@@ -82,7 +82,7 @@ it('enters a finite original-object scene and keeps new preparations, investment
  const target=quote(entry);h.select(target);expect(h.p().view.phase).toBe('epilogue')
  const business=equityJourneyFor(entry,equityFocusFor(entry,{runId:target.runId,accountId:target.accountId,businessId:target.businessId,kind:'business'}))
  expect(business.title).toContain('原主体');expect(business.line).toContain('不开始新的关系');expect(business.action).toMatchObject({kind:'choice',intent:'business'})
- for(const intent of ['prepare','discover','negotiate','governance'] as const){const tree=choice(target,intent);expect(text(tree)).toContain('尾声不能');expect(elements(tree).some(e=>e.type===CommandButton)).toBe(false)}
+ for(const intent of ['prepare','discover','negotiate','governance'] as const){const tree=choice(target,intent);expect(text(tree)).toContain('尾声只处理原来的事项');expect(elements(tree).some(e=>e.type===CommandButton)).toBe(false)}
  const moment=render('tail-quote',()=>Reflect.apply(EquityMoment,undefined,[h.scene().props])),tableau=elements(moment).find(e=>e.props.decisions!==undefined)!
  expect(text(tableau.props.context)).toContain('2025年第四季');expect(text(tableau.props.context)).toContain('原事项 2027-07-01');expect(text(tableau.props.context)).not.toContain('2027-Q3')
  expect(h.controller.exportSaved()).toBe(before)

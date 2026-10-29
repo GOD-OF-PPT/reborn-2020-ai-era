@@ -97,7 +97,7 @@ it('retains a missing legacy record as an invalid focus with no write action unt
  expect(choice.props.sourceInvalid).toBe(true)
  const choices=run('missing-choices',()=>Reflect.apply(EquitySceneChoice,undefined,[choice.props]))
  expect(elements(choices).some(e=>typeof e.props.kind==='string')).toBe(false)
- expect(text(choices)).toContain('回到没有承诺的新入口')
+ expect(text(choices)).toContain('重新选择关注')
 
  expect(h.controller.exportSaved()).toBe(before)
 })

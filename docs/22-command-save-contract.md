@@ -53,3 +53,10 @@ generation与游戏revision独立递增。显式恢复旧档可降低游戏revis
 运行`npm run check`。在dev服务访问`/tests/t04-storage.html`点击运行可核验隔离合成库；该页和测试处理器不进入生产build入口，保留测试库供审计，结束关闭连接与写锁。Node适配器失败注入和实际浏览器报告分别见[T04验证](../goal-1/evidence/t04-validation.md)。
 
 依赖依据：[Zod strictObject](https://zod.dev/api)、[Noble SHA256](https://github.com/paulmillr/noble-hashes)、[IndexedDB事务](https://developer.mozilla.org/en-US/docs/Web/API/IDBTransaction)、[Web Locks](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API)，本轮核验并锁定版本。fake-indexeddb只用于Node开发测试，不把其绿灯当原生浏览器证据。完整经营、历史世界、常规内容、可玩UI、24季度、原PNG和真人试玩尚未由T04完成。
+
+
+## 2026-10-30｜完整历史的物理存档封装
+
+当前schema13/rules-t16-journey-v1保持；大历史新增物理saveVersion2，内层仍原v1完整规范信封与语义checksum，小v1原字节保持。外部输入仍限10MiB，逻辑保存独立限256MiB/5000000节点，普通JSON/命令的300000节点与深度/容器/非法值检查不变。严格有界解包后仍完整校验版本、内容和全部业务/账务引用，不迁移旧schema1—12、不删历史。
+
+调用方用`prepare(run).text`或`export(run)`获得可导入文件；`seal(run)`提供完整逻辑信封供Session预检。IndexedDB写物理封装，读取先完整验证，再保原物理row供backup/exportStored；原事务complete后发布、候选/原retry/只读不改。pako3.0.3精确锁定；解包的流式预算、编码/hash/metadata、原版本拒绝与回滚保档详见[38号合同](38-large-save-persistence-contract.md)。该变化不改游戏规则、钱/AP/日期/RNG/权限，不是页面兼容开发或整体验收。限定证据见[当前保存验证](../goal-1/evidence/t17-acceptance-40/large-save-repair-r290/validation.md)。

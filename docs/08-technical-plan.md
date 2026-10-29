@@ -117,3 +117,10 @@ Codec.#sealed在完整validateRun后复用原canonical body得到同一SHA；che
 ### T15电影版的本机首屏取证
 
 仅本机且显式performanceTest=startup-v1时，index加载独立public/diagnostics/startup-metrics-v1.js；默认游戏不加载/记录。浏览器原生Paint/Navigation/Resource时序与DOM主动作启用观察分列，只输出一次本地console，不接入SDK/遥测或存档、种子、私人备注、完整URL。缺项为null/不完整，场景responseEnd不等于图片绘制，实际DPR不充浏览器200%缩放。[本轮验证](../goal-1/evidence/t15-cinematic-followup-01/validation.md)包含原采样缺口/修缮、3份非受控缓存本机基线与文字模式，不能充通用性能预算或C15整体完成。
+
+
+## 2026-10-30｜完整历史的物理存档封装
+
+当前schema13/rules-t16-journey-v1保持；大历史新增物理saveVersion2，内层仍原v1完整规范信封与语义checksum，小v1原字节保持。外部输入仍限10MiB，逻辑保存独立限256MiB/5000000节点，普通JSON/命令的300000节点与深度/容器/非法值检查不变。严格有界解包后仍完整校验版本、内容和全部业务/账务引用，不迁移旧schema1—12、不删历史。
+
+调用方用`prepare(run).text`或`export(run)`获得可导入文件；`seal(run)`提供完整逻辑信封供Session预检。IndexedDB写物理封装，读取先完整验证，再保原物理row供backup/exportStored；原事务complete后发布、候选/原retry/只读不改。pako3.0.3精确锁定；解包的流式预算、编码/hash/metadata、原版本拒绝与回滚保档详见[38号合同](38-large-save-persistence-contract.md)。该变化不改游戏规则、钱/AP/日期/RNG/权限，不是页面兼容开发或整体验收。限定证据见[当前保存验证](../goal-1/evidence/t17-acceptance-40/large-save-repair-r290/validation.md)。

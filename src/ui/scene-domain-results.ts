@@ -22,7 +22,7 @@ function customerContract(contract:Deepseek['contracts'][number],deepseek:Deepse
  const number=deepseek.leads.findIndex(lead=>lead.personId===contract.personId)+1
  return `${number>0?'客户'+number:'这位客户'}的${contract.productId==='deployment'?'部署':'培训'}合作`
 }
-const domainKinds=new Set(['PlanStockOrder','PlaceStockOrder','SubmitStockOrder','CancelStockOrder','AmendStockOrder','ResearchMarket','StopMarketResearch','AcceptEcoContract','SubmitEcoDelivery','StartEcoRemediation','CancelEcoContract','CollectEcoReceivable','SignEquityAgreement','FollowEquityRound','AcceptEquityExit','CollectEquityExit','StartLifeWork','FulfillLifePromise','AcceptLifePromise','DeclineLifePromise','InterruptLifeWork','AdvanceTime'])
+const domainKinds=new Set(['PlanStockOrder','PlaceStockOrder','SubmitStockOrder','CancelStockOrder','AmendStockOrder','ResearchMarket','StopMarketResearch','AcceptEcoContract','SubmitEcoDelivery','StartEcoRemediation','CancelEcoContract','CollectEcoReceivable','SignEquityAgreement','DeclineEquityTerms','FollowEquityRound','AcceptEquityExit','CollectEquityExit','StartLifeWork','FulfillLifePromise','AcceptLifePromise','DeclineLifePromise','InterruptLifeWork','AdvanceTime'])
 
 function marketResults(kind:string,before:Market,after:Market,date:string,accountText:AccountText):string[]{
  if(!before||!after)return []
@@ -171,6 +171,10 @@ function equityResults(kind:string,before:Deepseek,after:Deepseek,date:string,ac
   const added=after.agreements.filter(row=>!agreements.has(row.id)&&row.classification==='counterfactual'&&negotiations.get(row.negotiationId)?.accepted===true&&row.signedAt<=date&&row.shares===row.initialShares)
    if(added.length===1){const row=added[0]!;parts.push(`${accountText(row.accountId)} · 明确架空协议已签：实际投入${amount(row.initialCostFen)}，取得${row.shares}股，锁定至${row.lockUntil}；投资和估值不是现金收入`)}
  }
+ if(kind==='DeclineEquityTerms'){
+  const closed=after.negotiations.filter(row=>{const old=negotiations.get(row.id);return old&&old.closedAt===null&&row.closedAt===date&&row.closedKind==='declined'&&row.businessId===old.businessId&&row.invitationId===old.invitationId&&row.amountFen===old.amountFen&&!after.agreements.some(a=>a.negotiationId===row.id)})
+  if(closed.length===1){const row=closed[0]!;parts.push(`${businessAccount(row.businessId)} · 这份条款放下了；原报价本金${amount(row.amountFen)}未支付给本条款，已付费用与其它旧约保留`)}
+ }
  if(kind==='FollowEquityRound'){
   const decided=after.agreements.filter(row=>agreements.get(row.id)?.followDecision==='pending'&&row.followAt!==null&&row.followAt<=date)
   for(const row of decided){
@@ -253,6 +257,7 @@ function lifeResults(kind:string,before:Life,after:Life,date:string):string[]{
 /** Public before/after facts only. The caller composes first-order, risk and relay receipts. */
 export function domainSceneResult(kind:string,previous:PlayingView|null,current:PlayingView):string|null{
  if(!domainKinds.has(kind)||!previous||previous.runId!==current.runId||current.revision<=previous.revision||current.saveStatus!=='saved'||current.hasCandidate)return null
+ if(kind==='DeclineEquityTerms'&&current.revision!==previous.revision+1)return null
   const before=previous.features as unknown as PlayFeatures,after=current.features as unknown as PlayFeatures
   const accountText:AccountText=id=>{
    if(id==='personal')return '个人账户'

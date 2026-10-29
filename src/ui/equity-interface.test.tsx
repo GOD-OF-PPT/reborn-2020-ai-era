@@ -155,7 +155,7 @@ it('explains an original lock and missing board right before asking the player t
  expect(p.request).not.toHaveBeenCalled();expect(follow.controller.exportSaved()).toBe(before)
  const oldTerms=near(p,target(p,'negotiation'),'terms','already-signed-terms')
  expect(oldTerms.tree().props.title).toBe('本条款已经实际签署，持股另有原册。')
- expect(text(oldTerms.tree())).toContain('原条款本金');expect(text(oldTerms.tree())).not.toContain('拟支付本金')
+ expect(text(oldTerms.tree())).toContain('当时报价');expect(text(oldTerms.tree())).not.toContain('报价本金')
  expect(oldTerms.button('SignEquityAgreement').props.disabled).toBe(true)
  expect(oldTerms.button('DeclineEquityTerms').props.disabled).toBe(true)
  const book=render('already-signed-book',()=>EquityPanel({...p,assignment:{resources:['player-production'],startAt:p.view.date}}))

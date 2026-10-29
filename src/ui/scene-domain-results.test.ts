@@ -301,7 +301,7 @@ it('retains a real normal short-lock refusal without inventing a signature or sh
  const h=await normal('equity-exit',signRaw)
  try{
   const original=features(h.view()).deepseek!.negotiations.find(row=>row.accepted===true&&row.closedAt===null)!
-  await h.send('DeclineEquityTerms',{negotiationId:original.id})
+  const released=await h.send('DeclineEquityTerms',{negotiationId:original.id});expect(released.text).toContain('这份条款放下了');expect(released.text).toContain('原报价本金¥20,000未支付给本条款');expect(released.text).toContain('已付费用与其它旧约保留')
   await h.send('StartEquityNegotiation',{invitationId:original.invitationId,acquisitionKind:'new_capital',termsId:'liquidity',amountFen:800000,resources:['player-production'],startAt:h.view().date})
   const negotiation=features(h.view()).deepseek!.negotiations.at(-1)!
   const response=await h.send('AdvanceTime',{date:negotiation.job!.completeAt})
