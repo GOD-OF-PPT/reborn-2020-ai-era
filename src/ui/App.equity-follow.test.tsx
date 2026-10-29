@@ -43,7 +43,7 @@ async function setup(id:string,faulty=false){
  const open=()=>{const notice=elements(room()).find(e=>e.type===EquityFollowNotice)!,button=draw('notice-'+id,()=>Reflect.apply(EquityFollowNotice,undefined,[notice.props]));invoke(button,'onClick');return elements(room()).find(e=>e.type===EquitySceneChoice)!}
  const choices=(element:Element)=>draw('choice-'+id,()=>Reflect.apply(EquitySceneChoice,undefined,[element.props]))
  const modal=()=>app().find(e=>e.type===Dialog&&elements(e).some(x=>x.type===EquityDecisionFacts))!
- const command=(element:Element,amountFen:number)=>{let tree=choices(element);if(amountFen>0){const step=elements(tree).find(e=>e.type==='button'&&text(e.props.children).startsWith('我想追加一笔本金，先试算'));if(step){invoke(step,'onClick');tree=choices(element)}const owner=elements(tree).find(e=>e.type==='label'&&text(e.props.children).startsWith('本次愿意另行投入'))!,input=elements(owner).find(e=>e.type==='input')!;invoke(input,'onChange',{currentTarget:{value:String(amountFen/100)}});tree=choices(element)}const row=elements(tree).find(e=>e.type===CommandButton&&e.props.kind==='FollowEquityRound'&&(e.props.payload as {amountFen:number}).amountFen===amountFen)!;invoke(elements(Reflect.apply(CommandButton,undefined,[row.props])).find(e=>e.type==='button')!,'onClick');room()}
+ const command=(element:Element,amountFen:number)=>{let tree=choices(element);if(amountFen>0){const step=elements(tree).find(e=>e.type==='button'&&text(e.props.children).startsWith('试算一笔投入'));if(step){invoke(step,'onClick');tree=choices(element)}const owner=elements(tree).find(e=>e.type==='label'&&text(e.props.children).startsWith('本次愿意另行投入'))!,input=elements(owner).find(e=>e.type==='input')!;invoke(input,'onChange',{currentTarget:{value:String(amountFen/100)}});tree=choices(element)}const row=elements(tree).find(e=>e.type===CommandButton&&e.props.kind==='FollowEquityRound'&&(e.props.payload as {amountFen:number}).amountFen===amountFen)!;invoke(elements(Reflect.apply(CommandButton,undefined,[row.props])).find(e=>e.type==='button')!,'onClick');room()}
  return{controller,store,fault,a,work,app,room,roomElement,selectWork,open,choices,modal,command,arm:()=>{armed=true},close:async()=>{await controller.close();await store.close()}}
 }
 let normal:Awaited<ReturnType<typeof setup>>,failed:Awaited<ReturnType<typeof setup>>
@@ -54,9 +54,9 @@ afterAll(async()=>{await normal?.close();await failed?.close();vi.unstubAllGloba
 it('opens the same agreement comparison directly and cancels back to its actual work without writing a command or bookmark',()=>{
  const h=normal,before=h.controller.exportSaved(),submit=vi.spyOn(h.controller,'submit');h.selectWork()
  const original=h.roomElement().props.openingFocus,panel=h.open(),tree=h.choices(panel)
- expect(text(tree)).toContain('把现金留在自己手中');expect(text(tree)).toContain('本轮每份'+moneyText(800))
+ expect(text(tree)).toContain('留住现金');expect(text(tree)).toContain('每股 '+moneyText(800))
  expect(elements(tree).filter(e=>e.type===CommandButton&&e.props.kind==='FollowEquityRound')).toHaveLength(1)
- expect(text(tree)).toContain('我想追加一笔本金，先试算');expect(elements(tree).some(e=>e.type==='input')).toBe(false)
+ expect(text(tree)).toContain('试算一笔投入');expect(elements(tree).some(e=>e.type==='input')).toBe(false)
  invoke(panel,'onClose');expect(elements(h.room()).some(e=>e.type===EquitySceneChoice)).toBe(false)
  expect(h.roomElement().props.openingFocus).toEqual(original);expect(h.controller.exportSaved()).toBe(before);expect(submit).not.toHaveBeenCalled()
 })

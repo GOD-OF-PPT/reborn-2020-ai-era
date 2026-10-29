@@ -37,7 +37,7 @@ export function equityStageCopy(p:GamePanelProps,j:EquityJourney){
  if(b&&b.funds.prepaidLiabilityFen>0)facts.push('客户预款保护'+moneyText(b.funds.prepaidLiabilityFen))
  if(i&&r.target?.kind==='invitation'&&i.status==='open')facts.push('邀请有效至 '+i.expiresAt)
  if(n&&r.target?.kind==='negotiation')facts.push((n.closedAt!==null||n.expired?'当时本金':'拟投入本金')+moneyText(n.amountFen)+' · '+n.shares+'股'+(n.closedAt===null&&!n.expired?' · 条件至'+n.expiresAt:''))
- if(a)facts.push('仍持'+a.shares+'股 · 尚持成本'+moneyText(a.asset?.bookCostFen)+(a.shares>0?' · '+(a.locked?'锁定至':'原锁定至')+a.lockUntil:''))
+ if(a)facts.push('仍持'+a.shares+'股 · 约'+(a.holdingBps/100).toFixed(2)+'% · 尚持成本'+moneyText(a.asset?.bookCostFen)+(a.shares>0?' · '+(a.locked?'锁定至':'原锁定至')+a.lockUntil:''))
  if(e?.receivable)facts.push('已收'+moneyText(e.collectedFen)+' · 待收'+moneyText(e.receivable.remainingFen)+' · '+e.receivable.dueAt+'到期')
  else if(e?.buyerWilling===true&&!e.quoteExpired)facts.push('每股'+moneyText(e.unitPriceFen)+' · 最多'+e.shares+'股 · 报价至'+e.expiresAt)
  if(b&&r.target?.kind==='business'&&p.features.deepseek){

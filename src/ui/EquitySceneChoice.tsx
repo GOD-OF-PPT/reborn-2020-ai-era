@@ -48,7 +48,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
  const commandProps={...p,request:((...args:Parameters<GamePanelProps['request']>)=>{if(!draft.current())return;close();p.request(...args)})}
  const ui=(label:string,line:string,activate:()=>void,key=label)=>{
   const action=makeSharedAction(p,label,activate,{allowReadOnly:true,canActivate:draft.current})
-  return <button type="button" className="opening-next-choice" key={key} disabled={action.disabled} onClick={action.activate}><strong>{label}</strong><span>{line}</span>{action.reason?<span className="reason">{action.reason}</span>:null}<i aria-hidden="true">↗</i></button>
+  return <button type="button" className="opening-next-choice" key={key} disabled={action.disabled} onClick={action.activate}><strong>{label}</strong>{line?<span>{line}</span>:null}{action.reason?<span className="reason">{action.reason}</span>:null}<i aria-hidden="true">↗</i></button>
  }
  const go=(next:EquityChoiceIntent,label:string,line:string)=>ui(label,line,()=>changeIntent(next))
  const fillFollow=(label:string,value:number)=>{
@@ -143,32 +143,33 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
     {!closing?command('SignEquityAgreement',{negotiationId:n.id},'核对真实本金，另行支付并签署本协议'):null}
     {command('DeclineEquityTerms',{negotiationId:n.id},'不接受这份条款，原调查与谈判费用保留')}
    </>:null}
-   {(intent==='holding'||intent==='exit-request')&&a?holdingFacts:null}
+   {intent==='exit-request'&&a?holdingFacts:null}
    {intent==='holding'&&a?<>
-    <p>持有不要求做完所有记录才能离开。新的资金或权利决定由你另选；旧协议、费用与未收款继续保留。</p>
-    {go('follow','核对本轮融资与跟投选择',a.followDecision==='pending'?'当前有待决定融资；不跟投也是独立明确选择。':'原融资仍按已经发生的阶段表示，不自动新增投入。')}
-    {!closing?go('governance','核对本协议的会议权利','原条款和当前持股分别核对；查看不取得董事席位。'):null}
-    {go('exit-request','核对锁定，先询问独立买方','提出申请不出售，仍可能没有买方。')}
+    <p>仍持{a.shares}股 · 约{(a.holdingBps/100).toFixed(2)}% · {a.locked?'锁定至':'原锁定至'}{a.lockUntil}</p>
+    {go('follow',a.followDecision==='pending'?'看看这轮融资':'回看这轮融资',a.followDecision==='pending'?'追加，或把现金留下。':'查看已经发生的决定。')}
+    {!closing?go('governance','看看会议权利',a.board&&a.shares>0?'一席董事，无单方控制。':'当前没有董事权。'):null}
+    {go('exit-request','问问有没有买方',a.locked?'锁定尚未到期。':'提出申请，不保证卖出。')}
     {rows.filter(row=>{const t=row.target;return t.kind==='governance'&&v!.governance.some(g=>g.id===t.recordId&&g.agreementId===a.id)||t.kind==='exit'&&v!.exits.some(e=>e.id===t.recordId&&e.agreementId===a.id)}).map(original)}
-    {ui(closing?'收好这份持股，回到尾声':'收好这份持股，回到今天','不自动跟投、转让或清掉旧约。',today)}
+    {ui(closing?'回到尾声':'回到今天','',today)}
+    <details><summary>持股、权利与原账</summary>{holdingFacts}<p>持有不要求做完所有记录才能离开。新的资金或权利决定由你另选；旧协议、费用与未收款继续保留。</p>{ui('翻开完整持股手记','',inspect)}</details>
    </>:null}
    {intent==='follow'&&a?<>
-    <p>{a.followDecision==='pending'?'这轮融资最迟'+a.followDeadline+'决定。原持股'+a.shares+'股，原锁定至'+a.lockUntil+'；不跟投也是一个完整选择。':'当前没有待决定的本轮跟投；已发生结果保留。'}不会自动借款，也不以估值支付。</p>
+    <p>{a.followDecision==='pending'?'请在 '+a.followDeadline+' 前决定。':a.followDecision==='declined'?'这轮融资，你选择了不追加。':a.followDecision==='participated'?'这轮融资，已实际追加'+moneyText(a.followAmountFen)+'。':a.followDecision==='defaulted'?'期限已到，这轮没有追加。':'这轮融资尚未开放。'}</p>
     {!followPrincipal?<div className="equity-follow-options">
-     <section className="equity-follow-option"><h3>把现金留在自己手中</h3><p>本次新增付款0元、股份0股。{zeroFollow?<>仍持{zeroFollow.sharesAfter} / {zeroFollow.totalSharesAfter}模拟股，约{(zeroFollow.holdingBps/100).toFixed(2)}%。</>:null}</p>{command('FollowEquityRound',{agreementId:a.id,amountFen:0},'明确不跟投，不新增付款，接受实际稀释')}</section>
-     {!closing?<section className="equity-follow-option"><h3>另留一笔自己的本金</h3>{followOffer?<p>本轮每份{moneyText(followOffer.unitPriceFen)}、对应1模拟股；原整份本金上限{moneyText(followOffer.maxAmountFen)}。</p>:<p>原整份报价尚待核对；原册和当次原确认仍可查看。</p>}{!a.preemptive||a.shares===0?<p className="reason">本协议当前没有可新增付款的跟投权；原记录与原拒绝理由保留。</p>:null}{a.followDecision==='pending'?ui('我想追加一笔本金，先试算','先填写金额再核对；这里不付款。',()=>draft.set('followStep','principal')):go('holding','回看持股和本轮结果','当前没有待决定的跟投；原本金与各笔原款继续保留。')}</section>:null}
+     <section className="equity-follow-option"><h3>留住现金</h3><p>付款 ¥0 · 新增 0股</p>{zeroFollow?<p>稀释后 {zeroFollow.sharesAfter} / {zeroFollow.totalSharesAfter}股 · 约{(zeroFollow.holdingBps/100).toFixed(2)}%</p>:a.followDecision==='pending'?<p className="reason">本轮报价来源待核，不能试算稀释。</p>:<p>现持{a.shares} / {a.totalShares}股</p>}{command('FollowEquityRound',{agreementId:a.id,amountFen:0},'这次不跟投')}</section>
+     {!closing?<section className="equity-follow-option"><h3>追加投入</h3>{followOffer?<p>每股 {moneyText(followOffer.unitPriceFen)} · 最多 {moneyText(followOffer.maxAmountFen)}</p>:a.followDecision==='pending'?<p className="reason">本轮报价来源待核。</p>:null}{!a.preemptive||a.shares===0?<p className="reason">当前没有可新增付款的跟投权。</p>:null}{a.followDecision==='pending'?ui('试算一笔投入','',()=>draft.set('followStep','principal')):go('holding','看看持股','')}</section>:null}
     </div>:<section className="equity-follow-principal" aria-label="本轮本金试算">
      {!a.preemptive||a.shares===0?<p className="reason">本协议当前没有可新增付款的跟投权；原持股、原款与记录保留。</p>:null}
-      {followOffer?<p>本轮每份{moneyText(followOffer.unitPriceFen)}、对应1模拟股；按原持股份额计算的整份本金上限{moneyText(followOffer.maxAmountFen)}。</p>:<p className="reason">原整份报价尚待核对；原册和当次原确认仍可查看。</p>}
+      {followOffer?<p>每股 {moneyText(followOffer.unitPriceFen)} · 最多 {moneyText(followOffer.maxAmountFen)}</p>:<p className="reason">本轮报价来源待核。</p>}
       <div className="equity-follow-decision">
        {field('本次愿意另行投入的本金（元）','amount')}
-       {followOffer&&amount!==null&&amount>0&&amount%followOffer.unitPriceFen!==0?<p className="reason">本轮须按每份{moneyText(followOffer.unitPriceFen)}填写整份本金；当前金额不是整份。</p>:paidFollow&&amount!==null&&amount>0?<p>按原报价试算：新增{paidFollow.newShares}股，合计{paidFollow.sharesAfter} / {paidFollow.totalSharesAfter}，约{(paidFollow.holdingBps/100).toFixed(2)}%；实际资格和付款仍看原确认。</p>:null}
-       {command('FollowEquityRound',{agreementId:a.id,amountFen:amount??-1},'核对所填本金，明确付款参与本轮',amount!==null&&amount>0,'先填写大于零的本次本金；空稿不会变成不跟投。')}
+       {followOffer&&amount!==null&&amount>0&&amount%followOffer.unitPriceFen!==0?<p className="reason">请按每股{moneyText(followOffer.unitPriceFen)}填写整份本金。</p>:paidFollow&&amount!==null&&amount>0?<p>试算：新增{paidFollow.newShares}股 · 合计{paidFollow.sharesAfter} / {paidFollow.totalSharesAfter}股 · 约{(paidFollow.holdingBps/100).toFixed(2)}%</p>:null}
+       {command('FollowEquityRound',{agreementId:a.id,amountFen:amount??-1},'按这笔本金参与',amount!==null&&amount>0,'请填写大于零的本金。')}
       </div>
-      {ui('回到两种选择','保留这份本金草稿，重新比较；仍没有付款。',()=>draft.set('followStep','compare'))}
+      {ui('回到两种选择','',()=>draft.set('followStep','compare'))}
       <div className="equity-follow-presets">{followOffer&&equityFollowHalfAmount(followOffer)>0?fillFollow('试填约一半份额 · '+moneyText(equityFollowHalfAmount(followOffer)),equityFollowHalfAmount(followOffer)):null}{fillFollow('填入原上限 · '+moneyText(a.followMaxFen),a.followMaxFen)}</div><p className="field-help">试填不付款，实际出资仍须原确认。</p>
     </section>}
-    <details><summary>翻阅原持股、锁定与权利</summary>{holdingFacts}<p>已发生的费用和原责任不会因本次选择清除；本轮未新增现金收入。到期未选仍按原规则不付款并记录实际稀释。</p></details>
+    <details><summary>持股与融资条款</summary>{holdingFacts}<p>不会自动借款，也不以估值支付。已发生的费用和原责任不会因本次选择清除；本轮未新增现金收入。到期未选仍按原规则不付款并记录实际稀释。</p>{ui('翻开完整持股手记','',inspect)}</details>
    </>:null}
    {intent==='governance'&&a?<>
     {!a.board||a.shares===0?<p>这份协议当前没有可提出会议的董事权。原条款和已发生会议仍可查看。</p>:null}
@@ -232,7 +233,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
    </>:null}
    {intent==='record'?<><p>{journey.line}</p>{journey.facts.map(fact=><p key={fact}>{fact}</p>)}{r.governance?<p>本次提案{r.governance.resolvedAt===null?'尚无实际表决结果':r.governance.approved?'已经有限通过':'原董事会未通过'}，{r.governance.policy==='independent_audit'?'独立资本用途核对':'用途与接手方限制'}；不取得单方控制。</p>:null}{v?.auditedProjectReport?<p>已开放的本局资本用途核对（截至{v.auditedProjectReport.asOf}）：新增资本{moneyText(v.auditedProjectReport.newCapitalFen)}，老股卖方收款{moneyText(v.auditedProjectReport.secondaryPaymentFen)}，总模拟股数{v.auditedProjectReport.sharesOutstanding}；{v.auditedProjectReport.scope}。</p>:null}{ui('翻开完整原册与账目','同一主体和同一记录；只读查看。',inspect)}</>:null}
    {r.job&&intent!=='job'?go('job','核对本项原安排与中断选择','按原任务身份保留日期、已花费用和原拒绝理由。'):null}
-   {intent!=='record'?ui('翻阅同一份权益原册','完整条款、报告、旧费用与历史仍可查看。',inspect):null}
+   {!['record','follow','holding'].includes(intent)?ui('翻阅同一份权益原册','完整条款、报告、旧费用与历史仍可查看。',inspect):null}
    </>}
   </>}
  </>
