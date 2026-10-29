@@ -129,11 +129,13 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
     </div>:<section className="equity-follow-principal" aria-label="本轮本金试算">
      {!a.preemptive||a.shares===0?<p className="reason">本协议当前没有可新增付款的跟投权；原持股、原款与记录保留。</p>:null}
       {followOffer?<p>本轮每份{moneyText(followOffer.unitPriceFen)}、对应1模拟股；按原持股份额计算的整份本金上限{moneyText(followOffer.maxAmountFen)}。</p>:<p className="reason">原整份报价尚待核对；原册和当次原确认仍可查看。</p>}
-      {field('本次愿意另行投入的本金（元）','amount')}
-      <div className="equity-follow-presets">{followOffer&&equityFollowHalfAmount(followOffer)>0?fillFollow('试填约一半份额 · '+moneyText(equityFollowHalfAmount(followOffer)),equityFollowHalfAmount(followOffer)):null}{fillFollow('填入原上限 · '+moneyText(a.followMaxFen),a.followMaxFen)}</div><p className="field-help">试填不付款，实际出资仍须原确认。</p>
-      {followOffer&&amount!==null&&amount>0&&amount%followOffer.unitPriceFen!==0?<p className="reason">本轮须按每份{moneyText(followOffer.unitPriceFen)}填写整份本金；当前金额不是整份。</p>:paidFollow&&amount!==null&&amount>0?<p>按原报价试算：新增{paidFollow.newShares}股，合计{paidFollow.sharesAfter} / {paidFollow.totalSharesAfter}，约{(paidFollow.holdingBps/100).toFixed(2)}%；实际资格和付款仍看原确认。</p>:null}
-      {command('FollowEquityRound',{agreementId:a.id,amountFen:amount??-1},'核对所填本金，明确付款参与本轮',amount!==null&&amount>0,'先填写大于零的本次本金；空稿不会变成不跟投。')}
+      <div className="equity-follow-decision">
+       {field('本次愿意另行投入的本金（元）','amount')}
+       {followOffer&&amount!==null&&amount>0&&amount%followOffer.unitPriceFen!==0?<p className="reason">本轮须按每份{moneyText(followOffer.unitPriceFen)}填写整份本金；当前金额不是整份。</p>:paidFollow&&amount!==null&&amount>0?<p>按原报价试算：新增{paidFollow.newShares}股，合计{paidFollow.sharesAfter} / {paidFollow.totalSharesAfter}，约{(paidFollow.holdingBps/100).toFixed(2)}%；实际资格和付款仍看原确认。</p>:null}
+       {command('FollowEquityRound',{agreementId:a.id,amountFen:amount??-1},'核对所填本金，明确付款参与本轮',amount!==null&&amount>0,'先填写大于零的本次本金；空稿不会变成不跟投。')}
+      </div>
       {ui('回到两种选择','保留这份本金草稿，重新比较；仍没有付款。',()=>draft.set('followStep','compare'))}
+      <div className="equity-follow-presets">{followOffer&&equityFollowHalfAmount(followOffer)>0?fillFollow('试填约一半份额 · '+moneyText(equityFollowHalfAmount(followOffer)),equityFollowHalfAmount(followOffer)):null}{fillFollow('填入原上限 · '+moneyText(a.followMaxFen),a.followMaxFen)}</div><p className="field-help">试填不付款，实际出资仍须原确认。</p>
     </section>}
     <details><summary>翻阅原持股、锁定与权利</summary>{holdingFacts}<p>已发生的费用和原责任不会因本次选择清除；本轮未新增现金收入。到期未选仍按原规则不付款并记录实际稀释。</p></details>
    </>:null}
