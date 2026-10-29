@@ -40,10 +40,10 @@ it('keeps payroll as an ongoing work clock, then offers a shared UI return from 
   expect(dayPerspectiveCurrent(h.p().view,todayPerspective)).toBe(true)
   const before=h.controller.exportSaved(),ongoing=renderToStaticMarkup(<RoomMoment p={h.p()} headingRef={null} openingFocus={focus} onOpeningFocus={never} onNavigate={never} onExplore={never}/>)
   expect(ongoing).toContain('data-day-state="ongoing"');expect(ongoing).toContain('等下一次原工作日历反馈')
-  expect(ongoing).not.toContain('收好这次结果，想想接下来的日子');expect(h.controller.exportSaved()).toBe(before)
+  expect(ongoing).not.toContain('收好这次结果，想想接下来的日子');expect(ongoing).not.toContain('回到今天');expect(h.controller.exportSaved()).toBe(before)
   await h.advance('2020-04-01')
   const historicalBefore=h.controller.exportSaved(),html=renderToStaticMarkup(<RoomMoment p={h.p()} headingRef={null} openingFocus={focus} focusQuarter="2020-Q1" onOpeningFocus={never} onNavigate={never} onExplore={never}/>)
-  expect(html).toContain('data-day-state="history"');expect(html).toContain('合上这页，回到今天')
+  expect(html).toContain('data-day-state="history"');expect(html).toContain('回到今天')
   expect(html).not.toContain('aria-label="不新增安排，让原日子继续');expect(html).not.toContain('aria-label="保留这一季的工作"')
   expect(h.controller.exportSaved()).toBe(historicalBefore)
   expect(dayPerspectiveCurrent(h.p().view,todayPerspective)).toBe(true)
@@ -85,7 +85,7 @@ it('renders today after an actual life result without auto arranging work, anoth
   const p=h.p(),job=p.features.life.jobs[0]!,focus:OpeningFocus={runId:p.view.runId,kind:'life',accountId:'personal',selection:'rest',entityId:job.id},today=todayThread(p,focus)!
   expect(today.primary.classification).toBe('result')
   const before=h.controller.exportSaved(),html=renderToStaticMarkup(<TodayScene p={p} today={today} headingRef={null} onFocus={never} onPrepare={never} onResume={never} onExplore={never} onRecollection={never} onNavigate={never}/>)
-  expect(html).toContain('接下来仍留一点时间给自己');expect(html).toContain('2020-01-08实际完成，投入¥0');expect(html).toContain('给生活留一段真实的日子');expect(html).toContain('data-day-kind="today"');expect(html).toContain('不新增安排，让原日子继续')
+  expect(html).not.toContain('接下来仍留一点时间给自己');expect(html).toContain('2020-01-08实际完成，投入¥0');expect(html).toContain('给生活留一段真实的日子');expect(html).toContain('data-day-kind="today"');expect(html).toContain('不新增安排，让原日子继续')
   expect(html).not.toContain('aria-label="保留这一季的工作"');expect(html).not.toContain('核对并留出七天休整');expect(html).not.toContain('核对并提交买单')
   expect(h.controller.exportSaved()).toBe(before)
  }finally{await h.close()}

@@ -32,7 +32,7 @@ it('requires an explicit bookmark after an unavailable preference without exposi
  try{
   const before=h.controller.exportSaved(),html=renderToStaticMarkup(<RoomMoment p={h.p()} headingRef={null} focusRequiresChoice focusNotice="原关注未能读取，请重新选择" onNavigate={()=>{throw Error('RENDER_NAVIGATED')}} onExplore={()=>{}}/>)
   expect(html).toContain('先选回这一季在意的事');expect(html).toContain('原来的关注尚未读出');expect(html).toContain('重新选择原关注')
-  expect(html).not.toContain('aria-label="接下这笔手工单"');expect(html).not.toContain('aria-label="把七天留给自己"')
+  expect(html).not.toContain('aria-label="接下这笔手工单"');expect(html).not.toContain('aria-label="把七天留给自己"');expect(html).not.toContain('aria-label="歇几天"')
   expect(h.controller.exportSaved()).toBe(before)
  }finally{await h.close()}
 },20000)

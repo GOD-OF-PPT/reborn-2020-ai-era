@@ -4,6 +4,7 @@ import {publicFeedbackSince} from '../application/public-feedback.ts'
 import {committedEcho,type EchoFrame} from './SceneEcho.tsx'
 import {savedSceneResult} from './scene-result.ts'
 import {sceneCashResult} from './scene-cash-result.ts'
+import {equityReportBrief} from './equity-invitation-result.ts'
 import type {PlayingView,PlayFeatures} from './game-types.ts'
 
 const first=(text:string)=>text.includes('。')?text.slice(0,text.indexOf('。')+1):text
@@ -32,7 +33,8 @@ export function waitSceneResult(result:PublicWaitResult,current:PlayingView):{te
  const retryNote=last.date<result.targetDate?'原候选已经保存；余下的等候仍由你重新选择。':'原候选已经保存，没有额外推进日子。'
  const note=partial?'这些日子已经保存；接下来的一步尚未保存，请处理原候选。':stopped?'已经按你的选择停下；已发生的日子与原约保留。':retryOnly?retryNote:last.date<result.targetDate?'日子先停在这次真实反馈，剩下的安排仍在原日历里。':''
  const text=[cash,cause,meaning,'日历从'+before.date+'走到'+last.date+'。',retained.length?'这期间有'+new Set(retained.map(row=>row.sourceId)).size+'笔自己的原款到期，未收款仍保留，逐笔依据可翻原账。':null,note].filter(Boolean).join(' ')
- const brief=[stopped?'已经按你的选择停下。':null,cash?first(cash):null,first(cause),important?.label,partial?'已发生部分已保存，下一步尚未保存。':retryOnly?retryNote:null].filter(Boolean).join(' ')
+ const singleReport=!cash&&retained.length===0?equityReportBrief(before,last,paused):null
+ const brief=[stopped?'已经按你的选择停下。':null,cash?first(cash):null,singleReport??first(cause),important?.label,partial?'已发生部分已保存，下一步尚未保存。':retryOnly?retryNote:null].filter(Boolean).join(' ')
  return {text,brief,frame}
 }
 

@@ -6,7 +6,7 @@ import {makeSharedAction} from './shared-action.ts'
 
 export type EquityDraftMemory=Map<string,Readonly<Record<string,string>>>
 export const createEquityDraftMemory=():EquityDraftMemory=>new Map()
-const decisionStep=(intent:EquityChoiceIntent,values:Readonly<Record<string,string>>)=>intent==='follow'?values.followStep??'compare':intent==='governance'?JSON.stringify([values.governanceStep??'compare',values.policy??'']):null
+const decisionStep=(intent:EquityChoiceIntent,values:Readonly<Record<string,string>>)=>intent==='follow'?values.followStep??'compare':intent==='governance'?JSON.stringify([values.governanceStep??'compare',values.policy??'']):intent==='invitation'?values.invitationStep??'compare':null
 
 /** A new, actually published promise gets a fresh slot. A changed date,
  * revision, auxiliary save or failed candidate never constitutes a new promise. */

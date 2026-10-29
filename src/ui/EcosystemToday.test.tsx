@@ -73,7 +73,7 @@ it('keeps generic UI status by the reading entry and exposes the actual ecology 
  hooks.slots.clear();const ui=render('actual-directions','这次选择已经记下，尚待履行的事仍照原约定继续。');let all=nodes(ui.draw()),tableau=all.find(n=>n.type===RoomTableau)!
  expect(tableau.props.feedback).toBeNull();expect(words(tableau.props.record)).toContain('这次选择已经记下')
  const open=nodes(tableau.props.record).find(n=>n.type==='button')!;(open.props.onClick as ()=>void)();all=nodes(ui.draw())
- const ecology=all.find(n=>n.type==='button'&&words(n).startsWith('去听一份具体的合作请求'))!;expect(ecology).toBeDefined();(ecology.props.onClick as ()=>void)()
+ const ecology=all.find(n=>n.type==='button'&&words(n).startsWith('听听合作需求'))!;expect(ecology).toBeDefined();(ecology.props.onClick as ()=>void)()
  expect(ui.onFocus).toHaveBeenCalledExactlyOnceWith(ecosystemFocusFor(p,null,'personal'));expect(ui.onPrepare).not.toHaveBeenCalled();expect(ui.onNavigate).not.toHaveBeenCalled()
  expect(p.request).not.toHaveBeenCalled();expect(controller.exportSaved()).toBe(source135)
 })

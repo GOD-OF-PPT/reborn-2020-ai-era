@@ -38,7 +38,7 @@ it.each(['first_order','investment','free'] as const)('gives the real %s first s
    expect(html).not.toContain('data-first-order-phase=')
    expect(html).not.toContain('first-attempt-v1.png')
   }
-  if(approach==='free')expect(html).not.toContain('把七天留给自己')
+  if(approach==='free'){expect(html).not.toContain('把七天留给自己');expect(html).not.toContain('歇几天')}
  }finally{await h.close()}
 })
 

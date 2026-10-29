@@ -1,0 +1,1 @@
+264严格类型在新LifeDecisionFacts消费者中发现遗漏原CommandDetails必填clock属性；该普通生活命令没有Clock投影，现显式传原实际null。产品代码无需修改；原TS2741与264输出保，build/测试未被该失败称为通过。新266仅这一测试一处不同264，其余922源逐字同。

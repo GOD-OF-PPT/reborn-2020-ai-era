@@ -8,11 +8,13 @@ import {equityHistoryCommands} from './equity-public-history.ts'
 import {equityGovernancePolicy,equityGovernanceEffectiveDate} from './equity-governance-ui.ts'
 import {equityExitCash} from './equity-exit-cash.ts'
 import {equityRetainedFacts} from './equity-retained-facts.ts'
+import {equityInvitationState} from './equity-invitation-ui.ts'
 
 export type EquityChoiceIntent='actors'|'business'|'objects'|'prepare'|'relationship'|'eligibility'|'discover'|'fund'|'job'|'invitation'|'negotiate'|'terms'|'holding'|'follow'|'governance'|'exit-request'|'exit-accept'|'collect'|'record'|'next'
 export type EquityJourneyAction=
  |{readonly kind:'choice';readonly intent:EquityChoiceIntent;readonly label:string}
  |{readonly kind:'command';readonly command:'EnableCounterfactualEquity';readonly payload:{readonly acknowledge:true};readonly confirm:true;readonly label:string}
+ |{readonly kind:'command';readonly command:'RejectEquityInvitation';readonly payload:{readonly invitationId:string};readonly confirm:true;readonly label:string}
  |{readonly kind:'wait';readonly date:string;readonly label:string}
  |{readonly kind:'today';readonly label:string}
 export type EquityPaperState='intention'|'preparation'|'letter'|'report'|'terms'|'reply'|'holding'|'governance'|'quote'|'receivable'|'receipt'|'kept'|'stopped'
@@ -103,17 +105,17 @@ export function equityJourney(v:GamePanelProps['features']['deepseek'],target:Eq
   return build({phase:completed?'preparation-completed':'preparation-stopped',paper:completed?'report':'stopped',title:completed?name+'已经完成。':'这份'+name+'已经停下。',line:completed?'准备成果已经留下，邀请、条款和实际付款仍分别决定；现在还没有因此多出股份。':'已经发生的成本与原记录保留；等候不会自动补做，也没有取得股份。',purpose:completed?'本次准备成果已经留下，接下来是否继续由你另选。':'这份安排已经停下，保留原成本和记录，再选择自己的生活。',finishWhen:completed?'本次准备已经完成；邀请、调查与实际付款仍分别决定。':'这份安排已经停下，不再等不存在的完成；重新准备仍须显选，也可先回今天。',originDate:r.job?.startAt??null,resultDate:completed?r.job!.completeAt:r.job?.releasedAt??null,outcome:completed?'actual':'non-success',action:firstIntroduction?choice('discover','选择一次介绍的来源，先听再判断'):completed&&r.preparation.kind==='eligibility'?choice('objects','明确选回原邀请，再比较条款'):choice('business','回到同一主体，选择接下来的一步')})
  }
  if(target?.kind==='invitation'&&r.invitation){
-  const i=r.invitation
+  const i=r.invitation,invitationState=equityInvitationState(r)
   if(i.status!=='open'){
    const pending=task('diligence','letter','邀请已结束，原调查仍有安排。','等这份调查实际完成，不恢复邀请',i.createdAt)
    if(pending)return {...pending,phase:'invitation-closed-with-task',title:i.status==='declined'?'邀请已经拒绝，原调查仍在日历上。':'邀请已经到期，原调查仍在日历上。',line:'邀请不能继续使用，不等于调查任务自动取消；原投入和安排保留，也可核对原任务的停止选择。',purpose:'看清已经安排的调查，不恢复这封原邀请。',finishWhen:'调查结果留下后，可回生活；新的邀请仍须另选。'}
-   return build({phase:'invitation-closed',paper:'kept',title:i.status==='used'?'这封邀请已有自己的协议记录。':i.status==='declined'?'这封邀请已经拒绝。':'这封原邀请已经到期。',line:'原调查、中间费和准备记录仍保留；没有换成另一封邀请或免费取得股份。',originDate:i.createdAt,resultDate:i.status==='declined'?commandDate('RejectEquityInvitation','invitationId',i.id):null,outcome:i.status==='used'?'actual':'non-success',action:today(),facts:[`原邀请有效至${i.expiresAt}。`]})
+   return build({phase:'invitation-closed',paper:'kept',title:i.status==='used'?'这封邀请已有自己的协议记录。':i.status==='declined'?'这封邀请已经拒绝。':'这封原邀请已经到期。',line:'原调查、中间费和准备记录仍保留；没有换成另一封邀请或免费取得股份。',purpose:i.status==='used'?'这封邀请已经用于本局协议，保留原调查和投入。':i.status==='declined'?'这封邀请已经拒绝，保留已经付出的费用与自己的生活。':'这封邀请已经到期，保留已经发生的调查与费用。',finishWhen:'这封邀请已经结束，不再等新的回信；回到生活不恢复邀请或重复投入。',originDate:i.createdAt,resultDate:i.status==='declined'?commandDate('RejectEquityInvitation','invitationId',i.id):null,outcome:i.status==='used'?'actual':'non-success',action:today(),facts:[`原邀请有效至${i.expiresAt}。`]})
   }
   const pending=task('diligence','letter','先查清这封邀请的来意。','等同一份尽调报告实际完成',i.createdAt);if(pending)return pending
-  if(context.phase==='epilogue')return build({phase:'tail-invitation',paper:i.reportAt===null?'letter':'report',title:'这封原邀请，仍有自己的来处。',line:'尾声不开始新的调查、资格或投资；原报告、费用和拒绝选择仍可核对。',originDate:i.createdAt,resultDate:i.reportAt,action:choice('invitation','核对原邀请与拒绝收起的选择'),facts:['原邀请有效至'+i.expiresAt+'；未公开的授权或意愿仍未核实。']})
-  if(i.reportAt===null)return build({phase:r.job?'diligence-stopped':'invitation',paper:r.job?'stopped':'letter',title:r.job?'尽调还没有留下可用的报告。':'一封介绍，还不是可投资的承诺。',line:'授权与融资意愿都尚未核实。可以安排原尽调，也可以拒绝；中间服务费不产生股份、资格或同意。',originDate:i.createdAt,decisionOpen:true,outcome:r.job?'non-success':'none',action:choice('invitation','先比较尽调、拒绝与原风险选择'),facts:['原邀请最迟'+i.expiresAt+'；调查和新承诺都保自己的真实时间。',...(i.brokerPaymentId?['这封邀请已有原中间服务费记录，不能把它当作投资本金。']:[])]})
+  if(context.phase==='epilogue')return build({phase:'tail-invitation',paper:i.reportAt===null?'letter':'report',title:'这封原邀请，仍有自己的来处。',line:'尾声不开始新的调查、资格或投资；原报告、费用和拒绝选择仍可核对。',purpose:'收好这封旧介绍与已公开的报告，不新增投资或调查。',finishWhen:'可以明确拒绝或先回尾声；原费用保留，不要求继续完成所有准备。',originDate:i.createdAt,resultDate:i.reportAt,action:choice('invitation','核对原邀请与拒绝收起的选择'),facts:['原邀请有效至'+i.expiresAt+'；未公开的授权或意愿仍未核实。']})
+  if(i.reportAt===null)return build({phase:r.job?'diligence-stopped':'invitation',paper:r.job?'stopped':'letter',title:r.job?'尽调还没有留下可用的报告。':'一封介绍，还不是可投资的承诺。',line:'授权与融资意愿都尚未核实。可以安排原尽调，也可以拒绝；中间服务费不产生股份、资格或同意。',purpose:invitationState==='stopped'?'这次调查已经停下，先比较重新投入调查与收好邀请。':'先比较核实介绍与拒绝收起，再决定是否为调查留时间。',finishWhen:invitationState==='stopped'?'不再等已经停下的调查；重新调查仍须显选资源、日期并独立确认。':'明确安排调查或拒绝，都由你另作决定；查看不付款或取得股份。',originDate:i.createdAt,decisionOpen:true,outcome:r.job?'non-success':'none',action:choice('invitation','先比较尽调、拒绝与原风险选择'),facts:['原邀请最迟'+i.expiresAt+'；调查和新承诺都保自己的真实时间。',...(i.brokerPaymentId?['这封邀请已有原中间服务费记录，不能把它当作投资本金。']:[])]})
   const verified=i.authority===true&&i.financingConsent===true
-  return build({phase:verified?'diligence-completed':'diligence-rejected',paper:'report',title:verified?'授权和有条件意愿，已经分别核实。':i.authority===false?'这次没有核实到原对手授权。':'对方当前没有可确认的融资意愿。',line:verified?business!.eligible?'仍要比较条款与原日期，再决定是否付出下一次谈判成本。':'本主体资格仍须另行准备；已知报告不等于已经持股。':'这次调查已真实发生，原费用和记录保留；不能据此付款签出股份。',originDate:i.createdAt,resultDate:i.reportAt,outcome:verified?'actual':'non-success',decisionOpen:verified,action:verified?choice(business!.eligible?'negotiate':'eligibility',business!.eligible?'比较这封邀请可谈的原条款':'给本局资格准备，另选资源与日子'):today(),facts:['原邀请有效至'+i.expiresAt+'；授权、融资意愿、资格和谈判各自成立。']})
+  return build({phase:verified?'diligence-completed':'diligence-rejected',paper:'report',title:verified?'授权和有条件意愿，已经分别核实。':i.authority===false?'这次没有核实到原对手授权。':'对方当前没有可确认的融资意愿。',line:verified?business!.eligible?'仍要比较条款与原日期，再决定是否付出下一次谈判成本。':'本主体资格仍须另行准备；已知报告不等于已经持股。':'这次调查已真实发生，原费用和记录保留；不能据此付款签出股份。',purpose:verified?'这次调查已经结束，按已核报告选择下一次承担。':i.authority===false?'这次调查已经结束，没有核实到本次授权；已花费用保留。':'这次调查已经结束，本次授权已核实，但没有可确认的融资意愿。',finishWhen:verified?'不再等本次报告；资格、谈判与签署仍分别选择，也可以先回生活。':'不再等本次报告；可明确拒绝这封邀请，或保留原报告回自己的生活。',originDate:i.createdAt,resultDate:i.reportAt,outcome:verified?'actual':'non-success',decisionOpen:verified,action:verified?choice(business!.eligible?'negotiate':'eligibility',business!.eligible?'比较这封邀请可谈的原条款':'给本局资格准备，另选资源与日子'):{kind:'command',command:'RejectEquityInvitation',payload:{invitationId:i.id},confirm:true,label:'拒绝这封邀请'},facts:['原邀请有效至'+i.expiresAt+'；授权、融资意愿、资格和谈判各自成立。']})
  }
  if(target?.kind==='negotiation'&&r.negotiation){
   const n=r.negotiation,terms=v.catalog.terms.find(t=>t.id===n.termsId)!,pending=task('negotiation','terms','这份条款，还在等原回应。','等这份原谈判实际回应',n.createdAt)

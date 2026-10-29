@@ -10,16 +10,28 @@ import {equityGovernancePolicy} from './equity-governance-ui.ts'
 type Props={command:CommandEnvelope;preview:CommandPreview;view:Pick<GamePanelProps['view'],'runId'|'revision'|'date'|'accounts'>;features:Pick<GamePanelProps['features'],'deepseek'>;accountName:(id:string)=>string}
 const one=<T,>(rows:readonly T[])=>rows.length===1?rows[0]:undefined
 const amount=(value:unknown):value is number=>typeof value==='number'&&Number.isSafeInteger(value)&&value>=0
+export const EQUITY_INVITATION_DECISIONS=new Set(['DiscoverEquityInvitation','PayUnverifiedBrokerFee','RejectEquityInvitation'])
 export const EQUITY_PLANNING_COMMANDS=new Set(['StartEquityRelationship','StartEquityEligibility','InvestigateEquityInvitation','RequestEquityExit'])
 
 /** Captured with the original confirmation. It neither reads the controller
  * nor computes a new quote, fee, permission or committed cash result. */
 export function EquityDecisionFacts({command,preview,view,features,accountName}:Props){
- if(!EQUITY_PLANNING_COMMANDS.has(command.kind)&&!['StartEquityNegotiation','SignEquityAgreement','FollowEquityRound','ProposeEquityGovernance','AcceptEquityExit','CollectEquityExit'].includes(command.kind))return null
+ if(!EQUITY_INVITATION_DECISIONS.has(command.kind)&&!EQUITY_PLANNING_COMMANDS.has(command.kind)&&!['StartEquityNegotiation','SignEquityAgreement','FollowEquityRound','ProposeEquityGovernance','AcceptEquityExit','CollectEquityExit'].includes(command.kind))return null
  const capital=command.kind==='StartEquityNegotiation'||command.kind==='SignEquityAgreement'
- const bad=(reason:string)=><section className="warning-box"><h3>{EQUITY_PLANNING_COMMANDS.has(command.kind)?'先核对这一份原安排':command.kind==='ProposeEquityGovernance'?'先核对这份原会议安排':capital||command.kind==='FollowEquityRound'?'先核对这份原参与条件':'先核对这笔原转让款'}</h3><p>{reason} 请返回这份原记录重新核对；没有换成另一笔款项。</p></section>
+ const bad=(reason:string)=><section className="warning-box"><h3>{EQUITY_INVITATION_DECISIONS.has(command.kind)?'先核对这一封原邀请':EQUITY_PLANNING_COMMANDS.has(command.kind)?'先核对这一份原安排':command.kind==='ProposeEquityGovernance'?'先核对这份原会议安排':capital||command.kind==='FollowEquityRound'?'先核对这份原参与条件':'先核对这笔原转让款'}</h3><p>{reason} 请返回这份原记录重新核对；没有换成另一笔款项。</p></section>
  if(command.runId!==view.runId||command.expectedRevision!==view.revision)return bad('这份确认已经不属于眼前的原记录。')
  const body=typeof command.payload==='object'&&command.payload!==null&&!Array.isArray(command.payload)?command.payload as Record<string,unknown>:{},v=features.deepseek
+ if(command.kind==='DiscoverEquityInvitation'){
+  const b=typeof body.businessId==='string'?one(v?.businesses.filter(b=>b.id===body.businessId)??[]):undefined
+  if(!preview.allowed||!b||view.accounts.filter(a=>a.accountId===b.accountId).length!==1||!['referral','broker'].includes(String(body.source))||preview.upfrontCostFen!==0||preview.actionPoints!==0)return bad('本次介绍的来源、原主体或费用尚未完整核定。')
+  return <section className="equity-decision-facts"><p className="command-introduction">{accountName(b.accountId)} · {view.date} · 本次费用¥0，使用0点。</p><h3>{body.source==='broker'?'听一次未核验的中间人消息':'听一次已有实际合作或关系的介绍'}</h3><p>这次明确选择{body.source==='broker'?'虚构中间人的未核验消息':'已有实际合作或关系的介绍'}。介绍没有证明授权或融资意愿，不产生股份；是否独立调查、支付中间费或拒绝，仍由你分别决定。</p><p>保存成功后才留下这封介绍；现在没有安排调查、支付本金或取得资格，后续仍有独立期限与原规则。</p></section>
+ }
+ if(EQUITY_INVITATION_DECISIONS.has(command.kind)){
+  const i=typeof body.invitationId==='string'?one(v?.invitations.filter(i=>i.id===body.invitationId)??[]):undefined,b=i?one(v?.businesses.filter(b=>b.id===i.businessId)??[]):undefined,paying=command.kind==='PayUnverifiedBrokerFee'
+  if(!preview.allowed||!i||!b||i.status!=='open'||view.accounts.filter(a=>a.accountId===b.accountId).length!==1||preview.upfrontCostFen!==(paying?100000:0)||preview.actionPoints!==0)return bad('这封邀请、付款主体或本次费用尚未完整核定。')
+  const working=i.diligenceJob&&['planned','running'].includes(i.diligenceJob.status)
+  return <section className="equity-decision-facts"><p className="command-introduction">{accountName(b.accountId)} · {view.date} · 本次使用0点 · {paying?'实际中间服务费':'本次新增费用'}{moneyText(preview.upfrontCostFen)}。</p><h3>{paying?'一笔中间服务费，仍不是投资承诺':'拒绝这封介绍，保留已经付出的事'}</h3><p>这封{i.source==='broker'?'未核验的中间人消息':'实际合作介绍'}来自{i.createdAt}，有效至{i.expiresAt}。{paying?'1000元可能全部损失，不产生股份、资格或融资同意；调查仍须另行安排。':'拒绝不新增费用或股份，也不返还已花的调查费或中间服务费。'}</p>{working?<p>原调查仍在{i.diligenceJob!.startAt}—{i.diligenceJob!.completeAt}；本次拒绝不会自动中断该任务。若要停止，须另选同一原任务并确认。</p>:null}<p>保存成功后才更新这封邀请；原账和其它准备继续保留，返回调整不会付款或拒绝。</p></section>
+ }
  if(EQUITY_PLANNING_COMMANDS.has(command.kind)){
   const invitation=typeof body.invitationId==='string'?one(v?.invitations.filter(i=>i.id===body.invitationId)??[]):undefined,agreement=typeof body.agreementId==='string'?one(v?.agreements.filter(a=>a.id===body.agreementId)??[]):undefined,businessId=body.businessId??invitation?.businessId??agreement?.businessId,b=typeof businessId==='string'?one(v?.businesses.filter(b=>b.id===businessId)??[]):undefined
   const termId=command.kind==='StartEquityRelationship'?'deepseek-relationship':command.kind==='StartEquityEligibility'?'deepseek-eligibility':command.kind==='InvestigateEquityInvitation'?'deepseek-diligence':'deepseek-exit',term=DEEPSEEK_JOBS.find(j=>j.id===termId),resources=Array.isArray(body.resources)?body.resources.map(id=>one(v?.resources.filter(r=>r.id===id)??[])):[]
@@ -27,7 +39,7 @@ export function EquityDecisionFacts({command,preview,view,features,accountName}:
   let reply:string
   try{reply=addDays(body.startAt,term.durationDays)}catch{return bad('原开工与反馈日期尚未完整核定。')}
   const label=command.kind==='StartEquityRelationship'?'关系准备':command.kind==='StartEquityEligibility'?'本局参与资格':command.kind==='InvestigateEquityInvitation'?'这封原邀请的调查':'本次独立买方调查',planned=body.startAt>view.date
-  return <section className="equity-decision-facts"><p className="command-introduction">{accountName(b.accountId)} · {view.date} → {body.startAt}开工 · 按原安排{reply}等实际结果。</p><dl className="command-facts"><div><dt>这次实际安排</dt><dd>{label}</dd></div><div><dt>{planned?'先预留原任务预算':'本次实际开工预算'}</dt><dd>{moneyText(preview.upfrontCostFen)}</dd></div><div><dt>开工季度行动</dt><dd>{preview.actionPoints}点</dd></div><div><dt>本次原资源</dt><dd>{resources.map(r=>r!.label).join('、')}</dd></div></dl>{command.kind==='RequestEquityExit'?<p>本次询问{String(body.shares)}模拟股的独立买方；调查不出售股份或收钱，仍可能没有买方。</p>:null}<p>{planned?'目前尚未开工，原预算与开工季度行动先预留；实际开工后才支付与使用。':'实际开工后已耗费用和行动保留，停止也不自动退还。'}安排不等于完成，不产生股份、客户认可或现金收入；工资维护和旧约继续分别结算。</p></section>
+  return <section className="equity-decision-facts"><p className="command-introduction">{accountName(b.accountId)} · {view.date} → {body.startAt}开工 · 按原安排{reply}等实际结果。</p><dl className="command-facts"><div><dt>这次实际安排</dt><dd>{label}</dd></div><div><dt>{planned?'先预留原任务预算':'本次实际开工预算'}</dt><dd>{moneyText(preview.upfrontCostFen)}</dd></div><div><dt>开工季度行动</dt><dd>{preview.actionPoints}点</dd></div><div><dt>本次原资源</dt><dd>{resources.map(r=>r!.label).join('、')}</dd></div></dl>{command.kind==='RequestEquityExit'?<p>本次询问{String(body.shares)}模拟股的独立买方；调查不出售股份或收钱，仍可能没有买方。</p>:null}<p>{planned?'尚未开工；预算和行动先预留，开工时实际使用。':'确认保存后开工，费用与行动实际使用。'}工资、维护和旧约照常结算，准备不保证取得股份。</p></section>
  }
  if(command.kind==='ProposeEquityGovernance'){
   const a=typeof body.agreementId==='string'?one(v?.agreements.filter(a=>a.id===body.agreementId)??[]):undefined,b=a?one(v?.businesses.filter(b=>b.id===a.businessId&&b.accountId===a.accountId)??[]):undefined,policy=equityGovernancePolicy(body.policy),job=DEEPSEEK_JOBS.find(j=>j.id==='deepseek-governance')

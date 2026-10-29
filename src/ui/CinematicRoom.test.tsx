@@ -24,7 +24,7 @@ it('renders a read-only room without advancing, including delivery and end-of-ra
   expect(initial).toContain('环顾房间')
   expect(initial).toContain('2020-01-01')
   expect(initial).toContain('今天，先把时间留给什么')
-  expect(initial).not.toContain('把七天留给自己')
+  expect(initial).not.toContain('把七天留给自己');expect(initial).not.toContain('歇几天')
   expect(initial).not.toContain('接下这笔手工单')
   expect(initial).toContain('翻开随身册')
   expect(initial).not.toContain('推进下一节点')

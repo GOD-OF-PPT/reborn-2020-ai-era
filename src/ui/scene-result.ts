@@ -11,6 +11,7 @@ import {MONEY_LIMIT} from '../core/money.ts'
 import {ecosystemSceneResult} from './ecosystem-scene-result.ts'
 import {sceneCashResult} from './scene-cash-result.ts'
 import {equitySharedResult} from './equity-shared-result.ts'
+import {equityInvitationResult} from './equity-invitation-result.ts'
 
 type Relay=NonNullable<PlayFeatures['relay']>
 const originalDay=(value:unknown):value is string=>{try{return typeof value==='string'&&isoDate(value)===value}catch{return false}}
@@ -159,6 +160,8 @@ export function savedSceneResult(kind:string,label:string,previous:PlayingView|n
  const video=videoSceneResult(kind,previous,current)
  const relayResponse=relayResponseSceneResult(kind,previous,current)
  const ecosystem=ecosystemSceneResult(kind,previous,current)
+ const invitation=equityInvitationResult(kind,previous,current)
+ if(invitation)return invitation
  const equityShared=equitySharedResult(kind,previous,current)
  if(equityShared)return equityShared
  if(relayResponse)return relayResponse
