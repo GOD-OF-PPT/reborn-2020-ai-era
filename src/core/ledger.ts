@@ -397,7 +397,13 @@ function assertSupplierHistory(state: LedgerState): void {
   }
   requireRule(pools.size===state.supplierPrepayments.length,'SUPPLIER_HISTORY_MISMATCH')
   for(const actual of state.supplierPrepayments){const p=pools.get(actual.id);requireRule(p&&p.accountId===actual.accountId&&p.businessId===actual.businessId&&p.counterpartyId===actual.counterpartyId&&p.paidFen===actual.paidFen&&p.remainingFen===actual.remainingFen,'SUPPLIER_HISTORY_MISMATCH')}
-  for(const [id,remaining] of invoices)requireRule(state.obligations.some(o=>o.id===id&&o.remainingFen===remaining),'SUPPLIER_INVOICE_HISTORY_MISMATCH')
+  if(invoices.size>0){
+    // Keep all same-id balances so the original any-match and later duplicate
+    // guards retain their exact meaning; this index is local to this validation.
+    const balancesById=new Map<string,number[]>()
+    for(const obligation of state.obligations){const values=balancesById.get(obligation.id)??[];values.push(obligation.remainingFen);balancesById.set(obligation.id,values)}
+    for(const [id,remaining] of invoices)requireRule(balancesById.get(id)?.some(actual=>actual===remaining),'SUPPLIER_INVOICE_HISTORY_MISMATCH')
+  }
 }
 
 export function assertLedger(state: LedgerState): void {

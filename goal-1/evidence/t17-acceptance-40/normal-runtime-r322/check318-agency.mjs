@@ -1,0 +1,8 @@
+import fs from 'node:fs';import path from 'node:path';import cp from 'node:child_process';
+import {hash,json} from '../../t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs';
+import {assertBrowserEvidenceWritable as guard} from '../../../../scripts/browser_evidence_guard.mjs';
+const root='goal-1/evidence/t17-acceptance-40/normal-runtime-r322',s=json('goal-1/evidence/t17-acceptance-40/task-state-r305/snapshot318.json'),node='/Users/gordon/.nvm/versions/node/v22.12.0/bin/node',exact=()=>s.files.every(r=>hash(fs.readFileSync(path.join(s.target,r.path)))===r.sha256);
+if(!exact())throw Error('EXACT_BASE318_REQUIRED');guard(root);
+const args=['node_modules/vitest/vitest.mjs','run','--config','vitest.config.ts','src/application/story-agency.test.ts','--reporter=json','--outputFile='+path.resolve(root+'/r318-agency.vitest.json')],stdout=fs.openSync(root+'/r318-agency.stdout.log','wx'),stderr=fs.openSync(root+'/r318-agency.stderr.log','wx'),start=Date.now();
+const result=await new Promise(resolve=>{const child=cp.spawn(node,args,{cwd:s.target,env:{...process.env,PATH:path.dirname(node)+':'+process.env.PATH},stdio:['ignore',stdout,stderr]});child.on('error',error=>resolve({exitCode:null,error:String(error)}));child.on('close',(exitCode,signal)=>resolve({exitCode,signal}))});
+fs.closeSync(stdout);fs.closeSync(stderr);const report={at:new Date().toISOString(),...result,wallMs:Date.now()-start,args,cwd:s.target,sourceExact:exact(),sourceFiles:s.files.length,p3OverlayCopied:false,compatibility:0,completeU6:false};guard(root);fs.writeFileSync(root+'/r318-agency.result.json',JSON.stringify(report,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(report));if(result.exitCode!==0||!report.sourceExact)process.exitCode=1;
