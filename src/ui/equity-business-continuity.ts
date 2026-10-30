@@ -1,6 +1,7 @@
 import type {GamePanelProps} from './game-types.ts'
 import {equityDirectCosts} from './equity-costs.ts'
 import type {CommandEnvelope} from '../core/run-types.ts'
+import {operatingJobMoney} from './operating-job-money.ts'
 
 export type EquityBusinessSource=Pick<GamePanelProps,'view'|'features'>
 export const EQUITY_SHARED_COMMANDS=new Set(['FundBusiness','InterruptJob','RescheduleJob','WindDownBusiness','CloseBusiness'])
@@ -21,6 +22,8 @@ export function equityBusinessContinuity(p:EquityBusinessSource,businessId:strin
  const own=affected.filter(j=>j.businessId===b.id),elsewhere=affected.filter(j=>j.businessId!==b.id)
  const finance=one(p.features.workbench.finance.filter(f=>f.accountId===b.accountId))
  const agreements=v.agreements.filter(a=>a.businessId===b.id&&a.accountId===b.accountId),agreementIds=new Set(agreements.map(a=>a.id)),exits=v.exits.filter(e=>agreementIds.has(e.agreementId)&&e.businessId===b.id)
- return {business:b,finance,workers,affected,own,elsewhere,agreements,exits,costs:equityDirectCosts(b.id,b.accountId,ops.jobs,p.features.workbench.finance,p.view.date)}
+ const costs=equityDirectCosts(b.id,b.accountId,ops.jobs,p.features.workbench.finance,p.view.date),represented=new Set(costs.jobs.map(j=>j.id))
+ const otherTaskMoney=affected.filter(j=>!represented.has(j.id)).map(job=>({job,money:operatingJobMoney(p,job)}))
+ return {business:b,finance,workers,affected,own,elsewhere,agreements,exits,costs,otherTaskMoney}
 }
 export type EquityBusinessContinuity=NonNullable<ReturnType<typeof equityBusinessContinuity>>

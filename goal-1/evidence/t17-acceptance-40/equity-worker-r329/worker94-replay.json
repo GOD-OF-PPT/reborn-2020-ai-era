@@ -1,0 +1,264 @@
+{
+  "at": "2026-10-29T22:29:04.947Z",
+  "source": "/Users/gordon/githome/reborn-2020-ai-era/.delivery/t17-u6-runtime-r324",
+  "sourceRows": 930,
+  "fullCreate": 94,
+  "wallMs": 26658,
+  "actualRawInputs": [
+    {
+      "name": "original82",
+      "file": "goal-1/evidence/t17-acceptance-40/shared-native-r235/saved82-company-capital-added.json",
+      "bytes": 1109265,
+      "sha256": "7ac02e612798d3d677774f3d146e464e2c15c5aa49ab88efc19aace041a4bdcd",
+      "fullCreateEqual": true
+    },
+    {
+      "name": "before92",
+      "file": "goal-1/evidence/t17-acceptance-40/equity-worker-r329/prelude-r1/before-winddown.json",
+      "bytes": 1199676,
+      "sha256": "17a909622a76b489f4d7ed55cb6a06f005db03457297430c664ea568ccf81ecf",
+      "fullCreateEqual": true
+    },
+    {
+      "name": "cancel92",
+      "file": "goal-1/evidence/t17-acceptance-40/worker-native-r330/actual92-after-cancel.json",
+      "bytes": 1199676,
+      "sha256": "17a909622a76b489f4d7ed55cb6a06f005db03457297430c664ea568ccf81ecf",
+      "fullCreateEqual": true
+    },
+    {
+      "name": "after93",
+      "file": "goal-1/evidence/t17-acceptance-40/worker-native-r330/actual93-after-winddown.json",
+      "bytes": 1209522,
+      "sha256": "b82554f45799640651aaaa449ddcf6e2e7b3cf0fc8714c013eb5399d8bd3d7da",
+      "fullCreateEqual": true
+    },
+    {
+      "name": "after94",
+      "file": "goal-1/evidence/t17-acceptance-40/worker-native-r330/actual94-company-closed.json",
+      "bytes": 1213418,
+      "sha256": "92d40812ac56189654831dec55d692fa1a882a75dcdba7e56cbfde283d01e1f1",
+      "fullCreateEqual": true
+    },
+    {
+      "name": "cold94",
+      "file": "goal-1/evidence/t17-acceptance-40/worker-native-r330/actual94-cold.json",
+      "bytes": 1213418,
+      "sha256": "92d40812ac56189654831dec55d692fa1a882a75dcdba7e56cbfde283d01e1f1",
+      "fullCreateEqual": true
+    }
+  ],
+  "actual": {
+    "worker": {
+      "id": "ops:1cf69548ca13b3ee3e4a7ff10e08479d",
+      "definitionId": "editor-lin",
+      "sponsorBusinessId": "ops:6668f353b8af24f0457c47f08a2ad6dd",
+      "from": "2025-04-01",
+      "to": "2025-04-01",
+      "units": 1,
+      "monthlyWageFen": 300000
+    },
+    "own": {
+      "id": "ops:7d74044104c8cc9f89ce73998154c732",
+      "businessId": "ops:6668f353b8af24f0457c47f08a2ad6dd",
+      "definitionId": "service-maintenance",
+      "contractId": null,
+      "actionId": "ops:7d74044104c8cc9f89ce73998154c732",
+      "resources": [
+        "player-production"
+      ],
+      "startAt": "2025-04-03",
+      "completeAt": "2025-04-05",
+      "releasedAt": "2025-04-01",
+      "status": "cancelled",
+      "outputId": null
+    },
+    "cross": {
+      "id": "ops:9807526ae139d5e4aa5dde0bfb9edc54",
+      "businessId": "ops:598e1e16ef1fc271f773e432c29f33bd",
+      "definitionId": "business-preparation",
+      "contractId": null,
+      "actionId": "ops:9807526ae139d5e4aa5dde0bfb9edc54",
+      "resources": [
+        "ops:1cf69548ca13b3ee3e4a7ff10e08479d"
+      ],
+      "startAt": "2025-04-01",
+      "completeAt": "2025-04-08",
+      "releasedAt": "2025-04-01",
+      "status": "interrupted",
+      "outputId": null
+    },
+    "business": {
+      "id": "ops:6668f353b8af24f0457c47f08a2ad6dd",
+      "definitionId": "ecosystem-service",
+      "route": "deepseek_opportunity",
+      "accountId": "ops:d2912503b20b9ad37be939e3716c404e",
+      "company": true,
+      "lifecycle": "winding_down",
+      "prepared": true,
+      "activeFrom": "2025-01-27",
+      "stoppedAt": "2025-04-02",
+      "distributedFen": 0,
+      "monthlyMaintenanceFen": 10000,
+      "history": [
+        {
+          "date": "2025-01-20",
+          "state": "discovered",
+          "sourceId": "dsk:75f0bcbe9b5762cf12c286e85e48d753"
+        },
+        {
+          "date": "2025-01-20",
+          "state": "preparing",
+          "sourceId": "dsk:467f842e47893a3667feb3c195b87f56"
+        },
+        {
+          "date": "2025-01-27",
+          "state": "operating",
+          "sourceId": "u6-worker-prelude-v1:85"
+        },
+        {
+          "date": "2025-04-01",
+          "state": "winding_down",
+          "sourceId": "command-034cdfe4-6c74-40dd-89dd-605ec5bd08bd"
+        }
+      ]
+    },
+    "other": {
+      "id": "ops:598e1e16ef1fc271f773e432c29f33bd",
+      "definitionId": "investment-plan",
+      "route": "a_share",
+      "accountId": "personal",
+      "company": false,
+      "lifecycle": "operating",
+      "prepared": true,
+      "activeFrom": "2025-04-01",
+      "stoppedAt": null,
+      "distributedFen": 0,
+      "monthlyMaintenanceFen": 0,
+      "history": [
+        {
+          "date": "2025-04-01",
+          "state": "discovered",
+          "sourceId": "u6-worker-prelude-v1:88"
+        },
+        {
+          "date": "2025-04-01",
+          "state": "preparing",
+          "sourceId": "u6-worker-prelude-v1:89"
+        },
+        {
+          "date": "2025-04-01",
+          "state": "operating",
+          "sourceId": "u6-worker-prelude-v1:90"
+        }
+      ]
+    },
+    "companyBefore": {
+      "cashFen": 498388,
+      "heldFen": 10000,
+      "availableFen": 488388,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0,
+      "receivableFen": 0,
+      "prepaidLiabilityFen": 0,
+      "payableFen": 0,
+      "supplierPrepaidFen": 0,
+      "investmentValueFen": 0,
+      "netAssetsFen": 498388
+    },
+    "companyStopped": {
+      "cashFen": 488055,
+      "heldFen": 0,
+      "availableFen": 488055,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0,
+      "receivableFen": 0,
+      "prepaidLiabilityFen": 0,
+      "payableFen": 0,
+      "supplierPrepaidFen": 0,
+      "investmentValueFen": 0,
+      "netAssetsFen": 488055
+    },
+    "companyClosed": {
+      "cashFen": 0,
+      "heldFen": 0,
+      "availableFen": 0,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0,
+      "receivableFen": 0,
+      "prepaidLiabilityFen": 0,
+      "payableFen": 0,
+      "supplierPrepaidFen": 0,
+      "investmentValueFen": 0,
+      "netAssetsFen": 0
+    },
+    "personalBefore": {
+      "cashFen": 27140000,
+      "heldFen": 0,
+      "availableFen": 27140000,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0,
+      "receivableFen": 0,
+      "prepaidLiabilityFen": 0,
+      "payableFen": 0,
+      "supplierPrepaidFen": 0,
+      "investmentValueFen": 0,
+      "netAssetsFen": 27140000
+    },
+    "personalStopped": {
+      "cashFen": 27140000,
+      "heldFen": 0,
+      "availableFen": 27140000,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0,
+      "receivableFen": 0,
+      "prepaidLiabilityFen": 0,
+      "payableFen": 0,
+      "supplierPrepaidFen": 0,
+      "investmentValueFen": 0,
+      "netAssetsFen": 27140000
+    },
+    "personalClosed": {
+      "cashFen": 27628055,
+      "heldFen": 0,
+      "availableFen": 27628055,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0,
+      "receivableFen": 0,
+      "prepaidLiabilityFen": 0,
+      "payableFen": 0,
+      "supplierPrepaidFen": 0,
+      "investmentValueFen": 0,
+      "netAssetsFen": 27628055
+    },
+    "stopBudget": {
+      "available": 2,
+      "quarter": "2025-Q2",
+      "reserved": 0,
+      "spent": 2,
+      "total": 4
+    },
+    "closeBudget": {
+      "available": 2,
+      "quarter": "2025-Q2",
+      "reserved": 0,
+      "spent": 2,
+      "total": 4
+    },
+    "actualStopPaidFen": 10333,
+    "capitalRecoveredFen": 488055,
+    "businessIncomeUnchanged": true,
+    "newNativeCommands": 2,
+    "newNativeCreate": 0,
+    "independentImport": 1
+  },
+  "scope": "One actual normal82→Node92→Native93/94, fullCreate94 and six raw snapshots; not normal board, human, all UI or wholeU6",
+  "compatibility": 0,
+  "wholeU6Complete": false
+}

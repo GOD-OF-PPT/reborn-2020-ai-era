@@ -1,0 +1,10 @@
+import fs from 'node:fs';import path from 'node:path';import {json,ident,blobOid,git,proof} from '../../t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs';
+const root='goal-1/evidence/t17-acceptance-40',out=root+'/equity-worker-r329',parent='6f773a1ee85ed8a07d79324ac31dc8edc03ed0ba';
+if(git(['rev-parse','HEAD']).toString().trim()!==parent||git(['diff','--cached','--name-only']).toString().trim())throw Error('PINNED_PARENT_AND_EMPTY_INDEX_REQUIRED');
+const source=json(out+'/snapshot342.json'),paths=[...source.owned];
+for(const folder of ['equity-worker-r329','worker-native-r330','worker-ui-native-r336','worker-main-release-r343']){const walk=p=>{for(const n of fs.readdirSync(p)){const f=p+'/'+n,s=fs.lstatSync(f);if(s.isDirectory())walk(f);else if(s.isFile()&&!f.endsWith('.log'))paths.push(f);else if(!s.isFile())throw Error('REGULAR_OWNED_ONLY')}};walk(root+'/'+folder)}
+if(new Set(paths).size!==paths.length||paths.some(p=>p.startsWith('.delivery/')||!p.startsWith('src/ui/')&&!p.startsWith(root+'/')))throw Error('EXPLICIT_OWNER_PATHS_REQUIRED');
+const pre=json(out+'/ui-preimages.json');for(const row of pre.files){if(!row.path)throw Error('PREIMAGE_PATH_REQUIRED');const original=git(['show',parent+':'+row.path]);if(ident(row.path).path&&!original.equals(fs.readFileSync('.delivery/t17-u6-worker-before-6f773a1e/'+row.path)))throw Error('OWNED_UI_BASE_CHANGED:'+row.path)}
+const rows=paths.sort().map(p=>({...ident(p),oid:blobOid(fs.readFileSync(p))}));
+fs.writeFileSync(out+'/commit-owned.json',JSON.stringify({at:new Date().toISOString(),parent,rows,source:source.target,ignoredLogsRemainLocal:true,compatibility:0,wholeU6Complete:false},null,2)+'\n',{flag:'wx'});
+git(['add','--',...rows.map(r=>r.path)]);proof(rows);const changed=git(['diff','--cached','--name-only','-z']).toString().split('\0').filter(Boolean).sort();if(JSON.stringify(changed)!==JSON.stringify(rows.map(r=>r.path)))throw Error('STAGED_EXACT_SET_REQUIRED');console.log(JSON.stringify({paths:rows.length,allBlobBytesShaAndGitModeEqual:true,sourceRows:source.files.length,sourceOwned:source.owned.length}));
