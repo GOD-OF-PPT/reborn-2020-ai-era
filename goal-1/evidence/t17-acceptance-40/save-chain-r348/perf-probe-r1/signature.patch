@@ -1,0 +1,27 @@
+--- a/src/core/ledger.ts
++++ b/src/core/ledger.ts
+@@ -370,6 +370,15 @@
+ }
+ 
+ /** Reconcile supplier assets and corrected invoices from the immutable operation order. */
++const parsedLedgerSignatures=new WeakMap<LedgerReceipt,{signature:string;operation:LedgerOperation}>()
++function parseLedgerSignature(receipt:LedgerReceipt):LedgerOperation{
++ const signature=receipt.signature
++ if(typeof signature!=='string')return JSON.parse(signature) as LedgerOperation
++ const previous=parsedLedgerSignatures.get(receipt)
++ if(previous?.signature===signature)return previous.operation
++ const operation=JSON.parse(signature) as LedgerOperation
++ parsedLedgerSignatures.set(receipt,{signature,operation});return operation
++}
+ function assertSupplierHistory(state: LedgerState): void {
+   if (state.supplierPrepayments.length === 0 && !state.receipts.some(r => r.kind === 'incur_supplier_usage' || r.kind === 'reverse_supplier_usage' || r.kind === 'refund_supplier')) return
+   const pools = new Map<string,{accountId:string;businessId:string;counterpartyId:string;paidFen:number;remainingFen:number}>()
+@@ -380,7 +389,7 @@
+   for(const entry of state.metrics)if(entry.kind==='cost'){const key=[entry.operationId,entry.accountId,entry.businessId??'-'].join('|');costByOperation.set(key,sumMoney([costByOperation.get(key)??0,entry.deltaFen],true))}
+   const cost=(op:LedgerOperation,amount:number)=>requireRule((costByOperation.get([op.id,op.accountId,op.businessId??'-'].join('|'))??0)===amount,'SUPPLIER_COST_HISTORY_MISMATCH')
+   for (const receipt of state.receipts) {
+-    const o=JSON.parse(receipt.signature) as LedgerOperation
++    const o=parseLedgerSignature(receipt)
+     if(o.kind==='supplier_prepay'){const p=pool(o.prepaymentId,o.accountId,o.businessId,o.counterpartyId);p.paidFen=sumMoney([p.paidFen,o.amountFen]);p.remainingFen=sumMoney([p.remainingFen,o.amountFen])}
+     if(o.kind==='consume_supplier'){const p=pools.get(o.prepaymentId);requireRule(p&&p.accountId===o.accountId&&p.businessId===o.businessId&&p.remainingFen>=o.amountFen,'SUPPLIER_HISTORY_MISMATCH');p.remainingFen-=o.amountFen;sources.set(o.id,o);cost(o,o.amountFen)}
+     if(o.kind==='incur_supplier_usage'){sources.set(o.id,o);requireRule(!invoices.has(o.obligationId),'SUPPLIER_HISTORY_MISMATCH');invoices.set(o.obligationId,o.amountFen);cost(o,o.amountFen)}

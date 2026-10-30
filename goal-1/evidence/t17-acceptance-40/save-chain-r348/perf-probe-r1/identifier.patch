@@ -1,0 +1,14 @@
+--- a/src/core/identity.ts
++++ b/src/core/identity.ts
+@@ -1,7 +1,11 @@
+ import { requireRule } from './errors.ts'
+ 
++const validIdentifiers=new Set<string>()
+ export function identifier(value: unknown): string {
++  if(typeof value==='string'&&validIdentifiers.has(value))return value
+   requireRule(typeof value === 'string' && value.length <= 512 && /^[A-Za-z0-9][A-Za-z0-9_.:/-]*$/.test(value), 'INVALID_ID')
++  if(validIdentifiers.size>=100000)validIdentifiers.clear()
++  validIdentifiers.add(value)
+   return value
+ }
+ 
