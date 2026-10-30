@@ -254,7 +254,7 @@ export class RunCodec {
     assertJsonInput(value)
     const encoded = fromJsonText ? encodeParsedJson(value) : canonicalJson(value)
     requireRule(utf8Length(encoded) <= MAX_SAVE_BYTES, 'SAVE_TOO_LARGE')
-    if(typeof value==='object'&&value!==null&&Reflect.get(value,'saveVersion')===2){
+    if(typeof value==='object'&&value!==null&&[2,3].includes(Reflect.get(value,'saveVersion'))){
       const unpacked=unpackSave(value,header=>assertCompatible(header,this.registry.versions))
       let raw:unknown
       try{raw=JSON.parse(unpacked.text)}catch{throw new RuleError('INVALID_SAVE_JSON')}
