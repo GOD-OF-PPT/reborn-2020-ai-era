@@ -1,0 +1,10 @@
+import fs from 'node:fs';import path from 'node:path';import cp from 'node:child_process';
+import {hash,json} from '../../t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs';
+import {assertBrowserEvidenceWritable as guard} from '../../../../scripts/browser_evidence_guard.mjs';
+const root='goal-1/evidence/t17-acceptance-40/save-cumulative-r349',revision=process.argv[2],label=process.argv[3],files=process.argv.slice(4),node='/Users/gordon/.nvm/versions/node/v22.12.0/bin/node';
+if(!/^\d+$/.test(revision??'')||!/^[-a-z0-9]+$/.test(label??'')||!files.length)throw Error('EXPLICIT_REVISION_LABEL_FULL_FILES_REQUIRED');
+const s=json(root+'/snapshot'+revision+'.json'),exact=()=>s.files.every(r=>hash(fs.readFileSync(path.join(s.target,r.path)))===r.sha256);
+if(!exact())throw Error('EXACT_FROZEN_SOURCE_REQUIRED');guard(root);
+const args=['node_modules/vitest/vitest.mjs','run','--config','vitest.config.ts',...files,'--reporter=json','--outputFile='+path.resolve(root+'/'+label+'.vitest.json')],stdout=fs.openSync(root+'/'+label+'.stdout.log','wx'),stderr=fs.openSync(root+'/'+label+'.stderr.log','wx'),start=Date.now();
+const result=await new Promise(resolve=>{const child=cp.spawn(node,args,{cwd:s.target,env:{...process.env,PATH:path.dirname(node)+':'+process.env.PATH},stdio:['ignore',stdout,stderr]});child.on('error',error=>resolve({exitCode:null,error:String(error)}));child.on('close',(exitCode,signal)=>resolve({exitCode,signal}))});
+fs.closeSync(stdout);fs.closeSync(stderr);const report={at:new Date().toISOString(),...result,wallMs:Date.now()-start,args,cwd:s.target,sourceExact:exact(),sourceFiles:s.files.length,p3OverlayCopied:false,compatibility:0,wholeU6Complete:false};guard(root);fs.writeFileSync(root+'/'+label+'.result.json',JSON.stringify(report,null,2)+'\n',{flag:'wx'});console.log(report);if(result.exitCode!==0||!report.sourceExact)process.exitCode=1;

@@ -369,6 +369,34 @@ function addInvestment(state: WorkingLedger, operation: OperationBase & { readon
   } else state.investments.push({ id: operation.investmentId, accountId: operation.accountId, assetId: operation.assetId, subjectAccountId, classification: operation.classification, bookCostFen: operation.amountFen, valueFen: operation.amountFen })
 }
 
+// Reconciliation repeatedly reads the same immutable receipts while applying a
+// command. Reuse only JSON parsing, never a balance, reference or permission check.
+const MAX_PARSED_RECEIPTS = 32768
+const MAX_PARSED_SIGNATURE_CHARS = 16 * 1024 * 1024
+const MAX_CACHED_SIGNATURE_CHARS = 8192
+let parsedReceipts = new WeakMap<LedgerReceipt, { signature: string; operation: LedgerOperation }>()
+let parsedReceiptCount = 0, parsedSignatureChars = 0
+function supplierReceiptOperation(receipt: LedgerReceipt): LedgerOperation {
+  const signature = receipt.signature
+  // Keep the original direct-input JSON/property failures and coercions. Reading
+  // the current property above also prevents a getter from being memoized.
+  if (typeof receipt !== 'object' || receipt === null || typeof signature !== 'string') return JSON.parse(signature) as LedgerOperation
+  const previous = parsedReceipts.get(receipt)
+  if (previous?.signature === signature) return previous.operation
+  const operation = JSON.parse(signature) as LedgerOperation
+  if (signature.length <= MAX_CACHED_SIGNATURE_CHARS) {
+    // Counts include replacements and collected keys, conservatively bounding
+    // reuse without retaining keys or relying on GC to enforce the budget.
+    if (parsedReceiptCount >= MAX_PARSED_RECEIPTS || parsedSignatureChars + signature.length > MAX_PARSED_SIGNATURE_CHARS) {
+      parsedReceipts = new WeakMap()
+      parsedReceiptCount = 0; parsedSignatureChars = 0
+    }
+    parsedReceipts.set(receipt, { signature, operation })
+    parsedReceiptCount++; parsedSignatureChars += signature.length
+  }
+  return operation
+}
+
 /** Reconcile supplier assets and corrected invoices from the immutable operation order. */
 function assertSupplierHistory(state: LedgerState): void {
   if (state.supplierPrepayments.length === 0 && !state.receipts.some(r => r.kind === 'incur_supplier_usage' || r.kind === 'reverse_supplier_usage' || r.kind === 'refund_supplier')) return
@@ -380,7 +408,7 @@ function assertSupplierHistory(state: LedgerState): void {
   for(const entry of state.metrics)if(entry.kind==='cost'){const key=[entry.operationId,entry.accountId,entry.businessId??'-'].join('|');costByOperation.set(key,sumMoney([costByOperation.get(key)??0,entry.deltaFen],true))}
   const cost=(op:LedgerOperation,amount:number)=>requireRule((costByOperation.get([op.id,op.accountId,op.businessId??'-'].join('|'))??0)===amount,'SUPPLIER_COST_HISTORY_MISMATCH')
   for (const receipt of state.receipts) {
-    const o=JSON.parse(receipt.signature) as LedgerOperation
+    const o=supplierReceiptOperation(receipt)
     if(o.kind==='supplier_prepay'){const p=pool(o.prepaymentId,o.accountId,o.businessId,o.counterpartyId);p.paidFen=sumMoney([p.paidFen,o.amountFen]);p.remainingFen=sumMoney([p.remainingFen,o.amountFen])}
     if(o.kind==='consume_supplier'){const p=pools.get(o.prepaymentId);requireRule(p&&p.accountId===o.accountId&&p.businessId===o.businessId&&p.remainingFen>=o.amountFen,'SUPPLIER_HISTORY_MISMATCH');p.remainingFen-=o.amountFen;sources.set(o.id,o);cost(o,o.amountFen)}
     if(o.kind==='incur_supplier_usage'){sources.set(o.id,o);requireRule(!invoices.has(o.obligationId),'SUPPLIER_HISTORY_MISMATCH');invoices.set(o.obligationId,o.amountFen);cost(o,o.amountFen)}

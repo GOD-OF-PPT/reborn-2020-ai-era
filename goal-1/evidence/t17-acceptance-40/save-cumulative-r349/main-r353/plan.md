@@ -1,0 +1,1 @@
+仍C-B3唯一任务。只有当前351完整89文件594case、type/build、大档同原batch/旧格式/实际Native后缀与权限/冷读足够核齐后才更新主。先实际读Chrome5415当前已保存且无进行中的决定或候选，原UI完整导出并保原文；切换前再核，不假定一直129。原origin/全部DB/用户其它tabs保，原主server具体PID可核后精确停，保旧content-addressed资产，新351构建56文件HTTP逐字核。原UI重进与完整原文前后逐字同，0主Core/导入/设置/书签；无页面兼容开发测试。若存在进行中决定，保其状态延期，不自动关原稿。保新主server可玩、实际terminal/STOP/seal，混合masters/AGENTS/P3不stage。
