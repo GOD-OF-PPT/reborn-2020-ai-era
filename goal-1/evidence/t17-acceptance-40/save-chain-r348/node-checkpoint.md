@@ -1,0 +1,9 @@
+# B3已完成的真实Node事务检查点
+
+B3整体仍进行中，Chrome387928994/5527已经原UI单次导入304、取消确认后完整原文同，并实际等待到305/Jun6；同一Jun30原请求自2026-10-30T03:52:02Z已发，尚未观察到最终结果，不能重发/重启/标Native通过。该页仍在Chrome当前库存，原source347/941与server53959保持；全部兼容开发测试0。Native目录仍活动，不seal本父目录。
+
+本次只冻结/提交已完成的Node链：原327规范304经真实GameController/Session/kernel和fakeIDB Store，原normal-capital-v2:305 AdvanceTime Jun30；真正heads.put成功后transaction.abort，旧完整304/原backup空/日期/AP/账户/原features保持。实际第二Controller只读保旧与拒绝写，原candidate完整等原305提案；retry原candidate真正提交且不重新evaluate，物理saved305与candidate逐字同、backup304逐字同，reader reload/cold和duplicate均核。Node进程65336实际exit0、failure null、总1226303ms；它是作者fakeIDB链，不是Native故障或性能通过。
+
+saved305.json是该作者分支真正保存的规范输入（4609457B/SHA c107fa8eacb43116fb582f59beb0d85f95be86f5c5507fbf9db3691157844e87），区别于B2的未保存encoded proposal。日期2022Jun30/AP0可用4已用0预留；个人23212.35现金，企业自有可花65612.24、客户预款2786458仍全保护、应付378，不能拿保护款当董事本金。该正常资本路径须在B3与C-B3后另登记同seed继续，当前正常board未签。
+
+下一仍本B3：保同Native请求，实际结果后导出原文/物理backup、实际后缀独立重放与真实readonly/cold，最后才决定主游戏更新。C-B3三项检查及全部原U6/艺术/正常2025board/T17余/PNG0of3/真人0/P3正式62与22not_run/M01须明确恢复/T18最后/goal ACTIVE不缩。不要向旧344/345或原STOP目录写入。
