@@ -1,0 +1,14 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import {performance} from 'node:perf_hooks'
+import {createHash} from 'node:crypto'
+import {createCampaignCodec} from '../../../../.delivery/t17-u6-worker-r342/src/application/campaign.ts'
+import {evaluateCommand,previewCommand,projectRun} from '../../../../.delivery/t17-u6-worker-r342/src/core/commands.ts'
+import {canonicalJson} from '../../../../.delivery/t17-u6-worker-r342/src/core/identity.ts'
+import {assertBrowserEvidenceWritable as guard} from '../../../../scripts/browser_evidence_guard.mjs'
+const base='goal-1/evidence/t17-acceptance-40',out=base+'/save-boundary-r344',old=base+'/normal-capital-continue-r327',s=JSON.parse(fs.readFileSync(base+'/equity-worker-r329/snapshot342.json','utf8')),hash=(b:string|Buffer)=>createHash('sha256').update(b).digest('hex'),exact=()=>s.files.every((r:{path:string;sha256:string})=>hash(fs.readFileSync(path.join(s.target,r.path)))===r.sha256),codec=createCampaignCodec(),start=performance.now()
+if(!exact())throw Error('EXACT342_REQUIRED');guard(out);const raw=fs.readFileSync(old+'/head.current.json','utf8'),pending=JSON.parse(fs.readFileSync(old+'/serialization-failure.json','utf8')).command,reference=JSON.parse(fs.readFileSync(old+'/unwritten-proposal.json','utf8')),run=codec.import(raw)
+if(run.revision!==304||pending.expectedRevision!==304||pending.commandId!=='normal-capital-v2:305'||hash(raw)!=='9fa6fda4b28cdbb7bfcf02a29cc660f6530f9a45d5a955ba0ecbce892daf0ee3')throw Error('ORIGINAL304_COMMAND_REQUIRED')
+const preview=previewCommand(run,pending,codec.registry,run.actorId);if(!preview.allowed)throw Error('ORIGINAL_PREVIEW_REFUSED');console.log(JSON.stringify({phase:'evaluating',revision:run.revision,command:pending.kind,date:pending.payload.date}))
+const step=performance.now(),result=evaluateCommand(run,pending,codec.registry,run.actorId);if(result.status!=='proposed')throw Error('ORIGINAL_PROPOSED_REQUIRED');const actual=canonicalJson(result.nextRun),expected=canonicalJson(reference);if(actual!==expected)throw Error('CAPTURED_PROPOSAL_DIFFERS_FROM_REAL_COMMAND')
+if(!exact()||fs.readFileSync(old+'/head.current.json','utf8')!==raw)throw Error('SOURCE_OR_INPUT_CHANGED');const view=projectRun(result.nextRun);guard(out);fs.writeFileSync(out+'/recomputed-command-result.json',JSON.stringify({at:new Date().toISOString(),source:s.target,sourceRows:s.files.length,sourceExact:true,preview,command:pending,status:result.status,completeCanonicalStateEqual:true,proposedCanonicalBytes:Buffer.byteLength(actual),proposedCanonicalSha256:hash(actual),proposedDate:view.date,proposedBudget:view.budget,evaluateWallMs:performance.now()-step,wallMs:performance.now()-start,kernelEvaluations:1,newSavedRevision:0,newNativeCommands:0,compatibility:0,wholeU6Complete:false},null,2)+'\n',{flag:'wx'});console.log(JSON.stringify({allCanonicalBytesEqual:true,proposedDate:view.date,proposedRevision:result.nextRun.revision,wallMs:performance.now()-start}))
