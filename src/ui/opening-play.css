@@ -283,8 +283,10 @@
 .opening-room:not([data-exploring=true]) .room-pocket .scene-journal-object small{font:11px/1.7 var(--opening-serif)}
 .opening-room .opening-room-records{position:static;display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 20px;max-width:none;margin-top:14px}
 .opening-room>.opening-room-records{position:absolute;right:6%;bottom:70px;z-index:3;max-width:43%;margin-top:0}
-/* Service slips keep their desk anchor; the two reading entries use a separate scene edge. */
-.opening-room:not([data-exploring=true]):has(.opening-object[data-relay-phase][data-relay-state]) :is(.room-pocket,.opening-room-records){top:185px;bottom:auto}
+/* Reading belongs to the room edge, above every foreground paper and its state slips. */
+.cinematic-stage.opening-room:not([data-exploring=true])>.room-pocket{top:185px;right:6%;bottom:auto;align-items:center}
+.cinematic-stage.opening-room:not([data-exploring=true])>.room-pocket>button:hover{color:#ffe2a6}
+.cinematic-stage.opening-room:not([data-exploring=true])>.room-pocket>button:focus-visible{outline:3px solid var(--opening-focus);outline-offset:5px}
 .opening-room .opening-room-records button{display:inline-flex;align-items:baseline;gap:7px;min-height:34px;padding:5px 0;border:0;border-bottom:1px solid #b6a7784d;background:none;color:#d7d4b9;font:12px/1.8 var(--opening-serif)}
 .opening-room .opening-room-records button:hover{color:#ffe2aa;border-bottom-color:#d8bd80}
 .opening-room .opening-room-records button:focus-visible{outline:3px solid #ffe2a6;outline-offset:5px}

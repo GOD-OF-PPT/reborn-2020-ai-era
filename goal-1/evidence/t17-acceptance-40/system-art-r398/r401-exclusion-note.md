@@ -1,0 +1,1 @@
+401 freeze was created after a script stopped at its third file before writing owned-source. Thus 401 has the original 8 owned paths and excludes all three intended harness corrections. Its test is retained as old-harness evidence, not the corrected run. 402 includes all three. No product input/config/time limit changed.

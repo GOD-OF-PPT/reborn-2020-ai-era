@@ -23,7 +23,7 @@ const hooks=vi.hoisted(()=>({slots:new Map<string,unknown[]>(),current:[] as unk
 vi.mock('react',async importOriginal=>{
  const actual=await importOriginal<typeof import('react')>()
  const state=<T,>(initial:T|(()=>T))=>{const index=hooks.index++,values=hooks.current;if(!(index in values))values[index]=typeof initial==='function'?(initial as ()=>T)():initial;return [values[index] as T,(next:T|((old:T)=>T))=>{values[index]=typeof next==='function'?(next as (old:T)=>T)(values[index] as T):next}] as const}
- return {...actual,useState:state,useRef:<T,>(initial:T)=>state(()=>({current:initial}))[0],useId:()=>state(()=> 'today-relay-'+(++hooks.ids))[0],useEffect:()=>{},useImperativeHandle:()=>{},useMemo:<T,>(factory:()=>T)=>factory()}
+ return {...actual,useCallback:<T,>(callback:T)=>callback,useState:state,useRef:<T,>(initial:T)=>state(()=>({current:initial}))[0],useId:()=>state(()=> 'today-relay-'+(++hooks.ids))[0],useEffect:()=>{},useImperativeHandle:()=>{},useMemo:<T,>(factory:()=>T)=>factory()}
 })
 function mounted<T>(key:string,render:()=>T):T{const previous=hooks.current,index=hooks.index;hooks.current=hooks.slots.get(key)??[];hooks.slots.set(key,hooks.current);hooks.index=0;try{return render()}finally{hooks.current=previous;hooks.index=index}}
 type Element=ReactElement<Record<string,unknown>>

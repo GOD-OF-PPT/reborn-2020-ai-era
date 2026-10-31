@@ -17,7 +17,8 @@ export function EcosystemPaper({p,journey,binding,actionHint}:{p:GamePanelProps;
  const raster=envelope?envelopeArt:closed||phase==='commitment'||phase==='ready'?closedFolio:openFolio,rasterReady=loadedArt.has(raster)&&!failedArt.has(raster)
  const retry=!!c&&c.remediationJobId!==null&&r.job?.id===c.remediationJobId
  const responsibility=c?ecosystemContractResponsibility(c,p.features.workbench.finance):null
- const stageLabel=phase==='stopped'?responsibility&&!responsibility.known?'已经停下 · 原义务来源待核对':responsibility?.hasResponsibility?'停下的合作 · 责任仍在':c?'这次合作已停下':'这份安排已停下':retry?phase==='commitment'?'补救已安排 · 等开工':phase==='work'?'正在补救这份作品':phase==='ready'?'补救稿已做好 · 等亲手交出':phase==='sent'?'补救稿已交出 · 等客户回信':phase==='support'?'补救获认可 · 答应的支持':labels[phase]:labels[phase]
+ const businessClosed=r.status==='valid'&&r.target?.kind==='business'&&r.business?.lifecycle==='closed'
+ const stageLabel=businessClosed?'企业已经关闭 · 经营记录留存':phase==='stopped'?responsibility&&!responsibility.known?'已经停下 · 原义务来源待核对':responsibility?.hasResponsibility?'停下的合作 · 责任仍在':c?'这次合作已停下':'这份安排已停下':retry?phase==='commitment'?'补救已安排 · 等开工':phase==='work'?'正在补救这份作品':phase==='ready'?'补救稿已做好 · 等亲手交出':phase==='sent'?'补救稿已交出 · 等客户回信':phase==='support'?'补救获认可 · 答应的支持':labels[phase]:labels[phase]
  const debts=c?p.features.workbench.finance.find(f=>f.accountId===r.business?.accountId)?.obligations.filter(o=>o.businessId===c.businessId&&o.contractId===c.id&&o.remainingFen>0)??[]:[]
  const owed=debts.reduce((n,o)=>n+o.remainingFen,0),supportPending=!!c?.supportJob&&['planned','running'].includes(c.supportJob.status),remaining=c?p.features.deepseek?.deliveries.filter(d=>d.contractId===c.id).reduce((n,d)=>n+d.remainingFen,0)??0:0
  const protection=p.view.readOnly?'只读 · 原记录保留':p.view.hasCandidate||p.view.saveStatus==='unsaved'||p.view.saveStatus==='conflict'?'尚未保存 · 仍是上次物件':p.view.busy?'正在保存，暂留原物件':null

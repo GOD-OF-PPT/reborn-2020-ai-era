@@ -50,7 +50,7 @@ vi.mock('react',async importOriginal=>{
   if(!(index in values))values[index]=typeof initial==='function'?(initial as ()=>T)():initial
   return [values[index] as T,(next:T|((old:T)=>T))=>{values[index]=typeof next==='function'?(next as (old:T)=>T)(values[index] as T):next}] as const
  }
- return {...actual,useState:state,useRef:<T,>(initial:T)=>state(()=>({current:initial}))[0],useMemo:<T,>(factory:()=>T)=>factory(),useId:()=> 'u0r-continuity',useEffect:()=>{},useImperativeHandle:()=>{},useSyncExternalStore:(_subscribe:unknown,getSnapshot:()=>unknown)=>getSnapshot()}
+ return {...actual,useCallback:<T,>(callback:T)=>callback,useState:state,useRef:<T,>(initial:T)=>state(()=>({current:initial}))[0],useMemo:<T,>(factory:()=>T)=>factory(),useId:()=> 'u0r-continuity',useEffect:()=>{},useImperativeHandle:()=>{},useSyncExternalStore:(_subscribe:unknown,getSnapshot:()=>unknown)=>getSnapshot()}
 })
 type Scope={values:unknown[];index:number}
 function within<T>(scope:Scope,render:()=>T):T{const previous=hooks.current;hooks.current=scope;scope.index=0;try{return render()}finally{hooks.current=previous}}

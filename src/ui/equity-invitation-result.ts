@@ -40,7 +40,7 @@ export function equityReportBrief(before:PlayingView,last:PlayingView,feedback:r
  const reports=v.invitations.filter(i=>i.reportAt!==null&&i.reportAt<=last.date&&old.invitations.filter(o=>o.id===i.id&&o.businessId===i.businessId&&o.reportAt===null).length===1)
  if(reports.length!==1)return null
  const i=reports[0]!,owners=v.businesses.filter(b=>b.id===i.businessId)
- if(owners.length!==1||!feedback.length||feedback.some(row=>row.kind!=='job'||row.sourceId!==i.diligenceJobId))return null
+ if(owners.length!==1||!feedback.length||feedback.some(row=>!(row.kind==='job'&&row.sourceId===i.diligenceJobId)&&!(row.kind==='invitation'&&row.sourceId===i.id)))return null
  const b=owners[0]!,r=resolveEquitySceneTarget(v,{runId:last.runId,accountId:b.accountId,businessId:b.id,kind:'invitation',recordId:i.id},equitySceneContext({view:last,features},b.accountId))
  if(r.status!=='valid'||r.job?.status!=='completed'||r.invitation?.reportAt!==r.job.completeAt)return null
  return i.authority===false?'调查回信了：这次没能核实授权。':i.financingConsent===false?'授权已核实，对方暂不愿融资。':'授权与有条件融资意愿已核实。'

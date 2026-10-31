@@ -49,7 +49,7 @@ export function waitSceneResult(result:PublicWaitResult,current:PlayingView):{te
  const text=[cash,cause,meaning,'日历从'+before.date+'走到'+last.date+'。',retained.length?'这期间有'+new Set(retained.map(row=>row.sourceId)).size+'笔自己的原款到期，未收款仍保留，逐笔依据可翻原账。':null,note].filter(Boolean).join(' ')
  const singleReport=!cash&&retained.length===0?equityReportBrief(before,last,paused):null
  const supportBrief=retained.length===0?prepaidSupportRangeBrief(before,last,paused):null
- const brief=[stopped?'已经按你的选择停下。':null,cash?first(cash):null,singleReport??supportBrief??first(cause),important?.label,partial?'已保存部分保留，后续等候尚未保存。':retryOnly?retryNote:null].filter(Boolean).join(' ')
+ const brief=[stopped?'已经按你的选择停下。':null,cash?first(cash):null,singleReport??supportBrief??first(cause),singleReport?null:important?.label,partial?'已保存部分保留，后续等候尚未保存。':retryOnly?retryNote:null].filter(Boolean).join(' ')
  return {text,brief,frame}
 }
 

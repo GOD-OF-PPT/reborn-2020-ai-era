@@ -67,7 +67,8 @@ function currentPurpose(phase:string,outcome:EcosystemJourney['outcome']):Pick<C
  if(phase==='basics-needed')return purpose('补上这次合作真正需要的技术基础。','等学习实际完成；用途许可与客户合同仍须另选。')
  if(phase==='adaptation-needed')return purpose('显选本次模型用途，让工具真正适合这份服务。','看到该用途适配实际完成；不取得股份或真实供应授权。')
  if(phase==='activation')return purpose('核对已做好的准备，决定是否启用服务。','明确启用后再找真实需求；不会自动接合同。')
- if(phase==='business-paused'||phase==='business-winding_down'||phase==='business-closed')return purpose('把原企业的承诺与实际停止范围分别收好。','旧任务、退款和款项继续核对；暂停不会自动撤约或恢复。')
+ if(phase==='business-closed')return purpose('收好这段经营经历，再安排今天的生活。','原主体已经关闭，经营记录继续可查。')
+ if(phase==='business-paused'||phase==='business-winding_down')return purpose('把原企业的承诺与实际停止范围分别收好。','旧任务、退款和款项继续核对；暂停不会自动撤约或恢复。')
  if(phase==='original-contracts')return purpose('找回一份原来答应的合作，继续其中真实的一步。','明确选择原对象即可；查看不重新承诺或付费。')
  if(phase==='original-money')return purpose('核对本账户真实留下的原款与旧义务。','各笔原款和资产按自己的来源处理，不把余额当新客户或新服务。')
  if(phase==='known-leads'||phase==='outreach-needed')return purpose('听清具体的服务需要，再决定下一次承担。','看到实际需求即可停留；没有自动成交或客户收入。')
@@ -82,12 +83,13 @@ export function ecosystemJourney(v:DeepseekProjection,target:EcosystemSceneTarge
  if(resolution.status==='invalid')return present({phase:'invalid',title:'先找回这份原合作。',line:resolution.reason!,action:choice('objects','重新选择原生态对象')})
  if(!v)return present({phase:'unavailable',line:'当前尚未取得生态服务公开记录。可以回到今天，原存档不变。',action:{kind:'today',label:'回到今天，再决定安排'}})
  if(!target){const businesses=v.businesses.filter(b=>b.definitionId==='ecosystem-service'&&b.lifecycle!=='closed');return present(businesses.length?{action:choice('objects','把一份原合作放到眼前'),line:'已有生态企业和原约定，请明确选择想继续的对象；没有选成另一份权益安排。'}:{})}
- const b=resolution.business!,funds=`企业可花${moneyText(b.funds.availableFen)}；未履约预款保护${moneyText(b.funds.prepaidLiabilityFen)}、应收${moneyText(b.funds.receivableFen)}、应付${moneyText(b.funds.payableFen)}分别保留。`
+ const b=resolution.business!,funds=`企业可花${moneyText(b.funds.availableFen)} · 预款保护${moneyText(b.funds.prepaidLiabilityFen)} · 待收${moneyText(b.funds.receivableFen)} · 待付${moneyText(b.funds.payableFen)}`
  const common={originDate:b.history[0]?.date??null,facts:[funds],object:'这间原生态企业的合作夹'}
  if(target.kind==='business'){
   const jobs=context.operations!.jobs.filter(j=>j.businessId===b.id&&activeJob(j)).sort((a,b)=>(nextJob(a,date)??'9999').localeCompare(nextJob(b,date)??'9999')||a.id.localeCompare(b.id)),first=jobs[0],next=first?nextJob(first,date):null
   if(first&&next)return present({...common,phase:'business-working',title:'原来答应的工作，仍在自己的日历上。',line:'原制作、支持与准备各按原安排继续。也可以明确翻回其中一份，不会重新付费。',outcome:'pending',active:true,action:wait(next,'等原安排的下一处反馈'),paper:'work'})
-  if(['closed','winding_down','paused'].includes(b.lifecycle))return present({...common,phase:'business-'+b.lifecycle,title:b.lifecycle==='paused'?'先不接新合作，原承诺仍保留。':b.lifecycle==='closed'?'这间企业已经收好，记录仍在。':'这间企业正在实际收尾。',line:'暂停新增与真正收尾分别发生；原支持、退款、应收和应付不会因此清除。',action:choice('business','核对原约定、继续或收尾'),paper:'kept'})
+  if(b.lifecycle==='closed')return present({...common,phase:'business-closed',title:'这间企业，已经合上了。',line:'过去的合作与原账都在，今天由你安排。',outcome:'actual',action:{kind:'today',label:'收好企业记录，回到今天'},paper:'kept'})
+  if(['winding_down','paused'].includes(b.lifecycle))return present({...common,phase:'business-'+b.lifecycle,title:b.lifecycle==='paused'?'先不接新合作，原承诺仍保留。':'这间企业正在实际收尾。',line:'暂停新增与真正收尾分别发生；原支持、退款、应收和应付不会因此清除。',action:choice('business','核对原约定、继续或收尾'),paper:'kept'})
   if(b.lifecycle==='preparing'){
    if(!context.materialsReady)return present({...common,phase:'materials-needed',title:'先把能交付什么，认真写清。',line:'材料只是准备。选择实际资源和日子，尚未因此接下客户。',action:choice('materials','准备这次服务的材料'),paper:'preparation'})
    if(!v.technicallyReady)return present({...common,phase:'basics-needed',title:'先补上这份合作真正需要的技术。',line:'学习须实际投入和完成；不会自动取得模型用途许可或客户。',action:choice('basics','安排这次技术学习'),paper:'preparation'})

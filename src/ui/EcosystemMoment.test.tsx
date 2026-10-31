@@ -22,7 +22,7 @@ const hooks=vi.hoisted(()=>({slots:new Map<string,unknown[]>(),current:[] as unk
 vi.mock('react',async original=>{
  const actual=await original<typeof import('react')>()
  const state=<T,>(initial:T|(()=>T))=>{const i=hooks.index++,values=hooks.current;if(!(i in values))values[i]=typeof initial==='function'?(initial as ()=>T)():initial;return [values[i] as T,(next:T|((old:T)=>T))=>{values[i]=typeof next==='function'?(next as (old:T)=>T)(values[i] as T):next}] as const}
- return {...actual,useState:state,useRef:<T,>(initial:T)=>state(()=>({current:initial}))[0],useId:()=> 'ecology-test-choice',useEffect:()=>{}}
+ return {...actual,useState:state,useRef:<T,>(initial:T)=>state(()=>({current:initial}))[0],useId:()=> 'ecology-test-choice',useEffect:()=>{},useCallback:<T,>(callback:T)=>callback}
 })
 function mounted<T>(key:string,render:()=>T):T{const old=hooks.current,index=hooks.index;hooks.current=hooks.slots.get(key)??[];hooks.slots.set(key,hooks.current);hooks.index=0;try{return render()}finally{hooks.current=old;hooks.index=index}}
 type Element=ReactElement<Record<string,unknown>>
@@ -35,6 +35,7 @@ function nodes(value:unknown):Element[]{
 }
 const words=(value:unknown):string=>typeof value==='string'||typeof value==='number'?String(value):Array.isArray(value)?value.map(words).join(''):isValidElement<Record<string,unknown>>(value)?words(value.props.children):''
 let controller:GameController,store:IndexedDbRunStore,p:GamePanelProps,entry:GamePanelProps,business:EcosystemSceneTarget,raw:string
+let closedController:GameController,closedStore:IndexedDbRunStore,closedProps:GamePanelProps,closedRaw:string
 beforeAll(async()=>{
  const codec=createCampaignCodec();store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'u5-original-handler-consumer'})
  controller=new GameController({codec,store,locks:new MemoryWriterAccess()});await controller.initialize();await controller.importNew(actual115)
@@ -42,7 +43,16 @@ beforeAll(async()=>{
  entry=props();expect((await controller.submit(controller.prepare('OpenEcosystemService',{capitalFen:3000000}))).status).toBe('saved')
  p=props();const b=p.features.deepseek!.businesses.find(b=>b.definitionId==='ecosystem-service')!;business={kind:'business',runId:p.view.runId,businessId:b.id,accountId:b.accountId};p={...p,accountId:b.accountId};raw=controller.exportSaved()
 })
-afterAll(async()=>{await controller?.close();await store?.close()})
+beforeAll(async()=>{
+ const codec=createCampaignCodec();closedStore=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'u6-closed-ecology-consumer'})
+ closedController=new GameController({codec,store:closedStore,locks:new MemoryWriterAccess()});await closedController.initialize();await closedController.importNew(raw)
+})
+beforeAll(async()=>{expect((await closedController.submit(closedController.prepare('WindDownBusiness',{businessId:business.businessId}))).status).toBe('saved')})
+beforeAll(async()=>{
+ expect((await closedController.submit(closedController.prepare('CloseBusiness',{businessId:business.businessId}))).status).toBe('saved')
+ const view=closedController.snapshot.view!;closedProps={...p,controller:closedController,view,features:view.features as unknown as PlayFeatures,request:vi.fn(),ecosystemDraftMemory:createEcosystemDraftMemory()};closedRaw=closedController.exportSaved()
+})
+afterAll(async()=>{await closedController?.close();await closedStore?.close();await controller?.close();await store?.close()})
 
 it('gives the main thought and foreground paper the same direct preparation action without a duplicate summary modal',()=>{
  hooks.slots.clear();const focus=ecosystemFocusFor(p,business),props={p,focus,headingRef:{current:null},onFocus:vi.fn(),onNavigate:vi.fn(),onExplore:vi.fn()};let tree:unknown
@@ -104,4 +114,17 @@ it('keeps generic restore status by the record entry while preserving a rich rea
  expect(tableau.props.feedback).toBeNull();expect(words(tableau.props.record)).toContain('已从本机存档继续。')
  const actual=<p>这份原结果的现金与日期仍在这里。</p>,result=mounted('actual-result-kind',()=>EcosystemMoment({...props,feedback:actual}))
  expect(nodes(result).find(n=>n.type===RoomTableau)!.props.feedback).toBe(actual)
+})
+
+it('takes an actually closed ecology business straight back to today and makes other records an explicit reading choice',()=>{
+ hooks.slots.clear();const focus=ecosystemFocusFor(closedProps,business),today=vi.fn(),chosen=vi.fn(),navigate=vi.fn(),props={p:closedProps,focus,headingRef:{current:null},onFocus:chosen,onNavigate:navigate,onExplore:vi.fn(),onToday:today};let tree:unknown
+ const render=()=>{tree=mounted('closed-ecology',()=>EcosystemMoment(props))};render()
+ const rows=nodes(tree),paper=rows.find(n=>n.type===EcosystemPaper)!,journey=paper.props.journey as {phase:string;action:{kind:string}},binding=paper.props.binding as {activate:()=>void},main=rows.find(n=>n.type==='button'&&n.props.onClick===binding.activate)!
+ expect(journey).toMatchObject({phase:'business-closed',action:{kind:'today'}});expect(main).toBeDefined()
+ ;(main.props.onClick as ()=>void)();render();expect(today).toHaveBeenCalledOnce();expect(chosen).not.toHaveBeenCalled();expect(nodes(tree).some(n=>n.type===EcosystemSceneChoice)).toBe(false)
+ const other=nodes(tree).find(n=>n.type==='button'&&words(n).includes('翻看其它合作记录'))!;expect(other).toBeDefined();(other.props.onClick as ()=>void)();render()
+ expect(nodes(tree).some(n=>n.type===EcosystemSceneChoice&&n.props.intent==='objects')).toBe(true);expect(chosen).not.toHaveBeenCalled()
+ const read=nodes(tree).find(n=>n.type==='button'&&words(n)==='翻阅同一份合作与原账 ↗')!;expect(read).toBeDefined();(read.props.onClick as ()=>void)()
+ expect(navigate).toHaveBeenCalledWith('deepseek',expect.objectContaining({accountId:business.accountId,ecosystemTarget:business,recordId:business.businessId,openRecord:true}))
+ expect(closedProps.request).not.toHaveBeenCalled();expect(closedController.exportSaved()).toBe(closedRaw);expect(controller.exportSaved()).toBe(raw)
 })

@@ -24,7 +24,7 @@ const hooks=vi.hoisted(()=>({slots:new Map<string,unknown[]>(),scope:'',index:0}
 vi.mock('react',async load=>{
  const actual=await load<typeof import('react')>()
  const state=<T,>(initial:T|(()=>T))=>{const values=hooks.slots.get(hooks.scope)??[];hooks.slots.set(hooks.scope,values);const i=hooks.index++;if(!(i in values))values[i]=typeof initial==='function'?(initial as ()=>T)():initial;return[values[i] as T,(next:T|((old:T)=>T))=>{values[i]=typeof next==='function'?(next as (old:T)=>T)(values[i] as T):next}] as const}
- return {...actual,useState:state,useRef:<T,>(value:T)=>state(()=>({current:value}))[0],useId:()=>hooks.scope,useEffect:()=>{}}
+ return {...actual,useCallback:<T,>(callback:T)=>callback,useState:state,useRef:<T,>(value:T)=>state(()=>({current:value}))[0],useId:()=>hooks.scope,useEffect:()=>{}}
 })
 type Element=ReactElement<Record<string,unknown>>
 const elements=(v:unknown):Element[]=>Array.isArray(v)?v.flatMap(elements):isValidElement<Record<string,unknown>>(v)?[v,...elements(v.props.children)]:[]
