@@ -2,21 +2,30 @@ import { evaluateCommand, fingerprintCommand, bindCommandPreview, projectRun, ty
 import { commandIdentifier } from '../core/command-identity.ts'
 import { copyJson,assertJsonInput } from '../core/json-input.ts'
 import { requireRule, RuleError } from '../core/errors.ts'
-import type { CommandReceipt, ProposedRun,CommandEnvelope } from '../core/run-types.ts'
+import type { CommandReceipt, ProposedRun,CommandEnvelope,GameRun } from '../core/run-types.ts'
 import type { RunStore, StoredRun } from '../persistence/indexeddb.ts'
 import { RunCodec } from '../persistence/codec.ts'
 import type { WriterAccess, WriterLease } from '../persistence/writer-lock.ts'
 import {DAY_PHASES} from '../core/timeline.ts'
+import {executeCheckpointedWait,type WaitCheckpointContext} from './checkpoint-wait.ts'
+import {captureWaitScope,type PublicWaitResult} from './public-wait.ts'
+import type {WaitCheckpoint} from '../persistence/wait-checkpoint.ts'
+import {hashValue} from '../core/hash.ts'
 
 export type SaveStatus = 'saved' | 'saving' | 'unsaved' | 'conflict' | 'read_only' | 'closed'
 type PublicReceipt = Pick<CommandReceipt, 'commandId' | 'kind' | 'revisionAfter' | 'date' | 'summary'>
-export type SessionResult = { readonly status: 'saved' | 'duplicate'; readonly receipt: PublicReceipt; readonly reasonCodes: readonly string[] } | { readonly status: 'rejected' | 'unsaved' | 'conflict'; readonly reasonCodes: readonly string[] }
+export type SessionResult = { readonly status: 'saved' | 'duplicate'; readonly receipt: PublicReceipt; readonly reasonCodes: readonly string[];readonly checkpointWait?:true;readonly waitResult?:PublicWaitResult } | { readonly status: 'rejected' | 'unsaved' | 'conflict'; readonly reasonCodes: readonly string[] }
 interface SessionOptions { readonly store: RunStore; readonly codec: RunCodec; readonly registry: CommandRegistry; readonly locks: WriterAccess; readonly runId: string; readonly actorId: string }
 type Flight = { readonly commandId: string; readonly signature: string; readonly promise: Promise<SessionResult> }
 
 function rejected(code: string): SessionResult { return { status: 'rejected', reasonCodes: [code] } }
 function errorCode(error: unknown): string { return error instanceof RuleError ? error.code : 'SAVE_FAILED' }
 function publicReceipt(receipt: CommandReceipt): PublicReceipt { return { commandId: receipt.commandId, kind: receipt.kind, revisionAfter: receipt.revisionAfter, date: receipt.date, summary: receipt.summary } }
+function sessionProjection(run:GameRun,registry:CommandRegistry,status:SaveStatus,busy:boolean,lease:WriterLease,pendingRevision:number|null){
+ return {...projectRun(run),features:registry.runtime?.project?.(run)??{},saveStatus:status,busy,readOnly:lease.mode!=='writer',readOnlyReason:lease.reason,hasCandidate:pendingRevision!==null,pendingRevision}
+}
+export type SessionView=ReturnType<typeof sessionProjection>
+type CheckpointCandidate={readonly checkpoint:WaitCheckpoint;readonly context:WaitCheckpointContext}
 
 export class RunSession {
   readonly #options: SessionOptions
@@ -27,6 +36,8 @@ export class RunSession {
   #candidate: ProposedRun | null = null
   #flight: Flight | null = null
   #externalBusy = false
+  #waiting = false
+  #checkpointCandidate:CheckpointCandidate|null=null
   #status: SaveStatus
   readonly #listeners = new Set<(view: RunSession['view']) => void>()
 
@@ -50,12 +61,13 @@ export class RunSession {
     } catch (error) { await lease.release(); throw error }
   }
 
-  get view() {
+  get view():SessionView {
     // Never publish uncommitted outcomes, hidden evidence, or success receipts.
-    return { ...projectRun(this.#record.run), features:this.#options.registry.runtime?.project?.(this.#record.run)??{}, saveStatus: this.#status, busy: this.#flight !== null || this.#externalBusy, readOnly: this.#lease.mode !== 'writer', readOnlyReason: this.#lease.reason, hasCandidate: this.#candidate !== null, pendingRevision: this.#candidate?.nextRun.revision ?? null }
+    return sessionProjection(this.#record.run,this.#options.registry,this.#status,this.#flight!==null||this.#externalBusy,this.#lease,this.#candidate?.nextRun.revision??null)
   }
   get savedView() { return projectRun(this.#record.run) }
-  get needsUnsavedWarning(): boolean { return this.#candidate !== null || this.#status === 'saving' }
+  get needsUnsavedWarning(): boolean { return this.#candidate !== null || this.#status === 'saving'||this.#waiting }
+  get supportsWaitCheckpoints():boolean{return this.#options.store.supportsWaitCheckpoints===true&&typeof this.#options.store.commitCheckpoint==='function'}
 
   subscribe(listener: (view: RunSession['view']) => void): () => void {
     requireRule(this.#status !== 'closed', 'SESSION_CLOSED')
@@ -63,10 +75,10 @@ export class RunSession {
     try { listener(this.view) } catch { this.#listeners.delete(listener) }
     return () => { this.#listeners.delete(listener) }
   }
-  #notify(): void {
+  #notify(projected?:SessionView): void {
     for (const listener of [...this.#listeners]) {
       // A view observer must not interrupt or fabricate a durable commit.
-      try { listener(this.view) } catch { this.#listeners.delete(listener) }
+      try { listener(projected??this.view) } catch { this.#listeners.delete(listener) }
     }
   }
 
@@ -145,9 +157,14 @@ export class RunSession {
     const proposal = this.#candidate
     requireRule(proposal, 'NO_UNSAVED_CANDIDATE')
     try {
-      const committed = await this.#options.store.commit(proposal, this.#record.generation)
+      requireRule(!this.#checkpointCandidate||this.supportsWaitCheckpoints,'WAIT_CHECKPOINT_UNAVAILABLE')
+      const committed = this.#checkpointCandidate
+        ? await this.#options.store.commitCheckpoint!(this.#checkpointCandidate.checkpoint,this.#record.generation)
+        : await this.#options.store.commit(proposal, this.#record.generation)
       this.#record = committed.record
+      this.#previewRecord=null;this.#previewer=null
       this.#candidate = null
+      this.#checkpointCandidate=null
       this.#status = 'saved'
       return { status: committed.duplicate ? 'duplicate' : 'saved', receipt: publicReceipt(committed.receipt), reasonCodes: [] }
     } catch (error) {
@@ -164,10 +181,55 @@ export class RunSession {
     const candidate = this.#candidate
     if (candidate === null) return Promise.resolve(rejected('NO_UNSAVED_CANDIDATE'))
     this.#status = 'saving'
-    const promise = this.#saveCandidate().finally(() => { this.#flight = null; this.#notify() })
+    const checkpoint=this.#checkpointCandidate
+    const promise = this.#saveCandidate().finally(() => { this.#flight = null; this.#notify() }).then(result=>{
+      if(!checkpoint||result.status!=='saved'&&result.status!=='duplicate')return result
+      return {...result,checkpointWait:true as const,...this.#checkpointRecovery(checkpoint)}
+    })
     this.#flight = { commandId: candidate.receipt.commandId, signature: candidate.receipt.payloadSignature, promise }
     this.#notify()
     return promise
+  }
+
+  #projectWait(run:GameRun){return {...projectRun(run),features:this.#options.registry.runtime?.project?.(run)??{}}}
+  #previousSaved(run:GameRun):SessionView{return sessionProjection(run,this.#options.registry,'saved',false,this.#lease,null)}
+  #checkpointRecovery(candidate:CheckpointCandidate):{waitResult?:PublicWaitResult}{
+    const {checkpoint,context}=candidate,current=this.view,expected=checkpoint.proposal.nextRun
+    if(current.revision!==expected.revision||current.runId!==expected.runId||current.saveStatus!=='saved'||current.hasCandidate)return {}
+    if(hashValue(this.#record.run)!==hashValue(expected))return {}
+    const all=[...context.prefixSteps,...context.pendingSteps]
+    if(current.receipts.length!==context.before.receipts.length+all.length||!all.every((step,index)=>{const row=current.receipts[context.before.receipts.length+index];return row?.commandId===step.commandId&&row.kind==='AdvanceTime'&&row.revisionAfter===step.revisionAfter}))return {}
+    return {waitResult:{status:current.date>=context.targetDate?'saved':'stopped',reasonCodes:['WAIT_RETRY_SAVED_ONLY'],targetDate:context.targetDate,before:context.before,lastSaved:current,lastBefore:this.#previousSaved(context.previousRun),current,steps:all,feedback:[...context.prefixFeedback,...context.pendingFeedback],failed:null}}
+  }
+
+  /** The renderer never receives the working run or a fake saved projection. */
+  async waitForFeedbackCheckpoint(raw:CommandEnvelope,controls:{stopping:()=>boolean;yieldControl:()=>Promise<void>}):Promise<PublicWaitResult>{
+    requireRule(this.supportsWaitCheckpoints,'WAIT_CHECKPOINT_UNAVAILABLE')
+    const before=this.view,captured=captureWaitScope(raw,before),blocked=this.#blockReason()
+    if(captured.status==='rejected'||blocked)return {status:'rejected',reasonCodes:captured.status==='rejected'?captured.reasonCodes:[blocked!],targetDate:captured.targetDate,before,lastSaved:before,lastBefore:null,current:before,steps:[],feedback:[],failed:null}
+    // Capture the original committed rule context before taking the exclusive
+    // waiting lease. The runner validates the envelope before querying it.
+    let preview:ReturnType<typeof bindCommandPreview>|null=bindCommandPreview(this.#record.run,this.#options.registry,this.#options.actorId)
+    let published=before
+    this.#externalBusy=true;this.#waiting=true;this.#notify({...before,busy:true})
+    let outcome:PublicWaitResult
+    try{
+      outcome=await executeCheckpointedWait(raw,before,{
+        current:()=>published,run:()=>this.#record.run,preview:command=>{const captured=preview;requireRule(captured,'STALE_REVISION');preview=null;return captured(command)},
+        propose:(run,command)=>{const result=evaluateCommand(run,command,this.#options.registry,this.#options.actorId);if(result.status!=='proposed')return result;const nextRun=this.#options.codec.validateRun(result.nextRun);return {...result,nextRun,receipt:nextRun.receipts.at(-1)!}},
+        project:run=>this.#projectWait(run),previousSaved:run=>this.#previousSaved(run),
+        commit:async(checkpoint,context)=>{
+          this.#candidate=checkpoint.proposal;this.#checkpointCandidate={checkpoint,context};this.#status='saving';this.#notify({...published,saveStatus:'saving',busy:true,hasCandidate:true,pendingRevision:checkpoint.proposal.nextRun.revision})
+          const result=await this.#saveCandidate();published=this.view;this.#notify(published);return result
+        },stopping:controls.stopping,yieldControl:controls.yieldControl,
+      })
+    }finally{
+      this.#externalBusy=false;this.#waiting=false
+      published={...published,busy:false,saveStatus:this.#status,readOnly:this.#lease.mode!=='writer',readOnlyReason:this.#lease.reason,hasCandidate:this.#candidate!==null,pendingRevision:this.#candidate?.nextRun.revision??null}
+      this.#notify(published)
+    }
+    const current=published
+    return {...outcome,current,...(current.saveStatus==='saved'&&!current.hasCandidate&&outcome.lastSaved.revision===current.revision?{lastSaved:current}:{})}
   }
 
   exportCandidate(): string {
@@ -186,7 +248,7 @@ export class RunSession {
       if (lease.mode !== 'writer') lease = await this.#options.locks.acquire(`${this.#options.store.name}:${this.#options.runId}`)
       const latest = await this.#options.store.load(this.#options.runId)
       requireRule(latest && latest.run.actorId === this.#options.actorId, 'FORBIDDEN_ACTOR')
-      this.#record = latest; this.#candidate = null; this.#lease = lease
+      this.#record = latest; this.#candidate = null;this.#checkpointCandidate=null; this.#lease = lease
       this.#status = lease.mode === 'writer' ? 'saved' : 'read_only'
     } catch (error) { if (lease !== this.#lease) await lease.release(); throw error }
     finally { this.#externalBusy = false; this.#notify() }
@@ -210,7 +272,7 @@ export class RunSession {
     requireRule(!this.#externalBusy, 'SAVE_IN_PROGRESS')
     if (this.#flight !== null) await this.#flight.promise
     requireRule(this.#candidate === null || options.discardCandidate === true, 'UNSAVED_CANDIDATE_EXISTS')
-    this.#candidate = null;this.#previewer=null;this.#previewRecord=null
+    this.#candidate = null;this.#checkpointCandidate=null;this.#previewer=null;this.#previewRecord=null
     this.#status = 'closed'; this.#notify(); this.#listeners.clear()
     await this.#lease.release()
   }

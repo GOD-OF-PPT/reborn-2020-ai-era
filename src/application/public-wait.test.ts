@@ -10,11 +10,11 @@ import raw19 from '../../goal-1/evidence/t17-acceptance-39/public-wait-model-r1/
 import actual20 from '../../goal-1/evidence/t17-acceptance-39/chrome-result-r3/r3-03-actual20-explicit-rest-completed.json?raw'
 import class97 from '../../goal-1/evidence/t17-acceptance-36/chrome-final-r10/f04-final97-question-action-reading-unchanged.json?raw'
 
-async function open(name:string,raw=raw19,abortRevision?:number){
+async function open(name:string,raw=raw19,abortRevision?:number,yieldControl?:()=>Promise<void>){
  const codec=createCampaignCodec(),factory=new IDBFactory(),locks=new MemoryWriterAccess(),database='cux09-wait-'+name
  const fault=abortAfterHeadWrite(factory,database,row=>(row as {envelope?:{revision?:number}}).envelope?.revision===abortRevision)
  const store=new IndexedDbRunStore({codec,factory:abortRevision===undefined?factory:fault.factory,keyRange:IDBKeyRange,name:database}),physical=new IndexedDbRunStore({codec,factory,keyRange:IDBKeyRange,name:database});let n=0
- const controller=new GameController({codec,store,locks,id:()=>name+'-'+(++n)})
+ const controller=new GameController({codec,store,locks,id:()=>name+'-'+(++n),...(yieldControl?{yieldControl}:{})})
  await controller.initialize();await controller.importNew(raw)
  return {controller,codec,physical,locks,fault,factory,store,database,close:async()=>{await controller.close(true);await physical.close();await store.close()}}
 }
@@ -64,25 +64,27 @@ it('shares one active intent, permits cancellation before the first command, and
 })
 
 it('stops after the current original save and retains the real partial date',async()=>{
- const h=await open('partial-stop')
+ let h!:Awaited<ReturnType<typeof open>>,yielded=false
+ h=await open('partial-stop',raw19,undefined,async()=>{if(!yielded){yielded=true;expect(h.controller.snapshot.view!.revision).toBe(19);h.controller.stopWaiting()}})
  try{
-  const view=h.controller.snapshot.view!,unsubscribe=h.controller.subscribe(()=>{if(h.controller.snapshot.view?.revision===view.revision+1&&h.controller.snapshot.view.saveStatus==='saved')h.controller.stopWaiting()})
-  const result=await h.controller.waitForFeedback(h.controller.prepare('AdvanceTime',{date:'2020-04-11'}));unsubscribe()
+  const view=h.controller.snapshot.view!
+  const result=await h.controller.waitForFeedback(h.controller.prepare('AdvanceTime',{date:'2020-04-11'}))
   expect(result.status).toBe('stopped');expect(result.steps).toHaveLength(1)
   expect(h.controller.snapshot.view).toMatchObject({date:'2020-04-10',revision:20})
   expect(h.controller.snapshot.view!.budget).toEqual(view.budget)
  }finally{await h.close()}
 })
 
-it('retains the first durable step after a real second head.put abort, and retries only the original candidate',async()=>{
+it('keeps the original base after the checkpoint head.put aborts and retries only the original logical candidate',async()=>{
  const h=await open('actual-abort',raw19,21)
  try{
-  const command=h.controller.prepare('AdvanceTime',{date:'2020-04-11'}),result=await h.controller.waitForFeedback(command)
-  expect(result.status).toBe('unsaved');expect(result.steps).toHaveLength(1)
+  const before=h.controller.exportSaved(),command=h.controller.prepare('AdvanceTime',{date:'2020-04-11'}),result=await h.controller.waitForFeedback(command)
+  expect(result.status).toBe('unsaved');expect(result.steps).toHaveLength(0)
   expect(h.fault.trace).toEqual({writeSucceeded:true,abortIssued:true})
-  expect(result.lastSaved).toMatchObject({revision:20,date:'2020-04-10',saveStatus:'saved'})
-  expect(h.controller.snapshot.view).toMatchObject({revision:20,date:'2020-04-10',saveStatus:'unsaved',hasCandidate:true})
+  expect(result.lastSaved).toMatchObject({revision:19,saveStatus:'saved'})
+  expect(h.controller.snapshot.view).toMatchObject({revision:19,saveStatus:'unsaved',hasCandidate:true,pendingRevision:21})
   const old=h.controller.exportSaved(),candidate=h.controller.exportCandidate()
+  expect(old).toBe(before)
   expect(await h.physical.exportStored(result.before.runId)).toBe(old)
   expect(h.codec.import(candidate).receipts.at(-1)!.commandId).toBe(command.commandId)
   expect((await h.controller.retry()).status).toBe('saved')
@@ -123,20 +125,20 @@ it('keeps a real same-run reader from starting time or changing the physical sav
  }finally{await reader.close();await readerStore.close();await h.close()}
 })
 
-it('finishes the current original transaction before closing and never resumes the remaining range',async()=>{
+it('finishes the current checkpoint before closing and never resumes the remaining range',async()=>{
  const h=await open('close-current');let closing:Promise<void>|null=null,requested=false
  try{
   const before=h.controller.snapshot.view!,unsubscribe=h.controller.subscribe(()=>{
    const view=h.controller.snapshot.view
-   if(!requested&&view?.revision===before.revision+1&&view.saveStatus==='saved'){requested=true;closing=h.controller.close()}
+   if(!requested&&view?.saveStatus==='saving'&&view.pendingRevision===before.revision+2){requested=true;closing=h.controller.close()}
   })
-  const result=await h.controller.waitForFeedback(h.controller.prepare('AdvanceTime',{date:'2020-04-11'}));unsubscribe()
+  const result=await h.controller.waitForFeedback(h.controller.prepare('AdvanceTime',{date:'2020-04-12'}));unsubscribe()
   await closing
   expect(requested).toBe(true);expect(result).toMatchObject({status:'stopped',reasonCodes:['WAIT_STOP_REQUESTED']})
-  expect(result.steps).toHaveLength(1);expect(result.lastSaved).toMatchObject({date:'2020-04-10',revision:20})
+  expect(result.steps).toHaveLength(2);expect(result.lastSaved).toMatchObject({date:'2020-04-11',revision:21})
   const stored=await h.physical.exportStored(before.runId)
-  expect(h.codec.import(stored!).revision).toBe(20)
-  expect(h.codec.import(stored!).timeline.cursor.date).toBe('2020-04-10')
+  expect(h.codec.import(stored!).revision).toBe(21)
+  expect(h.codec.import(stored!).timeline.cursor.date).toBe('2020-04-11')
   await expect(h.controller.continueLife(before.runId)).rejects.toThrow('SESSION_CLOSED')
  }finally{await h.close()}
 })

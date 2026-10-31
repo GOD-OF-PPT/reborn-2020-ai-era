@@ -1,3 +1,4 @@
+import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
 import {cloneElement,isValidElement,useEffect,useId,useState,type Ref,type ReactNode,type ComponentProps} from 'react'
 import type {GamePanelProps,NavigateScene} from './game-types.ts'
 import type {Moment} from './RoomMoment.tsx'
@@ -162,10 +163,10 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
   else onNavigate(thread.inspect.screen,['video','course'].includes(thread.inspect.screen)?{...thread.inspect.target,openRecord:true}:thread.inspect.target)
  }
  const canWait=p.view.phase==='playing'&&!w.atQuarterEnd&&!w.progression.requiresDelivery&&w.pause===null
- const requested=moment.wait?.date??w.progression.nextQuarterDate??w.progression.nextDate
+ const requested=moment.wait?.date??defaultWaitDate(w,typeof p.requestWait==='function')
  const ordinaryDate=canWait?playableAdvanceDate(w,p.view.date,requested):null
  const safeDate=thread.focus.kind==='relay'?relayReviewDate(p,ordinaryDate):ordinaryDate
- const originalWaitLabel=moment.wait&&safeDate===moment.wait.date?moment.wait.label:clockStopCopy(p,safeDate)?.label??'先到日历上的下一处反馈'
+ const originalWaitLabel=moment.wait&&safeDate===moment.wait.date?moment.wait.label:(p.requestWait?defaultWaitLabel(w,true):clockStopCopy(p,safeDate)?.label??'先到日历上的下一处反馈')
  const waitLabel=thread.focus.kind==='relay'?relayReviewLabel(p,safeDate,originalWaitLabel):originalWaitLabel
  const employed=w.employment.some(e=>e.segments.some(s=>s.to===null))
  const terminal=p.view.date>=playableThrough
@@ -210,7 +211,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const primaryAllowed=primaryIntent?primaryPreview.preview.allowed:canChooseOrder
  const resultWithoutNext=!moment.command&&!moment.wait&&(thread.outcome==='actual'||thread.outcome==='non-success')
  const noAvailableNewAction=p.view.budget.available===0&&!moment.wait&&(!primaryAllowed||free||market)
- const optionalCourseDate=!interrupted&&!unknownFocus&&!legacy&&canWait&&!moment.wait&&course?courseStageWaitDate(w,p.view.date,courseProgress,p.requestWait!==undefined):null
+ const optionalCourseDate=!interrupted&&!unknownFocus&&!legacy&&canWait&&!moment.wait&&course?courseStageWaitDate(w,p.view.date,courseProgress,typeof p.requestWait==='function'):null
  const continueDate=courseProgress?.phase==='course-stage-needed'?optionalCourseDate:safeDate
  const canContinue=thread.focusScope!=='history'&&!interrupted&&!unknownFocus&&!legacy&&!w.atQuarterEnd&&canWait&&continueDate!==null&&(resultWithoutNext||noAvailableNewAction||optionalCourseDate!==null)
  const continuation=()=> <div className="moment-wait moment-continue"><ClockAdvance showReason={showSceneReasons} p={p} date={continueDate!} label={'不新增安排，让原日子继续 · '+continueDate} room/></div>

@@ -3,7 +3,7 @@ import {createCampaignCodec} from './campaign.ts'
 import {projectRun} from '../core/commands.ts'
 import type {RunSession} from './session.ts'
 import type {PlayFeatures} from '../ui/game-types.ts'
-import {publicFeedbackSince} from './public-feedback.ts'
+import {publicFeedbackSince,inspectPublicWaitTransition} from './public-feedback.ts'
 import beforeRaw from '../../goal-1/evidence/t17-acceptance-36/chrome-normal-r1/n07-saved17-cross-quarter-old-job.json?raw'
 import afterRaw from '../../goal-1/evidence/t17-acceptance-36/chrome-normal-r1/n09-saved18-life-complete.json?raw'
 
@@ -62,4 +62,37 @@ it('separates a public pending market settlement from its actual paidAt result',
  expect(publicFeedbackSince(previous,pending)).toContainEqual(expect.objectContaining({sourceId:settlement.id,label:'原投资留下了待交收的原款，还没有到账。'}))
  const paid:View={...pending,features:{...f,market:{...f.market,settlements:[...f.market.settlements,{...settlement,paidAt:'2020-04-02'}]}}}
  expect(publicFeedbackSince(previous,paid)).toContainEqual(expect.objectContaining({sourceId:settlement.id,label:'原投资的这笔交收已经实际付款。'}))
+})
+
+it('classifies a working public projection without pretending its candidate has been saved',()=>{
+ const candidate={...current,saveStatus:'unsaved' as const,hasCandidate:true}
+ expect(publicFeedbackSince(previous,candidate)).toEqual([])
+ expect(inspectPublicWaitTransition(previous,candidate)).toContainEqual(expect.objectContaining({kind:'job',sourceId:'life:719699f293d85e4fd27a700d7d9d1d3e'}))
+})
+
+it('includes public world-preparation completion rather than passing its response window',()=>{
+ // Isolated public states, not invented normal preparations or saved money.
+ const f=previous.features as unknown as PlayFeatures,job={id:'isolated-world-prep',title:'原学习',accountId:'personal',startAt:'2020-04-01',completeAt:'2020-04-02',status:'running'}
+ const before:View={...previous,features:{...f,workbench:{...f.workbench,preparationJobs:[job]}}}
+ const after:View={...before,date:'2020-04-02',revision:current.revision,receipts:current.receipts,features:{...f,workbench:{...f.workbench,preparationJobs:[{...job,status:'completed'}]}}}
+ expect(publicFeedbackSince(before,after)).toContainEqual(expect.objectContaining({sourceId:job.id,kind:'job',attention:'pause'}))
+})
+
+it('pauses on the first publicly reported service problem, not every later accumulated day',()=>{
+ // Only the public failed-day summary is supplied; meter rows stay unread.
+ const f=previous.features as unknown as PlayFeatures,period={id:'isolated-period',status:'active',feePostedAt:null,compensatedAt:null,failedDays:0}
+ const relay={...f.relay,periods:[period]};Object.defineProperty(relay,'meters',{get(){throw Error('NO_METER_READ')}})
+ const before:View={...previous,features:{...f,relay}}
+ const after:View={...before,date:'2020-04-02',revision:current.revision,receipts:current.receipts,features:{...f,relay:{...f.relay,periods:[{...period,failedDays:1}]}}}
+ expect(publicFeedbackSince(before,after)).toContainEqual(expect.objectContaining({sourceId:period.id,attention:'pause',label:'这份原服务出现了需要核对的情况。'}))
+ const known:View={...before,features:after.features},more:View={...after,features:{...f,relay:{...f.relay,periods:[{...period,failedDays:2}]}}}
+ expect(publicFeedbackSince(known,more)).toEqual([])
+})
+
+it('distinguishes an already known governance date from its actual effective day without reading the vote outcome',()=>{
+ const f=previous.features as unknown as PlayFeatures,governance={id:'isolated-governance',resolvedAt:'2020-03-31'}
+ Object.defineProperty(governance,'approved',{get(){throw Error('NO_FUTURE_VOTE_READ')}})
+ const features={...f,deepseek:{...f.deepseek,governance:[governance],policies:[{governanceId:governance.id,policy:'independent_audit',date:'2020-04-02'}]}}
+ const before:View={...previous,features},after:View={...before,date:'2020-04-02',revision:current.revision,receipts:current.receipts}
+ expect(publicFeedbackSince(before,after)).toContainEqual(expect.objectContaining({sourceId:governance.id,attention:'pause',label:'原先谈妥的治理安排已经实际生效。'}))
 })

@@ -9,6 +9,20 @@ import {playableAdvanceDate,PLAYABLE_THROUGH} from './playable-advance.ts'
 import {publicFeedbackSince,type PublicFeedback} from './public-feedback.ts'
 
 type View=RunSession['view']
+export function captureWaitScope(raw:CommandEnvelope,before:View):{readonly status:'valid';readonly scope:CommandEnvelope;readonly targetDate:string}|{readonly status:'rejected';readonly reasonCodes:readonly string[];readonly targetDate:string}{
+ let targetDate=before.date
+ const reject=(code:string)=>({status:'rejected' as const,reasonCodes:[code],targetDate})
+ try{
+  assertJsonInput(raw);const scope=copyJson(raw)
+  if(scope.kind!=='AdvanceTime'||scope.runId!==before.runId||scope.expectedRevision!==before.revision||scope.actorId!=='player')return reject('STALE_REVISION')
+  const body=scope.payload
+  if(body===null||typeof body!=='object'||Array.isArray(body)||Object.keys(body).some(key=>key!=='date')||!('date'in body)||typeof body.date!=='string')return reject('INVALID_PAYLOAD')
+  isoDate(body.date);targetDate=body.date
+  if(targetDate<before.date)return reject('CANNOT_REWIND_TIME')
+  if(targetDate>PLAYABLE_THROUGH||before.phase!=='playing')return reject('PREVIEW_RANGE_ENDED')
+  return {status:'valid',scope,targetDate}
+ }catch{return reject('INVALID_PAYLOAD')}
+}
 export interface PublicWaitStep {readonly commandId:string;readonly date:string;readonly revisionBefore:number;readonly revisionAfter:number}
 export interface PublicWaitResult {
  readonly status:'saved'|'stopped'|'rejected'|'unsaved'|'conflict'
@@ -39,13 +53,9 @@ export async function executePublicWait(raw:CommandEnvelope,port:PublicWaitPort)
  const result=(status:PublicWaitResult['status'],reasonCodes:readonly string[]=[]):PublicWaitResult=>({status,reasonCodes,targetDate,before,lastSaved,lastBefore,current:port.current(),steps:[...steps],feedback:[...feedback],failed})
  let scope:CommandEnvelope
  try{
-  assertJsonInput(raw);scope=copyJson(raw)
-  if(scope.kind!=='AdvanceTime'||scope.runId!==before.runId||scope.expectedRevision!==before.revision||scope.actorId!=='player')return result('rejected',['STALE_REVISION'])
-  const body=scope.payload
-  if(body===null||typeof body!=='object'||Array.isArray(body)||Object.keys(body).some(k=>k!=='date')||!('date'in body)||typeof body.date!=='string')return result('rejected',['INVALID_PAYLOAD'])
-  isoDate(body.date);targetDate=body.date
-  if(targetDate<before.date)return result('rejected',['CANNOT_REWIND_TIME'])
-  if(targetDate>PLAYABLE_THROUGH||before.phase!=='playing')return result('rejected',['PREVIEW_RANGE_ENDED'])
+  const captured=captureWaitScope(raw,before);targetDate=captured.targetDate
+  if(captured.status==='rejected')return result('rejected',captured.reasonCodes)
+  scope=captured.scope
   const preview=port.preview(scope)
   if(!preview.allowed)return result('rejected',preview.reasonCodes)
  }catch{return result('rejected',['INVALID_PAYLOAD'])}

@@ -72,7 +72,10 @@ export class GameController {
   if(current.receipts.some(r=>r.commandId===command.commandId))return this.submit(command).then(result=>({...empty('WAIT_ALREADY_HANDLED'),status:result.status==='unsaved'?'unsaved':result.status==='conflict'?'conflict':result.status==='rejected'?'rejected':'stopped',reasonCodes:result.reasonCodes}))
   this.#timeWaiting=true;this.#timeWaitStop=false
   this.#timeWaitScope={commandId:command.commandId,signature,targetDate:typeof command.payload==='object'&&command.payload!==null&&'date'in command.payload&&typeof command.payload.date==='string'?command.payload.date:current.date}
-  const flight=Promise.resolve().then(()=>executePublicWait(command,{
+  const flight=Promise.resolve().then(()=>session.supportsWaitCheckpoints&&!this.#rangeBlocks(command)?session.waitForFeedbackCheckpoint(command,{
+   stopping:()=>this.#timeWaitStop||this.#closed||this.#session!==session,
+   yieldControl:()=>this.#options.yieldControl?.()??Promise.resolve(),
+  }):executePublicWait(command,{
    current:()=>{requireRule(this.#session===session&&this.#state.view?.runId===command.runId,'RUN_NOT_FOUND');return this.#state.view!},
    preview:step=>this.#rangeBlocks(step)?{allowed:false,reasonCodes:['PREVIEW_RANGE_ENDED'],actionPoints:0,upfrontCostFen:0,releasedFen:0}:session.preview(step),
    submit:async step=>{const result=await session.submit(step);this.#set({error:result.reasonCodes[0]??null,notice:result.status==='saved'?result.receipt.summary:null});if(this.#options.yieldControl)await this.#options.yieldControl();return result},

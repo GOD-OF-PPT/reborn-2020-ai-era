@@ -1,3 +1,4 @@
+import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
 import type {GamePanelProps,SceneTarget} from './game-types.ts'
 import type {Screen} from './Navigation.tsx'
 import type {LifeSceneSelection} from './life-scene-progress.ts'
@@ -21,7 +22,7 @@ import {ecosystemCurrentDecision,ecosystemFocusFor,ecosystemFocusTargets,resolve
 import {equityCurrentDecision,equityFocusFor,equityFocusTargets,resolveEquityFocus,equityFocusQuarter,equityFocusOpen,equityFocusResultDate,equityPlayerScene,equityFocusFromSaved,type EquityOpeningFocus} from './equity-player-thread.ts'
 import {equityTargetEntity} from './equity-scene-target.ts'
 
-type Input=Pick<GamePanelProps,'view'|'features'>
+type Input=Pick<GamePanelProps,'view'|'features'>&Partial<Pick<GamePanelProps,'requestWait'>>
 type Identity={readonly runId:string;readonly accountId:string;readonly entityId:string|null;readonly businessId?:string}
 export type OpeningFocus=Identity&(
  |{readonly kind:'first-order'|'work'|'free'}
@@ -368,7 +369,7 @@ function firstScene(p:Input):Scene{
  if(status==='planned')return {...base,stage:'planned',title:'答应了，就给它留出日子。',line:`已预留制作费与${first.terms.actionPoints}点；${first.dates.startAt}才开工实际使用。还没有交付或回款。`,outcome:'pending',wait:{date:first.dates.startAt,label:'等这份作品开工'}}
  if(status==='running')return {...base,stage:'running',title:'这条短片，正在一点点成形。',line:`已付制作成本${moneyText(first.result.directCostFen)}；${first.dates.submitBy}完成后仍须亲手提交。`,outcome:'pending',wait:{date:first.dates.submitBy,label:'等这份作品做完'}}
  if(status==='awaiting_submission'&&!first.deadlineMissed)return {...base,stage:'delivery',title:'短片做好了。要发给客户吗？',line:'完成制作与交给客户是两回事；提交不再占用行动，复核与到账还在后面。',outcome:'pending',resultRefs,command:command('SubmitDelivery',{contractId:first.contractId},'把这份作品交给客户')}
- if(status==='review'||status==='delivered')return {...base,stage:'waiting',title:status==='review'?'作品已经发出，等客户回信。':'客户已经验收，款项还要等到账。',line:'作品已经交出，不必重复提交。等客户复核与付款，也可以先看看生活里的人与事。',outcome:'pending',resultRefs,wait:{date:first.dates.earliestReviewAt>p.view.date?first.dates.earliestReviewAt:p.features.workbench.progression.nextDate,label:'等客户原反馈'}}
+ if(status==='review'||status==='delivered')return {...base,stage:'waiting',title:status==='review'?'作品已经发出，等客户回信。':'客户已经验收，款项还要等到账。',line:'作品已经交出，不必重复提交。等客户复核与付款，也可以先看看生活里的人与事。',outcome:'pending',resultRefs,wait:{date:first.dates.earliestReviewAt>p.view.date?first.dates.earliestReviewAt:defaultWaitDate(p.features.workbench,typeof p.requestWait==='function'),label:first.dates.earliestReviewAt>p.view.date?'等客户原反馈':defaultWaitLabel(p.features.workbench,typeof p.requestWait==='function','等客户原反馈')}}
  if(first.result.paymentFen>0)return {...base,stage:'paid',title:'第一笔回款，真的到了。',line:`客户实际支付${moneyText(first.result.paymentFen)}；制作成本${moneyText(first.result.directCostFen)}，本单净额${moneyText(first.result.netOrderFen)}。`,detail:'这次尝试离你在意的生活近了吗？仍可继续手艺、安排工作生活或了解另一条路。',outcome:'actual',resultRefs}
  if(first.deadlineMissed)return {...base,stage:'missed',title:'原约定的交付日，已经过去。',line:'已做作品和实际成本仍在；可以按原合同取消或保留作品，不能补交领取教学款。',detail:'原约定的投入要求：'+base.detail,outcome:'non-success',resultRefs,...(first.contractId?{command:command('CancelContract',{contractId:first.contractId},'核对并取消这份逾期合同')}:{} )}
  const titles:Record<string,string>={declined:'这笔报价，你已经婉拒。',skipped:'这次委托，你已经略过。',expired:'这笔报价，已经过了答复窗口。',unavailable:'这笔报价，已经不再可接受。',cancelled:'这份合同，已经按原记录取消。',interrupted:'这次制作，已经停在半路。',rejected:'这份作品没有被客户接受。'}

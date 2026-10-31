@@ -1,3 +1,4 @@
+import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
 import type {GamePanelProps} from './game-types.ts'
 import type {Screen} from './Navigation.tsx'
 import {openingFocusFor,playerThread,type OpeningFocus,type PlayerThreadView,type ThreadResultRef} from './player-thread.ts'
@@ -14,7 +15,7 @@ import {moneyText} from './game-text.ts'
 import {ecosystemFocusFor,ecosystemFocusTargets,ecosystemFocusOpen,ecosystemJourneyFor} from './ecosystem-player-thread.ts'
 import {equityFocusFor,equityFocusTargets,equityJourneyFor} from './equity-player-thread.ts'
 
-export type TodayThreadInput=Pick<GamePanelProps,'view'|'features'>
+export type TodayThreadInput=Pick<GamePanelProps,'view'|'features'>&Partial<Pick<GamePanelProps,'requestWait'>>
 export type TodayThreadClassification='entry'|'active'|'carry'|'result'|'history'|'invalid'|'other'
 export interface TodayThreadItem{
  readonly focus:OpeningFocus
@@ -228,9 +229,11 @@ function ongoing(p:TodayThreadInput):TodayThreadItem[]{
 function wait(p:TodayThreadInput):TodayThreadView['wait']{
  const w=p.features.workbench
  if(w.pause||w.progression.requiresDelivery||w.atQuarterEnd&&w.progression.nextQuarterDate===null)return null
- const requested=w.atQuarterEnd?w.progression.nextQuarterDate:w.progression.nextDate
- if(!requested)return null
- try{return {date:playableAdvanceDate(w,p.view.date,requested),label:w.atQuarterEnd?'核对旧约定，进入下一季':'让已确认的日子继续'}}catch{return null}
+ try{
+  const requested=w.atQuarterEnd?w.progression.nextQuarterDate:defaultWaitDate(w,typeof p.requestWait==='function')
+  if(!requested)return null
+  return {date:playableAdvanceDate(w,p.view.date,requested),label:w.atQuarterEnd?'核对旧约定，进入下一季':defaultWaitLabel(w,typeof p.requestWait==='function','让已确认的日子继续')}
+ }catch{return null}
 }
 
 const directions:readonly TodayDirection[]=[

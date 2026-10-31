@@ -1,4 +1,4 @@
-import {expect,it} from 'vitest'
+import {afterAll,beforeAll,expect,it} from 'vitest'
 import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
 import raw from '../../goal-1/evidence/t16-epilogue/asset-a01/normal-asset-before-epilogue.json?raw'
 import {createCampaignCodec} from './campaign.ts'
@@ -9,10 +9,15 @@ import type {PlayFeatures} from '../ui/game-types.ts'
 
 // The original normal 24-quarter life is unchanged. These are original
 // Controller/IDB commands, not native interaction or human acceptance.
+let store:IndexedDbRunStore,controller:GameController
+beforeAll(async()=>{
+ const codec=createCampaignCodec()
+ store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'u6-tail-known-bills'})
+ controller=new GameController({codec,store,locks:new MemoryWriterAccess()})
+ await controller.initialize();await controller.importNew(raw)
+})
+afterAll(async()=>{await controller?.close();await store?.close()})
 it('projects original finite living and maintenance bills before they are scheduled, without duplicating or charging them on read',async()=>{
- const codec=createCampaignCodec(),store=new IndexedDbRunStore({codec,factory:new IDBFactory(),keyRange:IDBKeyRange,name:'u6-tail-known-bills'}),controller=new GameController({codec,store,locks:new MemoryWriterAccess()})
- try{
-  await controller.initialize();await controller.importNew(raw)
   const feature=()=>controller.snapshot.view!.features as unknown as PlayFeatures
   expect(controller.snapshot.view!.origin).toBe('normal');expect(feature().journey!.closedQuarters).toBe(24)
   expect((await controller.submit(controller.prepare('EnterEpilogue',{consent:true,reviewHash:feature().journey!.reviewHash}))).status).toBe('saved')
@@ -36,5 +41,4 @@ it('projects original finite living and maintenance bills before they are schedu
    expect(after.date).toBe(expectedDate);expect(after.phase).toBe('epilogue');expect(after.budget).toEqual(oldBudget)
    expect(()=>controller.clockCommitments(command)).toThrow('STALE_REVISION')
   }
- }finally{await controller.close();await store.close()}
 })

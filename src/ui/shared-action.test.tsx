@@ -11,6 +11,7 @@ import type {GameControllerPort} from '../application/game-controller-port.ts'
 import {makeSharedAction,type SharedActionBinding} from './shared-action.ts'
 import {CommandButton} from './CommandButton.tsx'
 import {ClockAdvance,type ClockActionBinding} from './ClockAdvance.tsx'
+import {QuarterPanel} from './QuarterPanel.tsx'
 
 // Real component handlers and controller/store state. Effects/DOM geometry are
 // not emulated here; native Space/focus and visual acceptance remain separate.
@@ -185,4 +186,18 @@ describe('original clock presentation and shared activation',()=>{
   expect((await f.controller.submit(f.controller.prepare('AdvanceTime',{date}))).status).toBe('saved')
   f.request.mockClear();binding.activate();fallback.activate();expect(f.request).not.toHaveBeenCalled()
  })
+})
+
+it('keeps a quarter wait bound to the original committed snapshot after an actual reload',async()=>{
+ const f=await fixture('quarter-wait-source')
+ try{
+  const before=f.controller.exportSaved(),wait=vi.fn(),noop=()=>{}
+  const tree=QuarterPanel({...f.props(),requestWait:wait,onLife:noop,onPeople:noop,onMarket:noop,onDeepseek:noop,onCourse:noop,onRelay:noop,onRoutines:noop,onStory:noop,guideHidden:true,onHideGuide:noop})
+  const button=elements(tree).find(node=>node.type==='button'&&Array.isArray(node.props.children)&&String(node.props.children[0]).includes('等下一次反馈'))
+  if(!button)throw Error('ACTUAL_QUARTER_WAIT_ACTION_REQUIRED')
+  click(button);expect(wait).toHaveBeenCalledOnce();expect(wait.mock.calls[0]![2]).toBe(true)
+  await f.controller.reload();wait.mockClear()
+  if(typeof button.props.onClick==='function')button.props.onClick()
+  expect(wait).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(before)
+ }finally{await f.close()}
 })

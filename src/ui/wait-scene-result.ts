@@ -31,14 +31,22 @@ export function waitSceneResult(result:PublicWaitResult,current:PlayingView):{te
  if(!frame)return null
  const partial=result.status==='unsaved'||result.status==='conflict',stopped=result.reasonCodes.includes('WAIT_STOP_REQUESTED'),retryOnly=result.reasonCodes.includes('WAIT_RETRY_SAVED_ONLY'),retained=result.feedback.filter(row=>row.attention==='retain'),paused=result.feedback.filter(row=>row.attention==='pause'),meaning=[...new Set(paused.map(row=>row.label))].join(' '),important=paused.find(row=>['responsibility','course-update','invitation'].includes(row.kind))
  const retryNote=last.date<result.targetDate?'原候选已经保存；余下的等候仍由你重新选择。':'原候选已经保存，没有额外推进日子。'
- const note=partial?'这些日子已经保存；接下来的一步尚未保存，请处理原候选。':stopped?'已经按你的选择停下；已发生的日子与原约保留。':retryOnly?retryNote:last.date<result.targetDate?'日子先停在这次真实反馈，剩下的安排仍在原日历里。':''
+ const note=partial?'这些日子已经保存；接下来这段等候尚未保存，请处理原候选。':stopped?'已经按你的选择停下；已发生的日子与原约保留。':retryOnly?retryNote:last.date<result.targetDate?'日子先停在这次真实反馈，剩下的安排仍在原日历里。':''
  const text=[cash,cause,meaning,'日历从'+before.date+'走到'+last.date+'。',retained.length?'这期间有'+new Set(retained.map(row=>row.sourceId)).size+'笔自己的原款到期，未收款仍保留，逐笔依据可翻原账。':null,note].filter(Boolean).join(' ')
  const singleReport=!cash&&retained.length===0?equityReportBrief(before,last,paused):null
- const brief=[stopped?'已经按你的选择停下。':null,cash?first(cash):null,singleReport??first(cause),important?.label,partial?'已发生部分已保存，下一步尚未保存。':retryOnly?retryNote:null].filter(Boolean).join(' ')
+ const brief=[stopped?'已经按你的选择停下。':null,cash?first(cash):null,singleReport??first(cause),important?.label,partial?'已保存部分保留，后续等候尚未保存。':retryOnly?retryNote:null].filter(Boolean).join(' ')
  return {text,brief,frame}
 }
 
 /** Completing the exact original candidate is not authorization to resume the range. */
+export function checkpointResultAfterRetry(pending:PublicWaitResult,saved:PublicWaitResult,current:PlayingView):PublicWaitResult|null{
+ if(!pending.failed||!['saved','stopped'].includes(saved.status)||saved.before.runId!==pending.before.runId||saved.before.revision!==pending.before.revision||saved.before.date!==pending.before.date||saved.targetDate!==pending.targetDate||saved.failed!==null||saved.reasonCodes.join('|')!=='WAIT_RETRY_SAVED_ONLY')return null
+ if(!pending.steps.every((step,index)=>{const row=saved.steps[index];return row?.commandId===step.commandId&&row.date===step.date&&row.revisionBefore===step.revisionBefore&&row.revisionAfter===step.revisionAfter}))return null
+ const anchored:PublicWaitResult={...saved,before:pending.before,current,lastSaved:current}
+ return waitSequenceValid(anchored,current)?anchored:null
+}
+
+/** Recovery for an original single-step store without checkpoint support. */
 export function waitResultAfterRetry(pending:PublicWaitResult,receipt:Extract<SessionResult,{status:'saved'|'duplicate'}>['receipt'],current:PlayingView):PublicWaitResult|null{
  const failed=pending.failed,before=pending.lastSaved
  if(!failed||receipt.commandId!==failed.command.commandId||receipt.kind!=='AdvanceTime'||current.runId!==before.runId||current.revision!==before.revision+1||current.saveStatus!=='saved'||current.hasCandidate||current.receipts.at(-1)?.commandId!==receipt.commandId)return null

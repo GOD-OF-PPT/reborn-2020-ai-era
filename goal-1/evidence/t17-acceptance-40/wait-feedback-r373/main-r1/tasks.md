@@ -1,0 +1,1 @@
+- [ ] 当前独立Chrome实际状态、同源交互/完整原文与保全；terminal→STOP→fullseal。

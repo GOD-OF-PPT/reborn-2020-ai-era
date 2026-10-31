@@ -1,3 +1,4 @@
+import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
 import type {Ref,ReactNode} from 'react'
 import type {GamePanelProps,NavigateScene,LifeSceneMode,SceneTarget} from './game-types.ts'
 import type {LifePerson} from '../core/life-schema.ts'
@@ -22,7 +23,7 @@ type Props={p:GamePanelProps;headingRef:Ref<HTMLHeadingElement>;feedback?:ReactN
 export type Moment={stage:string;object:string;title:string;line:string;detail:string;command?:{kind:string;payload:unknown;label:string;confirm?:boolean};wait?:{date:string;label:string};inspect?:{screen:Screen;label:string;accountId?:string;personId?:LifePerson;lifeSelection?:LifeSceneMode;recordId?:string;videoTarget?:SceneTarget['videoTarget'];courseTarget?:SceneTarget['courseTarget'];courseDraftSlot?:SceneTarget['courseDraftSlot'];courseTeachingSlot?:SceneTarget['courseTeachingSlot'];relayTarget?:SceneTarget['relayTarget'];relayDraftSlot?:SceneTarget['relayDraftSlot'];deepseekPane?:SceneTarget['deepseekPane'];equityTarget?:SceneTarget['equityTarget'];operatingJobTarget?:SceneTarget['operatingJobTarget']}}
 
 /** Current public commitments select a scene, never a command or an outcome. */
-export function roomMoment(p:Pick<GamePanelProps,'view'|'features'>):Moment{
+export function roomMoment(p:Pick<GamePanelProps,'view'|'features'>&Partial<Pick<GamePanelProps,'requestWait'>>):Moment{
  const {view,features:f}=p,w=f.workbench,first=f.firstOrder
  let paid:Moment|null=null
  if(w.pause)return {stage:'attention',object:'日历上的来信',title:'有件事，等你亲自回应。',line:w.progression.barrierLabel??'先看清已经发生的事，再决定怎样继续。',detail:'原费用和答应过的事都保留。看一眼不会替你作决定。',inspect:{screen:w.pause.reason==='STORY_RISK_DECISION_PENDING'?'story':'quarter',label:'读这封需要回应的来信'}}
@@ -46,7 +47,7 @@ export function roomMoment(p:Pick<GamePanelProps,'view'|'features'>):Moment{
   if(first.status==='planned')return {stage:'planned',object:'已经答应的委托',title:'答应了，就给它留出日子。',line:`制作排在${first.dates.startAt}开始，${first.dates.submitBy}完成。此刻还没有交付和回款。`,detail,wait:{date:first.dates.startAt,label:'等到这份作品开工'}}
   if(first.status==='running')return {stage:'running',object:'桌上的制作文件',title:'这条短片，正在一点点成形。',line:`制作已经开始。${first.dates.submitBy}完成后，还需要你亲手交给客户。`,detail:`已发生制作成本${moneyText(first.result.directCostFen)} · 还没有收到客户款`,wait:{date:first.dates.submitBy,label:'等作品做完'}}
   if(first.status==='awaiting_submission')return first.deadlineMissed?{stage:'attention',object:'超过约定日期的作品',title:'约定的交付日，已经过去了。',line:'作品和已发生成本仍在。继续或退出，需要面对原合同。',detail,inspect:{screen:'quarter',label:'查看逾期后的处理办法'}}:{stage:'delivery',object:'等你发送的作品',title:'短片做好了。要发给客户吗？',line:'你可以亲手提交。客户复核和真正到账，还会分别发生。',detail:`已经支付制作成本${moneyText(first.result.directCostFen)} · 提交不再占用行动`,command:{kind:'SubmitDelivery',payload:{contractId:first.contractId},label:'把作品交给客户'}}
-  if(first.status==='review'||first.status==='delivered')return {stage:'waiting',object:'已经发出的作品',title:first.status==='review'?'作品发出去了，等客户回信。':'客户已经验收，款项还要等到账。',line:'不必反复提交。也可以先去看看生活里的人与事。',detail:'客户复核、确认收入和实际到账，仍按原约定分别发生。',wait:{date:first.status==='review'&&first.dates.earliestReviewAt>view.date?first.dates.earliestReviewAt:w.progression.nextDate,label:first.status==='review'?'等客户复核':'等原款到账'}}
+  if(first.status==='review'||first.status==='delivered')return {stage:'waiting',object:'已经发出的作品',title:first.status==='review'?'作品发出去了，等客户回信。':'客户已经验收，款项还要等到账。',line:'不必反复提交。也可以先去看看生活里的人与事。',detail:'客户复核、确认收入和实际到账，仍按原约定分别发生。',wait:{date:first.status==='review'&&first.dates.earliestReviewAt>view.date?first.dates.earliestReviewAt:defaultWaitDate(w,typeof p.requestWait==='function'),label:first.status==='review'&&first.dates.earliestReviewAt>view.date?'等客户复核':defaultWaitLabel(w,typeof p.requestWait==='function',first.status==='review'?'等客户复核':'等原款到账')}}
   if(first.result.paymentFen>0)paid={stage:'paid',object:'客户寄回的回执',title:'第一笔回款，真的到了。',line:`客户实际支付${moneyText(first.result.paymentFen)}。制作成本${moneyText(first.result.directCostFen)}，这笔小单净额${moneyText(first.result.netOrderFen)}。`,detail:'工资和持仓浮盈不在这笔小单里。下一次尝试，仍由你选择。',inspect:{screen:'routes',label:'去看看另一种可能'}}
  }
  const ecosystem=deepseekSceneProgress(f.deepseek,view.date)
@@ -80,7 +81,7 @@ export function RoomMoment({p,headingRef,feedback,onNavigate,onExplore,openingFo
  const moment=roomMoment(p),w=p.features.workbench
  const employed=w.employment.some(e=>e.segments.some(s=>s.to===null))
  const canWait=false
- const target=moment.wait?.date??w.progression.nextQuarterDate??w.progression.nextDate
+ const target=moment.wait?.date??defaultWaitDate(w,typeof p.requestWait==='function')
  const safeDate=canWait?playableAdvanceDate(w,p.view.date,target):null
  const waitLabel=moment.wait&&safeDate===moment.wait.date?moment.wait.label:w.progression.nextQuarterDate?'走进下一季':'让原来的安排继续'
  const alternateWork=['offer','planned','running','waiting'].includes(moment.stage)&&!employed
@@ -96,6 +97,6 @@ export function RoomMoment({p,headingRef,feedback,onNavigate,onExplore,openingFo
     {alternateWork?<CommandButton {...p} kind="WorkQuarter" payload={{}} label="先保留这一季的工作" confirm className="moment-decision"><b aria-hidden="true">02</b><span>先保留这一季的工作<small>可与小单一起安排 · 占2点，按在岗日领工资</small></span><i aria-hidden="true">→</i></CommandButton>:moment.stage==='planned'||moment.stage==='running'||moment.stage==='waiting'?<button type="button" className="moment-decision" onClick={()=>onNavigate('life')}><b aria-hidden="true">02</b><span>等候时，也看看在意的人<small>先去看看，不自动花钱或占用时间</small></span><i aria-hidden="true">↗</i></button>:null}
     <button type="button" className="moment-explore" onClick={onExplore}>环顾房间，想想别的可能 <span aria-hidden="true">↗</span></button>
    </div>
-   {!moment.wait&&safeDate&&moment.stage!=='offer'?<div className="moment-idle-clock"><ClockAdvance p={p} date={safeDate} label={(w.progression.nextQuarterDate?'进入下一季 · ':'让日子向前 · ')+safeDate} room/></div>:null}
+   {!moment.wait&&safeDate&&moment.stage!=='offer'?<div className="moment-idle-clock"><ClockAdvance p={p} date={safeDate} label={defaultWaitLabel(w,typeof p.requestWait==='function')+' · '+safeDate} room/></div>:null}
  </section>
 }

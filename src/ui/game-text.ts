@@ -85,3 +85,5 @@ export const lifecycleText:Record<string,string>={not_started:'尚未开始',dis
 export const routineKindText:Record<string,string>={WorkQuarter:"保留本季工作",StartCourseRecovery:"既有课程补支持",StartRelayServicePeriod:"已签客户的服务周期",TopUpRelaySupplier:"已选供应的自有资金充值",CollectRelayDue:"收取既有到期应收",PayObligation:"支付已知到期义务"}
 
 Object.assign(errors,{RUNTIME_READ_PENDING:'正在核对这一步…',RUNTIME_SCOPE_EXPIRED:'这段画面已经变化，请重新核对。',RUNTIME_UNAVAILABLE:'这次操作已中断，请先重新读取本机记录。',RUNTIME_OPERATION_FAILED:'这一步暂未完成，请重新核对。',RUNTIME_INVALID_RESPONSE:'这次记录尚待核对，请重新读取本机进度。',RUNTIME_CANDIDATE_UNAVAILABLE:'这份候选尚未导出，请先核对本机记录；不会重新执行原操作。',RUNTIME_RECORD_UNAVAILABLE:'尚未取得这份原文，请先重新读取本机记录。'})
+
+Object.assign(errors,{WAIT_CHECKPOINT_UNAVAILABLE:'这段等候暂未完成，请核对原记录。',INVALID_WAIT_CHECKPOINT:'这段日历尚待核对，请重新查看原安排。',WAIT_CHECKPOINT_SOURCE_MISMATCH:'眼前的安排已经变化，请重新核对。',WAIT_CHECKPOINT_PREFIX_MISMATCH:'本机记录与这段等候不一致，请核对原档。'})

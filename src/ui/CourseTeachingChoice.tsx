@@ -1,3 +1,4 @@
+import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
 import {useEffect,useId,useRef,useState,type Dispatch,type SetStateAction,type ReactNode} from 'react'
 import type {GamePanelProps} from './game-types.ts'
 import {courseSceneProgress,courseTargetReason,courseStageLatestStart,type CourseSceneTarget} from './course-scene-progress.ts'
@@ -179,7 +180,7 @@ export function CourseTeachingChoice({p,target,onTarget,onInspect,onToday,onLife
   const preview=enrollmentPreview.preview
   if(preview.allowed&&typeof preview.receivedPrepaymentFen==='number'&&typeof preview.protectedIncreaseFen==='number')enrollmentQuote={receivedFen:preview.receivedPrepaymentFen,protectedFen:preview.protectedIncreaseFen}
  }
- const ordinaryDate=progress?.wait?.date??p.features.workbench.progression.nextQuarterDate??p.features.workbench.progression.nextDate,safeDate=progress?.phase==='course-stage-needed'?courseStageWaitDate(p.features.workbench,p.view.date,progress,p.requestWait!==undefined):progress?.wait?courseWaitDate(p.features.workbench,p.view.date,ordinaryDate,p.requestWait!==undefined):p.features.workbench.pause===null&&!p.features.workbench.progression.requiresDelivery?playableAdvanceDate(p.features.workbench,p.view.date,ordinaryDate):null
+ const ordinaryDate=progress?.wait?.date??defaultWaitDate(p.features.workbench,typeof p.requestWait==='function'),safeDate=progress?.phase==='course-stage-needed'?courseStageWaitDate(p.features.workbench,p.view.date,progress,typeof p.requestWait==='function'):progress?.wait?courseWaitDate(p.features.workbench,p.view.date,ordinaryDate,typeof p.requestWait==='function'):p.features.workbench.pause===null&&!p.features.workbench.progression.requiresDelivery?playableAdvanceDate(p.features.workbench,p.view.date,ordinaryDate):null
  const stoppedJob=stop?.source===JSON.stringify(current)?p.view.operations?.jobs.find(j=>j.id===stop.jobId&&j.businessId===s?.business.id&&['planned','running'].includes(j.status)):undefined
  const records:CourseSceneTarget[]=p.features.course?[...p.features.course.courses.filter(c=>c.status==='ready').map(c=>({kind:'course' as const,businessId:c.businessId,courseId:c.id})),...p.features.course.audiences.map(a=>({kind:'audience' as const,businessId:p.features.course!.courses.find(c=>c.id===a.courseId)!.businessId,courseId:a.courseId,audienceId:a.id})),...p.features.course.cohorts.map(co=>({kind:'cohort' as const,businessId:p.features.course!.courses.find(c=>c.id===co.courseId)!.businessId,courseId:co.courseId,cohortId:co.id}))].filter(t=>courseTargetReason(p.features.course,t,context(p))===null):[]
  const originalJobs=[...(co?[...co.stageJobs.flat().filter(j=>j!==null),...co.supportJobs.flatMap(slot=>slot.job?[slot.job]:[])]:a?.job?[a.job]:[]),...(s?.lesson.refreshes.flatMap(refresh=>refresh.job?[refresh.job]:[])??[])]
@@ -199,7 +200,7 @@ export function CourseTeachingChoice({p,target,onTarget,onInspect,onToday,onLife
   else if(money&&money.totalDueFen>0&&onInspect)primary=<button type="button" className="primary" disabled={bookmarkLock!==null} onClick={inspect}>翻开本班未付原账，核对责任 →</button>
   else if(currentDecision&&(!progress?.wait||urgentDecision))primary=<button type="button" className="primary" disabled={bookmarkLock!==null} onClick={()=>show(currentDecision)}>{progress!.choice.label} →</button>
   else if(current?.kind==='audience'&&!co&&!progress?.wait)primary=<button type="button" className="primary" disabled={bookmarkLock!==null} onClick={selectNewAudience}>为这门课另拟一份受众方案 →</button>
-  else if(!lock&&safeDate&&co?.closedAt==null)primary=<ClockAdvance p={{...p,request}} date={safeDate} label={(progress?.wait?safeDate===progress.wait.date?progress.wait.label:'先到日历上的这一日':'不新增安排，让原日子继续')+' · '+safeDate}/>
+  else if(!lock&&safeDate&&co?.closedAt==null)primary=<ClockAdvance p={{...p,request}} date={safeDate} label={(progress?.wait?safeDate===progress.wait.date?progress.wait.label:'先到日历上的这一日':defaultWaitLabel(p.features.workbench,typeof p.requestWait==='function','不新增安排，让原日子继续'))+' · '+safeDate}/>
  }
  else if(page==='more'||page==='details')primary=<button type="button" className="primary" onClick={()=>show('record')}>回到眼前这一步 →</button>
  else if(page==='stop')primary=stoppedJob?submit({kind:'InterruptJob',payload:{jobId:stoppedJob.id},label:'核对停止这次安排，保留原责任',confirm:true}):<button type="button" disabled>原任务已变化，请翻回原记录核对</button>

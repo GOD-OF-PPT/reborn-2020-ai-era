@@ -1,3 +1,4 @@
+import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
 import {useState,useEffect,useRef,type Ref} from 'react'
 import {Dialog} from './Dialog.tsx'
 import {SceneEcho,SceneTimeNotice,type EchoFrame} from './SceneEcho.tsx'
@@ -168,7 +169,7 @@ export function NarrativeScene(p:Props){
  const copy=courseIdentityReason?{...originalCopy,title:'先找回这份教案与原账户。',line:courseIdentityReason}:marketInvalid?{...originalCopy,title:'先找回原来的那份委托。',line:marketTarget.invalidReason??'原对象已经不可达，请重新选择。'}:progress?{...originalCopy,title:progress.title,line:progress.line}:originalCopy
  const person=f.life.people.find(person=>person.id===p.personId)??f.life.people[0]!
  const canAdvance=!closing&&(view.date<playableThrough||view.date===playableThrough&&!w.atQuarterEnd)&&!w.progression.requiresDelivery&&w.pause===null
- const ordinaryNext=canAdvance?(w.progression.nextQuarterDate??playableAdvanceDate(w,view.date,w.progression.nextDate)):null
+ const ordinaryNext=canAdvance?(w.progression.nextQuarterDate??playableAdvanceDate(w,view.date,defaultWaitDate(w,typeof p.requestWait==='function'))):null
  const encounterWait=videoThread?.focusStatus!=='invalid'&&p.screen==='video'?videoThread?.wait?.date:lifeProgress?.waitDate??marketProgress?.nextDate??deepseekProgress?.nextDate??(courseIdentityReason?undefined:courseProgress?.waitDate)
  const sceneNext=storyProgress?.phase==='waiting'?storyProgress.completeAt:relayProgress?.nextDate??encounterWait
  const next=relayProgress?relayReviewDate(p,relaySceneAdvanceDate(relayProgress,w,view.date,ordinaryNext)):sceneNext&&sceneNext>view.date&&ordinaryNext&&sceneNext<ordinaryNext?sceneNext:ordinaryNext
@@ -238,6 +239,6 @@ export function NarrativeScene(p:Props){
   </ScreenBook>
 
   {p.screen!=='video'&&!courseContinuity&&p.receipt&&p.receiptKind!=='AdvanceTime'?<SceneEcho text={p.receipt} frame={p.echoFrame??null} onClose={()=>p.onDismissReceipt?.()} accountName={id=>id==='personal'?'个人账户':w.routes.find(r=>r.accountId===id)?.name??'企业账户'}/>:null}
-  <footer className="scene-turn"><div><button type="button" className="scene-text-action" onClick={()=>p.onOpen('quarter')}>日历上的牵挂{commitmentCount>0?' · '+commitmentCount:''} ↗</button>{p.screen==='life'?<button type="button" className="scene-text-action" onClick={p.onYear}>回看年度胶片 ↗</button>:null}<button type="button" className="scene-text-action" aria-label={recordLabels[p.screen]} onClick={()=>p.screen==='life'&&lifeMode==='person'?p.onPeople():p.screen==='course'?openCourse():p.onOpen()}>{closing?'翻看人生记录':recordNames[p.screen]??'细看这一幕的安排'} ↗</button></div>{waitAt?<small className="scene-wait-caption">等候期间，费用和约定照常发生。也可以先去做别的事。</small>:canAdvance&&next?<ClockAdvance p={p} date={next} label={(w.progression.nextQuarterDate?'走进下一季 · ':'让日子向前 · ')+next}/>:<button type="button" onClick={()=>closing?p.onNavigate('room'):p.onOpen('quarter')}>{closing?'回到人生回顾':w.progression.requiresDelivery?'先面对这份交付':view.date===playableThrough&&w.atQuarterEnd?'回看最后一季':'看看停在了哪件事'}</button>}</footer>
+  <footer className="scene-turn"><div><button type="button" className="scene-text-action" onClick={()=>p.onOpen('quarter')}>日历上的牵挂{commitmentCount>0?' · '+commitmentCount:''} ↗</button>{p.screen==='life'?<button type="button" className="scene-text-action" onClick={p.onYear}>回看年度胶片 ↗</button>:null}<button type="button" className="scene-text-action" aria-label={recordLabels[p.screen]} onClick={()=>p.screen==='life'&&lifeMode==='person'?p.onPeople():p.screen==='course'?openCourse():p.onOpen()}>{closing?'翻看人生记录':recordNames[p.screen]??'细看这一幕的安排'} ↗</button></div>{waitAt?<small className="scene-wait-caption">等候期间，费用和约定照常发生。也可以先去做别的事。</small>:canAdvance&&next?<ClockAdvance p={p} date={next} label={defaultWaitLabel(w,typeof p.requestWait==='function')+' · '+next}/>:<button type="button" onClick={()=>closing?p.onNavigate('room'):p.onOpen('quarter')}>{closing?'回到人生回顾':w.progression.requiresDelivery?'先面对这份交付':view.date===playableThrough&&w.atQuarterEnd?'回看最后一季':'看看停在了哪件事'}</button>}</footer>
  </section>
 }

@@ -9,12 +9,13 @@ import {abortAfterHeadWrite} from '../testing/abort-after-write.ts'
 import {createRuntimeHarness} from '../testing/runtime-harness.ts'
 import {evaluateCommand} from '../core/commands.ts'
 import {record} from './runtime-protocol.ts'
+import wait19 from '../../goal-1/evidence/t17-acceptance-39/public-wait-model-r1/reconstructed-original19.json?raw'
 
 const codec=createCampaignCodec(),raw=codec.export(createCampaignRun({runId:'runtime-normal',actorId:'player',commandId:'create',backgroundId:'technical_employee',seed:'runtime-normal',playerProfile:{wishId:'autonomy',approach:'free'}}))
 const cleanups:(()=>Promise<void>)[]=[]
 afterEach(async()=>{for(const close of cleanups.splice(0).reverse())await close()})
-async function open(abort=false){
- const factory=new IDBFactory(),locks=new MemoryWriterAccess(),name='runtime-'+globalThis.crypto.randomUUID(),fault=abortAfterHeadWrite(factory,name,row=>(row as {envelope?:{revision?:number}}).envelope?.revision===2)
+async function open(abort=false,abortRevision=2){
+ const factory=new IDBFactory(),locks=new MemoryWriterAccess(),name='runtime-'+globalThis.crypto.randomUUID(),fault=abortAfterHeadWrite(factory,name,row=>(row as {envelope?:{revision?:number}}).envelope?.revision===abortRevision)
  const physical=new IndexedDbRunStore({codec,factory,keyRange:IDBKeyRange,name}),harnesses:ReturnType<typeof createRuntimeHarness>[]=[],instances:GameController[]=[]
  const transport=()=>{
   const h=createRuntimeHarness(async()=>{
@@ -133,4 +134,35 @@ it('settles an unanswered reading when the original owner closes, without accept
  await Promise.resolve();expect(settled).toBe('SESSION_CLOSED');expect(h.c.readingCount).toBe(0)
  h.h.release();await reading
  expect(settled).toBe('SESSION_CLOSED');expect(codec.export((await h.physical.load('runtime-normal'))!.run)).toBe(raw)
+})
+
+it('returns a checkpoint retry result only after the original candidate is actually durable',async()=>{
+ const h=await open(true,21);await h.c.home();await h.c.importNew(wait19)
+ const before=await h.c.exportSavedAsync(),scope=h.c.prepare('AdvanceTime',{date:'2020-04-11'})
+ const failed=await h.c.waitForFeedback(scope)
+ expect(failed.status).toBe('unsaved');expect(failed.steps).toEqual([]);expect(failed.feedback).toEqual([])
+ expect(await h.c.exportSavedAsync()).toBe(before)
+ const candidate=h.c.exportCandidate(),saved=await h.c.retry()
+ expect(saved.status).toBe('saved')
+ if(saved.status!=='saved'||!saved.waitResult)throw Error('DURABLE_RETRY_METADATA_REQUIRED')
+ expect(saved.checkpointWait).toBe(true);expect(saved.waitResult.current.revision).toBe(h.c.snapshot.view!.revision)
+ expect(saved.waitResult.current.accounts).toEqual(h.c.snapshot.view!.accounts)
+ expect(saved.waitResult.steps.length).toBe(h.c.snapshot.view!.revision-failed.before.revision)
+ expect(saved.waitResult.steps).toHaveLength(2)
+ expect(await h.c.exportSavedAsync()).toBe(candidate)
+})
+
+it('rejects fabricated checkpoint cash even when the retry receipt and physical save are real',async()=>{
+ const h=await open(true,21);await h.c.home();await h.c.importNew(wait19)
+ const failed=await h.c.waitForFeedback(h.c.prepare('AdvanceTime',{date:'2020-04-11'}))
+ expect(failed.status).toBe('unsaved')
+ let retryId=0
+ h.h.setHold(value=>record(value)&&value.kind==='response'&&value.id===retryId)
+ const held=h.h.next(value=>record(value)&&value.kind==='response'&&value.id===retryId)
+ const outcome=h.c.retry().then(()=>'',error=>error.message);retryId=(h.h.inbound.at(-1) as {id:number}).id
+ const response=await held as {result:{waitResult:{current:{accounts:{cashFen:number}[]}}}}
+ const forged=structuredClone(response.result);forged.waitResult.current.accounts[0]!.cashFen+=10000
+ h.h.inject({...response,result:forged})
+ expect(await outcome).toBe('RUNTIME_INVALID_RESPONSE');expect(h.c.runtimeFailed).toBe(true)
+ expect(h.c.snapshot.view!.accounts[0]!.cashFen).toBe((await h.physical.load(failed.before.runId))!.run.economy.ledger.accounts.find(a=>a.id==='personal')!.balanceFen)
 })

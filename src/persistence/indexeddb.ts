@@ -2,11 +2,12 @@ import { z } from 'zod'
 import { requireRule, RuleError } from '../core/errors.ts'
 import { canonicalJson } from '../core/identity.ts'
 import { commandIdentifier } from '../core/command-identity.ts'
-import { hashText } from '../core/hash.ts'
+import { hashText,hashValue } from '../core/hash.ts'
 import type { CommandReceipt, GameRun, ProposedRun } from '../core/run-types.ts'
 import { RunCodec } from './codec.ts'
 import type {SaveDocument} from './save-packing.ts'
 import { causeSchema, commandIdSchema, commandReceiptSchema } from './schemas.ts'
+import {captureWaitCheckpoint,checkpointBaseMatches,type WaitCheckpoint} from './wait-checkpoint.ts'
 
 const STORES = ['heads', 'backups', 'receipts', 'logs', 'imports'] as const
 const generationSchema = z.number().int().min(1).max(Number.MAX_SAFE_INTEGER)
@@ -25,9 +26,11 @@ export interface ImportResult { readonly record: StoredRun; readonly duplicate: 
 export interface RunListing {readonly runId:string;readonly revision:number|null;readonly date:string|null;readonly backgroundId:string|null;readonly compatible:boolean;readonly errorCode:string|null}
 export interface RunStore {
   readonly name: string
+  readonly supportsWaitCheckpoints?:boolean
   load(runId: string): Promise<StoredRun | null>
   create(run: GameRun): Promise<CommitResult>
   commit(proposal: ProposedRun, expectedGeneration: number): Promise<CommitResult>
+  commitCheckpoint?(checkpoint:WaitCheckpoint,expectedGeneration:number):Promise<CommitResult>
   loadBackup(runId: string): Promise<StoredRun | null>
   importSave(text: string, options: ImportOptions): Promise<ImportResult>
   exportStored(runId: string, backup?: boolean): Promise<string | null>
@@ -48,6 +51,10 @@ export class IndexedDbRunStore implements RunStore {
     requireRule(this.#factory && this.#ranges, 'STORAGE_UNAVAILABLE')
     this.#codec = options.codec
   }
+
+  // A subclass may attach policy to commit. It must explicitly implement the
+  // checkpoint policy before the session can bypass that single-step hook.
+  get supportsWaitCheckpoints():boolean{return this.commit===IndexedDbRunStore.prototype.commit}
 
   async #database(): Promise<IDBDatabase> {
     if (this.#connection === null) {
@@ -234,6 +241,60 @@ export class IndexedDbRunStore implements RunStore {
             } catch (error) { abort(error) }
           }
         } catch (error) { abort(error) }
+      }
+    })
+  }
+
+  /** All original receipt/log rows become durable in the same transaction as the checkpoint. */
+  async commitCheckpoint(input:WaitCheckpoint,expectedGeneration:number):Promise<CommitResult>{
+    requireRule(this.supportsWaitCheckpoints,'WAIT_CHECKPOINT_UNAVAILABLE')
+    const captured=captureWaitCheckpoint(input)
+    requireRule(Number.isSafeInteger(expectedGeneration)&&expectedGeneration>=1,'INVALID_STORAGE_GENERATION')
+    requireRule(Number.isSafeInteger(expectedGeneration+captured.count),'STORAGE_GENERATION_EXHAUSTED')
+    const final=this.#codec.prepare(captured.nextRun),previous=captured.count===1?null:this.#codec.prepare(captured.previousRun)
+    const state=final.envelope.state,receipt=state.receipts.at(-1)!,receipts=state.receipts.slice(-captured.count)
+    return this.#transaction(['heads','backups','receipts','logs'],'readwrite',(transaction,finish,abort)=>{
+      const request=transaction.objectStore('heads').get(state.runId)
+      request.onsuccess=()=>{
+        try{
+          const current=this.#readRow(request.result)
+          requireRule(current,'RUN_NOT_FOUND');requireRule(current.record.run.actorId===state.actorId,'FORBIDDEN_ACTOR')
+          const existing=current.record.run.receipts.find(row=>row.commandId===receipt.commandId)
+          if(existing){
+            requireRule(canonicalJson(existing)===canonicalJson(receipt),'COMMAND_ID_REUSED')
+            const identity=(run:GameRun)=>[run.runId,run.actorId,run.seed,run.versions,run.backgroundId,run.origin,run.personalAccountId,run.playerProfile]
+            requireRule(canonicalJson(identity(current.record.run))===canonicalJson(identity(state))&&canonicalJson(current.record.run.receipts.slice(0,state.receipts.length))===canonicalJson(state.receipts)&&canonicalJson(current.record.run.causes.slice(0,state.causes.length))===canonicalJson(state.causes),'WAIT_CHECKPOINT_PREFIX_MISMATCH')
+            if(current.record.run.revision===state.revision)requireRule(checkpointBaseMatches(current.record.run,hashValue(state)),'WAIT_CHECKPOINT_PREFIX_MISMATCH')
+            let remaining=receipts.length*2
+            const done=()=>{if(--remaining===0)finish({record:current.record,receipt:existing,duplicate:true})}
+            for(const row of receipts){
+              const saved=current.record.run.receipts.find(item=>item.commandId===row.commandId)
+              requireRule(saved&&canonicalJson(saved)===canonicalJson(row),'STORE_RECEIPT_MISMATCH')
+              const receiptRequest=transaction.objectStore('receipts').get([state.runId,row.commandId]),logRequest=transaction.objectStore('logs').get([state.runId,row.revisionAfter])
+              receiptRequest.onsuccess=()=>{try{const stored=receiptRowSchema.parse(receiptRequest.result);requireRule(stored.runId===state.runId&&canonicalJson(stored.receipt)===canonicalJson(row),'STORE_RECEIPT_MISMATCH');done()}catch(error){abort(error)}}
+              logRequest.onsuccess=()=>{try{const stored=logRowSchema.parse(logRequest.result);requireRule(stored.runId===state.runId&&canonicalJson(stored.causes)===canonicalJson(current.record.run.causes.filter(cause=>cause.commandId===row.commandId)),'STORE_LOG_MISMATCH');done()}catch(error){abort(error)}}
+            }
+            return
+          }
+          requireRule(current.record.generation===expectedGeneration&&current.record.run.revision===captured.baseRevision,'STALE_REVISION')
+          requireRule(checkpointBaseMatches(current.record.run,captured.baseHash),'WAIT_CHECKPOINT_PREFIX_MISMATCH')
+          for(const row of receipts)requireRule(!current.record.run.receipts.some(old=>old.commandId===row.commandId),'COMMAND_ID_REUSED')
+          let remaining=receipts.length*2
+          const absent=(value:unknown)=>{
+            requireRule(value===undefined,'STORE_BUNDLE_MISMATCH')
+            if(--remaining!==0)return
+            const generation=expectedGeneration+captured.count
+            transaction.objectStore('backups').put(previous?{runId:state.runId,generation:generation-1,envelope:previous.storage}:current.row)
+            transaction.objectStore('heads').put({runId:state.runId,generation,envelope:final.storage})
+            this.#writeRecords(transaction,state,receipts)
+            finish({record:{run:state,generation},receipt,duplicate:false})
+          }
+          for(const row of receipts){
+            const storedReceipt=transaction.objectStore('receipts').get([state.runId,row.commandId]),storedLog=transaction.objectStore('logs').get([state.runId,row.revisionAfter])
+            storedReceipt.onsuccess=()=>{try{absent(storedReceipt.result)}catch(error){abort(error)}}
+            storedLog.onsuccess=()=>{try{absent(storedLog.result)}catch(error){abort(error)}}
+          }
+        }catch(error){abort(error)}
       }
     })
   }
