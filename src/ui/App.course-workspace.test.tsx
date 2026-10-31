@@ -1,4 +1,4 @@
-import {expect,it,vi} from 'vitest'
+import {beforeAll,expect,it,vi} from 'vitest'
 import {isValidElement,type ComponentProps,type ReactElement} from 'react'
 import {IDBFactory,IDBKeyRange} from 'fake-indexeddb'
 import {createCampaignCodec} from '../application/campaign.ts'
@@ -16,6 +16,8 @@ import {CinematicRoom} from './CinematicRoom.tsx'
 import {NarrativeScene} from './NarrativeScene.tsx'
 import {Dialog} from './Dialog.tsx'
 import earnedSource from '../../goal-1/evidence/t17-acceptance-24/chrome-r4/course-physical-78.json?raw'
+import committedSource from '../../goal-1/evidence/t17-acceptance-40/interaction-runtime-r354/course-prefix-r1/saved79.json?raw'
+import {projectRun} from '../core/commands.ts'
 
 // Actual App handlers and normal Controller/IDB saves. The existing hook driver
 // does not execute React effects, a DOM, native locks or browser interactions.
@@ -49,25 +51,31 @@ function fire(element:Element,event:'onClick'|'onChange',value?:string){
  if(element.props.disabled)throw Error('ACTUAL_APP_HANDLER_DISABLED')
  if(event==='onChange')action({target:{value}});else action()
 }
-async function normal(name:string,mode:'define'|'license'='define',abort=false,legacy=false){
- const codec=createCampaignCodec(),original=codec.import(earnedSource),factory=new IDBFactory(),locks=new MemoryWriterAccess(),physical=new IndexedDbRunStore({codec,factory,keyRange:IDBKeyRange,name})
+let sourceRunId=''
+beforeAll(()=>{
+ const codec=createCampaignCodec(),original=codec.import(earnedSource),stored=codec.import(committedSource)
  expect(original.origin).toBe('normal');expect(original.revision).toBe(78)
- await physical.importSave(earnedSource,{mode:'create',actorId:'player',importId:name+'-source'})
- let sequence=0
- const bootstrap=new GameController({codec,store:physical,locks,id:()=>name+'-setup-'+(++sequence)})
- await bootstrap.initialize();await bootstrap.continueLife(original.runId)
- const first=bootstrap.snapshot.view!,features=first.features as unknown as PlayFeatures,company=features.course!.businesses.find(b=>b.lifecycle==='operating')!,courseA=features.course!.courses[0]!,firstCase=features.course!.cases.find(c=>c.kind==='first_order')!,licensedCase=features.course!.cases.find(c=>c.kind==='video'&&c.licensed)!
- expect(first.date).toBe('2022-12-08');expect(company.company).toBe(true);expect(company.accountId).not.toBe('personal')
- expect(licensedCase).toBeDefined();expect(features.course!.licenses).toHaveLength(0)
- const definition={businessId:company.id,name:'稍后明确留下的教案C',productId:'intro_recorded',topicId:'image_workflows',edition:'foundation',segment:'local_merchants',cases:[{kind:'first_order',id:firstCase.id}],consent:true}
- // This second draft is earned through the original command, with no injected
- // resources, qualification, AP or financial state and no teaching/enrollment.
- expect((await bootstrap.submit(bootstrap.prepare('DefineCourse',{...definition,name:'后来明确翻看的教案B'}))).status).toBe('saved')
- const raw=bootstrap.exportSaved(),view=bootstrap.snapshot.view!,courseB=(view.features as unknown as PlayFeatures).course!.courses.find(c=>c.name==='后来明确翻看的教案B')!
- expect(view.budget).toEqual(first.budget);expect(view.accounts).toEqual(first.accounts)
- await bootstrap.close()
+ expect(stored.origin).toBe('normal');expect(stored.revision).toBe(79)
+ expect(stored.runId).toBe(original.runId);expect(stored.seed).toBe(original.seed)
+ expect(stored.receipts.slice(0,original.receipts.length)).toEqual(original.receipts)
+ expect(stored.receipts.at(-1)).toMatchObject({kind:'DefineCourse',commandId:'command-u3c1-course-same-setup-1'})
+ expect(codec.export(stored)).toBe(committedSource)
+ const before=projectRun(original),after=projectRun(stored)
+ expect(after.budget).toEqual(before.budget);expect(after.accounts).toEqual(before.accounts)
+ sourceRunId=stored.runId
+})
+async function normal(name:string,mode:'define'|'license'='define',abort=false,legacy=false){
+ const codec=createCampaignCodec(),factory=new IDBFactory(),locks=new MemoryWriterAccess(),physical=new IndexedDbRunStore({codec,factory,keyRange:IDBKeyRange,name})
+ // This prefix was actually saved by the original Controller/Session/Store.
+ // Each consumer still imports/validates it; no AP, case or financial field is injected.
+ await physical.importSave(committedSource,{mode:'create',actorId:'player',importId:name+'-source'})
+ let sequence=1
  const fault=abort?abortAfterHeadWrite(factory,name):null,store=new IndexedDbRunStore({codec,factory:fault?.factory??factory,keyRange:IDBKeyRange,name}),controller=new GameController({codec,store,locks,id:()=>name+'-command-'+(++sequence)})
- await controller.initialize();await controller.continueLife(original.runId)
+ await controller.initialize();await controller.continueLife(sourceRunId)
+ const view=controller.snapshot.view!,features=view.features as unknown as PlayFeatures,company=features.course!.businesses.find(b=>b.lifecycle==='operating')!,courseA=features.course!.courses[0]!,firstCase=features.course!.cases.find(c=>c.kind==='first_order')!,licensedCase=features.course!.cases.find(c=>c.kind==='video'&&c.licensed)!,courseB=features.course!.courses.find(c=>c.name==='后来明确翻看的教案B')!,raw=committedSource
+ expect(view.date).toBe('2022-12-08');expect(company.company).toBe(true);expect(company.accountId).not.toBe('personal')
+ expect(licensedCase).toBeDefined();expect(courseB).toBeDefined();expect(features.course!.licenses).toHaveLength(0)
+ const definition={businessId:company.id,name:'稍后明确留下的教案C',productId:'intro_recorded',topicId:'image_workflows',edition:'foundation',segment:'local_merchants',cases:[{kind:'first_order',id:firstCase.id}],consent:true}
  const targetA:CourseSceneTarget=mode==='define'?{kind:'studio',businessId:company.id}:{kind:'course',businessId:company.id,courseId:courseA.id},targetB:CourseSceneTarget={kind:'course',businessId:company.id,courseId:courseB.id},initialTarget=legacy?undefined:targetA
  const focus=openingFocusFor({view,features:view.features as unknown as PlayFeatures},'course',{accountId:company.accountId,courseTarget:targetA})!
  const preferences=new Map([[seasonFocusPreferenceKey(view.runId),JSON.stringify({version:1,runId:view.runId,quarter:(view.features as unknown as PlayFeatures).workbench.quarter,focus})]])

@@ -25,7 +25,7 @@ const hooks=vi.hoisted(()=>({values:[] as unknown[],index:0}))
 vi.mock('react',async importOriginal=>{
  const actual=await importOriginal<typeof import('react')>()
  const slot=<T,>(initial:()=>T):[T,(value:T|((old:T)=>T))=>void]=>{const i=hooks.index++;if(!(i in hooks.values))hooks.values[i]=initial();return [hooks.values[i] as T,value=>{hooks.values[i]=typeof value==='function'?(value as (old:T)=>T)(hooks.values[i] as T):value}]}
- return {...actual,useState:<T,>(initial:T|(()=>T))=>slot(()=>typeof initial==='function'?(initial as ()=>T)():initial),useRef:<T,>(initial:T)=>slot(()=>({current:initial}))[0],useId:()=> 'teaching-test',useEffect:()=>{}}
+ return {...actual,useCallback:<T,>(callback:T)=>callback,useState:<T,>(initial:T|(()=>T))=>slot(()=>typeof initial==='function'?(initial as ()=>T)():initial),useRef:<T,>(initial:T)=>slot(()=>({current:initial}))[0],useId:()=> 'teaching-test',useEffect:()=>{}}
 })
 type Element=ReactElement<Record<string,unknown>>
 const elements=(value:unknown):Element[]=>Array.isArray(value)?value.flatMap(elements):isValidElement<Record<string,unknown>>(value)?[value,...elements(value.props.children),...elements(value.props.footer)]:[]

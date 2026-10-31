@@ -4,6 +4,7 @@ import {courseSceneProgress,courseTargetReason,courseStageLatestStart,type Cours
 import {useCourseTeachingDraft,type CourseTeachingDraft,type CourseTeachingDraftSlot,type CourseTeachingDraftScope} from './course-teaching-draft.ts'
 import {Dialog} from './Dialog.tsx'
 import {CommandButton} from './CommandButton.tsx'
+import {useCommandPreview} from './use-controller-read.ts'
 import {ClockAdvance} from './ClockAdvance.tsx'
 import {courseStageWaitDate} from './course-stage-wait.ts'
 import {courseWaitDate} from './course-wait-date.ts'
@@ -173,10 +174,11 @@ export function CourseTeachingChoice({p,target,onTarget,onInspect,onToday,onLife
  const command=courseTeachingDraftCommand(p,draft,slot,current),co=s?.cohort,a=s?.audience
  const enrollmentBatch=co?courseEnrollmentBatch(co,draft.personIds):null
  let enrollmentQuote:{receivedFen:number;protectedFen:number}|null=null
- if((page==='enroll'||page==='enroll-people')&&command?.kind==='EnrollCourseAudience'&&!lock)try{
-  const preview=p.controller.preview({runId:p.view.runId,actorId:'player',commandId:'course-enrollment-display',expectedRevision:p.view.revision,kind:command.kind,payload:command.payload})
+ const enrollmentPreview=useCommandPreview(p.controller,p.view,(page==='enroll'||page==='enroll-people')&&command?.kind==='EnrollCourseAudience'&&!lock?{runId:p.view.runId,actorId:'player',commandId:'course-enrollment-display',expectedRevision:p.view.revision,kind:command.kind,payload:command.payload}:null)
+ if((page==='enroll'||page==='enroll-people')&&command?.kind==='EnrollCourseAudience'&&!lock){
+  const preview=enrollmentPreview.preview
   if(preview.allowed&&typeof preview.receivedPrepaymentFen==='number'&&typeof preview.protectedIncreaseFen==='number')enrollmentQuote={receivedFen:preview.receivedPrepaymentFen,protectedFen:preview.protectedIncreaseFen}
- }catch{/* The original confirmation still owns eligibility and payment. */}
+ }
  const ordinaryDate=progress?.wait?.date??p.features.workbench.progression.nextQuarterDate??p.features.workbench.progression.nextDate,safeDate=progress?.phase==='course-stage-needed'?courseStageWaitDate(p.features.workbench,p.view.date,progress,p.requestWait!==undefined):progress?.wait?courseWaitDate(p.features.workbench,p.view.date,ordinaryDate,p.requestWait!==undefined):p.features.workbench.pause===null&&!p.features.workbench.progression.requiresDelivery?playableAdvanceDate(p.features.workbench,p.view.date,ordinaryDate):null
  const stoppedJob=stop?.source===JSON.stringify(current)?p.view.operations?.jobs.find(j=>j.id===stop.jobId&&j.businessId===s?.business.id&&['planned','running'].includes(j.status)):undefined
  const records:CourseSceneTarget[]=p.features.course?[...p.features.course.courses.filter(c=>c.status==='ready').map(c=>({kind:'course' as const,businessId:c.businessId,courseId:c.id})),...p.features.course.audiences.map(a=>({kind:'audience' as const,businessId:p.features.course!.courses.find(c=>c.id===a.courseId)!.businessId,courseId:a.courseId,audienceId:a.id})),...p.features.course.cohorts.map(co=>({kind:'cohort' as const,businessId:p.features.course!.courses.find(c=>c.id===co.courseId)!.businessId,courseId:co.courseId,cohortId:co.id}))].filter(t=>courseTargetReason(p.features.course,t,context(p))===null):[]

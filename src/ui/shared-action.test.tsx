@@ -7,6 +7,7 @@ import {IndexedDbRunStore} from '../persistence/indexeddb.ts'
 import {MemoryWriterAccess} from '../testing/memory-writer-access.ts'
 import {abortAfterHeadWrite} from '../testing/abort-after-write.ts'
 import type {GamePanelProps,PlayFeatures} from './game-types.ts'
+import type {GameControllerPort} from '../application/game-controller-port.ts'
 import {makeSharedAction,type SharedActionBinding} from './shared-action.ts'
 import {CommandButton} from './CommandButton.tsx'
 import {ClockAdvance,type ClockActionBinding} from './ClockAdvance.tsx'
@@ -15,7 +16,7 @@ import {ClockAdvance,type ClockActionBinding} from './ClockAdvance.tsx'
 // not emulated here; native Space/focus and visual acceptance remain separate.
 vi.mock('react',async importOriginal=>{
  const actual=await importOriginal<typeof import('react')>()
- return {...actual,useRef:<T,>(current:T)=>({current}),useMemo:<T,>(read:()=>T)=>read(),useEffect:()=>{}}
+ return {...actual,useState:<T,>(initial:T|(()=>T))=>[typeof initial==='function'?(initial as ()=>T)():initial,()=>{}] as const,useCallback:<T,>(callback:T)=>callback,useRef:<T,>(current:T)=>({current}),useMemo:<T,>(read:()=>T)=>read(),useEffect:()=>{}}
 })
 type Element=ReactElement<Record<string,unknown>>
 function elements(node:unknown):Element[]{
@@ -131,6 +132,15 @@ describe('readonly choices and an actual pending write',()=>{
   old.activate();expect(f.request).not.toHaveBeenCalled()
   const during=makeSharedAction(f.props(),'仍在保存',f.request,{allowReadOnly:true})
   expect(during.disabled).toBe(true);expect(during.reason).toContain('正在保存');during.activate();expect(f.request).not.toHaveBeenCalled()
+  const p=f.props(),remote=new Proxy(f.controller,{get(target,key){if(key==='asynchronous')return true;if(key==='preview')return()=>({allowed:false,reasonCodes:['SAVE_IN_PROGRESS'],actionPoints:0,upfrontCostFen:0,releasedFen:0});const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value}}) as GameControllerPort
+  const options={...p,controller:remote,kind:'AdvanceTime',payload:{date:'2020-01-05'},label:'等待原安排'}
+  const remoteButtons=elements(CommandButton(options)),localButtons=elements(CommandButton({...options,controller:f.controller}))
+  expect(remoteButtons.some(e=>e.type==='small'&&e.props.className==='reason')).toBe(false)
+  expect(localButtons.some(e=>e.type==='small'&&e.props.className==='reason')).toBe(true)
+  for(const button of remoteButtons.filter(e=>e.type==='button')){expect(button.props.disabled).toBe(true);if(typeof button.props.onClick==='function')button.props.onClick()}
+  expect(f.request).not.toHaveBeenCalled()
+  const funds=new Proxy(remote,{get(target,key){if(key==='preview')return()=>({allowed:false,reasonCodes:['INSUFFICIENT_CASH'],actionPoints:0,upfrontCostFen:0,releasedFen:0});return Reflect.get(target,key,target)}})
+  expect(elements(CommandButton({...options,controller:funds})).some(e=>e.type==='small'&&e.props.className==='reason')).toBe(true)
   ;(f.store as HeldStore).release.resolve();expect((await pending).status).toBe('saved');pending=null
  })
 })

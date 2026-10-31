@@ -13,6 +13,7 @@ import './ui/game-clarity.css'
 import './ui/scene-encounters.css'
 import './ui/opening-play.css'
 import './ui/night-journal.css'
+import './ui/runtime-feedback.css'
 
 const root = document.getElementById('root')
 if (!root) throw new Error('Application root is missing')

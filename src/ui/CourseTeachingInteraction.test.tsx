@@ -28,7 +28,7 @@ vi.mock('react',async importOriginal=>{
   if(!(index in hooks.values))hooks.values[index]=typeof initial==='function'?(initial as ()=>T)():initial
   return [hooks.values[index] as T,(value:T|((old:T)=>T))=>{hooks.values[index]=typeof value==='function'?(value as (old:T)=>T)(hooks.values[index] as T):value}] as const
  }
- return {...actual,useState:state,useRef:<T,>(initial:T)=>state(()=>({current:initial}))[0],useId:()=> 'course-teaching-interaction',useEffect:()=>{}}
+ return {...actual,useCallback:<T,>(callback:T)=>callback,useState:state,useRef:<T,>(initial:T)=>state(()=>({current:initial}))[0],useId:()=> 'course-teaching-interaction',useEffect:()=>{}}
 })
 type Element=ReactElement<Record<string,unknown>>
 const elements=(value:unknown):Element[]=>Array.isArray(value)?value.flatMap(elements):isValidElement<Record<string,unknown>>(value)?[value,...elements(value.props.children),...elements(value.props.footer)]:[]

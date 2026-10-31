@@ -28,7 +28,7 @@ const hooks=vi.hoisted(()=>({values:[] as unknown[],index:0}))
 vi.mock('react',async importOriginal=>{
  const actual=await importOriginal<typeof import('react')>()
  // This handler-only harness follows SSR effect semantics; mounted effects are checked in Chrome.
- return {...actual,useId:()=> 'focus-book-handler',useEffect:()=>{},useState:<T,>(initial:T|(()=>T))=>{
+ return {...actual,useRef:<T,>(current:T)=>({current}),useCallback:<T,>(callback:T)=>callback,useId:()=> 'focus-book-handler',useEffect:()=>{},useState:<T,>(initial:T|(()=>T))=>{
   const index=hooks.index++
   if(!(index in hooks.values))hooks.values[index]=typeof initial==='function'?(initial as ()=>T)():initial
   return [hooks.values[index] as T,(value:T|((previous:T)=>T))=>{hooks.values[index]=typeof value==='function'?(value as (previous:T)=>T)(hooks.values[index] as T):value}]

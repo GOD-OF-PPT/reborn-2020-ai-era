@@ -216,10 +216,4 @@ export class RunSession {
   }
 }
 
-export function guardUnsavedClose(session: RunSession, target: Window = globalThis.window): () => void {
-  const handler = (event: BeforeUnloadEvent) => {
-    if (session.needsUnsavedWarning) { event.preventDefault(); event.returnValue = '' }
-  }
-  target.addEventListener('beforeunload', handler)
-  return () => target.removeEventListener('beforeunload', handler)
-}
+export {guardUnsavedClose} from './session-close-guard.ts'

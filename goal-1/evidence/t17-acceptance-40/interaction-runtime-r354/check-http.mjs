@@ -1,0 +1,6 @@
+import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';
+const root='goal-1/evidence/t17-acceptance-40/interaction-runtime-r354',kind=process.argv[2],revision=process.argv[3],hash=value=>createHash('sha256').update(value).digest('hex');
+if(!['native','main'].includes(kind)||!/^\d+$/.test(revision??'')||fs.existsSync(root+'/stopped.json'))throw Error('ACTIVE_EXPLICIT_KIND_AND_REVISION_REQUIRED');
+const source=JSON.parse(fs.readFileSync(root+'/'+kind+'-serve-artifact'+revision+'.json','utf8')),origin=kind==='main'?'http://127.0.0.1:5415/':'http://127.0.0.1:5527/',rows=[];
+for(const row of source.files){const local=fs.readFileSync(path.join(source.target,row.path));if(hash(local)!==row.sha256)throw Error('SERVE_SOURCE_CHANGED');const response=await fetch(new URL(row.path,origin)),body=Buffer.from(await response.arrayBuffer());if(response.status!==200||body.length!==row.bytes||hash(body)!==row.sha256)throw Error('HTTP_BYTES_DIFFER:'+row.path);rows.push({...row,status:200})}
+const report={at:new Date().toISOString(),origin,target:source.target,sourceRevision:Number(revision),allServedBytesExact:true,files:rows,compatibility:0};fs.writeFileSync(root+'/'+kind+'-http-source'+revision+'.json',JSON.stringify(report,null,2)+'\n',{flag:'wx'});console.log({origin,files:rows.length,allServedBytesExact:true});

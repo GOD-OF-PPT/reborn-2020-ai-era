@@ -18,6 +18,10 @@ type Source=Pick<GamePanelProps,'controller'|'view'>
 
 function sourceReason(p:Source,allowReadOnly=false):string|null{
  const snapshot=p.controller.snapshot,current=snapshot.view
+ if(p.controller.runtimeFailed){
+  if(allowReadOnly&&current===p.view&&current.runId===p.view.runId&&current.revision===p.view.revision)return null
+  return '这次操作已中断，请先核对本机记录。'
+ }
  if(snapshot.busy||p.view.busy||current?.busy||p.view.saveStatus==='saving'||current?.saveStatus==='saving')return '正在保存，请等这次记录完成。'
  if(p.view.hasCandidate||current?.hasCandidate||p.view.saveStatus==='unsaved'||current?.saveStatus==='unsaved')return '这一步还未保存，请先处理原候选。'
  if(p.view.saveStatus==='conflict'||current?.saveStatus==='conflict')return '存档冲突尚未处理，请先重新读取。'

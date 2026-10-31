@@ -1,0 +1,1 @@
+原固定78由362原Controller/Session/fakeIDB真实执行同首例u3c1-course-same-setup-1 DefineCourse第二课程B，实际存79。Controller/物理规范原文859444B/SHA44cde9e2d51a75024af4039f8a2d7819653b6302f18d29a3a9234d563919d548逐字同；原钱/AP保，原351同一命令从原78重放完整wire同。51003实际exit0/4771ms，1作者保存/0Create/0Native；非完整Create79或正式性能。此真正规范输入可依AGENTS65供单元原消费者独立导入，不把未存提案导入当进度。旧原78/seed/规则/资格不改，后续正常资本仍原saved305单一路径，不能拼接。

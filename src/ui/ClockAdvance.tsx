@@ -4,6 +4,7 @@ import {CommandButton} from './CommandButton.tsx'
 import {moneyText} from './game-text.ts'
 import type {SharedActionBinding} from './shared-action.ts'
 import {journeyIntent} from './journey-intent.ts'
+import {useClockRead} from './use-controller-read.ts'
 
 export interface ClockActionBinding extends SharedActionBinding{readonly caption:string;readonly mainNode:ReactNode;readonly reviewNode:ReactNode}
 
@@ -11,13 +12,17 @@ export interface ClockActionBinding extends SharedActionBinding{readonly caption
 export function ClockAdvance({p,date,label,room=false,renderAction,showReason=true}:{p:GamePanelProps;date:string;label:string;room?:boolean;renderAction?:((binding:ClockActionBinding)=>ReactNode)|undefined;showReason?:boolean}){
  const root=useRef<HTMLDivElement>(null)
  const busy=p.controller.snapshot.busy
+ const intent=journeyIntent(p.view,'AdvanceTime',{date},label)
+ const command={runId:p.view.runId,actorId:'player',commandId:'display-preview',expectedRevision:p.view.revision,kind:intent.kind,payload:intent.payload}
+ const remote=useClockRead(p.controller,p.view,command,!!p.controller.asynchronous&&!busy&&!p.view.busy&&!p.view.readOnly&&!p.view.hasCandidate&&p.view.saveStatus==='saved'&&p.controller.snapshot.view===p.view,root)
  const projection=useMemo(()=>{
   const v=p.view
   if(busy||v.busy||v.readOnly||v.hasCandidate||v.saveStatus!=='saved'||p.controller.snapshot.view!==v)return null
+  if(p.controller.asynchronous)return remote&&remote.runId===v.runId&&remote.sourceRevision===v.revision&&remote.from===v.date?remote:null
   const intent=journeyIntent(v,'AdvanceTime',{date},label)
   const command={runId:v.runId,actorId:'player',commandId:'display-preview',expectedRevision:v.revision,kind:intent.kind,payload:intent.payload}
   try{if(!p.controller.preview(command).allowed)return null;const result=p.controller.clockCommitments(command);return result.runId===v.runId&&result.sourceRevision===v.revision&&result.from===v.date?result:null}catch{return null}
- },[p.controller,p.view,date,label,busy])
+ },[p.controller,p.view,date,label,busy,remote])
  const outflows=projection?.accounts.flatMap(a=>a.outflows.map(f=>({accountId:a.accountId,amountFen:-f.amountFen})))??[]
  const grouped=new Map<string,number>()
  for(const outflow of outflows)grouped.set(outflow.accountId,(grouped.get(outflow.accountId)??0)+outflow.amountFen)

@@ -3,7 +3,8 @@ import {Dialog} from './Dialog.tsx'
 import {lastViewedLife,selectContinuation} from './continuation.ts'
 import { useEffect,useRef,useState,useId } from 'react'
 import { BOOTSTRAP_CONTENT } from '../content/bootstrap.ts'
-import type { GameController,GameSnapshot } from '../application/game-controller.ts'
+import type {GameSnapshot} from '../application/game-controller.ts'
+import type {GameControllerPort as GameController} from '../application/game-controller-port.ts'
 import type { PlayerProfile } from '../core/player-profile.ts'
 import { backgroundNames,wishes,approaches,moneyText } from './game-text.ts'
 const wishThoughts={financial_independence:'让手里的钱，换来选择的余地。',own_brand:'留下能被人记住的作品与名字。',important_technology:'亲手参与一些值得的变化。',autonomy:'工作之外，也有自己想过的日子。'} as const
@@ -19,7 +20,7 @@ export function Home({controller,state,onStorage,onExport}:{controller:GameContr
  const loading=state.phase==='loading'||!controller
  return <main id="main-content" tabIndex={-1} className={'home-layout home-step-'+step}>
  <section className="home-story cinematic-room"><div className="home-copy"><p className="eyebrow">2020 / 你的故事重新开始</p><h1>重生2020<span>AI时代</span></h1><p className="premise">那时，一切还没有发生。<br/>这一次，你想怎样生活？</p><p className="home-intro">保留一份工作，做一点自己的事。<br/>未来的片段还模糊，眼前的选择由你决定。</p>
- {step==='room'?<><div className="home-actions">{latest?<button type="button" className="primary" disabled={!ready} onClick={()=>{void controller?.continueLife(latest.runId).catch(()=>{})}}>继续这段人生</button>:null}<button type="button" className={latest?'room-secondary':'primary'} disabled={loading||state.busy} onClick={()=>setStep('identity')}>开始一段新人生</button></div>{latest?<p className="continue-caption">{backgroundNames[latest.backgroundId as keyof typeof backgroundNames]??latest.backgroundId} · {latest.date} · 第{latest.revision}次提交</p>:null}{loading?<p className="continue-caption" role="status">正在读取本机存档…</p>:null}<div className="home-footnotes"><span>每季四点，由你安排</span><span>五条不同的财富路线</span><span>储蓄、工作，也关乎生活</span></div></>:null}
+ {step==='room'?<><div className="home-actions">{latest?<button type="button" className="primary" disabled={!ready} onClick={()=>{void controller?.continueLife(latest.runId).catch(()=>{})}}>继续这段人生</button>:null}<button type="button" className={latest?'room-secondary':'primary'} disabled={loading||state.busy} onClick={()=>setStep('identity')}>开始一段新人生</button></div>{latest?<p className="continue-caption">{backgroundNames[latest.backgroundId as keyof typeof backgroundNames]??latest.backgroundId} · {latest.date} · 第{latest.revision}次提交</p>:null}{loading||state.busy?<p className="continue-caption" role="status">{loading?"正在读取本机存档…":"正在翻开这段人生…"}</p>:null}<div className="home-footnotes"><span>每季四点，由你安排</span><span>五条不同的财富路线</span><span>储蓄、工作，也关乎生活</span></div></>:null}
  </div></section>
  <section className="entry-card" hidden={step==='room'}><p className="eyebrow">{step==='identity'?'01 / 你从哪里重新开始':step==='wish'?'02 / 这一次，在意什么':'03 / 先留一段日子'}</p><h2 ref={stepHeading} tabIndex={-1}>{step==='identity'?'还是那个熟悉的2020年。':step==='wish'?'这一次，想把什么留给自己？':'记得趋势，不是答案'}</h2>
  <ScreenBook key={step} label="人生的起点"><form id={entryForm} onSubmit={event=>{event.preventDefault();if(step==='identity'){setStep('wish');return}if(step==='wish'){setStep('approach');return}if(controller&&ready)void controller.newLife({backgroundId,playerProfile:{wishId,approach},...(seed?{seed}:{})}).catch(()=>{})}}>

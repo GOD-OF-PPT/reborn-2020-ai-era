@@ -1,0 +1,18 @@
+.runtime-feedback {
+ position: fixed;
+ left: 50%;
+ bottom: 1.3rem;
+ z-index: 20;
+ transform: translateX(-50%);
+ display: flex;
+ align-items: center;
+ gap: 1rem;
+ padding: .7rem 1rem;
+ border: 1px solid rgba(208, 181, 129, .45);
+ background: rgba(9, 26, 31, .96);
+ color: #f1dfbd;
+ box-shadow: 0 .4rem 1.5rem rgba(0, 0, 0, .28);
+ white-space: nowrap;
+}
+.runtime-feedback button {padding: .2rem .5rem; border-bottom: 1px solid currentColor; background: transparent; color: inherit;}
+.command[data-checking="true"] button::after {content: "…"; margin-left: .35em;}

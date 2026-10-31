@@ -36,6 +36,7 @@ import {DayThreadAction} from './DayThreadAction.tsx'
 import {VideoThreadAction} from './VideoThreadAction.tsx'
 import {videoPaperFor} from './video-continuity.ts'
 import {dayPerspectiveCurrent,type DayPerspective} from './day-perspective.ts'
+import {useCommandPreview} from './use-controller-read.ts'
 import {makeSharedAction,type SharedActionBinding} from './shared-action.ts'
 import './video-scene-object.css'
 import {CourseThreadAction} from './CourseThreadAction.tsx'
@@ -205,8 +206,8 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  }
  const canChooseOrder=!interrupted&&!requiresChoice&&!legacy&&market&&(!thread.wait&&!thread.command)&&thread.outcome!=='actual'
  const primaryIntent=moment.command??(free&&thread.stage==='choose'?{kind:'StartLifeWork',payload:{kind:'rest',personId:null,reference:null}}:null)
- let primaryAllowed=canChooseOrder
- if(primaryIntent)try{primaryAllowed=p.controller.preview({runId:p.view.runId,actorId:'player',commandId:'display-preview',expectedRevision:p.view.revision,kind:primaryIntent.kind,payload:primaryIntent.payload}).allowed}catch{primaryAllowed=false}
+ const primaryPreview=useCommandPreview(p.controller,p.view,primaryIntent?{runId:p.view.runId,actorId:'player',commandId:'display-preview',expectedRevision:p.view.revision,kind:primaryIntent.kind,payload:primaryIntent.payload}:null)
+ const primaryAllowed=primaryIntent?primaryPreview.preview.allowed:canChooseOrder
  const resultWithoutNext=!moment.command&&!moment.wait&&(thread.outcome==='actual'||thread.outcome==='non-success')
  const noAvailableNewAction=p.view.budget.available===0&&!moment.wait&&(!primaryAllowed||free||market)
  const optionalCourseDate=!interrupted&&!unknownFocus&&!legacy&&canWait&&!moment.wait&&course?courseStageWaitDate(w,p.view.date,courseProgress,p.requestWait!==undefined):null

@@ -15,7 +15,7 @@ export interface GameStart {readonly backgroundId:string;readonly playerProfile:
 export { INITIAL_GAME_SNAPSHOT } from './game-snapshot.ts'
 export type { GameSnapshot } from './game-snapshot.ts'
 import { INITIAL_GAME_SNAPSHOT,type GameSnapshot } from './game-snapshot.ts'
-interface ControllerOptions {readonly codec?:RunCodec;readonly store:RunStore&{listRuns():Promise<readonly RunListing[]>;close?():Promise<void>};readonly locks:WriterAccess;readonly id?:()=>string;readonly guard?:(session:RunSession)=>()=>void}
+interface ControllerOptions {readonly codec?:RunCodec;readonly store:RunStore&{listRuns():Promise<readonly RunListing[]>;close?():Promise<void>};readonly locks:WriterAccess;readonly id?:()=>string;readonly guard?:(session:RunSession)=>()=>void;readonly yieldControl?:()=>Promise<void>}
 const code=(error:unknown)=>error instanceof RuleError?error.code:'LOCAL_STORAGE_FAILED'
 const endActions=new Set(['StopHengxingAuthority','InterruptStoryWork','AcknowledgeStoryPause','ConfirmRiskAssessment','DeclareRiskLiabilities','ResolveRiskCase','DeclineRiskClaim','ShareRiskFindings','StartRiskTask','ReadNews','FavoriteMemory','SetPrivateNote','CancelStockOrder','StopMarketResearch','CancelAction','InterruptPreparation','InterruptJob','CancelContract','QuitWork','WindDownBusiness','CloseBusiness','PauseBusiness','DismissWorker','PayObligation','AcknowledgeCashGap','DeclineOffer','SkipOffer','SubmitDelivery','ExitVideoCommission','AbandonVideoWork','UnlistVideo','CollectVideoSettlement','SubmitVideoCommission','ReviewVideoOutput','PauseNewEnrollment','StopCourseSales','RetireCourse','RefundCourseLearners','PauseRelayTraffic','StopRelayStation','RefundRelayBalance','RefundRelaySupplier','CollectRelayReceivable','CollectRelayDue','CorrectRelayUsage','CorrectRelayPeriod','CloseRelayCustomer','StopRelayPeriod','AcknowledgeRelayMarket','CancelRoutinePlan','CancelRoutineStep','StopEcosystemService','CancelEcoContract','SubmitEcoDelivery','CollectEcoReceivable','RejectEquityInvitation','DeclineEquityTerms','CollectEquityExit'])
 
@@ -75,7 +75,7 @@ export class GameController {
   const flight=Promise.resolve().then(()=>executePublicWait(command,{
    current:()=>{requireRule(this.#session===session&&this.#state.view?.runId===command.runId,'RUN_NOT_FOUND');return this.#state.view!},
    preview:step=>this.#rangeBlocks(step)?{allowed:false,reasonCodes:['PREVIEW_RANGE_ENDED'],actionPoints:0,upfrontCostFen:0,releasedFen:0}:session.preview(step),
-   submit:async step=>{const result=await session.submit(step);this.#set({error:result.reasonCodes[0]??null,notice:result.status==='saved'?result.receipt.summary:null});return result},
+   submit:async step=>{const result=await session.submit(step);this.#set({error:result.reasonCodes[0]??null,notice:result.status==='saved'?result.receipt.summary:null});if(this.#options.yieldControl)await this.#options.yieldControl();return result},
    stopping:()=>this.#timeWaitStop||this.#closed||this.#session!==session,
   })).then(result=>{this.#lastTimeWait={session,commandId:command.commandId,signature};this.#set({error:result.status==='rejected'||result.status==='unsaved'||result.status==='conflict'?result.reasonCodes[0]??null:null});return result}).finally(()=>{this.#timeWaiting=false;this.#timeWaitFlight=null;this.#timeWaitScope=null;this.#set({})})
   this.#timeWaitFlight=flight;this.#set({error:null})
@@ -91,7 +91,7 @@ export class GameController {
    const run=this.#codec.import(session.exportSaved()),plan=run.routines?.plans.find(p=>p.id===planId);requireRule(plan,'ROUTINE_PLAN_NOT_FOUND');if(plan.status!=='confirmed')break;const step=plan.steps.find(s=>s.status==='pending');if(!step)break
    const command:CommandEnvelope={runId:run.runId,actorId:run.actorId,expectedRevision:run.revision,commandId:'routine-step-'+hashValue([run.runId,planId,step.id]).slice(0,32),kind:'RunRoutineStep',payload:{planId,stepId:step.id}}
    if(this.#rangeBlocks(command)){this.#set({error:'PREVIEW_RANGE_ENDED'});break}
-   const result=await session.submit(command);this.#set({error:result.reasonCodes[0]??null,notice:result.status==='saved'||result.status==='duplicate'?result.receipt.summary:null});if(result.status!=='saved'&&result.status!=='duplicate')break;commandsSaved++
+   const result=await session.submit(command);this.#set({error:result.reasonCodes[0]??null,notice:result.status==='saved'||result.status==='duplicate'?result.receipt.summary:null});if(this.#options.yieldControl)await this.#options.yieldControl();if(result.status!=='saved'&&result.status!=='duplicate')break;commandsSaved++
    const saved=this.#codec.import(session.exportSaved()).routines!.plans.find(p=>p.id===planId)!;if(saved.steps.find(s=>s.id===step.id)!.status==='completed')stepsExecuted++;if(!batch||saved.status!=='confirmed')break
   }return {stepsExecuted,commandsSaved}}
   finally{this.#routineRunning=false;this.#set({})}
