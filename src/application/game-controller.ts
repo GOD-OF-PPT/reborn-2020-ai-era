@@ -84,7 +84,9 @@ export class GameController {
   this.#timeWaitFlight=flight;this.#set({error:null})
   return flight
  }
- stopWaiting(){if(this.#timeWaiting&&!this.#timeWaitStop){this.#timeWaitStop=true;this.#set({notice:'先停下来，已经发生的日子保留。'})}}
+ // Stop is a control request. Its processing state is separate from the
+ // narrative result that can only be produced after the checkpoint commits.
+ stopWaiting(){if(this.#timeWaiting&&!this.#timeWaitStop){this.#timeWaitStop=true;this.#set({})}}
  /** Both UI modes dispatch the same deterministic envelopes, one durable command at a time. */
  async runRoutine(planId:string,batch=true){
   requireRule(this.#session&&!this.#libraryBusy&&!this.#routineRunning&&!this.#timeWaiting,'SAVE_IN_PROGRESS');let stepsExecuted=0,commandsSaved=0;this.#routineRunning=true;this.#routineStopRequested=false;this.#set({error:null})

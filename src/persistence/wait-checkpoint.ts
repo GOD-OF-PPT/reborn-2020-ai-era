@@ -1,8 +1,9 @@
-import {assertJsonInput,copyJson} from '../core/json-input.ts'
+import {assertJsonInput,inspectJsonInput,copyJson} from '../core/json-input.ts'
 import {canonicalJson} from '../core/identity.ts'
 import {hashValue} from '../core/hash.ts'
 import {requireRule} from '../core/errors.ts'
 import type {CommandEnvelope,CommandReceipt,GameRun,ProposedRun} from '../core/run-types.ts'
+import {MAX_LOGICAL_SAVE_NODES} from './save-limits.ts'
 
 export const MAX_WAIT_CHECKPOINT_STEPS=8
 export interface WaitCheckpoint {
@@ -27,7 +28,9 @@ export function captureWaitCheckpoint(input:WaitCheckpoint){
  assertJsonInput(rawCommands);requireRule(Array.isArray(rawCommands)&&rawCommands.length>=1&&rawCommands.length<=MAX_WAIT_CHECKPOINT_STEPS,'INVALID_WAIT_CHECKPOINT')
  const commands=copyJson(rawCommands) as CommandEnvelope[]
  const nextRun=own(proposal,'nextRun') as GameRun,receipt=own(proposal,'receipt') as CommandReceipt,previousRevision=own(proposal,'previousRevision')
- for(const run of [baseRun,previousRun,nextRun])assertJsonInput(run)
+ // Each history is a save-domain value. The small command payload budget
+ // above still applies to envelopes, independently of the existing save cap.
+ for(const run of [baseRun,previousRun,nextRun])inspectJsonInput(run,MAX_LOGICAL_SAVE_NODES)
  requireRule(own(proposal,'status')==='proposed','INVALID_WAIT_CHECKPOINT')
  const identity=(run:GameRun)=>[run.runId,run.actorId,run.personalAccountId,run.backgroundId,run.origin,run.seed,run.playerProfile,run.versions]
  requireRule(same(identity(baseRun),identity(previousRun))&&same(identity(baseRun),identity(nextRun)),'WAIT_CHECKPOINT_SOURCE_MISMATCH')

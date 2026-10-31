@@ -1,10 +1,11 @@
 import {quarterOf} from '../core/calendar.ts'
 import type {GamePanelProps} from './game-types.ts'
 import type {OpeningFocus,PlayerThreadView} from './player-thread.ts'
-import {relaySceneProgress} from './relay-scene-progress.ts'
+import {relaySceneProgress,relayAuditableMeters} from './relay-scene-progress.ts'
 import {resolveRelaySceneTarget,relayTargetEntity,type RelaySceneTarget,type RelaySceneContext} from './relay-scene-target.ts'
 import {relayJourneyAction,relayJourneyScene} from './relay-journey.ts'
 import {relayTicketAudit} from './relay-ticket-command.ts'
+import {relayPrepaidSupportBrief} from './relay-support-settlement.ts'
 
 type Input=Pick<GamePanelProps,'view'|'features'>
 export type RelayOpeningFocus=Extract<OpeningFocus,{kind:'relay'}>
@@ -79,7 +80,10 @@ export function relayPlayerScene(p:Input,f:RelayOpeningFocus):Scene{
  const progress=relaySceneProgress(p.features.relay,p.view.date,f.relayTarget,relaySceneContext(p,f.accountId))!,r=resolved(p,f)
  const object=r.period?`${r.period.from}—${r.period.to}的服务约定`:r.customer?'这位客户的服务与原账':r.audience?'这次获客的实际回信':r.application?'供应方的申请回信':f.relayTarget?'本站的服务单与接线盒':'桌边的中转服务资料'
  const decision=!progress.historical&&!progress.wait&&!progress.command?relayJourneyScene(relayJourneyAction({...p,accountId:f.accountId},f.relayTarget)):null
- return {stage:'relay-'+progress.phase,object,title:decision?.title??progress.title,line:decision?.line??progress.line,detail:decision?(r.audience||r.customer?progress.line:''):progress.choice.line===progress.line?'':progress.choice.line,outcome:progress.outcome,resultRefs:progress.resultRefs,inspect:{screen:'relay',label:progress.choice.label,target:{accountId:f.accountId,relayTarget:f.relayTarget,openRecord:true,...(progress.recordId?{recordId:progress.recordId}:{})}},...(progress.command?{command:{...progress.command,label:progress.choice.label}}:{}),...(progress.wait?{wait:progress.wait}:{})}
+ const prepaidResult=progress.phase==='audit-ready'&&!progress.historical&&f.relayTarget?.kind==='period'&&!f.relayTarget.jobId&&!f.relayTarget.meterId?relayPrepaidSupportBrief({...p,accountId:f.accountId},f.relayTarget):null
+ const pendingMeters=prepaidResult&&p.features.relay&&r.period?relayAuditableMeters(p.features.relay,r.period.id):[]
+ const compact=prepaidResult&&pendingMeters.length>0&&new Set(pendingMeters.map(m=>m.id)).size===pendingMeters.length
+ return {stage:'relay-'+progress.phase,object,title:compact?'支持告一段落，今天怎么过？':decision?.title??progress.title,line:compact?pendingMeters.length+'条用量记录还没核实。继续查账，还是先过自己的日子？':decision?.line??progress.line,detail:compact?'':decision?(r.audience||r.customer?progress.line:''):progress.choice.line===progress.line?'':progress.choice.line,outcome:progress.outcome,resultRefs:progress.resultRefs,inspect:{screen:'relay',label:progress.choice.label,target:{accountId:f.accountId,relayTarget:f.relayTarget,openRecord:true,...(progress.recordId?{recordId:progress.recordId}:{})}},...(progress.command?{command:{...progress.command,label:progress.choice.label}}:{}),...(progress.wait?{wait:progress.wait}:{})}
 }
 
 /** New public IDs follow only a committed original receipt, never a candidate or a balance delta. */

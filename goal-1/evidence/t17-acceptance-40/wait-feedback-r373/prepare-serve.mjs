@@ -1,7 +1,7 @@
 import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';
 const root='goal-1/evidence/t17-acceptance-40/wait-feedback-r373',kind=process.argv[2],revision=process.argv[3],hash=value=>createHash('sha256').update(value).digest('hex');
 if(!['native','main'].includes(kind)||!/^\d+$/.test(revision??'')||fs.existsSync(root+'/stopped.json'))throw Error('ACTIVE_EXPLICIT_KIND_AND_REVISION_REQUIRED');
-const target=path.resolve('.delivery/'+(kind==='main'?'t17-u6-main-r':'t17-u6-runtime-native-r')+revision),old=path.resolve(kind==='main'?'.delivery/t17-u6-main-r372':'.delivery/t17-u6-runtime-native-r372'),current=path.resolve('.delivery/t17-u6-wait-r'+revision+'/dist-u6-review');
+const target=path.resolve('.delivery/'+(kind==='main'?'t17-u6-main-r':'t17-u6-runtime-native-r')+revision),old=path.resolve(kind==='main'?'.delivery/t17-u6-main-r372':'.delivery/t17-u6-runtime-native-r396'),current=path.resolve('.delivery/t17-u6-wait-r'+revision+'/dist-u6-review');
 if(fs.existsSync(target))throw Error('FRESH_SERVE_TARGET_REQUIRED');
 const rows=[],walk=(base,part='')=>{for(const name of fs.readdirSync(path.join(base,part))){const relative=path.join(part,name),full=path.join(base,relative),stat=fs.lstatSync(full);if(stat.isDirectory())walk(base,relative);else if(stat.isFile())rows.push({path:relative,bytes:stat.size,sha256:hash(fs.readFileSync(full))});else throw Error('REGULAR_BUILD_FILES_REQUIRED')}};
 fs.cpSync(current,target,{recursive:true});const preserved=[];

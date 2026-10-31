@@ -18,7 +18,7 @@ it('shows the actual1514.56 known commitment separately from clock0 and does not
  const html=renderToStaticMarkup(<ClockConfirmationFacts clock={clock} newCostFen={preview.upfrontCostFen} newActionPoints={preview.actionPoints} accountName={id=>id==='personal'?'个人账户':'原中转账户'}/>)
  expect(html).toContain('已有安排的本段已知待付');expect(html).toContain('原中转账户');expect(html).toContain('¥1,514.56')
  expect(html).not.toContain('¥1,524.56');expect(html).not.toContain('¥1,527.89')
- expect(html).toContain('推进本身新增费用');expect(html).toContain('¥0');expect(html).toContain('推进本身新增行动');expect(html).toContain('原预留使用行动')
+ expect(html).toContain('推进新增¥0 / 0点');expect(html).toContain('原预留使用行动')
  expect(html).toContain('不另占一份');expect(html).toContain('2025-04-01');expect(html).toContain('2025-04-02')
  expect(controller.exportSaved()).toBe(before);expect(before).toBe(raw)
 })

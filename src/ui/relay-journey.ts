@@ -50,7 +50,7 @@ export function relayJourneyAction(p:Input,target:RelaySceneTarget|null|undefine
  const progress=relaySceneProgress(v,p.view.date,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})
  if(target.kind==='period'){
   if(target.jobId||target.meterId)return choose('record',target.meterId?'翻开这一张原票，再决定怎样回应':'核对这一份原任务与留下的约定','只翻同一对象；复核、更正、中断与收款仍分别由你确认。')
-  if(progress?.intent==='audit')return choose('audit','给这期原账，安排一次独立核对','显选原资源和日期，只复核已经发生的记录。')
+  if(progress?.intent==='audit')return choose('audit','安排独立核对','先选人手与日期，只核对已经发生的用量。')
   return choose('next','看看本期还留下什么，再决定下一步','服务、支持、原款与旧余额分别核对；新一期另行显选。')
  }
  if(target.kind==='application')return choose('next','带着这封回信，核对本站下一步','保留原批准或拒绝；材料、适配与启用仍由原条件核对。')

@@ -10,12 +10,13 @@ export function ClockConfirmationFacts({clock,newCostFen,newActionPoints,account
   return [{accountId:a.accountId,amountFen:known?amount:null,reserved:a.outflows.some(f=>f.releasedFen>0)}]
  })
  return <>
-  <section className="clock-known-confirmation" aria-label="已有安排的本段已知待付"><h3>已有安排的本段已知待付</h3>
+  <section className="clock-known-confirmation" aria-label="已有安排的本段已知待付">
+   <p className="clock-confirmation-note">{clock.from} → {clock.target} · 推进新增{moneyText(newCostFen)} / {newActionPoints}点。</p>
+   <h3>已有安排的本段已知待付</h3>
    {accounts.length?accounts.map(a=><p className="clock-due-account" key={a.accountId}><span>{accountName(a.accountId)}</span><strong>{a.amountFen===null?'金额来源待核对':moneyText(a.amountFen)}</strong></p>):<p>当前原排程未列本段待付。</p>}
    {accounts.some(a=>a.reserved)?<p>部分款项已列原占款，将按原引用转换或释放，不另占一份。</p>:null}
   </section>
-  <p className="clock-confirmation-note">日历核对范围：{clock.from} → {clock.target}。</p>
-  <p className="clock-confirmation-note">推进本身新增费用{moneyText(newCostFen)} / 推进本身新增行动{newActionPoints}点。已安排任务开工时，仍按原预留使用行动。</p>
+  <p className="clock-confirmation-note">已安排任务开工时，仍按原预留使用行动。</p>
   <p className="clock-confirmation-note">上列待付来自已有安排；按实际停点结算，原明细仍逐项保留。</p>
  </>
 }

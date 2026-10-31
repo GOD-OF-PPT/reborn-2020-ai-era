@@ -42,6 +42,18 @@ const unknown=(reason:string):RelaySupportSettlement=>({status:'unavailable',rea
 /** Read only existing public settlement facts. This does not calculate service loss or predict compensation. */
 export function relaySupportSettlement(p:Input,target:RelaySceneTarget):RelaySupportSettlement{
  try{return readSettlement(p,target)}catch{return unknown('本期支持的原成本、付款或责任引用尚未核齐；先保留原账，不把未知说成已结清。')}}
+
+/** A short reading of verified prepaid income, never a cash/profit estimate.
+ * Other settlement shapes retain their complete original explanation. */
+export function relayPrepaidSupportBrief(p:Input,target:RelaySceneTarget):string|null{
+ const relay=p.features.relay,resolved=resolveRelaySceneTarget(relay,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})
+ if(!relay||resolved.status!=='valid'||target.kind!=='period'||resolved.period?.supportJob?.status!=='completed')return null
+ const settlement=relaySupportSettlement(p,target),book=relay.casebook
+ if(settlement.status!=='known'||!book||settlement.incomeFen===null||settlement.incomeFen<=0||settlement.compensationCostFen!==0||settlement.compensationPaidFen!==0||settlement.compensationDueFen!==0)return null
+ const refs=settlement.sourceRefs.filter(ref=>ref.kind==='operation'),ids=new Set(refs.map(ref=>ref.id)),operations=book.operations.filter(operation=>ids.has(operation.id))
+ if(!refs.length||ids.size!==refs.length||operations.length!==refs.length||operations.some(operation=>operation.kind!=='deliver_prepaid'))return null
+ return '支持做完了，'+moneyText(settlement.incomeFen)+'预款已转为收入。'
+}
 function readSettlement(p:Input,target:RelaySceneTarget):RelaySupportSettlement{
  const relay=p.features.relay,resolved=resolveRelaySceneTarget(relay,target,{runId:p.view.runId,accountId:p.accountId,operations:p.view.operations})
  if(!relay||resolved.status!=='valid'||target.kind!=='period'||!resolved.period||!resolved.business)return unknown(resolved.reason??'请先明确这份支持所属的原服务期与账户；没有换到另一期。')

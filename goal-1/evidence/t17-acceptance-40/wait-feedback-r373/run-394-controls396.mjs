@@ -1,0 +1,6 @@
+import fs from 'node:fs';import cp from 'node:child_process';
+const root='goal-1/evidence/t17-acceptance-40/wait-feedback-r373',node='/Users/gordon/.nvm/versions/node/v22.12.0/bin/node';
+if(fs.existsSync(root+'/stopped.json'))throw Error('ACTIVE_REQUIRED');
+const jobs=[['394','r394-copy-control396','src/ui/relay-player-copy.test.tsx'],['394','r394-player-control396','src/ui/player-thread.test.ts'],['394','r394-attempt-control396','src/ui/OpeningMoment.attempt.test.tsx'],['394','r394-focus-control396','src/ui/OpeningMoment.focus-book.test.tsx']];
+const results=[];for(const [revision,label,file]of jobs){console.log(JSON.stringify({phase:'start',revision,label,file}));const result=await new Promise(resolve=>{const child=cp.spawn(node,[root+'/check-source.mjs',revision,label,file],{env:process.env,stdio:'inherit'});child.on('error',e=>resolve({exitCode:null,error:String(e)}));child.on('close',(exitCode,signal)=>resolve({exitCode,signal}))});results.push({revision,label,file,...result});console.log(JSON.stringify({phase:'end',label,...result}))}
+fs.writeFileSync(root+'/r394-control396-index.json',JSON.stringify({at:new Date().toISOString(),results,configurationUnchanged:true,authorAndTypeCompleteBeforeStart:true,compatibility:0},null,2)+'\n',{flag:'wx'});if(results.some(r=>r.exitCode!==0))process.exitCode=1;

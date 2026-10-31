@@ -45,7 +45,14 @@ it('publishes only durable checkpoints and preserves every original logical comm
 
 it('accepts stop between real logical steps without exposing the uncommitted date',async()=>{
  let h!:Awaited<ReturnType<typeof open>>,ticks=0,observed=0
- h=await open('stop',{yieldControl:async()=>{if(++ticks===1){observed=h.controller.snapshot.view!.revision;h.controller.stopWaiting()}}})
+ h=await open('stop',{yieldControl:async()=>{if(++ticks===1){
+  observed=h.controller.snapshot.view!.revision
+  const priorNotice=h.controller.snapshot.notice
+  h.controller.stopWaiting()
+  expect(h.controller.timeWait?.stopRequested).toBe(true)
+  expect(h.controller.snapshot.view!.revision).toBe(observed)
+  expect(h.controller.snapshot.notice).toBe(priorNotice)
+ }}})
  const result=await h.controller.waitForFeedback(h.controller.prepare('AdvanceTime',{date:'2020-04-11'}))
  expect(observed).toBe(19);expect(result.status).toBe('stopped');expect(result.reasonCodes).toEqual(['WAIT_STOP_REQUESTED'])
  expect(result.steps).toHaveLength(1);expect(result.current).toMatchObject({revision:20,date:'2020-04-10',saveStatus:'saved',hasCandidate:false})
