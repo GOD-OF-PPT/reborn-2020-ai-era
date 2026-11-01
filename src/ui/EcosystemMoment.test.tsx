@@ -58,8 +58,11 @@ it('gives the main thought and foreground paper the same direct preparation acti
  hooks.slots.clear();const focus=ecosystemFocusFor(p,business),props={p,focus,headingRef:{current:null},onFocus:vi.fn(),onNavigate:vi.fn(),onExplore:vi.fn()};let tree:unknown
  const render=()=>{tree=mounted('moment',()=>EcosystemMoment(props))};render()
  const rows=nodes(tree),paper=rows.find(n=>n.type===EcosystemPaper)!,binding=paper.props.binding as {activate:()=>void},main=rows.find(n=>n.type==='button'&&n.props.onClick===binding.activate)!
- expect(main).toBeDefined();expect(words(main)).toContain('准备这次服务的材料')
+ expect(main).toBeDefined();expect(words(main)).toContain('准备服务材料');expect(main.props['aria-label']).toContain('准备这次服务的材料')
+ expect(paper.props.actionHint).toBe('准备服务材料');expect(words(main)).not.toContain('看到服务材料实际完成；没有因此接受客户承诺。')
  binding.activate();render();expect(nodes(tree).some(n=>n.type===EcosystemSceneChoice&&n.props.intent==='materials')).toBe(true)
+ const choiceWords=nodes(tree).filter(n=>n.type==='p').map(words).join(' ')
+ expect(choiceWords).toContain('原基础预算300元 / 1点 / 7日');expect(choiceWords).toContain('完成准备不等于接单或收入')
  expect(p.request).not.toHaveBeenCalled();expect(controller.exportSaved()).toBe(raw)
 })
 
@@ -122,9 +125,9 @@ it('takes an actually closed ecology business straight back to today and makes o
  const rows=nodes(tree),paper=rows.find(n=>n.type===EcosystemPaper)!,journey=paper.props.journey as {phase:string;action:{kind:string}},binding=paper.props.binding as {activate:()=>void},main=rows.find(n=>n.type==='button'&&n.props.onClick===binding.activate)!
  expect(journey).toMatchObject({phase:'business-closed',action:{kind:'today'}});expect(main).toBeDefined()
  ;(main.props.onClick as ()=>void)();render();expect(today).toHaveBeenCalledOnce();expect(chosen).not.toHaveBeenCalled();expect(nodes(tree).some(n=>n.type===EcosystemSceneChoice)).toBe(false)
- const other=nodes(tree).find(n=>n.type==='button'&&words(n).includes('翻看其它合作记录'))!;expect(other).toBeDefined();(other.props.onClick as ()=>void)();render()
+ const other=nodes(tree).find(n=>n.type==='button'&&words(n).includes('翻其它合作'))!;expect(other).toBeDefined();expect(other.props['aria-label']).toContain('翻看其它合作记录');(other.props.onClick as ()=>void)();render()
  expect(nodes(tree).some(n=>n.type===EcosystemSceneChoice&&n.props.intent==='objects')).toBe(true);expect(chosen).not.toHaveBeenCalled()
- const read=nodes(tree).find(n=>n.type==='button'&&words(n)==='翻阅同一份合作与原账 ↗')!;expect(read).toBeDefined();(read.props.onClick as ()=>void)()
+ const read=nodes(tree).find(n=>n.type==='button'&&words(n)==='翻合作手记 ↗')!;expect(read).toBeDefined();expect(read.props['aria-label']).toContain('翻阅同一份合作与原账');(read.props.onClick as ()=>void)()
  expect(navigate).toHaveBeenCalledWith('deepseek',expect.objectContaining({accountId:business.accountId,ecosystemTarget:business,recordId:business.businessId,openRecord:true}))
  expect(closedProps.request).not.toHaveBeenCalled();expect(closedController.exportSaved()).toBe(closedRaw);expect(controller.exportSaved()).toBe(raw)
 })

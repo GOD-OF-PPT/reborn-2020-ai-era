@@ -16,6 +16,7 @@ import {TodayScene} from './TodayScene.tsx'
 import {todayThread} from './today-thread.ts'
 import {dayPerspectiveCurrent,type DayPerspective} from './day-perspective.ts'
 import {wishes} from './game-text.ts'
+import {sceneReadingLabel,sceneReadingName,sceneNextHint} from './scene-language.ts'
 
 type Props={p:GamePanelProps;focus:EcosystemOpeningFocus;focusQuarter?:string|null|undefined;headingRef:Ref<HTMLHeadingElement>;feedback?:ReactNode;onFocus:(focus:OpeningFocus)=>void;onNavigate:NavigateScene;onExplore:()=>void;onToday?:undefined|(()=>void);onRecollection?:undefined|(()=>void)}
 export function EcosystemMoment({p,focus,focusQuarter,headingRef,feedback,onFocus,onNavigate,onExplore,onToday,onRecollection}:Props){
@@ -53,7 +54,7 @@ export function EcosystemMoment({p,focus,focusQuarter,headingRef,feedback,onFocu
   const contract=journey.resolution.contract,finished=contract&&['completed','cancelled'].includes(contract.status),responding=action.kind==='choice'&&action.intent==='remediation'
   const businessClosed=journey.phase==='business-closed'&&journey.resolution.status==='valid'&&target?.kind==='business'
   const secondaryLabel=action.kind==='today'?'看看这间企业，下一步有哪些条件':finished?'先回到今天，未收的原款仍保留':responding?'先回到今天，保留这份约定':journey.active&&contract?'核对这份合作的原款与退出选择':'先回到今天，给生活留些余地'
-  const secondaryHint=businessClosed?'显选原对象，或查看下一次投入条件。':entryDirections?'服务合同与出资分别决定；不必先开服务企业，查看不付款或持股。':action.kind==='today'?'先看看当前条件；新的合作由你另选':finished?'留着这次合作的账，去安排今天':responding?'旧约和预款保护都在，生活仍由你安排':journey.active&&contract?'待收款、退款和支持责任，分别看清':'原来的安排还在，也可以先过自己的日子'
+  const secondaryHint=businessClosed?'记录仍在':entryDirections?'独立选择 · 查看不出资':action.kind==='today'?'新合作另选':finished?'这段经历留在手记':responding?'回今天不取消旧约':journey.active&&contract?'待收款 · 退款 · 支持责任':'原安排仍在'
   const business=journey.resolution.business
   const nextBusiness=()=>business?choose({runId:p.view.runId,accountId:business.accountId,businessId:business.id,kind:'business'}):open('business')
   const secondary=ui(businessClosed?'翻看其它合作记录':entryDirections?'另看明确架空的出资选择':secondaryLabel,businessClosed?()=>open('objects'):entryDirections?()=>{setPanel(null);onNavigate('deepseek',{deepseekPane:'equity',equityTarget:null,accountId:'personal'})}:action.kind==='today'?nextBusiness:finished||responding?today:journey.active&&contract?()=>open('next'):today),record=ui('翻阅同一份合作与原账',inspect)
@@ -63,9 +64,9 @@ export function EcosystemMoment({p,focus,focusQuarter,headingRef,feedback,onFocu
    heading={<div className="moment-heading"><p className="moment-overline">{journey.object}</p><h1 ref={headingRef} tabIndex={-1}>{title}</h1></div>}
    context={<><p className="moment-stage-label">{currentDecision?'今天 '+p.view.date+(thread.focusQuarter?' · '+(target?.kind==='lead'?'原需求来自':target?.kind==='business'?'原企业始于':'原合作来自')+thread.focusQuarter:''):thread.focusScope==='history'?'历史回看 · '+(thread.focusQuarter??'原日期'):thread.focusScope==='carry'?'旧约定继续 · '+thread.focusQuarter:'今天 '+p.view.date+' · '+(journey.outcome==='actual'?'已经发生的回响':journey.outcome==='non-success'?'实际停下或受挫':'眼前的这一步')}</p><p>{!currentDecision&&thread.focusScope==='carry'?'这件事从'+thread.focusQuarter+'留下，仍按原约继续。 ':''}{journey.line}</p></>}
    feedback={statusFeedback===null&&calendarStatus===null?feedback:null} facts={<>{journey.facts.map(line=><p key={line}>{line}</p>)}</>}
-   decisions={<>{main}<button type="button" className="moment-decision" disabled={secondary.disabled} onClick={secondary.activate}><b aria-hidden="true">02</b><span>{secondary.label}<small>{secondaryHint}</small></span><i aria-hidden="true">↗</i></button>{leaveEntry?<button type="button" className="moment-explore" disabled={leaveEntry.disabled} onClick={leaveEntry.activate}>{leaveEntry.label} ↗</button>:<button type="button" className="moment-explore" onClick={onExplore}>环顾房间，想想别的可能 ↗</button>}</>}
-   object={<EcosystemPaper p={p} journey={journey} binding={binding} {...(action.kind==='wait'?{actionHint:advance===null?binding.label:waitLabel}:{})}/>}
-   record={<><button type="button" className="scene-text-action" disabled={record.disabled} onClick={record.activate}>{record.label} ↗</button>{statusFeedback&&!repeatedReadOnly?<p className="moment-status" role="status">{statusFeedback}</p>:null}{calendarStatus?<div className="ecosystem-reading-status">{calendarStatus}</div>:null}{!globalProtection&&binding.reason?<p className="reason">{binding.reason}</p>:null}</>}/>
+   decisions={<>{main}<button type="button" className="moment-decision" aria-label={sceneReadingName(secondary.label)} disabled={secondary.disabled} onClick={secondary.activate}><b aria-hidden="true">02</b><span>{sceneReadingLabel(secondary.label)}<small>{secondaryHint}</small></span><i aria-hidden="true">↗</i></button>{leaveEntry?<button type="button" className="moment-explore" aria-label={sceneReadingName(leaveEntry.label)} disabled={leaveEntry.disabled} onClick={leaveEntry.activate}>{sceneReadingLabel(leaveEntry.label)} ↗</button>:<button type="button" className="moment-explore" onClick={onExplore}>环顾房间 ↗</button>}</>}
+   object={<EcosystemPaper p={p} journey={journey} binding={binding} actionHint={action.kind==='wait'?advance===null?binding.label:waitLabel:sceneReadingLabel(binding.label)}/>}
+   record={<><button type="button" className="scene-text-action" aria-label={sceneReadingName(record.label)} disabled={record.disabled} onClick={record.activate}>{sceneReadingLabel(record.label)} ↗</button>{statusFeedback&&!repeatedReadOnly?<p className="moment-status" role="status">{statusFeedback}</p>:null}{calendarStatus?<div className="ecosystem-reading-status">{calendarStatus}</div>:null}{!globalProtection&&binding.reason?<p className="reason">{binding.reason}</p>:null}</>}/>
    {activePanel?<EcosystemSceneChoice p={p} target={target} intent={activePanel} onClose={()=>setPanel(null)} onChoose={choose} onInspect={inspect} onToday={today}/>:null}
   </div>
  }
@@ -76,5 +77,5 @@ export function EcosystemMoment({p,focus,focusQuarter,headingRef,feedback,onFocu
   return decision(binding,<button type="button" className="moment-decision moment-primary" disabled={binding.disabled} onClick={binding.activate}><b aria-hidden="true">01</b><span>{binding.label}<small>{normalTimeEnded?'旧款和未完约定仍保留，后续沿原收尾入口继续。':'处理眼前的原责任后，还能回来核对这一份。'}</small></span><i aria-hidden="true">↗</i></button>)
  }
  const binding=ui(action.label,action.kind==='today'?today:()=>open(action.kind==='choice'?action.intent:'record'))
- return decision(binding,<button type="button" className="moment-decision moment-primary" disabled={binding.disabled} onClick={binding.activate}><b aria-hidden="true">01</b><span>{binding.label}<small>{journey.finishWhen}</small></span><i aria-hidden="true">→</i></button>)
+ return decision(binding,<button type="button" className="moment-decision moment-primary" aria-label={sceneReadingName(binding.label)} disabled={binding.disabled} onClick={binding.activate}><b aria-hidden="true">01</b><span>{sceneReadingLabel(binding.label)}<small>{sceneNextHint(journey.finishWhen)}</small></span><i aria-hidden="true">→</i></button>)
 }

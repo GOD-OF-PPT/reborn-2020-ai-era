@@ -21,7 +21,7 @@ import normalMiddle from '../../goal-1/evidence/t17-acceptance-38/art-r19/replay
 // original controller/store APIs, without browser, geometry or human claims.
 vi.mock('react',async original=>{
  const actual=await original<typeof import('react')>()
- return {...actual,useState:<T,>(initial:T|(()=>T))=>[typeof initial==='function'?(initial as ()=>T)():initial,()=>{}],useRef:<T,>(initial:T)=>({current:initial}),useMemo:<T,>(factory:()=>T)=>factory(),useId:()=> 'u5-end-original-consumer',useEffect:()=>{}}
+ return {...actual,useState:<T,>(initial:T|(()=>T))=>[typeof initial==='function'?(initial as ()=>T)():initial,()=>{}],useRef:<T,>(initial:T)=>({current:initial}),useMemo:<T,>(factory:()=>T)=>factory(),useCallback:<T,>(callback:T)=>callback,useId:()=> 'u5-end-original-consumer',useEffect:()=>{}}
 })
 type Element=ReactElement<Record<string,unknown>>
 const execute=new Set<unknown>([ClockAdvance,CommandButton,EcosystemPaper])
@@ -80,7 +80,11 @@ describe('original actual read-only source',()=>{
   const {p,focus,target}=f,onNavigate=vi.fn(),tree=EcosystemMoment({p,focus,headingRef:{current:null},feedback:f.controller.snapshot.notice,onFocus:vi.fn(),onNavigate,onExplore:vi.fn()}),all=nodes(tree),tableau=all.find(n=>n.type===RoomTableau)!,paper=all.find(n=>n.type===EcosystemPaper)!,binding=paper.props.binding as {disabled:boolean;activate:()=>void}
   expect(p.view.readOnly).toBe(true);expect(binding.disabled).toBe(true);binding.activate();expect(p.request).not.toHaveBeenCalled()
   expect(nodes(tableau.props.decisions).filter(n=>n.type==='small'&&n.props.className==='reason')).toHaveLength(0)
-  expect(words(tableau.props.record)).toContain('当前为只读，请查看写入状态说明。');expect(words(tableau.props.record)).not.toContain('当前只读，仍可翻阅原记录。')
+  // The global notice is already owned by App; this paper retains its visible
+  // protection and its original disabled action without repeating that notice.
+  expect(words(tableau.props.record)).not.toContain('当前为只读，请查看写入状态说明。')
+  const visiblePaper=nodes(tableau.props.object).find(n=>n.type==='button'&&String(n.props.className).includes('ecosystem-object'))!
+  expect(words(visiblePaper)).toContain('只读 · 原记录保留');expect(visiblePaper.props.disabled).toBe(true)
   const read=nodes(tableau.props.record).find(n=>n.type==='button')!;(read.props.onClick as ()=>void)();expect(onNavigate).toHaveBeenCalledWith('deepseek',expect.objectContaining({recordId:target.recordId,openRecord:true,accountId:target.accountId}))
   const near=EcosystemSceneChoice({p,target,intent:'next',onClose:vi.fn(),onChoose:vi.fn(),onInspect:vi.fn(),onToday:vi.fn()}),cancel=nodes(near).find(n=>n.type===CommandButton&&n.props.kind==='CancelEcoContract')!,nearOriginal=CommandButton(cancel.props as unknown as Parameters<typeof CommandButton>[0]),button=nodes(nearOriginal).find(n=>n.type==='button')!
   expect(button.props.disabled).toBe(true);expect(words(nearOriginal)).toContain('当前只读。请关闭正在操作同一人生的另一标签，再尝试接管。');(button.props.onClick as ()=>void)();expect(p.request).not.toHaveBeenCalled();expect(f.controller.exportSaved()).toBe(normalMiddle)

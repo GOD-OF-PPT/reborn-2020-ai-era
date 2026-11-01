@@ -22,7 +22,9 @@ const hooks=vi.hoisted(()=>({values:[] as unknown[],index:0}))
 vi.mock('react',async original=>{
  const actual=await original<typeof import('react')>()
  const state=<T,>(initial:T|(()=>T))=>{const i=hooks.index++;if(!(i in hooks.values))hooks.values[i]=typeof initial==='function'?(initial as ()=>T)():initial;return [hooks.values[i] as T,(next:T|((old:T)=>T))=>{hooks.values[i]=typeof next==='function'?(next as (old:T)=>T)(hooks.values[i] as T):next}] as const}
- return {...actual,useState:state,useRef:<T,>(initial:T)=>state(()=>({current:initial}))[0],useId:()=> 'u5-normal-original-save'}
+ // These cases use the synchronous controller; Worker effect lifetimes are
+ // covered separately by runtime-reading.test.tsx and Native verification.
+ return {...actual,useState:state,useRef:<T,>(initial:T)=>state(()=>({current:initial}))[0],useCallback:<T,>(callback:T)=>callback,useEffect:()=>{},useId:()=> 'u5-normal-original-save'}
 })
 type Element=ReactElement<Record<string,unknown>>
 const nodes=(value:unknown):Element[]=>Array.isArray(value)?value.flatMap(nodes):isValidElement<Record<string,unknown>>(value)?[value,...nodes(value.props.children),...nodes(value.props.footer)]:[]
