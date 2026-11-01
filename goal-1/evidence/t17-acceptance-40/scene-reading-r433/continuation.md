@@ -7,3 +7,5 @@ Main5415已为436，dist仍.delivery/t17-u6-main-r416（目录名旧，但内容
 正常资本作者仍原r432/58935/child4421，固定416/规范372/原seed策略继续。不要改活run/helper/calendar、重启305/372、stage活head/log或封活r432。本组原43路径WIP217258e保，原board尾段合同静态审查不等于已签署治理。当前实时进度以原stdout为准，最终目标仍完整2025/80万董事/真实签署与治理。r432 fullwire/journal审计和6/6选择器修复已有独立证据，不重复启动审计39398。
 
 原52封存和P3等保护如preservation-before-owned-commit；图形是新截图，不算原ABC PNG；正式真人与P3未跑/旧红、完整U6与所有后续/M01暂停须明确恢复/T18最后保持。所有兼容开发测试0。shell全rtk，Node22绝对路径，不push/deploy/外发/global memory写。若引用memory，MEMORY.md659-667及rollout01a14402-3f43-7380-8e27-f02f1d53c60d。
+
+本组实际feature 57ea6901d78f36151f0fdaaa7943765f2ea8538e已精确提交，68owned/5源全部index与Git blob/模式同，index空、未push。任务checkbox只标当前内部阅读组，不标整个U6。后续记录/STOP/完整seal完成后不得向本根追加；从新producer接当前U6剩余和r432原完整目标。
