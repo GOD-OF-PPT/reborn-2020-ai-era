@@ -21,3 +21,7 @@
 原52完整封存加r433=53在审计内全部实核，P326/132markers/2links/旧19和35/input61B/未接线model/三master前缀及2304B插入保持。原资本作者58935仍继续完整2025/80万董事/实际签署治理，不改活run/helper/calendar-offsets、不重启/不stage活head/log/不封活r432。U6原17权益/5共享、当前全深态与最终全审、U7/U8/CUX12完整原组合、U9后组合/T17余、原PNG0/3、正式真人0/P3正式62与22未跑/旧红与长档慢/M01须用户明确恢复/T18最后/goal ACTIVE全保。
 
 本内部审计结果已齐，下一精确本地提交与读回，尚不预填提交身份；不是资本目标结束。无push/deploy/外发/代理/global memory写，兼容开发测试0。
+
+## 实际提交与来源补证
+
+本地审计实现/材料 ed31b8254a67ef9babdf36c5eb069a30e7214639，20精确owned；原JSONL补证 93b826f286b51fc561c8bcf7f3588d09f2814c95，4精确owned。两次全部暂存与Git blob/字节/SHA/模式核同，index空、未push。原audit-journal.json只是解析数组，另保存29行原字节15324B/SHAc8abaf21311c96591aea2842e4b5cbf93e3b1d786f49cd19e1c3dee07e6b8cfd，逐解析对象与已审计数组完全一致；没有重启长审计、修改原日志或重新执行游戏命令。当前内部审计完成，不关闭资本原终点或U6。完整封存与最后Git读回由后续记录交回，不回写旧证据。
