@@ -1,4 +1,4 @@
-# 最终431，本内部组实现与验收已齐，待本地提交/读回及任务记录终结
+# 最终431，feature已提交，任务记录已完成，待本组最后封存/后置保护
 
 先全量读goal-1三文件和本input/plan/tasks；详细范围以validation.md及native-observations.md为准。整个U6第10项/goal仍active，绝不开始U7/M01/T18。
 
@@ -21,3 +21,9 @@ Main5415已最终431，.delivery/t17-u6-main-r416目录名只是旧名称；263H
 整个U6原17/5/正常board/深态/最终全审、U7U8/CUX12完整U4-B/U5/U6、U9后完整原组合、T17余、原PNG0/3/真人0/P3正式62/22未跑、旧超时和长档慢、M01待明确恢复/T18最后全保。当前只交有界文案和交互改进，不说全游戏文案、真人趣味或系统美术完成。所有兼容开发测试0。
 
 所有shell以rtk前缀；Node /Users/gordon/.nvm/versions/node/v22.12.0/bin/node。memory本轮使用MEMORY.md659—667，最终附唯一memory citation，rollout id01a14402-3f43-7380-8e27-f02f1d53c60d；不写全局memory。原goal-1/input61B不改。
+
+
+## 最新真实交付与下一步（覆盖前文待提交/活417措辞）
+feature实际03d53a107e085a75c809888c2671ae5fbe48fb3b/172owned/10源，逐blob/模式/路径同，index空/未push，tasks已在提交读回之后标本组x。最终UI无再修改必要；尚需将本次任务/验证记录提交，真实terminal→STOP→fullseal及独立post保护，不能把本组收尾变成新业务工作。
+
+417执行真实已终止！92675最后poll exit1/12409207ms，372/2022Nov30，新增67保存，规范head5660569B/SHA900a74e355271ab79d09ff5b401b318396a443e921b075c43c3e7246acbb68e0。Error UNIQUE_PUBLIC_OBJECT_REQUIRED匹配作者run.ts的one(rows)，产品源没有这个字符串；具体哪一个公开选择器仍需诊断。旧child stage标签原样保，不叫游戏规则拒绝。child原terminal/STOP后已初次全seal（读capital417-terminal-observation.json），别再追加child文件。父417原input/plan/tasks/目标未结束；不要再poll已关闭句柄92675，别从305重启，不改旧seed/钱/策略。下一原U6工作应从此真实差异/规范372与完整journal独立审计后，用新producer修作者选择器并接续完整2025/80万董事/实际签署/治理；与已交本组UI分开记身份。原17/5/深态/最终U6及全部后续/未验保持。

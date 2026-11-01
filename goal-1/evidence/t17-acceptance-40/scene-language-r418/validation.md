@@ -34,8 +34,15 @@ Main5415最终431实际重进原129，Oct1/270137.33/AP4/预留0/2812股/已改�
 
 ## 保留责任与回滚
 
-本组不结束完整U6原17动作/5共享/正常board/全深态/最终全审。417仍固定416、同原305规范输入与v2策略继续，不能重启/换seed/改钱或封存活输出。后续仍U7/U8→C-UX12完整U4-B/U5/U6，U9后原组合、T17余；原PNG0/3、真人0、P3正式62/22未跑、M01待明确恢复、T18最后、整个goal ACTIVE。
+本组不结束完整U6原17动作/5共享/正常board/全深态/最终全审。417保持固定416/同原305/v2完整目标；收尾实际观测到作者执行已exit1，见下方真实终态，不能再称活进程。后续仍U7/U8→C-UX12完整U4-B/U5/U6，U9后原组合、T17余；原PNG0/3、真人0、P3正式62/22未跑、M01待明确恢复、T18最后、整个goal ACTIVE。
 
 UI可按本组精确owned提交回退；Main仅恢复本组备份index并保所有旧资产，不触游戏DB/用户存档/其他WIP。原48旧完整封存加417诊断一份、P326/132markers/2links、旧19/35、input61B、未接线model及三master原前缀/插入持续保护。REPEAT复用既有冻结/封存/来源核验工具，无缺失的高置信度全局资产需要新建；未写全局memory/skill/自动化。
 
 [杠精审查] 本片短文案、真实代价/等待/保存、取消/返回/原回调所有权有据成立；未删原合法动作或字段，没有裁切/缩字/滚动藏操作。原未验与外部标准保持。本地owned提交和逐blob/模式读回另记，不push/部署/外发或委派。
+
+
+## 本地交付与收尾观测
+
+本地feature 03d53a107e085a75c809888c2671ae5fbe48fb3b，父69896900，共172精确owned路径/10源；index与commit逐blob字节/SHA/模式/路径集全等，索引空，未push。tasks在提交读回之后才标本组x；混合goal masters/AGENTS/P3未stage。本组后置记录与封存另记，整个U6/goal仍未完。
+
+收尾poll原92675取得真实exit1（15:23:34 UTC），417已从原305新增67次规范保存到372/2022Nov30，5660569B/SHA900a74e355271ab79d09ff5b401b318396a443e921b075c43c3e7246acbb68e0。原错误Error: UNIQUE_PUBLIC_OBJECT_REQUIRED精确匹配作者driver的one(rows)，产品源无此字符串；原子结果pending=null/sourceExact=true。旧child的registered_path_stopped_at_original_rule标签原样保，但没有据此认定产品规则拒绝或正常board不可达。具体失败调用尚需诊断。真实terminal/STOP之后仅初次补完整seal，head/journal/旧原文件保；后续须新producer，从规范372原文/原日志先独立审计再接续，不能重启305/换seed/放松规则或缩成季度终点。父417目标、完整80万董事/实际签署/治理仍未完成，绝不冒活状态或关闭goal。
