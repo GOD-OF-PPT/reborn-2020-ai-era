@@ -6,6 +6,15 @@ import {courseCohortJob} from './course-cohort-progress.ts'
 import {COURSE_JOBS} from '../content/course.ts'
 import {moneyText} from './game-text.ts'
 
+/** The current class's original price and refund window, without repeating its retained-history notice. */
+export function courseUpdateRoomTerms(p:Pick<GamePanelProps,'view'|'features'>,target:CourseSceneTarget|null){
+ const course=p.features.course,context=courseSceneContext(p)
+ if(!course||target?.kind!=='cohort'||target.jobId!==undefined||courseTargetReason(course,target,context))return null
+ if(courseSceneProgress(course,p.view.date,target,context)?.phase!=='course-cohort-update-required')return null
+ const cohort=course.cohorts.find(row=>row.id===target.cohortId)!
+ return `本班约定单价${moneyText(cohort.priceFen)} · 留存${cohort.students.filter(row=>row.paidRemainingFen>0).length}/${cohort.seatLimit}人；退款窗口至${cohort.refundUntil}。学费不再收一次。`
+}
+
 /** Short room narration only; the original progress keeps its complete record and terms. */
 export function courseRoomCopy(p:Pick<GamePanelProps,'view'|'features'>,target:CourseSceneTarget|null){
  const course=p.features.course,context=courseSceneContext(p)

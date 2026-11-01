@@ -1,0 +1,5 @@
+- [x] 129完整原文、408/410及415有限重进/持股/只读。
+- [x] 独立94 actual closed/Today/书签/原册/设置与完整原文。
+- [ ] 本producer课程105仅检查未确认；由native-r2完成独立导入。
+- [ ] 本producer没有新Native候选注入；复用范围见父validation。
+- [x] 原producer已因中断/旧标签库存消失终结，原负例和完整字节保留。

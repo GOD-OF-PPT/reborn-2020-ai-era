@@ -29,6 +29,9 @@ const positiveShares=(value:string)=>/^\d+$/.test(value)&&Number.isSafeInteger(N
  * original preview, independent confirmation and atomic save. */
 export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceReason=null,onClose,onChoose,onIntent,onInspect,onToday}:Props){
  const v=p.features.deepseek,journey=equityJourneyFor(p,equityFocusFor(p,target,p.accountId)),r=journey.resolution,b=r.business,i=r.invitation,n=r.negotiation,a=r.agreement,e=r.exit
+ // Public prerequisites only organize this near view. Original previews still
+ // decide every command, including the unchanged full-book controls.
+ const governancePrerequisites=a!==null&&a.board&&a.shares>0,exitPrerequisites=a!==null&&a.shares>0&&!a.locked&&a.transferConsent
  const draft=useEquityDraft(p,target,intent),name=useId(),resource=draft.value('resource'),date=draft.value('date'),assignment={resources:resource?[resource]:[],startAt:date}
  const directPreparation=intent==='relationship'||intent==='eligibility',preparing=intent==='prepare'||directPreparation
  const close=()=>{if(!draft.current())return;draft.retire();onClose()}
@@ -181,7 +184,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
     <details><summary>持股与融资条款</summary>{holdingFacts}<p>不会自动借款，也不以估值支付。已发生的费用和原责任不会因本次选择清除；本轮未新增现金收入。到期未选仍按原规则不付款并记录实际稀释。</p>{quietJobLink}{ui('翻开完整持股手记','',inspect)}</details>
    </>:null}
    {intent==='governance'&&a?<>
-    {!a.board||a.shares===0?<p>这份协议当前没有可提出会议的董事权。原条款和已发生会议仍可查看。</p>:null}
+    {!governancePrerequisites?<><p>{!a.board?'这份协议当前没有可提出会议的董事权。':'股份已经转出，这次不能提出会议。'}原条款和已发生会议仍可查看。</p><div>{go('holding','回到这份持股','')}{ui('先过自己的日子','',today)}</div></>:<>
     <p>会议预算 {moneyText(governanceJob?.costFen)} · {governanceJob?.actionPoints??'待核'}点 · {governanceJob?.durationDays??'待核'}天。工资维护另计，对方可能拒绝。</p>
     {!governanceArranging?<div className="equity-governance-options" aria-label="先比较这次有限提案" ref={governanceFields}>
      {EQUITY_GOVERNANCE_POLICIES.map(policy=><section className="equity-governance-option" data-selected={governancePolicy?.id===policy.id?'true':undefined} key={policy.id}><h3>{policy.question}</h3><p>{policy.choiceEffect}</p><p>{policy.choiceLimit}</p>{ui(policy.choiceLabel,'',()=>draft.patch({policy:policy.id,governanceStep:'arrange'}))}</section>)}
@@ -195,14 +198,15 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
      </div>
      {ui('重新比较两项提案','',()=>draft.set('governanceStep','compare'))}
     </>}
-    <details><summary>持股与会议条款</summary>{holdingFacts}{EQUITY_GOVERNANCE_POLICIES.map(policy=><p key={policy.id}>{policy.label}：{policy.effect} {policy.limit}</p>)}<p>本次提案不增加股份、不解除原锁定，不删除旧费用、客户保护或原应收；实际通过后才有对应的本局政策。</p>{quietJobLink}{ui('翻开完整持股手记','',inspect)}</details>
+    </>}
+    <details><summary>持股与会议条款</summary>{holdingFacts}{!governancePrerequisites?<p>原会议预算 {moneyText(governanceJob?.costFen)} · {governanceJob?.actionPoints??'待核'}点 · {governanceJob?.durationDays??'待核'}天；工资维护另计，对方可能拒绝。当前没有安排会议。</p>:null}{EQUITY_GOVERNANCE_POLICIES.map(policy=><p key={policy.id}>{policy.label}：{policy.effect} {policy.limit}</p>)}<p>本次提案不增加股份、不解除原锁定，不删除旧费用、客户保护或原应收；实际通过后才有对应的本局政策。</p>{quietJobLink}{ui('翻开完整持股手记','',inspect)}</details>
    </>:null}
    {intent==='exit-request'&&a?<>
     {closing&&a.locked?<><p>原锁定至{a.lockUntil}。等候沿原下一日期，仍结算原生活费与旧约，不免费跳到锁定结束。</p>{command('AdvanceTime',{date:a.lockUntil},'等原锁定到期，再核对独立买方')}</>:null}
     <p>仍持{a.shares}股 · {a.locked?'锁定至':'原锁定至'}{a.lockUntil}</p>{!a.transferConsent?<p className="reason">原协议尚无转让同意。</p>:null}
-    <p>调查预算 ¥500 · 1点 · 7天。买方可能拒绝，或只给有限折价报价。</p>{field('本次拟询问转让的模拟股数','shares',true)}<div className="equity-assignment-decision">{resources}
-    {command('RequestEquityExit',{agreementId:a.id,shares:shares??-1,...assignment},'询问独立买方',hasAssignment&&shares!==null)}</div>
-    <details><summary>持股与转让条款</summary>{holdingFacts}<p>锁定结束不保证出售，不能按过去峰值套现。提出调查不出售股份；成交与收款仍须另行决定。</p>{quietJobLink}{ui('翻开完整持股手记','',inspect)}</details>
+    {exitPrerequisites?<><p>调查预算 ¥500 · 1点 · 7天。买方可能拒绝，或只给有限折价报价。</p>{field('本次拟询问转让的模拟股数','shares',true)}<div className="equity-assignment-decision">{resources}
+    {command('RequestEquityExit',{agreementId:a.id,shares:shares??-1,...assignment},'询问独立买方',hasAssignment&&shares!==null)}</div></>:<>{a.shares===0?<p>股份已经转出，原报价和款项仍可翻阅。</p>:null}<div>{go('holding','回到这份持股','')}{ui(closing?'回到尾声':'先过自己的日子','',today)}</div></>}
+    <details><summary>持股与转让条款</summary>{holdingFacts}{!exitPrerequisites?<p>原调查预算 ¥500 · 1点 · 7天。买方可能拒绝，或只给有限折价报价；当前没有安排调查。</p>:null}<p>锁定结束不保证出售，不能按过去峰值套现。提出调查不出售股份；成交与收款仍须另行决定。</p>{quietJobLink}{ui('翻开完整持股手记','',inspect)}</details>
    </>:null}
    {intent==='exit-accept'&&e?<>
     <p>每股 {moneyText(e.unitPriceFen)} · 最多 {e.shares}股 · 报价至 {e.expiresAt}</p>{e.scopeRestricted?<p className="reason">用途与接手方受限。</p>:null}

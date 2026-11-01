@@ -15,7 +15,7 @@ import {courseStageWaitDate} from './course-stage-wait.ts'
 import {courseSceneContext} from './course-player-thread.ts'
 import {courseTeachingPaper} from './course-teaching-paper.ts'
 import {courseTeachingPaperFor,courseTeachingPaperLabel,courseTeachingMoneyFor,courseTeachingClosureFor} from './course-teaching-continuity.ts'
-import {courseRoomCopy} from './course-room-copy.ts'
+import {courseRoomCopy,courseUpdateRoomTerms} from './course-room-copy.ts'
 import {clockStopCopy} from './clock-stop-copy.ts'
 import {SceneTimeNotice,sceneTimeNarrative} from './SceneEcho.tsx'
 import {RelaySceneChoice} from './RelaySceneChoice.tsx'
@@ -268,6 +268,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const courseComplete=course&&!interrupted&&!requiresChoice&&!legacy&&courseAttemptClosed(p,thread)
  const currentCohortContext=meaning&&course&&!courseComplete&&courseTarget?.kind==='cohort'&&courseTarget.jobId===undefined&&thread.focusScope!=='history'?meaning.situation:null
  const currentCohortUpdate=currentCohortContext!==null&&thread.stage==='course-cohort-update-required'&&meaning?.sourceRefs.some(ref=>ref.kind==='course-update')===true
+ const updateTerms=currentCohortUpdate?courseUpdateRoomTerms(p,courseTarget):null
  const cohortUpdateDue=currentCohortUpdate?meaning?.sourceRefs.filter(ref=>ref.kind==='course-update').map(ref=>ref.date).filter((date):date is string=>date!==null).sort()[0]??null:null
  const cohortCopy=currentCohortContext&&(thread.focusScope==='current'||thread.focusScope==='carry')?courseRoomCopy(p,courseTarget):null
  const closedCopy=classArt?.phase==='closed'&&thread.focusScope!=='history'&&p.view.saveStatus==='saved'&&!p.view.hasCandidate?courseTeachingClosureFor(p,courseTarget):null
@@ -304,7 +305,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
    {thread.focusScope==='invalid'&&thread.invalidReason?<p className="season-focus-notice" role="status">{thread.invalidReason}</p>:null}
    {!relayClosed&&!interrupted&&!requiresChoice&&!legacy&&thread.focusScope==='history'?<p className="season-focus-notice">正在回看{thread.focusQuarter}，今天仍是{p.view.date}。旧收支不会重记为本季收入。</p>:null}
    {sceneFeedback?<div className={typeof sceneFeedback==='string'?'moment-status':'moment-feedback'} role={typeof sceneFeedback==='string'?'status':undefined}>{sceneFeedback}</div>:null}</>}
- facts={<>{freeChoice?<p className="moment-line">{employed?'留几天给自己，也可以看看房间。':'休整几天，还是先去上班？'}</p>:<>{currentCohortContext?<p className="moment-line">{cohortCopy?.context??currentCohortContext}{cohortUpdateDue?' · 更新期限'+cohortUpdateDue:null}</p>:null}{!closedEcho&&!currentCohortUpdate?firstFacts?firstFacts.map(line=><p key={line} className="moment-line">{line}</p>):<p className="moment-line">{cohortCopy?.line??collectionScope??(summarized?meaning!.situation:closedCopy?.line??sceneLine)}</p>:null}{!summarized&&(closedCopy?.terms||moment.detail)?<p className="moment-terms">{cohortCopy?.terms??closedCopy?.terms??moment.detail}</p>:null}{teachingMoney?<p className="course-scene-money">{teachingMoney}</p>:null}{relayMoney?<p className="relay-scene-money">{relayMoney}</p>:null}{courseComplete?<button type="button" className="scene-text-action" onClick={inspectFocus}>翻阅本班的完整原记录 ↗</button>:null}</>}</>}
+ facts={<>{freeChoice?<p className="moment-line">{employed?'留几天给自己，也可以看看房间。':'休整几天，还是先去上班？'}</p>:<>{currentCohortContext?<p className="moment-line">{cohortCopy?.context??currentCohortContext}{cohortUpdateDue?' · 更新期限'+cohortUpdateDue:null}</p>:null}{!closedEcho&&!currentCohortUpdate?firstFacts?firstFacts.map(line=><p key={line} className="moment-line">{line}</p>):<p className="moment-line">{cohortCopy?.line??collectionScope??(summarized?meaning!.situation:closedCopy?.line??sceneLine)}</p>:null}{!summarized&&(closedCopy?.terms||moment.detail)?<p className="moment-terms">{updateTerms??cohortCopy?.terms??closedCopy?.terms??moment.detail}</p>:null}{teachingMoney?<p className="course-scene-money">{teachingMoney}</p>:null}{relayMoney?<p className="relay-scene-money">{relayMoney}</p>:null}{courseComplete?<button type="button" className="scene-text-action" onClick={inspectFocus}>翻阅本班的完整原记录 ↗</button>:null}</>}</>}
  decisions={<>
 
    {primary?.main??quarterPrimary?.main??videoPrimary?.main??coursePrimary?.main??relayPrimary?.main??dayPrimary?.main??originalAction(false,openOrder,openVideo,openCourse,openRelay)}

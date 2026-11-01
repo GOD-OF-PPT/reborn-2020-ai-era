@@ -3,11 +3,11 @@
 - [ ] 当前系统美术/短文案：完整17权益能力+5共享状态/字段迁移、Today与原阅读入口/物件、closed生态终态、现有近景/原册/确认及保存权限保护；实际当前窗口整幕和操作、相称工程/原文保护、owned提交与收尾。
   - 原始/最新来源及连续构图：input/plan与state-field-art-map已建立。
   - 全17+5状态/字段/动作/资产矩阵：22行明确原payload、必要事实、物件与完整去处；不是22条当前Native通过。
-  - 已实施的美术/文案与完整字段去处：通用阅读位置、自由日历、Today空态、四项金额短标签、closed生态原Today、同一报告短句、真实课程期限；18源（9产品9测试）。
+  - 已实施的美术/文案与完整字段去处：通用阅读位置、自由日历、Today空态、四项金额短标签、closed生态原Today、同一报告短句、真实课程期限；22源（13产品9测试）。
   - 三里程碑累计review/debug：矩阵→整幕→完整消费者，发现同一报告重复与课程期限缺失，原红/修后54及12整文件绿分列。
-  - 当前Chrome/真实样本/fixture/只读/候选/原文：400实际129副本→Today→随身册→导出；最终408整幕、closed等及完整wire未核，见validation-progress。
-  - 既有完整文件/类型构建与原红：405大批272/282，六mock红已407修；四原5秒红保。408共享54/54、类型/构建和155HTTP过，不称一次全批绿。
-  - [杠精审查]：当前组仍[ ]；只准备WIP检查点，不冒最终Native/真人/normal board或完整U6完成。
-  - 准确提交/readback/post/封存：checkpoint.mjs按8891父与固定408/明确18源和本活动root操作；实际身份以checkpoint-readback.json为准；未最终STOP/seal。
+  - 当前Chrome/真实样本/fixture/只读/候选/原文：Native-r1真实129/94的只读、同对象、closed/Today与原文；Native-r2主416和独立course105实际读回/期限/取消，三原文完整一致，见validation。新Native候选注入未跑，复用边界明确。
+  - 既有完整文件/类型构建与原红：405大批272/282原红保；413共享48/48、414权益42/42、416课程31/31分层通过。416类型/构建和两origin各237HTTP过，不称一次全批绿。
+  - [杠精审查]：当前限定实施有完整源码、实际画面/操作与原文证据；正式真人/normal board及完整U6均未完成。准确提交后才标本内部组完成。
+  - 准确提交/readback/post/封存：WIP5df已有准确readback；最终按commit-final416.mjs、固定416/22源与本root明确delta提交，原混合masters/AGENTS/P3不stage。两个Native子producer已独立终结/seal；父待post。
 
 以上为原U6内部组，不缩掉原正常board/资本/全深态/最终全审，也不重计task或开始U7。全部兼容开发测试0，原后续与goal保持active。

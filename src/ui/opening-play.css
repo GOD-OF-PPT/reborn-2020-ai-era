@@ -9,6 +9,19 @@
  --opening-focus:#ffe2a6;
  --opening-serif:var(--serif,"Songti SC",serif);
 }
+/* The room remains a stage when focus moves between a result and Today. */
+.cinema-app .cinematic-stage.opening-room{overflow:clip}
+.opening-room .room-tableau .opening-object[data-day-kind=today][data-protection=readonly][data-copy-mode=tableau][data-text-only=false]>.opening-object-copy{position:static}
+.opening-room .room-tableau .opening-object[data-day-kind=today][data-protection=readonly][data-copy-mode=tableau][data-text-only=false] .first-order-protection{position:absolute;top:8px;right:0;z-index:3}
+.text-mode .opening-room .room-tableau .opening-object[data-day-kind=today][data-protection=readonly][data-copy-mode=tableau] .first-order-protection{position:static}
+.opening-room .room-tableau .equity-object[data-equity-reading=true][data-text-only=false]>.equity-paper-copy{position:static}
+.opening-room .room-tableau .equity-object[data-equity-reading=true][data-text-only=false] .equity-protection{position:absolute;top:8px;right:0;z-index:3}
+.text-mode .opening-room .room-tableau .equity-object[data-equity-reading=true] .equity-protection{position:static}
+/* Reading stays above the object; extra state slips never push it off the stage. */
+.opening-room .room-tableau[data-scene] .tableau-record{position:absolute;top:-60px;right:0;width:100%;padding-bottom:0;text-shadow:0 1px 5px #041c24}
+.opening-room .room-tableau[data-scene=equity] .tableau-content>.tableau-foreground{top:80px}
+.opening-room .room-tableau[data-scene=equity] .tableau-record{top:-40px}
+.opening-room .room-tableau[data-scene=equity] .equity-record-navigation{flex-direction:row;justify-content:flex-start;flex-wrap:wrap;align-items:center;gap:6px 12px}
 
 .cinema-entry .home-step-wish .home-copy{visibility:hidden}
 .cinema-entry .opening-wishes{display:block;border:0;padding:12px 0;margin-top:14px}

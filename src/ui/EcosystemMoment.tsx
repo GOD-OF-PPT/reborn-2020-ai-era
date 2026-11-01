@@ -42,6 +42,7 @@ export function EcosystemMoment({p,focus,focusQuarter,headingRef,feedback,onFocu
  const globalProtection=p.view.readOnly||p.view.hasCandidate||p.view.busy||['saving','unsaved','conflict'].includes(p.view.saveStatus)
  const advance=action.kind==='wait'&&!normalTimeEnded&&!thread.responsibilityOverrideNeeded?playableAdvanceDate(p.features.workbench,p.view.date,action.date>PLAYABLE_THROUGH?PLAYABLE_THROUGH:action.date):null
  const statusFeedback=ecosystemUiStatus(feedback,p.view.date),calendarStatus=ecosystemCalendarStatus(feedback,p.view.date),currentDecision=ecosystemCurrentDecision(p,focus)
+ const repeatedReadOnly=p.view.readOnly&&statusFeedback==='当前为只读，请查看写入状态说明。'
  const title=thread.focusStatus==='invalid'?thread.title:journey.title
  const waitLabel=action.kind==='wait'&&advance!==null&&advance!==action.date?advance===p.features.workbench.progression.quarterTarget?'先到本季末，原安排仍保留':'先到原日历的这一处反馈':action.label
  const choiceLabel=action.kind==='wait'&&advance!==null?waitLabel+' · '+advance:action.label
@@ -64,7 +65,7 @@ export function EcosystemMoment({p,focus,focusQuarter,headingRef,feedback,onFocu
    feedback={statusFeedback===null&&calendarStatus===null?feedback:null} facts={<>{journey.facts.map(line=><p key={line}>{line}</p>)}</>}
    decisions={<>{main}<button type="button" className="moment-decision" disabled={secondary.disabled} onClick={secondary.activate}><b aria-hidden="true">02</b><span>{secondary.label}<small>{secondaryHint}</small></span><i aria-hidden="true">↗</i></button>{leaveEntry?<button type="button" className="moment-explore" disabled={leaveEntry.disabled} onClick={leaveEntry.activate}>{leaveEntry.label} ↗</button>:<button type="button" className="moment-explore" onClick={onExplore}>环顾房间，想想别的可能 ↗</button>}</>}
    object={<EcosystemPaper p={p} journey={journey} binding={binding} {...(action.kind==='wait'?{actionHint:advance===null?binding.label:waitLabel}:{})}/>}
-   record={<><button type="button" className="scene-text-action" disabled={record.disabled} onClick={record.activate}>{record.label} ↗</button>{statusFeedback?<p className="moment-status" role="status">{statusFeedback}</p>:null}{calendarStatus?<div className="ecosystem-reading-status">{calendarStatus}</div>:null}{!globalProtection&&binding.reason?<p className="reason">{binding.reason}</p>:null}</>}/>
+   record={<><button type="button" className="scene-text-action" disabled={record.disabled} onClick={record.activate}>{record.label} ↗</button>{statusFeedback&&!repeatedReadOnly?<p className="moment-status" role="status">{statusFeedback}</p>:null}{calendarStatus?<div className="ecosystem-reading-status">{calendarStatus}</div>:null}{!globalProtection&&binding.reason?<p className="reason">{binding.reason}</p>:null}</>}/>
    {activePanel?<EcosystemSceneChoice p={p} target={target} intent={activePanel} onClose={()=>setPanel(null)} onChoose={choose} onInspect={inspect} onToday={today}/>:null}
   </div>
  }
