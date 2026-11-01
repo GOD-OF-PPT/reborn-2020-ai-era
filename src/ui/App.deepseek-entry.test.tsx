@@ -39,12 +39,13 @@ let entry:Awaited<ReturnType<typeof setup>>,company:Awaited<ReturnType<typeof se
 beforeAll(async()=>{entry=await setup('entry',initialRaw);company=await setup('company',companyRaw);reader=new GameController({codec:entry.codec,store:entry.store,locks:entry.locks});await reader.initialize();await reader.continueLife(entry.controller.snapshot.view!.runId);expect(reader.snapshot.view!.readOnly).toBe(true)})
 afterAll(async()=>{await reader?.close();await company?.close();await entry?.close()})
 beforeEach(()=>hooks.slots.clear())
-const second=(scene:Element,scope:string)=>{const tree=render(scope,()=>Reflect.apply(EcosystemMoment,undefined,[scene.props])),tableau=elements(tree).find(e=>e.type===RoomTableau)!;return {tree,tableau,button:elements(tableau.props.decisions).find(e=>e.type==='button'&&text(e.props.children).includes('另看明确架空的出资选择'))!}}
+const equityReadingButton=(tree:unknown)=>elements(tree).find(e=>e.type==='button'&&String(e.props['aria-label']??'').includes('另看明确架空的出资选择'))!
+const second=(scene:Element,scope:string)=>{const tree=render(scope,()=>Reflect.apply(EcosystemMoment,undefined,[scene.props])),tableau=elements(tree).find(e=>e.type===RoomTableau)!;return {tree,tableau,button:equityReadingButton(tableau.props.decisions)}}
 
 it('lets the actual App entry show an independent equity reading choice without opening a service enterprise or writing a game command',async()=>{
  const h=entry,before=h.controller.exportSaved(),submit=vi.spyOn(h.controller,'submit')
  invoke(h.room(),'onNavigate','deepseek')
- const {button}=second(h.scene(),'uncommitted-service-entry');expect(button).toBeDefined();expect(text(button)).toContain('不必先开服务企业')
+ const {button}=second(h.scene(),'uncommitted-service-entry');expect(button).toBeDefined();expect(text(button)).toContain('看看架空出资');expect(text(button)).toContain('独立选择 · 查看不出资')
  invoke(button,'onClick')
  const equity=h.draw().find(e=>e.type===EquityMoment)!,focus=equity.props.focus as {kind:string;accountId:string;equityTarget:null},p=equity.props.p as GamePanelProps
  expect(focus).toMatchObject({kind:'equity',accountId:'personal',equityTarget:null});expect(p.features.deepseek!.counterfactualEnabledAt).toBeNull();expect(p.features.deepseek!.businesses).toHaveLength(0)
@@ -62,7 +63,7 @@ it('keeps a specified original service and its shared paper action direct instea
 
 it('allows actual readonly viewing while fencing a candidate or stale entry callback from switching the live subject',()=>{
  const view=reader.snapshot.view!,features=view.features as unknown as PlayFeatures,p:GamePanelProps={controller:reader,view,features,accountId:'personal',request:vi.fn()},navigate=vi.fn(),props={p,focus:ecosystemFocusFor(p),headingRef:null,onFocus:vi.fn(),onNavigate:navigate,onExplore:vi.fn()}
- const draw=(source=p)=>render('protected-entry',()=>EcosystemMoment({...props,p:source})),button=(tree:unknown)=>elements(tree).find(e=>e.type==='button'&&text(e.props.children).includes('另看明确架空的出资选择'))!
+ const draw=(source=p)=>render('protected-entry',()=>EcosystemMoment({...props,p:source})),button=equityReadingButton
  invoke(button(draw()),'onClick');expect(navigate).toHaveBeenCalledWith('deepseek',{deepseekPane:'equity',equityTarget:null,accountId:'personal'});expect(p.request).not.toHaveBeenCalled();navigate.mockClear()
  for(const status of [{...view},{...view,hasCandidate:true,saveStatus:'unsaved' as const}]){const tree=draw({...p,view:status}),b=button(tree);expect(b.props.disabled).toBe(true);(b.props.onClick as ()=>void)();expect(navigate).not.toHaveBeenCalled()}
  expect(reader.exportSaved()).toBe(entry.controller.exportSaved())
