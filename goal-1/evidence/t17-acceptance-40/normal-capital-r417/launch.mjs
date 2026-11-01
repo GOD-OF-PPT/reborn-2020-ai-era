@@ -1,0 +1,8 @@
+import fs from 'node:fs';import cp from 'node:child_process';import {createHash}from'node:crypto';
+const root='goal-1/evidence/t17-acceptance-40/normal-capital-r417',node='/Users/gordon/.nvm/versions/node/v22.12.0/bin/node';
+if(fs.existsSync(root+'/execution-launch.json')||fs.existsSync(root+'/stopped.json'))throw Error('SINGLE_FRESH_LAUNCH_REQUIRED');
+const stdout=fs.openSync(root+'/execution.stdout.log','wx'),stderr=fs.openSync(root+'/execution.stderr.log','wx'),started=Date.now(),args=['--experimental-strip-types',root+'/run.ts'];
+const child=cp.spawn(node,args,{env:{...process.env,PATH:'/Users/gordon/.nvm/versions/node/v22.12.0/bin:'+process.env.PATH},stdio:['ignore',stdout,stderr]});
+const launch={at:new Date().toISOString(),pid:child.pid,args,node,driverSha256:createHash('sha256').update(fs.readFileSync(root+'/run.ts')).digest('hex'),fullNormal2025BoardObjectiveRetained:true,newNative:0,newIndexedDbWrites:0,compatibility:0};fs.writeFileSync(root+'/execution-launch.json',JSON.stringify(launch,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify({phase:'launched',...launch}));
+const terminal=await new Promise(resolve=>{child.on('error',error=>resolve({exitCode:null,error:String(error)}));child.on('close',(exitCode,signal)=>resolve({exitCode,signal}))});fs.closeSync(stdout);fs.closeSync(stderr);
+const result={at:new Date().toISOString(),...terminal,wallMs:Date.now()-started,childResultExists:fs.existsSync(root+'/execution-r1/result.json'),childStoppedExists:fs.existsSync(root+'/execution-r1/stopped.json'),wholeU6Complete:false,compatibility:0};fs.writeFileSync(root+'/execution-terminal.json',JSON.stringify(result,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(result));if(terminal.exitCode!==0)process.exitCode=1;
