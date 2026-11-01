@@ -1,0 +1,4 @@
+src/ui/CinematicRoom.tsx(68,36): error TS2345: Argument of type 'EquityThreadInput' is not assignable to parameter of type 'Input'.
+  Type 'EquityThreadInput' is not assignable to type 'Pick<GamePanelProps, "view" | "features">'.
+    Types of property 'view' are incompatible.
+      Type 'Pick<{ features: Readonly<Record<string, unknown>>; saveStatus: SaveStatus; busy: boolean; readOnly: boolean; readOnlyReason: "ANOTHER_WRITER" | "LOCK_API_UNAVAILABLE" | "LOCK_REQUEST_FAILED" | null; ... 14 more ...; operations: { ...; } | null; }, "date" | ... 8 more ... | "hasCandidate">' is missing the following properties from type '{ features: Readonly<Record<string, unknown>>; saveStatus: SaveStatus; busy: boolean; readOnly: boolean; readOnlyReason: "ANOTHER_WRITER" | "LOCK_API_UNAVAILABLE" | "LOCK_REQUEST_FAILED" | null; ... 14 more ...; operations: { ...; } | null; }': features, busy, readOnlyReason, pendingRevision, and 6 more.

@@ -92,7 +92,7 @@ it('keeps a pending radio across groups, cancels without focus changes and confi
   const click=(label:string)=>{const button=nodes().find(node=>node.type==='button'&&text(node.props.children).startsWith(label));if(!button||typeof button.props.onClick!=='function')throw Error('REAL_FOCUS_HANDLER_REQUIRED:'+label);expect(button.props.disabled).not.toBe(true);button.props.onClick();render()}
   const choose=(id:string)=>{const radio=nodes().find(node=>node.type==='input'&&node.props.value===id);if(!radio||typeof radio.props.onChange!=='function')throw Error('REAL_RADIO_REQUIRED:'+id);radio.props.onChange();render()}
   const confirm=()=>nodes().find(node=>node.type==='button'&&text(node.props.children)==='把这件事放到桌面')!
-  render();click('调整本季书签')
+  render();click('本季书签')
   expect(String(dialog().props.title)).toContain('继续眼前的事')
   expect(confirm().props.disabled).toBe(true);expect(onFocus).not.toHaveBeenCalled()
   choose(customer.id)
@@ -108,7 +108,7 @@ it('keeps a pending radio across groups, cancels without focus changes and confi
   expect(nodes().find(node=>node.type==='input'&&node.props.value===customer.id)!.props.checked).toBe(true)
   expect(onFocus).not.toHaveBeenCalled();click('仍留原来的书签')
   expect(dialog()).toBeUndefined();expect(onFocus).not.toHaveBeenCalled()
-  click('调整本季书签');expect(confirm().props.disabled).toBe(true)
+  click('本季书签');expect(confirm().props.disabled).toBe(true)
   click('换个方向');choose(work.id);click('继续眼前的事')
   expect(text(dialog().props.footer)).toContain('待确认：本季的工作与生活底线')
   click('把这件事放到桌面')

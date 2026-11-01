@@ -73,7 +73,7 @@ it('does not invent a service promise from actual115 operation, retained protect
  expect(finance.accruedCostFen).toBeGreaterThan(0);expect(today.remaining.find(item=>item.id==='today-relay-accrual:'+business.accountId)?.line).toContain(moneyText(finance.accruedCostFen));expect(today.line).toContain('未出账成本仍在原账')
  expect(today.wait?.date).toBe(playableAdvanceDate(p.features.workbench,p.view.date,p.features.workbench.progression.nextDate!))
  const ui=renderToday('actual115-without-false-service',p,pin)
- expect(text(ui.button)).toContain('给生活留一段真实的日子');expect(ui.text()).not.toContain('继续这期原服务');expect(ui.object.props.onClick).toBe(ui.button.props.onClick)
+ expect(text(ui.button)).toContain('留点时间给自己');expect(ui.button.props['aria-label']).toBe('留点时间给自己 · 给生活留一段真实的日子');expect(ui.text()).not.toContain('继续这期原服务');expect(ui.object.props.onClick).toBe(ui.button.props.onClick)
  expect(JSON.stringify(pin)).toBe(beforePin);expect(p.request).not.toHaveBeenCalled();expect(current.controller.exportSaved()).toBe(source115)
 })
 

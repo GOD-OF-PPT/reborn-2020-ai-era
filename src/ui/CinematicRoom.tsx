@@ -14,7 +14,7 @@ import {EventCard} from './QuarterPanel.tsx'
 import {ClockAdvance} from './ClockAdvance.tsx'
 import {playableAdvanceDate} from '../application/playable-advance.ts'
 import {moneyText,playableThrough} from './game-text.ts'
-import type {OpeningFocus} from './player-thread.ts'
+import {openingFocusAfterSave,type OpeningFocus} from './player-thread.ts'
 import {SeasonRecollection} from './SeasonRecollection.tsx'
 import {makeSharedAction} from './shared-action.ts'
 import {dayPerspectiveCurrent,type DayPerspective} from './day-perspective.ts'
@@ -25,7 +25,7 @@ import {equityTargetEntity,type EquitySceneTarget} from './equity-scene-target.t
 import type {EquityChoiceIntent} from './equity-journey.ts'
 import {canonicalJson} from '../core/identity.ts'
 
-type Props=GamePanelProps&{initialToday?:DayPerspective|null;todayPerspective?:DayPerspective|null;onTodayPerspective?:(perspective:DayPerspective|null)=>void;headingRef:Ref<HTMLHeadingElement>;notice:string|null;timeEcho?:ReactNode;onNavigate:NavigateScene;onPeople:(id?:LifePerson)=>void;onYear:()=>void;onJourney?:()=>void;openingFocus?:OpeningFocus|null;focusQuarter?:string|null|undefined;focusNotice?:string|null|undefined;focusRequiresChoice?:boolean|undefined;onOpeningFocus?:(focus:OpeningFocus|null)=>void;onSavedFollowFocus?:(focus:OpeningFocus)=>void}
+type Props=GamePanelProps&{readingContext?:string;initialToday?:DayPerspective|null;todayPerspective?:DayPerspective|null;onTodayPerspective?:(perspective:DayPerspective|null)=>void;headingRef:Ref<HTMLHeadingElement>;notice:string|null;timeEcho?:ReactNode;onNavigate:NavigateScene;onPeople:(id?:LifePerson)=>void;onYear:()=>void;onJourney?:()=>void;openingFocus?:OpeningFocus|null;focusQuarter?:string|null|undefined;focusNotice?:string|null|undefined;focusRequiresChoice?:boolean|undefined;onOpeningFocus?:(focus:OpeningFocus|null)=>void;onSavedFollowFocus?:(focus:OpeningFocus)=>void}
 const spots=[['routes','电脑 · 经营','新的机会，都从一次尝试开始。',76,49],['quarter','门外 · 安排','工作与时间，仍由你决定。',37,40],['memory','书架 · 记忆','记得趋势，不是答案。',22,48],['life','床边 · 生活','也留一些时间，给自己。',21,65]] as const
 type Spot=typeof spots[number][0]
 const inspection:Record<Spot,{speaker:string;line:string;hint:string}>={
@@ -36,12 +36,14 @@ const inspection:Record<Spot,{speaker:string;line:string;hint:string}>={
 }
 
 const ecoContractStatus={production:'制作中',review:'等待客户复核',rejected:'客户未接受，待处理',support:'支持进行中',completed:'已经履约',cancelled:'已经退出'}
+const todayChoices=new Set(['WorkQuarter','StartLifeWork','ResearchMarket','PlanStockOrder','PlaceStockOrder'])
 
 export function CinematicRoom(p:Props){
  const [responsibilities,setResponsibilities]=useState(false),[exploring,setExploring]=useState(false),[records,setRecords]=useState(false)
  const [recollection,setRecollection]=useState(false),[localTodayAt,setLocalTodayAt]=useState<DayPerspective|null>(()=>p.initialToday?.runId===p.view.runId?p.initialToday:null)
  const [followPanel,setFollowPanel]=useState<{target:EquitySceneTarget;intent:EquityChoiceIntent}|null>(null)
  const followHandoff=useRef<{previous:EquityThreadInput;payload:Record<string,unknown>;focusKey:string;exploring:boolean;todayKey:string}|null>(null)
+ const todayHandoff=useRef<{controller:GamePanelProps['controller'];session:string|undefined;context:string|undefined;previous:Pick<GamePanelProps,'view'|'features'>;kind:string;payload:Record<string,unknown>;focusKey:string;todayKey:string;readingKey:string}|null>(null)
  const todayAt=p.onTodayPerspective?p.todayPerspective??null:localTodayAt,setTodayAt=p.onTodayPerspective??setLocalTodayAt
  const momentRoot=useRef<HTMLDivElement>(null)
  const [hovered,setHovered]=useState<Spot|null>(null),[focused,setFocused]=useState<Spot|null>(null)
@@ -59,6 +61,27 @@ export function CinematicRoom(p:Props){
   if(saved){followHandoff.current=null;setExploring(false);setTodayAt(null);if(focusKey!==canonicalJson(saved))p.onSavedFollowFocus?.(saved)}
   else if(view.runId!==origin.previous.view.runId||view.revision!==origin.previous.view.revision)followHandoff.current=null
  },[view,f,p.openingFocus,p.onSavedFollowFocus,p.controller,exploring,todayAt,setTodayAt])
+ const readingKey=canonicalJson([exploring,records,recollection,responsibilities])
+ useEffect(()=>{
+  const origin=todayHandoff.current;if(!origin)return
+  if(origin.controller!==p.controller||origin.session!==p.controller.runtimeSession||origin.context!==p.readingContext){todayHandoff.current=null;return}
+  const free:OpeningFocus={runId:origin.previous.view.runId,kind:'free',accountId:'personal',entityId:null}
+  const next=openingFocusAfterSave(origin.previous,{view,features:f},origin.kind,origin.payload,free)
+  const saved=next!==null&&next.kind!=='free'?next:null,focusKey=canonicalJson(p.openingFocus??null)
+  const sameFocus=focusKey===origin.focusKey||saved!==null&&focusKey===canonicalJson(saved)
+  const sameToday=canonicalJson(todayAt)===origin.todayKey||saved!==null&&todayAt===null
+  if(!sameFocus||!sameToday||readingKey!==origin.readingKey){todayHandoff.current=null;return}
+  if(view.busy||p.controller.snapshot.busy||p.controller.snapshot.view!==view)return
+  if(saved){todayHandoff.current=null;setTodayAt(null);if(focusKey!==canonicalJson(saved))p.onOpeningFocus?.(saved)}
+  else if(view.runId!==origin.previous.view.runId||view.revision!==origin.previous.view.revision)todayHandoff.current=null
+ },[view,f,p.openingFocus,p.onOpeningFocus,p.controller,p.controller.runtimeSession,p.readingContext,todayAt,setTodayAt,readingKey])
+ const requestScene:GamePanelProps['request']=(kind,payload,label,confirm)=>{
+  todayHandoff.current=null
+  if(todayChoices.has(kind)&&dayPerspectiveCurrent(view,todayAt)&&!view.readOnly&&!view.hasCandidate&&view.saveStatus==='saved'&&!view.busy&&!p.controller.snapshot.busy&&p.controller.snapshot.view===view&&typeof payload==='object'&&payload!==null&&!Array.isArray(payload)){
+   try{todayHandoff.current={controller:p.controller,session:p.controller.runtimeSession,context:p.readingContext,previous:{view,features:f},kind,payload:JSON.parse(canonicalJson(payload)) as Record<string,unknown>,focusKey:canonicalJson(p.openingFocus??null),todayKey:canonicalJson(todayAt),readingKey}}catch{/* Invalid payload still follows the original request and validation. */}
+  }
+  p.request(kind,payload,label,confirm)
+ }
  const opening=view.phase==='playing'
  const showToday=()=>makeSharedAction(p,'回到今天',()=>{setRecollection(false);setExploring(false);setTodayAt(w.pause||w.progression.requiresDelivery?null:{runId:view.runId,revision:view.revision})},{allowReadOnly:true}).activate()
  const returnToFocus=()=>setTodayAt(null)
@@ -99,13 +122,13 @@ export function CinematicRoom(p:Props){
   p.request(kind,payload,label,confirm)
  }) as GamePanelProps['request']}
  const inspectFollow=()=>{if(!panel)return;setFollowPanel(null);p.onNavigate('deepseek',{accountId:panel.target.accountId,deepseekPane:'equity',equityTarget:panel.target,recordId:equityTargetEntity(panel.target),openRecord:true})}
- return <div ref={momentRoot} className="cinematic-home">
+ return <div ref={momentRoot} className="cinematic-home" onPointerDownCapture={()=>{todayHandoff.current=null}} onKeyDownCapture={()=>{todayHandoff.current=null}}>
   <section className={'cinematic-stage clarity-stage'+(opening?' opening-room':'')} data-exploring={exploring?'true':'false'} aria-label="可探索的住处">
    {!p.textOnly?<RoomBackdrop improved={f.life.scene.workspaceCompleted}/>:null}
    <div className="room-vignette" aria-hidden="true"/>
    {spot?<div className="room-attention" aria-hidden="true" style={{left:spot[3]+'%',top:spot[4]+'%'}}/>:null}
    {exploring?<><header className="room-chapter"><p className="eyebrow">{w.quarter} / 第{season.chapter??'—'}幕</p><h1 ref={p.headingRef} tabIndex={-1}>房间里，还有别的可能。</h1><p className="room-exploration-guide">走近一件物品，看看它带你去哪里。</p></header>
-   <nav className="room-objects" aria-label="探索住处">{spots.map(([screen,label,hint,x,y])=><button type="button" className="room-hotspot" key={screen} style={{left:x+'%',top:y+'%'}} aria-label={label} aria-describedby={inspected===screen?'room-inspection-copy':undefined} data-inspected={inspected===screen?'true':undefined} onPointerEnter={()=>setHovered(screen)} onPointerLeave={()=>setHovered(null)} onFocus={()=>{setFocused(screen);setHovered(null)}} onBlur={()=>setFocused(null)} onClick={()=>p.onNavigate(screen)}><span className="hotspot-diamond" aria-hidden="true"/><span><strong>{label}</strong><small>{hint}</small></span></button>)}</nav></>:<RoomMoment p={p} openingFocus={p.openingFocus} focusQuarter={p.focusQuarter} focusNotice={p.focusNotice} focusRequiresChoice={p.focusRequiresChoice} onOpeningFocus={p.onOpeningFocus} headingRef={p.headingRef} feedback={p.timeEcho??p.notice} onNavigate={p.onNavigate} onExplore={()=>setExploring(true)} onResponsibilities={()=>setResponsibilities(true)} onRecollection={()=>setRecollection(true)} todayView={dayPerspectiveCurrent(view,todayAt)} onToday={showToday} onReturnFocus={returnToFocus}/>}
+   <nav className="room-objects" aria-label="探索住处">{spots.map(([screen,label,hint,x,y])=><button type="button" className="room-hotspot" key={screen} style={{left:x+'%',top:y+'%'}} aria-label={label} aria-describedby={inspected===screen?'room-inspection-copy':undefined} data-inspected={inspected===screen?'true':undefined} onPointerEnter={()=>setHovered(screen)} onPointerLeave={()=>setHovered(null)} onFocus={()=>{setFocused(screen);setHovered(null)}} onBlur={()=>setFocused(null)} onClick={()=>p.onNavigate(screen)}><span className="hotspot-diamond" aria-hidden="true"/><span><strong>{label}</strong><small>{hint}</small></span></button>)}</nav></>:<RoomMoment p={{...p,request:requestScene}} openingFocus={p.openingFocus} focusQuarter={p.focusQuarter} focusNotice={p.focusNotice} focusRequiresChoice={p.focusRequiresChoice} onOpeningFocus={p.onOpeningFocus} headingRef={p.headingRef} feedback={p.timeEcho??p.notice} onNavigate={p.onNavigate} onExplore={()=>setExploring(true)} onResponsibilities={()=>setResponsibilities(true)} onRecollection={()=>setRecollection(true)} todayView={dayPerspectiveCurrent(view,todayAt)} onToday={showToday} onReturnFocus={returnToFocus}/>}
    <EquityFollowNotice p={p} viewing={!exploring&&!dayPerspectiveCurrent(view,todayAt)&&p.openingFocus?.kind==='equity'?p.openingFocus.equityTarget:null} blocked={urgent>0||recollection||records||responsibilities||panel!==null} onOpen={target=>setFollowPanel({target,intent:'follow'})}/>
    <nav className="room-pocket" aria-label="随身记录">{opening?<button type="button" onClick={()=>setRecords(true)}><span aria-hidden="true">▤</span>翻开随身册</button>:<><SceneJournal p={p} onNavigate={p.onNavigate} compact/>{p.onJourney?<button type="button" onClick={p.onJourney}><span aria-hidden="true">◈</span>篇章</button>:null}<button type="button" onClick={()=>p.onPeople()}><span aria-hidden="true">♧</span>人物</button><button type="button" onClick={p.onYear}><span aria-hidden="true">▤</span>年度</button></>}<button type="button" onClick={()=>setResponsibilities(true)}><span aria-hidden="true">◷</span>牵挂与日历{urgent>0?<b>{urgent}</b>:null}</button></nav>
    {exploring?<footer className="room-narrative" data-inspecting={look?'true':undefined}><div id="room-inspection-copy"><span className="narrative-speaker">{look?.speaker??'你 · 眼前的房间'}</span><p>{look?.line??'电脑、门外、书架和床边，连接着四种不同的日子。'}</p><small>{look?.hint??'这里是自由探索。翻看不花钱，也不替你接受承诺。'}</small></div><div className="room-next"><button type="button" className="primary" onClick={()=>setExploring(false)}>回到眼前这件事 →</button>{canAdvance?<ClockAdvance p={p} date={nextDate!} label={defaultWaitLabel(w,typeof p.requestWait==='function')+' · '+nextDate} room/>:null}</div></footer>:null}

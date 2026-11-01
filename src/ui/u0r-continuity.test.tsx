@@ -105,7 +105,7 @@ describe('U0-R continuity keeps the original identity, amounts and guards',()=>{
   const p=first.p(),focus=openingFocusFor(p,'quarter',{recordId:p.features.firstOrder.contractId!})!,raw=first.controller.exportSaved(),driver=room(p,focus),rows=driver.render()
   const main=button(rows,'收好这次结果，回到今天安排日子'),object=rows.find(row=>row.type===OpeningObject)!
   expect(object.props.onActivate).toBe(main.props.onClick)
-  expect(rows.filter(row=>row.type==='p').map(row=>text(row.props.children)).join(' ')).toContain('本单实收¥1,300 · 制作直接成本¥500 · 本单净额¥800')
+  expect(rows.filter(row=>row.type==='p').map(row=>text(row.props.children)).join(' ')).toContain('实收¥1,300 · 制作成本¥500 · 本单净额¥800')
   click(main);(object.props.onActivate as ()=>void)()
   expect(driver.onToday).toHaveBeenCalledTimes(2);expect(driver.onFocus).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled()
   expect(first.controller.exportSaved()).toBe(raw)
@@ -123,9 +123,10 @@ describe('U0-R continuity keeps the original identity, amounts and guards',()=>{
  })
  it('keeps a ready course on the same object when its record is opened and cancelled',()=>{
   const p=ready.p(),focus=courseFocus(p),driver=room(p,focus),raw=ready.controller.exportSaved(),rows=driver.render()
-  click(button(rows,'翻阅这一段的记录与代价'))
+  click(button(rows,'翻开手记'))
   const open=driver.render(),dialog=open.find(row=>row.type===Dialog&&String(row.props.className).includes('tableau-source-record'))!
   expect(text(dialog.props.children)).toContain(p.features.course!.courses[0]!.id)
+  expect(text(dialog.props.children)).toContain('样课已经完成 · 招生仍另行决定')
   ;(dialog.props.onClose as ()=>void)()
   const after=driver.render(),beforeObject=rows.find(row=>row.type===OpeningObject)!,afterObject=after.find(row=>row.type===OpeningObject)!
   expect(afterObject.props.title).toBe(beforeObject.props.title);expect(afterObject.props.actionLabel).toBe(beforeObject.props.actionLabel)
@@ -149,8 +150,8 @@ describe('U0-R continuity keeps the original identity, amounts and guards',()=>{
   expect(published).toContain('仍受保护¥398');expect(published).toContain('教学收入¥398')
   expect(published).toContain('4名留存学员');expect(published).toContain('已交出1/2段')
   expect(driver.onFocus).not.toHaveBeenCalled();expect(driver.onNavigate).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled();expect(promised97.controller.exportSaved()).toBe(raw)
-  expect(rows.some(row=>row.type==='button'&&text(row.props.children).includes('翻阅这一段的记录与代价'))).toBe(true)
-  click(button(rows,'看看能否留点时间给自己'))
+  expect(rows.some(row=>row.type==='button'&&text(row.props.children).includes('翻开手记'))).toBe(true)
+  click(button(rows,'留点时间给自己'))
   expect(driver.onNavigate).toHaveBeenCalledExactlyOnceWith('life',{accountId:'personal',lifeSelection:'rest'})
   expect(driver.onFocus).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled();expect(promised97.controller.exportSaved()).toBe(raw)
  })
@@ -169,7 +170,7 @@ describe('U0-R continuity keeps the original identity, amounts and guards',()=>{
   expect(object.props.teachingPaper).toMatchObject({phase:'update',protectedFen:39800,stages:['completed','planned']})
   click(main);(object.props.onActivate as ()=>void)()
   expect(driver.onToday).not.toHaveBeenCalled();expect(driver.onFocus).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled();expect(updated105.controller.exportSaved()).toBe(raw)
-  click(button(rows,'看看能否留点时间给自己'))
+  click(button(rows,'留点时间给自己'))
   expect(driver.onNavigate).toHaveBeenCalledExactlyOnceWith('life',{accountId:'personal',lifeSelection:'rest'})
   expect(driver.onFocus).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled();expect(updated105.controller.exportSaved()).toBe(raw)
  })
@@ -203,7 +204,7 @@ describe('U0-R continuity keeps the original identity, amounts and guards',()=>{
   expect(today.ongoing.some(item=>item.focus.kind==='relay'&&item.focus.relayTarget?.kind==='period'&&item.focus.relayTarget.periodId===period.id)).toBe(true)
   expect(rows.some(row=>row.type===CommandButton&&String(row.props.kind).startsWith('CollectRelay'))).toBe(false)
   expect(rows.some(row=>row.type==='p'&&text(row.props.children).includes('原客户款已到期、尚未收取'))).toBe(false)
-  click(button(rows,'回到书签里的那件事'))
+  click(button(rows,'回到书签'))
   expect(onResume).toHaveBeenCalledOnce();expect(onFocus).not.toHaveBeenCalled();expect(onPrepare).not.toHaveBeenCalled();expect(relay.controller.exportSaved()).toBe(raw)
  })
  it('takes an actual due-customer hint directly to the same original customer record without collecting or borrowing a different account',()=>{

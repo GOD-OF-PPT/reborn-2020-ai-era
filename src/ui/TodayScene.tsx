@@ -1,3 +1,4 @@
+import {sceneReadingLabel,sceneReadingName} from './scene-language.ts'
 import {useEffect,useImperativeHandle,useRef,useState,type Ref,type ReactNode} from 'react'
 import type {GamePanelProps,NavigateScene} from './game-types.ts'
 import {openingFocusFor,type OpeningFocus} from './player-thread.ts'
@@ -27,10 +28,10 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
  const localHeading=useRef<HTMLHeadingElement>(null)
  useImperativeHandle(headingRef,()=>localHeading.current!,[])
  useEffect(()=>{localHeading.current?.focus({preventScroll:true})},[])
- const personal={...p,accountId:'personal'},free:OpeningFocus={runId:p.view.runId,kind:'free',accountId:'personal',entityId:null}
+ const personal={...p,accountId:'personal'}
  const ui=(label:string,activate:()=>void)=>makeSharedAction(p,label,activate,{allowReadOnly:true})
  const choose=(focus:OpeningFocus)=>{const binding=ui('把这件事放回眼前',()=>{setPage(null);onFocus(focus)});binding.activate()}
- const prepare=(next:'life'|'market')=>{const binding=ui('选择新的方向',()=>{onPrepare(free);setPage(next)});binding.activate()}
+ const prepare=(next:'life'|'market')=>{const binding=ui('选择新的方向',()=>setPage(next));binding.activate()}
  const request:GamePanelProps['request']=(...args)=>{setPage(null);p.request(...args)}
  const commandProps={...personal,request}
  const continuing=today.ongoing.filter(item=>!(item.focus.kind==='market'&&item.focus.entityKind==='position'&&!item.wait))
@@ -49,7 +50,7 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
  const situation=meaning?.situation??(continuation?one!.line:hasMoney||!continuing.length&&p.features.relay?.businesses.length?today.line:today.ongoing.length?'还有'+today.ongoing.length+'件已经答应的事，正在照约定继续。':null)
  const dueCustomers=p.features.relay?.customers.filter(customer=>customer.dueReceivableFen>0)??[]
  const dueTotal=dueCustomers.reduce((sum,customer)=>sum+customer.dueReceivableFen,0)
- const button=(label:string,activate:()=>void,description?:string)=>{const action=ui(label,activate);return <button type="button" disabled={action.disabled} onClick={action.activate}>{label}{description?<span>{description}</span>:null}</button>}
+ const button=(label:string,activate:()=>void,description?:string)=>{const action=ui(label,activate);return <button type="button" aria-label={sceneReadingName(label)} disabled={action.disabled} onClick={action.activate}>{sceneReadingLabel(label)}{description?<span>{description}</span>:null}</button>}
  const videoFocus=today.primary.thread.focus.kind==='video'?today.primary.thread.focus:null
  const videoTarget=videoFocus?.videoTarget??undefined
  const videoProps={...p,accountId:videoFocus?.accountId??'personal',request}
@@ -64,14 +65,14 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
    context={<><p className="opening-room-stage">今天 {p.view.date}</p></>}
    feedback={!statusFeedback&&!calendarStatus&&!repeatedReadOnly&&feedback&&feedback!=='已从本机存档继续。'?<div className={typeof feedback==='string'?'moment-status':'moment-feedback'}>{feedback}</div>:null}
    facts={<>{situation?<p className="moment-line">{situation}</p>:null}{one?<p className="moment-terms">{continuation?.kind==='money'?'原款仍保留：':'仍在继续：'}{one.title.replace(/[。！？]$/u,'')}{one.wait?' · 下一反馈 '+one.wait.date:''}。</p>:null}{dueTotal>0?<p className="relay-scene-money">原客户款已到期、尚未收取 {moneyText(dueTotal)}。<button type="button" className="scene-text-action" onClick={ui('翻看这些原客户款',()=>setPage('ongoing')).activate}>逐位翻回原客户 ↗</button></p>:null}</>}
-   decisions={<><div className="command moment-decision moment-primary"><button type="button" disabled={primary.disabled} onClick={primary.activate}><b aria-hidden="true">01</b><span>{primary.label}</span><i aria-hidden="true">→</i></button>{primary.reason?<small className="reason">{primary.reason}</small>:null}</div>
+   decisions={<><div className="command moment-decision moment-primary"><button type="button" aria-label={sceneReadingName(primary.label)} disabled={primary.disabled} onClick={primary.activate}><b aria-hidden="true">01</b><span>{sceneReadingLabel(primary.label)}</span><i aria-hidden="true">→</i></button>{primary.reason?<small className="reason">{primary.reason}</small>:null}</div>
     {today.wait?<div className="moment-wait"><ClockAdvance p={p} date={today.wait.date} label={'不新增安排，让原日子继续 · '+today.wait.date} room showReason={!p.view.readOnly&&!p.view.hasCandidate&&p.view.saveStatus!=='conflict'}/></div>:button('翻看今天的日历',()=>onNavigate('quarter',{accountId:p.accountId}),'原费用、期限和未完约定都在这里')}
-    <button type="button" className="moment-explore" onClick={ui('环顾房间，想想别的可能',onExplore).activate}>环顾房间，想想别的可能 <span aria-hidden="true">↗</span></button>
+    <button type="button" className="moment-explore" onClick={ui('环顾房间，想想别的可能',onExplore).activate} aria-label="环顾房间，想想别的可能 ↗">环顾房间 <span aria-hidden="true">↗</span></button>
    </>}
-   object={<OpeningObject copyMode="tableau" kind="calendar" title="今天的日历" displayTitle="" detail={p.view.date} stageLabel="今天 · 仍可安排" actionLabel={primary.label} onActivate={primary.activate} disabled={primary.disabled} textOnly={p.textOnly===true} dayPaper={{kind:'today',state:'ongoing'}} {...(p.view.readOnly?{protection:'readonly' as const}:p.view.hasCandidate||p.view.saveStatus==='conflict'?{protection:'unsaved' as const}:{})}/>}
-   record={<><button type="button" className="scene-text-action" onClick={ui('看看工作、其它尝试与原约定',()=>setPage('directions')).activate}>看看工作、其它尝试与原约定 ↗</button>{statusFeedback&&!repeatedReadOnly?<p className="moment-status" role="status">{statusFeedback}</p>:null}{calendarStatus?<div className="ecosystem-reading-status">{calendarStatus}</div>:null}</>}
+   object={<OpeningObject copyMode="tableau" kind="calendar" title="今天的日历" displayTitle="" detail={p.view.date} stageLabel="今天 · 仍可安排" actionLabel={sceneReadingLabel(primary.label)} onActivate={primary.activate} disabled={primary.disabled} textOnly={p.textOnly===true} dayPaper={{kind:'today',state:'ongoing'}} {...(p.view.readOnly?{protection:'readonly' as const}:p.view.hasCandidate||p.view.saveStatus==='conflict'?{protection:'unsaved' as const}:{})}/>}
+   record={<><button type="button" className="scene-text-action" onClick={ui('看看工作、其它尝试与原约定',()=>setPage('directions')).activate} aria-label="想想今天 · 看看工作、其它尝试与原约定 ↗">想想今天 ↗</button>{statusFeedback&&!repeatedReadOnly?<p className="moment-status" role="status">{statusFeedback}</p>:null}{calendarStatus?<div className="ecosystem-reading-status">{calendarStatus}</div>:null}</>}
   />
-  {page?<Dialog title={page==='directions'?'今天，想把时间留给什么？':page==='life'?'给生活留出一段真实的日子':page==='market'?'给自己的模拟判断划一个边界':'这些原安排，仍在继续'} className="opening-paper today-choice-paper" onClose={()=>setPage(null)} footer={<div className="today-choice-footer">{page!=='directions'?button('返回今天的选择',()=>setPage('directions')):null}{button('先不新增安排，合上这一页',()=>setPage(null))}</div>}>
+  {page?<Dialog title={page==='directions'?'今天，想把时间留给什么？':page==='life'?'留点时间给自己':page==='market'?'这次，怎样判断？':'手头的事'} className="opening-paper today-choice-paper" onClose={()=>setPage(null)} footer={<div className="today-choice-footer">{page!=='directions'?button('返回今天的选择',()=>setPage('directions')):null}{button('先不新增安排，合上这一页',()=>setPage(null))}</div>}>
    <p className="opening-paper-date">今天 {p.view.date} · {p.features.workbench.quarter}</p>
    {page==='directions'?<><div className="opening-directions today-directions">
     {today.ongoing.length?button('继续手头的事',()=>setPage('ongoing'),'工作、旧约和待收款'):null}

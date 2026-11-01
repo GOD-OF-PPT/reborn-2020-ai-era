@@ -31,11 +31,12 @@ import paidSource from '../../goal-1/evidence/t17-acceptance-03/video-matrix-r1/
 const hooks=vi.hoisted(()=>({values:[] as unknown[],index:0}))
 vi.mock('react',async original=>{
  const actual=await original<typeof import('react')>()
- return {...actual,useEffect:()=>{},useId:()=> 'video-day-handler',useState:<T,>(initial:T|(()=>T))=>{
+ const useState=<T,>(initial:T|(()=>T))=>{
   const index=hooks.index++
   if(!(index in hooks.values))hooks.values[index]=typeof initial==='function'?(initial as ()=>T)():initial
-  return [hooks.values[index] as T,(value:T|((previous:T)=>T))=>{hooks.values[index]=typeof value==='function'?(value as (previous:T)=>T)(hooks.values[index] as T):value}]
- }}
+  return [hooks.values[index] as T,(value:T|((previous:T)=>T))=>{hooks.values[index]=typeof value==='function'?(value as (previous:T)=>T)(hooks.values[index] as T):value}] as const
+ }
+ return {...actual,useEffect:()=>{},useId:()=> 'video-day-handler',useState,useRef:<T,>(initial:T)=>useState(()=>({current:initial}))[0]}
 })
 const never=()=>{throw Error('READING_MUST_NOT_COMMAND')}
 function history(name:string,source?:string){
@@ -150,14 +151,14 @@ it.each(['work','video'] as const)('shares the quarter decision between the main
   const p=h.p(),focus:OpeningFocus=kind==='work'?{runId:p.view.runId,accountId:'personal',kind:'work',entityId:p.view.operations!.employment[0]!.id}:openingFocusFor(p,'video',{videoTarget:{channelId:p.features.video!.works[0]!.channelId,workId:p.features.video!.works[0]!.id}})!,onRecollection=vi.fn(),raw=h.controller.exportSaved()
   expect(p.features.workbench.atQuarterEnd).toBe(true)
   const render=(props:GamePanelProps)=>{hooks.index=0;return OpeningMoment({p:props,headingRef:null,fallback:roomMoment(props),focus,onFocus:never,onNavigate:never,onExplore:never,onRecollection})}
-  const nodes=elements(render(p)),main=nodes.find(node=>node.type==='button'&&text(node.props.children).includes('看看这一季，真实留下了什么'))!,object=nodes.find(node=>node.type===OpeningObject)!
+  const nodes=elements(render(p)),main=nodes.find(node=>node.type==='button'&&text(node.props.children).includes('翻本季留页'))!,object=nodes.find(node=>node.type===OpeningObject)!
   expect(main).toBeDefined();expect(main.props.onClick).toBe(object.props.onActivate)
   expect(main.props.disabled).toBe(false);expect(object.props.disabled).toBe(false)
   if(typeof main.props.onClick!=='function')throw Error('ORIGINAL_QUARTER_HANDLER_REQUIRED')
   main.props.onClick();expect(onRecollection).toHaveBeenCalledTimes(1)
   if(typeof object.props.onActivate!=='function')throw Error('ORIGINAL_OBJECT_HANDLER_REQUIRED')
   object.props.onActivate();expect(onRecollection).toHaveBeenCalledTimes(2)
-  const candidate={...p,view:{...p.view,hasCandidate:true,saveStatus:'unsaved' as const}},blocked=elements(render(candidate)),blockedMain=blocked.find(node=>node.type==='button'&&text(node.props.children).includes('看看这一季，真实留下了什么'))!,blockedObject=blocked.find(node=>node.type===OpeningObject)!
+  const candidate={...p,view:{...p.view,hasCandidate:true,saveStatus:'unsaved' as const}},blocked=elements(render(candidate)),blockedMain=blocked.find(node=>node.type==='button'&&text(node.props.children).includes('翻本季留页'))!,blockedObject=blocked.find(node=>node.type===OpeningObject)!
   expect(blockedMain.props.disabled).toBe(true);expect(blockedObject.props.disabled).toBe(true)
   expect(blockedMain.props.onClick).toBe(blockedObject.props.onActivate)
   if(typeof blockedMain.props.onClick!=='function')throw Error('PROTECTED_QUARTER_HANDLER_REQUIRED')
