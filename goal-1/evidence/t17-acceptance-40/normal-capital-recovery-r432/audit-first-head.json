@@ -1,0 +1,79 @@
+{
+  "at": "2026-11-01T17:01:08.196Z",
+  "source": 416,
+  "inputRevision": 372,
+  "savedRevision": 373,
+  "date": "2022-11-30",
+  "bytes": 5661089,
+  "sha256": "36450905e05f263cddeb9c0874c4e0088157c98814b8084a5611829f683850d6",
+  "old372ReceiptPrefixExact": true,
+  "fullOriginalWireRoundTripExact": true,
+  "firstActualReceipt": {
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:373",
+      "expectedRevision": 372,
+      "kind": "ChooseEvent",
+      "payload": {
+        "instanceId": "event:c4573c6eb77d038cb88a52af058aed8a",
+        "choiceId": "defer"
+      }
+    },
+    "receipt": {
+      "runId": "u6-board-capital-pilot-v1",
+      "commandId": "normal-capital-v2:373",
+      "actorId": "player",
+      "kind": "ChooseEvent",
+      "payloadHash": "fa7a4b32df9730cd0fef40109c446932c57c704f992cf46f81c9460a1eafaa0d",
+      "payloadSignature": "{\"actorId\":\"player\",\"kind\":\"ChooseEvent\",\"payload\":{\"choiceId\":\"defer\",\"instanceId\":\"event:c4573c6eb77d038cb88a52af058aed8a\"},\"runId\":\"u6-board-capital-pilot-v1\"}",
+      "revisionBefore": 372,
+      "revisionAfter": 373,
+      "ledgerReceiptCountAfter": 26636,
+      "date": "2022-11-30",
+      "summary": "事件选择已处理",
+      "transactionIds": [],
+      "causeIds": [
+        "cause:normal-capital-v2:373",
+        "effect:6a0a30da827d9703c5a5998d06483235",
+        "resolved:2fcd4d847aa653a6b068817c152a6e67"
+      ]
+    }
+  },
+  "event": {
+    "id": "event:c4573c6eb77d038cb88a52af058aed8a",
+    "definitionId": "PREP-COURSE",
+    "status": "resolved",
+    "choiceId": "defer",
+    "resolvedAt": "2022-11-30"
+  },
+  "budget": {
+    "available": 0,
+    "quarter": "2022-Q4",
+    "reserved": 1,
+    "spent": 3,
+    "total": 4
+  },
+  "personal": {
+    "cashFen": 2202320,
+    "heldFen": 0,
+    "availableFen": 2202320,
+    "protectionRequiredFen": 0,
+    "protectionShortfallFen": 0,
+    "commitmentShortfallFen": 0,
+    "receivableFen": 0,
+    "prepaidLiabilityFen": 0,
+    "payableFen": 0,
+    "supplierPrepaidFen": 0,
+    "investmentValueFen": 34402050,
+    "netAssetsFen": 36604370
+  },
+  "newDefaultSelectionSameAsPublished": true,
+  "wallMs": 173637,
+  "authorFileSaveOnly": true,
+  "newNative": 0,
+  "newIndexedDbWrites": 0,
+  "wholeU6Complete": false,
+  "normalBoardComplete": false,
+  "compatibility": 0
+}

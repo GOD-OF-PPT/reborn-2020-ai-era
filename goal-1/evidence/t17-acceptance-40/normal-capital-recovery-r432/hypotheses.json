@@ -1,0 +1,22 @@
+{
+  "afterReproduction": "reproduction.json: original current paused branch failed twice with zero candidates",
+  "ranked": [
+    {
+      "id": "H1",
+      "cause": "Author filters open, but current original pending event is published as pending",
+      "prediction": "Original openedBy link matches exactly one pending instance and one public blocking event; open matches zero."
+    },
+    {
+      "id": "H2",
+      "cause": "Pause identifier relation is incorrect",
+      "prediction": "OpenedBy relation has no pending match but direct instance id relation has a unique match."
+    },
+    {
+      "id": "H3",
+      "cause": "Multiple unanswered events are being confused with the current blocking event",
+      "prediction": "Several public pending events exist but only one isBlocking; a selector over all pending events would be ambiguous."
+    }
+  ],
+  "alreadyExcluded": "Full original wire and original305 receipt prefix plus all67 original normalized journal fingerprints passed.",
+  "newGameCommands": 0
+}
