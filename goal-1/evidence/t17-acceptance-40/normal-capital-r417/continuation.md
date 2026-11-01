@@ -11,3 +11,7 @@ audit-first-head-input.json是稳定实际308独立捕获，4673737B/215721ef…
 execution-r1仍在写head/log/季度档，不能stage活文件或封存。本父也不能STOP/seal；原策略遇真规则/编码失败需保head/未存proposal和真实terminal，再诊断；不能改终点为有限检查点。Node wrapper有execution-terminal后才认终态，观察超时不等于退出。
 
 全U6原17/5/正常董事/最终全审及U7/U8/CUX12完整U4-B/U5/U6、U9后原组合、T17余、原PNG0of3/真人0/P3正式62与22not_run、长档慢/四时限红、M01须明确恢复/T18最后和goal active全保。所有兼容0。无Native新步骤，无主Core/导入/设置/书签，无push/deploy/委派/外部消息/global memory写。
+
+作者WIP实际5a403ef717e0f8c65d8718731552e515fd268b1f（27 owned/0产品/未push）已核；最后记录真实316/2022-07-31，不是固定311，接续以实时head/journal为准。Root和child都仍active，无STOP/seal。
+
+本轮诊断handle10854实际exit0/107679ms，原308→真实309同ID全wire同。codec export27.3s/import19.5s，canonical仅2.2s，deepStrict0.35s；单次Node未受控，不冒正式性能。没有更改活driver原严格检查，不为此重启。diagnostic-r1将在本轮独立STOP/seal；根417与execution-r1仍active。最近观察324/Jul31续客户，后续以实时日志为准，不固定记录值。

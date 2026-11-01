@@ -1,0 +1,3 @@
+- [x] 同一真实309只读重算与分段计时，实际exit0/107679ms。
+- [x] 全wire/全canonical/deep strict一致；单次Node不冒性能通过。
+- [x] 原driver未改，诊断producer已真实终结；父/执行仍active。

@@ -13,3 +13,9 @@
 无必要重复未改产品的全批测试或构建。Node原strip-types语法检查过；原日期API负输入拒绝不改。旧时限红/长档慢/正式真人0/原PNG0of3/P3正式62与22not_run/完整U6与后续组合/M01待明确恢复/T18最后保。兼容开发测试0，无push/deploy/外部资源/委派/消息/global memory写。主5415/416没有业务/导入/设置/书签操作。
 
 [GJ] 工具恢复与真实原命令已验证，不把季度检查点降格为完整目标，不读未来事实或拼Native分支。当前资金及治理终点未达，任务保持未完成；准备只提交稳定作者工具/输入与独立308审计，活head/log/季度文件不stage。
+
+## 只读309诊断完成，原执行继续
+
+诊断10854实际exit0/107679ms：真实308输入+原实际309同ID命令，重算wire与真实日志同，全canonical与deep strict相等，输入未改。单次Node import21.6s/preview0.96s/kernel9.49s/export27.33s/proposalImport19.51s/canonical2.22s/deepStrict0.35s；总时长还含输入再导出与模块开销。没有把单次并行受干扰诊断当性能通过，也未为了小比较收益更改活driver或减原检查。diagnostic-r1六普通文件已terminal/STOP/fullseal0c7492e7…，父417与execution-r1不封存。
+
+本次最后记录实际328/2022-07-31，原92675/PID77448继续完整2025目标。新source产品改动仍0；所有作者规范保存非新Controller/IDB/Native。
