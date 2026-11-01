@@ -1,0 +1,804 @@
+[
+  {
+    "revision": 373,
+    "date": "2022-11-30",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:373",
+      "expectedRevision": 372,
+      "kind": "ChooseEvent",
+      "payload": {
+        "instanceId": "event:c4573c6eb77d038cb88a52af058aed8a",
+        "choiceId": "defer"
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 5661089,
+    "sha256": "36450905e05f263cddeb9c0874c4e0088157c98814b8084a5611829f683850d6",
+    "wallMs": 124741
+  },
+  {
+    "revision": 374,
+    "date": "2022-12-12",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:374",
+      "expectedRevision": 373,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2022-12-12"
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 5756169,
+    "sha256": "e323ef7bd06b392e3bb53f3989eef94b3744ceb3ad2dd406d90ed32b9f24725f",
+    "wallMs": 573156
+  },
+  {
+    "revision": 375,
+    "date": "2022-12-31",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:375",
+      "expectedRevision": 374,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2022-12-31"
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 5756477,
+    "sha256": "20b3b5a1d7d3f39eb40e99d743ca6e5a70e2bda4eee1c2c678b51215cf9b8b90",
+    "wallMs": 98219
+  },
+  {
+    "revision": 376,
+    "date": "2022-12-31",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:376",
+      "expectedRevision": 375,
+      "kind": "DistributeProfit",
+      "payload": {
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "amountFen": 5749104
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 5756525,
+    "sha256": "f16b4dc99feceeeda234c4cc05cdc5811dc68257a0b1c4ffb8888bffe3ae4b9b",
+    "wallMs": 108920
+  },
+  {
+    "revision": 377,
+    "date": "2022-12-31",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:377",
+      "expectedRevision": 376,
+      "kind": "PlaceStockOrder",
+      "payload": {
+        "accountId": "personal",
+        "symbol": "SIM-AI03",
+        "side": "buy",
+        "quantity": 1990,
+        "limitPriceFen": 2574,
+        "quoteId": "SIM-CP-2022-12-31",
+        "validUntil": "SIM-CP-2023-01-31"
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 5129943,
+      "releasedFen": 0
+    },
+    "bytes": 5756497,
+    "sha256": "7245933effb5ceab1351a42362573288c4923de2c598e4547b17f47652b1df61",
+    "wallMs": 78154
+  },
+  {
+    "revision": 378,
+    "date": "2023-01-01",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:378",
+      "expectedRevision": 377,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2023-01-01"
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 5756549,
+    "sha256": "b6c9598d1054de5ac531c72ca410322b0bdee7076f55d110b29b3e571f75622f",
+    "wallMs": 106665
+  },
+  {
+    "revision": 379,
+    "date": "2023-01-01",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:379",
+      "expectedRevision": 378,
+      "kind": "CancelStockOrder",
+      "payload": {
+        "orderId": "market:08c7307209f95ff1958f02fc768d555d"
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 5129943
+    },
+    "bytes": 5756505,
+    "sha256": "acc7326f3cfcc1a5a57b212dce57d0e87b2a7a46ed95ce5db88d62fd6ba1f1b4",
+    "wallMs": 121710
+  },
+  {
+    "revision": 380,
+    "date": "2023-01-01",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:380",
+      "expectedRevision": 379,
+      "kind": "PlaceStockOrder",
+      "payload": {
+        "accountId": "personal",
+        "symbol": "SIM-AI03",
+        "side": "buy",
+        "quantity": 1840,
+        "limitPriceFen": 2574,
+        "quoteId": "SIM-CP-2022-12-31",
+        "validUntil": "SIM-CP-2023-01-31"
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 4743264,
+      "releasedFen": 0
+    },
+    "bytes": 5756269,
+    "sha256": "f4d7dae500fc74bc7312f19c1934d74909865679e7011ccd3ffc4ce55dfbba7f",
+    "wallMs": 123712
+  },
+  {
+    "revision": 381,
+    "date": "2023-01-01",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:381",
+      "expectedRevision": 380,
+      "kind": "StartRelayServicePeriod",
+      "payload": {
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "customerIds": [
+          "rly:8d5febe2daed7e357160da4215fecae4",
+          "rly:1a83f8dc83faaa709c759bacf81129fe",
+          "rly:eb11d453377d6081a55f33305f22b290",
+          "rly:6b119bcf7838ec3ee6186c786ff16557",
+          "rly:418e245360e994603e36c1a3447e4bfe",
+          "rly:555dc1412ea3ad9ea8cb81493f5b90ed",
+          "rly:5dae06c705327a1c7352149cfc3da297",
+          "rly:b159d5c103ed3040d85e0d7888efc23f",
+          "rly:f696341cfa2615221d37ac5878f7364f",
+          "rly:1563279a1d293524fbd2d43980a37e83",
+          "rly:cadfa08640468e9ca9516420560c836a",
+          "rly:5188cfc5aad905c6ef097f386a088267",
+          "rly:1268a0d14e0c50c4c977773c91c02695",
+          "rly:ed1499f3f5c208b332b4844a902cba9d",
+          "rly:f2fe8463b7902ab706b34f995895c4e7",
+          "rly:012134be072550f8806827a7b2e3b3c8",
+          "rly:e95e70103f5df75daaa375332e1cbfb6",
+          "rly:7db9b122d63605522ed3a43c5257ee3d",
+          "rly:4ac310f5989fa0951e62ea72d907950c",
+          "rly:5f899912894741f96aba4fef3c312674"
+        ],
+        "supplierIds": [
+          "cedar-direct"
+        ],
+        "maxUnits": 300000,
+        "maxSupplierCostFen": 2000000,
+        "supportMode": "guided",
+        "resources": [
+          "player-production"
+        ],
+        "startAt": "2023-01-02"
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 2,
+      "upfrontCostFen": 450000,
+      "releasedFen": 0,
+      "actionAllocations": [
+        {
+          "date": "2023-01-02",
+          "actionPoints": 1,
+          "label": "\u670d\u52a1\u5468\u671f"
+        },
+        {
+          "date": "2023-01-30",
+          "actionPoints": 1,
+          "label": "\u7ea6\u5b9a\u652f\u6301"
+        }
+      ]
+    },
+    "bytes": 5757141,
+    "sha256": "3860afe095f1200150fae5996164f688f0eec0d8c6f1c2cd2bd37b379df18010",
+    "wallMs": 132406
+  },
+  {
+    "revision": 382,
+    "date": "2023-01-10",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:382",
+      "expectedRevision": 381,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2023-01-10"
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 5845601,
+    "sha256": "331d221d9b7fe3d58f7932c69a104d0c97bb556762f52da4b3f58a5e98e272f5",
+    "wallMs": 481261
+  },
+  {
+    "revision": 383,
+    "date": "2023-01-20",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:383",
+      "expectedRevision": 382,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2023-01-20"
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 5958913,
+    "sha256": "ac9eb4445360f392a268770f5c2a605b9686882efbe296ac62789b58dc8f1089",
+    "wallMs": 553400
+  },
+  {
+    "revision": 384,
+    "date": "2023-01-31",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:384",
+      "expectedRevision": 383,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2023-01-31"
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6067241,
+    "sha256": "9243be01175cbd44539594cb663b90e5bdc92458607ab573ab97880a6e7ba6ec",
+    "wallMs": 615052
+  },
+  {
+    "revision": 385,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:385",
+      "expectedRevision": 384,
+      "kind": "AdvanceTime",
+      "payload": {
+        "date": "2023-02-06"
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6092457,
+    "sha256": "b2ecb351f15ecadd04145dd0501cb942b6b8ff8c880e9452b0db65d81d0acf22",
+    "wallMs": 194703
+  },
+  {
+    "revision": 386,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:386",
+      "expectedRevision": 385,
+      "kind": "RenewRelayCustomer",
+      "payload": {
+        "customerId": "rly:8d5febe2daed7e357160da4215fecae4",
+        "termEnd": "2023-05-07",
+        "mode": "prepaid",
+        "creditLimitFen": 0
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6092657,
+    "sha256": "d8651831be0939da63783d4f68631516c5d079940ba82ad1bd78e675d43c12bf",
+    "wallMs": 74716
+  },
+  {
+    "revision": 387,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:387",
+      "expectedRevision": 386,
+      "kind": "RenewRelayCustomer",
+      "payload": {
+        "customerId": "rly:1a83f8dc83faaa709c759bacf81129fe",
+        "termEnd": "2023-05-07",
+        "mode": "prepaid",
+        "creditLimitFen": 0
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6092821,
+    "sha256": "d4c9ab5bba520ccd297631335a0120c22804b45eec4843cdb1010f49d9189bb9",
+    "wallMs": 63257
+  },
+  {
+    "revision": 388,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:388",
+      "expectedRevision": 387,
+      "kind": "RenewRelayCustomer",
+      "payload": {
+        "customerId": "rly:eb11d453377d6081a55f33305f22b290",
+        "termEnd": "2023-05-07",
+        "mode": "prepaid",
+        "creditLimitFen": 0
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6092961,
+    "sha256": "49b9fd3c564aff86775e4e8d5519c08d7193f9bcc4bb4edd4519640f46cf3288",
+    "wallMs": 64777
+  },
+  {
+    "revision": 389,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:389",
+      "expectedRevision": 388,
+      "kind": "RenewRelayCustomer",
+      "payload": {
+        "customerId": "rly:6b119bcf7838ec3ee6186c786ff16557",
+        "termEnd": "2023-05-07",
+        "mode": "prepaid",
+        "creditLimitFen": 0
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6093129,
+    "sha256": "6e9f87a2caf64c5b69d728f52132345744c3b7e921c135666782b6543761c1f0",
+    "wallMs": 64330
+  },
+  {
+    "revision": 390,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:390",
+      "expectedRevision": 389,
+      "kind": "RenewRelayCustomer",
+      "payload": {
+        "customerId": "rly:418e245360e994603e36c1a3447e4bfe",
+        "termEnd": "2023-05-07",
+        "mode": "prepaid",
+        "creditLimitFen": 0
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6093297,
+    "sha256": "61967b8700855f92112060a83a284a0d6fdb53eb6122f17a1a49953c548fd884",
+    "wallMs": 65981
+  },
+  {
+    "revision": 391,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:391",
+      "expectedRevision": 390,
+      "kind": "RenewRelayCustomer",
+      "payload": {
+        "customerId": "rly:555dc1412ea3ad9ea8cb81493f5b90ed",
+        "termEnd": "2023-05-07",
+        "mode": "prepaid",
+        "creditLimitFen": 0
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6093409,
+    "sha256": "d69cd9a2fe4be074f3b3cfa89d296d2f0494dc9ae0bb50fe14e195cc4125339b",
+    "wallMs": 61612
+  },
+  {
+    "revision": 392,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:392",
+      "expectedRevision": 391,
+      "kind": "RenewRelayCustomer",
+      "payload": {
+        "customerId": "rly:5dae06c705327a1c7352149cfc3da297",
+        "termEnd": "2023-05-07",
+        "mode": "prepaid",
+        "creditLimitFen": 0
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6093609,
+    "sha256": "339cd71925ab92758c1cab7bc6395b5ac2aa9c7d1c4ceeb004b7580fba67fff7",
+    "wallMs": 62584
+  },
+  {
+    "revision": 393,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:393",
+      "expectedRevision": 392,
+      "kind": "RenewRelayCustomer",
+      "payload": {
+        "customerId": "rly:b159d5c103ed3040d85e0d7888efc23f",
+        "termEnd": "2023-05-07",
+        "mode": "prepaid",
+        "creditLimitFen": 0
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6093733,
+    "sha256": "a67c7ab2e24e59448ac0d0f4881e7a513ac9bc8f1f3c5695b03ab1f0453487fb",
+    "wallMs": 64393
+  },
+  {
+    "revision": 394,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:394",
+      "expectedRevision": 393,
+      "kind": "RenewRelayCustomer",
+      "payload": {
+        "customerId": "rly:f696341cfa2615221d37ac5878f7364f",
+        "termEnd": "2023-05-07",
+        "mode": "prepaid",
+        "creditLimitFen": 0
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6093753,
+    "sha256": "d04c0c180f0982edaec0c7ad2ee53833d0e45a9610d3d16c10399edca4b299fd",
+    "wallMs": 62407
+  },
+  {
+    "revision": 395,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:395",
+      "expectedRevision": 394,
+      "kind": "RenewRelayCustomer",
+      "payload": {
+        "customerId": "rly:1563279a1d293524fbd2d43980a37e83",
+        "termEnd": "2023-05-07",
+        "mode": "prepaid",
+        "creditLimitFen": 0
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6093769,
+    "sha256": "a08d13b327ef0694993cbbec58cb12fa8f90598c5bc199319c9c7244a21aac76",
+    "wallMs": 61526
+  },
+  {
+    "revision": 396,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:396",
+      "expectedRevision": 395,
+      "kind": "RenewRelayCustomer",
+      "payload": {
+        "customerId": "rly:cadfa08640468e9ca9516420560c836a",
+        "termEnd": "2023-05-07",
+        "mode": "prepaid",
+        "creditLimitFen": 0
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6093773,
+    "sha256": "4c7d7c4f2a99dd5cbe8b10f94368e8161621993a6505c9eec684c5d8ea4b7a1d",
+    "wallMs": 63287
+  },
+  {
+    "revision": 397,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:397",
+      "expectedRevision": 396,
+      "kind": "RenewRelayCustomer",
+      "payload": {
+        "customerId": "rly:5188cfc5aad905c6ef097f386a088267",
+        "termEnd": "2023-05-07",
+        "mode": "prepaid",
+        "creditLimitFen": 0
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6093821,
+    "sha256": "1006b76545ae3db2e97e4e641dd8e74f5c1f51520dba181c94ecc4d219cd8ebc",
+    "wallMs": 68792
+  },
+  {
+    "revision": 398,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:398",
+      "expectedRevision": 397,
+      "kind": "RenewRelayCustomer",
+      "payload": {
+        "customerId": "rly:1268a0d14e0c50c4c977773c91c02695",
+        "termEnd": "2023-05-07",
+        "mode": "prepaid",
+        "creditLimitFen": 0
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6093921,
+    "sha256": "cdfa4321f69763d240caf39ac6fec6f7b05b81e8701cd2331d4ee4cdb2eae3b7",
+    "wallMs": 67631
+  },
+  {
+    "revision": 399,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:399",
+      "expectedRevision": 398,
+      "kind": "RenewRelayCustomer",
+      "payload": {
+        "customerId": "rly:ed1499f3f5c208b332b4844a902cba9d",
+        "termEnd": "2023-05-07",
+        "mode": "prepaid",
+        "creditLimitFen": 0
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6094053,
+    "sha256": "9bd8c1ddd05037525418b4ce0cd004eaba5d3a5a0dbd26ed80e8fda7d90508ca",
+    "wallMs": 63905
+  },
+  {
+    "revision": 400,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:400",
+      "expectedRevision": 399,
+      "kind": "RenewRelayCustomer",
+      "payload": {
+        "customerId": "rly:f2fe8463b7902ab706b34f995895c4e7",
+        "termEnd": "2023-05-07",
+        "mode": "prepaid",
+        "creditLimitFen": 0
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6094157,
+    "sha256": "c97b1df205e2924b8f9ca5f545ccf3a82f134f01dd691225d498c93ba812f2e0",
+    "wallMs": 60184
+  },
+  {
+    "revision": 401,
+    "date": "2023-02-06",
+    "command": {
+      "runId": "u6-board-capital-pilot-v1",
+      "actorId": "player",
+      "commandId": "normal-capital-v2:401",
+      "expectedRevision": 400,
+      "kind": "RenewRelayCustomer",
+      "payload": {
+        "customerId": "rly:012134be072550f8806827a7b2e3b3c8",
+        "termEnd": "2023-05-07",
+        "mode": "prepaid",
+        "creditLimitFen": 0
+      }
+    },
+    "preview": {
+      "allowed": true,
+      "reasonCodes": [],
+      "actionPoints": 0,
+      "upfrontCostFen": 0,
+      "releasedFen": 0
+    },
+    "bytes": 6094181,
+    "sha256": "3cfe3c6e66b613a922f8d34ad2c4732f7cb18b6a7b7d47d58b16e73349da0eb4",
+    "wallMs": 60133
+  }
+]
