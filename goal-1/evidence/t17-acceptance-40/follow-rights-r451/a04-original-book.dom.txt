@@ -1,0 +1,84 @@
+- main:
+  - paragraph: 隔离规则夹具 · 真实组件交互核对 · 非正常人生验收
+  - paragraph: 2025-09-01 · 已保存 15
+  - button "核对这轮融资"
+  - button "翻开原书"
+  - status "夹具宿主捕获的原确认请求": "原确认请求，仅捕获未执行：{\"kind\":\"FollowEquityRound\",\"payload\":{\"agreementId\":\"dsk:be6f2b6a3a663bffe9859b43beeee7f9\",\"amountFen\":0},\"label\":\"这次不跟投\",\"confirm\":true,\"preview\":{\"allowed\":true,\"reasonCodes\":[],\"actionPoints\":0,\"upfrontCostFen\":0,\"releasedFen\":0}}"
+- dialog "完整持股手记":
+  - text: 长日重启
+  - text: 夜灯下的手记
+  - heading "完整持股手记" [level=2]
+  - button "关闭对话框" [active]: ×
+  - region "完整持股手记 · 翻页阅读":
+    - text: 翻到
+    - combobox "完整持股手记章节":
+      - option "选择一个片段 · 8" [disabled] [selected]
+      - option "01 · 明确架空融资安排 · 不是现实公开申购"
+      - option "01 · 技术、合同、题材与真实融资的边界"
+      - option "03 · 原协议、实际持股与下一次选择"
+      - option "03 · DeepSeek直接投资 · 明确架空融资安排"
+      - option "06 · 锁定、独立买方与有限退出"
+      - option "07 · 新邀请、关系与参与准备"
+      - option "07 · 当前邀请与条款回应"
+      - option "07 · 邀请与谈判历史 · 已使用、拒绝或到期的原记录"
+    - heading "明确架空融资安排 · 不是现实公开申购" [level=3]
+    - paragraph: 本局于2025-04-01明确选择架空情境；协议、持仓、治理与退出持续标识，估值不能花。
+    - generic "技术、合同、题材与真实融资的边界"
+    - region "架空投资进展":
+      - generic: "01"
+      - strong: 权益原协议
+      - generic: 1份当前持股 / 1份原协议
+      - link "查看这一层 →":
+        - /url: "#equity-holdings"
+      - generic: "02"
+      - strong: 邀请与条款
+      - generic: 0份当前邀请
+      - link "查看这一层 →":
+        - /url: "#equity-preparation"
+      - generic: "03"
+      - strong: 转让与到账
+      - generic: 0项待核实/确认/收款
+      - link "查看这一层 →":
+        - /url: "#equity-exits"
+    - heading "原协议、实际持股与下一次选择" [level=3]
+    - heading "DeepSeek直接投资 · 明确架空融资安排" [level=3]
+    - paragraph: 本局明确架空持股记录
+    - paragraph: 原协议主体：个人账户，与新邀请准备主体分别记录。
+    - term: 实际模拟股数 / 总股数
+    - definition: 1000 / 1250000
+    - term: 当前比例（约）
+    - definition: 0.08%
+    - term: 尚持有投资成本
+    - definition: ¥8,000
+    - term: 账面估值，不能花
+    - definition: ¥8,000
+    - term: 锁定至
+    - definition: 2025-07-28 · 锁定期已到，仍需买方
+    - term: 治理权
+    - definition: 无董事权
+    - paragraph: 估值不增加现金；退出款到账前是独立应收。本条款没有跟投权。投资不是永久收益倍率或模型控制权限。
+    - heading "对方拟新增融资，最迟2025-09-15决定" [level=4]
+    - paragraph: 本轮投前1000万元、新资本250万元。放弃或逾期默认不付款，原股份被动稀释；不会自动借款或投资。
+    - paragraph: 每份原报价¥8、对应1模拟股；整份本金上限¥2,000，资格仍以原协议及本次确认为准。
+    - button "明确不跟投，接受本轮实际稀释"
+    - text: 本次愿意另行投入的本金（元）
+    - textbox "本次愿意另行投入的本金（元）"
+    - button "核对所填本金，明确付款参与本轮" [disabled]
+    - generic: 输入尚不完整或超出可用范围，请核对主体、金额、日期与已选资源。
+    - generic "锁定、独立买方与有限退出"
+    - option "原资源不可用，请重新选择" [disabled] [selected]
+    - option "本人实际日期产能"
+    - generic "新邀请、关系与参与准备"
+    - option "先明确选择，不默认采用另一家企业"
+    - option "个人投资准备分账 · f53780" [selected]
+    - option "原资源不可用，请重新选择" [disabled] [selected]
+    - option "本人实际日期产能"
+    - heading "当前邀请与条款回应" [level=3]
+    - generic "邀请与谈判历史 · 已使用、拒绝或到期的原记录"
+    - navigation "完整持股手记翻页":
+      - button "← 上一页" [disabled]
+      - spinbutton "完整持股手记页码": "1"
+      - generic: / 07
+      - status: 第1页，共7页
+      - generic: PageUp / PageDown
+      - button "下一页 →"

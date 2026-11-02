@@ -49,7 +49,8 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
  const jobCost=intent==='job'&&r.job&&b?equityDirectCosts(b.id,b.accountId,p.view.operations?.jobs,p.features.workbench.finance,p.view.date).jobs.find(row=>row.id===r.job!.id):undefined
  const followOffer=a?equityFollowOffer(p,a):null,zeroFollow=followOffer&&a?equityFollowPosition(followOffer,a,0):null,paidFollow=followOffer&&a&&amount!==null?equityFollowPosition(followOffer,a,amount):null
  const followHistory=a?equityFollowHistory(p,a):null,followPending=a?.followDecision==='pending'
- const followPrincipal=intent==='follow'&&p.view.phase==='playing'&&followPending&&draft.value('followStep')==='principal',followInput=useRef<HTMLInputElement>(null)
+ const followPaidPrerequisites=a!==null&&a.preemptive&&a.shares>0
+ const followPrincipal=intent==='follow'&&p.view.phase==='playing'&&followPending&&followPaidPrerequisites&&draft.value('followStep')==='principal',followInput=useRef<HTMLInputElement>(null)
  useEffect(()=>{if(followPrincipal)followInput.current?.focus({preventScroll:true})},[followPrincipal,draft.key])
  const governancePolicy=equityGovernancePolicy(draft.value('policy')),governanceArranging=intent==='governance'&&governancePolicy!==null&&draft.value('governanceStep')==='arrange',governanceFields=useRef<HTMLDivElement>(null),governanceJob=DEEPSEEK_JOBS.find(j=>j.id==='deepseek-governance')
  useEffect(()=>{if(intent!=='governance')return;const region=governanceFields.current,target=governanceArranging?region?.querySelector<HTMLInputElement>('input[type=radio]:checked')??region?.querySelector<HTMLInputElement>('input[type=radio]'):region?.querySelector<HTMLButtonElement>('[data-selected=true] button')??region?.querySelector('button');target?.focus({preventScroll:true})},[intent,governanceArranging,governancePolicy?.id,draft.key])
@@ -90,7 +91,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
  const governanceTitle=intent==='governance'&&a?(!a.board||a.shares===0?governanceArranging?'当前没有会议权利，只核对原安排。':'先核对本协议当前的会议权利。':governanceArranging&&governancePolicy?'为「'+governancePolicy.label+'」留好会议日子。':titles.governance):null
  const invitationTitle=intent==='invitation'?(invitationArranging?'为调查留几天。':i?.reportAt!==null&&i?.reportAt!==undefined?'回信到了，怎么选？':'查清楚，还是放下？'):null
  const jobTitle=intent==='job'&&r.job?({planned:'这份安排还没开工，要不要保留？',running:'已经投入的时间，要继续吗？',completed:'这次安排已经完成。',cancelled:'这次安排已经取消。',interrupted:'这次安排已经中断。'})[r.job.status]:null
- const title=invalidSource?'先找回原来那一份。':newClosingDecision?'常规篇已经结束，只沿原来的事项继续。':closing&&(intent==='actors'||intent==='objects')?'想收好哪一份原权益记录？':closing&&intent==='follow'?'核对原融资与不新增付款的选择。':followPrincipal?(a?.shares===0?'已无现持股，先核对这笔试算。':'这笔本金，留多少给这次融资？'):intent==='holding'&&a?.shares===0?'收好原协议，看看各笔原款。':intent==='follow'&&a?.shares===0?'已无现持股，核对本轮原安排。':intent==='follow'&&a&&!followPending?followHistoryTitle:jobTitle!==null?jobTitle:governanceTitle!==null?governanceTitle:invitationTitle!==null?invitationTitle:intent==='exit-request'&&a?.locked?'还在原锁定期，先看看这份安排。':intent==='exit-request'&&a&&!a.transferConsent?'先核对这份协议的原转让同意。':intent==='terms'&&n&&journey.phase!=='terms-accepted'?journey.title:intent==='relationship'?'为这份关系，留七天自己的时间。':intent==='eligibility'?'给本局资格，另留一份投入。':titles[intent]
+ const title=invalidSource?'先找回原来那一份。':newClosingDecision?'常规篇已经结束，只沿原来的事项继续。':closing&&(intent==='actors'||intent==='objects')?'想收好哪一份原权益记录？':closing&&intent==='follow'?'核对原融资与不新增付款的选择。':followPrincipal?'这笔本金，留多少给这次融资？':intent==='holding'&&a?.shares===0?'收好原协议，看看各笔原款。':intent==='follow'&&a?.shares===0?'已无现持股，核对本轮原安排。':intent==='follow'&&a&&!followPending?followHistoryTitle:intent==='follow'&&followPending&&!followPaidPrerequisites?'这轮不能追加，原持股仍在。':jobTitle!==null?jobTitle:governanceTitle!==null?governanceTitle:invitationTitle!==null?invitationTitle:intent==='exit-request'&&a?.locked?'还在原锁定期，先看看这份安排。':intent==='exit-request'&&a&&!a.transferConsent?'先核对这份协议的原转让同意。':intent==='terms'&&n&&journey.phase!=='terms-accepted'?journey.title:intent==='relationship'?'为这份关系，留七天自己的时间。':intent==='eligibility'?'给本局资格，另留一份投入。':titles[intent]
  const contents:ReactNode=<>
   <p className="counterfactual-boundary">明确架空情境 · 无现实申购</p>
   {closing?<p>尾声只处理原来的事项，不再开始新的准备、投资或治理。仍沿用2025年第四季的四点行动，原生活费、工资与维护继续结算。</p>:null}
@@ -167,7 +168,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
    </>:null}
    {intent==='holding'&&a?<>
     <p>仍持{a.shares}股 · 约{(a.holdingBps/100).toFixed(2)}% · {a.locked?'锁定至':'原锁定至'}{a.lockUntil}</p>
-    {go('follow',a.followDecision==='pending'?'看看这轮融资':a.followDecision===null?'看看融资安排':'回看这轮融资',a.followDecision==='pending'?'追加，或把现金留下。':a.followDecision===null?'这轮尚未开放。':'查看已经发生的决定。')}
+    {go('follow',a.followDecision==='pending'?'看看这轮融资':a.followDecision===null?'看看融资安排':'回看这轮融资',a.followDecision==='pending'?followPaidPrerequisites?'追加，或把现金留下。':'本轮不能追加，原记录保留。':a.followDecision===null?'这轮尚未开放。':'查看已经发生的决定。')}
     {!closing?go('governance','看看会议权利',a.board&&a.shares>0?'一席董事，无单方控制。':'当前没有董事权。'):null}
     {go('exit-request','问问有没有买方',a.locked?'锁定尚未到期。':'提出申请，不保证卖出。')}
     {rows.filter(row=>{const t=row.target;return t.kind==='governance'&&v!.governance.some(g=>g.id===t.recordId&&g.agreementId===a.id)||t.kind==='exit'&&v!.exits.some(e=>e.id===t.recordId&&e.agreementId===a.id)}).map(original)}
@@ -182,11 +183,15 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
      <div className="equity-history-next">{go('holding','回到这份持股','')}{ui(closing?'回到尾声':'回到今天','',today)}</div>
     </section>:<>
     <p>请在 {a.followDeadline} 前决定。</p>
-    {!followPrincipal?<div className="equity-follow-options">
+    {!followPaidPrerequisites?<section className="equity-follow-history equity-follow-zero" aria-label="本轮不追加的选择">
+     <p>{a.shares===0?'股份已经转出，本轮不能追加本金。':'原协议没有跟投权，本轮不能追加本金。'}</p>
+     <p>付款 ¥0 · 新增 0股{zeroFollow?<> · 稀释后 {zeroFollow.sharesAfter} / {zeroFollow.totalSharesAfter}股 · 约{(zeroFollow.holdingBps/100).toFixed(2)}%</>:null}</p>
+     {!zeroFollow?<p className="reason">本轮报价来源待核，不能试算稀释。</p>:null}
+     <div className="equity-history-next">{command('FollowEquityRound',{agreementId:a.id,amountFen:0},'这次不跟投')}{ui(closing?'先留着，回到尾声':'先留着，回到今天','',today)}</div>
+    </section>:!followPrincipal?<div className="equity-follow-options">
      <section className="equity-follow-option"><h3>留住现金</h3><p>付款 ¥0 · 新增 0股</p>{zeroFollow?<p>稀释后 {zeroFollow.sharesAfter} / {zeroFollow.totalSharesAfter}股 · 约{(zeroFollow.holdingBps/100).toFixed(2)}%</p>:a.followDecision==='pending'?<p className="reason">本轮报价来源待核，不能试算稀释。</p>:<p>现持{a.shares} / {a.totalShares}股</p>}{command('FollowEquityRound',{agreementId:a.id,amountFen:0},'这次不跟投')}</section>
-     {!closing?<section className="equity-follow-option"><h3>追加投入</h3>{followOffer?<p>每股 {moneyText(followOffer.unitPriceFen)} · 最多 {moneyText(followOffer.maxAmountFen)}</p>:a.followDecision==='pending'?<p className="reason">本轮报价来源待核。</p>:null}{!a.preemptive||a.shares===0?<p className="reason">当前没有可新增付款的跟投权。</p>:null}{a.followDecision==='pending'?ui('试算一笔投入','',()=>draft.set('followStep','principal')):go('holding','看看持股','')}</section>:null}
+     {!closing?<section className="equity-follow-option"><h3>追加投入</h3>{followOffer?<p>每股 {moneyText(followOffer.unitPriceFen)} · 最多 {moneyText(followOffer.maxAmountFen)}</p>:a.followDecision==='pending'?<p className="reason">本轮报价来源待核。</p>:null}{a.followDecision==='pending'?ui('试算一笔投入','',()=>draft.set('followStep','principal')):go('holding','看看持股','')}</section>:null}
     </div>:<section className="equity-follow-principal" aria-label="本轮本金试算">
-     {!a.preemptive||a.shares===0?<p className="reason">本协议当前没有可新增付款的跟投权；原持股、原款与记录保留。</p>:null}
       {followOffer?<p>每股 {moneyText(followOffer.unitPriceFen)} · 最多 {moneyText(followOffer.maxAmountFen)}</p>:<p className="reason">本轮报价来源待核。</p>}
       <div className="equity-follow-decision">
        {field('本次愿意另行投入的本金（元）','amount')}
