@@ -1,0 +1,67 @@
+{
+  "at": "2026-11-02T01:46:33.238Z",
+  "unchangedStrategyFunctions": [
+    "command",
+    "preview",
+    "send",
+    "activeOrders",
+    "marketMaintenance",
+    "hasLiquidationPosition",
+    "acknowledge",
+    "finishPeriod",
+    "renewSupply",
+    "renewCustomers",
+    "recharge",
+    "distribute",
+    "closeRelay",
+    "quarterEnd",
+    "quarterStart",
+    "snapshotQuarter",
+    "serviceQuarter",
+    "qualify",
+    "maybeBoard",
+    "signAndGovern"
+  ],
+  "all20Exact": true,
+  "advanceExact": true,
+  "originalLoopAndTailVerbatim": true,
+  "tests": [
+    {
+      "name": "actual public417 remainder",
+      "pass": true,
+      "scope": "Control-flow equivalence against original function using opaque operation stubs; no kernel/Native/future outcome proof"
+    },
+    {
+      "name": "original permission does not cover another period",
+      "pass": true,
+      "scope": "Control-flow equivalence against original function using opaque operation stubs; no kernel/Native/future outcome proof"
+    },
+    {
+      "name": "original preview refuses another period",
+      "pass": true,
+      "scope": "Control-flow equivalence against original function using opaque operation stubs; no kernel/Native/future outcome proof"
+    },
+    {
+      "name": "one remaining AP carries support beyond this quarter",
+      "pass": true,
+      "scope": "Control-flow equivalence against original function using opaque operation stubs; no kernel/Native/future outcome proof"
+    },
+    {
+      "name": "wrong revision",
+      "pass": true
+    },
+    {
+      "name": "duplicate current period",
+      "pass": true
+    },
+    {
+      "name": "wrong support identity",
+      "pass": true
+    }
+  ],
+  "passed": 7,
+  "driverSha256": "47c80daa34bfce9e7a4ab7f7fdc289fdf4236832f1daffcefb71f5007de0027c",
+  "newGameCommands": 0,
+  "productChanges": 0,
+  "compatibility": 0
+}

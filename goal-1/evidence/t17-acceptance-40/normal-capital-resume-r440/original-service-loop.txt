@@ -1,0 +1,6 @@
+ while(count<2&&budget().available>=1&&date()<end){
+  let from=addDays(date(),1);if(budget().available<2){const boundary=addDays(end,1),earliest=daysBefore(boundary,28);if(from<earliest)from=earliest}
+  if(from>end)break;const to=addDays(from,28),permission=relay()!.applications.filter(a=>a.businessId===b.id&&a.supplierId==='cedar-direct'&&a.read&&a.approved===true).at(-1);if(!permission?.expiresAt||to>permission.expiresAt){decision('period-not-arranged-permission-coverage',{from,to,expiresAt:permission?.expiresAt??null});break}
+  renewCustomers(to);recharge();const payload={businessId:b.id,customerIds:relay()!.customers.filter(c=>c.businessId===b.id&&c.closedAt===null).map(c=>c.id),supplierIds:['cedar-direct'],maxUnits:300000,maxSupplierCostFen:2000000,supportMode:'guided',resources:['player-production'],startAt:from},p=preview('StartRelayServicePeriod',payload);if(!p.allowed){decision('period-not-arranged',{payload,preview:p});break}send('StartRelayServicePeriod',payload);count++;const planned=relay()!.periods.at(-1)!;if(!planned.supportJob)throw Error('PUBLIC_SUPPORT_JOB_REQUIRED');if(planned.supportJob.completeAt>end)break;finishPeriod();acknowledge()
+ }
+ if(budget().available>=2&&date()<end&&preview('WorkQuarter',{}).allowed)send('WorkQuarter',{});advance(end);distribute();marketMaintenance()

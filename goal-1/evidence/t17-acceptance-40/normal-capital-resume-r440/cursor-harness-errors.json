@@ -1,0 +1,13 @@
+{
+  "observedFailure": "ORIGINAL417_CONTROL_POINT_REQUIRED in trace fixture",
+  "cause": "Minimal audit period was nested under the actual business but omitted its repeated businessId; original relay projection has businessId. Harness filter therefore saw zero periods.",
+  "correction": "Restore the already-known parent businessId in the control-flow fixture; no real input/driver/rule changed.",
+  "temporaryProbePreserved": "check-cursor-with-shape-probe.mjs",
+  "newGameCommands": 0,
+  "compatibility": 0,
+  "additionalFixtureCorrection": "The second-period refusal option initially also refused the first reference period, preventing the already-saved checkpoint. Restrict that option to after first period exists; real driver and guard unchanged.",
+  "calendarFixtureCorrection": "Use the original calendar-offsets.ts daysBefore, since original addDays intentionally rejects negative counts; do not reimplement that helper in the harness.",
+  "shapeFailureAttempts": 2,
+  "totalFailedHarnessRuns": 4,
+  "finalPassingCases": 7
+}
