@@ -44,7 +44,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
  const today=()=>{if(!draft.current())return;close();onToday()}
  const amount=parseMoneyInput(draft.value('amount')),shares=positiveShares(draft.value('shares'))
  const exitCash=e&&a?equityExitCash(e,a.accountId,equitySceneContext(p,p.accountId)):null
- const continuity=intent==='next'&&b?equityBusinessContinuity(p,b.id):null
+ const continuity=(intent==='next'||intent==='business')&&b?equityBusinessContinuity(p,b.id):null
  const jobCost=intent==='job'&&r.job&&b?equityDirectCosts(b.id,b.accountId,p.view.operations?.jobs,p.features.workbench.finance,p.view.date).jobs.find(row=>row.id===r.job!.id):undefined
  const followOffer=a?equityFollowOffer(p,a):null,zeroFollow=followOffer&&a?equityFollowPosition(followOffer,a,0):null,paidFollow=followOffer&&a&&amount!==null?equityFollowPosition(followOffer,a,amount):null
  const followPrincipal=intent==='follow'&&p.view.phase==='playing'&&a?.followDecision==='pending'&&draft.value('followStep')==='principal',followInput=useRef<HTMLInputElement>(null)
@@ -102,10 +102,11 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
    <p className="equity-choice-owner">{b!.accountId==='personal'?'个人资金':'企业 · '+b!.accountId.slice(-6)} · 可用{moneyText(b!.funds.availableFen)}{b!.funds.prepaidLiabilityFen>0?' · 另有客户预款保护'+moneyText(b!.funds.prepaidLiabilityFen):null}</p>
    {newClosingDecision?<><p>尾声只处理旧事项，不再新增准备、投资或治理。</p>{go('objects','看看原来的事项','任务、持股与款项仍在。')}{ui('翻阅原册与条件','',inspect)}{ui('回到尾声','',today)}</>:<>
    {intent==='business'?<>
+    {journey.phase==='business-active'?continuity?<p>已有{continuity.own.length}份原安排，按原日历继续。</p>:<p className="reason">原安排来源尚待核对，请翻原册；没有替你停止。</p>:null}
     <p>{b!.related?'关系准备已有依据。':'还需实际关系准备。'}{b!.eligible?'本局参与资格已完成。':'本局参与资格待核对。'}</p>
     {['winding_down','closed'].includes(b!.lifecycle)?<><p>这里已停止新增安排，原条件仍可翻阅。</p><details><summary>原准备与介绍条件</summary>{go('prepare','核对准备条件','原允许范围与拒绝理由仍保留。')}{go('discover','核对介绍条件','查看不创建邀请。')}</details></>:!closing?<>{go('prepare','先做一点准备','关系与资格分别安排。')}{go('discover','听一次介绍','合作介绍，或未核验的中间人消息。')}</>:null}
     {go('objects','翻看邀请与协议','')}
-    {go('next','想想接下来的日子','保留安排，或核对收尾。')}
+    {go('next','核对保留与收尾','')}
    </>:null}
    {preparing?<>
     <p>{intent==='relationship'?'关系准备 · ¥500 · 1点 · 7天':intent==='eligibility'?'本局参与资格 · ¥1,500 · 1点 · 7天':'关系准备 ¥500；本局参与资格 ¥1,500。每项各1点、7天。'}</p>

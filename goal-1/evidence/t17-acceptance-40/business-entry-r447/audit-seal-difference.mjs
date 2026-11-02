@@ -1,0 +1,8 @@
+import fs from 'node:fs'
+import {json,tree,hash} from '../../t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs'
+const root='goal-1/evidence/t17-acceptance-40/business-entry-r447',prior='goal-1/evidence/t17-acceptance-40/normal-capital-resume-r440'
+const roots=[...json(prior+'/baseline.json').seals.map(row=>row.root),json(prior+'/old-execution-seal.json').seal.root,'goal-1/evidence/t17-acceptance-40/people-choice-r441']
+if(roots.length!==57||new Set(roots).size!==57)throw Error('EXACT57_REQUIRED')
+const differences=[]
+for(const name of roots){const marker=json(name+'/sealed-evidence.json'),current=tree(name),expected=new Map(marker.files.map(row=>[row.path,row])),actual=new Map(current.files.map(row=>[row.path,row])),extra=current.files.filter(row=>!expected.has(row.path)),missing=marker.files.filter(row=>!actual.has(row.path)),changed=marker.files.filter(row=>{const now=actual.get(row.path);return now&&['bytes','sha256','mode'].some(key=>now[key]!==row[key])}),extraDirectories=current.directories.filter(path=>!marker.directories.includes(path)),missingDirectories=marker.directories.filter(path=>!current.directories.includes(path));if(extra.length||missing.length||changed.length||extraDirectories.length||missingDirectories.length)differences.push({root:name,markerSha256:hash(fs.readFileSync(name+'/sealed-evidence.json')),extra,missing,changed,extraDirectories,missingDirectories})}
+const report={at:new Date().toISOString(),checked:roots.length,differences,readOnlyAudit:true,compatibility:0};fs.writeFileSync(root+'/preservation-difference448.json',JSON.stringify(report,null,2)+'\n',{flag:'wx'});console.log(report)

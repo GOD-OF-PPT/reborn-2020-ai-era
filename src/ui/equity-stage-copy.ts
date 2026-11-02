@@ -15,6 +15,7 @@ export function equityStageCopy(p:GamePanelProps,j:EquityJourney){
  if(phase==='terms-rejected')action='看看这次回应'
  if(phase==='terms-tail')action='收好旧条款'
  if(phase==='disposed')action='看看转让款'
+ if(phase==='business-active')action='看看安排与选择'
  const copy:Record<string,[string,string]>={
   boundary:['留一个不同的可能？','这是一段明确架空的融资经历。'],entry:['这次，用谁的钱参与？','先选自己的准备，或已有企业。'],'tail-entry':['还有哪些旧事想收好？','从一份持股或旧款继续。'],
   invitation:['一封还没查清的介绍','先核实来历，也可以把它收好。'],'diligence-stopped':['调查停下了','没有报告；重新调查要另留时间。'],'diligence-completed':['调查回信了','授权与有条件意愿已核实，下一步由你决定。'],'diligence-rejected':[i?.authority===false?'授权没能核实':'对方暂不愿融资',i?.authority===false?'这次调查已经结束。':'授权已核实，融资意愿未能确认。'],
@@ -24,9 +25,10 @@ export function equityStageCopy(p:GamePanelProps,j:EquityJourney){
   holding:['这份持股，可以慢慢留着','下一笔投入，或下一段生活，由你决定。'],follow:['这轮融资，你想怎样选？','可以追加，也可以把现金留给生活。'],'follow-without-holding':['股份已转出，旧事还在','本轮只核对不新增付款的选择。'],disposed:['这份股份已经转出','各笔转让款仍要分别收取。'],
   'governance-result':[r.governance?.approved?'提案通过了':'提案没获通过',r.governance?.approved?r.governance.policy==='commercial_scope'?'用途限制按约定日期生效。':'这次资本用途报告已经开放。':'会议已经结束，股份和已花费用仍在。'],'governance-stopped':['会议停下了','没有表决结果。'],
   quote:['有人愿意接手','报价有限，转不转、转多少，由你决定。'],receivable:['股份转出，款还没到','按这笔约定日期再收款。'],collection:['这笔款到日子了','收回一部分，或先留着，都可以。'],collected:['这笔款收齐了','余股还在，接下来想怎样生活？'],'transfer-no-credit':['这次没有净款要等','股份与费用按实际转让记录保留。'],'no-buyer':['这次没人接手','未售股份还在，不必再等这次回信。'],'quote-expired':['这份报价过期了','股份没有出售。'],'exit-stopped':['买方调查停下了','没有可接受的报价。'],
-  business:['先看看这次准备','下一步，还可以继续准备或先过生活。'],'business-winding-down':['这段准备，已经收尾','持股和旧款各自保留。'],'business-closed':['这份分账合上了','接下来，回到自己的日子。'],
+  business:['先看看这次准备','下一步，还可以继续准备或先过生活。'],'business-active':['原来的安排，还在日历上','原安排照常继续，新投入另作决定。'],'business-winding-down':['这段准备，已经收尾','持股和旧款各自保留。'],'business-closed':['这份分账合上了','接下来，回到自己的日子。'],
  }
  let [heading,line]=copy[phase]??[j.title,j.line]
+ if(phase==='business'&&p.view.phase==='epilogue'){heading='把这份旧事收好';line='持股、款项和原任务，分别核对。';action='看看原来的事项'}
  if(['preparation-planned','diligence-planned','negotiation-planned','governance-planned','exit-planned'].includes(phase)){heading='日子留好了，等开工';line='现在还没开始。'}
  if(['preparation-running','diligence-running','negotiation-running','governance-running','exit-running'].includes(phase)){heading=phase==='diligence-running'?'正在查这封介绍':phase==='governance-running'?'这次会议还在进行':'事情正在一步步往前走';line='到约定日，再看这一次的结果。'}
  const facts:string[]=[],costs=j.directCosts,fee=i&&b?equityBrokerFee(i,b.accountId,p.features.workbench.finance,p.view.date):null,paid:string[]=[]
