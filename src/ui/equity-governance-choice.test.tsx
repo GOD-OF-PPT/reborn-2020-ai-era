@@ -69,6 +69,8 @@ it('compares both effects before showing an empty original arrangement, without 
  const p=props(normal.controller),before=normal.controller.exportSaved(),ui=near(p)
  expect(text(ui.tree())).toContain('已经发生的资本用途报告');expect(text(ui.tree())).toContain('原报价不追改');expect(elements(ui.tree()).some(e=>e.type===CommandButton&&e.props.kind==='ProposeEquityGovernance')).toBe(false)
  ui.choose('查清资本去向');expect(ui.date().props.value).toBe('');expect(ui.resource().props.value).toBe('');expect(ui.pay().props.disabled).toBe(true)
+ expect(ui.resource().props).toMatchObject({appearance:'people',ariaLabel:'谁来做 · 本次实际资源'});expect(ui.resource().props.name).toEqual(expect.any(String))
+ expect(text(ui.tree())).toContain('个人预算¥500 · 1点 · 7天');expect(text(ui.tree())).toContain('工资维护另计')
  expect(p.request).not.toHaveBeenCalled();expect(normal.controller.exportSaved()).toBe(before)
 })
 

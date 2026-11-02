@@ -19,3 +19,9 @@ QA标签493/496/499均为本轮独立验收中间页，未成功导入；清理�
 原56完整封存/P326/132markers/2links/旧19与35/input61B/未接线model/三master前缀及2304B插入保。当前r440原执行47783继续完整资本/80万董事/真实签署治理，本轮已真实推进至440/2023May7并开始第二期，不改其run/helper/calendar-offsets、不stage其活文件、不封或重启。整个U6第10、原17/5深态/normal board Native/最终U6、后续完整组合/T17余、PNG0/3/真人0/P3正式62与22未跑/旧红长档慢/M01须明确恢复/T18最后/goal active保持。
 
 本组已验代码可精确WIP提交供后续复核；不把WIP/52通过当真实游戏美术、趣味或Main已发布。没有push/deploy/外发/代理/global memory写。
+
+
+本组已验WIP实际 a6a11bec1a3a4c36b5d51706acc585686ecc6a62（父443a87e46a895b54874e283ded34673c37059a8b），38精确路径/6源，所有index及commit blob/字节/SHA/mode同、索引空、未push。Task保持[ ]，Main仍436，实际新people界面/键盘/鼠标/分页与原文未验，不封活本root、不把WIP冒完整交付。后续从当前443/970继续真实Chrome验收；未改已在运行的r440代码或策略。
+
+## 446限定验收已齐，准备本地提交
+见validation.md。最终52/52、类型/构建过，Native最大三选项/零AP/真实鼠标/键盘/取消保稿与完整94原文保，Main129完整前后原文逐字同。旧连接/导入失败已由真实原UI导入解决，复制/下载尝试仍非成功。Main已446、QA已关且DB保，本task提交读回前仍[ ]，整个U6/goal active，兼容0。

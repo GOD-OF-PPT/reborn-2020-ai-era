@@ -239,7 +239,7 @@ it('opens an unprepared actual normal enterprise relationship directly, preserve
   expect(main.props.onClick).toBe((paper.props.binding as {activate:()=>void}).activate);invoke(main,'onClick')
   expect(elements(draw()).find(e=>e.type===EquitySceneChoice)!.props.intent).toBe('relationship')
   const form=near(p,t,'relationship','direct-normal-relationship')
-  expect(text(form.tree())).not.toContain('这次具体准备哪一项');expect(form.field('本次开工日期').props.value).toBe('')
+  expect(text(form.tree())).not.toContain('这次具体准备哪一项');expect(text(form.tree())).toContain('企业预算¥500 · 1点 · 7天');expect(text(form.tree())).toContain('工资维护另计');expect(form.field('本次开工日期').props.value).toBe('')
   expect(form.button('StartEquityRelationship').props.disabled).toBe(true)
   form.change('本次开工日期',p.view.date)
   const resource=elements(form.tree()).find(e=>e.type===ResourceSelect)!

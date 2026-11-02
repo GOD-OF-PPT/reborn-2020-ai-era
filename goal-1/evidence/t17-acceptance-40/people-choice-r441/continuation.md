@@ -9,3 +9,6 @@ Main本轮原入口仅读回129/Oct1/270137.33/AP4，无新Core。QA5534静态�
 原r440作者正常路径handle47783/child7199保持live，当前末次440/2023May7，下一原AdvanceTime处理第二期；原完整2025/80万董事/实际签署治理不缩。不改其run/helper/calendar-offsets，不stage活head/log，不封活root/child，不因观察超时重启。r440 WIP443a87e已验，56封存（含旧r432执行子）都保持。
 
 完成本组实际画面/原操作/保护与原文后才能更新Main、精确提交并标完成；已验代码可先WIP提交，源/失败/未验身份保。整个U6/goal及原17/5深态/正常board Native/最终U6和所有后续/PNG/真人/P3未跑/M01暂停待明确恢复/T18最后保。兼容开发测试0，无push/deploy/外发/代理/global memory写。Shell全rtk/Node22，memory引用MEMORY.md659-667与rollout01a14402-3f43-7380-8e27-f02f1d53c60d。
+
+
+本组已验WIP实际 a6a11bec1a3a4c36b5d51706acc585686ecc6a62（父443a87e46a895b54874e283ded34673c37059a8b），38精确路径/6源，所有index及commit blob/字节/SHA/mode同、索引空、未push。Task保持[ ]，Main仍436，实际新people界面/键盘/鼠标/分页与原文未验，不封活本root、不把WIP冒完整交付。后续从当前443/970继续真实Chrome验收；未改已在运行的r440代码或策略。

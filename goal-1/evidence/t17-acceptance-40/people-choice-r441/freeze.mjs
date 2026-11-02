@@ -2,7 +2,7 @@ import fs from 'node:fs';import path from 'node:path';
 import {json,hash} from '../../t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs';
 const root='goal-1/evidence/t17-acceptance-40/people-choice-r441',revision=process.argv[2];
 if(!/^\d+$/.test(revision??'')||fs.existsSync(root+'/stopped.json'))throw Error('ACTIVE_EXPLICIT_REVISION_REQUIRED');
-const base=json('goal-1/evidence/t17-acceptance-40/equity-consumers-r438/snapshot439.json'),owned=json(root+'/baseline.json').owned,target=path.resolve('.delivery/t17-u6-people-r'+revision);
+const base=json('goal-1/evidence/t17-acceptance-40/equity-consumers-r438/snapshot439.json'),owned=[...json(root+'/baseline.json').owned,...json(root+'/owned-addendum.json').owned],target=path.resolve('.delivery/t17-u6-people-r'+revision);
 if(fs.existsSync(target))throw Error('FRESH_FROZEN_DIRECTORY_REQUIRED');
 fs.mkdirSync(target);const rows=new Map();
 for(const row of base.files){const source=path.join(base.target,row.path),bytes=fs.readFileSync(source);if(hash(bytes)!==row.sha256)throw Error('EXACT_BASE439_REQUIRED');const out=path.join(target,row.path);fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,bytes,{flag:'wx'});rows.set(row.path,{...row})}
