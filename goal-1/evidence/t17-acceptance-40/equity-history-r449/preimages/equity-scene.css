@@ -1,0 +1,108 @@
+.cinema-app .opening-room .equity-object[data-copy-mode=tableau]{color:#eee3c7;background:none;border:1px solid transparent;box-shadow:none;transform:none}
+.cinema-app .opening-room .equity-object[data-copy-mode=tableau]:hover{background:#e2c8880a;border-color:#c7ae7966;transform:none}
+.cinema-app .opening-room .equity-object[data-copy-mode=tableau]:focus-visible{outline:2px solid #e4cd96;outline-offset:5px;background:#e2c88812;transform:none}
+.cinema-app .opening-room .equity-object[data-copy-mode=tableau]:disabled{color:#d1c9b0;opacity:1;border:1px dashed #899881;background:#17392e33;transform:none}
+.equity-paper-art{position:relative;display:block;isolation:isolate}
+.equity-paper-art>img,.equity-paper-art>svg{display:block;width:100%;height:100%;object-fit:contain}
+.equity-paper-art>.equity-raster{position:absolute;inset:0;opacity:0;pointer-events:none}
+.equity-paper-art>.equity-raster[data-ready=true]{opacity:1}
+.equity-paper-art>.equity-fallback[data-raster-ready=true]{opacity:0}
+.equity-paper-art>.equity-state-leaf{position:absolute;inset:0;pointer-events:none}
+.equity-contact{fill:#071d1b88}.equity-cover{fill:#65533c;stroke:#3c4030;stroke-width:2}.equity-sheet{fill:#e0d1ad;stroke:#a28e63;stroke-width:1.5}
+.equity-leaf-shadow{fill:#0b211c66}.equity-leaf{fill:#e2d2ad;stroke:#a39265;stroke-width:1.5}.equity-ink{fill:none;stroke:#918360;stroke-width:2}
+.equity-lock{fill:#9b8757;stroke:#5a6244;stroke-width:3}.equity-pending{fill:none;stroke:#9b7956;stroke-width:3;stroke-dasharray:5 4}.equity-mark{fill:none;stroke:#83734b;stroke-width:2}.equity-kept{fill:none;stroke:#778060;stroke-width:3}
+.equity-lock[data-lock=unlocked]{fill:#b0ae7b;stroke:#677d56}.equity-open-shackle{fill:none}.equity-unknown{fill:none;stroke:#7f8569;stroke-width:2;stroke-dasharray:4 4}
+.equity-governance-stamp{fill:none;stroke:#957c4e;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}.equity-governance-stamp.vote-running{stroke:#8f8458}.equity-governance-stamp.vote-approved{stroke:#617c53}.equity-governance-stamp.vote-rejected{stroke:#a15c48;stroke-width:3}.equity-governance-stamp.vote-stopped{stroke:#7c8069;stroke-dasharray:7 3}
+.equity-exit-stamp{fill:none;stroke:#937d50;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}.equity-exit-stamp.exit-partial{stroke:#6e825b}.equity-exit-stamp.exit-source-unknown{stroke:#7d8872;stroke-dasharray:4 4}.equity-exit-stamp:is(.exit-no-buyer,.exit-expired,.exit-stopped){stroke:#8a7c63}
+.equity-cash-receipt{fill:#e9debf;stroke:#a18f60;stroke-width:1.5}.equity-received{fill:none;stroke:#677854;stroke-width:3}
+.equity-paper-copy{display:flex;flex-direction:column;align-items:center;gap:7px;color:#e7dfc4}
+.equity-paper-copy>:is(.equity-date,.equity-holding-note,.equity-money-note){padding:5px 9px;background:linear-gradient(110deg,#e9dcba,#d9c8a0);color:#4f553e;border:1px solid #b29c6e;box-shadow:1px 2px 2px #0a201a66}
+.equity-paper-copy>.equity-money-note{border-left:3px dashed #987751}.equity-object[data-equity-paper=receipt] .equity-money-note{border-left:3px double #6f8155}
+.equity-paper-copy>.equity-protection{padding:5px 8px;border-left:3px double #a9b291;background:#234332;color:#e0e3c9}
+.equity-paper-copy>.equity-paper-action{color:#e3ce98;border-bottom:1px solid #c2a87566;padding:6px 0}
+.equity-terms-choice{display:flex;align-items:flex-start;gap:12px;padding:12px 0;break-inside:avoid}
+.equity-terms-choice>span,.equity-terms-choice>span>span{display:block}.equity-terms-choice input{margin-top:7px}
+.equity-choice-resources{break-inside:auto}.equity-choice-resources>h3{break-after:avoid}
+.equity-scene-choice .command,.equity-scene-choice .field{break-inside:avoid}
+
+.cinema-app .book-flow .equity-follow-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:16px 0;break-inside:avoid}
+.equity-follow-option{min-width:0;padding:14px 16px;border:1px solid #b6a06c77;border-top:3px double #cab078;background:linear-gradient(125deg,#c8ae7110,#102e2c33)}
+.equity-follow-option>h3{margin:0 0 9px;color:#ecd59f}.equity-follow-option>p{margin:7px 0}
+.equity-follow-option>.command{margin-top:12px}.equity-follow-option>.field{margin-top:12px}
+.cinema-app .book-flow :is(.equity-follow-option>.opening-next-choice,.equity-follow-option>.command>button,.equity-governance-option>.opening-next-choice){display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;padding:12px 0;border:0;border-bottom:1px solid #c9b17c88;background:none;box-shadow:none;color:#efdaaa;font:17px/1.7 var(--serif);text-align:left;transform:none}
+.cinema-app .book-flow :is(.equity-follow-option>.opening-next-choice,.equity-follow-option>.command>button,.equity-governance-option>.opening-next-choice)>strong{font-weight:400}
+.cinema-app .book-flow :is(.equity-follow-option,.equity-governance-option)>.opening-next-choice>i{font-style:normal}
+.cinema-app .book-flow :is(.equity-follow-option>.opening-next-choice,.equity-follow-option>.command>button,.equity-governance-option>.opening-next-choice):hover:not(:disabled){background:#ddc28a12;border-bottom-color:#f4d69b;color:#fff0cd;transform:none}
+.cinema-app .book-flow :is(.equity-follow-option>.opening-next-choice,.equity-follow-option>.command>button,.equity-governance-option>.opening-next-choice):focus-visible{outline:2px solid #f0d8a1;outline-offset:4px;background:#ddc28a12;transform:none}
+.cinema-app .book-flow :is(.equity-follow-option>.opening-next-choice,.equity-follow-option>.command>button,.equity-governance-option>.opening-next-choice):disabled{border-bottom-style:dashed;color:#a6b49a;background:none;opacity:1;transform:none}
+.cinema-app .book-flow .equity-follow-presets{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin:9px 0}
+.equity-follow-decision{break-inside:avoid}.equity-follow-decision>.field{margin:10px 0}.equity-follow-principal>.opening-next-choice{margin:12px 0}
+.cinema-app .book-flow .equity-governance-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:14px 0;break-inside:avoid}
+.equity-governance-option{padding:12px 15px;border:1px solid #b7a16d66;border-top:3px double #cab078;background:linear-gradient(125deg,#c8ae7110,#102e2c33)}
+.equity-governance-option[data-selected=true]{border-left:4px double #e0c68b}.equity-governance-option>h3{margin:0 0 8px;color:#ecd59f}.equity-governance-option>p{margin:7px 0}
+.equity-governance-option>.opening-next-choice{margin:10px 0 0}.equity-governance-decision{break-inside:avoid}
+.cinema-app .book-flow .equity-governance-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;break-inside:avoid}.equity-governance-fields>.field{min-width:0;margin:8px 0}
+.equity-governance-date>.field{margin:8px 0}.cinema-app .equity-governance-date>.scene-text-action{padding:4px 0;border:0;border-bottom:1px solid #bdac7d77;background:none;box-shadow:none;color:#e4cf9e;font:inherit;transform:none}
+.cinema-app .book-flow .equity-exit-decision-row{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:20px;align-items:start;break-inside:avoid}.equity-exit-decision-row>.field{min-width:0;margin:8px 0}.equity-exit-quote-action>p{margin:7px 0}.equity-exit-quote-action>.command{margin:10px 0}.equity-collection-decision{break-inside:avoid}
+.cinema-app .equity-governance-date>.scene-text-action:hover:not(:disabled){background:none;color:#f5e3b8;border-bottom-color:#f5d58f;transform:none}.cinema-app .equity-governance-date>.scene-text-action:focus-visible{outline:2px solid #f0d8a1;outline-offset:3px;background:none;transform:none}.cinema-app .equity-governance-date>.scene-text-action:disabled{color:#a6b49a;border-bottom-style:dashed;background:none;transform:none}
+.cinema-app .equity-follow-presets>.scene-text-action{padding:4px 0;border:0;border-bottom:1px solid #bdac7d77;background:none;box-shadow:none;color:#e4cf9e;font:inherit;transform:none}
+.cinema-app .equity-follow-presets>.scene-text-action:hover{background:none;color:#f5e3b8;border-bottom-color:#f5d58f;transform:none}
+.cinema-app .equity-follow-presets>.scene-text-action:focus-visible{outline:2px solid #f0d8a1;outline-offset:3px;background:none;transform:none}
+.cinema-app .equity-follow-presets>.scene-text-action:disabled{color:#a6b49a;border-bottom-style:dashed;background:none;transform:none}
+
+.equity-financing-art{position:relative;display:block;isolation:isolate;aspect-ratio:3/2;pointer-events:none}
+.equity-financing-art>img,.equity-financing-art>svg{display:block;width:100%;height:100%;object-fit:contain}
+.equity-financing-art>img{position:absolute;inset:0;opacity:0}.equity-financing-art[data-image-state=ready]>img{opacity:1}
+.equity-financing-art[data-image-state=ready]>.equity-financing-fallback{opacity:0}
+.letter-contact{fill:#071d1b88}.letter-lining{fill:#294536;stroke:#9d855b;stroke-width:2}.letter-sheet{fill:#eee4ce;stroke:#bca67b;stroke-width:2}
+.letter-envelope{fill:#e1cfa9;stroke:#a48e65;stroke-width:2}.letter-fold{fill:none;stroke:#b7a07a;stroke-width:2}.letter-clip{fill:none;stroke:#9c7f43;stroke-width:4;stroke-linecap:round}
+
+.equity-paper-art>.equity-book-letter{position:absolute;left:6%;top:46%;width:43%;height:59%;z-index:2;filter:drop-shadow(1px 3px 2px #071b2355)}
+.cinema-app .cinematic-stage>.equity-follow-notice{position:absolute;z-index:5;top:48%;right:30.5%;display:flex;flex-direction:column;align-items:center;width:168px;gap:5px;padding:4px;color:#e5d4ab;background:transparent;border:1px solid transparent;box-shadow:none;text-align:center;transform:none;font:15px/1.65 var(--serif);cursor:pointer}
+.equity-follow-notice>.equity-financing-art{width:100%;height:112px;transition:transform .18s ease;transform-origin:50% 85%}
+.equity-notice-copy{display:flex;flex-direction:column;align-items:center;gap:3px}.equity-notice-copy>strong{padding:3px 8px;background:#e5d4b0;color:#50553a;border:1px solid #b39a68;font-weight:400}
+.equity-notice-copy>span{color:#eddbaf;font-size:15px}.equity-notice-copy>.equity-notice-protection{padding:3px 6px;border-left:3px double #acb494;background:#233e34;color:#dbe1c9}
+.cinema-app .cinematic-stage>.equity-follow-notice:hover{background:transparent;border-color:#d6b97466;box-shadow:none;transform:none}.equity-follow-notice:hover>.equity-financing-art{transform:translateY(-3px) rotate(-1deg)}
+.cinema-app .cinematic-stage>.equity-follow-notice:focus-visible{background:transparent;outline:2px solid #f0d89e;outline-offset:4px;border-color:#d9bd7d;box-shadow:none;transform:none}
+.cinema-app .cinematic-stage>.equity-follow-notice:active{background:transparent;border-color:#ead29b;box-shadow:none;transform:none}.equity-follow-notice:active>.equity-financing-art{transform:translateY(-1px)}
+.cinema-app .cinematic-stage>.equity-follow-notice:disabled{background:#17382e33;border:1px dashed #899c82;color:#d6dbc5;opacity:1;box-shadow:none;transform:none;cursor:default}.equity-follow-notice:disabled>.equity-financing-art{transform:none;filter:saturate(.7)}
+.cinema-app .cinematic-stage>.equity-follow-notice[data-text-only=true]{padding:12px;background:#17382e;border-color:#b69e6e}
+.reduced-motion .equity-follow-notice>.equity-financing-art{transition:none;transform:none}
+
+.cinema-app .book-flow .equity-closure-decision{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;break-inside:avoid}.equity-closure-decision>.command{margin:0}.equity-continuity{border-left:1px solid #bba77766;padding-left:14px}.equity-object[data-equity-business] .opening-object-stage{color:#e8d4a2}
+
+.cinema-app .book-flow .equity-choice-resources{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px 20px}.equity-choice-resources>:is(h3,p){grid-column:1/-1}.cinema-app .equity-choice-resources>.field,.cinema-app .equity-assignment-date>.field{margin:0;min-width:0}.equity-assignment-date{min-width:0}.equity-assignment-date>.scene-text-action{padding:4px 0;border:0;border-bottom:1px solid #bba77788;background:none;color:#dfcca3;box-shadow:none;font:inherit;transform:none}.cinema-app .book-flow .equity-assignment-decision{break-inside:avoid;display:block}
+
+.cinema-app .dialog .book-flow .equity-choice-resources{margin:6px 0;gap:8px 20px}.cinema-app .dialog .book-flow .equity-choice-resources>:is(h3,p){margin:0}.cinema-app .dialog .book-flow .equity-choice-resources>.field,.cinema-app .dialog .book-flow .equity-assignment-date>.field{margin:0}.cinema-app .book-flow .equity-assignment-date>.scene-text-action{padding:4px 0;background:none;color:#dfcca3;box-shadow:none;transform:none}.cinema-app .book-flow .equity-assignment-date>.scene-text-action:hover:not(:disabled){background:none;color:#f5e3b8;transform:none}.cinema-app .book-flow .equity-assignment-date>.scene-text-action:focus-visible{background:none;outline:2px solid #f0d8a1;outline-offset:3px;transform:none}.cinema-app .book-flow .equity-assignment-date>.scene-text-action:disabled{background:none;color:#a6b49a;transform:none}
+
+.cinema-app .dialog .book-flow .equity-choice-resources>.reason{max-width:none}
+
+.cinema-app .dialog.command-review.equity-shared-review{width:1020px}.equity-original-confirmation{margin:12px 0;border-top:1px solid #baa67855;padding-top:9px}.equity-original-confirmation>summary{color:#d8c899}
+
+.equity-record-navigation{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+
+
+/* An invitation remains a paper object; a report never grants rights. */
+.equity-invitation-stamp{fill:none;stroke:#927b4b;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}.equity-invitation-stamp.invitation-verified{stroke:#657c52}.equity-invitation-stamp.invitation-unverified-authority{stroke:#9c5e49}.equity-invitation-stamp.invitation-unwilling{stroke:#987153}.equity-invitation-stamp:is(.invitation-stopped,.invitation-declined,.invitation-expired,.invitation-closed-planned,.invitation-closed-running){stroke:#7c8069}.equity-invitation-stamp.invitation-stopped{stroke-dasharray:6 3}
+.cinema-app .book-flow .equity-invitation-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start;break-inside:avoid}.equity-invitation-choices>section{padding:10px 14px;border-top:3px double #c5ac75;background:linear-gradient(125deg,#c8ae7110,#102e2c33)}.equity-invitation-choices>section>h3{margin:0 0 8px;color:#ecd59f}.equity-invitation-choices>section>p{margin:7px 0}.equity-invitation-choices .opening-next-choice,.equity-invitation-choices .command{margin:10px 0 0}
+
+/* Reading and choices share the journal's ink treatment; state guards stay in the original bindings. */
+.cinema-app .equity-scene-choice .book-flow .opening-next-choice{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:4px;width:100%;padding:10px 28px 10px 0;border:0;border-bottom:1px solid #c9b17c77;background:none;box-shadow:none;color:#efdaaa;font:17px/1.7 var(--serif);text-align:left;transform:none}
+.cinema-app .equity-scene-choice .book-flow .opening-next-choice>strong{font-weight:400}.cinema-app .equity-scene-choice .book-flow .opening-next-choice>span{display:block;color:#d0d5bd}.cinema-app .equity-scene-choice .book-flow .opening-next-choice>i{position:absolute;right:6px;top:11px;font-style:normal}
+.cinema-app .equity-scene-choice .book-flow .opening-next-choice:hover:not(:disabled){background:#ddc28a0c;color:#fff0cd;border-bottom-color:#f4d69b;transform:none}
+.cinema-app .equity-scene-choice .book-flow .opening-next-choice:focus-visible{outline:2px solid #f0d8a1;outline-offset:4px;background:#ddc28a12;transform:none}
+.cinema-app .equity-scene-choice .book-flow .opening-next-choice:disabled{border-bottom-style:dashed;color:#a6b49a;background:none;opacity:1;transform:none}
+
+.cinema-app .equity-stage .equity-record-links:not(.equity-record-navigation){display:inline-flex;align-items:center;gap:16px}
+
+/* People are explicit choices; the original resource IDs and previews own assignment. */
+.cinema-app .equity-scene-choice .equity-assignment-people{min-width:0;color:#e2d4ae}
+.cinema-app .equity-scene-choice .resource-people{display:flex;flex-direction:column;gap:5px;margin-top:6px}
+.cinema-app .equity-scene-choice .resource-people>.resource-choice-hint{margin:0;color:#c9cfb8;font-size:14px}
+.cinema-app .equity-scene-choice .resource-person-choice{display:grid;grid-template-columns:18px minmax(0,1fr) 28px;gap:9px;align-items:center;padding:8px 9px;border:1px solid #b7a16d55;border-left:3px solid transparent;color:#e3d6b5;background:#c8ae7108;cursor:pointer;break-inside:avoid}
+.cinema-app .equity-scene-choice .resource-person-choice>input[type=radio]{width:16px;height:16px;min-height:0;padding:0;margin:0;accent-color:#d9bd7c}
+.cinema-app .equity-scene-choice .resource-person-choice>span{min-width:0;font-size:15px;line-height:1.5}
+.cinema-app .equity-scene-choice .resource-person-choice>.resource-person-selected{color:#e8cc8e;font-size:13px;text-align:right}
+.cinema-app .equity-scene-choice .resource-person-choice[data-selected=true]{border-left:3px double #e1c488;background:#ddc28a17;color:#f4e3bb}
+.cinema-app .equity-scene-choice .resource-person-choice:hover{border-color:#d2b77b;background:#ddc28a12}
+.cinema-app .equity-scene-choice .resource-person-choice:focus-within{outline:2px solid #efd69d;outline-offset:2px}
