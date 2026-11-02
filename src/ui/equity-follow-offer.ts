@@ -8,6 +8,9 @@ export type EquityFollowOffer=NonNullable<EquityFollowAgreement['followOffer']>
 type Input={view:Pick<GamePanelProps['view'],'runId'|'revision'|'date'|'accounts'>;features:Pick<GamePanelProps['features'],'deepseek'>}
 const whole=(n:number)=>Number.isSafeInteger(n)&&n>=0
 
+/** A necessary public right for organizing the scene, never command authority. */
+export const equityPaidFollowPrerequisites=(a:Pick<EquityFollowAgreement,'preemptive'|'shares'>)=>a.preemptive&&a.shares>0
+
 /** Published quotation only. It grants no command eligibility or spending. */
 export function equityFollowOffer(p:Input,a:EquityFollowAgreement):EquityFollowOffer|null{
  const v=p.features.deepseek,q=a.followOffer

@@ -4,6 +4,7 @@ import {equityBrokerFee} from './equity-costs.ts'
 import {moneyText} from './game-text.ts'
 import {resolveEquitySceneTarget} from './equity-scene-target.ts'
 import {equitySceneContext} from './equity-player-thread.ts'
+import {equityPaidFollowPrerequisites} from './equity-follow-offer.ts'
 
 /** Editorial projection of already public state. Full rules, records and
  * command bindings stay with the existing journey, book and confirmation. */
@@ -28,6 +29,7 @@ export function equityStageCopy(p:GamePanelProps,j:EquityJourney){
   business:['先看看这次准备','下一步，还可以继续准备或先过生活。'],'business-active':['原来的安排，还在日历上','原安排照常继续，新投入另作决定。'],'business-winding-down':['这段准备，已经收尾','持股和旧款各自保留。'],'business-closed':['这份分账合上了','接下来，回到自己的日子。'],
  }
  let [heading,line]=copy[phase]??[j.title,j.line]
+ if(phase==='follow'&&a&&!equityPaidFollowPrerequisites(a)){heading='这轮融资，原持股仍在';line='原协议没有跟投权，可以不追加，也可以先过生活。';action='看看本轮安排'}
  if(phase==='business'&&p.view.phase==='epilogue'){heading='把这份旧事收好';line='持股、款项和原任务，分别核对。';action='看看原来的事项'}
  if(['preparation-planned','diligence-planned','negotiation-planned','governance-planned','exit-planned'].includes(phase)){heading='日子留好了，等开工';line='现在还没开始。'}
  if(['preparation-running','diligence-running','negotiation-running','governance-running','exit-running'].includes(phase)){heading=phase==='diligence-running'?'正在查这封介绍':phase==='governance-running'?'这次会议还在进行':'事情正在一步步往前走';line='到约定日，再看这一次的结果。'}

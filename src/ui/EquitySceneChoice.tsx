@@ -12,7 +12,7 @@ import {equityFollowHistory} from './equity-follow-history.ts'
 import {makeSharedAction} from './shared-action.ts'
 import {moneyText} from './game-text.ts'
 import {parseMoneyInput} from './money-input.ts'
-import {equityFollowOffer,equityFollowPosition,equityFollowHalfAmount} from './equity-follow-offer.ts'
+import {equityFollowOffer,equityFollowPosition,equityFollowHalfAmount,equityPaidFollowPrerequisites} from './equity-follow-offer.ts'
 import {EQUITY_GOVERNANCE_POLICIES,equityGovernancePolicy} from './equity-governance-ui.ts'
 import {DEEPSEEK_JOBS} from '../content/deepseek.ts'
 import {equityExitCash} from './equity-exit-cash.ts'
@@ -49,7 +49,7 @@ export function EquitySceneChoice({p,target,intent,sourceInvalid=false,sourceRea
  const jobCost=intent==='job'&&r.job&&b?equityDirectCosts(b.id,b.accountId,p.view.operations?.jobs,p.features.workbench.finance,p.view.date).jobs.find(row=>row.id===r.job!.id):undefined
  const followOffer=a?equityFollowOffer(p,a):null,zeroFollow=followOffer&&a?equityFollowPosition(followOffer,a,0):null,paidFollow=followOffer&&a&&amount!==null?equityFollowPosition(followOffer,a,amount):null
  const followHistory=a?equityFollowHistory(p,a):null,followPending=a?.followDecision==='pending'
- const followPaidPrerequisites=a!==null&&a.preemptive&&a.shares>0
+ const followPaidPrerequisites=a!==null&&equityPaidFollowPrerequisites(a)
  const followPrincipal=intent==='follow'&&p.view.phase==='playing'&&followPending&&followPaidPrerequisites&&draft.value('followStep')==='principal',followInput=useRef<HTMLInputElement>(null)
  useEffect(()=>{if(followPrincipal)followInput.current?.focus({preventScroll:true})},[followPrincipal,draft.key])
  const governancePolicy=equityGovernancePolicy(draft.value('policy')),governanceArranging=intent==='governance'&&governancePolicy!==null&&draft.value('governanceStep')==='arrange',governanceFields=useRef<HTMLDivElement>(null),governanceJob=DEEPSEEK_JOBS.find(j=>j.id==='deepseek-governance')

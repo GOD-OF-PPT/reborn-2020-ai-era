@@ -9,6 +9,7 @@ import {equityGovernancePolicy,equityGovernanceEffectiveDate} from './equity-gov
 import {equityExitCash} from './equity-exit-cash.ts'
 import {equityRetainedFacts} from './equity-retained-facts.ts'
 import {equityInvitationState} from './equity-invitation-ui.ts'
+import {equityPaidFollowPrerequisites} from './equity-follow-offer.ts'
 
 export type EquityChoiceIntent='actors'|'business'|'objects'|'prepare'|'relationship'|'eligibility'|'discover'|'fund'|'job'|'invitation'|'negotiate'|'terms'|'holding'|'follow'|'governance'|'exit-request'|'exit-accept'|'collect'|'record'|'next'
 export type EquityJourneyAction=
@@ -137,7 +138,10 @@ export function equityJourney(v:GamePanelProps['features']['deepseek'],target:Eq
    const pending=a.followDecision==='pending'
    return build({phase:pending?'follow-without-holding':'disposed',paper:'kept',title:pending?'持股已经转出，本轮只核对旧安排。':'这份原持股，已经全部转出。',line:pending?'当前没有可新增跟投的持股；可明确不新增付款，或沿原到期安排继续。各笔转让原款仍分别保留。':'股份已经转出，不等于原款已经到账。每笔转让和应收仍按自己的原记录继续，生活也可以继续。',originDate:a.signedAt,resultDate:known?dates.sort().at(-1)??null:null,outcome:pending?'pending':'actual',decisionOpen:pending,action:choice(pending?'follow':'holding',pending?'核对本轮原安排，明确不新增付款':'核对原协议与各笔转让原款'),facts:[`原签署本金${moneyText(a.initialCostFen)}；已转出${a.disposedShares}模拟股，原转出持有成本${moneyText(a.disposedBasisFen)}。这不是现金退款或已经收回的本金。`,pending?'本轮原截止'+a.followDeadline+'，不会因查看自动付款或作出决定。':'现已没有这份协议的持股；原调查、会议和转让费用仍在原账。']})
   }
-  if(target?.kind==='agreement')return build({phase:a.followDecision==='pending'?'follow':'holding',paper:'holding',title:a.followDecision==='pending'?context.phase==='epilogue'?'原融资只保留不新增投入的选择。':'愿不愿再留一笔钱，参与这次融资？':'这份权利已经持有，生活仍可继续。',line:a.followDecision==='pending'?'本轮最迟'+a.followDeadline+'决定；不跟投或逾期默认不付款，原股份按实际新增资本稀释。':'锁定和原权利仍在；持有本身不要求清空记录，也不等于有买方或可花现金。',originDate:a.signedAt,resultDate:a.followDecision&&a.followDecision!=='pending'?a.followAt:a.signedAt,outcome:a.followDecision==='pending'?'pending':'actual',decisionOpen:a.followDecision==='pending',action:choice(a.followDecision==='pending'?'follow':'holding',a.followDecision==='pending'?context.phase==='epilogue'?'核对原融资，明确不新增付款':'比较本轮投入和明确不跟投':'看看本协议的权利、锁定与原选择'),facts:[holding,`原锁定至${a.lockUntil}；${a.board?'一席董事，无单方控制':'无董事权'}，${a.preemptive?'原条款有跟投权':'原条款无跟投权'}。`]})
+  if(target?.kind==='agreement'){
+   const pending=a.followDecision==='pending',noPaidRight=pending&&!equityPaidFollowPrerequisites(a)
+   return build({phase:pending?'follow':'holding',paper:'holding',title:pending?context.phase==='epilogue'?'原融资只保留不新增投入的选择。':noPaidRight?'这轮没有追加权利，原持股仍在。':'愿不愿再留一笔钱，参与这次融资？':'这份权利已经持有，生活仍可继续。',line:pending?(noPaidRight?'原协议没有跟投权。':'')+'本轮最迟'+a.followDeadline+'决定；不跟投或逾期默认不付款，原股份按实际新增资本稀释。':'锁定和原权利仍在；持有本身不要求清空记录，也不等于有买方或可花现金。',...(noPaidRight?{purpose:'本轮不能追加本金；核对不新增付款的选择，也可以先过自己的生活。',finishWhen:'明确不追加后才记录本轮结果；先回今天不替你作决定。'}:{}),originDate:a.signedAt,resultDate:a.followDecision&&!pending?a.followAt:a.signedAt,outcome:pending?'pending':'actual',decisionOpen:pending,action:choice(pending?'follow':'holding',pending?context.phase==='epilogue'?'核对原融资，明确不新增付款':noPaidRight?'核对本轮不新增付款的选择':'比较本轮投入和明确不跟投':'看看本协议的权利、锁定与原选择'),facts:[holding,`原锁定至${a.lockUntil}；${a.board?'一席董事，无单方控制':'无董事权'}，${a.preemptive?'原条款有跟投权':'原条款无跟投权'}。`]})
+  }
   if(r.governance){const g=r.governance,policy=equityGovernancePolicy(g.policy),effective=g.resolvedAt!==null&&g.policy==='commercial_scope'?equityGovernanceEffectiveDate(g.resolvedAt):null
    if(!policy||g.resolvedAt!==null&&g.policy==='commercial_scope'&&effective===null)return build({phase:'governance-unknown',paper:'stopped',title:'先核对原会议的性质和日期。',line:'这份提案的政策或生效日期仍待核对，不能按另一种政策显示结果。',purpose:'找回这次会议的原记录，保留原持股和费用。',finishWhen:'核对原记录，不补表决或猜生效日。',originDate:g.createdAt,action:choice('record','翻阅同一份会议原记录'),facts:[holding]})
    const pending=task('governance','governance','有限提案，尚未实际表决。','等这次原会议实际回应',g.createdAt);if(pending)return {...pending,line:'本次'+policy.label+'；'+pending.line}
