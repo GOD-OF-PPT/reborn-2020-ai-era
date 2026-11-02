@@ -20,6 +20,7 @@ import {EquityMoment} from './EquityMoment.tsx'
 import EquityPanel from './EquityPanel.tsx'
 import {CommandButton} from './CommandButton.tsx'
 import {RoomTableau} from './RoomTableau.tsx'
+import {ResourceSelect} from './ResourceSelect.tsx'
 
 // Actual component callbacks, original normal saves and Controller/IDB previews.
 // This hook driver does not run DOM/effects or establish Chrome/art/human acceptance.
@@ -151,7 +152,7 @@ it('explains an original lock and missing board right before asking the player t
  expect(governance.tree().props.title).toBe('先核对本协议当前的会议权利。')
  expect(text(governance.tree())).toContain('当前没有可提出会议的董事权')
  expect(p.controller.preview(p.controller.prepare('ProposeEquityGovernance',{agreementId:a.id,policy:'independent_audit',resources:['player-production'],startAt:p.view.date})).allowed).toBe(false)
- expect(elements(governance.tree()).some(e=>e.type==='input'||e.props.emptyLabel==='先选择本次实际资源')).toBe(false)
+ expect(elements(governance.tree()).some(e=>e.type==='input'||e.type===ResourceSelect)).toBe(false)
  expect(elements(governance.tree()).some(e=>e.type===CommandButton&&e.props.kind==='ProposeEquityGovernance')).toBe(false)
  expect(elements(governance.tree()).some(e=>e.type==='button'&&['查清资本去向','限定接手范围'].some(label=>text(e.props.children).startsWith(label)))).toBe(false)
  expect(text(governance.tree())).toContain('回到这份持股')
@@ -159,7 +160,7 @@ it('explains an original lock and missing board right before asking the player t
  const locked=near(p,t,'exit-request','locked-title')
  expect(locked.tree().props.title).toBe('还在原锁定期，先看看这份安排。')
  expect(p.controller.preview(p.controller.prepare('RequestEquityExit',{agreementId:a.id,shares:1,resources:['player-production'],startAt:p.view.date})).allowed).toBe(false)
- expect(elements(locked.tree()).some(e=>e.type==='input'||e.props.emptyLabel==='先选择本次实际资源')).toBe(false)
+ expect(elements(locked.tree()).some(e=>e.type==='input'||e.type===ResourceSelect)).toBe(false)
  expect(elements(locked.tree()).some(e=>e.type===CommandButton&&e.props.kind==='RequestEquityExit')).toBe(false)
  expect(text(locked.tree())).toContain(a.lockUntil)
  expect(text(locked.tree())).toContain('回到这份持股')
@@ -241,7 +242,8 @@ it('opens an unprepared actual normal enterprise relationship directly, preserve
   expect(text(form.tree())).not.toContain('这次具体准备哪一项');expect(form.field('本次开工日期').props.value).toBe('')
   expect(form.button('StartEquityRelationship').props.disabled).toBe(true)
   form.change('本次开工日期',p.view.date)
-  const resource=elements(form.tree()).find(e=>typeof e.type==='function'&&e.props.emptyLabel==='先选择本次实际资源')!
+  const resource=elements(form.tree()).find(e=>e.type===ResourceSelect)!
+  expect(resource.props.appearance).toBe('people');expect(resource.props.value).toBe('');expect(resource.props.options).toContainEqual({id:'player-production',label:'由我自己来做'})
   invoke(resource,'onChange','player-production');form.draw()
   expect(form.button('StartEquityRelationship').props.disabled).toBe(false);invoke(form.button('StartEquityRelationship'),'onClick')
   expect(p.request).toHaveBeenCalledWith('StartEquityRelationship',{businessId:t.businessId,resources:['player-production'],startAt:p.view.date},expect.any(String),true)
