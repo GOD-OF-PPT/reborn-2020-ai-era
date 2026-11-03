@@ -3,11 +3,12 @@ import {Dialog} from './Dialog.tsx'
 import {CommandDetails} from './CommandDetails.tsx'
 import {LifeDecisionFacts} from './LifeDecisionFacts.tsx'
 import {WorkDecisionFacts} from './WorkDecisionFacts.tsx'
+import {ResearchDecisionFacts} from './ResearchDecisionFacts.tsx'
 import './personal-command-review.css'
 
-/** Select only the two existing captured fact components, never a label. */
+/** Select only the registered captured personal fact components, never a label. */
 export function isPersonalDecisionFacts(value:ReactNode):boolean {
- return isValidElement(value)&&(value.type===LifeDecisionFacts||value.type===WorkDecisionFacts)
+ return isValidElement(value)&&(value.type===LifeDecisionFacts||value.type===WorkDecisionFacts||value.type===ResearchDecisionFacts)
 }
 
 /** Only presentation changes; original captured command/view/preview references
