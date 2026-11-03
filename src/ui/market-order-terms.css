@@ -1,0 +1,46 @@
+.cinema-app .dialog.market-order-dialog>.dialog-direct-body{display:flex;flex:1;min-height:0;flex-direction:column;justify-content:center;gap:10px}
+.cinema-app .market-order-dialog .market-order-terms{display:flex;flex-direction:column;gap:8px}
+.cinema-app .dialog.market-order-dialog:has(>.order-actions .reason) .market-order-terms{gap:4px}
+.cinema-app .market-order-dialog .order-context{display:flex;justify-content:space-between;align-items:baseline;gap:20px}
+.cinema-app .market-order-dialog .order-context h3{font:400 24px/1.5 var(--serif);color:#efdeb6;margin:0}
+.cinema-app .market-order-dialog .order-context>span,.cinema-app .market-order-dialog .order-quote{font:14px/1.7 var(--serif);color:#c7cebc;margin:0}
+.cinema-app .market-order-dialog .order-sides{display:grid;grid-template-columns:1fr 1fr;gap:12px;border:0;padding:0;margin:0;min-width:0}
+.cinema-app .market-order-dialog .order-sides legend{font:14px/1.7 var(--serif);padding-bottom:8px;color:#dac89f}
+.cinema-app .market-order-dialog .order-sides>button{display:flex;flex-direction:column;align-items:flex-start;gap:5px;background:#0c2a2d88;border:1px solid #b7a67566;border-left:3px solid transparent;padding:11px 16px;text-align:left;transform:none}
+.cinema-app .market-order-dialog .order-sides strong{font:400 20px/1.5 var(--serif);color:#efdfbb}
+.cinema-app .market-order-dialog .order-sides small{font:13px/1.6 var(--serif);color:#bdc7b7}
+.cinema-app .market-order-dialog .order-sides>button[aria-pressed=true]{background:#405447;border-color:#d5b97c;border-left-color:#edcf91}
+.cinema-app .market-order-dialog .order-fields{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:18px}
+.cinema-app .market-order-dialog .order-fields .field{display:flex;flex-direction:column;gap:6px;margin:0;font:14px/1.7 var(--serif);color:#ded3b5;min-width:0}
+.cinema-app .market-order-dialog .order-fields input,.cinema-app .market-order-dialog .order-expiry-button{width:100%;box-sizing:border-box;min-height:43px;background:#0c2429;color:#eee4ce;border:1px solid #a6ad8988;padding:8px 11px;margin:0;font:16px/1.6 var(--serif);border-radius:2px}
+.cinema-app .market-order-dialog .order-expiry-button{display:flex;align-items:center;justify-content:space-between;text-align:left}
+.cinema-app .market-order-dialog .order-expiry-button[data-invalid=true]{border-style:dashed;color:#e6c19a}
+.cinema-app .market-order-dialog .order-text-action{padding:5px 0;min-height:0;background:none;border:0;border-bottom:1px solid #bda36b66;color:#ddc48b;font:13px/1.6 var(--serif)}
+.cinema-app .market-order-dialog .order-rules-line{display:flex;gap:20px;align-items:center;border-top:1px solid #b6a57044;padding-top:9px}
+.cinema-app .market-order-dialog .order-rules-line p{flex:1;font:13px/1.7 var(--serif);color:#c4cbbb;margin:0}
+.cinema-app .market-order-dialog .order-rules-line button{flex:none}
+.cinema-app .market-order-dialog .order-help,.cinema-app .market-expiry-dialog .order-help{font:13px/1.7 var(--serif);color:#bcc7b7;margin:0}
+.cinema-app .market-order-dialog .order-lock{font:13px/1.7 var(--serif);color:#efcda4;border-left:2px solid #d6ac76;padding-left:10px;margin:0}
+.cinema-app .dialog.market-order-dialog>.order-actions{display:flex;align-items:center;gap:12px;flex:none;margin-top:15px;padding-top:13px;border-top:1px solid #bba46d66}
+.cinema-app .market-order-dialog>.order-actions :is(button,.command){margin:0}
+.cinema-app .market-order-dialog>.order-actions>button:last-child{margin-left:auto;background:none;border:0;border-bottom:1px solid #bba46d66}
+.cinema-app .market-order-dialog>.order-actions .command>button{font:15px/1.6 var(--serif);padding:10px 15px;min-height:42px}
+.cinema-app .market-order-dialog .warning-box{display:flex;align-items:center;gap:14px;padding:8px 12px;margin:0;font:13px/1.7 var(--serif)}
+.cinema-app .market-order-dialog .warning-box p{flex:1;margin:0}
+.cinema-app .market-order-dialog .warning-box button{flex:none;min-height:34px;padding:5px 10px;font:14px/1.6 var(--serif)}
+.cinema-app :is(.market-order-dialog,.market-expiry-dialog) :is(button,input,select):focus-visible{outline:2px solid #f2dba0;outline-offset:3px}
+.cinema-app .dialog.market-expiry-dialog>.dialog-direct-body{display:flex;flex:1;min-height:0;align-items:center}
+.cinema-app .market-expiry-calendar{display:flex;flex-direction:column;gap:18px;width:100%}
+.cinema-app .market-expiry-dialog .expiry-year{display:flex;align-items:center;gap:16px;color:#dfd3b3;font:15px/1.7 var(--serif)}
+.cinema-app .market-expiry-dialog .expiry-year select{width:145px;min-height:38px;padding:6px 12px;background:#102a2e;color:#f0e4c9;border:1px solid #b2a47788;font:16px/1.6 var(--serif)}
+.cinema-app .market-expiry-dialog .expiry-year strong{margin-left:auto;font:400 24px/1.5 var(--serif)}
+.cinema-app .market-expiry-dialog .expiry-months{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.cinema-app .market-expiry-dialog .expiry-months button{font:15px/1.6 var(--serif);padding:7px;min-height:36px;background:#16343666;border:1px solid #b9a87255}
+.cinema-app .market-expiry-dialog .expiry-months button[aria-pressed=true]{background:#405447;border-color:#e2c487;color:#f4dfb7}
+.cinema-app .market-expiry-dialog .expiry-days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.cinema-app .market-expiry-dialog .expiry-days button{display:flex;flex-direction:column;gap:8px;align-items:flex-start;padding:16px 18px;background:#0e2a2dbb;border:1px solid #b4a67266;border-left:3px solid transparent;text-align:left;transform:none}
+.cinema-app .market-expiry-dialog .expiry-days button[aria-pressed=true]{border-left-color:#edcf91;background:#405447}
+.cinema-app .market-expiry-dialog .expiry-days strong{font:400 25px/1.5 var(--serif);color:#efddb5}
+.cinema-app .market-expiry-dialog .expiry-days :is(small,span){font:13px/1.6 var(--serif);color:#bdc8b6}
+.cinema-app .market-expiry-dialog .expiry-current{margin:0;font:14px/1.7 var(--serif);color:#d5c79f}
+.cinema-app .market-expiry-dialog>.expiry-footer{flex:none;margin-top:14px;padding-top:12px;border-top:1px solid #b8a26c66}
