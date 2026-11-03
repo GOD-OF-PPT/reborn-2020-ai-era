@@ -73,3 +73,6 @@ fact-index-r462最终463/979，两源（relay-validation.ts/新test）局部Map�
 当前优先级覆盖上一“先cache修复”：先按原623审计输入、封存失败现场→核保存编码容量并在原10MiB encoded/256MiB logical/5m nodes/depth等guard内寻无损方案（原level3 preferred、可考察有界高压缩fallback，尚未实现/验证），不得提高限额、删历史、造成功624 wire或跳过原失败命令→按精确623控制点接回原624及Q4/2025完整策略；缓存预算修复合同保留后续，不能替代保存修缮。仍原完整2025/80万董事实际签署治理/17+5深态/最终U6及原后续全组合/T17其余/PNG0of3/真人0/P3正式62与22未跑/M01须明确恢复/T18最后/goal未完成。Main457/DB未动，全部兼容开发测试0，无push/deploy/外发/新委派/global memory写。
 
 保存失败现场保全提交5c5aa66f8bb4ff0d78a8ef3d94ae4badbf489ee4（父56f7116b），12精确owned/delta、0产品源改、全部index/commit blob/字节/SHA/mode核同、index空未push。原最后623的逐字副本、未保存624命令、原closed文件hash与实际exit1/失败记录已保全，独立623完整codec/源前缀审计明确pending；没有将失败624当新正常进度。后续直接读本post的original-save-limit-stop-intake.json与last-saved623.json，不poll已terminal71876/15729，也不重启原execution-r1。先保存编码容量/完整数据修缮，再缓存预算修复；旧execution待独立审计再fullseal，父root及goal仍active。整个U6及全部原后续/未验责任保，compat开发测试0，无push/deploy/外发/新委派/global memory写。
+
+## 保存编码修缮限定提交已齐
+3694b363e4dd74428384cb2cbeb2e4237a1ca601：473/981两源、91精确owned/delta、全部blob/字节/SHA/mode核同、index空未push；最终同源212/212、类型/构建通过。旧623wire全部同，原未写624全状态同，9876634B在原10MiB内且旧reader可读，默认首选/所有guard不变。当前只完成编码修缮，原正常624未实际保存/Main未更新，下一新producer按原623控制点/原624及完整Q4/2025恢复，不重启已封旧execution。缓存预算修复合同仍待，所有原U6/goal及后续责任保，compat0。

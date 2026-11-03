@@ -8,3 +8,5 @@
 证据边界：新容量JSON fixture仅测试packing层，extra state不是合法campaign；正常提案验证来自原kernel416实际未写624而非此fixture。完整旧623和原18指纹另有独立审计；更早417/372沿原605已验链复用，非本轮重跑。旧读器proof按完全同一wire显式复用，实际472/最终473只有测试Buffer比较区别，不冒源相同的单次批次；212是最终473两批的唯一case，不加旧55或其它分支。
 原始失败execution已封14文件，完整未写125MB proposal留原地且有无损zlib传输副本；大raw的归档不会作为游戏存档/注入正常人生。当前只完成编码修缮，不恢复旧STOP producer，不将candidate624当实际已保存624。Main457/用户DB未动，0Native/0IDB/0新实际游戏命令，所有页面compat开发测试0。原正常Q4/2025/80万董事实际签署治理/17+5深态/最终U6及原后续全组合、T17其余/PNG0of3/真人0/P3正式62和22未跑/M01待明确恢复/T18最后/完整goal仍未完。缓存预算修复合同保留。
 [杠精审查]限定通过：原数据/权限/原子保存均保，完全真实提案和旧读器有据，实际恢复必须下一子继续原preview/evaluate/同command624和完整保存，不能用已有proposal替代真正命令或缩短路径。
+
+编码修缮接受提交3694b363e4dd74428384cb2cbeb2e4237a1ca601：91精确owned/delta，两源与全部index/commit blob/字节/SHA/mode核同、index空未push。原125MB提案raw未stage且留原地，完整可逆17MB archive及hash/mode/byte等值证明已stage。当前仅本编码子完成，实际正常624仍待恢复。
