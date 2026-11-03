@@ -68,19 +68,19 @@ it('does not reuse a different receipt object and does not cache oversized signa
  ledger.receipts[0]!.signature=large;parse.mockClear();assertLedger(ledger);assertLedger(ledger)
  expect(parse.mock.calls.filter(([text])=>text===large)).toHaveLength(2)
 })
-it('evicts private parse reuse after its entry budget and keeps the ledger checks intact',()=>{
+it('keeps existing private parse reuse when its entry budget stops admitting new receipts',()=>{
  const ledger=original(),signature=ledger.receipts[0]!.signature,parse=vi.spyOn(JSON,'parse')
  assertLedger(ledger)
  const receipts=Array.from({length:32769},(_,i)=>({id:'cache-entry:'+i,signature:'{"kind":"income"}',kind:'income' as const,status:'applied' as const,accountId:'personal',contractId:null}))
  // A low-level ledger validation stress input, not a valid campaign or a save.
  assertLedger({...ledger,receipts:[...ledger.receipts,...receipts]});assertLedger(ledger)
- expect(parse.mock.calls.filter(([text])=>text===signature)).toHaveLength(2)
+ expect(parse.mock.calls.filter(([text])=>text===signature)).toHaveLength(1)
 })
-it('evicts on aggregate text budget independently of the entry budget',()=>{
+it('keeps existing private parse reuse when the aggregate text budget is full',()=>{
  const ledger=original(),signature=ledger.receipts[0]!.signature,parse=vi.spyOn(JSON,'parse')
  assertLedger(ledger)
  const large=canonicalJson({kind:'income',unrelated:'x'.repeat(8000)})
  const receipts=Array.from({length:2100},(_,i)=>({id:'cache-text:'+i,signature:large,kind:'income' as const,status:'applied' as const,accountId:'personal',contractId:null}))
  assertLedger({...ledger,receipts:[...ledger.receipts,...receipts]});assertLedger(ledger)
- expect(parse.mock.calls.filter(([text])=>text===signature)).toHaveLength(2)
+ expect(parse.mock.calls.filter(([text])=>text===signature)).toHaveLength(1)
 })

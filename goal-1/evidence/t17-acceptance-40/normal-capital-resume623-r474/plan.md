@@ -17,3 +17,9 @@
 恢复错栈会重复承诺或跳整季；原624 first-call与whole-state黄金围栏、字面策略同、控制fixture和实际preflight共同阻止。唯一实际执行入参/源/code/helper SHA在启动前固定；观察超时不重启，失败原样STOP留档，续接必须新producer。原旧头623和所有73完整seal/P326/132marker/2link/61B原输入/未接线model/mixedmasters保护，无清理/reset/push/deploy/外发/新委派/global memory写。
 rollback只新root工具/未开始的执行；实际有保存后只能按真实新head审计，不回滚用户或原游戏钱/日期。0Native/0IDB身份保持，正式Chrome/人类/整体验收后续。可在真实Q4保存检查点合作停止以独立工作，不能终止目标或半步改运行代码。
 [杠精审查]通过准备：原624与第一Q4等待栈明确，原count已1、while尾ack准确，不偷加分红或跳Q4；完整2025实际签署治理仍门槛。
+
+## 中断现场复核
+83560句柄缺失，62571与62502均不存在，原terminal/launcher result缺失，退出码未知。原head623逐字等于独立已验输入，commands空，624 golden缺失，19pinned代码与输入同。保interruption-intake及实际stopped记录，恢复任务仍[ ]。下一先处理已有47156凭据超预算整表清空的性能问题，再从同623/原624新producer接续。原中断producer不重启，所有原Q4/2025实际董事治理目标保，compat0。
+
+## 缓存候选479在制
+三owned运行变化已限定，479定向17项/类型通过，运行字节相同477的完整251/251和构建及40笔真实组件明确复用。重复原ledger解析47156→14388，全部原账目校验保。独立同623→原624全状态与wire验证43845/pid71497已启动，尚待实际结果，不重复执行；正常保存仍623，缓存子和完整恢复任务保持[ ]。74旧封存/P3/原输入/原未验责任保，Main/DB/兼容开发测试0。

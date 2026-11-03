@@ -376,21 +376,27 @@ const MAX_PARSED_SIGNATURE_CHARS = 16 * 1024 * 1024
 const MAX_CACHED_SIGNATURE_CHARS = 8192
 let parsedReceipts = new WeakMap<LedgerReceipt, { signature: string; operation: LedgerOperation }>()
 let parsedReceiptCount = 0, parsedSignatureChars = 0
-function supplierReceiptOperation(receipt: LedgerReceipt): LedgerOperation {
+interface SupplierReceiptScan { needsAnchor: boolean }
+function supplierReceiptOperation(receipt: LedgerReceipt, scan: SupplierReceiptScan): LedgerOperation {
   const signature = receipt.signature
   // Keep the original direct-input JSON/property failures and coercions. Reading
   // the current property above also prevents a getter from being memoized.
   if (typeof receipt !== 'object' || receipt === null || typeof signature !== 'string') return JSON.parse(signature) as LedgerOperation
   const previous = parsedReceipts.get(receipt)
-  if (previous?.signature === signature) return previous.operation
-  const operation = JSON.parse(signature) as LedgerOperation
-  if (signature.length <= MAX_CACHED_SIGNATURE_CHARS) {
-    // Counts include replacements and collected keys, conservatively bounding
-    // reuse without retaining keys or relying on GC to enforce the budget.
-    if (parsedReceiptCount >= MAX_PARSED_RECEIPTS || parsedSignatureChars + signature.length > MAX_PARSED_SIGNATURE_CHARS) {
+  if (scan.needsAnchor && signature.length <= MAX_CACHED_SIGNATURE_CHARS) {
+    scan.needsAnchor = false
+    // Freshly decoded or replaced receipt objects start a bounded generation.
+    // Stable scans keep their prefix even when the history exceeds capacity.
+    if (previous?.signature !== signature) {
       parsedReceipts = new WeakMap()
       parsedReceiptCount = 0; parsedSignatureChars = 0
     }
+  }
+  if (previous?.signature === signature) return previous.operation
+  const operation = JSON.parse(signature) as LedgerOperation
+  if (signature.length <= MAX_CACHED_SIGNATURE_CHARS && parsedReceiptCount < MAX_PARSED_RECEIPTS && parsedSignatureChars + signature.length <= MAX_PARSED_SIGNATURE_CHARS) {
+    // Counts include replacements and collected keys, conservatively bounding
+    // reuse without retaining keys or relying on GC to enforce the budget.
     parsedReceipts.set(receipt, { signature, operation })
     parsedReceiptCount++; parsedSignatureChars += signature.length
   }
@@ -407,8 +413,9 @@ function assertSupplierHistory(state: LedgerState): void {
   const costByOperation=new Map<string,number>()
   for(const entry of state.metrics)if(entry.kind==='cost'){const key=[entry.operationId,entry.accountId,entry.businessId??'-'].join('|');costByOperation.set(key,sumMoney([costByOperation.get(key)??0,entry.deltaFen],true))}
   const cost=(op:LedgerOperation,amount:number)=>requireRule((costByOperation.get([op.id,op.accountId,op.businessId??'-'].join('|'))??0)===amount,'SUPPLIER_COST_HISTORY_MISMATCH')
+  const receiptScan: SupplierReceiptScan = { needsAnchor: true }
   for (const receipt of state.receipts) {
-    const o=supplierReceiptOperation(receipt)
+    const o=supplierReceiptOperation(receipt, receiptScan)
     if(o.kind==='supplier_prepay'){const p=pool(o.prepaymentId,o.accountId,o.businessId,o.counterpartyId);p.paidFen=sumMoney([p.paidFen,o.amountFen]);p.remainingFen=sumMoney([p.remainingFen,o.amountFen])}
     if(o.kind==='consume_supplier'){const p=pools.get(o.prepaymentId);requireRule(p&&p.accountId===o.accountId&&p.businessId===o.businessId&&p.remainingFen>=o.amountFen,'SUPPLIER_HISTORY_MISMATCH');p.remainingFen-=o.amountFen;sources.set(o.id,o);cost(o,o.amountFen)}
     if(o.kind==='incur_supplier_usage'){sources.set(o.id,o);requireRule(!invoices.has(o.obligationId),'SUPPLIER_HISTORY_MISMATCH');invoices.set(o.obligationId,o.amountFen);cost(o,o.amountFen)}
