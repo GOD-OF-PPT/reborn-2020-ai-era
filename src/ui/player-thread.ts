@@ -379,8 +379,8 @@ function firstScene(p:Input):Scene{
 
 function marketScene(p:Input,f:Extract<OpeningFocus,{kind:'market'}>):Scene{
  const m=p.features.market,progress=marketSceneProgress(accountMarket(p,f.accountId),p.view.date,f.accountId,f.entityId)
- const inspect={screen:'market' as const,label:'查看这份模拟投资与原记录',target:{accountId:f.accountId,...(f.entityId?{recordId:f.entityId}:{})}}
  const research=m.researches.find(r=>r.id===f.entityId),resultRefs:ThreadResultRef[]=[]
+ const inspect={screen:'market' as const,label:research?'查看这份公开研究与原记录':'查看这份模拟投资与原记录',target:{accountId:f.accountId,...(f.entityId?{recordId:f.entityId}:{})}}
  if(research&&research.status!=='running')return {stage:'market-research-'+research.status,object:'原来的公开研究笔记',title:research.status==='completed'?'这次公开研究，已经完成。':'这次研究，已经中断。',line:'整理材料不会揭示未来价格，也没有替你下单；下一份委托仍需自己选择。',detail:'研究与买股分别发生，原成本和行动按实际记录保留。',outcome:research.status==='completed'?'actual':'non-success',inspect,resultRefs:research.status==='completed'?[{kind:'research',id:research.id,date:research.completeAt}]:[]}
  const order=m.orders.find(o=>o.id===f.entityId),results=marketOrderResults(p,f)
  for(const fill of results.fills)resultRefs.push({kind:'fill',id:fill.id,date:fill.date})
@@ -388,7 +388,7 @@ function marketScene(p:Input,f:Extract<OpeningFocus,{kind:'market'}>):Scene{
  const settlement=m.settlements.find(s=>s.id===f.entityId)
  if(settlement?.paidAt&&settlement.paidAt<=p.view.date)resultRefs.push({kind:'settlement',id:settlement.id,date:settlement.paidAt})
  const rejected=order&&['cancelled','expired'].includes(order.status)
- return {stage:'market-'+progress.phase,object:progress.phase==='opening'?'桌上的模拟市场资料':'原来的模拟委托与持仓',title:progress.title,line:progress.line,detail:progress.choice.line,outcome:rejected?'non-success':resultRefs.length||progress.phase==='position'?'actual':progress.active?'pending':'none',inspect,resultRefs,
+ return {stage:'market-'+progress.phase,object:research?'桌上的公开研究笔记':progress.phase==='opening'?'桌上的模拟市场资料':'原来的模拟委托与持仓',title:progress.title,line:progress.line,detail:progress.choice.line,outcome:rejected?'non-success':resultRefs.length||progress.phase==='position'?'actual':progress.active?'pending':'none',inspect,resultRefs,
   ...(progress.command?{command:{...progress.command,label:progress.choice.label}}:{}),...(progress.secondaryCommand?{secondaryCommand:{...progress.secondaryCommand,label:'撤回这份委托的剩余部分'}}:{}),...(progress.nextDate?{wait:{date:progress.nextDate,label:progress.waitLabel??'等原市场安排的反馈'}}:{})}
 }
 

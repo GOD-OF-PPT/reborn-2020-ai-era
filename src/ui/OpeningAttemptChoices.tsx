@@ -5,6 +5,7 @@ import {Dialog} from './Dialog.tsx'
 import {CommandButton} from './CommandButton.tsx'
 import {makeSharedAction} from './shared-action.ts'
 import {moneyText} from './game-text.ts'
+import {addDays} from '../core/calendar.ts'
 import './opening-attempt.css'
 
 export type OpeningChoicePanel='offer'|'free'|'next'|'market'
@@ -13,12 +14,13 @@ type Props={p:GamePanelProps;attempt:OpeningAttemptView;panel:OpeningChoicePanel
 /** These are decisions about today's original objects, never a second tutorial state machine. */
 export function OpeningAttemptChoices({p,attempt,panel,onClose,onInspect,onMarket,onExplore,onFocus,onNavigate}:Props){
  const first=attempt.firstOrder,request:GamePanelProps['request']=(...args)=>{onClose();p.request(...args)},current={...p,request}
+ const overview=panel==='market'?p.features.workbench.researches.find(r=>r.id==='market-overview'):undefined,research=overview?.state,personal=panel==='market'?p.view.accounts.find(a=>a.accountId==='personal'):undefined
  const ui=(label:string,line:string,perform:()=>void)=>{
   const binding=makeSharedAction(p,label,()=>{onClose();perform()},{allowReadOnly:true})
   return <button type="button" key={label} className="opening-next-choice" disabled={binding.disabled} onClick={binding.activate}><strong>{label}</strong><span>{line}</span>{binding.reason?<span className="reason">{binding.reason}</span>:null}<i aria-hidden="true">↗</i></button>
  }
- const title=panel==='offer'?'这封委托，怎样答复？':panel==='free'?'今天，先把时间留给什么？':panel==='market'?'先想清这笔钱的去处。':'接下来的日子，想怎样继续？'
- return <Dialog title={title} className="opening-paper opening-attempt-choices" onClose={onClose} footer={<div className="opening-choice-footer"><button type="button" onClick={onClose}>先不决定，留在这里</button><button type="button" className="scene-text-action" onClick={()=>{onClose();onInspect()}}>翻看当前对象的完整记录 ↗</button></div>}>
+ const title=panel==='offer'?'这封委托，怎样答复？':panel==='free'?'今天，先把时间留给什么？':panel==='market'?'这笔钱，先怎么安排？':'接下来的日子，想怎样继续？'
+ return <Dialog title={title} layout={panel==='market'?'direct':'book'} className={'opening-paper opening-attempt-choices'+(panel==='market'?' opening-market-choices':'')} onClose={onClose} footer={<div className="opening-choice-footer"><button type="button" onClick={onClose}>先不决定，留在这里</button><button type="button" className="scene-text-action" onClick={()=>{onClose();onInspect()}}>翻看当前对象的完整记录 ↗</button></div>}>
   {panel==='offer'&&first?<>
    <p className="opening-paper-date">{p.view.date} · 最迟{first.dates.replyBy}答复</p>
    <p>剪一条短片，并整理交付资料。客户报价<strong>{moneyText(first.terms.priceFen)}</strong>。</p>
@@ -33,10 +35,12 @@ export function OpeningAttemptChoices({p,attempt,panel,onClose,onInspect,onMarke
    {ui('环顾房间，看看别的可能','作品、人物、生活与五条路都还在。',onExplore)}
   </>:null}
   {panel==='market'?<>
-   <p>生活储备与投资用钱是同一份个人现金。研究、下单或不买入，分别由你决定。</p>
-   {p.features.workbench.researches.filter(r=>r.id==='market-overview'&&!r.state).map(r=><CommandButton key={r.id} {...current} kind="ResearchMarket" payload={{definitionId:r.id}} label="先理清公开产业线索" confirm><span>先理清公开产业线索<small>{moneyText(r.costFen)} · {r.actionPoints}点 · {r.days}日；不代你买股</small></span></CommandButton>)}
-   {ui('自己选择一份模拟委托','显选标的、股数、价格和期限；提交仍要确认。',onMarket)}
-   {ui('暂不买入，看看其它安排','保留现金，自己选择工作或生活。',onExplore)}
+   <div className="opening-market-context"><span>{p.view.date} · 模拟市场</span><p>{personal?<>个人可花 <strong>{moneyText(personal.availableFen)}</strong></>:'个人可花金额仍需查看原账。'}<small>生活与投资，共用这笔钱。</small></p></div>
+   <div className="opening-market-decisions">
+    {overview&&!research?<CommandButton {...current} kind="ResearchMarket" payload={{definitionId:overview.id}} label="先读公开资料" confirm><span><strong>先读公开资料</strong><small>{moneyText(overview.costFen)} · {overview.actionPoints}点 · 预计{addDays(p.view.date,overview.days)}完成</small><small>整理已知线索，不揭示未来价格，也不自动买入。</small></span></CommandButton>:research?ui('查看这份研究',research.status==='running'?`公开资料正在整理 · ${research.startAt}开始，预计${research.completeAt}完成。`:research.status==='completed'?`公开资料已于${research.completeAt}整理完成；不会因此自动买入。`:'这份研究已中断；已经投入的资源仍按原账保留。',()=>onFocus({kind:'market',runId:p.view.runId,accountId:'personal',entityId:research.id,entityKind:'research'})):null}
+    {ui('填写模拟委托','自己选标的、数量、限价和期限，提交前再核对费用。',onMarket)}
+    {ui('先留着这笔钱','去看看工作和生活；不买入，也不占行动。',onExplore)}
+   </div>
   </>:null}
   {panel==='next'?<>
    <p>{attempt.endpoint}</p>

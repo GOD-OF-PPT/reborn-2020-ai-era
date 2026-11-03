@@ -270,7 +270,10 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const lifeRows=!interrupted&&!requiresChoice&&!legacy&&thread.focus.kind==='life'&&meaning?p.features.life.jobs.filter(job=>job.id===thread.focus.entityId&&job.personId===null&&(job.kind==='rest'||job.kind==='workspace')&&(job.status==='running'||job.status==='completed')&&meaning.sourceRefs.some(ref=>ref.kind==='job'&&ref.id===job.id)):[]
  const personalLife=lifeRows.length===1?lifeRows[0]!:null
  const lifeSceneFacts=personalLife?[personalLife.status==='running'?`${personalLife.startAt}—${personalLife.completeAt} · 已付${moneyText(personalLife.costFen)} / 已用${personalLife.actionPoints}点；中断不退费用和行动。`:`${personalLife.completeAt}已完成 · 已付${moneyText(personalLife.costFen)} / 已用${personalLife.actionPoints}点；行动不返还，不产生收入。`]:null
- const sceneFacts=sceneFirstFacts??lifeSceneFacts??(workCopy?[workCopy.line]:null)
+ const researchRows=!interrupted&&!requiresChoice&&!legacy&&thread.focus.kind==='market'&&thread.focus.entityKind==='research'?p.features.market.researches.filter(row=>row.id===thread.focus.entityId):[]
+ const currentResearch=researchRows.length===1?researchRows[0]!:null
+ const researchFacts=currentResearch?currentResearch.status==='running'?[`${currentResearch.startAt}—${currentResearch.completeAt} · 公开资料整理中；研究不代买卖。`,'中断不退已耗费用与行动。']:currentResearch.status==='completed'?[`${currentResearch.completeAt}已完成 · 费用与行动不返还，买卖另行决定。`]:['研究已中断，已投入的费用和行动不返还。']:null
+ const sceneFacts=sceneFirstFacts??lifeSceneFacts??researchFacts??(workCopy?[workCopy.line]:null)
  const lifeRoomTitle=personalLife&&thread.focusScope!=='history'?personalLife.status==='running'?personalLife.kind==='rest'?'这几天，留给自己。':'住处的改变，还在准备。':personalLife.kind==='rest'?'休整的日子，已经走过。':'住处的改变，已经完成。':null
 
  const courseReady=course&&!interrupted&&!requiresChoice&&!legacy&&thread.focusScope!=='history'&&thread.stage==='course-ready'&&courseTarget?.kind==='course'&&courseProgress?.historical!==true
