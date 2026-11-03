@@ -32,3 +32,6 @@ OS采样未解析JS业务函数，因此另固定当前原612完整保存档，�
 ## 原日期步的局部热点已定位，尚未实施新优化
 原执行71876/15729仍live，原612→613计算未返回。OS只读采样后，独立固定612 clone用同原normal-capital-v2:613/Aug10命令取局部CPU profile，未提交/导出候选或接回原run。probe01自检exit13和提前实际启动错误保，已仅终止自有clone；probe02修复Worker生命周期并加实际launcher自检gate后，自检/实际clone均按保存profile后仅自身SIGTERM结束。原运行无源码/状态/inspector/端口变化。
 probe02实际窗口3644.818ms/561样本，约80.05%落在relay-validation.ts:47每meter的facts.find回调，9.48%在:16 timer.some；不是完整日期步耗时或新保存、Native、正式性能。下一最小验证方向是保首匹配/原全校验的单次fact索引，timer另列；本轮0产品源改，不在运行中热改。详见advance-diagnosis.md，失败和原样本保。
+
+## 当前恢复任务内的已证事实查找验证子步骤
+原613已真实保存，可比较原612→613完整结果；fact-index-r462子三文件先落，候选只更改单次meter事实首匹配索引，原71876仍不动。只有完整原语义/消费者/同原613 wire差分均齐才提交有限优化；不另推进功能、不把候选接入live或冒完整恢复完成。

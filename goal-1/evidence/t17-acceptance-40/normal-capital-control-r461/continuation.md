@@ -27,3 +27,10 @@ Main5415仍原457/129/Oct1/270137.33/AP4/2812股/改善住处，本任务0Main/D
 ## 原日期步的局部热点已定位，尚未实施新优化
 原执行71876/15729仍live，原612→613计算未返回。OS只读采样后，独立固定612 clone用同原normal-capital-v2:613/Aug10命令取局部CPU profile，未提交/导出候选或接回原run。probe01自检exit13和提前实际启动错误保，已仅终止自有clone；probe02修复Worker生命周期并加实际launcher自检gate后，自检/实际clone均按保存profile后仅自身SIGTERM结束。原运行无源码/状态/inspector/端口变化。
 probe02实际窗口3644.818ms/561样本，约80.05%落在relay-validation.ts:47每meter的facts.find回调，9.48%在:16 timer.some；不是完整日期步耗时或新保存、Native、正式性能。下一最小验证方向是保首匹配/原全校验的单次fact索引，timer另列；本轮0产品源改，不在运行中热改。详见advance-diagnosis.md，失败和原样本保。
+
+局部AdvanceTime诊断提交af0c5d7bf8d42d01f371867ec834893565c9e7d5（父6141bbc9），124 owned/59 delta，全部index/commit blob/字节/SHA/mode核同、index空未push，0产品源改；活head/log/mixedmasters未stage。probe01错误/停止记录及probe02成功局部CPU样本各完整封存，65旧加两诊断子=67；活原root/execution不封。当前原71876仍实活、原有效保存仍612，完整2025/董事签署治理/整个task/U6/goal均未完成。
+
+## 当前新增验证子步骤：fact-index-r462（原r461仍是唯一task）
+HEAD仍af0c5d7b诊断提交，WT有两项本任务未提交owned：src/core/relay-validation.ts、src/core/relay-fact-index.test.ts；不是P3，不可reset。子input/plan/tasks已先落，产品候选从459 freeze，最终463/979，仅这两个源diff。原s.meters循环前局部Map保第一个fact、不缓存跨次、不改其他原条件/timer/规则/版本。
+旧462 six回归5pass+访问增长1red（435>174），候选新6全过；完整13文件88中87pass+technical_employee原120s timeout红，原source459同完整relay-normal.test.ts对照handle60226还在跑；不得加timeout求绿。463类型224034ms/build6775ms过，source-scope463证明P3未带。候选完整原612→613差分handle13127/node24915仍evaluate，参数原normal-capital-v2:613/dateAug10，输入12 raw在已封advance-probe01/input612.json，终点真实原613 raw在fact-index-r462/original613.json/10064570B/ed051a22d9ac41ddc2871d2f41e34985ed79e177b2aee794c082be87ebac2274；候选codec/evaluate/export/import/全Run并原wire全部等才可通过。不要重启/重复此长核，先poll同13127。其源码fact-replay613.mjs在parent；helper fact-freeze/fact-check/fact-engineering也在parent（import相对层级正确），phase output在child。
+原主producer71876/15729已实际保存613/Aug10，旧步1346034ms，仅日志整author step非精确kernel计时；仍独立原416kernel/registry+459codec，不用新463候选。不热改、不停止/重启活进程，不stage活head/log，候选不接回原run。只有后续明确安全检查点并完整等值核才考虑新版本，原2025/80万签署治理全目标保持。新候选验证未完成，子task[]、父task[]、整个U6/goalactive，Main仍457不更新、兼容0。
