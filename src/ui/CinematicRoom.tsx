@@ -80,9 +80,9 @@ export function CinematicRoom(p:Props){
   const sameToday=canonicalJson(todayAt)===origin.todayKey||saved!==null&&todayAt===null
   if(!sameFocus||!sameToday||readingKey!==origin.readingKey){todayHandoff.current=null;return}
   if(view.busy||p.controller.snapshot.busy||p.controller.snapshot.view!==view)return
-  if(saved){todayHandoff.current=null;setTodayAt(null);if(focusKey!==canonicalJson(saved))p.onOpeningFocus?.(saved)}
+  if(saved){todayHandoff.current=null;setTodayAt(null);if(focusKey!==canonicalJson(saved))(p.onSavedFollowFocus??p.onOpeningFocus)?.(saved)}
   else if(view.runId!==origin.previous.view.runId||view.revision!==origin.previous.view.revision)todayHandoff.current=null
- },[view,f,p.openingFocus,p.onOpeningFocus,p.controller,p.controller.runtimeSession,p.readingContext,todayAt,setTodayAt,readingKey])
+ },[view,f,p.openingFocus,p.onOpeningFocus,p.onSavedFollowFocus,p.controller,p.controller.runtimeSession,p.readingContext,todayAt,setTodayAt,readingKey])
  const requestScene:GamePanelProps['request']=(kind,payload,label,confirm)=>{
   todayHandoff.current=null
   if(todayChoices.has(kind)&&dayPerspectiveCurrent(view,todayAt)&&!view.readOnly&&!view.hasCandidate&&view.saveStatus==='saved'&&!view.busy&&!p.controller.snapshot.busy&&p.controller.snapshot.view===view&&typeof payload==='object'&&payload!==null&&!Array.isArray(payload)){
