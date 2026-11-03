@@ -26,3 +26,12 @@ launch71876/child15729，driverSHA51184d43dfc3d629bb7b2125bb05a316d52ffef9a6dcb0
 同一71876实际原五续签606..610已全保存，随后原StartRelayServicePeriod611已保存。固定611/Jul31/9958178B/SHA091e990c190ab90806d29d4c5d007691e1d26253621e3024dc9b68ff59c859b2，独立优化codec配原registry进出全wire同、原605完整command/cause/ledger/timeline prefix同，六条原fingerprint/日期/namespace同。五位剩余客户与原20客户/cedar-direct/资源/原Aug1安排吻合。
 服务rly:bdad9034b6d6d2ae967048050a35d153仍planned，服务Aug1—Aug29、支持Aug29—Sep5，当前Jul31；本季2已用/2预留/0可用，不能画成实际开工或完成。个人现金68059.27与模拟股票账面679156.80分列；企业现金2307848.40、客户预款保护2287848.40、本次任务另预留4500、实际可花15500分别保。审计201537ms，0新命令/IDB/Native，不冒正式性能或完整2025/board。只读checkpoint611子已完整STOP/seal；原64加此子为65，活root/execution-r1仍不封。
 后台原流程已继续到612原模拟委托，后续逐保存以同句柄和journal为准，不改原运行源/策略。
+
+611只读检查本地提交6141bbc9fbac5c333d6c63e94806232c7f2e8140（父897defac），70 owned/27 delta，index/commit blob字节/SHA/mode核同、index空未push、0产品源改；活输出与mixedmasters未stage。checkpoint611已封，producer仍active，任务/U6/goal继续未完成。
+
+## 长日期步只读诊断，未计新保存
+同71876/15729实活，AdvanceTime尚未返回；一次/usr/bin/sample 1秒/10ms采样主线程90样本显示正在JS计算，含Set查找/JSON解析，大量JIT无符号，不足以指定业务函数或证明最终终止。该片段I/O阻塞或GC均未占主线程主导；不是正式性能门槛，也不等于日期已经保存。默认sample命令被用户Python脚本遮蔽且缺模块，改用已读帮助的系统/usr/bin/sample成功，未改系统权限/inspector/代码/游戏状态。原运行driverSHA仍同；主DB/存档无操作。采样原文及summary保留，最新已保存仍按物理head/journal（本次读到612）核定，继续原同一执行，不重启、不跳结算、不改任务完成状态。
+
+## 原日期步的局部热点已定位，尚未实施新优化
+原执行71876/15729仍live，原612→613计算未返回。OS只读采样后，独立固定612 clone用同原normal-capital-v2:613/Aug10命令取局部CPU profile，未提交/导出候选或接回原run。probe01自检exit13和提前实际启动错误保，已仅终止自有clone；probe02修复Worker生命周期并加实际launcher自检gate后，自检/实际clone均按保存profile后仅自身SIGTERM结束。原运行无源码/状态/inspector/端口变化。
+probe02实际窗口3644.818ms/561样本，约80.05%落在relay-validation.ts:47每meter的facts.find回调，9.48%在:16 timer.some；不是完整日期步耗时或新保存、Native、正式性能。下一最小验证方向是保首匹配/原全校验的单次fact索引，timer另列；本轮0产品源改，不在运行中热改。详见advance-diagnosis.md，失败和原样本保。

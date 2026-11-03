@@ -1,0 +1,16 @@
+(node:22584) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:22584) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+Warning: Detected unsettled top-level await at file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-40/normal-capital-control-r461/advance-probe-01/sampler.mjs:5
+await post('Profiler.enable');await post('Profiler.setSamplingInterval',{interval:1000});parentPort.postMessage('ready');
+^
+
+
+
+Warning: Detected unsettled top-level await at file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-40/normal-capital-control-r461/advance-probe-01/probe.mjs:10
+const worker=new Worker(new URL('./sampler.mjs',import.meta.url),{workerData:{ownPid:process.pid,output,delayMs:mode==='selftest'?0:20000}});await new Promise((resolve,reject)=>{worker.once('message',message=>message==='ready'?resolve():reject(Error('SAMPLER_NOT_READY')));worker.once('error',reject)});put('evaluating.json',{at:new Date().toISOString(),ownPid:process.pid,mode,noCommit:true});worker.postMessage('go');const result=evaluate();put('evaluation-returned.json',{at:new Date().toISOString(),status:result.status,ownPid:process.pid,noCommit:true});worker.postMessage('returned');
+                                                                                                                                             ^
+
+
+

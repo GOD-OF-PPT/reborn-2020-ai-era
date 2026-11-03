@@ -1,0 +1,3 @@
+# 当前r461任务的有界独立CPU诊断
+同原612存档、原命令namespace，独立copy配原416kernel/registry与459codec；只读导入后用公开market matching日和原pending买单核请求Aug10。原AdvanceTime613仅独立evaluate，绝不提交/导出候选或接回原run，不改原15729/71876、source、seed、RNG历史或命令参数。
+只在此自有clone主线程用node:inspector Session API经Worker连主线程，无open()、无端口、无Debugger暂停、无Runtime.evaluate。Worker在clone开始evaluate后20秒采1秒CPU profile，写盘完成后SIGTERM只杀本clone自身（workerData.pid===process.pid且不等于15729）。另设同clone 40秒watchdog，异常保原错/termination；无热改live或用候选图冒已发生结果。此证据只能定位这一小窗口，不能代替完整命令终点/正常board/Native/正式性能。

@@ -1,0 +1,2 @@
+# 同一诊断的生命周期修复（不修改原进程）
+probe01自检exit13：Worker仅有未完成inspector Promise，无活事件循环保持导致top-level await未结。原错误和提前实际启动后停止的probe记录保。修复仅在probe02给Worker活定时器、主线程ready timeout/worker exit拒绝；actual launcher强制验证同probe02的selftest terminal reason/profileExists，然后才能启动实际副本。input仍引用probe01固定612原字节，不重取或变参数。仍不启用端口/Debugger/Runtime.evaluate，不改15729或原driver，采样副本自己终止。失败保失败，不把自检或采样当游戏保存结果。

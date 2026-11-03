@@ -22,3 +22,13 @@
 
 ## 当前执行的独立只读检查点
 同一71876实活至609，准备在五条剩余续约全部真实保存且原Aug1服务已建立后，固定一次原head与同revision journal全文，独立原registry/优化codec进出及605全receipt/cause/ledger/timeline前缀核定、606以后逐原fingerprint；检查五条续约顺序、原服务主体/客户/供应/from/to/AP与实际阶段。只读同run当前公开记录，不执行、重放、改源、重启或封活root；在原五续约/新期未保存前不称此门槛通过。明确该检查是作者层，非Native/人类或原完整2025终点。
+
+## 正在执行的长日期步：只读操作系统栈采样
+同一71876/15729已确认实活，最新仍612、下一AdvanceTime计算中。ps显示R/约100%CPU、累计CPU持续增加，无错误/terminal。仅以/usr/bin/sample对本任务自有进程做一次1秒/10ms OS栈采样，不发送游戏命令、不启用inspector端口、不改源/运行状态/保存/策略，不将采样当规则结果或新的已保存日期。可证伪区分：重复历史/规则验证应主要出现在计算栈；GC内存压力应主要出现在V8回收栈；I/O等待应以阻塞读写栈为主（ps已有R/CPU高，不支持持续I/O等待为首因）。该采样只为当前等待真实性诊断，不另启动优化或改活代码；若OS权限拒绝保原失败，不改系统权限。
+
+## 无端口、仅独立副本的有界CPU诊断
+OS采样未解析JS业务函数，因此另固定当前原612完整保存档，在单个独立probe中使用原416kernel/registry和等义459codec，只读导入并沿公开matching日核原Aug10命令613。仅clone中的Worker通过本机inspector Session.connectToMainThread采CPU，无open端口/无Debugger暂停/无Runtime.evaluate/无live15729注入。开始evaluate后20秒采1秒，写profile后只终止clone自身，另40秒watchdog同样只杀本clone；不存新候选、不把probe结果合回live，不重抽或新策略。实际game原进程继续，所有样本只是局部诊断，完整结果仍等原保存。单probe，有界内存风险，先核本机RAM后执行；异常保原失败，不改原源以取绿。
+
+## 原日期步的局部热点已定位，尚未实施新优化
+原执行71876/15729仍live，原612→613计算未返回。OS只读采样后，独立固定612 clone用同原normal-capital-v2:613/Aug10命令取局部CPU profile，未提交/导出候选或接回原run。probe01自检exit13和提前实际启动错误保，已仅终止自有clone；probe02修复Worker生命周期并加实际launcher自检gate后，自检/实际clone均按保存profile后仅自身SIGTERM结束。原运行无源码/状态/inspector/端口变化。
+probe02实际窗口3644.818ms/561样本，约80.05%落在relay-validation.ts:47每meter的facts.find回调，9.48%在:16 timer.some；不是完整日期步耗时或新保存、Native、正式性能。下一最小验证方向是保首匹配/原全校验的单次fact索引，timer另列；本轮0产品源改，不在运行中热改。详见advance-diagnosis.md，失败和原样本保。
