@@ -9,7 +9,7 @@ import {useClockRead} from './use-controller-read.ts'
 export interface ClockActionBinding extends SharedActionBinding{readonly caption:string;readonly mainNode:ReactNode;readonly reviewNode:ReactNode}
 
 /** Advancing fulfills old arrangements; it never authorizes another business or AI permission. */
-export function ClockAdvance({p,date,label,room=false,renderAction,showReason=true}:{p:GamePanelProps;date:string;label:string;room?:boolean;renderAction?:((binding:ClockActionBinding)=>ReactNode)|undefined;showReason?:boolean}){
+export function ClockAdvance({p,date,label,displayLabel,room=false,renderAction,showReason=true}:{p:GamePanelProps;date:string;label:string;displayLabel?:string;room?:boolean;renderAction?:((binding:ClockActionBinding)=>ReactNode)|undefined;showReason?:boolean}){
  const root=useRef<HTMLDivElement>(null)
  const busy=p.controller.snapshot.busy
  const intent=journeyIntent(p.view,'AdvanceTime',{date},label)
@@ -44,6 +44,6 @@ export function ClockAdvance({p,date,label,room=false,renderAction,showReason=tr
  },[])
  const request:GamePanelProps['request']=p.requestWait?(_kind,_payload,text,confirm)=>p.requestWait!(date,text,confirm??false):p.request
  const reviewNode=<CommandButton {...p} request={request} kind="AdvanceTime" payload={{date}} label={'核对后推进 · '+date} confirm className="clock-review" showReason={showReason}><span>先核对 ↗</span></CommandButton>
- const main=<CommandButton {...p} request={request} kind="AdvanceTime" payload={{date}} label={label+(caption?' · '+caption:'')} confirm={projection===null} className="clock-main" rootRef={root} showReason={showReason} renderAction={renderAction?(binding,mainNode)=>renderAction({...binding,caption,mainNode,reviewNode}):undefined}><span>{label}</span><kbd aria-hidden="true">Space</kbd>{caption?<small>{caption}</small>:null}</CommandButton>
+ const main=<CommandButton {...p} request={request} kind="AdvanceTime" payload={{date}} label={label+(caption?' · '+caption:'')} confirm={projection===null} className="clock-main" rootRef={root} showReason={showReason} renderAction={renderAction?(binding,mainNode)=>renderAction({...binding,caption,mainNode,reviewNode}):undefined}><span>{displayLabel??label}</span><kbd aria-hidden="true">Space</kbd>{caption?<small>{caption}</small>:null}</CommandButton>
  return renderAction?main:<div className={'clock-advance'+(room?' clock-advance-room':'')}>{reviewNode}{main}</div>
 }
