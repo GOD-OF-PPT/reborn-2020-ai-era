@@ -9,3 +9,11 @@
 父r461恢复、U6与goal仍未完成。compat0。
 
 - 中间反馈：旧464、新465合同19/19；配对1001项退路出现约4.54倍wall/CPU退化，保原报告并不接受该版。下一仅隔离原BigInt退路，原实际live无改动、无新命令。
+
+- 当前本地WIP ccdcb12705b1ecb81a1fdf8534f2eee8d3180859：80精确owned/delta，两源，全部index/commit blob/字节/SHA/mode同；index空未push。活replay所有输出与原执行输出/混合master均未stage。最终子task仍[ ]。
+
+## 同原612既有账本长度核查（非性能结论）
+money-shapes612只经原unpackSave解码/校验packed payload读取同原612，没有第二evaluate或新命令。20份合同收入小计均792项；已列68个静态数组点66短/2长，长项为企业累计收入15840项、成本15592项。原报告callsInSnapshot实指所列类别的静态数组点，并非运行调用次数，独立review重命名明确。不是完整codec、全部求和路径/实际频率/CPU或整步收益证明。469全部980源后验仍精确。下一仍只等待89899原613全wire/全Run，不扩长数组算法、不改原71876。
+
+## 同原612完整账本的单次观察
+原464和最终469独立模块实例各首次调用原assertLedger，同一完整ledger；两者校验通过、整个ledger前后JSON哈希同、两份980源后验精确。原wall1556.60ms/CPU853.414ms，新wall876.58ms/CPU628.480ms。本次只观察一个既有账本/一个验证器、原先新后，无正式统计、完整codec或整个日期步结论。原853→628不是全游戏性能通过，也不抹掉长数组微基准仍不利。完整原613差分仍单次89899/node33943在evaluate，无新实际游戏命令，不接Main/live。

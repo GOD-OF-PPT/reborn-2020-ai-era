@@ -46,3 +46,10 @@ fact-index-r462最终463/979，两源（relay-validation.ts/新test）局部Map�
 旧fixture6项5过1增长红435>174，新6均过；13完整文件87/88含technical_employee原120s红、原459同完整文件亦1过1同红保。释放大副本后同463完整normal文件定向2/2按原限时过（98326.08/83373.40ms），同源88独立case至少一次过，不相加/不倒改为一次全绿。类型224034ms/构建6775ms过。
 原612同原normal-capital-v2:613/Aug10命令，从候选kernel/codec完整往返/全Run比较/输出10064570B/SHAed051a22d9ac41ddc2871d2f41e34985ed79e177b2aee794c082be87ebac2274与原真正已存613所有字节同。候选整步1755347.10ms、原journal1346030ms（console1346034ms）无整步加速证明，完整日期性能未解决/未通过。较晚120s局部样本80.98%在sumMoney BigInt精确求和，未改money，后续先独立验证金额边界/错误顺序/精确性，不放限额或删校验求快。
 子步骤限定完成，原父恢复/2024Q3Q4/2025正常资金/80万董事签署治理、全部17+5深态/最终U6/原所有后续/PNG0/真人0/P3正式62与22未跑/M01待明确恢复/T18最后/goalactive不关闭；compat0、无push/deploy/外发/新委派/global memory写。当前68原完整seal保护通过，fact子完整seal后69，活r461父/execution不seal。
+
+事实索引有限子步骤最终closure 35ba64a530bc26a86864c3ae5c042650de47de23，fact-index-r462已完整STOP/fullseal：81普通文件，marker 3150335636ebef3ca3d27ffc8ca723cf34f500558ffed49ff4a813a1e20d3646，91 owned/12 delta全部blob/字节/SHA/mode核同、index空未push；68旧加此父子=69完整封存，禁止向已封fact-index-r462/late-probe追加。原r461/root及execution-r1仍active不seal；候选463未推广Main/live，整步性能和父正常2025董事治理仍未完成。后续新子步骤只在本活parent记录，不倒改旧输入/红或原caller保存。
+
+
+## 2026-11-03｜最终金额候选工程检查通过，真实原613差分在制
+469/980两owned，最终31完整文件246/246/0skip、类型237117ms和构建7252ms通过；468原相同最终19项也过。原BigInt正文/费率乘积/全部原校验保，安全前缀N=1000，全部源码差异已核。短路径收益与长项不利、原汇总工具筛错及独立重算保，不冒所有路径/正式性能通过。
+单次原612→613候选差分89899/node33943已启动，原命令ID/日期/seed/全输出固定；没有全wire/全Run结果前不接Main/live、不标子步骤/父任务/U6/goal完成，不为等待重启。原71876继续原416/459执行并实际保存614Aug31，完整2025/80万董事/真实签署治理原目标保持。阶段三里程碑累计review在money-sum-r464/review-before-replay.json，数学/错误/大额/源身份已核，剩余完整差分明确未验。compat0。

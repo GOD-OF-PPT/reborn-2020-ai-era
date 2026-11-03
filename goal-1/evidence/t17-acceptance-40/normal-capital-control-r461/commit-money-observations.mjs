@@ -1,0 +1,28 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import {json,hash,ident,blobOid,proof,git,verifySeal} from '../../t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs'
+const root='goal-1/evidence/t17-acceptance-40/normal-capital-control-r461',phase=root+'/money-sum-r464',parent='ccdcb12705b1ecb81a1fdf8534f2eee8d3180859'
+if(git(['rev-parse','HEAD']).toString().trim()!==parent || git(['diff','--cached','--name-only']).length || fs.existsSync(phase+'/stopped.json') || fs.existsSync(root+'/stopped.json')) throw Error('ACTIVE_EXACT_PARENT_REQUIRED')
+const source=json(phase+'/snapshot469.json')
+for(const row of source.files) if(hash(fs.readFileSync(path.join(source.target,row.path)))!==row.sha256) throw Error('FROZEN469_CHANGED')
+for(const name of source.owned) if(hash(fs.readFileSync(name))!==source.files.find(row=>row.path===name)?.sha256) throw Error('OWNED_SOURCE_CHANGED')
+const observed=json(phase+'/actual-ledger612-cold-observation.json')
+if(!observed.sourceExact || !observed.ledgerUnchanged || observed.rows.length!==2 || observed.rows[0].source!==464 || observed.rows[1].source!==469 || observed.rows.some(row=>!row.ledgerPassed)) throw Error('EXACT_READ_ONLY_OBSERVATION_REQUIRED')
+const preserved=json(root+'/preservation-money-ledger-cold-after-r469.json')
+if(preserved.fullSeals.length!==69) throw Error('EXACT69_REQUIRED')
+for(const row of preserved.fullSeals) verifySeal(row.root)
+const paths=[...['money-shapes612.mjs','money-ledger612-observe.mjs','commit-money-observations.mjs','continuation.md','validation-progress.md','preservation-money-ledger-cold-after-r469.json'].map(name=>root+'/'+name),...['adoption-boundary-review.md','snapshot612-money-shapes.json','snapshot612-money-shape-review.json','actual-ledger612-cold-observation.json','plan.md','tasks.md','validation-progress.md','wip-readback.json','verified-wait-after-wip.json'].map(name=>phase+'/'+name)].sort()
+if(paths.some(name=>name.startsWith(phase+'/replay613') || source.owned.includes(name))) throw Error('NO_ACTIVE_OUTPUT_OR_PRODUCT_SOURCE_ALLOWED')
+fs.writeFileSync(phase+'/observations-owned.json',JSON.stringify({at:new Date().toISOString(),parent,paths,selfExcluded:'observations-owned.json',productChanges:0,pendingFullOriginal613Difference:true,taskComplete:false,compatibility:0},null,2)+'\n',{flag:'wx'})
+paths.push(phase+'/observations-owned.json');paths.sort()
+const rows=paths.map(name=>({...ident(name),oid:blobOid(fs.readFileSync(name))}))
+git(['add','-f','--',...paths])
+const staged=git(['diff','--cached','--name-only','-z']).toString().split(String.fromCharCode(0)).filter(Boolean).sort()
+if(!staged.length || staged.some(name=>!paths.includes(name))) throw Error('EXACT_DIAGNOSTIC_DELTA_REQUIRED')
+const index=proof(rows)
+git(['commit','-m','Record exact-ledger observations for pending money replay'])
+const commit=git(['rev-parse','HEAD']).toString().trim(),delta=git(['diff-tree','--no-commit-id','--name-only','-r','-z',commit]).toString().split(String.fromCharCode(0)).filter(Boolean).sort()
+if(JSON.stringify(delta)!==JSON.stringify(staged) || git(['diff','--cached','--name-only']).length) throw Error('EXACT_COMMIT_DELTA_REQUIRED')
+const readback=proof(rows,commit)
+fs.writeFileSync(phase+'/observations-readback.json',JSON.stringify({at:new Date().toISOString(),commit,parent,owned:paths.length,delta:staged.length,index,readback,productChanges:0,indexEmpty:true,notPushed:true,pendingFullOriginal613Difference:true,taskComplete:false,wholeU6Complete:false,compatibility:0},null,2)+'\n',{flag:'wx'})
+console.log({commit,owned:paths.length,delta:staged.length,productChanges:0,indexEmpty:true,notPushed:true,taskComplete:false})
