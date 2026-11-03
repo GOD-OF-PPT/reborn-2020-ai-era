@@ -1,0 +1,31 @@
+{
+  "source": 469,
+  "completedMilestones": [
+    "old-exact-oracle-and-performance-baseline",
+    "bounded-math-and-call-shape-debug",
+    "final-consumers-and-engineering"
+  ],
+  "consumerFiles": 31,
+  "independentCases": 246,
+  "allPassed": true,
+  "newOracleCases": [
+    "keeps negative operands, temporary over-limit prefixes and final unsigned/signed limits separate",
+    "preserves every boundary length including sparse arrays on both sides of the safe-prefix bound",
+    "retains exact cancellation after intermediate sums exceed the safe-integer range",
+    "validates all operands in original order before checking the final aggregate",
+    "matches exact integer arithmetic over deterministic mixed-sign histories around the boundary",
+    "keeps cumulative fee integer rounding at the money limit and for split charges"
+  ],
+  "originalBigIntBodyVerbatim": true,
+  "prefixBound": "1000*9000000000000 <= 9007199254740991; 1001*9000000000000 > bound",
+  "negativeOperandsAndFinalOnlyValidation": true,
+  "sparseAndErrorOrderingAndHugeCancellationChecked": true,
+  "feeBigIntProductUnchanged": true,
+  "p3NotCopied": true,
+  "actualInput612AndOriginal613Exact": true,
+  "wholeOriginal613DifferencePending": true,
+  "notWholeStepPerformancePass": true,
+  "adversarialReview": "Limited implementation is ready for full replay; task incomplete until whole wire and fullRun proof. No dropped business validation or feature.",
+  "compatibility": 0,
+  "wholeU6Complete": false
+}

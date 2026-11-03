@@ -1,0 +1,122 @@
+{
+  "at": "2026-11-03T05:45:56.634Z",
+  "mode": "baseline",
+  "node": "v22.12.0",
+  "results": [
+    {
+      "case": "signed-pairs",
+      "implementation": "original464",
+      "sample": 0,
+      "iterations": 200000,
+      "wallMs": 58.21065299999998,
+      "cpuUserMs": 66.756,
+      "cpuSystemMs": 3.379,
+      "sink": 23702100
+    },
+    {
+      "case": "signed-pairs",
+      "implementation": "original464",
+      "sample": 1,
+      "iterations": 200000,
+      "wallMs": 71.02561800000001,
+      "cpuUserMs": 63.359,
+      "cpuSystemMs": 2.052,
+      "sink": 23702100
+    },
+    {
+      "case": "signed-pairs",
+      "implementation": "original464",
+      "sample": 2,
+      "iterations": 200000,
+      "wallMs": 72.15972199999999,
+      "cpuUserMs": 75.621,
+      "cpuSystemMs": 2.502,
+      "sink": 23702100
+    },
+    {
+      "case": "safe-bound1000",
+      "implementation": "original464",
+      "sample": 0,
+      "iterations": 1000,
+      "wallMs": 17.931648999999993,
+      "cpuUserMs": 12.361,
+      "cpuSystemMs": 0.41,
+      "sink": 15404
+    },
+    {
+      "case": "safe-bound1000",
+      "implementation": "original464",
+      "sample": 1,
+      "iterations": 1000,
+      "wallMs": 15.831944000000021,
+      "cpuUserMs": 12.256,
+      "cpuSystemMs": 0.35,
+      "sink": 15404
+    },
+    {
+      "case": "safe-bound1000",
+      "implementation": "original464",
+      "sample": 2,
+      "iterations": 1000,
+      "wallMs": 15.345802999999933,
+      "cpuUserMs": 12.058,
+      "cpuSystemMs": 0.466,
+      "sink": 15404
+    },
+    {
+      "case": "fallback1001",
+      "implementation": "original464",
+      "sample": 0,
+      "iterations": 1000,
+      "wallMs": 21.488992000000053,
+      "cpuUserMs": 13.564,
+      "cpuSystemMs": 0.362,
+      "sink": 15404
+    },
+    {
+      "case": "fallback1001",
+      "implementation": "original464",
+      "sample": 1,
+      "iterations": 1000,
+      "wallMs": 16.464418999999907,
+      "cpuUserMs": 13.111,
+      "cpuSystemMs": 0.376,
+      "sink": 15404
+    },
+    {
+      "case": "fallback1001",
+      "implementation": "original464",
+      "sample": 2,
+      "iterations": 1000,
+      "wallMs": 31.156226999999944,
+      "cpuUserMs": 13.95,
+      "cpuSystemMs": 0.561,
+      "sink": 15404
+    }
+  ],
+  "summaries": [
+    {
+      "case": "signed-pairs",
+      "oldMedianMs": 71.02561800000001,
+      "candidateMedianMs": null,
+      "ratio": null
+    },
+    {
+      "case": "safe-bound1000",
+      "oldMedianMs": 15.831944000000021,
+      "candidateMedianMs": null,
+      "ratio": null
+    },
+    {
+      "case": "fallback1001",
+      "oldMedianMs": 21.488992000000053,
+      "candidateMedianMs": null,
+      "ratio": null
+    }
+  ],
+  "microbenchmarkOnly": true,
+  "notFormalPerformancePass": true,
+  "notWholeGameStep": true,
+  "newGameCommands": 0,
+  "compatibility": 0
+}

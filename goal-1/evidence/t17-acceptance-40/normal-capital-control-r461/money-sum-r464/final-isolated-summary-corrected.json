@@ -1,0 +1,31 @@
+{
+  "input": "final-isolated-benchmark.json",
+  "originalReportBug": "summary filtered revision467 although actual candidate466; raw measurement preserved",
+  "correctedSummaries": [
+    {
+      "case": "signed-pairs",
+      "oldMedianWallMs": 38.154157999999825,
+      "candidateMedianWallMs": 17.66040299999986,
+      "oldMedianCpuUserMs": 47.511,
+      "candidateMedianCpuUserMs": 21.055
+    },
+    {
+      "case": "safe-bound1000",
+      "oldMedianWallMs": 132.135761,
+      "candidateMedianWallMs": 48.7292010000001,
+      "oldMedianCpuUserMs": 119.819,
+      "candidateMedianCpuUserMs": 46.559
+    },
+    {
+      "case": "fallback1001",
+      "oldMedianWallMs": 134.00592799999959,
+      "candidateMedianWallMs": 148.5221590000001,
+      "oldMedianCpuUserMs": 118.872,
+      "candidateMedianCpuUserMs": 126.756
+    }
+  ],
+  "rawRowsVerified": 18,
+  "allSinksEqual": true,
+  "notFormalPerformancePass": true,
+  "compatibility": 0
+}

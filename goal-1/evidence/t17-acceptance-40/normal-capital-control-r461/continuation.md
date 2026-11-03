@@ -57,3 +57,15 @@ fact-index-r462最终463/979，两源（relay-validation.ts/新test）局部Map�
 
 最新：fact-index-r462将完整STOP/seal，封后禁止追加；后续必须新子目录。原差分13127/24915实际exit0、真实raw等值已齐，normal定向13251已exit0/2过，旧60226已exit1/同红，别再poll这些已结束句柄。原71876/15729仍live，当前物理最新613Aug10、正在下一AdvanceTime。其source416/codec459不热改；463虽有限接受但未推广Main或live。父r461/root及execution-r1仍[ ]，不能seal/stage活head/log。
 下一仍同一U6恢复，优先对已证money sumMoney具体调用形状/安全边界作独立验证以消除长档瓶颈；不可把先前局部80%窗口当整步结论。任何金额累加优化必须保持原signedMoney逐项验证（即使signed=false也允许中间负项，只在最终检查总额范围）、BigInt精确和MONEY_LIMIT9e12/原错误顺序与大规模取消，不得直接无界Number累计。先三文件/旧基线/测试，再候选冻结与真实原613对照，不为观察超时restart原71876，待合法安全检查点再考虑采用新源。原整体性能仍待，不抢U7/M01/T18。
+
+事实索引有限子步骤最终closure 35ba64a530bc26a86864c3ae5c042650de47de23，fact-index-r462已完整STOP/fullseal：81普通文件，marker 3150335636ebef3ca3d27ffc8ca723cf34f500558ffed49ff4a813a1e20d3646，91 owned/12 delta全部blob/字节/SHA/mode核同、index空未push；68旧加此父子=69完整封存，禁止向已封fact-index-r462/late-probe追加。原r461/root及execution-r1仍active不seal；候选463未推广Main/live，整步性能和父正常2025董事治理仍未完成。后续新子步骤只在本活parent记录，不倒改旧输入/红或原caller保存。
+
+## 2026-11-03｜当前U6金额求和验证子步骤在制
+事实索引子35ba64a5已完整封存69，禁止追加。新money-sum-r464已先input/plan/tasks，仅money.ts与新money-sum-equivalence.test.ts，基463冻结（不带P3）。安全界限N=1000使全部整数前缀在MAX_SAFE_INTEGER内，保signedMoney逐项原序/最终范围，长数组保原BigInt正文；不改金额/AP/日期/RNG/权限/格式/版本。旧464合同19过、最终相同测试对照468仍19过，467的31完整消费者246/246与类型过，但连续短→长路径有实测JIT退化，不把它移记给最终版。
+经原始CPU/wall与V8 trace，最终469采用已测466的私有BigInt退路（正文逐字原样）及467边界oracle；产品money字节同466，只有两owned变化。隔离版充分预热短对CPU21.06/47.51ms、1000项46.56/119.82ms；1001项126.76/118.87ms仍不利，不称全部路径加速/正式性能或卡顿已解决。错误汇总筛错源ID原报告保、独立原18行重算同sink通过。最终469消费者/工程与原612→613全wire差分尚待，不推广Main/live、不标子步骤/父任务/U6/goal完成。
+原71876/15729仍同416kernel/459codec/原driver/命名与全部策略，已真正保存614/2024Aug31，原2025/80万董事签署治理目标不缩、不为观察超时restart。Main457/DB不操作；原PNG/真人/P3正式62与22/17+5深态/最终U6/后续原完整组合与M01待明确恢复/T18最后保持，compat开发测试0。无push/deploy/外发/新委派/global memory写。
+
+
+## 2026-11-03｜最终金额候选工程检查通过，真实原613差分在制
+469/980两owned，最终31完整文件246/246/0skip、类型237117ms和构建7252ms通过；468原相同最终19项也过。原BigInt正文/费率乘积/全部原校验保，安全前缀N=1000，全部源码差异已核。短路径收益与长项不利、原汇总工具筛错及独立重算保，不冒所有路径/正式性能通过。
+单次原612→613候选差分89899/node33943已启动，原命令ID/日期/seed/全输出固定；没有全wire/全Run结果前不接Main/live、不标子步骤/父任务/U6/goal完成，不为等待重启。原71876继续原416/459执行并实际保存614Aug31，完整2025/80万董事/真实签署治理原目标保持。阶段三里程碑累计review在money-sum-r464/review-before-replay.json，数学/错误/大额/源身份已核，剩余完整差分明确未验。compat0。

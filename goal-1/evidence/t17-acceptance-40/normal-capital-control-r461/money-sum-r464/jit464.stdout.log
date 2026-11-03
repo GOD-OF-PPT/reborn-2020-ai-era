@@ -1,0 +1,28 @@
+BEGIN_PHASE 464 pairs
+[marking 0x1c957d5917a9 <JSFunction requireRule (sfi = 0x1c957d590f01)> for optimization to TURBOFAN, ConcurrencyMode::kConcurrent, reason: hot and stable]
+[compiling method 0x1c957d5917a9 <JSFunction requireRule (sfi = 0x1c957d590f01)> (target TURBOFAN), mode: ConcurrencyMode::kConcurrent]
+[marking 0x1c957d5918e1 <JSFunction signedMoney (sfi = 0x1c957d58fe11)> for optimization to TURBOFAN, ConcurrencyMode::kConcurrent, reason: hot and stable]
+[marking 0x1c9576b66609 <JSFunction (sfi = 0x1c957d592cb9)> for optimization to TURBOFAN, ConcurrencyMode::kConcurrent, reason: hot and stable]
+[compiling method 0x1c9576b666e1 <JSFunction (sfi = 0x1c957d592cb9)> (target TURBOFAN), mode: ConcurrencyMode::kConcurrent]
+[compiling method 0x1c957d5918e1 <JSFunction signedMoney (sfi = 0x1c957d58fe11)> (target TURBOFAN), mode: ConcurrencyMode::kConcurrent]
+[marking 0x1c957d591921 <JSFunction sumMoney (sfi = 0x1c957d58fe69)> for optimization to TURBOFAN, ConcurrencyMode::kConcurrent, reason: hot and stable]
+[compiling method 0x1c957d591921 <JSFunction sumMoney (sfi = 0x1c957d58fe69)> (target TURBOFAN), mode: ConcurrencyMode::kConcurrent]
+[completed compiling 0x1c957d5917a9 <JSFunction requireRule (sfi = 0x1c957d590f01)> (target TURBOFAN) - took 0.039, 3.954, 0.524 ms]
+[completed optimizing 0x1c957d5917a9 <JSFunction requireRule (sfi = 0x1c957d590f01)> (target TURBOFAN)]
+[completed compiling 0x1c957d5918e1 <JSFunction signedMoney (sfi = 0x1c957d58fe11)> (target TURBOFAN) - took 0.008, 2.260, 0.024 ms]
+[completed optimizing 0x1c957d5918e1 <JSFunction signedMoney (sfi = 0x1c957d58fe11)> (target TURBOFAN)]
+[completed compiling 0x1c9576b666e1 <JSFunction (sfi = 0x1c957d592cb9)> (target TURBOFAN) - took 0.014, 2.905, 0.027 ms]
+[completed optimizing 0x1c9576b666e1 <JSFunction (sfi = 0x1c957d592cb9)> (target TURBOFAN)]
+[completed compiling 0x1c957d591921 <JSFunction sumMoney (sfi = 0x1c957d58fe69)> (target TURBOFAN) - took 0.011, 4.054, 0.058 ms]
+[completed optimizing 0x1c957d591921 <JSFunction sumMoney (sfi = 0x1c957d58fe69)> (target TURBOFAN)]
+[marking 0x1c95a4137651 <JSFunction (sfi = 0x1c95a4121ff9)> for optimization to TURBOFAN, ConcurrencyMode::kConcurrent, reason: hot and stable]
+[compiling method 0x1c95a4137651 <JSFunction (sfi = 0x1c95a4121ff9)> (target TURBOFAN) OSR, mode: ConcurrencyMode::kConcurrent]
+[completed compiling 0x1c95a4137651 <JSFunction (sfi = 0x1c95a4121ff9)> (target TURBOFAN) OSR - took 0.019, 6.120, 0.073 ms]
+[completed optimizing 0x1c95a4137651 <JSFunction (sfi = 0x1c95a4121ff9)> (target TURBOFAN) OSR]
+[bailout (kind: deopt-eager, reason: Insufficient type feedback for generic named access): begin. deoptimizing 0x1c95a4137651 <JSFunction (sfi = 0x1c95a4121ff9)>, 0x1c955a7b2051 <Code TURBOFAN>, opt id 4, bytecode offset 769, deopt exit 9, FP to SP delta 440, caller SP 0x7ff7b4f556b0, pc 0x00011f896f18]
+END_PHASE {"revision":464,"phase":"pairs","calls":200000,"wallMs":42.442635000000024,"cpuUserMs":51.955,"sink":400000}
+BEGIN_PHASE 464 bound
+END_PHASE {"revision":464,"phase":"bound","calls":50000,"wallMs":604.4552789999999,"cpuUserMs":552.091,"sink":0}
+BEGIN_PHASE 464 fallback
+[marking 0x1c95a4137651 <JSFunction (sfi = 0x1c95a4121ff9)> for optimization to TURBOFAN, ConcurrencyMode::kConcurrent, reason: hot and stable]
+END_PHASE {"revision":464,"phase":"fallback","calls":50000,"wallMs":672.330189,"cpuUserMs":558.159,"sink":100000}
