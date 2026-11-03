@@ -40,3 +40,9 @@ probe02实际窗口3644.818ms/561样本，约80.05%落在relay-validation.ts:47�
 
 ## 当前候选改动已隔离，尚未完成验收
 fact-index-r462子步骤已在同一恢复任务内验证局部首匹配索引；WT仅此产品relay-validation.ts和新测试两源，source463仅两diff。旧增长红/候选六项过，类型构建过；完整13为87/88含原120s红，原459同文件control60226和原612→613完整wire差分13127均未返回。将以明确WIP提交保全，绝不当全绿或接入live/Main；原71876继续原代码，完整任务和goal未完成。
+
+## 2026-11-03｜当前U6事实索引有限结果等值验证完成
+fact-index-r462最终463/979，两源（relay-validation.ts/新test）局部Map保首匹配/每次重建/空meter不扫、不动timer和原规则/钱AP日期随机/权限/格式/版本；原71876仍旧运行代码，Main/DB不更新。WIP558e75ea之后接受记录364dbb84e3a448cc2681965aa82d083491312d2d（87owned/18delta，全部blob/字节/SHA/mode核同，index空未push）才标子步骤完成。
+旧fixture6项5过1增长红435>174，新6均过；13完整文件87/88含technical_employee原120s红、原459同完整文件亦1过1同红保。释放大副本后同463完整normal文件定向2/2按原限时过（98326.08/83373.40ms），同源88独立case至少一次过，不相加/不倒改为一次全绿。类型224034ms/构建6775ms过。
+原612同原normal-capital-v2:613/Aug10命令，从候选kernel/codec完整往返/全Run比较/输出10064570B/SHAed051a22d9ac41ddc2871d2f41e34985ed79e177b2aee794c082be87ebac2274与原真正已存613所有字节同。候选整步1755347.10ms、原journal1346030ms（console1346034ms）无整步加速证明，完整日期性能未解决/未通过。较晚120s局部样本80.98%在sumMoney BigInt精确求和，未改money，后续先独立验证金额边界/错误顺序/精确性，不放限额或删校验求快。
+子步骤限定完成，原父恢复/2024Q3Q4/2025正常资金/80万董事签署治理、全部17+5深态/最终U6/原所有后续/PNG0/真人0/P3正式62与22未跑/M01待明确恢复/T18最后/goalactive不关闭；compat0、无push/deploy/外发/新委派/global memory写。当前68原完整seal保护通过，fact子完整seal后69，活r461父/execution不seal。

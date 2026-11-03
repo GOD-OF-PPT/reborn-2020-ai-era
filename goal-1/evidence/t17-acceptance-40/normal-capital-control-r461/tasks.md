@@ -25,3 +25,5 @@ WIP897defaccabc6d86aae87846734c70948cc7d78a已交，88owned/85delta/blobSHA/mode
 ## 原日期步的局部热点已定位，尚未实施新优化
 原执行71876/15729仍live，原612→613计算未返回。OS只读采样后，独立固定612 clone用同原normal-capital-v2:613/Aug10命令取局部CPU profile，未提交/导出候选或接回原run。probe01自检exit13和提前实际启动错误保，已仅终止自有clone；probe02修复Worker生命周期并加实际launcher自检gate后，自检/实际clone均按保存profile后仅自身SIGTERM结束。原运行无源码/状态/inspector/端口变化。
 probe02实际窗口3644.818ms/561样本，约80.05%落在relay-validation.ts:47每meter的facts.find回调，9.48%在:16 timer.some；不是完整日期步耗时或新保存、Native、正式性能。下一最小验证方向是保首匹配/原全校验的单次fact索引，timer另列；本轮0产品源改，不在运行中热改。详见advance-diagnosis.md，失败和原样本保。
+
+局部AdvanceTime诊断提交af0c5d7bf8d42d01f371867ec834893565c9e7d5（父6141bbc9），124 owned/59 delta，全部index/commit blob/字节/SHA/mode核同、index空未push，0产品源改；活head/log/mixedmasters未stage。probe01错误/停止记录及probe02成功局部CPU样本各完整封存，65旧加两诊断子=67；活原root/execution不封。当前原71876仍实活、原有效保存仍612，完整2025/董事签署治理/整个task/U6/goal均未完成。

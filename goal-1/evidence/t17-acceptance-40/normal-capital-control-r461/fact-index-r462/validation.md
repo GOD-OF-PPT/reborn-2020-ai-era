@@ -20,3 +20,5 @@ meter循环以前建立单次Map保首个id，原米数/授权/金额/日期/来
 大型副本释放后，未改463源/原测试/两背景/原120s限时，完整relay-normal.test.ts 2/2通过：technical98326.08ms、content83373.40ms。旧13/88=87pass+1timeout、原459同文件1pass+1同名timeout均保原红；不能说一次全批绿/正式性能过。case-coverage463按同source文件+fullName展开88个独立case，每个至少一次通过；原批87过与定向2过有重复，不相加89或覆盖原红。
 
 本子步骤的原拒绝/first-match/完整真实613等值与相称功能验证齐。仅接受本次局部查找工作量的等义改动，不声称整个AdvanceTime延迟或性能验收完成。原活producer/用户Main未采用463；父恢复任务、整个U6和goal继续active。精确本地提交读回后才标子任务完成。
+
+本有限子步骤已在364dbb84原blob/SHA/mode读回后完成；完整raw613等值/原拒绝/同源case覆盖已齐，旧时限红和整步慢保持，不等于父恢复task/U6/goal完成。后续closure与完整seal另记，封后不追加。

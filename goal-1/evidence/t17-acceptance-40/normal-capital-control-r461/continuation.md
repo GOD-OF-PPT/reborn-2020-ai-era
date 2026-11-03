@@ -45,3 +45,15 @@ WIP558e75ea0081b55aace3579caf5bdf28c9bf1f0f（父af0c5d7b）44精确owned/delta�
 较晚probe在fact-index-r462/late-probe-01，44120已terminal exit按预期SIGTERM且profile保存；尚待只读封存。原613全差分13127仍evaluate，无result/failure；不要重复probe或重启diff。
 
 较晚late-probe-01已完整STOP/seal（完整文件数以marker/late-probe-seal.json为准）；67旧加该只读子=68，父fact-index-r462仍在差分中不seal，原root/execution仍active不seal。较晚CPU热点是sumMoney BigInt精确累加，MONEY_LIMIT=9e12、原sumMoney逐项signedMoney后最终总额范围核定；任何后续优化必须保这些语义/溢出/取消/错误顺序，不得直接无界Number替代。当前本轮未改money产品源。
+
+较晚诊断/原超时对照提交80f16cca193c20557f669ad19edf460a9a431adc（父558e75ea），42 owned/42 delta，index/commit blob/字节/SHA/mode全同、index空未push；0新增产品源改，原/完整差分活输出未stage。late-probe子26普通文件完整STOP/seal，67旧加该子=68；父fact子与原producer仍active不能封。当前事实索引候选仍WIP，完整原613差分13127尚未返回，不声称加速/接受/完成。
+下一必须先poll13127并检查replay613-result/failure，不重复跑同长差分。原459 normal对照60226已terminal，同名120s红已记录，不能再poll旧handle。较晚probe44120已terminal样本保，不能重跑。原71876继续同原策略，不为观察超时重启或改源。
+
+## 2026-11-03｜当前U6事实索引有限结果等值验证完成
+fact-index-r462最终463/979，两源（relay-validation.ts/新test）局部Map保首匹配/每次重建/空meter不扫、不动timer和原规则/钱AP日期随机/权限/格式/版本；原71876仍旧运行代码，Main/DB不更新。WIP558e75ea之后接受记录364dbb84e3a448cc2681965aa82d083491312d2d（87owned/18delta，全部blob/字节/SHA/mode核同，index空未push）才标子步骤完成。
+旧fixture6项5过1增长红435>174，新6均过；13完整文件87/88含technical_employee原120s红、原459同完整文件亦1过1同红保。释放大副本后同463完整normal文件定向2/2按原限时过（98326.08/83373.40ms），同源88独立case至少一次过，不相加/不倒改为一次全绿。类型224034ms/构建6775ms过。
+原612同原normal-capital-v2:613/Aug10命令，从候选kernel/codec完整往返/全Run比较/输出10064570B/SHAed051a22d9ac41ddc2871d2f41e34985ed79e177b2aee794c082be87ebac2274与原真正已存613所有字节同。候选整步1755347.10ms、原journal1346030ms（console1346034ms）无整步加速证明，完整日期性能未解决/未通过。较晚120s局部样本80.98%在sumMoney BigInt精确求和，未改money，后续先独立验证金额边界/错误顺序/精确性，不放限额或删校验求快。
+子步骤限定完成，原父恢复/2024Q3Q4/2025正常资金/80万董事签署治理、全部17+5深态/最终U6/原所有后续/PNG0/真人0/P3正式62与22未跑/M01待明确恢复/T18最后/goalactive不关闭；compat0、无push/deploy/外发/新委派/global memory写。当前68原完整seal保护通过，fact子完整seal后69，活r461父/execution不seal。
+
+最新：fact-index-r462将完整STOP/seal，封后禁止追加；后续必须新子目录。原差分13127/24915实际exit0、真实raw等值已齐，normal定向13251已exit0/2过，旧60226已exit1/同红，别再poll这些已结束句柄。原71876/15729仍live，当前物理最新613Aug10、正在下一AdvanceTime。其source416/codec459不热改；463虽有限接受但未推广Main或live。父r461/root及execution-r1仍[ ]，不能seal/stage活head/log。
+下一仍同一U6恢复，优先对已证money sumMoney具体调用形状/安全边界作独立验证以消除长档瓶颈；不可把先前局部80%窗口当整步结论。任何金额累加优化必须保持原signedMoney逐项验证（即使signed=false也允许中间负项，只在最终检查总额范围）、BigInt精确和MONEY_LIMIT9e12/原错误顺序与大规模取消，不得直接无界Number累计。先三文件/旧基线/测试，再候选冻结与真实原613对照，不为观察超时restart原71876，待合法安全检查点再考虑采用新源。原整体性能仍待，不抢U7/M01/T18。
