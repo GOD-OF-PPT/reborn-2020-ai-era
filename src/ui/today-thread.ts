@@ -29,6 +29,7 @@ export interface TodayThreadItem{
  readonly relayContinuation?:TodayRelayContinuation
  readonly ecosystemContinuation?:{readonly kind:'task'|'money';readonly label:string}
  readonly equityContinuation?:{readonly kind:'task'|'money';readonly label:string}
+ readonly marketContinuation?:{readonly kind:'task'|'money'|'holding';readonly label:string}
 }
 export interface TodayRelayContinuation{readonly kind:'period'|'support'|'audit'|'application'|'audience'|'task'|'money'|'unknown';readonly label:string}
 export interface TodayDirection{readonly id:'work'|'life'|'market'|'video'|'course'|'relay'|'ecosystem'|'equity';readonly label:string;readonly line:string;readonly screen:Screen}
@@ -43,6 +44,20 @@ export interface TodayThreadView{
  readonly remaining:SeasonRecollectionView['remaining']
  readonly wait:NonNullable<PlayerThreadView['wait']>|null
  readonly responsibilityOverrideNeeded:boolean
+}
+
+/** Retained shares stay readable without becoming another promise to finish. */
+export function todayReadingGroups(items:readonly TodayThreadItem[]){
+ const continuing:TodayThreadItem[]=[],holdings:TodayThreadItem[]=[]
+ for(const item of items)(item.focus.kind==='market'&&item.focus.entityKind==='position'&&!item.wait?holdings:continuing).push(item)
+ return {continuing,holdings}
+}
+function marketContinuation(thread:PlayerThreadView):TodayThreadItem['marketContinuation']{
+ if(thread.focus.kind!=='market')return undefined
+ if(thread.focus.entityKind==='position')return {kind:'holding',label:'查看这份持仓'}
+ if(thread.focus.entityKind==='research')return {kind:'task',label:'继续这份公开研究'}
+ if(thread.stage==='market-settlement')return {kind:'money',label:thread.focus.entityKind==='order'?'核对这份委托的原交收':'核对这笔原款交收'}
+ return {kind:'task',label:'回到这份模拟委托'}
 }
 
 const supported=(thread:PlayerThreadView)=>['free','work','life','market','video','relay','ecosystem','equity'].includes(thread.focus.kind)||isCourseContinuityThread(thread)
@@ -220,8 +235,9 @@ function ongoing(p:TodayThreadInput):TodayThreadItem[]{
    const equityMoney=equity&&(equity.resolution.exit?.receivable?.remainingFen??0)>0
    const financialEcology=ecology&&(ecology.phase==='original-money'||!!ecology.resolution.contract&&['completed','cancelled'].includes(ecology.resolution.contract.status))
    const ecologyMoneyLine=ecology&&financialEcology?ecology.line+' '+ecology.facts.join(' '):null
+   const market=marketContinuation(thread)
    const feedback=relay?.wait??thread.wait
-   items.push({focus:thread.focus,classification:state,title:relay?.title??thread.title,line:relay?.line??ecologyMoneyLine??thread.line,originQuarter:thread.focusQuarter,inspect:thread.inspect,sourceRefs:(relay?.sourceRefs??thread.resultRefs).map(ref=>({...ref})),...(feedback?{wait:{...feedback}}:{}),...(relay?{relayContinuation:{kind:relay.kind,label:relay.label}}:{}),...(ecology?{ecosystemContinuation:{kind:financialEcology?'money' as const:'task' as const,label:financialEcology?'核对这份原款与旧义务':'继续这份原生态安排'}}:{}),...(equity?{equityContinuation:{kind:equityMoney?'money' as const:'task' as const,label:equityMoney?'核对这笔架空转让原款':'继续这份原权益准备或调查'}}:{})})
+   items.push({focus:thread.focus,classification:state,title:relay?.title??thread.title,line:relay?.line??ecologyMoneyLine??thread.line,originQuarter:thread.focusQuarter,inspect:thread.inspect,sourceRefs:(relay?.sourceRefs??thread.resultRefs).map(ref=>({...ref})),...(feedback?{wait:{...feedback}}:{}),...(market?{marketContinuation:market}:{}),...(relay?{relayContinuation:{kind:relay.kind,label:relay.label}}:{}),...(ecology?{ecosystemContinuation:{kind:financialEcology?'money' as const:'task' as const,label:financialEcology?'核对这份原款与旧义务':'继续这份原生态安排'}}:{}),...(equity?{equityContinuation:{kind:equityMoney?'money' as const:'task' as const,label:equityMoney?'核对这笔架空转让原款':'继续这份原权益准备或调查'}}:{})})
  }
  return items
 }
@@ -254,12 +270,13 @@ export function todayThread(p:TodayThreadInput,focus?:OpeningFocus|null,focusQua
  // Missing public chapter context must fall back, never claim that its responsibilities are empty.
  if(!season)return null
  const thread=playerThread(p,focus,focusQuarter),state=classification(p,thread),current=ongoing(p),remaining=[...season.remaining]
+ const {continuing,holdings}=todayReadingGroups(current)
  const relayAccounts=new Set(p.features.relay?.businesses.map(b=>b.accountId)??[])
  for(const account of p.features.workbench.finance.filter(a=>relayAccounts.has(a.accountId)&&a.accruedCostFen>0))remaining.push({id:'today-relay-accrual:'+account.accountId,title:'本账户已有尚未出账的原成本',line:'截至'+p.view.date+'本账户已发生未出账成本'+moneyText(account.accruedCostFen)+'，可能包括原维护与在岗工资等；不是一份新服务，也不是此刻保证支付的现金额。',dueAt:null,accountId:account.accountId,urgent:false,sourceRefs:[{kind:'account',id:account.accountId,date:p.view.date}],focus:null,inspect:{screen:'finance',label:'核对原维护、工资与完整账户原账',target:{accountId:account.accountId}}})
  return {
   source:{runId:p.view.runId,revision:p.view.revision,date:p.view.date,quarter:p.features.workbench.quarter},
   primary:{thread,classification:state,supported:supported(thread),originQuarter:thread.focusQuarter,sourceRefs:thread.resultRefs.map(ref=>({...ref}))},
-   title:'回到今天，慢慢决定',line:(current.length?current.some(item=>item.relayContinuation&&['money','unknown'].includes(item.relayContinuation.kind)||item.ecosystemContinuation?.kind==='money'||item.equityContinuation?.kind==='money')?'原安排与仍待核对的旧事项继续保留；今天的去向由你决定。':'已经答应的事仍照原约定继续；今天的去向由你决定。':'旧结果留在原记录。接下来的日子，可以重新选择。')+(remaining.some(item=>item.id.startsWith('today-relay-accrual:'))?'已发生的原维护、工资等未出账成本仍在原账，不因回到今天清除。':''),
+   title:'回到今天，慢慢决定',line:(continuing.length?continuing.some(item=>item.relayContinuation&&['money','unknown'].includes(item.relayContinuation.kind)||item.ecosystemContinuation?.kind==='money'||item.equityContinuation?.kind==='money'||item.marketContinuation?.kind==='money')?'原安排与仍待核对的旧事项继续保留；今天的去向由你决定。':'已经答应的事仍照原约定继续；今天的去向由你决定。':holdings.length?'原持仓仍保留，今天的安排由你选择。':'旧结果留在原记录。接下来的日子，可以重新选择。')+(remaining.some(item=>item.id.startsWith('today-relay-accrual:'))?'已发生的原维护、工资等未出账成本仍在原账，不因回到今天清除。':''),
    question:thread.focus.kind==='video'&&(state==='result'||state==='history')?'接下来是回应已有询价、做另一份作品，还是暂不新增制作？原结果与未完约定都留着。':thread.focus.kind==='course'&&(state==='result'||state==='history')?isCoursePreparationThread(thread)?'这份教学准备留下后，是先看下一步、另备一份教案，还是把日子留给生活？样课与招生、学费仍分别决定。':thread.focus.courseTarget?.kind==='cohort'?'这一班已经发生的学习与钱款都留着。先续上未完承诺，还是不再新增安排，把日子留给生活？':'这次实际受众已经留下。是否作出开班承诺、另定受众，或先回生活，仍由你明确决定。':season.nextQuestion,ongoing:current,directions:directions.map(direction=>({...direction})),remaining,wait:wait(p),responsibilityOverrideNeeded:thread.responsibilityOverrideNeeded,
  }
 }

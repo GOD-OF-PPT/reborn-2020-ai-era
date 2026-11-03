@@ -1,0 +1,5 @@
+527累计55项54过1红：原stock-picker最后一项仍断言518旧计划文案，526已改为阶段+短事实。528只将该项对齐现行已交付文案，并保原数量/2505预留/原thread全文/原提交与撤回/不执行检查；原失败结果不改。另收紧新测试focus断言为显式market/research形状，避免未区分联合类型属性访问。产品源不改；owned扩至4份（其中2份测试）。
+
+527类型实际还报未用OpeningFocus import；529移除该测试import。产品源仍与527/528逐字一致，最终类型与构建另核；528纯UI行为若通过按唯一unused import差异明确复用，不冒整批在529重跑。
+
+实际527检查：Today重复日期占行，带完整回响/Clock时探索入口接近地点日期；保当前日期在heading和HUD，去重复context。持仓单项的ScreenBook把只有说明的首页和真正持仓拆页，新增TodayHoldings直接阅读当前原持仓，逐份显选前后翻、同身份查看；为空/失效明确说明不静默换对象。新增today-scene.css样式与TodayHoldings，owned共6，保完整item.line、不缩字裁切。当前实际问题保图，最终新源复核。
