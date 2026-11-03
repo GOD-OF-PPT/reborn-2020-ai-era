@@ -53,11 +53,18 @@ export function packSave(envelope:SaveEnvelope,logicalText:string,nodes:number):
   if(utf8Length(canonicalJson(legacy))<=MAX_ENCODED_SAVE_BYTES)return legacy
  }
  requireRule(canonicalJson(envelope)===logicalText,'CORRUPT_SAVE')
- const tokens=encodeDictionaryJson(envelope,logicalBytes),compressed=deflate(tokens,{level:3})
- requireRule(Math.ceil(compressed.length/3)*4<MAX_ENCODED_SAVE_BYTES,'SAVE_TOO_LARGE')
- const result:DictionarySaveEnvelope={...metadata,saveVersion:3,packing:'zlib-dictionary-v1',logicalBytes,packedBytes:tokens.length,payloadHash,payload:base64(compressed)}
- requireRule(utf8Length(canonicalJson(result))<=MAX_ENCODED_SAVE_BYTES,'SAVE_TOO_LARGE')
- return result
+ const tokens=encodeDictionaryJson(envelope,logicalBytes)
+ const dictionaryDocument=(level:3|9):DictionarySaveEnvelope|null=>{
+  const compressed=deflate(tokens,{level})
+  if(Math.ceil(compressed.length/3)*4>=MAX_ENCODED_SAVE_BYTES)return null
+  const result:DictionarySaveEnvelope={...metadata,saveVersion:3,packing:'zlib-dictionary-v1',logicalBytes,packedBytes:tokens.length,payloadHash,payload:base64(compressed)}
+  return utf8Length(canonicalJson(result))<=MAX_ENCODED_SAVE_BYTES?result:null
+ }
+ const preferred=dictionaryDocument(3)
+ if(preferred!==null)return preferred
+ const stronger=dictionaryDocument(9)
+ requireRule(stronger!==null,'SAVE_TOO_LARGE')
+ return stronger
 }
 
 /** No allocation trusts the declared length. Output is checked on each fixed chunk. */

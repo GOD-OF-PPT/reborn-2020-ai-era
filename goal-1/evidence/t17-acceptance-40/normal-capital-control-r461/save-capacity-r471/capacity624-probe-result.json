@@ -1,0 +1,100 @@
+{
+  "at": "2026-11-03T07:48:07.829Z",
+  "status": "same-format-stronger-compression-feasible",
+  "attempts": [
+    {
+      "level": 3,
+      "compressedBytes": 7882672,
+      "base64Bytes": 10510232,
+      "completeWireBytes": 10510786,
+      "encodedLimit": 10485760,
+      "fitsOriginalLimit": false,
+      "logicalBytes": 125193634,
+      "packedBytes": 44319731
+    },
+    {
+      "level": 9,
+      "compressedBytes": 7407058,
+      "base64Bytes": 9876080,
+      "completeWireBytes": 9876634,
+      "encodedLimit": 10485760,
+      "fitsOriginalLimit": true,
+      "logicalBytes": 125193634,
+      "packedBytes": 44319731
+    }
+  ],
+  "measured": [
+    {
+      "phase": "validate-original-unwritten624",
+      "wallMs": 20591.390337,
+      "cpuUserMs": 21466.794,
+      "cpuSystemMs": 1878.048
+    },
+    {
+      "phase": "repeat-original-encoder-rejection",
+      "wallMs": 31792.706474,
+      "cpuUserMs": 33764.844,
+      "cpuSystemMs": 2484.529
+    },
+    {
+      "phase": "reference-v1-checksum",
+      "wallMs": 3681.5851299999995,
+      "cpuUserMs": 4203.951,
+      "cpuSystemMs": 883.534
+    },
+    {
+      "phase": "reference-logical-text",
+      "wallMs": 1693.336221999998,
+      "cpuUserMs": 1611.833,
+      "cpuSystemMs": 287.897
+    },
+    {
+      "phase": "original-dictionary-tokens",
+      "wallMs": 3105.808928000006,
+      "cpuUserMs": 3670.076,
+      "cpuSystemMs": 130.726
+    },
+    {
+      "phase": "dictionary-deflate-level3",
+      "wallMs": 1392.2728260000004,
+      "cpuUserMs": 1550.304,
+      "cpuSystemMs": 60.941
+    },
+    {
+      "phase": "dictionary-deflate-level9",
+      "wallMs": 7185.1957729999995,
+      "cpuUserMs": 7288.135,
+      "cpuSystemMs": 112.726
+    },
+    {
+      "phase": "original-old-reader-imports-level9",
+      "wallMs": 22929.67209800001,
+      "cpuUserMs": 25795.928,
+      "cpuSystemMs": 1831.317
+    }
+  ],
+  "limits": {
+    "LEGACY_SAVE_NODES": 300000,
+    "MAX_ENCODED_SAVE_BYTES": 10485760,
+    "MAX_LOGICAL_SAVE_BYTES": 268435456,
+    "MAX_LOGICAL_SAVE_NODES": 5000000,
+    "SAVE_JSON_DEPTH": 32,
+    "SAVE_JSON_MEMBERS": 100000
+  },
+  "oldEncoderStillRejects": true,
+  "originalOldReaderAcceptedAlternative": true,
+  "entireOriginalProposalGameRunHashEqual": true,
+  "wholeOriginalProposalCanonicalSha256": "caacdf3b6b96b9213d93fe936c02010711eb7735c8e85ba3f4772eb46f6fc358",
+  "alternativeWireBytes": 9876634,
+  "alternativeWireSha256": "d6d408726bc10fd7c53cb13fbb0c78def17d7ff00361e5815c67e425970e118e",
+  "sourceExact": true,
+  "referenceLogicalEnvelopeOnlyNotNewProductWriter": true,
+  "original624StillNotSaved": true,
+  "newGameCommands": 0,
+  "newNative": 0,
+  "newIndexedDbWrites": 0,
+  "productChanges": 0,
+  "wholeStepPerformancePassed": false,
+  "wholeU6Complete": false,
+  "compatibility": 0
+}

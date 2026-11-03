@@ -1,0 +1,10 @@
+# 原上限内的保存编码修缮验证
+最小修缮仅save-packing.ts与save-capacity.test.ts：原v1/v2及dictionary level3能放下时全部首选行为不变；仅dictionary level3的payload或完整外层UTF8超过原预算才尝试固定level9，最终仍超限保SAVE_TOO_LARGE。无新版本/依赖，encoded10MiB、logical256MiB、nodes5m、depth32/members100000与全部JSON/字典/损坏/metadata/旧schema拒绝规则未改。默认路径仍原wire，无历史裁切或额度提高。
+
+## 最终固定源473验证
+旧471容量3例2过1实际SAVE_TOO_LARGE红；472首轮55中54过1新60s超时保红。只将测试10MB Buffer深比较换为原生完整字节equals，数据/断言覆盖和所有timeout不减/不增，最终473的4文件55/55和18文件157/157，212独立case同源全部过、0skip（两批，不倒改旧红）。最终473类型71595ms、构建2190ms过；472与473类型实际运行区间不重叠。无页面compat开发测试。
+实际产品472（与473仅一测试行不同，所有运行源/配置/资产同）已证：旧623全部10390858B/42aa4462…29cdc原wire不变；原未写624提案完整GameRun导入/导出同，产品wire9876634B/d6d40872…70e118e<=10485760、重复编码确定性，且与旧459读器已验reference wire逐字相等，旧读器结果按同字节明确复用。原旧encoder对同624仍SAVE_TOO_LARGE（10510786B reference），无成功old624 wire可比较，未捏造。623独立整档/605四前缀/18指纹已过，失败execution14完整封存、72旧seal保护通过，125193244B未写提案原字节仍保并有17148175B无损归档，归档不是游戏存档。
+
+证据边界：新容量JSON fixture仅测试packing层，extra state不是合法campaign；正常提案验证来自原kernel416实际未写624而非此fixture。完整旧623和原18指纹另有独立审计；更早417/372沿原605已验链复用，非本轮重跑。旧读器proof按完全同一wire显式复用，实际472/最终473只有测试Buffer比较区别，不冒源相同的单次批次；212是最终473两批的唯一case，不加旧55或其它分支。
+原始失败execution已封14文件，完整未写125MB proposal留原地且有无损zlib传输副本；大raw的归档不会作为游戏存档/注入正常人生。当前只完成编码修缮，不恢复旧STOP producer，不将candidate624当实际已保存624。Main457/用户DB未动，0Native/0IDB/0新实际游戏命令，所有页面compat开发测试0。原正常Q4/2025/80万董事实际签署治理/17+5深态/最终U6及原后续全组合、T17其余/PNG0of3/真人0/P3正式62和22未跑/M01待明确恢复/T18最后/完整goal仍未完。缓存预算修复合同保留。
+[杠精审查]限定通过：原数据/权限/原子保存均保，完全真实提案和旧读器有据，实际恢复必须下一子继续原preview/evaluate/同command624和完整保存，不能用已有proposal替代真正命令或缩短路径。

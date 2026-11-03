@@ -1,0 +1,129 @@
+{
+  "at": "2026-11-03T07:09:35.740Z",
+  "stage": "original_execution_or_storage_failure",
+  "failure": "RuleError: SAVE_TOO_LARGE",
+  "failureKind": "execution_or_storage",
+  "failureStack": "RuleError: SAVE_TOO_LARGE\n    at requireRule (file:///Users/gordon/githome/reborn-2020-ai-era/.delivery/t17-u6-large-run-r459/src/core/errors.ts:12:25)\n    at packSave (file:///Users/gordon/githome/reborn-2020-ai-era/.delivery/t17-u6-large-run-r459/src/persistence/save-packing.ts:57:2)\n    at RunCodec.prepare (file:///Users/gordon/githome/reborn-2020-ai-era/.delivery/t17-u6-large-run-r459/src/persistence/codec.ts:248:115)\n    at RunCodec.export (file:///Users/gordon/githome/reborn-2020-ai-era/.delivery/t17-u6-large-run-r459/src/persistence/codec.ts:255:46)\n    at send (file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-40/normal-capital-control-r461/run605.ts:37:23)\n    at advance (file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-40/normal-capital-control-r461/run605.ts:65:3)\n    at finishPeriod (file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-40/normal-capital-control-r461/run605.ts:70:236)\n    at serviceQuarter (file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-40/normal-capital-control-r461/run605.ts:86:611)\n    at file:///Users/gordon/githome/reborn-2020-ai-era/goal-1/evidence/t17-acceptance-40/normal-capital-control-r461/run605.ts:147:590\n    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)",
+  "pending": {
+    "runId": "u6-board-capital-pilot-v1",
+    "actorId": "player",
+    "commandId": "normal-capital-v2:624",
+    "expectedRevision": 623,
+    "kind": "AdvanceTime",
+    "payload": {
+      "date": "2024-10-20"
+    }
+  },
+  "sourceExact": true,
+  "lastSaved": {
+    "revision": 623,
+    "date": "2024-10-10",
+    "budget": {
+      "available": 2,
+      "quarter": "2024-Q4",
+      "reserved": 1,
+      "spent": 1,
+      "total": 4
+    },
+    "personal": {
+      "cashFen": 4001239,
+      "heldFen": 0,
+      "availableFen": 4001239,
+      "protectionRequiredFen": 0,
+      "protectionShortfallFen": 0,
+      "commitmentShortfallFen": 0,
+      "receivableFen": 5730516,
+      "prepaidLiabilityFen": 0,
+      "payableFen": 0,
+      "supplierPrepaidFen": 0,
+      "investmentValueFen": 68301090,
+      "netAssetsFen": 78032845
+    },
+    "bytes": 10390858,
+    "sha256": "42aa446291c91e544931ea2b64339d7af4ae4c0f84e2b0c54dd5681122a29cdc"
+  },
+  "quarters": [
+    {
+      "label": "2024-Q3",
+      "revision": 618,
+      "date": "2024-09-30",
+      "budget": {
+        "available": 0,
+        "quarter": "2024-Q3",
+        "reserved": 0,
+        "spent": 4,
+        "total": 4
+      },
+      "personal": {
+        "cashFen": 4401239,
+        "heldFen": 1999154,
+        "availableFen": 2402085,
+        "protectionRequiredFen": 0,
+        "protectionShortfallFen": 0,
+        "commitmentShortfallFen": 0,
+        "receivableFen": 0,
+        "prepaidLiabilityFen": 0,
+        "payableFen": 0,
+        "supplierPrepaidFen": 0,
+        "investmentValueFen": 73114650,
+        "netAssetsFen": 77515889
+      },
+      "positions": [
+        {
+          "accountId": "personal",
+          "costIncludingBuyFeesFen": 58016534,
+          "id": "market:84fece4de432356b03d9396cff94c4de",
+          "lastKnownValueFen": 73114650,
+          "lastMarkIndex": 170,
+          "quantity": 25790,
+          "reservedQuantity": 0,
+          "settledQuantity": 25790,
+          "symbol": "SIM-AI03",
+          "unrealizedProfitFen": 15098116,
+          "valuationStatus": "current",
+          "valueFen": 73114650
+        }
+      ],
+      "businesses": [
+        {
+          "id": "ops:ba624da362c2c6850efa1eff912fe9f8",
+          "lifecycle": "operating",
+          "funds": {
+            "availableFen": 2000000,
+            "cashFen": 227767340,
+            "commitmentShortfallFen": 0,
+            "heldFen": 225767340,
+            "investmentValueFen": 0,
+            "netAssetsFen": 2000000,
+            "payableFen": 0,
+            "prepaidLiabilityFen": 225767340,
+            "protectionRequiredFen": 225767340,
+            "protectionShortfallFen": 0,
+            "receivableFen": 0,
+            "supplierPrepaidFen": 0
+          },
+          "metrics": {
+            "accruedCostFen": 0,
+            "costFen": 19458487,
+            "incomeFen": 96232660,
+            "profitFen": 76774173
+          },
+          "distributedFen": 76774173
+        }
+      ],
+      "bytes": 10317082,
+      "sha256": "c1c6634aaddf3aeb92b8c7f242e02ca06272b194b66ce2f1408343b34b949c5a",
+      "originalRules": true
+    }
+  ],
+  "mutations": 18,
+  "wallMs": 10667822,
+  "normalBoardReadyForSignature": false,
+  "normalBoardActuallySigned": false,
+  "governanceResult": null,
+  "newNative": 0,
+  "newIndexedDbWrites": 0,
+  "scope": "Same registered v2 public strategy/commandIds from canonical saved605; codec459 cause-index only; kernel/codec and canonical file saves only, not new Controller/IDB/Native or human proof",
+  "compatibility": 0,
+  "wholeU6Complete": false
+}
