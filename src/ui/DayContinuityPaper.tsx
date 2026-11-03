@@ -1,10 +1,11 @@
 import './day-continuity.css'
 
-export type DayContinuityArt={kind:'today'|'work'|'life'|'market';state:'history'|'result'|'ongoing'|'carry'}
+export type MarketOrderPaperPhase='planned'|'pending'|'partial'|'filled'|'stopped'|'settlement'
+export type DayContinuityArt={kind:'today'|'work'|'life'|'market';state:'history'|'result'|'ongoing'|'carry';orderPhase?:MarketOrderPaperPhase}
 
 /** The parent supplies committed context and all words. These papers have no business behaviour. */
 export function DayContinuityPaper({art}:{art:DayContinuityArt}){
- return <svg className="day-continuity-art" data-kind={art.kind} data-state={art.state} viewBox="0 0 320 300" fill="none" aria-hidden="true" focusable="false">
+ return <svg className="day-continuity-art" data-kind={art.kind} data-state={art.state} data-order-phase={art.kind==='market'?art.orderPhase:undefined} viewBox="0 0 320 300" fill="none" aria-hidden="true" focusable="false">
   <ellipse className="day-paper-shadow" cx="166" cy="270" rx="119" ry="17"/>
   <path className="day-paper-bottom" d="m46 55 229 23-17 194-229-23z"/>
   {art.kind==='today'?<g data-material="empty-calendar">
@@ -42,7 +43,17 @@ export function DayContinuityPaper({art}:{art:DayContinuityArt}){
    <path className="day-paper-sheet" d="m81 36 190 40-34 161-190-40z"/>
    <path className="day-paper-ink" d="m99 77 133 28m-136-12 102 21m-106-4 131 27m-134-11 110 23"/>
    <path className="day-paper-tab" d="m48 102 24 5-9 43-24-5z"/>
-   {art.state==='result'?<g data-material="execution-note">
+   {art.orderPhase?<g data-material={'order-'+art.orderPhase}>
+    <path className="day-paper-kept" d="m162 152 126 19-13 86-126-19z"/>
+    <path className="day-paper-perforation" d="m170 166 105 16"/>
+    <path className="day-paper-ink" d="m170 181 72 11m-75 2 91 14m-93 0 57 8"/>
+    {art.orderPhase==='planned'?<path className="day-paper-order-pencil" d="m223 198 40-63 9 6-40 63-12 9z"/>:null}
+    {art.orderPhase==='pending'?<><path className="day-paper-order-band" d="m195 157 22 3-13 86-22-3z"/><circle className="day-paper-order-seal" cx="200" cy="201" r="12"/></>:null}
+    {art.orderPhase==='partial'?<><path className="day-paper-sheet" d="m188 207 97 16-6 40-97-16z"/><path className="day-paper-order-mark" d="m200 226 8 11 17-17m14 17 31 5"/></>:null}
+    {art.orderPhase==='filled'?<><rect className="day-paper-order-mark" x="217" y="204" width="40" height="29" rx="3" transform="rotate(9 217 204)"/><path className="day-paper-order-mark" d="m224 217 8 11 17-17"/></>:null}
+    {art.orderPhase==='stopped'?<path className="day-paper-order-stopped" d="m167 176 93 59m-83-72 93 59"/>:null}
+    {art.orderPhase==='settlement'?<><circle className="day-paper-order-clock" cx="255" cy="221" r="24"/><path className="day-paper-order-mark" d="m255 207 0 15 10 7"/></>:null}
+   </g>:art.state==='result'?<g data-material="execution-note">
     <path className="day-paper-kept" d="m170 175 110 14-8 54-110-14z"/>
     <path className="day-paper-ink" d="m181 192 84 11m-86 3 48 6m-50 7 84 10"/>
     <path className="day-paper-clip" d="m187 175 2-14c1-8 13-6 12 2l-2 14"/>
