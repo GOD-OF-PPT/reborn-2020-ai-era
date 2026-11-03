@@ -34,3 +34,14 @@ probe02实际窗口3644.818ms/561样本，约80.05%落在relay-validation.ts:47�
 HEAD仍af0c5d7b诊断提交，WT有两项本任务未提交owned：src/core/relay-validation.ts、src/core/relay-fact-index.test.ts；不是P3，不可reset。子input/plan/tasks已先落，产品候选从459 freeze，最终463/979，仅这两个源diff。原s.meters循环前局部Map保第一个fact、不缓存跨次、不改其他原条件/timer/规则/版本。
 旧462 six回归5pass+访问增长1red（435>174），候选新6全过；完整13文件88中87pass+technical_employee原120s timeout红，原source459同完整relay-normal.test.ts对照handle60226还在跑；不得加timeout求绿。463类型224034ms/build6775ms过，source-scope463证明P3未带。候选完整原612→613差分handle13127/node24915仍evaluate，参数原normal-capital-v2:613/dateAug10，输入12 raw在已封advance-probe01/input612.json，终点真实原613 raw在fact-index-r462/original613.json/10064570B/ed051a22d9ac41ddc2871d2f41e34985ed79e177b2aee794c082be87ebac2274；候选codec/evaluate/export/import/全Run并原wire全部等才可通过。不要重启/重复此长核，先poll同13127。其源码fact-replay613.mjs在parent；helper fact-freeze/fact-check/fact-engineering也在parent（import相对层级正确），phase output在child。
 原主producer71876/15729已实际保存613/Aug10，旧步1346034ms，仅日志整author step非精确kernel计时；仍独立原416kernel/registry+459codec，不用新463候选。不热改、不停止/重启活进程，不stage活head/log，候选不接回原run。只有后续明确安全检查点并完整等值核才考虑新版本，原2025/80万签署治理全目标保持。新候选验证未完成，子task[]、父task[]、整个U6/goalactive，Main仍457不更新、兼容0。
+
+## 当前WIP与原超时对照已返回
+WIP558e75ea0081b55aace3579caf5bdf28c9bf1f0f（父af0c5d7b）44精确owned/delta、两源路径、全index/commit blob/字节/SHA/mode同、index空未push。原source459同完整normal文件60226 exit1，1过1同名technical_employee原120s超时，候选13批次的该时限红在未改源同样复现，不能说唯一原因已证，也不能倒改为候选全绿；原超时/原输入/限时均保。候选类型/构建及新6项过，完整13仍87/88分层。
+真正原612→613全wire差分13127/node24915仍evaluate，当前没有result/failure，不重启或改源，子步骤task[]。原71876继续原416kernel/459codec和原命令，当前已存613Aug10，正常2025/80万board签署治理/整个U6/goal未完。Main457/DB未动，页面兼容开发测试0，67旧sealed/P3全保。
+
+下一优先poll同13127（原613差分），不能再启动另一份。候选463冻结路径.delivery/t17-u6-relay-facts-r463/979；base459/原416规则，WT两owned已进WIP，不是P3。60226已terminal，不再poll旧controlhandle；结果在fact-index-r462/original-normal-control.result/vitest.json，summary同目录timeout-control-summary.json（post-WIP文件）。若原wire不同保different-candidate613.json和failure，找差异不改原数据；若全等，再按实际结果决定有限接受/提交记录，父恢复任务不因此结束。原driver51184…不热改，活root/execution-r1不seal，不stage原和候选活输出；fact-index-r462在差分结束前也不seal。
+
+较晚窗口诊断已返回：候选463同原612→613、120秒后名义1秒/实际5394.239ms/286样本，80.98% self在sumMoney、96.61% inclusive在assertLedger，调用来自meter供应费用处理；不是首段facts查找，也不是整步性能或新保存。副本仅自有SIGTERM，原71876/完整差分13127未触碰。本轮不改money/timer第二热点，先等当前fact全wire；后续若优化任何金额累加，先守BigInt精确/安全整数与原错误/边界，不放限额或删校验。
+较晚probe在fact-index-r462/late-probe-01，44120已terminal exit按预期SIGTERM且profile保存；尚待只读封存。原613全差分13127仍evaluate，无result/failure；不要重复probe或重启diff。
+
+较晚late-probe-01已完整STOP/seal（完整文件数以marker/late-probe-seal.json为准）；67旧加该只读子=68，父fact-index-r462仍在差分中不seal，原root/execution仍active不seal。较晚CPU热点是sumMoney BigInt精确累加，MONEY_LIMIT=9e12、原sumMoney逐项signedMoney后最终总额范围核定；任何后续优化必须保这些语义/溢出/取消/错误顺序，不得直接无界Number替代。当前本轮未改money产品源。

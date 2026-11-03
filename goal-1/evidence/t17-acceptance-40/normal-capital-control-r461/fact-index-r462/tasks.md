@@ -9,3 +9,9 @@
 当前恢复原完整目标和goal未完成；兼容0。
 
 当前结果：旧回归5过1预期红（435次>174）；候选新6项通过；完整13/88中87过1原120s超时，未放限时，459原同文件对照60226在跑。463类型/构建过。原613全wire差分13127仍evaluate，不能标子步骤完成或作为正式性能通过。原71876不改、不restart，Main/DB未动，67旧完整seal/P3保护通过。
+
+## 当前WIP与原超时对照已返回
+WIP558e75ea0081b55aace3579caf5bdf28c9bf1f0f（父af0c5d7b）44精确owned/delta、两源路径、全index/commit blob/字节/SHA/mode同、index空未push。原source459同完整normal文件60226 exit1，1过1同名technical_employee原120s超时，候选13批次的该时限红在未改源同样复现，不能说唯一原因已证，也不能倒改为候选全绿；原超时/原输入/限时均保。候选类型/构建及新6项过，完整13仍87/88分层。
+真正原612→613全wire差分13127/node24915仍evaluate，当前没有result/failure，不重启或改源，子步骤task[]。原71876继续原416kernel/459codec和原命令，当前已存613Aug10，正常2025/80万board签署治理/整个U6/goal未完。Main457/DB未动，页面兼容开发测试0，67旧sealed/P3全保。
+
+较晚窗口诊断已返回：候选463同原612→613、120秒后名义1秒/实际5394.239ms/286样本，80.98% self在sumMoney、96.61% inclusive在assertLedger，调用来自meter供应费用处理；不是首段facts查找，也不是整步性能或新保存。副本仅自有SIGTERM，原71876/完整差分13127未触碰。本轮不改money/timer第二热点，先等当前fact全wire；后续若优化任何金额累加，先守BigInt精确/安全整数与原错误/边界，不放限额或删校验。

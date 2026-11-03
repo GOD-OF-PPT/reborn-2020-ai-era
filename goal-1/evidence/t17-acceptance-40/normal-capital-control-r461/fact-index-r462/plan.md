@@ -13,3 +13,11 @@
 [杠精审查]通过：修已实测查找成本，保完整原验证，以已实际保存613作为终点而非缩小成仅小夹具。
 
 463完整13文件88项，87过1原120s时限红；新6项全过。下一从原冻结459跑相同完整relay-normal.test.ts，沿原限时/参数/Node22，记录基线是否复现，不修改产品或测试限时求绿。原全批红与原613差分仍pending，不能标本子步骤完成。
+
+## 当前WIP与原超时对照已返回
+WIP558e75ea0081b55aace3579caf5bdf28c9bf1f0f（父af0c5d7b）44精确owned/delta、两源路径、全index/commit blob/字节/SHA/mode同、index空未push。原source459同完整normal文件60226 exit1，1过1同名technical_employee原120s超时，候选13批次的该时限红在未改源同样复现，不能说唯一原因已证，也不能倒改为候选全绿；原超时/原输入/限时均保。候选类型/构建及新6项过，完整13仍87/88分层。
+真正原612→613全wire差分13127/node24915仍evaluate，当前没有result/failure，不重启或改源，子步骤task[]。原71876继续原416kernel/459codec和原命令，当前已存613Aug10，正常2025/80万board签署治理/整个U6/goal未完。Main457/DB未动，页面兼容开发测试0，67旧sealed/P3全保。
+
+当前完整差分仍evaluate，早20s样本只能代表初始runtime.validate。另独立候选463同612/613副本在120秒后采约1秒CPU，delay+20s watchdog，仅终止clone自身，不碰原71876或差分13127，不新增第二产品优化；自检门槛沿已验证probe02，所有结果保持局部/未保存身份。
+
+较晚窗口诊断已返回：候选463同原612→613、120秒后名义1秒/实际5394.239ms/286样本，80.98% self在sumMoney、96.61% inclusive在assertLedger，调用来自meter供应费用处理；不是首段facts查找，也不是整步性能或新保存。副本仅自有SIGTERM，原71876/完整差分13127未触碰。本轮不改money/timer第二热点，先等当前fact全wire；后续若优化任何金额累加，先守BigInt精确/安全整数与原错误/边界，不放限额或删校验。
