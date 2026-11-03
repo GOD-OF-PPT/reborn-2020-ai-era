@@ -1,0 +1,41 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import cp from 'node:child_process'
+import {json,hash,tree,ident,blobOid,proof,git,verifySeal} from '../../t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs'
+const root='goal-1/evidence/t17-acceptance-40/normal-capital-control-r461',phase=root+'/money-sum-r464',post=root+'/money-sum-post-commit-01',source=json(phase+'/snapshot469.json'),accepted=json(phase+'/accept-readback.json'),parent=accepted.commit
+if(parent!=='c0b999d6ac95b2d6c123cb03700b9ce564399b09' || git(['rev-parse','HEAD']).toString().trim()!==parent || git(['diff','--cached','--name-only']).length || fs.existsSync(phase+'/stopped.json') || fs.existsSync(post) || fs.existsSync(root+'/stopped.json')) throw Error('EXACT_COMPLETED_ACTIVE_PHASE_REQUIRED')
+const terminal=json(phase+'/replay613-process-terminal.json'),bytes=json(phase+'/replay613-byte-readback.json')
+if(terminal.exitCode!==0 || !bytes.candidateMatchesActualOriginalRawBytes || !accepted.moneySumLimitedAcceptance || accepted.wholeStepPerformancePassed || !fs.readFileSync(phase+'/tasks.md','utf8').includes('- [x] 在保持原精确性')) throw Error('LIMITED_COMPLETED_VALIDATION_REQUIRED')
+let alive=false;try{process.kill(33943,0);alive=true}catch(error){if(error.code!=='ESRCH')throw error}if(alive)throw Error('COMPLETED_REPLAY_PROCESS_MUST_BE_GONE')
+for(const row of source.files) if(hash(fs.readFileSync(path.join(source.target,row.path)))!==row.sha256) throw Error('FROZEN469_CHANGED')
+for(const name of source.owned) if(hash(fs.readFileSync(name))!==source.files.find(row=>row.path===name)?.sha256) throw Error('OWNED_SOURCE_CHANGED')
+const preserveFile=root+'/preserve.mjs',before=fs.readFileSync(preserveFile,'utf8'),anchor='const report={'
+if(before.split(anchor).length!==2 || before.includes("seals.push(verifySeal('"+phase+"'))")) throw Error('EXACT_PRESEAL69_HELPER_REQUIRED')
+fs.mkdirSync(post)
+const put=(file,value)=>fs.writeFileSync(file,JSON.stringify(value,null,2)+'\n',{flag:'wx'})
+put(post+'/preparation.json',{at:new Date().toISOString(),parent,source:469,scope:'Seal completed exactness and cost validation only',wholeStepPerformancePassed:false,parentTaskComplete:false,compatibility:0})
+put(phase+'/terminal.json',{at:new Date().toISOString(),source:469,status:'limited_validation_complete',actualReplayExitCode:0,actualOriginal613WireEqual:true,wholeGameRunRoundTripEqual:true,wholeStepPerformancePassed:false,parentTaskComplete:false,compatibility:0})
+put(phase+'/stopped.json',{at:new Date().toISOString(),reason:'All validation producers ended; limited bounded-money verification complete; preserve every adverse result; no append after full seal',parentStillActive:true,compatibility:0})
+put(phase+'/sealed-evidence.json',{at:new Date().toISOString(),selfExcluded:'sealed-evidence.json',...tree(phase),source:469,feature:parent,scope:'Limited exact integer sum and complete original613 equivalence; no whole-step performance pass',compatibility:0})
+const sealed=verifySeal(phase)
+put(post+'/sealed-phase.json',sealed)
+fs.writeFileSync(preserveFile,before.replace(anchor,"seals.push(verifySeal('"+phase+"'));\n"+anchor))
+const node='/Users/gordon/.nvm/versions/node/v22.12.0/bin/node',preservation=cp.spawnSync(node,[preserveFile,'money-phase-sealed'],{encoding:'utf8'})
+put(post+'/preservation-command.json',{status:preservation.status,signal:preservation.signal,stdout:preservation.stdout,stderr:preservation.stderr})
+if(preservation.status!==0 || json(root+'/preservation-money-phase-sealed.json').fullSeals.length!==70) throw Error('EXACT70_PRESERVATION_REQUIRED')
+const extras=[preserveFile,root+'/close-money-sum.mjs',root+'/plan.md',root+'/tasks.md',root+'/continuation.md',root+'/validation-progress.md',root+'/preservation-money-phase-sealed.json']
+const paths=[...new Set([...source.owned,...tree(phase).files.map(row=>row.path),phase+'/sealed-evidence.json',...tree(post).files.map(row=>row.path),...extras])].sort()
+if(paths.some(name=>name.startsWith(root+'/execution-r1/') || name===root+'/execution.stdout.log' || name===root+'/execution.stderr.log' || name==='goal-1/plan.md' || name==='goal-1/tasks.md')) throw Error('ACTIVE_OUTPUTS_AND_MIXED_MASTERS_EXCLUDED')
+put(post+'/owned.json',{at:new Date().toISOString(),parent,source:469,paths,selfExcluded:'owned.json',sealedPhase:sealed,wholeStepPerformancePassed:false,parentTaskComplete:false,compatibility:0})
+paths.push(post+'/owned.json');paths.sort()
+const rows=paths.map(name=>({...ident(name),oid:blobOid(fs.readFileSync(name))}))
+git(['add','-f','--',...paths])
+const staged=git(['diff','--cached','--name-only','-z']).toString().split(String.fromCharCode(0)).filter(Boolean).sort()
+if(!staged.length || staged.some(name=>!paths.includes(name))) throw Error('EXACT_CLOSEOUT_DELTA_REQUIRED')
+const index=proof(rows)
+git(['commit','-m','Seal completed bounded-money validation evidence'])
+const commit=git(['rev-parse','HEAD']).toString().trim(),delta=git(['diff-tree','--no-commit-id','--name-only','-r','-z',commit]).toString().split(String.fromCharCode(0)).filter(Boolean).sort()
+if(JSON.stringify(delta)!==JSON.stringify(staged) || git(['diff','--cached','--name-only']).length) throw Error('EXACT_COMMIT_DELTA_REQUIRED')
+const readback=proof(rows,commit),finalSeal=verifySeal(phase)
+put(post+'/readback.json',{at:new Date().toISOString(),commit,parent,source:469,owned:paths.length,delta:staged.length,index,readback,finalSeal,indexEmpty:true,notPushed:true,wholeStepPerformancePassed:false,parentTaskComplete:false,wholeU6Complete:false,compatibility:0})
+console.log({commit,owned:paths.length,delta:staged.length,sealedOrdinaryFiles:finalSeal.ordinaryFiles,fullPreservedSeals:70,indexEmpty:true,notPushed:true,wholeStepPerformancePassed:false,parentTaskComplete:false})

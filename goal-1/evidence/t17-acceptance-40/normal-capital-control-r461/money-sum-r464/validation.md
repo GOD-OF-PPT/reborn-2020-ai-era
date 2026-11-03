@@ -12,3 +12,5 @@
 完整候选469整步1916474.55ms，原463事实索引整步1755347.10ms，原作者步1346030ms（作者包含head/journal IO，机器负载与时间范围不同）。新evaluate1773056.47ms、CPU user1018974.63/system80892.99ms，原463evaluate1641532.46ms、user1006855.37/system65141.99ms。没有完整日期步提速证明，不宣告卡顿已修复或正式性能通过。完整反证见performance-observations-final.json；所有原报告保持。
 
 [杠精审查] 本子限定验证通过：原数学/错误与所有原功能未删，完整状态和原实际wire有据；代价验证保留不利结果，不将局部指标代整步成功。父正常2025/80万董事实际签署治理、全17+5深态/最终U6/原后续组合/T17其余/PNG0of3/真人0/P3正式62和22未跑/M01须明确恢复/T18最后及完整goal仍未完成。原71876继续原416kernel/459codec，不热改/重启或封活root/execution；本子完成不获得跨任务成功身份。Main457/用户DB未动，全部兼容开发测试0，无push/deploy/外发/新委派/global memory写。
+
+本地接受c0b999d6ac95b2d6c123cb03700b9ce564399b09：105精确owned/20delta、两源逐blob/字节/SHA/mode核同、index空、未push。当前仅子验证完成；完整日期性能未解决，Main/live未采用。

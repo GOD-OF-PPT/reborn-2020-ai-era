@@ -17,4 +17,5 @@ seals.push(verifySeal('goal-1/evidence/t17-acceptance-40/normal-capital-control-
 seals.push(verifySeal('goal-1/evidence/t17-acceptance-40/normal-capital-control-r461/advance-probe-01'));seals.push(verifySeal('goal-1/evidence/t17-acceptance-40/normal-capital-control-r461/advance-probe-02'));
 seals.push(verifySeal('goal-1/evidence/t17-acceptance-40/normal-capital-control-r461/fact-index-r462/late-probe-01'));
 seals.push(verifySeal('goal-1/evidence/t17-acceptance-40/normal-capital-control-r461/fact-index-r462'));
+seals.push(verifySeal('goal-1/evidence/t17-acceptance-40/normal-capital-control-r461/money-sum-r464'));
 const report={at:new Date().toISOString(),head:git(['rev-parse','HEAD']).toString().trim(),p3:old.p3.length,oldMarkers:old.oldSeals.length,links:old.markerSymlinks.length,fullSeals:seals,old19And35Exact:true,originalInputExact:true,unverifiedModelExact:true,originalAndCurrentMasterPrefixesExact:true,compatibility:0,wholeU6Complete:false};fs.writeFileSync(root+'/preservation-'+label+'.json',JSON.stringify(report,null,2)+'\n',{flag:'wx'});console.log({p3:report.p3,markers:report.oldMarkers,seals:seals.length,masters:true,input:true});
