@@ -77,3 +77,15 @@ money-shapes612只经原unpackSave解码/校验packed payload读取同原612，�
 
 ## 同原612完整账本的单次观察
 原464和最终469独立模块实例各首次调用原assertLedger，同一完整ledger；两者校验通过、整个ledger前后JSON哈希同、两份980源后验精确。原wall1556.60ms/CPU853.414ms，新wall876.58ms/CPU628.480ms。本次只观察一个既有账本/一个验证器、原先新后，无正式统计、完整codec或整个日期步结论。原853→628不是全游戏性能通过，也不抹掉长数组微基准仍不利。完整原613差分仍单次89899/node33943在evaluate，无新实际游戏命令，不接Main/live。
+
+## 2026-11-03｜原612真实账本诊断已记录，完整差分继续
+本地诊断a16c3d38339cf09c79b086f4737e45240995c7d2（父ccdcb127），16精确owned/delta、全部index/commit blob/字节/SHA/mode核同、index空未push，0新产品改动；活replay/原执行输出与mixedmasters未stage。原69完整封存/P326/132marker/2link/原输入/model/master前缀保护通过。
+同原612：20合同小计最长792，所列68静态数组点66短2长（不是调用频率）；原464/候选469完整既有ledger各一次校验通过、整个ledger JSON哈希不变。CPU853.414/628.480ms、wall1556.60/876.58ms，仅此独立模块首次校验观察，不代全codec/整日期步/正式性能；长项不利和原错误汇总保。完整同原612→613差分89899/node33943仍evaluate，不能因为局部26%CPU降低标完成、启用或seal。2560和26756两个只读观测已exit0，不重复跑；原71876原策略继续，全正常2025/80万董事签署治理与U6/goal/全部原后续责任保持，compat0。
+
+原71876/15729同416kernel/459codec已实际保存615/2024Sept5、616/Sept30和617/Sept30分红，当前在原PlaceStockOrder评估；不是money候选进度。最新观察物理head revision=617、10316378B/SHA5650e25b3d8f15b41f4c2b0e9d7105888ab9fa30ae2d286721ac86bb702ce1de，仅作者物理记录，不冒新Controller/IDB/Native。Q3原尾与后续Q4/2025全部目标保；不在Q3旁支合作停止、不改或重启原流程。候选89899仍单次原613差分在制。
+
+后续收尾准备：accept-money-sum.mjs已写并node --check通过，尚未执行，预期parent=a16c3d38339cf09c79b086f4737e45240995c7d2。仍先poll同89899/33943，禁止重复回放。只有真正exit0后写replay613-process-terminal.json，独立全原613 raw比较/实际命令与fullRun核后写replay613-byte-readback.json，再fresh preserve money-diff-complete、标money子有限完成与执行accept。无result/failure时不写成功/terminal、不启动accept或seal；原parent/U6/goal仍未完成，Main不推广。未来closeout封存需另在实际完成后制作，当前helper只是有拒绝门槛的准备，不是验收结果。
+
+## 2026-11-03｜金额求和子步骤限定验证完成
+469/980两owned的整数精确性、错误/边界与成本验证已齐；最终31文件246/246/0skip、类型237117ms/构建7252ms过，旧468同最终19也过。单次89899/node33943实际exit0，原612→同normal-capital-v2:613/Aug10完整输出10064570B/ed051a22…c2274与原真正613所有字节相同，全GameRun往返及独立raw读回同，全部980源保持。
+新整步1916474.55ms、原事实索引1755347.10ms、原实际作者1346030ms，范围/负载不同，没有整步提速证明；全部不利/早期工具错误保。仅本金额子验证完成，整体长档延迟/正式性能/父正常2025董事签署治理/U6/全部原后续/PNG0/真人0/P3正式未跑/goal未完，compat0。Main/live不推广，原71876仍原416/459策略继续，不改活driver或封活root/execution。待实际提交读回后再封已结束money子，不能先封父。
