@@ -1,0 +1,96 @@
+/* One journal material for every modal. The original book, focus and command authority stay intact. */
+.cinema-app .dialog{
+ --paper:#122c30;--sheet:#173337;--surface:#153135;--ink:#e9e5d7;--muted:#b8c2b7;
+ --gold:#d7b87d;--accent:#dfc38c;--border:#baac7e45;--blue:#e8d098;
+ color-scheme:dark;color:var(--ink);border:1px solid #ad976158;border-radius:3px;
+ background-color:#122c30;
+ background-image:linear-gradient(100deg,#081c2059,#0c24272b 55%,#071b1e59),url('../../assets/ui-redesign/cinematic/night-journal-modal-v1.png');
+ background-size:100% 100%;background-position:center;
+ box-shadow:0 32px 110px #000b,0 1px 0 #e7d7a82b,inset 0 0 50px #061b2459;
+ padding:26px 38px;
+}
+.cinema-app .dialog.scene-workspace,.cinema-app .dialog.scene-echo{background-color:#122c30;background-image:linear-gradient(100deg,#081c2059,#0c24272b 55%,#071b1e59),url('../../assets/ui-redesign/cinematic/night-journal-modal-v1.png');background-size:100% 100%;border:1px solid #ad976158;box-shadow:0 32px 110px #000b}
+.cinema-app .dialog::backdrop{background:#031317b8;backdrop-filter:blur(6px)}
+.cinema-app .dialog .dialog-heading{align-items:center;min-height:72px;padding:0 0 16px;margin-bottom:3px;border-bottom:1px solid #c7ad735c;background:none;gap:24px}
+.cinema-app .dialog-title-block{min-width:0}
+.cinema-app .dialog-edition{display:flex;align-items:center;gap:12px;color:#c7b681;font:10px/1.8 var(--serif);letter-spacing:3px}
+.dialog-edition i{display:block;width:28px;height:1px;background:#b8a16b6b}
+.cinema-app .dialog .dialog-heading h2{margin:6px 0 0;font:400 27px/1.5 var(--serif);letter-spacing:2px;color:#f0e4c7}
+.cinema-app .dialog .dialog-heading>button{width:38px;height:38px;border:1px solid #bda87555;border-radius:50%;background:#0b242966;color:#d9c590;font:25px/1 var(--serif);flex:none}
+.cinema-app .dialog .dialog-heading>button:hover{background:#425344;border-color:#dfc38c;color:#fff2d2}
+.cinema-app .dialog .book-index{color:var(--muted);border-bottom:1px solid #baa47422;margin-bottom:13px}
+.cinema-app .dialog .book-index>.book-binding{display:none}
+.cinema-app .dialog .book-index{justify-content:flex-end}
+.cinema-app .dialog :is(.book-binding,.book-hint,.book-index label){color:#bcc2aa}
+.cinema-app .dialog .book-binding{font-family:var(--serif);letter-spacing:1.2px}
+.cinema-app .dialog .book-flow{color:var(--ink)}
+.cinema-app .dialog[open] .book-flow :where(p,li,label,span,strong,blockquote){color:inherit}
+.cinema-app .dialog .book-flow :is(h2,h3,h4,legend){color:#e9dab4}
+.cinema-app .dialog .book-flow :is(small,.muted,.field-help,.scope-label,.scene-sheet-caption){color:var(--muted)}
+.cinema-app .dialog :is(.scene-dialog-intro,.command-introduction){color:#d9dfcc;font-family:var(--serif)}
+.cinema-app .dialog .command-introduction{border-left:2px solid #c7ad73;padding:5px 0 5px 14px;margin-bottom:17px;font-size:16px;line-height:1.85}
+.cinema-app .dialog .book-flow :is(button,a,summary){color:#e4c997}
+.cinema-app .dialog button{border-color:#bba36b70;border-radius:2px;background:#16363a44;color:#e4d5b5;box-shadow:none}
+.cinema-app .dialog button:hover:not(:disabled){background:#405449b3;border-color:#ddc486;color:#fff0ce;transform:none}
+.cinema-app .dialog button:disabled{opacity:.55;border-color:#a3ac9659;color:#b3bdad;background:#17323666}
+.cinema-app .dialog button.primary{background:linear-gradient(105deg,#d4b77c,#e4c995);border-color:#e1c38b;color:#183031;text-shadow:none}
+.cinema-app .dialog button.primary:hover:not(:disabled){background:#f0d8a7;color:#0c2428;border-color:#f8e5be}
+.cinema-app .dialog button.danger{background:#663b35;border-color:#c48972;color:#ffe0ca}
+.cinema-app .dialog button.danger:hover:not(:disabled){background:#834b3e;border-color:#e4ab8c;color:#fff1dc}
+.cinema-app .dialog :is(button,a,input,select,textarea,summary):focus-visible{outline:2px solid #f2dba0;outline-offset:4px}
+.cinema-app .dialog .book-flow :is(input:not([type=checkbox]):not([type=radio]),select,textarea),.cinema-app .dialog .book-index select,.cinema-app .dialog .book-page-counter input{background:#0c2429db;color:#f0e8d5;border:1px solid #9eaa8c80;border-bottom-color:#cbb987a6;border-radius:2px;box-shadow:inset 0 1px 7px #02151a4d;caret-color:#f2dba0}
+.cinema-app .dialog :is(input,textarea)::placeholder{color:#aab8af;opacity:1}
+.cinema-app .dialog :is(input[type=checkbox],input[type=radio]){accent-color:#ddc38c}
+.cinema-app .dialog input[type=file]::file-selector-button{background:#304a43;color:#e9d6aa;border:1px solid #c2ab766b;border-radius:2px;margin-right:14px;padding:5px 12px;cursor:pointer}
+.cinema-app .dialog :is(option,optgroup){background:#173337;color:#eee5d2}
+.cinema-app .dialog .book-flow :is(.panel,.side-note,.guide-card,.advance-panel,.life-person-record,.life-work-card,.receipt-card,.money-card,.research-grid>article,.business-grid>article,.counterfactual-boundary,.entry-memory,.result-equation,.financial-table th,.pane-navigation>button[aria-pressed=true]){background:#0b252a8c;border-color:#b3a47150;color:var(--ink);box-shadow:none}
+.cinema-app .dialog .book-flow :is(.warning-box,.course-paper-warning,.reason,.deadline-summary){color:#f0d0a1;border-color:#b38f61;background-color:#68502b26}
+.cinema-app .dialog .book-flow :is(.error-box,.unsaved-banner,.decision-blocking){background:#5e342c55;border-color:#c58d70;color:#f6d4c0}
+.cinema-app .dialog .book-flow :is(.global-alert,.saved-warning,.test-banner){color:#f6d4c0}
+.cinema-app .dialog .book-flow :is(.choice,.stock-browser>button,.decision-options>div,.routine-step-list>li){background:#173738aa;color:var(--ink);border-color:#b1a77b59}
+.cinema-app .dialog .book-flow :is(.choice:has(input:checked),.stock-browser>button[aria-pressed=true]){background:#405447;border-color:#e0c589;color:#f6e8c9}
+.cinema-app .dialog .book-flow :is(.tag,.save-badge){background:#1b3c39;color:#dec89d;border-color:#b6a37666}
+.cinema-app .dialog .book-flow .finance-answer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));background:#102a2e80;border-color:#b3a47150}
+.cinema-app .dialog .book-flow .finance-answer-grid>div{background:none;border:0;border-bottom:1px solid #b3a47140;padding:15px 18px;break-inside:avoid}
+.cinema-app .dialog .book-flow .finance-answer-grid>div:first-child{background:#6470551a;border-left:2px solid #cfb579}
+.cinema-app .dialog .book-flow .finance-answer-grid strong{color:#f0deb7;font:400 26px/1.5 Georgia,var(--serif)}
+.cinema-app .dialog .book-flow .finance-answer-grid .financial-negative{color:#efb59c}
+.cinema-app .dialog .scene-sheet-account{color:#c5cfb7}
+.cinema-app .dialog .book-flow :is(.scene-attention,.room-responsibilities,.scene-threads){background:none;color:var(--ink)}
+.cinema-app .dialog .book-flow :is(.scene-attention>div,.scene-threads li){color:var(--ink);border-color:#b49c6759}
+.cinema-app .dialog .book-flow :is(.season-focus-choice strong,.season-echo-leaf h3,.season-next-question h3){color:#e9dab4}
+.cinema-app .dialog .book-flow :is(.season-focus-choice span>span,.season-selection-note,.season-echo-leaf>p,.season-focus-notice){color:#c9d1bd}
+.cinema-app .dialog .book-flow :is(.season-choice-origin,.season-choice-date,.opening-paper-date,.course-paper-kicker,time){color:#c3b785}
+.cinema-app .dialog .book-flow dl{border-color:#b7a27140;padding:5px 0 10px}
+.cinema-app .dialog .book-flow dl>div{border-color:#b7a27140}
+.cinema-app .dialog .book-flow dt{color:#b7c2b2}
+.cinema-app .dialog .book-flow dd{color:#eee1c0;font-variant-numeric:tabular-nums}
+.cinema-app .dialog .book-flow .command-facts>div{padding:11px 4px;border-bottom:1px solid #b7a27138;background:none}
+.cinema-app .dialog .command-facts dd{font:400 19px/1.6 var(--serif);color:#f0ddb1}
+.cinema-app .dialog .command-facts>div:nth-child(3) dd{font-size:25px;color:#f2d59b}
+.cinema-app .dialog .confirmation-context{border-color:#b7a27159}
+.cinema-app .dialog :is(.dialog-actions,.echo-continue,.season-focus-footer,.season-recollection-actions,.opening-choice-footer){background:none;border-color:#baa57466}
+.cinema-app .dialog>.dialog-actions{padding-top:15px;margin-top:13px;gap:18px}
+.cinema-app .dialog>.dialog-actions>button:first-child{border:0;border-bottom:1px solid #bda87577;padding-inline:2px;background:none;color:#c3c9b7}
+.cinema-app .dialog>.dialog-actions>button.primary{min-width:184px;letter-spacing:1px}
+.cinema-app .dialog .book-pagination{border-color:#baa5745e}
+.cinema-app .dialog .book-pagination button{color:#e4c997;background:none;border:0;letter-spacing:1px}
+.cinema-app .dialog .book-pagination :is(.book-page-counter,small){color:#c5bea0}
+.cinema-app .dialog .book-page-counter input{font:17px/1.5 Georgia,var(--serif);text-align:center}
+.cinema-app .dialog.command-review{width:min(860px,84vw);height:82dvh;max-height:82dvh;inset:9vh 8vw;margin:auto}
+.cinema-app .dialog.display-journal{width:min(860px,84vw);height:70dvh;max-height:70dvh;inset:15vh 8vw;margin:auto}
+.cinema-app .dialog .journal-storage-intro{margin-bottom:20px;padding-bottom:15px;border-bottom:1px solid #b7a27140}
+.cinema-app .dialog .journal-storage-intro h3{font:400 23px/1.6 var(--serif);margin:3px 0 9px;color:#ebddba}
+.cinema-app .dialog .journal-storage-intro>p:last-child{max-width:68ch;color:#c0caba}
+.cinema-app .dialog .journal-section-label{font:11px/1.7 var(--serif);letter-spacing:2px;color:#c7b681;margin:0 0 6px}
+.cinema-app .dialog .storage-panel>.field{margin-block:16px 20px;color:#d8d0b4}
+.cinema-app .dialog .storage-panel .save-text-pages{padding-top:4px}
+.cinema-app .dialog .journal-storage-actions{padding-top:13px;border-top:1px solid #b7a27140}
+.cinema-app .dialog .journal-storage-actions>button:first-child{border-color:#d5b97e;background:#304b41;color:#f1dfb5}
+.cinema-app .dialog .full-save-text{color:#d7dfcf;background:#091f2573;border-left:1px solid #c1aa75;padding:14px 18px}
+.cinema-app.text-mode .dialog,.cinema-app.text-mode .dialog.scene-workspace,.cinema-app.text-mode .dialog.scene-echo{background-image:none;background-color:#122c30}
+.cinema-app .dialog .book-flow .clock-known-confirmation{display:block;break-inside:auto;border-left:2px solid #cfb579;padding:5px 0 7px 16px;margin-bottom:12px}
+.cinema-app .dialog .book-flow .clock-known-confirmation h3{font:400 19px/1.6 var(--serif);margin:0 0 6px;color:#e9dab4}
+.cinema-app .dialog .book-flow .clock-known-confirmation p,.cinema-app .dialog .book-flow .clock-confirmation-note{font:400 19px/1.6 var(--serif);margin:5px 0 10px;break-inside:avoid}
+.cinema-app .dialog .book-flow .clock-known-confirmation .clock-due-account{padding:3px 0;margin:0 0 5px}
+.cinema-app .dialog .book-flow .clock-due-account strong{font:400 25px/1.5 Georgia,var(--serif);color:#f2d59b;margin-left:16px}
