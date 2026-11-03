@@ -8,12 +8,12 @@ import {todayReadingGroups,type TodayThreadView} from './today-thread.ts'
 import {OpeningObject} from './OpeningObject.tsx'
 import {Dialog} from './Dialog.tsx'
 import {TodayHoldings} from './TodayHoldings.tsx'
+import {TodayLifeChoices} from './TodayLifeChoices.tsx'
 import {ClockAdvance} from './ClockAdvance.tsx'
 import {CommandButton} from './CommandButton.tsx'
 import {MarketSceneChoice} from './MarketSceneChoice.tsx'
 import {makeSharedAction} from './shared-action.ts'
 import {moneyText} from './game-text.ts'
-import {addDays} from '../core/calendar.ts'
 import {RoomTableau} from './RoomTableau.tsx'
 import {sceneMeaning} from './scene-meaning.ts'
 import {relayBusinessTarget} from './relay-player-thread.ts'
@@ -75,8 +75,8 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
    object={<OpeningObject copyMode="tableau" kind="calendar" title="今天的日历" displayTitle="" detail={p.view.date} stageLabel="今天 · 仍可安排" actionLabel={sceneReadingLabel(primary.label)} onActivate={primary.activate} disabled={primary.disabled} textOnly={p.textOnly===true} dayPaper={{kind:'today',state:'ongoing'}} {...(p.view.readOnly?{protection:'readonly' as const}:p.view.hasCandidate||p.view.saveStatus==='conflict'?{protection:'unsaved' as const}:{})}/>}
    record={<><button type="button" className="scene-text-action" onClick={ui('看看工作、其它尝试与原约定',()=>setPage('directions')).activate} aria-label="想想今天 · 看看工作、其它尝试与原约定 ↗">想想今天 ↗</button>{statusFeedback&&!repeatedReadOnly?<p className="moment-status" role="status">{statusFeedback}</p>:null}{calendarStatus?<div className="ecosystem-reading-status">{calendarStatus}</div>:null}</>}
   />
-  {page?<Dialog title={page==='directions'?'今天，想把时间留给什么？':page==='life'?'留点时间给自己':page==='market'?'这次，怎样判断？':page==='holdings'?'保留的持仓':'手头的事'} layout={page==='holdings'?'direct':'book'} className={'opening-paper today-choice-paper'+(page==='holdings'?' today-held-dialog':'')} onClose={()=>setPage(null)} footer={<div className="today-choice-footer">{page!=='directions'?button('返回今天的选择',()=>setPage('directions')):null}{button('先不新增安排，合上这一页',()=>setPage(null))}</div>}>
-   <p className="opening-paper-date">今天 {p.view.date} · {p.features.workbench.quarter}</p>
+  {page?<Dialog title={page==='directions'?'今天，想把时间留给什么？':page==='life'?'留点时间给自己':page==='market'?'这次，怎样判断？':page==='holdings'?'保留的持仓':'手头的事'} layout={page==='holdings'||page==='life'?'direct':'book'} className={'opening-paper today-choice-paper'+(page==='holdings'?' today-held-dialog':page==='life'?' today-life-dialog':'')} onClose={()=>setPage(null)} footer={<div className="today-choice-footer">{page!=='directions'?button('返回今天的选择',()=>setPage('directions')):null}{button('先不新增安排，合上这一页',()=>setPage(null))}</div>}>
+   {page!=='life'?<p className="opening-paper-date">今天 {p.view.date} · {p.features.workbench.quarter}</p>:null}
    {page==='directions'?<><div className="opening-directions today-directions">
     {today.ongoing.length?button(continuing.length?'继续手头的事':'翻看保留的持仓',()=>setPage(continuing.length?'ongoing':'holdings'),continuing.length?'工作、旧约和待收款':'持有的股份，仍在原账户'):null}
     {button('看看工作',()=>choose({runId:p.view.runId,kind:'work',accountId:'personal',entityId:null}))}
@@ -89,7 +89,7 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
     {button('准备一次模拟判断',()=>prepare('market'),'先研究，或写一份委托')}
    </div></>:null}
    {page==='holdings'?<TodayHoldings items={holdings} onChoose={choose}/>:null}
-   {page==='life'?<><p>给自己留一点余地。</p><div className="today-commitments">{(['rest','workspace'] as const).map(kind=>{const terms=p.features.life.work[kind];return <article key={kind}><h3>{terms.title}</h3><p>个人{moneyText(terms.costFen)} · {terms.points}点 · {terms.days}日；今天开始，最早{addDays(p.view.date,terms.days)}实际完成。</p><CommandButton {...commandProps} kind="StartLifeWork" payload={{kind,personId:null,reference:null}} label={kind==='rest'?'核对并留出七天休整':'核对并改善桌椅与照明'} confirm/></article>})}</div>{button('看看相识的人与全部生活记录',()=>{setPage(null);onNavigate('life',{accountId:'personal'})})}</>:null}
+   {page==='life'?<><TodayLifeChoices p={commandProps}/>{button('看看相识的人与全部生活记录',()=>{setPage(null);onNavigate('life',{accountId:'personal'})})}</>:null}
    {page==='market'?<><p>准备一次判断，或先留住现金。</p><div className="opening-directions today-directions">{button('显选一份新的模拟委托',()=>{setPage(null);openOrder()},'自己选账户、标的、方向、股数、限价和原撮合期限')}{research&&!research.state?<article><h3>先整理公开产业线索</h3><p>个人{moneyText(research.costFen)} · {research.actionPoints}点 · {research.days}日</p><CommandButton {...commandProps} kind="ResearchMarket" payload={{definitionId:research.id}} label="核对并开始公开研究" confirm/></article>:<p>这组基础线索已按原记录整理；完整研究和已有委托仍可在原记录核对。</p>}{button('先保留现金，不新增委托',()=>setPage(null),'回到今天，原来的股票与交收不变')}</div></>:null}
    {page==='ongoing'?<>{dueCustomers.length?<section><h3>已到期、尚未收取的原客户款</h3>{dueCustomers.map(customer=>{const number=p.features.relay!.customers.filter(original=>original.businessId===customer.businessId).findIndex(original=>original.id===customer.id)+1,identity=relayBusinessTarget(p,customer.businessId),target=identity?{...identity,kind:'customer' as const,customerId:customer.id}:null,next=target?openingFocusFor(p,'relay',{relayTarget:target,accountId:target.accountId}):null;return <article key={customer.id}><p>{p.features.relay!.businesses.length>1?'中转站'+customer.businessId.slice(-6)+' · ':null}原客户{number} · 已到期{moneyText(customer.dueReceivableFen)}，尚未实收；本入口不收款。</p>{next&&target?button('翻到这位原客户的到期款记录',()=>{setPage(null);onNavigate('relay',{accountId:target.accountId,relayTarget:target,recordId:customer.id,openRecord:true})}):<p className="warning-box">这位原客户的服务身份暂不可确认，请先从原服务记录重新选择；没有换到另一客户或账户。</p>}</article>})}</section>:null}<p>按原对象翻阅，不会重新付费或新增约定。</p>{continuing.length?<section><h3>仍在继续的事</h3><div className="today-ongoing">{continuing.map(item=><article key={JSON.stringify(item.focus)}><p className="opening-paper-date">{item.classification==='carry'?'从'+item.originQuarter+'留下，仍在继续':'本季原安排'}{item.wait?' · 下一反馈 '+item.wait.date:''}</p><h3>{item.title}</h3><p>{item.line}</p>{button(item.marketContinuation?.label??'回到这件原安排',()=>choose(item.focus))}</article>)}</div></section>:null}{holdings.length?<section><h3>保留的持仓</h3><p>这些股份仍在原账户；无需为了安排生活而卖出。</p><div className="today-ongoing">{holdings.map(item=><article key={JSON.stringify(item.focus)}><p className="opening-paper-date">{item.originQuarter?'来源 '+item.originQuarter:'原持仓'} · 截至{p.view.date}</p><h3>{item.title}</h3><p>{item.line}</p>{button('查看这份持仓',()=>choose(item.focus))}</article>)}</div></section>:null}</>:null}
   </Dialog>:null}

@@ -27,7 +27,7 @@ function elements(value:unknown,path='root'):Element[]{
  if(typeof value.type==='function'&&['VideoSceneChoice','CourseSceneChoice','MarketSceneChoice'].includes(value.type.name)&&typeof value.props.children==='function')return elements(value.props.children(()=>{}),path+'/drawer')
  const own=[value,...elements(value.props.children,path+'/children')]
  if(typeof value.type==='function'&&value.type.name==='RoomTableau')for(const key of ['heading','facts','decisions','record','object'])own.push(...elements(value.props[key],path+'/'+key))
- if(typeof value.type==='function'&&['OpeningObject','ClockAdvance','CommandButton','TodayHoldings'].includes(value.type.name)){const fn=value.type as (props:Record<string,unknown>)=>unknown;own.push(...elements(mounted(path,()=>fn(value.props)),path+'/render'))}
+ if(typeof value.type==='function'&&['OpeningObject','ClockAdvance','CommandButton','TodayHoldings','TodayLifeChoices'].includes(value.type.name)){const fn=value.type as (props:Record<string,unknown>)=>unknown;own.push(...elements(mounted(path,()=>fn(value.props)),path+'/render'))}
  return own
 }
 const words=(value:unknown):string=>typeof value==='string'||typeof value==='number'?String(value):Array.isArray(value)?value.map(words).join(''):isValidElement<Record<string,unknown>>(value)?words(value.props.children):''
