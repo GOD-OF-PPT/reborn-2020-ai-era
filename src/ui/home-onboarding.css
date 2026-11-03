@@ -1,0 +1,41 @@
+.cinema-app .entry-card.entry-choice-stage{
+ --ink:#e9e5d7;--muted:#b8c2b7;--gold:#d7b87d;--border:#baac7e45;
+ color-scheme:dark;color:var(--ink);width:min(1040px,90vw);padding:28px 36px;overflow:visible;
+ background:#122c30 url('../../assets/ui-redesign/cinematic/night-journal-modal-v1.png') center/100% 100%;
+ border:1px solid #ad976158;border-radius:3px;box-shadow:0 30px 90px #00131dbb;
+}
+.cinema-app .entry-card.entry-choice-stage>.eyebrow{color:var(--gold);font:12px/1.8 var(--serif);letter-spacing:2px}
+.cinema-app .entry-card.entry-choice-stage>h2{font:400 29px/1.5 var(--serif);color:#f0e4c7;margin:6px 0 18px;letter-spacing:1px}
+.cinema-app .entry-choice-stage>.entry-choice-form{display:flex;flex:1;min-height:0;margin:0}
+.cinema-app .entry-choice-stage .entry-choice-layout{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:34px;width:100%;align-items:center}
+.cinema-app .entry-choice-stage .entry-choice-main{min-width:0}
+.cinema-app .entry-choice-stage fieldset{border:0;padding:0;margin:0;min-width:0}
+.cinema-app .entry-choice-stage legend{color:#d7c79c;font:15px/1.6 var(--serif);margin-bottom:12px}
+.cinema-app .entry-choice-stage :is(.entry-backgrounds,.entry-wishes){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.cinema-app .entry-choice-stage .entry-approaches{display:grid;gap:12px}
+.cinema-app .entry-choice-stage .entry-option{display:flex;align-items:flex-start;gap:12px;padding:16px 15px;border:1px solid var(--border);border-left:3px solid transparent;background:#0b252a77;cursor:pointer;transition:background .16s,border-color .16s}
+.cinema-app .entry-choice-stage .entry-approach-field .entry-option{padding-top:12px;padding-bottom:12px}
+.cinema-app .entry-choice-stage .entry-option:hover{border-color:#d7b87d99;background:#29433ccc}
+.cinema-app .entry-choice-stage .entry-option:has(input:checked){border-color:#d7b87d99;border-left-color:#e4c995;background:#40544799}
+.cinema-app .entry-choice-stage .entry-option:focus-within{outline:2px solid #f2dba0;outline-offset:3px}
+.cinema-app .entry-choice-stage .entry-option input{flex:none;min-height:0;width:17px;height:17px;margin:6px 0 0;accent-color:#ddc38c}
+.cinema-app .entry-choice-stage .entry-option strong{display:block;color:#f1e5c9;font:400 20px/1.5 var(--serif)}
+.cinema-app .entry-choice-stage .entry-option small{display:block;color:var(--muted);font:13px/1.7 var(--serif);margin-top:4px}
+.cinema-app .entry-choice-stage .entry-note{font:13px/1.7 var(--serif);color:var(--muted);margin:14px 0 0}
+.cinema-app .entry-choice-stage .entry-budget{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:18px 0 0;margin:24px 0 0;border-top:1px solid var(--border)}
+.cinema-app .entry-choice-stage .entry-budget dt{font:13px/1.6 var(--serif);color:var(--muted)}
+.cinema-app .entry-choice-stage .entry-budget dd{font:400 25px/1.5 var(--serif);color:#efdab0;margin:5px 0 0}
+.cinema-app .entry-choice-stage .entry-choice-aside{border-left:1px solid #bba36b55;padding-left:25px;align-self:stretch;display:flex;flex-direction:column;justify-content:center}
+.cinema-app .entry-choice-stage .entry-aside-date{color:var(--gold);font:13px/1.6 var(--serif);letter-spacing:2px;margin:0 0 16px}
+.cinema-app .entry-choice-stage .entry-selection{margin:0;display:grid;gap:12px}
+.cinema-app .entry-choice-stage .entry-selection dt{font:12px/1.6 var(--serif);color:var(--muted)}
+.cinema-app .entry-choice-stage .entry-selection dd{margin:3px 0 0;color:#e9dab4;font:17px/1.6 var(--serif)}
+.cinema-app .entry-choice-stage .entry-aside-thought{font:21px/1.9 var(--serif);color:#bec8b6;margin-top:28px}
+.cinema-app .entry-choice-stage blockquote{margin:18px 0 0;padding:0 0 0 12px;border-left:2px solid #bfa56b;color:#dbd5bc;font:15px/1.8 var(--serif)}
+.cinema-app .entry-choice-stage .entry-seed-link{align-self:flex-start;margin-top:6px;min-height:0;border:0;border-bottom:1px solid var(--border);background:none;padding:3px 0;font:13px/1.6 var(--serif);color:#dfc38c}
+.cinema-app .entry-choice-stage>.entry-step-actions{flex:none;border-top:1px solid #bba36b55;margin-top:22px;padding-top:16px;align-items:center}
+.cinema-app .entry-choice-stage>.entry-step-actions button{font:16px/1.6 var(--serif);color:#e4d5b5;background:none;border:1px solid #bba36b70;padding:10px 18px}
+.cinema-app .entry-choice-stage>.entry-step-actions button.primary{background:linear-gradient(105deg,#d4b77c,#e4c995);color:#183031;border-color:#e1c38b}
+.cinema-app .entry-choice-stage>.entry-step-actions button:hover:not(:disabled){background:#405449;color:#fff0ce}
+.cinema-app .entry-choice-stage>.entry-step-actions button.primary:hover:not(:disabled){background:#f0d8a7;color:#0c2428}
+.cinema-app .entry-choice-stage :is(button,input,summary):focus-visible{outline:2px solid #f2dba0;outline-offset:3px}
