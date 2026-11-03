@@ -26,7 +26,11 @@ function personalJob(p:Input,thread:PlayerThreadView){
 export function personalDayProgressBrief(p:Input,thread:PlayerThreadView,notice:{date:string;text:string;brief?:string;frame:EchoFrame|null}):string|null{
   const job=personalJob(p,thread),frame=notice.frame
   if(!job||job.status!=='running'||p.view.date>=job.completeAt||notice.date!==p.view.date||p.view.saveStatus!=='saved'||p.view.hasCandidate)return null
-  if((notice.brief??sceneTimeNarrative(notice.date,notice.text))!==p.view.date+'。')return null
+  const orderFeedback=notice.text.includes('那份原委托，有了新的实际反馈。')
+    ?p.features.firstOrder.status==='expired'?'委托答复期限已过。':'原委托有了新反馈。'
+    :''
+  const brief=notice.brief??sceneTimeNarrative(notice.date,notice.text)
+  if(brief!==p.view.date+'。'&&(!orderFeedback||brief!==orderFeedback))return null
   if(!frame||frame.dateAfter!==p.view.date||frame.dateBefore>=frame.dateAfter||frame.quarterChanged||frame.pointsBefore!==frame.pointsAfter||frame.reservedBefore!==frame.reservedAfter||frame.spentBefore!==frame.spentAfter||frame.accounts.some(account=>account.before!==account.after))return null
   try{isoDate(frame.dateBefore)}catch{return null}
   if(frame.pointsAfter!==p.view.budget.available||frame.reservedAfter!==p.view.budget.reserved||frame.spentAfter!==p.view.budget.spent)return null
@@ -36,9 +40,6 @@ export function personalDayProgressBrief(p:Input,thread:PlayerThreadView,notice:
     return current.length!==1||current[0]!.availableFen!==account.after
   }))return null
   const activity=job.kind==='rest'?'休整还在继续':'住处改善还在进行'
-  const orderFeedback=notice.text.includes('那份原委托，有了新的实际反馈。')
-    ?p.features.firstOrder.status==='expired'?'委托答复期限已过。':'原委托有了新反馈。'
-    :''
   return `${orderFeedback}${activity}，预计${job.completeAt}结束。`
 }
 

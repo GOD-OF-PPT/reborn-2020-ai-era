@@ -6,6 +6,7 @@ import {savedSceneResult} from './scene-result.ts'
 import {sceneCashResult} from './scene-cash-result.ts'
 import {equityReportBrief} from './equity-invitation-result.ts'
 import {relayPrepaidSupportBrief} from './relay-support-settlement.ts'
+import {waitCauseBrief} from './scene-feedback-copy.ts'
 import type {PlayingView,PlayFeatures} from './game-types.ts'
 
 const first=(text:string)=>text.includes('。')?text.slice(0,text.indexOf('。')+1):text
@@ -49,7 +50,9 @@ export function waitSceneResult(result:PublicWaitResult,current:PlayingView):{te
  const text=[cash,cause,meaning,'日历从'+before.date+'走到'+last.date+'。',retained.length?'这期间有'+new Set(retained.map(row=>row.sourceId)).size+'笔自己的原款到期，未收款仍保留，逐笔依据可翻原账。':null,note].filter(Boolean).join(' ')
  const singleReport=!cash&&retained.length===0?equityReportBrief(before,last,paused):null
  const supportBrief=retained.length===0?prepaidSupportRangeBrief(before,last,paused):null
- const brief=[stopped?'已经按你的选择停下。':null,cash?first(cash):null,singleReport??supportBrief??first(cause),singleReport?null:important?.label,partial?'已保存部分保留，后续等候尚未保存。':retryOnly?retryNote:null].filter(Boolean).join(' ')
+ const causeBrief=singleReport??supportBrief??waitCauseBrief(last.date,cause,paused,old.firstOrder,features.firstOrder)
+ const wageAlreadySummarized=!!cash&&first(cause)===last.date+'。'&&paused.length===1&&paused[0]!.kind==='result'&&causeBrief===paused[0]!.label&&last.operations?.payroll.some(row=>row.id===paused[0]!.sourceId&&row.kind==='salary'&&row.amountFen>0&&row.through===last.date&&!before.operations?.payroll.some(old=>old.id===row.id))
+ const brief=[stopped?'已经按你的选择停下。':null,cash?first(cash):null,wageAlreadySummarized?null:causeBrief,singleReport||important?.label===causeBrief?null:important?.label,partial?'已保存部分保留，后续等候尚未保存。':retryOnly?retryNote:null].filter(Boolean).join(' ')
  return {text,brief,frame}
 }
 
