@@ -15,3 +15,7 @@ WIP558e75ea0081b55aace3579caf5bdf28c9bf1f0f（父af0c5d7b）44精确owned/delta�
 真正原612→613全wire差分13127/node24915仍evaluate，当前没有result/failure，不重启或改源，子步骤task[]。原71876继续原416kernel/459codec和原命令，当前已存613Aug10，正常2025/80万board签署治理/整个U6/goal未完。Main457/DB未动，页面兼容开发测试0，67旧sealed/P3全保。
 
 较晚窗口诊断已返回：候选463同原612→613、120秒后名义1秒/实际5394.239ms/286样本，80.98% self在sumMoney、96.61% inclusive在assertLedger，调用来自meter供应费用处理；不是首段facts查找，也不是整步性能或新保存。副本仅自有SIGTERM，原71876/完整差分13127未触碰。本轮不改money/timer第二热点，先等当前fact全wire；后续若优化任何金额累加，先守BigInt精确/安全整数与原错误/边界，不放限额或删校验。
+
+较晚诊断/原超时对照提交80f16cca193c20557f669ad19edf460a9a431adc（父558e75ea），42 owned/42 delta，index/commit blob/字节/SHA/mode全同、index空未push；0新增产品源改，原/完整差分活输出未stage。late-probe子26普通文件完整STOP/seal，67旧加该子=68；父fact子与原producer仍active不能封。当前事实索引候选仍WIP，完整原613差分13127尚未返回，不声称加速/接受/完成。
+
+完整差分13127已实际exit0：原612同原613命令，候选codec/全Run往返与原真实613全部10064570B/SHAed051a22…c2274逐字同。命令+codec段1755347.10ms，原journal step1346030ms（console1346034ms），不证明整步提速，长日期问题保持。定向同完整normal文件13251仍在跑，完成后按实际收尾，当前task仍[ ]。

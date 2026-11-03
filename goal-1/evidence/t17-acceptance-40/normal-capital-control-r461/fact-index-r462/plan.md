@@ -21,3 +21,8 @@ WIP558e75ea0081b55aace3579caf5bdf28c9bf1f0f（父af0c5d7b）44精确owned/delta�
 当前完整差分仍evaluate，早20s样本只能代表初始runtime.validate。另独立候选463同612/613副本在120秒后采约1秒CPU，delay+20s watchdog，仅终止clone自身，不碰原71876或差分13127，不新增第二产品优化；自检门槛沿已验证probe02，所有结果保持局部/未保存身份。
 
 较晚窗口诊断已返回：候选463同原612→613、120秒后名义1秒/实际5394.239ms/286样本，80.98% self在sumMoney、96.61% inclusive在assertLedger，调用来自meter供应费用处理；不是首段facts查找，也不是整步性能或新保存。副本仅自有SIGTERM，原71876/完整差分13127未触碰。本轮不改money/timer第二热点，先等当前fact全wire；后续若优化任何金额累加，先守BigInt精确/安全整数与原错误/边界，不放限额或删校验。
+
+较晚诊断/原超时对照提交80f16cca193c20557f669ad19edf460a9a431adc（父558e75ea），42 owned/42 delta，index/commit blob/字节/SHA/mode全同、index空未push；0新增产品源改，原/完整差分活输出未stage。late-probe子26普通文件完整STOP/seal，67旧加该子=68；父fact子与原producer仍active不能封。当前事实索引候选仍WIP，完整原613差分13127尚未返回，不声称加速/接受/完成。
+
+## 差分结束后的定向时限复核（不改限时）
+原613候选evaluate已返回但仍需codec完整往返/全wire终点检查。结束后释放该大型副本，再只定向重跑同一完整relay-normal.test.ts（两个原case/原120s），核原时限红是否仍复现；不改测试/规则/输入、不与新批绿混计。新旧原红保，若定向过只能说同源两个case另过，不能把旧13批次87/88改写成一次全绿。事实查找局部优化的接受不等于长日期整步性能通过；较晚sumMoney热点保给后续独立验证，不合并另一产品改动。
