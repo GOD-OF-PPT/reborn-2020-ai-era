@@ -57,3 +57,8 @@ money-sum-r464三文件先落，基463，仅验证sumMoney已证热点的安全�
 
 ## 当前同一恢复任务的下一只读诊断ledger-prefix-r470
 money验证已封70，但完整日期步尚无提速；本子先三文件后仅用原实际612→613新增40笔receipt做applyLedger短回放/Profiler自身取样，区分历史核验、复制/GC、金额与账本之外成本。0产品源改、0新游戏命令、不改原71876/策略、不接Main/DB，全部原完整目标保；compat0。
+
+## 2026-11-03｜缓存诊断已封存；新增保存容量失败优先
+诊断提交56f7116b831f83a4e9e0da207ee62e95895eed2c（父920a8904）38精确owned/delta、0产品改、全blob/字节/SHA/mode核同、index空未push。ledger-prefix-r470已STOP/fullseal23普通文件，marker 06e68b4fd9cedee55c9a11e37934a87a9c53df676c1b6bef8bf92f1bfb5027e9；原70加本子=71完整封存，禁止向该子追加。40笔真实组件前缀/原receipt字段全同，重复同一ledger三次均解析47156条，有据定位预算满清表；仅诊断未修缓存。三子累计review齐，原所有不利/未验保。
+本次post预期原进程live的检查失败后，重新读真实71876工具终态exit1与execution-r1/result/terminal/stopped，确认原进程已在2026-11-03T07:09:37.520Z因SAVE_TOO_LARGE停止，不再宣称其运行。第624条normal-capital-v2:624/AdvanceTime/Oct20未保存，原物理head仍623/2024Oct10/10390858B/42aa4462…29cdc；已无损复制到ledger-prefix-post-commit-01/last-saved623.json并保全部closed文件hash与pending命令。源exact/driver未动；旧execution已STOP但尚待独立623完整codec/前缀审计后fullseal，父root仍active不seal。不要poll/restart已terminal71876/15729或改写旧输出。
+当前优先级覆盖上一“先cache修复”：先按原623审计输入、封存失败现场→核保存编码容量并在原10MiB encoded/256MiB logical/5m nodes/depth等guard内寻无损方案（原level3 preferred、可考察有界高压缩fallback，尚未实现/验证），不得提高限额、删历史、造成功624 wire或跳过原失败命令→按精确623控制点接回原624及Q4/2025完整策略；缓存预算修复合同保留后续，不能替代保存修缮。仍原完整2025/80万董事实际签署治理/17+5深态/最终U6及原后续全组合/T17其余/PNG0of3/真人0/P3正式62与22未跑/M01须明确恢复/T18最后/goal未完成。Main457/DB未动，全部兼容开发测试0，无push/deploy/外发/新委派/global memory写。
