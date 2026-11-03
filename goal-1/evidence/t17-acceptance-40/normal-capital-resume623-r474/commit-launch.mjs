@@ -1,0 +1,26 @@
+import fs from 'node:fs'
+import {json,hash,ident,blobOid,proof,git,verifySeal} from '../../t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs'
+const root='goal-1/evidence/t17-acceptance-40/normal-capital-resume623-r474',old='goal-1/evidence/t17-acceptance-40/normal-capital-control-r461',parent='a87315126054b39ff0a976906ff7570ca05a9259'
+if(git(['rev-parse','HEAD']).toString().trim()!==parent || git(['diff','--cached','--name-only']).length || fs.existsSync(root+'/stopped.json') || fs.existsSync(root+'/execution-r1/stopped.json')) throw Error('EXACT_ACTIVE_LAUNCH_REQUIRED')
+const launch=json(root+'/execution-launch.json'),session=json(root+'/execution-session.json'),pin=json(root+'/launch-pin.json')
+if(launch.childPid!==62571 || session.sessionId!==83560 || session.childPid!==launch.childPid || launch.initialRevision!==623 || launch.firstOriginalCommand.commandId!=='normal-capital-v2:624') throw Error('SAME_ORIGINAL_SINGLE_CONTINUATION_REQUIRED')
+process.kill(launch.childPid,0)
+for(const row of pin.files) if(hash(fs.readFileSync(row.path))!==row.sha256) throw Error('LIVE_AUTHOR_CODE_OR_INPUT_CHANGED')
+const protectedSeals=json(old+'/preservation-r474-live-01.json').fullSeals
+if(protectedSeals.length!==73) throw Error('EXACT73_REQUIRED')
+for(const row of protectedSeals) verifySeal(row.root)
+const paths=[...['execution-launch.lock','execution-launch.json','execution-session.json','preparation-readback.json','tasks.md','continuation.md','validation-progress.md','commit-launch.mjs'].map(name=>root+'/'+name),...[old+'/plan.md',old+'/tasks.md',old+'/continuation.md',old+'/preservation-r474-live-01.json']].sort()
+if(paths.some(name=>name.startsWith(root+'/execution-r1/') || name===root+'/execution.stdout.log' || name.startsWith('src/') || name==='goal-1/plan.md' || name==='goal-1/tasks.md')) throw Error('LIVE_OUTPUTS_AND_PRODUCT_AND_MIXED_MASTERS_EXCLUDED')
+fs.writeFileSync(root+'/launch-owned.json',JSON.stringify({at:new Date().toISOString(),parent,paths,selfExcluded:'launch-owned.json',activeSession:83560,childPid:62571,taskComplete:false,compatibility:0},null,2)+'\n',{flag:'wx'})
+paths.push(root+'/launch-owned.json');paths.sort()
+const rows=paths.map(name=>({...ident(name),oid:blobOid(fs.readFileSync(name))}))
+git(['add','-f','--',...paths])
+const staged=git(['diff','--cached','--name-only','-z']).toString().split(String.fromCharCode(0)).filter(Boolean).sort()
+if(!staged.length || staged.some(name=>!paths.includes(name))) throw Error('EXACT_LAUNCH_DELTA_REQUIRED')
+const index=proof(rows)
+git(['commit','-m','Record the single original623 recovery execution and pinned inputs'])
+const commit=git(['rev-parse','HEAD']).toString().trim(),delta=git(['diff-tree','--no-commit-id','--name-only','-r','-z',commit]).toString().split(String.fromCharCode(0)).filter(Boolean).sort()
+if(JSON.stringify(delta)!==JSON.stringify(staged) || git(['diff','--cached','--name-only']).length) throw Error('EXACT_COMMIT_DELTA_REQUIRED')
+const readback=proof(rows,commit)
+fs.writeFileSync(root+'/launch-readback.json',JSON.stringify({at:new Date().toISOString(),commit,parent,owned:paths.length,delta:staged.length,index,readback,indexEmpty:true,notPushed:true,activeSession:83560,childPid:62571,productChanges:0,taskComplete:false,wholeU6Complete:false,compatibility:0},null,2)+'\n',{flag:'wx'})
+console.log({commit,owned:paths.length,delta:staged.length,activeSession:83560,childPid:62571,indexEmpty:true,notPushed:true,taskComplete:false})

@@ -4,7 +4,7 @@
   - 控制拒绝/实际函数尾接trace：5种实际驱动函数控制fixture完整624后命令尾/状态同，10类非法控制点拒绝，4类first-kernel/golden围栏通过；非正常人生证明。
   - 原24函数/while/2025源身份：所有24原函数、原while/季尾和2025区段逐字同，原normal-capital-v2命名保持。
   - 实际preflight：真实623导入/当前公开投影和原624 preview allowed，actual exit0/0命令，真实execution journal/head尚未创建。
-  - 单执行与原624全状态围栏：
+  - 单执行与原624全状态围栏：83560/child62571已启动Core416/codec473，first envelope与原624强围栏、重算全文与原未写golden比；当前尚在评估，未当已保存。
   - 完整2025/实际Sign/治理结果：
   - [杠精审查]：
   - 提交/读回：
