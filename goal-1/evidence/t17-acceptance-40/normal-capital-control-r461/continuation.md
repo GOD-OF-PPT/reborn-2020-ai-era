@@ -110,3 +110,12 @@ money验证已封70，但完整日期步尚无提速；本子先三文件后仅�
 
 ## 保存编码修缮限定提交已齐
 3694b363e4dd74428384cb2cbeb2e4237a1ca601：473/981两源、91精确owned/delta、全部blob/字节/SHA/mode核同、index空未push；最终同源212/212、类型/构建通过。旧623wire全部同，原未写624全状态同，9876634B在原10MiB内且旧reader可读，默认首选/所有guard不变。当前只完成编码修缮，原正常624未实际保存/Main未更新，下一新producer按原623控制点/原624及完整Q4/2025恢复，不重启已封旧execution。缓存预算修复合同仍待，所有原U6/goal及后续责任保，compat0。
+
+## 保存容量修缮最终封存与后续
+本地feature3694b363e4dd74428384cb2cbeb2e4237a1ca601、closuref286d1b92f5ea5d06b8f60565471793ade43623c；473/981两owned源，closure76精确owned/17delta、全部index/commit blob/字节/SHA/mode核同、index空未push。save-capacity-r471已STOP/fullseal62普通文件，marker f275da87a91b80ca10d87cb7d5b6c3021048e09b3609cf86b879e70ad809bfd1；72旧加本子=73完整封存，禁止向该子追加，post在save-capacity-post-commit-01。
+最终同源212/212（两批/22完整文件）、类型/构建过；旧623完整wire不变。原未写624的9876634B/d6d40872…70e118e在原10MiB内、全原GameRun同且新codec确定性，按完全同wire显式复用旧reader证明；原old624超限红、472首轮60s红及全部原负例保。所有额度/错误/全历史/权限/保存规则不变，Main457/DB未动、页面compat0。
+实际旧r461/execution-r1仍623/Oct10、已STOP/fullseal14；624从未真正保存，不poll/restart旧71876/15729或向旧producer追加。下一同父任务新producer恢复原623→原normal-capital-v2:624/Oct20再接完整Q4/2025：Core/registry仍416，codec用已验证473，原23策略函数/命名/loop不变；先测试准确控制点再启动。公开已核控制点：Q4首期command622、Oct2—Oct30 running、原guided支持Oct30—Nov6 planned、AP1已用/1预留/2可用、lastBoughtMonth2024-09；旧pause/确认/费用/屏障/全部20客户与max2期不省。现成proposal只当golden全状态比对，不能注入充当实际执行。缓存预算修复合同保留，不能覆盖保存恢复。
+原正常2025/80万董事实际签署治理、全部17+5深态/最终U6及原所有后续组合/T17其余/PNG0of3/真人0/P3正式62与22未跑/M01须明确恢复/T18最后/完整goal仍未完成；父root active不seal。93938、69366、7555、63746、59915、31239、49456、56251、60598、17071、60238、59466、48710、52856、16921、27403均已terminal，勿再poll这些已结束句柄。无push/deploy/外发/新委派/global memory写。
+
+## 同一U6新producer normal-capital-resume623-r474准备
+已先input/plan/tasks和原623/pin/416与473源锁定；待控制拒绝、实际函数trace/源等值与真实preflight后才单执行。准确栈为原624 pending send，先原send624再finishPeriod/ack，原count已1再同while/季尾和原2025；没有while内额外distribute。实际重算624全文与原未写golden比，只当断言不注入。旧r461/execution-r1及所有73seal不动，Main/DB/compat0不操作，原完整目标保。

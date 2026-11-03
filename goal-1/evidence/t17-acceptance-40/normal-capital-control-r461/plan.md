@@ -68,3 +68,6 @@ money验证已封70，但完整日期步尚无提速；本子先三文件后仅�
 
 ## 保存编码修缮限定提交已齐
 3694b363e4dd74428384cb2cbeb2e4237a1ca601：473/981两源、91精确owned/delta、全部blob/字节/SHA/mode核同、index空未push；最终同源212/212、类型/构建通过。旧623wire全部同，原未写624全状态同，9876634B在原10MiB内且旧reader可读，默认首选/所有guard不变。当前只完成编码修缮，原正常624未实际保存/Main未更新，下一新producer按原623控制点/原624及完整Q4/2025恢复，不重启已封旧execution。缓存预算修复合同仍待，所有原U6/goal及后续责任保，compat0。
+
+## 同一U6新producer normal-capital-resume623-r474准备
+已先input/plan/tasks和原623/pin/416与473源锁定；待控制拒绝、实际函数trace/源等值与真实preflight后才单执行。准确栈为原624 pending send，先原send624再finishPeriod/ack，原count已1再同while/季尾和原2025；没有while内额外distribute。实际重算624全文与原未写golden比，只当断言不注入。旧r461/execution-r1及所有73seal不动，Main/DB/compat0不操作，原完整目标保。
