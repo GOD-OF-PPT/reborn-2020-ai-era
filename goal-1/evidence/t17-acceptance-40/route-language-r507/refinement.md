@@ -1,0 +1,2 @@
+507实际开局发现生活入口entityId不是null，而是原selection字符串rest/workspace/person。旧保守显示边界因此漏了这三类短名。按公开scope entry且无invalidReason接受原selection token，仍拒绝真实job/promise身份；补正常initial投影与已安排life对照检查，最终508。507既有检查及实际观察保留，不冒最终源。
+508正常Jan8方向页还暴露原课程公开开放日被通用写为下次反馈。仅在原公开course-unavailable阶段、通用课程入口下改称开放日期，并在选中提示说明尚未开放。真实工作/生活反馈日期不改，最终509；508正常连续流程明确作为相同操作/主幕来源复用，课程显示再核最终版。

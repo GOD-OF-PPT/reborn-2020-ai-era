@@ -7,6 +7,7 @@ import type {PlayFeatures,PlayingView} from './game-types.ts'
 import {seasonFocusChoices,seasonFocusGroupFor,type SeasonFocusChoice} from './season-thread.ts'
 import {SeasonFocusChoices,SeasonFocusDetails,seasonChoicePage} from './SeasonFocusChoices.tsx'
 import {Dialog} from './Dialog.tsx'
+import {seasonChoiceDateLabel,seasonChoiceDirection,seasonChoiceTitle} from './season-choice-copy.ts'
 
 // Normal in-memory gameplay projections, with no storage or codec APIs.
 const registry=createCampaignRegistry()
@@ -28,7 +29,7 @@ it('shows three real current objects together with their sources and next feedba
  for(const c of continuing)expect(html).toContain(c.title)
  expect(html).toContain('2020-01-08')
  expect(html).toContain('2020-01-31')
- expect(html).toContain('来源 2020-01-01')
+ expect(html).toContain('来源 2020-Q1 · 2020-01-01')
  expect(html).not.toContain('checked=""')
  expect(html).not.toContain('screen-book')
  expect(html).not.toContain('工资与经营收入分别核对')
@@ -66,7 +67,7 @@ it('preserves provided historical and unavailable metadata instead of silently s
  const historical:SeasonFocusChoice={...continuing[0]!,scope:'history',originQuarter:'2020-Q1',date:'2020-01-01',nextDate:null}
  const blocked:SeasonFocusChoice={...continuing[1]!,disabledReason:'原对象需要重新选择。'}
  const html=renderToStaticMarkup(<SeasonFocusChoices choices={[historical,blocked]} selectedId={null} currentDate="2020-04-01" label="记录" onSelect={vi.fn()}/>)
- expect(html).toContain('历史回看 · 2020-Q1 · 来源 2020-01-01')
+ expect(html).toContain('历史回看 · 来源 2020-Q1 · 2020-01-01')
  expect(html).toContain('原对象需要重新选择。')
  expect(html).toContain('disabled=""')
  expect(html).toContain('查看'+blocked.title+'的详情')
@@ -79,4 +80,52 @@ it('keeps Dialog reading pagination by default and makes direct layout explicit'
  expect(direct).not.toContain('screen-book')
  expect(direct).toContain('dialog-direct-body')
  expect(direct).toContain('关闭对话框')
+})
+
+
+it('presents normal unstarted directions as readable purposes without changing identity or beginning work',()=>{
+ const before=JSON.stringify(all),directions=all.filter(c=>c.scope==='entry'),video=directions.find(c=>c.focus.kind==='video')!,course=directions.find(c=>c.focus.kind==='course')!
+ expect(seasonChoiceTitle(video)).toBe('尝试视频创作')
+ expect(seasonChoiceTitle(course)).toBe('筹备一门课')
+ expect(seasonChoiceDirection(video)?.next).toContain('再决定')
+ const markup=renderToStaticMarkup(<SeasonFocusChoices choices={[video,course]} selectedId={video.id} currentDate={view.date} label="方向" onSelect={vi.fn()}/>)
+ expect(markup).toContain('查看尝试视频创作的详情')
+ expect(markup).toContain('value="'+video.id+'"')
+ expect(markup).not.toContain('从一个真实账号与视频尝试开始')
+ expect(JSON.stringify(all)).toBe(before)
+})
+
+it('does not turn existing work, life arrangements or historical objects into new directions',()=>{
+ for(const choice of continuing){expect(seasonChoiceDirection(choice)).toBeNull();expect(seasonChoiceTitle(choice)).toBe(choice.title)}
+ // Identity variants test the display boundary only, not new historical gameplay.
+ const entry=all.find(c=>c.scope==='entry'&&c.focus.kind==='video')!
+ for(const choice of [{...entry,scope:'history' as const},{...entry,focus:{...entry.focus,entityId:'existing-object'}},{...entry,focus:{...entry.focus,businessId:'existing-business'}},{...entry,disabledReason:'原对象需要重新选择。'}]){
+  expect(seasonChoiceDirection(choice)).toBeNull()
+  expect(seasonChoiceTitle(choice)).toBe(entry.title)
+ }
+})
+
+
+it('recognizes normal life entry tokens without confusing them with actual life jobs',()=>{
+ const initialProjection=registry.runtime!.project!(initial)
+ const initialView:PlayingView={...projectRun(initial),features:initialProjection,saveStatus:'saved',busy:false,readOnly:false,readOnlyReason:null,hasCandidate:false,pendingRevision:null}
+ const entries=seasonFocusChoices({view:initialView,features:initialProjection as unknown as PlayFeatures}).filter(c=>c.focus.kind==='life')
+ const rest=entries.find(c=>c.focus.kind==='life'&&c.focus.selection==='rest')!,workspace=entries.find(c=>c.focus.kind==='life'&&c.focus.selection==='workspace')!,person=entries.find(c=>c.focus.kind==='life'&&c.focus.selection==='tang-ying')!
+ expect(rest.focus.entityId).toBe('rest')
+ expect(seasonChoiceTitle(rest)).toBe('给自己放几天假')
+ expect(seasonChoiceTitle(workspace)).toBe('改善住处')
+ expect(seasonChoiceTitle(person)).toBe('和唐萤相处')
+ expect(seasonChoiceDirection(continuing.find(c=>c.focus.kind==='life')!)).toBeNull()
+})
+
+
+it('distinguishes the public course opening date from feedback on an actual arrangement',()=>{
+ const course=all.find(c=>c.focus.kind==='course'&&c.scope==='entry')!,rest=continuing.find(c=>c.focus.kind==='life')!
+ expect(course.stage).toBe('course-unavailable')
+ expect(seasonChoiceDateLabel(course,view.date)).toBe('开放日期')
+ expect(seasonChoiceDirection(course)?.next).toContain('尚未开放')
+ expect(seasonChoiceDateLabel(rest,view.date)).toBe('下次反馈')
+ const detail=renderToStaticMarkup(<SeasonFocusDetails choice={course} currentDate={view.date}/>)
+ expect(detail).toContain(course.line)
+ expect(detail).toContain('开放日期')
 })
