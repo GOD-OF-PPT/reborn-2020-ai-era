@@ -5,6 +5,7 @@ import {CommandButton} from './CommandButton.tsx'
 import {ClockAdvance} from './ClockAdvance.tsx'
 import {makeSharedAction,type SharedActionBinding} from './shared-action.ts'
 import {moneyText} from './game-text.ts'
+import {addDays} from '../core/calendar.ts'
 
 type Primary={binding:SharedActionBinding;main:ReactNode}
 type Props={p:GamePanelProps;thread:PlayerThreadView;active:boolean;result:boolean;date:string|null;waitLabel:string;onToday:()=>void;children:(primary:Primary|null)=>ReactNode}
@@ -20,7 +21,7 @@ export function DayThreadAction({p,thread,active,result,date,waitLabel,onToday,c
  }
  if(thread.focus.kind==='free'&&thread.stage==='choose'){
   const terms=p.features.life.work.rest
-  return <CommandButton {...p} kind="StartLifeWork" payload={{kind:'rest',personId:null,reference:null}} label="歇几天" confirm className="moment-decision moment-primary" showReason={showReason} renderAction={(binding,main)=>children({binding,main})}><b aria-hidden="true">01</b><span>歇几天<small>{moneyText(terms.costFen)} · {terms.points}点 · {terms.days}天</small></span><i aria-hidden="true">→</i></CommandButton>
+  return <CommandButton {...p} kind="StartLifeWork" payload={{kind:'rest',personId:null,reference:null}} label="歇几天" confirm className="moment-decision moment-primary" showReason={showReason} renderAction={(binding,main)=>children({binding,main})}><b aria-hidden="true">01</b><span>歇几天<small>{moneyText(terms.costFen)} · {terms.points}点 · {terms.days}天 · 预计{addDays(p.view.date,terms.days)}结束</small></span><i aria-hidden="true">→</i></CommandButton>
  }
  if(thread.command)return <CommandButton {...p} {...thread.command} confirm={thread.command.confirm} className="moment-decision moment-primary" showReason={showReason} renderAction={(binding,main)=>children({binding,main})}><b aria-hidden="true">01</b><span>{thread.command.label}</span><i aria-hidden="true">→</i></CommandButton>
  if(thread.wait&&date)return <ClockAdvance p={p} date={date} label={waitLabel+' · '+date} room showReason={showReason} renderAction={binding=>children({binding,main:<div className="moment-wait moment-primary"><div className="clock-advance clock-advance-room">{binding.reviewNode}{binding.mainNode}</div></div>})}/>

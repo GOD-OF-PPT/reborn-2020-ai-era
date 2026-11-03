@@ -23,7 +23,7 @@ async function life(approach:'first_order'|'investment'|'free'){
 it.each(['first_order','investment','free'] as const)('gives the real %s first screen its own shared choice without starting anything',async approach=>{
  const h=await life(approach)
  try{
-  const before=h.controller.exportSaved(),html=h.render(),label={first_order:'回应这封委托',investment:'看看这笔钱，准备怎样安排',free:'今天，先把时间留给什么'}[approach]
+  const before=h.controller.exportSaved(),html=h.render(),label={first_order:'回应这封委托',investment:'看看这笔钱，准备怎样安排',free:'歇几天'}[approach]
   const expected={first_order:{scene:'first-order',state:'offer'},investment:{scene:'market',state:'market-opening'},free:{scene:'free',state:'choose'}}[approach]
   expect(html).toContain(label);expect(html).toContain('data-scene="'+expected.scene+'"');expect(html).toContain('data-state="'+expected.state+'"');expect(html).toContain('data-perspective="entry"')
   // The visible thought and foreground object retain the same complete action name;
@@ -38,7 +38,7 @@ it.each(['first_order','investment','free'] as const)('gives the real %s first s
    expect(html).not.toContain('data-first-order-phase=')
    expect(html).not.toContain('first-attempt-v1.png')
   }
-  if(approach==='free'){expect(html).not.toContain('把七天留给自己');expect(html).not.toContain('歇几天')}
+  if(approach==='free'){expect(html).not.toContain('把七天留给自己');expect(html).toContain('歇几天');expect(html).toContain('去上班')}
  }finally{await h.close()}
 })
 
