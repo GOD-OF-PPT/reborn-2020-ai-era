@@ -13,4 +13,5 @@ seals.push(verifySeal('goal-1/evidence/t17-acceptance-40/follow-rights-r451'));
 seals.push(verifySeal('goal-1/evidence/t17-acceptance-40/follow-stage-r456'));
 seals.push(verifySeal('goal-1/evidence/t17-acceptance-40/large-run-profile-r458'));seals.push(verifySeal('goal-1/evidence/t17-acceptance-40/normal-capital-recover-r460'));
 seals.push(verifySeal('goal-1/evidence/t17-acceptance-40/normal-capital-resume-r440/execution-r1'));
+seals.push(verifySeal('goal-1/evidence/t17-acceptance-40/normal-capital-control-r461/checkpoint611'));
 const report={at:new Date().toISOString(),head:git(['rev-parse','HEAD']).toString().trim(),p3:old.p3.length,oldMarkers:old.oldSeals.length,links:old.markerSymlinks.length,fullSeals:seals,old19And35Exact:true,originalInputExact:true,unverifiedModelExact:true,originalAndCurrentMasterPrefixesExact:true,compatibility:0,wholeU6Complete:false};fs.writeFileSync(root+'/preservation-'+label+'.json',JSON.stringify(report,null,2)+'\n',{flag:'wx'});console.log({p3:report.p3,markers:report.oldMarkers,seals:seals.length,masters:true,input:true});

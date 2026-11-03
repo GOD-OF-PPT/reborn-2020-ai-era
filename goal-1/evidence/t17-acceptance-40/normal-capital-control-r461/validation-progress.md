@@ -17,3 +17,12 @@ launch71876/child15729，driverSHA51184d43dfc3d629bb7b2125bb05a316d52ffef9a6dcb0
 本内部恢复task、完整正常2025/80万董事/实际签署及independent_audit结果、U6全部17+5深态/最终系统美术均仍待。随后U7/U8→CUX12完整原U4B/U5/U6、U9原完整组合/T17余，原PNG0of3/正式人类理解趣味美术0/P3正式62与22not_run/旧红长档慢/M01须用户明确恢复/T18最后/goalactive保。所有页面兼容开发测试0，无push/deploy/外发/新委派/global memory写。
 
 [杠精审查] r460实质偏离已打回纠正，r461启动前完整审计和控制流等值限定通过；真实board/治理未完成，不将WIP提交或进程启动当交付。
+
+## WIP本地检查点及首条真实续接
+本地897defaccabc6d86aae87846734c70948cc7d78a（父f9e892bb），88精确owned/85delta，全部index/commit blob/字节/SHA/mode读回、index空未push；0产品源改，未stage mixedmasters、原live日志或新execution子。64完整已STOP producer均核，活r461/rootchild不seal。
+原首条606已真实保存：normal-capital-v2:606 / RenewRelayCustomer / 原第16位rly:012134be072550f8806827a7b2e3b3c8 / 到2024Oct29 / prepaid信用0，9953830B/SHA760524b5c1917ab2ffa9c6cd14e0febc1d3501d03248551c1f32fab7287bf93c物理head与journal同。第一步与原中断点完全相接，不拿偏离分支的637拼入。其余步骤仍在执行，任务仍未完成，原2025board签署治理责任保留。
+
+## 原611独立只读检查完成（仍非当前task终点）
+同一71876实际原五续签606..610已全保存，随后原StartRelayServicePeriod611已保存。固定611/Jul31/9958178B/SHA091e990c190ab90806d29d4c5d007691e1d26253621e3024dc9b68ff59c859b2，独立优化codec配原registry进出全wire同、原605完整command/cause/ledger/timeline prefix同，六条原fingerprint/日期/namespace同。五位剩余客户与原20客户/cedar-direct/资源/原Aug1安排吻合。
+服务rly:bdad9034b6d6d2ae967048050a35d153仍planned，服务Aug1—Aug29、支持Aug29—Sep5，当前Jul31；本季2已用/2预留/0可用，不能画成实际开工或完成。个人现金68059.27与模拟股票账面679156.80分列；企业现金2307848.40、客户预款保护2287848.40、本次任务另预留4500、实际可花15500分别保。审计201537ms，0新命令/IDB/Native，不冒正式性能或完整2025/board。只读checkpoint611子已完整STOP/seal；原64加此子为65，活root/execution-r1仍不封。
+后台原流程已继续到612原模拟委托，后续逐保存以同句柄和journal为准，不改原运行源/策略。

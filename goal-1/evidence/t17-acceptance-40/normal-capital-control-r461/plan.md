@@ -19,3 +19,6 @@
 
 ## 实际门槛已核（启动前）
 原416codec对原605完整进出逐wire同；优化459Codec配原416registry完整进出与全部GameRun同。原417receipt+causes完整prefix同、372证据沿原417审计复用，418..605全部188指纹/日期/ID核同，非新372全文重验。控制点实际Q3尚无新期、无active期、AP2/4，15已续/5未续。原23函数、原while正文、原for全文同；control5与原paused6完整用例过。r460错误分支20普通文件与原r440执行子19普通文件均按外部中断/exit未知准确STOP封存，原payload/mode不改。现64完整seal保护，原错误分支不冒原正常路径。下一一次launch，保完整2024Q3剩余+Q4再2025；本task仍[ ]，禁止声明董事完成。
+
+## 当前执行的独立只读检查点
+同一71876实活至609，准备在五条剩余续约全部真实保存且原Aug1服务已建立后，固定一次原head与同revision journal全文，独立原registry/优化codec进出及605全receipt/cause/ledger/timeline前缀核定、606以后逐原fingerprint；检查五条续约顺序、原服务主体/客户/供应/from/to/AP与实际阶段。只读同run当前公开记录，不执行、重放、改源、重启或封活root；在原五续约/新期未保存前不称此门槛通过。明确该检查是作者层，非Native/人类或原完整2025终点。
