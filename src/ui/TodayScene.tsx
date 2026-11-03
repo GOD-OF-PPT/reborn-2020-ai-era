@@ -9,6 +9,7 @@ import {OpeningObject} from './OpeningObject.tsx'
 import {Dialog} from './Dialog.tsx'
 import {TodayHoldings} from './TodayHoldings.tsx'
 import {TodayLifeChoices} from './TodayLifeChoices.tsx'
+import {TodayDirections} from './TodayDirections.tsx'
 import {ClockAdvance} from './ClockAdvance.tsx'
 import {CommandButton} from './CommandButton.tsx'
 import {MarketSceneChoice} from './MarketSceneChoice.tsx'
@@ -75,19 +76,18 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
    object={<OpeningObject copyMode="tableau" kind="calendar" title="今天的日历" displayTitle="" detail={p.view.date} stageLabel="今天 · 仍可安排" actionLabel={sceneReadingLabel(primary.label)} onActivate={primary.activate} disabled={primary.disabled} textOnly={p.textOnly===true} dayPaper={{kind:'today',state:'ongoing'}} {...(p.view.readOnly?{protection:'readonly' as const}:p.view.hasCandidate||p.view.saveStatus==='conflict'?{protection:'unsaved' as const}:{})}/>}
    record={<><button type="button" className="scene-text-action" onClick={ui('看看工作、其它尝试与原约定',()=>setPage('directions')).activate} aria-label="想想今天 · 看看工作、其它尝试与原约定 ↗">想想今天 ↗</button>{statusFeedback&&!repeatedReadOnly?<p className="moment-status" role="status">{statusFeedback}</p>:null}{calendarStatus?<div className="ecosystem-reading-status">{calendarStatus}</div>:null}</>}
   />
-  {page?<Dialog title={page==='directions'?'今天，想把时间留给什么？':page==='life'?'留点时间给自己':page==='market'?'这次，怎样判断？':page==='holdings'?'保留的持仓':'手头的事'} layout={page==='holdings'||page==='life'?'direct':'book'} className={'opening-paper today-choice-paper'+(page==='holdings'?' today-held-dialog':page==='life'?' today-life-dialog':'')} onClose={()=>setPage(null)} footer={<div className="today-choice-footer">{page!=='directions'?button('返回今天的选择',()=>setPage('directions')):null}{button('先不新增安排，合上这一页',()=>setPage(null))}</div>}>
-   {page!=='life'?<p className="opening-paper-date">今天 {p.view.date} · {p.features.workbench.quarter}</p>:null}
-   {page==='directions'?<><div className="opening-directions today-directions">
-    {today.ongoing.length?button(continuing.length?'继续手头的事':'翻看保留的持仓',()=>setPage(continuing.length?'ongoing':'holdings'),continuing.length?'工作、旧约和待收款':'持有的股份，仍在原账户'):null}
-    {button('看看工作',()=>choose({runId:p.view.runId,kind:'work',accountId:'personal',entityId:null}))}
-    {button('留点时间给自己',()=>prepare('life'),'休整，或改善住处')}
-    {button('做一段视频',()=>{setPage(null);openVideo('select-account')},'先选账号和作品')}
-    {button('准备一堂课',()=>{setPage(null);openCourse('objects')},'教案、班期和学员')}
-    {button('经营一份服务',()=>{const focus=openingFocusFor(p,'relay',{relayTarget:null,accountId:'personal'});if(focus)choose(focus)},'供应、客户和实际服务')}
-    {button('听听合作需求',()=>{const focus=openingFocusFor(p,'deepseek',{ecosystemTarget:null,accountId:'personal',deepseekPane:'ecosystem'});if(focus)choose(focus)},'模型、用途和合作请求')}
-    {button('看看架空参与',()=>{const focus=openingFocusFor(p,'deepseek',{equityTarget:null,accountId:'personal',deepseekPane:'equity'});if(focus)choose(focus)},'虚构参与，独立决定')}
-    {button('准备一次模拟判断',()=>prepare('market'),'先研究，或写一份委托')}
-   </div></>:null}
+  {page?<Dialog title={page==='directions'?'今天，想把时间留给什么？':page==='life'?'留点时间给自己':page==='market'?'这次，怎样判断？':page==='holdings'?'保留的持仓':'手头的事'} layout={page==='holdings'||page==='life'||page==='directions'?'direct':'book'} className={'opening-paper today-choice-paper'+(page==='holdings'?' today-held-dialog':page==='life'?' today-life-dialog':page==='directions'?' today-directions-dialog':'')} onClose={()=>setPage(null)} footer={<div className="today-choice-footer">{page!=='directions'?button('返回今天的选择',()=>setPage('directions')):null}{button('先不新增安排，合上这一页',()=>setPage(null))}</div>}>
+   {page!=='life'&&page!=='directions'?<p className="opening-paper-date">今天 {p.view.date} · {p.features.workbench.quarter}</p>:null}
+   {page==='directions'?<TodayDirections date={p.view.date} quarter={p.features.workbench.quarter} existing={today.ongoing.length?button(continuing.length?'继续手头的事':'翻看保留的持仓',()=>setPage(continuing.length?'ongoing':'holdings'),continuing.length?'工作、旧约和待收款':'持有的股份，仍在原账户'):null} choices={{
+    work:button('看看工作',()=>choose({runId:p.view.runId,kind:'work',accountId:'personal',entityId:null}),'先看行动占用与工资日期'),
+    life:button('留点时间给自己',()=>prepare('life'),'比较休整与住处改善'),
+    video:button('做一段视频',()=>{setPage(null);openVideo('select-account')},'先选账号和作品'),
+    course:button('准备一堂课',()=>{setPage(null);openCourse('objects')},'先看开放条件与教学准备'),
+    relay:button('经营一份服务',()=>{const focus=openingFocusFor(p,'relay',{relayTarget:null,accountId:'personal'});if(focus)choose(focus)},'先看开站条件与客户约定'),
+    ecosystem:button('听听合作需求',()=>{const focus=openingFocusFor(p,'deepseek',{ecosystemTarget:null,accountId:'personal',deepseekPane:'ecosystem'});if(focus)choose(focus)},'先看模型、用途与合作条件'),
+    equity:button('看看架空参与',()=>{const focus=openingFocusFor(p,'deepseek',{equityTarget:null,accountId:'personal',deepseekPane:'equity'});if(focus)choose(focus)},'先看架空模式与参与条件'),
+    market:button('准备一次模拟判断',()=>prepare('market'),'先看资料，或写一份委托'),
+   }}/>:null}
    {page==='holdings'?<TodayHoldings items={holdings} onChoose={choose}/>:null}
    {page==='life'?<><TodayLifeChoices p={commandProps}/>{button('看看相识的人与全部生活记录',()=>{setPage(null);onNavigate('life',{accountId:'personal'})})}</>:null}
    {page==='market'?<><p>准备一次判断，或先留住现金。</p><div className="opening-directions today-directions">{button('显选一份新的模拟委托',()=>{setPage(null);openOrder()},'自己选账户、标的、方向、股数、限价和原撮合期限')}{research&&!research.state?<article><h3>先整理公开产业线索</h3><p>个人{moneyText(research.costFen)} · {research.actionPoints}点 · {research.days}日</p><CommandButton {...commandProps} kind="ResearchMarket" payload={{definitionId:research.id}} label="核对并开始公开研究" confirm/></article>:<p>这组基础线索已按原记录整理；完整研究和已有委托仍可在原记录核对。</p>}{button('先保留现金，不新增委托',()=>setPage(null),'回到今天，原来的股票与交收不变')}</div></>:null}

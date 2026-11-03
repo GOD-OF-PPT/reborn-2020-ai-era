@@ -1,0 +1,10 @@
+import fs from 'node:fs';import ts from 'typescript';import assert from 'node:assert/strict';
+const root='goal-1/evidence/t17-acceptance-40/today-directions-r537';
+const parse=p=>ts.createSourceFile(p,fs.readFileSync(p,'utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
+const old=parse(root+'/TodayScene.tsx.before'),next=parse('src/ui/TodayScene.tsx');
+const statements=s=>s.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name?.text==='TodayScene').body.statements.filter(n=>!ts.isReturnStatement(n)).map(n=>n.getText(s));
+assert.deepEqual(statements(old),statements(next));
+function callbacks(s){let rows=[];function walk(n){if(ts.isCallExpression(n)&&n.expression.getText(s)==='button'&&n.arguments.length>=2)rows.push({label:n.arguments[0].getText(s),callback:n.arguments[1].getText(s)});ts.forEachChild(n,walk)}walk(s);return rows}
+const before=callbacks(old),after=callbacks(next);for(const row of before)assert(after.some(n=>n.label===row.label&&n.callback===row.callback),'ORIGINAL_CALLBACK_CHANGED '+row.label);
+const load=n=>JSON.parse(fs.readFileSync(root+'/snapshot'+n+'.json','utf8'));const prev=load(539),final=load(540),base=JSON.parse(fs.readFileSync('goal-1/evidence/t17-acceptance-40/focus-echo-r536/snapshot536.json','utf8'));const map=x=>new Map(x.files.map(r=>[r.path,r.sha256]));const a=map(prev),b=map(final),c=map(base);const diffs=final.files.filter(r=>a.get(r.path)!==r.sha256).map(r=>r.path);assert.deepEqual(diffs,['src/ui/today-directions.css']);const delta=final.files.filter(r=>c.get(r.path)!==r.sha256).map(r=>r.path);assert.deepEqual([...delta].sort(),[...final.owned].sort());
+const report={source:540,base:536,originalNonReturnStatementsUnchanged:statements(old).length,originalButtonCallbacksUnchanged:before.length,changed:delta,from539:diffs,checksReused:{source:539,pureUI:'directions-ui-final539.result.json',type:'r539-type.result.json',reason:'Only CSS changes; all TypeScript, tests and configuration bytes unchanged.'},storageTests:0,compatibility:0};fs.writeFileSync(root+'/source-review540.json',JSON.stringify(report,null,2)+'\n');console.log(report);
