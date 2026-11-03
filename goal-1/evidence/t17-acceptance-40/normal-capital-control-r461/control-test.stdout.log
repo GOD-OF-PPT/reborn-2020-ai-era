@@ -1,0 +1,37 @@
+TAP version 13
+# (node:15363) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: continues exactly the five unfinished renewals, before recharge and the original Aug1 service
+ok 1 - continues exactly the five unfinished renewals, before recharge and the original Aug1 service
+  ---
+  duration_ms: 2.917264
+  ...
+# Subtest: rejects a changed revision/date/business/account or budget instead of starting2025
+ok 2 - rejects a changed revision/date/business/account or budget instead of starting2025
+  ---
+  duration_ms: 3.386519
+  ...
+# Subtest: rejects an already arranged period or unresolved prior period
+ok 3 - rejects an already arranged period or unresolved prior period
+  ---
+  duration_ms: 0.594462
+  ...
+# Subtest: rejects changed customer order, duplicate customer or a replayed already-renewed command
+ok 4 - rejects changed customer order, duplicate customer or a replayed already-renewed command
+  ---
+  duration_ms: 19.484653
+  ...
+# Subtest: rejects a changed local date range or original supply coverage
+ok 5 - rejects a changed local date range or original supply coverage
+  ---
+  duration_ms: 2.819614
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 370.556196

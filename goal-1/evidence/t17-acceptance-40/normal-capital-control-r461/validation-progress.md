@@ -1,0 +1,19 @@
+# U6原605控制恢复：当前审计与执行在制
+
+当前任务未完成。前一r460错误续接删除2024Q3/Q4经营且改命令namespace，606..637分支不用于原策略董事证明。错误已明确告知并保全部原字节/模式；原20普通文件fullseal、原任务仍未完成，stop表示保留负例，不是业务完成。原r440进程47783/7199缺失、无terminal、exit未知，execution子19普通文件已完整封存，全部原payload同；原605原始head仍与本输入逐字同，用户Main/DB未动。
+
+## 完整来源审计
+原416codec对605全部进出wire逐字同；已交459cause索引codec配同原416registry进出wire与全部GameRun canonical逐字同。只优化校验访问，Core/rules/seed/参数/钱/AP/日期/随机/权限/版本不变。原417全部receipt和cause前缀逐对象同；原372完整prefix沿原417已核报告复用，不能冒本轮重新导372。418..605共188原指纹、signature/hash、日期/编号/期望revision全部匹配。固定输入9953882B/SHAfef7ea6a70f0e2fe3cd05cc01afbbef7d080191c043365612275650320a45e87，原origin normal、run u6-board-capital-pilot-v1、seed normal-relay-s03-v1。
+
+## 实际控制点与防重放
+原605处于July31续签20客户的第15条完成后；Q3尚无新服务期、无active期，AP2/4（2已用、0预留）。原fromAug1/toAug29/quarterEndSep30，客户15已续到Oct29、5未续，原cedar-direct许可覆盖。新的restore先核这些完整事实，再接原while正文；原23函数/原剩余for及normal-capital-v2命令编号全文同，保重新读取同日期公开状态和原重复保护。既不重发15条，也不跳到2025。
+
+控制点完整文件5/5、原paused完整6/6、TypeScript parser/strip语法与23函数/while/for字节核对均过。无产品源修改；237codec消费者复用已提交459原结果，未冒本轮全跑/Native。64旧/新增完整封存及P326/132marker/2link/旧19和35/input/masterprefix原插入保护通过。
+
+## 单执行已启动
+launch71876/child15729，driverSHA51184d43dfc3d629bb7b2125bb05a316d52ffef9a6dcb0641dafdb42542a2c24、controlSHA b6c8120b2aad287e54f55751de1a4a8f9995f14ccb669043e8ee84d23b174473，原paused45cda4…及calendar75d335…保持原字节。只有新execution-r1写head/journal，不写旧r440、负例r460、Main/DB。原preview/evaluate/完整codec/fullRun与原子文件head逐命令保；这是作者file-save层，不冒Controller/IDB/Native。未到实际签署治理不能关闭原正常完整目标。进度与terminal以新同一71876/物理head为准，不因观察超时重启；活源/日志不stage，parent/child不seal。
+
+## 剩余责任
+本内部恢复task、完整正常2025/80万董事/实际签署及independent_audit结果、U6全部17+5深态/最终系统美术均仍待。随后U7/U8→CUX12完整原U4B/U5/U6、U9原完整组合/T17余，原PNG0of3/正式人类理解趣味美术0/P3正式62与22not_run/旧红长档慢/M01须用户明确恢复/T18最后/goalactive保。所有页面兼容开发测试0，无push/deploy/外发/新委派/global memory写。
+
+[杠精审查] r460实质偏离已打回纠正，r461启动前完整审计和控制流等值限定通过；真实board/治理未完成，不将WIP提交或进程启动当交付。
