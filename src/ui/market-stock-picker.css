@@ -1,0 +1,21 @@
+.cinema-app .dialog.market-stock-dialog>.dialog-direct-body{display:flex;flex:1;flex-direction:column;min-height:0;justify-content:center;gap:12px}
+.cinema-app .market-stock-dialog .market-stock-context{margin:0;color:#c9ceb9;font:13px/1.7 var(--serif);padding:8px 0;border-bottom:1px solid #baa57444}
+.cinema-app .market-stock-dialog .market-stock-picker>.field{display:flex;flex-direction:row;align-items:center;gap:16px;font:15px/1.7 var(--serif);margin:0 0 15px;color:#e5d5b5}
+.cinema-app .market-stock-dialog .market-stock-picker select{flex:1;margin:0;background:#102b2b;color:#f2e6ca;border:1px solid #acaa8766;font:15px/1.6 var(--serif);min-height:40px}
+.cinema-app .market-stock-dialog .market-stock-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.cinema-app .market-stock-dialog .market-stock-cards>button{display:flex;flex-direction:column;align-items:stretch;text-align:left;gap:7px;min-width:0;padding:13px 15px;border:1px solid #b5a77666;border-left:3px solid transparent;border-radius:1px;background:linear-gradient(120deg,#1d3b37aa,#0c292c88);color:#f0e4c6;transform:none}
+.cinema-app .market-stock-dialog .market-stock-cards>button[data-unavailable=true]{border-style:dashed;color:#e2d5b5}
+.cinema-app .market-stock-dialog .market-stock-cards>button:hover{background:#354d40;border-color:#d6bd85;color:#fff0ce;transform:none}
+.cinema-app .market-stock-dialog .market-stock-cards>button[aria-pressed=true]{border-left-color:#f2d59a;border-color:#ddc183;background:#405447}
+.cinema-app .market-stock-dialog .market-stock-cards>button[aria-pressed=true] .market-stock-category:after{content:' · 已选';color:#f2d59a}
+.cinema-app .market-stock-dialog .market-stock-category{font:12px/1.6 var(--serif);color:#bfc9b7}
+.cinema-app .market-stock-dialog .market-stock-main{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.cinema-app .market-stock-dialog .market-stock-main strong{font:400 19px/1.5 var(--serif);color:inherit}
+.cinema-app .market-stock-dialog .market-stock-main>span{font:21px/1.5 var(--serif);color:#ead3a3;white-space:nowrap}
+.cinema-app .market-stock-dialog .market-stock-state{font:12px/1.7 var(--serif);color:#c5cbb9}
+.cinema-app .market-stock-dialog .market-stock-cards>button[data-unavailable=true] .market-stock-state{color:#dec59a}
+.cinema-app .market-stock-dialog :is(button,select):focus-visible{outline:2px solid #f2dba0;outline-offset:3px}
+.cinema-app .market-stock-dialog .warning-box{display:flex;align-items:center;gap:16px;padding:8px 12px;margin:0;font:13px/1.7 var(--serif)}
+.cinema-app .market-stock-dialog .warning-box p{margin:0;flex:1}
+.cinema-app .market-stock-dialog .warning-box button{flex:none;min-height:34px;padding:5px 10px;font:14px/1.6 var(--serif)}
+.cinema-app .dialog.market-stock-dialog>.encounter-fixed-actions{margin:16px 0 0;padding-top:12px}

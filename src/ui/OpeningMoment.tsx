@@ -273,7 +273,10 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const researchRows=!interrupted&&!requiresChoice&&!legacy&&thread.focus.kind==='market'&&thread.focus.entityKind==='research'?p.features.market.researches.filter(row=>row.id===thread.focus.entityId):[]
  const currentResearch=researchRows.length===1?researchRows[0]!:null
  const researchFacts=currentResearch?currentResearch.status==='running'?[`${currentResearch.startAt}—${currentResearch.completeAt} · 公开资料整理中；研究不代买卖。`,'中断不退已耗费用与行动。']:currentResearch.status==='completed'?[`${currentResearch.completeAt}已完成 · 费用与行动不返还，买卖另行决定。`]:['研究已中断，已投入的费用和行动不返还。']:null
- const sceneFacts=sceneFirstFacts??lifeSceneFacts??researchFacts??(workCopy?[workCopy.line]:null)
+ const plannedBuyRows=!interrupted&&!requiresChoice&&!legacy&&thread.focus.kind==='market'&&thread.focus.entityKind==='order'?p.features.market.orders.filter(row=>row.id===thread.focus.entityId&&row.accountId===thread.focus.accountId&&row.status==='planned'&&row.side==='buy'):[]
+ const plannedBuy=plannedBuyRows.length===1?plannedBuyRows[0]!:null
+ const plannedBuyFacts=plannedBuy?[`${p.features.market.stocks.find(stock=>stock.symbol===plannedBuy.symbol)?.name??plannedBuy.symbol} · 计划买入${plannedBuy.quantity}股，限价${moneyText(plannedBuy.limitPriceFen)}；尚未进入市场。`,`资金预留${moneyText(plannedBuy.cashHeldFen)}；提交沿用这份占款，不重复冻结。`]:null
+ const sceneFacts=sceneFirstFacts??lifeSceneFacts??researchFacts??plannedBuyFacts??(workCopy?[workCopy.line]:null)
  const lifeRoomTitle=personalLife&&thread.focusScope!=='history'?personalLife.status==='running'?personalLife.kind==='rest'?'这几天，留给自己。':'住处的改变，还在准备。':personalLife.kind==='rest'?'休整的日子，已经走过。':'住处的改变，已经完成。':null
 
  const courseReady=course&&!interrupted&&!requiresChoice&&!legacy&&thread.focusScope!=='history'&&thread.stage==='course-ready'&&courseTarget?.kind==='course'&&courseProgress?.historical!==true

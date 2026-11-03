@@ -4,9 +4,9 @@ import {Dialog} from './Dialog.tsx'
 import {CommandButton} from './CommandButton.tsx'
 import {parseMoneyInput} from './money-input.ts'
 import {moneyText,playableThrough} from './game-text.ts'
+import {MarketStockPicker} from './MarketStockPicker.tsx'
 
 export type MarketSceneDraft={accountId:string;symbol:string;side:''|'buy'|'sell';quantity:string;price:string;expiry:string;quoteId:string|null}
-const exposure={compute:'算力设备',interconnect:'通信互联',application:'模型应用',data:'数据服务',media:'内容传媒'}
 
 /** Parsing is local; affordability, quote ownership, fees and permissions remain original rule decisions. */
 export function marketDraftPayload(draft:MarketSceneDraft,p:Pick<GamePanelProps,'view'|'features'>){
@@ -35,14 +35,10 @@ export function MarketSceneChoice({p,onFullRecord,children,blockedReason=null}:{
  const lockReason=marketSceneSubmissionLock(p,draft.symbol,blockedReason),locked=lockReason!==null
  const accountName=(id:string)=>id==='personal'?'个人账户':p.features.workbench.routes.find(r=>r.accountId===id)?.name??'经营账户'
  const edit=<K extends keyof MarketSceneDraft>(key:K,value:MarketSceneDraft[K])=>setDraft(old=>({...old,[key]:value}))
- return <>{children(()=>{if(blockedReason)return;openedRevision.current=p.view.revision;setOpen(true)})}{open?<Dialog key={page} title={page==='stock'?'选择股票与账户':'填写这次买卖的条件'} className="market-scene-choice" onClose={()=>setOpen(false)} footer={page==='stock'?<div className="encounter-actions encounter-fixed-actions"><button type="button" className="primary" disabled={!!blockedReason||!stock||!draft.accountId} onClick={()=>setPage('terms')}>填写买卖条件 →</button><button type="button" onClick={()=>{setOpen(false);onFullRecord()}}>查看全部行情、委托与持仓</button></div>:undefined}>
-  <p className="encounter-overline">虚构个股 · 简化模拟市场 · 非历史实盘</p>
-  <p>报价截至{m.asOf}。限价由你填写，成交还要等后续撮合；填写和返回都不会下单。</p>
+ return <>{children(()=>{if(blockedReason)return;openedRevision.current=p.view.revision;setOpen(true)})}{open?<Dialog key={page} title={page==='stock'?'选择股票与账户':'填写这次买卖的条件'} layout={page==='stock'?'direct':'book'} className={'market-scene-choice'+(page==='stock'?' market-stock-dialog':'')} onClose={()=>setOpen(false)} footer={page==='stock'?<div className="encounter-actions encounter-fixed-actions"><button type="button" className="primary" disabled={!!blockedReason||!stock||!draft.accountId} onClick={()=>setPage('terms')}>填写买卖条件 →</button><button type="button" onClick={()=>{setOpen(false);onFullRecord()}}>查看全部行情、委托与持仓</button></div>:undefined}>
+  {page==='stock'?<p className="market-stock-context">虚构个股 · 非历史实盘 · 报价截至{m.asOf??'尚未公开'}。填写不下单，成交仍等后续撮合。</p>:<><p className="encounter-overline">虚构个股 · 简化模拟市场 · 非历史实盘</p><p>报价截至{m.asOf}。限价由你填写，成交还要等后续撮合；填写和返回都不会下单。</p></>}
   {quoteChanged?<section className="warning-box"><p>报价已经更新，股数和限价草稿仍保留。请重新核对当前公开报价与到期日期。</p><button type="button" onClick={()=>edit('quoteId',m.quoteId)}>核对这次新报价</button></section>:null}
-  {page==='stock'?<section className="market-pick">
-   <label className="field">这次使用的账户<select value={draft.accountId} onChange={e=>edit('accountId',e.target.value)}><option value="">请选择账户</option>{p.view.accounts.map(a=><option key={a.accountId} value={a.accountId}>{accountName(a.accountId)} · 可花{moneyText(a.availableFen)}</option>)}</select></label>
-   <div className="market-scene-stocks" aria-label="选择这次买卖的股票">{m.stocks.map(s=><button key={s.symbol} type="button" aria-label={'选择模拟标的 · '+s.name} aria-pressed={draft.symbol===s.symbol} onClick={()=>edit('symbol',s.symbol)}><small>{s.exposure?exposure[s.exposure]:'模拟试验段'}</small><strong>{s.name}</strong><span>{moneyText(s.priceFen)}</span><small>{s.status==='open'?'当前公开报价':s.status==='suspended'?'当前停牌':s.priceFen===null?'当前数据不足':'当前不可交易'}{!s.qualified?' · 缺本局资格':''}</small></button>)}</div>
-  </section>:stock?<section className="market-terms">
+  {page==='stock'?<MarketStockPicker stocks={m.stocks} accounts={p.view.accounts} accountId={draft.accountId} symbol={draft.symbol} accountName={accountName} onAccount={id=>edit('accountId',id)} onStock={symbol=>edit('symbol',symbol)}/>:stock?<section className="market-terms">
    <h3>{stock.name} · {accountName(draft.accountId)}</h3>
    {stock.status==='open'&&stock.priceFen!==null?<p>当前报价{moneyText(stock.priceFen)}；{stock.lowerFen===null&&stock.upperFen===null?'本段没有固定限价范围。':'本次可填价格范围'+moneyText(stock.lowerFen)+'—'+moneyText(stock.upperFen)+'。'}限价不保证成交，仍须等待后续合法撮合。</p>:<p className="warning-box">{stock.status==='not_listed'?'当前尚未上市':stock.status==='suspended'?'当前停牌':'当前没有可用的公开报价'}，不能提交这份交易。草稿可以保留，未来是否可交易以当时公开情况与交易规则为准。</p>}
    <fieldset className="market-side-choice"><legend>这次买入，还是卖出？</legend><button type="button" aria-pressed={draft.side==='buy'} onClick={()=>edit('side','buy')}>买入这只股票<span>先预留资金，后续才可能成交</span></button><button type="button" aria-pressed={draft.side==='sell'} onClick={()=>edit('side','sell')}>卖出已有股份<span>当前可售{Math.max(0,(position?.settledQuantity??0)-(position?.reservedQuantity??0))}股，卖款另等交收</span></button></fieldset>
