@@ -1,0 +1,72 @@
+{
+  "sourceInput": {
+    "at": "2026-11-02T11:12:20.168176+00:00",
+    "input": {
+      "path": "goal-1/evidence/t17-acceptance-40/large-run-profile-r458/input-normal.json",
+      "bytes": 8893670,
+      "sha256": "26dc73ef2d289d90a0e714a3f9b8d6f4c30f7993979c74f96975a2a3cbdcf655",
+      "revision": 545,
+      "date": "2024-03-07"
+    },
+    "journalRaw": {
+      "path": "goal-1/evidence/t17-acceptance-40/large-run-profile-r458/input-journal.jsonl",
+      "bytes": 1569,
+      "sha256": "efb39f59da1235f779bf8138cf920bb0ac4c80fd9e4fa16626763dd9b6fa78bf"
+    },
+    "originalSource": 416,
+    "liveProcessUnmodified": 47783,
+    "profileTaskOnly": true,
+    "compatibility": 0
+  },
+  "baseline": {
+    "importMs": 69011.521896,
+    "exportMs": 61857.792518,
+    "canonicalMs": 2589.7394,
+    "totalMs": 135487.369102,
+    "wireEqual": true,
+    "profile": "cpu-summary1.json"
+  },
+  "candidate1": {
+    "importMs": 27943.428546,
+    "exportMs": 38752.55589,
+    "canonicalMs": 3056.7063,
+    "totalMs": 71875.189379,
+    "wireEqual": true
+  },
+  "candidate2": {
+    "importMs": 22204.78261,
+    "exportMs": 32041.091354,
+    "canonicalMs": 2520.980692,
+    "totalMs": 58206.683833,
+    "wireEqual": true
+  },
+  "improvement": {
+    "candidate1TotalRatio": 0.5305,
+    "candidate2TotalRatio": 0.4296,
+    "candidate2ImportRatio": 0.3218,
+    "candidate2ExportRatio": 0.518
+  },
+  "consumerTests": {
+    "files": 23,
+    "tests": 237,
+    "passed": 237,
+    "failed": 0,
+    "skipped": 0,
+    "success": true
+  },
+  "regressionFirstRed": {
+    "tests": 5,
+    "passed": 4,
+    "failed": 1
+  },
+  "regressionGreen": {
+    "tests": 23,
+    "passed": 23,
+    "failed": 0
+  },
+  "wireAndSemanticContract": "same source revision545, origin normal, full codec export byte equal; no Core rules/date/AP/money/RNG/permissions/atomic save semantics changed",
+  "notFormalPerformancePass": true,
+  "controllerIdbNative": false,
+  "compatibility": 0,
+  "wholeU6Complete": false
+}
