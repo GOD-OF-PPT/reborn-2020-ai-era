@@ -1,8 +1,9 @@
+import {SeasonFocusChoices} from './SeasonFocusChoices.tsx'
 import {workRoomCopy} from './work-room-copy.ts'
 import {personalDayProgressBrief,personalStartNoticeExpired} from './personal-day-copy.ts'
 import {sceneReadingLabel,sceneReadingName,sceneStageLabel} from './scene-language.ts'
 import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
-import {cloneElement,isValidElement,useEffect,useId,useState,type Ref,type ReactNode,type ComponentProps} from 'react'
+import {cloneElement,isValidElement,useEffect,useState,type Ref,type ReactNode,type ComponentProps} from 'react'
 import type {GamePanelProps,NavigateScene} from './game-types.ts'
 import type {Moment} from './RoomMoment.tsx'
 import {OpeningObject,type OpeningObjectProps} from './OpeningObject.tsx'
@@ -138,7 +139,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const [localTodayAt,setLocalTodayAt]=useState<DayPerspective|null>(null)
  const [recordOpen,setRecordOpen]=useState(false)
  useEffect(()=>{if(localTodayAt&&!dayPerspectiveCurrent(p.view,localTodayAt))setLocalTodayAt(null)},[localTodayAt,p.view])
- const choiceName=useId(),candidates=seasonFocusChoices(p),picked=candidates.find(candidate=>candidate.id===draftId)
+ const candidates=seasonFocusChoices(p),picked=candidates.find(candidate=>candidate.id===draftId)
  const groupTitle=seasonFocusGroups.find(group=>group.id===focusGroup)!.label,groupCandidates=candidates.filter(candidate=>seasonFocusGroupFor(candidate)===focusGroup)
  const focusLocked=p.view.busy||p.controller.snapshot.busy||p.view.hasCandidate||p.view.saveStatus==='conflict'
  const showSceneReasons=!p.view.hasCandidate&&!p.view.readOnly&&p.view.saveStatus!=='conflict'
@@ -365,17 +366,14 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
 
   {objectOpen&&!attempt?<Dialog title={moment.object} className="opening-paper" onClose={()=>setObjectOpen(false)}><p className="opening-paper-date">{p.view.date} · {label}</p>{previousFocusNotice?<p className="season-focus-notice" role="status">{focusNotice}</p>:null}<h3>{moment.title}</h3><p>{moment.line}</p>{moment.detail?<p className="opening-paper-terms">{moment.detail}</p>:null}{originalAction(true,openOrder,openVideo,openCourse,openRelay)}{!interrupted&&!unknownFocus&&!legacy&&thread.stage==='offer'?<div className="opening-paper-alternatives"><CommandButton {...nearProps} kind="DeclineOffer" payload={{offerId:first.offerId}} label="婉拒这笔报价" confirm/><CommandButton {...nearProps} kind="SkipOffer" payload={{offerId:first.offerId}} label="先跳过这次小单" confirm/></div>:null}<button type="button" className="scene-text-action" onClick={inspect}>{unknownFocus?'翻看本季已有记录':'翻看同一件事的全部原记录'} ↗</button></Dialog>:null}
   {choicePanel&&attempt?<OpeningAttemptChoices p={p} attempt={attempt} panel={choicePanel} onClose={()=>setChoicePanel(null)} onInspect={inspect} onMarket={()=>{setChoicePanel(null);openOrder()}} onExplore={()=>{setChoicePanel(null);onExplore()}} onFocus={changeAttempt} onNavigate={onNavigate}/>:null}
-  {directions?<Dialog title={'这一季，先把哪件事放在桌面？ · '+groupTitle} className="opening-paper season-focus-book" onClose={()=>setDirections(false)} footer={<div className="season-focus-footer">
-   <nav className="season-focus-groups" aria-label="按眼前约定、方向与历史翻阅书签">{seasonFocusGroups.map(group=><button type="button" key={group.id} aria-pressed={focusGroup===group.id} onClick={()=>setFocusGroup(group.id)}>{group.label} · {candidates.filter(candidate=>seasonFocusGroupFor(candidate)===group.id).length}</button>)}</nav>
-   <p className="season-selection-note" role="status">{picked?<>待确认：<strong>{picked.title}</strong> · {seasonFocusGroups.find(group=>group.id===seasonFocusGroupFor(picked))!.label}{picked.originQuarter?' · 来源'+picked.originQuarter:''}{picked.date?' · 原日期'+picked.date:''}。尚未改变原书签。{picked.disabledReason?' '+picked.disabledReason:''}</>:'尚未改变原关注。先选一个对象预看，再明确放到桌面。'}</p>
-   <div className="season-focus-actions"><button type="button" onClick={()=>setDirections(false)}>仍留原来的书签</button><button type="button" className="primary" disabled={!picked||picked.disabledReason!==null||focusLocked} onClick={()=>{if(!picked||picked.disabledReason!==null||focusLocked)return;chooseFocus(picked.focus);if(!onFocus)setLocalQuarter(picked.originQuarter??w.quarter);setDirections(false);setDraftId(null);returnToFocus()}}>把这件事放到桌面</button></div>
+  {directions?<Dialog title="这一季，先关注哪件事？" layout="direct" className="opening-paper season-focus-book" onClose={()=>setDirections(false)} footer={<div className="season-focus-footer">
+   <p className="season-selection-note" role="status">{picked?<>待确认：<strong>{picked.title}</strong> · {seasonFocusGroups.find(group=>group.id===seasonFocusGroupFor(picked))!.label}{picked.originQuarter?' · '+picked.originQuarter:''}{picked.date?' · '+picked.date:''}。{picked.disabledReason??'原书签尚未改变。'}</>:'只换书签，不开始新安排。先选一件事，再确认。'}</p>
+   <div className="season-focus-actions"><button type="button" onClick={()=>setDirections(false)}>仍留原来的书签</button><button type="button" className="text-button" onClick={()=>{setDirections(false);onExplore()}}>只环顾房间 ↗</button><button type="button" className="primary" disabled={!picked||picked.disabledReason!==null||focusLocked} onClick={()=>{if(!picked||picked.disabledReason!==null||focusLocked)return;chooseFocus(picked.focus);if(!onFocus)setLocalQuarter(picked.originQuarter??w.quarter);setDirections(false);setDraftId(null);returnToFocus()}}>把这件事放到桌面</button></div>
   </div>}>
-   <p>你想{thread.wish.label}。{thread.yearQuestion} 先翻看具体对象，再决定调整书签；不接受合同、工作、交易或新权限。</p>
-   <p className="opening-paper-date">当前{w.quarter} · {p.view.date} · 本季共享四点保持原数</p>
+   <p className="season-bookmark-intro">你想{thread.wish.label}。{thread.yearQuestion} · {w.quarter} · {p.view.date}</p>
+   <nav className="season-focus-groups" aria-label="按眼前约定、方向与历史翻阅书签">{seasonFocusGroups.map(group=><button type="button" key={group.id} aria-pressed={focusGroup===group.id} onClick={()=>setFocusGroup(group.id)}>{group.label} · {candidates.filter(candidate=>seasonFocusGroupFor(candidate)===group.id).length}</button>)}</nav>
    {focusLocked?<p className="season-focus-notice" role="status">正在保存、有原候选或存在冲突时，先保留原关注；仍可翻阅这些记录。</p>:null}
-   {groupCandidates.map(candidate=><label className="season-focus-choice" key={candidate.id} data-selected={draftId===candidate.id?'true':undefined}><input type="radio" name={choiceName} value={candidate.id} checked={draftId===candidate.id} disabled={candidate.disabledReason!==null} onChange={()=>setDraftId(candidate.id)}/><span><strong>{candidate.title}</strong><span className="season-choice-origin">{candidate.scope==='history'?'历史回看':candidate.scope==='carry'?'旧约定延续':candidate.scope==='entry'?'可查看的方向':'当前原对象'}{candidate.originQuarter?' · '+candidate.originQuarter:''}{candidate.date?' · 原日期'+candidate.date:''}</span><span>{candidate.line}</span>{candidate.nextDate?<span className="season-choice-date">{candidate.nextDate>p.view.date?'下一公开反馈':'原反馈日期'} · {candidate.nextDate}</span>:null}{candidate.disabledReason?<span className="reason">{candidate.disabledReason}</span>:null}</span></label>)}
-   {!groupCandidates.length?<p>这组尚无可定位的公开对象。仍可翻看另外两组和完整原记录，不为凑选项新增安排。</p>:null}
-   <button type="button" className="scene-text-action" onClick={()=>{setDirections(false);onExplore()}}>只环顾房间，不新增安排 ↗</button>
+   <SeasonFocusChoices key={focusGroup} choices={groupCandidates} selectedId={draftId} currentDate={p.view.date} label={groupTitle+' · 选择一个书签'} onSelect={setDraftId}/>
   </Dialog>:null}
   {recollectionOpen?<SeasonRecollection p={p} onClose={()=>setRecollectionOpen(false)} onNavigate={onNavigate} onChooseFocus={openDirections} onToday={openToday} onContinueFocus={chooseToday}/>:null}
  </>}</DayThreadAction>}</CourseThreadAction>}</VideoThreadAction>}</OpeningAttemptAction>}</RelayThreadAction>}</RelaySceneChoice>}</CourseSceneChoice>}</VideoSceneChoice>}</MarketSceneChoice>
