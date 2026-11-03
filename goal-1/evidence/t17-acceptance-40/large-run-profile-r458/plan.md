@@ -24,3 +24,6 @@ U6全17+5深态/正常80万董事/实际签署治理/最终U6/系统美术及后
 固定545原profile1完整往返逐wire同：import69.01s/export61.86s，全canonical2.59s；CPU约51.5%位于codec.#references的receipt causeIds逐个run.causes.some。当前42,040账务回执/14,916事件/43,555cause/545command；这是实采样，非仅猜测。只优化src/persistence/codec.ts此same-causeId AND same-commandId的any-match，建立本次validation局部Map<causeId,Set<commandId>>，仍逐个原causeId requireRule(...,'INVALID_CAUSE_REFERENCE')；不跨调用cache，不跳assertGameRun或任何字段/重复/原receipt完整校验。可见同id任一命中语义也保，虽前序原guard已拒重复cause。
 
 先在新codec-cause-index.test.ts真正RunCodec.validateRun消费链构造80条原SetPrivateNote命令，用数组some回调访问计数而非机器毫秒阈值表达不得每个claim重扫cause表，原实现应红；同时完整state/wire、另一已有命令借用/同对象验证后修改/缺失/重复以及原允许重复claim分别保持。然后仅此局部索引修复、从457冻结不带P3、相称完整core/persistence/session/Controller消费者与固定9MB同原wire差分；原416 profile和initial66s红各保。活r440源不改，只新版本独立验证，Main暂不更新直到需要/证据齐。
+
+## 当前诊断task完成
+真实profile已复现并确认codec cause ownership全历史扫描为主热点；最小Map修复与相称消费者/固定大档wire差分完成，feature7f1e20dc已交。候选性能仅bounded evidence，仍非正式性能门槛；下步需closure封存并保留全部U6责任。

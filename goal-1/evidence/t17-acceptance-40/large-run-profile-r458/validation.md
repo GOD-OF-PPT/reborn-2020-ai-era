@@ -15,3 +15,6 @@
 
 ## 保留边界
 原baseline1的错误统计字段读取失败另存，不能冒成完整通过；首轮原profile和失败/红层保。活r440继续原完整2025/80万董事/实际签署治理，原source/seed/driver/策略/日期/预算不改。正式人类理解/趣味/美术、原PNG0of3、P3正式62/22、17+5深态、normal board Native、最终U6和后续组合均未关闭。
+
+## 精确提交
+feature7f1e20dc82b6cec4fc4e05549840e3dfec8f8806，父64b5e7e75b02e7297e5585672c32e88c99b793ad；58owned/delta、2源路径，index/commit blob/模式/字节/SHA全核同，index空未push。新增原因索引仅作用于一次codec validation；固定545完整wire保持逐字同。

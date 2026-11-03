@@ -17,3 +17,7 @@
 
 ## 实际完成记录
 feature提交前已完成固定545复现、CPU采样、三假设判定、最小cause索引修复、候选1/2固定wire复测和237项相称消费者；本任务的精确提交/读回仍待执行。
+
+## 实际提交记录
+feature7f1e20dc82b6cec4fc4e05549840e3dfec8f8806（父64b5e7e7），58精确owned/delta、2源路径（codec.ts与新增cause-index测试），全部index/commit blob/字节/SHA/mode读回、index空未push。固定545基线/候选wire对比、CPU profile、23新增相关+237相称消费者、类型/构建均完成；正式性能/Controller/IDB/Native/兼容仍不宣称。
+[杠精审查] 通过：修复了已实测的重复全量原因扫描，没有把本机加速冒正式性能或跳过任何原校验；旧红与全U6缺口保留。封存前不得再追加产品源。
