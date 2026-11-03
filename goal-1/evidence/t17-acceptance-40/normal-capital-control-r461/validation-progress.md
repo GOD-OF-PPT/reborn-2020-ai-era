@@ -63,3 +63,6 @@ fact-index-r462最终463/979，两源（relay-validation.ts/新test）局部Map�
 新整步1916474.55ms、原事实索引1755347.10ms、原实际作者1346030ms，范围/负载不同，没有整步提速证明；全部不利/早期工具错误保。仅本金额子验证完成，整体长档延迟/正式性能/父正常2025董事签署治理/U6/全部原后续/PNG0/真人0/P3正式未跑/goal未完，compat0。Main/live不推广，原71876仍原416/459策略继续，不改活driver或封活root/execution。待实际提交读回后再封已结束money子，不能先封父。
 
 金额子限定接受c0b999d6ac95b2d6c123cb03700b9ce564399b09（105owned/20delta，两源、全部blob/字节/SHA/mode核同，index空未push）已齐；实际原613全wire和GameRun同，整步1916474.55ms无加速证明。当前只完成money子验证，下一封存已结束money子；父正常2025/董事签署治理/完整U6/goal与全部原后续仍未完成，Main457/DB未动、compat0。
+
+金额子最终closure 920a8904cea08c7e60647b3c743f0fc0c11567c9已完成：money-sum-r464已STOP/fullseal84普通文件、marker 37d675ae426e12c24aefb25dd2acfae2efaa165dd38aeb880c053ab9e9e3d0a6，98 owned/17 delta全部index/commit blob/字节/SHA/mode核同、index空未push；原69加本子=70完整封存，禁止向money子追加，post在money-sum-post-commit-01。限定接受c0b999d6完整原613 wire/GameRun同；整步1916474.55ms未证明加速，日期延迟/正式性能仍未解决，Main/live未采用469。
+原71876/15729仍原416kernel/459codec和全部原策略，driver不变，末次物理head622（仅作者记录，不冒新Native/IDB）。父r461 root/execution仍active不seal；下一仍原Q4/2025正常资金80万董事实际签署治理、全17+5深态/最终U6及原后续组合/T17其余；PNG0of3/真人0/P3正式62与22未跑/M01须明确恢复/T18最后/goal未完成保持。兼容开发测试0，无push/deploy/外发/新委派/global memory写。89899/33943、14216、11016、72948、88028均已terminal，勿再poll这些已结束句柄；后续等原71876或新独立子，不能重跑旧producer。

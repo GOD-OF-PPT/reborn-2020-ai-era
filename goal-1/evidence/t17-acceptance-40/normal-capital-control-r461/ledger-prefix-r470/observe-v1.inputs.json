@@ -1,0 +1,933 @@
+{
+  "at": "2026-11-03T06:49:52.559Z",
+  "input612Sha256": "b69e6b54c003da7647cb4087f504ae461db4aa2dd4a8d124be815892fab3c294",
+  "actual613Sha256": "ed051a22d9ac41ddc2871d2f41e34985ed79e177b2aee794c082be87ebac2274",
+  "originalReceiptCount": 47156,
+  "actualAddedReceipts": 465,
+  "selectedFirstActualReceipts": 40,
+  "operations": [
+    {
+      "index": 0,
+      "originalReceipt": {
+        "accountId": "personal",
+        "contractId": null,
+        "id": "living:2024-08-01",
+        "kind": "due_expense",
+        "signature": "{\"accountId\":\"personal\",\"amountFen\":400000,\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"id\":\"living:2024-08-01\",\"kind\":\"due_expense\",\"obligationId\":\"living-due:2024-08-01\",\"sourceEventId\":\"bootstrap:living\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "personal",
+        "amountFen": 400000,
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "id": "living:2024-08-01",
+        "kind": "due_expense",
+        "obligationId": "living-due:2024-08-01",
+        "sourceEventId": "bootstrap:living"
+      }
+    },
+    {
+      "index": 1,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "ops:a66570095771aad75bb8f942874c6845:cost",
+        "kind": "expense",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":300000,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"id\":\"ops:a66570095771aad75bb8f942874c6845:cost\",\"kind\":\"expense\",\"originId\":\"rly:22bff81ff733425099956aa308d26ec1\",\"referenceId\":\"rly:22bff81ff733425099956aa308d26ec1\",\"reservationId\":\"ops:6c3806f2eabe915b6da6e12a089da86e\",\"sourceEventId\":\"rly:22bff81ff733425099956aa308d26ec1\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 300000,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "id": "ops:a66570095771aad75bb8f942874c6845:cost",
+        "kind": "expense",
+        "originId": "rly:22bff81ff733425099956aa308d26ec1",
+        "referenceId": "rly:22bff81ff733425099956aa308d26ec1",
+        "reservationId": "ops:6c3806f2eabe915b6da6e12a089da86e",
+        "sourceEventId": "rly:22bff81ff733425099956aa308d26ec1"
+      }
+    },
+    {
+      "index": 2,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:8d5febe2daed7e357160da4215fecae4",
+        "id": "rly:c1ffb7e440fc1b63376303a0f3efd025",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3300,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:8d5febe2daed7e357160da4215fecae4\",\"date\":\"2024-08-01\",\"id\":\"rly:c1ffb7e440fc1b63376303a0f3efd025\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:e494ca66605063d652e423ea8c8543f4\",\"sourceEventId\":\"rly:71d18284bbc868314d9a44a1cc79e359\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3300,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:8d5febe2daed7e357160da4215fecae4",
+        "date": "2024-08-01",
+        "id": "rly:c1ffb7e440fc1b63376303a0f3efd025",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:e494ca66605063d652e423ea8c8543f4",
+        "sourceEventId": "rly:71d18284bbc868314d9a44a1cc79e359"
+      }
+    },
+    {
+      "index": 3,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:77f957eb670460d859efd1ed7e9f4943",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":132,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:77f957eb670460d859efd1ed7e9f4943\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:f21285125e5e4a0182e9a7483fe240bd\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:71d18284bbc868314d9a44a1cc79e359\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 132,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:77f957eb670460d859efd1ed7e9f4943",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:f21285125e5e4a0182e9a7483fe240bd",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:71d18284bbc868314d9a44a1cc79e359"
+      }
+    },
+    {
+      "index": 4,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:1a83f8dc83faaa709c759bacf81129fe",
+        "id": "rly:9a857ed924538b0228955e08a8ee9957",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3600,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:1a83f8dc83faaa709c759bacf81129fe\",\"date\":\"2024-08-01\",\"id\":\"rly:9a857ed924538b0228955e08a8ee9957\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:3d34ca841606602d16982e354d358953\",\"sourceEventId\":\"rly:13cf3b1518da520545382730c5668712\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3600,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:1a83f8dc83faaa709c759bacf81129fe",
+        "date": "2024-08-01",
+        "id": "rly:9a857ed924538b0228955e08a8ee9957",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:3d34ca841606602d16982e354d358953",
+        "sourceEventId": "rly:13cf3b1518da520545382730c5668712"
+      }
+    },
+    {
+      "index": 5,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:a231a1402105e89af688e3b09484e33e",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":144,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:a231a1402105e89af688e3b09484e33e\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:c16c2eccc520b77dd7cf1c1b694a90fe\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:13cf3b1518da520545382730c5668712\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 144,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:a231a1402105e89af688e3b09484e33e",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:c16c2eccc520b77dd7cf1c1b694a90fe",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:13cf3b1518da520545382730c5668712"
+      }
+    },
+    {
+      "index": 6,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:eb11d453377d6081a55f33305f22b290",
+        "id": "rly:3eb027a6a3981b00dbe2c920c29b6e46",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3600,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:eb11d453377d6081a55f33305f22b290\",\"date\":\"2024-08-01\",\"id\":\"rly:3eb027a6a3981b00dbe2c920c29b6e46\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:59502e9078463519001d0415f75980d8\",\"sourceEventId\":\"rly:1ddac7cf7051092074d84c4fed423de7\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3600,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:eb11d453377d6081a55f33305f22b290",
+        "date": "2024-08-01",
+        "id": "rly:3eb027a6a3981b00dbe2c920c29b6e46",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:59502e9078463519001d0415f75980d8",
+        "sourceEventId": "rly:1ddac7cf7051092074d84c4fed423de7"
+      }
+    },
+    {
+      "index": 7,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:24264ce7d1b304f20740decaf1e635b5",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":144,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:24264ce7d1b304f20740decaf1e635b5\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:8a7ebea4c71c91c04f65d23e0ce4d8c4\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:1ddac7cf7051092074d84c4fed423de7\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 144,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:24264ce7d1b304f20740decaf1e635b5",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:8a7ebea4c71c91c04f65d23e0ce4d8c4",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:1ddac7cf7051092074d84c4fed423de7"
+      }
+    },
+    {
+      "index": 8,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:6b119bcf7838ec3ee6186c786ff16557",
+        "id": "rly:720f2968bdbbf5940910bfd202e91dc7",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3300,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:6b119bcf7838ec3ee6186c786ff16557\",\"date\":\"2024-08-01\",\"id\":\"rly:720f2968bdbbf5940910bfd202e91dc7\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:796346a7494dc496f24e98c3fc68fa18\",\"sourceEventId\":\"rly:84adbc3a4635d25ff24e11f155642923\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3300,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:6b119bcf7838ec3ee6186c786ff16557",
+        "date": "2024-08-01",
+        "id": "rly:720f2968bdbbf5940910bfd202e91dc7",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:796346a7494dc496f24e98c3fc68fa18",
+        "sourceEventId": "rly:84adbc3a4635d25ff24e11f155642923"
+      }
+    },
+    {
+      "index": 9,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:25b76557f80d1b1f9c87a6a298154a1b",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":132,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:25b76557f80d1b1f9c87a6a298154a1b\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:ba9e662fc21da9c7256bde9ffbdcc968\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:84adbc3a4635d25ff24e11f155642923\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 132,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:25b76557f80d1b1f9c87a6a298154a1b",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:ba9e662fc21da9c7256bde9ffbdcc968",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:84adbc3a4635d25ff24e11f155642923"
+      }
+    },
+    {
+      "index": 10,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:418e245360e994603e36c1a3447e4bfe",
+        "id": "rly:55b84cdb7e5d27e19bae45d8e453cc15",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3600,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:418e245360e994603e36c1a3447e4bfe\",\"date\":\"2024-08-01\",\"id\":\"rly:55b84cdb7e5d27e19bae45d8e453cc15\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:2689390e482e0dce62ea5c54916a33e2\",\"sourceEventId\":\"rly:3d94729913ea5501db3beb9c03e6f6fe\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3600,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:418e245360e994603e36c1a3447e4bfe",
+        "date": "2024-08-01",
+        "id": "rly:55b84cdb7e5d27e19bae45d8e453cc15",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:2689390e482e0dce62ea5c54916a33e2",
+        "sourceEventId": "rly:3d94729913ea5501db3beb9c03e6f6fe"
+      }
+    },
+    {
+      "index": 11,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:c1a9332057aa08112f0478f839b9f142",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":144,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:c1a9332057aa08112f0478f839b9f142\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:aad3e8d7589a85ba2a99a382dac01d14\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:3d94729913ea5501db3beb9c03e6f6fe\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 144,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:c1a9332057aa08112f0478f839b9f142",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:aad3e8d7589a85ba2a99a382dac01d14",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:3d94729913ea5501db3beb9c03e6f6fe"
+      }
+    },
+    {
+      "index": 12,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:555dc1412ea3ad9ea8cb81493f5b90ed",
+        "id": "rly:e0352a02c1a1cf24e7f3feb6864b85b7",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3600,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:555dc1412ea3ad9ea8cb81493f5b90ed\",\"date\":\"2024-08-01\",\"id\":\"rly:e0352a02c1a1cf24e7f3feb6864b85b7\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:4aaeedd562fe6fd44f618d1f22364242\",\"sourceEventId\":\"rly:b49ff134621fdac87c0edc85948ab442\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3600,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:555dc1412ea3ad9ea8cb81493f5b90ed",
+        "date": "2024-08-01",
+        "id": "rly:e0352a02c1a1cf24e7f3feb6864b85b7",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:4aaeedd562fe6fd44f618d1f22364242",
+        "sourceEventId": "rly:b49ff134621fdac87c0edc85948ab442"
+      }
+    },
+    {
+      "index": 13,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:49364c97029666d4b59755e92a4e93df",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":144,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:49364c97029666d4b59755e92a4e93df\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:22e217911cdb986275d1df7aef47a047\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:b49ff134621fdac87c0edc85948ab442\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 144,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:49364c97029666d4b59755e92a4e93df",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:22e217911cdb986275d1df7aef47a047",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:b49ff134621fdac87c0edc85948ab442"
+      }
+    },
+    {
+      "index": 14,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:5dae06c705327a1c7352149cfc3da297",
+        "id": "rly:e6fc62265076e1a3e031b36d0748fe63",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3600,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:5dae06c705327a1c7352149cfc3da297\",\"date\":\"2024-08-01\",\"id\":\"rly:e6fc62265076e1a3e031b36d0748fe63\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:2a0bba84c34d3c695c57cc7d26a4e853\",\"sourceEventId\":\"rly:b397f001318e104e91a93f0cc9e8cc53\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3600,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:5dae06c705327a1c7352149cfc3da297",
+        "date": "2024-08-01",
+        "id": "rly:e6fc62265076e1a3e031b36d0748fe63",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:2a0bba84c34d3c695c57cc7d26a4e853",
+        "sourceEventId": "rly:b397f001318e104e91a93f0cc9e8cc53"
+      }
+    },
+    {
+      "index": 15,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:90f1617a5c4644b63189252e700e00a8",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":144,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:90f1617a5c4644b63189252e700e00a8\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:2041257229e968f93b99f048e9c45fc7\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:b397f001318e104e91a93f0cc9e8cc53\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 144,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:90f1617a5c4644b63189252e700e00a8",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:2041257229e968f93b99f048e9c45fc7",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:b397f001318e104e91a93f0cc9e8cc53"
+      }
+    },
+    {
+      "index": 16,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:b159d5c103ed3040d85e0d7888efc23f",
+        "id": "rly:2a279afa0170c934a7648c1e3fbae98f",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3600,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:b159d5c103ed3040d85e0d7888efc23f\",\"date\":\"2024-08-01\",\"id\":\"rly:2a279afa0170c934a7648c1e3fbae98f\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:9b787ee23f2279d4dcc6832a94c9ddb7\",\"sourceEventId\":\"rly:849dc51a39d42d37244d89ea90da4ee8\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3600,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:b159d5c103ed3040d85e0d7888efc23f",
+        "date": "2024-08-01",
+        "id": "rly:2a279afa0170c934a7648c1e3fbae98f",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:9b787ee23f2279d4dcc6832a94c9ddb7",
+        "sourceEventId": "rly:849dc51a39d42d37244d89ea90da4ee8"
+      }
+    },
+    {
+      "index": 17,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:ce665a40b96f9965193a2ce63baadc60",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":144,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:ce665a40b96f9965193a2ce63baadc60\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:489c99ffce7e55f1516b9b47aa78f6db\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:849dc51a39d42d37244d89ea90da4ee8\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 144,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:ce665a40b96f9965193a2ce63baadc60",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:489c99ffce7e55f1516b9b47aa78f6db",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:849dc51a39d42d37244d89ea90da4ee8"
+      }
+    },
+    {
+      "index": 18,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:f696341cfa2615221d37ac5878f7364f",
+        "id": "rly:48b3b5e2f6e3f8c8fde49abeaceebab6",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3600,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:f696341cfa2615221d37ac5878f7364f\",\"date\":\"2024-08-01\",\"id\":\"rly:48b3b5e2f6e3f8c8fde49abeaceebab6\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:62e14f6376756eca30539326f22967f5\",\"sourceEventId\":\"rly:f6d03beaa45f7a0fa3e7f2b8252363a9\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3600,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:f696341cfa2615221d37ac5878f7364f",
+        "date": "2024-08-01",
+        "id": "rly:48b3b5e2f6e3f8c8fde49abeaceebab6",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:62e14f6376756eca30539326f22967f5",
+        "sourceEventId": "rly:f6d03beaa45f7a0fa3e7f2b8252363a9"
+      }
+    },
+    {
+      "index": 19,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:f4a911ae355c0adc565c6c7cb87b3aa9",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":144,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:f4a911ae355c0adc565c6c7cb87b3aa9\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:ec7917e9638e010178279e6d09bca4a2\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:f6d03beaa45f7a0fa3e7f2b8252363a9\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 144,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:f4a911ae355c0adc565c6c7cb87b3aa9",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:ec7917e9638e010178279e6d09bca4a2",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:f6d03beaa45f7a0fa3e7f2b8252363a9"
+      }
+    },
+    {
+      "index": 20,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:1563279a1d293524fbd2d43980a37e83",
+        "id": "rly:8fc5d1db1a6a1e1bf62da26646a91345",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3600,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:1563279a1d293524fbd2d43980a37e83\",\"date\":\"2024-08-01\",\"id\":\"rly:8fc5d1db1a6a1e1bf62da26646a91345\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:2c3738f1f3efbea2745292d3e26becb9\",\"sourceEventId\":\"rly:f944611073e5732bca42404cda3c7466\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3600,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:1563279a1d293524fbd2d43980a37e83",
+        "date": "2024-08-01",
+        "id": "rly:8fc5d1db1a6a1e1bf62da26646a91345",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:2c3738f1f3efbea2745292d3e26becb9",
+        "sourceEventId": "rly:f944611073e5732bca42404cda3c7466"
+      }
+    },
+    {
+      "index": 21,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:c9fc1efc42ed6818f1fa031fddc29233",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":144,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:c9fc1efc42ed6818f1fa031fddc29233\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:0fbd30be03ea992d373e69286afb9b19\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:f944611073e5732bca42404cda3c7466\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 144,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:c9fc1efc42ed6818f1fa031fddc29233",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:0fbd30be03ea992d373e69286afb9b19",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:f944611073e5732bca42404cda3c7466"
+      }
+    },
+    {
+      "index": 22,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:cadfa08640468e9ca9516420560c836a",
+        "id": "rly:3f0e052657ecccf98dc8a35e8c353527",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3600,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:cadfa08640468e9ca9516420560c836a\",\"date\":\"2024-08-01\",\"id\":\"rly:3f0e052657ecccf98dc8a35e8c353527\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:39964033dca779743eb58e771985a714\",\"sourceEventId\":\"rly:bd900b98452eea30408d94d1d977bc65\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3600,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:cadfa08640468e9ca9516420560c836a",
+        "date": "2024-08-01",
+        "id": "rly:3f0e052657ecccf98dc8a35e8c353527",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:39964033dca779743eb58e771985a714",
+        "sourceEventId": "rly:bd900b98452eea30408d94d1d977bc65"
+      }
+    },
+    {
+      "index": 23,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:0194324ce5720749780f2a1e8f83a5a2",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":144,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:0194324ce5720749780f2a1e8f83a5a2\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:1f2f1fdee69b530dbf17e6990e0ffea7\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:bd900b98452eea30408d94d1d977bc65\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 144,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:0194324ce5720749780f2a1e8f83a5a2",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:1f2f1fdee69b530dbf17e6990e0ffea7",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:bd900b98452eea30408d94d1d977bc65"
+      }
+    },
+    {
+      "index": 24,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:5188cfc5aad905c6ef097f386a088267",
+        "id": "rly:497769242fd75a3438444498db62d59c",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3600,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:5188cfc5aad905c6ef097f386a088267\",\"date\":\"2024-08-01\",\"id\":\"rly:497769242fd75a3438444498db62d59c\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:9d9c908e1a06a3278b1f045de6bb868f\",\"sourceEventId\":\"rly:a9c4c0f4adf522fae38501bb89a49d6c\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3600,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:5188cfc5aad905c6ef097f386a088267",
+        "date": "2024-08-01",
+        "id": "rly:497769242fd75a3438444498db62d59c",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:9d9c908e1a06a3278b1f045de6bb868f",
+        "sourceEventId": "rly:a9c4c0f4adf522fae38501bb89a49d6c"
+      }
+    },
+    {
+      "index": 25,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:1938d6f82978788dfa3e3d6f7257153f",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":144,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:1938d6f82978788dfa3e3d6f7257153f\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:f857118774b3bbf52686311251322994\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:a9c4c0f4adf522fae38501bb89a49d6c\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 144,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:1938d6f82978788dfa3e3d6f7257153f",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:f857118774b3bbf52686311251322994",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:a9c4c0f4adf522fae38501bb89a49d6c"
+      }
+    },
+    {
+      "index": 26,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:1268a0d14e0c50c4c977773c91c02695",
+        "id": "rly:57af2a3759f68f87bbd4f73e3eeaa718",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3900,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:1268a0d14e0c50c4c977773c91c02695\",\"date\":\"2024-08-01\",\"id\":\"rly:57af2a3759f68f87bbd4f73e3eeaa718\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:e446a616f030a8364df831c4e3152f47\",\"sourceEventId\":\"rly:e4ba8ddffe6bd33630dd8fa96c7a4bcd\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3900,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:1268a0d14e0c50c4c977773c91c02695",
+        "date": "2024-08-01",
+        "id": "rly:57af2a3759f68f87bbd4f73e3eeaa718",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:e446a616f030a8364df831c4e3152f47",
+        "sourceEventId": "rly:e4ba8ddffe6bd33630dd8fa96c7a4bcd"
+      }
+    },
+    {
+      "index": 27,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:7cf93eae91337c5a2262e52e0752a786",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":156,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:7cf93eae91337c5a2262e52e0752a786\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:2df9ae026ad29f42206b2bd219712080\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:e4ba8ddffe6bd33630dd8fa96c7a4bcd\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 156,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:7cf93eae91337c5a2262e52e0752a786",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:2df9ae026ad29f42206b2bd219712080",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:e4ba8ddffe6bd33630dd8fa96c7a4bcd"
+      }
+    },
+    {
+      "index": 28,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:ed1499f3f5c208b332b4844a902cba9d",
+        "id": "rly:f11090c8a18b97eecfbe09259234a53a",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3600,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:ed1499f3f5c208b332b4844a902cba9d\",\"date\":\"2024-08-01\",\"id\":\"rly:f11090c8a18b97eecfbe09259234a53a\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:950dafd8178005b8b8f1bc6599fff62e\",\"sourceEventId\":\"rly:96af3c93e66769f5d89f38a8d05a783b\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3600,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:ed1499f3f5c208b332b4844a902cba9d",
+        "date": "2024-08-01",
+        "id": "rly:f11090c8a18b97eecfbe09259234a53a",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:950dafd8178005b8b8f1bc6599fff62e",
+        "sourceEventId": "rly:96af3c93e66769f5d89f38a8d05a783b"
+      }
+    },
+    {
+      "index": 29,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:2847489b400e039028bf100f7a733a62",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":144,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:2847489b400e039028bf100f7a733a62\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:609b9848534f89161959c4ef500d0b2f\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:96af3c93e66769f5d89f38a8d05a783b\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 144,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:2847489b400e039028bf100f7a733a62",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:609b9848534f89161959c4ef500d0b2f",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:96af3c93e66769f5d89f38a8d05a783b"
+      }
+    },
+    {
+      "index": 30,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:f2fe8463b7902ab706b34f995895c4e7",
+        "id": "rly:61fb04ba8055de99f22e6eb581b96fe7",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3600,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:f2fe8463b7902ab706b34f995895c4e7\",\"date\":\"2024-08-01\",\"id\":\"rly:61fb04ba8055de99f22e6eb581b96fe7\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:d01a5e2ca3f3a31e5aabc6c8a0f8d994\",\"sourceEventId\":\"rly:fb50c036b282321e839dee64f078a9cb\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3600,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:f2fe8463b7902ab706b34f995895c4e7",
+        "date": "2024-08-01",
+        "id": "rly:61fb04ba8055de99f22e6eb581b96fe7",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:d01a5e2ca3f3a31e5aabc6c8a0f8d994",
+        "sourceEventId": "rly:fb50c036b282321e839dee64f078a9cb"
+      }
+    },
+    {
+      "index": 31,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:dc6b372573d9fba011ab56f55b02a6e8",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":144,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:dc6b372573d9fba011ab56f55b02a6e8\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:0368c1745f461eed8bdb5108ae7e6a14\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:fb50c036b282321e839dee64f078a9cb\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 144,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:dc6b372573d9fba011ab56f55b02a6e8",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:0368c1745f461eed8bdb5108ae7e6a14",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:fb50c036b282321e839dee64f078a9cb"
+      }
+    },
+    {
+      "index": 32,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:012134be072550f8806827a7b2e3b3c8",
+        "id": "rly:1f106722bb66a24b9df6a59e025485fd",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3300,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:012134be072550f8806827a7b2e3b3c8\",\"date\":\"2024-08-01\",\"id\":\"rly:1f106722bb66a24b9df6a59e025485fd\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:e517e0e7083529db65f41af347d3164a\",\"sourceEventId\":\"rly:5cc7aaf28d8f82df7c3b2ff74b4f78ce\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3300,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:012134be072550f8806827a7b2e3b3c8",
+        "date": "2024-08-01",
+        "id": "rly:1f106722bb66a24b9df6a59e025485fd",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:e517e0e7083529db65f41af347d3164a",
+        "sourceEventId": "rly:5cc7aaf28d8f82df7c3b2ff74b4f78ce"
+      }
+    },
+    {
+      "index": 33,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:d4cae72afc1c418c6db5b03d0240ee3c",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":132,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:d4cae72afc1c418c6db5b03d0240ee3c\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:692486991134b7b423e50b2c8d3066d7\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:5cc7aaf28d8f82df7c3b2ff74b4f78ce\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 132,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:d4cae72afc1c418c6db5b03d0240ee3c",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:692486991134b7b423e50b2c8d3066d7",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:5cc7aaf28d8f82df7c3b2ff74b4f78ce"
+      }
+    },
+    {
+      "index": 34,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:e95e70103f5df75daaa375332e1cbfb6",
+        "id": "rly:23d87cd007fa1e2435ab61d3b8b006ed",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3600,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:e95e70103f5df75daaa375332e1cbfb6\",\"date\":\"2024-08-01\",\"id\":\"rly:23d87cd007fa1e2435ab61d3b8b006ed\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:9edbcf590a98b605cbd0a27cec9e69c6\",\"sourceEventId\":\"rly:11995da62734a026fc4cf8f4ab748f6e\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3600,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:e95e70103f5df75daaa375332e1cbfb6",
+        "date": "2024-08-01",
+        "id": "rly:23d87cd007fa1e2435ab61d3b8b006ed",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:9edbcf590a98b605cbd0a27cec9e69c6",
+        "sourceEventId": "rly:11995da62734a026fc4cf8f4ab748f6e"
+      }
+    },
+    {
+      "index": 35,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:707b8c0b253958f83d11d8110169630f",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":144,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:707b8c0b253958f83d11d8110169630f\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:7c9d8dbe811e7035c2a63b6145d6bf60\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:11995da62734a026fc4cf8f4ab748f6e\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 144,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:707b8c0b253958f83d11d8110169630f",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:7c9d8dbe811e7035c2a63b6145d6bf60",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:11995da62734a026fc4cf8f4ab748f6e"
+      }
+    },
+    {
+      "index": 36,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:7db9b122d63605522ed3a43c5257ee3d",
+        "id": "rly:05bcd9b527f61e11ed974daccee7b0a7",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3600,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:7db9b122d63605522ed3a43c5257ee3d\",\"date\":\"2024-08-01\",\"id\":\"rly:05bcd9b527f61e11ed974daccee7b0a7\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:5f1e1dac6059c621669de87969b0fd4e\",\"sourceEventId\":\"rly:f77964ea4fc08fdfa400ebb74a584e33\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3600,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:7db9b122d63605522ed3a43c5257ee3d",
+        "date": "2024-08-01",
+        "id": "rly:05bcd9b527f61e11ed974daccee7b0a7",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:5f1e1dac6059c621669de87969b0fd4e",
+        "sourceEventId": "rly:f77964ea4fc08fdfa400ebb74a584e33"
+      }
+    },
+    {
+      "index": 37,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:cd4c3ebe9d9b8bd7b6a7d724ddc740a8",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":144,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:cd4c3ebe9d9b8bd7b6a7d724ddc740a8\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:221ba90e6d25ad16d40b133bda7420c7\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:f77964ea4fc08fdfa400ebb74a584e33\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 144,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:cd4c3ebe9d9b8bd7b6a7d724ddc740a8",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:221ba90e6d25ad16d40b133bda7420c7",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:f77964ea4fc08fdfa400ebb74a584e33"
+      }
+    },
+    {
+      "index": 38,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": "rly:4ac310f5989fa0951e62ea72d907950c",
+        "id": "rly:7f4ea3efbaffc28a00d2c0314d35ba31",
+        "kind": "deliver_prepaid",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":3600,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"contractId\":\"rly:4ac310f5989fa0951e62ea72d907950c\",\"date\":\"2024-08-01\",\"id\":\"rly:7f4ea3efbaffc28a00d2c0314d35ba31\",\"kind\":\"deliver_prepaid\",\"referenceId\":\"rly:4e5af2baf11527e5ff9364b210e690d8\",\"sourceEventId\":\"rly:e532f7f983f176664843748b02e3fc7a\"}",
+        "status": "applied"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 3600,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "contractId": "rly:4ac310f5989fa0951e62ea72d907950c",
+        "date": "2024-08-01",
+        "id": "rly:7f4ea3efbaffc28a00d2c0314d35ba31",
+        "kind": "deliver_prepaid",
+        "referenceId": "rly:4e5af2baf11527e5ff9364b210e690d8",
+        "sourceEventId": "rly:e532f7f983f176664843748b02e3fc7a"
+      }
+    },
+    {
+      "index": 39,
+      "originalReceipt": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "contractId": null,
+        "id": "rly:1fb5d5cf83c54dd75798ef627f166809",
+        "kind": "incur_supplier_usage",
+        "signature": "{\"accountId\":\"ops:5324790e65be34234f2f8fab9737ae4e\",\"amountFen\":144,\"businessId\":\"ops:ba624da362c2c6850efa1eff912fe9f8\",\"counterpartyId\":\"world\",\"date\":\"2024-08-01\",\"dueAt\":\"2024-08-08\",\"id\":\"rly:1fb5d5cf83c54dd75798ef627f166809\",\"kind\":\"incur_supplier_usage\",\"obligationId\":\"rly:5229aa533fd99bf8b4e9be2b39d7e6a9\",\"prepaymentId\":\"rly:b5cdd152aa0b0639062a98b7b08ad49c\",\"sourceEventId\":\"rly:e532f7f983f176664843748b02e3fc7a\"}",
+        "status": "due"
+      },
+      "operation": {
+        "accountId": "ops:5324790e65be34234f2f8fab9737ae4e",
+        "amountFen": 144,
+        "businessId": "ops:ba624da362c2c6850efa1eff912fe9f8",
+        "counterpartyId": "world",
+        "date": "2024-08-01",
+        "dueAt": "2024-08-08",
+        "id": "rly:1fb5d5cf83c54dd75798ef627f166809",
+        "kind": "incur_supplier_usage",
+        "obligationId": "rly:5229aa533fd99bf8b4e9be2b39d7e6a9",
+        "prepaymentId": "rly:b5cdd152aa0b0639062a98b7b08ad49c",
+        "sourceEventId": "rly:e532f7f983f176664843748b02e3fc7a"
+      }
+    }
+  ],
+  "source": 469,
+  "control": 464,
+  "notNewGameCommands": true,
+  "compatibility": 0
+}

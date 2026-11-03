@@ -1,0 +1,61 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import cp from 'node:child_process'
+import {json,hash,tree,ident,blobOid,proof,git,verifySeal} from '../../t17-acceptance-25/closeout-preparation-r1/closeout-lib.candidate.mjs'
+const root='goal-1/evidence/t17-acceptance-40/normal-capital-control-r461',phase=root+'/ledger-prefix-r470',post=root+'/ledger-prefix-post-commit-01',parent='920a8904cea08c7e60647b3c743f0fc0c11567c9'
+if(git(['rev-parse','HEAD']).toString().trim()!==parent || git(['diff','--cached','--name-only']).length || fs.existsSync(phase+'/stopped.json') || fs.existsSync(root+'/stopped.json') || fs.existsSync(post)) throw Error('FRESH_COMPLETED_DIAGNOSIS_REQUIRED')
+const meta=json(phase+'/source.json'),observed=json(phase+'/observe-v1.result.json'),analysis=json(phase+'/observe-v1.profile-analysis.json'),witness=json(phase+'/cache-witness.json')
+const helperHash=hash(fs.readFileSync(root+'/ledger-prefix-observe.mjs'))
+for(const name of ['selftest-v1','observe-v1','cache-witness']) {
+  const terminal=json(phase+'/'+name+'.process-terminal.json')
+  if(terminal.exitCode!==0) throw Error('ACTUAL_DIAGNOSTIC_EXIT_ZERO_REQUIRED')
+  let alive=false;try{process.kill(terminal.pid,0);alive=true}catch(error){if(error.code!=='ESRCH')throw error}if(alive)throw Error('OWN_DIAGNOSTIC_PRODUCER_MUST_BE_ENDED')
+}
+if(json(phase+'/selftest-v1.result.json').helperSha256!==helperHash || observed.helperSha256!==helperHash || !observed.allFortyCompleteLedgerPrefixesEqual || !observed.allActualReceiptResultsEqual || !observed.baselineUnchanged || !observed.sourceExact || observed.actualOperations!==40 || observed.steps.length!==80) throw Error('COMPLETE_ACTUAL_PREFIX_PROOF_REQUIRED')
+for(const row of observed.steps.filter(row=>row.source===469)) if(!row.wholeLedgerMatchesControl || !row.actualReceiptMatched || row.wholeCanonicalLedgerSha256!==observed.controlFullLedgerPrefixHashes[row.index]) throw Error('COMPLETE_PREFIX_HASH_MISMATCH')
+if(analysis.profileSha256!==hash(fs.readFileSync(phase+'/observe-v1.cpuprofile')) || !analysis.applyRoots.length || analysis.completeCanonicalLedgerPrefixHashesEqual!==40) throw Error('EXACT_RAW_PROFILE_ANALYSIS_REQUIRED')
+if(witness.ledgerReceiptCount!==47156 || witness.eligibleReceiptCount!==47156 || witness.passes.length!==3 || witness.passes.some(row=>row.receiptSignatureParseCalls!==47156 || !row.validatorPassed || !row.wholeLedgerUnchanged || !row.nativeBindingRestored) || !witness.wholeLedgerUnchanged || !witness.nativeBindingRestored || !witness.sourceExact || witness.wholeLedgerSha256!==observed.baselineSha256) throw Error('COMPLETE_UNCHANGED_LEDGER_CACHE_WITNESS_REQUIRED')
+if(json(phase+'/cache-witness.process-terminal.json').helperSha256!==hash(fs.readFileSync(root+'/ledger-cache-witness.mjs'))) throw Error('EXACT_WITNESS_HELPER_REQUIRED')
+const equivalence=json(phase+'/source-ledger-equivalence.json')
+for(const row of equivalence.rows) if(hash(fs.readFileSync(row.path))!==row.sha256) throw Error('PINNED_LEDGER_SOURCE_CHANGED')
+for(const file of [meta.controlManifest,meta.sourceManifest]) {
+  const source=json(file)
+  for(const row of source.files) if(hash(fs.readFileSync(path.join(source.target,row.path)))!==row.sha256) throw Error('FROZEN_SOURCE_CHANGED')
+}
+if(hash(fs.readFileSync(root+'/run605.ts'))!==meta.originalDriverSha256) throw Error('ORIGINAL_LIVE_DRIVER_CHANGED')
+const protectedSeals=json(root+'/preservation-ledger-prefix-diagnosis.json').fullSeals
+if(protectedSeals.length!==70) throw Error('EXACT70_REQUIRED')
+for(const row of protectedSeals) verifySeal(row.root)
+const preserveFile=root+'/preserve.mjs',before=fs.readFileSync(preserveFile,'utf8'),anchor='const report={'
+if(before.split(anchor).length!==2 || before.includes("seals.push(verifySeal('"+phase+"'))")) throw Error('EXACT_PRESEAL_HELPER_REQUIRED')
+const tasks=fs.readFileSync(phase+'/tasks.md','utf8')
+if(!tasks.includes('- [x] 自检取样工具')) throw Error('LIMITED_DIAGNOSIS_MUST_BE_COMPLETE')
+fs.writeFileSync(phase+'/tasks.md',tasks.replace('  - 提交/读回：','  - 提交/读回：本组一次封存提交；实际commit及逐blob/字节/SHA/mode回读见父目录ledger-prefix-post-commit-01/readback.json，0产品源改。'))
+fs.mkdirSync(post)
+const put=(file,value)=>fs.writeFileSync(file,JSON.stringify(value,null,2)+'\n',{flag:'wx'})
+put(post+'/preparation.json',{at:new Date().toISOString(),parent,scope:'Actual ledger-component diagnosis only',productChanges:0,parentTaskComplete:false,wholeStepPerformancePassed:false,compatibility:0})
+put(phase+'/terminal.json',{at:new Date().toISOString(),status:'limited_diagnosis_complete',actualOperations:40,allWholeLedgerPrefixHashesMatched:true,sameLedgerParseCounts:[47156,47156,47156],cacheThrashingObserved:true,productChanges:0,wholeStepPerformancePassed:false,parentTaskComplete:false,compatibility:0})
+put(phase+'/stopped.json',{at:new Date().toISOString(),reason:'All own observers and analysis ended; diagnosis complete with no product fix; preserve raw profile, counter evidence and scope limits; no append after seal',parentStillActive:true,compatibility:0})
+put(phase+'/sealed-evidence.json',{at:new Date().toISOString(),selfExcluded:'sealed-evidence.json',...tree(phase),source:469,control:464,scope:'Only actual component prefix/profile and unchanged-ledger cache witness; not normal2025 or performance completion',productChanges:0,compatibility:0})
+const seal=verifySeal(phase)
+put(post+'/sealed-phase.json',seal)
+fs.writeFileSync(preserveFile,before.replace(anchor,"seals.push(verifySeal('"+phase+"'));\n"+anchor))
+const node='/Users/gordon/.nvm/versions/node/v22.12.0/bin/node',preserved=cp.spawnSync(node,[preserveFile,'ledger-prefix-sealed'],{encoding:'utf8'})
+put(post+'/preservation-command.json',{status:preserved.status,signal:preserved.signal,stdout:preserved.stdout,stderr:preserved.stderr})
+if(preserved.status!==0 || json(root+'/preservation-ledger-prefix-sealed.json').fullSeals.length!==71) throw Error('EXACT71_PRESERVATION_REQUIRED')
+const extras=['ledger-prefix-observe.mjs','ledger-cache-witness.mjs','finalize-ledger-prefix.mjs','preserve.mjs','plan.md','tasks.md','continuation.md','validation-progress.md','preservation-ledger-prefix-diagnosis.json','preservation-ledger-prefix-sealed.json'].map(name=>root+'/'+name)
+const paths=[...new Set([...tree(phase).files.map(row=>row.path),phase+'/sealed-evidence.json',...tree(post).files.map(row=>row.path),...extras])].sort()
+if(paths.some(name=>name.startsWith('src/') || name.startsWith(root+'/execution-r1/') || name===root+'/execution.stdout.log' || name==='goal-1/plan.md' || name==='goal-1/tasks.md')) throw Error('NO_PRODUCT_ACTIVE_OUTPUT_OR_MIXED_MASTER_ALLOWED')
+put(post+'/owned.json',{at:new Date().toISOString(),parent,paths,selfExcluded:'owned.json',sealedPhase:seal,productChanges:0,parentTaskComplete:false,compatibility:0})
+paths.push(post+'/owned.json');paths.sort()
+const rows=paths.map(name=>({...ident(name),oid:blobOid(fs.readFileSync(name))}))
+git(['add','-f','--',...paths])
+const staged=git(['diff','--cached','--name-only','-z']).toString().split(String.fromCharCode(0)).filter(Boolean).sort()
+if(!staged.length || staged.some(name=>!paths.includes(name))) throw Error('EXACT_DIAGNOSIS_DELTA_REQUIRED')
+const index=proof(rows)
+git(['commit','-m','Diagnose repeated receipt parsing above the bounded cache budget'])
+const commit=git(['rev-parse','HEAD']).toString().trim(),delta=git(['diff-tree','--no-commit-id','--name-only','-r','-z',commit]).toString().split(String.fromCharCode(0)).filter(Boolean).sort()
+if(JSON.stringify(delta)!==JSON.stringify(staged) || git(['diff','--cached','--name-only']).length) throw Error('EXACT_COMMIT_DELTA_REQUIRED')
+const readback=proof(rows,commit),finalSeal=verifySeal(phase)
+put(post+'/readback.json',{at:new Date().toISOString(),commit,parent,owned:paths.length,delta:staged.length,index,readback,finalSeal,productChanges:0,indexEmpty:true,notPushed:true,cacheThrashingDiagnosed:true,cacheFixImplemented:false,parentTaskComplete:false,wholeStepPerformancePassed:false,wholeU6Complete:false,compatibility:0})
+console.log({commit,owned:paths.length,delta:staged.length,sealedOrdinaryFiles:finalSeal.ordinaryFiles,fullPreservedSeals:71,productChanges:0,indexEmpty:true,notPushed:true,cacheFixImplemented:false,parentTaskComplete:false})
