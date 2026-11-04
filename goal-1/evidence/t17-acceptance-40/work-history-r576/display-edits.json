@@ -1,0 +1,46 @@
+[
+  {
+    "old": "import {workRoomCopy} from './work-room-copy.ts'",
+    "new": "import {workRoomCopy} from './work-room-copy.ts'\nimport {workHistoryCopy} from './work-history-copy.ts'"
+  },
+  {
+    "old": " const workCopy=!interrupted&&!requiresChoice&&!legacy?workRoomCopy(p,thread):null",
+    "new": " const workCopy=!interrupted&&!requiresChoice&&!legacy?workRoomCopy(p,thread):null\n const workHistory=!interrupted&&!requiresChoice&&!legacy?workHistoryCopy(p,thread):null"
+  },
+  {
+    "old": "const label=quarterTurn?'季末 · 旧约保留':researchCopy?.stage",
+    "new": "const label=quarterTurn?'季末 · 旧约保留':workHistory?.stage??researchCopy?.stage"
+  },
+  {
+    "old": "marketCopy?.facts??(workCopy?[workCopy.line]:null)",
+    "new": "marketCopy?.facts??(workHistory?[workHistory.line,workHistory.next]:workCopy?[workCopy.line]:null)"
+  },
+  {
+    "old": "<p>{relayClosed?'这份服务的实际结果':<>",
+    "new": "<p>{workHistory?workHistory.object:relayClosed?'这份服务的实际结果':<>"
+  },
+  {
+    "old": "quarterTurn?.title??lifeRoomTitle",
+    "new": "quarterTurn?.title??workHistory?.title??lifeRoomTitle"
+  },
+  {
+    "old": ":previousFocusNotice?<span> · 原书签未变",
+    "new": ":previousFocusNotice&&!workHistory?<span> · 原书签未变"
+  },
+  {
+    "old": "{!relayClosed&&!interrupted&&!requiresChoice&&!legacy&&thread.focusScope==='history'?",
+    "new": "{!workHistory&&!relayClosed&&!interrupted&&!requiresChoice&&!legacy&&thread.focusScope==='history'?"
+  },
+  {
+    "old": "{sceneFeedback}</div>:null}",
+    "new": "{workHistory?<p className=\"opening-paper-date\">今天的回响</p>:null}{sceneFeedback}</div>:null}"
+  },
+  {
+    "old": "title={quarterTurn?'本季留页':freeChoice?'今天的日历':researchCopy?.object",
+    "new": "title={quarterTurn?'本季留页':freeChoice?'今天的日历':workHistory?.object??researchCopy?.object"
+  },
+  {
+    "old": "detail={freeChoice||workCopy||marketCopy||researchCopy?",
+    "new": "detail={freeChoice||workCopy||workHistory||marketCopy||researchCopy?"
+  }
+]
