@@ -20,11 +20,11 @@ export function OpeningAttemptChoices({p,attempt,panel,onClose,onInspect,onMarke
   return <button type="button" key={label} className="opening-next-choice" disabled={binding.disabled} onClick={binding.activate}><strong>{label}</strong><span>{line}</span>{binding.reason?<span className="reason">{binding.reason}</span>:null}<i aria-hidden="true">↗</i></button>
  }
  const title=panel==='offer'?'这封委托，怎样答复？':panel==='free'?'今天，先把时间留给什么？':panel==='market'?'这笔钱，先怎么安排？':'接下来的日子，想怎样继续？'
- return <Dialog title={title} layout={panel==='market'?'direct':'book'} className={'opening-paper opening-attempt-choices'+(panel==='market'?' opening-market-choices':'')} onClose={onClose} footer={<div className="opening-choice-footer"><button type="button" onClick={onClose}>先不决定，留在这里</button><button type="button" className="scene-text-action" onClick={()=>{onClose();onInspect()}}>翻看当前对象的完整记录 ↗</button></div>}>
+ return <Dialog title={title} layout={panel==='market'||panel==='offer'?'direct':'book'} className={'opening-paper opening-attempt-choices'+(panel==='market'?' opening-market-choices':panel==='offer'?' opening-offer-choices':'')} onClose={onClose} footer={<div className="opening-choice-footer"><button type="button" onClick={onClose}>先不决定，留在这里</button><button type="button" className="scene-text-action" onClick={()=>{onClose();onInspect()}}>翻看当前对象的完整记录 ↗</button></div>}>
   {panel==='offer'&&first?<>
-   <p className="opening-paper-date">{p.view.date} · 最迟{first.dates.replyBy}答复</p>
-   <p>剪一条短片，并整理交付资料。客户报价<strong>{moneyText(first.terms.priceFen)}</strong>。</p>
-   <p className="opening-paper-terms">你要留出个人{moneyText(first.terms.costFen)}和本季{first.terms.actionPoints}点；{first.dates.startAt}开工，{first.dates.submitBy}前亲手提交。接下时先预留，开工才付款；客户确认后的实际回款另记。</p>
+   <p className="opening-offer-intro">剪一条短片，整理好交付资料。<span>最迟{first.dates.replyBy}答复</span></p>
+   <dl className="opening-offer-facts"><div><dt>客户报价</dt><dd>{moneyText(first.terms.priceFen)}</dd></div><div><dt>个人制作投入</dt><dd>{moneyText(first.terms.costFen)} / {first.terms.actionPoints}点</dd></div></dl>
+   <p className="opening-offer-dates">{first.dates.startAt}开工 · {first.dates.submitBy}前亲手提交。{p.view.date<first.dates.startAt?'接下先预留，开工才付款。':'今天接下就开工。'}客户款仍待验收和实际支付。</p>
    <div className="opening-offer-decisions"><CommandButton {...current} kind="StartFirstOrder" payload={{}} label="接下这笔手工单" confirm/><CommandButton {...current} kind="DeclineOffer" payload={{offerId:first.offerId}} label="婉拒这笔报价" confirm/><CommandButton {...current} kind="SkipOffer" payload={{offerId:first.offerId}} label="略过这次委托" confirm/></div>
   </>:null}
   {panel==='free'?<>

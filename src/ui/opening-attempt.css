@@ -26,3 +26,18 @@
 .cinema-app .opening-market-choices .opening-market-decisions :is(.command>button,.opening-next-choice):focus-visible{outline:2px solid #f2dba0;outline-offset:3px}
 .cinema-app .opening-market-choices .opening-market-decisions :is(.command>button,.opening-next-choice):disabled{background:#102a2c66;color:#b7b9a9;border-style:dashed}
 .cinema-app .opening-market-choices>.opening-choice-footer{flex:none;margin-top:18px;font:14px/1.7 var(--serif)}
+
+/* The short original letter and all three replies share one readable page. */
+.cinema-app .dialog.opening-offer-choices>.dialog-direct-body{display:flex;flex:1;min-height:0;flex-direction:column;justify-content:center;gap:16px}
+.cinema-app .opening-offer-choices .opening-offer-intro{display:flex;justify-content:space-between;gap:24px;margin:0;color:#e4d9bd;font:18px/1.8 var(--serif)}
+.cinema-app .opening-offer-choices .opening-offer-intro>span{color:#c5c6b2;font:14px/1.8 var(--serif);align-self:center}
+.cinema-app .opening-offer-choices .opening-offer-facts{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin:0;padding:0;border:0}
+.cinema-app .opening-offer-choices .opening-offer-facts>div{display:block;background:none;padding:10px 0;border:0;border-bottom:1px solid #bfa66b55}
+.cinema-app .opening-offer-choices .opening-offer-facts dt{color:#c5c6ab;font:15px/1.7 var(--serif)}
+.cinema-app .opening-offer-choices .opening-offer-facts dd{margin:6px 0 0;color:#efd69e;font:26px/1.6 Georgia,var(--serif)}
+.cinema-app .opening-offer-choices .opening-offer-dates{margin:0;color:#cdd0ba;font:15px/1.8 var(--serif)}
+.cinema-app .opening-offer-choices .opening-offer-decisions{margin:5px 0 0;gap:10px 20px}
+.cinema-app .opening-offer-choices .opening-offer-decisions .command>button{padding:12px 18px;color:#efdfbb;font:18px/1.7 var(--serif);transform:none}
+.cinema-app .opening-offer-choices .opening-offer-decisions .command>button:hover:not(:disabled){background:#41534788;color:#fff0d1}
+.cinema-app .opening-offer-choices .opening-offer-decisions .command>button:disabled{color:#b7b9a9;background:#102a2c66;border-bottom-style:dashed}
+.cinema-app .opening-offer-choices>.opening-choice-footer{flex:none;margin-top:18px}
