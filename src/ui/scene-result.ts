@@ -12,6 +12,7 @@ import {ecosystemSceneResult} from './ecosystem-scene-result.ts'
 import {sceneCashResult} from './scene-cash-result.ts'
 import {equitySharedResult} from './equity-shared-result.ts'
 import {equityInvitationResult} from './equity-invitation-result.ts'
+import {preparationStartResult} from './preparation-feedback.ts'
 
 type Relay=NonNullable<PlayFeatures['relay']>
 const originalDay=(value:unknown):value is string=>{try{return typeof value==='string'&&isoDate(value)===value}catch{return false}}
@@ -166,6 +167,8 @@ export function savedSceneResult(kind:string,label:string,previous:PlayingView|n
  if(equityShared)return equityShared
  if(relayResponse)return relayResponse
  if(ecosystem&&kind!=='AdvanceTime')return ecosystem
+ const preparation=preparationStartResult(kind,previous,current)
+ if(preparation)return preparation
  if(kind==='WorkQuarter')return `这一季的工作已经安排好。月末才按实际在岗日期发薪；你还留着${current.budget.available}点，可以做自己的选择。`
  if(kind==='StartFirstOrder')return `你接下了这份手工小单。${first.dates.startAt}开工，${first.dates.submitBy}前完成并提交。${first.status==='planned'?`本次预留制作费${moneyText(first.terms.costFen)}和${first.terms.actionPoints}点，开工时才实际使用。`:first.status==='running'?`制作已经开工，已付制作费${moneyText(first.result.directCostFen)}，使用${first.terms.actionPoints}点。`:''}客户的钱还没有到账。`
  if(kind==='SubmitDelivery')return '作品交出去了。接下来，等客户真正复核；验收和到账还会留下各自的日期。'

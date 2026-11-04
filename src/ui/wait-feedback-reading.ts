@@ -1,6 +1,7 @@
 import type {PublicFeedback} from '../application/public-feedback.ts'
 import type {PlayingView,PlayFeatures} from './game-types.ts'
 import {isoDate} from '../core/calendar.ts'
+import {preparationCompletionReading} from './preparation-feedback.ts'
 
 type LifeJob=PlayFeatures['life']['jobs'][number]
 const genericCompleted='一份原工作已经有了实际结果。'
@@ -20,6 +21,8 @@ export function personalCompletionCause(job:LifeJob,date:string):string|null {
 export function waitFeedbackReading(previous:PlayingView,current:PlayingView,cause:string,rows:readonly PublicFeedback[]):string[] {
  const before=previous.features as unknown as PlayFeatures,after=current.features as unknown as PlayFeatures
  return rows.flatMap(row=>{
+  const preparation=preparationCompletionReading(previous,current,row)
+  if(preparation)return [preparation]
   if(previous.runId!==current.runId||previous.date>current.date||row.kind!=='job'||row.attention!=='pause'||row.key!=='job:'+row.sourceId+':"completed"'||![genericCompleted,researchCompleted].includes(row.label))return [row.label]
   const lives=after.life.jobs.filter(job=>job.id===row.sourceId),studies=after.market.researches.filter(job=>job.id===row.sourceId)
   if(lives.length===1&&studies.length===0&&row.label===genericCompleted){

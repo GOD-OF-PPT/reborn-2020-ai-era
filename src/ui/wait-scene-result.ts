@@ -9,6 +9,7 @@ import {relayPrepaidSupportBrief} from './relay-support-settlement.ts'
 import {waitCauseBrief} from './scene-feedback-copy.ts'
 import {waitFeedbackReading} from './wait-feedback-reading.ts'
 import {firstOrderWaitBrief} from './first-order-feedback.ts'
+import {preparationCompletionReading} from './preparation-feedback.ts'
 import type {PlayingView,PlayFeatures} from './game-types.ts'
 
 const first=(text:string)=>text.includes('。')?text.slice(0,text.indexOf('。')+1):text
@@ -49,10 +50,12 @@ export function waitSceneResult(result:PublicWaitResult,current:PlayingView):{te
  const partial=result.status==='unsaved'||result.status==='conflict',stopped=result.reasonCodes.includes('WAIT_STOP_REQUESTED'),retryOnly=result.reasonCodes.includes('WAIT_RETRY_SAVED_ONLY'),retained=result.feedback.filter(row=>row.attention==='retain'),paused=result.feedback.filter(row=>row.attention==='pause'),meaning=[...new Set(waitFeedbackReading(result.lastBefore,last,cause,paused))].join(' '),important=paused.find(row=>['responsibility','course-update','invitation'].includes(row.kind))
  const retryNote=last.date<result.targetDate?'原候选已经保存；余下的等候仍由你重新选择。':'原候选已经保存，没有额外推进日子。'
  const note=partial?'这些日子已经保存；接下来这段等候尚未保存，请处理原候选。':stopped?'已经按你的选择停下；已发生的日子与原约保留。':retryOnly?retryNote:last.date<result.targetDate?'日子先停在这次真实反馈，剩下的安排仍在原日历里。':''
- const text=[cash,cause,meaning,'日历从'+before.date+'走到'+last.date+'。',retained.length?'这期间有'+new Set(retained.map(row=>row.sourceId)).size+'笔自己的原款到期，未收款仍保留，逐笔依据可翻原账。':null,note].filter(Boolean).join(' ')
+ const preparationReading=paused.map(row=>{const label=preparationCompletionReading(result.lastBefore!,last,row);return label?{...row,label}:row})
+ const onlyPreparation=paused.length===1&&preparationReading[0]!==paused[0]&&cause===last.date+'。已经确认的安排按真实日期发生，眼前又多了一次选择。'
+ const text=[cash,onlyPreparation?null:cause,meaning,'日历从'+before.date+'走到'+last.date+'。',retained.length?'这期间有'+new Set(retained.map(row=>row.sourceId)).size+'笔自己的原款到期，未收款仍保留，逐笔依据可翻原账。':null,note].filter(Boolean).join(' ')
  const singleReport=!cash&&retained.length===0?equityReportBrief(before,last,paused):null
  const supportBrief=retained.length===0?prepaidSupportRangeBrief(before,last,paused):null
- const causeBrief=singleReport??supportBrief??waitCauseBrief(last.date,cause,paused,old.firstOrder,features.firstOrder)
+ const causeBrief=singleReport??supportBrief??waitCauseBrief(last.date,cause,preparationReading,old.firstOrder,features.firstOrder)
  const wageAlreadySummarized=!!cash&&first(cause)===last.date+'。'&&paused.length===1&&paused[0]!.kind==='result'&&causeBrief===paused[0]!.label&&last.operations?.payroll.some(row=>row.id===paused[0]!.sourceId&&row.kind==='salary'&&row.amountFen>0&&row.through===last.date&&!before.operations?.payroll.some(old=>old.id===row.id))
  const firstOrderBrief=!partial&&!stopped&&!retryOnly&&retained.length===0?firstOrderWaitBrief(before,last,cash,cause,paused):null
  const brief=firstOrderBrief??[stopped?'已经按你的选择停下。':null,cash?first(cash):null,wageAlreadySummarized?null:causeBrief,singleReport||important?.label===causeBrief?null:important?.label,partial?'已保存部分保留，后续等候尚未保存。':retryOnly?retryNote:null].filter(Boolean).join(' ')
