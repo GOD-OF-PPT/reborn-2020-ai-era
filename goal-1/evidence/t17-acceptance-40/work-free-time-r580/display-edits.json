@@ -1,0 +1,59 @@
+[
+  {
+    "old": "import {WorkHistoryRecord} from './WorkHistoryRecord.tsx'",
+    "new": "import {WorkHistoryRecord} from './WorkHistoryRecord.tsx'\nimport {WorkTimeChoices} from './WorkTimeChoices.tsx'\nimport {workTimeChoiceFor} from './work-time-choice.ts'"
+  },
+  {
+    "old": " const currentWorkRecordKey=useRef<string|null>(null)",
+    "new": " const currentWorkRecordKey=useRef<string|null>(null)\n const [workTimeAt,setWorkTimeAt]=useState<string|null>(null)\n const currentWorkTimeKey=useRef<string|null>(null)"
+  },
+  {
+    "old": " const videoArt=!interrupted&&!requiresChoice&&!legacy&&video?videoPaperFor(thread):undefined",
+    "new": " const freeTime=dayActive&&!attempt&&day?.primary.classification==='active'&&safeDate?workTimeChoiceFor(p,thread):null\n const workTimeKey=freeTime?.key??null\n currentWorkTimeKey.current=workTimeKey\n useEffect(()=>{setWorkTimeAt(null)},[workTimeKey])\n const inWorkTime=(activate:()=>void)=>makeSharedAction(p,'安排工作之外的时间',activate,{allowReadOnly:true,canActivate:()=>workTimeKey!==null&&currentWorkTimeKey.current===workTimeKey}).activate()\n const closeWorkTime=()=>{if(currentWorkTimeKey.current===workTimeKey)setWorkTimeAt(null)}\n const workTimeBinding=freeTime?makeSharedAction(p,freeTime.label,()=>setWorkTimeAt(workTimeKey),{allowReadOnly:true,canActivate:()=>currentWorkTimeKey.current===workTimeKey}):null\n const workTimePrimary=workTimeBinding?{binding:workTimeBinding,main:action('01',workTimeBinding.label,'',workTimeBinding.activate,workTimeBinding)}:null\n const videoArt=!interrupted&&!requiresChoice&&!legacy&&video?videoPaperFor(thread):undefined"
+  },
+  {
+    "old": "??relayPrimary?.main??dayPrimary?.main??originalAction",
+    "new": "??relayPrimary?.main??workTimePrimary?.main??dayPrimary?.main??originalAction"
+  },
+  {
+    "old": "    :deferredRelay?<div",
+    "new": "    :workTimePrimary?dayPrimary?.main\n    :deferredRelay?<div"
+  },
+  {
+    "old": "title={quarterTurn?'本季留页':freeChoice?'今天的日历':workHistory?.object",
+    "new": "title={quarterTurn?'本季留页':freeChoice?'今天的日历':freeTime?'工作之外的时间':workHistory?.object"
+  },
+  {
+    "old": "??relayPrimary?.binding.label??dayPrimary?.binding.label",
+    "new": "??relayPrimary?.binding.label??workTimePrimary?.binding.label??dayPrimary?.binding.label"
+  },
+  {
+    "old": "??relayPrimary?.binding.disabled??dayPrimary?.binding.disabled",
+    "new": "??relayPrimary?.binding.disabled??workTimePrimary?.binding.disabled??dayPrimary?.binding.disabled",
+    "count": 2
+  },
+  {
+    "old": "??relayPrimary?.binding.activate??dayPrimary?.binding.activate",
+    "new": "??relayPrimary?.binding.activate??workTimePrimary?.binding.activate??dayPrimary?.binding.activate"
+  },
+  {
+    "old": "  {workReading&&workRecordAt===workRecordKey?",
+    "new": "  {freeTime&&workTimeAt===workTimeKey?<WorkTimeChoices key={workTimeKey} p={{...p,accountId:'personal'}} onClose={closeWorkTime} onLife={()=>inWorkTime(()=>{closeWorkTime();onNavigate('life',{accountId:'personal'})})} onExplore={()=>inWorkTime(()=>{closeWorkTime();onExplore()})} onResearch={id=>inWorkTime(()=>{closeWorkTime();onNavigate('market',{accountId:'personal',...(id?{recordId:id}:{}),openRecord:true})})}/>:null}\n  {workReading&&workRecordAt===workRecordKey?"
+  },
+  {
+    "old": "onResearch={id=>inWorkTime(()=>{closeWorkTime();onNavigate('market',{accountId:'personal',...(id?{recordId:id}:{}),openRecord:true})})}",
+    "new": "onResearch={id=>inWorkTime(()=>{closeWorkTime();onNavigate('market',{accountId:'personal',...(id?{recordId:id}:{}),openRecord:true})})} onRest={id=>inWorkTime(()=>{closeWorkTime();onNavigate('life',{accountId:'personal',lifeSelection:'rest',recordId:id})})}"
+  },
+  {
+    "old": "import {workTimeChoiceFor} from './work-time-choice.ts'",
+    "new": "import {workTimeChoiceFor,workTimeResearchBrief} from './work-time-choice.ts'"
+  },
+  {
+    "old": " const personalProgress=timeNotice?personalDayProgressBrief",
+    "new": " const workActivityBrief=workCopy&&timeNotice?workTimeResearchBrief(p,thread,timeNotice.props):null\n const personalProgress=timeNotice?personalDayProgressBrief"
+  },
+  {
+    "old": ":researchBrief&&timeNotice?cloneElement(timeNotice,{brief:researchBrief})",
+    "new": ":workActivityBrief&&timeNotice?cloneElement(timeNotice,{brief:workActivityBrief}):researchBrief&&timeNotice?cloneElement(timeNotice,{brief:researchBrief})"
+  }
+]

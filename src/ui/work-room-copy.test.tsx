@@ -35,14 +35,14 @@ function context(run=working){
 }
 function render(p:GamePanelProps,focus:OpeningFocus,feedback?:string){return renderToStaticMarkup(<OpeningMoment p={p} focus={focus} onFocus={vi.fn()} headingRef={null} fallback={roomMoment(p)} feedback={feedback} onNavigate={vi.fn()} onExplore={vi.fn()}/>)}
 
-it('keeps the unpaid work scene concise and preserves the original wait, fee review and alternate life choice',()=>{
+it('keeps the unpaid work scene concise and preserves the original wait, fee review and active-choice entry',()=>{
  const {p,focus,thread}=context(),html=render(p,focus,'这一季的工作已经安排好。')
  expect(workRoomCopy(p,thread)?.title).toBe('工作之外，想做点什么？')
  expect(html).toContain('工资按在岗日结算，尚未到账')
  expect(html).toContain('在岗 · 按月结薪')
  expect(html).toContain('等工作回响 · 2020-01-31')
  expect(html).toContain('核对后推进 · 2020-01-31')
- expect(html).toContain('看看生活')
+ expect(html).toContain('安排工作之外的时间')
  expect(html).toContain('环顾房间')
  expect(html).toContain('翻开手记')
  expect(html).toContain('这一季的工作已经安排好。')
