@@ -9,6 +9,7 @@ import {TodayScene} from './TodayScene.tsx'
 import {TodayMarketChoices} from './TodayMarketChoices.tsx'
 import {Dialog} from './Dialog.tsx'
 import {sceneReadingName} from './scene-language.ts'
+import type {OpeningFocus} from './player-thread.ts'
 
 // Normal in-memory gameplay projections plus a local React callback driver.
 // No controller submission, storage, codec, import/export or reload checks.
@@ -38,10 +39,10 @@ function act(run:GameRun,kind:string,payload:unknown={}){const result=evaluateCo
 const running=act(initial,'ResearchMarket',{definitionId:'market-overview'}),researchId=running.market!.researches[0]!.id
 const completed=act(running,'AdvanceTime',{date:running.market!.researches[0]!.completeAt}),interrupted=act(running,'StopMarketResearch',{researchId})
 const work=act(initial,'WorkQuarter'),rest=act(work,'StartLifeWork',{kind:'rest',personId:null,reference:null}),stopped=act(rest,'InterruptLifeWork',{jobId:rest.life!.jobs[0]!.id}),zero=act(stopped,'StartLifeWork',{kind:'rest',personId:null,reference:null})
-function driver(run:GameRun=initial){
+function driver(run:GameRun=initial,focusedResearchId?:string){
  const projected=registry.runtime!.project!(run),features=projected as unknown as PlayFeatures,view:GamePanelProps['view']={...projectRun(run),features:projected,saveStatus:'saved',busy:false,readOnly:false,readOnlyReason:null,hasCandidate:false,pendingRevision:null}
  const request=vi.fn(),requestWait=vi.fn(),controller={snapshot:{view,busy:false},asynchronous:false,runtimeFailed:false,preview:(command:CommandEnvelope)=>previewCommand(run,command,registry,run.actorId)} as unknown as GamePanelProps['controller']
- const p:GamePanelProps={view,features,controller,request,requestWait,accountId:'personal'},focus={runId:run.runId,kind:'work' as const,accountId:'personal',entityId:null},today=todayThread(p,focus)!
+ const p:GamePanelProps={view,features,controller,request,requestWait,accountId:'personal'},focus:OpeningFocus=focusedResearchId?{runId:run.runId,kind:'market',accountId:'personal',entityId:focusedResearchId,entityKind:'research'}:{runId:run.runId,kind:'work',accountId:'personal',entityId:null},today=todayThread(p,focus)!
  const onFocus=vi.fn(),onPrepare=vi.fn()
  const render=()=>elements(mounted('scene',()=>TodayScene({p,today,headingRef:null,onFocus,onPrepare,onResume:vi.fn(),onNavigate:vi.fn(),onExplore:vi.fn(),onRecollection:vi.fn()})))
  const find=(label:string)=>render().find(row=>row.type==='button'&&(words(row.props.children)===label||row.props['aria-label']===label||row.props['aria-label']===sceneReadingName(label)))
@@ -92,4 +93,49 @@ it('preserves existing order nodes and does not invent missing research terms',(
  const tree=TodayMarketChoices({p,orderAction,researchAction}),rows=elements(tree)
  expect(words(tree)).toContain('暂未找到这份研究的公开条件');expect(rows).toContain(orderAction);expect(rows).not.toContain(researchAction)
  expect(rows.some(row=>row.props.kind==='ResearchMarket')).toBe(false);expect(ui.p.request).not.toHaveBeenCalled()
+})
+
+
+it.each([
+ ['交易规则','market-foundation-course','模拟交易规则学习','¥3,000','核对模拟规则研习'],
+ ['试验资格','simulation-special-study','本局试验段资格研习','¥100','核对试验段研习'],
+] as const)('compares %s without spending, then opens only that original paid research confirmation',(short,id,title,cost,label)=>{
+ const ui=driver();ui.open();expect(ui.sheet().props.studyId).toBe('market-overview')
+ ui.click('比较研习：'+short);expect(ui.p.request).not.toHaveBeenCalled();expect(ui.onFocus).not.toHaveBeenCalled()
+ expect(ui.find('比较研习：'+short)?.props['aria-pressed']).toBe(true)
+ for(const text of [title,cost,'1点','7天','2020-01-08','完成后'])expect(ui.content()).toContain(text)
+ ui.click(label);expect(ui.p.request).toHaveBeenCalledExactlyOnceWith('ResearchMarket',{definitionId:id},label,true);expect(ui.dialog()).toBeUndefined()
+})
+
+it('keeps an explicitly compared study on returning and never silently picks a paid study',()=>{
+ const ui=driver();ui.open();expect(ui.find('比较研习：公开资料')?.props['aria-pressed']).toBe(true)
+ ui.click('比较研习：交易规则');ui.click('返回今天的选择');ui.click('准备一次模拟判断');expect(ui.sheet().props.studyId).toBe('market-foundation-course')
+ ui.click('先保留现金，不新增委托');ui.open();expect(ui.sheet().props.studyId).toBe('market-foundation-course');expect(ui.p.request).not.toHaveBeenCalled()
+})
+
+it('returns to the selected existing paid study rather than the newest research',()=>{
+ const paid=act(completed,'ResearchMarket',{definitionId:'market-foundation-course'}),paidId=paid.market!.researches.find(row=>row.definitionId==='market-foundation-course')!.id,more=act(paid,'ResearchMarket',{definitionId:'simulation-special-study'}),ui=driver(more)
+ ui.open();ui.click('比较研习：交易规则');expect(ui.content()).toContain('交易规则正在研习')
+ expect(ui.find('核对模拟规则研习')).toBeUndefined();ui.click('回到这份研习')
+ expect(ui.onFocus).toHaveBeenCalledExactlyOnceWith({runId:more.runId,kind:'market',accountId:'personal',entityId:paidId,entityKind:'research'});expect(ui.p.request).not.toHaveBeenCalled()
+})
+
+it('reads the already focused paid research on Today without creating another commitment',()=>{
+ const paid=act(initial,'ResearchMarket',{definitionId:'market-foundation-course'}),ui=driver(paid,paid.market!.researches[0]!.id)
+ ui.open();expect(ui.sheet().props.studyId).toBe('market-foundation-course');expect(ui.find('回到这份研习')).toBeDefined();expect(ui.p.request).not.toHaveBeenCalled()
+})
+
+it('can compare paid choices at zero action points but keeps their original rejection',()=>{
+ const ui=driver(zero);ui.open();ui.click('比较研习：交易规则');const button=ui.find('核对模拟规则研习')!
+ expect(button.props.disabled).toBe(true);(button.props.onClick as ()=>void)();expect(ui.p.request).not.toHaveBeenCalled()
+ expect(ui.render().some(row=>row.props.className==='reason'&&words(row.props.children).length>0)).toBe(true)
+})
+
+it('does not replace a missing selected definition with another study or reuse another life selection',()=>{
+ const ui=driver();ui.open();ui.click('比较研习：交易规则')
+ const missing={...ui.p,features:{...ui.p.features,workbench:{...ui.p.features.workbench,researches:ui.p.features.workbench.researches.filter(row=>row.id!=='market-foundation-course')}}}
+ const tree=TodayMarketChoices({p:missing,studyId:'market-foundation-course',onStudy:vi.fn(),researchAction:null,orderAction:<button>原委托</button>})
+ expect(words(tree)).toContain('暂未找到这份研究的公开条件');expect(elements(tree).some(row=>row.props.kind==='ResearchMarket')).toBe(false)
+ const other=createCampaignRun({runId:'other-study-ui',actorId:'player',commandId:'create-other',seed:'other-study-ui',backgroundId:'technical_employee',playerProfile:{wishId:'autonomy',approach:'free'}}),next=driver(other)
+ expect(next.sheet().props.studyId).toBe('market-overview');expect(next.p.request).not.toHaveBeenCalled()
 })

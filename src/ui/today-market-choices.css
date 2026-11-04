@@ -1,8 +1,8 @@
 .cinema-app .dialog.today-market-dialog>.dialog-direct-body{display:flex;flex:1;min-height:0;flex-direction:column;justify-content:center}
-.cinema-app .dialog.today-market-dialog .today-market-choices{--market-paper:#efdfba;--market-muted:#c3c9b4;--market-rule:#b9a36b66;display:flex;flex-direction:column;gap:18px;font-family:var(--serif)}
+.cinema-app .dialog.today-market-dialog .today-market-choices{--market-paper:#efdfba;--market-muted:#c3c9b4;--market-rule:#b9a36b66;display:flex;flex-direction:column;gap:12px;font-family:var(--serif)}
 .cinema-app .dialog.today-market-dialog .today-market-context{display:flex;justify-content:space-between;gap:20px;margin:0;color:var(--market-muted);font:15px/1.8 var(--serif)}
 .cinema-app .dialog.today-market-dialog .today-market-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px}
-.cinema-app .dialog.today-market-dialog .today-market-option{display:flex;flex-direction:column;border-top:1px solid var(--market-rule);padding-top:16px;min-width:0}
+.cinema-app .dialog.today-market-dialog .today-market-option{display:flex;flex-direction:column;border-top:1px solid var(--market-rule);padding-top:10px;min-width:0}
 .cinema-app .dialog.today-market-dialog .today-market-option>header{display:flex;align-items:center;gap:12px;min-height:64px;margin-bottom:12px}
 .cinema-app .dialog.today-market-dialog .today-market-number{color:#cbb67e;font-size:17px}
 .cinema-app .dialog.today-market-dialog .today-market-option h3{margin:0;color:var(--market-paper);font:400 23px/1.6 var(--serif)}
@@ -28,3 +28,13 @@
 .cinema-app .dialog.today-market-dialog .today-market-footnote{margin:0;color:var(--market-muted);font:14px/1.8 var(--serif)}
 .cinema-app .dialog.today-market-dialog>.today-choice-footer{flex:none;padding-top:15px;border-top:1px solid #b9a36b66}
 .text-mode .today-market-sketch{display:none}
+
+.cinema-app .dialog.today-market-dialog .today-study-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 10px}
+.cinema-app .dialog.today-market-dialog .today-study-tabs>button{display:flex;flex-direction:row;justify-content:center;align-items:baseline;gap:8px;padding:7px 5px;border:1px solid #b9a36b66;border-bottom:3px solid #b9a36b66;border-radius:0;background:#18382d77;color:#d8d8be;font:14px/1.6 var(--serif);box-shadow:none;transform:none}
+.cinema-app .dialog.today-market-dialog .today-study-tabs>button strong{font:400 16px/1.6 var(--serif)}
+.cinema-app .dialog.today-market-dialog .today-study-tabs>button[aria-pressed=true]{border-color:#ddc58c;background:#d6bc801b;color:#ffdf9e}
+.cinema-app .dialog.today-market-dialog .today-study-tabs>button:is(:hover,:focus-visible):not(:disabled){background:#d6bc8026;color:#ffdf9e;transform:none}
+.cinema-app .dialog.today-market-dialog .today-study-tabs>button:disabled{opacity:.55}
+.cinema-app .dialog.today-market-dialog .today-market-option[data-kind=research]>header{min-height:42px;margin-bottom:5px}
+.cinema-app .dialog.today-market-dialog .today-market-option[data-kind=research] .today-market-sketch{width:50px;height:46px}
+.cinema-app .dialog.today-market-dialog .today-market-option[data-kind=research] .today-market-effect{margin-bottom:10px}
