@@ -83,12 +83,14 @@ it('keeps a meaningful short time receipt and access to its full echo',()=>{
  expect(html).toContain('等这次生活安排完成 · 2020-01-08')
 })
 
-it('retains the original disabled preview when no actions remain',()=>{
+it('offers the original clock and a complete-condition reader when no actions remain',()=>{
  const working=act(initial,'WorkQuarter'),first=act(working,'StartLifeWork',{kind:'rest',personId:null,reference:null}),interrupted=act(first,'InterruptLifeWork',{jobId:first.life!.jobs[0]!.id}),again=act(interrupted,'StartLifeWork',{kind:'rest',personId:null,reference:null}),p=props(again,'workspace')
  expect(p.view.budget.available).toBe(0)
- const html=render(p),button=html.match(/<button[^>]*aria-label="改善桌椅与照明"[^>]*>/)?.[0]
- expect(button).toContain('disabled')
- expect(html).toContain('reason')
+ const html=render(p)
+ expect(html).toContain('这季的四点，已经用完')
+ expect(html).toContain('改善桌椅与照明 · 条件与费用')
+ expect(html).not.toContain('aria-label="改善桌椅与照明"')
+ expect((html.match(/class="clock-advance"/g)??[]).length).toBe(1)
  expect(p.request).not.toHaveBeenCalled()
 })
 
