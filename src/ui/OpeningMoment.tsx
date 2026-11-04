@@ -7,6 +7,7 @@ import {WorkTimeChoices} from './WorkTimeChoices.tsx'
 import {workTimeChoiceFor,workTimeResearchBrief} from './work-time-choice.ts'
 import {workWaitReading} from './work-wait-reading.ts'
 import {WorkWaitCue} from './WorkWaitCue.tsx'
+import {workOutcome} from './work-outcome.ts'
 import {marketOrderRoomCopy,marketOrderWaitBrief} from './market-order-room.ts'
 import {researchRoomCopy,researchRoomBrief,researchWaitLabel} from './research-room-copy.ts'
 import {personalDayProgressBrief,personalStartNoticeExpired,personalResultFacts} from './personal-day-copy.ts'
@@ -340,6 +341,8 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  // A different result or any additional fact keeps its original presentation.
  const closedEcho=closedCopy&&isValidElement<ComponentProps<typeof SceneTimeNotice>>(feedback)&&feedback.type===SceneTimeNotice&&feedback.props.compact===true&&feedback.props.date===p.view.date&&sceneTimeNarrative(p.view.date,feedback.props.text)===closedCopy.originalEcho
  const timeNotice=isValidElement<ComponentProps<typeof SceneTimeNotice>>(feedback)&&feedback.type===SceneTimeNotice&&feedback.props.compact?feedback:null
+ const sideOutcome=workCopy&&timeNotice?workOutcome(p,thread,timeNotice.props):null
+ const sideRecord=sideOutcome?makeSharedAction(p,sideOutcome.record.label,()=>onNavigate(sideOutcome.record.screen,sideOutcome.record.target),{allowReadOnly:true}):null
  const workActivityBrief=workCopy&&timeNotice?workTimeResearchBrief(p,thread,timeNotice.props):null
  const personalProgress=timeNotice?personalDayProgressBrief(p,thread,timeNotice.props):null
  const marketProgress=marketCopy&&timeNotice?marketOrderWaitBrief(p,thread,timeNotice.props):null
@@ -347,7 +350,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const personalFacts=personalLife&&timeNotice?personalResultFacts(p,thread,timeNotice.props):null
  const paidFirstFacts=firstAttempt&&timeNotice?firstOrderPaidFacts(p,thread,timeNotice.props):null
  const sceneFactsAfterEcho=researchCopy?.resultEcho&&researchBrief===researchCopy.resultEcho?[]:paidFirstFacts??(personalFacts?[personalFacts]:sceneFacts)
- const sceneFeedback=feedback==='已从本机存档继续。'||personalStartNoticeExpired(p,feedback,thread)?null:closedEcho?cloneElement(feedback,{brief:closedCopy.line}):workActivityBrief&&timeNotice?cloneElement(timeNotice,{brief:workActivityBrief}):researchBrief&&timeNotice?cloneElement(timeNotice,{brief:researchBrief}):marketProgress&&timeNotice?cloneElement(timeNotice,{brief:marketProgress}):personalProgress&&timeNotice?cloneElement(timeNotice,{brief:personalProgress}):feedback
+ const sceneFeedback=feedback==='已从本机存档继续。'||personalStartNoticeExpired(p,feedback,thread)?null:closedEcho?cloneElement(feedback,{brief:closedCopy.line}):sideOutcome&&sideRecord&&timeNotice?cloneElement(timeNotice,{brief:sideOutcome.brief,recordAction:<button type="button" disabled={sideRecord.disabled} onClick={sideRecord.activate}>{sideRecord.label}</button>}):workActivityBrief&&timeNotice?cloneElement(timeNotice,{brief:workActivityBrief}):researchBrief&&timeNotice?cloneElement(timeNotice,{brief:researchBrief}):marketProgress&&timeNotice?cloneElement(timeNotice,{brief:marketProgress}):personalProgress&&timeNotice?cloneElement(timeNotice,{brief:personalProgress}):feedback
  const courseArt=!interrupted&&!requiresChoice&&!legacy&&course?coursePreparationPaperFor(thread):undefined
  const quarterBinding=!interrupted&&!unknownFocus&&!legacy&&w.atQuarterEnd&&thread.focusScope!=='history'?makeSharedAction(p,'看看这一季，真实留下了什么',openRecollection,{allowReadOnly:true}):null
  const quarterPrimary=quarterBinding?{binding:quarterBinding,main:<div className="command moment-decision moment-primary"><button type="button" disabled={quarterBinding.disabled} onClick={quarterBinding.activate}><b aria-hidden="true">01</b><span>{sceneReadingLabel(quarterBinding.label)}</span><i aria-hidden="true">↗</i></button>{quarterBinding.reason?<small className="reason">{quarterBinding.reason}</small>:null}</div>}:null
@@ -385,6 +388,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
     :relayClosed?action('02','看看下一期需要哪些条件','先核对当前条款与资源，再显选新客户、线路和支持；不自动续约',()=>{setObjectOpen(false);openRelay('next-service')})
     :!requiresChoice&&!legacy&&thread.focusScope==='history'?action('02',inspectLabel,'只回看，不新增工作、交易或推进日期',workReading?openWorkRecord:inspectFocus)
     :workTimePrimary?dayPrimary?.main
+    :sideOutcome?action('02',sideOutcome.next.label,'只查看下一方向，不新增承诺',()=>onNavigate(sideOutcome.next.screen,sideOutcome.next.target))
     :deferredRelay?<div className="moment-wait moment-continue"><ClockAdvance showReason={showSceneReasons} p={nearProps} date={deferredRelay.date} label={deferredRelay.label+' · '+deferredRelay.date} room/></div>
     :courseReady?action('02','把样课收好，回到今天','保留这份准备与原书签，新的招生仍另行决定',openToday)
     :attempt?.action.kind==='next-choice'?action('02','看看这份经历，还能通向哪些尝试','先看手艺、生活与模拟判断，不自动新增安排',()=>setChoicePanel('next'))

@@ -394,7 +394,7 @@ export default function App({controller=null,startupError=null,diagnostics=null,
   }
  }
  const openWorkspace=(screen:Screen=tab,target?:SceneTarget)=>{
-  if(!workspaceOpen){const current=controller?.snapshot.view;readerReturn.current=tab==='room'&&(screen==='finance'||screen==='deepseek')&&current&&current.runId===view?.runId?{runId:current.runId,revision:current.revision,accountId:selectedAccountId,focusKey:JSON.stringify(currentFocus.current?.focus??null),today:requestedRoomToday,receipt:sceneReceipt}:null}
+  if(!workspaceOpen){const current=controller?.snapshot.view;readerReturn.current=tab==='room'&&(screen==='finance'||screen==='deepseek'||target?.returnToRoom===true&&(screen==='market'||screen==='life'))&&current&&current.runId===view?.runId?{runId:current.runId,revision:current.revision,accountId:selectedAccountId,focusKey:JSON.stringify(currentFocus.current?.focus??null),today:requestedRoomToday,receipt:sceneReceipt}:null}
   const lifeMode=target?.lifeSelection??(screen===tab?lifeSceneMode:'person')
   const recordId=target?.recordId??(screen===tab?(screen==='market'?marketRecordId:screen==='quarter'?quarterRecordId:screen==='life'?lifeRecordId:null):null)
   const requestedVideo=target?.videoTarget??(screen===tab&&target===undefined?videoTarget:undefined)

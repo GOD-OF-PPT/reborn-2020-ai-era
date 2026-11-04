@@ -1,0 +1,52 @@
+[
+  {
+    "file": "src/ui/SceneEcho.tsx",
+    "old": "import {useState} from 'react'",
+    "new": "import {useState,type ReactNode} from 'react'"
+  },
+  {
+    "file": "src/ui/SceneEcho.tsx",
+    "old": "accountName,compact=false,brief}:{date:string",
+    "new": "accountName,compact=false,brief,recordAction}:{date:string"
+  },
+  {
+    "file": "src/ui/SceneEcho.tsx",
+    "old": "compact?:boolean;brief?:string})",
+    "new": "compact?:boolean;brief?:string;recordAction?:ReactNode})"
+  },
+  {
+    "file": "src/ui/SceneEcho.tsx",
+    "old": ">细看回响 ↗</button><button type=\"button\" aria-label=\"收起这次时间回响\"",
+    "new": ">细看回响 ↗</button>{recordAction}<button type=\"button\" aria-label=\"收起这次时间回响\""
+  },
+  {
+    "file": "src/ui/OpeningMoment.tsx",
+    "old": "import {WorkWaitCue} from './WorkWaitCue.tsx'",
+    "new": "import {WorkWaitCue} from './WorkWaitCue.tsx'\nimport {workOutcome} from './work-outcome.ts'"
+  },
+  {
+    "file": "src/ui/OpeningMoment.tsx",
+    "old": " const workActivityBrief=workCopy&&timeNotice?",
+    "new": " const sideOutcome=workCopy&&timeNotice?workOutcome(p,thread,timeNotice.props):null\n const sideRecord=sideOutcome?makeSharedAction(p,sideOutcome.record.label,()=>onNavigate(sideOutcome.record.screen,sideOutcome.record.target),{allowReadOnly:true}):null\n const workActivityBrief=workCopy&&timeNotice?"
+  },
+  {
+    "file": "src/ui/OpeningMoment.tsx",
+    "old": ":workActivityBrief&&timeNotice?cloneElement",
+    "new": ":sideOutcome&&sideRecord&&timeNotice?cloneElement(timeNotice,{brief:sideOutcome.brief,recordAction:<button type=\"button\" disabled={sideRecord.disabled} onClick={sideRecord.activate}>{sideRecord.label}</button>}):workActivityBrief&&timeNotice?cloneElement"
+  },
+  {
+    "file": "src/ui/OpeningMoment.tsx",
+    "old": "    :workTimePrimary?dayPrimary?.main\n    :deferredRelay?",
+    "new": "    :workTimePrimary?dayPrimary?.main\n    :sideOutcome?action('02',sideOutcome.next.label,'只查看下一方向，不新增承诺',()=>onNavigate(sideOutcome.next.screen,sideOutcome.next.target))\n    :deferredRelay?"
+  },
+  {
+    "file": "src/ui/game-types.ts",
+    "old": "export interface SceneTarget {roomView?:'today';",
+    "new": "export interface SceneTarget {roomView?:'today';returnToRoom?:true;"
+  },
+  {
+    "file": "src/ui/App.tsx",
+    "old": "tab==='room'&&(screen==='finance'||screen==='deepseek')&&current",
+    "new": "tab==='room'&&(screen==='finance'||screen==='deepseek'||target?.returnToRoom===true&&(screen==='market'||screen==='life'))&&current"
+  }
+]

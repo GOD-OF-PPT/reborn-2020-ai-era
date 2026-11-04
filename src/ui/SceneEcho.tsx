@@ -1,7 +1,7 @@
 import type {PlayingView} from './game-types.ts'
 import {Dialog} from './Dialog.tsx'
 import {moneyText} from './game-text.ts'
-import {useState} from 'react'
+import {useState,type ReactNode} from 'react'
 import {isoDate} from '../core/calendar.ts'
 import './scene-echo-reading.css'
 
@@ -42,8 +42,8 @@ export function sceneTimeNarrative(date:string,text:string){
 }
 
 /** The actual saved result stays in the scene; the same complete reel opens on demand. */
-export function SceneTimeNotice({date,text,frame,onClose,accountName,compact=false,brief}:{date:string;text:string;frame:EchoFrame|null;onClose:()=>void;accountName:(id:string)=>string;compact?:boolean;brief?:string}){
+export function SceneTimeNotice({date,text,frame,onClose,accountName,compact=false,brief,recordAction}:{date:string;text:string;frame:EchoFrame|null;onClose:()=>void;accountName:(id:string)=>string;compact?:boolean;brief?:string;recordAction?:ReactNode}){
  const [open,setOpen]=useState(false)
  const narrative=sceneTimeNarrative(date,text),summary=compact&&brief?brief:compact&&narrative.includes('。')?narrative.slice(0,narrative.indexOf('。')+1):narrative
- return <span className="scene-time-note" role="status">{!compact?<time dateTime={date}>{date}</time>:null}<span className="scene-time-result">{summary}</span><button type="button" data-interaction="inspect" onClick={()=>setOpen(true)}>细看回响 ↗</button><button type="button" aria-label="收起这次时间回响" onClick={onClose}>收好</button>{open?<SceneEcho text={text} frame={frame} accountName={accountName} onClose={()=>setOpen(false)}/>:null}</span>
+ return <span className="scene-time-note" role="status">{!compact?<time dateTime={date}>{date}</time>:null}<span className="scene-time-result">{summary}</span><button type="button" data-interaction="inspect" onClick={()=>setOpen(true)}>细看回响 ↗</button>{recordAction}<button type="button" aria-label="收起这次时间回响" onClick={onClose}>收好</button>{open?<SceneEcho text={text} frame={frame} accountName={accountName} onClose={()=>setOpen(false)}/>:null}</span>
 }
