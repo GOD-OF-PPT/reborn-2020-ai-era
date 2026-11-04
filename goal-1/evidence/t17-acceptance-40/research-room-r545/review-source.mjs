@@ -1,0 +1,10 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import ts from 'typescript';
+const root='goal-1/evidence/t17-acceptance-40/research-room-r545',read=p=>fs.readFileSync(p,'utf8');
+const before=read(root+'/DayThreadAction.tsx.before'),after=read('src/ui/DayThreadAction.tsx');assert.equal(after.replace("thread.focusScope!=='history'&&thread.focus.kind==='market'&&thread.focus.entityKind==='research'&&result?'收好笔记，想想今天':",''),before);
+const parse=p=>ts.createSourceFile(p,read(p),ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),old=parse(root+'/OpeningMoment.tsx.before'),next=parse('src/ui/OpeningMoment.tsx');
+function controls(source){const rows=[];function walk(node){if(ts.isJsxSelfClosingElement(node)&&['CommandButton','ClockAdvance'].includes(node.tagName.getText(source)))rows.push(node.getText(source));if(ts.isJsxElement(node)&&['CommandButton','ClockAdvance'].includes(node.openingElement.tagName.getText(source)))rows.push(node.getText(source));ts.forEachChild(node,walk)}walk(source);return rows}
+assert.deepEqual(controls(old),controls(next));
+function attributes(source,name){const rows=[];function walk(node){if(ts.isJsxAttribute(node)&&node.name.getText(source)===name)rows.push(node.getText(source));ts.forEachChild(node,walk)}walk(source);return rows}
+assert.deepEqual(attributes(old,'onActivate'),attributes(next,'onActivate'));
+const load=p=>JSON.parse(read(p)),base=load('goal-1/evidence/t17-acceptance-40/research-review-r543/snapshot544.json'),final=load(root+'/snapshot546.json'),map=new Map(base.files.map(row=>[row.path,row.sha256])),delta=final.files.filter(row=>map.get(row.path)!==row.sha256).map(row=>row.path);assert.deepEqual([...delta].sort(),[...final.owned].sort());
+const record={source:546,base:544,changed:delta,originalCommandAndClockNodesExact:controls(old).length,originalObjectOnActivateExact:true,dayActionOnlyLabelChanged:true,allNonUIUnchanged:true,fullSceneEchoAndAppUnchanged:true,storageTests:0,compatibility:0};fs.writeFileSync(root+'/source-review546.json',JSON.stringify(record,null,2)+'\n');console.log(record);
