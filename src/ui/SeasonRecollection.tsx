@@ -6,12 +6,15 @@ import {ClockAdvance} from './ClockAdvance.tsx'
 import type {OpeningFocus} from './player-thread.ts'
 import {makeSharedAction} from './shared-action.ts'
 import {seasonMeaning} from './scene-meaning.ts'
+import {seasonTurnReading} from './season-turn.ts'
+import {SeasonTurnSummary} from './SeasonTurnSummary.tsx'
 
 type Props={p:GamePanelProps;quarter?:string;onClose:()=>void;onNavigate:NavigateScene;onChooseFocus?:()=>void;focusLabel?:string;onToday?:()=>void;onContinueFocus?:(focus:OpeningFocus)=>void}
 
 /** Reading a season never closes it, clears an obligation or executes the next season's plans. */
 export function SeasonRecollection({p,quarter,onClose,onNavigate,onChooseFocus,focusLabel='调整本季关注',onToday,onContinueFocus}:Props){
  const key=p.view.runId+'|'+(quarter??'current'),[selection,setSelection]=useState<{key:string;quarter:string}|null>(null)
+ const [fullAt,setFullAt]=useState<string|null>(null)
  const origin=useRef({key,quarter:quarter??p.features.workbench.quarter})
  if(origin.current.key!==key)origin.current={key,quarter:quarter??p.features.workbench.quarter}
  const reading=selection?.key===key?selection.quarter:origin.current.quarter,readingKey=key+'|'+reading
@@ -40,12 +43,16 @@ export function SeasonRecollection({p,quarter,onClose,onNavigate,onChooseFocus,f
   const focusLabel=item.continuation==='retained'?'把这份原记录放回眼前':item.continuation==='choice'?'把这个原选择放回眼前':'把这件仍待续的事放回眼前'
   return <article key={item.id} data-urgent={item.urgent?'true':'false'}><p className="season-remaining-label">{label}{item.continuation==='retained'?'仍按原协议保留':item.dueAt??'日期沿原记录'}</p><h4>{item.title}</h4><p>{item.line}</p><button type="button" className="scene-text-action" onClick={()=>inspect(item.inspect.screen,item.inspect.target)}>{item.inspect.label} ↗</button>{item.focus&&onContinueFocus?<button type="button" disabled={sourceLocked} className="scene-text-action" onClick={()=>ui(focusLabel,()=>{close();onContinueFocus(item.focus!)}).activate()}>{focusLabel}</button>:null}<details><summary>核对原责任来源</summary>{item.sourceRefs.map(ref=><code key={ref.kind+':'+ref.id}>{ref.kind} · {ref.id}</code>)}</details></article>
  }
+ const clock=canEnter?<ClockAdvance p={nearProps} date={season.nextQuarterDate!} label={'核对旧约定，进入下一季 · '+season.nextQuarterDate} room/>:null
  const footer=<div className="season-recollection-actions">
-  {canEnter?<ClockAdvance p={nearProps} date={season.nextQuarterDate!} label={'核对旧约定，进入下一季 · '+season.nextQuarterDate} room/>:null}
+  {clock}
   {onToday?<button type="button" disabled={today.disabled} onClick={today.activate}>{p.features.workbench.progression.requiresDelivery?'先回到待交付的作品':'合上'+season.quarter+'，回到今天'}</button>:!canEnter?<button type="button" onClick={close}>回到眼前这件事</button>:null}
    {onChooseFocus?<button type="button" onClick={()=>ui('调整本季关注',()=>{close();onChooseFocus()}).activate()}>{focusLabel} ↗</button>:<button type="button" onClick={()=>inspect('quarter',{accountId:p.accountId})}>转看今天（{p.features.workbench.quarter}）的全部安排与原账 ↗</button>}
  </div>
- return <Dialog key={season.quarter} title={season.quarter+' · 这季留下的日子'} className="opening-paper season-recollection" onClose={close} footer={footer}>
+ const turn=seasonTurnReading(p,season)
+ const openFull=ui('翻阅完整季度留页',()=>setFullAt(readingKey)),backToTurn=ui('回到季末交接',()=>setFullAt(null))
+ if(turn&&clock&&fullAt!==readingKey)return <Dialog title={season.quarter+' · 这一季，先收好'} layout="direct" className="opening-paper season-recollection season-turn" onClose={close} footer={<div className="season-recollection-actions season-turn-actions">{clock}<button type="button" className="season-turn-read" disabled={openFull.disabled} onClick={openFull.activate}>翻阅全部回响、旧约与原账 ↗</button></div>}><SeasonTurnSummary value={turn}/></Dialog>
+ return <Dialog key={season.quarter} title={season.quarter+' · 这季留下的日子'} className="opening-paper season-recollection" onClose={close} footer={turn?<><button type="button" className="season-turn-read" disabled={backToTurn.disabled} onClick={backToTurn.activate}>回到季末交接</button>{footer}</>:footer}>
   <header className="season-leaf-heading"><p className="opening-paper-date">正在翻阅{season.quarter} · 今天仍是{p.view.date}</p><label className="season-reading-selector">翻阅哪一季<select value={reading} disabled={sourceLocked} onChange={event=>{const next=event.target.value;if(!available.includes(next)||sourceLocked)return;ui('翻阅原季度',()=>setSelection({key,quarter:next})).activate()}}>{available.map(id=><option key={id} value={id}>{id}{id===p.features.workbench.quarter?' · 本季':' · 已走过的日子'}</option>)}</select></label><p className="opening-paper-date">原发生范围 {season.from}—{season.through} · 公开记录截至{season.asOf}</p><h3>{season.closed?'这一季，已经留下原结束记录。':season.atQuarterEnd?'本季日期已经结算到这里。':'日子还在继续，先看看已发生的事。'}</h3><p>{season.closed?'原来的义务仍按各自记录延续。':'翻阅不会提前结束本季，也不会替你进入下一季。'}</p></header>
   <section className="season-echoes" aria-label="本季实际回响">
    {season.nodes.length?season.nodes.map(node=><article key={node.id} className="season-echo-leaf"><time>{node.date}</time><h3>{node.title}</h3><p>{node.line}</p><button type="button" className="scene-text-action" onClick={()=>inspect(node.inspect.screen,node.inspect.target)}>{node.inspect.label} ↗</button><details><summary>核对这项实际来源</summary>{node.sourceRefs.map(ref=><p key={ref.kind+':'+ref.id}><span>{ref.kind} · {ref.date??'原记录日期'}</span><code>{ref.id}</code></p>)}</details></article>):<p>本季暂没有足够的已确认结果，不用安排、浮盈或想象补一份回报。原工作与生活仍可继续。</p>}
