@@ -1,7 +1,8 @@
 import {SeasonFocusChoices} from './SeasonFocusChoices.tsx'
 import {seasonChoiceDirection,seasonChoiceTitle} from './season-choice-copy.ts'
 import {workRoomCopy} from './work-room-copy.ts'
-import {workHistoryCopy} from './work-history-copy.ts'
+import {workHistoryCopy,workHistoryReading} from './work-history-copy.ts'
+import {WorkHistoryRecord} from './WorkHistoryRecord.tsx'
 import {marketOrderRoomCopy,marketOrderWaitBrief} from './market-order-room.ts'
 import {researchRoomCopy,researchRoomBrief,researchWaitLabel} from './research-room-copy.ts'
 import {personalDayProgressBrief,personalStartNoticeExpired,personalResultFacts} from './personal-day-copy.ts'
@@ -10,7 +11,7 @@ import {firstOrderStage} from './first-order-stage.ts'
 import './first-order-stage.css'
 import {sceneReadingLabel,sceneReadingName,sceneStageLabel} from './scene-language.ts'
 import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
-import {cloneElement,isValidElement,useEffect,useState,type Ref,type ReactNode,type ComponentProps} from 'react'
+import {cloneElement,isValidElement,useEffect,useRef,useState,type Ref,type ReactNode,type ComponentProps} from 'react'
 import type {GamePanelProps,NavigateScene} from './game-types.ts'
 import type {Moment} from './RoomMoment.tsx'
 import {OpeningObject,type OpeningObjectProps} from './OpeningObject.tsx'
@@ -146,6 +147,8 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const [focusGroup,setFocusGroup]=useState<SeasonFocusGroup>('continue')
  const [localTodayAt,setLocalTodayAt]=useState<DayPerspective|null>(null)
  const [recordOpen,setRecordOpen]=useState(false)
+ const [workRecordAt,setWorkRecordAt]=useState<string|null>(null)
+ const currentWorkRecordKey=useRef<string|null>(null)
  useEffect(()=>{if(localTodayAt&&!dayPerspectiveCurrent(p.view,localTodayAt))setLocalTodayAt(null)},[localTodayAt,p.view])
  const candidates=seasonFocusChoices(p),picked=candidates.find(candidate=>candidate.id===draftId)
  const pickedDirection=picked?seasonChoiceDirection(picked):null
@@ -192,6 +195,11 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const safeDate=thread.focus.kind==='relay'?relayReviewDate(p,ordinaryDate):ordinaryDate
  const workCopy=!interrupted&&!requiresChoice&&!legacy?workRoomCopy(p,thread):null
  const workHistory=!interrupted&&!requiresChoice&&!legacy?workHistoryCopy(p,thread):null
+ const workReading=workHistory?workHistoryReading(p,thread):null,workRecordKey=workReading?.key??null
+ currentWorkRecordKey.current=workRecordKey
+ useEffect(()=>{setWorkRecordAt(null)},[workRecordKey])
+ const inWorkRecord=(activate:()=>void)=>makeSharedAction(p,'翻阅原工作手记',activate,{allowReadOnly:true,canActivate:()=>workRecordKey!==null&&currentWorkRecordKey.current===workRecordKey}).activate()
+ const openWorkRecord=()=>inWorkRecord(()=>{setObjectOpen(false);setWorkRecordAt(workRecordKey)})
  const quarterTurn=!interrupted&&!unknownFocus&&!legacy&&w.atQuarterEnd&&thread.focusScope!=='history'?seasonTurnReading(p,seasonRecollection(p)):null
  const originalWaitLabel=moment.wait&&safeDate===moment.wait.date?(workCopy?'等工作回响':moment.wait.label):(p.requestWait?defaultWaitLabel(w,true):clockStopCopy(p,safeDate)?.label??'先到日历上的下一处反馈')
  const waitLabel=thread.focus.kind==='relay'?relayReviewLabel(p,safeDate,originalWaitLabel):!interrupted&&!requiresChoice&&!legacy?researchWaitLabel(p,thread,safeDate,originalWaitLabel):originalWaitLabel
@@ -293,7 +301,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  // Collection covers this customer's full due balance, possibly across periods.
  // That exact command scope takes precedence over the current period summary.
  const collectionScope=summarized&&relay&&thread.stage==='relay-collection'?sceneLine:null
- const recordBinding=makeSharedAction(p,requiresChoice?'翻看本季已有记录':'翻阅这一段的记录与代价',()=>{if(requiresChoice)onNavigate('quarter',{accountId:p.accountId});else setRecordOpen(true)},{allowReadOnly:true})
+ const recordBinding=makeSharedAction(p,requiresChoice?'翻看本季已有记录':'翻阅这一段的记录与代价',()=>{if(requiresChoice)onNavigate('quarter',{accountId:p.accountId});else if(workReading)openWorkRecord();else setRecordOpen(true)},{allowReadOnly:true})
  const recordLink=(openRelay:(intent?:'record')=>void)=>{
   const binding=relay&&!requiresChoice&&!legacy?makeSharedAction(p,relayTarget===null?'翻看这次开站的条件与投入':relayClosed?'翻原票与回执':'翻看同一份服务的原票与回应',()=>{setObjectOpen(false);openRelay('record')},{allowReadOnly:true}):recordBinding
   return <><button type="button" className="scene-text-action" disabled={binding.disabled} onClick={binding.activate} aria-label={sceneReadingName(binding.label)+' ↗'}>{sceneReadingLabel(binding.label)} ↗</button>{relayClosed&&feedback==='已从本机存档继续。'?<p className="moment-status" role="status">{feedback}</p>:null}</>
@@ -359,7 +367,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
    {primary?.main??quarterPrimary?.main??videoPrimary?.main??coursePrimary?.main??relayPrimary?.main??dayPrimary?.main??originalAction(false,openOrder,openVideo,openCourse,openRelay)}
    {interrupted?unknownFocus?action('02','只翻本季已有记录','原关注待重选；这项原责任不会因此解除',()=>onNavigate('quarter',{accountId:p.accountId})):action('02','只翻原来关注的那件事','只查看；这项原责任不会因此解除',inspectFocus)
     :relayClosed?action('02','看看下一期需要哪些条件','先核对当前条款与资源，再显选新客户、线路和支持；不自动续约',()=>{setObjectOpen(false);openRelay('next-service')})
-    :!requiresChoice&&!legacy&&thread.focusScope==='history'?action('02',inspectLabel,'只回看，不新增工作、交易或推进日期',inspectFocus)
+    :!requiresChoice&&!legacy&&thread.focusScope==='history'?action('02',inspectLabel,'只回看，不新增工作、交易或推进日期',workReading?openWorkRecord:inspectFocus)
     :deferredRelay?<div className="moment-wait moment-continue"><ClockAdvance showReason={showSceneReasons} p={nearProps} date={deferredRelay.date} label={deferredRelay.label+' · '+deferredRelay.date} room/></div>
     :courseReady?action('02','把样课收好，回到今天','保留这份准备与原书签，新的招生仍另行决定',openToday)
     :attempt?.action.kind==='next-choice'?action('02','看看这份经历，还能通向哪些尝试','先看手艺、生活与模拟判断，不自动新增安排',()=>setChoicePanel('next'))
@@ -385,6 +393,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  object={<OpeningObject copyMode="tableau" {...(relayArt?{relayPaper:{...relayArt,...(relayPrimary?{actionHint:relayPrimary.hint}:{})},displayTitle:''}:{})} {...(videoArt?{videoPaper:videoArt,displayTitle:''}:{})} {...(courseArt?{coursePaper:courseArt,displayTitle:''}:{})} {...(classArt?{teachingPaper:classArt,displayTitle:''}:{})} {...(dayArt?{dayPaper:dayArt,displayTitle:''}:{})} {...(entryPaper?{entryPaper,displayTitle:''}:{})} {...(firstArt?{displayTitle:''}:{})} {...(!interrupted&&!requiresChoice&&(video||course||relay)?{appearance:relay?'relay' as const:course?'course' as const:'video' as const}:{})} {...(!interrupted&&!requiresChoice&&relay&&!relayArt?{displayTitle:relayDisplayTitle}:{})} {...(!interrupted&&!requiresChoice&&courseDisplayTitle&&!classArt?{displayTitle:courseDisplayTitle}:{})} {...(teachingPaper?{teaching:teachingPaper}:{})} kind={interrupted||requiresChoice?'calendar':legacy?(moment.wait?'waiting':'portfolio'):objectKind(thread)} title={quarterTurn?'本季留页':freeChoice?'今天的日历':workHistory?.object??researchCopy?.object??marketCopy?.object??(workCopy?'工作日历':moment.object)} detail={freeChoice||workCopy||workHistory||marketCopy||researchCopy?'':relayArt?'':courseArt||classArt?(moment.wait&&!(coursePrimary?.binding.label.includes(moment.wait.date)&&coursePrimary?.binding.label.includes(moment.wait.label))?moment.wait.date+' · '+moment.wait.label:''):videoArt?(moment.wait&&!(videoPrimary?.binding.label.includes(moment.wait.date)&&videoPrimary?.binding.label.includes(moment.wait.label))?moment.wait.date+' · '+moment.wait.label:''):entryPaper?p.view.date:firstArt?'':moment.wait?moment.wait.date+' · '+moment.wait.label:interrupted?'这项责任仍需你回应':requiresChoice?'原记录与责任都保留，先明确重新选择':legacy?'沿原业务记录继续':thread.outcome==='actual'?'回响已有实际记录':'翻开，看清这次选择'} stageLabel={freeChoice?'今天':relayArt?relayTarget===null?'服务资料':relayDisplayTitle:classArt?courseTeachingPaperLabel(classArt):entryPaper==='calendar'?'接下来，自己安排':entryPaper==='market'?'公开市场资料':firstObjectLabel??sceneStageLabel(label)} actionLabel={primary?.binding.label??quarterPrimary?.binding.label??videoPrimary?.binding.label??coursePrimary?.binding.label??relayPrimary?.binding.label??dayPrimary?.binding.label??operatingBinding?.label??(requiresChoice?'重新选择原关注':'走近这件事')} {...(firstArt?{firstOrder:firstArt}:{})} {...(p.view.readOnly?{protection:'readonly' as const}:p.view.hasCandidate||p.view.saveStatus!=='saved'?{protection:'unsaved' as const}:(primary?.binding.disabled??quarterPrimary?.binding.disabled??videoPrimary?.binding.disabled??coursePrimary?.binding.disabled??relayPrimary?.binding.disabled??dayPrimary?.binding.disabled??operatingBinding?.disabled)?{protection:'unavailable' as const}:{})} disabled={primary?.binding.disabled??quarterPrimary?.binding.disabled??videoPrimary?.binding.disabled??coursePrimary?.binding.disabled??relayPrimary?.binding.disabled??dayPrimary?.binding.disabled??operatingBinding?.disabled??p.view.busy} textOnly={p.textOnly===true} onActivate={primary?.binding.activate??quarterPrimary?.binding.activate??videoPrimary?.binding.activate??coursePrimary?.binding.activate??relayPrimary?.binding.activate??dayPrimary?.binding.activate??operatingBinding?.activate??(requiresChoice?openDirections:()=>setObjectOpen(true))}/>}
  record={recordLink(openRelay)}
  />
+  {workReading&&workRecordAt===workRecordKey?<WorkHistoryRecord key={workRecordKey} value={workReading} onClose={()=>{if(currentWorkRecordKey.current===workRecordKey)setWorkRecordAt(null)}} onToday={()=>inWorkRecord(()=>{setWorkRecordAt(null);openToday()})} onExplanation={()=>inWorkRecord(()=>{setWorkRecordAt(null);setRecordOpen(true)})}/>:null}
   {recordOpen?<Dialog title={(researchCopy?.object??moment.object)+' · 记录与代价'} className="opening-paper tableau-source-record" onClose={()=>setRecordOpen(false)}><p className="opening-paper-date">今天 {p.view.date} · {firstStage?.label??label}</p><h3>{moment.title}</h3><p>{moment.line}</p><p>{moment.detail}</p>{collectionScope&&meaning?<p>{meaning.situation}</p>:null}{!interrupted&&!requiresChoice&&!legacy?<p>这一步想走到：{thread.finishWhen}</p>:null}{attempt?<p>{attempt.purpose}</p>:null}{firstFacts?.map(line=><p key={line}>{line}</p>)}{teachingMoney?<p>{teachingMoney}</p>:null}{relayMoney?<p>{relayMoney}</p>:null}{meaning?.sourceRefs.length?<details><summary>核对这段处境的实际来源</summary>{meaning.sourceRefs.map(ref=><p key={ref.kind+':'+ref.id+':'+(ref.date??'')}>{ref.kind} · {ref.date??'原记录日期'} · <code>{ref.id}</code></p>)}</details>:null}{attempt?.action.kind==='next-choice'?<button type="button" onClick={()=>{setRecordOpen(false);setChoicePanel('next')}}>翻看手艺、生活与模拟判断的后续选择</button>:null}{courseReady?<button type="button" onClick={()=>{setRecordOpen(false);openCourse('next')}}>翻看这间教室的其它选择与旧责任</button>:null}<button type="button" onClick={()=>{setRecordOpen(false);if(interrupted||legacy)inspect();else inspectFocus()}}>翻开这件事的完整原册 ↗</button></Dialog>:null}
 
   {objectOpen&&!attempt?<Dialog title={moment.object} className="opening-paper" onClose={()=>setObjectOpen(false)}><p className="opening-paper-date">{p.view.date} · {label}</p>{previousFocusNotice?<p className="season-focus-notice" role="status">{focusNotice}</p>:null}<h3>{moment.title}</h3><p>{moment.line}</p>{moment.detail?<p className="opening-paper-terms">{moment.detail}</p>:null}{originalAction(true,openOrder,openVideo,openCourse,openRelay)}{!interrupted&&!unknownFocus&&!legacy&&thread.stage==='offer'?<div className="opening-paper-alternatives"><CommandButton {...nearProps} kind="DeclineOffer" payload={{offerId:first.offerId}} label="婉拒这笔报价" confirm/><CommandButton {...nearProps} kind="SkipOffer" payload={{offerId:first.offerId}} label="先跳过这次小单" confirm/></div>:null}<button type="button" className="scene-text-action" onClick={inspect}>{unknownFocus?'翻看本季已有记录':'翻看同一件事的全部原记录'} ↗</button></Dialog>:null}

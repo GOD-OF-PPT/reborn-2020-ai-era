@@ -1,0 +1,30 @@
+[
+  {
+    "old": "import {workHistoryCopy} from './work-history-copy.ts'",
+    "new": "import {workHistoryCopy,workHistoryReading} from './work-history-copy.ts'\nimport {WorkHistoryRecord} from './WorkHistoryRecord.tsx'"
+  },
+  {
+    "old": "cloneElement,isValidElement,useEffect,useState,type Ref",
+    "new": "cloneElement,isValidElement,useEffect,useRef,useState,type Ref"
+  },
+  {
+    "old": " const [recordOpen,setRecordOpen]=useState(false)",
+    "new": " const [recordOpen,setRecordOpen]=useState(false)\n const [workRecordAt,setWorkRecordAt]=useState<string|null>(null)\n const currentWorkRecordKey=useRef<string|null>(null)"
+  },
+  {
+    "old": " const workHistory=!interrupted&&!requiresChoice&&!legacy?workHistoryCopy(p,thread):null",
+    "new": " const workHistory=!interrupted&&!requiresChoice&&!legacy?workHistoryCopy(p,thread):null\n const workReading=workHistory?workHistoryReading(p,thread):null,workRecordKey=workReading?.key??null\n currentWorkRecordKey.current=workRecordKey\n useEffect(()=>{setWorkRecordAt(null)},[workRecordKey])\n const inWorkRecord=(activate:()=>void)=>makeSharedAction(p,'翻阅原工作手记',activate,{allowReadOnly:true,canActivate:()=>workRecordKey!==null&&currentWorkRecordKey.current===workRecordKey}).activate()\n const openWorkRecord=()=>inWorkRecord(()=>{setObjectOpen(false);setWorkRecordAt(workRecordKey)})"
+  },
+  {
+    "old": "if(requiresChoice)onNavigate('quarter',{accountId:p.accountId});else setRecordOpen(true)",
+    "new": "if(requiresChoice)onNavigate('quarter',{accountId:p.accountId});else if(workReading)openWorkRecord();else setRecordOpen(true)"
+  },
+  {
+    "old": "action('02',inspectLabel,'只回看，不新增工作、交易或推进日期',inspectFocus)",
+    "new": "action('02',inspectLabel,'只回看，不新增工作、交易或推进日期',workReading?openWorkRecord:inspectFocus)"
+  },
+  {
+    "old": "  {recordOpen?<Dialog",
+    "new": "  {workReading&&workRecordAt===workRecordKey?<WorkHistoryRecord key={workRecordKey} value={workReading} onClose={()=>{if(currentWorkRecordKey.current===workRecordKey)setWorkRecordAt(null)}} onToday={()=>inWorkRecord(()=>{setWorkRecordAt(null);openToday()})} onExplanation={()=>inWorkRecord(()=>{setWorkRecordAt(null);setRecordOpen(true)})}/>:null}\n  {recordOpen?<Dialog"
+  }
+]
