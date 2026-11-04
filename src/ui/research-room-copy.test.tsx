@@ -6,7 +6,7 @@ import type {PublicWaitResult} from '../application/public-wait.ts'
 import {evaluateCommand,previewCommand,projectRun} from '../core/commands.ts'
 import type {CommandEnvelope,GameRun} from '../core/run-types.ts'
 import type {GamePanelProps,PlayFeatures,PlayingView} from './game-types.ts'
-import {researchRoomCopy,researchRoomBrief} from './research-room-copy.ts'
+import {researchRoomCopy,researchRoomBrief,researchWaitLabel} from './research-room-copy.ts'
 import {playerThread,type OpeningFocus} from './player-thread.ts'
 import {committedEcho,SceneTimeNotice} from './SceneEcho.tsx'
 import {savedSceneResult} from './scene-result.ts'
@@ -93,4 +93,40 @@ it('retains a real mixed research and offer-expiry result rather than shortening
  const started=start('market-foundation-course'),run=act(started.run,'AdvanceTime',{date:'2020-01-08'}),c=context(run),before=view(started.run),after=c.p.view,receipt=after.receipts.at(-1)!,result:PublicWaitResult={status:'stopped',reasonCodes:[],targetDate:after.date,before,lastBefore:before,lastSaved:after,current:after,steps:[{commandId:receipt.commandId,date:after.date,revisionBefore:before.revision,revisionAfter:after.revision}],feedback:inspectPublicWaitTransition(before,after),failed:null},notice={date:after.date,...waitSceneResult(result,after)!}
  expect(notice.text).toContain('那份原委托，有了新的实际反馈。')
  expect(researchRoomBrief(c.p,c.thread,notice)).toBeNull()
+})
+
+
+it.each([['market-overview','等公开资料整理好'],['market-foundation-course','等规则研习完成'],['simulation-special-study','等试验研习完成']] as const)('names the original %s wait only at its actual target', (id,label)=>{
+ const c=start(id)
+ expect(researchWaitLabel(c.p,c.thread,c.research.completeAt,'原等待')).toBe(label)
+ expect(researchWaitLabel(c.p,c.thread,'2020-01-01','先到原反馈')).toBe('先到原反馈')
+ expect(researchWaitLabel(c.p,{...c.thread,focusScope:'history'},c.research.completeAt,'回看')).toBe('回看')
+ const html=renderToStaticMarkup(<OpeningMoment p={c.p} focus={c.focus} onFocus={vi.fn()} headingRef={null} fallback={roomMoment(c.p)} onNavigate={vi.fn()} onExplore={vi.fn()}/>)
+ expect(html).toContain(label+' · '+c.research.completeAt)
+})
+
+it('identifies the real old hand-made offer deadline without calling the running study overdue',()=>{
+ const started=start('market-foundation-course'),run=act(started.run,'AdvanceTime',{date:'2020-01-06'}),c=context(run),before=view(started.run),after=c.p.view,receipt=after.receipts.at(-1)!,result:PublicWaitResult={status:'stopped',reasonCodes:[],targetDate:'2020-01-08',before,lastBefore:before,lastSaved:after,current:after,steps:[{commandId:receipt.commandId,date:after.date,revisionBefore:before.revision,revisionAfter:after.revision}],feedback:inspectPublicWaitTransition(before,after),failed:null},notice={date:after.date,...waitSceneResult(result,after)!}
+ const brief=researchRoomBrief(c.p,c.thread,notice)
+ expect(brief,JSON.stringify(notice)).toBe('手工小单的答复期限已过；这份研习仍在继续。')
+ expect(researchRoomBrief(c.p,c.thread,{...notice,text:notice.text+' 另有一项责任。'})).toBeNull()
+ expect(researchRoomBrief(c.p,c.thread,{...notice,brief:'已实际支付¥100。'})).toBeNull()
+ expect(researchRoomBrief(c.p,c.thread,{...notice,frame:{...notice.frame,spentBefore:0}})).toBeNull()
+ const html=renderToStaticMarkup(<OpeningMoment p={c.p} focus={c.focus} onFocus={vi.fn()} headingRef={null} fallback={roomMoment(c.p)} onNavigate={vi.fn()} onExplore={vi.fn()} feedback={<SceneTimeNotice {...notice} compact onClose={vi.fn()} accountName={()=>'个人'}/>}/>)
+ expect(html).toContain(brief!);expect(html).toContain('预计2020-01-08完成')
+})
+
+it.each(['market-foundation-course','simulation-special-study'] as const)('shows the actual %s qualification once and restores the dated fact after the echo is closed',id=>{
+ const c=finish(start(id).run),copy=researchRoomCopy(c.p,c.thread)!,phrase=copy.resultEcho!,render=(notice:typeof c.notice|null)=>renderToStaticMarkup(<OpeningMoment p={c.p} focus={c.focus} onFocus={vi.fn()} headingRef={null} fallback={roomMoment(c.p)} onNavigate={vi.fn()} onExplore={vi.fn()} feedback={notice?<SceneTimeNotice {...notice} compact onClose={vi.fn()} accountName={()=>'个人'}/>:null}/>)
+ const withEcho=render(c.notice),without=render(null),mixed=render({...c.notice,text:c.notice.text+' 另有原款待核对。'})
+ expect(withEcho.split(phrase)).toHaveLength(2)
+ expect(withEcho).not.toContain(c.research.completeAt+'已完成 · '+phrase)
+ expect(without).toContain(c.research.completeAt+'已完成 · '+phrase)
+ expect(mixed).toContain(c.research.completeAt+'已完成 · '+phrase)
+ expect(withEcho).toContain('细看回响');expect(withEcho).toContain('翻阅这一段的记录与代价')
+})
+
+it('keeps the public-study decision boundary when the short completion sentence is not equivalent',()=>{
+ const c=finish(start('market-overview').run),html=renderToStaticMarkup(<OpeningMoment p={c.p} focus={c.focus} onFocus={vi.fn()} headingRef={null} fallback={roomMoment(c.p)} onNavigate={vi.fn()} onExplore={vi.fn()} feedback={<SceneTimeNotice {...c.notice} compact onClose={vi.fn()} accountName={()=>'个人'}/>}/>)
+ expect(html).toContain('公开线索已整理；买卖仍由你决定。')
 })

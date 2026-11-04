@@ -2,7 +2,7 @@ import {SeasonFocusChoices} from './SeasonFocusChoices.tsx'
 import {seasonChoiceDirection,seasonChoiceTitle} from './season-choice-copy.ts'
 import {workRoomCopy} from './work-room-copy.ts'
 import {marketOrderRoomCopy,marketOrderWaitBrief} from './market-order-room.ts'
-import {researchRoomCopy,researchRoomBrief} from './research-room-copy.ts'
+import {researchRoomCopy,researchRoomBrief,researchWaitLabel} from './research-room-copy.ts'
 import {personalDayProgressBrief,personalStartNoticeExpired} from './personal-day-copy.ts'
 import {sceneReadingLabel,sceneReadingName,sceneStageLabel} from './scene-language.ts'
 import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
@@ -187,7 +187,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const safeDate=thread.focus.kind==='relay'?relayReviewDate(p,ordinaryDate):ordinaryDate
  const workCopy=!interrupted&&!requiresChoice&&!legacy?workRoomCopy(p,thread):null
  const originalWaitLabel=moment.wait&&safeDate===moment.wait.date?(workCopy?'等工作回响':moment.wait.label):(p.requestWait?defaultWaitLabel(w,true):clockStopCopy(p,safeDate)?.label??'先到日历上的下一处反馈')
- const waitLabel=thread.focus.kind==='relay'?relayReviewLabel(p,safeDate,originalWaitLabel):originalWaitLabel
+ const waitLabel=thread.focus.kind==='relay'?relayReviewLabel(p,safeDate,originalWaitLabel):!interrupted&&!requiresChoice&&!legacy?researchWaitLabel(p,thread,safeDate,originalWaitLabel):originalWaitLabel
  const employed=w.employment.some(e=>e.segments.some(s=>s.to===null))
  const terminal=p.view.date>=playableThrough
  const market=thread.focus.kind==='market',free=thread.focus.kind==='free',video=thread.focus.kind==='video',course=thread.focus.kind==='course',relay=thread.focus.kind==='relay'
@@ -312,6 +312,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const personalProgress=timeNotice?personalDayProgressBrief(p,thread,timeNotice.props):null
  const marketProgress=marketCopy&&timeNotice?marketOrderWaitBrief(p,thread,timeNotice.props):null
  const researchBrief=researchCopy&&timeNotice?researchRoomBrief(p,thread,timeNotice.props):null
+ const sceneFactsAfterEcho=researchCopy?.resultEcho&&researchBrief===researchCopy.resultEcho?[]:sceneFacts
  const sceneFeedback=feedback==='已从本机存档继续。'||personalStartNoticeExpired(p,feedback)?null:closedEcho?cloneElement(feedback,{brief:closedCopy.line}):researchBrief&&timeNotice?cloneElement(timeNotice,{brief:researchBrief}):marketProgress&&timeNotice?cloneElement(timeNotice,{brief:marketProgress}):personalProgress&&timeNotice?cloneElement(timeNotice,{brief:personalProgress}):feedback
  const courseArt=!interrupted&&!requiresChoice&&!legacy&&course?coursePreparationPaperFor(thread):undefined
  const quarterBinding=!interrupted&&!unknownFocus&&!legacy&&w.atQuarterEnd&&thread.focusScope!=='history'?makeSharedAction(p,'看看这一季，真实留下了什么',openRecollection,{allowReadOnly:true}):null
@@ -342,7 +343,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
    {thread.focusScope==='invalid'&&thread.invalidReason?<p className="season-focus-notice" role="status">{thread.invalidReason}</p>:null}
    {!relayClosed&&!interrupted&&!requiresChoice&&!legacy&&thread.focusScope==='history'?<p className="season-focus-notice">正在回看{thread.focusQuarter}，今天仍是{p.view.date}。旧收支不会重记为本季收入。</p>:null}
    {sceneFeedback?<div className={typeof sceneFeedback==='string'?'moment-status':'moment-feedback'} role={typeof sceneFeedback==='string'?'status':undefined}>{sceneFeedback}</div>:null}</>}
- facts={<>{freeChoice?<p className="moment-line">{employed?'留几天给自己，也可以看看房间。':'休整几天，还是先去上班？'}</p>:<>{currentCohortContext?<p className="moment-line">{cohortCopy?.context??currentCohortContext}{cohortUpdateDue?' · 更新期限'+cohortUpdateDue:null}</p>:null}{!closedEcho&&!currentCohortUpdate?sceneFacts?sceneFacts.map(line=><p key={line} className={marketCopy?"moment-line market-order-fact":"moment-line"}>{line}</p>):<p className="moment-line">{cohortCopy?.line??collectionScope??(summarized?meaning!.situation:closedCopy?.line??sceneLine)}</p>:null}{!summarized&&(closedCopy?.terms||moment.detail)?<p className="moment-terms">{updateTerms??cohortCopy?.terms??closedCopy?.terms??moment.detail}</p>:null}{teachingMoney?<p className="course-scene-money">{teachingMoney}</p>:null}{relayMoney?<p className="relay-scene-money">{relayMoney}</p>:null}{courseComplete?<button type="button" className="scene-text-action" onClick={inspectFocus}>翻阅本班的完整原记录 ↗</button>:null}</>}</>}
+ facts={<>{freeChoice?<p className="moment-line">{employed?'留几天给自己，也可以看看房间。':'休整几天，还是先去上班？'}</p>:<>{currentCohortContext?<p className="moment-line">{cohortCopy?.context??currentCohortContext}{cohortUpdateDue?' · 更新期限'+cohortUpdateDue:null}</p>:null}{!closedEcho&&!currentCohortUpdate?sceneFactsAfterEcho?sceneFactsAfterEcho.map(line=><p key={line} className={marketCopy?"moment-line market-order-fact":"moment-line"}>{line}</p>):<p className="moment-line">{cohortCopy?.line??collectionScope??(summarized?meaning!.situation:closedCopy?.line??sceneLine)}</p>:null}{!summarized&&(closedCopy?.terms||moment.detail)?<p className="moment-terms">{updateTerms??cohortCopy?.terms??closedCopy?.terms??moment.detail}</p>:null}{teachingMoney?<p className="course-scene-money">{teachingMoney}</p>:null}{relayMoney?<p className="relay-scene-money">{relayMoney}</p>:null}{courseComplete?<button type="button" className="scene-text-action" onClick={inspectFocus}>翻阅本班的完整原记录 ↗</button>:null}</>}</>}
  decisions={<>
 
    {primary?.main??quarterPrimary?.main??videoPrimary?.main??coursePrimary?.main??relayPrimary?.main??dayPrimary?.main??originalAction(false,openOrder,openVideo,openCourse,openRelay)}
