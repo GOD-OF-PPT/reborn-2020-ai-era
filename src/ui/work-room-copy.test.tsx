@@ -106,3 +106,60 @@ it('retains the original shared date request and confirmation when the work pape
  expect(p.requestWait).toHaveBeenCalledExactlyOnceWith('2020-01-31',expect.stringContaining('等工作回响'),true)
  expect(p.request).not.toHaveBeenCalled()
 })
+
+
+function advanceNormally(run:GameRun,date:string){
+ for(let step=0;step<12;step++){
+  const w=context(run).p.features.workbench
+  if(w.pause){const event=w.events.find(e=>e.isBlocking),choice=event?.choices.find(c=>c.isDefault);if(!event||!choice||choice.actionPoints!==0||choice.costFen!==0)throw Error('ORIGINAL_ZERO_COST_RESPONSE_REQUIRED');run=act(run,'ChooseEvent',{instanceId:event.id,choiceId:choice.id});continue}
+  if(run.timeline.cursor.date>=date)return run
+  run=act(run,'AdvanceTime',{date})
+ }
+ throw Error('ORIGINAL_TIME_BOUND_EXCEEDED')
+}
+const fullWork=act(act(act(initial,'WorkQuarter'),'ResearchMarket',{definitionId:'market-overview'}),'StartLifeWork',{kind:'rest',personId:null,reference:null})
+const reservedWork=act(act(act(initial,'WorkQuarter'),'ResearchMarket',{definitionId:'market-overview'}),'StartFirstOrder')
+
+it('guides a real exhausted work quarter toward its original wait and reading without offering new action spending',()=>{
+ const {p,focus,thread}=context(fullWork),copy=workRoomCopy(p,thread)!,html=render(p,focus)
+ expect(p.view.budget).toMatchObject({available:0,spent:4,reserved:0})
+ expect(copy.title).toBe('这季的四点已用完，工作照常继续。');expect(copy.line).toContain('仍可翻阅生活，或等下一次回响')
+ expect(copy.line).not.toContain('生活与副业仍可安排')
+ expect(p.features.life.jobs.find(job=>job.kind==='rest')?.completeAt).toBe('2020-01-08')
+ for(const text of ['等下一次反馈（最迟） · 2020-01-08','核对后推进 · 2020-01-08','看看生活','环顾房间','翻开手记'])expect(html).toContain(text)
+ expect(p.request).not.toHaveBeenCalled();expect(p.requestWait).not.toHaveBeenCalled()
+})
+
+it('distinguishes original reserved work points from actually used points',()=>{
+ const {p,thread}=context(reservedWork),copy=workRoomCopy(p,thread)!
+ expect(p.view.budget).toMatchObject({available:0,spent:3,reserved:1})
+ expect(copy.title).toBe('这季的行动已排满，工作照常继续。');expect(copy.title).not.toContain('已用完')
+ expect(copy.line).toContain('尚未到账');expect(copy.line).not.toContain('生活与副业仍可安排')
+})
+
+it('keeps today’s real wage receipt visible at zero actions and treats it as history on a later actual day',()=>{
+ const salaryRun=advanceNormally(fullWork,'2020-01-31'),today=context(salaryRun),now=workRoomCopy(today.p,today.thread)!
+ expect(now.title).toBe('工资到了，工作还在继续。');expect(now.line).toContain('2020-01-31工资实收¥8,000');expect(now.line).toContain('仍可翻阅生活')
+ expect(now.line).not.toContain('最近一笔')
+ const later=context(advanceNormally(salaryRun,'2020-02-02')),copy=workRoomCopy(later.p,later.thread)!
+ expect(copy.title).toBe('这季的四点已用完，工作照常继续。');expect(copy.line).toContain('最近一笔：2020-01-31工资实收¥8,000')
+ expect(copy.title).not.toContain('工资到了');expect(later.p.view.budget.available).toBe(0)
+ const html=render(later.p,later.focus,'另一件准备仍需按自己的日期发生。')
+ expect(html).toContain('另一件准备仍需按自己的日期发生。');expect(html).toContain('等工作回响 · 2020-02-29');expect(html).toContain('看看生活')
+})
+
+it('keeps older pay as a dated fact while remaining actions invite another choice',()=>{
+ const {p,thread}=context(advanceNormally(paid,'2020-02-02')),copy=workRoomCopy(p,thread)!
+ expect(p.view.budget.available).toBe(2);expect(copy.title).toBe('工作照常，接下来怎样安排？')
+ expect(copy.line).toBe('最近一笔：2020-01-31工资实收¥8,000。')
+})
+
+it('keeps the selected quarter’s original payroll total on the next actual payday',()=>{
+ const {p,thread}=context(advanceNormally(paid,'2020-02-29')),copy=workRoomCopy(p,thread)!
+ expect(copy.title).toBe('工资到了，工作还在继续。');expect(copy.line).toBe('2020-02-29工资实收¥8,000 · 本季累计¥16,000。')
+})
+
+it('keeps an ambiguous action budget neutral instead of inventing remaining or exhausted points',()=>{
+ const {p,thread}=context(),changed={...p,view:{...p.view,budget:{...p.view.budget,available:0}}},copy=workRoomCopy(changed,thread)!
+ expect(copy.title).toBe('这季的工作，仍在继续。');expect(copy.line).toBe('工资按在岗日结算，尚未到账。')
+})

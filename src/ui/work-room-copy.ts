@@ -22,6 +22,12 @@ export function workRoomCopy(p:Pick<GamePanelProps,'view'|'features'>,thread:Pla
  const scheduled=open[0],planned=scheduled!==undefined&&scheduled.from>p.view.date,active=scheduled!==undefined&&!planned,latest=paid[0]
  const wage=latest?`${latest.through}工资实收${moneyText(latest.amountFen)}${paid.length>1?' · 本季累计'+moneyText(total):''}。`:null
  if(planned)return {title:'接下来的工作，已经留好。',stage:'已安排 · 等待开工',line:`${scheduled.from}开始。${wage??'工资按实际在岗日结算。'}`}
- if(active)return {title:latest?'工资到了，工作还在继续。':'工作之外，想做点什么？',stage:'在岗 · 按月结薪',line:wage??'工资按在岗日结算，尚未到账。生活与副业仍可安排。'}
+ if(active){
+  const budget=p.view.budget,known=budget.total===4&&budget.quarter===p.features.workbench.quarter&&[budget.available,budget.spent,budget.reserved].every(n=>Number.isSafeInteger(n)&&n>=0)&&budget.available+budget.spent+budget.reserved===4
+  const full=known&&budget.available===0,paidToday=latest?.through===p.view.date
+  const title=paidToday?'工资到了，工作还在继续。':!known?'这季的工作，仍在继续。':full?budget.reserved>0?'这季的行动已排满，工作照常继续。':'这季的四点已用完，工作照常继续。':latest?'工作照常，接下来怎样安排？':'工作之外，想做点什么？'
+  const fact=wage?(paidToday?'':'最近一笔：')+wage:'工资按在岗日结算，尚未到账。'
+  return {title,stage:'在岗 · 按月结薪',line:fact+(full?'仍可翻阅生活，或等下一次回响。':!latest&&known&&budget.available>0?'生活与副业仍可安排。':'')}
+ }
  return {title:'这段工作，先告一段落。',stage:'已停止 · 记录保留',line:(wage??'这段工作尚无工资实收。')+'已用行动不返还，后续工作另行决定。'}
 }
