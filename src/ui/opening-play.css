@@ -533,3 +533,48 @@
 .text-mode .opening-object[data-entry-paper]{grid-template-rows:auto;align-content:start;gap:0}
 .opening-object[data-entry-paper][data-text-only=true] .opening-object-copy,
 .text-mode .opening-object[data-entry-paper] .opening-object-copy{margin:0;transform:none;box-shadow:none}
+
+
+/* Reading links use the room's ink and paper, including pointer/keyboard states.
+   Their stronger scope prevents the generic pale button hover from bleeding in. */
+.cinema-app .opening-room .room-tableau{
+ --room-reading-ink:#e1d1a8;
+ --room-reading-bright:#ffe7b9;
+ --room-reading-rule:#c5af7877;
+ --room-reading-hover:#17382ed9;
+ --room-reading-pressed:#102b24ed;
+ --room-reading-focus:#f1d69b;
+}
+.cinema-app .opening-room .room-tableau :is(.opening-room-intention>button,.tableau-record>.scene-text-action,.moment-explore,.scene-time-note>button){
+ background:transparent;
+ color:var(--room-reading-ink);
+ border-bottom-color:var(--room-reading-rule);
+ box-shadow:none;
+ transform:none;
+ transition:none;
+}
+.cinema-app .opening-room .room-tableau :is(.opening-room-intention>button,.tableau-record>.scene-text-action,.moment-explore,.scene-time-note>button):is(:hover,:focus-visible):not(:disabled):not([aria-disabled=true]){
+ background:var(--room-reading-hover);
+ color:var(--room-reading-bright);
+ border-bottom-color:var(--room-reading-focus);
+ box-shadow:inset 0 -1px var(--room-reading-focus);
+}
+.cinema-app .opening-room .room-tableau :is(.opening-room-intention>button,.tableau-record>.scene-text-action,.moment-explore,.scene-time-note>button):focus-visible:not(:disabled):not([aria-disabled=true]){
+ outline:2px solid var(--room-reading-focus);
+ outline-offset:3px;
+}
+.cinema-app .opening-room .room-tableau :is(.opening-room-intention>button,.tableau-record>.scene-text-action,.moment-explore,.scene-time-note>button):active:not(:disabled):not([aria-disabled=true]){
+ background:var(--room-reading-pressed);
+ color:#fff2d8;
+ border-bottom-color:#fff0c8;
+ box-shadow:inset 0 -2px #e3c583;
+}
+.cinema-app .opening-room .room-tableau :is(.opening-room-intention>button,.tableau-record>.scene-text-action,.moment-explore,.scene-time-note>button):is(:disabled,[aria-disabled=true]){
+ background:transparent;
+ color:#b8bca6;
+ border-bottom-color:#9ca58b88;
+ border-bottom-style:dashed;
+ box-shadow:none;
+ opacity:.65;
+ cursor:not-allowed;
+}
