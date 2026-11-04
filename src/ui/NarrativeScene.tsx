@@ -2,6 +2,7 @@ import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
 import {useState,useEffect,useRef,type Ref,type ComponentProps} from 'react'
 import './life-choice-stage.css'
 import {Dialog} from './Dialog.tsx'
+import {singleSceneEvent,EventChoiceLetter} from './EventChoiceLetter.tsx'
 import {SceneEcho,SceneTimeNotice,type EchoFrame} from './SceneEcho.tsx'
 import {ClockAdvance} from './ClockAdvance.tsx'
 import {ScreenBook} from './ScreenBook.tsx'
@@ -117,8 +118,8 @@ export function SceneAttention({p,onOpen,onStoryScene}:{p:GamePanelProps;onOpen:
  const [open,setOpen]=useState(true)
  const w=p.features.workbench,short=w.finance.filter(a=>a.protectionShortfallFen>0||a.commitmentShortfallFen>0)
  const due=w.finance.flatMap(a=>a.obligations.filter(o=>o.remainingFen>0&&o.date<=p.view.date).map(o=>({...o,accountId:a.accountId})))
- const forced=w.events.filter(e=>e.presentation!=='ordinary'||e.isBlocking)
- return short.length||due.length||forced.length||w.pause?<><button type="button" className="attention-pocket" onClick={()=>setOpen(true)}>有{short.length+due.length+forced.length+(w.pause?1:0)}件事需要面对 <span>翻开来信 →</span></button>{open?<Dialog title="不能略过的事" onClose={()=>setOpen(false)}><aside className="scene-attention" aria-label="不能略过的事">
+ const forced=w.events.filter(e=>e.presentation!=='ordinary'||e.isBlocking),directEvent=singleSceneEvent(p)
+ return short.length||due.length||forced.length||w.pause?<><button type="button" className="attention-pocket" onClick={()=>setOpen(true)}>有{short.length+due.length+forced.length+(w.pause?1:0)}件事需要面对 <span>翻开来信 →</span></button>{open?directEvent?<Dialog title={directEvent.title} layout="direct" className="event-choice-review" onClose={()=>setOpen(false)}><EventChoiceLetter p={p} event={directEvent}/></Dialog>:<Dialog title="不能略过的事" onClose={()=>setOpen(false)}><aside className="scene-attention" aria-label="不能略过的事">
   {short.map(a=><div role="alert" key={a.accountId}><strong>{a.accountId==='personal'?'个人':w.routes.find(r=>r.accountId===a.accountId)?.name??'企业'}承诺资金存在缺口 · {moneyText(Math.max(a.protectionShortfallFen,a.commitmentShortfallFen))}</strong><button type="button" onClick={()=>onOpen('finance',a.accountId)}>查看原账与责任</button></div>)}
   {due.map(o=><div role="alert" key={o.id}><strong>{o.accountId==='personal'?'个人':w.routes.find(r=>r.accountId===o.accountId)?.name??'企业'}到期未付 · {moneyText(o.remainingFen)} · {o.date}</strong><button type="button" onClick={()=>onOpen('quarter',o.accountId)}>处理这笔义务</button></div>)}
   {w.pause&&!forced.some(e=>e.isBlocking)?<div role="alert"><strong>日子在这里停了一下 · {w.progression.barrierLabel??'有一件需要你决定的事'}</strong><button type="button" onClick={()=>{if(w.pause?.reason==='STORY_RISK_DECISION_PENDING'&&onStoryScene){const source=w.pause.instanceId,incident=p.features.story.incidents.find(c=>c.sourceEventId===source||c.signals.some(s=>s.sourceEventId===source));setOpen(false);onStoryScene(incident?.id??null)}else onOpen(w.pause?.reason==='STORY_RISK_DECISION_PENDING'?'story':'quarter')}}>面对这件事</button></div>:null}
