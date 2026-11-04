@@ -24,7 +24,7 @@ const text=(value:unknown):string=>typeof value==='string'||typeof value==='numb
 it('reads a real paid research in one page with the complete original text and all five facts',()=>{
  const p=paid(),before=JSON.stringify(p.frame),tree=SceneEcho(p),rows=nodes(tree)
  expect(tree.type).toBe(Dialog);expect(tree.props.layout).toBe('direct')
- expect(rows.find(row=>row.props.className==='echo-result')?.props.children).toBe(p.text)
+ expect(text(rows.find(row=>row.props.className==='echo-result')?.props.children)).toBe(p.text)
  expect(rows.filter(row=>row.type==='dt').map(row=>text(row.props.children))).toEqual(['日历翻到','可用行动','预留行动','已用行动','个人账户 · 可花'])
  expect(rows.filter(row=>row.type==='dd').map(row=>text(row.props.children))).toEqual(['2020-01-01','4 → 3 点','0 点 · 未变','0 → 1 点','¥26,000 → ¥23,000'])
  expect(p.accountName).toHaveBeenCalledExactlyOnceWith('personal');expect(JSON.stringify(p.frame)).toBe(before)
@@ -48,7 +48,7 @@ it('keeps quarter labels and a new account value without claiming an extra gain'
 
 it('retains every account and the entire narrative in the original book for complex results',()=>{
  const p=paid(),long='第一项原约定仍待处理，完整金额与期限都要保留。'.repeat(15),frame={...p.frame,accounts:[...p.frame.accounts,{id:'business',before:120000,after:123456}]},tree=SceneEcho({...p,text:long,frame,accountName:id=>id==='personal'?'个人账户':'原企业账户'}),rows=nodes(tree)
- expect(tree.props.layout).toBe('book');expect(rows.find(row=>row.props.className==='echo-result')?.props.children).toBe(long)
+ expect(tree.props.layout).toBe('book');expect(text(rows.find(row=>row.props.className==='echo-result')?.props.children)).toBe(long)
  expect(rows.filter(row=>row.type==='dt').map(row=>text(row.props.children))).toContain('原企业账户 · 可花')
  expect(rows.filter(row=>row.type==='dd').map(row=>text(row.props.children))).toContain('¥1,200 → ¥1,234.56')
  expect(rows.filter(row=>row.type==='dd').map(row=>text(row.props.children))).toContain('¥26,000 → ¥23,000')
@@ -58,7 +58,7 @@ it('keeps absent frames, long labels and multiline original content readable wit
  const p=paid(),plain=SceneEcho({...p,frame:null,text:'原款¥88仍待核对。'});expect(plain.props.layout).toBe('book');expect(nodes(plain).some(row=>row.type==='dl')).toBe(false)
  expect(SceneEcho({...p,accountName:()=> '原账户的完整名称必须保留'.repeat(4)}).props.layout).toBe('book')
  const multiline='第一项\n第二项\n第三项\n第四项\n第五项'
- const tree=SceneEcho({...p,text:multiline});expect(tree.props.layout).toBe('book');expect(nodes(tree).find(row=>row.props.className==='echo-result')?.props.children).toBe(multiline)
+ const tree=SceneEcho({...p,text:multiline});expect(tree.props.layout).toBe('book');expect(text(nodes(tree).find(row=>row.props.className==='echo-result')?.props.children)).toBe(multiline)
 })
 
 it('renders supplied narrative and account names as text while retaining dates and amounts',()=>{
@@ -79,4 +79,10 @@ it('closes only the full reader before the outer scene echo is explicitly dismis
  const full=render().find(row=>row.type===SceneEcho)!;expect(full.props.text).toBe(p.text);expect(full.props.frame).toBe(p.frame)
  ;(full.props.onClose as ()=>void)();expect(render().some(row=>row.type===SceneEcho)).toBe(false);expect(onClose).not.toHaveBeenCalled()
  const dismiss=render().find(row=>row.props['aria-label']==='收起这次时间回响')!;(dismiss.props.onClick as ()=>void)();expect(onClose).toHaveBeenCalledOnce()
+})
+
+it('keeps each narrative date together while retaining every original character',()=>{
+ const p=paid(),original='2020-01-08，原款仍在。 日历从2020-01-06走到2020-01-08。',tree=SceneEcho({...p,text:original}),body=nodes(tree).find(row=>row.props.className==='echo-result')!
+ expect(text(body.props.children)).toBe(original)
+ expect(nodes(body).filter(row=>row.props.className==='echo-inline-date').map(row=>row.props.children)).toEqual(['2020-01-08','2020-01-06','2020-01-08'])
 })

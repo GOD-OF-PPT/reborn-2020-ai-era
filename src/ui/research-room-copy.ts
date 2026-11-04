@@ -69,6 +69,7 @@ export function researchRoomBrief(p:Input,thread:PlayerThreadView,notice:{date:s
  if(last.kind!=='AdvanceTime'||research.status!=='completed'||frame.dateBefore>=research.completeAt||research.completeAt!==p.view.date||frame.pointsBefore!==frame.pointsAfter||frame.spentBefore!==frame.spentAfter||frame.accounts.some(row=>row.before!==row.after))return null
  const original='个人账户：1项市场研究已完成，只整理已公开线索；这不是未来价格，也没有替你下委托。',cause=p.view.date+'，'+original
  const simple=cause+' 原研究有了实际进展。 日历从'+frame.dateBefore+'走到'+frame.dateAfter+'。'
- if(sceneTimeNarrative(notice.date,notice.brief??notice.text)!==original||![cause,simple,simple+' 日子先停在这次真实反馈，剩下的安排仍在原日历里。'].includes(notice.text))return null
+ const direct=cause+' 日历从'+frame.dateBefore+'走到'+frame.dateAfter+'。'
+ if(sceneTimeNarrative(notice.date,notice.brief??notice.text)!==original||![cause,simple,simple+' 日子先停在这次真实反馈，剩下的安排仍在原日历里。',direct,direct+' 日子先停在这次真实反馈，剩下的安排仍在原日历里。'].includes(notice.text))return null
  return copy.permission?copy.result:copy.object+'已完成，可以作下一次选择了。'
 }

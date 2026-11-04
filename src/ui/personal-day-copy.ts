@@ -3,11 +3,16 @@ import type {PlayerThreadView} from './player-thread.ts'
 import type {EchoFrame} from './SceneEcho.tsx'
 import {sceneTimeNarrative} from './SceneEcho.tsx'
 import {isoDate} from '../core/calendar.ts'
+import {personalCompletionCause} from './wait-feedback-reading.ts'
+import {moneyText} from './game-text.ts'
 
 type Input=Pick<GamePanelProps,'view'|'features'>
 /** The generic start notice expires once no life job is running. */
-export function personalStartNoticeExpired(p:Input,notice:unknown):boolean{
-  return notice==='生活工作已实际开始；完成与场景仍按真实日期处理。'&&!p.features.life.jobs.some(job=>job.status==='running')
+export function personalStartNoticeExpired(p:Input,notice:unknown,thread?:PlayerThreadView):boolean{
+  if(notice!=='生活工作已实际开始；完成与场景仍按真实日期处理。')return false
+  if(!p.features.life.jobs.some(job=>job.status==='running'))return true
+  const job=thread?personalJob(p,thread):null,last=p.view.receipts.at(-1)
+  return !!job&&job.status==='running'&&last?.kind==='StartLifeWork'&&last.commandId===job.originCommandId&&last.revisionAfter===p.view.revision
 }
 
 
@@ -47,4 +52,19 @@ export function personalDayProgressBrief(p:Input,thread:PlayerThreadView,notice:
 export function personalRestCompleted(p:Input,thread:PlayerThreadView):boolean{
   const job=personalJob(p,thread)
   return !!job&&job.kind==='rest'&&job.status==='completed'&&job.completeAt<=p.view.date&&thread.outcome==='actual'
+}
+
+/** A visible exact completion echo already carries the date and outcome.
+ * Keep its original paid cost and consumed action beside it. */
+export function personalResultFacts(p:Input,thread:PlayerThreadView,notice:{date:string;text:string;brief?:string;frame:EchoFrame|null}):string|null {
+ const job=personalJob(p,thread),frame=notice.frame,last=p.view.receipts.at(-1)
+ if(!job||job.status!=='completed'||job.completeAt!==p.view.date||p.view.readOnly||p.view.busy||p.view.hasCandidate||p.view.saveStatus!=='saved'||!frame||frame.quarterChanged||notice.date!==p.view.date||frame.dateAfter!==p.view.date||frame.dateBefore>=job.completeAt||last?.kind!=='AdvanceTime'||last.revisionAfter!==p.view.revision)return null
+ if(p.features.life.jobs.filter(j=>j.status==='completed'&&j.completeAt===p.view.date).length!==1||!Number.isSafeInteger(job.costFen)||job.costFen<0||!Number.isSafeInteger(job.actionPoints)||job.actionPoints<0)return null
+ if(frame.pointsBefore!==frame.pointsAfter||frame.pointsAfter!==p.view.budget.available||frame.reservedBefore!==frame.reservedAfter||frame.reservedAfter!==p.view.budget.reserved||frame.spentBefore!==frame.spentAfter||frame.spentAfter!==p.view.budget.spent)return null
+ if(new Set(frame.accounts.map(a=>a.id)).size!==frame.accounts.length||frame.accounts.filter(a=>a.id==='personal').length!==1||frame.accounts.some(a=>{const accounts=p.view.accounts.filter(row=>row.accountId===a.id);return a.before!==a.after||accounts.length!==1||accounts[0]!.availableFen!==a.after}))return null
+ const cause=personalCompletionCause(job,p.view.date)
+ if(!cause||notice.brief!==cause)return null
+ const tail=' 日历从'+frame.dateBefore+'走到'+frame.dateAfter+'。',stop=' 日子先停在这次真实反馈，剩下的安排仍在原日历里。'
+ if(notice.text!==cause+tail&&notice.text!==cause+tail+stop)return null
+ return `已付${moneyText(job.costFen)} / 已用${job.actionPoints}点；行动不返还，不产生收入。`
 }

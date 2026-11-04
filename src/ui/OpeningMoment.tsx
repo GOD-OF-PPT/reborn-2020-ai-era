@@ -3,7 +3,7 @@ import {seasonChoiceDirection,seasonChoiceTitle} from './season-choice-copy.ts'
 import {workRoomCopy} from './work-room-copy.ts'
 import {marketOrderRoomCopy,marketOrderWaitBrief} from './market-order-room.ts'
 import {researchRoomCopy,researchRoomBrief,researchWaitLabel} from './research-room-copy.ts'
-import {personalDayProgressBrief,personalStartNoticeExpired} from './personal-day-copy.ts'
+import {personalDayProgressBrief,personalStartNoticeExpired,personalResultFacts} from './personal-day-copy.ts'
 import {sceneReadingLabel,sceneReadingName,sceneStageLabel} from './scene-language.ts'
 import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
 import {cloneElement,isValidElement,useEffect,useState,type Ref,type ReactNode,type ComponentProps} from 'react'
@@ -312,8 +312,9 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const personalProgress=timeNotice?personalDayProgressBrief(p,thread,timeNotice.props):null
  const marketProgress=marketCopy&&timeNotice?marketOrderWaitBrief(p,thread,timeNotice.props):null
  const researchBrief=researchCopy&&timeNotice?researchRoomBrief(p,thread,timeNotice.props):null
- const sceneFactsAfterEcho=researchCopy?.resultEcho&&researchBrief===researchCopy.resultEcho?[]:sceneFacts
- const sceneFeedback=feedback==='已从本机存档继续。'||personalStartNoticeExpired(p,feedback)?null:closedEcho?cloneElement(feedback,{brief:closedCopy.line}):researchBrief&&timeNotice?cloneElement(timeNotice,{brief:researchBrief}):marketProgress&&timeNotice?cloneElement(timeNotice,{brief:marketProgress}):personalProgress&&timeNotice?cloneElement(timeNotice,{brief:personalProgress}):feedback
+ const personalFacts=personalLife&&timeNotice?personalResultFacts(p,thread,timeNotice.props):null
+ const sceneFactsAfterEcho=researchCopy?.resultEcho&&researchBrief===researchCopy.resultEcho?[]:personalFacts?[personalFacts]:sceneFacts
+ const sceneFeedback=feedback==='已从本机存档继续。'||personalStartNoticeExpired(p,feedback,thread)?null:closedEcho?cloneElement(feedback,{brief:closedCopy.line}):researchBrief&&timeNotice?cloneElement(timeNotice,{brief:researchBrief}):marketProgress&&timeNotice?cloneElement(timeNotice,{brief:marketProgress}):personalProgress&&timeNotice?cloneElement(timeNotice,{brief:personalProgress}):feedback
  const courseArt=!interrupted&&!requiresChoice&&!legacy&&course?coursePreparationPaperFor(thread):undefined
  const quarterBinding=!interrupted&&!unknownFocus&&!legacy&&w.atQuarterEnd&&thread.focusScope!=='history'?makeSharedAction(p,'看看这一季，真实留下了什么',openRecollection,{allowReadOnly:true}):null
  const quarterPrimary=quarterBinding?{binding:quarterBinding,main:<div className="command moment-decision moment-primary"><button type="button" disabled={quarterBinding.disabled} onClick={quarterBinding.activate}><b aria-hidden="true">01</b><span>{sceneReadingLabel(quarterBinding.label)}</span><i aria-hidden="true">↗</i></button>{quarterBinding.reason?<small className="reason">{quarterBinding.reason}</small>:null}</div>}:null

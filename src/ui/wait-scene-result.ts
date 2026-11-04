@@ -7,6 +7,7 @@ import {sceneCashResult} from './scene-cash-result.ts'
 import {equityReportBrief} from './equity-invitation-result.ts'
 import {relayPrepaidSupportBrief} from './relay-support-settlement.ts'
 import {waitCauseBrief} from './scene-feedback-copy.ts'
+import {waitFeedbackReading} from './wait-feedback-reading.ts'
 import type {PlayingView,PlayFeatures} from './game-types.ts'
 
 const first=(text:string)=>text.includes('。')?text.slice(0,text.indexOf('。')+1):text
@@ -44,7 +45,7 @@ export function waitSceneResult(result:PublicWaitResult,current:PlayingView):{te
  const label=(id:string)=>id==='personal'?'个人':({a_share:'模拟投资',ai_video:'视频',ai_course:'课程',api_relay:'中转服务',deepseek_opportunity:'生态服务'} as Record<string,string>)[features.workbench.routes.find(r=>r.accountId===id)?.id??'']??'经营'
  const cash=sceneCashResult(old.workbench.finance,features.workbench.finance,before.date,last.date,label),cause=savedSceneResult('AdvanceTime','等原安排的反馈',result.lastBefore,last,{includeCash:false}),frame=committedEcho(before,last)
  if(!frame)return null
- const partial=result.status==='unsaved'||result.status==='conflict',stopped=result.reasonCodes.includes('WAIT_STOP_REQUESTED'),retryOnly=result.reasonCodes.includes('WAIT_RETRY_SAVED_ONLY'),retained=result.feedback.filter(row=>row.attention==='retain'),paused=result.feedback.filter(row=>row.attention==='pause'),meaning=[...new Set(paused.map(row=>row.label))].join(' '),important=paused.find(row=>['responsibility','course-update','invitation'].includes(row.kind))
+ const partial=result.status==='unsaved'||result.status==='conflict',stopped=result.reasonCodes.includes('WAIT_STOP_REQUESTED'),retryOnly=result.reasonCodes.includes('WAIT_RETRY_SAVED_ONLY'),retained=result.feedback.filter(row=>row.attention==='retain'),paused=result.feedback.filter(row=>row.attention==='pause'),meaning=[...new Set(waitFeedbackReading(result.lastBefore,last,cause,paused))].join(' '),important=paused.find(row=>['responsibility','course-update','invitation'].includes(row.kind))
  const retryNote=last.date<result.targetDate?'原候选已经保存；余下的等候仍由你重新选择。':'原候选已经保存，没有额外推进日子。'
  const note=partial?'这些日子已经保存；接下来这段等候尚未保存，请处理原候选。':stopped?'已经按你的选择停下；已发生的日子与原约保留。':retryOnly?retryNote:last.date<result.targetDate?'日子先停在这次真实反馈，剩下的安排仍在原日历里。':''
  const text=[cash,cause,meaning,'日历从'+before.date+'走到'+last.date+'。',retained.length?'这期间有'+new Set(retained.map(row=>row.sourceId)).size+'笔自己的原款到期，未收款仍保留，逐笔依据可翻原账。':null,note].filter(Boolean).join(' ')
