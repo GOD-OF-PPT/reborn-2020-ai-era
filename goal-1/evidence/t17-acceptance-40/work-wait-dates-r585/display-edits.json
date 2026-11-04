@@ -1,0 +1,14 @@
+[
+  {
+    "old": "import {workTimeChoiceFor,workTimeResearchBrief} from './work-time-choice.ts'",
+    "new": "import {workTimeChoiceFor,workTimeResearchBrief} from './work-time-choice.ts'\nimport {workWaitReading} from './work-wait-reading.ts'\nimport {WorkWaitCue} from './WorkWaitCue.tsx'"
+  },
+  {
+    "old": " const workCopy=!interrupted&&!requiresChoice&&!legacy?workRoomCopy(p,thread):null",
+    "new": " const workCopy=!interrupted&&!requiresChoice&&!legacy?workRoomCopy(p,thread):null\n const workWait=workCopy?workWaitReading(p,thread):null"
+  },
+  {
+    "old": "context={<>{!freeChoice?<p className=\"opening-room-stage\"",
+    "new": "context={<>{!freeChoice?workWait?<WorkWaitCue p={p} value={workWait} onNavigate={onNavigate}/>:<p className=\"opening-room-stage\""
+  }
+]
