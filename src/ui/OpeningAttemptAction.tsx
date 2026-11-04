@@ -19,8 +19,8 @@ export function OpeningAttemptAction({p,attempt,date,waitLabel,openOffer,openMar
  const choice=intent.kind==='offer-reply'?{label:'回应这封委托',caption:'接下、婉拒，或把日子留给别的事',activate:openOffer}
   :intent.kind==='market-choice'?{label:'看看这笔钱，准备怎样安排',caption:'先研究、显选模拟委托，或暂不买入',activate:openMarket}
   :intent.kind==='free-choice'?{label:'今天，先把时间留给什么',caption:'工作、休整，或先看看别的可能',activate:openFree}
-  :intent.kind==='next-choice'?onToday?{label:'收好这次结果，回到今天安排日子',caption:'保留这份委托与原书签；工作、生活和新的投入仍由你显选',activate:onToday}:{label:'接下来的日子，想怎样继续',caption:'保留这次结果，再选一个在意的方向',activate:openNext}
+  :intent.kind==='next-choice'?onToday?{label:'收好结果，回到今天',caption:'保留这份委托与原书签；工作、生活和新的投入仍由你显选',activate:onToday}:{label:'接下来的日子，想怎样继续',caption:'保留这次结果，再选一个在意的方向',activate:openNext}
   :{label:intent.inspect.label,caption:'翻阅同一件事的记录',activate:inspect}
  const binding=makeSharedAction(p,choice.label,choice.activate,{allowReadOnly:true})
- return children({binding,main:<div className="command moment-decision moment-primary"><button type="button" aria-label={binding.label} disabled={binding.disabled} onClick={binding.activate}><b aria-hidden="true">01</b><span>{choice.label}<small>{choice.caption}</small></span><i aria-hidden="true">→</i></button>{binding.reason?<small className="reason">{binding.reason}</small>:null}</div>})
+ return children({binding,main:<div className="command moment-decision moment-primary"><button type="button" aria-label={binding.label} disabled={binding.disabled} onClick={binding.activate}><b aria-hidden="true">01</b><span>{choice.label}{intent.kind!=='next-choice'?<small>{choice.caption}</small>:null}</span><i aria-hidden="true">→</i></button>{binding.reason?<small className="reason">{binding.reason}</small>:null}</div>})
 }

@@ -4,6 +4,7 @@ import {workRoomCopy} from './work-room-copy.ts'
 import {marketOrderRoomCopy,marketOrderWaitBrief} from './market-order-room.ts'
 import {researchRoomCopy,researchRoomBrief,researchWaitLabel} from './research-room-copy.ts'
 import {personalDayProgressBrief,personalStartNoticeExpired,personalResultFacts} from './personal-day-copy.ts'
+import {firstOrderPaidFacts} from './first-order-feedback.ts'
 import {sceneReadingLabel,sceneReadingName,sceneStageLabel} from './scene-language.ts'
 import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
 import {cloneElement,isValidElement,useEffect,useState,type Ref,type ReactNode,type ComponentProps} from 'react'
@@ -313,7 +314,8 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const marketProgress=marketCopy&&timeNotice?marketOrderWaitBrief(p,thread,timeNotice.props):null
  const researchBrief=researchCopy&&timeNotice?researchRoomBrief(p,thread,timeNotice.props):null
  const personalFacts=personalLife&&timeNotice?personalResultFacts(p,thread,timeNotice.props):null
- const sceneFactsAfterEcho=researchCopy?.resultEcho&&researchBrief===researchCopy.resultEcho?[]:personalFacts?[personalFacts]:sceneFacts
+ const paidFirstFacts=firstAttempt&&timeNotice?firstOrderPaidFacts(p,thread,timeNotice.props):null
+ const sceneFactsAfterEcho=researchCopy?.resultEcho&&researchBrief===researchCopy.resultEcho?[]:paidFirstFacts??(personalFacts?[personalFacts]:sceneFacts)
  const sceneFeedback=feedback==='已从本机存档继续。'||personalStartNoticeExpired(p,feedback,thread)?null:closedEcho?cloneElement(feedback,{brief:closedCopy.line}):researchBrief&&timeNotice?cloneElement(timeNotice,{brief:researchBrief}):marketProgress&&timeNotice?cloneElement(timeNotice,{brief:marketProgress}):personalProgress&&timeNotice?cloneElement(timeNotice,{brief:personalProgress}):feedback
  const courseArt=!interrupted&&!requiresChoice&&!legacy&&course?coursePreparationPaperFor(thread):undefined
  const quarterBinding=!interrupted&&!unknownFocus&&!legacy&&w.atQuarterEnd&&thread.focusScope!=='history'?makeSharedAction(p,'看看这一季，真实留下了什么',openRecollection,{allowReadOnly:true}):null
