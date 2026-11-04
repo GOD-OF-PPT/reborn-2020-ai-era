@@ -1,5 +1,5 @@
 import {sceneReadingLabel,sceneReadingName} from './scene-language.ts'
-import {useEffect,useImperativeHandle,useRef,useState,type Ref,type ReactNode} from 'react'
+import {isValidElement,useEffect,useImperativeHandle,useRef,useState,type Ref,type ReactNode,type ComponentProps} from 'react'
 import type {GamePanelProps,NavigateScene} from './game-types.ts'
 import {openingFocusFor,type OpeningFocus} from './player-thread.ts'
 import {VideoSceneChoice} from './VideoSceneChoice.tsx'
@@ -21,6 +21,8 @@ import {relayBusinessTarget} from './relay-player-thread.ts'
 import {ecosystemCalendarStatus,ecosystemUiStatus} from './ecosystem-ui-status.ts'
 import './today-scene.css'
 import {personalRestCompleted,personalStartNoticeExpired} from './personal-day-copy.ts'
+import {SceneTimeNotice} from './SceneEcho.tsx'
+import {todayResultReading} from './today-result-reading.ts'
 
 type Props={p:GamePanelProps;today:TodayThreadView;headingRef:Ref<HTMLHeadingElement>;feedback?:ReactNode;onFocus:(focus:OpeningFocus)=>void;onPrepare:(focus:OpeningFocus)=>void;onResume:()=>void;onExplore:()=>void;onRecollection:()=>void;onNavigate:NavigateScene}
 type Page='directions'|'life'|'market'|'ongoing'|'holdings'
@@ -55,7 +57,9 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
   :afterRest?ui('看看这季的工作',()=>choose({runId:p.view.runId,kind:'work',accountId:'personal',entityId:null}))
   :ui('给生活留一段真实的日子',()=>prepare('life'))
  const meaning=today.primary.classification==='history'?null:sceneMeaning({...p,accountId:today.primary.thread.focus.accountId},today.primary.thread)
- const situation=meaning?.situation??(continuation?one!.line:hasMoney||!continuing.length&&p.features.relay?.businesses.length?today.line:continuing.length?'还有'+continuing.length+'件已经答应的事，正在照约定继续。':holdings.length?'持仓留在原账上；今天仍可选择工作、生活或新的尝试。':null)
+ const resultNotice=isValidElement<ComponentProps<typeof SceneTimeNotice>>(feedback)&&feedback.type===SceneTimeNotice&&feedback.props.compact===true?feedback:null
+ const resultReading=todayResultReading(p,today,resultNotice?.props)
+ const situation=resultReading?.line??meaning?.situation??(continuation?one!.line:hasMoney||!continuing.length&&p.features.relay?.businesses.length?today.line:continuing.length?'还有'+continuing.length+'件已经答应的事，正在照约定继续。':holdings.length?'持仓留在原账上；今天仍可选择工作、生活或新的尝试。':null)
  const dueCustomers=p.features.relay?.customers.filter(customer=>customer.dueReceivableFen>0)??[]
  const dueTotal=dueCustomers.reduce((sum,customer)=>sum+customer.dueReceivableFen,0)
  const button=(label:string,activate:()=>void,description?:string)=>{const action=ui(label,activate);return <button type="button" aria-label={sceneReadingName(label)} disabled={action.disabled} onClick={action.activate}>{sceneReadingLabel(label)}{description?<span>{description}</span>:null}</button>}
@@ -69,7 +73,7 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
  return <VideoSceneChoice p={videoProps} {...(videoTarget?{target:videoTarget}:{})} onTargetChange={target=>{const next=openingFocusFor(p,'video',{videoTarget:target});if(next)onPrepare(next)}} onToday={()=>setPage(null)} onLife={()=>{setPage(null);onNavigate('life',{accountId:'personal'})}} onInspect={target=>{setPage(null);const owner=p.features.video?.channels.find(c=>c.id===target?.channelId);onNavigate('video',{openRecord:true,...(target?{videoTarget:target}:{}),accountId:owner?.accountId??videoProps.accountId})}}>{openVideo=><CourseSceneChoice p={courseProps} target={courseFocus?.courseTarget??null} onTarget={target=>{const next=openingFocusFor(p,'course',{courseTarget:target});if(next)onPrepare(next)}} onToday={()=>setPage(null)} onLife={()=>{setPage(null);onNavigate('life',{accountId:'personal'})}} onInspect={(target,slot,teachingSlot)=>{setPage(null);const owner=p.features.course?.businesses.find(b=>b.id===target?.businessId);onNavigate('course',{openRecord:true,courseTarget:target,accountId:owner?.accountId??courseProps.accountId,...(slot?{courseDraftSlot:slot}:{}),...(teachingSlot?{courseTeachingSlot:teachingSlot}:{})})}}>{openCourse=><MarketSceneChoice p={commandProps} onFullRecord={()=>onNavigate('market',{accountId:'personal',openRecord:true})}>{openOrder=><>
   <RoomTableau scene="today" state={today.primary.classification} perspective="today" textOnly={p.textOnly===true}
    intention={<p className="opening-room-intention"><span>我想{today.primary.thread.wish.label}</span>{button('回到书签里的那件事 ↗',onResume)}{button('翻季度留页 ↗',onRecollection)}</p>}
-   heading={<header className="moment-heading"><p>{p.features.workbench.quarter} / 今天的日历 · {p.view.date}</p><h1 ref={localHeading} tabIndex={-1}>{one?continuation?.kind==='unknown'?'原站的责任，先核清来源。':continuation?.kind==='money'?'这些原款，仍要分别核对。':'这份约定，今天还在继续。':continuing.length>1?hasMoney?'今天，原安排与旧款都在。':'今天，还有几件答应过的事。':afterRest?'歇过之后，想从哪里开始？':holdings.length?'持仓留着，今天想怎么过？':meaning?.title??'今天，仍由你安排。'}</h1></header>}
+   heading={<header className="moment-heading"><p>{p.features.workbench.quarter} / 今天的日历 · {p.view.date}</p><h1 ref={localHeading} tabIndex={-1}>{one?continuation?.kind==='unknown'?'原站的责任，先核清来源。':continuation?.kind==='money'?'这些原款，仍要分别核对。':'这份约定，今天还在继续。':continuing.length>1?hasMoney?'今天，原安排与旧款都在。':'今天，还有几件答应过的事。':afterRest?'歇过之后，想从哪里开始？':holdings.length?'持仓留着，今天想怎么过？':resultReading?.title??meaning?.title??'今天，仍由你安排。'}</h1></header>}
    feedback={!statusFeedback&&!calendarStatus&&!repeatedReadOnly&&feedback&&feedback!=='已从本机存档继续。'&&!personalStartNoticeExpired(p,feedback)?<div className={typeof feedback==='string'?'moment-status':'moment-feedback'}>{feedback}</div>:null}
    facts={<>{situation?<p className="moment-line">{situation}</p>:null}{one?<p className="moment-terms">{continuation?.kind==='money'?'原款仍保留：':'仍在继续：'}{one.title.replace(/[。！？]$/u,'')}{one.wait?' · 下一反馈 '+one.wait.date:''}。</p>:null}{holdings.length?<button type="button" className="scene-text-action today-held-link" onClick={ui('翻看保留的持仓',()=>setPage('holdings')).activate}>翻看保留的持仓 · {holdings.length}份 ↗</button>:null}{dueTotal>0?<p className="relay-scene-money">原客户款已到期、尚未收取 {moneyText(dueTotal)}。<button type="button" className="scene-text-action" onClick={ui('翻看这些原客户款',()=>setPage('ongoing')).activate}>逐位翻回原客户 ↗</button></p>:null}</>}
    decisions={<><div className="command moment-decision moment-primary"><button type="button" aria-label={sceneReadingName(primary.label)} disabled={primary.disabled} onClick={primary.activate}><b aria-hidden="true">01</b><span>{sceneReadingLabel(primary.label)}</span><i aria-hidden="true">→</i></button>{primary.reason?<small className="reason">{primary.reason}</small>:null}</div>
