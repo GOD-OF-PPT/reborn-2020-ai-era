@@ -1,0 +1,28 @@
+.cinema-app .narrative-life .scene-life-paths>.life-contact-entry{display:flex;align-items:center;gap:14px;margin-left:auto;flex:none}
+.cinema-app .narrative-life .life-contact-open{padding:4px 0;background:transparent;border:0;border-bottom:1px solid #c5af7877;color:#e7d1a2;font:16px/1.7 var(--serif);min-height:32px}
+.cinema-app .narrative-life .life-contact-open:hover:not(:disabled){background:#17382ed9;color:#ffe7b9;border-color:#efd49a}
+.cinema-app .life-contact-count{font:14px/1.7 var(--serif);color:#bdc7ae}
+.cinema-app .life-contact-book .dialog-direct-body{display:flex;flex-direction:column;justify-content:center;gap:20px}
+.cinema-app .life-contact-date{margin:0;color:#cfc7ad;font:16px/1.8 var(--serif)}
+.cinema-app .life-contact-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.cinema-app .dialog.life-contact-book .life-contact-card{display:flex;align-items:center;gap:18px;min-height:142px;padding:14px 18px;background:linear-gradient(135deg,#24433588,#122f2966);border:1px solid #bba36a66;color:#e7d9ba;text-align:left;box-shadow:none;transform:none}
+.cinema-app .dialog.life-contact-book .life-contact-card[aria-pressed=true]{border-color:#efd49a;box-shadow:inset 3px 0 #e7c883;background:linear-gradient(135deg,#36503ecf,#1d3d31bb)}
+.cinema-app .dialog.life-contact-book .life-contact-card:hover:not(:disabled){background:#294b3c;border-color:#e9cb8c;color:#fff0cc;transform:none}
+.cinema-app .dialog.life-contact-book .life-contact-card>.person-portrait{display:block;flex:none;width:70px;min-width:70px;height:88px;overflow:hidden;border:1px solid #b5a16f88;background:#102d28}
+.cinema-app .life-contact-card .person-portrait img{width:100%;height:100%;object-fit:cover}
+.cinema-app .life-contact-card .portrait-initial{display:grid;place-items:center;width:100%;height:100%;color:#a9b29a}
+.cinema-app .life-contact-card .portrait-initial svg{max-width:54px;max-height:72px;stroke:#97a18a;stroke-width:1.4}
+.cinema-app .life-contact-copy{display:block;flex:1;min-width:0}
+.cinema-app .life-contact-copy>strong{display:block;font:400 22px/1.5 var(--serif);color:#eddbaf;margin-bottom:7px}
+.cinema-app .life-contact-state,.cinema-app .life-contact-detail{display:block;font:15px/1.7 var(--serif)}
+.cinema-app .life-contact-state{color:#d7d8bf}
+.cinema-app .life-contact-detail{color:#bbc5af;margin-top:3px}
+.cinema-app .life-contact-card[data-tone=attention] .life-contact-state{color:#efd08c}
+.cinema-app .life-contact-card[data-tone=danger] .life-contact-state{color:#efb198}
+.cinema-app .life-contact-card[data-known=false]>.person-portrait{border-style:dashed}
+.cinema-app .life-contact-card>i{flex:none;font:18px var(--serif);color:#cfb77c}
+.cinema-app .life-contact-footer{display:flex;align-items:center;justify-content:space-between;gap:22px;width:100%}
+.cinema-app .life-contact-footer p{font:15px/1.8 var(--serif);margin:0;color:#c8ccb6}
+.cinema-app .life-contact-entry button:focus-visible,.cinema-app .dialog.life-contact-book button:focus-visible{outline:2px solid #f1d69b;outline-offset:4px}
+
+.cinema-app .dialog.life-contact-book .life-contact-card:disabled,.cinema-app .narrative-life .life-contact-open:disabled{background:#1b3029;color:#a6ae9a;border-color:#879079;border-style:dashed;box-shadow:none;transform:none}

@@ -1,0 +1,10 @@
+[
+  {
+    "old": "import {PersonPortrait} from './PersonPortrait.tsx'",
+    "new": "import {PersonPortrait} from './PersonPortrait.tsx'\nimport {LifeContactBook} from './LifeContactBook.tsx'"
+  },
+  {
+    "old": "  {p.screen==='life'&&(closing||lifeMode==='person')?<div className=\"scene-people\" aria-label=\"你的长期联系\">{f.life.people.map(person=><button type=\"button\" key={person.id} aria-label={'看看'+person.name} aria-pressed={lifeMode==='person'&&person.id===p.personId} onClick={()=>{setLifeMode('person');p.onPerson(person.id)}}><PersonPortrait personId={person.id} name={person.name} revealed={person.known} textOnly={p.textOnly===true}/><span>{person.name}<small>{person.known?'已经相识':'还未形成联系'}</small></span></button>)}</div>:null}",
+    "new": "  {p.screen==='life'&&(closing||lifeMode==='person')?closing?<div className=\"scene-people\" aria-label=\"你的长期联系\">{f.life.people.map(person=><button type=\"button\" key={person.id} aria-label={'看看'+person.name} aria-pressed={lifeMode==='person'&&person.id===p.personId} onClick={()=>{setLifeMode('person');p.onPerson(person.id)}}><PersonPortrait personId={person.id} name={person.name} revealed={person.known} textOnly={p.textOnly===true}/><span>{person.name}<small>{person.known?'已经相识':'还未形成联系'}</small></span></button>)}</div>:<LifeContactBook p={p} selectedId={p.personId} onSelect={id=>{setLifeMode('person');p.onPerson(id)}}/>:null}"
+  }
+]

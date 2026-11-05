@@ -1,0 +1,14 @@
+[
+  {
+    "old": "import {PersonPortrait} from './PersonPortrait.tsx'",
+    "new": "import {PersonPortrait} from './PersonPortrait.tsx'\nimport {LifeContactBook} from './LifeContactBook.tsx'"
+  },
+  {
+    "old": "  {p.screen==='life'&&(closing||lifeMode==='person')?<div className=\"scene-people\" aria-label=\"你的长期联系\">{f.life.people.map(person=><button type=\"button\" key={person.id} aria-label={'看看'+person.name} aria-pressed={lifeMode==='person'&&person.id===p.personId} onClick={()=>{setLifeMode('person');p.onPerson(person.id)}}><PersonPortrait personId={person.id} name={person.name} revealed={person.known} textOnly={p.textOnly===true}/><span>{person.name}<small>{person.known?'已经相识':'还未形成联系'}</small></span></button>)}</div>:null}",
+    "new": "  {p.screen==='life'&&closing?<div className=\"scene-people\" aria-label=\"你的长期联系\">{f.life.people.map(person=><button type=\"button\" key={person.id} aria-label={'看看'+person.name} aria-pressed={lifeMode==='person'&&person.id===p.personId} onClick={()=>{setLifeMode('person');p.onPerson(person.id)}}><PersonPortrait personId={person.id} name={person.name} revealed={person.known} textOnly={p.textOnly===true}/><span>{person.name}<small>{person.known?'已经相识':'还未形成联系'}</small></span></button>)}</div>:null}"
+  },
+  {
+    "old": "  {p.screen==='life'&&!closing?<nav className=\"scene-life-paths\" aria-label=\"这次想把时间留给什么\"><button type=\"button\" aria-pressed={lifeMode==='person'} onClick={()=>setLifeMode('person')}>与人在一起</button><button type=\"button\" aria-pressed={lifeMode==='rest'} onClick={()=>setLifeMode('rest')}>留七天给自己</button><button type=\"button\" aria-pressed={lifeMode==='workspace'} onClick={()=>setLifeMode('workspace')}>改善眼前住处</button></nav>:null}",
+    "new": "  {p.screen==='life'&&!closing?<nav className=\"scene-life-paths\" aria-label=\"这次想把时间留给什么\"><button type=\"button\" aria-pressed={lifeMode==='person'} onClick={()=>setLifeMode('person')}>与人在一起</button><button type=\"button\" aria-pressed={lifeMode==='rest'} onClick={()=>setLifeMode('rest')}>留七天给自己</button><button type=\"button\" aria-pressed={lifeMode==='workspace'} onClick={()=>setLifeMode('workspace')}>改善眼前住处</button>{lifeMode==='person'?<LifeContactBook p={p} selectedId={p.personId} onSelect={id=>{setLifeMode('person');p.onPerson(id)}}/>:null}</nav>:null}"
+  }
+]

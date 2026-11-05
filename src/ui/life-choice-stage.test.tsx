@@ -47,10 +47,11 @@ it('keeps the workspace cost and original confirmation button directly reachable
  expect(p.request).not.toHaveBeenCalled()
 })
 
-it('retains all four people and the known person’s real meeting terms',()=>{
+it('offers the contact book while retaining the known person’s real meeting terms',()=>{
  const p=props(initial,'person'),html=render(p)
- expect(html).toContain('你的长期联系')
- for(const name of ['唐萤','林舟','许澄','陈屿'])expect(html).toContain('看看'+name)
+ expect(html).toContain('翻开联系簿')
+ expect(html).not.toContain('你的长期联系')
+ expect(html).not.toContain('life-contact-cards')
  expect(html).toContain('安排与唐萤见面')
  expect(html).toContain('个人¥200 · 1点 · 3日')
  expect(html).toContain('预计2020-01-04完成')
