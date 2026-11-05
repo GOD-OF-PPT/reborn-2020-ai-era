@@ -1,0 +1,66 @@
+import {afterEach,expect,it,vi} from 'vitest'
+import {renderToStaticMarkup} from 'react-dom/server'
+import type {ComponentProps} from 'react'
+import {createCampaignRegistry,createCampaignRun} from '../application/campaign.ts'
+import {evaluateCommand,previewCommand,projectRun} from '../core/commands.ts'
+import {inspectPublicWaitTransition} from '../application/public-feedback.ts'
+import type {PublicWaitResult} from '../application/public-wait.ts'
+import type {CommandEnvelope,GameRun} from '../core/run-types.ts'
+import type {GamePanelProps,PlayFeatures,PlayingView} from './game-types.ts'
+import {playerThread,type OpeningFocus} from './player-thread.ts'
+import {todayThread} from './today-thread.ts'
+import {waitSceneResult} from './wait-scene-result.ts'
+import {personalCompletionReading} from './personal-completion-reading.ts'
+import {NarrativeScene} from './NarrativeScene.tsx'
+import {TodayScene} from './TodayScene.tsx'
+import {SceneTimeNotice,SceneEcho} from './SceneEcho.tsx'
+
+// Normal in-memory gameplay and public UI only; no persistence APIs or fixtures.
+const captured=vi.hoisted(()=>({notices:[] as Record<string,unknown>[]}))
+vi.mock('./SceneEcho.tsx',async original=>{const actual=await original<typeof import('./SceneEcho.tsx')>();return {...actual,SceneTimeNotice:(p:ComponentProps<typeof actual.SceneTimeNotice>)=>{captured.notices.push(p as unknown as Record<string,unknown>);return <actual.SceneTimeNotice {...p}/>}}})
+afterEach(()=>{captured.notices=[]})
+const registry=createCampaignRegistry(),initial=createCampaignRun({runId:'completion-reading-ui',actorId:'player',commandId:'create',seed:'completion-reading-ui',backgroundId:'technical_employee',playerProfile:{wishId:'autonomy',approach:'free'}})
+function act(run:GameRun,kind:string,payload:unknown={}){const result=evaluateCommand(run,{runId:run.runId,actorId:run.actorId,commandId:'read-'+(run.revision+1),expectedRevision:run.revision,kind,payload},registry,run.actorId);if(result.status!=='proposed')throw Error(JSON.stringify(result));return result.nextRun}
+const view=(run:GameRun):PlayingView=>({...projectRun(run),features:registry.runtime!.project!(run),saveStatus:'saved',busy:false,readOnly:false,readOnlyReason:null,hasCandidate:false,pendingRevision:null})
+function input(run:GameRun):GamePanelProps{const v=view(run);return {view:v,features:v.features as unknown as PlayFeatures,accountId:'personal',request:vi.fn(),requestWait:vi.fn(),controller:{snapshot:{view:v,busy:false},asynchronous:false,runtimeFailed:false,preview:(c:CommandEnvelope)=>previewCommand(run,c,registry,run.actorId),clockCommitments:()=>{throw Error('ORIGINAL_REVIEW_REQUIRED')}} as unknown as GamePanelProps['controller']}}
+function notice(beforeRun:GameRun,run:GameRun,states:GameRun[]=[run]){const before=view(beforeRun),current=view(run),lastBefore=states.length>1?view(states[states.length-2]!):before,result:PublicWaitResult={status:'stopped',reasonCodes:[],targetDate:current.date,before,lastBefore,lastSaved:current,current,steps:states.map((state,index)=>({commandId:state.receipts.at(-1)!.commandId,date:state.timeline.cursor.date,revisionBefore:index?states[index-1]!.revision:before.revision,revisionAfter:state.revision})),feedback:inspectPublicWaitTransition(lastBefore,current),failed:null};return {date:current.date,...waitSceneResult(result,current)!}}
+function completed(kind:'rest'|'workspace'){
+ const started=act(initial,'StartLifeWork',{kind,personId:null,reference:null}),middle=act(started,'AdvanceTime',{date:'2020-01-06'}),run=act(middle,'AdvanceTime',{date:'2020-01-08'}),p=input(run),job=p.features.life.jobs.find(j=>j.kind===kind)!,focus:OpeningFocus={runId:run.runId,kind:'life',accountId:'personal',entityId:job.id,selection:kind},thread=playerThread(p,focus)
+ return {p,focus,thread,notice:notice(middle,run)}
+}
+function scene(c:ReturnType<typeof completed>,show=true){const onDismissReceipt=vi.fn(),props:ComponentProps<typeof NarrativeScene>={...c.p,screen:'life',lifeMode:c.focus.selection as 'rest'|'workspace',personId:'tang-ying',headingRef:null,onPerson:vi.fn(),onOpen:vi.fn(),onPeople:vi.fn(),onYear:vi.fn(),onNavigate:vi.fn(),onDismissReceipt,receipt:show?c.notice.text:null,receiptBrief:show?c.notice.brief:null,receiptKind:show?'AdvanceTime':null,echoFrame:show?c.notice.frame:null};return {html:renderToStaticMarkup(<NarrativeScene {...props}/>),onDismissReceipt}}
+
+it.each(['rest','workspace'] as const)('keeps exact %s completion brief while preserving earlier paid costs and the original full result',kind=>{
+ const c=completed(kind),original=JSON.stringify(c.notice),reading=personalCompletionReading(c.p,c.thread,c.notice)!
+ expect(reading).toEqual({brief:'这段等待，没有新增支出。'})
+ const rendered=scene(c);expect(rendered.html).toContain(reading.brief);expect(rendered.html).toContain('个人已付'+(kind==='rest'?'¥0':'¥3,000')+' / 已用1点');expect(rendered.html).toContain('回到今天，安排接下来');expect(rendered.html).toContain('细看回响')
+ expect(rendered.html).not.toContain(kind==='rest'?'2020-01-08完成；休整不返还行动':'2020-01-08完成；你花下的钱与时间')
+ const actual=captured.notices.at(-1)!;expect(actual.text).toBe(c.notice.text);expect(actual.frame).toBe(c.notice.frame);expect(actual.brief).toBe(reading.brief)
+ const full=renderToStaticMarkup(<SceneEcho text={actual.text as string} frame={c.notice.frame} accountName={()=>'个人账户'} onClose={vi.fn()}/>);expect(full).toContain('2020-01-08');expect(full).toContain('预留行动');expect(full).toContain('已用行动')
+ ;(actual.onClose as ()=>void)();expect(rendered.onDismissReceipt).toHaveBeenCalledTimes(1);expect(JSON.stringify(c.notice)).toBe(original);expect(c.p.request).not.toHaveBeenCalled()
+})
+it.each(['rest','workspace'] as const)('restores the original %s completion explanation when the visible echo is dismissed',kind=>{
+ const c=completed(kind),shown=scene(c),closed=scene(c,false)
+ expect(shown.html).toContain('这段等待，没有新增支出');expect(closed.html).not.toContain('这段等待，没有新增支出')
+ expect(closed.html).toContain(kind==='rest'?'2020-01-08完成；休整不返还行动':'2020-01-08完成；你花下的钱与时间')
+ expect(closed.html).toContain('回到今天，安排接下来');expect(closed.html).toContain('个人已付'+(kind==='rest'?'¥0':'¥3,000'))
+})
+it('uses the same brief in Today while preserving exact full-text, frame, reader and close references',()=>{
+ const c=completed('workspace'),onClose=vi.fn(),accountName=()=> '个人账户',feedback=<SceneTimeNotice {...c.notice} compact onClose={onClose} accountName={accountName}/>,today=todayThread(c.p,c.focus)!,before=JSON.stringify(today),html=renderToStaticMarkup(<TodayScene p={c.p} today={today} feedback={feedback} headingRef={null} onFocus={vi.fn()} onPrepare={vi.fn()} onResume={vi.fn()} onExplore={vi.fn()} onRecollection={vi.fn()} onNavigate={vi.fn()}/>),actual=captured.notices.at(-1)!
+ expect(html).toContain('这段等待，没有新增支出。');expect(html).toContain('已付¥3,000 / 已用1点');expect(html).toContain('住处变好了，接下来呢')
+ expect(actual.text).toBe(c.notice.text);expect(actual.frame).toBe(c.notice.frame);expect(actual.onClose).toBe(onClose);expect(actual.accountName).toBe(accountName);expect(JSON.stringify(today)).toBe(before)
+})
+it('keeps additional facts, cash changes, quarter changes and other objects on their original reading',()=>{
+ const c=completed('workspace'),frame=c.notice.frame
+ for(const altered of [{...c.notice,text:c.notice.text+' 另有原款到期。'},{...c.notice,date:'2020-01-09'},{...c.notice,brief:'另一件事有了结果。'},{...c.notice,frame:null},{...c.notice,frame:{...frame,quarterChanged:true}},{...c.notice,frame:{...frame,pointsAfter:frame.pointsAfter+1}},{...c.notice,frame:{...frame,accounts:frame.accounts.map(a=>({...a,after:a.after-100}))}}])expect(personalCompletionReading(c.p,c.thread,altered)).toBeNull()
+ expect(personalCompletionReading(c.p,{...c.thread,focus:{...c.focus,entityId:'other'}},c.notice)).toBeNull()
+ const mixed={...c,notice:{...c.notice,text:c.notice.text+' 原责任仍需回应。'}},html=scene(mixed).html
+ expect(html).not.toContain('这段等待，没有新增支出');expect(html).toContain('2020-01-08完成；你花下的钱与时间')
+})
+function until(run:GameRun,date:string){let before=run;const steps:GameRun[]=[];for(let i=0;i<30;i++){if(run.timeline.cursor.date>=date)return {run,before,steps};const w=input(run).features.workbench;if(w.pause){const e=w.events.find(e=>e.isBlocking)!,choice=e.choices.find(c=>c.isDefault)!;if(choice.costFen||choice.actionPoints)throw Error('EXPECTED_FREE_DEFAULT');run=act(run,'ChooseEvent',{instanceId:e.id,choiceId:choice.id});continue}before=run;run=act(run,'AdvanceTime',{date});steps.push(run)}throw Error('TIME_BOUND')}
+it('keeps the real event stop before billing and the later actual living payment distinct',()=>{
+ const january=until(initial,'2020-01-25').run,start=act(january,'StartLifeWork',{kind:'rest',personId:null,reference:null}),stopped=until(start,'2020-02-01'),blocked=input(stopped.run),firstNotice=notice(start,stopped.run,stopped.steps),event=blocked.features.workbench.events.find(e=>e.isBlocking)!,choice=event.choices.find(c=>c.isDefault)!
+ expect(blocked.features.workbench.pause).not.toBeNull();expect(firstNotice.frame.accounts.every(a=>a.before===a.after)).toBe(true);expect(choice.costFen).toBe(0);expect(choice.actionPoints).toBe(0)
+ const replied=act(stopped.run,'ChooseEvent',{instanceId:event.id,choiceId:choice.id}),paid=act(replied,'AdvanceTime',{date:'2020-02-01'}),p=input(paid),job=p.features.life.jobs.find(j=>j.kind==='rest')!,thread=playerThread(p,{runId:p.view.runId,kind:'life',accountId:'personal',entityId:job.id,selection:'rest'}),n=notice(replied,paid)
+ expect(p.view.date).toBe('2020-02-01');expect(n.frame.accounts.some(a=>a.before!==a.after)).toBe(true);expect(n.text).toContain('¥4,000');expect(personalCompletionReading(p,thread,n)).toBeNull()
+})

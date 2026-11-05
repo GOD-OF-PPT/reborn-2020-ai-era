@@ -1,0 +1,47 @@
+[
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "old": "import {lifeActionPauseReading} from './life-action-pause.ts'",
+    "new": "import {lifeActionPauseReading} from './life-action-pause.ts'\nimport {personalCompletionReading} from './personal-completion-reading.ts'"
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "old": " const lifeTimeReceipt=p.screen",
+    "new": " const lifeCompletion=personalResult&&p.receipt&&p.receiptKind==='AdvanceTime'?personalCompletionReading(p,playerThread(p,{runId:view.runId,kind:'life',accountId:'personal',entityId:personalResult.jobId,selection:personalResult.kind}),{date:view.date,text:p.receipt,...(p.receiptBrief?{brief:p.receiptBrief}:{}),frame:p.echoFrame??null}):null\n const lifeReceiptBrief=lifeCompletion?.brief??p.receiptBrief\n const lifeTimeReceipt=p.screen"
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "old": "{...(p.receiptBrief?{brief:p.receiptBrief}:{})} frame={p.echoFrame??null} onClose",
+    "new": "{...(lifeReceiptBrief?{brief:lifeReceiptBrief}:{})} frame={p.echoFrame??null} onClose"
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "old": "</h1><p>{lifeTimeReceipt?",
+    "new": "</h1>{lifeCompletion?null:<p>{lifeTimeReceipt?"
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "old": ":lifePause?.line??copy.line}</p></header>",
+    "new": ":lifePause?.line??copy.line}</p>}</header>"
+  },
+  {
+    "path": "src/ui/TodayScene.tsx",
+    "old": "import {isValidElement,useEffect",
+    "new": "import {cloneElement,isValidElement,useEffect"
+  },
+  {
+    "path": "src/ui/TodayScene.tsx",
+    "old": "import {todayResultReading} from './today-result-reading.ts'",
+    "new": "import {todayResultReading} from './today-result-reading.ts'\nimport {personalCompletionReading} from './personal-completion-reading.ts'"
+  },
+  {
+    "path": "src/ui/TodayScene.tsx",
+    "old": " const resultReading=todayResultReading(p,today,resultNotice?.props)",
+    "new": " const resultReading=todayResultReading(p,today,resultNotice?.props)\n const completionReading=resultReading?.line&&resultNotice?personalCompletionReading(p,today.primary.thread,resultNotice.props):null\n const visibleFeedback=completionReading&&resultNotice?cloneElement(resultNotice,{brief:completionReading.brief}):feedback"
+  },
+  {
+    "path": "src/ui/TodayScene.tsx",
+    "old": "<div className={typeof feedback==='string'?'moment-status':'moment-feedback'}>{feedback}</div>",
+    "new": "<div className={typeof feedback==='string'?'moment-status':'moment-feedback'}>{visibleFeedback}</div>"
+  }
+]
