@@ -1,0 +1,38 @@
+[
+  {
+    "from": "import {todayOngoingReading} from './today-ongoing-reading.ts'",
+    "to": "import {todayOngoingReading} from './today-ongoing-reading.ts'\nimport {todayChoiceBoard} from './today-choice-board.ts'\nimport {TodayOngoingChoices} from './TodayOngoingChoices.tsx'"
+  },
+  {
+    "from": "type Page='directions'|'daily'|'life'|'market'|'ongoing'|'holdings'",
+    "to": "type Page='directions'|'daily'|'life'|'market'|'ongoing'|'ongoing-records'|'holdings'"
+  },
+  {
+    "from": " const one=continuing.length===1?continuing[0]:null",
+    "to": " const choiceBoard=todayChoiceBoard(p,today)\n const showChoiceBoard=page==='ongoing'&&choiceBoard!==null\n const one=continuing.length===1?continuing[0]:null"
+  },
+  {
+    "from": "page==='holdings'?'保留的持仓':'手头的事'",
+    "to": "page==='holdings'?'保留的持仓':showChoiceBoard?'先把哪件事放回眼前？':'手头的事'"
+  },
+  {
+    "from": "layout={page==='holdings'",
+    "to": "layout={showChoiceBoard||page==='holdings'"
+  },
+  {
+    "from": "(page==='holdings'?' today-held-dialog'",
+    "to": "(showChoiceBoard?' today-ongoing-dialog':page==='holdings'?' today-held-dialog'"
+  },
+  {
+    "from": "{page!=='directions'?button('返回今天的选择',()=>setPage('directions')):null}",
+    "to": "{page==='ongoing-records'&&choiceBoard?button('回到这些原安排',()=>setPage('ongoing')):page!=='directions'?button('返回今天的选择',()=>setPage('directions')):null}"
+  },
+  {
+    "from": "{page!=='daily'&&page!=='life'",
+    "to": "{!showChoiceBoard&&page!=='daily'&&page!=='life'"
+  },
+  {
+    "from": "{page==='ongoing'?<>{dueCustomers.length?",
+    "to": "{showChoiceBoard?<TodayOngoingChoices key={choiceBoard.key} p={p} value={choiceBoard} onChoose={choose} onFull={()=>setPage('ongoing-records')}/>:page==='ongoing'||page==='ongoing-records'?<>{dueCustomers.length?"
+  }
+]
