@@ -59,7 +59,7 @@ it('both arrow controls wrap through the same five choices without navigating',(
 it('keeps every original preparation, money, feedback and refusal reason in the original condition dialog',()=>{
  const ui=driver()
  for(const route of ui.p.features.workbench.routes){
-  ui.select(route.id);ui.click('查看'+route.name+'的准备条件');const dialog=ui.render().find(n=>n.type===Dialog)!,text=words(dialog)
+  ui.select(route.id);ui.click('查看'+route.name+'的准备条件');let dialog=ui.render().find(n=>n.type===Dialog)!;if(dialog.props.layout==='direct'){const button=elements(dialog.props.footer).find(n=>words(n)==='翻阅完整条件 ↗')!;(button.props.onClick as ()=>void)();dialog=ui.render().find(n=>n.type===Dialog)!}const text=words(dialog)
   for(const value of [route.preparation,route.feedback,moneyText(route.requirements.minimumCashFen),moneyText(route.requirements.availableCashFen),...route.requirements.reasons.map(r=>reasonText(r.reason))])expect(text).toContain(value)
   if(route.id==='ai_video')for(const reason of route.futureTool)expect(text).toContain(reasonText(reason))
   if(route.id==='deepseek_opportunity')expect(text).toContain('现实公开申购未提供')
