@@ -1,0 +1,29 @@
+import type {GamePanelProps} from './game-types.ts'
+import type {OpeningFocus} from './player-thread.ts'
+import {playerThread} from './player-thread.ts'
+import {todayReadingGroups,type TodayThreadView} from './today-thread.ts'
+import {workWaitReading,type WorkWaitReading,type WorkWaitItem} from './work-wait-reading.ts'
+
+export interface TodayWaitItem extends Omit<WorkWaitItem,'screen'|'target'>{readonly focus:OpeningFocus}
+export interface TodayWaitReading extends Omit<WorkWaitReading,'items'>{readonly items:readonly TodayWaitItem[]}
+/** Reuse the work scene's original public dates only when they exactly cover
+ * today's personal continuing objects. This is not an event-order predictor. */
+export function todayWaitReading(p:Pick<GamePanelProps,'view'|'features'>,today:TodayThreadView):TodayWaitReading|null{
+ const source=today.source,w=p.features.workbench
+ if(p.view.phase!=='playing'||p.features.life.asOf!==p.view.date||source.runId!==p.view.runId||source.revision!==p.view.revision||source.date!==p.view.date||source.quarter!==w.quarter||today.responsibilityOverrideNeeded||w.atQuarterEnd)return null
+ const {continuing}=todayReadingGroups(today.ongoing),work=continuing.filter(item=>item.focus.kind==='work'&&item.focus.accountId==='personal')
+ if(continuing.length<2||work.length!==1)return null
+ const reading=workWaitReading(p,playerThread(p,work[0]!.focus))
+ if(!reading||reading.items.length!==continuing.length||new Set(continuing.map(item=>JSON.stringify(item.focus))).size!==continuing.length)return null
+ const items:TodayWaitItem[]=[]
+ for(const row of reading.items){
+  const matching=continuing.filter(item=>{
+   const f=item.focus,t=row.target
+   if(f.runId!==p.view.runId||f.accountId!=='personal'||t.accountId!=='personal'||f.entityId!==t.recordId||item.wait?.date!==row.date)return false
+   return row.screen==='quarter'?f.kind==='work':row.screen==='market'?f.kind==='market'&&f.entityKind==='research':row.screen==='life'&&f.kind==='life'&&(t.lifeSelection==='person'?f.selection===t.personId:f.selection===t.lifeSelection)
+  })
+  if(matching.length!==1)return null
+  items.push({key:row.key,label:row.label,title:row.title,date:row.date,focus:matching[0]!.focus})
+ }
+ return {...reading,items}
+}

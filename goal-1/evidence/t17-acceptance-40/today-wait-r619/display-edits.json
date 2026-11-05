@@ -1,0 +1,14 @@
+[
+  {
+    "old": "import {TodayWorkChoice} from './TodayWorkChoice.tsx'",
+    "new": "import {TodayWorkChoice} from './TodayWorkChoice.tsx'\nimport {todayWaitReading} from './today-wait-reading.ts'\nimport {TodayWaitCue} from './TodayWaitCue.tsx'"
+  },
+  {
+    "old": " const one=continuing.length===1?continuing[0]:null",
+    "new": " const one=continuing.length===1?continuing[0]:null\n const waiting=todayWaitReading(p,today)"
+  },
+  {
+    "old": "   feedback={!statusFeedback",
+    "new": "   context={waiting?<TodayWaitCue p={p} value={waiting} onChoose={choose} onAll={()=>setPage('ongoing')}/>:null}\n   feedback={!statusFeedback"
+  }
+]

@@ -10,6 +10,8 @@ import {Dialog} from './Dialog.tsx'
 import {TodayHoldings} from './TodayHoldings.tsx'
 import {TodayLifeChoices} from './TodayLifeChoices.tsx'
 import {TodayWorkChoice} from './TodayWorkChoice.tsx'
+import {todayWaitReading} from './today-wait-reading.ts'
+import {TodayWaitCue} from './TodayWaitCue.tsx'
 import {TodayDirections} from './TodayDirections.tsx'
 import {TodayMarketChoices} from './TodayMarketChoices.tsx'
 import {ClockAdvance} from './ClockAdvance.tsx'
@@ -49,6 +51,7 @@ export function TodayScene({p,today,initialChoice,headingRef,feedback,onFocus,on
  const commandProps={...personal,request}
  const {continuing,holdings}=todayReadingGroups(today.ongoing)
  const one=continuing.length===1?continuing[0]:null
+ const waiting=todayWaitReading(p,today)
  const relayContinuation=one?.focus.kind==='relay'?one.relayContinuation:undefined
  const continuation=relayContinuation??one?.ecosystemContinuation??one?.equityContinuation??one?.marketContinuation
  const hasMoney=continuing.some(item=>item.relayContinuation?.kind==='money'||item.ecosystemContinuation?.kind==='money'||item.equityContinuation?.kind==='money'||item.marketContinuation?.kind==='money')
@@ -83,6 +86,7 @@ export function TodayScene({p,today,initialChoice,headingRef,feedback,onFocus,on
   <RoomTableau scene="today" state={today.primary.classification} perspective="today" textOnly={p.textOnly===true}
    intention={<p className="opening-room-intention"><span>我想{today.primary.thread.wish.label}</span>{button('回到书签里的那件事 ↗',onResume)}{button('翻季度留页 ↗',onRecollection)}</p>}
    heading={<header className="moment-heading"><p>{p.features.workbench.quarter} / 今天的日历 · {p.view.date}</p><h1 ref={localHeading} tabIndex={-1}>{idleReading?.title??(one?continuation?.kind==='unknown'?'原站的责任，先核清来源。':continuation?.kind==='money'?'这些原款，仍要分别核对。':'这份约定，今天还在继续。':continuing.length>1?hasMoney?'今天，原安排与旧款都在。':'今天，还有几件答应过的事。':afterRest?'歇过之后，想从哪里开始？':holdings.length?'持仓留着，今天想怎么过？':resultReading?.title??meaning?.title??'今天，仍由你安排。')}</h1></header>}
+   context={waiting?<TodayWaitCue p={p} value={waiting} onChoose={choose} onAll={()=>setPage('ongoing')}/>:null}
    feedback={!statusFeedback&&!calendarStatus&&!repeatedReadOnly&&feedback&&feedback!=='已从本机存档继续。'&&!personalStartNoticeExpired(p,feedback)?<div className={typeof feedback==='string'?'moment-status':'moment-feedback'}>{visibleFeedback}</div>:null}
    facts={<>{idleReading?<p className="moment-terms">{idleReading.line}</p>:null}{situation?<p className="moment-line">{situation}</p>:null}{one?<p className="moment-terms">{continuation?.kind==='money'?'原款仍保留：':'仍在继续：'}{one.title.replace(/[。！？]$/u,'')}{one.wait?' · 下一反馈 '+one.wait.date:''}。</p>:null}{holdings.length?<button type="button" className="scene-text-action today-held-link" onClick={ui('翻看保留的持仓',()=>setPage('holdings')).activate}>翻看保留的持仓 · {holdings.length}份 ↗</button>:null}{dueTotal>0?<p className="relay-scene-money">原客户款已到期、尚未收取 {moneyText(dueTotal)}。<button type="button" className="scene-text-action" onClick={ui('翻看这些原客户款',()=>setPage('ongoing')).activate}>逐位翻回原客户 ↗</button></p>:null}</>}
    decisions={<>{idlePrimary?.node??<div className="command moment-decision moment-primary"><button type="button" aria-label={sceneReadingName(primary.label)} disabled={primary.disabled} onClick={primary.activate}><b aria-hidden="true">01</b><span>{sceneReadingLabel(primary.label)}</span><i aria-hidden="true">→</i></button>{primary.reason?<small className="reason">{primary.reason}</small>:null}</div>}
