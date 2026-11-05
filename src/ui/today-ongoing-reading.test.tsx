@@ -69,5 +69,5 @@ it('falls back for stale, history, strong, multi-object, altered dates or unknow
 })
 it('does not publish guessed or malformed life money and keeps a completed result on the original next-choice presentation',()=>{
  const run=act(initial,'StartLifeWork',{kind:'rest',personId:null,reference:null}),p=input(run),job=p.features.life.jobs[0]!,f:OpeningFocus={runId:p.view.runId,kind:'life',accountId:'personal',selection:'rest',entityId:job.id},c=context(run,f),changed={...c.p,features:{...c.p.features,life:{...c.p.features.life,jobs:c.p.features.life.jobs.map(row=>({...row,costFen:-1}))}}}
- expect(todayOngoingReading(changed,todayThread(changed,f)!,generic)).toBeNull();const done=context(until(run,'2020-01-08'),f);expect(todayOngoingReading(done.p,done.today,generic)).toBeNull();expect(scene(done).html).toContain('歇过之后，想从哪里开始？')
+ expect(todayOngoingReading(changed,todayThread(changed,f)!,generic)).toBeNull();const done=context(until(run,'2020-01-08'),f);expect(todayOngoingReading(done.p,done.today,generic)).toBeNull();expect(scene(done).html).toContain('歇过之后，想怎样继续？')
 })

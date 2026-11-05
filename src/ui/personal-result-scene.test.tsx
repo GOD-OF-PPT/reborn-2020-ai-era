@@ -66,9 +66,9 @@ it('keeps extra responsibilities, unfamiliar narration, changed cash/AP or stale
   expect(personalResultScene(c.p,c.thread,c.next,notice)!.brief).toBeNull();const r=render(c,notice);expect(r.notice!.text).toBe(notice.text);expect(renderToStaticMarkup(<>{r.room.facts}</>)).toContain('已付¥3,000 / 已用1点')
  }
 })
-it('leaves proven parallel completion text and costs visible, without guessing its membership from a sentence',()=>{
+it('uses the producer membership to compose parallel costs once while the single-result reader remains unchanged',()=>{
  const run=act(act(initial,'StartLifeWork',{kind:'workspace',personId:null,reference:null}),'ResearchMarket',{definitionId:'market-foundation-course'}),c=ctx(complete(run)),r=render(c)
- expect(personalResultScene(c.p,c.thread,c.next,c.notice)!.brief).toBeNull();expect(r.notice!.brief).toBe(c.notice.brief);expect(r.html).toContain('桌椅与照明已改善；规则研习资格已取得。');expect(renderToStaticMarkup(<>{r.room.facts}</>)).toContain('已付¥3,000 / 已用1点')
+ expect(personalResultScene(c.p,c.thread,c.next,c.notice)!.brief).toBeNull();expect(r.notice!.text).toBe(c.notice.text);expect(r.html).toContain('桌椅与照明已改善（原投入¥3,000 / 1点）；规则研习资格已取得。');expect(renderToStaticMarkup(<>{r.room.facts}</>)).toBe('')
 })
 it('keeps the next question about existing work when the completed life has one original continuation',()=>{
  const run=act(act(initial,'WorkQuarter'),'StartLifeWork',{kind:'rest',personId:null,reference:null}),c=ctx(complete(run)),v=personalResultScene(c.p,c.thread,c.next,c.notice)!,r=render(c)

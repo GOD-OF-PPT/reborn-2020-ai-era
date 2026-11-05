@@ -57,7 +57,7 @@ it.each(['rest','workspace'] as const)('keeps actual %s costs and action visible
  expect(reading.title).toBe(kind==='rest'?'歇过之后，想从哪里开始？':'住处变好了，接下来呢？')
  expect(reading.line).toBe(`已付${kind==='rest'?'¥0':'¥3,000'} / 已用1点；行动不返还，不产生收入。`)
  expect(shown.html).toContain(reading.line!);expect(closed.html).toContain('2020-01-08实际完成，投入'+(kind==='rest'?'¥0':'¥3,000'))
- expect(closed.html).toContain(reading.title);expect(shown.onPrepare).not.toHaveBeenCalled();expect(c.p.request).not.toHaveBeenCalled()
+ expect(closed.html).toContain(kind==='rest'?'歇过之后，想怎样继续？':reading.title);expect(shown.onPrepare).not.toHaveBeenCalled();expect(c.p.request).not.toHaveBeenCalled()
 })
 
 it('keeps original ongoing work in front of a completed side order',()=>{

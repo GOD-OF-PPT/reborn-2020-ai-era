@@ -71,7 +71,7 @@ it('offers an explicit work direction after actual rest while retaining the comp
   const p=props(completed),thread=playerThread(p,focus(p))
   expect(personalRestCompleted(p,thread)).toBe(true)
   const html=renderToday(p)
-  expect(html).toContain('歇过之后，想从哪里开始？')
+  expect(html).toContain('歇过之后，想怎样继续？')
   expect(html).toContain('工作，还是留点时间给自己？')
   expect(html).toContain('今天的日历 工作，还是留点时间给自己？')
   expect(html).toContain('2020-01-08实际完成')

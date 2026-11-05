@@ -1,7 +1,7 @@
 import type {PublicWaitResult} from '../application/public-wait.ts'
 import type {SessionResult} from '../application/session.ts'
 import {publicFeedbackSince} from '../application/public-feedback.ts'
-import {committedEcho,type EchoFrame} from './SceneEcho.tsx'
+import {committedEcho,type EchoFrame,type PersonalResultProof} from './SceneEcho.tsx'
 import {savedSceneResult} from './scene-result.ts'
 import {sceneCashResult} from './scene-cash-result.ts'
 import {equityReportBrief} from './equity-invitation-result.ts'
@@ -10,7 +10,7 @@ import {waitCauseBrief} from './scene-feedback-copy.ts'
 import {waitFeedbackReading} from './wait-feedback-reading.ts'
 import {firstOrderWaitBrief} from './first-order-feedback.ts'
 import {preparationCompletionReading} from './preparation-feedback.ts'
-import {personalParallelFeedback} from './personal-parallel-feedback.ts'
+import {personalParallelResults} from './personal-parallel-feedback.ts'
 import type {PlayingView,PlayFeatures} from './game-types.ts'
 
 const first=(text:string)=>text.includes('。')?text.slice(0,text.indexOf('。')+1):text
@@ -42,7 +42,7 @@ export function waitSequenceValid(result:PublicWaitResult,current:PlayingView):b
  return date===last.date&&current.receipts.every((row,index)=>{const saved=last.receipts[index];return row.commandId===saved?.commandId&&row.kind===saved.kind&&row.revisionAfter===saved.revisionAfter})&&JSON.stringify(current.accounts)===JSON.stringify(last.accounts)&&JSON.stringify(current.budget)===JSON.stringify(last.budget)
 }
 
-export function waitSceneResult(result:PublicWaitResult,current:PlayingView):{text:string;brief:string;frame:EchoFrame}|null{
+export function waitSceneResult(result:PublicWaitResult,current:PlayingView):{text:string;brief:string;frame:EchoFrame;personalResults?:PersonalResultProof}|null{
  if(!waitSequenceValid(result,current)||!result.lastBefore||result.lastBefore.runId!==result.lastSaved.runId||result.lastBefore.revision!==result.lastSaved.revision-1)return null
  const before=result.before,last=result.lastSaved,features=last.features as unknown as PlayFeatures,old=before.features as unknown as PlayFeatures
  const label=(id:string)=>id==='personal'?'个人':({a_share:'模拟投资',ai_video:'视频',ai_course:'课程',api_relay:'中转服务',deepseek_opportunity:'生态服务'} as Record<string,string>)[features.workbench.routes.find(r=>r.accountId===id)?.id??'']??'经营'
@@ -56,12 +56,15 @@ export function waitSceneResult(result:PublicWaitResult,current:PlayingView):{te
  const text=[cash,onlyPreparation?null:cause,meaning,'日历从'+before.date+'走到'+last.date+'。',retained.length?'这期间有'+new Set(retained.map(row=>row.sourceId)).size+'笔自己的原款到期，未收款仍保留，逐笔依据可翻原账。':null,note].filter(Boolean).join(' ')
  const singleReport=!cash&&retained.length===0?equityReportBrief(before,last,paused):null
  const supportBrief=retained.length===0?prepaidSupportRangeBrief(before,last,paused):null
- const parallelBrief=!partial&&!stopped&&!retryOnly&&!frame.quarterChanged&&retained.length===0&&!important&&(!cash||cash.startsWith('这段日子，'))?personalParallelFeedback(result.lastBefore,last,cause,paused):null
+ const parallelReading=!partial&&!stopped&&!retryOnly&&!frame.quarterChanged&&retained.length===0&&!important&&(!cash||cash.startsWith('这段日子，'))?personalParallelResults(result.lastBefore,last,cause,paused):null
+ const parallelBrief=parallelReading?.brief??null
  const causeBrief=singleReport??supportBrief??parallelBrief??waitCauseBrief(last.date,cause,preparationReading,old.firstOrder,features.firstOrder)
  const wageAlreadySummarized=!!cash&&first(cause)===last.date+'。'&&paused.length===1&&paused[0]!.kind==='result'&&causeBrief===paused[0]!.label&&last.operations?.payroll.some(row=>row.id===paused[0]!.sourceId&&row.kind==='salary'&&row.amountFen>0&&row.through===last.date&&!before.operations?.payroll.some(old=>old.id===row.id))
  const firstOrderBrief=!partial&&!stopped&&!retryOnly&&retained.length===0?firstOrderWaitBrief(before,last,cash,cause,paused):null
  const brief=firstOrderBrief??[stopped?'已经按你的选择停下。':null,cash?first(cash):null,wageAlreadySummarized?null:causeBrief,singleReport||important?.label===causeBrief?null:important?.label,partial?'已保存部分保留，后续等候尚未保存。':retryOnly?retryNote:null].filter(Boolean).join(' ')
- return {text,brief,frame}
+ const unchanged=frame.pointsBefore===frame.pointsAfter&&frame.reservedBefore===frame.reservedAfter&&frame.spentBefore===frame.spentAfter&&frame.accounts.every(a=>a.before===a.after)
+ const personalResults=parallelReading&&!cash&&unchanged?{...parallelReading.results,text,brief,frame}:null
+ return {text,brief,frame,...(personalResults?{personalResults}:{})}
 }
 
 /** Completing the exact original candidate is not authorization to resume the range. */

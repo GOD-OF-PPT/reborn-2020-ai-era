@@ -4,8 +4,11 @@ import {moneyText} from './game-text.ts'
 import {useState,type ReactNode} from 'react'
 import {isoDate} from '../core/calendar.ts'
 import './scene-echo-reading.css'
+import type {PersonalResultSet} from './personal-parallel-feedback.ts'
 
 export type EchoFrame={dateBefore:string;dateAfter:string;pointsBefore:number;pointsAfter:number;reservedBefore:number;reservedAfter:number;spentBefore:number;spentAfter:number;quarterChanged:boolean;accounts:{id:string;before:number|null;after:number}[]}
+
+export type PersonalResultProof=PersonalResultSet&{readonly text:string;readonly brief:string;readonly frame:EchoFrame}
 
 /** A cross-run or uncommitted snapshot cannot produce a success reel. */
 export function committedEcho(previous:PlayingView|null,current:PlayingView):EchoFrame|null{
@@ -42,7 +45,7 @@ export function sceneTimeNarrative(date:string,text:string){
 }
 
 /** The actual saved result stays in the scene; the same complete reel opens on demand. */
-export function SceneTimeNotice({date,text,frame,onClose,accountName,compact=false,brief,recordAction}:{date:string;text:string;frame:EchoFrame|null;onClose:()=>void;accountName:(id:string)=>string;compact?:boolean;brief?:string;recordAction?:ReactNode}){
+export function SceneTimeNotice({date,text,frame,onClose,accountName,compact=false,brief,recordAction}:{date:string;text:string;frame:EchoFrame|null;onClose:()=>void;accountName:(id:string)=>string;compact?:boolean;brief?:string;recordAction?:ReactNode;personalResults?:PersonalResultProof}){
  const [open,setOpen]=useState(false)
  const narrative=sceneTimeNarrative(date,text),summary=compact&&brief?brief:compact&&narrative.includes('。')?narrative.slice(0,narrative.indexOf('。')+1):narrative
  return <span className="scene-time-note" role="status">{!compact?<time dateTime={date}>{date}</time>:null}<span className="scene-time-result">{summary}</span><button type="button" data-interaction="inspect" onClick={()=>setOpen(true)}>细看回响 ↗</button>{recordAction}<button type="button" aria-label="收起这次时间回响" onClick={onClose}>收好</button>{open?<SceneEcho text={text} frame={frame} accountName={accountName} onClose={()=>setOpen(false)}/>:null}</span>

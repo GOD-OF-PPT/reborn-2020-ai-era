@@ -47,7 +47,7 @@ it.each(['rest','workspace'] as const)('restores the original %s completion expl
 })
 it('uses the same brief in Today while preserving exact full-text, frame, reader and close references',()=>{
  const c=completed('workspace'),onClose=vi.fn(),accountName=()=> '个人账户',feedback=<SceneTimeNotice {...c.notice} compact onClose={onClose} accountName={accountName}/>,today=todayThread(c.p,c.focus)!,before=JSON.stringify(today),html=renderToStaticMarkup(<TodayScene p={c.p} today={today} feedback={feedback} headingRef={null} onFocus={vi.fn()} onPrepare={vi.fn()} onResume={vi.fn()} onExplore={vi.fn()} onRecollection={vi.fn()} onNavigate={vi.fn()}/>),actual=captured.notices.at(-1)!
- expect(html).toContain('这段等待，没有新增支出。');expect(html).toContain('已付¥3,000 / 已用1点');expect(html).toContain('住处变好了，接下来呢')
+ expect(html).toContain('桌椅与照明已改善 · 已付¥3,000 / 已用1点');expect(html).toContain('已付¥3,000 / 已用1点');expect(html).toContain('住处变好了，接下来呢')
  expect(actual.text).toBe(c.notice.text);expect(actual.frame).toBe(c.notice.frame);expect(actual.onClose).toBe(onClose);expect(actual.accountName).toBe(accountName);expect(JSON.stringify(today)).toBe(before)
 })
 it('keeps additional facts, cash changes, quarter changes and other objects on their original reading',()=>{

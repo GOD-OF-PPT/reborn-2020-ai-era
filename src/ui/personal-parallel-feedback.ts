@@ -10,9 +10,12 @@ const studies:Record<string,{readonly result:string;readonly entitlement:string|
  'market-foundation-course':{result:'规则研习资格已取得',entitlement:'sim-researched'},
  'simulation-special-study':{result:'试验段研习资格已取得',entitlement:'sim-experimental-access'},
 }
+export type PersonalResultMember={readonly kind:'life';readonly id:string;readonly actionId:string;readonly work:'rest'|'workspace';readonly completeAt:string;readonly costFen:number;readonly actionPoints:number}|{readonly kind:'research';readonly id:string;readonly actionId:string;readonly definitionId:string;readonly completeAt:string;readonly entitlementId:string|null}
+export interface PersonalResultSet{readonly runId:string;readonly revision:number;readonly date:string;readonly members:readonly PersonalResultMember[]}
+
 /** Exact before/after personal completions only. The caller retains its original
  * cash summary, full text, dates, resource frame and every command boundary. */
-export function personalParallelFeedback(previous:PlayingView,current:PlayingView,cause:string,feedback:readonly PublicFeedback[]):string|null{
+export function personalParallelResults(previous:PlayingView,current:PlayingView,cause:string,feedback:readonly PublicFeedback[]):{readonly brief:string;readonly results:PersonalResultSet}|null{
  const before=previous.features as unknown as PlayFeatures,after=current.features as unknown as PlayFeatures,last=current.receipts.at(-1)
  if(previous.runId!==current.runId||current.phase!=='playing'||current.busy||current.readOnly||current.hasCandidate||current.saveStatus!=='saved'||previous.saveStatus!=='saved'||previous.hasCandidate||current.revision!==previous.revision+1||last?.kind!=='AdvanceTime'||last.revisionAfter!==current.revision||!day(previous.date)||!day(current.date)||previous.date>=current.date||after.life.asOf!==current.date||after.workbench.atQuarterEnd||after.workbench.pause||after.workbench.progression.requiresDelivery)return null
  const life=after.life.jobs.filter(j=>j.status==='completed'&&j.completeAt>previous.date&&j.completeAt<=current.date),research=after.market.researches.filter(r=>r.status==='completed'&&r.completeAt>previous.date&&r.completeAt<=current.date)
@@ -39,5 +42,9 @@ export function personalParallelFeedback(previous:PlayingView,current:PlayingVie
  if(workspace.length>1||rest.length>1)return null
  const parts=[`个人账户：${research.length}项市场研究已完成，只整理已公开线索；这不是未来价格，也没有替你下委托`,...(workspace.length?['桌椅与照明已经改善，这次投入的钱和时间仍记在账上']:[]),...(rest.length?[`${rest.length}次休整已经结束，行动与花费照账保留`]:[])]
  if(cause!==current.date+'，'+parts.join('；')+'。')return null
- return [...(workspace.length?['桌椅与照明已改善']:[]),...(rest.length?['休整结束']:[]),...research.map(r=>studies[r.definitionId]!.result)].join('；')+'。'
+ const brief=[...(workspace.length?['桌椅与照明已改善']:[]),...(rest.length?['休整结束']:[]),...research.map(r=>studies[r.definitionId]!.result)].join('；')+'。'
+ const members:PersonalResultMember[]=[...[...workspace,...rest].map(j=>({kind:'life' as const,id:j.id,actionId:j.actionId,work:j.kind as 'rest'|'workspace',completeAt:j.completeAt,costFen:j.costFen,actionPoints:j.actionPoints})),...research.map(r=>({kind:'research' as const,id:r.id,actionId:r.actionId,definitionId:r.definitionId,completeAt:r.completeAt,entitlementId:studies[r.definitionId]!.entitlement}))]
+ return {brief,results:{runId:current.runId,revision:current.revision,date:current.date,members}}
 }
+
+export function personalParallelFeedback(previous:PlayingView,current:PlayingView,cause:string,feedback:readonly PublicFeedback[]):string|null{return personalParallelResults(previous,current,cause,feedback)?.brief??null}
