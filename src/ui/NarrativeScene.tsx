@@ -15,6 +15,7 @@ import {CommandButton} from './CommandButton.tsx'
 import {PersonPortrait} from './PersonPortrait.tsx'
 import {LifeContactBook} from './LifeContactBook.tsx'
 import {PersonResultChoice,personResultReading} from './PersonResultChoice.tsx'
+import {PersonalResultChoice,personalResultReading} from './PersonalResultChoice.tsx'
 import {lifeSceneProgress,type LifeSceneSelection} from './life-scene-progress.ts'
 import {LifeReferenceChoice} from './LifeReferenceChoice.tsx'
 import {marketSceneProgress} from './market-scene-progress.ts'
@@ -187,6 +188,7 @@ export function NarrativeScene(p:Props){
  const waitAt=canAdvance&&encounterWait&&encounterWait>=view.date?playableAdvanceDate(w,view.date,encounterWait):null
  const lifePause=p.screen==='life'&&lifeProgress&&canAdvance&&next?lifeActionPauseReading(p,lifeProgress):null
  const availableClock=canAdvance&&next?<ClockAdvance p={p} date={next} label={defaultWaitLabel(w,typeof p.requestWait==='function')+' · '+next}/>:null
+ const personalResult=lifeProgress&&lifeMode!=='person'?personalResultReading(p,lifeProgress):null
  const personResult=lifeProgress&&lifeMode==='person'?personResultReading(p,lifeProgress):null
  const lifeMainAction=lifeProgress?.command?<Action compact p={p} {...lifeProgress.command} title={lifeProgress.choice.title} line={lifeProgress.choice.line} label={lifeProgress.choice.label}/>:null
  const waitLabel=waitAt&&waitAt!==encounterWait?'先到日历上的这一日':videoThread?.wait?.label??courseProgress?.wait?.label??marketProgress?.waitLabel??(courseProgress?.preparation?'等这份大纲的下一处反馈':lifeProgress?.person?'等和'+lifeProgress.person.name+'约好的这段时间结束':lifeProgress?'等这次生活安排完成':deepseekProgress?.source==='counterfactual-equity'?'等这份架空投资的回信':'等这份合作的回信')
@@ -245,7 +247,7 @@ export function NarrativeScene(p:Props){
 
    </>:null}
    {p.screen==='life'&&lifeProgress?<>
-    {personResult?<PersonResultChoice p={p} value={personResult} onRecord={p.onPeople} onNavigate={p.onNavigate}/>:lifeProgress.command?lifePause&&availableClock?<LifeActionPause title={lifeProgress.choice.label} clock={availableClock}>{lifeMainAction}</LifeActionPause>:lifeMainAction:waitAt?<WaitChoice compact displayLabel={waitAt===lifeProgress.waitDate?(lifeProgress.person?'等这次相处结束':'等这次生活安排完成'):waitLabel} p={p} date={waitAt} title={lifeProgress.choice.title} line={lifeProgress.choice.line} label={waitLabel}/>:lifeProgress.waitDate?<Choice title="这次等候，还要先面对日历上的事" line={lifeProgress.choice.line} label="查看阻碍推进的原事项" onClick={()=>p.onOpen('quarter')}/>:lifeProgress.referenceRequired&&lifeProgress.person?<LifeReferenceChoice key={view.runId+':'+person.id} p={p} person={lifeProgress.person} onFullRecord={p.onPeople}>{open=><Choice intent="plan" title={lifeProgress.choice.title} line={lifeProgress.choice.line} label={lifeProgress.choice.label} onClick={open}/>}</LifeReferenceChoice>:<Choice title={lifeProgress.choice.title} line={lifeProgress.choice.line} label={lifeProgress.choice.label} onClick={lifeMode==='person'?p.onPeople:p.onYear}/>}
+    {personalResult?<PersonalResultChoice p={p} value={personalResult} onOpen={p.onOpen} onNavigate={p.onNavigate}/>:personResult?<PersonResultChoice p={p} value={personResult} onRecord={p.onPeople} onNavigate={p.onNavigate}/>:lifeProgress.command?lifePause&&availableClock?<LifeActionPause title={lifeProgress.choice.label} clock={availableClock}>{lifeMainAction}</LifeActionPause>:lifeMainAction:waitAt?<WaitChoice compact displayLabel={waitAt===lifeProgress.waitDate?(lifeProgress.person?'等这次相处结束':'等这次生活安排完成'):waitLabel} p={p} date={waitAt} title={lifeProgress.choice.title} line={lifeProgress.choice.line} label={waitLabel}/>:lifeProgress.waitDate?<Choice title="这次等候，还要先面对日历上的事" line={lifeProgress.choice.line} label="查看阻碍推进的原事项" onClick={()=>p.onOpen('quarter')}/>:lifeProgress.referenceRequired&&lifeProgress.person?<LifeReferenceChoice key={view.runId+':'+person.id} p={p} person={lifeProgress.person} onFullRecord={p.onPeople}>{open=><Choice intent="plan" title={lifeProgress.choice.title} line={lifeProgress.choice.line} label={lifeProgress.choice.label} onClick={open}/>}</LifeReferenceChoice>:<Choice title={lifeProgress.choice.title} line={lifeProgress.choice.line} label={lifeProgress.choice.label} onClick={lifeMode==='person'?p.onPeople:p.onYear}/>}
     {lifeProgress.secondaryCommand?<Action compact p={p} {...lifeProgress.secondaryCommand} buttonLabel={lifeProgress.secondaryCommand.kind==='DeclineLifePromise'?'婉拒这次邀请':'中断这次安排'} title={lifeProgress.secondaryCommand.kind==='DeclineLifePromise'?'婉拒这次邀请':'中断这次安排'} line={lifeProgress.secondaryCommand.kind==='DeclineLifePromise'?'告诉对方这次无法参加；不会花钱，也不会接受这项约定。':'原成本、已经用掉的行动和答应过的责任不会因中断消失；再次安排仍须另付真实资源。'} label={lifeProgress.secondaryCommand.kind==='DeclineLifePromise'?'婉拒'+person.name+'的邀请':'中断这次生活工作，保留原成本与承诺'}/>:null}
 
    </>:null}

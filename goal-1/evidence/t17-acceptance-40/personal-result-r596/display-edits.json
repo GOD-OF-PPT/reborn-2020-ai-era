@@ -1,0 +1,14 @@
+[
+  {
+    "old": "import {PersonResultChoice,personResultReading} from './PersonResultChoice.tsx'",
+    "new": "import {PersonResultChoice,personResultReading} from './PersonResultChoice.tsx'\nimport {PersonalResultChoice,personalResultReading} from './PersonalResultChoice.tsx'"
+  },
+  {
+    "old": " const personResult=lifeProgress",
+    "new": " const personalResult=lifeProgress&&lifeMode!=='person'?personalResultReading(p,lifeProgress):null\n const personResult=lifeProgress"
+  },
+  {
+    "old": "{personResult?<PersonResultChoice p={p} value={personResult} onRecord={p.onPeople} onNavigate={p.onNavigate}/>:lifeProgress.command?",
+    "new": "{personalResult?<PersonalResultChoice p={p} value={personalResult} onOpen={p.onOpen} onNavigate={p.onNavigate}/>:personResult?<PersonResultChoice p={p} value={personResult} onRecord={p.onPeople} onNavigate={p.onNavigate}/>:lifeProgress.command?"
+  }
+]
