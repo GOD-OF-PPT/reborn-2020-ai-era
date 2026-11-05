@@ -1,0 +1,187 @@
+{
+  "at": "2026-11-05T20:55:22.188780+00:00",
+  "browser": "Chrome 3",
+  "livesAreIndependent": true,
+  "cases": [
+    {
+      "case": "A",
+      "url": "http://127.0.0.1:5778/",
+      "source": 653,
+      "tab": "387930002",
+      "profile": "normal technical/autonomy/free",
+      "name": "巷口的第一束光",
+      "sequence": [
+        {
+          "date": "2020-01-01",
+          "revision": 2,
+          "cashFen": 2600000,
+          "available": 4,
+          "meaning": "actual original0/0 account, first comparison Room/route"
+        },
+        {
+          "date": "2020-01-01",
+          "revision": 3,
+          "cashFen": 2540000,
+          "available": 3,
+          "meaning": "original marketing actually started, paid600 and used1, reserved0"
+        },
+        {
+          "date": "2020-01-06",
+          "revision": 4,
+          "meaning": "original offer reply barrier, same marketing still running"
+        },
+        {
+          "date": "2020-01-08",
+          "revision": 5,
+          "cashFen": 2540000,
+          "available": 3,
+          "meaning": "actual3 new qualified inquiries, no orders; old long result pushed Clock fee out of view"
+        }
+      ],
+      "captures": [
+        "01-route-first-two-intentions",
+        "02-room-same-two-intentions",
+        "03-room-primary-direct-product-choice",
+        "04-room-object-same-product-choice",
+        "05-original-marketing-resource-date-page1",
+        "06-original-marketing-confirmation-cost-and-start",
+        "07-actual-marketing-start-paid600-used1",
+        "08-original-jan6-barrier-keeps-marketing-focus",
+        "09-jan8-actual-three-inquiries-not-orders",
+        "10-original-next-choice-after-real-feedback"
+      ],
+      "notes": "09 is retained visual failure; main/object direct product unselected; original next record3 pages"
+    },
+    {
+      "case": "B",
+      "url": "http://127.0.0.1:5779/",
+      "sources": [
+        654,
+        655
+      ],
+      "tab": "387930006",
+      "profile": "independent normal technical/autonomy/free",
+      "name": "灯下的一点日常",
+      "sequence": [
+        {
+          "date": "2020-01-01",
+          "revision": 2,
+          "meaning": "original account created on654, no marketing yet"
+        },
+        {
+          "date": "2020-01-01",
+          "revision": 2,
+          "meaning": "655 normal program load, explicit original existing account selection, first comparison now direct stage, numeric2 opens original marketing"
+        },
+        {
+          "date": "2020-01-01",
+          "revision": 3,
+          "cashFen": 2540000,
+          "available": 3,
+          "meaning": "marketing original600/1 started"
+        },
+        {
+          "date": "2020-01-06",
+          "revision": 4,
+          "meaning": "original barrier"
+        },
+        {
+          "date": "2020-01-08",
+          "revision": 5,
+          "cashFen": 2540000,
+          "available": 3,
+          "meaning": "actual3 inquiries; spacing alone still did not keep Clock fee fully visible"
+        }
+      ],
+      "captures": [
+        "11-final-route-first-comparison",
+        "12-final-room-clean-first-comparison",
+        "13-final-direct-route-comparison-no-pagination",
+        "14-final-original-marketing-resource-page",
+        "15-final-original-promotion-confirmation",
+        "16-final-long-result-and-clock"
+      ],
+      "notes": "11 is source654 auto-pagination failure;16 is source655 incomplete visual fix; program update is not storage verification"
+    },
+    {
+      "case": "C",
+      "url": "http://127.0.0.1:5780/",
+      "source": 656,
+      "tab": "387930010",
+      "profile": "third independent normal technical/autonomy/free",
+      "name": "街角的一盏灯",
+      "sequence": [
+        {
+          "date": "2020-01-01",
+          "revision": 2,
+          "cashFen": 2600000,
+          "available": 4,
+          "meaning": "explicit local-merchants/name and original0/0 creation"
+        },
+        {
+          "date": "2020-01-01",
+          "revision": 3,
+          "cashFen": 2540000,
+          "available": 3,
+          "reserved": 0,
+          "meaning": "numeric2 original marketing, explicit self resource and today; paid600 and used1"
+        },
+        {
+          "date": "2020-01-06",
+          "revision": 4,
+          "meaning": "original reply barrier before complete"
+        },
+        {
+          "date": "2020-01-08",
+          "revision": 5,
+          "cashFen": 2540000,
+          "available": 3,
+          "reserved": 0,
+          "meaning": "actual3 inquiries; only exact duplicate current date/count line omitted while original result stays visible, Clock known8000 fee visible"
+        },
+        {
+          "date": "2020-01-08",
+          "revision": 5,
+          "meaning": "original full text/frame open/close; dismiss restores original current date/count; original next page3 explicit Today, no new commitment"
+        }
+      ],
+      "captures": [
+        "17-final656-original-promotion-confirmation",
+        "18-final656-composed-result-and-clock",
+        "19-final656-original-full-result-and-frame",
+        "20-final656-dismiss-restores-date-and-count",
+        "21-final656-original-next-choice-last-page",
+        "22-final656-explicit-today-without-new-commitment"
+      ],
+      "frame": {
+        "dateBefore": "2020-01-06",
+        "dateAfter": "2020-01-08",
+        "available": 3,
+        "reserved": 0,
+        "spent": 1,
+        "availableFen": 2540000,
+        "allResourceChanges": false
+      }
+    },
+    {
+      "case": "Main",
+      "url": "http://127.0.0.1:5415/",
+      "source": 656,
+      "capture": "23-main656-entry-only",
+      "meaning": "local program entry only, original user2025-10-01/rev129 life not entered"
+    }
+  ],
+  "qaExits": [
+    143,
+    143,
+    143,
+    143
+  ],
+  "inputTimeoutHandling": "Inspected actual UI before next actions; partial dispatch sometimes only focused control, used documented Enter from observed state. Never repeated game commitment blindly. Read selected browser troubleshooting; same browser3 retained. Longer documented locator deadlines used, no browser settings changed.",
+  "storageDevelopment": 0,
+  "storageTests": 0,
+  "compatibilityDevelopment": 0,
+  "compatibilityTests": 0,
+  "humanUnderstandingOrArtApproval": false,
+  "wholeU6Complete": false
+}

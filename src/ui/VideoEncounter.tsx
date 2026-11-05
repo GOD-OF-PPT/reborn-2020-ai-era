@@ -6,13 +6,15 @@ import {OpeningObject,type OpeningObjectProps} from './OpeningObject.tsx'
 import {videoPaperFor} from './video-continuity.ts'
 import './video-encounter.css'
 import {videoFirstAccount} from './video-first-entry.ts'
+import type {VideoChoiceAction} from './VideoSceneChoice.tsx'
+import {VideoFirstAttemptOptions} from './VideoFirstAttemptOptions.tsx'
 
 export interface VideoEncounterProps{
  readonly p:GamePanelProps
  readonly thread:PlayerThreadView
  readonly date:string|null
  readonly waitLabel:string
- readonly onChoose:()=>void
+ readonly onChoose:(intent?:VideoChoiceAction)=>void
  readonly onResult:()=>void
  readonly onToday:()=>void
 }
@@ -36,14 +38,15 @@ export function VideoEncounter({p,thread,date,waitLabel,onChoose,onResult,onToda
   // lookup finds .scene-decision-main>button or the original .clock-main>button.
   const main=isValidElement<{className?:string}>(primary.main)?cloneElement(primary.main,{className:[primary.main.props.className,'scene-decision-main'].filter(Boolean).join(' ')}):primary.main
   const protection=p.view.readOnly?'readonly' as const:p.view.hasCandidate||p.view.saveStatus!=='saved'?'unsaved' as const:primary.binding.disabled?'unavailable' as const:undefined
-  return <section className="scene-action video-encounter" data-video-stage={thread.stage} data-focus-scope={thread.focusScope} aria-label="这一份视频的决定">
+  return <section className="scene-action video-encounter" data-first-attempt={primary.firstAttempt?true:undefined} data-video-stage={thread.stage} data-focus-scope={thread.focusScope} aria-label="这一份视频的决定">
    <div className="video-encounter-thought">
-    <span className="scene-choice-overline" data-book-chapter={thread.title}>{thread.focusScope==='history'?'翻阅原来的一份':'眼前这一份 · 由你决定'}</span>
-    {first?null:<p className="scene-choice-line">{thread.detail}</p>}
+    {primary.firstAttempt?null:<span className="scene-choice-overline" data-book-chapter={thread.title}>{thread.focusScope==='history'?'翻阅原来的一份':'眼前这一份 · 由你决定'}</span>}
+    {first||primary.firstAttempt?null:<p className="scene-choice-line">{thread.detail}</p>}
     {main}
+    {primary.firstAttempt?<VideoFirstAttemptOptions value={primary.firstAttempt}/>:null}
    </div>
    <div className="video-encounter-paper">
-    <OpeningObject {...(first?{copyMode:'tableau' as const}:{})} kind={objectKind(thread)} appearance="video" title={thread.object} displayTitle="" detail={paperDetail} stageLabel={paperStage} actionLabel={primary.binding.label} disabled={primary.binding.disabled} onActivate={primary.binding.activate} textOnly={p.textOnly===true} {...(art?{videoPaper:art}:{})} {...(protection?{protection}:{})}/>
+    <OpeningObject {...(first||primary.firstAttempt?{copyMode:'tableau' as const}:{})} kind={objectKind(thread)} appearance="video" title={thread.object} displayTitle="" detail={paperDetail} stageLabel={primary.firstAttempt?'第一份作品 · 待选择':paperStage} actionLabel={primary.binding.label} disabled={primary.binding.disabled} onActivate={primary.binding.activate} textOnly={p.textOnly===true} {...(art?{videoPaper:art}:{})} {...(protection?{protection}:{})}/>
    </div>
   </section>
  }}</VideoThreadAction>

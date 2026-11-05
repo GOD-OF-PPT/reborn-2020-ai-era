@@ -1,0 +1,137 @@
+[
+  {
+    "path": "src/ui/VideoThreadAction.tsx",
+    "from": "import {videoFirstAccount,videoFirstEntryCopy} from './video-first-entry.ts'\n",
+    "to": "import type {VideoChoiceAction} from './VideoSceneChoice.tsx'\nimport {videoFirstAttemptReading} from './video-first-attempt.ts'\nimport {VideoFirstAttemptAction,type VideoFirstAttemptExtras} from './VideoFirstAttemptAction.tsx'\nimport {videoFirstAccount,videoFirstEntryCopy} from './video-first-entry.ts'\n"
+  },
+  {
+    "path": "src/ui/VideoThreadAction.tsx",
+    "from": "type Primary={binding:SharedActionBinding;main:ReactNode}",
+    "to": "type Primary={binding:SharedActionBinding;main:ReactNode;firstAttempt?:VideoFirstAttemptExtras}"
+  },
+  {
+    "path": "src/ui/VideoThreadAction.tsx",
+    "from": "onChoose:()=>void;",
+    "to": "onChoose:(intent?:VideoChoiceAction)=>void;"
+  },
+  {
+    "path": "src/ui/VideoThreadAction.tsx",
+    "from": " if(thread.stage==='video-entry'&&",
+    "to": " const firstAttempt=thread.stage==='video-channel'&&thread.focus.kind==='video'&&['entry','current'].includes(thread.focusScope)&&!thread.responsibilityOverrideNeeded&&!thread.legacyFallbackRequired?videoFirstAttemptReading(p,thread.focus):null\n if(firstAttempt&&thread.focus.kind==='video')return <VideoFirstAttemptAction p={p} focus={thread.focus} reading={firstAttempt} onChoose={onChoose}>{children}</VideoFirstAttemptAction>\n if(thread.stage==='video-entry'&&"
+  },
+  {
+    "path": "src/ui/VideoEncounter.tsx",
+    "from": "import {videoFirstAccount} from './video-first-entry.ts'",
+    "to": "import {videoFirstAccount} from './video-first-entry.ts'\nimport type {VideoChoiceAction} from './VideoSceneChoice.tsx'\nimport {VideoFirstAttemptOptions} from './VideoFirstAttemptOptions.tsx'"
+  },
+  {
+    "path": "src/ui/VideoEncounter.tsx",
+    "from": "readonly onChoose:()=>void",
+    "to": "readonly onChoose:(intent?:VideoChoiceAction)=>void"
+  },
+  {
+    "path": "src/ui/VideoEncounter.tsx",
+    "from": "data-video-stage={thread.stage}",
+    "to": "data-first-attempt={primary.firstAttempt?true:undefined} data-video-stage={thread.stage}"
+  },
+  {
+    "path": "src/ui/VideoEncounter.tsx",
+    "from": "{first?null:<p className=\"scene-choice-line\">{thread.detail}</p>}",
+    "to": "{first||primary.firstAttempt?null:<p className=\"scene-choice-line\">{thread.detail}</p>}"
+  },
+  {
+    "path": "src/ui/VideoEncounter.tsx",
+    "from": "    {main}\n",
+    "to": "    {main}\n    {primary.firstAttempt?<VideoFirstAttemptOptions value={primary.firstAttempt}/>:null}\n"
+  },
+  {
+    "path": "src/ui/VideoEncounter.tsx",
+    "from": "{...(first?{copyMode:'tableau' as const}:{})}",
+    "to": "{...(first||primary.firstAttempt?{copyMode:'tableau' as const}:{})}"
+  },
+  {
+    "path": "src/ui/VideoEncounter.tsx",
+    "from": "stageLabel={paperStage}",
+    "to": "stageLabel={primary.firstAttempt?'第一份作品 · 待选择':paperStage}"
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "from": "import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'\n",
+    "to": "import {videoFirstAttemptReading} from './video-first-attempt.ts'\nimport {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'\n"
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "from": " const rawVideoProgress=",
+    "to": " const videoAttempt=videoThread?.stage==='video-channel'&&videoThread.focus.kind==='video'&&['entry','current'].includes(videoThread.focusScope)&&!videoThread.responsibilityOverrideNeeded&&!videoThread.legacyFallbackRequired?videoFirstAttemptReading(p,videoThread.focus):null\n const rawVideoProgress="
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "from": "invalidReason:videoThread.invalidReason}:rawVideoProgress",
+    "to": "invalidReason:videoThread.invalidReason}:rawVideoProgress&&videoAttempt?{...rawVideoProgress,title:videoAttempt.title,line:videoAttempt.line}:rawVideoProgress"
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "from": "onChoose={()=>open(videoThread.stage==='video-quality'?'rework':videoThread.stage==='video-ready-to-publish'?'publish':undefined)}",
+    "to": "onChoose={intent=>open(intent??(videoThread.stage==='video-quality'?'rework':videoThread.stage==='video-ready-to-publish'?'publish':undefined))}"
+  },
+  {
+    "path": "src/ui/OpeningMoment.tsx",
+    "from": "import {videoFirstAccount,videoFirstEntryCopy} from './video-first-entry.ts'\n",
+    "to": "import {videoFirstAttemptReading} from './video-first-attempt.ts'\nimport {VideoFirstAttemptFacts,VideoFirstAttemptOptions} from './VideoFirstAttemptOptions.tsx'\nimport {videoFirstAccount,videoFirstEntryCopy} from './video-first-entry.ts'\n"
+  },
+  {
+    "path": "src/ui/OpeningMoment.tsx",
+    "from": " const videoChooseIntent:",
+    "to": " const videoAttempt=thread.stage==='video-channel'&&!interrupted&&!requiresChoice&&!unknownFocus&&!legacy&&!thread.responsibilityOverrideNeeded&&thread.focus.kind==='video'&&['entry','current'].includes(thread.focusScope)?videoFirstAttemptReading(p,thread.focus):null\n const videoChooseIntent:"
+  },
+  {
+    "path": "src/ui/OpeningMoment.tsx",
+    "from": "onChoose={()=>{setObjectOpen(false);openVideo(videoChooseIntent)}}",
+    "to": "onChoose={intent=>{setObjectOpen(false);openVideo(intent??videoChooseIntent)}}"
+  },
+  {
+    "path": "src/ui/OpeningMoment.tsx",
+    "from": "cohortCopy?.title??meaning?.title??moment.title",
+    "to": "cohortCopy?.title??videoAttempt?.title??meaning?.title??moment.title"
+  },
+  {
+    "path": "src/ui/OpeningMoment.tsx",
+    "from": "facts={<>{freeChoice?",
+    "to": "facts={<>{videoAttempt?<VideoFirstAttemptFacts reading={videoAttempt}/>:freeChoice?"
+  },
+  {
+    "path": "src/ui/OpeningMoment.tsx",
+    "from": "   {interrupted?unknownFocus?action",
+    "to": "   {videoPrimary?.firstAttempt?<VideoFirstAttemptOptions value={videoPrimary.firstAttempt} room/>:interrupted?unknownFocus?action"
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "from": "function SceneChoiceSurface({direct,children,...book}:ComponentProps<typeof ScreenBook>&{direct:boolean}){\n return direct?<div className=\"life-choice-stage\" role=\"group\" aria-label=\"现在可以作出的生活选择\">{children}</div>:<ScreenBook {...book}>{children}</ScreenBook>\n}",
+    "to": "function SceneChoiceSurface({direct,video=false,children,...book}:ComponentProps<typeof ScreenBook>&{direct:boolean;video?:boolean}){\n return direct?<div className={video?'video-first-attempt-stage':'life-choice-stage'} role=\"group\" aria-label={video?'现在可以作出的视频选择':'现在可以作出的生活选择'}>{children}</div>:<ScreenBook {...book}>{children}</ScreenBook>\n}"
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "from": "direct={p.screen==='life'&&!closing} choiceNavigation",
+    "to": "direct={p.screen==='life'&&!closing||videoAttempt!==null} video={videoAttempt!==null} choiceNavigation"
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "from": " const number=Number(event.key)-1,choice=root.querySelectorAll",
+    "to": " const number=Number(event.key)-1,direct=root.querySelector('.video-first-attempt-stage')\n if(direct){const button=direct.querySelectorAll<HTMLButtonElement>('.scene-decision-main>button,.video-attempt-option,.video-attempt-more')[number];if(!button||button.disabled||button.inert||button.closest('[inert]')||!button.getClientRects().length)return;event.preventDefault();button.click();return}\n const choice=root.querySelectorAll"
+  },
+  {
+    "path": "src/ui/VideoEncounter.tsx",
+    "from": "<span className=\"scene-choice-overline\" data-book-chapter={thread.title}>{thread.focusScope==='history'?'翻阅原来的一份':'眼前这一份 · 由你决定'}</span>",
+    "to": "{primary.firstAttempt?null:<span className=\"scene-choice-overline\" data-book-chapter={thread.title}>{thread.focusScope==='history'?'翻阅原来的一份':'眼前这一份 · 由你决定'}</span>}"
+  },
+  {
+    "path": "src/ui/OpeningMoment.tsx",
+    "from": "import {videoFirstAttemptReading} from './video-first-attempt.ts'\n",
+    "to": "import {videoMarketingResultCoversLine} from './video-marketing-result-reading.ts'\nimport {videoFirstAttemptReading} from './video-first-attempt.ts'\n"
+  },
+  {
+    "path": "src/ui/OpeningMoment.tsx",
+    "from": " const sceneFactsAfterEcho=parallelResult?",
+    "to": " const marketingLineCovered=sceneFacts===null&&timeNotice&&videoMarketingResultCoversLine(p,thread,timeNotice.props,cohortCopy?.line??collectionScope??(summarized?meaning!.situation:closedCopy?.line??sceneLine))\n const sceneFactsAfterEcho=marketingLineCovered?[]:parallelResult?"
+  }
+]

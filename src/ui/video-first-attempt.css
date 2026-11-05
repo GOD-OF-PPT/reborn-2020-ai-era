@@ -1,0 +1,28 @@
+.cinema-app .video-attempt-option{--video-attempt-ink:#e7d9b6;--video-attempt-rule:#bea57588;display:flex;align-items:center;gap:14px;width:100%;padding:12px 0;background:none;border:0;border-bottom:1px solid var(--video-attempt-rule);border-radius:0;box-shadow:none;color:var(--video-attempt-ink);text-align:left;transform:none}
+.cinema-app .video-attempt-option>b{font:14px/1.8 var(--serif);font-weight:400;color:#c4ac76}
+.cinema-app .video-attempt-option>span{display:flex;flex:1;flex-direction:column;gap:5px;font:20px/1.7 var(--serif)}
+.cinema-app .video-attempt-option>span>small{font:14px/1.8 var(--serif);color:#c3ccb5}
+.cinema-app .video-attempt-option>i{font-style:normal;font-size:19px;color:#d4bd85}
+.cinema-app .video-attempt-option:is(:hover,:focus-visible):not(:disabled){background:#a8965f17;color:#ffe6af;border-bottom-color:#e6c990;transform:none}
+.cinema-app .video-attempt-option:focus-visible,.cinema-app .video-attempt-more:focus-visible{outline:2px solid #eed39a;outline-offset:4px}
+.cinema-app .video-attempt-option:disabled{border-bottom-style:dashed;color:#b9bfae}
+.cinema-app .video-attempt-more{align-self:flex-start;width:auto;margin:0;padding:6px 0;background:none;border:0;border-bottom:1px solid #ad9d6b88;border-radius:0;box-shadow:none;color:#d1c197;font:14px/1.8 var(--serif);transform:none}
+.cinema-app .book-flow .video-encounter[data-first-attempt=true] .video-encounter-thought{gap:10px}
+.cinema-app .book-flow .video-encounter[data-first-attempt=true] .scene-decision-main>button>span>small{font:14px/1.8 var(--serif)}
+/* Preserve long actual video feedback and the original Clock in the room. */
+.cinema-app .opening-room:not([data-exploring=true]) .room-tableau[data-scene=video]{gap:8px}
+.cinema-app .opening-room:not([data-exploring=true]) .room-tableau[data-scene=video]>.tableau-content{row-gap:4px}
+.cinema-app .opening-room .room-tableau[data-scene=video] .tableau-feedback .moment-feedback{padding-block:0}
+.cinema-app .opening-room .room-tableau[data-scene=video] .tableau-facts :is(.moment-line,.moment-terms){margin-bottom:4px}
+.cinema-app .opening-room .room-tableau[data-scene=video] .tableau-facts>p+p{padding-top:0}
+.cinema-app .opening-room .room-tableau[data-scene=video] .tableau-content>.moment-decisions{gap:6px}
+.cinema-app .narrative-video .video-first-attempt-stage{display:flex;align-items:flex-start;flex:1;min-height:0;width:100%}
+.cinema-app .narrative-video .video-first-attempt-stage>.scene-choices{display:block;width:100%;margin:0}
+.cinema-app .narrative-video .video-first-attempt-stage .video-encounter.scene-action{display:grid;grid-template-columns:minmax(0,1fr) 240px;align-items:start;gap:24px;margin:0;padding:0;border:0;background:none;min-height:0}
+.cinema-app .narrative-video .video-first-attempt-stage .video-encounter-thought{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:16px 24px;min-width:0}
+.cinema-app .narrative-video .video-first-attempt-stage .scene-decision-main{grid-column:1;grid-row:1;margin:0}
+.cinema-app .narrative-video .video-first-attempt-stage .scene-decision-main>button{width:100%;font:18px/1.7 var(--serif);padding:12px 16px}
+.cinema-app .narrative-video .video-first-attempt-stage .scene-decision-main>button>span>small{font:14px/1.8 var(--serif);color:inherit}
+.cinema-app .narrative-video .video-first-attempt-stage .video-attempt-option{grid-column:2;grid-row:1;margin:0}
+.cinema-app .narrative-video .video-first-attempt-stage .video-attempt-more{grid-column:1 / -1;grid-row:2}
+.cinema-app .narrative-video .video-first-attempt-stage .video-encounter-paper{align-self:start}
