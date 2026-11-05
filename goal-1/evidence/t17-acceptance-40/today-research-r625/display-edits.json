@@ -1,0 +1,10 @@
+[
+  {
+    "old": "import {personTimeReading} from './person-time-reading.ts'",
+    "new": "import {personTimeReading} from './person-time-reading.ts'\nimport {todayResearchReading} from './today-research-reading.ts'"
+  },
+  {
+    "old": " const echoReading=completionReading??personTime",
+    "new": " const researchReading=resultNotice?todayResearchReading(p,today,resultNotice.props):null\n const echoReading=completionReading??personTime??researchReading"
+  }
+]
