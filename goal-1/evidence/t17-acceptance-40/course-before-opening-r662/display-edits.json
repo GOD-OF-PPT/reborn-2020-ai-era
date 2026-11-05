@@ -1,0 +1,214 @@
+[
+  {
+    "path": "src/ui/CourseThreadAction.tsx",
+    "hunks": [
+      {
+        "oldStart": 1,
+        "oldEnd": 2,
+        "newStart": 1,
+        "newEnd": 4,
+        "old": "import type {GamePanelProps} from './game-types.ts'\n",
+        "new": "import {courseEntryReading} from './course-entry-reading.ts'\nimport {CourseEntryAction,type CourseEntryExtras} from './CourseEntryAction.tsx'\nimport type {GamePanelProps,NavigateScene} from './game-types.ts'\n"
+      },
+      {
+        "oldStart": 14,
+        "oldEnd": 16,
+        "newStart": 16,
+        "newEnd": 18,
+        "old": "type Primary={binding:SharedActionBinding;main:ReactNode}\ntype Props={p:GamePanelProps;thread:PlayerThreadView;active:boolean;date:string|null;waitLabel:string;onChoose:(intent?:CourseChoiceIntent)=>void;onResult:()=>void;onToday:()=>void;children:(primary:Primary|null)=>ReactNode}\n",
+        "new": "type Primary={binding:SharedActionBinding;main:ReactNode;courseEntry?:CourseEntryExtras}\ntype Props={p:GamePanelProps;thread:PlayerThreadView;active:boolean;date:string|null;waitLabel:string;onChoose:(intent?:CourseChoiceIntent)=>void;onResult:()=>void;onToday:()=>void;onNavigate?:NavigateScene|undefined;children:(primary:Primary|null)=>ReactNode}\n"
+      },
+      {
+        "oldStart": 18,
+        "oldEnd": 19,
+        "newStart": 20,
+        "newEnd": 21,
+        "old": "export function CourseThreadAction({p,thread,active,date,waitLabel,onChoose,onResult,onToday,children}:Props){\n",
+        "new": "export function CourseThreadAction({p,thread,active,date,waitLabel,onChoose,onResult,onToday,onNavigate,children}:Props){\n"
+      },
+      {
+        "oldStart": 28,
+        "oldEnd": 28,
+        "newStart": 30,
+        "newEnd": 32,
+        "old": "",
+        "new": " const entry=onNavigate?courseEntryReading(p,thread):null\n if(entry&&onNavigate)return <CourseEntryAction p={p} thread={thread} reading={entry} date={date} waitLabel={waitLabel} onChoose={onChoose} onToday={onToday} onNavigate={onNavigate}>{children}</CourseEntryAction>\n"
+      }
+    ]
+  },
+  {
+    "path": "src/ui/CourseEncounter.tsx",
+    "hunks": [
+      {
+        "oldStart": 1,
+        "oldEnd": 2,
+        "newStart": 1,
+        "newEnd": 2,
+        "old": "import type {GamePanelProps} from './game-types.ts'\n",
+        "new": "import type {GamePanelProps,NavigateScene} from './game-types.ts'\n"
+      },
+      {
+        "oldStart": 10,
+        "oldEnd": 10,
+        "newStart": 10,
+        "newEnd": 11,
+        "old": "",
+        "new": "import {CourseEntryOptions} from './CourseEntryOptions.tsx'\n"
+      },
+      {
+        "oldStart": 11,
+        "oldEnd": 12,
+        "newStart": 12,
+        "newEnd": 13,
+        "old": "type Props={p:GamePanelProps;thread:PlayerThreadView;date:string|null;waitLabel:string;onChoose:(intent?:CourseChoiceIntent)=>void;onResult:()=>void;onToday:()=>void}\n",
+        "new": "type Props={p:GamePanelProps;thread:PlayerThreadView;date:string|null;waitLabel:string;onChoose:(intent?:CourseChoiceIntent)=>void;onResult:()=>void;onToday:()=>void;onNavigate?:NavigateScene|undefined}\n"
+      },
+      {
+        "oldStart": 13,
+        "oldEnd": 14,
+        "newStart": 14,
+        "newEnd": 15,
+        "old": "export function CourseEncounter({p,thread,date,waitLabel,onChoose,onResult,onToday}:Props){\n",
+        "new": "export function CourseEncounter({p,thread,date,waitLabel,onChoose,onResult,onToday,onNavigate}:Props){\n"
+      },
+      {
+        "oldStart": 17,
+        "oldEnd": 18,
+        "newStart": 18,
+        "newEnd": 19,
+        "old": " return <CourseThreadAction p={p} thread={thread} active date={date} waitLabel={waitLabel} onChoose={onChoose} onResult={onResult} onToday={onToday}>{primary=>{\n",
+        "new": " return <CourseThreadAction p={p} thread={thread} active date={date} waitLabel={waitLabel} onChoose={onChoose} onResult={onResult} onToday={onToday} onNavigate={onNavigate}>{primary=>{\n"
+      },
+      {
+        "oldStart": 23,
+        "oldEnd": 26,
+        "newStart": 24,
+        "newEnd": 27,
+        "old": "  return <section className=\"scene-action course-encounter\" aria-label={classArt?target?.kind==='audience'?'这一份受众的决定':'这一班学员的决定':'这一份教学准备的决定'} data-course-stage={thread.stage}>\n   <div className=\"course-encounter-thought\"><span className=\"scene-choice-overline\" data-book-chapter={thread.title}>{classArt?target?.kind==='audience'?'眼前的受众与报价 · 由你决定':'眼前的学员与承诺 · 由你决定':'眼前这份教案 · 由你决定'}</span><p className=\"course-encounter-object\">{thread.object}</p><p className=\"scene-choice-line\">{thread.detail}</p>{money?<p className=\"course-scene-money\">{money}</p>:null}{main}</div>\n   <div className=\"course-encounter-paper\"><OpeningObject kind={thread.outcome==='non-success'?'letter':thread.wait?'calendar':'work'} appearance=\"course\" title={thread.object} displayTitle=\"\" detail={thread.wait&&!(primary.binding.label.includes(thread.wait.date)&&primary.binding.label.includes(thread.wait.label))?thread.wait.date+' · '+thread.wait.label:''} stageLabel={classArt?courseTeachingPaperLabel(classArt):thread.focusScope==='history'?'历史回看':thread.stage==='course-ready'?'样课已经完成':thread.stage.endsWith('-planned')?'已安排 · 尚未开工':thread.stage.endsWith('-running')?'正在准备 · 尚未完成':thread.outcome==='non-success'?'这次准备留下的原记录':'这份教学准备'} actionLabel={primary.binding.label} disabled={primary.binding.disabled} onActivate={primary.binding.activate} textOnly={p.textOnly===true} {...(art?{coursePaper:art}:{})} {...(classArt?{teachingPaper:classArt}:{})} {...(teaching?{teaching}:{})} {...(protection?{protection}:{})}/></div>\n",
+        "new": "  return <section className=\"scene-action course-encounter\" aria-label={classArt?target?.kind==='audience'?'这一份受众的决定':'这一班学员的决定':'这一份教学准备的决定'} data-course-stage={thread.stage} data-course-entry={primary.courseEntry?true:undefined}>\n   <div className=\"course-encounter-thought\">{primary.courseEntry?<p className=\"scene-choice-line\">{primary.courseEntry.reading.caseLine}</p>:<><span className=\"scene-choice-overline\" data-book-chapter={thread.title}>{classArt?target?.kind==='audience'?'眼前的受众与报价 · 由你决定':'眼前的学员与承诺 · 由你决定':'眼前这份教案 · 由你决定'}</span><p className=\"course-encounter-object\">{thread.object}</p><p className=\"scene-choice-line\">{thread.detail}</p>{money?<p className=\"course-scene-money\">{money}</p>:null}</>}{main}{primary.courseEntry?<CourseEntryOptions value={primary.courseEntry}/>:null}</div>\n   <div className=\"course-encounter-paper\"><OpeningObject {...(primary.courseEntry?{copyMode:'tableau' as const}:{})} kind={thread.outcome==='non-success'?'letter':thread.wait?'calendar':'work'} appearance=\"course\" title={thread.object} displayTitle=\"\" detail={primary.courseEntry?'':thread.wait&&!(primary.binding.label.includes(thread.wait.date)&&primary.binding.label.includes(thread.wait.label))?thread.wait.date+' · '+thread.wait.label:''} stageLabel={primary.courseEntry?'课程尚未开放':classArt?courseTeachingPaperLabel(classArt):thread.focusScope==='history'?'历史回看':thread.stage==='course-ready'?'样课已经完成':thread.stage.endsWith('-planned')?'已安排 · 尚未开工':thread.stage.endsWith('-running')?'正在准备 · 尚未完成':thread.outcome==='non-success'?'这次准备留下的原记录':'这份教学准备'} actionLabel={primary.binding.label} disabled={primary.binding.disabled} onActivate={primary.binding.activate} textOnly={p.textOnly===true} {...(art?{coursePaper:art}:{})} {...(classArt?{teachingPaper:classArt}:{})} {...(teaching?{teaching}:{})} {...(protection?{protection}:{})}/></div>\n"
+      }
+    ]
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "hunks": [
+      {
+        "oldStart": 2,
+        "oldEnd": 2,
+        "newStart": 2,
+        "newEnd": 3,
+        "old": "",
+        "new": "import {courseEntryReading} from './course-entry-reading.ts'\n"
+      },
+      {
+        "oldStart": 105,
+        "oldEnd": 107,
+        "newStart": 106,
+        "newEnd": 108,
+        "old": " const number=Number(event.key)-1,direct=root.querySelector('.video-first-attempt-stage,.video-work-stage')\n if(direct){const button=direct.querySelectorAll<HTMLButtonElement>('.scene-decision-main>button,.clock-main>button,.video-attempt-option,.video-attempt-more')[number];if(!button||button.disabled||button.inert||button.closest('[inert]')||!button.getClientRects().length)return;event.preventDefault();button.click();return}\n",
+        "new": " const number=Number(event.key)-1,direct=root.querySelector('.video-first-attempt-stage,.video-work-stage,.course-entry-stage')\n if(direct){const button=direct.querySelectorAll<HTMLButtonElement>('.scene-decision-main>button,.clock-main>button,.video-attempt-option,.video-attempt-more,.course-entry-option,.course-entry-details')[number];if(!button||button.disabled||button.inert||button.closest('[inert]')||!button.getClientRects().length)return;event.preventDefault();button.click();return}\n"
+      },
+      {
+        "oldStart": 143,
+        "oldEnd": 145,
+        "newStart": 144,
+        "newEnd": 146,
+        "old": "function SceneChoiceSurface({direct,video=false,work=false,children,...book}:ComponentProps<typeof ScreenBook>&{direct:boolean;video?:boolean;work?:boolean}){\n return direct?<div className={work?'video-work-stage':video?'video-first-attempt-stage':'life-choice-stage'} role=\"group\" aria-label={video?'现在可以作出的视频选择':'现在可以作出的生活选择'}>{children}</div>:<ScreenBook {...book}>{children}</ScreenBook>\n",
+        "new": "function SceneChoiceSurface({direct,video=false,work=false,course=false,children,...book}:ComponentProps<typeof ScreenBook>&{direct:boolean;video?:boolean;work?:boolean;course?:boolean}){\n return direct?<div className={work?'video-work-stage':course?'course-entry-stage':video?'video-first-attempt-stage':'life-choice-stage'} role=\"group\" aria-label={course?'现在可以作出的课程选择':video?'现在可以作出的视频选择':'现在可以作出的生活选择'}>{children}</div>:<ScreenBook {...book}>{children}</ScreenBook>\n"
+      },
+      {
+        "oldStart": 169,
+        "oldEnd": 169,
+        "newStart": 170,
+        "newEnd": 171,
+        "old": "",
+        "new": " const courseEntry=courseThread?courseEntryReading(p,courseThread):null\n"
+      },
+      {
+        "oldStart": 190,
+        "oldEnd": 191,
+        "newStart": 192,
+        "newEnd": 193,
+        "old": " const copy=courseIdentityReason?{...originalCopy,title:'先找回这份教案与原账户。',line:courseIdentityReason}:marketInvalid?{...originalCopy,title:'先找回原来的那份委托。',line:marketTarget.invalidReason??'原对象已经不可达，请重新选择。'}:progress?{...originalCopy,title:progress.title,line:progress.line}:originalCopy\n",
+        "new": " const copy=courseIdentityReason?{...originalCopy,title:'先找回这份教案与原账户。',line:courseIdentityReason}:courseEntry?{...originalCopy,title:courseEntry.title,line:courseEntry.line}:marketInvalid?{...originalCopy,title:'先找回原来的那份委托。',line:marketTarget.invalidReason??'原对象已经不可达，请重新选择。'}:progress?{...originalCopy,title:progress.title,line:progress.line}:originalCopy\n"
+      },
+      {
+        "oldStart": 233,
+        "oldEnd": 234,
+        "newStart": 235,
+        "newEnd": 236,
+        "old": "  <SceneChoiceSurface direct={p.screen==='life'&&!closing||videoAttempt!==null||videoWork} video={videoAttempt!==null||videoWork} work={videoWork} choiceNavigation key={p.screen==='video'||courseContinuity?view.runId+':'+p.screen+':'+view.phase:p.screen+':'+view.phase+':'+view.date+':'+(p.screen==='life'?lifeSelection:relayProgress?.periodId??marketProgress?.entityId??deepseekProgress?.entityId??'')+':'+bookContext} label=\"眼前的选择\" className=\"scene-story-book\">\n",
+        "new": "  <SceneChoiceSurface direct={p.screen==='life'&&!closing||videoAttempt!==null||videoWork||courseEntry!==null} video={videoAttempt!==null||videoWork} work={videoWork} course={courseEntry!==null} choiceNavigation key={p.screen==='video'||courseContinuity?view.runId+':'+p.screen+':'+view.phase:p.screen+':'+view.phase+':'+view.date+':'+(p.screen==='life'?lifeSelection:relayProgress?.periodId??marketProgress?.entityId??deepseekProgress?.entityId??'')+':'+bookContext} label=\"眼前的选择\" className=\"scene-story-book\">\n"
+      },
+      {
+        "oldStart": 243,
+        "oldEnd": 244,
+        "newStart": 245,
+        "newEnd": 246,
+        "old": "   {p.screen==='course'&&courseProgress?p.courseTarget===undefined?<>{courseProgress.preparation?.phase==='fund'||courseProgress.preparation?.phase==='outline'?<CoursePreparation key={view.runId+':'+(courseProgress.preparation.businessId??'new')} p={p} step={courseProgress.preparation}/>:courseProgress.preparation?.phase==='waiting'&&waitAt?<><CoursePreparationTrail step={courseProgress.preparation}/><WaitChoice p={p} date={waitAt} title={courseProgress.choice.title} line={courseProgress.choice.line} label={waitLabel}/></>:courseProgress.preparation?.phase==='activate'?<><CoursePreparationTrail step={courseProgress.preparation}/><Action p={p} kind=\"ActivateBusiness\" payload={{businessId:courseProgress.preparation.businessId}} title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label}/></>:courseProgress.stage?<CourseStageChoice key={courseProgress.stage.cohortId+':'+courseProgress.stage.index} p={p} stage={courseProgress.stage} onFullRecord={(target,slot)=>p.onOpen('course',{...(target?{courseTarget:target}:{}),...(slot?{courseTeachingSlot:slot}:{})})}>{open=><Choice title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label} caption=\"选择资源与日期\" onClick={open}/>}</CourseStageChoice>:<Choice title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label} onClick={openCourse}/>}</>:<CourseSceneChoice p={p} target={p.courseTarget} {...(p.onCourseTargetChange?{onTarget:p.onCourseTargetChange}:{})} onToday={()=>p.onNavigate('room',{roomView:'today'})} onLife={()=>p.onNavigate('life',{accountId:'personal'})} blockedReason={w.pause!==null||w.progression.requiresDelivery?'先面对原责任，再回到这份教案。':null} onInspect={(target,slot,teachingSlot)=>{const recordId=!slot&&!teachingSlot?courseSceneProgress(f.course,view.date,target,{operations:view.operations})?.recordId:undefined;p.onOpen('course',{courseTarget:target,...(recordId?{recordId}:{}),...(slot?{courseDraftSlot:slot}:{}),...(teachingSlot?{courseTeachingSlot:teachingSlot}:{})})}}>{open=><>{courseContinuity&&courseThread?<CourseEncounter p={p} thread={courseThread} date={waitAt} waitLabel={waitLabel} onChoose={intent=>open(intent)} onResult={()=>open('next')} onToday={()=>p.onNavigate('room',{roomView:'today'})}/>:courseProgress.command&&!courseProgress.invalidReason&&!courseIdentityReason?<Action p={p} {...courseProgress.command} title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label}/>:waitAt&&!courseProgress.invalidReason&&!courseIdentityReason?<WaitChoice p={p} date={waitAt} title={courseProgress.choice.title} line={courseProgress.choice.line} label={waitLabel}/>:<Choice intent=\"plan\" title={courseProgress.choice.title} line={courseIdentityReason??courseProgress.invalidReason??courseProgress.choice.line} label={courseProgress.choice.label} caption={courseProgress.invalidReason?'重新显选，不替换原记录':'走近这份教案，核对眼前一步'} onClick={()=>open()}/>}</>}</CourseSceneChoice>:null}\n",
+        "new": "   {p.screen==='course'&&courseProgress?p.courseTarget===undefined?<>{courseProgress.preparation?.phase==='fund'||courseProgress.preparation?.phase==='outline'?<CoursePreparation key={view.runId+':'+(courseProgress.preparation.businessId??'new')} p={p} step={courseProgress.preparation}/>:courseProgress.preparation?.phase==='waiting'&&waitAt?<><CoursePreparationTrail step={courseProgress.preparation}/><WaitChoice p={p} date={waitAt} title={courseProgress.choice.title} line={courseProgress.choice.line} label={waitLabel}/></>:courseProgress.preparation?.phase==='activate'?<><CoursePreparationTrail step={courseProgress.preparation}/><Action p={p} kind=\"ActivateBusiness\" payload={{businessId:courseProgress.preparation.businessId}} title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label}/></>:courseProgress.stage?<CourseStageChoice key={courseProgress.stage.cohortId+':'+courseProgress.stage.index} p={p} stage={courseProgress.stage} onFullRecord={(target,slot)=>p.onOpen('course',{...(target?{courseTarget:target}:{}),...(slot?{courseTeachingSlot:slot}:{})})}>{open=><Choice title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label} caption=\"选择资源与日期\" onClick={open}/>}</CourseStageChoice>:<Choice title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label} onClick={openCourse}/>}</>:<CourseSceneChoice p={p} target={p.courseTarget} {...(p.onCourseTargetChange?{onTarget:p.onCourseTargetChange}:{})} onToday={()=>p.onNavigate('room',{roomView:'today'})} onLife={()=>p.onNavigate('life',{accountId:'personal'})} blockedReason={w.pause!==null||w.progression.requiresDelivery?'先面对原责任，再回到这份教案。':null} onInspect={(target,slot,teachingSlot)=>{const recordId=!slot&&!teachingSlot?courseSceneProgress(f.course,view.date,target,{operations:view.operations})?.recordId:undefined;p.onOpen('course',{courseTarget:target,...(recordId?{recordId}:{}),...(slot?{courseDraftSlot:slot}:{}),...(teachingSlot?{courseTeachingSlot:teachingSlot}:{})})}}>{open=><>{courseContinuity&&courseThread?<CourseEncounter p={p} thread={courseThread} date={waitAt} waitLabel={waitLabel} onChoose={intent=>open(intent)} onResult={()=>open('next')} onToday={()=>p.onNavigate('room',{roomView:'today'})} onNavigate={p.onNavigate}/>:courseProgress.command&&!courseProgress.invalidReason&&!courseIdentityReason?<Action p={p} {...courseProgress.command} title={courseProgress.choice.title} line={courseProgress.choice.line} label={courseProgress.choice.label}/>:waitAt&&!courseProgress.invalidReason&&!courseIdentityReason?<WaitChoice p={p} date={waitAt} title={courseProgress.choice.title} line={courseProgress.choice.line} label={waitLabel}/>:<Choice intent=\"plan\" title={courseProgress.choice.title} line={courseIdentityReason??courseProgress.invalidReason??courseProgress.choice.line} label={courseProgress.choice.label} caption={courseProgress.invalidReason?'重新显选，不替换原记录':'走近这份教案，核对眼前一步'} onClick={()=>open()}/>}</>}</CourseSceneChoice>:null}\n"
+      }
+    ]
+  },
+  {
+    "path": "src/ui/OpeningMoment.tsx",
+    "hunks": [
+      {
+        "oldStart": 69,
+        "oldEnd": 69,
+        "newStart": 69,
+        "newEnd": 71,
+        "old": "",
+        "new": "import {courseEntryReading} from './course-entry-reading.ts'\nimport {CourseEntryFacts,CourseEntryOptions} from './CourseEntryOptions.tsx'\n"
+      },
+      {
+        "oldStart": 383,
+        "oldEnd": 383,
+        "newStart": 385,
+        "newEnd": 386,
+        "old": "",
+        "new": " const courseEntry=!interrupted&&!requiresChoice&&!unknownFocus&&!legacy&&course&&isCourseContinuityThread(thread)?courseEntryReading(nearProps,thread):null\n"
+      },
+      {
+        "oldStart": 401,
+        "oldEnd": 402,
+        "newStart": 404,
+        "newEnd": 405,
+        "old": " const renderPerson=(readPerson:()=>void)=><MarketSceneChoice p={p} onFullRecord={inspect} blockedReason={unknownFocus?'原来的关注尚未读出，请先重新选择；原委托草稿仍保留。':null}>{openOrder=><VideoSceneChoice p={video?{...p,accountId:thread.focus.accountId}:p} {...(videoTarget?{target:videoTarget}:{})} onTargetChange={chooseVideoTarget} onToday={openToday} onLife={()=>{setObjectOpen(false);onNavigate('life',{accountId:'personal'})}} blockedReason={unknownFocus?\"原来的关注尚待读出，请先明确重新选择。\":interrupted?\"先回应日历里的原责任；原视频草稿仍保留。\":null} onInspect={target=>{setObjectOpen(false);onNavigate('video',target?{openRecord:true,videoTarget:target,...(p.features.video?.channels.find(c=>c.id===target.channelId)?{accountId:p.features.video.channels.find(c=>c.id===target.channelId)!.accountId}:{})}:{openRecord:true,accountId:video?thread.focus.accountId:p.accountId})}}>{openVideo=><CourseSceneChoice p={course?{...p,accountId:thread.focus.accountId}:p} target={courseTarget} onTarget={chooseCourseTarget} onToday={openToday} onLife={()=>{setObjectOpen(false);onNavigate('life',{accountId:'personal'})}} blockedReason={unknownFocus?'原关注尚待读出，请先明确重新选择。':interrupted?'先回应日历里的原责任；这份教案仍保留。':null} onInspect={(target,slot,teachingSlot)=>{setObjectOpen(false);const owner=p.features.course?.businesses.find(b=>b.id===target?.businessId),recordId=!slot&&!teachingSlot?courseSceneProgress(p.features.course,p.view.date,target,courseSceneContext(p))?.recordId:undefined;onNavigate('course',{openRecord:true,courseTarget:target,accountId:owner?.accountId??'personal',...(recordId?{recordId}:{}),...(slot?{courseDraftSlot:slot}:{}),...(teachingSlot?{courseTeachingSlot:teachingSlot}:{})})}}>{openCourse=><RelaySceneChoice p={relayProps} target={relayTarget} onToday={openToday} onLife={()=>{setObjectOpen(false);onNavigate('life',{accountId:'personal'})}} onTargetChange={chooseRelayTarget} blockedReason={unknownFocus?'原关注尚待读出，请先明确重新选择。':interrupted?'先回应日历里的原责任；这份服务单仍保留。':null} onInspect={(target,slot,requestedRecordId)=>{setObjectOpen(false);const accountId=target?.accountId??(relay?thread.focus.accountId:p.accountId),recordId=requestedRecordId??(!slot?relaySceneProgress(p.features.relay,p.view.date,target,relaySceneContext(p,accountId))?.recordId:undefined);onNavigate('relay',{openRecord:true,relayTarget:target,accountId,...(recordId?{recordId}:{}),...(slot?{relayDraftSlot:slot}:{})})}}>{openRelay=><RelayThreadAction p={relayProps} thread={thread} target={relayTarget} active={(dayActive||relayClosed)&&!attempt&&relay} date={safeDate} waitLabel={waitLabel} onChoose={intent=>{setObjectOpen(false);openRelay(intent)}} onToday={openToday}>{relayPrimary=><OpeningAttemptAction p={p} attempt={freeChoice?null:attempt} date={safeDate} waitLabel={waitLabel} openOffer={()=>setChoicePanel('offer')} openMarket={()=>setChoicePanel('market')} openFree={()=>setChoicePanel('free')} openNext={()=>setChoicePanel('next')} onToday={openToday} inspect={inspect}>{primary=><VideoThreadAction p={nearProps} thread={thread} active={dayActive&&!attempt&&video} date={safeDate} waitLabel={waitLabel} onChoose={intent=>{setObjectOpen(false);openVideo(intent??videoChooseIntent)}} onResult={()=>{setObjectOpen(false);openVideo('next')}} onToday={openToday}>{videoPrimary=><CourseThreadAction p={nearProps} thread={thread} active={dayActive&&!attempt&&course&&isCourseContinuityThread(thread)} date={safeDate} waitLabel={waitLabel} onChoose={intent=>{setObjectOpen(false);openCourse(intent)}} onResult={()=>{setObjectOpen(false);openCourse('next')}} onToday={openToday}>{coursePrimary=><DayThreadAction p={p} thread={thread} active={freeChoice||dayActive&&!attempt&&!video&&!course&&!relay} result={day?.primary.classification==='result'} date={safeDate} waitLabel={waitLabel} onToday={openToday} resultAction={resultChoiceBinding}>{dayPrimary=><><RoomTableau scene={interrupted?'attention':requiresChoice?'unavailable':thread.focus.kind} state={moment.stage} perspective={thread.focusScope} textOnly={p.textOnly===true}\n",
+        "new": " const renderPerson=(readPerson:()=>void)=><MarketSceneChoice p={p} onFullRecord={inspect} blockedReason={unknownFocus?'原来的关注尚未读出，请先重新选择；原委托草稿仍保留。':null}>{openOrder=><VideoSceneChoice p={video?{...p,accountId:thread.focus.accountId}:p} {...(videoTarget?{target:videoTarget}:{})} onTargetChange={chooseVideoTarget} onToday={openToday} onLife={()=>{setObjectOpen(false);onNavigate('life',{accountId:'personal'})}} blockedReason={unknownFocus?\"原来的关注尚待读出，请先明确重新选择。\":interrupted?\"先回应日历里的原责任；原视频草稿仍保留。\":null} onInspect={target=>{setObjectOpen(false);onNavigate('video',target?{openRecord:true,videoTarget:target,...(p.features.video?.channels.find(c=>c.id===target.channelId)?{accountId:p.features.video.channels.find(c=>c.id===target.channelId)!.accountId}:{})}:{openRecord:true,accountId:video?thread.focus.accountId:p.accountId})}}>{openVideo=><CourseSceneChoice p={course?{...p,accountId:thread.focus.accountId}:p} target={courseTarget} onTarget={chooseCourseTarget} onToday={openToday} onLife={()=>{setObjectOpen(false);onNavigate('life',{accountId:'personal'})}} blockedReason={unknownFocus?'原关注尚待读出，请先明确重新选择。':interrupted?'先回应日历里的原责任；这份教案仍保留。':null} onInspect={(target,slot,teachingSlot)=>{setObjectOpen(false);const owner=p.features.course?.businesses.find(b=>b.id===target?.businessId),recordId=!slot&&!teachingSlot?courseSceneProgress(p.features.course,p.view.date,target,courseSceneContext(p))?.recordId:undefined;onNavigate('course',{openRecord:true,courseTarget:target,accountId:owner?.accountId??'personal',...(recordId?{recordId}:{}),...(slot?{courseDraftSlot:slot}:{}),...(teachingSlot?{courseTeachingSlot:teachingSlot}:{})})}}>{openCourse=><RelaySceneChoice p={relayProps} target={relayTarget} onToday={openToday} onLife={()=>{setObjectOpen(false);onNavigate('life',{accountId:'personal'})}} onTargetChange={chooseRelayTarget} blockedReason={unknownFocus?'原关注尚待读出，请先明确重新选择。':interrupted?'先回应日历里的原责任；这份服务单仍保留。':null} onInspect={(target,slot,requestedRecordId)=>{setObjectOpen(false);const accountId=target?.accountId??(relay?thread.focus.accountId:p.accountId),recordId=requestedRecordId??(!slot?relaySceneProgress(p.features.relay,p.view.date,target,relaySceneContext(p,accountId))?.recordId:undefined);onNavigate('relay',{openRecord:true,relayTarget:target,accountId,...(recordId?{recordId}:{}),...(slot?{relayDraftSlot:slot}:{})})}}>{openRelay=><RelayThreadAction p={relayProps} thread={thread} target={relayTarget} active={(dayActive||relayClosed)&&!attempt&&relay} date={safeDate} waitLabel={waitLabel} onChoose={intent=>{setObjectOpen(false);openRelay(intent)}} onToday={openToday}>{relayPrimary=><OpeningAttemptAction p={p} attempt={freeChoice?null:attempt} date={safeDate} waitLabel={waitLabel} openOffer={()=>setChoicePanel('offer')} openMarket={()=>setChoicePanel('market')} openFree={()=>setChoicePanel('free')} openNext={()=>setChoicePanel('next')} onToday={openToday} inspect={inspect}>{primary=><VideoThreadAction p={nearProps} thread={thread} active={dayActive&&!attempt&&video} date={safeDate} waitLabel={waitLabel} onChoose={intent=>{setObjectOpen(false);openVideo(intent??videoChooseIntent)}} onResult={()=>{setObjectOpen(false);openVideo('next')}} onToday={openToday}>{videoPrimary=><CourseThreadAction p={nearProps} thread={thread} active={dayActive&&!attempt&&course&&isCourseContinuityThread(thread)} date={safeDate} waitLabel={waitLabel} onChoose={intent=>{setObjectOpen(false);openCourse(intent)}} onResult={()=>{setObjectOpen(false);openCourse('next')}} onToday={openToday} onNavigate={(screen,target)=>{setObjectOpen(false);onNavigate(screen,target)}}>{coursePrimary=><DayThreadAction p={p} thread={thread} active={freeChoice||dayActive&&!attempt&&!video&&!course&&!relay} result={day?.primary.classification==='result'} date={safeDate} waitLabel={waitLabel} onToday={openToday} resultAction={resultChoiceBinding}>{dayPrimary=><><RoomTableau scene={interrupted?'attention':requiresChoice?'unavailable':thread.focus.kind} state={moment.stage} perspective={thread.focusScope} textOnly={p.textOnly===true}\n"
+      },
+      {
+        "oldStart": 403,
+        "oldEnd": 404,
+        "newStart": 406,
+        "newEnd": 407,
+        "old": " heading={<header className=\"moment-heading\"><p>{workHistory?workHistory.object:relayClosed?'这份服务的实际结果':<>{thread.focusScope==='history'?'正在回看 · ':''}{quarterTurn?quarterTurn.quarter+' · 季末留页':researchCopy?.object??marketCopy?.object??(workCopy?'工作日历':moment.object)}</>}</p><h1 ref={headingRef} tabIndex={-1}>{freeChoice?'今天，想怎样过？':quarterTurn?.title??workHistory?.title??personalResult?.title??lifeRoomTitle??researchCopy?.title??marketCopy?.title??workCopy?.title??cohortCopy?.title??videoAttempt?.title??meaning?.title??moment.title}</h1></header>}\n",
+        "new": " heading={<header className=\"moment-heading\"><p>{workHistory?workHistory.object:relayClosed?'这份服务的实际结果':<>{thread.focusScope==='history'?'正在回看 · ':''}{quarterTurn?quarterTurn.quarter+' · 季末留页':researchCopy?.object??marketCopy?.object??(workCopy?'工作日历':moment.object)}</>}</p><h1 ref={headingRef} tabIndex={-1}>{freeChoice?'今天，想怎样过？':quarterTurn?.title??workHistory?.title??personalResult?.title??lifeRoomTitle??researchCopy?.title??marketCopy?.title??workCopy?.title??cohortCopy?.title??videoAttempt?.title??courseEntry?.title??meaning?.title??moment.title}</h1></header>}\n"
+      },
+      {
+        "oldStart": 410,
+        "oldEnd": 411,
+        "newStart": 413,
+        "newEnd": 414,
+        "old": " facts={<>{videoAttempt?<VideoFirstAttemptFacts reading={videoAttempt}/>:freeChoice?<p className=\"moment-line\">{employed?'留几天给自己，也可以看看房间。':'休整几天，还是先去上班？'}</p>:<>{currentCohortContext?<p className=\"moment-line\">{cohortCopy?.context??currentCohortContext}{cohortUpdateDue?' · 更新期限'+cohortUpdateDue:null}</p>:null}{!closedEcho&&!currentCohortUpdate?sceneFactsAfterEcho?sceneFactsAfterEcho.map(line=><p key={line} className={marketCopy?\"moment-line market-order-fact\":\"moment-line\"}>{line}</p>):<p className=\"moment-line\">{cohortCopy?.line??collectionScope??(summarized?meaning!.situation:closedCopy?.line??sceneLine)}</p>:null}{!summarized&&(closedCopy?.terms||moment.detail)?<p className=\"moment-terms\">{updateTerms??cohortCopy?.terms??closedCopy?.terms??moment.detail}</p>:null}{teachingMoney?<p className=\"course-scene-money\">{teachingMoney}</p>:null}{relayMoney?<p className=\"relay-scene-money\">{relayMoney}</p>:null}{courseComplete?<button type=\"button\" className=\"scene-text-action\" onClick={inspectFocus}>翻阅本班的完整原记录 ↗</button>:null}</>}</>}\n",
+        "new": " facts={<>{videoAttempt?<VideoFirstAttemptFacts reading={videoAttempt}/>:courseEntry?<CourseEntryFacts reading={courseEntry}/>:freeChoice?<p className=\"moment-line\">{employed?'留几天给自己，也可以看看房间。':'休整几天，还是先去上班？'}</p>:<>{currentCohortContext?<p className=\"moment-line\">{cohortCopy?.context??currentCohortContext}{cohortUpdateDue?' · 更新期限'+cohortUpdateDue:null}</p>:null}{!closedEcho&&!currentCohortUpdate?sceneFactsAfterEcho?sceneFactsAfterEcho.map(line=><p key={line} className={marketCopy?\"moment-line market-order-fact\":\"moment-line\"}>{line}</p>):<p className=\"moment-line\">{cohortCopy?.line??collectionScope??(summarized?meaning!.situation:closedCopy?.line??sceneLine)}</p>:null}{!summarized&&(closedCopy?.terms||moment.detail)?<p className=\"moment-terms\">{updateTerms??cohortCopy?.terms??closedCopy?.terms??moment.detail}</p>:null}{teachingMoney?<p className=\"course-scene-money\">{teachingMoney}</p>:null}{relayMoney?<p className=\"relay-scene-money\">{relayMoney}</p>:null}{courseComplete?<button type=\"button\" className=\"scene-text-action\" onClick={inspectFocus}>翻阅本班的完整原记录 ↗</button>:null}</>}</>}\n"
+      },
+      {
+        "oldStart": 414,
+        "oldEnd": 415,
+        "newStart": 417,
+        "newEnd": 418,
+        "old": "   {videoPrimary?.firstAttempt?<VideoFirstAttemptOptions value={videoPrimary.firstAttempt} room/>:interrupted?unknownFocus?action('02','只翻本季已有记录','原关注待重选；这项原责任不会因此解除',()=>onNavigate('quarter',{accountId:p.accountId})):action('02','只翻原来关注的那件事','只查看；这项原责任不会因此解除',inspectFocus)\n",
+        "new": "   {videoPrimary?.firstAttempt?<VideoFirstAttemptOptions value={videoPrimary.firstAttempt} room/>:coursePrimary?.courseEntry?<CourseEntryOptions value={coursePrimary.courseEntry}/>:interrupted?unknownFocus?action('02','只翻本季已有记录','原关注待重选；这项原责任不会因此解除',()=>onNavigate('quarter',{accountId:p.accountId})):action('02','只翻原来关注的那件事','只查看；这项原责任不会因此解除',inspectFocus)\n"
+      },
+      {
+        "oldStart": 442,
+        "oldEnd": 443,
+        "newStart": 445,
+        "newEnd": 446,
+        "old": " object={<OpeningObject copyMode=\"tableau\" {...(relayArt?{relayPaper:{...relayArt,...(relayPrimary?{actionHint:relayPrimary.hint}:{})},displayTitle:''}:{})} {...(videoArt?{videoPaper:videoArt,displayTitle:''}:{})} {...(courseArt?{coursePaper:courseArt,displayTitle:''}:{})} {...(classArt?{teachingPaper:classArt,displayTitle:''}:{})} {...(dayArt?{dayPaper:dayArt,displayTitle:''}:{})} {...(entryPaper?{entryPaper,displayTitle:''}:{})} {...(firstArt?{displayTitle:''}:{})} {...(!interrupted&&!requiresChoice&&(video||course||relay)?{appearance:relay?'relay' as const:course?'course' as const:'video' as const}:{})} {...(!interrupted&&!requiresChoice&&relay&&!relayArt?{displayTitle:relayDisplayTitle}:{})} {...(!interrupted&&!requiresChoice&&courseDisplayTitle&&!classArt?{displayTitle:courseDisplayTitle}:{})} {...(teachingPaper?{teaching:teachingPaper}:{})} kind={interrupted||requiresChoice?'calendar':legacy?(moment.wait?'waiting':'portfolio'):objectKind(thread)} title={quarterTurn?'本季留页':freeChoice?'今天的日历':freeTime?'工作之外的时间':workHistory?.object??researchCopy?.object??marketCopy?.object??(workCopy?'工作日历':moment.object)} detail={freeChoice||workCopy||workHistory||marketCopy||researchCopy?'':relayArt?'':courseArt||classArt?(moment.wait&&!(coursePrimary?.binding.label.includes(moment.wait.date)&&coursePrimary?.binding.label.includes(moment.wait.label))?moment.wait.date+' · '+moment.wait.label:''):videoArt?(moment.wait&&!(videoPrimary?.binding.label.includes(moment.wait.date)&&videoPrimary?.binding.label.includes(moment.wait.label))?moment.wait.date+' · '+moment.wait.label:''):entryPaper?p.view.date:firstArt?'':moment.wait?moment.wait.date+' · '+moment.wait.label:interrupted?'这项责任仍需你回应':requiresChoice?'原记录与责任都保留，先明确重新选择':legacy?'沿原业务记录继续':thread.outcome==='actual'?'回响已有实际记录':'翻开，看清这次选择'} stageLabel={freeChoice?'今天':relayArt?relayTarget===null?'服务资料':relayDisplayTitle:classArt?courseTeachingPaperLabel(classArt):entryPaper==='calendar'?'接下来，自己安排':entryPaper==='market'?'公开市场资料':firstObjectLabel??sceneStageLabel(label)} actionLabel={primary?.binding.label??quarterPrimary?.binding.label??videoPrimary?.binding.label??coursePrimary?.binding.label??relayPrimary?.binding.label??workTimePrimary?.binding.label??dayPrimary?.binding.label??operatingBinding?.label??(requiresChoice?'重新选择原关注':'走近这件事')} {...(firstArt?{firstOrder:firstArt}:{})} {...(p.view.readOnly?{protection:'readonly' as const}:p.view.hasCandidate||p.view.saveStatus!=='saved'?{protection:'unsaved' as const}:(primary?.binding.disabled??quarterPrimary?.binding.disabled??videoPrimary?.binding.disabled??coursePrimary?.binding.disabled??relayPrimary?.binding.disabled??workTimePrimary?.binding.disabled??dayPrimary?.binding.disabled??operatingBinding?.disabled)?{protection:'unavailable' as const}:{})} disabled={primary?.binding.disabled??quarterPrimary?.binding.disabled??videoPrimary?.binding.disabled??coursePrimary?.binding.disabled??relayPrimary?.binding.disabled??workTimePrimary?.binding.disabled??dayPrimary?.binding.disabled??operatingBinding?.disabled??p.view.busy} textOnly={p.textOnly===true} onActivate={primary?.binding.activate??quarterPrimary?.binding.activate??videoPrimary?.binding.activate??coursePrimary?.binding.activate??relayPrimary?.binding.activate??workTimePrimary?.binding.activate??dayPrimary?.binding.activate??operatingBinding?.activate??(requiresChoice?openDirections:()=>setObjectOpen(true))}/>}\n",
+        "new": " object={<OpeningObject copyMode=\"tableau\" {...(relayArt?{relayPaper:{...relayArt,...(relayPrimary?{actionHint:relayPrimary.hint}:{})},displayTitle:''}:{})} {...(videoArt?{videoPaper:videoArt,displayTitle:''}:{})} {...(courseArt?{coursePaper:courseArt,displayTitle:''}:{})} {...(classArt?{teachingPaper:classArt,displayTitle:''}:{})} {...(dayArt?{dayPaper:dayArt,displayTitle:''}:{})} {...(entryPaper?{entryPaper,displayTitle:''}:{})} {...(firstArt?{displayTitle:''}:{})} {...(!interrupted&&!requiresChoice&&(video||course||relay)?{appearance:relay?'relay' as const:course?'course' as const:'video' as const}:{})} {...(!interrupted&&!requiresChoice&&relay&&!relayArt?{displayTitle:relayDisplayTitle}:{})} {...(!interrupted&&!requiresChoice&&courseDisplayTitle&&!classArt?{displayTitle:courseDisplayTitle}:{})} {...(teachingPaper?{teaching:teachingPaper}:{})} kind={interrupted||requiresChoice?'calendar':legacy?(moment.wait?'waiting':'portfolio'):objectKind(thread)} title={quarterTurn?'本季留页':freeChoice?'今天的日历':freeTime?'工作之外的时间':workHistory?.object??researchCopy?.object??marketCopy?.object??(workCopy?'工作日历':moment.object)} detail={courseEntry?'':freeChoice||workCopy||workHistory||marketCopy||researchCopy?'':relayArt?'':courseArt||classArt?(moment.wait&&!(coursePrimary?.binding.label.includes(moment.wait.date)&&coursePrimary?.binding.label.includes(moment.wait.label))?moment.wait.date+' · '+moment.wait.label:''):videoArt?(moment.wait&&!(videoPrimary?.binding.label.includes(moment.wait.date)&&videoPrimary?.binding.label.includes(moment.wait.label))?moment.wait.date+' · '+moment.wait.label:''):entryPaper?p.view.date:firstArt?'':moment.wait?moment.wait.date+' · '+moment.wait.label:interrupted?'这项责任仍需你回应':requiresChoice?'原记录与责任都保留，先明确重新选择':legacy?'沿原业务记录继续':thread.outcome==='actual'?'回响已有实际记录':'翻开，看清这次选择'} stageLabel={courseEntry?'课程尚未开放':freeChoice?'今天':relayArt?relayTarget===null?'服务资料':relayDisplayTitle:classArt?courseTeachingPaperLabel(classArt):entryPaper==='calendar'?'接下来，自己安排':entryPaper==='market'?'公开市场资料':firstObjectLabel??sceneStageLabel(label)} actionLabel={primary?.binding.label??quarterPrimary?.binding.label??videoPrimary?.binding.label??coursePrimary?.binding.label??relayPrimary?.binding.label??workTimePrimary?.binding.label??dayPrimary?.binding.label??operatingBinding?.label??(requiresChoice?'重新选择原关注':'走近这件事')} {...(firstArt?{firstOrder:firstArt}:{})} {...(p.view.readOnly?{protection:'readonly' as const}:p.view.hasCandidate||p.view.saveStatus!=='saved'?{protection:'unsaved' as const}:(primary?.binding.disabled??quarterPrimary?.binding.disabled??videoPrimary?.binding.disabled??coursePrimary?.binding.disabled??relayPrimary?.binding.disabled??workTimePrimary?.binding.disabled??dayPrimary?.binding.disabled??operatingBinding?.disabled)?{protection:'unavailable' as const}:{})} disabled={primary?.binding.disabled??quarterPrimary?.binding.disabled??videoPrimary?.binding.disabled??coursePrimary?.binding.disabled??relayPrimary?.binding.disabled??workTimePrimary?.binding.disabled??dayPrimary?.binding.disabled??operatingBinding?.disabled??p.view.busy} textOnly={p.textOnly===true} onActivate={primary?.binding.activate??quarterPrimary?.binding.activate??videoPrimary?.binding.activate??coursePrimary?.binding.activate??relayPrimary?.binding.activate??workTimePrimary?.binding.activate??dayPrimary?.binding.activate??operatingBinding?.activate??(requiresChoice?openDirections:()=>setObjectOpen(true))}/>}\n"
+      }
+    ]
+  }
+]
