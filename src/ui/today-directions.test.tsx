@@ -69,7 +69,7 @@ it('opens one direct choice sheet and closes without making a commitment or chan
  expect(ui.dialog()).toBeUndefined();expect(ui.onFocus).not.toHaveBeenCalled();expect(ui.p.request).not.toHaveBeenCalled()
 })
 
-it('keeps work and the three business focuses on their original target payloads',()=>{
+it('opens daily work comparison and keeps the three business focuses on their original target payloads',()=>{
  const ui=driver()
  const targets={
   work:{runId:ui.p.view.runId,kind:'work',accountId:'personal',entityId:null},
@@ -77,7 +77,8 @@ it('keeps work and the three business focuses on their original target payloads'
   ecosystem:openingFocusFor(ui.p,'deepseek',{ecosystemTarget:null,accountId:'personal',deepseekPane:'ecosystem'}),
   equity:openingFocusFor(ui.p,'deepseek',{equityTarget:null,accountId:'personal',deepseekPane:'equity'}),
  }
- for(const key of ['work','relay','ecosystem','equity'] as const){ui.open();ui.route(key);expect(ui.onFocus).toHaveBeenLastCalledWith(targets[key]);expect(ui.dialog()).toBeUndefined()}
+ ui.open();ui.route('work');expect(ui.dialog()?.props.title).toBe('今天，怎样安排这段日子？');expect(ui.onFocus).not.toHaveBeenCalled();ui.click('翻阅原工作与本季日历');expect(ui.onFocus).toHaveBeenLastCalledWith(targets.work);expect(ui.dialog()).toBeUndefined()
+ for(const key of ['relay','ecosystem','equity'] as const){ui.open();ui.route(key);expect(ui.onFocus).toHaveBeenLastCalledWith(targets[key]);expect(ui.dialog()).toBeUndefined()}
  expect(ui.onFocus).toHaveBeenCalledTimes(4);expect(ui.p.request).not.toHaveBeenCalled();expect(ui.onPrepare).not.toHaveBeenCalled()
 })
 

@@ -1,0 +1,46 @@
+[
+  {
+    "old": "import {TodayLifeChoices} from './TodayLifeChoices.tsx'",
+    "new": "import {TodayLifeChoices} from './TodayLifeChoices.tsx'\nimport {TodayWorkChoice} from './TodayWorkChoice.tsx'"
+  },
+  {
+    "old": "type Page='directions'|'life'|'market'|'ongoing'|'holdings'",
+    "new": "type Page='directions'|'daily'|'life'|'market'|'ongoing'|'holdings'"
+  },
+  {
+    "old": "const prepare=(next:'life'|'market')",
+    "new": "const prepare=(next:'daily'|'life'|'market')"
+  },
+  {
+    "old": ":afterRest?ui('看看这季的工作',()=>choose({runId:p.view.runId,kind:'work',accountId:'personal',entityId:null}))\n  :ui('给生活留一段真实的日子',()=>prepare('life'))",
+    "new": ":ui('工作，还是留点时间给自己？',()=>prepare('daily'))"
+  },
+  {
+    "old": "page==='life'?'留点时间给自己':page==='market'",
+    "new": "page==='daily'?'今天，怎样安排这段日子？':page==='life'?'留点时间给自己':page==='market'"
+  },
+  {
+    "old": "layout={page==='holdings'||page==='life'||page==='directions'||page==='market'?'direct':'book'}",
+    "new": "layout={page==='holdings'||page==='life'||page==='daily'||page==='directions'||page==='market'?'direct':'book'}"
+  },
+  {
+    "old": "page==='life'?' today-life-dialog':page==='directions'",
+    "new": "page==='daily'?' today-life-dialog today-daily-dialog':page==='life'?' today-life-dialog':page==='directions'"
+  },
+  {
+    "old": "{page!=='life'&&page!=='directions'&&page!=='market'?",
+    "new": "{page!=='daily'&&page!=='life'&&page!=='directions'&&page!=='market'?"
+  },
+  {
+    "old": "{page==='life'?<><TodayLifeChoices p={commandProps}/>",
+    "new": "{page==='life'||page==='daily'?<><TodayLifeChoices p={commandProps} {...(page==='daily'?{work:<TodayWorkChoice p={commandProps} onWork={id=>choose({runId:p.view.runId,kind:'work',accountId:'personal',entityId:id})}/>}:{})}/>"
+  },
+  {
+    "old": "work:button('看看工作',()=>choose({runId:p.view.runId,kind:'work',accountId:'personal',entityId:null}),'先看行动占用与工资日期')",
+    "new": "work:button('看看工作',()=>prepare('daily'),'比较工作、休整与住处投入')"
+  },
+  {
+    "old": "{button('看看相识的人与全部生活记录',()=>{setPage(null);onNavigate('life',{accountId:'personal'})})}</>:null}",
+    "new": "<div className={page==='daily'?'today-daily-readings':undefined}>{page==='daily'?button('翻阅原工作与本季日历',()=>choose({runId:p.view.runId,kind:'work',accountId:'personal',entityId:null})):null}{button('看看相识的人与全部生活记录',()=>{setPage(null);onNavigate('life',{accountId:'personal'})})}</div></>:null}"
+  }
+]

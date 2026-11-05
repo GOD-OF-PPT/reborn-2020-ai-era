@@ -66,7 +66,7 @@ it('keeps a completed purchase readable without calling the retained position an
  expect(words(ui.tableau().props.facts)).toContain('持仓留在原账上')
  expect(words(ui.tableau().props.facts)).not.toContain('已经答应的事')
  expect(JSON.stringify(ui.today.ongoing)).toBe(before)
- expect(ui.render().some(row=>row.props['aria-label']==='留点时间给自己 · 给生活留一段真实的日子')).toBe(true)
+ expect(ui.render().some(row=>row.props['aria-label']==='工作，还是留点时间给自己？')).toBe(true)
  expect(ui.p.request).not.toHaveBeenCalled()
 })
 
@@ -102,9 +102,9 @@ it('opens retained shares separately, preserves their full facts and returns to 
 
 it('opens life choices without making a new promise, then uses the original rest confirmation',()=>{
  const ui=driver()
- ui.click('留点时间给自己 · 给生活留一段真实的日子')
+ ui.click('工作，还是留点时间给自己？')
  const dialog=ui.render().find(row=>row.type===Dialog)!
- expect(dialog.props.title).toBe('留点时间给自己');expect(ui.p.request).not.toHaveBeenCalled();expect(ui.onFocus).not.toHaveBeenCalled()
+ expect(dialog.props.title).toBe('今天，怎样安排这段日子？');expect(ui.p.request).not.toHaveBeenCalled();expect(ui.onFocus).not.toHaveBeenCalled()
  ui.click('核对并留出七天休整')
  expect(ui.p.request).toHaveBeenCalledExactlyOnceWith('StartLifeWork',{kind:'rest',personId:null,reference:null},'核对并留出七天休整',true)
 })

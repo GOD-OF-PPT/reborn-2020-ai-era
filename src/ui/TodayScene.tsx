@@ -9,6 +9,7 @@ import {OpeningObject} from './OpeningObject.tsx'
 import {Dialog} from './Dialog.tsx'
 import {TodayHoldings} from './TodayHoldings.tsx'
 import {TodayLifeChoices} from './TodayLifeChoices.tsx'
+import {TodayWorkChoice} from './TodayWorkChoice.tsx'
 import {TodayDirections} from './TodayDirections.tsx'
 import {TodayMarketChoices} from './TodayMarketChoices.tsx'
 import {ClockAdvance} from './ClockAdvance.tsx'
@@ -29,7 +30,7 @@ import {lifeSceneProgress} from './life-scene-progress.ts'
 import {TodayIdleAction,todayIdleReading,type TodayIdlePrimary} from './TodayIdleAction.tsx'
 
 type Props={p:GamePanelProps;today:TodayThreadView;headingRef:Ref<HTMLHeadingElement>;feedback?:ReactNode;onFocus:(focus:OpeningFocus)=>void;onPrepare:(focus:OpeningFocus)=>void;onResume:()=>void;onExplore:()=>void;onRecollection:()=>void;onNavigate:NavigateScene}
-type Page='directions'|'life'|'market'|'ongoing'|'holdings'
+type Page='directions'|'daily'|'life'|'market'|'ongoing'|'holdings'
 
 /** Today is a reading/choice perspective. Only original command controls can make a new promise. */
 export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResume,onExplore,onRecollection,onNavigate}:Props){
@@ -43,7 +44,7 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
  const personal={...p,accountId:'personal'}
  const ui=(label:string,activate:()=>void)=>makeSharedAction(p,label,activate,{allowReadOnly:true})
  const choose=(focus:OpeningFocus)=>{const binding=ui('把这件事放回眼前',()=>{setPage(null);onFocus(focus)});binding.activate()}
- const prepare=(next:'life'|'market')=>{const binding=ui('选择新的方向',()=>setPage(next));binding.activate()}
+ const prepare=(next:'daily'|'life'|'market')=>{const binding=ui('选择新的方向',()=>setPage(next));binding.activate()}
  const request:GamePanelProps['request']=(...args)=>{setPage(null);p.request(...args)}
  const commandProps={...personal,request}
  const {continuing,holdings}=todayReadingGroups(today.ongoing)
@@ -58,8 +59,7 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
  const primary=p.features.workbench.atQuarterEnd?ui('看看这一季，实际留下了什么',onRecollection)
   :one?ui(one.focus.kind==='relay'?relayContinuation?.label??'回到这份原中转事项':one.ecosystemContinuation?.label??one.equityContinuation?.label??one.marketContinuation?.label??'继续'+({work:'这季的工作',life:'这段生活安排',course:'这份教学约定',video:'这份作品',market:'这份模拟委托',ecosystem:'这份原生态事项',equity:'这份架空权益与原款',free:'原来的安排','first-order':'这份委托'}[one.focus.kind]),()=>choose(one.focus))
   :continuing.length>1?ui('选回一件未完的约定',()=>setPage('ongoing'))
-  :afterRest?ui('看看这季的工作',()=>choose({runId:p.view.runId,kind:'work',accountId:'personal',entityId:null}))
-  :ui('给生活留一段真实的日子',()=>prepare('life'))
+  :ui('工作，还是留点时间给自己？',()=>prepare('daily'))
  const meaning=today.primary.classification==='history'?null:sceneMeaning({...p,accountId:today.primary.thread.focus.accountId},today.primary.thread)
  const resultNotice=isValidElement<ComponentProps<typeof SceneTimeNotice>>(feedback)&&feedback.type===SceneTimeNotice&&feedback.props.compact===true?feedback:null
  const resultReading=todayResultReading(p,today,resultNotice?.props)
@@ -92,10 +92,10 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
    object={<OpeningObject copyMode="tableau" kind="calendar" title="今天的日历" displayTitle="" detail={p.view.date} stageLabel={idlePrimary?'今天 · 先不新增':'今天 · 仍可安排'} actionLabel={sceneReadingLabel((idlePrimary?.binding??primary).label)} onActivate={(idlePrimary?.binding??primary).activate} disabled={(idlePrimary?.binding??primary).disabled} textOnly={p.textOnly===true} dayPaper={{kind:'today',state:'ongoing'}} {...(p.view.readOnly?{protection:'readonly' as const}:p.view.hasCandidate||p.view.saveStatus==='conflict'?{protection:'unsaved' as const}:{})}/>}
    record={<>{idlePrimary?null:<button type="button" className="scene-text-action" onClick={ui('看看工作、其它尝试与原约定',()=>setPage('directions')).activate} aria-label="想想今天 · 看看工作、其它尝试与原约定 ↗">想想今天 ↗</button>}{statusFeedback&&!repeatedReadOnly?<p className="moment-status" role="status">{statusFeedback}</p>:null}{calendarStatus?<div className="ecosystem-reading-status">{calendarStatus}</div>:null}</>}
   />
-  {page?<Dialog title={page==='directions'?'今天，想把时间留给什么？':page==='life'?'留点时间给自己':page==='market'?'这次，怎样判断？':page==='holdings'?'保留的持仓':'手头的事'} layout={page==='holdings'||page==='life'||page==='directions'||page==='market'?'direct':'book'} className={'opening-paper today-choice-paper'+(page==='holdings'?' today-held-dialog':page==='life'?' today-life-dialog':page==='directions'?' today-directions-dialog':page==='market'?' today-market-dialog':'')} onClose={()=>setPage(null)} footer={<div className="today-choice-footer">{page!=='directions'?button('返回今天的选择',()=>setPage('directions')):null}{page==='market'?button('先保留现金，不新增委托',()=>setPage(null)):button('先不新增安排，合上这一页',()=>setPage(null))}</div>}>
-   {page!=='life'&&page!=='directions'&&page!=='market'?<p className="opening-paper-date">今天 {p.view.date} · {p.features.workbench.quarter}</p>:null}
+  {page?<Dialog title={page==='directions'?'今天，想把时间留给什么？':page==='daily'?'今天，怎样安排这段日子？':page==='life'?'留点时间给自己':page==='market'?'这次，怎样判断？':page==='holdings'?'保留的持仓':'手头的事'} layout={page==='holdings'||page==='life'||page==='daily'||page==='directions'||page==='market'?'direct':'book'} className={'opening-paper today-choice-paper'+(page==='holdings'?' today-held-dialog':page==='daily'?' today-life-dialog today-daily-dialog':page==='life'?' today-life-dialog':page==='directions'?' today-directions-dialog':page==='market'?' today-market-dialog':'')} onClose={()=>setPage(null)} footer={<div className="today-choice-footer">{page!=='directions'?button('返回今天的选择',()=>setPage('directions')):null}{page==='market'?button('先保留现金，不新增委托',()=>setPage(null)):button('先不新增安排，合上这一页',()=>setPage(null))}</div>}>
+   {page!=='daily'&&page!=='life'&&page!=='directions'&&page!=='market'?<p className="opening-paper-date">今天 {p.view.date} · {p.features.workbench.quarter}</p>:null}
    {page==='directions'?<TodayDirections date={p.view.date} quarter={p.features.workbench.quarter} existing={today.ongoing.length?button(continuing.length?'继续手头的事':'翻看保留的持仓',()=>setPage(continuing.length?'ongoing':'holdings'),continuing.length?'工作、旧约和待收款':'持有的股份，仍在原账户'):null} choices={{
-    work:button('看看工作',()=>choose({runId:p.view.runId,kind:'work',accountId:'personal',entityId:null}),'先看行动占用与工资日期'),
+    work:button('看看工作',()=>prepare('daily'),'比较工作、休整与住处投入'),
     life:button('留点时间给自己',()=>prepare('life'),'比较休整与住处改善'),
     video:button('做一段视频',()=>{setPage(null);openVideo('select-account')},'先选账号和作品'),
     course:button('准备一堂课',()=>{setPage(null);openCourse('objects')},'先看开放条件与教学准备'),
@@ -105,7 +105,7 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
     market:button('准备一次模拟判断',()=>prepare('market'),'先看资料，或写一份委托'),
    }}/>:null}
    {page==='holdings'?<TodayHoldings items={holdings} onChoose={choose}/>:null}
-   {page==='life'?<><TodayLifeChoices p={commandProps}/>{button('看看相识的人与全部生活记录',()=>{setPage(null);onNavigate('life',{accountId:'personal'})})}</>:null}
+   {page==='life'||page==='daily'?<><TodayLifeChoices p={commandProps} {...(page==='daily'?{work:<TodayWorkChoice p={commandProps} onWork={id=>choose({runId:p.view.runId,kind:'work',accountId:'personal',entityId:id})}/>}:{})}/><div className={page==='daily'?'today-daily-readings':undefined}>{page==='daily'?button('翻阅原工作与本季日历',()=>choose({runId:p.view.runId,kind:'work',accountId:'personal',entityId:null})):null}{button('看看相识的人与全部生活记录',()=>{setPage(null);onNavigate('life',{accountId:'personal'})})}</div></>:null}
    {page==='market'?<TodayMarketChoices p={commandProps} studyId={studyId} onStudy={definitionId=>setStudyChoice({runId:p.view.runId,definitionId})} orderAction={button('显选一份新的模拟委托',()=>{setPage(null);openOrder()})} researchAction={research?.state?button(studyId==='market-overview'?'回到这份公开研究':'回到这份研习',()=>choose({runId:p.view.runId,kind:'market',accountId:'personal',entityId:research.state!.id,entityKind:'research'})):null}/>:null}
    {page==='ongoing'?<>{dueCustomers.length?<section><h3>已到期、尚未收取的原客户款</h3>{dueCustomers.map(customer=>{const number=p.features.relay!.customers.filter(original=>original.businessId===customer.businessId).findIndex(original=>original.id===customer.id)+1,identity=relayBusinessTarget(p,customer.businessId),target=identity?{...identity,kind:'customer' as const,customerId:customer.id}:null,next=target?openingFocusFor(p,'relay',{relayTarget:target,accountId:target.accountId}):null;return <article key={customer.id}><p>{p.features.relay!.businesses.length>1?'中转站'+customer.businessId.slice(-6)+' · ':null}原客户{number} · 已到期{moneyText(customer.dueReceivableFen)}，尚未实收；本入口不收款。</p>{next&&target?button('翻到这位原客户的到期款记录',()=>{setPage(null);onNavigate('relay',{accountId:target.accountId,relayTarget:target,recordId:customer.id,openRecord:true})}):<p className="warning-box">这位原客户的服务身份暂不可确认，请先从原服务记录重新选择；没有换到另一客户或账户。</p>}</article>})}</section>:null}<p>按原对象翻阅，不会重新付费或新增约定。</p>{continuing.length?<section><h3>仍在继续的事</h3><div className="today-ongoing">{continuing.map(item=><article key={JSON.stringify(item.focus)}><p className="opening-paper-date">{item.classification==='carry'?'从'+item.originQuarter+'留下，仍在继续':'本季原安排'}{item.wait?' · 下一反馈 '+item.wait.date:''}</p><h3>{item.title}</h3><p>{item.line}</p>{button(item.marketContinuation?.label??'回到这件原安排',()=>choose(item.focus))}</article>)}</div></section>:null}{holdings.length?<section><h3>保留的持仓</h3><p>这些股份仍在原账户；无需为了安排生活而卖出。</p><div className="today-ongoing">{holdings.map(item=><article key={JSON.stringify(item.focus)}><p className="opening-paper-date">{item.originQuarter?'来源 '+item.originQuarter:'原持仓'} · 截至{p.view.date}</p><h3>{item.title}</h3><p>{item.line}</p>{button('查看这份持仓',()=>choose(item.focus))}</article>)}</div></section>:null}</>:null}
   </Dialog>:null}

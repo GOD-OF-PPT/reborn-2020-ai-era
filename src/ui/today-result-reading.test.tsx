@@ -41,7 +41,7 @@ it('invites the next choice after the actual first receipt and avoids repeating 
  expect(reading).toEqual({title:'接下来的日子，想怎样过？',line:'制作成本¥500 · 本单净额¥800。'})
  const shown=scene(c)
  expect(shown.html).toContain('接下来的日子，想怎样过？');expect(shown.html).toContain('客户付来了¥1,300');expect(shown.html).toContain('制作成本¥500 · 本单净额¥800')
- expect(shown.html).not.toContain('这份手工单实际收到¥1,300');expect(shown.html).toContain('回到书签');expect(shown.html).toContain('给生活留一段真实的日子')
+ expect(shown.html).not.toContain('这份手工单实际收到¥1,300');expect(shown.html).toContain('回到书签');expect(shown.html).toContain('工作，还是留点时间给自己？')
  expect(JSON.stringify(c.today)).toBe(before);expect(JSON.stringify(c.notice)).toBe(notice);expect(shown.onFocus).not.toHaveBeenCalled();expect(c.p.request).not.toHaveBeenCalled()
 })
 
