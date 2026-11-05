@@ -73,6 +73,6 @@ it('keeps simultaneous completions, actual living costs and extra narration in t
 
 it('retires only the contextual shortcuts when the echo is put away and leaves the original work navigation intact',()=>{
  const withEcho=render(rested),without=render(rested,false)
- expect(withEcho.html).toContain('休整记录 ↗');expect(without.html).not.toContain('休整记录 ↗');expect(without.html).toContain('看看生活');expect(without.html).toContain('翻开手记');expect(without.html).toContain('等工作回响 · 2020-01-31')
+ expect(withEcho.html).toContain('休整记录 ↗');expect(without.html).not.toContain('休整记录 ↗');expect(without.html).toContain('回到今天，看看其它安排');expect(without.html).toContain('翻开手记');expect(without.html).toContain('等工作回响 · 2020-01-31')
  expect(workOutcome(rested.p,{...rested.thread,focusScope:'history'},rested.notice)).toBeNull()
 })

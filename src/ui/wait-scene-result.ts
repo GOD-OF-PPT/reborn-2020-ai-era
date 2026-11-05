@@ -10,6 +10,7 @@ import {waitCauseBrief} from './scene-feedback-copy.ts'
 import {waitFeedbackReading} from './wait-feedback-reading.ts'
 import {firstOrderWaitBrief} from './first-order-feedback.ts'
 import {preparationCompletionReading} from './preparation-feedback.ts'
+import {personalParallelFeedback} from './personal-parallel-feedback.ts'
 import type {PlayingView,PlayFeatures} from './game-types.ts'
 
 const first=(text:string)=>text.includes('。')?text.slice(0,text.indexOf('。')+1):text
@@ -55,7 +56,8 @@ export function waitSceneResult(result:PublicWaitResult,current:PlayingView):{te
  const text=[cash,onlyPreparation?null:cause,meaning,'日历从'+before.date+'走到'+last.date+'。',retained.length?'这期间有'+new Set(retained.map(row=>row.sourceId)).size+'笔自己的原款到期，未收款仍保留，逐笔依据可翻原账。':null,note].filter(Boolean).join(' ')
  const singleReport=!cash&&retained.length===0?equityReportBrief(before,last,paused):null
  const supportBrief=retained.length===0?prepaidSupportRangeBrief(before,last,paused):null
- const causeBrief=singleReport??supportBrief??waitCauseBrief(last.date,cause,preparationReading,old.firstOrder,features.firstOrder)
+ const parallelBrief=!partial&&!stopped&&!retryOnly&&!frame.quarterChanged&&retained.length===0&&!important&&(!cash||cash.startsWith('这段日子，'))?personalParallelFeedback(result.lastBefore,last,cause,paused):null
+ const causeBrief=singleReport??supportBrief??parallelBrief??waitCauseBrief(last.date,cause,preparationReading,old.firstOrder,features.firstOrder)
  const wageAlreadySummarized=!!cash&&first(cause)===last.date+'。'&&paused.length===1&&paused[0]!.kind==='result'&&causeBrief===paused[0]!.label&&last.operations?.payroll.some(row=>row.id===paused[0]!.sourceId&&row.kind==='salary'&&row.amountFen>0&&row.through===last.date&&!before.operations?.payroll.some(old=>old.id===row.id))
  const firstOrderBrief=!partial&&!stopped&&!retryOnly&&retained.length===0?firstOrderWaitBrief(before,last,cash,cause,paused):null
  const brief=firstOrderBrief??[stopped?'已经按你的选择停下。':null,cash?first(cash):null,wageAlreadySummarized?null:causeBrief,singleReport||important?.label===causeBrief?null:important?.label,partial?'已保存部分保留，后续等候尚未保存。':retryOnly?retryNote:null].filter(Boolean).join(' ')

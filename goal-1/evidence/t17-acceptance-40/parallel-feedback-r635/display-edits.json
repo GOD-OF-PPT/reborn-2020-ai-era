@@ -1,0 +1,10 @@
+[
+  {
+    "from": "import {preparationCompletionReading} from './preparation-feedback.ts'",
+    "to": "import {preparationCompletionReading} from './preparation-feedback.ts'\nimport {personalParallelFeedback} from './personal-parallel-feedback.ts'"
+  },
+  {
+    "from": " const causeBrief=singleReport??supportBrief??waitCauseBrief",
+    "to": " const parallelBrief=!partial&&!stopped&&!retryOnly&&!frame.quarterChanged&&retained.length===0&&!important&&(!cash||cash.startsWith('这段日子，'))?personalParallelFeedback(result.lastBefore,last,cause,paused):null\n const causeBrief=singleReport??supportBrief??parallelBrief??waitCauseBrief"
+  }
+]
