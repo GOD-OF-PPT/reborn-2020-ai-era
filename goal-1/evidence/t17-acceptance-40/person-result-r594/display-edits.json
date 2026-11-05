@@ -1,0 +1,14 @@
+[
+  {
+    "old": "import {LifeContactBook} from './LifeContactBook.tsx'",
+    "new": "import {LifeContactBook} from './LifeContactBook.tsx'\nimport {PersonResultChoice,personResultReading} from './PersonResultChoice.tsx'"
+  },
+  {
+    "old": " const lifeMainAction=lifeProgress?.command?",
+    "new": " const personResult=lifeProgress&&lifeMode==='person'?personResultReading(p,lifeProgress):null\n const lifeMainAction=lifeProgress?.command?"
+  },
+  {
+    "old": "{lifeProgress.command?lifePause&&availableClock?",
+    "new": "{personResult?<PersonResultChoice p={p} value={personResult} onRecord={p.onPeople} onNavigate={p.onNavigate}/>:lifeProgress.command?lifePause&&availableClock?"
+  }
+]
