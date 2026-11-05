@@ -1,0 +1,18 @@
+[
+  {
+    "from": "import {completedDayChoice} from './completed-day-choice.ts'",
+    "to": "import {completedDayChoice} from './completed-day-choice.ts'\nimport {personalResultScene} from './personal-result-scene.ts'"
+  },
+  {
+    "from": " const sceneFactsAfterEcho=roomPersonTime?[]:",
+    "to": " const personalResult=resultChoice?personalResultScene(p,thread,resultChoice,timeNotice?.props):null\n const sceneFactsAfterEcho=personalResult?.brief?[]:roomPersonTime?[]:"
+  },
+  {
+    "from": "closedEcho?cloneElement(feedback,{brief:closedCopy.line}):sideOutcome",
+    "to": "closedEcho?cloneElement(feedback,{brief:closedCopy.line}):personalResult?.brief&&timeNotice?cloneElement(timeNotice,{brief:personalResult.brief}):sideOutcome"
+  },
+  {
+    "from": "quarterTurn?.title??workHistory?.title??lifeRoomTitle",
+    "to": "quarterTurn?.title??workHistory?.title??personalResult?.title??lifeRoomTitle"
+  }
+]
