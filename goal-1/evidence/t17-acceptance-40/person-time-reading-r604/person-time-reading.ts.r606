@@ -1,0 +1,58 @@
+import type {GamePanelProps} from './game-types.ts'
+import type {LifeSceneProgress} from './life-scene-progress.ts'
+import type {EchoFrame} from './SceneEcho.tsx'
+import {isoDate} from '../core/calendar.ts'
+import {moneyText} from './game-text.ts'
+
+type Notice={readonly date:string;readonly text:string;readonly brief?:string;readonly frame:EchoFrame|null}
+const jobMeaning='一份原工作已经有了实际结果。',promiseMeaning='一份个人约定，有了实际变化。',invitationMeaning='生活里有一份新的邀请，可以看看。'
+/** Exact original authored time reports only. Unknown/mixed results retain all
+ * original text. The helper never changes an invitation, target or permission. */
+export function personTimeReading(p:Pick<GamePanelProps,'view'|'features'>,progress:LifeSceneProgress,notice:Notice,recordId?:string|null):{readonly brief:string;readonly line?:string}|null{
+ const {view,features}=p,life=features.life,person=progress.person,promise=progress.promise,frame=notice.frame,last=view.receipts.at(-1)
+ if(view.phase!=='playing'||view.busy||view.readOnly||view.hasCandidate||view.saveStatus!=='saved'||life.asOf!==view.date||notice.date!==view.date||!person?.known||progress.selection!==person.id||!frame||frame.dateAfter!==view.date||frame.dateBefore>=view.date||frame.quarterChanged||last?.kind!=='AdvanceTime'||last.revisionAfter!==view.revision||features.workbench.pause||features.workbench.progression.requiresDelivery||recordId!==undefined&&recordId!==progress.sourceId)return null
+ const people=life.people.filter(row=>row.id===person.id)
+ if(people.length!==1||JSON.stringify(people[0])!==JSON.stringify(person))return null
+ try{isoDate(view.date);isoDate(frame.dateBefore)}catch{return null}
+ if(frame.pointsBefore!==frame.pointsAfter||frame.pointsAfter!==view.budget.available||frame.reservedBefore!==frame.reservedAfter||frame.reservedAfter!==view.budget.reserved||frame.spentBefore!==frame.spentAfter||frame.spentAfter!==view.budget.spent||![frame.pointsAfter,frame.reservedAfter,frame.spentAfter].every(n=>Number.isSafeInteger(n)&&n>=0&&n<=4))return null
+ if(new Set(frame.accounts.map(a=>a.id)).size!==frame.accounts.length||frame.accounts.filter(a=>a.id==='personal').length!==1||frame.accounts.some(a=>{const rows=view.accounts.filter(row=>row.accountId===a.id);return a.before!==a.after||rows.length!==1||rows[0]!.availableFen!==a.after}))return null
+ if(promise){
+  const rows=life.promises.filter(row=>row.id===promise.id),own=person.promises.filter(row=>row.id===promise.id)
+  if(rows.length!==1||own.length!==1||JSON.stringify(rows[0])!==JSON.stringify(promise)||JSON.stringify(own[0])!==JSON.stringify(promise)||promise.personId!==person.id||promise.offeredAt>view.date)return null
+  try{isoDate(promise.offeredAt);isoDate(promise.expiresAt);isoDate(promise.deadline);if(promise.resolvedAt)isoDate(promise.resolvedAt)}catch{return null}
+ }
+ const job=progress.job??(promise?life.jobs.find(row=>row.id===promise.sharedJobId)??null:null)
+ if(job){
+  const rows=life.jobs.filter(row=>row.id===job.id),own=person.jobs.filter(row=>row.id===job.id)
+  if(rows.length!==1||own.length!==1||JSON.stringify(rows[0])!==JSON.stringify(job)||JSON.stringify(own[0])!==JSON.stringify(job)||job.personId!==person.id||job.accountId!=='personal'||!Number.isSafeInteger(job.costFen)||job.costFen<0||!Number.isSafeInteger(job.actionPoints)||job.actionPoints<0)return null
+  try{isoDate(job.startAt);isoDate(job.completeAt)}catch{return null}
+ }
+ const completed=job?.status==='completed'&&job.completeAt===view.date&&job.startAt<=frame.dateBefore?job:null
+ const finishedToday=life.jobs.filter(row=>row.status==='completed'&&row.completeAt===view.date)
+ if(finishedToday.length!==(completed?1:0)||completed&&finishedToday[0]?.id!==completed.id)return null
+ const resolutions=life.promises.filter(row=>row.resolvedAt===view.date),offers=life.promises.filter(row=>row.status==='offered'&&row.offeredAt===view.date)
+ const shared=completed?.result==='shared_experience'&&completed.kind===person.work.kind&&completed.promiseId===null
+ const sharedCause='1项共同活动已完成（'+person.name+'）',name='与'+person.name+'的约定',parts:string[]=[],meanings:string[]=[]
+ let brief:string,line:string|undefined,extraMeaning:string|null=null
+ if(progress.stage==='offered'&&promise?.status==='offered'&&promise.offeredAt===view.date&&promise.acceptedAt===null&&promise.resolvedAt===null&&shared&&promise.sharedJobId===completed!.id&&offers.length===1&&resolutions.length===0){
+  parts.push(sharedCause,'1份基于实际共同经历的新邀请已出现，是否接受仍由你决定');meanings.push(jobMeaning,invitationMeaning);extraMeaning=invitationMeaning
+  brief='与'+person.name+'的这次相处已完成 · 已付'+moneyText(completed!.costFen)+' / 已用'+completed!.actionPoints+'点。有一份新邀请，仍由你决定。'
+  line='邀请：'+person.promiseTerms.title.replace('已经答应的','')+'。请在'+promise.expiresAt+'前回应；接受后仍要另行安排。'
+ }else if(progress.stage==='completed'&&promise?.status==='fulfilled'&&promise.resolvedAt===view.date&&promise.acceptedAt!==null&&promise.acceptedAt<=view.date&&completed?.kind==='promise_keep'&&completed.result==='promise_fulfilled'&&completed.promiseId===promise.id&&promise.completionJobId===completed.id&&promise.costFen===completed.costFen&&promise.actionPoints===completed.actionPoints&&resolutions.length===1&&offers.length===0){
+  parts.push(name+'已兑现，费用与其他已承担的责任照旧');meanings.push(jobMeaning,promiseMeaning);extraMeaning=promiseMeaning
+  brief=name+'已兑现 · 原投入'+moneyText(completed.costFen)+' / '+completed.actionPoints+'点。'
+ }else if(progress.stage==='completed'&&promise===null&&shared&&offers.length===0&&resolutions.length===0){
+  parts.push(sharedCause);meanings.push(jobMeaning)
+  brief='与'+person.name+'的这次相处已完成 · 已付'+moneyText(completed!.costFen)+' / 已用'+completed!.actionPoints+'点。'
+ }else if(promise?.resolvedAt===view.date&&resolutions.length===1&&offers.length===0){
+  if(shared&&promise.sharedJobId===completed!.id){parts.push(sharedCause);meanings.push(jobMeaning)}else if(completed)return null
+  if(progress.stage==='expired'&&promise.status==='expired'&&promise.acceptedAt===null){parts.push('1份尚未接受的邀请已到期，没有自动接受、付款或完成');brief=person.name+'的邀请已过回应期限；未接受，没有新增承诺。'}
+  else if(progress.stage==='missed'&&promise.status==='missed'&&promise.acceptedAt!==null&&promise.acceptedAt<=view.date){parts.push(name+'已到期未实际完成，保留失约记录与已付成本');brief=name+'已到期未兑现，失约与已付成本仍保留。'}
+  else if(progress.stage==='npc-declined'&&promise.status==='npc_declined'&&promise.acceptedAt===null){parts.push(name+'由对方按自己的安排撤回尚未接受的邀请，不记玩家失约');brief=person.name+'撤回尚未接受的邀请；不记作你失约。'}
+  else return null
+  meanings.push(promiseMeaning);extraMeaning=promiseMeaning
+ }else return null
+ const cause=view.date+'，'+parts.join('；')+'。',expected=[cause,meanings.join(' '),'日历从'+frame.dateBefore+'走到'+view.date+'。'].join(' '),stop=' 日子先停在这次真实反馈，剩下的安排仍在原日历里。'
+ if(notice.text!==expected&&notice.text!==expected+stop||notice.brief!==[cause,extraMeaning].filter(Boolean).join(' '))return null
+ return {brief,...(line?{line}:{})}
+}

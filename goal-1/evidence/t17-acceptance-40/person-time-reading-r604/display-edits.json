@@ -1,0 +1,52 @@
+[
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "old": "import {personalCompletionReading} from './personal-completion-reading.ts'",
+    "new": "import {personalCompletionReading} from './personal-completion-reading.ts'\nimport {personTimeReading} from './person-time-reading.ts'"
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "old": " const lifeReceiptBrief=lifeCompletion?.brief??p.receiptBrief",
+    "new": " const personTime=p.screen==='life'&&lifeMode==='person'&&lifeProgress&&p.receipt&&p.receiptKind==='AdvanceTime'?personTimeReading(p,lifeProgress,{date:view.date,text:p.receipt,...(p.receiptBrief?{brief:p.receiptBrief}:{}),frame:p.echoFrame??null}):null\n const lifeReceiptBrief=lifeCompletion?.brief??personTime?.brief??p.receiptBrief"
+  },
+  {
+    "path": "src/ui/TodayScene.tsx",
+    "old": "import {personalCompletionReading} from './personal-completion-reading.ts'",
+    "new": "import {personalCompletionReading} from './personal-completion-reading.ts'\nimport {personTimeReading} from './person-time-reading.ts'\nimport {lifeSceneProgress} from './life-scene-progress.ts'"
+  },
+  {
+    "path": "src/ui/TodayScene.tsx",
+    "old": " const visibleFeedback=completionReading&&resultNotice?cloneElement(resultNotice,{brief:completionReading.brief}):feedback",
+    "new": " const personTime=resultNotice&&today.primary.thread.focus.kind==='life'&&today.primary.thread.focusScope!=='history'&&today.primary.thread.focusStatus!=='invalid'&&!today.responsibilityOverrideNeeded&&today.source.runId===p.view.runId&&today.source.revision===p.view.revision&&today.source.date===p.view.date?personTimeReading(p,lifeSceneProgress(p.features.life,p.view.date,today.primary.thread.focus.selection),resultNotice.props,today.primary.thread.focus.entityId):null\n const echoReading=completionReading??personTime\n const visibleFeedback=echoReading&&resultNotice?cloneElement(resultNotice,{brief:echoReading.brief}):feedback"
+  },
+  {
+    "path": "src/ui/TodayScene.tsx",
+    "old": "today.source.date===p.view.date?personTimeReading",
+    "new": "today.source.date===p.view.date&&today.source.quarter===p.features.workbench.quarter?personTimeReading"
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "old": "lifeTimeReceipt?(lifePause?.line??copy.line)",
+    "new": "lifeTimeReceipt?(personTime?.line??lifePause?.line??copy.line)"
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "old": "import {personTimeReading} from './person-time-reading.ts'",
+    "new": "import {personInvitationLine,personTimeReading} from './person-time-reading.ts'"
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "old": " const lifeReceiptBrief=lifeCompletion?.brief??personTime?.brief??p.receiptBrief",
+    "new": " const invitationLine=p.screen==='life'&&lifeMode==='person'&&lifeProgress?personInvitationLine(p,lifeProgress):null\n const lifeReceiptBrief=lifeCompletion?.brief??personTime?.brief??p.receiptBrief"
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "old": "<p>{lifeTimeReceipt?(personTime?.line??lifePause?.line??copy.line)",
+    "new": "<p>{invitationLine??(lifeTimeReceipt?(personTime?.line??lifePause?.line??copy.line)"
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "old": ":lifePause?.line??copy.line}</p>}</header>",
+    "new": ":lifePause?.line??copy.line)}</p>}</header>"
+  }
+]

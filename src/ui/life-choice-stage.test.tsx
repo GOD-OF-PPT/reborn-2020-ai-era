@@ -116,7 +116,8 @@ it('changes only the visible wait wording while keeping its original date, label
 it('keeps the real invitation and reply deadline visible alongside a completed-activity echo',()=>{
  const person=props().features.life.people.find(row=>row.id==='tang-ying')!,started=act(initial,'StartLifeWork',{kind:person.work.kind,personId:person.id,reference:null}),completed=act(started,'AdvanceTime',{date:'2020-01-04'}),p=props(completed,'person')
  const html=render({...p,receiptKind:'AdvanceTime',receipt:'这次相处已经完成。',receiptBrief:'这次相处已经完成。',echoFrame:committedEcho(props(started).view,p.view)})
- expect(html).toContain('留出一次已经答应的陪伴')
+ expect(html).toContain('邀请：留出一次陪伴')
+ expect(p.features.life.people.find(row=>row.id==='tang-ying')!.promiseTerms.title).toBe('留出一次已经答应的陪伴')
  expect(html).toContain('2020-01-18前回应')
  expect(html).toContain('2020-02-18完成')
  expect(html).toContain('这次相处已经完成。')

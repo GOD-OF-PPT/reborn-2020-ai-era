@@ -24,6 +24,8 @@ import {personalRestCompleted,personalStartNoticeExpired} from './personal-day-c
 import {SceneTimeNotice} from './SceneEcho.tsx'
 import {todayResultReading} from './today-result-reading.ts'
 import {personalCompletionReading} from './personal-completion-reading.ts'
+import {personTimeReading} from './person-time-reading.ts'
+import {lifeSceneProgress} from './life-scene-progress.ts'
 import {TodayIdleAction,todayIdleReading,type TodayIdlePrimary} from './TodayIdleAction.tsx'
 
 type Props={p:GamePanelProps;today:TodayThreadView;headingRef:Ref<HTMLHeadingElement>;feedback?:ReactNode;onFocus:(focus:OpeningFocus)=>void;onPrepare:(focus:OpeningFocus)=>void;onResume:()=>void;onExplore:()=>void;onRecollection:()=>void;onNavigate:NavigateScene}
@@ -62,7 +64,9 @@ export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResu
  const resultNotice=isValidElement<ComponentProps<typeof SceneTimeNotice>>(feedback)&&feedback.type===SceneTimeNotice&&feedback.props.compact===true?feedback:null
  const resultReading=todayResultReading(p,today,resultNotice?.props)
  const completionReading=resultReading?.line&&resultNotice?personalCompletionReading(p,today.primary.thread,resultNotice.props):null
- const visibleFeedback=completionReading&&resultNotice?cloneElement(resultNotice,{brief:completionReading.brief}):feedback
+ const personTime=resultNotice&&today.primary.thread.focus.kind==='life'&&today.primary.thread.focusScope!=='history'&&today.primary.thread.focusStatus!=='invalid'&&!today.responsibilityOverrideNeeded&&today.source.runId===p.view.runId&&today.source.revision===p.view.revision&&today.source.date===p.view.date&&today.source.quarter===p.features.workbench.quarter?personTimeReading(p,lifeSceneProgress(p.features.life,p.view.date,today.primary.thread.focus.selection),resultNotice.props,today.primary.thread.focus.entityId):null
+ const echoReading=completionReading??personTime
+ const visibleFeedback=echoReading&&resultNotice?cloneElement(resultNotice,{brief:echoReading.brief}):feedback
  const idleReading=todayIdleReading(p,today)
  const situation=resultReading?.line??meaning?.situation??(continuation?one!.line:hasMoney||!continuing.length&&p.features.relay?.businesses.length?today.line:continuing.length?'还有'+continuing.length+'件已经答应的事，正在照约定继续。':holdings.length?'持仓留在原账上；今天仍可选择工作、生活或新的尝试。':null)
  const dueCustomers=p.features.relay?.customers.filter(customer=>customer.dueReceivableFen>0)??[]
