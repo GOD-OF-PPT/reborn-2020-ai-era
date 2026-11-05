@@ -1,0 +1,206 @@
+[
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "hunks": [
+      {
+        "oldStart": 1,
+        "oldEnd": 1,
+        "newStart": 1,
+        "newEnd": 2,
+        "old": "",
+        "new": "import {videoWorkStage} from './video-work-stage.ts'\n"
+      },
+      {
+        "oldStart": 104,
+        "oldEnd": 106,
+        "newStart": 105,
+        "newEnd": 107,
+        "old": " const number=Number(event.key)-1,direct=root.querySelector('.video-first-attempt-stage')\n if(direct){const button=direct.querySelectorAll<HTMLButtonElement>('.scene-decision-main>button,.video-attempt-option,.video-attempt-more')[number];if(!button||button.disabled||button.inert||button.closest('[inert]')||!button.getClientRects().length)return;event.preventDefault();button.click();return}\n",
+        "new": " const number=Number(event.key)-1,direct=root.querySelector('.video-first-attempt-stage,.video-work-stage')\n if(direct){const button=direct.querySelectorAll<HTMLButtonElement>('.scene-decision-main>button,.clock-main>button,.video-attempt-option,.video-attempt-more')[number];if(!button||button.disabled||button.inert||button.closest('[inert]')||!button.getClientRects().length)return;event.preventDefault();button.click();return}\n"
+      },
+      {
+        "oldStart": 142,
+        "oldEnd": 144,
+        "newStart": 143,
+        "newEnd": 145,
+        "old": "function SceneChoiceSurface({direct,video=false,children,...book}:ComponentProps<typeof ScreenBook>&{direct:boolean;video?:boolean}){\n return direct?<div className={video?'video-first-attempt-stage':'life-choice-stage'} role=\"group\" aria-label={video?'现在可以作出的视频选择':'现在可以作出的生活选择'}>{children}</div>:<ScreenBook {...book}>{children}</ScreenBook>\n",
+        "new": "function SceneChoiceSurface({direct,video=false,work=false,children,...book}:ComponentProps<typeof ScreenBook>&{direct:boolean;video?:boolean;work?:boolean}){\n return direct?<div className={work?'video-work-stage':video?'video-first-attempt-stage':'life-choice-stage'} role=\"group\" aria-label={video?'现在可以作出的视频选择':'现在可以作出的生活选择'}>{children}</div>:<ScreenBook {...book}>{children}</ScreenBook>\n"
+      },
+      {
+        "oldStart": 160,
+        "oldEnd": 160,
+        "newStart": 161,
+        "newEnd": 162,
+        "old": "",
+        "new": " const videoWork=videoThread!==null&&videoWorkStage(p,videoThread)\n"
+      },
+      {
+        "oldStart": 231,
+        "oldEnd": 232,
+        "newStart": 233,
+        "newEnd": 234,
+        "old": "  <SceneChoiceSurface direct={p.screen==='life'&&!closing||videoAttempt!==null} video={videoAttempt!==null} choiceNavigation key={p.screen==='video'||courseContinuity?view.runId+':'+p.screen+':'+view.phase:p.screen+':'+view.phase+':'+view.date+':'+(p.screen==='life'?lifeSelection:relayProgress?.periodId??marketProgress?.entityId??deepseekProgress?.entityId??'')+':'+bookContext} label=\"眼前的选择\" className=\"scene-story-book\">\n",
+        "new": "  <SceneChoiceSurface direct={p.screen==='life'&&!closing||videoAttempt!==null||videoWork} video={videoAttempt!==null||videoWork} work={videoWork} choiceNavigation key={p.screen==='video'||courseContinuity?view.runId+':'+p.screen+':'+view.phase:p.screen+':'+view.phase+':'+view.date+':'+(p.screen==='life'?lifeSelection:relayProgress?.periodId??marketProgress?.entityId??deepseekProgress?.entityId??'')+':'+bookContext} label=\"眼前的选择\" className=\"scene-story-book\">\n"
+      }
+    ]
+  },
+  {
+    "path": "src/ui/VideoEncounter.tsx",
+    "hunks": [
+      {
+        "oldStart": 10,
+        "oldEnd": 10,
+        "newStart": 10,
+        "newEnd": 11,
+        "old": "",
+        "new": "import {videoWorkStage} from './video-work-stage.ts'\n"
+      },
+      {
+        "oldStart": 31,
+        "oldEnd": 32,
+        "newStart": 32,
+        "newEnd": 33,
+        "old": " const art=videoPaperFor(thread),first=thread.stage==='video-entry'&&p.view.phase==='playing'&&videoFirstAccount(p.features.video)\n",
+        "new": " const workStage=videoWorkStage(p,thread),art=videoPaperFor(thread),first=thread.stage==='video-entry'&&p.view.phase==='playing'&&videoFirstAccount(p.features.video)\n"
+      },
+      {
+        "oldStart": 40,
+        "oldEnd": 41,
+        "newStart": 41,
+        "newEnd": 42,
+        "old": "  return <section className=\"scene-action video-encounter\" data-first-attempt={primary.firstAttempt?true:undefined} data-video-stage={thread.stage} data-focus-scope={thread.focusScope} aria-label=\"这一份视频的决定\">\n",
+        "new": "  return <section className=\"scene-action video-encounter\" data-first-attempt={primary.firstAttempt?true:undefined} data-work-stage={workStage?true:undefined} data-video-stage={thread.stage} data-focus-scope={thread.focusScope} aria-label=\"这一份视频的决定\">\n"
+      },
+      {
+        "oldStart": 42,
+        "oldEnd": 43,
+        "newStart": 43,
+        "newEnd": 44,
+        "old": "    {primary.firstAttempt?null:<span className=\"scene-choice-overline\" data-book-chapter={thread.title}>{thread.focusScope==='history'?'翻阅原来的一份':'眼前这一份 · 由你决定'}</span>}\n",
+        "new": "    {primary.firstAttempt||workStage?null:<span className=\"scene-choice-overline\" data-book-chapter={thread.title}>{thread.focusScope==='history'?'翻阅原来的一份':'眼前这一份 · 由你决定'}</span>}\n"
+      },
+      {
+        "oldStart": 48,
+        "oldEnd": 49,
+        "newStart": 49,
+        "newEnd": 50,
+        "old": "    <OpeningObject {...(first||primary.firstAttempt?{copyMode:'tableau' as const}:{})} kind={objectKind(thread)} appearance=\"video\" title={thread.object} displayTitle=\"\" detail={paperDetail} stageLabel={primary.firstAttempt?'第一份作品 · 待选择':paperStage} actionLabel={primary.binding.label} disabled={primary.binding.disabled} onActivate={primary.binding.activate} textOnly={p.textOnly===true} {...(art?{videoPaper:art}:{})} {...(protection?{protection}:{})}/>\n",
+        "new": "    <OpeningObject {...(first||primary.firstAttempt||workStage?{copyMode:'tableau' as const}:{})} kind={objectKind(thread)} appearance=\"video\" title={thread.object} displayTitle=\"\" detail={workStage&&thread.wait&&primary.binding.label.includes(thread.wait.date)&&primary.binding.label.includes(thread.wait.label)?'':paperDetail} stageLabel={primary.firstAttempt?'第一份作品 · 待选择':paperStage} actionLabel={primary.binding.label} disabled={primary.binding.disabled} onActivate={primary.binding.activate} textOnly={p.textOnly===true} {...(art?{videoPaper:art}:{})} {...(protection?{protection}:{})}/>\n"
+      }
+    ]
+  },
+  {
+    "path": "src/ui/VideoThreadAction.tsx",
+    "hunks": [
+      {
+        "oldStart": 1,
+        "oldEnd": 1,
+        "newStart": 1,
+        "newEnd": 3,
+        "old": "",
+        "new": "import {videoWorkCanReturnToday} from './video-work-stage.ts'\nimport './video-work-stage.css'\n"
+      },
+      {
+        "oldStart": 18,
+        "oldEnd": 19,
+        "newStart": 20,
+        "newEnd": 21,
+        "old": " const choice=(label:string,caption:string,activate:()=>void)=>{\n",
+        "new": " const choice=(label:string,caption:string,activate:()=>void,more?:SharedActionBinding)=>{\n"
+      },
+      {
+        "oldStart": 20,
+        "oldEnd": 21,
+        "newStart": 22,
+        "newEnd": 23,
+        "old": "  return children({binding,main:<div className=\"command moment-decision moment-primary\"><button type=\"button\" disabled={binding.disabled} onClick={binding.activate}><b aria-hidden=\"true\">01</b><span>{label}{caption?<small>{caption}</small>:null}</span><i aria-hidden=\"true\">→</i></button>{binding.reason?<small className=\"reason\">{binding.reason}</small>:null}</div>})\n",
+        "new": "  return children({binding,main:<div className=\"command moment-decision moment-primary\"><button type=\"button\" disabled={binding.disabled} onClick={binding.activate}><b aria-hidden=\"true\">01</b><span>{label}{caption?<small>{caption}</small>:null}</span><i aria-hidden=\"true\">→</i></button>{binding.reason?<small className=\"reason\">{binding.reason}</small>:null}{more?<><button type=\"button\" className=\"video-work-more\" disabled={more.disabled} onClick={more.activate}>{more.label} ↗</button>{more.reason?<small className=\"reason\">{more.reason}</small>:null}</>:null}</div>})\n"
+      },
+      {
+        "oldStart": 25,
+        "oldEnd": 25,
+        "newStart": 27,
+        "newEnd": 28,
+        "old": "",
+        "new": " if(videoWorkCanReturnToday(p,thread))return choice('合上这份作品，回到今天','作品与实际反馈保留；下一次投入仍由你决定',onToday,makeSharedAction(p,'继续这个账号，看看下一次选择',onResult,{allowReadOnly:true}))\n"
+      }
+    ]
+  },
+  {
+    "path": "src/ui/VideoSceneChoice.tsx",
+    "hunks": [
+      {
+        "oldStart": 17,
+        "oldEnd": 17,
+        "newStart": 17,
+        "newEnd": 18,
+        "old": "",
+        "new": "import {videoPublicationPreparation} from './video-work-stage.ts'\n"
+      },
+      {
+        "oldStart": 19,
+        "oldEnd": 20,
+        "newStart": 20,
+        "newEnd": 21,
+        "old": "type Page='channel'|'create'|'purpose'|'clients'|'product'|'mode'|'material'|'schedule'|'record'|'response'|'publish'|'objects'|'result'\n",
+        "new": "type Page='channel'|'create'|'purpose'|'clients'|'product'|'mode'|'material'|'schedule'|'record'|'response'|'publish'|'publish-terms'|'objects'|'result'\n"
+      },
+      {
+        "oldStart": 143,
+        "oldEnd": 143,
+        "newStart": 144,
+        "newEnd": 145,
+        "old": "",
+        "new": "  const publishPreparation=(page==='publish'||page==='publish-terms')&&action==='publish'&&videoPublicationPreparation(p,currentTarget)\n"
+      },
+      {
+        "oldStart": 175,
+        "oldEnd": 176,
+        "newStart": 177,
+        "newEnd": 178,
+        "old": " const title=page==='result'?'这一份之后，怎样继续？':page==='create'?'这次，想为谁制作？':page==='channel'?'先选择一个内容账号':page==='clients'?'这次，回应哪一份询价？':page==='product'?'想先做怎样一份作品？':page==='mode'?'用什么方式认真完成？':page==='material'?'这次素材，从哪里来？':page==='schedule'?'给这一份，留出真正的日子':page==='response'?'先看清修改，再决定怎么回应':page==='publish'?'这份作品，怎样让人看见？':page==='objects'?'翻回具体的那一份记录':page==='record'?'这份作品与约定':'这次，想把哪件事做起来？'\n",
+        "new": " const title=page==='result'?'这一份之后，怎样继续？':page==='create'?'这次，想为谁制作？':page==='channel'?'先选择一个内容账号':page==='clients'?'这次，回应哪一份询价？':page==='product'?'想先做怎样一份作品？':page==='mode'?'用什么方式认真完成？':page==='material'?'这次素材，从哪里来？':page==='schedule'?'给这一份，留出真正的日子':page==='response'?'先看清修改，再决定怎么回应':page==='publish-terms'?'这一份发布，会得到什么反馈？':page==='publish'?'这份作品，怎样让人看见？':page==='objects'?'翻回具体的那一份记录':page==='record'?'这份作品与约定':'这次，想把哪件事做起来？'\n"
+      },
+      {
+        "oldStart": 181,
+        "oldEnd": 182,
+        "newStart": 183,
+        "newEnd": 185,
+        "old": " else if(page==='schedule'||page==='publish')primary=command?submit(command):<button type=\"button\" disabled>先明确选择本页条件</button>\n",
+        "new": " else if(publishPreparation&&page==='publish')primary=<button type=\"button\" className=\"primary\" disabled={!['none','ads','affiliate'].includes(draft.monetization)} onClick={()=>setPage('publish-terms')}>核对本次反馈与资格 →</button>\n else if(page==='schedule'||page==='publish'||page==='publish-terms')primary=command?submit(command):<button type=\"button\" disabled>先明确选择本页条件</button>\n"
+      },
+      {
+        "oldStart": 188,
+        "oldEnd": 189,
+        "newStart": 191,
+        "newEnd": 192,
+        "old": "  {samplePreparation&&sampleStep>0?<button type=\"button\" onClick={()=>setPage(sampleSteps[sampleStep-1]!)}>← 调整{sampleStep===1?'作品方向':sampleStep===2?'制作方式':'素材来源'}</button>:firstCreate?<button type=\"button\" onClick={()=>setOpen(false)}>先合上，保留草稿</button>:page==='schedule'?<button type=\"button\" onClick={()=>setPage(action==='sample'||action==='commission'?'material':action==='price'||action==='scope'?'response':'purpose')}>返回调整</button>:page!=='purpose'&&page!=='record'&&page!=='channel'?<button type=\"button\" onClick={()=>setPage(page==='create'?'channel':'purpose')}>返回选择</button>:<button type=\"button\" onClick={()=>setOpen(false)}>先合上，保留草稿</button>}\n",
+        "new": "  {publishPreparation&&page==='publish-terms'?<button type=\"button\" onClick={()=>setPage('publish')}>← 调整发布方式</button>:samplePreparation&&sampleStep>0?<button type=\"button\" onClick={()=>setPage(sampleSteps[sampleStep-1]!)}>← 调整{sampleStep===1?'作品方向':sampleStep===2?'制作方式':'素材来源'}</button>:firstCreate?<button type=\"button\" onClick={()=>setOpen(false)}>先合上，保留草稿</button>:page==='schedule'?<button type=\"button\" onClick={()=>setPage(action==='sample'||action==='commission'?'material':action==='price'||action==='scope'?'response':'purpose')}>返回调整</button>:page!=='purpose'&&page!=='record'&&page!=='channel'?<button type=\"button\" onClick={()=>setPage(page==='create'?'channel':'purpose')}>返回选择</button>:<button type=\"button\" onClick={()=>setOpen(false)}>先合上，保留草稿</button>}\n"
+      },
+      {
+        "oldStart": 191,
+        "oldEnd": 192,
+        "newStart": 194,
+        "newEnd": 195,
+        "old": " return <>{children?children(activate):<button type=\"button\" className=\"video-scene-open\" onClick={()=>activate()}>翻开视频制作与客户约定 ↗</button>}{open?<Dialog title={title} className={'opening-paper video-choice-paper'+(firstCreate?' video-first-account-dialog':samplePreparation?' video-sample-preparation':'')} layout={firstCreate||samplePreparation?'direct':'book'} onClose={()=>setOpen(false)} footer={footer}>\n",
+        "new": " return <>{children?children(activate):<button type=\"button\" className=\"video-scene-open\" onClick={()=>activate()}>翻开视频制作与客户约定 ↗</button>}{open?<Dialog title={title} className={'opening-paper video-choice-paper'+(firstCreate?' video-first-account-dialog':samplePreparation||publishPreparation?' video-sample-preparation':'')+(publishPreparation?' video-publish-preparation':'')} layout={firstCreate||samplePreparation||publishPreparation?'direct':'book'} onClose={()=>setOpen(false)} footer={footer}>\n"
+      },
+      {
+        "oldStart": 194,
+        "oldEnd": 195,
+        "newStart": 197,
+        "newEnd": 199,
+        "old": "   {firstCreate||samplePreparation?null:<p className=\"video-paper-hint\">填写、翻页和合上都不接单；投入仍需最后确认。</p>}\n",
+        "new": "   {publishPreparation?<ol className=\"video-publish-steps\" aria-label=\"发布准备，共两步\"><li aria-current={page==='publish'?'step':undefined}>1 选择发布方式</li><li aria-current={page==='publish-terms'?'step':undefined}>2 核对反馈与资格</li></ol>:null}\n   {firstCreate||samplePreparation||publishPreparation?null:<p className=\"video-paper-hint\">填写、翻页和合上都不接单；投入仍需最后确认。</p>}\n"
+      },
+      {
+        "oldStart": 221,
+        "oldEnd": 222,
+        "newStart": 225,
+        "newEnd": 226,
+        "old": "  {page==='publish'?<><fieldset className=\"video-paper-choices\"><legend>明确本次发布方式</legend>{[['none','积累受众'],['ads','平台分成（需本次已有资格）'],['affiliate','带货（需本次已有资格）']].map(([id,label])=><label key={id}><input type=\"radio\" name={name+'publish'} checked={draft.monetization===id} onChange={()=>edit({monetization:id!})}/><span>{label}</span></label>)}</fieldset><label className=\"video-paper-check\"><input type=\"checkbox\" checked={draft.label} onChange={e=>edit({label:e.target.checked})}/>为AI生成内容附合成标识；2025-09-01起按要求核对。</label><VideoPublicationTerms video={v} date={p.view.date} workId={work?.id??''} monetization={draft.monetization} className=\"video-paper-terms\"/></>:null}\n",
+        "new": "  {page==='publish'||page==='publish-terms'?<>{!publishPreparation||page==='publish'?<><fieldset className=\"video-paper-choices\"><legend>明确本次发布方式</legend>{[['none','积累受众'],['ads','平台分成（需本次已有资格）'],['affiliate','带货（需本次已有资格）']].map(([id,label])=><label key={id}><input type=\"radio\" name={name+'publish'} checked={draft.monetization===id} onChange={()=>edit({monetization:id!})}/><span>{label}</span></label>)}</fieldset><label className=\"video-paper-check\"><input type=\"checkbox\" checked={draft.label} onChange={e=>edit({label:e.target.checked})}/>为AI生成内容附合成标识；2025-09-01起按要求核对。</label></>:null}{!publishPreparation||page==='publish-terms'?<VideoPublicationTerms video={v} date={p.view.date} workId={work?.id??''} monetization={draft.monetization} className=\"video-paper-terms\"/>:null}</>:null}\n"
+      }
+    ]
+  }
+]

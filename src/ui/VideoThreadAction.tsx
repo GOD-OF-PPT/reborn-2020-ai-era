@@ -1,4 +1,6 @@
 import type {VideoChoiceAction} from './VideoSceneChoice.tsx'
+import {videoWorkCanReturnToday} from './video-work-stage.ts'
+import './video-work-stage.css'
 import {videoFirstAttemptReading} from './video-first-attempt.ts'
 import {VideoFirstAttemptAction,type VideoFirstAttemptExtras} from './VideoFirstAttemptAction.tsx'
 import {videoFirstAccount,videoFirstEntryCopy} from './video-first-entry.ts'
@@ -16,13 +18,14 @@ type Props={p:GamePanelProps;thread:PlayerThreadView;active:boolean;date:string|
 export function VideoThreadAction({p,thread,active,date,waitLabel,onChoose,onResult,onToday,children}:Props){
  if(!active)return children(null)
  const showReason=!p.view.hasCandidate&&!p.view.readOnly&&p.view.saveStatus!=='conflict'
- const choice=(label:string,caption:string,activate:()=>void)=>{
+ const choice=(label:string,caption:string,activate:()=>void,more?:SharedActionBinding)=>{
   const binding=makeSharedAction(p,label,activate,{allowReadOnly:true})
-  return children({binding,main:<div className="command moment-decision moment-primary"><button type="button" disabled={binding.disabled} onClick={binding.activate}><b aria-hidden="true">01</b><span>{label}{caption?<small>{caption}</small>:null}</span><i aria-hidden="true">→</i></button>{binding.reason?<small className="reason">{binding.reason}</small>:null}</div>})
+  return children({binding,main:<div className="command moment-decision moment-primary"><button type="button" disabled={binding.disabled} onClick={binding.activate}><b aria-hidden="true">01</b><span>{label}{caption?<small>{caption}</small>:null}</span><i aria-hidden="true">→</i></button>{binding.reason?<small className="reason">{binding.reason}</small>:null}{more?<><button type="button" className="video-work-more" disabled={more.disabled} onClick={more.activate}>{more.label} ↗</button>{more.reason?<small className="reason">{more.reason}</small>:null}</>:null}</div>})
  }
  if(thread.focusScope==='history')return choice('合上这份视频留页，回到今天','保留原作品、账号与书签，不重做交付',onToday)
  if(thread.command)return <CommandButton {...p} {...thread.command} confirm={thread.command.confirm} className="moment-decision moment-primary" showReason={showReason} renderAction={(binding,main)=>children({binding,main})}><b aria-hidden="true">01</b><span>{thread.command.label}<small>核对同一份作品与这次原决定</small></span><i aria-hidden="true">→</i></CommandButton>
  if(thread.wait&&date)return <ClockAdvance p={p} date={date} label={waitLabel+' · '+date} room showReason={showReason} renderAction={binding=>children({binding,main:<div className="moment-wait moment-primary"><div className="clock-advance clock-advance-room">{binding.reviewNode}{binding.mainNode}</div></div>})}/>
+ if(videoWorkCanReturnToday(p,thread))return choice('合上这份作品，回到今天','作品与实际反馈保留；下一次投入仍由你决定',onToday,makeSharedAction(p,'继续这个账号，看看下一次选择',onResult,{allowReadOnly:true}))
  if(thread.outcome==='actual'||thread.outcome==='non-success')return choice('这一份之后，想怎样继续','继续这个账号、收好原结果，或回自己的生活',onResult)
  const firstAttempt=thread.stage==='video-channel'&&thread.focus.kind==='video'&&['entry','current'].includes(thread.focusScope)&&!thread.responsibilityOverrideNeeded&&!thread.legacyFallbackRequired?videoFirstAttemptReading(p,thread.focus):null
  if(firstAttempt&&thread.focus.kind==='video')return <VideoFirstAttemptAction p={p} focus={thread.focus} reading={firstAttempt} onChoose={onChoose}>{children}</VideoFirstAttemptAction>

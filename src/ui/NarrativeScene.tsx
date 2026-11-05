@@ -1,4 +1,5 @@
 import {videoFirstAttemptReading} from './video-first-attempt.ts'
+import {videoWorkStage} from './video-work-stage.ts'
 import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
 import {useState,useEffect,useRef,type Ref,type ComponentProps} from 'react'
 import './life-choice-stage.css'
@@ -102,8 +103,8 @@ function chooseWithNumber(root:HTMLElement,event:KeyboardEvent){
  if(event.defaultPrevented||event.repeat||event.isComposing||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||!/^[1-9]$/.test(event.key))return
  const target=event.target
  if(!(target instanceof Element)||target.closest('input,textarea,select,[contenteditable]:not([contenteditable=false])')||document.querySelector('dialog[open]'))return
- const number=Number(event.key)-1,direct=root.querySelector('.video-first-attempt-stage')
- if(direct){const button=direct.querySelectorAll<HTMLButtonElement>('.scene-decision-main>button,.video-attempt-option,.video-attempt-more')[number];if(!button||button.disabled||button.inert||button.closest('[inert]')||!button.getClientRects().length)return;event.preventDefault();button.click();return}
+ const number=Number(event.key)-1,direct=root.querySelector('.video-first-attempt-stage,.video-work-stage')
+ if(direct){const button=direct.querySelectorAll<HTMLButtonElement>('.scene-decision-main>button,.clock-main>button,.video-attempt-option,.video-attempt-more')[number];if(!button||button.disabled||button.inert||button.closest('[inert]')||!button.getClientRects().length)return;event.preventDefault();button.click();return}
  const choice=root.querySelectorAll<HTMLElement>('.scene-choices>.scene-choice,.scene-choices>.scene-action,.scene-choices>.scene-wait-decision')[number]
  // The calendar review is a secondary control inside one thought, never another numbered decision.
  const button=choice instanceof HTMLButtonElement?choice:choice?.querySelector<HTMLButtonElement>('.clock-main>button,.scene-decision-main>button')??choice?.querySelector<HTMLButtonElement>(':scope>button'),viewport=button?.closest('.book-viewport')??button?.closest('.life-choice-stage')
@@ -140,8 +141,8 @@ export function SceneAttention({p,onOpen,onStoryScene}:{p:GamePanelProps;onOpen:
 }
 
 /** Short life decisions belong on the stage; only the reading surfaces paginate. */
-function SceneChoiceSurface({direct,video=false,children,...book}:ComponentProps<typeof ScreenBook>&{direct:boolean;video?:boolean}){
- return direct?<div className={video?'video-first-attempt-stage':'life-choice-stage'} role="group" aria-label={video?'现在可以作出的视频选择':'现在可以作出的生活选择'}>{children}</div>:<ScreenBook {...book}>{children}</ScreenBook>
+function SceneChoiceSurface({direct,video=false,work=false,children,...book}:ComponentProps<typeof ScreenBook>&{direct:boolean;video?:boolean;work?:boolean}){
+ return direct?<div className={work?'video-work-stage':video?'video-first-attempt-stage':'life-choice-stage'} role="group" aria-label={video?'现在可以作出的视频选择':'现在可以作出的生活选择'}>{children}</div>:<ScreenBook {...book}>{children}</ScreenBook>
 }
 
 export function NarrativeScene(p:Props){
@@ -158,6 +159,7 @@ export function NarrativeScene(p:Props){
  const videoFocus=p.screen==='video'?openingFocusFor(p,'video',{accountId:p.accountId,...(p.videoTarget?{videoTarget:p.videoTarget}:{})}):null
  const videoThread=videoFocus?playerThread(p,videoFocus):null
  const videoAttempt=videoThread?.stage==='video-channel'&&videoThread.focus.kind==='video'&&['entry','current'].includes(videoThread.focusScope)&&!videoThread.responsibilityOverrideNeeded&&!videoThread.legacyFallbackRequired?videoFirstAttemptReading(p,videoThread.focus):null
+ const videoWork=videoThread!==null&&videoWorkStage(p,videoThread)
  const rawVideoProgress=!closing&&p.screen==='video'&&w.pause===null&&!w.progression.requiresDelivery?videoSceneProgress(f.video,view.date,p.videoTarget??null):null
  const videoProgress=rawVideoProgress&&videoThread?.focusStatus==='invalid'?{...rawVideoProgress,title:videoThread.title,line:videoThread.line,command:undefined,wait:undefined,invalidReason:videoThread.invalidReason}:rawVideoProgress&&videoAttempt?{...rawVideoProgress,title:videoAttempt.title,line:videoAttempt.line}:rawVideoProgress
  const courseIdentityReason=p.screen==='course'&&p.courseTarget!==undefined?courseSceneContextReason(p,p.courseTarget):null
@@ -229,7 +231,7 @@ export function NarrativeScene(p:Props){
   {lifeTimeReceipt&&lifeMode!=='person'?<aside className="life-time-echo life-personal-echo" aria-label="刚才发生的回响"><p className="scene-overline">刚才的回响</p>{lifeTimeReceipt}</aside>:null}
   {marketProgress?<MarketRecordSwitch p={p} progress={marketProgress} onSelect={id=>setMarketSelection({context:marketContext,id})}/>:null}
   {deepseekProgress?<DeepseekRecordSwitch p={p} progress={deepseekProgress} onSelect={id=>setDeepseekSelection({context:deepseekContext,id})}/>:null}
-  <SceneChoiceSurface direct={p.screen==='life'&&!closing||videoAttempt!==null} video={videoAttempt!==null} choiceNavigation key={p.screen==='video'||courseContinuity?view.runId+':'+p.screen+':'+view.phase:p.screen+':'+view.phase+':'+view.date+':'+(p.screen==='life'?lifeSelection:relayProgress?.periodId??marketProgress?.entityId??deepseekProgress?.entityId??'')+':'+bookContext} label="眼前的选择" className="scene-story-book">
+  <SceneChoiceSurface direct={p.screen==='life'&&!closing||videoAttempt!==null||videoWork} video={videoAttempt!==null||videoWork} work={videoWork} choiceNavigation key={p.screen==='video'||courseContinuity?view.runId+':'+p.screen+':'+view.phase:p.screen+':'+view.phase+':'+view.date+':'+(p.screen==='life'?lifeSelection:relayProgress?.periodId??marketProgress?.entityId??deepseekProgress?.entityId??'')+':'+bookContext} label="眼前的选择" className="scene-story-book">
   {p.screen==='quarter'&&w.quarter==='2020-Q1'&&first.result.paymentFen>0?<aside className="scene-earned"><span>这笔小单，客户已经付了款。</span><strong>{moneyText(first.result.paymentFen)}</strong><p>实际制作成本{moneyText(first.result.directCostFen)} · 本单净额{moneyText(first.result.netOrderFen)}</p><small>工资和浮盈没有算进这笔净额。</small></aside>:null}
   {storyProgress?<RiskLetter key={storyProgress.incident.id} p={p} incident={storyProgress.incident} count={f.story.incidents.length} index={f.story.incidents.findIndex(c=>c.id===storyProgress.incident.id)} onNext={()=>{const index=f.story.incidents.findIndex(c=>c.id===storyProgress.incident.id);const id=f.story.incidents[(index+1)%f.story.incidents.length]!.id;if(p.onStoryIncident)p.onStoryIncident(id);else setSelectedLetter({source:p.storyIncidentId??null,id})}}/>:null}
   {relayProgress?.periodId&&!relayProgress.invalidReason?<RelayServiceLetter p={relayProps} progress={relayProgress} onFullRecord={()=>openRelay()} onNext={nextRelayPeriod} />:null}

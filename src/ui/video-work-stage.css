@@ -1,0 +1,30 @@
+/* The selected sample stays in the street scene; reading does not advance it. */
+.cinema-app .narrative-video .video-work-stage{display:flex;align-items:flex-start;flex:1;min-height:0;width:100%}
+.cinema-app .narrative-video .video-work-stage>.scene-choices{display:block;width:100%;margin:0}
+.cinema-app .narrative-video .video-work-stage .video-encounter.scene-action{display:grid;grid-template-columns:minmax(0,1fr) 240px;align-items:start;gap:32px;margin:0;padding:0;border:0;background:none;min-height:0}
+.cinema-app .narrative-video .video-work-stage .video-encounter-thought{display:flex;flex-direction:column;align-items:stretch;gap:18px;min-width:0}
+.cinema-app .narrative-video .video-work-stage .scene-choice-line{font:15px/1.9 var(--serif);color:#d5ddc8;max-width:64ch;margin:0}
+.cinema-app .narrative-video .video-work-stage .scene-decision-main{margin:0;max-width:640px}
+.cinema-app .narrative-video .video-work-stage .scene-decision-main>button{width:100%;padding:13px 18px;font:19px/1.7 var(--serif)}
+.cinema-app .narrative-video .video-work-stage .scene-decision-main>button>span>small{font:14px/1.8 var(--serif);color:inherit}
+.cinema-app .narrative-video .video-work-stage .moment-wait{margin:0;max-width:640px}
+.cinema-app .narrative-video .video-work-stage .clock-advance-room{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.cinema-app .narrative-video .video-work-stage .clock-main>button{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:14px 18px;font:18px/1.7 var(--serif);text-align:left}
+.cinema-app .narrative-video .video-work-stage .clock-main>button>small{flex-basis:100%;font:14px/1.8 var(--serif);color:inherit;margin:0}
+.cinema-app .narrative-video .video-work-stage .clock-review>button{padding:4px 0;font:14px/1.8 var(--serif);color:#d5c08c;background:none;border:0;border-bottom:1px solid #bca97577}
+.cinema-app .narrative-video .video-work-stage .video-encounter-paper{align-self:start}
+.cinema-app .moment-decision>button.video-work-more{display:block;width:fit-content;padding:9px 0;margin-top:10px;border:0;border-bottom:1px solid #bca97588;border-radius:0;background:none;box-shadow:none;color:#e3cf9f;text-align:left;font:16px/1.8 var(--serif);transform:none}
+.cinema-app .moment-decision>button.video-work-more:is(:hover,:focus-visible):not(:disabled){color:#ffe4a3;border-bottom-color:#e6ca8b;background:#b69a5317;transform:none}
+.cinema-app .moment-decision>button.video-work-more:disabled{border-bottom-style:dashed;color:#bbc4b2}
+.cinema-app .narrative-video .video-work-stage :is(.scene-decision-main>button,.clock-main>button,.clock-review>button):focus-visible{outline:2px solid #eed39a;outline-offset:4px}
+/* Publishing is a choice, then the full original feedback and qualification terms. */
+.cinema-app .video-publish-preparation .video-publish-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));list-style:none;margin:0;padding:0;border-block:1px solid var(--sample-rule);color:var(--sample-muted)}
+.cinema-app .video-publish-preparation .video-publish-steps>li{padding:10px 14px;border-bottom:2px solid transparent;font:16px/1.8 var(--serif)}
+.cinema-app .video-publish-preparation .video-publish-steps>li[aria-current=step]{color:var(--sample-gold);border-bottom-color:var(--sample-gold);background:#a58d4b24}
+.cinema-app .video-publish-preparation .video-paper-check{color:var(--sample-ink);font:16px/1.8 var(--serif);margin:8px 0;gap:12px}
+.cinema-app .video-publish-preparation .video-paper-check>input{flex:none;accent-color:#e0c588}
+.cinema-app .video-publish-preparation .video-paper-terms{display:flex;flex-direction:column;gap:12px;border:0;padding:8px 0}
+.cinema-app .video-publish-preparation .video-paper-terms>p{margin:0;color:var(--sample-ink);font:16px/1.85 var(--serif)}
+.cinema-app .video-publish-preparation .video-paper-terms>p.warning-box{padding:9px 13px;background:#9d593018;border:0;border-left:2px solid #cfa278;color:#f1c7ac}
+.cinema-app .narrative-video .video-work-stage .video-encounter .opening-object,
+.cinema-app .narrative-video .video-work-stage .video-encounter .opening-object:is(:hover,:focus-visible,:active,:disabled){background:transparent;color:#eee3c8;box-shadow:none;transform:none;opacity:1}

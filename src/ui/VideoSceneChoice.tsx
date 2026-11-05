@@ -15,9 +15,10 @@ import './video-play.css'
 import {videoFirstAccount} from './video-first-entry.ts'
 import {VideoFirstAccountForm} from './VideoFirstAccountForm.tsx'
 import './video-sample-preparation.css'
+import {videoPublicationPreparation} from './video-work-stage.ts'
 
 export type VideoChoiceAction='channel'|'marketing'|'sample'|'commission'|'rework'|'price'|'scope'|'publish'|'next'|'select-account'
-type Page='channel'|'create'|'purpose'|'clients'|'product'|'mode'|'material'|'schedule'|'record'|'response'|'publish'|'objects'|'result'
+type Page='channel'|'create'|'purpose'|'clients'|'product'|'mode'|'material'|'schedule'|'record'|'response'|'publish'|'publish-terms'|'objects'|'result'
 export type VideoChoiceCommand={kind:string;payload:Record<string,unknown>;label:string;confirm:boolean}
 type Props={p:GamePanelProps;target?:VideoSceneTarget;onTargetChange?:(target:VideoSceneTarget)=>void;blockedReason?:string|null;onInspect?:(target?:VideoSceneTarget)=>void;onToday?:()=>void;onLife?:()=>void;children?:(open:(action?:VideoChoiceAction)=>void)=>ReactNode}
 const emptyDraft=(channelId=''):VideoSceneDraft=>({channelId,clientId:'',cohortId:'',modeId:'',materialId:'',resource:'',startAt:'',productId:'',name:'',segment:'',monetization:'',label:false})
@@ -141,6 +142,7 @@ export function VideoSceneChoice({p,target,onTargetChange,blockedReason=null,onI
  const contract=v?.contracts.find(c=>c.channelId===currentTarget?.channelId&&(currentTarget?.contractId?c.id===currentTarget.contractId:directWork?.contractId===c.id))
  const work=directWork??v?.works.find(w=>w.channelId===currentTarget?.channelId&&w.id===contract?.workId)
  const contextReason=videoSceneContextReason(p,currentTarget)
+  const publishPreparation=(page==='publish'||page==='publish-terms')&&action==='publish'&&videoPublicationPreparation(p,currentTarget)
   const sampleSteps=['product','mode','material','schedule'] as const
   const sampleStep=sampleSteps.findIndex(step=>step===page)
   const samplePreparation=action==='sample'&&p.view.phase==='playing'&&sampleStep>=0&&!contextReason&&!progress?.invalidReason&&!!channel&&currentTarget?.channelId===channel.id&&!currentTarget.workId&&!currentTarget.contractId&&!currentTarget.marketingId&&v?.modes.length===3&&['manual','image_assisted','generative_video'].every(id=>v.modes.filter(mode=>mode.id===id).length===1)
@@ -173,26 +175,28 @@ export function VideoSceneChoice({p,target,onTargetChange,blockedReason=null,onI
  const channelNameField=<label className="field">想给账号起什么名字<input value={draft.name} maxLength={60} onChange={e=>edit({name:e.target.value})}/></label>
  const channelAudienceField=<fieldset className="video-paper-choices"><legend>这次想为谁制作</legend>{segments.map(([id,label])=><label key={id}><input type="radio" name={name+'segment'} checked={draft.segment===id} onChange={()=>edit({segment:id})}/><span>{label}</span></label>)}</fieldset>
  const channelTerms=<p>个人经营沿用原账户。首次启用需至少¥500可花资金，这不是额外开户费。继续前会核对你的资金与资格。</p>
- const title=page==='result'?'这一份之后，怎样继续？':page==='create'?'这次，想为谁制作？':page==='channel'?'先选择一个内容账号':page==='clients'?'这次，回应哪一份询价？':page==='product'?'想先做怎样一份作品？':page==='mode'?'用什么方式认真完成？':page==='material'?'这次素材，从哪里来？':page==='schedule'?'给这一份，留出真正的日子':page==='response'?'先看清修改，再决定怎么回应':page==='publish'?'这份作品，怎样让人看见？':page==='objects'?'翻回具体的那一份记录':page==='record'?'这份作品与约定':'这次，想把哪件事做起来？'
+ const title=page==='result'?'这一份之后，怎样继续？':page==='create'?'这次，想为谁制作？':page==='channel'?'先选择一个内容账号':page==='clients'?'这次，回应哪一份询价？':page==='product'?'想先做怎样一份作品？':page==='mode'?'用什么方式认真完成？':page==='material'?'这次素材，从哪里来？':page==='schedule'?'给这一份，留出真正的日子':page==='response'?'先看清修改，再决定怎么回应':page==='publish-terms'?'这一份发布，会得到什么反馈？':page==='publish'?'这份作品，怎样让人看见？':page==='objects'?'翻回具体的那一份记录':page==='record'?'这份作品与约定':'这次，想把哪件事做起来？'
  let primary:ReactNode=null
  if(page==='create')primary=command&&action==='channel'?submit(command):<button type="button" disabled>先填写名称与选择受众</button>
   else if(page==='channel')primary=<button type="button" className="primary" disabled={!pickedChannel||bookmarkLocked} onClick={()=>{if(!pickedChannel||!chooseTarget({channelId:pickedChannel.id}))return;setChannelPick(null);setPage('purpose')}}>明确选择这个账号</button>
  else if(page==='objects')primary=<button type="button" className="primary" disabled={!recordPick||bookmarkLocked} onClick={()=>{if(!recordPick||!chooseTarget(recordPick))return;setPage('record')}}>翻看这一份记录</button>
  else if(page==='product'||page==='clients'||page==='mode'||page==='material')primary=<button type="button" className="primary" disabled={page==='product'?!draft.productId:page==='clients'?!validClient:page==='mode'?!draft.modeId:!draft.materialId} onClick={next}>继续核对{page==='product'||page==='clients'?'制作方式':page==='mode'?'素材来源':'资源与日历'} →</button>
- else if(page==='schedule'||page==='publish')primary=command?submit(command):<button type="button" disabled>先明确选择本页条件</button>
+ else if(publishPreparation&&page==='publish')primary=<button type="button" className="primary" disabled={!['none','ads','affiliate'].includes(draft.monetization)} onClick={()=>setPage('publish-terms')}>核对本次反馈与资格 →</button>
+ else if(page==='schedule'||page==='publish'||page==='publish-terms')primary=command?submit(command):<button type="button" disabled>先明确选择本页条件</button>
  else if(page==='record'&&!lock&&progress?.command)primary=submit({...progress.command,label:progress.choice.label})
  else if(page==='record'&&!lock&&safeWait&&wait)primary=<ClockAdvance p={{...p,request}} date={safeWait} label={(safeWait===wait.date?wait.label:'先到日历上的下一处反馈')+' · '+safeWait}/>
  const footer=<div className="video-choice-footer">
   {primary}
   {(page==='record'||page==='response')&&contract&&!['delivered','settled','cancelled'].includes(contract.status)?submit({kind:'ExitVideoCommission',payload:{contractId:contract.id},label:'核对退出这笔商单与退款',confirm:true}):null}
   {page==='record'&&work&&!contract&&!work.abandonedAt&&!v?.publications.some(pub=>pub.workId===work.id)?submit({kind:'AbandonVideoWork',payload:{workId:work.id},label:'核对放弃样片，保留已耗成本',confirm:true}):null}
-  {samplePreparation&&sampleStep>0?<button type="button" onClick={()=>setPage(sampleSteps[sampleStep-1]!)}>← 调整{sampleStep===1?'作品方向':sampleStep===2?'制作方式':'素材来源'}</button>:firstCreate?<button type="button" onClick={()=>setOpen(false)}>先合上，保留草稿</button>:page==='schedule'?<button type="button" onClick={()=>setPage(action==='sample'||action==='commission'?'material':action==='price'||action==='scope'?'response':'purpose')}>返回调整</button>:page!=='purpose'&&page!=='record'&&page!=='channel'?<button type="button" onClick={()=>setPage(page==='create'?'channel':'purpose')}>返回选择</button>:<button type="button" onClick={()=>setOpen(false)}>先合上，保留草稿</button>}
+  {publishPreparation&&page==='publish-terms'?<button type="button" onClick={()=>setPage('publish')}>← 调整发布方式</button>:samplePreparation&&sampleStep>0?<button type="button" onClick={()=>setPage(sampleSteps[sampleStep-1]!)}>← 调整{sampleStep===1?'作品方向':sampleStep===2?'制作方式':'素材来源'}</button>:firstCreate?<button type="button" onClick={()=>setOpen(false)}>先合上，保留草稿</button>:page==='schedule'?<button type="button" onClick={()=>setPage(action==='sample'||action==='commission'?'material':action==='price'||action==='scope'?'response':'purpose')}>返回调整</button>:page!=='purpose'&&page!=='record'&&page!=='channel'?<button type="button" onClick={()=>setPage(page==='create'?'channel':'purpose')}>返回选择</button>:<button type="button" onClick={()=>setOpen(false)}>先合上，保留草稿</button>}
   {onInspect?<button type="button" className="video-record-link" onClick={inspect}>翻看作品与客户的完整记录 ↗</button>:null}
  </div>
- return <>{children?children(activate):<button type="button" className="video-scene-open" onClick={()=>activate()}>翻开视频制作与客户约定 ↗</button>}{open?<Dialog title={title} className={'opening-paper video-choice-paper'+(firstCreate?' video-first-account-dialog':samplePreparation?' video-sample-preparation':'')} layout={firstCreate||samplePreparation?'direct':'book'} onClose={()=>setOpen(false)} footer={footer}>
+ return <>{children?children(activate):<button type="button" className="video-scene-open" onClick={()=>activate()}>翻开视频制作与客户约定 ↗</button>}{open?<Dialog title={title} className={'opening-paper video-choice-paper'+(firstCreate?' video-first-account-dialog':samplePreparation||publishPreparation?' video-sample-preparation':'')+(publishPreparation?' video-publish-preparation':'')} layout={firstCreate||samplePreparation||publishPreparation?'direct':'book'} onClose={()=>setOpen(false)} footer={footer}>
   <p className="video-paper-kicker">{p.view.date} · {firstCreate?'第一份作品':channel?.name??'尚未选择账号'}</p>
   {samplePreparation?<ol className="video-sample-steps" aria-label="样片制作准备，共四步">{['作品方向','制作方式','素材来源','资源与日历'].map((label,index)=><li key={label} aria-current={index===sampleStep?'step':undefined} data-past={index<sampleStep?'true':undefined}><span aria-hidden="true">{index+1}</span>{label}</li>)}</ol>:null}
-   {firstCreate||samplePreparation?null:<p className="video-paper-hint">填写、翻页和合上都不接单；投入仍需最后确认。</p>}
+   {publishPreparation?<ol className="video-publish-steps" aria-label="发布准备，共两步"><li aria-current={page==='publish'?'step':undefined}>1 选择发布方式</li><li aria-current={page==='publish-terms'?'step':undefined}>2 核对反馈与资格</li></ol>:null}
+   {firstCreate||samplePreparation||publishPreparation?null:<p className="video-paper-hint">填写、翻页和合上都不接单；投入仍需最后确认。</p>}
   {(action==='commission'||action==='sample')&&['mode','material','schedule'].includes(page)?<p className="video-paper-kicker">{action==='commission'?(validClient?'待确认 · 客户询价 '+((channel?.leads.findIndex(lead=>lead.personId===draft.clientId&&lead.cohortId===draft.cohortId)??-1)+1):'请重新选择询价客户'):'待确认样片 · '+(v?.catalog.products.find(product=>product.id===draft.productId)?.label??'尚未选择方向')}{draft.modeId?' · '+(v?.modes.find(mode=>mode.id===draft.modeId)?.label??'制作方式待核对'):''}{draft.materialId?' · '+(draft.materialId==='licensed'?'本单授权素材':'自行制作并保留来源'):''}</p>:null}
   {lock?<p role="status" className="video-paper-warning">{lock}</p>:null}
   {contextReason&&contextReason!==lock?<p className="video-paper-warning">{contextReason}</p>:null}
@@ -219,7 +223,7 @@ export function VideoSceneChoice({p,target,onTargetChange,blockedReason=null,onI
    </div>
    <p className="video-schedule-account">{channel?.accountId==='personal'?'个人账户':p.features.workbench.routes.find(route=>route.accountId===channel?.accountId)?.name??'经营账户'}承担这次费用；继续前核对资源冲突、共享四点、资格与完成日期。</p>
   </>:null}
-  {page==='publish'?<><fieldset className="video-paper-choices"><legend>明确本次发布方式</legend>{[['none','积累受众'],['ads','平台分成（需本次已有资格）'],['affiliate','带货（需本次已有资格）']].map(([id,label])=><label key={id}><input type="radio" name={name+'publish'} checked={draft.monetization===id} onChange={()=>edit({monetization:id!})}/><span>{label}</span></label>)}</fieldset><label className="video-paper-check"><input type="checkbox" checked={draft.label} onChange={e=>edit({label:e.target.checked})}/>为AI生成内容附合成标识；2025-09-01起按要求核对。</label><VideoPublicationTerms video={v} date={p.view.date} workId={work?.id??''} monetization={draft.monetization} className="video-paper-terms"/></>:null}
+  {page==='publish'||page==='publish-terms'?<>{!publishPreparation||page==='publish'?<><fieldset className="video-paper-choices"><legend>明确本次发布方式</legend>{[['none','积累受众'],['ads','平台分成（需本次已有资格）'],['affiliate','带货（需本次已有资格）']].map(([id,label])=><label key={id}><input type="radio" name={name+'publish'} checked={draft.monetization===id} onChange={()=>edit({monetization:id!})}/><span>{label}</span></label>)}</fieldset><label className="video-paper-check"><input type="checkbox" checked={draft.label} onChange={e=>edit({label:e.target.checked})}/>为AI生成内容附合成标识；2025-09-01起按要求核对。</label></>:null}{!publishPreparation||page==='publish-terms'?<VideoPublicationTerms video={v} date={p.view.date} workId={work?.id??''} monetization={draft.monetization} className="video-paper-terms"/>:null}</>:null}
   {page==='record'&&currentTarget?<><VideoSceneRecord p={p} target={currentTarget}/><div className="video-paper-directions">
    {(work?.defectKnown===true&&work.corrections.length===0||contract?.status==='revision')?<button type="button" onClick={()=>selectAction('rework','schedule')}>安排有代价的校正或返工<small>¥300 · 1点 · 7日，再核对新的版本。</small></button>:null}
    {contract?.status==='revision'?<button type="button" onClick={()=>setPage('response')}>先核对范围、报价与退出<small>先看清可谈的条件，再决定是否投入时间。</small></button>:null}
