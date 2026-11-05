@@ -1,0 +1,22 @@
+[
+  {
+    "old": "import {VideoFirstAccountForm} from './VideoFirstAccountForm.tsx'",
+    "new": "import {VideoFirstAccountForm} from './VideoFirstAccountForm.tsx'\nimport './video-sample-preparation.css'"
+  },
+  {
+    "old": "const contextReason=videoSceneContextReason(p,currentTarget)",
+    "new": "const contextReason=videoSceneContextReason(p,currentTarget)\n  const sampleSteps=['product','mode','material','schedule'] as const\n  const sampleStep=sampleSteps.findIndex(step=>step===page)\n  const samplePreparation=action==='sample'&&p.view.phase==='playing'&&sampleStep>=0&&!contextReason&&!progress?.invalidReason&&!!channel&&currentTarget?.channelId===channel.id&&!currentTarget.workId&&!currentTarget.contractId&&!currentTarget.marketingId&&v?.modes.length===3&&['manual','image_assisted','generative_video'].every(id=>v.modes.filter(mode=>mode.id===id).length===1)"
+  },
+  {
+    "old": "{firstCreate?<button type=\"button\" onClick={()=>setOpen(false)}>先合上，保留草稿</button>:page==='schedule'?",
+    "new": "{samplePreparation&&sampleStep>0?<button type=\"button\" onClick={()=>setPage(sampleSteps[sampleStep-1]!)}>← 调整{sampleStep===1?'作品方向':sampleStep===2?'制作方式':'素材来源'}</button>:firstCreate?<button type=\"button\" onClick={()=>setOpen(false)}>先合上，保留草稿</button>:page==='schedule'?"
+  },
+  {
+    "old": "className={'opening-paper video-choice-paper'+(firstCreate?' video-first-account-dialog':'')} layout={firstCreate?'direct':'book'}",
+    "new": "className={'opening-paper video-choice-paper'+(firstCreate?' video-first-account-dialog':samplePreparation?' video-sample-preparation':'')} layout={firstCreate||samplePreparation?'direct':'book'}"
+  },
+  {
+    "old": "{firstCreate?null:<p className=\"video-paper-hint\">填写、翻页和合上都不接单；投入仍需最后确认。</p>}",
+    "new": "{samplePreparation?<ol className=\"video-sample-steps\" aria-label=\"样片制作准备，共四步\">{['作品方向','制作方式','素材来源','资源与日历'].map((label,index)=><li key={label} aria-current={index===sampleStep?'step':undefined} data-past={index<sampleStep?'true':undefined}><span aria-hidden=\"true\">{index+1}</span>{label}</li>)}</ol>:null}\n   {firstCreate||samplePreparation?null:<p className=\"video-paper-hint\">填写、翻页和合上都不接单；投入仍需最后确认。</p>}"
+  }
+]

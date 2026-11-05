@@ -14,6 +14,7 @@ import {moneyText,playableThrough,lifecycleText,reasonText} from './game-text.ts
 import './video-play.css'
 import {videoFirstAccount} from './video-first-entry.ts'
 import {VideoFirstAccountForm} from './VideoFirstAccountForm.tsx'
+import './video-sample-preparation.css'
 
 export type VideoChoiceAction='channel'|'marketing'|'sample'|'commission'|'rework'|'price'|'scope'|'publish'|'next'|'select-account'
 type Page='channel'|'create'|'purpose'|'clients'|'product'|'mode'|'material'|'schedule'|'record'|'response'|'publish'|'objects'|'result'
@@ -140,6 +141,9 @@ export function VideoSceneChoice({p,target,onTargetChange,blockedReason=null,onI
  const contract=v?.contracts.find(c=>c.channelId===currentTarget?.channelId&&(currentTarget?.contractId?c.id===currentTarget.contractId:directWork?.contractId===c.id))
  const work=directWork??v?.works.find(w=>w.channelId===currentTarget?.channelId&&w.id===contract?.workId)
  const contextReason=videoSceneContextReason(p,currentTarget)
+  const sampleSteps=['product','mode','material','schedule'] as const
+  const sampleStep=sampleSteps.findIndex(step=>step===page)
+  const samplePreparation=action==='sample'&&p.view.phase==='playing'&&sampleStep>=0&&!contextReason&&!progress?.invalidReason&&!!channel&&currentTarget?.channelId===channel.id&&!currentTarget.workId&&!currentTarget.contractId&&!currentTarget.marketingId&&v?.modes.length===3&&['manual','image_assisted','generative_video'].every(id=>v.modes.filter(mode=>mode.id===id).length===1)
  const lock=videoSceneSubmissionLock(p,blockedReason)??contextReason??progress?.invalidReason??null
  const bookmarkLocked=videoSceneBookmarkLock(p,blockedReason)!==null
  useEffect(()=>{if(blockedReason||p.view.hasCandidate||p.view.saveStatus==='conflict'||open&&p.view.revision!==openedRevision.current&&p.view.saveStatus==='saved')setOpen(false)},[blockedReason,p.view.hasCandidate,p.view.saveStatus,p.view.revision,open])
@@ -182,12 +186,13 @@ export function VideoSceneChoice({p,target,onTargetChange,blockedReason=null,onI
   {primary}
   {(page==='record'||page==='response')&&contract&&!['delivered','settled','cancelled'].includes(contract.status)?submit({kind:'ExitVideoCommission',payload:{contractId:contract.id},label:'核对退出这笔商单与退款',confirm:true}):null}
   {page==='record'&&work&&!contract&&!work.abandonedAt&&!v?.publications.some(pub=>pub.workId===work.id)?submit({kind:'AbandonVideoWork',payload:{workId:work.id},label:'核对放弃样片，保留已耗成本',confirm:true}):null}
-  {firstCreate?<button type="button" onClick={()=>setOpen(false)}>先合上，保留草稿</button>:page==='schedule'?<button type="button" onClick={()=>setPage(action==='sample'||action==='commission'?'material':action==='price'||action==='scope'?'response':'purpose')}>返回调整</button>:page!=='purpose'&&page!=='record'&&page!=='channel'?<button type="button" onClick={()=>setPage(page==='create'?'channel':'purpose')}>返回选择</button>:<button type="button" onClick={()=>setOpen(false)}>先合上，保留草稿</button>}
+  {samplePreparation&&sampleStep>0?<button type="button" onClick={()=>setPage(sampleSteps[sampleStep-1]!)}>← 调整{sampleStep===1?'作品方向':sampleStep===2?'制作方式':'素材来源'}</button>:firstCreate?<button type="button" onClick={()=>setOpen(false)}>先合上，保留草稿</button>:page==='schedule'?<button type="button" onClick={()=>setPage(action==='sample'||action==='commission'?'material':action==='price'||action==='scope'?'response':'purpose')}>返回调整</button>:page!=='purpose'&&page!=='record'&&page!=='channel'?<button type="button" onClick={()=>setPage(page==='create'?'channel':'purpose')}>返回选择</button>:<button type="button" onClick={()=>setOpen(false)}>先合上，保留草稿</button>}
   {onInspect?<button type="button" className="video-record-link" onClick={inspect}>翻看作品与客户的完整记录 ↗</button>:null}
  </div>
- return <>{children?children(activate):<button type="button" className="video-scene-open" onClick={()=>activate()}>翻开视频制作与客户约定 ↗</button>}{open?<Dialog title={title} className={'opening-paper video-choice-paper'+(firstCreate?' video-first-account-dialog':'')} layout={firstCreate?'direct':'book'} onClose={()=>setOpen(false)} footer={footer}>
+ return <>{children?children(activate):<button type="button" className="video-scene-open" onClick={()=>activate()}>翻开视频制作与客户约定 ↗</button>}{open?<Dialog title={title} className={'opening-paper video-choice-paper'+(firstCreate?' video-first-account-dialog':samplePreparation?' video-sample-preparation':'')} layout={firstCreate||samplePreparation?'direct':'book'} onClose={()=>setOpen(false)} footer={footer}>
   <p className="video-paper-kicker">{p.view.date} · {firstCreate?'第一份作品':channel?.name??'尚未选择账号'}</p>
-  {firstCreate?null:<p className="video-paper-hint">填写、翻页和合上都不接单；投入仍需最后确认。</p>}
+  {samplePreparation?<ol className="video-sample-steps" aria-label="样片制作准备，共四步">{['作品方向','制作方式','素材来源','资源与日历'].map((label,index)=><li key={label} aria-current={index===sampleStep?'step':undefined} data-past={index<sampleStep?'true':undefined}><span aria-hidden="true">{index+1}</span>{label}</li>)}</ol>:null}
+   {firstCreate||samplePreparation?null:<p className="video-paper-hint">填写、翻页和合上都不接单；投入仍需最后确认。</p>}
   {(action==='commission'||action==='sample')&&['mode','material','schedule'].includes(page)?<p className="video-paper-kicker">{action==='commission'?(validClient?'待确认 · 客户询价 '+((channel?.leads.findIndex(lead=>lead.personId===draft.clientId&&lead.cohortId===draft.cohortId)??-1)+1):'请重新选择询价客户'):'待确认样片 · '+(v?.catalog.products.find(product=>product.id===draft.productId)?.label??'尚未选择方向')}{draft.modeId?' · '+(v?.modes.find(mode=>mode.id===draft.modeId)?.label??'制作方式待核对'):''}{draft.materialId?' · '+(draft.materialId==='licensed'?'本单授权素材':'自行制作并保留来源'):''}</p>:null}
   {lock?<p role="status" className="video-paper-warning">{lock}</p>:null}
   {contextReason&&contextReason!==lock?<p className="video-paper-warning">{contextReason}</p>:null}
