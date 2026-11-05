@@ -29,12 +29,12 @@ import {personTimeReading} from './person-time-reading.ts'
 import {lifeSceneProgress} from './life-scene-progress.ts'
 import {TodayIdleAction,todayIdleReading,type TodayIdlePrimary} from './TodayIdleAction.tsx'
 
-type Props={p:GamePanelProps;today:TodayThreadView;headingRef:Ref<HTMLHeadingElement>;feedback?:ReactNode;onFocus:(focus:OpeningFocus)=>void;onPrepare:(focus:OpeningFocus)=>void;onResume:()=>void;onExplore:()=>void;onRecollection:()=>void;onNavigate:NavigateScene}
+type Props={p:GamePanelProps;today:TodayThreadView;initialChoice?:'daily'|null|undefined;headingRef:Ref<HTMLHeadingElement>;feedback?:ReactNode;onFocus:(focus:OpeningFocus)=>void;onPrepare:(focus:OpeningFocus)=>void;onResume:()=>void;onExplore:()=>void;onRecollection:()=>void;onNavigate:NavigateScene}
 type Page='directions'|'daily'|'life'|'market'|'ongoing'|'holdings'
 
 /** Today is a reading/choice perspective. Only original command controls can make a new promise. */
-export function TodayScene({p,today,headingRef,feedback,onFocus,onPrepare,onResume,onExplore,onRecollection,onNavigate}:Props){
- const [page,setPage]=useState<Page|null>(null)
+export function TodayScene({p,today,initialChoice,headingRef,feedback,onFocus,onPrepare,onResume,onExplore,onRecollection,onNavigate}:Props){
+ const [page,setPage]=useState<Page|null>(initialChoice==='daily'?'daily':null)
  const [studyChoice,setStudyChoice]=useState<{runId:string;definitionId:string}|null>(null)
  const originalStudy=today.primary.thread.focus.kind==='market'&&today.primary.thread.focus.entityKind==='research'?p.features.market.researches.find(row=>row.id===today.primary.thread.focus.entityId)?.definitionId:undefined
  const studyId=studyChoice?.runId===p.view.runId?studyChoice.definitionId:originalStudy??'market-overview'

@@ -155,12 +155,14 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const [localQuarter,setLocalQuarter]=useState<string|null>(null)
  const [focusGroup,setFocusGroup]=useState<SeasonFocusGroup>('continue')
  const [localTodayAt,setLocalTodayAt]=useState<DayPerspective|null>(null)
+ const [todayChoiceAt,setTodayChoiceAt]=useState<DayPerspective|null>(null)
  const [recordOpen,setRecordOpen]=useState(false)
  const [workRecordAt,setWorkRecordAt]=useState<string|null>(null)
  const currentWorkRecordKey=useRef<string|null>(null)
  const [workTimeAt,setWorkTimeAt]=useState<string|null>(null)
  const currentWorkTimeKey=useRef<string|null>(null)
  useEffect(()=>{if(localTodayAt&&!dayPerspectiveCurrent(p.view,localTodayAt))setLocalTodayAt(null)},[localTodayAt,p.view])
+ useEffect(()=>{if(todayChoiceAt&&!dayPerspectiveCurrent(p.view,todayChoiceAt))setTodayChoiceAt(null)},[todayChoiceAt,p.view])
  const candidates=seasonFocusChoices(p),picked=candidates.find(candidate=>candidate.id===draftId)
  const pickedDirection=picked?seasonChoiceDirection(picked):null
  const groupTitle=seasonFocusGroups.find(group=>group.id===focusGroup)!.label,groupCandidates=candidates.filter(candidate=>seasonFocusGroupFor(candidate)===focusGroup)
@@ -188,8 +190,8 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const meaning=!interrupted&&!requiresChoice&&!legacy?sceneMeaning({...p,accountId:thread.focus.accountId},thread):null
  const openDirections=()=>{setDraftId(null);setFocusGroup(initialSeasonFocusGroup(candidates));setDirections(true)}
  const openRecollection=()=>{setObjectOpen(false);if(onRecollection)onRecollection();else setRecollectionOpen(true)}
- const openToday=()=>{if(!day||focusLocked||p.controller.snapshot.view!==p.view)return;setObjectOpen(false);setChoicePanel(null);setDirections(false);setRecollectionOpen(false);if(thread.responsibilityOverrideNeeded){setLocalTodayAt(null);onReturnFocus?.();return}if(onToday)onToday();else setLocalTodayAt({runId:p.view.runId,revision:p.view.revision})}
- const returnToFocus=()=>{setLocalTodayAt(null);onReturnFocus?.()}
+ const openToday=(choice:'daily'|null=null)=>{if(!day||focusLocked||p.controller.snapshot.view!==p.view)return;setObjectOpen(false);setChoicePanel(null);setDirections(false);setRecollectionOpen(false);if(thread.responsibilityOverrideNeeded){setTodayChoiceAt(null);setLocalTodayAt(null);onReturnFocus?.();return}setTodayChoiceAt(choice==='daily'?{runId:p.view.runId,revision:p.view.revision}:null);if(onToday)onToday();else setLocalTodayAt({runId:p.view.runId,revision:p.view.revision})}
+ const returnToFocus=()=>{setTodayChoiceAt(null);setLocalTodayAt(null);onReturnFocus?.()}
  const prepareToday=(next:OpeningFocus)=>{if(focusLocked||p.controller.snapshot.view!==p.view||next.runId!==p.view.runId)return;chooseFocus(next);if(!onFocus)setLocalQuarter(w.quarter)}
  const chooseToday=(next:OpeningFocus)=>{prepareToday(next);returnToFocus()}
  const inspectFocus=()=>{setObjectOpen(false);onNavigate(thread.inspect.screen,['video','course','relay'].includes(thread.inspect.screen)?{...thread.inspect.target,openRecord:true}:thread.inspect.target)}
@@ -317,7 +319,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const recordBinding=makeSharedAction(p,requiresChoice?'翻看本季已有记录':personRoom?'这次选择的完整说明':'翻阅这一段的记录与代价',()=>{if(requiresChoice)onNavigate('quarter',{accountId:p.accountId});else if(workReading)openWorkRecord();else setRecordOpen(true)},{allowReadOnly:true})
  const recordLink=(openRelay:(intent?:'record')=>void)=>{
   const binding=relay&&!requiresChoice&&!legacy?makeSharedAction(p,relayTarget===null?'翻看这次开站的条件与投入':relayClosed?'翻原票与回执':'翻看同一份服务的原票与回应',()=>{setObjectOpen(false);openRelay('record')},{allowReadOnly:true}):recordBinding
-  return <><button type="button" className="scene-text-action" disabled={binding.disabled} onClick={binding.activate} aria-label={sceneReadingName(binding.label)+' ↗'}>{sceneReadingLabel(binding.label)} ↗</button>{relayClosed&&feedback==='已从本机存档继续。'?<p className="moment-status" role="status">{feedback}</p>:null}</>
+  return <><button type="button" className="scene-text-action" disabled={binding.disabled} onClick={binding.activate} aria-label={sceneReadingName(binding.label)+' ↗'}>{sceneReadingLabel(binding.label)} ↗</button>{workTodayBinding&&(workTimePrimary||sideOutcome)?<button type="button" className="scene-text-action" disabled={workTodayBinding.disabled} onClick={workTodayBinding.activate}>{workTodayBinding.label} ↗</button>:null}{relayClosed&&feedback==='已从本机存档继续。'?<p className="moment-status" role="status">{feedback}</p>:null}</>
  }
  const entryPaper=attempt?.kind==='free-entry'?'calendar' as const:attempt?.kind==='market-entry'?'market' as const:undefined
  const firstObjectLabel=firstStage?.label??(firstAttempt?({letter:'待答复',planned:'已安排 · 等开工',running:'制作中',delivery:'作品待提交',feedback:'已发送 · 等回信',paid:'实收凭证','non-success':({declined:'已婉拒',skipped:'已略过',expired:'报价已到期',cancelled:'已取消',interrupted:'工作已中断',missed:'错过交付期限'} as Record<string,string>)[thread.stage]??'这次留下的记录'}[firstAttempt.phase]):null)
@@ -353,6 +355,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const marketProgress=marketCopy&&timeNotice?marketOrderWaitBrief(p,thread,timeNotice.props):null
  const researchBrief=researchCopy&&timeNotice?researchRoomBrief(p,thread,timeNotice.props):null
  const personalFacts=personalLife&&timeNotice?personalResultFacts(p,thread,timeNotice.props):null
+ const workTodayBinding=dayActive&&!attempt&&workCopy?makeSharedAction(p,'回到今天，看看其它安排',()=>openToday('daily'),{allowReadOnly:true,disabled:focusLocked}):null
  const roomPersonTime=personRoom&&timeNotice&&thread.focus.kind==='life'?personTimeReading(p,lifeSceneProgress(p.features.life,p.view.date,thread.focus.selection),timeNotice.props,thread.focus.entityId):null
  const paidFirstFacts=firstAttempt&&timeNotice?firstOrderPaidFacts(p,thread,timeNotice.props):null
  const sceneFactsAfterEcho=roomPersonTime?[]:researchCopy?.resultEcho&&researchBrief===researchCopy.resultEcho?[]:paidFirstFacts??(personalFacts?[personalFacts]:sceneFacts)
@@ -362,7 +365,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const quarterPrimary=quarterBinding?{binding:quarterBinding,main:<div className="command moment-decision moment-primary"><button type="button" disabled={quarterBinding.disabled} onClick={quarterBinding.activate}><b aria-hidden="true">01</b><span>{sceneReadingLabel(quarterBinding.label)}</span><i aria-hidden="true">↗</i></button>{quarterBinding.reason?<small className="reason">{quarterBinding.reason}</small>:null}</div>}:null
  const videoChooseIntent:VideoChoiceAction|undefined=thread.stage==='video-quality'?'rework':thread.stage==='video-ready-to-publish'?'publish':undefined
  const dayArt:DayContinuityArt|undefined=freeChoice?{kind:'today',state:'ongoing'}:dayActive&&['work','life','market'].includes(thread.focus.kind)?{kind:thread.focus.kind as 'work'|'life'|'market',state:thread.focusScope==='history'?'history':day?.primary.classification==='result'?'result':thread.focusScope==='carry'?'carry':'ongoing',...(marketCopy?{orderPhase:marketCopy.paperPhase}:{})}:undefined
- if((todayView??dayPerspectiveCurrent(p.view,localTodayAt))&&day&&!thread.responsibilityOverrideNeeded&&!interrupted&&!requiresChoice&&!legacy)return <TodayScene p={p} today={day} headingRef={headingRef} feedback={feedback} onFocus={chooseToday} onPrepare={prepareToday} onResume={returnToFocus} onExplore={onExplore} onRecollection={openRecollection} onNavigate={onNavigate}/>
+ if((todayView??dayPerspectiveCurrent(p.view,localTodayAt))&&day&&!thread.responsibilityOverrideNeeded&&!interrupted&&!requiresChoice&&!legacy)return <TodayScene p={p} today={day} initialChoice={dayPerspectiveCurrent(p.view,todayChoiceAt)?'daily':null} headingRef={headingRef} feedback={feedback} onFocus={chooseToday} onPrepare={prepareToday} onResume={returnToFocus} onExplore={onExplore} onRecollection={openRecollection} onNavigate={onNavigate}/>
  if(thread.focus.kind==='equity'&&!interrupted&&!unknownFocus&&!legacy){
   const equityFocus=thread.focus
   return <EquityMoment p={{...p,accountId:equityFocus.accountId}} focus={equityFocus} focusQuarter={focusQuarter} headingRef={headingRef} feedback={feedback} onFocus={next=>{
@@ -395,6 +398,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
     :!requiresChoice&&!legacy&&thread.focusScope==='history'?action('02',inspectLabel,'只回看，不新增工作、交易或推进日期',workReading?openWorkRecord:inspectFocus)
     :workTimePrimary?dayPrimary?.main
     :sideOutcome?action('02',sideOutcome.next.label,'只查看下一方向，不新增承诺',()=>onNavigate(sideOutcome.next.screen,sideOutcome.next.target))
+    :workTodayBinding?action('02',workTodayBinding.label,'只回到今天比较原工作与生活，不新增承诺',workTodayBinding.activate,workTodayBinding)
     :deferredRelay?<div className="moment-wait moment-continue"><ClockAdvance showReason={showSceneReasons} p={nearProps} date={deferredRelay.date} label={deferredRelay.label+' · '+deferredRelay.date} room/></div>
     :courseReady?action('02','把样课收好，回到今天','保留这份准备与原书签，新的招生仍另行决定',openToday)
     :attempt?.action.kind==='next-choice'?action('02','看看这份经历，还能通向哪些尝试','先看手艺、生活与模拟判断，不自动新增安排',()=>setChoicePanel('next'))

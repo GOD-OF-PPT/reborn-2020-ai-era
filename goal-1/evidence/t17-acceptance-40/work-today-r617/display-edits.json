@@ -1,0 +1,50 @@
+{
+  "src/ui/OpeningMoment.tsx": [
+    {
+      "old": " const [localTodayAt,setLocalTodayAt]=useState<DayPerspective|null>(null)",
+      "new": " const [localTodayAt,setLocalTodayAt]=useState<DayPerspective|null>(null)\n const [todayChoiceAt,setTodayChoiceAt]=useState<DayPerspective|null>(null)"
+    },
+    {
+      "old": " useEffect(()=>{if(localTodayAt&&!dayPerspectiveCurrent(p.view,localTodayAt))setLocalTodayAt(null)},[localTodayAt,p.view])",
+      "new": " useEffect(()=>{if(localTodayAt&&!dayPerspectiveCurrent(p.view,localTodayAt))setLocalTodayAt(null)},[localTodayAt,p.view])\n useEffect(()=>{if(todayChoiceAt&&!dayPerspectiveCurrent(p.view,todayChoiceAt))setTodayChoiceAt(null)},[todayChoiceAt,p.view])"
+    },
+    {
+      "old": "const openToday=()=>{if(!day||focusLocked||p.controller.snapshot.view!==p.view)return;setObjectOpen(false);setChoicePanel(null);setDirections(false);setRecollectionOpen(false);if(thread.responsibilityOverrideNeeded){setLocalTodayAt(null);onReturnFocus?.();return}if(onToday)onToday();else setLocalTodayAt({runId:p.view.runId,revision:p.view.revision})}",
+      "new": "const openToday=(choice:'daily'|null=null)=>{if(!day||focusLocked||p.controller.snapshot.view!==p.view)return;setObjectOpen(false);setChoicePanel(null);setDirections(false);setRecollectionOpen(false);if(thread.responsibilityOverrideNeeded){setTodayChoiceAt(null);setLocalTodayAt(null);onReturnFocus?.();return}setTodayChoiceAt(choice==='daily'?{runId:p.view.runId,revision:p.view.revision}:null);if(onToday)onToday();else setLocalTodayAt({runId:p.view.runId,revision:p.view.revision})}"
+    },
+    {
+      "old": "const returnToFocus=()=>{setLocalTodayAt(null);onReturnFocus?.()}",
+      "new": "const returnToFocus=()=>{setTodayChoiceAt(null);setLocalTodayAt(null);onReturnFocus?.()}"
+    },
+    {
+      "old": "<TodayScene p={p} today={day} headingRef={headingRef}",
+      "new": "<TodayScene p={p} today={day} initialChoice={dayPerspectiveCurrent(p.view,todayChoiceAt)?'daily':null} headingRef={headingRef}"
+    },
+    {
+      "old": " const roomPersonTime=personRoom&&timeNotice",
+      "new": " const workTodayBinding=dayActive&&!attempt&&workCopy?makeSharedAction(p,'回到今天，看看其它安排',()=>openToday('daily'),{allowReadOnly:true,disabled:focusLocked}):null\n const roomPersonTime=personRoom&&timeNotice"
+    },
+    {
+      "old": "{sceneReadingLabel(binding.label)} ↗</button>{relayClosed&&feedback",
+      "new": "{sceneReadingLabel(binding.label)} ↗</button>{workTodayBinding&&(workTimePrimary||sideOutcome)?<button type=\"button\" className=\"scene-text-action\" disabled={workTodayBinding.disabled} onClick={workTodayBinding.activate}>{workTodayBinding.label} ↗</button>:null}{relayClosed&&feedback"
+    },
+    {
+      "old": ":sideOutcome?action('02',sideOutcome.next.label,'只查看下一方向，不新增承诺',()=>onNavigate(sideOutcome.next.screen,sideOutcome.next.target))\n    :deferredRelay?",
+      "new": ":sideOutcome?action('02',sideOutcome.next.label,'只查看下一方向，不新增承诺',()=>onNavigate(sideOutcome.next.screen,sideOutcome.next.target))\n    :workTodayBinding?action('02',workTodayBinding.label,'只回到今天比较原工作与生活，不新增承诺',workTodayBinding.activate,workTodayBinding)\n    :deferredRelay?"
+    }
+  ],
+  "src/ui/TodayScene.tsx": [
+    {
+      "old": "type Props={p:GamePanelProps;today:TodayThreadView;headingRef:",
+      "new": "type Props={p:GamePanelProps;today:TodayThreadView;initialChoice?:'daily'|null|undefined;headingRef:"
+    },
+    {
+      "old": "TodayScene({p,today,headingRef,feedback,",
+      "new": "TodayScene({p,today,initialChoice,headingRef,feedback,"
+    },
+    {
+      "old": " const [page,setPage]=useState<Page|null>(null)",
+      "new": " const [page,setPage]=useState<Page|null>(initialChoice==='daily'?'daily':null)"
+    }
+  ]
+}

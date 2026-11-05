@@ -126,7 +126,7 @@ it('guides a real exhausted work quarter toward its original wait and reading wi
  expect(copy.title).toBe('这季的四点已用完，工作照常继续。');expect(copy.line).toContain('仍可翻阅生活，或等下一次回响')
  expect(copy.line).not.toContain('生活与副业仍可安排')
  expect(p.features.life.jobs.find(job=>job.kind==='rest')?.completeAt).toBe('2020-01-08')
- for(const text of ['等下一次反馈（最迟） · 2020-01-08','核对后推进 · 2020-01-08','看看生活','环顾房间','翻开手记'])expect(html).toContain(text)
+ for(const text of ['等下一次反馈（最迟） · 2020-01-08','核对后推进 · 2020-01-08','回到今天，看看其它安排','环顾房间','翻开手记'])expect(html).toContain(text)
  expect(p.request).not.toHaveBeenCalled();expect(p.requestWait).not.toHaveBeenCalled()
 })
 
@@ -145,7 +145,7 @@ it('keeps today’s real wage receipt visible at zero actions and treats it as h
  expect(copy.title).toBe('这季的四点已用完，工作照常继续。');expect(copy.line).toContain('最近一笔：2020-01-31工资实收¥8,000')
  expect(copy.title).not.toContain('工资到了');expect(later.p.view.budget.available).toBe(0)
  const html=render(later.p,later.focus,'另一件准备仍需按自己的日期发生。')
- expect(html).toContain('另一件准备仍需按自己的日期发生。');expect(html).toContain('等工作回响 · 2020-02-29');expect(html).toContain('看看生活')
+ expect(html).toContain('另一件准备仍需按自己的日期发生。');expect(html).toContain('等工作回响 · 2020-02-29');expect(html).toContain('回到今天，看看其它安排')
 })
 
 it('keeps older pay as a dated fact while remaining actions invite another choice',()=>{
