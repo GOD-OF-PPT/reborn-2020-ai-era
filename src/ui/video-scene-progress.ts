@@ -1,3 +1,4 @@
+import {videoFirstAccount,videoFirstEntryCopy} from './video-first-entry.ts'
 import {addDays,quarterOf} from '../core/calendar.ts'
 import type {VideoProjection} from '../core/video-projection.ts'
 import {moneyText} from './game-text.ts'
@@ -169,6 +170,6 @@ function focusedVideoScene(video:VideoProjection,date:string,target:VideoSceneTa
 
 /** Undefined retains the recommendation; null is an explicit entry without a channel. */
 export function videoSceneProgress(video:VideoProjection,date:string,requested?:VideoSceneTarget|null):VideoSceneProgress|null{
- if(requested===null)return {...detail('先选一个具体的账号和受众。','新客户必须来自真实形成的受众，不能由入口创造。','准备这一份真实视频尝试','账号、受众、制作方式、素材、资源与日期仍由你选择；原资格沿真实年代与批准。','选择视频账号与准备'),stage:'video-entry'}
+ if(requested===null)return {...detail(videoFirstAccount(video)?videoFirstEntryCopy.title:'先选一个具体的账号和受众。',videoFirstAccount(video)?videoFirstEntryCopy.line:'新客户必须来自真实形成的受众，不能由入口创造。','准备这一份真实视频尝试','账号、受众、制作方式、素材、资源与日期仍由你选择；原资格沿真实年代与批准。','选择视频账号与准备'),stage:'video-entry'}
  return requested===undefined?legacyVideoSceneProgress(video,date):focusedVideoScene(video,date,requested)
 }

@@ -1,3 +1,4 @@
+import {videoFirstAccount,videoFirstEntryCopy} from './video-first-entry.ts'
 import {quarterOf} from '../core/calendar.ts'
 import type {GamePanelProps} from './game-types.ts'
 import type {OpeningFocus,PlayerThreadView} from './player-thread.ts'
@@ -47,8 +48,8 @@ export function videoFocusResultDate(p:Input,f:VideoOpeningFocus):string|null{
  return dates.filter((date):date is string=>typeof date==='string'&&date<=p.view.date).sort().at(-1)??null
 }
 export function videoPlayerScene(p:Input,f:VideoOpeningFocus):Scene{
- const t=f.videoTarget
- if(t===null)return {stage:'video-entry',object:'桌上的视频制作工具',title:'先选一个具体的账号和受众。',line:'2020年可以从手工剪辑开始；新的客户必须来自真实受众。',detail:'建立账号不会自动制作或获得资格。准备、制作、客户验收与实际回款分别发生。',outcome:'none',inspect:{screen:'video',label:'查看原账号与视频准备',target:{accountId:'personal'}},resultRefs:[]}
+ const t=f.videoTarget,first=p.view.phase==='playing'&&videoFirstAccount(p.features.video)
+ if(t===null)return {stage:'video-entry',object:'桌上的视频制作工具',title:first?videoFirstEntryCopy.title:'先选一个具体的账号和受众。',line:first?videoFirstEntryCopy.line:'2020年可以从手工剪辑开始；新的客户必须来自真实受众。',detail:first?videoFirstEntryCopy.detail:'建立账号不会自动制作或获得资格。准备、制作、客户验收与实际回款分别发生。',outcome:'none',inspect:{screen:'video',label:'查看原账号与视频准备',target:{accountId:'personal'}},resultRefs:[]}
  const progress=videoSceneProgress(p.features.video,p.view.date,t)!,contract=p.features.video!.contracts.find(c=>c.id===t.contractId)
  const resultRefs:PlayerThreadView['resultRefs'][number][]=[...progress.resultRefs]
  const work=p.features.video!.works.find(w=>w.id===t.workId)

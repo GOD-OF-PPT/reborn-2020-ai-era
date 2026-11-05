@@ -1,0 +1,122 @@
+[
+  {
+    "path": "src/ui/video-player-thread.ts",
+    "from": "import {quarterOf} from '../core/calendar.ts'\n",
+    "to": "import {videoFirstAccount,videoFirstEntryCopy} from './video-first-entry.ts'\nimport {quarterOf} from '../core/calendar.ts'\n"
+  },
+  {
+    "path": "src/ui/video-scene-progress.ts",
+    "from": "import {addDays,quarterOf} from '../core/calendar.ts'\n",
+    "to": "import {videoFirstAccount,videoFirstEntryCopy} from './video-first-entry.ts'\nimport {addDays,quarterOf} from '../core/calendar.ts'\n"
+  },
+  {
+    "path": "src/ui/VideoThreadAction.tsx",
+    "from": "import type {ReactNode} from 'react'\n",
+    "to": "import {videoFirstAccount,videoFirstEntryCopy} from './video-first-entry.ts'\nimport type {ReactNode} from 'react'\n"
+  },
+  {
+    "path": "src/ui/OpeningMoment.tsx",
+    "from": "import {SeasonFocusChoices} from './SeasonFocusChoices.tsx'\n",
+    "to": "import {videoFirstAccount,videoFirstEntryCopy} from './video-first-entry.ts'\nimport {SeasonFocusChoices} from './SeasonFocusChoices.tsx'\n"
+  },
+  {
+    "path": "src/ui/video-player-thread.ts",
+    "from": " const t=f.videoTarget\n if(t===null)return",
+    "to": " const t=f.videoTarget,first=p.view.phase==='playing'&&videoFirstAccount(p.features.video)\n if(t===null)return"
+  },
+  {
+    "path": "src/ui/video-player-thread.ts",
+    "from": "title:'先选一个具体的账号和受众。',line:'2020年可以从手工剪辑开始；新的客户必须来自真实受众。',detail:'建立账号不会自动制作或获得资格。准备、制作、客户验收与实际回款分别发生。'",
+    "to": "title:first?videoFirstEntryCopy.title:'先选一个具体的账号和受众。',line:first?videoFirstEntryCopy.line:'2020年可以从手工剪辑开始；新的客户必须来自真实受众。',detail:first?videoFirstEntryCopy.detail:'建立账号不会自动制作或获得资格。准备、制作、客户验收与实际回款分别发生。'"
+  },
+  {
+    "path": "src/ui/video-scene-progress.ts",
+    "from": "if(requested===null)return {...detail('先选一个具体的账号和受众。','新客户必须来自真实形成的受众，不能由入口创造。',",
+    "to": "if(requested===null)return {...detail(videoFirstAccount(video)?videoFirstEntryCopy.title:'先选一个具体的账号和受众。',videoFirstAccount(video)?videoFirstEntryCopy.line:'新客户必须来自真实形成的受众，不能由入口创造。',"
+  },
+  {
+    "path": "src/ui/VideoThreadAction.tsx",
+    "from": "<span>{label}<small>{caption}</small></span>",
+    "to": "<span>{label}{caption?<small>{caption}</small>:null}</span>"
+  },
+  {
+    "path": "src/ui/VideoThreadAction.tsx",
+    "from": " return choice(thread.stage==='video-entry'?",
+    "to": " if(thread.stage==='video-entry'&&p.view.phase==='playing'&&videoFirstAccount(p.features.video))return choice(videoFirstEntryCopy.action,'',onChoose)\n return choice(thread.stage==='video-entry'?"
+  },
+  {
+    "path": "src/ui/VideoEncounter.tsx",
+    "from": "import './video-encounter.css'",
+    "to": "import './video-encounter.css'\nimport {videoFirstAccount} from './video-first-entry.ts'"
+  },
+  {
+    "path": "src/ui/VideoEncounter.tsx",
+    "from": " const art=videoPaperFor(thread)",
+    "to": " const art=videoPaperFor(thread),first=thread.stage==='video-entry'&&p.view.phase==='playing'&&videoFirstAccount(p.features.video)"
+  },
+  {
+    "path": "src/ui/VideoEncounter.tsx",
+    "from": "thread.stage==='video-entry'?'先选账号'",
+    "to": "thread.stage==='video-entry'?(first?'第一份作品 · 尚未安排':'先选账号')"
+  },
+  {
+    "path": "src/ui/VideoEncounter.tsx",
+    "from": "<p className=\"scene-choice-line\">{thread.detail}</p>",
+    "to": "{first?null:<p className=\"scene-choice-line\">{thread.detail}</p>}"
+  },
+  {
+    "path": "src/ui/VideoEncounter.tsx",
+    "from": "<OpeningObject kind={objectKind(thread)}",
+    "to": "<OpeningObject {...(first?{copyMode:'tableau' as const}:{})} kind={objectKind(thread)}"
+  },
+  {
+    "path": "src/ui/OpeningMoment.tsx",
+    "from": "thread.stage==='video-entry'?'选择账号，开始这次视频尝试'",
+    "to": "thread.stage==='video-entry'?(videoFirstAccount(p.features.video)?videoFirstEntryCopy.action:'选择账号，开始这次视频尝试')"
+  },
+  {
+    "path": "src/ui/VideoSceneChoice.tsx",
+    "from": "import './video-play.css'",
+    "to": "import './video-play.css'\nimport {videoFirstAccount} from './video-first-entry.ts'\nimport {VideoFirstAccountForm} from './VideoFirstAccountForm.tsx'"
+  },
+  {
+    "path": "src/ui/VideoSceneChoice.tsx",
+    "from": " const progress=currentTarget?",
+    "to": " const firstAccount=p.view.phase==='playing'&&p.accountId==='personal'&&currentTarget==null&&videoFirstAccount(v)\n const firstCreate=firstAccount&&page==='create'\n const progress=currentTarget?"
+  },
+  {
+    "path": "src/ui/VideoSceneChoice.tsx",
+    "from": "  if(channel&&(intent==='marketing'",
+    "to": "  if(firstAccount&&(intent===undefined||intent==='select-account')){setAction('channel');setPage('create');setOpen(true);return}\n  if(channel&&(intent==='marketing'"
+  },
+  {
+    "path": "src/ui/VideoSceneChoice.tsx",
+    "from": " const title=page==='result'?",
+    "to": " const channelNameField=<label className=\"field\">想给账号起什么名字<input value={draft.name} maxLength={60} onChange={e=>edit({name:e.target.value})}/></label>\n const channelAudienceField=<fieldset className=\"video-paper-choices\"><legend>这次想为谁制作</legend>{segments.map(([id,label])=><label key={id}><input type=\"radio\" name={name+'segment'} checked={draft.segment===id} onChange={()=>edit({segment:id})}/><span>{label}</span></label>)}</fieldset>\n const channelTerms=<p>个人经营沿用原账户。首次启用需至少¥500可花资金，这不是额外开户费。继续前会核对你的资金与资格。</p>\n const title=page==='result'?"
+  },
+  {
+    "path": "src/ui/VideoSceneChoice.tsx",
+    "from": "{page==='create'?<><label className=\"field\">想给账号起什么名字<input value={draft.name} maxLength={60} onChange={e=>edit({name:e.target.value})}/></label><fieldset className=\"video-paper-choices\"><legend>这次想为谁制作</legend>{segments.map(([id,label])=><label key={id}><input type=\"radio\" name={name+'segment'} checked={draft.segment===id} onChange={()=>edit({segment:id})}/><span>{label}</span></label>)}</fieldset><p>个人经营沿用原账户。首次启用需至少¥500可花资金，这不是额外开户费。继续前会核对你的资金与资格。</p></>:null}",
+    "to": "{page==='create'?firstAccount?<VideoFirstAccountForm audience={channelAudienceField} nameField={channelNameField} terms={channelTerms}/>:<>{channelNameField}{channelAudienceField}{channelTerms}</>:null}"
+  },
+  {
+    "path": "src/ui/VideoSceneChoice.tsx",
+    "from": "{page==='schedule'?<button type=\"button\" onClick={()=>setPage(action===",
+    "to": "{firstCreate?<button type=\"button\" onClick={()=>setOpen(false)}>先合上，保留草稿</button>:page==='schedule'?<button type=\"button\" onClick={()=>setPage(action==="
+  },
+  {
+    "path": "src/ui/VideoSceneChoice.tsx",
+    "from": "className=\"opening-paper video-choice-paper\" onClose",
+    "to": "className={'opening-paper video-choice-paper'+(firstCreate?' video-first-account-dialog':'')} layout={firstCreate?'direct':'book'} onClose"
+  },
+  {
+    "path": "src/ui/VideoSceneChoice.tsx",
+    "from": "<p className=\"video-paper-hint\">填写、翻页和合上都不接单；投入仍需最后确认。</p>",
+    "to": "{firstCreate?null:<p className=\"video-paper-hint\">填写、翻页和合上都不接单；投入仍需最后确认。</p>}"
+  },
+  {
+    "path": "src/ui/VideoSceneChoice.tsx",
+    "from": "{channel?.name??'尚未选择账号'}",
+    "to": "{firstCreate?'第一份作品':channel?.name??'尚未选择账号'}"
+  }
+]
