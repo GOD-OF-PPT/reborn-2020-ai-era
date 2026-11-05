@@ -1,0 +1,8 @@
+{
+  "file": "src/ui/personal-confirmation.test.tsx",
+  "old": "expect(personalConfirmationAction({...command,kind:'StartFirstOrder'})).toBe('就这样决定')",
+  "new": "expect(personalConfirmationAction({...command,kind:'StartFirstOrder'})).toBe('接下这笔手工单')",
+  "reason": "原591产品已有首单专用文案，该纯UI测试末项仍断言更早泛文案；本次改确认标签，补纳此完整文件并只校正这一过时断言。原测试此项未在592批次运行，不冒原全绿。",
+  "originalProductAlreadyUsedLabel": true,
+  "storageTests": 0
+}

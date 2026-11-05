@@ -86,5 +86,5 @@ it('keeps person-linked commitments and unrelated commands on their original con
  const {command}=context()
  expect(personalConfirmationAction({...command,kind:'StartLifeWork',payload:{kind:'rest',personId:'tang-ying',reference:null}})).toBe('就这样决定')
  expect(personalConfirmationAction({...command,kind:'StartLifeWork',payload:{kind:'workspace',personId:null,reference:null}})).toBe('开始改善住处')
- expect(personalConfirmationAction({...command,kind:'StartFirstOrder'})).toBe('就这样决定')
+ expect(personalConfirmationAction({...command,kind:'StartFirstOrder'})).toBe('接下这笔手工单')
 })

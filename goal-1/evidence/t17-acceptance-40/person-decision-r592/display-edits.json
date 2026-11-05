@@ -1,0 +1,37 @@
+[
+  {
+    "path": "src/ui/App.tsx",
+    "old": "import {captureLifeDecision,LifeDecisionFacts} from './LifeDecisionFacts.tsx'",
+    "new": "import {captureLifeDecision,LifeDecisionFacts} from './LifeDecisionFacts.tsx'\nimport {capturePersonDecision,PersonDecisionFacts} from './PersonDecisionFacts.tsx'"
+  },
+  {
+    "path": "src/ui/App.tsx",
+    "old": "const lifeDecision=captureLifeDecision(command,preview,context,contextFeatures),workDecision=",
+    "new": "const personDecision=capturePersonDecision(command,preview,context,contextFeatures),lifeDecision=captureLifeDecision(command,preview,context,contextFeatures),workDecision="
+  },
+  {
+    "path": "src/ui/App.tsx",
+    "old": ">:lifeDecision?<LifeDecisionFacts value={lifeDecision}/>",
+    "new": ">:personDecision?<PersonDecisionFacts value={personDecision}/>:lifeDecision?<LifeDecisionFacts value={lifeDecision}/>"
+  },
+  {
+    "path": "src/ui/PersonalCommandReview.tsx",
+    "old": "import {LifeDecisionFacts} from './LifeDecisionFacts.tsx'",
+    "new": "import {LifeDecisionFacts} from './LifeDecisionFacts.tsx'\nimport {PersonDecisionFacts} from './PersonDecisionFacts.tsx'"
+  },
+  {
+    "path": "src/ui/PersonalCommandReview.tsx",
+    "old": "value.type===LifeDecisionFacts||",
+    "new": "value.type===PersonDecisionFacts||value.type===LifeDecisionFacts||"
+  },
+  {
+    "path": "src/ui/personal-confirmation.ts",
+    "old": " if(command.kind==='StartLifeWork'){",
+    "new": " if(command.kind==='AcceptLifePromise')return '答应这次邀请'\n if(command.kind==='FulfillLifePromise')return '开始兑现约定'\n if(command.kind==='StartLifeWork'){"
+  },
+  {
+    "path": "src/ui/personal-confirmation.ts",
+    "old": "  if(p?.personId===null&&p.reference===null){",
+    "new": "  const peopleWork:Record<string,string>={'tang-ying':'friend_visit',linzhou:'linzhou_review','xu-cheng':'peer_notes','chen-yu':'partner_review'}\n  if(typeof p?.personId==='string'&&Object.hasOwn(peopleWork,p.personId)&&peopleWork[p.personId]===p.kind)return '安排这次相处'\n  if(p?.personId===null&&p.reference===null){"
+  }
+]

@@ -11,8 +11,12 @@ export function personalConfirmationAction(command:CommandEnvelope):string {
  if(command.kind==='AdvanceTime')return '让日子继续'
  if(command.kind==='ResearchMarket')return '开始这项研究'
  if(command.kind==='WorkQuarter')return '安排本季工作'
+ if(command.kind==='AcceptLifePromise')return '答应这次邀请'
+ if(command.kind==='FulfillLifePromise')return '开始兑现约定'
  if(command.kind==='StartLifeWork'){
   const p=command.payload!==null&&typeof command.payload==='object'&&!Array.isArray(command.payload)?command.payload as Record<string,unknown>:null
+  const peopleWork:Record<string,string>={'tang-ying':'friend_visit',linzhou:'linzhou_review','xu-cheng':'peer_notes','chen-yu':'partner_review'}
+  if(typeof p?.personId==='string'&&Object.hasOwn(peopleWork,p.personId)&&peopleWork[p.personId]===p.kind)return '安排这次相处'
   if(p?.personId===null&&p.reference===null){
    if(p.kind==='rest')return '开始休整'
    if(p.kind==='workspace')return '开始改善住处'

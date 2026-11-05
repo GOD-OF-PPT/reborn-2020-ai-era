@@ -2,6 +2,7 @@ import {Children,Fragment,cloneElement,isValidElement,useState,type ReactNode,ty
 import {Dialog} from './Dialog.tsx'
 import {CommandDetails} from './CommandDetails.tsx'
 import {LifeDecisionFacts} from './LifeDecisionFacts.tsx'
+import {PersonDecisionFacts} from './PersonDecisionFacts.tsx'
 import {WorkDecisionFacts} from './WorkDecisionFacts.tsx'
 import {ResearchDecisionFacts} from './ResearchDecisionFacts.tsx'
 import {ClockDecisionFacts} from './ClockDecisionFacts.tsx'
@@ -11,7 +12,7 @@ import './personal-command-review.css'
 
 /** Select only the registered captured personal fact components, never a label. */
 export function isPersonalDecisionFacts(value:ReactNode):boolean {
- return isValidElement(value)&&(value.type===LifeDecisionFacts||value.type===WorkDecisionFacts||value.type===ResearchDecisionFacts||value.type===ClockDecisionFacts||value.type===FirstOrderDecisionFacts||value.type===EventDecisionFacts)
+ return isValidElement(value)&&(value.type===PersonDecisionFacts||value.type===LifeDecisionFacts||value.type===WorkDecisionFacts||value.type===ResearchDecisionFacts||value.type===ClockDecisionFacts||value.type===FirstOrderDecisionFacts||value.type===EventDecisionFacts)
 }
 
 /** Only presentation changes; original captured command/view/preview references
