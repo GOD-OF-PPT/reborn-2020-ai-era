@@ -1,0 +1,75 @@
+import {afterEach,expect,it,vi} from 'vitest'
+import {isValidElement,type ReactElement,type ComponentProps} from 'react'
+import {renderToStaticMarkup} from 'react-dom/server'
+import {createCampaignRegistry,createCampaignRun} from '../application/campaign.ts'
+import {evaluateCommand,previewCommand,projectRun} from '../core/commands.ts'
+import type {GameRun,CommandEnvelope} from '../core/run-types.ts'
+import type {GamePanelProps,PlayFeatures,PlayingView} from './game-types.ts'
+import {playerThread,type OpeningFocus} from './player-thread.ts'
+import {personRoomReading} from './person-room-reading.ts'
+import {OpeningMoment} from './OpeningMoment.tsx'
+import {roomMoment} from './RoomMoment.tsx'
+import {RoomTableau} from './RoomTableau.tsx'
+import {PersonRecordReader} from './PersonRecordReader.tsx'
+import {OpeningObject} from './OpeningObject.tsx'
+import {SceneTimeNotice} from './SceneEcho.tsx'
+import {inspectPublicWaitTransition} from '../application/public-feedback.ts'
+import type {PublicWaitResult} from '../application/public-wait.ts'
+import {waitSceneResult} from './wait-scene-result.ts'
+
+// Normal in-memory play; integration observes read/navigation bindings. The real
+// shared Reader's paging/close behavior is exercised in person-moment-record.
+const captured=vi.hoisted(()=>({reader:null as ComponentProps<typeof PersonRecordReader>|null,open:vi.fn(),tableau:null as ComponentProps<typeof RoomTableau>|null,notice:null as ComponentProps<typeof SceneTimeNotice>|null}))
+vi.mock('./PersonRecordReader.tsx',()=>({PersonRecordReader:(p:ComponentProps<typeof PersonRecordReader>)=>{captured.reader=p;return p.children(captured.open)}}))
+vi.mock('./RoomTableau.tsx',async original=>{const actual=await original<typeof import('./RoomTableau.tsx')>();return {...actual,RoomTableau:(p:ComponentProps<typeof actual.RoomTableau>)=>{captured.tableau=p;return <actual.RoomTableau {...p}/>}}})
+vi.mock('./SceneEcho.tsx',async original=>{const actual=await original<typeof import('./SceneEcho.tsx')>();return {...actual,SceneTimeNotice:(p:ComponentProps<typeof actual.SceneTimeNotice>)=>{captured.notice=p;return <actual.SceneTimeNotice {...p}/>}}})
+afterEach(()=>{captured.reader=null;captured.open.mockClear();captured.tableau=null;captured.notice=null})
+const registry=createCampaignRegistry(),initial=createCampaignRun({runId:'person-room-ui',actorId:'player',commandId:'create',seed:'person-room-ui',backgroundId:'technical_employee',playerProfile:{wishId:'autonomy',approach:'free'}})
+function act(run:GameRun,kind:string,payload:unknown={}){const result=evaluateCommand(run,{runId:run.runId,actorId:run.actorId,commandId:'room-'+(run.revision+1),expectedRevision:run.revision,kind,payload},registry,run.actorId);if(result.status!=='proposed')throw Error(JSON.stringify(result));return result.nextRun}
+const view=(run:GameRun):PlayingView=>({...projectRun(run),features:registry.runtime!.project!(run),saveStatus:'saved',busy:false,readOnly:false,readOnlyReason:null,hasCandidate:false,pendingRevision:null})
+function input(run=done):GamePanelProps{const v=view(run);return {view:v,features:v.features as unknown as PlayFeatures,accountId:'personal',request:vi.fn(),requestWait:vi.fn(),controller:{snapshot:{view:v,busy:false},asynchronous:false,runtimeFailed:false,preview:(c:CommandEnvelope)=>previewCommand(run,c,registry,run.actorId),clockCommitments:()=>{throw Error('ORIGINAL_REVIEW_REQUIRED')}} as unknown as GamePanelProps['controller']}}
+const started=act(initial,'StartLifeWork',{kind:'friend_visit',personId:'tang-ying',reference:null}),met=act(started,'AdvanceTime',{date:'2020-01-04'}),promise=(registry.runtime!.project!(met) as unknown as PlayFeatures).life.promises[0]!,accepted=act(met,'AcceptLifePromise',{promiseId:promise.id,consent:true}),working=act(accepted,'FulfillLifePromise',{promiseId:promise.id}),jan6=act(working,'AdvanceTime',{date:'2020-01-06'}),done=act(jan6,'AdvanceTime',{date:'2020-01-07'}),declined=act(met,'DeclineLifePromise',{promiseId:promise.id})
+function focus(p:GamePanelProps):OpeningFocus{return {runId:p.view.runId,kind:'life',accountId:'personal',selection:'tang-ying',entityId:promise.id}}
+function render(p=input(),extra:Partial<ComponentProps<typeof OpeningMoment>>={}){const onNavigate=vi.fn(),onToday=vi.fn(),props:ComponentProps<typeof OpeningMoment>={p,headingRef:null,fallback:roomMoment(p),focus:focus(p),onFocus:vi.fn(),onNavigate,onExplore:vi.fn(),onToday,...extra},html=renderToStaticMarkup(<OpeningMoment {...props}/>);return {p,props,html,onNavigate,onToday}}
+type Element=ReactElement<Record<string,unknown>>
+const nodes=(n:unknown):Element[]=>Array.isArray(n)?n.flatMap(nodes):isValidElement<Record<string,unknown>>(n)?[n,...nodes(n.props.children)]:[]
+const words=(n:unknown):string=>typeof n==='string'?n:Array.isArray(n)?n.map(words).join(''):isValidElement<Record<string,unknown>>(n)?words(n.props.children):''
+
+it('reads only the exact current original person promise and labels the actual completed attempt',()=>{
+ const p=input(),thread=playerThread(p,focus(p)),value=personRoomReading(p,thread)!
+ expect(value.record.target).toEqual({accountId:'personal',personId:'tang-ying',lifeSelection:'person',recordId:promise.id})
+ expect(value.line).toBe('2020-01-07完成 · 本段已付¥300 / 已用1点，无收入。');expect(value.record.basis!.costFen).toBe(20000);expect(value.record.jobs[0]!.costFen).toBe(30000)
+ expect(p.request).not.toHaveBeenCalled();expect(p.requestWait).not.toHaveBeenCalled()
+})
+it('keeps prior shared activities, new invitations and work in progress on their original paths',()=>{
+ for(const run of [met,accepted,working]){const p=input(run);expect(personRoomReading(p,playerThread(p,focus(p)))).toBeNull()}
+ const p=input(),job=p.features.life.jobs.find(j=>j.promiseId===null)!,old:OpeningFocus={runId:p.view.runId,kind:'life',accountId:'personal',selection:'tang-ying',entityId:job.id}
+ expect(personRoomReading(p,playerThread(p,old))).toBeNull();expect(render(p,{focus:old}).html).toContain('查看这次生活安排与原记录')
+})
+it('retains history, strong responsibility, quarter-end and mismatched original identity paths',()=>{
+ const p=input(),thread=playerThread(p,focus(p))
+ for(const changed of [{...thread,focusScope:'history' as const},{...thread,responsibilityOverrideNeeded:true},{...thread,inspect:{...thread.inspect,target:{...thread.inspect.target,personId:'linzhou' as const}}},{...thread,inspect:{...thread.inspect,target:{...thread.inspect.target,recordId:'another'}}}])expect(personRoomReading(p,changed)).toBeNull()
+ expect(personRoomReading({...p,features:{...p.features,workbench:{...p.features.workbench,atQuarterEnd:true}}},thread)).toBeNull()
+ expect(personRoomReading(p,{...thread,focus:{...focus(p),runId:'another'}})).toBeNull()
+})
+it('shows concise actual cost, one direct person-reading action and preserves original time review',()=>{
+ const r=render()
+ expect(r.html).toContain('2020-01-07完成 · 本段已付¥300 / 已用1点，无收入。');expect(r.html).not.toContain('接受与支出也各有自己的日期');expect(r.html).not.toContain('个人费用¥300 · 已耗1点；完成不会返还')
+ expect(r.html).toContain('翻阅与唐萤的这段经历');expect(r.html).toContain('这次选择的完整说明');expect(r.html).not.toContain('查看这次生活安排与原记录');expect(r.html.match(/class="clock-advance clock-advance-room"/g)).toHaveLength(1)
+ expect(r.html).toContain('不新增安排，让原日子继续');expect(r.p.request).not.toHaveBeenCalled()
+})
+it('binds result reading to the shared near reader, keeps object/main Today identical and preserves exact full target',()=>{
+ const r=render(),t=captured.tableau!,buttons=nodes(t.decisions).filter(n=>n.type==='button'),near=buttons.find(n=>words(n.props.children).includes('翻阅与唐萤'))!,main=buttons.find(n=>words(n.props.children).includes('回到今天'))!,object=nodes(t.object).find(n=>n.type===OpeningObject)!
+ ;(near.props.onClick as ()=>void)();expect(captured.open).toHaveBeenCalledTimes(1);expect(r.onNavigate).not.toHaveBeenCalled();expect(r.onToday).not.toHaveBeenCalled()
+ expect(object.props.onActivate).toBe(main.props.onClick);(main.props.onClick as ()=>void)();(object.props.onActivate as ()=>void)();expect(r.onToday).toHaveBeenCalledTimes(2)
+ const reader=captured.reader!;reader.onFull(reader.value.target);expect(r.onNavigate).toHaveBeenCalledExactlyOnceWith('life',{accountId:'personal',personId:'tang-ying',lifeSelection:'person',recordId:promise.id});expect(r.p.request).not.toHaveBeenCalled();expect(r.p.requestWait).not.toHaveBeenCalled()
+})
+it('leaves a declined invitation distinct from paid fulfillment and keeps its original responsibility explanation',()=>{
+ const p=input(declined),thread=playerThread(p,focus(p)),value=personRoomReading(p,thread)!,r=render(p)
+ expect(value.record.jobs).toHaveLength(0);expect(value.line).toBeNull();expect(r.html).toContain('没有自动接受、付费或完成工作');expect(r.html).toContain('未接受的邀请没有变成新的付费承诺');expect(r.html).not.toContain('本段已付¥300');expect(r.html).toContain('翻阅与唐萤的这段经历')
+})
+it('shortens only the exact original fulfillment echo while retaining its full text, frame and callbacks',()=>{
+ const before=view(jan6),current=view(done),receipt=current.receipts.at(-1)!,result:PublicWaitResult={status:'stopped',reasonCodes:[],targetDate:current.date,before,lastBefore:before,lastSaved:current,current,steps:[{commandId:receipt.commandId,date:current.date,revisionBefore:before.revision,revisionAfter:current.revision}],feedback:inspectPublicWaitTransition(before,current),failed:null},notice={date:current.date,...waitSceneResult(result,current)!},onClose=vi.fn(),accountName=()=> '个人账户',p=input()
+ render(p,{feedback:<SceneTimeNotice {...notice} compact onClose={onClose} accountName={accountName}/>});expect(captured.notice!.brief).toBe('与唐萤的约定已兑现 · 原投入¥300 / 1点。');expect(renderToStaticMarkup(<>{captured.tableau!.facts}</>)).not.toContain('本段已付');expect(captured.notice!.text).toBe(notice.text);expect(captured.notice!.frame).toBe(notice.frame);expect(captured.notice!.onClose).toBe(onClose);expect(captured.notice!.accountName).toBe(accountName)
+ const mixed={...notice,text:notice.text+' 另有原款¥100仍待核对。'};render(p,{feedback:<SceneTimeNotice {...mixed} compact onClose={onClose} accountName={accountName}/>});expect(captured.notice!.text).toBe(mixed.text);expect(captured.notice!.brief).toBe(mixed.brief);expect(renderToStaticMarkup(<>{captured.tableau!.facts}</>)).toContain('本段已付¥300');expect(p.request).not.toHaveBeenCalled()
+})

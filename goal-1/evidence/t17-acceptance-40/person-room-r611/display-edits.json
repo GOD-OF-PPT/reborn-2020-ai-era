@@ -1,0 +1,42 @@
+[
+  {
+    "old": "import {EquityMoment} from './EquityMoment.tsx'",
+    "new": "import {EquityMoment} from './EquityMoment.tsx'\nimport {personRoomReading} from './person-room-reading.ts'\nimport {PersonRecordReader} from './PersonRecordReader.tsx'\nimport {personTimeReading} from './person-time-reading.ts'\nimport {lifeSceneProgress} from './life-scene-progress.ts'"
+  },
+  {
+    "old": " const lifeRows=!interrupted",
+    "new": " const personRoom=!interrupted&&!requiresChoice&&!legacy?personRoomReading(p,thread):null\n const lifeRows=!interrupted"
+  },
+  {
+    "old": " const sceneFacts=sceneFirstFacts??lifeSceneFacts",
+    "new": " const sceneFacts=sceneFirstFacts??(personRoom?.line?[personRoom.line]:null)??lifeSceneFacts"
+  },
+  {
+    "old": "const recordBinding=makeSharedAction(p,requiresChoice?'翻看本季已有记录':'翻阅这一段的记录与代价'",
+    "new": "const recordBinding=makeSharedAction(p,requiresChoice?'翻看本季已有记录':personRoom?'这次选择的完整说明':'翻阅这一段的记录与代价'"
+  },
+  {
+    "old": " const paidFirstFacts=firstAttempt&&timeNotice?",
+    "new": " const roomPersonTime=personRoom&&timeNotice&&thread.focus.kind==='life'?personTimeReading(p,lifeSceneProgress(p.features.life,p.view.date,thread.focus.selection),timeNotice.props,thread.focus.entityId):null\n const paidFirstFacts=firstAttempt&&timeNotice?"
+  },
+  {
+    "old": "personalProgress&&timeNotice?cloneElement(timeNotice,{brief:personalProgress}):feedback",
+    "new": "personalProgress&&timeNotice?cloneElement(timeNotice,{brief:personalProgress}):roomPersonTime&&timeNotice?cloneElement(timeNotice,{brief:roomPersonTime.brief}):feedback"
+  },
+  {
+    "old": " return <MarketSceneChoice p={p} onFullRecord={inspect}",
+    "new": " const renderPerson=(readPerson:()=>void)=><MarketSceneChoice p={p} onFullRecord={inspect}"
+  },
+  {
+    "old": ":dayActive&&!attempt&&(day?.primary.classification==='result'||thread.stage==='market-position')?action('02',inspectLabel,'只翻阅同一件事的实际结果与全部原记录',inspectFocus)",
+    "new": ":dayActive&&!attempt&&(day?.primary.classification==='result'||thread.stage==='market-position')?action('02',personRoom?.label??inspectLabel,'只翻阅同一件事的实际结果与全部原记录',personRoom?readPerson:inspectFocus)"
+  },
+  {
+    "old": " </>}</DayThreadAction>}</CourseThreadAction>}</VideoThreadAction>}</OpeningAttemptAction>}</RelayThreadAction>}</RelaySceneChoice>}</CourseSceneChoice>}</VideoSceneChoice>}</MarketSceneChoice>\n}",
+    "new": " </>}</DayThreadAction>}</CourseThreadAction>}</VideoThreadAction>}</OpeningAttemptAction>}</RelayThreadAction>}</RelaySceneChoice>}</CourseSceneChoice>}</VideoSceneChoice>}</MarketSceneChoice>\n return personRoom?<PersonRecordReader key={personRoom.record.key} p={p} value={personRoom.record} onFull={target=>onNavigate('life',target)}>{renderPerson}</PersonRecordReader>:renderPerson(inspectFocus)\n}"
+  },
+  {
+    "old": " const sceneFactsAfterEcho=researchCopy?.resultEcho",
+    "new": " const sceneFactsAfterEcho=roomPersonTime?[]:researchCopy?.resultEcho"
+  }
+]
