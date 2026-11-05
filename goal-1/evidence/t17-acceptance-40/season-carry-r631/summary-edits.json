@@ -1,0 +1,10 @@
+[
+  {
+    "from": "className=\"season-turn-summary\"",
+    "to": "className={'season-turn-summary'+(v.carry?' season-turn-with-carry':'')}"
+  },
+  {
+    "from": "{v.pending.map(item=>",
+    "to": "{v.carry?<section className=\"season-carry\" aria-label=\"带到下一季的原安排\"><p className=\"season-carry-heading\">带到下一季 <span>尚未完成 · 原投入保留</span></p><div className=\"season-carry-papers\" style={{gridTemplateColumns:'repeat('+v.carry.length+',minmax(0,1fr))'}}>{v.carry.map(item=><article key={item.id}><header><h4>{item.label}</h4><span>{item.stage}</span></header><p className=\"season-carry-origin\">始于{item.quarter} · {item.from}</p>{item.lines.map((line,index)=><p key={index}>{line}</p>)}<p className=\"season-carry-date\"><span>原预计反馈</span><time dateTime={item.through}>{item.through}</time></p></article>)}</div></section>:v.pending.map(item=>"
+  }
+]

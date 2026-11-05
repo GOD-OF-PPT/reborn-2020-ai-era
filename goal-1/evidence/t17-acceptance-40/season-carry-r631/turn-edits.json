@@ -1,0 +1,26 @@
+[
+  {
+    "from": "import {seasonMeaning} from './scene-meaning.ts'",
+    "to": "import {seasonMeaning} from './scene-meaning.ts'\nimport {seasonPersonalCarry,type SeasonPersonalCarry} from './season-personal-carry.ts'"
+  },
+  {
+    "from": "readonly retained:number}",
+    "to": "readonly retained:number;readonly carry:readonly SeasonPersonalCarry[]|null}"
+  },
+  {
+    "from": " if(pending.length>1||pending.some",
+    "to": " const carry=pending.length>1?seasonPersonalCarry(p,season,pending):null\n if(pending.length>1&&!carry||pending.some"
+  },
+  {
+    "from": "question:'下一季，想把时间留给什么？',pending,retained:",
+    "to": "question:'下一季，想把时间留给什么？',pending,carry,retained:"
+  },
+  {
+    "from": "import type {SeasonRecollectionView,SeasonPendingItem} from './season-thread.ts'",
+    "to": "import {seasonRecollection,type SeasonRecollectionView,type SeasonPendingItem} from './season-thread.ts'\nimport {canonicalJson} from '../core/identity.ts'"
+  },
+  {
+    "from": " const pending=season.remaining.filter(item=>item.continuation!=='retained')",
+    "to": " const original=seasonRecollection(p,season.quarter)\n if(!original||canonicalJson(original.remaining)!==canonicalJson(season.remaining))return null\n const pending=season.remaining.filter(item=>item.continuation!=='retained')"
+  }
+]

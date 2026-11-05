@@ -15,3 +15,29 @@
 .cinema-app .season-turn-actions .clock-review{flex:none}
 .cinema-app .dialog .season-turn-read{align-self:flex-start;font:16px/1.7 var(--serif);padding:5px 0;background:none;border:0;border-bottom:1px solid #c1a86b77;color:#ddc58d}
 .cinema-app .season-turn :is(button,summary):focus-visible{outline:2px solid #f1d99f;outline-offset:4px}
+
+.cinema-app .season-turn-with-carry{gap:9px}
+.cinema-app .season-carry-heading{display:flex;align-items:baseline;justify-content:space-between;gap:15px;margin:0 0 8px;color:#e4c68a;font:17px/1.7 var(--serif)}
+.cinema-app .season-carry-heading>span{color:#b4c2ab;font:14px/1.8 var(--serif)}
+.cinema-app .season-carry-papers{display:grid;gap:18px}
+.cinema-app .season-carry-papers>article{position:relative;min-width:0;padding:11px 14px 12px;border-top:1px solid #b6a16d88;border-bottom:1px solid #b6a16d55;background:linear-gradient(110deg,#8a9c6b0d,#a2b18c12);box-shadow:0 6px 10px #061f2633}
+.cinema-app .season-carry-papers>article::before{content:'';position:absolute;top:0;left:0;width:10px;height:10px;border-top:2px solid #d6bd84;border-left:2px solid #d6bd84}
+.cinema-app .season-carry-papers header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px}
+.cinema-app .season-carry-papers h4{margin:0;color:#e8d3a4;font:400 20px/1.7 var(--serif)}
+.cinema-app .season-carry-papers header>span{flex:none;color:#c9c7a4;border-left:2px solid #cfb77b;padding-left:8px;font:14px/1.7 var(--serif)}
+.cinema-app .season-carry-papers article>p{margin:4px 0;color:#d2d6be;font:15px/1.8 var(--serif)}
+.cinema-app .season-carry-papers article>.season-carry-origin{color:#aebda6;font:14px/1.8 var(--serif)}
+.cinema-app .season-carry-papers article>.season-carry-date{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px 12px;margin-top:8px;padding-top:6px;border-top:1px solid #b8a36944}
+.cinema-app .season-carry-date>time{color:#ead4a2;font:17px/1.8 Georgia,var(--serif)}
+
+/* Keep the real closing decision below the paper, independent of global room controls. */
+.cinema-app .dialog.season-turn>.dialog-direct-body{flex-direction:column;align-items:stretch;justify-content:center}
+.cinema-app .dialog.season-turn>.season-turn-actions{align-items:stretch;gap:8px;margin-top:10px;padding-top:10px}
+.cinema-app .dialog.season-turn>.season-turn-actions>.clock-advance.clock-advance-room{display:flex;flex-direction:row;align-items:center;flex-wrap:nowrap;gap:15px;width:100%;margin:0}
+.cinema-app .dialog.season-turn .season-turn-actions .command.clock-main{display:flex;flex:1;min-width:0;width:auto;margin:0}
+.cinema-app .dialog.season-turn .season-turn-actions .clock-main>button{display:flex;justify-content:space-between;align-items:center;gap:5px 15px;width:100%;padding:10px 15px;min-height:50px;background:#dfc58f;color:#16382d;border:1px solid #d9bf85;font:17px/1.7 var(--serif);box-shadow:none;transform:none}
+.cinema-app .dialog.season-turn .season-turn-actions .clock-main>button small{color:inherit;font:14px/1.7 var(--serif)}
+.cinema-app .dialog.season-turn .season-turn-actions .clock-main>button:not(:disabled):is(:hover,:focus-visible){background:#ebd6a6;color:#102e26;border-color:#f0d59b;transform:none;box-shadow:none}
+.cinema-app .dialog.season-turn .season-turn-actions .clock-main>button:disabled{background:#2b4035;color:#b8c4ac;border:1px dashed #88997c}
+.cinema-app .dialog.season-turn .season-turn-actions .command.clock-review{flex:none;align-self:center;width:auto;margin:0}
+.cinema-app .dialog.season-turn .season-turn-actions .clock-review>button{padding:6px 0;background:none;border:0;border-bottom:1px solid #c0ae7b77;color:#d9c89e;font:15px/1.8 var(--serif);min-height:0}
