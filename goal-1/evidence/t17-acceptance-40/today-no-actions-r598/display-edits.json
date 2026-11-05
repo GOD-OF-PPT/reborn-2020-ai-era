@@ -1,0 +1,62 @@
+[
+  {
+    "old": "import {todayResultReading} from './today-result-reading.ts'",
+    "new": "import {todayResultReading} from './today-result-reading.ts'\nimport {TodayIdleAction,todayIdleReading,type TodayIdlePrimary} from './TodayIdleAction.tsx'"
+  },
+  {
+    "old": " const resultReading=todayResultReading(p,today,resultNotice?.props)",
+    "new": " const resultReading=todayResultReading(p,today,resultNotice?.props)\n const idleReading=todayIdleReading(p,today)"
+  },
+  {
+    "old": " return <VideoSceneChoice p={videoProps}",
+    "new": " const render=(idlePrimary:TodayIdlePrimary|null)=><VideoSceneChoice p={videoProps}"
+  },
+  {
+    "old": "{one?continuation?.kind",
+    "new": "{idleReading?.title??(one?continuation?.kind"
+  },
+  {
+    "old": "??'今天，仍由你安排。'}</h1>",
+    "new": "??'今天，仍由你安排。')}</h1>"
+  },
+  {
+    "old": "facts={<>{situation?",
+    "new": "facts={<>{idleReading?<p className=\"moment-terms\">{idleReading.line}</p>:null}{situation?"
+  },
+  {
+    "old": "decisions={<><div className=\"command moment-decision moment-primary\">",
+    "new": "decisions={<>{idlePrimary?.node??<div className=\"command moment-decision moment-primary\">"
+  },
+  {
+    "old": "{primary.reason?<small className=\"reason\">{primary.reason}</small>:null}</div>",
+    "new": "{primary.reason?<small className=\"reason\">{primary.reason}</small>:null}</div>}"
+  },
+  {
+    "old": "{today.wait?<div className=\"moment-wait\">",
+    "new": "{idlePrimary?button('翻阅今天的选择',()=>setPage('directions')):today.wait?<div className=\"moment-wait\">"
+  },
+  {
+    "old": "stageLabel=\"今天 · 仍可安排\" actionLabel={sceneReadingLabel(primary.label)} onActivate={primary.activate} disabled={primary.disabled}",
+    "new": "stageLabel={idlePrimary?'今天 · 先不新增':'今天 · 仍可安排'} actionLabel={sceneReadingLabel((idlePrimary?.binding??primary).label)} onActivate={(idlePrimary?.binding??primary).activate} disabled={(idlePrimary?.binding??primary).disabled}"
+  },
+  {
+    "old": " </>}</MarketSceneChoice>}</CourseSceneChoice>}</VideoSceneChoice>\n}",
+    "new": " </>}</MarketSceneChoice>}</CourseSceneChoice>}</VideoSceneChoice>\n return idleReading?<TodayIdleAction p={p} value={idleReading}>{render}</TodayIdleAction>:render(null)\n}"
+  },
+  {
+    "old": "const button=(label:string,activate:()=>void,description?:string)=>",
+    "new": "const button=(label:string,activate:()=>void,description?:string,className?:string)=>"
+  },
+  {
+    "old": "return <button type=\"button\" aria-label={sceneReadingName(label)}",
+    "new": "return <button type=\"button\" className={className} aria-label={sceneReadingName(label)}"
+  },
+  {
+    "old": "idlePrimary?button('翻阅今天的选择',()=>setPage('directions'))",
+    "new": "idlePrimary?button('翻阅今天的选择',()=>setPage('directions'),undefined,'moment-explore')"
+  },
+  {
+    "old": "record={<><button type=\"button\" className=\"scene-text-action\" onClick={ui('看看工作、其它尝试与原约定',()=>setPage('directions')).activate} aria-label=\"想想今天 · 看看工作、其它尝试与原约定 ↗\">想想今天 ↗</button>",
+    "new": "record={<>{idlePrimary?null:<button type=\"button\" className=\"scene-text-action\" onClick={ui('看看工作、其它尝试与原约定',()=>setPage('directions')).activate} aria-label=\"想想今天 · 看看工作、其它尝试与原约定 ↗\">想想今天 ↗</button>}"
+  }
+]
