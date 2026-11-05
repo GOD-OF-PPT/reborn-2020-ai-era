@@ -1,0 +1,26 @@
+[
+  {
+    "old": "import {PersonResultChoice,personResultReading} from './PersonResultChoice.tsx'",
+    "new": "import {PersonResultChoice,personResultReading} from './PersonResultChoice.tsx'\nimport {personMomentRecord} from './person-moment-record.ts'\nimport {PersonRecordReader} from './PersonRecordReader.tsx'"
+  },
+  {
+    "old": " const personalResult=lifeProgress",
+    "new": " const personRecord=lifeProgress&&lifeMode==='person'?personMomentRecord(p,lifeProgress):null\n const personalResult=lifeProgress"
+  },
+  {
+    "old": " return <section ref={stage} className={'narrative-scene narrative-'+p.screen}",
+    "new": " const renderPerson=(readPerson:()=>void)=><section ref={stage} className={'narrative-scene narrative-'+p.screen}"
+  },
+  {
+    "old": "onRecord={p.onPeople} onNavigate={p.onNavigate}",
+    "new": "onRecord={readPerson} onNavigate={p.onNavigate}"
+  },
+  {
+    "old": "onClick={lifeMode==='person'?p.onPeople:p.onYear}",
+    "new": "onClick={lifeMode==='person'?readPerson:p.onYear}"
+  },
+  {
+    "old": " </section>\n}\n",
+    "new": " </section>\n return personRecord?<PersonRecordReader key={personRecord.key} p={p} value={personRecord} onFull={target=>p.onOpen('life',target)}>{renderPerson}</PersonRecordReader>:renderPerson(p.onPeople)\n}\n"
+  }
+]

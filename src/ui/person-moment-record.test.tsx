@@ -1,0 +1,67 @@
+import {afterEach,expect,it,vi} from 'vitest'
+import {isValidElement,type ReactElement,type ComponentProps} from 'react'
+import {renderToStaticMarkup} from 'react-dom/server'
+import {createCampaignRegistry,createCampaignRun} from '../application/campaign.ts'
+import {evaluateCommand,projectRun} from '../core/commands.ts'
+import type {GameRun} from '../core/run-types.ts'
+import type {GamePanelProps,PlayFeatures} from './game-types.ts'
+import {lifeSceneProgress} from './life-scene-progress.ts'
+import {personMomentRecord} from './person-moment-record.ts'
+import {PersonRecordReader} from './PersonRecordReader.tsx'
+import {NarrativeScene} from './NarrativeScene.tsx'
+import {Dialog} from './Dialog.tsx'
+
+// Normal in-memory game history and read-only UI callbacks; no persistence APIs.
+const hooks=vi.hoisted(()=>({enabled:false,index:0,values:[] as unknown[]}))
+const captured=vi.hoisted(()=>({open:null as unknown,actualReader:null as unknown,choice:null as Record<string,unknown>|null}))
+vi.mock('react',async original=>{const actual=await original<typeof import('react')>();return {...actual,useState:<T,>(initial:T|(()=>T))=>{if(!hooks.enabled)return actual.useState(initial);const i=hooks.index++;if(!(i in hooks.values))hooks.values[i]=typeof initial==='function'?(initial as ()=>T)():initial;return [hooks.values[i] as T,(v:T)=>{hooks.values[i]=v}] as const}}})
+vi.mock('./PersonResultChoice.tsx',async original=>{const actual=await original<typeof import('./PersonResultChoice.tsx')>();return {...actual,PersonResultChoice:(p:ComponentProps<typeof actual.PersonResultChoice>)=>{captured.choice=p as unknown as Record<string,unknown>;return <actual.PersonResultChoice {...p}/>}}})
+vi.mock('./PersonRecordReader.tsx',async original=>{const actual=await original<typeof import('./PersonRecordReader.tsx')>();captured.actualReader=actual.PersonRecordReader;return {...actual,PersonRecordReader:(p:ComponentProps<typeof actual.PersonRecordReader>)=><actual.PersonRecordReader {...p}>{open=>{captured.open=open;return p.children(open)}}</actual.PersonRecordReader>}})
+afterEach(()=>{hooks.enabled=false;hooks.index=0;hooks.values=[];captured.open=null;captured.choice=null})
+const registry=createCampaignRegistry(),initial=createCampaignRun({runId:'person-record-ui',actorId:'player',commandId:'create',seed:'person-record-ui',backgroundId:'technical_employee',playerProfile:{wishId:'autonomy',approach:'free'}})
+function act(run:GameRun,kind:string,payload:unknown={}){const result=evaluateCommand(run,{runId:run.runId,actorId:run.actorId,commandId:'record-'+(run.revision+1),expectedRevision:run.revision,kind,payload},registry,run.actorId);if(result.status!=='proposed')throw Error(JSON.stringify(result));return result.nextRun}
+function input(run=initial):GamePanelProps{const f=registry.runtime!.project!(run),view:GamePanelProps['view']={...projectRun(run),features:f,saveStatus:'saved',busy:false,readOnly:false,readOnlyReason:null,hasCandidate:false,pendingRevision:null};return {view,features:f as unknown as PlayFeatures,accountId:'personal',request:vi.fn(),requestWait:vi.fn(),controller:{snapshot:{view,busy:false},asynchronous:false,runtimeFailed:false} as unknown as GamePanelProps['controller']}}
+function until(run:GameRun,date:string){for(let i=0;i<30&&run.timeline.cursor.date<date;i++)run=act(run,'AdvanceTime',{date});return run}
+const started=act(initial,'StartLifeWork',{kind:'friend_visit',personId:'tang-ying',reference:null}),met=act(started,'AdvanceTime',{date:'2020-01-04'}),promise=input(met).features.life.promises.find(row=>row.status==='offered')!,accepted=act(met,'AcceptLifePromise',{promiseId:promise.id,consent:true}),first=act(accepted,'FulfillLifePromise',{promiseId:promise.id}),interrupted=act(first,'InterruptLifeWork',{jobId:input(first).features.life.jobs.find(j=>j.promiseId===promise.id)!.id}),second=act(interrupted,'FulfillLifePromise',{promiseId:promise.id}),done=until(second,'2020-01-07'),expired=until(met,'2020-01-19')
+const progress=(p:GamePanelProps)=>lifeSceneProgress(p.features.life,p.view.date,'tang-ying')
+function value(run=done){const p=input(run),v=personMomentRecord(p,progress(p))!;if(!v)throw Error('ORIGINAL_RECORD_REQUIRED');return {p,v}}
+type Element=ReactElement<Record<string,unknown>>
+const nodes=(n:unknown):Element[]=>Array.isArray(n)?n.flatMap(nodes):isValidElement<Record<string,unknown>>(n)?[n,...nodes(n.props.children),...nodes(n.props.footer)]:[]
+const words=(n:unknown):string=>typeof n==='string'?n:Array.isArray(n)?n.map(words).join(''):isValidElement<Record<string,unknown>>(n)?words(n.props.children):''
+function driver(run=done){const {p,v}=value(run),onFull=vi.fn(),render=()=>{hooks.enabled=true;hooks.index=0;return (captured.actualReader as typeof PersonRecordReader)({p,value:v,onFull,children:open=><button onClick={open}>原阅读入口</button>})},click=(label:string)=>{const b=nodes(render()).find(n=>n.type==='button'&&words(n.props.children)===label)!;if(!b||b.props.disabled)throw Error('ENABLED_READER_BUTTON_REQUIRED: '+label);(b.props.onClick as ()=>void)()},html=()=>{const tree=render();hooks.enabled=false;return renderToStaticMarkup(tree)};return {p,v,onFull,render,click,html}}
+
+it('keeps every paid attempt separately and distinguishes the original invitation/acceptance/result dates',()=>{
+ const {p,v}=value(),pr=v.promise!
+ expect(v.jobs).toHaveLength(2);expect(v.jobs.map(j=>[j.status,j.costFen,j.points])).toEqual([['interrupted',30000,1],['completed',30000,1]])
+ expect(v.initialJob).toBe(1);expect(pr).toMatchObject({offeredAt:'2020-01-04',acceptedAt:'2020-01-04',resolvedAt:'2020-01-07',deadline:'2020-02-18',costFen:30000})
+ expect(v.basis).toMatchObject({costFen:20000,points:1,completeAt:'2020-01-04'});expect(v.target).toEqual({accountId:'personal',personId:'tang-ying',lifeSelection:'person',recordId:promise.id});expect(p.request).not.toHaveBeenCalled()
+})
+it('opens a direct near record, reads both work pages and closes with no command or navigation',()=>{
+ const ui=driver();expect(ui.html()).not.toContain('person-moment-record');ui.click('原阅读入口')
+ const dialog=nodes(ui.render()).find(n=>n.type===Dialog)!;expect(dialog.props.layout).toBe('direct')
+ let html=ui.html();expect(html).toContain('已实际完成');expect(html).toContain('实际接受');expect(html).toContain('实际兑现');expect(html).toContain('¥300');expect(html).not.toContain('实际停止');expect(html).not.toContain('screen-book')
+ ui.click('上一段');html=ui.html();expect(html).toContain('已中断');expect(html).toContain('实际停止');expect(html).toContain('原预计完成');expect(html).toContain('¥300')
+ ui.click('下一段');expect(ui.html()).toContain('已实际完成');ui.click('合上手记');expect(ui.html()).not.toContain('person-moment-record');expect(ui.onFull).not.toHaveBeenCalled();expect(ui.p.request).not.toHaveBeenCalled();expect(ui.p.requestWait).not.toHaveBeenCalled()
+})
+it('closes the near page and passes the exact original personal promise target to the full reader',()=>{
+ const ui=driver();ui.click('原阅读入口');ui.click('完整人物原记录 ↗');expect(ui.onFull).toHaveBeenCalledExactlyOnceWith(ui.v.target);expect(ui.html()).not.toContain('person-moment-record');expect(ui.p.request).not.toHaveBeenCalled()
+})
+it('describes an expired invitation without charging its future quote or inventing a fulfillment job',()=>{
+ const ui=driver(expired);expect(ui.v.jobs).toHaveLength(0);expect(ui.v.promise!.acceptedAt).toBeNull();ui.click('原阅读入口');const html=ui.html()
+ expect(html).toContain('原邀请已过回应窗口');expect(html).toContain('这项邀请未被接受，没有兑现工作记录');expect(html).not.toContain('class="person-record-paid"');expect(html).toContain('原条款 ¥300');expect(html).toContain('此前相处');expect(html).toContain('已付¥200')
+})
+it('keeps the original result action bound to the near reader while all people and annual records stay reachable',()=>{
+ const p=input(done),onPeople=vi.fn(),props:ComponentProps<typeof NarrativeScene>={...p,screen:'life',lifeMode:'person',personId:'tang-ying',headingRef:null,onPerson:vi.fn(),onPeople,onYear:vi.fn(),onOpen:vi.fn(),onNavigate:vi.fn(),receipt:null},html=renderToStaticMarkup(<NarrativeScene {...props}/> )
+ expect(captured.choice!.onRecord).toBe(captured.open);expect(captured.choice!.onRecord).not.toBe(onPeople);expect(html).toContain('回看年度胶片');expect(html).toContain('打开人物与全部原约定');expect(onPeople).not.toHaveBeenCalled();expect(p.request).not.toHaveBeenCalled()
+})
+it('falls back for unknown, ambiguous and mismatched paid sources rather than showing zero or another person',()=>{
+ const p=input(done),pg=progress(p),v=personMomentRecord(p,pg)!
+ expect(personMomentRecord(p,{...pg,person:{...pg.person!,known:false}})).toBeNull();expect(personMomentRecord(p,{...pg,selection:'linzhou'})).toBeNull()
+ const job=p.features.life.jobs.find(j=>j.id===v.jobs[0]!.id)!
+ expect(personMomentRecord({...p,features:{...p.features,life:{...p.features.life,jobs:[...p.features.life.jobs,job]}}},pg)).toBeNull()
+ expect(personMomentRecord(p,{...pg,promise:{...pg.promise!,costFen:0}})).toBeNull();expect(personMomentRecord(input(started),progress(input(started)))).toBeNull()
+})
+it('keeps stale UI callbacks from opening the full reader after the public view changes',()=>{
+ const ui=driver();ui.click('原阅读入口');const full=nodes(ui.render()).find(n=>n.type==='button'&&words(n.props.children)==='完整人物原记录 ↗')!
+ Object.assign(ui.p.controller.snapshot,{view:{...ui.p.view,revision:ui.p.view.revision+1}});(full.props.onClick as ()=>void)();expect(ui.onFull).not.toHaveBeenCalled();expect(ui.p.request).not.toHaveBeenCalled()
+})

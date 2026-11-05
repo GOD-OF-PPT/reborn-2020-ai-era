@@ -1,0 +1,20 @@
+import {useState,type ReactNode} from 'react'
+import type {GamePanelProps,SceneTarget} from './game-types.ts'
+import type {PersonMomentRecord} from './person-moment-record.ts'
+import {Dialog} from './Dialog.tsx'
+import {PersonPortrait} from './PersonPortrait.tsx'
+import {moneyText} from './game-text.ts'
+import {makeSharedAction} from './shared-action.ts'
+import './person-moment-record.css'
+
+export function PersonRecordReader({p,value:v,onFull,children}:{p:GamePanelProps;value:PersonMomentRecord;onFull:(target:SceneTarget)=>void;children:(open:()=>void)=>ReactNode}){
+ const [open,setOpen]=useState(false),[index,setIndex]=useState(v.initialJob)
+ const ui=(label:string,activate:()=>void)=>makeSharedAction(p,label,activate,{allowReadOnly:true,canActivate:()=>v.runId===p.view.runId&&v.revision===p.view.revision})
+ const reading=ui('翻阅这段人物原经历',()=>{setIndex(v.initialJob);setOpen(true)}),full=ui('完整人物原记录',()=>{setOpen(false);onFull(v.target)}),page=Math.min(index,Math.max(0,v.jobs.length-1)),job=v.jobs[page]??null,pr=v.promise
+ return <>{children(reading.activate)}{open?<Dialog title={'与'+v.name+' · 这段日子'} layout="direct" className="opening-paper person-moment-record" onClose={()=>setOpen(false)} footer={<div className="person-record-actions"><button type="button" className="person-record-more" disabled={full.disabled} onClick={full.activate}>完整人物原记录 ↗</button><button type="button" className="primary" onClick={()=>setOpen(false)}>合上手记</button></div>}>
+  <div className="person-record-heading"><PersonPortrait personId={v.personId} name={v.name} revealed textOnly={p.textOnly===true}/><div><p>今天 {v.today} · 个人原经历</p><strong>{v.name} <small>{v.role}</small></strong><span className="person-record-status" data-missed={v.missed?'true':'false'}>{v.status}</span></div></div>
+  <div className="person-record-columns"><section><h3>{pr?'邀请与回应':'对方想过的生活'}</h3>{pr?<><p className="person-record-promise-title">{pr.title}</p><dl className="person-record-dates"><div><dt>邀请提出</dt><dd>{pr.offeredAt}</dd></div>{pr.acceptedAt?<div><dt>实际接受</dt><dd>{pr.acceptedAt}</dd></div>:null}<div><dt>{v.missed?'到期未兑现':v.status==='已经实际完成'?'实际兑现':'原结果记下'}</dt><dd>{pr.resolvedAt}</dd></div></dl><p className="person-record-terms">原条款 {moneyText(pr.costFen)} / {pr.points}点 / {pr.days}日<br/>原完成期限 {pr.deadline}</p>{v.basis?<p className="person-record-basis">此前共同活动 {v.basis.completeAt}完成，已付{moneyText(v.basis.costFen)} / 已用{v.basis.points}点。</p>:null}</>:<><p>{v.goal}</p><p className="person-record-boundary">{v.boundary}</p></>}</section>
+   <section aria-label="这份记录关联的全部原工作"><h3>{pr?'兑现工作的原记录':'真正相处过的日子'}</h3>{job?<><p className="person-record-work-title">{job.title} · {job.status==='completed'?'已实际完成':'已中断'}</p><dl className="person-record-dates"><div><dt>实际开始</dt><dd>{job.startAt}</dd></div><div><dt>{job.status==='completed'?'实际完成':'原预计完成'}</dt><dd>{job.completeAt}</dd></div>{job.releasedAt?<div><dt>实际停止</dt><dd>{job.releasedAt}</dd></div>:null}</dl><p className="person-record-paid">已付 <strong>{moneyText(job.costFen)}</strong> / 已用{job.points}点</p>{job.reference?<p className="person-record-reference">原材料 {job.reference}；完整来源见原记录。</p>:null}{v.jobs.length>1?<nav className="person-record-pages" aria-label="每段原工作"><button type="button" disabled={page===0} onClick={()=>setIndex(page-1)}>上一段</button><span>{page+1} / {v.jobs.length}</span><button type="button" disabled={page+1>=v.jobs.length} onClick={()=>setIndex(page+1)}>下一段</button></nav>:null}</>:<p className="person-record-no-work">{pr?.accepted?'已接受，但未留下兑现工作的记录。':'这项邀请未被接受，没有兑现工作记录。'}</p>}</section></div>
+  <p className="person-record-note">每段投入照原账保留；翻阅不增加收入或行动。</p>
+ </Dialog>:null}</>
+}
