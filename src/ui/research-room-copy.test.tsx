@@ -80,7 +80,7 @@ it('renders the actual short start echo, retains full reading and offers life af
  expect(html).toContain('公开研究笔记已开始 · 已付¥0 / 已用1点。');expect(html).toContain('细看回响')
  expect(html).toContain('预计2020-01-02完成；期间仍可安排生活')
  const done=finish(c.run),result=renderToStaticMarkup(<OpeningMoment p={done.p} focus={done.focus} onFocus={vi.fn()} headingRef={null} fallback={roomMoment(done.p)} onNavigate={vi.fn()} onExplore={vi.fn()}/>)
- expect(result).toContain('收好笔记，想想今天');expect(result).toContain('看看生活');expect(result).toContain('翻阅这一段的记录与代价')
+ expect(result).toContain('安排接下来的日子');expect(result).toContain('看看生活');expect(result).toContain('翻阅这一段的记录与代价')
 })
 
 it('binds the completed research object and primary choice to the original Today callback without making a command',()=>{

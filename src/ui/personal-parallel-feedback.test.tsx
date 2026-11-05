@@ -45,7 +45,7 @@ it('reuses the short original producer in both the same-life room and Today, kee
  const e=complete(begun()),p=input(e),f=focus(p),onClose=vi.fn(),feedback=<SceneTimeNotice date={e.after.date} {...e.notice} compact onClose={onClose} accountName={()=>'个人账户'}/>,today=todayThread(p,f)!
  const html=renderToStaticMarkup(<OpeningMoment p={p} focus={f} onFocus={vi.fn()} headingRef={null} fallback={roomMoment(p)} onNavigate={vi.fn()} onExplore={vi.fn()} feedback={feedback}/>),now=renderToStaticMarkup(<TodayScene p={p} today={today} headingRef={null} feedback={feedback} onFocus={vi.fn()} onPrepare={vi.fn()} onResume={vi.fn()} onExplore={vi.fn()} onRecollection={vi.fn()} onNavigate={vi.fn()}/>);
  for(const text of [html,now]){expect(text).toContain('休整结束；规则研习资格已取得。');expect(text).toContain('细看回响');expect(text).toContain('收起这次时间回响');expect(text).not.toContain('1项市场研究已完成，只整理')}
- expect(html).toContain('回到今天');expect(now).toContain('工作，还是留点时间给自己');expect(p.request).not.toHaveBeenCalled();expect(onClose).not.toHaveBeenCalled();expect(playerThread(p,f).focus.entityId).toBe(f.entityId)
+ expect(html).toContain('安排接下来的日子');expect(now).toContain('工作，还是留点时间给自己');expect(p.request).not.toHaveBeenCalled();expect(onClose).not.toHaveBeenCalled();expect(playerThread(p,f).focus.entityId).toBe(f.entityId)
 })
 it('names two legitimate research results with the same completed personal work and verifies each original qualification source',()=>{
  const run=act(begun('workspace'),'ResearchMarket',{definitionId:'simulation-special-study'}),e=complete(run),brief=short(e)!

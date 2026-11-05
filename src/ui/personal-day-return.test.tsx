@@ -82,5 +82,5 @@ it('keeps old-view callbacks inert and uses the same selected public research id
  const row=r.p.features.market.researches[0]!;expect(personalDayReturn({...r.p,features:{...r.p.features,market:{...r.p.features.market,researches:[row,row]}}},thread)).toBeNull()
 })
 it('keeps the original completion Today primary and does not add a redundant running exit',()=>{
- const done=until(full,'2020-01-08'),r=driver(done,'rest'),html=renderToStaticMarkup(<OpeningMoment {...r.props}/>);expect(html).not.toContain('回到今天，看未完安排');expect(html).toContain('回到今天');expect(r.p.request).not.toHaveBeenCalled()
+ const done=until(full,'2020-01-08'),r=driver(done,'rest'),html=renderToStaticMarkup(<OpeningMoment {...r.props}/>);expect(html).not.toContain('回到今天，看未完安排');expect(html).toContain('继续本季工作');expect(r.p.request).not.toHaveBeenCalled()
 })

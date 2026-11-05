@@ -8,16 +8,16 @@ import {moneyText} from './game-text.ts'
 import {addDays} from '../core/calendar.ts'
 
 type Primary={binding:SharedActionBinding;main:ReactNode}
-type Props={p:GamePanelProps;thread:PlayerThreadView;active:boolean;result:boolean;date:string|null;waitLabel:string;onToday:()=>void;children:(primary:Primary|null)=>ReactNode}
+type Props={p:GamePanelProps;thread:PlayerThreadView;active:boolean;result:boolean;date:string|null;waitLabel:string;onToday:()=>void;resultAction?:SharedActionBinding|undefined;children:(primary:Primary|null)=>ReactNode}
 
 /** A single original action binds both the work/life/market object and its main thought. */
-export function DayThreadAction({p,thread,active,result,date,waitLabel,onToday,children}:Props){
+export function DayThreadAction({p,thread,active,result,date,waitLabel,onToday,resultAction,children}:Props){
  if(!active)return children(null)
  const showReason=!p.view.hasCandidate&&!p.view.readOnly&&p.view.saveStatus!=='conflict'
  if(thread.focusScope==='history'||result||thread.stage==='market-position'){
   const label=thread.stage==='market-position'?'看看别的安排':thread.focusScope!=='history'&&thread.focus.kind==='market'&&thread.focus.entityKind==='research'&&result?'收好笔记，想想今天':'回到今天'
-  const binding=makeSharedAction(p,label,onToday,{allowReadOnly:true})
-  return children({binding,main:<div className="command moment-decision moment-primary"><button type="button" disabled={binding.disabled} onClick={binding.activate}><b aria-hidden="true">01</b><span>{label}</span><i aria-hidden="true">→</i></button>{binding.reason?<small className="reason">{binding.reason}</small>:null}</div>})
+  const binding=result&&thread.focusScope!=='history'&&resultAction?resultAction:makeSharedAction(p,label,onToday,{allowReadOnly:true})
+  return children({binding,main:<div className="command moment-decision moment-primary"><button type="button" disabled={binding.disabled} onClick={binding.activate}><b aria-hidden="true">01</b><span>{binding.label}</span><i aria-hidden="true">→</i></button>{binding.reason?<small className="reason">{binding.reason}</small>:null}</div>})
  }
  if(thread.focus.kind==='free'&&thread.stage==='choose'){
   const terms=p.features.life.work.rest

@@ -1,0 +1,72 @@
+{
+  "DayThreadAction.tsx": [
+    {
+      "from": "onToday:()=>void;children:",
+      "to": "onToday:()=>void;resultAction?:SharedActionBinding|undefined;children:"
+    },
+    {
+      "from": "date,waitLabel,onToday,children}:Props)",
+      "to": "date,waitLabel,onToday,resultAction,children}:Props)"
+    },
+    {
+      "from": "const binding=makeSharedAction(p,label,onToday,{allowReadOnly:true})",
+      "to": "const binding=result&&thread.focusScope!=='history'&&resultAction?resultAction:makeSharedAction(p,label,onToday,{allowReadOnly:true})"
+    },
+    {
+      "from": "<span>{label}</span><i aria-hidden=\"true\">→</i>",
+      "to": "<span>{binding.label}</span><i aria-hidden=\"true\">→</i>"
+    }
+  ],
+  "TodayScene.tsx": [
+    {
+      "from": "initialChoice?:'daily'|null|undefined",
+      "to": "initialChoice?:'daily'|'ongoing'|null|undefined"
+    },
+    {
+      "from": "useState<Page|null>(initialChoice==='daily'?'daily':null)",
+      "to": "useState<Page|null>(initialChoice==='daily'||initialChoice==='ongoing'?initialChoice:null)"
+    }
+  ],
+  "OpeningMoment.tsx": [
+    {
+      "from": "import {personalDayReturn} from './personal-day-return.ts'",
+      "to": "import {personalDayReturn} from './personal-day-return.ts'\nimport {completedDayChoice} from './completed-day-choice.ts'"
+    },
+    {
+      "from": "const [todayChoiceAt,setTodayChoiceAt]=useState<DayPerspective|null>(null)",
+      "to": "const [todayChoiceAt,setTodayChoiceAt]=useState<(DayPerspective&{choice:'daily'|'ongoing'})|null>(null)\n const currentResultChoiceKey=useRef<string|null>(null)"
+    },
+    {
+      "from": "const openToday=(choice:'daily'|null=null)",
+      "to": "const openToday=(choice:'daily'|'ongoing'|null=null)"
+    },
+    {
+      "from": "setTodayChoiceAt(choice==='daily'?{runId:p.view.runId,revision:p.view.revision}:null)",
+      "to": "setTodayChoiceAt(choice?{runId:p.view.runId,revision:p.view.revision,choice}:null)"
+    },
+    {
+      "from": " const freeTime=dayActive",
+      "to": " const resultChoice=dayActive&&!attempt&&day?completedDayChoice(p,day):null\n currentResultChoiceKey.current=resultChoice?.key??null\n const resultChoiceBinding=resultChoice?makeSharedAction(p,resultChoice.label,()=>{if(resultChoice.kind==='focus')chooseToday(resultChoice.focus);else openToday(resultChoice.kind)},{allowReadOnly:true,disabled:focusLocked,canActivate:()=>resultChoice.runId===p.view.runId&&resultChoice.revision===p.view.revision&&currentResultChoiceKey.current===resultChoice.key}):undefined\n const freeTime=dayActive"
+    },
+    {
+      "from": "initialChoice={dayPerspectiveCurrent(p.view,todayChoiceAt)?'daily':null}",
+      "to": "initialChoice={dayPerspectiveCurrent(p.view,todayChoiceAt)?todayChoiceAt!.choice:null}"
+    },
+    {
+      "from": "waitLabel={waitLabel} onToday={openToday}>{dayPrimary",
+      "to": "waitLabel={waitLabel} onToday={openToday} resultAction={resultChoiceBinding}>{dayPrimary"
+    },
+    {
+      "from": "const currentResultChoiceKey=useRef<string|null>(null)",
+      "to": "const currentResultChoiceKey=useRef<{key:string|null}>({key:null})"
+    },
+    {
+      "from": " currentResultChoiceKey.current=resultChoice?.key??null\n const resultChoiceBinding",
+      "to": " if(currentResultChoiceKey.current.key!==(resultChoice?.key??null))currentResultChoiceKey.current={key:resultChoice?.key??null}\n const resultChoiceScope=currentResultChoiceKey.current\n const resultChoiceBinding"
+    },
+    {
+      "from": "currentResultChoiceKey.current===resultChoice.key",
+      "to": "currentResultChoiceKey.current===resultChoiceScope&&resultChoiceScope.key===resultChoice.key"
+    }
+  ]
+}

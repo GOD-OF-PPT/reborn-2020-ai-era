@@ -85,7 +85,7 @@ it('shows one current completion date while the full echo is visible and restore
  const shown=renderToStaticMarkup(<OpeningMoment {...props} feedback={<SceneTimeNotice date={e.after.date} {...e.notice} compact accountName={()=>'个人账户'} onClose={vi.fn()}/>}/>),closed=renderToStaticMarkup(<OpeningMoment {...props} feedback={null}/>)
  expect(shown).toContain('2020-01-08，1次休整已经结束');expect(shown).not.toContain('2020-01-08已完成 · 已付')
  expect(shown).toContain('已付¥0 / 已用1点；行动不返还，不产生收入。');expect(closed).toContain('2020-01-08已完成 · 已付¥0')
- for(const html of [shown,closed]){expect(html).toContain('回到今天');expect(html).toContain('查看这次生活安排与原记录')}
+ for(const html of [shown,closed]){expect(html).toContain('安排接下来的日子');expect(html).toContain('查看这次生活安排与原记录')}
 })
 
 it('retires the fact-free start acknowledgement only beside its own current personal task',()=>{
