@@ -84,7 +84,7 @@ it('keeps parallel work ahead of a new life suggestion while leaving holdings vi
  const ui=driver(working),groups=todayReadingGroups(ui.today.ongoing)
  expect(groups.continuing).toHaveLength(1);expect(groups.continuing[0]!.focus.kind).toBe('work')
  expect(groups.holdings).toHaveLength(1)
- expect(words(ui.tableau().props.facts)).toContain('还有1件已经答应的事')
+ expect(words(ui.tableau().props.facts)).toContain('本季尚无工资实收');expect(words(ui.tableau().props.facts)).toContain('下一次反馈预计')
  ui.click('继续这季的工作');expect(ui.onFocus).toHaveBeenCalledExactlyOnceWith(groups.continuing[0]!.focus)
 })
 

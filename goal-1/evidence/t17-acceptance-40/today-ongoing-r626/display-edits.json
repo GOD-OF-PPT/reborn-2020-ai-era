@@ -1,0 +1,18 @@
+[
+  {
+    "old": "import {todayResearchReading} from './today-research-reading.ts'",
+    "new": "import {todayResearchReading} from './today-research-reading.ts'\nimport {todayOngoingReading} from './today-ongoing-reading.ts'"
+  },
+  {
+    "old": " const dueCustomers=p.features.relay?",
+    "new": " const ongoingReading=todayOngoingReading(p,today,situation)\n const dueCustomers=p.features.relay?"
+  },
+  {
+    "old": "one?continuation?.kind==='unknown'?'原站的责任，先核清来源。':continuation?.kind==='money'?'这些原款，仍要分别核对。':'这份约定，今天还在继续。':",
+    "new": "one?ongoingReading?.title??(continuation?.kind==='unknown'?'原站的责任，先核清来源。':continuation?.kind==='money'?'这些原款，仍要分别核对。':'这份约定，今天还在继续。'):"
+  },
+  {
+    "old": "{situation?<p className=\"moment-line\">{situation}</p>:null}{one?<p className=\"moment-terms\">",
+    "new": "{situation?<p className=\"moment-line\">{ongoingReading?.merged?ongoingReading.line:situation}</p>:null}{one&&!ongoingReading?.merged?<p className=\"moment-terms\">"
+  }
+]

@@ -64,7 +64,7 @@ it('keeps original ongoing work in front of a completed side order',()=>{
  const c=firstOrder(true)
  expect(c.today.ongoing.some(item=>item.focus.kind==='work')).toBe(true)
  expect(todayResultReading(c.p,c.today,c.notice)).toBeNull()
- const html=scene(c).html;expect(html).toContain('这份约定，今天还在继续。');expect(html).not.toContain('接下来的日子，想怎样过？')
+ const html=scene(c).html;expect(html).toContain('工作还在继续，今天怎么过？');expect(html).not.toContain('接下来的日子，想怎样过？')
 })
 
 it('retains history, responsibility and a stale source in their original reading',()=>{
