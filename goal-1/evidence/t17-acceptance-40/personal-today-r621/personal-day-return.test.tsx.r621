@@ -1,0 +1,84 @@
+import {afterEach,expect,it,vi} from 'vitest'
+import {isValidElement,type ComponentProps,type ReactElement} from 'react'
+import {renderToStaticMarkup} from 'react-dom/server'
+import {createCampaignRegistry,createCampaignRun} from '../application/campaign.ts'
+import {evaluateCommand,previewCommand,projectRun} from '../core/commands.ts'
+import type {GameRun,CommandEnvelope} from '../core/run-types.ts'
+import type {GamePanelProps,PlayFeatures} from './game-types.ts'
+import {OpeningMoment} from './OpeningMoment.tsx'
+import {TodayScene} from './TodayScene.tsx'
+import {RoomTableau} from './RoomTableau.tsx'
+import {Dialog} from './Dialog.tsx'
+import {OpeningObject} from './OpeningObject.tsx'
+import {roomMoment} from './RoomMoment.tsx'
+import {todayThread} from './today-thread.ts'
+import {playerThread,type OpeningFocus} from './player-thread.ts'
+import {sceneReadingName} from './scene-language.ts'
+import {personalDayReturn} from './personal-day-return.ts'
+
+// Normal in-memory game state; the driver follows real Opening/Today/DayThread
+// UI callbacks. No persistence, codec or imported run fixtures.
+const hooks=vi.hoisted(()=>({enabled:false,current:[] as unknown[],index:0,slots:new Map<string,unknown[]>()}))
+vi.mock('react',async original=>{
+ const actual=await original<typeof import('react')>(),state=<T,>(initial:T|(()=>T))=>{const i=hooks.index++,values=hooks.current;if(!(i in values))values[i]=typeof initial==='function'?(initial as ()=>T)():initial;return [values[i] as T,(next:T|((old:T)=>T))=>{values[i]=typeof next==='function'?(next as (old:T)=>T)(values[i] as T):next}] as const}
+ return {...actual,useState:<T,>(v:T|(()=>T))=>hooks.enabled?state(v):actual.useState(v),useRef:<T,>(v:T)=>hooks.enabled?state(()=>({current:v}))[0]:actual.useRef(v),useEffect:(...args:Parameters<typeof actual.useEffect>)=>{if(!hooks.enabled)actual.useEffect(...args)},useImperativeHandle:(...args:Parameters<typeof actual.useImperativeHandle>)=>{if(!hooks.enabled)actual.useImperativeHandle(...args)},useCallback:<T extends (...args:never[])=>unknown,>(fn:T,deps:readonly unknown[])=>hooks.enabled?fn:actual.useCallback(fn,deps),useMemo:<T,>(fn:()=>T,deps:readonly unknown[])=>hooks.enabled?fn():actual.useMemo(fn,deps),useId:()=>hooks.enabled?'work-today':actual.useId()}
+})
+afterEach(()=>{hooks.enabled=false;hooks.current=[];hooks.index=0;hooks.slots.clear();vi.clearAllMocks()})
+function mounted<T>(key:string,fn:()=>T){const old=hooks.current,index=hooks.index,enabled=hooks.enabled;hooks.current=hooks.slots.get(key)??[];hooks.slots.set(key,hooks.current);hooks.index=0;hooks.enabled=true;try{return fn()}finally{hooks.current=old;hooks.index=index;hooks.enabled=enabled}}
+const registry=createCampaignRegistry(),initial=createCampaignRun({runId:'personal-day-return-ui',actorId:'player',commandId:'create',seed:'personal-day-return-ui',backgroundId:'technical_employee',playerProfile:{wishId:'autonomy',approach:'free'}})
+function act(run:GameRun,kind:string,payload:unknown={}){const r=evaluateCommand(run,{runId:run.runId,actorId:run.actorId,commandId:'today-'+(run.revision+1),expectedRevision:run.revision,kind,payload},registry,run.actorId);if(r.status!=='proposed')throw Error(JSON.stringify(r));return r.nextRun}
+const working=act(initial,'WorkQuarter'),full=act(act(working,'StartLifeWork',{kind:'rest',personId:null,reference:null}),'ResearchMarket',{definitionId:'market-overview'})
+function input(run=full):GamePanelProps{const f=registry.runtime!.project!(run),view:GamePanelProps['view']={...projectRun(run),features:f,saveStatus:'saved',busy:false,readOnly:false,readOnlyReason:null,hasCandidate:false,pendingRevision:null};return {view,features:f as unknown as PlayFeatures,accountId:'personal',request:vi.fn(),requestWait:vi.fn(),controller:{snapshot:{view,busy:false},asynchronous:false,runtimeFailed:false,preview:(c:CommandEnvelope)=>previewCommand(run,c,registry,run.actorId),clockCommitments:()=>{throw Error('ORIGINAL_REVIEW_REQUIRED')}} as unknown as GamePanelProps['controller']}}
+type Selection='rest'|'workspace'|'research'
+const focus=(p:GamePanelProps,selection:Selection='rest'):OpeningFocus=>selection==='research'?{runId:p.view.runId,kind:'market',accountId:'personal',entityKind:'research',entityId:p.features.market.researches[0]!.id}:{runId:p.view.runId,kind:'life',accountId:'personal',selection,entityId:p.features.life.jobs.find(row=>row.kind===selection)!.id}
+function until(run:GameRun,date:string){for(let n=0;n<40;n++){const p=input(run),w=p.features.workbench;if(w.pause){const e=w.events.find(e=>e.isBlocking)!,c=e.choices.find(c=>c.isDefault)!;if(c.costFen||c.actionPoints)throw Error('EXPECTED_FREE_ORIGINAL_REPLY');run=act(run,'ChooseEvent',{instanceId:e.id,choiceId:c.id});continue}if(run.timeline.cursor.date>=date)return run;run=act(run,'AdvanceTime',{date})}throw Error('ORIGINAL_TIME_BOUND')}
+
+type Element=ReactElement<Record<string,unknown>>
+const words=(n:unknown):string=>typeof n==='string'?n:Array.isArray(n)?n.map(words).join(''):isValidElement<Record<string,unknown>>(n)?words(n.props.children):''
+function elements(n:unknown,path='root'):Element[]{
+ if(Array.isArray(n))return n.flatMap((v,i)=>elements(v,path+'/'+i));if(!isValidElement<Record<string,unknown>>(n))return []
+ if(typeof n.type==='function'&&['MarketSceneChoice','VideoSceneChoice','CourseSceneChoice','RelaySceneChoice'].includes(n.type.name)&&typeof n.props.children==='function')return elements(n.props.children(vi.fn()),path+'/choice')
+ if(typeof n.type==='function'&&['RelayThreadAction','OpeningAttemptAction','VideoThreadAction','CourseThreadAction'].includes(n.type.name)&&typeof n.props.children==='function')return elements(n.props.children(null),path+'/thread')
+ const out=[n,...elements(n.props.children,path+'/children'),...elements(n.props.footer,path+'/footer')]
+ if(n.type===RoomTableau)for(const key of ['heading','context','feedback','facts','decisions','record','object'])out.push(...elements(n.props[key],path+'/'+key))
+ if(typeof n.type==='function'&&['DayThreadAction','ClockAdvance','OpeningObject','TodayScene','TodayLifeChoices','TodayWorkChoice','TodayDirections','CommandButton'].includes(n.type.name))out.push(...elements(mounted(n.type===TodayScene?'today':path,()=> (n.type as (p:Record<string,unknown>)=>unknown)(n.props)),path+'/render'))
+ return out
+}
+function driver(run=full,selection:Selection='rest',extra:Partial<ComponentProps<typeof OpeningMoment>>={}){const p=input(run),onFocus=vi.fn(),onNavigate=vi.fn(),props:ComponentProps<typeof OpeningMoment>={p,focus:focus(p,selection),onFocus,headingRef:null,fallback:roomMoment(p),onNavigate,onExplore:vi.fn(),...extra};let mountedToday=false
+ const render=()=>{const tree=mounted('opening',()=>OpeningMoment(props)),now=tree.type===TodayScene;if(now&&!mountedToday)hooks.slots.delete('today');mountedToday=now;return elements(tree)},button=(label:string)=>render().find(n=>n.type==='button'&&(words(n.props.children)===label||n.props['aria-label']===label||n.props['aria-label']===sceneReadingName(label))),click=(label:string)=>{const b=button(label);if(!b||b.props.disabled)throw Error('ENABLED_BUTTON_REQUIRED: '+label);(b.props.onClick as ()=>void)()};return {p,props,onFocus,onNavigate,render,button,click}}
+
+it.each(['rest','research'] as const)('returns directly from the running %s scene to Today with no automatic comparison or game command',selection=>{
+ const r=driver(full,selection),before=JSON.stringify({accounts:r.p.view.accounts,budget:r.p.view.budget,date:r.p.view.date,jobs:r.p.features.life.jobs,researches:r.p.features.market.researches}),all=r.render(),links=all.filter(n=>n.type==='button'&&words(n.props.children).includes('回到今天，看未完安排'))
+ expect(links).toHaveLength(1);r.click('回到今天，看未完安排 ↗');expect(r.render().some(n=>n.type===TodayScene)).toBe(true);expect(r.render().some(n=>n.type===Dialog)).toBe(false)
+ r.click('回到书签里的那件事 ↗');expect(r.render().some(n=>n.type===TodayScene)).toBe(false);expect(r.render().some(n=>n.type==='button'&&words(n.props.children).includes('回到今天，看未完安排'))).toBe(true)
+ expect(r.onFocus).not.toHaveBeenCalled();expect(r.onNavigate).not.toHaveBeenCalled();expect(r.p.request).not.toHaveBeenCalled();expect(r.p.requestWait).not.toHaveBeenCalled();expect(JSON.stringify({accounts:r.p.view.accounts,budget:r.p.view.budget,date:r.p.view.date,jobs:r.p.features.life.jobs,researches:r.p.features.market.researches})).toBe(before)
+})
+it.each(['rest','workspace'] as const)('preserves the original %s wait/main/object and interruption command while adding a reading exit',kind=>{
+ const run=kind==='rest'?full:act(working,'StartLifeWork',{kind:'workspace',personId:null,reference:null}),r=driver(run,kind),all=r.render(),room=all.find(n=>n.type===RoomTableau)!,object=all.find(n=>n.type===OpeningObject)!,main=all.find(n=>n.type==='button'&&n.props['aria-label']===object.props.actionLabel)!,stop=all.find(n=>typeof n.type==='function'&&n.type.name==='CommandButton'&&n.props.kind==='InterruptLifeWork')!,job=r.p.features.life.jobs.find(j=>j.kind===kind)!
+ expect(object.props.onActivate).toBe(main.props.onClick);expect(stop.props.payload).toEqual({jobId:job.id});expect(stop.props.confirm).toBe(true);expect(words(room.props.record)).toContain('回到今天，看未完安排');expect(words(room.props.decisions)).not.toContain('回到今天，看未完安排');expect(r.p.request).not.toHaveBeenCalled()
+})
+it('requires the same live public object and retains completed/interrupted/history/invalid paths',()=>{
+ const p=input(),f=focus(p),thread=playerThread(p,f),job=p.features.life.jobs[0]!
+ expect(personalDayReturn(p,thread)).toMatchObject({runId:p.view.runId,revision:p.view.revision,sourceId:job.id,kind:'life'})
+ for(const t of [{...thread,focusScope:'history' as const},{...thread,responsibilityOverrideNeeded:true},{...thread,focus:{...f,entityId:'missing'}},{...thread,focus:{...f,runId:'another'}}])expect(personalDayReturn(p,t)).toBeNull()
+ expect(personalDayReturn({...p,features:{...p.features,life:{...p.features.life,jobs:[...p.features.life.jobs,job]}}},thread)).toBeNull();expect(personalDayReturn({...p,features:{...p.features,life:{...p.features.life,asOf:'2019-12-31'}}},thread)).toBeNull()
+ const stopped=act(full,'InterruptLifeWork',{jobId:job.id}),sp=input(stopped);expect(personalDayReturn(sp,playerThread(sp,focus(sp)))).toBeNull()
+ const done=until(full,'2020-01-08'),dp=input(done);expect(personalDayReturn(dp,playerThread(dp,focus(dp)))).toBeNull()
+ const rp=input(act(full,'StopMarketResearch',{researchId:p.features.market.researches[0]!.id}));expect(personalDayReturn(rp,playerThread(rp,focus(rp,'research')))).toBeNull()
+})
+it('retains a real cross-quarter unfinished rest and its original source, without treating it as completed history',()=>{
+ const march=until(working,'2020-03-28'),started=act(march,'StartLifeWork',{kind:'rest',personId:null,reference:null}),april=until(started,'2020-04-01'),p=input(april),thread=playerThread(p,focus(p)),v=personalDayReturn(p,thread)!
+ expect(thread.focusScope).toBe('carry');expect(p.features.life.jobs[0]!.status).toBe('running');expect(v.sourceId).toBe(p.features.life.jobs[0]!.id);expect(p.features.life.jobs[0]!.completeAt).toBe('2020-04-04');expect(p.request).not.toHaveBeenCalled()
+})
+it('supports the original known-person shared work without creating a relationship or accepting another promise',()=>{
+ const run=act(working,'StartLifeWork',{kind:'friend_visit',personId:'tang-ying',reference:null}),p=input(run),job=p.features.life.jobs[0]!,f:OpeningFocus={runId:p.view.runId,kind:'life',accountId:'personal',selection:'tang-ying',entityId:job.id},thread=playerThread(p,f),v=personalDayReturn(p,thread)!
+ expect(v).toMatchObject({kind:'life',sourceId:job.id});expect(p.features.life.promises).toHaveLength(0);expect(p.request).not.toHaveBeenCalled()
+})
+it('keeps old-view callbacks inert and uses the same selected public research identity',()=>{
+ const r=driver(full,'research'),thread=playerThread(r.p,focus(r.p,'research')),v=personalDayReturn(r.p,thread)!,button=r.button('回到今天，看未完安排 ↗')!
+ expect(v).toMatchObject({kind:'research',sourceId:r.p.features.market.researches[0]!.id});Object.assign(r.p.controller.snapshot,{view:{...r.p.view,revision:r.p.view.revision+1}});(button.props.onClick as ()=>void)();expect(r.render().some(n=>n.type===TodayScene)).toBe(false);expect(r.onNavigate).not.toHaveBeenCalled();expect(r.p.request).not.toHaveBeenCalled()
+ const row=r.p.features.market.researches[0]!;expect(personalDayReturn({...r.p,features:{...r.p.features,market:{...r.p.features.market,researches:[row,row]}}},thread)).toBeNull()
+})
+it('keeps the original completion Today primary and does not add a redundant running exit',()=>{
+ const done=until(full,'2020-01-08'),r=driver(done,'rest'),html=renderToStaticMarkup(<OpeningMoment {...r.props}/>);expect(html).not.toContain('回到今天，看未完安排');expect(html).toContain('回到今天');expect(r.p.request).not.toHaveBeenCalled()
+})

@@ -1,0 +1,14 @@
+[
+  {
+    "old": "import {personalDayProgressBrief,personalStartNoticeExpired,personalResultFacts} from './personal-day-copy.ts'",
+    "new": "import {personalDayProgressBrief,personalStartNoticeExpired,personalResultFacts} from './personal-day-copy.ts'\nimport {personalDayReturn} from './personal-day-return.ts'"
+  },
+  {
+    "old": " const roomPersonTime=personRoom&&timeNotice",
+    "new": " const personalReturn=dayActive&&!attempt?personalDayReturn(p,thread):null\n const personalTodayBinding=personalReturn?makeSharedAction(p,'回到今天，看未完安排',()=>openToday(),{allowReadOnly:true,disabled:focusLocked,canActivate:()=>personalReturn.runId===p.view.runId&&personalReturn.revision===p.view.revision}):null\n const roomPersonTime=personRoom&&timeNotice"
+  },
+  {
+    "old": "{workTodayBinding.label} ↗</button>:null}{relayClosed&&feedback",
+    "new": "{workTodayBinding.label} ↗</button>:null}{personalTodayBinding?<button type=\"button\" className=\"scene-text-action\" disabled={personalTodayBinding.disabled} onClick={personalTodayBinding.activate}>{personalTodayBinding.label} ↗</button>:null}{relayClosed&&feedback"
+  }
+]

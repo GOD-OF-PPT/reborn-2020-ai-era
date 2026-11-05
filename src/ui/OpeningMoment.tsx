@@ -11,6 +11,7 @@ import {workOutcome} from './work-outcome.ts'
 import {marketOrderRoomCopy,marketOrderWaitBrief} from './market-order-room.ts'
 import {researchRoomCopy,researchRoomBrief,researchWaitLabel} from './research-room-copy.ts'
 import {personalDayProgressBrief,personalStartNoticeExpired,personalResultFacts} from './personal-day-copy.ts'
+import {personalDayReturn} from './personal-day-return.ts'
 import {firstOrderPaidFacts} from './first-order-feedback.ts'
 import {firstOrderStage} from './first-order-stage.ts'
 import './first-order-stage.css'
@@ -319,7 +320,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const recordBinding=makeSharedAction(p,requiresChoice?'翻看本季已有记录':personRoom?'这次选择的完整说明':'翻阅这一段的记录与代价',()=>{if(requiresChoice)onNavigate('quarter',{accountId:p.accountId});else if(workReading)openWorkRecord();else setRecordOpen(true)},{allowReadOnly:true})
  const recordLink=(openRelay:(intent?:'record')=>void)=>{
   const binding=relay&&!requiresChoice&&!legacy?makeSharedAction(p,relayTarget===null?'翻看这次开站的条件与投入':relayClosed?'翻原票与回执':'翻看同一份服务的原票与回应',()=>{setObjectOpen(false);openRelay('record')},{allowReadOnly:true}):recordBinding
-  return <><button type="button" className="scene-text-action" disabled={binding.disabled} onClick={binding.activate} aria-label={sceneReadingName(binding.label)+' ↗'}>{sceneReadingLabel(binding.label)} ↗</button>{workTodayBinding&&(workTimePrimary||sideOutcome)?<button type="button" className="scene-text-action" disabled={workTodayBinding.disabled} onClick={workTodayBinding.activate}>{workTodayBinding.label} ↗</button>:null}{relayClosed&&feedback==='已从本机存档继续。'?<p className="moment-status" role="status">{feedback}</p>:null}</>
+  return <><button type="button" className="scene-text-action" disabled={binding.disabled} onClick={binding.activate} aria-label={sceneReadingName(binding.label)+' ↗'}>{sceneReadingLabel(binding.label)} ↗</button>{workTodayBinding&&(workTimePrimary||sideOutcome)?<button type="button" className="scene-text-action" disabled={workTodayBinding.disabled} onClick={workTodayBinding.activate}>{workTodayBinding.label} ↗</button>:null}{personalTodayBinding?<button type="button" className="scene-text-action" disabled={personalTodayBinding.disabled} onClick={personalTodayBinding.activate}>{personalTodayBinding.label} ↗</button>:null}{relayClosed&&feedback==='已从本机存档继续。'?<p className="moment-status" role="status">{feedback}</p>:null}</>
  }
  const entryPaper=attempt?.kind==='free-entry'?'calendar' as const:attempt?.kind==='market-entry'?'market' as const:undefined
  const firstObjectLabel=firstStage?.label??(firstAttempt?({letter:'待答复',planned:'已安排 · 等开工',running:'制作中',delivery:'作品待提交',feedback:'已发送 · 等回信',paid:'实收凭证','non-success':({declined:'已婉拒',skipped:'已略过',expired:'报价已到期',cancelled:'已取消',interrupted:'工作已中断',missed:'错过交付期限'} as Record<string,string>)[thread.stage]??'这次留下的记录'}[firstAttempt.phase]):null)
@@ -356,6 +357,8 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const researchBrief=researchCopy&&timeNotice?researchRoomBrief(p,thread,timeNotice.props):null
  const personalFacts=personalLife&&timeNotice?personalResultFacts(p,thread,timeNotice.props):null
  const workTodayBinding=dayActive&&!attempt&&workCopy?makeSharedAction(p,'回到今天，看看其它安排',()=>openToday('daily'),{allowReadOnly:true,disabled:focusLocked}):null
+ const personalReturn=dayActive&&!attempt?personalDayReturn(p,thread):null
+ const personalTodayBinding=personalReturn?makeSharedAction(p,'回到今天，看未完安排',()=>openToday(),{allowReadOnly:true,disabled:focusLocked,canActivate:()=>personalReturn.runId===p.view.runId&&personalReturn.revision===p.view.revision}):null
  const roomPersonTime=personRoom&&timeNotice&&thread.focus.kind==='life'?personTimeReading(p,lifeSceneProgress(p.features.life,p.view.date,thread.focus.selection),timeNotice.props,thread.focus.entityId):null
  const paidFirstFacts=firstAttempt&&timeNotice?firstOrderPaidFacts(p,thread,timeNotice.props):null
  const sceneFactsAfterEcho=roomPersonTime?[]:researchCopy?.resultEcho&&researchBrief===researchCopy.resultEcho?[]:paidFirstFacts??(personalFacts?[personalFacts]:sceneFacts)
