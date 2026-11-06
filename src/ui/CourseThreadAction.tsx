@@ -2,6 +2,7 @@ import type {ReactNode} from 'react'
 import {courseEntryReading} from './course-entry-reading.ts'
 import {CourseEntryAction,type CourseEntryExtras} from './CourseEntryAction.tsx'
 import {courseStudioReading} from './course-studio-reading.ts'
+import {courseLessonReading} from './course-lesson-preparation.ts'
 import {CourseStudioAction} from './CourseStudioAction.tsx'
 import type {GamePanelProps,NavigateScene} from './game-types.ts'
 import type {PlayerThreadView} from './player-thread.ts'
@@ -15,6 +16,7 @@ import {courseSceneProgress} from './course-scene-progress.ts'
 import {resolveCourseFocus,courseSceneContext} from './course-player-thread.ts'
 import {COURSE_JOBS} from '../content/course.ts'
 import {moneyText} from './game-text.ts'
+import {playableAdvanceDate} from '../application/playable-advance.ts'
 
 type Primary={binding:SharedActionBinding;main:ReactNode;courseEntry?:CourseEntryExtras}
 type Props={p:GamePanelProps;thread:PlayerThreadView;active:boolean;date:string|null;waitLabel:string;onChoose:(intent?:CourseChoiceIntent)=>void;onResult:()=>void;onToday:()=>void;onNavigate?:NavigateScene|undefined;children:(primary:Primary|null)=>ReactNode}
@@ -34,6 +36,11 @@ export function CourseThreadAction({p,thread,active,date,waitLabel,onChoose,onRe
  if(entry&&onNavigate)return <CourseEntryAction p={p} thread={thread} reading={entry} date={date} waitLabel={waitLabel} onChoose={onChoose} onToday={onToday} onNavigate={onNavigate}>{children}</CourseEntryAction>
  const studio=courseStudioReading(p,thread)
  if(studio?.choice)return <CourseStudioAction p={p} thread={thread} reading={studio} onChoose={onChoose}>{children}</CourseStudioAction>
+ const lesson=courseLessonReading(p,thread)
+ if(lesson?.toolCommand){const command=lesson.toolCommand;return <CommandButton {...p} kind="DecideVideoProgram" payload={{applicationId:command.applicationId}} label={command.label} confirm={false} className="moment-decision moment-primary" showReason={showReason} renderAction={(binding,main)=>children({binding,main})}><b aria-hidden="true">01</b><span>{command.label}<small>读真实回信，不重新付款或延长条件</small></span><i aria-hidden="true">↗</i></CommandButton>}
+ if(lesson?.toolWait){const wait=lesson.toolWait,next=playableAdvanceDate(p.features.workbench,p.view.date,wait.date);if(next)return <ClockAdvance p={{...p,accountId:wait.accountId}} date={next} label={(next===wait.date?wait.label:'先到日历上的下一处反馈')+' · '+next} room showReason={showReason} renderAction={binding=>children({binding,main:<div className="moment-wait moment-primary"><div className="clock-advance clock-advance-room">{binding.reviewNode}{binding.mainNode}</div></div>})}/>}
+ if(lesson?.tool)return choice('准备图像工具的使用条件','选原账号，留出人手和时间；课程与案例保留',()=>onChoose('tool'))
+ if(thread.stage==='course-draft'&&lesson)return choice('亲手准备这一堂课的样课','先留出人手和时间，再作真实投入',()=>onChoose('sample'))
  if(teaching&&thread.outcome==='non-success')return choice('看清停下之后，仍要面对什么','先决定退款与未完承诺，再考虑继续等待',onResult)
  if(thread.command)return <CommandButton {...p} {...thread.command} className="moment-decision moment-primary" showReason={showReason} renderAction={(binding,main)=>children({binding,main})}><b aria-hidden="true">01</b><span>{thread.command.label}<small>核对这间教室的条件，再由你决定</small></span><i aria-hidden="true">→</i></CommandButton>
  if(teaching&&thread.stage==='course-cohort-update-required'){

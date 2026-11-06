@@ -16,3 +16,17 @@
 .cinema-app .dialog.today-daily-dialog .today-life-option{padding-top:10px}
 .cinema-app .dialog.today-daily-dialog .today-life-terms{margin-top:10px}
 .cinema-app .dialog.today-daily-dialog>.dialog-direct-body{gap:6px}
+
+/* A disabled choice keeps its reason below the action, without pushing the intro into the title. */
+.cinema-app .dialog.today-daily-dialog>.dialog-direct-body{justify-content:flex-start}
+.cinema-app .dialog.today-daily-dialog .today-life-choices{gap:8px}
+.cinema-app .dialog.today-daily-dialog .today-life-option{padding-top:6px}
+.cinema-app .dialog.today-daily-dialog .today-life-sketch{width:44px;height:46px}
+.cinema-app .dialog.today-daily-dialog .today-life-terms{margin-top:6px}
+.cinema-app .dialog.today-daily-dialog .today-life-date{margin:3px 0}
+.cinema-app .dialog.today-daily-dialog .today-life-effect{margin:3px 0 8px}
+
+/* The life surface loads later; keep this complete daily comparison above its shared centering rule. */
+.cinema-app .dialog.today-daily-dialog.today-life-dialog>.dialog-direct-body{justify-content:flex-start}
+.cinema-app .dialog.today-daily-dialog>.today-choice-footer{display:flex;align-items:center;gap:14px}
+.cinema-app .dialog.today-daily-dialog>.today-choice-footer>.today-daily-readings{margin-right:auto}

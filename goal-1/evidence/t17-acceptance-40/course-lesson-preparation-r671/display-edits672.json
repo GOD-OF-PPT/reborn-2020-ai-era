@@ -1,0 +1,147 @@
+[
+  {
+    "path": "src/ui/CourseSceneChoice.tsx",
+    "hunks": [
+      {
+        "oldStart": 16,
+        "oldEnd": 16,
+        "newStart": 16,
+        "newEnd": 18,
+        "old": "",
+        "new": "import {courseLessonPreparationPage} from './course-lesson-preparation.ts'\nimport './course-lesson-preparation.css'\n"
+      },
+      {
+        "oldStart": 115,
+        "oldEnd": 115,
+        "newStart": 117,
+        "newEnd": 123,
+        "old": "",
+        "new": " const lessonPreparation=!contextReason&&!progress?.invalidReason&&courseLessonPreparationPage(p,current,page)\n const lessonKey=JSON.stringify([p.view.runId,p.accountId,current?.businessId]),[lessonLeaf,setLessonLeaf]=useState<{key:string;value:'form'|'content'|'promise'}|null>(null),definitionLeaf=lessonLeaf?.key===lessonKey?lessonLeaf.value:'form'\n const [caseLeaf,setCaseLeaf]=useState<{key:string;value:number}|null>(null),casePages=Math.max(1,Math.ceil((v?.cases.length??0)/2)),casePage=caseLeaf?.key===lessonKey?Math.min(Math.max(0,caseLeaf.value),casePages-1):0\n const originalCases=v?.cases.map((ref,index)=>({ref,index}))??[],visibleCases=lessonPreparation?originalCases.slice(casePage*2,casePage*2+2):originalCases\n const definitionProductReady=v?.catalog.products.some(product=>product.id===draft.productId)??false\n const definitionContentReady=definitionProductReady&&draft.name.trim().length>0&&draft.name.trim().length<=80&&(v?.catalog.topics.some(topic=>topic.id===draft.topicId)??false)\n"
+      },
+      {
+        "oldStart": 133,
+        "oldEnd": 133,
+        "newStart": 141,
+        "newEnd": 143,
+        "old": "",
+        "new": " else if(page==='definition'&&lessonPreparation&&definitionLeaf==='form')primary=<button type=\"button\" className=\"primary\" disabled={!definitionProductReady} onClick={()=>setLessonLeaf({key:lessonKey,value:'content'})}>给这堂课起个名字 →</button>\n else if(page==='definition'&&lessonPreparation&&definitionLeaf==='content')primary=<button type=\"button\" className=\"primary\" disabled={!definitionContentReady} onClick={()=>setLessonLeaf({key:lessonKey,value:'promise'})}>接着，想清谁会来听 →</button>\n"
+      },
+      {
+        "oldStart": 149,
+        "oldEnd": 150,
+        "newStart": 159,
+        "newEnd": 160,
+        "old": " const render=(openTeaching?:((intent?:CourseTeachingIntent)=>void))=><>{children?children(dispatch(openTeaching)):<button type=\"button\" onClick={()=>activate()}>走近这份教案 ↗</button>}{open?<Dialog title={title} className={'opening-paper course-choice-paper'+(directPreparation?' course-studio-preparation':'')} layout={directPreparation?'direct':'book'} onClose={()=>setOpen(false)} footer={footer}><p className=\"course-paper-kicker\">{p.view.date} · {directPreparation&&page==='fund'?'自有资本 · 尚未转入':business?'这间教室 · '+(lifecycleText[business.lifecycle]??'状态待核对'):'尚未选择教室'}{course?' · '+course.name:''}</p>{lock?<p role=\"status\" className=\"course-paper-warning\">{lock}</p>:null}\n",
+        "new": " const render=(openTeaching?:((intent?:CourseTeachingIntent)=>void))=><>{children?children(dispatch(openTeaching)):<button type=\"button\" onClick={()=>activate()}>走近这份教案 ↗</button>}{open?<Dialog title={title} className={'opening-paper course-choice-paper'+(directPreparation||lessonPreparation?' course-studio-preparation':'')+(lessonPreparation?' course-lesson-preparation':'')} layout={directPreparation||lessonPreparation?'direct':'book'} onClose={()=>setOpen(false)} footer={footer}><p className=\"course-paper-kicker\">{p.view.date} · {directPreparation&&page==='fund'?'自有资本 · 尚未转入':business?'这间教室 · '+(lifecycleText[business.lifecycle]??'状态待核对'):'尚未选择教室'}{course?' · '+course.name:''}{lessonPreparation?<span className=\"course-lesson-leaf\"> · {page==='cases'?'从亲历说起':page==='definition'?definitionLeaf==='form'?'怎样教':definitionLeaf==='content'?'想教会什么':'谁会来听':page==='license'?'案例使用范围':'制作样课'}</span>:null}</p>{lock?<p role=\"status\" className=\"course-paper-warning\">{lock}</p>:null}\n"
+      },
+      {
+        "oldStart": 161,
+        "oldEnd": 163,
+        "newStart": 171,
+        "newEnd": 176,
+        "old": "  {page==='cases'?<><p>选1—3份已经实际付款的案例；企业内训至少两份。手工经验能成为起点，AI教学还须另做样课、核对工具资格。</p><fieldset className=\"course-paper-choices\"><legend>把真正做过的事，留进这一堂课</legend>{v?.cases.map((ref,index)=><label key={ref.kind+ref.id}><input type=\"checkbox\" checked={draft.cases.some(r=>sameCase(r,ref as CourseDraftCase))} onChange={e=>edit({cases:e.target.checked?[...draft.cases,{kind:ref.kind as CourseDraftCase['kind'],id:ref.id}]:draft.cases.filter(r=>!sameCase(r,ref as CourseDraftCase))})}/><span>案例 {index+1} · {ref.label}<small>{ref.licensed?'本单授权素材还需这间教室独立取得课程使用范围。':'保留来源，使用匿名化说明。'}</small></span></label>)}</fieldset>{!v?.cases.length?<p className=\"course-paper-warning\">还没有已付案例。先完成手工小单或视频商单的验收、付款与费用，再回来准备。</p>:null}{draft.cases.length>3?<p className=\"course-paper-warning\">本方案最多选择三份案例，请明确留下哪些经历。</p>:null}</>:null}\n  {page==='definition'?<><label className=\"field\">这堂课的名字<input value={draft.name} maxLength={80} onChange={e=>edit({name:e.target.value})}/></label><div className=\"course-definition-fields\"><label className=\"field\">用什么形式教<select value={draft.productId} onChange={e=>edit({productId:e.target.value})}><option value=\"\">请明确选择课程形式</option>{v?.catalog.products.map(product=><option key={product.id} value={product.id}>{product.label}</option>)}</select></label><label className=\"field\">教哪种工具方法<select value={draft.topicId} onChange={e=>edit({topicId:e.target.value})}><option value=\"\">请明确选择工具主题</option>{v?.catalog.topics.map(topic=><option key={topic.id} value={topic.id}>{topic.label}</option>)}</select></label><label className=\"field\">想回应谁的需要<select value={draft.segment} onChange={e=>edit({segment:e.target.value})}><option value=\"\">请明确选择受众</option>{segments.map(([id,label])=><option key={id} value={id}>{label}</option>)}</select></label></div><p>已选{draft.cases.length}份实际已付案例。这里只留下方案，不招学生、不收学费；样课投入另行确认。</p>{draft.productId==='enterprise_training'&&draft.cases.length<2?<p className=\"course-paper-warning\">企业内训需要至少两份案例，请返回补选。</p>:null}<label className=\"course-paper-check\"><input type=\"checkbox\" checked={draft.consent} onChange={e=>edit({consent:e.target.checked})}/>只使用有权使用的案例与匿名化说明，不编造客户或教学资历</label><button type=\"button\" className=\"course-paper-direction\" onClick={()=>setPage('cases')}>返回调整案例 →</button></>:null}\n",
+        "new": "  {page==='cases'?<><p>选1—3份已经实际付款的案例；企业内训至少两份。手工经验能成为起点，AI教学还须另做样课、核对工具资格。</p><fieldset className=\"course-paper-choices\"><legend>把真正做过的事，留进这一堂课</legend>{visibleCases.map(({ref,index})=><label key={ref.kind+ref.id}><input type=\"checkbox\" checked={draft.cases.some(r=>sameCase(r,ref as CourseDraftCase))} onChange={e=>edit({cases:e.target.checked?[...draft.cases,{kind:ref.kind as CourseDraftCase['kind'],id:ref.id}]:draft.cases.filter(r=>!sameCase(r,ref as CourseDraftCase))})}/><span>案例 {index+1} · {ref.label}<small>{ref.licensed?'本单授权素材还需这间教室独立取得课程使用范围。':'保留来源，使用匿名化说明。'}</small></span></label>)}</fieldset>{lessonPreparation?<nav className=\"course-case-leaves\" aria-label=\"翻选全部真实案例\"><button type=\"button\" disabled={casePage===0} onClick={()=>setCaseLeaf({key:lessonKey,value:casePage-1})}>← 前两份</button><span>已选{draft.cases.length}份 · {casePage+1}/{casePages}</span><button type=\"button\" disabled={casePage+1>=casePages} onClick={()=>setCaseLeaf({key:lessonKey,value:casePage+1})}>后两份 →</button></nav>:null}{!v?.cases.length?<p className=\"course-paper-warning\">还没有已付案例。先完成手工小单或视频商单的验收、付款与费用，再回来准备。</p>:null}{draft.cases.length>3?<p className=\"course-paper-warning\">本方案最多选择三份案例，请明确留下哪些经历。</p>:null}</>:null}\n  {page==='definition'&&lessonPreparation&&definitionLeaf==='form'?<><p>先比较怎样教；样课要亲手做完，招生与教学承诺仍另定。</p><fieldset className=\"course-paper-choices course-product-picks\"><legend>你想怎样把经验讲明白？</legend>{v?.catalog.products.map(product=>{const sample=COURSE_JOBS.find(job=>job.id.startsWith('course-sample-'+product.id+'-'));return <label key={product.id}><input type=\"radio\" name={name+'product'} checked={draft.productId===product.id} onChange={()=>edit({productId:product.id})}/><span>{product.label}<small>{sample?`样课${moneyText(sample.costFen)} · ${sample.actionPoints}点 · ${sample.durationDays}日`:'样课投入仍须原确认'}{product.id==='enterprise_training'?' · 至少两份案例':''}</small></span></label>})}</fieldset><button type=\"button\" className=\"course-paper-direction\" onClick={()=>setPage('cases')}>返回调整案例 →</button></>:null}\n  {page==='definition'&&lessonPreparation&&definitionLeaf==='content'?<><p>{v?.catalog.products.find(product=>product.id===draft.productId)?.label} · 先说清楚，想教会别人什么。</p><div className=\"course-definition-content\"><label className=\"field\">这堂课的名字<input value={draft.name} maxLength={80} onChange={e=>edit({name:e.target.value})}/></label><label className=\"field\">教哪种工具方法<select value={draft.topicId} onChange={e=>edit({topicId:e.target.value})}><option value=\"\">请明确选择工具主题</option>{v?.catalog.topics.map(topic=><option key={topic.id} value={topic.id}>{topic.label}</option>)}</select></label></div><button type=\"button\" className=\"course-paper-direction\" onClick={()=>setLessonLeaf({key:lessonKey,value:'form'})}>返回比较课程形式 →</button></>:null}\n  {page==='definition'&&lessonPreparation&&definitionLeaf==='promise'?<><label className=\"field\">想回应谁的需要<select value={draft.segment} onChange={e=>edit({segment:e.target.value})}><option value=\"\">请明确选择受众</option>{segments.map(([id,label])=><option key={id} value={id}>{label}</option>)}</select></label><p>已选{draft.cases.length}份实际已付案例。这里只留下方案，不招学生、不收学费；样课投入另行确认。</p>{draft.productId==='enterprise_training'&&draft.cases.length<2?<p className=\"course-paper-warning\">企业内训需要至少两份案例，请返回补选。</p>:null}<label className=\"course-paper-check\"><input type=\"checkbox\" checked={draft.consent} onChange={e=>edit({consent:e.target.checked})}/>只使用有权使用的案例与匿名化说明，不编造客户或教学资历</label><div className=\"course-definition-return\"><button type=\"button\" className=\"course-paper-direction\" onClick={()=>setLessonLeaf({key:lessonKey,value:'content'})}>返回调整课名与主题 →</button><button type=\"button\" className=\"course-paper-direction\" onClick={()=>setPage('cases')}>返回调整案例 →</button></div></>:null}\n  {page==='definition'&&!lessonPreparation?<><label className=\"field\">这堂课的名字<input value={draft.name} maxLength={80} onChange={e=>edit({name:e.target.value})}/></label><div className=\"course-definition-fields\"><label className=\"field\">用什么形式教<select value={draft.productId} onChange={e=>edit({productId:e.target.value})}><option value=\"\">请明确选择课程形式</option>{v?.catalog.products.map(product=><option key={product.id} value={product.id}>{product.label}</option>)}</select></label><label className=\"field\">教哪种工具方法<select value={draft.topicId} onChange={e=>edit({topicId:e.target.value})}><option value=\"\">请明确选择工具主题</option>{v?.catalog.topics.map(topic=><option key={topic.id} value={topic.id}>{topic.label}</option>)}</select></label><label className=\"field\">想回应谁的需要<select value={draft.segment} onChange={e=>edit({segment:e.target.value})}><option value=\"\">请明确选择受众</option>{segments.map(([id,label])=><option key={id} value={id}>{label}</option>)}</select></label></div><p>已选{draft.cases.length}份实际已付案例。这里只留下方案，不招学生、不收学费；样课投入另行确认。</p>{draft.productId==='enterprise_training'&&draft.cases.length<2?<p className=\"course-paper-warning\">企业内训需要至少两份案例，请返回补选。</p>:null}<label className=\"course-paper-check\"><input type=\"checkbox\" checked={draft.consent} onChange={e=>edit({consent:e.target.checked})}/>只使用有权使用的案例与匿名化说明，不编造客户或教学资历</label><button type=\"button\" className=\"course-paper-direction\" onClick={()=>setPage('cases')}>返回调整案例 →</button></>:null}\n"
+      }
+    ]
+  },
+  {
+    "path": "src/ui/CourseEncounter.tsx",
+    "hunks": [
+      {
+        "oldStart": 12,
+        "oldEnd": 12,
+        "newStart": 12,
+        "newEnd": 13,
+        "old": "",
+        "new": "import {courseLessonReading} from './course-lesson-preparation.ts'\n"
+      },
+      {
+        "oldStart": 16,
+        "oldEnd": 17,
+        "newStart": 17,
+        "newEnd": 18,
+        "old": " const studio=courseStudioReading(p,thread),art=coursePreparationPaperFor(thread)\n",
+        "new": " const lesson=courseLessonReading(p,thread),studio=courseStudioReading(p,thread)??lesson,art=coursePreparationPaperFor(thread)\n"
+      },
+      {
+        "oldStart": 26,
+        "oldEnd": 27,
+        "newStart": 27,
+        "newEnd": 28,
+        "old": "   <div className=\"course-encounter-thought\">{primary.courseEntry?<p className=\"scene-choice-line\">{primary.courseEntry.reading.caseLine}</p>:studio?<p className=\"scene-choice-line\">{thread.detail}</p>:<><span className=\"scene-choice-overline\" data-book-chapter={thread.title}>{classArt?target?.kind==='audience'?'眼前的受众与报价 · 由你决定':'眼前的学员与承诺 · 由你决定':'眼前这份教案 · 由你决定'}</span><p className=\"course-encounter-object\">{thread.object}</p><p className=\"scene-choice-line\">{thread.detail}</p>{money?<p className=\"course-scene-money\">{money}</p>:null}</>}{main}{primary.courseEntry?<CourseEntryOptions value={primary.courseEntry}/>:null}</div>\n",
+        "new": "   <div className=\"course-encounter-thought\">{primary.courseEntry?<p className=\"scene-choice-line\">{primary.courseEntry.reading.caseLine}</p>:studio?<p className=\"scene-choice-line\">{lesson?.detail??thread.detail}</p>:<><span className=\"scene-choice-overline\" data-book-chapter={thread.title}>{classArt?target?.kind==='audience'?'眼前的受众与报价 · 由你决定':'眼前的学员与承诺 · 由你决定':'眼前这份教案 · 由你决定'}</span><p className=\"course-encounter-object\">{thread.object}</p><p className=\"scene-choice-line\">{thread.detail}</p>{money?<p className=\"course-scene-money\">{money}</p>:null}</>}{main}{primary.courseEntry?<CourseEntryOptions value={primary.courseEntry}/>:null}</div>\n"
+      }
+    ]
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "hunks": [
+      {
+        "oldStart": 4,
+        "oldEnd": 4,
+        "newStart": 4,
+        "newEnd": 5,
+        "old": "",
+        "new": "import {courseLessonReading} from './course-lesson-preparation.ts'\n"
+      },
+      {
+        "oldStart": 172,
+        "oldEnd": 173,
+        "newStart": 173,
+        "newEnd": 174,
+        "old": " const courseStudio=courseThread?courseStudioReading(p,courseThread):null\n",
+        "new": " const courseStudio=courseThread?(courseStudioReading(p,courseThread)??courseLessonReading(p,courseThread)):null\n"
+      }
+    ]
+  },
+  {
+    "path": "src/ui/OpeningMoment.tsx",
+    "hunks": [
+      {
+        "oldStart": 71,
+        "oldEnd": 71,
+        "newStart": 71,
+        "newEnd": 72,
+        "old": "",
+        "new": "import {courseLessonReading} from './course-lesson-preparation.ts'\n"
+      },
+      {
+        "oldStart": 386,
+        "oldEnd": 387,
+        "newStart": 387,
+        "newEnd": 389,
+        "old": " const courseStudio=!interrupted&&!requiresChoice&&!unknownFocus&&!legacy&&course&&isCourseContinuityThread(thread)?courseStudioReading(nearProps,thread):null\n",
+        "new": " const courseLesson=!interrupted&&!requiresChoice&&!unknownFocus&&!legacy&&course&&isCourseContinuityThread(thread)?courseLessonReading(nearProps,thread):null\n const courseStudio=!interrupted&&!requiresChoice&&!unknownFocus&&!legacy&&course&&isCourseContinuityThread(thread)?(courseStudioReading(nearProps,thread)??courseLesson):null\n"
+      },
+      {
+        "oldStart": 415,
+        "oldEnd": 416,
+        "newStart": 417,
+        "newEnd": 418,
+        "old": " facts={<>{videoAttempt?<VideoFirstAttemptFacts reading={videoAttempt}/>:courseEntry?<CourseEntryFacts reading={courseEntry}/>:freeChoice?<p className=\"moment-line\">{employed?'留几天给自己，也可以看看房间。':'休整几天，还是先去上班？'}</p>:<>{currentCohortContext?<p className=\"moment-line\">{cohortCopy?.context??currentCohortContext}{cohortUpdateDue?' · 更新期限'+cohortUpdateDue:null}</p>:null}{!closedEcho&&!currentCohortUpdate?sceneFactsAfterEcho?sceneFactsAfterEcho.map(line=><p key={line} className={marketCopy?\"moment-line market-order-fact\":\"moment-line\"}>{line}</p>):<p className=\"moment-line\">{courseStudio?.line??cohortCopy?.line??collectionScope??(summarized?meaning!.situation:closedCopy?.line??sceneLine)}</p>:null}{!summarized&&(closedCopy?.terms||moment.detail)?<p className=\"moment-terms\">{updateTerms??cohortCopy?.terms??closedCopy?.terms??moment.detail}</p>:null}{teachingMoney?<p className=\"course-scene-money\">{teachingMoney}</p>:null}{relayMoney?<p className=\"relay-scene-money\">{relayMoney}</p>:null}{courseComplete?<button type=\"button\" className=\"scene-text-action\" onClick={inspectFocus}>翻阅本班的完整原记录 ↗</button>:null}</>}</>}\n",
+        "new": " facts={<>{videoAttempt?<VideoFirstAttemptFacts reading={videoAttempt}/>:courseEntry?<CourseEntryFacts reading={courseEntry}/>:freeChoice?<p className=\"moment-line\">{employed?'留几天给自己，也可以看看房间。':'休整几天，还是先去上班？'}</p>:<>{currentCohortContext?<p className=\"moment-line\">{cohortCopy?.context??currentCohortContext}{cohortUpdateDue?' · 更新期限'+cohortUpdateDue:null}</p>:null}{!closedEcho&&!currentCohortUpdate?sceneFactsAfterEcho?sceneFactsAfterEcho.map(line=><p key={line} className={marketCopy?\"moment-line market-order-fact\":\"moment-line\"}>{line}</p>):<p className=\"moment-line\">{courseStudio?.line??cohortCopy?.line??collectionScope??(summarized?meaning!.situation:closedCopy?.line??sceneLine)}</p>:null}{!summarized&&(closedCopy?.terms||moment.detail)?<p className=\"moment-terms\">{courseLesson?.detail??updateTerms??cohortCopy?.terms??closedCopy?.terms??moment.detail}</p>:null}{teachingMoney?<p className=\"course-scene-money\">{teachingMoney}</p>:null}{relayMoney?<p className=\"relay-scene-money\">{relayMoney}</p>:null}{courseComplete?<button type=\"button\" className=\"scene-text-action\" onClick={inspectFocus}>翻阅本班的完整原记录 ↗</button>:null}</>}</>}\n"
+      }
+    ]
+  },
+  {
+    "path": "src/ui/CourseThreadAction.tsx",
+    "hunks": [
+      {
+        "oldStart": 4,
+        "oldEnd": 4,
+        "newStart": 4,
+        "newEnd": 5,
+        "old": "",
+        "new": "import {courseLessonReading} from './course-lesson-preparation.ts'\n"
+      },
+      {
+        "oldStart": 36,
+        "oldEnd": 36,
+        "newStart": 37,
+        "newEnd": 40,
+        "old": "",
+        "new": " const lesson=courseLessonReading(p,thread)\n if(lesson?.tool&&onNavigate)return choice('准备图像工具的使用条件','先看看创作账号与申请，课程会留在这里',()=>onNavigate('video',{accountId:'personal'}))\n if(thread.stage==='course-draft'&&lesson)return choice('亲手准备这一堂课的样课','先留出人手和时间，再作真实投入',()=>onChoose('sample'))\n"
+      }
+    ]
+  }
+]
