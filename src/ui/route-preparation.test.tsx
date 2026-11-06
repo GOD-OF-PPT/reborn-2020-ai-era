@@ -70,26 +70,24 @@ it('groups only known blocker categories while unknown or uncertain values retai
  ])expect(routePreparationReading(changed)).toBeNull()
 })
 
-it('opens a direct comparison, expands the same original full conditions and returns without navigating or creating a command',()=>{
- const ui=driver();ui.select('ai_video');ui.click('查看'+ui.route('ai_video').name+'的准备条件')
- expect(ui.dialog()?.props.layout).toBe('direct');const first=ui.render().find(n=>n.type===RoutePreparationSummary)!
- expect(first.props.route).toBe(ui.route('ai_video'));expect(words(ui.dialog()?.props.footer)).toContain('看看作品与需求')
- ui.click('翻阅完整条件 ↗');expect(ui.dialog()?.props.layout).toBe('book');let text=words(ui.dialog())
- for(const value of [ui.route('ai_video').preparation,ui.route('ai_video').feedback,...ui.route('ai_video').futureTool.map(reasonText)])expect(text).toContain(value)
- ui.click('返回简明条件');expect(ui.dialog()?.props.layout).toBe('direct');expect(ui.render().find(n=>n.type===RoutePreparationSummary)?.props.route).toBe(first.props.route)
- ui.click('再想一想');expect(ui.dialog()).toBeUndefined();expect(ui.request).not.toHaveBeenCalled();expect(ui.onRoute).not.toHaveBeenCalled()
+it('shows the direct comparison in the current scene and opens the same original full conditions once',()=>{
+ const ui=driver();ui.select('ai_video');const route=ui.route('ai_video'),paper=ui.render().find(n=>n.props.className==='route-current-paper')!
+ expect(paper.props['aria-label']).toBe(route.name+'的当前条件');expect(words(paper)).toContain(moneyText(route.requirements.minimumCashFen));expect(words(paper)).toContain(moneyText(route.requirements.availableCashFen));expect(words(paper)).toContain('门槛不是本次付款')
+ ui.click('查看'+route.name+'的准备条件');expect(ui.dialog()?.props.layout).not.toBe('direct');const text=words(ui.dialog())
+ for(const value of [route.preparation,route.feedback,...route.futureTool.map(reasonText)])expect(text).toContain(value)
+ expect(text).not.toContain('翻阅完整条件');ui.click('再想一想');expect(ui.dialog()).toBeUndefined();expect(ui.render().find(n=>n.props.className==='route-current-paper')!.props['aria-label']).toBe(paper.props['aria-label']);expect(ui.request).not.toHaveBeenCalled();expect(ui.onRoute).not.toHaveBeenCalled()
 })
 
-it('the brief view retains the exact original route navigation and never grants execution to a missing-condition route',()=>{
- const ui=driver();ui.select('deepseek_opportunity');ui.click('查看'+ui.route('deepseek_opportunity').name+'的准备条件')
- expect(ui.dialog()?.props.layout).toBe('direct');expect((ui.render().find(n=>n.type===RoutePreparationSummary)!.props.reading as {barriers:readonly string[]}).barriers.length).toBeGreaterThan(0)
- ui.click('看看合作与原协议 ↗');expect(ui.onRoute).toHaveBeenCalledExactlyOnceWith('deepseek_opportunity');expect(ui.dialog()).toBeUndefined();expect(ui.request).not.toHaveBeenCalled()
+it('the current paper retains exact route navigation and never grants execution to a missing-condition route',()=>{
+ const ui=driver();ui.select('deepseek_opportunity');const route=ui.route('deepseek_opportunity'),paper=ui.render().find(n=>n.props.className==='route-current-paper')!
+ expect(words(paper)).toContain('准备材料尚未完成');for(const line of routePreparationReading(route)!.barriers)expect(words(paper)).toContain(line)
+ expect(ui.dialog()).toBeUndefined();ui.click('看看合作与原协议 · '+route.name);expect(ui.onRoute).toHaveBeenCalledExactlyOnceWith('deepseek_opportunity');expect(ui.request).not.toHaveBeenCalled()
 })
 
 it('unknown conditions and epilogue start with the full original reader and all original actions',()=>{
  for(const closing of [false,true]){
   hooks.values=[];const ui=driver(p=>({...p,view:{...p.view,phase:closing?'epilogue':'playing'},features:{...p.features,workbench:{...p.features.workbench,routes:p.features.workbench.routes.map(r=>r.id==='ai_video'?{...r,futureTool:['UNKNOWN_FUTURE_QUALIFICATION']}:r)}}}))
-  ui.select('ai_video');ui.click('查看'+ui.route('ai_video').name+'的准备条件');expect(ui.dialog()?.props.layout).toBe('book');expect(ui.render().some(n=>n.type===RoutePreparationSummary)).toBe(false)
+  ui.select('ai_video');ui.click('查看'+ui.route('ai_video').name+'的准备条件');expect(ui.dialog()?.props.layout).not.toBe('direct');expect(ui.render().some(n=>n.type===RoutePreparationSummary)).toBe(false)
   expect(words(ui.dialog())).toContain(reasonText('UNKNOWN_FUTURE_QUALIFICATION'));ui.click('走进'+ui.route('ai_video').name);expect(ui.onRoute).toHaveBeenCalledExactlyOnceWith('ai_video');expect(ui.request).not.toHaveBeenCalled()
  }
 })

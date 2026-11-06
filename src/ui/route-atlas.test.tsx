@@ -33,11 +33,11 @@ it('makes all five gameplay loops distinct while selection only changes the disp
  const ui=driver(),before=JSON.stringify(ui.p.features)
  const expected:Record<RouteId,readonly string[]>={a_share:['看看公开资料','写下买卖条件','等成交，再等交收'],ai_video:['挑一份作品或需求','制作、交付或发布','看真实反馈与回款'],ai_course:['备好案例与样课','招生，兑现每堂课','答疑支持，逐步结算'],api_relay:['看供应，谈客户','安排服务与支持','看用量，核账收款'],deepseek_opportunity:['挑一份合作需求','按约交付与支持','核对结算与旧约']}
  for(const id of Object.keys(expected) as RouteId[]){
-  ui.select(id);const rows=ui.render(),path=rows.find(n=>n.type==='aside')!
+  ui.select(id);let rows=ui.render();expect(rows.find(n=>n.type==='aside')!.props['aria-label']).toBe(ui.route(id).name+'的当前条件');ui.click('查看'+ui.route(id).name+'的准备条件');rows=ui.render();const dialog=rows.find(n=>n.type===Dialog)!,path=elements(dialog).find(n=>n.props['aria-label']===ui.route(id).name+'的玩法过程')!
   expect(path.props['aria-label']).toBe(ui.route(id).name+'的玩法过程')
-  expect(elements(path).filter(n=>n.type==='li').map(n=>words(n.props.children).slice(2))).toEqual(expected[id])
+  expect(elements(path).filter(n=>n.type==='li').map(n=>words(n.props.children))).toEqual(expected[id])
   expect(rows.filter(n=>n.type==='button'&&n.props['aria-pressed']===true).map(n=>n.props['aria-label'])).toEqual(['聚焦'+ui.route(id).name])
-  expect(rows.some(n=>n.props.role==='progressbar'||'aria-valuenow' in n.props)).toBe(false)
+  expect(rows.some(n=>n.props.role==='progressbar'||'aria-valuenow' in n.props)).toBe(false);(dialog.props.onClose as ()=>void)()
  }
  expect(ui.onRoute).not.toHaveBeenCalled();expect(ui.request).not.toHaveBeenCalled();expect(JSON.stringify(ui.p.features)).toBe(before)
 })
@@ -69,14 +69,14 @@ it('keeps every original preparation, money, feedback and refusal reason in the 
 })
 
 it('keeps manual 2020 production and separate fictional equity boundaries explicit',()=>{
- const ui=driver();ui.select('ai_video');expect(ui.text()).toContain('2020年可以从手工剪辑开始。')
- ui.select('deepseek_opportunity');expect(ui.text()).toContain('技术合作怎样走');expect(ui.text()).not.toContain('架空股权另有资格与协议。');expect(ui.text()).toContain('技术合作与明确架空股权分别核条件、另立协议')
+ const ui=driver();ui.select('ai_video');expect(ui.text()).toContain('手工剪辑可另看小单');ui.click('查看'+ui.route('ai_video').name+'的准备条件');expect(ui.text()).toContain('2020年可以从手工剪辑开始。');(ui.render().find(n=>n.type===Dialog)!.props.onClose as ()=>void)()
+ ui.select('deepseek_opportunity');ui.click('查看'+ui.route('deepseek_opportunity').name+'的准备条件');expect(ui.text()).toContain('技术合作怎样走');expect(ui.text()).not.toContain('架空股权另有资格与协议。');expect(ui.text()).toContain('技术合作与明确架空股权分别核条件、另立协议')
  ui.select('a_share');expect(ui.text()).toContain('虚构个股模拟 · 判断不保证收益')
 })
 
 it('read-only and original unmet conditions allow browsing without granting execution',()=>{
  const ui=driver(p=>({...p,view:{...p.view,readOnly:true,readOnlyReason:'ANOTHER_WRITER'},features:{...p.features,workbench:{...p.features.workbench,routes:p.features.workbench.routes.map(r=>({...r,requirements:{...r.requirements,availableCashFen:0,preparationReady:false}}))}}}))
- expect(ui.text()).toContain('还要准备什么');ui.select('api_relay');ui.click('查看'+ui.route('api_relay').name+'的准备条件');expect(ui.render().some(n=>n.type===Dialog)).toBe(true)
+ expect(ui.text()).toContain('先核对这份条件');ui.select('api_relay');ui.click('查看'+ui.route('api_relay').name+'的准备条件');expect(ui.render().some(n=>n.type===Dialog)).toBe(true)
  expect(ui.request).not.toHaveBeenCalled();expect(ui.onRoute).not.toHaveBeenCalled()
 })
 
@@ -87,7 +87,7 @@ it('epilogue reads old records and never presents an unstarted gameplay track as
 })
 
 it('text-only and failed artwork retain all five destinations and the same gameplay information',()=>{
- const ui=driver(),picture=ui.render().find(n=>n.type==='img')!;(picture.props.onError as ()=>void)();expect(ui.render().some(n=>n.type==='img')).toBe(false);expect(ui.text()).toContain('等成交，再等交收')
+ const ui=driver(),picture=ui.render().find(n=>n.type==='img')!;(picture.props.onError as ()=>void)();expect(ui.render().some(n=>n.type==='img')).toBe(false);expect(ui.text()).toContain('起步资金门槛')
  Object.assign(ui.p,{textOnly:true});ui.select('ai_video');expect(ui.render().some(n=>n.type==='img')).toBe(false);expect(ui.render().filter(n=>n.type==='button'&&String(n.props['aria-label']).startsWith('聚焦'))).toHaveLength(5)
- expect(ui.text()).toContain('制作、交付或发布');expect(ui.request).not.toHaveBeenCalled()
+ expect(ui.text()).toContain('手工剪辑可另看小单');expect(ui.request).not.toHaveBeenCalled()
 })

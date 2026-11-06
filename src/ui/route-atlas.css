@@ -20,3 +20,26 @@
 .cinema-app .route-film[data-atlas=journeys] .route-film-selections>button[aria-pressed=true]{color:#ffe8b5;background:#aa955c38}
 .cinema-app .route-film[data-atlas=journeys] button:focus-visible{outline:2px solid #f0d290;outline-offset:-4px}
 .text-mode .route-film[data-atlas=journeys] .route-journey{transform:none;box-shadow:none}
+
+/* A single sheet holds present facts; the film stays available around it. */
+.cinema-app .route-film[data-atlas=journeys] .route-film-body{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);align-items:center;padding:22px 30px;gap:30px}
+.cinema-app .route-film[data-atlas=journeys] .route-film-thought{align-self:center}
+.cinema-app .route-current-paper{position:relative;justify-self:end;width:100%;max-width:370px;padding:16px 20px;box-sizing:border-box;color:#efe5ca;background:linear-gradient(115deg,#173c35f5,#102f2af5);border:1px solid #c7ab727d;box-shadow:5px 6px 0 #071f1c88}
+.cinema-app .route-current-paper:before{content:"";position:absolute;inset:7px;pointer-events:none;border:1px solid #c6ad7140}
+.cinema-app .route-current-caption{margin:0 0 12px;color:#dbc58e;font:16px/1.6 var(--serif)}
+.cinema-app .route-current-paper dl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0;border-block:1px solid #c1aa7055;padding:10px 0}
+.cinema-app .route-current-paper dt{font:13px/1.7 var(--serif);color:#c2ccb8}
+.cinema-app .route-current-paper dd{font:24px/1.5 var(--serif);color:#f3e6bf;margin:3px 0 0}
+.cinema-app .route-current-material{font:16px/1.7 var(--serif);margin:12px 0 5px}
+.cinema-app .route-current-barrier{font:14px/1.7 var(--serif);color:#edc396;margin:5px 0;padding-left:10px;border-left:2px solid #bd805a}
+.cinema-app .route-current-note,.cinema-app .route-current-manual{font:13px/1.7 var(--serif);color:#c7cfb9;margin:8px 0 0}
+.cinema-app .route-film[data-atlas=journeys] .route-film-actions{flex-wrap:wrap;margin-top:16px;gap:10px 18px}
+.cinema-app .route-choice-return{display:flex;align-items:center;justify-content:space-between;gap:20px;flex:none}
+.cinema-app .route-choice-return button{color:#e6d2a3;background:none;border:0;border-bottom:1px solid #baa26977;font:15px/1.7 var(--serif);padding:4px 0;transform:none}
+.cinema-app .route-choice-return button:is(:hover,:focus-visible){color:#ffe5ab;background:#153a3266;outline-color:#e6c487}
+.cinema-app .route-full-journey{break-inside:avoid;color:#dfd8bd}
+.cinema-app .route-full-journey li{font:17px/1.8 var(--serif);padding:6px 0}
+.cinema-app .route-choice-scene>.scene-title{flex:none}
+
+.cinema-app .route-current-paper dl>div{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:3px;min-width:0;padding:0;border:0}
+.cinema-app .route-current-paper dd{white-space:nowrap;text-align:left}

@@ -5,7 +5,7 @@ import {CommandButton} from './CommandButton.tsx'
 import {moneyText} from './game-text.ts'
 import {OpportunityAtlas,type RouteId} from './OpportunityAtlas.tsx'
 
-export function RoutesPanel(props:GamePanelProps&{onRoute:(id:RouteId)=>void;headingRef?:Ref<HTMLHeadingElement>}){
+export function RoutesPanel(props:GamePanelProps&{onRoute:(id:RouteId)=>void;headingRef?:Ref<HTMLHeadingElement>;onToday?:()=>void}){
  return <OpportunityAtlas {...props}/>
 }
 

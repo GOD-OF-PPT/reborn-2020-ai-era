@@ -1,0 +1,22 @@
+/* A route is a possible experience, never an already-completed progress track. */
+.cinema-app .route-film[data-atlas=journeys] .route-film-body{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);align-items:end;gap:32px;flex:1;min-height:0;padding:26px 34px}
+.cinema-app .route-film[data-atlas=journeys] .route-film-thought{padding:0;max-width:none;align-self:end}
+.cinema-app .route-film[data-atlas=journeys] .route-film-thought h2{margin:8px 0 12px;font:400 29px/1.45 var(--serif)}
+.cinema-app .route-film[data-atlas=journeys] .route-film-thought>p:not(.scene-overline){margin-bottom:10px;font:15px/1.8 var(--serif)}
+.cinema-app .route-film[data-atlas=journeys] .route-film-thought>small{display:block;color:#d0d6c0;font:13px/1.8 var(--serif)}
+.cinema-app .route-film[data-atlas=journeys] .route-film-actions{gap:20px;margin-top:20px}
+.cinema-app .route-film[data-atlas=journeys] .route-film-actions>button{font:15px/1.6 var(--serif);padding:11px 15px}
+.cinema-app .route-film[data-atlas=journeys] .route-film-actions>button:not(.primary){background:none;border:0;border-bottom:1px solid #c3ad7766;padding-inline:0}
+.cinema-app .route-film[data-atlas=journeys] .route-film-actions>.primary>span{margin-left:15px}
+.cinema-app .route-film[data-atlas=journeys] .route-journey{position:relative;justify-self:end;width:100%;max-width:300px;box-sizing:border-box;padding:16px 22px;background:linear-gradient(115deg,#163c38ed,#112e2be8);border:1px solid #b9a27180;box-shadow:0 8px 28px #00151666;transform:rotate(.5deg)}
+.cinema-app .route-film[data-atlas=journeys] .route-journey::before{content:'';position:absolute;right:24px;top:-9px;width:10px;height:26px;border:2px solid #b9a674;border-radius:5px;transform:rotate(-7deg)}
+.cinema-app .route-film[data-atlas=journeys] .route-journey-caption{margin:0 0 9px;color:#dbca9e;font:14px/1.8 var(--serif);letter-spacing:2px}
+.cinema-app .route-film[data-atlas=journeys] .route-journey ol{list-style:none;padding:0;margin:0}
+.cinema-app .route-film[data-atlas=journeys] .route-journey li{display:flex;align-items:center;gap:14px;padding:9px 0;border-bottom:1px solid #b5ac8055}
+.cinema-app .route-film[data-atlas=journeys] .route-journey li>span{color:#b9a778;font:15px/1.5 Georgia,serif}
+.cinema-app .route-film[data-atlas=journeys] .route-journey li>strong{color:#f0e4c4;font:400 18px/1.6 var(--serif)}
+.cinema-app .route-film[data-atlas=journeys] .route-journey-note{color:#c7cdb8;font:13px/1.7 var(--serif);margin:11px 0 0}
+.cinema-app .route-film[data-atlas=journeys] .route-film-selections>button:not(.route-film-arrow){font:16px/1.7 var(--serif);letter-spacing:1px}
+.cinema-app .route-film[data-atlas=journeys] .route-film-selections>button[aria-pressed=true]{color:#ffe8b5;background:#aa955c38}
+.cinema-app .route-film[data-atlas=journeys] button:focus-visible{outline:2px solid #f0d290;outline-offset:-4px}
+.text-mode .route-film[data-atlas=journeys] .route-journey{transform:none;box-shadow:none}
