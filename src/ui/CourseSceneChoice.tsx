@@ -22,8 +22,8 @@ import type {CourseTeachingDraftSlot} from './course-teaching-draft.ts'
 import {CourseObjectChoices} from './CourseObjectChoices.tsx'
 import {courseObjectReading} from './course-object-reading.ts'
 
-export type CourseChoiceIntent='tool'|'fund'|'outline'|'activate'|'define'|'license'|'sample'|'record'|'next'|'objects'|'audience'|'current-class'
-type PreparationIntent=Exclude<CourseChoiceIntent,'audience'|'current-class'>
+export type CourseChoiceIntent='tool'|'fund'|'outline'|'activate'|'define'|'license'|'sample'|'record'|'next'|'objects'|'audience'|'plan'|'current-class'
+type PreparationIntent=Exclude<CourseChoiceIntent,'audience'|'plan'|'current-class'>
 type Page='tool'|'objects'|'fund'|'outline'|'activate'|'cases'|'definition'|'license'|'sample'|'record'|'next'
 type Props={p:GamePanelProps;target:CourseSceneTarget|null;onTarget?:(target:CourseSceneTarget|null)=>void;onInspect?:(target:CourseSceneTarget|null,slot?:CourseSceneDraftSlot,teachingSlot?:CourseTeachingDraftSlot)=>void;onToday?:()=>void;onLife?:()=>void;onToolAccount?:()=>void;blockedReason?:string|null;children?:(open:(intent?:CourseChoiceIntent)=>void)=>ReactNode}
 const segments=[['ai_learners','AI学习者'],['local_merchants','本地商家'],['lifestyle','生活方式受众']] as const
@@ -161,9 +161,9 @@ export function CourseSceneChoice({p,target,onTarget,onInspect,onToday,onLife,on
  // Keep the preparation hooks stable when an actual saved sample becomes ready.
  // Teaching owns its own children and drafts; the supplied object is never replaced here.
  const teaching=current?.kind==='audience'||current?.kind==='cohort'||current?.kind==='course'&&course?.status==='ready'&&(progress?.phase==='course-update-required'||progress?.phase.startsWith('course-refresh'))&&!progress?.historical
- if(teaching)return <CourseTeachingChoice p={p} target={current} onTarget={choose} blockedReason={blockedReason??null} {...(onToday?{onToday}:{})} {...(onLife?{onLife}:{})} {...(onInspect?{onInspect:(next:CourseSceneTarget|null,teachingSlot?:CourseTeachingDraftSlot)=>onInspect(next,undefined,teachingSlot)}:{})} {...(children?{children:(open:(intent?:CourseTeachingIntent)=>void)=>children(intent=>open(intent==='objects'?'targets':intent==='record'||intent==='next'||intent==='current-class'?intent:undefined))}:{})}/>
+ if(teaching)return <CourseTeachingChoice p={p} target={current} onTarget={choose} blockedReason={blockedReason??null} {...(onToday?{onToday}:{})} {...(onLife?{onLife}:{})} {...(onInspect?{onInspect:(next:CourseSceneTarget|null,teachingSlot?:CourseTeachingDraftSlot)=>onInspect(next,undefined,teachingSlot)}:{})} {...(children?{children:(open:(intent?:CourseTeachingIntent)=>void)=>children(intent=>open(intent==='objects'?'targets':intent==='record'||intent==='next'||intent==='plan'||intent==='current-class'?intent:undefined))}:{})}/>
  const dispatch=(openTeaching?:((intent?:CourseTeachingIntent)=>void))=>(intent?:CourseChoiceIntent)=>{
-  if(intent!=='audience'){activate(intent==='current-class'?'record':intent);return}
+  if(intent!=='audience'){activate(intent==='current-class'||intent==='plan'?'record':intent);return}
   if(blockedReason||courseSceneBookmarkLock(p,blockedReason))return
   if(openTeaching&&current?.kind==='course'&&course?.status==='ready'&&progress?.phase==='course-ready'&&!progress.historical&&!contextReason&&!progress.invalidReason){setOpen(false);openTeaching('audience');return}
   activate('record')

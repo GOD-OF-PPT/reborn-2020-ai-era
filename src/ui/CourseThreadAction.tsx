@@ -1,5 +1,6 @@
 import type {ReactNode} from 'react'
-import {courseAudienceReading} from './course-audience-reading.ts'
+import {courseAudienceReading,courseAudienceNext} from './course-audience-reading.ts'
+import {CourseAudienceAction} from './CourseAudienceAction.tsx'
 import {courseEntryReading} from './course-entry-reading.ts'
 import {CourseEntryAction,type CourseEntryExtras} from './CourseEntryAction.tsx'
 import {courseStudioReading} from './course-studio-reading.ts'
@@ -20,7 +21,7 @@ import {COURSE_JOBS} from '../content/course.ts'
 import {moneyText} from './game-text.ts'
 import {playableAdvanceDate} from '../application/playable-advance.ts'
 
-type Primary={binding:SharedActionBinding;main:ReactNode;courseEntry?:CourseEntryExtras}
+type Primary={binding:SharedActionBinding;main:ReactNode;continuation?:ReactNode;courseEntry?:CourseEntryExtras}
 type Props={p:GamePanelProps;thread:PlayerThreadView;active:boolean;date:string|null;waitLabel:string;onChoose:(intent?:CourseChoiceIntent)=>void;onResult:()=>void;onToday:()=>void;onNavigate?:NavigateScene|undefined;children:(primary:Primary|null)=>ReactNode}
 
 /** The thought and course object invoke this same original decision. */
@@ -35,6 +36,8 @@ export function CourseThreadAction({p,thread,active,date,waitLabel,onChoose,onRe
  if(courseAttemptClosed(p,thread))return choice('回到今天，看看接下来的日子','保留本班学习、退款、钱款与原书签；新班仍须另行决定',onToday)
  const classResult=courseClassResult(p,thread)
  if(classResult)return choice(classResult.label,'保留这一段实际交付；下一次投入仍由你决定',()=>onChoose('current-class'))
+ const audienceNext=courseAudienceNext(p,thread)
+ if(audienceNext)return <CourseAudienceAction p={p} thread={thread} reading={audienceNext} onChoose={onChoose} onToday={onToday}>{children}</CourseAudienceAction>
  if(thread.focusScope==='history'&&courseAudienceReading(p,thread)?.historical)return choice('看清这份原回应，再决定下一步','回看原反馈；新班仍按今天的条件另选',onResult)
  if(thread.focusScope==='history')return teaching?choice('看清这一段之后，决定怎样继续','翻回同一班的当前承诺，或保留这份实际结果',onResult):choice('合上这份教案留页，回到今天','保留原课程、样课尝试与书签，不重做准备',onToday)
  const entry=onNavigate?courseEntryReading(p,thread):null
