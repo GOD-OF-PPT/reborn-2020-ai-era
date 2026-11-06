@@ -3,6 +3,7 @@ import {courseEntryReading} from './course-entry-reading.ts'
 import {CourseEntryAction,type CourseEntryExtras} from './CourseEntryAction.tsx'
 import {courseStudioReading} from './course-studio-reading.ts'
 import {courseLessonReading} from './course-lesson-preparation.ts'
+import {courseClassResume,courseClassResult} from './course-class-reading.ts'
 import {CourseStudioAction} from './CourseStudioAction.tsx'
 import type {GamePanelProps,NavigateScene} from './game-types.ts'
 import type {PlayerThreadView} from './player-thread.ts'
@@ -31,11 +32,15 @@ export function CourseThreadAction({p,thread,active,date,waitLabel,onChoose,onRe
   return children({binding,main:<div className="command moment-decision moment-primary"><button type="button" disabled={binding.disabled} onClick={binding.activate}><b aria-hidden="true">01</b><span>{label}<small>{caption}</small></span><i aria-hidden="true">→</i></button>{binding.reason?<small className="reason">{binding.reason}</small>:null}</div>})
  }
  if(courseAttemptClosed(p,thread))return choice('回到今天，看看接下来的日子','保留本班学习、退款、钱款与原书签；新班仍须另行决定',onToday)
+ const classResult=courseClassResult(p,thread)
+ if(classResult)return choice(classResult.label,'保留这一段实际交付；下一次投入仍由你决定',()=>onChoose('current-class'))
  if(thread.focusScope==='history')return teaching?choice('看清这一段之后，决定怎样继续','翻回同一班的当前承诺，或保留这份实际结果',onResult):choice('合上这份教案留页，回到今天','保留原课程、样课尝试与书签，不重做准备',onToday)
  const entry=onNavigate?courseEntryReading(p,thread):null
  if(entry&&onNavigate)return <CourseEntryAction p={p} thread={thread} reading={entry} date={date} waitLabel={waitLabel} onChoose={onChoose} onToday={onToday} onNavigate={onNavigate}>{children}</CourseEntryAction>
  const studio=courseStudioReading(p,thread)
  if(studio?.choice)return <CourseStudioAction p={p} thread={thread} reading={studio} onChoose={onChoose}>{children}</CourseStudioAction>
+ const resume=courseClassResume(p,thread)
+ if(resume)return <CommandButton {...p} kind="ResumeCourseEnrollment" payload={{courseId:resume.courseId}} label={resume.label} confirm={false} className="moment-decision moment-primary" showReason={showReason} renderAction={(binding,main)=>children({binding,main})}><b aria-hidden="true">01</b><span>{resume.label}<small>原更新已经完成；新班仍要另作承诺</small></span><i aria-hidden="true">→</i></CommandButton>
  const lesson=courseLessonReading(p,thread)
  if(lesson?.toolCommand){const command=lesson.toolCommand;return <CommandButton {...p} kind="DecideVideoProgram" payload={{applicationId:command.applicationId}} label={command.label} confirm={false} className="moment-decision moment-primary" showReason={showReason} renderAction={(binding,main)=>children({binding,main})}><b aria-hidden="true">01</b><span>{command.label}<small>读真实回信，不重新付款或延长条件</small></span><i aria-hidden="true">↗</i></CommandButton>}
  if(lesson?.toolWait){const wait=lesson.toolWait,next=playableAdvanceDate(p.features.workbench,p.view.date,wait.date);if(next)return <ClockAdvance p={{...p,accountId:wait.accountId}} date={next} label={(next===wait.date?wait.label:'先到日历上的下一处反馈')+' · '+next} room showReason={showReason} renderAction={binding=>children({binding,main:<div className="moment-wait moment-primary"><div className="clock-advance clock-advance-room">{binding.reviewNode}{binding.mainNode}</div></div>})}/>}

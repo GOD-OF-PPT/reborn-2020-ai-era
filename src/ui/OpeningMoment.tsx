@@ -70,6 +70,7 @@ import {CourseThreadAction} from './CourseThreadAction.tsx'
 import {courseEntryReading} from './course-entry-reading.ts'
 import {courseStudioReading} from './course-studio-reading.ts'
 import {courseLessonReading,courseSamplePlanCoversLine} from './course-lesson-preparation.ts'
+import {courseClassReading,courseClassResume} from './course-class-reading.ts'
 import {CourseEntryFacts,CourseEntryOptions} from './CourseEntryOptions.tsx'
 import {RelayThreadAction} from './RelayThreadAction.tsx'
 import {relayPaperFor,relayMoneyFor} from './relay-continuity.ts'
@@ -386,7 +387,9 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const quarterBinding=!interrupted&&!unknownFocus&&!legacy&&w.atQuarterEnd&&thread.focusScope!=='history'?makeSharedAction(p,'看看这一季，真实留下了什么',openRecollection,{allowReadOnly:true}):null
  const quarterPrimary=quarterBinding?{binding:quarterBinding,main:<div className="command moment-decision moment-primary"><button type="button" disabled={quarterBinding.disabled} onClick={quarterBinding.activate}><b aria-hidden="true">01</b><span>{sceneReadingLabel(quarterBinding.label)}</span><i aria-hidden="true">↗</i></button>{quarterBinding.reason?<small className="reason">{quarterBinding.reason}</small>:null}</div>}:null
  const courseLesson=!interrupted&&!requiresChoice&&!unknownFocus&&!legacy&&course&&isCourseContinuityThread(thread)?courseLessonReading(nearProps,thread):null
- const courseStudio=!interrupted&&!requiresChoice&&!unknownFocus&&!legacy&&course&&isCourseContinuityThread(thread)?(courseStudioReading(nearProps,thread)??courseLesson):null
+ const courseResume=!interrupted&&!requiresChoice&&!unknownFocus&&!legacy&&course&&isCourseContinuityThread(thread)?courseClassResume(nearProps,thread):null
+ const courseResumeCopy=courseResume?courseClassReading(nearProps,thread):null
+ const courseStudio=!interrupted&&!requiresChoice&&!unknownFocus&&!legacy&&course&&isCourseContinuityThread(thread)?(courseStudioReading(nearProps,thread)??courseLesson??courseResumeCopy):null
  const coursePlanLineCovered=sceneFactsAfterEcho===null&&!!courseLesson&&!!timeNotice&&courseSamplePlanCoversLine(nearProps,thread,timeNotice.props,courseLesson.line)
  const courseLine=courseStudio?.line,courseDisplayLine=courseLine&&previousFocusNotice&&originPrefix&&courseLine.startsWith(originPrefix)?courseLine.slice(originPrefix.length):courseLine
  const courseEntry=!interrupted&&!requiresChoice&&!unknownFocus&&!legacy&&course&&isCourseContinuityThread(thread)?courseEntryReading(nearProps,thread):null
@@ -417,7 +420,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
    {thread.focusScope==='invalid'&&thread.invalidReason?<p className="season-focus-notice" role="status">{thread.invalidReason}</p>:null}
    {!workHistory&&!relayClosed&&!interrupted&&!requiresChoice&&!legacy&&thread.focusScope==='history'?<p className="season-focus-notice">正在回看{thread.focusQuarter}，今天仍是{p.view.date}。旧收支不会重记为本季收入。</p>:null}
    {sceneFeedback?<div className={typeof sceneFeedback==='string'?'moment-status':'moment-feedback'} role={typeof sceneFeedback==='string'?'status':undefined}>{workHistory?<p className="opening-paper-date">今天的回响</p>:null}{sceneFeedback}</div>:null}</>}
- facts={<>{videoAttempt?<VideoFirstAttemptFacts reading={videoAttempt}/>:courseEntry?<CourseEntryFacts reading={courseEntry}/>:freeChoice?<p className="moment-line">{employed?'留几天给自己，也可以看看房间。':'休整几天，还是先去上班？'}</p>:<>{currentCohortContext?<p className="moment-line">{cohortCopy?.context??currentCohortContext}{cohortUpdateDue?' · 更新期限'+cohortUpdateDue:null}</p>:null}{!closedEcho&&!currentCohortUpdate?sceneFactsAfterEcho?sceneFactsAfterEcho.map(line=><p key={line} className={marketCopy?"moment-line market-order-fact":"moment-line"}>{line}</p>):coursePlanLineCovered?null:<p className="moment-line">{courseDisplayLine??cohortCopy?.line??collectionScope??(summarized?meaning!.situation:closedCopy?.line??sceneLine)}</p>:null}{!summarized&&(closedCopy?.terms||moment.detail)?<p className="moment-terms">{courseLesson?.detail??updateTerms??cohortCopy?.terms??closedCopy?.terms??moment.detail}</p>:null}{teachingMoney?<p className="course-scene-money">{teachingMoney}</p>:null}{relayMoney?<p className="relay-scene-money">{relayMoney}</p>:null}{courseComplete?<button type="button" className="scene-text-action" onClick={inspectFocus}>翻阅本班的完整原记录 ↗</button>:null}</>}</>}
+ facts={<>{videoAttempt?<VideoFirstAttemptFacts reading={videoAttempt}/>:courseEntry?<CourseEntryFacts reading={courseEntry}/>:freeChoice?<p className="moment-line">{employed?'留几天给自己，也可以看看房间。':'休整几天，还是先去上班？'}</p>:<>{currentCohortContext&&cohortCopy?.context!==''?<p className="moment-line">{cohortCopy?.context??currentCohortContext}{cohortUpdateDue?' · 更新期限'+cohortUpdateDue:null}</p>:null}{!closedEcho&&!currentCohortUpdate?sceneFactsAfterEcho?sceneFactsAfterEcho.map(line=><p key={line} className={marketCopy?"moment-line market-order-fact":"moment-line"}>{line}</p>):coursePlanLineCovered?null:<p className="moment-line">{courseDisplayLine??cohortCopy?.line??collectionScope??(summarized?meaning!.situation:closedCopy?.line??sceneLine)}</p>:null}{!summarized&&(closedCopy?.terms||moment.detail)?<p className="moment-terms">{courseResumeCopy?.detail??courseLesson?.detail??updateTerms??cohortCopy?.terms??closedCopy?.terms??moment.detail}</p>:null}{teachingMoney?<p className="course-scene-money">{teachingMoney}</p>:null}{relayMoney?<p className="relay-scene-money">{relayMoney}</p>:null}{courseComplete?<button type="button" className="scene-text-action" onClick={inspectFocus}>翻阅本班的完整原记录 ↗</button>:null}</>}</>}
  decisions={<>
 
    {primary?.main??quarterPrimary?.main??videoPrimary?.main??coursePrimary?.main??relayPrimary?.main??workTimePrimary?.main??dayPrimary?.main??originalAction(false,openOrder,openVideo,openCourse,openRelay)}
@@ -431,6 +434,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
     :courseReady?action('02','把样课收好，回到今天','保留这份准备与原书签，新的招生仍另行决定',openToday)
     :attempt?.action.kind==='next-choice'?action('02','看看这份经历，还能通向哪些尝试','先看手艺、生活与模拟判断，不自动新增安排',()=>setChoicePanel('next'))
     :!requiresChoice&&!legacy&&!w.atQuarterEnd&&relay&&relayTarget?.kind==='period'&&!relayHistory?action('02','先回到今天，留些时间给生活','原支持、待复核与旧款照原日历保留',openToday)
+    :cohortCopy?.context===''&&!interrupted&&!requiresChoice&&!unknownFocus&&!legacy?action('02','先看看生活','只翻阅，原班期与教学期限都保留',()=>{setObjectOpen(false);onNavigate('life',{accountId:'personal'})})
     :courseComplete?action('02','看看再备一堂课前的选择','查看下一次准备或生活方向，不招生、不付款',()=>openCourse('next'))
     :dayActive&&!attempt&&researchCopy&&day?.primary.classification==='result'?action('02','看看生活','只翻阅生活，不新增安排或改变原研究',()=>onNavigate('life',{accountId:'personal'}))
     :dayActive&&!attempt&&(day?.primary.classification==='result'||thread.stage==='market-position')?action('02',personRoom?.label??inspectLabel,'只翻阅同一件事的实际结果与全部原记录',personRoom?readPerson:inspectFocus)

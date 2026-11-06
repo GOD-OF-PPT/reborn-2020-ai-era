@@ -1,4 +1,6 @@
-import type {PlayFeatures} from './game-types.ts'
+import type {PlayFeatures,GamePanelProps,SceneTarget} from './game-types.ts'
+import type {CourseSceneTarget} from './course-scene-progress.ts'
+import {courseFocusFor,resolveCourseFocus} from './course-player-thread.ts'
 import type {Screen} from './Navigation.tsx'
 import type {LifePerson} from '../core/life-schema.ts'
 import {moneyText} from './game-text.ts'
@@ -39,4 +41,19 @@ export function sceneThreads(f:PlayFeatures,date:string):SceneThread[]{
   ...(f.deepseek?.agreements??[]).map(a=>({id:'equity:'+a.id,screen:'deepseek' as const,title:'架空股权的原约，仍要看清',detail:`${a.shares}/${a.totalShares}股 · 锁定至${a.lockUntil} · ${a.followDecision==='pending'?'跟投待决定，默认不付款':'估值不是可花现金'}。`})),
   ...(f.routines?.plans??[]).filter(r=>r.status==='paused'||r.status==='confirmed').map(r=>({id:'routine:'+r.id,screen:'routines' as const,title:r.name,detail:r.status==='paused'?'条件变了，未来安排已暂停；已经发生的费用与履约保留。':'已确认的范围仍待逐项执行，不包含新的交易、招生或代理扩权。'})),
  ]
+}
+
+/** A course responsibility opens its exact public object and owner, never the current life account. */
+export function sceneThreadCourseTarget(p:GamePanelProps,note:SceneThread):{status:'target';target:SceneTarget}|{status:'unavailable';reason:string}|null{
+ if(note.screen!=='course')return null
+ const unavailable=(reason='这份课堂责任的来源已变化，请从当前原约与日历重新选择。')=>({status:'unavailable' as const,reason}),live=p.controller.snapshot.view,v=p.features.course
+ if(!v||!live||live!==p.view||live.runId!==p.view.runId||live.revision!==p.view.revision)return unavailable()
+ if(p.view.busy||p.controller.snapshot.busy||p.view.hasCandidate||['unsaved','conflict','saving'].includes(p.view.saveStatus))return unavailable('先等眼前这一步处理完，再从当前日历选回这份课堂责任。')
+ let target:CourseSceneTarget
+ if(note.id.startsWith('cohort:')){const rows=v.cohorts.filter(c=>'cohort:'+c.id===note.id&&c.closedAt===null),co=rows[0],courses=co?v.courses.filter(c=>c.id===co.courseId):[],course=courses[0];if(rows.length!==1||courses.length!==1||!co||!course)return unavailable();target={kind:'cohort',businessId:course.businessId,courseId:course.id,cohortId:co.id}}
+ else if(note.id.startsWith('update:')){const rows=v.updates.filter(u=>'update:'+u.id===note.id&&u.resolvedAt===null),update=rows[0],courses=update?v.courses.filter(c=>c.id===update.courseId):[],course=courses[0];if(rows.length!==1||courses.length!==1||!course)return unavailable();target={kind:'course',businessId:course.businessId,courseId:course.id}}
+ else return unavailable()
+ const owners=v.businesses.filter(b=>b.id===target.businessId),owner=owners[0]
+ if(owners.length!==1||!owner||resolveCourseFocus(p,courseFocusFor(p,target,owner.accountId)).reason)return unavailable()
+ return {status:'target',target:{accountId:owner.accountId,courseTarget:target}}
 }
