@@ -1,0 +1,32 @@
+/* A long-day room: four distinct objects and one quiet reading, without a directory of panels. */
+.cinema-app .cinematic-stage[data-exploring=true]{--explore-ink:#f5e7c6;--explore-muted:#d3ccb5;--explore-gold:#e4c68a;--explore-rule:#c8ae6b66}
+.cinema-app .room-exploration-heading{max-width:29%;top:23%}
+.cinema-app .room-exploration-heading h1{font:500 31px/1.55 var(--serif);color:var(--explore-ink);margin:8px 0}
+.cinema-app .room-exploration-heading .room-exploration-guide{font:15px/1.8 var(--serif);color:var(--explore-muted);letter-spacing:1px;margin:8px 0}
+.cinema-app .room-exploration-heading .exploration-responsibility{background:#532f29d9;border:1px solid #d8a18a;color:#ffe2cf;font:15px/1.7 var(--serif);padding:6px 12px;transform:none}
+.cinema-app .room-exploration-heading .exploration-responsibility:is(:hover,:focus-visible){background:#704538;color:#fff0d9;outline:1px solid #e6bc92;transform:none}
+.cinema-app .room-hotspot.room-exploration-spot,.cinema-app .room-hotspot.room-exploration-spot:is(:hover,:focus-visible){transform:translate(-15px,-15px);gap:8px;padding:5px;color:var(--explore-ink);text-shadow:0 2px 8px #061716;outline-offset:5px}
+.cinema-app .room-exploration-spot .exploration-object-mark{width:34px;height:39px;stroke:var(--explore-gold);stroke-width:1.2;filter:drop-shadow(0 2px 4px #071915);flex:none}
+.cinema-app .room-exploration-spot>.exploration-object-label{display:flex;flex-direction:column;gap:3px;padding:8px 13px 10px;background:linear-gradient(100deg,#142e2bd9,#18332c77);border:0;border-bottom:1px solid var(--explore-rule);box-shadow:0 5px 18px #06141133;backdrop-filter:blur(3px)}
+.cinema-app .room-exploration-spot .exploration-object-name{display:flex;align-items:center;justify-content:space-between;gap:20px;color:var(--explore-muted);font:13px/1.5 var(--serif);letter-spacing:2px}
+.cinema-app .room-exploration-spot .exploration-object-name kbd{font:11px/1.4 var(--serif);padding:0 4px;background:#182e2b;color:var(--explore-gold);border:1px solid #dcc78c66;box-shadow:none;letter-spacing:0}
+.cinema-app .room-exploration-spot strong{color:var(--explore-ink);font:500 19px/1.5 var(--serif);letter-spacing:1px;white-space:normal}
+.cinema-app .room-exploration-spot small,.cinema-app .room-exploration-spot:is(:hover,:focus-visible) small{display:block;color:var(--explore-muted);font:14px/1.8 var(--serif);max-width:none;margin:0}
+.cinema-app .room-exploration-spot:is(:hover,:focus-visible,[data-inspected=true])>.exploration-object-label{background:linear-gradient(100deg,#244135ee,#18352de6);border-color:#efd69c;box-shadow:0 0 0 2px #d8b66d22,0 6px 25px #06141166}
+.cinema-app .room-exploration-spot:is(:hover,:focus-visible,[data-inspected=true]) .exploration-object-mark{stroke:#ffe3a6;filter:drop-shadow(0 0 5px #d9b56d88)}
+.cinema-app .room-exploration-spot:focus-visible{outline:2px solid var(--explore-gold)}
+.cinema-app .room-exploration-narrative{gap:24px;align-items:center;padding-top:14px}
+.cinema-app .room-exploration-narrative .narrative-speaker{font:13px/1.5 var(--serif);color:var(--explore-gold);letter-spacing:2px}
+.cinema-app .room-exploration-narrative p{font:20px/1.7 var(--serif);color:var(--explore-ink);margin:5px 0}
+.cinema-app .room-exploration-narrative small{font:15px/1.8 var(--serif);color:var(--explore-muted)}
+.cinema-app .room-exploration-narrative .room-next{min-width:0;flex:0 1 40%;gap:9px}
+.cinema-app .room-exploration-narrative .room-explore-return{padding:7px 0;color:var(--explore-gold);border:0;border-bottom:1px solid var(--explore-rule);background:none;font:16px/1.8 var(--serif);justify-self:start;box-shadow:none;transform:none}
+.cinema-app .room-exploration-narrative .room-explore-return:is(:hover,:focus-visible){color:#ffe5ae;border-color:#efd69c;background:#c9ab6422;transform:none}
+.cinema-app .room-exploration-narrative .clock-advance-room{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center}
+.cinema-app .room-exploration-narrative .clock-review{grid-column:1;grid-row:1;margin:0;align-self:center}
+.cinema-app .room-exploration-narrative .clock-main{grid-column:2;grid-row:1;min-width:0;margin:0}
+.cinema-app .room-exploration-narrative .clock-main>button{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 8px;padding:7px 10px;text-align:left}
+.cinema-app .room-exploration-narrative .clock-main>button::before{content:none}
+.cinema-app .room-exploration-narrative .clock-main>button>span{grid-column:1;grid-row:1;min-width:0}
+.cinema-app .room-exploration-narrative .clock-main>button>kbd{grid-column:2;grid-row:1;justify-self:end;margin:0;width:auto}
+.cinema-app .room-exploration-narrative .clock-main>button>small{grid-column:1/-1;grid-row:2;color:inherit}
