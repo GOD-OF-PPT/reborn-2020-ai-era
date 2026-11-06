@@ -1,0 +1,54 @@
+.cinema-app .calendar-entry-stage{width:100%;flex:1;min-height:0;display:flex;align-items:flex-start}
+.cinema-app .calendar-entry-stage>.scene-choices{width:100%;display:block;margin:0}
+.cinema-app .calendar-choices{width:100%;color:#efe5cb}
+.cinema-app .calendar-entry-tabs{display:flex;align-items:center;gap:24px;margin-bottom:8px;border-bottom:1px solid #c4aa6a66}
+.cinema-app .calendar-entry-tabs>button{color:#c9cbb7;border:0;border-bottom:2px solid transparent;background:none;font:16px/1.8 var(--serif);padding:4px 0;transform:none}
+.cinema-app .calendar-entry-tabs>button[aria-pressed=true]{color:#f5dca3;border-bottom-color:#d9ba7b}
+.cinema-app .calendar-entry-stage .today-life-choices{gap:6px}
+.cinema-app .calendar-entry-stage .today-life-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.cinema-app .calendar-entry-stage .today-life-option{padding-top:8px}
+.cinema-app .calendar-entry-stage .today-life-heading{gap:10px}
+.cinema-app .calendar-entry-stage .today-life-sketch{width:40px;height:44px}
+.cinema-app .calendar-entry-stage .today-life-option h3{font:400 23px/1.5 var(--serif);margin:0}
+.cinema-app .calendar-entry-stage .today-life-terms{margin:6px 0 3px;column-gap:14px;row-gap:0;flex-wrap:wrap}
+.cinema-app .calendar-entry-stage .today-life-terms strong{font:400 27px/1.5 var(--serif)}
+.cinema-app .calendar-entry-stage .today-life-date{margin:3px 0}
+.cinema-app .calendar-entry-stage .today-life-effect{margin:3px 0 8px}
+.cinema-app .calendar-entry-stage .today-work-reading{display:block;width:100%;min-height:42px;padding:7px 12px;border:1px solid #c9ad7466;background:#17382f;color:#eddbb0;text-align:left;font:17px/1.7 var(--serif);transform:none}
+.cinema-app .calendar-entry-stage .today-life-option .command>button{min-height:42px;padding:7px 12px}
+.cinema-app .calendar-entry-stage .today-life-option button:is(:hover,:focus-visible):not(:disabled){color:#152b24;background:#e3c88c;transform:none;box-shadow:none}
+.cinema-app .calendar-entry-stage .today-life-option button:disabled{color:#acb8a8;background:#20392e;border:1px dashed #7e8f75;box-shadow:none;transform:none}
+.cinema-app .calendar-entry-readings{display:flex;gap:24px;align-items:center;margin-top:8px}
+.cinema-app .calendar-entry-readings>button,.cinema-app .calendar-entry-return{color:#dec593;background:none;border:0;border-bottom:1px solid #bca16a66;font:15px/1.8 var(--serif);padding:3px 0;transform:none}
+.cinema-app .calendar-first-order>:is(.scene-action-card,.scene-choice){display:flex;flex-direction:column;align-items:flex-start;gap:10px;width:100%;min-height:0;margin:0;padding:18px 22px;background:linear-gradient(100deg,#12352ff0,#183b34d9);color:#efe3c5;border:1px solid #c7ab7066;box-shadow:none}
+.cinema-app .calendar-first-order .scene-choice-overline{display:none}
+.cinema-app .calendar-first-order :is(.scene-action-card,.scene-choice)>strong{font:25px/1.6 var(--serif);color:#f0dfb4;margin:0}
+.cinema-app .calendar-first-order .scene-choice-line{font:17px/1.8 var(--serif);margin:0}
+.cinema-app .calendar-first-order>.scene-earned{position:static;width:auto;margin:0 0 12px;padding:16px 20px}
+.cinema-app .calendar-entry-stage :is(button,summary):focus-visible{outline:2px solid #ecd09a;outline-offset:4px}
+.cinema-app .narrative-quarter:has(.calendar-entry-stage)>.scene-title{max-width:100%}
+.cinema-app .narrative-quarter:has(.calendar-entry-stage)>.scene-turn{width:100%}
+.cinema-app :is(.narrative-memory:has(.memory-reading-stage),.narrative-quarter:has(.calendar-entry-stage))>.scene-turn .clock-advance{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center}
+.cinema-app :is(.narrative-memory:has(.memory-reading-stage),.narrative-quarter:has(.calendar-entry-stage))>.scene-turn .clock-review{grid-column:1;grid-row:1;margin:0;align-self:center}
+.cinema-app :is(.narrative-memory:has(.memory-reading-stage),.narrative-quarter:has(.calendar-entry-stage))>.scene-turn .clock-main{grid-column:2;grid-row:1;min-width:0;margin:0}
+.cinema-app :is(.narrative-memory:has(.memory-reading-stage),.narrative-quarter:has(.calendar-entry-stage))>.scene-turn .clock-main>button{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 9px;min-width:0;padding:7px 10px;text-align:left}
+.cinema-app :is(.narrative-memory:has(.memory-reading-stage),.narrative-quarter:has(.calendar-entry-stage))>.scene-turn .clock-main>button::before{content:none}
+.cinema-app :is(.narrative-memory:has(.memory-reading-stage),.narrative-quarter:has(.calendar-entry-stage))>.scene-turn .clock-main>button>span{grid-column:1;grid-row:1;min-width:0}
+.cinema-app :is(.narrative-memory:has(.memory-reading-stage),.narrative-quarter:has(.calendar-entry-stage))>.scene-turn .clock-main>button>kbd{grid-column:2;grid-row:1;margin:0;width:auto}
+.cinema-app :is(.narrative-memory:has(.memory-reading-stage),.narrative-quarter:has(.calendar-entry-stage))>.scene-turn .clock-main>button>small{grid-column:1/-1;grid-row:2}
+
+.cinema-app .calendar-entry-comparison{position:relative;isolation:isolate}
+.cinema-app .calendar-entry-comparison:before{content:"";position:absolute;inset:-9px -16px;z-index:-1;background:linear-gradient(105deg,#12362ff0,#15382ff0);border:1px solid #c4aa6c66;box-shadow:5px 6px 0 #061d1a55;pointer-events:none}
+.cinema-app .narrative-quarter:has(.calendar-entry-stage)>.scene-turn>div:first-child{flex-wrap:wrap}
+
+/* The title and its quarter note share a reading line; a real response keeps its own line. */
+.cinema-app .narrative-quarter:has(.calendar-entry-stage){gap:8px}
+.cinema-app .narrative-quarter:has(.calendar-entry-stage)>.scene-title{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;column-gap:24px;row-gap:6px}
+.cinema-app .narrative-quarter:has(.calendar-entry-stage)>.scene-title>h1{grid-column:1;grid-row:1;margin:0}
+.cinema-app .narrative-quarter:has(.calendar-entry-stage)>.scene-title>.scene-overline{grid-column:2;grid-row:1;margin:0}
+.cinema-app .narrative-quarter:has(.calendar-entry-stage)>.scene-title>p:not(.scene-overline){grid-column:1/-1;grid-row:2}
+.cinema-app .calendar-entry-stage .today-life-option{padding-top:0}
+.cinema-app .calendar-entry-stage .today-life-heading{min-height:34px}
+.cinema-app .calendar-entry-stage .today-life-sketch{height:30px}
+.cinema-app .calendar-entry-stage .today-life-terms{margin-top:2px}
+.cinema-app .calendar-entry-stage .today-life-effect{margin-bottom:4px}
