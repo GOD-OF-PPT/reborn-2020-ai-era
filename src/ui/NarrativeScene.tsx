@@ -3,6 +3,7 @@ import {videoWorkStage} from './video-work-stage.ts'
 import {courseEntryReading} from './course-entry-reading.ts'
 import {courseStudioReading} from './course-studio-reading.ts'
 import {courseLessonReading} from './course-lesson-preparation.ts'
+import {courseAudienceReading} from './course-audience-reading.ts'
 import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
 import {useState,useEffect,useRef,type Ref,type ComponentProps} from 'react'
 import './life-choice-stage.css'
@@ -172,7 +173,7 @@ export function NarrativeScene(p:Props){
  const courseContinuity=courseThread!==null&&isCourseContinuityThread(courseThread)
  const courseEntry=courseThread?courseEntryReading(p,courseThread):null
  const courseLesson=courseThread?courseLessonReading(p,courseThread):null
- const courseStudio=courseThread?(courseStudioReading(p,courseThread)??courseLesson):null
+ const courseStudio=courseThread?(courseStudioReading(p,courseThread)??courseLesson??courseAudienceReading(p,courseThread)):null
  const relaySelectionContext=view.runId+'|'+p.accountId
  const relayTarget=p.relayTarget!==undefined?p.relayTarget:!p.onRelayTargetChange&&localRelaySelection.context===relaySelectionContext?localRelaySelection.target:undefined
  const relayAccount=!p.onRelayTargetChange&&p.relayTarget===undefined&&relayTarget?relayTarget.accountId:p.accountId

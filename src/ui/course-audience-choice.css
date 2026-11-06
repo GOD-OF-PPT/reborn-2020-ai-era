@@ -1,0 +1,48 @@
+/* A lesson meets its audience through choices on the same night-green paper. */
+.cinema-app .dialog.course-audience-paper{--audience-ink:#eee3c6;--audience-muted:#c2ccb8;--audience-rule:#bca97580;--audience-gold:#efd498}
+.cinema-app .dialog.course-audience-paper>.dialog-direct-body{display:flex;flex-direction:column;justify-content:center;gap:10px;color:var(--audience-ink)}
+.cinema-app .course-audience-paper .teaching-kicker{color:var(--audience-muted);margin:0;font:14px/1.8 var(--serif)}
+.cinema-app .course-audience-paper .audience-leaf{color:var(--audience-gold)}
+.cinema-app .course-audience-paper .teaching-paper-choices{margin:6px 0;padding:0;border:0;gap:10px}
+.cinema-app .course-audience-paper .audience-mode-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.cinema-app .course-audience-paper .teaching-paper-choices legend{color:var(--audience-muted);font:17px/1.8 var(--serif);margin:0 0 9px}
+.cinema-app .course-audience-paper .teaching-paper-choices>label{display:flex;align-items:flex-start;gap:12px;padding:16px;border:1px solid var(--audience-rule);background:#153b3599;transform:none;box-shadow:none}
+.cinema-app .course-audience-paper .teaching-paper-choices>label>span{font:18px/1.8 var(--serif);color:var(--audience-ink)}
+.cinema-app .course-audience-paper .teaching-paper-choices input{flex:none;margin:8px 0 0;accent-color:var(--audience-gold)}
+.cinema-app .course-audience-paper .teaching-paper-choices small{color:var(--audience-muted);font:14px/1.8 var(--serif);margin-top:7px}
+.cinema-app .course-audience-paper .teaching-paper-choices>label:hover{border-color:var(--audience-gold);background:#a58d4b18;transform:none}
+.cinema-app .course-audience-paper .teaching-paper-choices>label:has(input:checked){border-color:var(--audience-gold);background:#a58d4b24;box-shadow:inset 0 -3px var(--audience-gold);transform:none}
+.cinema-app .course-audience-paper .teaching-paper-choices>label:has(input:checked)>span{color:#ffe6ad}
+.cinema-app .course-audience-paper .teaching-paper-choices>label:has(input:focus-visible){outline:2px solid var(--audience-gold);outline-offset:3px}
+.cinema-app .course-audience-paper .teaching-paper-choices>label:has(input:disabled){border-style:dashed;color:var(--audience-muted);cursor:default}
+.cinema-app .course-audience-paper .teaching-terms{font:16px/1.85 var(--serif);color:var(--audience-ink);border-color:var(--audience-rule);padding:9px 0;margin:0}
+.cinema-app .course-audience-paper .teaching-warning{color:#f1c5ad;background:#ad725018;border-color:#d89872;padding:9px 12px;margin:0;font:16px/1.85 var(--serif)}
+.cinema-app .course-audience-paper .field{color:var(--audience-ink);font:17px/1.8 var(--serif);margin:0}
+.cinema-app .course-audience-paper .field>input{color:var(--audience-ink);background:#092c28;border-color:var(--audience-rule);font:18px/1.8 var(--serif);color-scheme:dark}
+.cinema-app .course-audience-paper .field>input:focus-visible{outline:2px solid var(--audience-gold);outline-offset:3px}
+.cinema-app .course-audience-paper .audience-boundary{color:var(--audience-muted);margin:0;font:16px/1.85 var(--serif)}
+.cinema-app .course-audience-paper .audience-quote-slip{color:var(--audience-gold);border-left:2px solid var(--audience-gold);padding-left:12px;margin:0;font:17px/1.8 var(--serif)}
+.cinema-app .course-audience-paper .audience-schedule-fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+.cinema-app .course-audience-paper .audience-source-leaves{display:flex;justify-content:space-between;gap:15px;align-items:center;color:var(--audience-muted);font:15px/1.8 var(--serif)}
+.cinema-app .course-audience-paper .teaching-link,.cinema-app .course-audience-paper .audience-source-leaves>button{color:var(--audience-gold);background:none;border:0;border-bottom:1px solid var(--audience-rule);padding:6px 0;font:15px/1.8 var(--serif);transform:none}
+.cinema-app .course-audience-paper .teaching-link:is(:hover,:focus-visible),.cinema-app .course-audience-paper .audience-source-leaves>button:is(:hover,:focus-visible){color:#ffe6ad;border-color:var(--audience-gold);background:#a58d4b18;transform:none}
+.cinema-app .course-audience-paper .audience-source-leaves>button:disabled{color:var(--audience-muted);border-style:dashed;background:none}
+.cinema-app .dialog.course-audience-paper>.teaching-footer{border-color:var(--audience-rule);gap:9px 18px;padding-top:12px;margin-top:10px}
+
+/* Keep the response, its original costs, and the original Clock together in the room. */
+.cinema-app .opening-room .room-tableau[data-scene=course]:is([data-state=course-audience-planned],[data-state=course-audience-running],[data-state=course-audience-ready],[data-state=course-audience-empty]) .moment-decisions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:6px 18px;align-items:center}
+.cinema-app .opening-room .room-tableau[data-scene=course]:is([data-state=course-audience-planned],[data-state=course-audience-running],[data-state=course-audience-ready],[data-state=course-audience-empty]) .moment-decisions>:first-child{grid-column:1 / -1}
+.cinema-app .opening-room .room-tableau[data-scene=course]:is([data-state=course-audience-planned],[data-state=course-audience-running],[data-state=course-audience-ready],[data-state=course-audience-empty]) .moment-decisions>.moment-continue{grid-column:2;grid-row:2}
+.cinema-app .opening-room .room-tableau[data-scene=course]:is([data-state=course-audience-planned],[data-state=course-audience-running],[data-state=course-audience-ready],[data-state=course-audience-empty]) .moment-decisions>.moment-explore:last-child{grid-column:2;grid-row:2;align-self:center;margin:0}
+.cinema-app .opening-room .room-tableau[data-scene=course]:is([data-state=course-audience-planned],[data-state=course-audience-running],[data-state=course-audience-ready],[data-state=course-audience-empty]) .moment-wait .clock-advance-room{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center}
+.cinema-app .opening-room .room-tableau[data-scene=course]:is([data-state=course-audience-planned],[data-state=course-audience-running],[data-state=course-audience-ready],[data-state=course-audience-empty]) .moment-wait .clock-review{grid-column:1;grid-row:1;align-self:center;margin:0}
+.cinema-app .opening-room .room-tableau[data-scene=course]:is([data-state=course-audience-planned],[data-state=course-audience-running],[data-state=course-audience-ready],[data-state=course-audience-empty]) .moment-wait .clock-main{grid-column:2;grid-row:1;min-width:0;margin:0}
+.cinema-app .opening-room .room-tableau[data-scene=course]:is([data-state=course-audience-planned],[data-state=course-audience-running],[data-state=course-audience-ready],[data-state=course-audience-empty]) .moment-wait .clock-main>button{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;padding:8px 12px;text-align:left}
+.cinema-app .opening-room .room-tableau[data-scene=course]:is([data-state=course-audience-planned],[data-state=course-audience-running],[data-state=course-audience-ready],[data-state=course-audience-empty]) .moment-wait .clock-main>button::before{content:none}
+.cinema-app .opening-room .room-tableau[data-scene=course]:is([data-state=course-audience-planned],[data-state=course-audience-running],[data-state=course-audience-ready],[data-state=course-audience-empty]) .moment-wait .clock-main>button>span{grid-column:1;grid-row:1;min-width:0}
+.cinema-app .opening-room .room-tableau[data-scene=course]:is([data-state=course-audience-planned],[data-state=course-audience-running],[data-state=course-audience-ready],[data-state=course-audience-empty]) .moment-wait .clock-main>button>kbd{grid-column:2;grid-row:1;justify-self:end;margin:0;width:auto}
+.cinema-app .opening-room .room-tableau[data-scene=course]:is([data-state=course-audience-planned],[data-state=course-audience-running],[data-state=course-audience-ready],[data-state=course-audience-empty]) .moment-wait .clock-main>button>small{grid-column:1 / -1;grid-row:2;color:inherit}
+
+/* Remove the duplicated outer button padding; keep the original type and all facts. */
+.cinema-app .opening-room .room-tableau[data-scene=course]:is([data-state=course-audience-planned],[data-state=course-audience-running],[data-state=course-audience-ready],[data-state=course-audience-empty])>.tableau-content{row-gap:4px}
+.cinema-app .opening-room .room-tableau[data-scene=course]:is([data-state=course-audience-planned],[data-state=course-audience-running],[data-state=course-audience-ready],[data-state=course-audience-empty]) .moment-decisions>.command.moment-decision{padding:0;min-height:0}

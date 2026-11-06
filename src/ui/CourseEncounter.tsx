@@ -11,11 +11,12 @@ import './course-encounter.css'
 import {CourseEntryOptions} from './CourseEntryOptions.tsx'
 import {courseStudioReading} from './course-studio-reading.ts'
 import {courseLessonReading} from './course-lesson-preparation.ts'
+import {courseAudienceReading} from './course-audience-reading.ts'
 
 type Props={p:GamePanelProps;thread:PlayerThreadView;date:string|null;waitLabel:string;onChoose:(intent?:CourseChoiceIntent)=>void;onResult:()=>void;onToday:()=>void;onNavigate?:NavigateScene|undefined}
 
 export function CourseEncounter({p,thread,date,waitLabel,onChoose,onResult,onToday,onNavigate}:Props){
- const lesson=courseLessonReading(p,thread),studio=courseStudioReading(p,thread)??lesson,art=coursePreparationPaperFor(thread)
+ const lesson=courseLessonReading(p,thread),studio=courseStudioReading(p,thread)??lesson??courseAudienceReading(p,thread),art=coursePreparationPaperFor(thread)
  const target=thread.focus.kind==='course'?thread.focus.courseTarget:null
  const classArt=courseTeachingPaperFor(p,target),teaching=courseTeachingPaper(p,target),money=courseTeachingMoneyFor(p,target)
  return <CourseThreadAction p={p} thread={thread} active date={date} waitLabel={waitLabel} onChoose={onChoose} onResult={onResult} onToday={onToday} onNavigate={onNavigate}>{primary=>{
