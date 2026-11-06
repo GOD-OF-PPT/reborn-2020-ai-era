@@ -12,6 +12,8 @@ import {addDays,isoDate} from '../core/calendar.ts'
 import {COURSE_JOBS} from '../content/course.ts'
 import {moneyText,playableThrough,lifecycleText,reasonText} from './game-text.ts'
 import './course-play.css'
+import './course-studio-preparation.css'
+import {courseStudioPreparationPage} from './course-studio-reading.ts'
 import {CourseTeachingChoice,type CourseTeachingIntent} from './CourseTeachingChoice.tsx'
 import type {CourseTeachingDraftSlot} from './course-teaching-draft.ts'
 
@@ -110,6 +112,7 @@ export function CourseSceneChoice({p,target,onTarget,onInspect,onToday,onLife,bl
  const [draft,setDraft]=useCourseSceneDraft(p.view.runId,{accountId:p.accountId,businessId:current?.businessId??null,courseId:slot==='sample'&&current?.kind==='course'?current.courseId:null,slot},p.courseDraftMemory)
  const edit=(patch:Partial<CourseSceneDraft>)=>setDraft(old=>({...old,...patch}))
  const contextReason=courseSceneContextReason(p,current),lock=courseSceneSubmissionLock(p,blockedReason)??contextReason??progress?.invalidReason??null,bookmarkLock=courseSceneBookmarkLock(p,blockedReason)
+ const directPreparation=!contextReason&&!progress?.invalidReason&&courseStudioPreparationPage(p,current,page)
  useEffect(()=>{if(blockedReason||p.view.hasCandidate||p.view.saveStatus==='conflict'||open&&p.view.revision!==openedRevision.current&&p.view.saveStatus==='saved')setOpen(false)},[blockedReason,p.view.hasCandidate,p.view.saveStatus,p.view.revision,open])
  const choose=(next:CourseSceneTarget|null)=>{if(courseSceneBookmarkLock(p,blockedReason))return false;binding.current.value=next;refreshTarget(value=>value+1);onTarget?.(next);return true}
  const inferredPage=():Page=>!current||contextReason||progress?.invalidReason?'objects':progress?.phase==='course-outline-needed'?'outline':progress?.phase==='course-activate'?'activate':progress?.phase==='course-define'?'cases':progress?.phase==='course-draft'?'sample':progress?.phase==='course-ready'||progress?.outcome==='non-success'||course?.status==='ready'&&progress?.phase==='course-paused'?'next':'record'
@@ -144,7 +147,7 @@ export function CourseSceneChoice({p,target,onTarget,onInspect,onToday,onLife,bl
   if(openTeaching&&current?.kind==='course'&&course?.status==='ready'&&progress?.phase==='course-ready'&&!progress.historical&&!contextReason&&!progress.invalidReason){setOpen(false);openTeaching('audience');return}
   activate('record')
  }
- const render=(openTeaching?:((intent?:CourseTeachingIntent)=>void))=><>{children?children(dispatch(openTeaching)):<button type="button" onClick={()=>activate()}>走近这份教案 ↗</button>}{open?<Dialog title={title} className="opening-paper course-choice-paper" onClose={()=>setOpen(false)} footer={footer}><p className="course-paper-kicker">{p.view.date} · {business?'这间教室 · '+(lifecycleText[business.lifecycle]??'状态待核对'):'尚未选择教室'}{course?' · '+course.name:''}</p>{lock?<p role="status" className="course-paper-warning">{lock}</p>:null}
+ const render=(openTeaching?:((intent?:CourseTeachingIntent)=>void))=><>{children?children(dispatch(openTeaching)):<button type="button" onClick={()=>activate()}>走近这份教案 ↗</button>}{open?<Dialog title={title} className={'opening-paper course-choice-paper'+(directPreparation?' course-studio-preparation':'')} layout={directPreparation?'direct':'book'} onClose={()=>setOpen(false)} footer={footer}><p className="course-paper-kicker">{p.view.date} · {directPreparation&&page==='fund'?'自有资本 · 尚未转入':business?'这间教室 · '+(lifecycleText[business.lifecycle]??'状态待核对'):'尚未选择教室'}{course?' · '+course.name:''}</p>{lock?<p role="status" className="course-paper-warning">{lock}</p>:null}
   {page==='next'&&current?<><h3>{course?.name??'这间教室的教学准备'}</h3><p>{progress?.line}</p><p>{progress?.choice.line}</p>{business?<p>本教室可花{moneyText(business.funds.availableFen)}；维护、旧班与已发生费用仍按原日期和记录继续。</p>:null}{business&&(business.funds.payableFen>0||business.funds.prepaidLiabilityFen>0||business.funds.protectionShortfallFen>0||business.funds.commitmentShortfallFen>0)?<p className="course-paper-warning">尚未履约保护款{moneyText(business.funds.prepaidLiabilityFen)} · 未结应付{moneyText(business.funds.payableFen)}。原资金缺口和承诺须先在原账与日历处理，回到今天不会清除。</p>:null}<div className="course-paper-directions">
    {progress?.phase==='course-ready'&&openTeaching?<button type="button" disabled={bookmarkLock!==null} onClick={()=>{setOpen(false);openTeaching('audience')}}>先看看谁会需要这一堂课<small>只打开原受众与报价选择，不自动推广、开班或收款。</small></button>:null}
    {course&&['draft','building'].includes(course.status)&&progress?.outcome==='non-success'&&!progress.historical?<button type="button" disabled={bookmarkLock!==null} onClick={()=>setPage('sample')}>重新核对这份样课的资源与日期<small>已耗成本与原尝试保留，新样课仍须新的真实投入。</small></button>:null}

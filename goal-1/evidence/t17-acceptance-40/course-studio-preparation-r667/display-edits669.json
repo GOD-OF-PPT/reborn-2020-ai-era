@@ -1,0 +1,179 @@
+[
+  {
+    "path": "src/ui/CourseSceneChoice.tsx",
+    "hunks": [
+      {
+        "oldStart": 14,
+        "oldEnd": 14,
+        "newStart": 14,
+        "newEnd": 16,
+        "old": "",
+        "new": "import './course-studio-preparation.css'\nimport {courseStudioPreparationPage} from './course-studio-reading.ts'\n"
+      },
+      {
+        "oldStart": 112,
+        "oldEnd": 112,
+        "newStart": 114,
+        "newEnd": 115,
+        "old": "",
+        "new": " const directPreparation=!contextReason&&!progress?.invalidReason&&courseStudioPreparationPage(p,current,page)\n"
+      },
+      {
+        "oldStart": 146,
+        "oldEnd": 147,
+        "newStart": 149,
+        "newEnd": 150,
+        "old": " const render=(openTeaching?:((intent?:CourseTeachingIntent)=>void))=><>{children?children(dispatch(openTeaching)):<button type=\"button\" onClick={()=>activate()}>走近这份教案 ↗</button>}{open?<Dialog title={title} className=\"opening-paper course-choice-paper\" onClose={()=>setOpen(false)} footer={footer}><p className=\"course-paper-kicker\">{p.view.date} · {business?'这间教室 · '+(lifecycleText[business.lifecycle]??'状态待核对'):'尚未选择教室'}{course?' · '+course.name:''}</p>{lock?<p role=\"status\" className=\"course-paper-warning\">{lock}</p>:null}\n",
+        "new": " const render=(openTeaching?:((intent?:CourseTeachingIntent)=>void))=><>{children?children(dispatch(openTeaching)):<button type=\"button\" onClick={()=>activate()}>走近这份教案 ↗</button>}{open?<Dialog title={title} className={'opening-paper course-choice-paper'+(directPreparation?' course-studio-preparation':'')} layout={directPreparation?'direct':'book'} onClose={()=>setOpen(false)} footer={footer}><p className=\"course-paper-kicker\">{p.view.date} · {directPreparation&&page==='fund'?'自有资本 · 尚未转入':business?'这间教室 · '+(lifecycleText[business.lifecycle]??'状态待核对'):'尚未选择教室'}{course?' · '+course.name:''}</p>{lock?<p role=\"status\" className=\"course-paper-warning\">{lock}</p>:null}\n"
+      }
+    ]
+  },
+  {
+    "path": "src/ui/CourseThreadAction.tsx",
+    "hunks": [
+      {
+        "oldStart": 3,
+        "oldEnd": 3,
+        "newStart": 3,
+        "newEnd": 5,
+        "old": "",
+        "new": "import {courseStudioReading} from './course-studio-reading.ts'\nimport {CourseStudioAction} from './CourseStudioAction.tsx'\n"
+      },
+      {
+        "oldStart": 32,
+        "oldEnd": 32,
+        "newStart": 34,
+        "newEnd": 36,
+        "old": "",
+        "new": " const studio=courseStudioReading(p,thread)\n if(studio?.choice)return <CourseStudioAction p={p} thread={thread} reading={studio} onChoose={onChoose}>{children}</CourseStudioAction>\n"
+      }
+    ]
+  },
+  {
+    "path": "src/ui/CourseEncounter.tsx",
+    "hunks": [
+      {
+        "oldStart": 11,
+        "oldEnd": 11,
+        "newStart": 11,
+        "newEnd": 12,
+        "old": "",
+        "new": "import {courseStudioReading} from './course-studio-reading.ts'\n"
+      },
+      {
+        "oldStart": 15,
+        "oldEnd": 16,
+        "newStart": 16,
+        "newEnd": 17,
+        "old": " const art=coursePreparationPaperFor(thread)\n",
+        "new": " const studio=courseStudioReading(p,thread),art=coursePreparationPaperFor(thread)\n"
+      },
+      {
+        "oldStart": 24,
+        "oldEnd": 27,
+        "newStart": 25,
+        "newEnd": 28,
+        "old": "  return <section className=\"scene-action course-encounter\" aria-label={classArt?target?.kind==='audience'?'这一份受众的决定':'这一班学员的决定':'这一份教学准备的决定'} data-course-stage={thread.stage} data-course-entry={primary.courseEntry?true:undefined}>\n   <div className=\"course-encounter-thought\">{primary.courseEntry?<p className=\"scene-choice-line\">{primary.courseEntry.reading.caseLine}</p>:<><span className=\"scene-choice-overline\" data-book-chapter={thread.title}>{classArt?target?.kind==='audience'?'眼前的受众与报价 · 由你决定':'眼前的学员与承诺 · 由你决定':'眼前这份教案 · 由你决定'}</span><p className=\"course-encounter-object\">{thread.object}</p><p className=\"scene-choice-line\">{thread.detail}</p>{money?<p className=\"course-scene-money\">{money}</p>:null}</>}{main}{primary.courseEntry?<CourseEntryOptions value={primary.courseEntry}/>:null}</div>\n   <div className=\"course-encounter-paper\"><OpeningObject {...(primary.courseEntry?{copyMode:'tableau' as const}:{})} kind={thread.outcome==='non-success'?'letter':thread.wait?'calendar':'work'} appearance=\"course\" title={thread.object} displayTitle=\"\" detail={primary.courseEntry?'':thread.wait&&!(primary.binding.label.includes(thread.wait.date)&&primary.binding.label.includes(thread.wait.label))?thread.wait.date+' · '+thread.wait.label:''} stageLabel={primary.courseEntry?'课程尚未开放':classArt?courseTeachingPaperLabel(classArt):thread.focusScope==='history'?'历史回看':thread.stage==='course-ready'?'样课已经完成':thread.stage.endsWith('-planned')?'已安排 · 尚未开工':thread.stage.endsWith('-running')?'正在准备 · 尚未完成':thread.outcome==='non-success'?'这次准备留下的原记录':'这份教学准备'} actionLabel={primary.binding.label} disabled={primary.binding.disabled} onActivate={primary.binding.activate} textOnly={p.textOnly===true} {...(art?{coursePaper:art}:{})} {...(classArt?{teachingPaper:classArt}:{})} {...(teaching?{teaching}:{})} {...(protection?{protection}:{})}/></div>\n",
+        "new": "  return <section className=\"scene-action course-encounter\" aria-label={classArt?target?.kind==='audience'?'这一份受众的决定':'这一班学员的决定':'这一份教学准备的决定'} data-course-stage={thread.stage} data-course-entry={primary.courseEntry?true:undefined} data-studio-preparation={studio?true:undefined}>\n   <div className=\"course-encounter-thought\">{primary.courseEntry?<p className=\"scene-choice-line\">{primary.courseEntry.reading.caseLine}</p>:studio?<p className=\"scene-choice-line\">{thread.detail}</p>:<><span className=\"scene-choice-overline\" data-book-chapter={thread.title}>{classArt?target?.kind==='audience'?'眼前的受众与报价 · 由你决定':'眼前的学员与承诺 · 由你决定':'眼前这份教案 · 由你决定'}</span><p className=\"course-encounter-object\">{thread.object}</p><p className=\"scene-choice-line\">{thread.detail}</p>{money?<p className=\"course-scene-money\">{money}</p>:null}</>}{main}{primary.courseEntry?<CourseEntryOptions value={primary.courseEntry}/>:null}</div>\n   <div className=\"course-encounter-paper\"><OpeningObject {...(primary.courseEntry||studio?{copyMode:'tableau' as const}:{})} kind={thread.outcome==='non-success'?'letter':thread.wait?'calendar':'work'} appearance=\"course\" title={thread.object} displayTitle=\"\" detail={primary.courseEntry?'':thread.wait&&!(primary.binding.label.includes(thread.wait.date)&&primary.binding.label.includes(thread.wait.label))?thread.wait.date+' · '+thread.wait.label:''} stageLabel={primary.courseEntry?'课程尚未开放':studio?studio.stageLabel:classArt?courseTeachingPaperLabel(classArt):thread.focusScope==='history'?'历史回看':thread.stage==='course-ready'?'样课已经完成':thread.stage.endsWith('-planned')?'已安排 · 尚未开工':thread.stage.endsWith('-running')?'正在准备 · 尚未完成':thread.outcome==='non-success'?'这次准备留下的原记录':'这份教学准备'} actionLabel={primary.binding.label} disabled={primary.binding.disabled} onActivate={primary.binding.activate} textOnly={p.textOnly===true} {...(art?{coursePaper:art}:{})} {...(classArt?{teachingPaper:classArt}:{})} {...(teaching?{teaching}:{})} {...(protection?{protection}:{})}/></div>\n"
+      }
+    ]
+  },
+  {
+    "path": "src/ui/NarrativeScene.tsx",
+    "hunks": [
+      {
+        "oldStart": 3,
+        "oldEnd": 3,
+        "newStart": 3,
+        "newEnd": 4,
+        "old": "",
+        "new": "import {courseStudioReading} from './course-studio-reading.ts'\n"
+      },
+      {
+        "oldStart": 106,
+        "oldEnd": 107,
+        "newStart": 107,
+        "newEnd": 108,
+        "old": " const number=Number(event.key)-1,direct=root.querySelector('.video-first-attempt-stage,.video-work-stage,.course-entry-stage')\n",
+        "new": " const number=Number(event.key)-1,direct=root.querySelector('.video-first-attempt-stage,.video-work-stage,.course-entry-stage,.course-studio-stage')\n"
+      },
+      {
+        "oldStart": 144,
+        "oldEnd": 146,
+        "newStart": 145,
+        "newEnd": 147,
+        "old": "function SceneChoiceSurface({direct,video=false,work=false,course=false,children,...book}:ComponentProps<typeof ScreenBook>&{direct:boolean;video?:boolean;work?:boolean;course?:boolean}){\n return direct?<div className={work?'video-work-stage':course?'course-entry-stage':video?'video-first-attempt-stage':'life-choice-stage'} role=\"group\" aria-label={course?'现在可以作出的课程选择':video?'现在可以作出的视频选择':'现在可以作出的生活选择'}>{children}</div>:<ScreenBook {...book}>{children}</ScreenBook>\n",
+        "new": "function SceneChoiceSurface({direct,video=false,work=false,course=false,studio=false,children,...book}:ComponentProps<typeof ScreenBook>&{direct:boolean;video?:boolean;work?:boolean;course?:boolean;studio?:boolean}){\n return direct?<div className={work?'video-work-stage':studio?'course-studio-stage':course?'course-entry-stage':video?'video-first-attempt-stage':'life-choice-stage'} role=\"group\" aria-label={course||studio?'现在可以作出的课程选择':video?'现在可以作出的视频选择':'现在可以作出的生活选择'}>{children}</div>:<ScreenBook {...book}>{children}</ScreenBook>\n"
+      },
+      {
+        "oldStart": 171,
+        "oldEnd": 171,
+        "newStart": 172,
+        "newEnd": 173,
+        "old": "",
+        "new": " const courseStudio=courseThread?courseStudioReading(p,courseThread):null\n"
+      },
+      {
+        "oldStart": 192,
+        "oldEnd": 193,
+        "newStart": 194,
+        "newEnd": 195,
+        "old": " const copy=courseIdentityReason?{...originalCopy,title:'先找回这份教案与原账户。',line:courseIdentityReason}:courseEntry?{...originalCopy,title:courseEntry.title,line:courseEntry.line}:marketInvalid?{...originalCopy,title:'先找回原来的那份委托。',line:marketTarget.invalidReason??'原对象已经不可达，请重新选择。'}:progress?{...originalCopy,title:progress.title,line:progress.line}:originalCopy\n",
+        "new": " const copy=courseIdentityReason?{...originalCopy,title:'先找回这份教案与原账户。',line:courseIdentityReason}:courseEntry?{...originalCopy,title:courseEntry.title,line:courseEntry.line}:courseStudio?{...originalCopy,title:courseStudio.title,line:courseStudio.line}:marketInvalid?{...originalCopy,title:'先找回原来的那份委托。',line:marketTarget.invalidReason??'原对象已经不可达，请重新选择。'}:progress?{...originalCopy,title:progress.title,line:progress.line}:originalCopy\n"
+      },
+      {
+        "oldStart": 235,
+        "oldEnd": 236,
+        "newStart": 237,
+        "newEnd": 238,
+        "old": "  <SceneChoiceSurface direct={p.screen==='life'&&!closing||videoAttempt!==null||videoWork||courseEntry!==null} video={videoAttempt!==null||videoWork} work={videoWork} course={courseEntry!==null} choiceNavigation key={p.screen==='video'||courseContinuity?view.runId+':'+p.screen+':'+view.phase:p.screen+':'+view.phase+':'+view.date+':'+(p.screen==='life'?lifeSelection:relayProgress?.periodId??marketProgress?.entityId??deepseekProgress?.entityId??'')+':'+bookContext} label=\"眼前的选择\" className=\"scene-story-book\">\n",
+        "new": "  <SceneChoiceSurface direct={p.screen==='life'&&!closing||videoAttempt!==null||videoWork||courseEntry!==null||courseStudio!==null} video={videoAttempt!==null||videoWork} work={videoWork} course={courseEntry!==null} studio={courseStudio!==null} choiceNavigation key={p.screen==='video'||courseContinuity?view.runId+':'+p.screen+':'+view.phase:p.screen+':'+view.phase+':'+view.date+':'+(p.screen==='life'?lifeSelection:relayProgress?.periodId??marketProgress?.entityId??deepseekProgress?.entityId??'')+':'+bookContext} label=\"眼前的选择\" className=\"scene-story-book\">\n"
+      }
+    ]
+  },
+  {
+    "path": "src/ui/OpeningMoment.tsx",
+    "hunks": [
+      {
+        "oldStart": 70,
+        "oldEnd": 70,
+        "newStart": 70,
+        "newEnd": 71,
+        "old": "",
+        "new": "import {courseStudioReading} from './course-studio-reading.ts'\n"
+      },
+      {
+        "oldStart": 385,
+        "oldEnd": 385,
+        "newStart": 386,
+        "newEnd": 387,
+        "old": "",
+        "new": " const courseStudio=!interrupted&&!requiresChoice&&!unknownFocus&&!legacy&&course&&isCourseContinuityThread(thread)?courseStudioReading(nearProps,thread):null\n"
+      },
+      {
+        "oldStart": 406,
+        "oldEnd": 408,
+        "newStart": 408,
+        "newEnd": 410,
+        "old": " heading={<header className=\"moment-heading\"><p>{workHistory?workHistory.object:relayClosed?'这份服务的实际结果':<>{thread.focusScope==='history'?'正在回看 · ':''}{quarterTurn?quarterTurn.quarter+' · 季末留页':researchCopy?.object??marketCopy?.object??(workCopy?'工作日历':moment.object)}</>}</p><h1 ref={headingRef} tabIndex={-1}>{freeChoice?'今天，想怎样过？':quarterTurn?.title??workHistory?.title??personalResult?.title??lifeRoomTitle??researchCopy?.title??marketCopy?.title??workCopy?.title??cohortCopy?.title??videoAttempt?.title??courseEntry?.title??meaning?.title??moment.title}</h1></header>}\n context={<>{!freeChoice?workWait?<WorkWaitCue p={p} value={workWait} onNavigate={onNavigate}/>:<p className=\"opening-room-stage\" data-first-order-stage={firstStage?.key} data-first-order-tone={firstStage?.tone} data-interrupted={interrupted?'true':undefined}>{firstStage?<span className=\"first-order-stage-mark\" aria-hidden=\"true\">{firstStage.mark}</span>:null}{firstStage?.label??sceneStageLabel(label)}{interrupted?<span> · 原来的关注仍保留</span>:previousFocusNotice&&!workHistory?<span> · 原书签未变（{bookmarkQuarter}）</span>:null}</p>:null}</>}\n",
+        "new": " heading={<header className=\"moment-heading\" data-course-studio={courseStudio?'true':undefined}><p>{workHistory?workHistory.object:relayClosed?'这份服务的实际结果':<>{thread.focusScope==='history'?'正在回看 · ':''}{quarterTurn?quarterTurn.quarter+' · 季末留页':researchCopy?.object??marketCopy?.object??(workCopy?'工作日历':moment.object)}</>}</p><h1 ref={headingRef} tabIndex={-1}>{freeChoice?'今天，想怎样过？':quarterTurn?.title??workHistory?.title??personalResult?.title??lifeRoomTitle??researchCopy?.title??marketCopy?.title??workCopy?.title??cohortCopy?.title??videoAttempt?.title??courseEntry?.title??courseStudio?.title??meaning?.title??moment.title}</h1></header>}\n context={<>{!freeChoice?workWait?<WorkWaitCue p={p} value={workWait} onNavigate={onNavigate}/>:<p className=\"opening-room-stage\" data-first-order-stage={firstStage?.key} data-first-order-tone={firstStage?.tone} data-interrupted={interrupted?'true':undefined}>{firstStage?<span className=\"first-order-stage-mark\" aria-hidden=\"true\">{firstStage.mark}</span>:null}{firstStage?.label??courseStudio?.stageLabel??sceneStageLabel(label)}{interrupted?<span> · 原来的关注仍保留</span>:previousFocusNotice&&!workHistory?<span> · 原书签未变（{bookmarkQuarter}）</span>:null}</p>:null}</>}\n"
+      },
+      {
+        "oldStart": 413,
+        "oldEnd": 414,
+        "newStart": 415,
+        "newEnd": 416,
+        "old": " facts={<>{videoAttempt?<VideoFirstAttemptFacts reading={videoAttempt}/>:courseEntry?<CourseEntryFacts reading={courseEntry}/>:freeChoice?<p className=\"moment-line\">{employed?'留几天给自己，也可以看看房间。':'休整几天，还是先去上班？'}</p>:<>{currentCohortContext?<p className=\"moment-line\">{cohortCopy?.context??currentCohortContext}{cohortUpdateDue?' · 更新期限'+cohortUpdateDue:null}</p>:null}{!closedEcho&&!currentCohortUpdate?sceneFactsAfterEcho?sceneFactsAfterEcho.map(line=><p key={line} className={marketCopy?\"moment-line market-order-fact\":\"moment-line\"}>{line}</p>):<p className=\"moment-line\">{cohortCopy?.line??collectionScope??(summarized?meaning!.situation:closedCopy?.line??sceneLine)}</p>:null}{!summarized&&(closedCopy?.terms||moment.detail)?<p className=\"moment-terms\">{updateTerms??cohortCopy?.terms??closedCopy?.terms??moment.detail}</p>:null}{teachingMoney?<p className=\"course-scene-money\">{teachingMoney}</p>:null}{relayMoney?<p className=\"relay-scene-money\">{relayMoney}</p>:null}{courseComplete?<button type=\"button\" className=\"scene-text-action\" onClick={inspectFocus}>翻阅本班的完整原记录 ↗</button>:null}</>}</>}\n",
+        "new": " facts={<>{videoAttempt?<VideoFirstAttemptFacts reading={videoAttempt}/>:courseEntry?<CourseEntryFacts reading={courseEntry}/>:freeChoice?<p className=\"moment-line\">{employed?'留几天给自己，也可以看看房间。':'休整几天，还是先去上班？'}</p>:<>{currentCohortContext?<p className=\"moment-line\">{cohortCopy?.context??currentCohortContext}{cohortUpdateDue?' · 更新期限'+cohortUpdateDue:null}</p>:null}{!closedEcho&&!currentCohortUpdate?sceneFactsAfterEcho?sceneFactsAfterEcho.map(line=><p key={line} className={marketCopy?\"moment-line market-order-fact\":\"moment-line\"}>{line}</p>):<p className=\"moment-line\">{courseStudio?.line??cohortCopy?.line??collectionScope??(summarized?meaning!.situation:closedCopy?.line??sceneLine)}</p>:null}{!summarized&&(closedCopy?.terms||moment.detail)?<p className=\"moment-terms\">{updateTerms??cohortCopy?.terms??closedCopy?.terms??moment.detail}</p>:null}{teachingMoney?<p className=\"course-scene-money\">{teachingMoney}</p>:null}{relayMoney?<p className=\"relay-scene-money\">{relayMoney}</p>:null}{courseComplete?<button type=\"button\" className=\"scene-text-action\" onClick={inspectFocus}>翻阅本班的完整原记录 ↗</button>:null}</>}</>}\n"
+      },
+      {
+        "oldStart": 445,
+        "oldEnd": 446,
+        "newStart": 447,
+        "newEnd": 448,
+        "old": " object={<OpeningObject copyMode=\"tableau\" {...(relayArt?{relayPaper:{...relayArt,...(relayPrimary?{actionHint:relayPrimary.hint}:{})},displayTitle:''}:{})} {...(videoArt?{videoPaper:videoArt,displayTitle:''}:{})} {...(courseArt?{coursePaper:courseArt,displayTitle:''}:{})} {...(classArt?{teachingPaper:classArt,displayTitle:''}:{})} {...(dayArt?{dayPaper:dayArt,displayTitle:''}:{})} {...(entryPaper?{entryPaper,displayTitle:''}:{})} {...(firstArt?{displayTitle:''}:{})} {...(!interrupted&&!requiresChoice&&(video||course||relay)?{appearance:relay?'relay' as const:course?'course' as const:'video' as const}:{})} {...(!interrupted&&!requiresChoice&&relay&&!relayArt?{displayTitle:relayDisplayTitle}:{})} {...(!interrupted&&!requiresChoice&&courseDisplayTitle&&!classArt?{displayTitle:courseDisplayTitle}:{})} {...(teachingPaper?{teaching:teachingPaper}:{})} kind={interrupted||requiresChoice?'calendar':legacy?(moment.wait?'waiting':'portfolio'):objectKind(thread)} title={quarterTurn?'本季留页':freeChoice?'今天的日历':freeTime?'工作之外的时间':workHistory?.object??researchCopy?.object??marketCopy?.object??(workCopy?'工作日历':moment.object)} detail={courseEntry?'':freeChoice||workCopy||workHistory||marketCopy||researchCopy?'':relayArt?'':courseArt||classArt?(moment.wait&&!(coursePrimary?.binding.label.includes(moment.wait.date)&&coursePrimary?.binding.label.includes(moment.wait.label))?moment.wait.date+' · '+moment.wait.label:''):videoArt?(moment.wait&&!(videoPrimary?.binding.label.includes(moment.wait.date)&&videoPrimary?.binding.label.includes(moment.wait.label))?moment.wait.date+' · '+moment.wait.label:''):entryPaper?p.view.date:firstArt?'':moment.wait?moment.wait.date+' · '+moment.wait.label:interrupted?'这项责任仍需你回应':requiresChoice?'原记录与责任都保留，先明确重新选择':legacy?'沿原业务记录继续':thread.outcome==='actual'?'回响已有实际记录':'翻开，看清这次选择'} stageLabel={courseEntry?'课程尚未开放':freeChoice?'今天':relayArt?relayTarget===null?'服务资料':relayDisplayTitle:classArt?courseTeachingPaperLabel(classArt):entryPaper==='calendar'?'接下来，自己安排':entryPaper==='market'?'公开市场资料':firstObjectLabel??sceneStageLabel(label)} actionLabel={primary?.binding.label??quarterPrimary?.binding.label??videoPrimary?.binding.label??coursePrimary?.binding.label??relayPrimary?.binding.label??workTimePrimary?.binding.label??dayPrimary?.binding.label??operatingBinding?.label??(requiresChoice?'重新选择原关注':'走近这件事')} {...(firstArt?{firstOrder:firstArt}:{})} {...(p.view.readOnly?{protection:'readonly' as const}:p.view.hasCandidate||p.view.saveStatus!=='saved'?{protection:'unsaved' as const}:(primary?.binding.disabled??quarterPrimary?.binding.disabled??videoPrimary?.binding.disabled??coursePrimary?.binding.disabled??relayPrimary?.binding.disabled??workTimePrimary?.binding.disabled??dayPrimary?.binding.disabled??operatingBinding?.disabled)?{protection:'unavailable' as const}:{})} disabled={primary?.binding.disabled??quarterPrimary?.binding.disabled??videoPrimary?.binding.disabled??coursePrimary?.binding.disabled??relayPrimary?.binding.disabled??workTimePrimary?.binding.disabled??dayPrimary?.binding.disabled??operatingBinding?.disabled??p.view.busy} textOnly={p.textOnly===true} onActivate={primary?.binding.activate??quarterPrimary?.binding.activate??videoPrimary?.binding.activate??coursePrimary?.binding.activate??relayPrimary?.binding.activate??workTimePrimary?.binding.activate??dayPrimary?.binding.activate??operatingBinding?.activate??(requiresChoice?openDirections:()=>setObjectOpen(true))}/>}\n",
+        "new": " object={<OpeningObject copyMode=\"tableau\" {...(relayArt?{relayPaper:{...relayArt,...(relayPrimary?{actionHint:relayPrimary.hint}:{})},displayTitle:''}:{})} {...(videoArt?{videoPaper:videoArt,displayTitle:''}:{})} {...(courseArt?{coursePaper:courseArt,displayTitle:''}:{})} {...(classArt?{teachingPaper:classArt,displayTitle:''}:{})} {...(dayArt?{dayPaper:dayArt,displayTitle:''}:{})} {...(entryPaper?{entryPaper,displayTitle:''}:{})} {...(firstArt?{displayTitle:''}:{})} {...(!interrupted&&!requiresChoice&&(video||course||relay)?{appearance:relay?'relay' as const:course?'course' as const:'video' as const}:{})} {...(!interrupted&&!requiresChoice&&relay&&!relayArt?{displayTitle:relayDisplayTitle}:{})} {...(!interrupted&&!requiresChoice&&courseDisplayTitle&&!classArt?{displayTitle:courseDisplayTitle}:{})} {...(teachingPaper?{teaching:teachingPaper}:{})} kind={interrupted||requiresChoice?'calendar':legacy?(moment.wait?'waiting':'portfolio'):objectKind(thread)} title={quarterTurn?'本季留页':freeChoice?'今天的日历':freeTime?'工作之外的时间':workHistory?.object??researchCopy?.object??marketCopy?.object??(workCopy?'工作日历':moment.object)} detail={courseEntry?'':freeChoice||workCopy||workHistory||marketCopy||researchCopy?'':relayArt?'':courseArt||classArt?(moment.wait&&!(coursePrimary?.binding.label.includes(moment.wait.date)&&coursePrimary?.binding.label.includes(moment.wait.label))?moment.wait.date+' · '+moment.wait.label:''):videoArt?(moment.wait&&!(videoPrimary?.binding.label.includes(moment.wait.date)&&videoPrimary?.binding.label.includes(moment.wait.label))?moment.wait.date+' · '+moment.wait.label:''):entryPaper?p.view.date:firstArt?'':moment.wait?moment.wait.date+' · '+moment.wait.label:interrupted?'这项责任仍需你回应':requiresChoice?'原记录与责任都保留，先明确重新选择':legacy?'沿原业务记录继续':thread.outcome==='actual'?'回响已有实际记录':'翻开，看清这次选择'} stageLabel={courseEntry?'课程尚未开放':courseStudio?courseStudio.stageLabel:freeChoice?'今天':relayArt?relayTarget===null?'服务资料':relayDisplayTitle:classArt?courseTeachingPaperLabel(classArt):entryPaper==='calendar'?'接下来，自己安排':entryPaper==='market'?'公开市场资料':firstObjectLabel??sceneStageLabel(label)} actionLabel={primary?.binding.label??quarterPrimary?.binding.label??videoPrimary?.binding.label??coursePrimary?.binding.label??relayPrimary?.binding.label??workTimePrimary?.binding.label??dayPrimary?.binding.label??operatingBinding?.label??(requiresChoice?'重新选择原关注':'走近这件事')} {...(firstArt?{firstOrder:firstArt}:{})} {...(p.view.readOnly?{protection:'readonly' as const}:p.view.hasCandidate||p.view.saveStatus!=='saved'?{protection:'unsaved' as const}:(primary?.binding.disabled??quarterPrimary?.binding.disabled??videoPrimary?.binding.disabled??coursePrimary?.binding.disabled??relayPrimary?.binding.disabled??workTimePrimary?.binding.disabled??dayPrimary?.binding.disabled??operatingBinding?.disabled)?{protection:'unavailable' as const}:{})} disabled={primary?.binding.disabled??quarterPrimary?.binding.disabled??videoPrimary?.binding.disabled??coursePrimary?.binding.disabled??relayPrimary?.binding.disabled??workTimePrimary?.binding.disabled??dayPrimary?.binding.disabled??operatingBinding?.disabled??p.view.busy} textOnly={p.textOnly===true} onActivate={primary?.binding.activate??quarterPrimary?.binding.activate??videoPrimary?.binding.activate??coursePrimary?.binding.activate??relayPrimary?.binding.activate??workTimePrimary?.binding.activate??dayPrimary?.binding.activate??operatingBinding?.activate??(requiresChoice?openDirections:()=>setObjectOpen(true))}/>}\n"
+      }
+    ]
+  }
+]

@@ -1,0 +1,46 @@
+.cinema-app .dialog.course-studio-preparation{--studio-ink:#eee3c6;--studio-muted:#c2ccb8;--studio-rule:#bca97580;--studio-gold:#efd498}
+.cinema-app .dialog.course-studio-preparation>.dialog-direct-body{display:flex;flex:1;min-height:0;flex-direction:column;justify-content:center;gap:12px;color:var(--studio-ink)}
+.cinema-app .course-studio-preparation .course-paper-kicker{color:var(--studio-muted);font:15px/1.8 var(--serif);margin:0}
+.cinema-app .course-studio-preparation .dialog-direct-body>p{font:16px/1.85 var(--serif);color:var(--studio-ink);margin:0}
+.cinema-app .course-studio-preparation .preparation-picks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:8px 0}
+.cinema-app .course-studio-preparation .preparation-picks>button{min-height:0;padding:15px 13px;border:1px solid var(--studio-rule);background:#153b3599;color:var(--studio-ink);box-shadow:none;transform:none}
+.cinema-app .course-studio-preparation .preparation-picks>button>span{color:var(--studio-ink);font:18px/1.8 var(--serif)}
+.cinema-app .course-studio-preparation .preparation-picks>button>small{color:var(--studio-muted);font:14px/1.8 var(--serif)}
+.cinema-app .course-studio-preparation .preparation-picks>button:is(:hover,:focus-visible):not(:disabled){background:#a58d4b24;color:#ffe6ad;border-color:var(--studio-gold);transform:none}
+.cinema-app .course-studio-preparation .preparation-picks>button[aria-pressed=true]{background:#a58d4b24;border-color:var(--studio-gold);box-shadow:inset 0 -3px #e4c78e;color:#ffe6ad}
+.cinema-app .course-studio-preparation .preparation-picks>button[aria-pressed=true]>span{color:#ffe6ad}
+.cinema-app .course-studio-preparation .preparation-picks>button[aria-pressed=true]>small{color:var(--studio-muted)}
+.cinema-app .course-studio-preparation .field{display:flex;flex-direction:column;gap:8px;color:var(--studio-ink);font:17px/1.8 var(--serif);margin:0;max-width:none}
+.cinema-app .course-studio-preparation .field>:is(input,select){box-sizing:border-box;width:100%;padding:9px 12px;color:var(--studio-ink);background:#0b2925cc;border:1px solid var(--studio-rule);border-radius:2px;font:17px/1.8 var(--serif);color-scheme:dark}
+.cinema-app .course-studio-preparation .course-paper-direction{color:#e5cc96;border-color:var(--studio-rule);font:15px/1.8 var(--serif)}
+.cinema-app .course-studio-preparation .course-schedule-fields{gap:18px 24px;margin:6px 0}
+.cinema-app .course-studio-preparation .dialog-direct-body>.preparation-hint{font:15px/1.8 var(--serif);color:var(--studio-muted)}
+.cinema-app .course-studio-preparation .dialog-direct-body>.course-paper-warning{color:#f1c7ac;border-color:#cfa278;background:#9d593018;font:16px/1.8 var(--serif);padding:8px 12px}
+.cinema-app .course-studio-preparation .course-choice-footer .course-record-link{color:var(--studio-muted);border-color:var(--studio-rule)}
+.cinema-app .course-studio-preparation :is(input,select,button):focus-visible{outline:2px solid var(--studio-gold);outline-offset:3px}
+.cinema-app .narrative-course .course-studio-stage{display:flex;flex:1;align-items:flex-start;min-height:0;width:100%}
+.cinema-app .narrative-course .course-studio-stage>.scene-choices{display:block;width:100%;margin:0}
+.cinema-app .narrative-course .course-studio-stage .course-encounter.scene-action{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:32px;align-items:start;margin:0;padding:0;border:0;background:none;min-height:0}
+.cinema-app .narrative-course .course-studio-stage .course-encounter-thought{display:flex;flex-direction:column;gap:16px;align-items:stretch;min-width:0}
+.cinema-app .narrative-course .course-studio-stage .scene-choice-line{margin:0;max-width:64ch;color:#d5ddc8;font:15px/1.9 var(--serif)}
+.cinema-app .narrative-course .course-studio-stage .scene-decision-main{margin:0;max-width:650px}
+.cinema-app .narrative-course .course-studio-stage .scene-decision-main>button{width:100%;padding:13px 18px;font:19px/1.7 var(--serif);text-align:left}
+.cinema-app .narrative-course .course-studio-stage .scene-decision-main>button>span>small{font:14px/1.8 var(--serif);color:inherit}
+.cinema-app .narrative-course .course-studio-stage .moment-wait{margin:0;max-width:650px}
+.cinema-app .narrative-course .course-studio-stage .clock-advance-room{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center}
+.cinema-app .narrative-course .course-studio-stage .clock-review{grid-column:1;grid-row:1;align-self:center;margin:0}
+.cinema-app .narrative-course .course-studio-stage .clock-main{grid-column:2;grid-row:1;min-width:0;margin:0}
+.cinema-app .narrative-course .course-studio-stage .clock-main>button{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;padding:10px 14px;font:16px/1.8 var(--serif);text-align:left}
+.cinema-app .narrative-course .course-studio-stage .clock-main>button::before{content:none}
+.cinema-app .narrative-course .course-studio-stage .clock-main>button>span{grid-column:1;grid-row:1;min-width:0}
+.cinema-app .narrative-course .course-studio-stage .clock-main>button>kbd{grid-column:2;grid-row:1;justify-self:end;margin:0;width:auto}
+.cinema-app .narrative-course .course-studio-stage .clock-main>button>small{grid-column:1 / -1;color:inherit;font:14px/1.8 var(--serif)}
+.cinema-app .narrative-course .course-studio-stage .clock-review>button{padding:4px 0;color:#d5c08c;background:none;border:0;border-bottom:1px solid #bca97577;font:14px/1.8 var(--serif)}
+.cinema-app .narrative-course .course-studio-stage .opening-object,
+.cinema-app .narrative-course .course-studio-stage .opening-object:is(:hover,:focus-visible,:active,:disabled){background:transparent;color:#eee3c8;box-shadow:none;transform:none;opacity:1}
+.cinema-app .narrative-course .course-studio-stage .course-encounter-paper{align-self:start}
+
+.cinema-app .opening-room .room-tableau:has(.moment-heading[data-course-studio=true])>.tableau-content{row-gap:6px}
+.cinema-app .opening-room .room-tableau:has(.moment-heading[data-course-studio=true]) .tableau-content>.moment-decisions{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 18px;align-items:center}
+.cinema-app .opening-room .room-tableau:has(.moment-heading[data-course-studio=true]) .moment-decisions>:first-child{grid-column:1 / -1}
+.cinema-app .opening-room .room-tableau:has(.moment-heading[data-course-studio=true]) .moment-decisions>.moment-explore{grid-column:2;grid-row:2;margin:0;align-self:center}

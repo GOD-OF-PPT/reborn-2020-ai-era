@@ -1,6 +1,7 @@
 import {videoFirstAttemptReading} from './video-first-attempt.ts'
 import {videoWorkStage} from './video-work-stage.ts'
 import {courseEntryReading} from './course-entry-reading.ts'
+import {courseStudioReading} from './course-studio-reading.ts'
 import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
 import {useState,useEffect,useRef,type Ref,type ComponentProps} from 'react'
 import './life-choice-stage.css'
@@ -104,7 +105,7 @@ function chooseWithNumber(root:HTMLElement,event:KeyboardEvent){
  if(event.defaultPrevented||event.repeat||event.isComposing||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||!/^[1-9]$/.test(event.key))return
  const target=event.target
  if(!(target instanceof Element)||target.closest('input,textarea,select,[contenteditable]:not([contenteditable=false])')||document.querySelector('dialog[open]'))return
- const number=Number(event.key)-1,direct=root.querySelector('.video-first-attempt-stage,.video-work-stage,.course-entry-stage')
+ const number=Number(event.key)-1,direct=root.querySelector('.video-first-attempt-stage,.video-work-stage,.course-entry-stage,.course-studio-stage')
  if(direct){const button=direct.querySelectorAll<HTMLButtonElement>('.scene-decision-main>button,.clock-main>button,.video-attempt-option,.video-attempt-more,.course-entry-option,.course-entry-details')[number];if(!button||button.disabled||button.inert||button.closest('[inert]')||!button.getClientRects().length)return;event.preventDefault();button.click();return}
  const choice=root.querySelectorAll<HTMLElement>('.scene-choices>.scene-choice,.scene-choices>.scene-action,.scene-choices>.scene-wait-decision')[number]
  // The calendar review is a secondary control inside one thought, never another numbered decision.
@@ -142,8 +143,8 @@ export function SceneAttention({p,onOpen,onStoryScene}:{p:GamePanelProps;onOpen:
 }
 
 /** Short life decisions belong on the stage; only the reading surfaces paginate. */
-function SceneChoiceSurface({direct,video=false,work=false,course=false,children,...book}:ComponentProps<typeof ScreenBook>&{direct:boolean;video?:boolean;work?:boolean;course?:boolean}){
- return direct?<div className={work?'video-work-stage':course?'course-entry-stage':video?'video-first-attempt-stage':'life-choice-stage'} role="group" aria-label={course?'现在可以作出的课程选择':video?'现在可以作出的视频选择':'现在可以作出的生活选择'}>{children}</div>:<ScreenBook {...book}>{children}</ScreenBook>
+function SceneChoiceSurface({direct,video=false,work=false,course=false,studio=false,children,...book}:ComponentProps<typeof ScreenBook>&{direct:boolean;video?:boolean;work?:boolean;course?:boolean;studio?:boolean}){
+ return direct?<div className={work?'video-work-stage':studio?'course-studio-stage':course?'course-entry-stage':video?'video-first-attempt-stage':'life-choice-stage'} role="group" aria-label={course||studio?'现在可以作出的课程选择':video?'现在可以作出的视频选择':'现在可以作出的生活选择'}>{children}</div>:<ScreenBook {...book}>{children}</ScreenBook>
 }
 
 export function NarrativeScene(p:Props){
@@ -169,6 +170,7 @@ export function NarrativeScene(p:Props){
  const courseThread=courseFocus?playerThread(p,courseFocus):null
  const courseContinuity=courseThread!==null&&isCourseContinuityThread(courseThread)
  const courseEntry=courseThread?courseEntryReading(p,courseThread):null
+ const courseStudio=courseThread?courseStudioReading(p,courseThread):null
  const relaySelectionContext=view.runId+'|'+p.accountId
  const relayTarget=p.relayTarget!==undefined?p.relayTarget:!p.onRelayTargetChange&&localRelaySelection.context===relaySelectionContext?localRelaySelection.target:undefined
  const relayAccount=!p.onRelayTargetChange&&p.relayTarget===undefined&&relayTarget?relayTarget.accountId:p.accountId
@@ -190,7 +192,7 @@ export function NarrativeScene(p:Props){
  const originalCopy=closing?{...stories[screen],...closingStories[screen],overline:'原来的记录与边界',line:archived?'已经归档的经历和原账仍可以翻阅。若想继续实做，请回到住处明确继续旧事项；原回顾会保留。':'原合同、原资产与答应过的事，仍沿真实日期发生。尾声共用原四点，等候与收尾仍承担原来的费用。'}:stories[screen]
  const presentedRelay=relayProgress&&relayThread&&relayThread.focusStatus!=='invalid'?{...relayProgress,title:relayThread.title,line:relayThread.line}:relayProgress
  const progress=storyProgress??videoProgress??courseProgress??presentedRelay??marketResearchTarget??marketProgress??deepseekProgress??lifeProgress
- const copy=courseIdentityReason?{...originalCopy,title:'先找回这份教案与原账户。',line:courseIdentityReason}:courseEntry?{...originalCopy,title:courseEntry.title,line:courseEntry.line}:marketInvalid?{...originalCopy,title:'先找回原来的那份委托。',line:marketTarget.invalidReason??'原对象已经不可达，请重新选择。'}:progress?{...originalCopy,title:progress.title,line:progress.line}:originalCopy
+ const copy=courseIdentityReason?{...originalCopy,title:'先找回这份教案与原账户。',line:courseIdentityReason}:courseEntry?{...originalCopy,title:courseEntry.title,line:courseEntry.line}:courseStudio?{...originalCopy,title:courseStudio.title,line:courseStudio.line}:marketInvalid?{...originalCopy,title:'先找回原来的那份委托。',line:marketTarget.invalidReason??'原对象已经不可达，请重新选择。'}:progress?{...originalCopy,title:progress.title,line:progress.line}:originalCopy
  const person=f.life.people.find(person=>person.id===p.personId)??f.life.people[0]!
  const canAdvance=!closing&&(view.date<playableThrough||view.date===playableThrough&&!w.atQuarterEnd)&&!w.progression.requiresDelivery&&w.pause===null
  const ordinaryNext=canAdvance?(w.progression.nextQuarterDate??playableAdvanceDate(w,view.date,defaultWaitDate(w,typeof p.requestWait==='function'))):null
@@ -233,7 +235,7 @@ export function NarrativeScene(p:Props){
   {lifeTimeReceipt&&lifeMode!=='person'?<aside className="life-time-echo life-personal-echo" aria-label="刚才发生的回响"><p className="scene-overline">刚才的回响</p>{lifeTimeReceipt}</aside>:null}
   {marketProgress?<MarketRecordSwitch p={p} progress={marketProgress} onSelect={id=>setMarketSelection({context:marketContext,id})}/>:null}
   {deepseekProgress?<DeepseekRecordSwitch p={p} progress={deepseekProgress} onSelect={id=>setDeepseekSelection({context:deepseekContext,id})}/>:null}
-  <SceneChoiceSurface direct={p.screen==='life'&&!closing||videoAttempt!==null||videoWork||courseEntry!==null} video={videoAttempt!==null||videoWork} work={videoWork} course={courseEntry!==null} choiceNavigation key={p.screen==='video'||courseContinuity?view.runId+':'+p.screen+':'+view.phase:p.screen+':'+view.phase+':'+view.date+':'+(p.screen==='life'?lifeSelection:relayProgress?.periodId??marketProgress?.entityId??deepseekProgress?.entityId??'')+':'+bookContext} label="眼前的选择" className="scene-story-book">
+  <SceneChoiceSurface direct={p.screen==='life'&&!closing||videoAttempt!==null||videoWork||courseEntry!==null||courseStudio!==null} video={videoAttempt!==null||videoWork} work={videoWork} course={courseEntry!==null} studio={courseStudio!==null} choiceNavigation key={p.screen==='video'||courseContinuity?view.runId+':'+p.screen+':'+view.phase:p.screen+':'+view.phase+':'+view.date+':'+(p.screen==='life'?lifeSelection:relayProgress?.periodId??marketProgress?.entityId??deepseekProgress?.entityId??'')+':'+bookContext} label="眼前的选择" className="scene-story-book">
   {p.screen==='quarter'&&w.quarter==='2020-Q1'&&first.result.paymentFen>0?<aside className="scene-earned"><span>这笔小单，客户已经付了款。</span><strong>{moneyText(first.result.paymentFen)}</strong><p>实际制作成本{moneyText(first.result.directCostFen)} · 本单净额{moneyText(first.result.netOrderFen)}</p><small>工资和浮盈没有算进这笔净额。</small></aside>:null}
   {storyProgress?<RiskLetter key={storyProgress.incident.id} p={p} incident={storyProgress.incident} count={f.story.incidents.length} index={f.story.incidents.findIndex(c=>c.id===storyProgress.incident.id)} onNext={()=>{const index=f.story.incidents.findIndex(c=>c.id===storyProgress.incident.id);const id=f.story.incidents[(index+1)%f.story.incidents.length]!.id;if(p.onStoryIncident)p.onStoryIncident(id);else setSelectedLetter({source:p.storyIncidentId??null,id})}}/>:null}
   {relayProgress?.periodId&&!relayProgress.invalidReason?<RelayServiceLetter p={relayProps} progress={relayProgress} onFullRecord={()=>openRelay()} onNext={nextRelayPeriod} />:null}
