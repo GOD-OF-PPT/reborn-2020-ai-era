@@ -1,0 +1,1 @@
+711/712仅冻结，未执行工程或UI检查/未服务：源码复核修测试驱动真实集中支持和资本字段标签，以及当天补支持应为实际开工而非计划；DateField未知max用空prop而不传undefined。无原检查结果被覆盖。旧classAct闭包引用已封存692root，被guard在输入之前拒绝；改为新root明确supportAct/Cap，无旧证据写入或重复Continue。

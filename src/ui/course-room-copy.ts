@@ -4,6 +4,7 @@ import {courseSceneProgress,courseTargetReason,courseStageLatestStart} from './c
 import {courseSceneContext} from './course-player-thread.ts'
 import {courseCohortJob} from './course-cohort-progress.ts'
 import {COURSE_JOBS} from '../content/course.ts'
+import {courseSupportReading} from './course-support-reading.ts'
 import {moneyText} from './game-text.ts'
 
 /** The current class's original price and refund window, without repeating its retained-history notice. */
@@ -17,6 +18,7 @@ export function courseUpdateRoomTerms(p:Pick<GamePanelProps,'view'|'features'>,t
 
 /** Short room narration only; the original progress keeps its complete record and terms. */
 export function courseRoomCopy(p:Pick<GamePanelProps,'view'|'features'>,target:CourseSceneTarget|null){
+ const support=courseSupportReading(p,target);if(support)return support
  const course=p.features.course,context=courseSceneContext(p)
  if(!course||target?.kind!=='cohort'||target.jobId!==undefined||courseTargetReason(course,target,context))return null
  const progress=courseSceneProgress(course,p.view.date,target,context)
