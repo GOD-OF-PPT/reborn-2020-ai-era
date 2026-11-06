@@ -8,6 +8,7 @@ import {openingFocusFor,playerThread,type OpeningFocus} from './player-thread.ts
 import {seasonFocusAfterSave} from './season-thread.ts'
 import {nextLifeFocusAfterResult} from './next-life-focus.ts'
 import {videoFocusFromSaved} from './video-player-thread.ts'
+import {createLifeMaterialDraftMemory} from './life-material-draft.ts'
 import {createVideoSceneDraftMemory} from './video-scene-draft.ts'
 import {createCourseSceneDraftMemory} from './course-scene-draft.ts'
 import {createCourseTeachingDraftMemory} from './course-teaching-draft.ts'
@@ -128,6 +129,7 @@ function savedLabel(status:string){return ({saved:'已保存',saving:'正在保�
 function readSettings(){try{const value=JSON.parse(localStorage.getItem('reborn-2020-display')??'{}') as Record<string,unknown>;return {textOnly:value.textOnly===true,reducedMotion:value.reducedMotion===true,hiddenGuides:Array.isArray(value.hiddenGuides)?value.hiddenGuides.filter((id):id is string=>typeof id==='string'):[]}}catch{return {textOnly:false,reducedMotion:false,hiddenGuides:[] as string[]}}}
 export default function App({controller=null,startupError=null,diagnostics=null,focusPreferenceStorage=seasonFocusStorage}:{controller?:GameController|null;startupError?:string|null;diagnostics?:{name:string;trace:{writeSucceeded:boolean;abortIssued:boolean}}|null;focusPreferenceStorage?:SeasonFocusPreferenceStorage}){
  const state=useSyncExternalStore(controller?.subscribe??noSubscribe,()=>controller?.snapshot??INITIAL_GAME_SNAPSHOT,()=>INITIAL_GAME_SNAPSHOT),view=state.view
+ const lifeMaterialDraftMemory=useMemo(()=>createLifeMaterialDraftMemory(view?.runId??''),[view?.runId])
  const videoDraftMemory=useMemo(()=>createVideoSceneDraftMemory(view?.runId??''),[view?.runId])
  const courseDraftMemory=useMemo(()=>createCourseSceneDraftMemory(view?.runId??''),[view?.runId])
  const courseTeachingDraftMemory=useMemo(()=>createCourseTeachingDraftMemory(view?.runId??''),[view?.runId])
@@ -325,7 +327,7 @@ export default function App({controller=null,startupError=null,diagnostics=null,
  }
  const request:RequestCommand=(kind,payload,label,force=false)=>requestCommand(kind,payload,label,force)
  const requestWait=(date:string,label:string,confirm:boolean)=>requestCommand('AdvanceTime',{date},label,confirm,true)
- const features=view?.features as PlayFeatures|undefined,props=controller&&view&&features?{controller,view,features,request,requestWait,accountId,textOnly:settings.textOnly,videoDraftMemory,courseDraftMemory,courseTeachingDraftMemory,relayDraftMemory,relayPreparationDraftMemory,relayResponseDraftMemory,relayRecordMemory,ecosystemDraftMemory,equityDraftMemory}:null
+ const features=view?.features as PlayFeatures|undefined,props=controller&&view&&features?{controller,view,features,request,requestWait,accountId,textOnly:settings.textOnly,lifeMaterialDraftMemory,videoDraftMemory,courseDraftMemory,courseTeachingDraftMemory,relayDraftMemory,relayPreparationDraftMemory,relayResponseDraftMemory,relayRecordMemory,ecosystemDraftMemory,equityDraftMemory}:null
  const rememberedFocus=useMemo(()=>view?.phase==='playing'&&features?loadSeasonFocusPreference(focusPreferenceStorage,{runId:view.runId,quarter:features.workbench.quarter}):null,[view?.runId,view?.phase,features?.workbench.quarter,focusPreferenceStorage])
  const loadedChoice=rememberedFocus?.status==='loaded'?{...rememberedFocus.record,notice:rememberedFocus.quarterStatus==='previous'?rememberedFocus.message:null,requiresChoice:false}:null
  const selectedFocus=focusChoice?.runId===view?.runId?focusChoice:loadedChoice

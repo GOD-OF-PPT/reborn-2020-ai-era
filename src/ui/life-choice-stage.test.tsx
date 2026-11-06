@@ -95,10 +95,13 @@ it('offers the original clock and a complete-condition reader when no actions re
  expect(p.request).not.toHaveBeenCalled()
 })
 
-it('leaves the original long-form decision book on other routes',()=>{
- const html=render({...props(),screen:'quarter'})
- expect(html).toContain('screen-book')
+it('keeps the already delivered calendar decision stage separate from the life stage',()=>{
+ const p={...props(),screen:'quarter' as const},html=render(p)
+ expect(html).toContain('calendar-entry-stage')
  expect(html).not.toContain('life-choice-stage')
+ expect(html).toContain('今天的工作与生活')
+ expect(html).toContain('原来这一笔小单')
+ expect(p.request).not.toHaveBeenCalled()
 })
 
 it('changes only the visible wait wording while keeping its original date, label and confirmation request',()=>{
