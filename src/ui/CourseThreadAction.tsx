@@ -1,4 +1,5 @@
 import type {ReactNode} from 'react'
+import {courseAudienceReading} from './course-audience-reading.ts'
 import {courseEntryReading} from './course-entry-reading.ts'
 import {CourseEntryAction,type CourseEntryExtras} from './CourseEntryAction.tsx'
 import {courseStudioReading} from './course-studio-reading.ts'
@@ -34,6 +35,7 @@ export function CourseThreadAction({p,thread,active,date,waitLabel,onChoose,onRe
  if(courseAttemptClosed(p,thread))return choice('回到今天，看看接下来的日子','保留本班学习、退款、钱款与原书签；新班仍须另行决定',onToday)
  const classResult=courseClassResult(p,thread)
  if(classResult)return choice(classResult.label,'保留这一段实际交付；下一次投入仍由你决定',()=>onChoose('current-class'))
+ if(thread.focusScope==='history'&&courseAudienceReading(p,thread)?.historical)return choice('看清这份原回应，再决定下一步','回看原反馈；新班仍按今天的条件另选',onResult)
  if(thread.focusScope==='history')return teaching?choice('看清这一段之后，决定怎样继续','翻回同一班的当前承诺，或保留这份实际结果',onResult):choice('合上这份教案留页，回到今天','保留原课程、样课尝试与书签，不重做准备',onToday)
  const entry=onNavigate?courseEntryReading(p,thread):null
  if(entry&&onNavigate)return <CourseEntryAction p={p} thread={thread} reading={entry} date={date} waitLabel={waitLabel} onChoose={onChoose} onToday={onToday} onNavigate={onNavigate}>{children}</CourseEntryAction>
