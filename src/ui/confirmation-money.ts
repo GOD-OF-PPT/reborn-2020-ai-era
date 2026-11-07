@@ -20,6 +20,7 @@ export function confirmationMoney(command:CommandEnvelope,preview:CommandPreview
  if(command.kind==='AcceptEquityExit')return {label:'本次即时现金支出（转让费用从价款扣除）',amountFen:preview.upfrontCostFen}
  if(command.kind==='CancelEcoContract')return {label:'本次支持赔偿义务（现金不足则保留应付）',amountFen:preview.upfrontCostFen}
  if(command.kind==='StartFirstOrder')return {label:'安排时预留的自有资金（开工后才付制作费）',amountFen:preview.upfrontCostFen}
+ if(command.kind==='CancelStockOrder')return {label:'本次撤回新增费用',amountFen:preview.upfrontCostFen}
  if(command.kind.includes('StockOrder'))return {label:'新增资金预算（预留不等于成交）',amountFen:preview.upfrontCostFen}
  if(typeof p.startAt==='string'||preview.actionDate!==undefined)return {label:'需准备或预留的自有资金',amountFen:preview.upfrontCostFen}
  return {label:'本次确定费用',amountFen:preview.upfrontCostFen}

@@ -9,6 +9,7 @@ import {Dialog} from './Dialog.tsx'
 import {makeSharedAction} from './shared-action.ts'
 import {moneyText} from './game-text.ts'
 import './obligation-choice.css'
+import {ObligationBudgetChoices} from './ObligationBudgetChoices.tsx'
 type Props={p:GamePanelProps;target:ObligationSceneTarget;drafts:ReadonlyMap<string,string>;onDraft:(key:string,amount:string)=>void;onClose:()=>void;onInspect:(accountId:string)=>void}
 /** One original debt, its original input and independent confirmation. */
 export function ObligationChoice({p,target,drafts,onDraft,onClose,onInspect}:Props){
@@ -22,6 +23,7 @@ export function ObligationChoice({p,target,drafts,onDraft,onClose,onInspect}:Pro
   {value.status==='invalid'?<p role="status" className="obligation-choice-unknown">{value.reason}</p>:value.status==='pause'?<CashGapDecision p={p} hasDebts={false}/>:<>
    <p className="obligation-choice-kicker">{value.debt.kind==='loan_principal'?'原借款本金':value.debt.kind==='refund_undelivered'||value.debt.kind==='refund_delivered'?'已确认的原退款':'已经发生的原支出'} · 分次支付仍关联同一笔</p>
    <DebtPayment props={{...p,accountId:value.debt.accountId}} debt={value.debt} {...(drafts.has(value.draftKey)?{draftAmount:drafts.get(value.draftKey)!}:{})} onAmount={amount=>{makeSharedAction(p,'调整本次原款金额',()=>onDraft(value.draftKey,amount),{allowReadOnly:true,canActivate:current}).activate()}}/>
+   <ObligationBudgetChoices p={p} target={target}/>
    <p className="obligation-choice-boundary">本次支付仍须确认。{value.account.prepaidLiabilityFen>0?'该账户客户保护'+moneyText(value.account.prepaidLiabilityFen)+'，可用范围由原付款资格核对。':'原款性质与其它安排继续按各自原账。'}</p>
   </>}
  </Dialog>
