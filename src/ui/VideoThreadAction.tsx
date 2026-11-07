@@ -1,7 +1,7 @@
 import type {VideoChoiceAction} from './VideoSceneChoice.tsx'
 import {videoWorkCanReturnToday} from './video-work-stage.ts'
 import './video-work-stage.css'
-import {videoFirstAttemptReading} from './video-first-attempt.ts'
+import {videoAccountAttemptReading} from './video-account-attempt.ts'
 import {VideoFirstAttemptAction,type VideoFirstAttemptExtras} from './VideoFirstAttemptAction.tsx'
 import {videoFirstAccount,videoFirstEntryCopy} from './video-first-entry.ts'
 import type {ReactNode} from 'react'
@@ -27,7 +27,7 @@ export function VideoThreadAction({p,thread,active,date,waitLabel,onChoose,onRes
  if(thread.wait&&date)return <ClockAdvance p={p} date={date} label={waitLabel+' · '+date} room showReason={showReason} renderAction={binding=>children({binding,main:<div className="moment-wait moment-primary"><div className="clock-advance clock-advance-room">{binding.reviewNode}{binding.mainNode}</div></div>})}/>
  if(videoWorkCanReturnToday(p,thread))return choice('合上这份作品，回到今天','作品与实际反馈保留；下一次投入仍由你决定',onToday,makeSharedAction(p,'继续这个账号，看看下一次选择',onResult,{allowReadOnly:true}))
  if(thread.outcome==='actual'||thread.outcome==='non-success')return choice('这一份之后，想怎样继续','继续这个账号、收好原结果，或回自己的生活',onResult)
- const firstAttempt=thread.stage==='video-channel'&&thread.focus.kind==='video'&&['entry','current'].includes(thread.focusScope)&&!thread.responsibilityOverrideNeeded&&!thread.legacyFallbackRequired?videoFirstAttemptReading(p,thread.focus):null
+ const firstAttempt=videoAccountAttemptReading(p,thread)
  if(firstAttempt&&thread.focus.kind==='video')return <VideoFirstAttemptAction p={p} focus={thread.focus} reading={firstAttempt} onChoose={onChoose}>{children}</VideoFirstAttemptAction>
  if(thread.stage==='video-entry'&&p.view.phase==='playing'&&videoFirstAccount(p.features.video))return choice(videoFirstEntryCopy.action,'',onChoose)
  return choice(thread.stage==='video-entry'?'为谁做一份视频，先选一个账号':thread.stage==='video-revision'?'回应客户的这次修改':thread.stage==='video-quality'?'核对这一版的素材问题':thread.stage==='video-ready-to-publish'?'选择这份作品的发布方式':'给这个账号，选一次具体尝试','先明确这次对象与取舍，真正投入仍需原确认',onChoose)

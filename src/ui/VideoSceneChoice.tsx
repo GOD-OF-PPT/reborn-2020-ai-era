@@ -1,3 +1,5 @@
+import {openingFocusFor} from './player-thread.ts'
+import {videoChannelAttemptReading} from './video-account-attempt.ts'
 import {useEffect,useId,useRef,useState,type ReactNode} from 'react'
 import type {GamePanelProps} from './game-types.ts'
 import {videoSceneDraftKey,type VideoSceneDraft} from './video-scene-draft.ts'
@@ -178,7 +180,7 @@ export function VideoSceneChoice({p,target,onTargetChange,blockedReason=null,onI
  const title=page==='result'?'这一份之后，怎样继续？':page==='create'?'这次，想为谁制作？':page==='channel'?'先选择一个内容账号':page==='clients'?'这次，回应哪一份询价？':page==='product'?'想先做怎样一份作品？':page==='mode'?'用什么方式认真完成？':page==='material'?'这次素材，从哪里来？':page==='schedule'?'给这一份，留出真正的日子':page==='response'?'先看清修改，再决定怎么回应':page==='publish-terms'?'这一份发布，会得到什么反馈？':page==='publish'?'这份作品，怎样让人看见？':page==='objects'?'翻回具体的那一份记录':page==='record'?'这份作品与约定':'这次，想把哪件事做起来？'
  let primary:ReactNode=null
  if(page==='create')primary=command&&action==='channel'?submit(command):<button type="button" disabled>先填写名称与选择受众</button>
-  else if(page==='channel')primary=<button type="button" className="primary" disabled={!pickedChannel||bookmarkLocked} onClick={()=>{if(!pickedChannel||!chooseTarget({channelId:pickedChannel.id}))return;setChannelPick(null);setPage('purpose')}}>明确选择这个账号</button>
+  else if(page==='channel')primary=<button type="button" className="primary" disabled={!pickedChannel||bookmarkLocked} onClick={()=>{if(!pickedChannel||!chooseTarget({channelId:pickedChannel.id}))return;setChannelPick(null);setPage('purpose');const selectedProps={...p,accountId:pickedChannel.accountId},focus=openingFocusFor(selectedProps,'video',{accountId:pickedChannel.accountId,videoTarget:{channelId:pickedChannel.id}});if(focus?.kind==='video'&&videoChannelAttemptReading(selectedProps,focus))setOpen(false)}}>明确选择这个账号</button>
  else if(page==='objects')primary=<button type="button" className="primary" disabled={!recordPick||bookmarkLocked} onClick={()=>{if(!recordPick||!chooseTarget(recordPick))return;setPage('record')}}>翻看这一份记录</button>
  else if(page==='product'||page==='clients'||page==='mode'||page==='material')primary=<button type="button" className="primary" disabled={page==='product'?!draft.productId:page==='clients'?!validClient:page==='mode'?!draft.modeId:!draft.materialId} onClick={next}>继续核对{page==='product'||page==='clients'?'制作方式':page==='mode'?'素材来源':'资源与日历'} →</button>
  else if(publishPreparation&&page==='publish')primary=<button type="button" className="primary" disabled={!['none','ads','affiliate'].includes(draft.monetization)} onClick={()=>setPage('publish-terms')}>核对本次反馈与资格 →</button>

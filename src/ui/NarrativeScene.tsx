@@ -1,4 +1,4 @@
-import {videoFirstAttemptReading} from './video-first-attempt.ts'
+import {videoAccountAttemptReading} from './video-account-attempt.ts'
 import {videoWorkStage} from './video-work-stage.ts'
 import {courseEntryReading} from './course-entry-reading.ts'
 import {courseStudioReading} from './course-studio-reading.ts'
@@ -168,7 +168,7 @@ export function NarrativeScene(p:Props){
  const entryTimeReceipt=!!p.receipt&&(memoryReading&&['ReadNews','FavoriteMemory'].includes(p.receiptKind??'')||(memoryReading||calendarEntry)&&p.receiptKind==='AdvanceTime')
  const videoFocus=p.screen==='video'?openingFocusFor(p,'video',{accountId:p.accountId,...(p.videoTarget?{videoTarget:p.videoTarget}:{})}):null
  const videoThread=videoFocus?playerThread(p,videoFocus):null
- const videoAttempt=videoThread?.stage==='video-channel'&&videoThread.focus.kind==='video'&&['entry','current'].includes(videoThread.focusScope)&&!videoThread.responsibilityOverrideNeeded&&!videoThread.legacyFallbackRequired?videoFirstAttemptReading(p,videoThread.focus):null
+ const videoAttempt=videoThread?videoAccountAttemptReading(p,videoThread):null
  const videoWork=videoThread!==null&&videoWorkStage(p,videoThread)
  const rawVideoProgress=!closing&&p.screen==='video'&&w.pause===null&&!w.progression.requiresDelivery?videoSceneProgress(f.video,view.date,p.videoTarget??null):null
  const videoProgress=rawVideoProgress&&videoThread?.focusStatus==='invalid'?{...rawVideoProgress,title:videoThread.title,line:videoThread.line,command:undefined,wait:undefined,invalidReason:videoThread.invalidReason}:rawVideoProgress&&videoAttempt?{...rawVideoProgress,title:videoAttempt.title,line:videoAttempt.line}:rawVideoProgress
