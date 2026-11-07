@@ -1,10 +1,10 @@
 import {useState,type Ref,type ReactNode} from 'react'
-import type {GamePanelProps} from './game-types.ts'
+import type {GamePanelProps,NavigateScene} from './game-types.ts'
 import {sceneSeason} from './scene-season.ts'
 import {roomSpots,roomExplorationReading,type RoomSpot} from './room-exploration-reading.ts'
 import './room-exploration.css'
 
-type Props={p:GamePanelProps;headingRef:Ref<HTMLHeadingElement>;onNavigate:(screen:RoomSpot)=>void;onReturn:()=>void;onResponsibilities:()=>void;urgent:boolean;calendar:ReactNode}
+type Props={p:GamePanelProps;headingRef:Ref<HTMLHeadingElement>;onNavigate:NavigateScene;onReturn:()=>void;onResponsibilities:()=>void;urgent:boolean;calendar:ReactNode}
 const marks:Record<RoomSpot,string>={
  routes:'M4 5h24v16H4z M16 21v6 M9 27h14 M8 9h16 M8 13h10',
  quarter:'M8 29V3h17v26 M4 29h25 M21 17h.1 M11 7h9v5h-9z',
@@ -19,7 +19,7 @@ export function RoomExploration({p,headingRef,onNavigate,onReturn,onResponsibili
  return <>
   {spot?<div className="room-attention" aria-hidden="true" style={{left:spot.x+'%',top:spot.y+'%'}}/>:null}
   <header className="room-chapter room-exploration-heading"><p className="eyebrow">{p.features.workbench.quarter} / 第{season.chapter??'—'}幕</p><h1 ref={headingRef} tabIndex={-1}>今天，想走哪边？</h1><p className="room-exploration-guide">点一件物品，或按 1—4。</p>{urgent?<button type="button" className="exploration-responsibility" onClick={onResponsibilities}>有件事，等你回应 ↗</button>:null}</header>
-  <nav className="room-objects room-exploration-objects" aria-label="探索住处">{roomSpots.map(s=><button type="button" className="room-hotspot room-exploration-spot" key={s.screen} style={{left:s.x+'%',top:s.y+'%'}} aria-label={s.object+' · '+s.verb+' · '+s.preview} aria-keyshortcuts={s.key} aria-describedby={inspected===s.screen?'room-inspection-copy':undefined} data-inspected={inspected===s.screen?'true':'false'} onPointerEnter={()=>setHovered(s.screen)} onPointerLeave={()=>setHovered(null)} onFocus={()=>{setFocused(s.screen);setHovered(null)}} onBlur={()=>setFocused(null)} onClick={()=>onNavigate(s.screen)}>
+  <nav className="room-objects room-exploration-objects" aria-label="探索住处">{roomSpots.map(s=><button type="button" className="room-hotspot room-exploration-spot" key={s.screen} style={{left:s.x+'%',top:s.y+'%'}} aria-label={s.object+' · '+s.verb+' · '+s.preview} aria-keyshortcuts={s.key} aria-describedby={inspected===s.screen?'room-inspection-copy':undefined} data-inspected={inspected===s.screen?'true':'false'} onPointerEnter={()=>setHovered(s.screen)} onPointerLeave={()=>setHovered(null)} onFocus={()=>{setFocused(s.screen);setHovered(null)}} onBlur={()=>setFocused(null)} onClick={()=>s.screen==='life'?onNavigate('life',{accountId:'personal'}):onNavigate(s.screen)}>
    {!p.textOnly?<svg className="exploration-object-mark" viewBox="0 0 32 34" fill="none" aria-hidden="true"><path d={marks[s.screen]}/></svg>:null}
    <span className="exploration-object-label"><span className="exploration-object-name">{s.object}<kbd aria-hidden="true">{s.key}</kbd></span><strong>{s.verb}<span aria-hidden="true"> ↗</span></strong></span>
   </button>)}</nav>

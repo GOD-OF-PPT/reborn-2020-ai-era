@@ -103,9 +103,9 @@ export function lifeSceneProgress(life:LifeProjection,date:string,selection:Life
  const reference=references.length===1?references[0]!:null
  const needsReference=person!==null&&person.id!=='tang-ying'
   const referenceLine=needsReference?(reference?'这次用到的材料：'+referenceText(reference)+'，完整来源可展开查看。':references.length?`已有${references.length}份材料，请选择这次要一起看的那一份；完整来源可展开查看。`:'当前没有本次所需的实际材料；钱或关系不能代替真实履约及对方同意。'):''
-  const terms=`个人${moneyText(work.costFen)} · ${work.points}点 · ${work.days}日；现在开始，预计${expected}完成。${referenceLine}`
- if(person?.busy)return scene('unavailable',`${person.name}这段日子有自己的安排。`,`${person.busy.from}起、${person.busy.to}前是对方公开档期，不能用付款强迫共同工作。`,'查看对方公开日程',terms,'查看原日程与其他活动')
- if(!life.canPlanCurrentYear)return scene('unavailable','新的生活安排，要留在实际可用的年代。','当前这里只回看已提交生活记录；原未完承诺仍按原规则处理。','回看原生活与人物记录',terms,'查看原生活记录')
+  const resources=`个人${moneyText(work.costFen)} · ${work.points}点 · ${work.days}日`,terms=`${resources}；现在开始，预计${expected}完成。${referenceLine}`
+ if(person?.busy)return scene('unavailable',`${person.name}这段日子有自己的安排。`,`${person.busy.from}起、${person.busy.to}前是对方公开档期，不能用付款强迫共同工作。`,'查看对方公开日程',`${resources}；对方档期结束后，再核对开工与完成日期。${referenceLine}`,'查看原日程与其他活动')
+ if(!life.canPlanCurrentYear)return scene('unavailable','新的生活安排，要留在实际可用的年代。','当前这里只回看已提交生活记录；原未完承诺仍按原规则处理。','回看原生活与人物记录',`${resources}；当前只回看已有安排。${referenceLine}`,'查看原生活记录')
  const command:LifeSceneCommand|null=needsReference&&!reference?null:{kind:'StartLifeWork',payload:{kind:work.kind,personId:person?.id??null,reference:needsReference?reference:null},confirm:true}
   const label=person?person.id==='tang-ying'?`安排与${person.name}见面`:person.id==='linzhou'?`安排与${person.name}共同核对`:person.id==='xu-cheng'?`安排与${person.name}整理笔记`:`安排与${person.name}复盘交付`:selection==='workspace'?'改善桌椅与照明':'留出七天休整'
   return scene(needsReference&&!references.length?'unavailable':'ready',person?`给${person.name}留一段真正相处的时间。`:selection==='workspace'?'把桌椅与照明，认真改善一次。':'把七天，留给自己的生活。',person?person.boundary:selection==='workspace'?'开始采购还没有改变场景；完成以后，投入才成为眼前用得上的东西。':'休整仍占用行动，也不带来收入。给自己留出这段时间，再决定别的安排。',needsReference&&!references.length?'先看看还缺什么材料和同意':needsReference&&!reference?'挑一份这次要一起看的材料':'把这段时间留出来',terms,needsReference&&!references.length?'查看所需材料与相识条件':needsReference&&!reference?'选择材料后安排这次活动':label,{command,referenceRequired:needsReference&&!reference&&references.length>0})

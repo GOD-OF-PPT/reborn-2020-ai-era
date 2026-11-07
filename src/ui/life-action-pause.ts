@@ -6,7 +6,9 @@ export interface LifeActionPauseReading {readonly title:string;readonly line:str
  * promises, running work and independent responsibilities keep their own lead. */
 export function lifeActionPauseReading(p:Pick<GamePanelProps,'view'|'features'>,progress:LifeSceneProgress):LifeActionPauseReading|null {
  const {view,features}=p,w=features.workbench,b=view.budget
- if(view.phase!=='playing'||view.busy||view.readOnly||view.hasCandidate||view.saveStatus!=='saved'||b.available!==0||b.total!==4||b.quarter!==w.quarter||!Number.isSafeInteger(b.spent)||!Number.isSafeInteger(b.reserved)||b.spent<0||b.reserved<0||b.spent+b.reserved!==4||w.atQuarterEnd||w.pause||w.progression.requiresDelivery||progress.stage!=='ready'||progress.command?.kind!=='StartLifeWork'||progress.promise!==null)return null
+ const optional=progress.command?.kind==='StartLifeWork'||progress.command===null&&progress.referenceRequired&&progress.person?.known&&progress.references.length>0
+ if(view.phase!=='playing'||view.busy||view.readOnly||view.hasCandidate||view.saveStatus!=='saved'||b.available!==0||b.total!==4||b.quarter!==w.quarter||!Number.isSafeInteger(b.spent)||!Number.isSafeInteger(b.reserved)||b.spent<0||b.reserved<0||b.spent+b.reserved!==4||w.pause||w.progression.requiresDelivery||progress.stage!=='ready'||!optional||progress.promise!==null)return null
  if(w.finance.some(a=>a.protectionShortfallFen>0||a.commitmentShortfallFen>0||a.obligations.some(o=>o.remainingFen>0&&o.date<=view.date))||features.life.promises.some(p=>['offered','accepted'].includes(p.status))||features.story.incidents.some(i=>i.resolvedAt===null&&!['normal','resolved'].includes(i.stage)))return null
+ if(w.atQuarterEnd)return w.progression.nextQuarterDate&&w.progression.nextQuarterDate>view.date?{title:'这一季，已经走到最后一天。',line:'先翻到下一季，再决定把时间留给谁；原约定与费用仍按日历继续。'}:null
  return b.reserved>0?{title:'这季的行动，已经排进日历。',line:'预留仍属于原安排；现在可翻阅，等待时费用照常发生。'}:{title:'这季的四点，已经用完。',line:'仍可翻阅人物与原约定；等待期间，生活费照常发生。'}
 }
