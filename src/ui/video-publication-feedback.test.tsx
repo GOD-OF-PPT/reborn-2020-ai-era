@@ -32,7 +32,7 @@ function elements(v:unknown):Element[]{
  if(Array.isArray(v))return v.flatMap(elements)
  if(!isValidElement<Record<string,unknown>>(v))return []
  const rows=[v,...elements(v.props.children),...elements(v.props.footer)]
- 
+
  return rows
 }
 const words=(v:unknown):string=>typeof v==='string'||typeof v==='number'?String(v):Array.isArray(v)?v.map(words).join(''):isValidElement<Record<string,unknown>>(v)?words(v.props.children):''
