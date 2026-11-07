@@ -1,3 +1,4 @@
+import {videoClientSettlementReading} from './video-client-settlement.ts'
 import type {VideoChoiceAction} from './VideoSceneChoice.tsx'
 import {videoWorkCanReturnToday} from './video-work-stage.ts'
 import './video-work-stage.css'
@@ -31,6 +32,8 @@ export function VideoThreadAction({p,thread,active,date,waitLabel,onChoose,onRes
  if(thread.focusScope==='history')return choice('合上这份视频留页，回到今天','保留原作品、账号与书签，不重做交付',onToday)
  if(thread.command)return <CommandButton {...p} {...thread.command} confirm={thread.command.confirm} className="moment-decision moment-primary" showReason={showReason} renderAction={(binding,main)=>children({binding,main})}><b aria-hidden="true">01</b><span>{thread.command.label}<small>核对同一份作品与这次原决定</small></span><i aria-hidden="true">→</i></CommandButton>
  if(thread.wait&&date)return <ClockAdvance p={p} date={date} label={waitLabel+' · '+date} room showReason={showReason} renderAction={binding=>children({binding,main:<div className="moment-wait moment-primary"><div className="clock-advance clock-advance-room">{binding.reviewNode}{binding.mainNode}</div></div>})}/>
+ const receipt=videoClientSettlementReading(p,thread)
+ if(receipt){const current=()=>feedbackLive.current&&feedbackScope.current===source,bind=(label:string,activate:()=>void)=>makeSharedAction(p,label,activate,{allowReadOnly:true,canActivate:current}),other=bind('看看这个账号的其他选择',onResult);return choice('合上这一单，回到今天','',onToday,receipt.canHearInquiry?bind('再听一份询价',()=>onChoose('commission')):other,receipt.canHearInquiry?other:undefined,current)}
  const feedback=videoPublicationFeedbackReading(p,thread)
  if(feedback){
   const current=()=>feedbackLive.current&&feedbackScope.current===source

@@ -1,0 +1,14 @@
+.cinema-app .video-client-receipt{--client-receipt-ink:#eee3c6;--client-receipt-muted:#c2ccb8;--client-receipt-rule:#bca97580;color:var(--client-receipt-ink);border-left:2px solid var(--client-receipt-rule);padding:2px 0 2px 18px;max-width:640px}
+.cinema-app .video-client-receipt .video-client-received{display:flex;align-items:baseline;gap:16px}
+.cinema-app .video-client-receipt .video-client-received>span{font:15px/1.8 var(--serif);color:var(--client-receipt-muted)}
+.cinema-app .video-client-receipt .video-client-received>strong{font:32px/1.35 var(--serif);font-weight:400;font-variant-numeric:tabular-nums;color:var(--client-receipt-ink)}
+.cinema-app .video-client-receipt .video-client-received>time{font:14px/1.8 var(--serif);color:var(--client-receipt-muted);margin-left:8px}
+.cinema-app .video-client-receipt>p{font:15px/1.8 var(--serif);margin:5px 0 0;color:var(--client-receipt-ink)}
+.cinema-app .video-client-receipt .video-client-paid{display:flex;flex-wrap:wrap;gap:6px 24px}
+.cinema-app .video-client-receipt .video-client-context{font:14px/1.8 var(--serif);color:var(--client-receipt-muted);margin-top:4px}
+.cinema-app .opening-room .room-tableau[data-scene=video]:has(.video-client-receipt) .moment-wait .clock-advance-room{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:12px;margin:0}
+.cinema-app .opening-room .room-tableau[data-scene=video]:has(.video-client-receipt) .clock-advance-room>.clock-main{grid-column:1;grid-row:1;margin:0}
+.cinema-app .opening-room .room-tableau[data-scene=video]:has(.video-client-receipt) .clock-advance-room>.clock-review{grid-column:2;grid-row:1;margin:0;align-self:start}
+.cinema-app .opening-room .room-tableau[data-scene=video]:has(.video-client-receipt) .clock-main>button{padding-block:8px}
+.cinema-app .video-client-receipt .video-client-all-details{display:flex;flex-wrap:wrap;gap:4px 16px}
+.cinema-app .video-client-receipt[data-condensed=true] .video-client-received>time{white-space:nowrap}
