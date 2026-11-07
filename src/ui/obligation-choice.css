@@ -1,0 +1,19 @@
+.cinema-app .dialog.obligation-choice-paper{--obligation-ink:#eee3c6;--obligation-muted:#c2ccb8;--obligation-rule:#bca97580;--obligation-gold:#efd498}
+.cinema-app .obligation-choice-paper>.dialog-direct-body{display:flex;flex:1;min-height:0;flex-direction:column;justify-content:center;gap:16px}
+.cinema-app .obligation-choice-paper .obligation-choice-kicker{font:15px/1.8 var(--serif);color:var(--obligation-muted);margin:0}
+.cinema-app .obligation-choice-paper .debt-payment{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px 24px;padding:18px 0;border-block:1px solid var(--obligation-rule)}
+.cinema-app .obligation-choice-paper .debt-payment>div:first-child{grid-column:1/-1}
+.cinema-app .obligation-choice-paper .debt-payment strong{font:22px/1.65 var(--serif);color:var(--obligation-ink)}
+.cinema-app .obligation-choice-paper .debt-payment p{font:17px/1.85 var(--serif);color:var(--obligation-ink);margin:8px 0 0}
+.cinema-app .obligation-choice-paper .debt-payment>.field{display:flex;flex-direction:column;gap:8px;margin:0;color:var(--obligation-ink);font:17px/1.8 var(--serif)}
+.cinema-app .obligation-choice-paper .debt-payment input{box-sizing:border-box;width:100%;padding:9px 12px;background:#0b2925cc;border:1px solid var(--obligation-rule);border-radius:2px;color:var(--obligation-ink);font:19px/1.8 var(--serif)}
+.cinema-app .obligation-choice-paper .debt-payment>.command{margin:0;padding-top:38px}
+.cinema-app .obligation-choice-paper .debt-payment>.reason{grid-column:1/-1}
+.cinema-app .obligation-choice-paper .reason{color:#e3cf9f;font:15px/1.8 var(--serif)}
+.cinema-app .obligation-choice-paper .obligation-choice-boundary,.cinema-app .obligation-choice-paper .obligation-choice-unknown{font:15px/1.85 var(--serif);color:var(--obligation-muted);margin:0}
+.cinema-app .obligation-choice-footer{display:flex;align-items:center;gap:20px;border-top:1px solid var(--obligation-rule);padding-top:12px}
+.cinema-app .obligation-choice-footer>.command{padding:0;margin:0}
+.cinema-app .obligation-choice-footer button{background:none;border:0;border-bottom:1px solid var(--obligation-rule);border-radius:0;box-shadow:none;color:var(--obligation-muted);padding:7px 0;font:15px/1.8 var(--serif);transform:none}
+.cinema-app .obligation-choice-footer button:is(:hover,:focus-visible):not(:disabled){color:var(--obligation-gold);border-bottom-color:var(--obligation-gold);background:#a58d4b17;transform:none}
+.cinema-app .obligation-choice-footer button:focus-visible,.cinema-app .obligation-choice-paper input:focus-visible{outline:2px solid var(--obligation-gold);outline-offset:3px}
+.cinema-app .obligation-choice-footer button:disabled{color:#afbaa8;border-bottom-style:dashed}

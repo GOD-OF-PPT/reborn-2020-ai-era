@@ -1,3 +1,4 @@
+import {obligationSceneMoment} from './obligation-scene.ts'
 import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
 import type {Ref,ReactNode} from 'react'
 import type {GamePanelProps,NavigateScene,LifeSceneMode,SceneTarget} from './game-types.ts'
@@ -20,12 +21,14 @@ import type {OpeningFocus} from './player-thread.ts'
 import {relayBusinessTarget} from './relay-player-thread.ts'
 
 type Props={p:GamePanelProps;headingRef:Ref<HTMLHeadingElement>;feedback?:ReactNode;onNavigate:NavigateScene;onExplore:()=>void;openingFocus?:OpeningFocus|null|undefined;focusQuarter?:string|null|undefined;focusNotice?:string|null|undefined;focusRequiresChoice?:boolean|undefined;onOpeningFocus?:((focus:OpeningFocus|null)=>void)|undefined;onResponsibilities?:(()=>void)|undefined;onRecollection?:(()=>void)|undefined;todayView?:boolean|undefined;onToday?:(()=>void)|undefined;onReturnFocus?:(()=>void)|undefined}
-export type Moment={stage:string;object:string;title:string;line:string;detail:string;command?:{kind:string;payload:unknown;label:string;confirm?:boolean};wait?:{date:string;label:string};inspect?:{screen:Screen;label:string;accountId?:string;personId?:LifePerson;lifeSelection?:LifeSceneMode;recordId?:string;videoTarget?:SceneTarget['videoTarget'];courseTarget?:SceneTarget['courseTarget'];courseDraftSlot?:SceneTarget['courseDraftSlot'];courseTeachingSlot?:SceneTarget['courseTeachingSlot'];relayTarget?:SceneTarget['relayTarget'];relayDraftSlot?:SceneTarget['relayDraftSlot'];deepseekPane?:SceneTarget['deepseekPane'];equityTarget?:SceneTarget['equityTarget'];operatingJobTarget?:SceneTarget['operatingJobTarget']}}
+export type Moment={stage:string;object:string;title:string;line:string;detail:string;command?:{kind:string;payload:unknown;label:string;confirm?:boolean};wait?:{date:string;label:string};inspect?:{obligationTarget?:SceneTarget['obligationTarget'];screen:Screen;label:string;accountId?:string;personId?:LifePerson;lifeSelection?:LifeSceneMode;recordId?:string;videoTarget?:SceneTarget['videoTarget'];courseTarget?:SceneTarget['courseTarget'];courseDraftSlot?:SceneTarget['courseDraftSlot'];courseTeachingSlot?:SceneTarget['courseTeachingSlot'];relayTarget?:SceneTarget['relayTarget'];relayDraftSlot?:SceneTarget['relayDraftSlot'];deepseekPane?:SceneTarget['deepseekPane'];equityTarget?:SceneTarget['equityTarget'];operatingJobTarget?:SceneTarget['operatingJobTarget']}}
 
 /** Current public commitments select a scene, never a command or an outcome. */
 export function roomMoment(p:Pick<GamePanelProps,'view'|'features'>&Partial<Pick<GamePanelProps,'requestWait'>>):Moment{
  const {view,features:f}=p,w=f.workbench,first=f.firstOrder
  let paid:Moment|null=null
+ const obligation=obligationSceneMoment(p)
+ if(obligation)return {stage:'attention',object:obligation.target.kind==='payment'?'一笔到期的原款':'原款处理后的停点',title:obligation.title,line:obligation.line,detail:obligation.detail,inspect:{screen:'quarter',label:obligation.label,obligationTarget:obligation.target}}
  if(w.pause)return {stage:'attention',object:'日历上的来信',title:'有件事，等你亲自回应。',line:w.progression.barrierLabel??'先看清已经发生的事，再决定怎样继续。',detail:'原费用和答应过的事都保留。看一眼不会替你作决定。',inspect:{screen:w.pause.reason==='STORY_RISK_DECISION_PENDING'?'story':'quarter',label:'读这封需要回应的来信'}}
  const activeRisk=f.story.incidents.filter(c=>c.resolvedAt===null&&!['normal','resolved'].includes(c.stage)).sort((a,b)=>a.deadline.localeCompare(b.deadline))[0]
  const risk=activeRisk?storySceneProgress(f.story,view.date,activeRisk.id):null

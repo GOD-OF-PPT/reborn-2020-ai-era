@@ -1,3 +1,4 @@
+import {obligationTargetFor,cashPauseTarget} from './obligation-scene.ts'
 import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
 import {useEffect,useRef,useState,type Ref,type ReactNode} from 'react'
 import {RoomMoment} from './RoomMoment.tsx'
@@ -129,8 +130,8 @@ export function CinematicRoom(p:Props){
   {recollection?<SeasonRecollection p={p} onClose={()=>setRecollection(false)} onNavigate={p.onNavigate} onToday={showToday} {...(p.onOpeningFocus?{onContinueFocus:(focus:OpeningFocus)=>{p.onOpeningFocus!(focus);setTodayAt(null);setRecollection(false);setExploring(false)}}:{})}/>:null}
   {responsibilities?<Dialog title="桌上的牵挂" onClose={()=>setResponsibilities(false)} className="responsibility-book"><section id="room-responsibilities" className="room-responsibilities" aria-label="桌上全部待办与持续责任"><header className="section-heading"><div><p className="eyebrow">别忘了，已经答应的事</p><h2>桌上，还有这些牵挂。</h2></div><button type="button" onClick={()=>p.onNavigate('quarter')}>打开本季安排 →</button></header>
    {shortages.map(a=><section className="error-box" role="alert" key={a.accountId}><strong>{a.accountId==='personal'?'个人':'企业'}承诺资金存在真实缺口</strong><p>保护或承诺不足{moneyText(Math.max(a.protectionShortfallFen,a.commitmentShortfallFen))}，可花0不代表偿还。</p><button type="button" onClick={()=>p.onNavigate('finance')}>查看账本与欠款</button></section>)}
-   {w.pause?<section className="warning-box" role="alert"><strong>推进暂停，需要你的决定</strong><p>{w.progression.barrierLabel??'查看本季安排中的期限、资金与独立记录。'}</p><button type="button" onClick={()=>p.onNavigate('quarter')}>面对这件事</button></section>:null}
-   {debts.length?<Obligations props={p} debts={debts}/>:null}
+   {w.pause?<section className="warning-box" role="alert"><strong>推进暂停，需要你的决定</strong><p>{w.progression.barrierLabel??'查看本季安排中的期限、资金与独立记录。'}</p><button type="button" onClick={()=>{const target=cashPauseTarget(p);setResponsibilities(false);p.onNavigate('quarter',target?{obligationTarget:target}:undefined)}}>面对这件事</button></section>:null}
+   {debts.length?<Obligations props={p} debts={debts} onSelect={debt=>{const target=obligationTargetFor(p,debt);setResponsibilities(false);if(target)p.onNavigate('quarter',{obligationTarget:target});else p.onNavigate('quarter',{accountId:debt.accountId})}}/>:null}
    <StoryQueue p={p} onOpen={()=>p.onNavigate('story')}/><LifeQueue p={p} onOpen={p.onPeople}/>
    {forced.map(event=><EventCard key={event.id} event={event} props={p}/>)}
    {f.life.jobs.filter(j=>j.status==='running').map(j=><article className="room-running-life" key={j.id}><strong>{j.kind==='promise_keep'?'兑现约定':f.life.work[j.kind].title} · 进行中</strong><p>{j.startAt}—{j.completeAt} · 已付{moneyText(j.costFen)} / {j.actionPoints}点，尚未完成。</p><button type="button" onClick={()=>p.onNavigate('life',lifeWorkTarget(j))}>查看这段生活安排</button></article>)}
