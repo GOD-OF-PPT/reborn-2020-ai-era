@@ -73,3 +73,8 @@ html:has(.game-app),body:has(.game-app),#root:has(.game-app){width:100%;height:1
 @media(min-height:900px){.game-app{--scene-top:164px}}
 /* The annual film opens immediately. Its own life tabs remain; duplicate workspace chrome does not precede it. */
 .game-app .workspace-life:has(.year-review) .scene-sheet-caption,.game-app .workspace-life:has(.year-review) .scene-sheet-account,.game-app .workspace-life:has(.year-review) .section-navigation{display:none}
+
+.cinema-app .book-flow .course-funding-choice{break-inside:avoid}
+.cinema-app .book-flow .course-funding-link{display:inline-block;margin:10px 0 14px;padding:3px 0;border-bottom:1px solid #bda06877;color:#dfc58e;font:15px/1.8 var(--serif);text-decoration:none}
+.cinema-app .book-flow .course-funding-link:is(:hover,:focus-visible){color:#ffe3a5;border-bottom-color:#e5c789;background:#26473855}
+.cinema-app .book-flow .course-funding-link:focus-visible{outline:2px solid #e5c789;outline-offset:3px}
