@@ -13,6 +13,7 @@ import {sceneCashResult} from './scene-cash-result.ts'
 import {equitySharedResult} from './equity-shared-result.ts'
 import {equityInvitationResult} from './equity-invitation-result.ts'
 import {preparationStartResult} from './preparation-feedback.ts'
+import {cashGapResult} from './cash-gap-reading.ts'
 
 type Relay=NonNullable<PlayFeatures['relay']>
 const originalDay=(value:unknown):value is string=>{try{return typeof value==='string'&&isoDate(value)===value}catch{return false}}
@@ -205,5 +206,7 @@ export function savedSceneResult(kind:string,label:string,previous:PlayingView|n
  if(domain)return domain
  if(course)return course
  if(video)return video
+ const cashGap=cashGapResult(kind,previous,current)
+ if(cashGap)return cashGap
  return `${label}，已经记进这段人生。实际结果请看眼前的记录；未完成的承诺仍会延续。`
 }

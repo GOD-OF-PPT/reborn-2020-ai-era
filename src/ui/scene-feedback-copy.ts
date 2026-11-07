@@ -9,7 +9,7 @@ const genericSuccess='已保存你的安排。详情以当前状态和账本为�
  * fact-free acknowledgement must not reappear when that echo is dismissed. */
 export function sceneStatusNotice(notice:string|null):string|null {
  if(notice===null)return null
- if(notice===genericSuccess||notice==='事件选择已处理'||/^(经营|模拟市场)指令已处理：[A-Za-z]+$/.test(notice))return null
+ if(notice===genericSuccess||notice==='事件选择已处理'||notice==='延期处置，欠款仍保留'||/^(经营|模拟市场)指令已处理：[A-Za-z]+$/.test(notice))return null
  const text=activityText(notice)
  // Preserve an unfamiliar or richer message rather than hiding it merely
  // because the older formatter recognizes an implementation phrase inside it.

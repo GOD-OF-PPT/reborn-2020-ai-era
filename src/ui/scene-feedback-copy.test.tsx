@@ -72,7 +72,7 @@ it('preserves authored cause sentences and avoids inventing a single cause for m
 })
 
 it('retires only fact-free generic success notices, including their exact producer form',()=>{
- for(const notice of ['已保存你的安排。详情以当前状态和账本为准。','事件选择已处理','经营指令已处理：WorkQuarter','模拟市场指令已处理：PlaceStockOrder'])expect(sceneStatusNotice(notice)).toBeNull()
+ for(const notice of ['已保存你的安排。详情以当前状态和账本为准。','事件选择已处理','延期处置，欠款仍保留','经营指令已处理：WorkQuarter','模拟市场指令已处理：PlaceStockOrder'])expect(sceneStatusNotice(notice)).toBeNull()
  expect(sceneStatusNotice(null)).toBeNull()
 })
 

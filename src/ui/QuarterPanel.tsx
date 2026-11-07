@@ -1,4 +1,5 @@
 import {defaultWaitDate,defaultWaitLabel} from './default-wait-window.ts'
+import {CashGapDecision} from './CashGapDecision.tsx'
 import {useEffect,useRef,useState} from 'react'
 import {playableAdvanceDate} from '../application/playable-advance.ts'
 import type {GamePanelProps} from './game-types.ts'
@@ -54,8 +55,8 @@ export function QuarterPanel(props:QuarterProps){
  <h2 className="sr-only" ref={phaseHeading} tabIndex={-1}>{phases.find(p=>p[0]===phase)![1]} · {w.quarter}</h2>
  <div className="quarter-columns"><div className="quarter-main">
  {w.finance.filter(f=>f.protectionShortfallFen>0||f.commitmentShortfallFen>0).map(f=><section className="error-box" role="alert" key={f.accountId}><h3>{f.accountId==='personal'?'个人账户':'企业账户'}承诺资金不足</h3><p>保护或已承诺资金缺口：{moneyText(Math.max(f.protectionShortfallFen,f.commitmentShortfallFen))}。缺口不会被可花余额0掩盖。</p></section>)}
- {w.pause?.reason==='CASH_SHORTFALL'?<section className="error-box" role="alert"><h3>到期现金不足，时间已暂停</h3><p>本笔应付尚未结清。可以部分支付、缩减新增安排，或选择延期处置；剩余金额继续保留。</p><CommandButton {...props} kind="AcknowledgeCashGap" payload={{instanceId:w.pause.instanceId}} label="确认处置后继续，未结金额保留"/></section>:null}
- {debts.length>0?<Obligations props={props} debts={debts}/>:null}
+ {w.pause?.reason==='CASH_SHORTFALL'?<CashGapDecision p={props} hasDebts={debts.length>0}/>:null}
+ {debts.length>0?<div id="quarter-original-debts"><Obligations props={props} debts={debts}/></div>:null}
  {w.pause?.reason==='STORY_RISK_DECISION_PENDING'?<section className="warning-box" role="alert"><h3>有新的独立信号，推进已暂停</h3><p>请查看记录。确认看见不等于核实、付款或恢复。</p><div className="button-row"><button type="button" onClick={props.onStory}>查看风险与控制</button><CommandButton {...props} kind="AcknowledgeStoryPause" payload={{instanceId:w.pause.instanceId}} label="已看见记录，保留责任继续"/></div></section>:null}
  <StoryQueue p={props} onOpen={props.onStory}/>
  <LifeQueue p={props} onOpen={props.onPeople}/>
