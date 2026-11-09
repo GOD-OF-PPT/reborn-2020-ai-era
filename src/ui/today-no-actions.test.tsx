@@ -35,14 +35,14 @@ function render(d:ReturnType<typeof data>){hooks.index=0;return renderToStaticMa
 it('uses the original wait only after all four normal activities have actually consumed this quarter’s points',()=>{
  const d=data(),value=todayIdleReading(d.p,d.today)!
  expect(d.p.view.budget.available).toBe(0);expect(d.p.view.budget.spent).toBe(4);expect(d.today.ongoing).toHaveLength(0)
- expect(value.title).toBe('这季的行动，已经用完。');expect(value.waitDate).toBe(d.today.wait!.date);expect(value.line).toContain('费用和旧约照常发生')
+ expect(value.title).toBe('这季的行动，已经用完。');expect(value.waitDate).toBe(d.today.wait!.date);expect(value.waitLabel).toBe(d.today.wait!.label);expect(value.waitLabel).toContain('最迟');expect(value.line).toContain('费用和旧约照常发生')
  const html=render(d);expect(html).toContain(value.title);expect(html).toContain('2020-01-15实际完成，投入¥3,000');expect(html).toContain('翻阅今天的选择');expect(html).not.toContain('今天 · 仍可安排');expect(d.p.requestWait).not.toHaveBeenCalled()
 })
 it('binds the calendar object and main wait to exactly one original clock with its original confirmation request',()=>{
  const d=data(),html=render(d),clock=captured.clock as ClockActionBinding,room=captured.room!,object=room.object as Element
  expect(clock).toBeDefined();expect(object.type).toBe(OpeningObject);expect(object.props.onActivate).toBe(clock.activate);expect(object.props.actionLabel).toBe(clock.label);expect(object.props.stageLabel).toBe('今天 · 先不新增')
  expect(html.match(/class="clock-advance clock-advance-room"/g)).toHaveLength(1);expect(nodes(room.decisions).filter(n=>n.type===ClockAdvance)).toHaveLength(0)
- ;(object.props.onActivate as ()=>void)();expect(d.p.requestWait).toHaveBeenCalledExactlyOnceWith(d.today.wait!.date,expect.stringContaining('不新增安排，让原日子继续'),true);expect(d.p.request).not.toHaveBeenCalled()
+ ;(object.props.onActivate as ()=>void)();expect(d.p.requestWait).toHaveBeenCalledExactlyOnceWith(d.today.wait!.date,expect.stringContaining(d.today.wait!.label),true);expect(d.p.request).not.toHaveBeenCalled()
  let review:SharedActionBinding|undefined;hooks.values=[];hooks.index=0
  renderToStaticMarkup(<CommandButton {...(clock.reviewNode as ReactElement<ComponentProps<typeof CommandButton>>).props} renderAction={(binding,main)=>{review=binding;return main}}/>);review!.activate()
  expect(d.p.requestWait).toHaveBeenLastCalledWith(d.today.wait!.date,'核对后推进 · '+d.today.wait!.date,true)

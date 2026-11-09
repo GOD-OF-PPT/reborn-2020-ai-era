@@ -1,0 +1,73 @@
+diff --git a/src/ui/TodayIdleAction.tsx b/src/ui/TodayIdleAction.tsx
+index d8d6b7fe..c6e1e087 100644
+--- a/src/ui/TodayIdleAction.tsx
++++ b/src/ui/TodayIdleAction.tsx
+@@ -5,7 +5,7 @@ import {todayReadingGroups} from './today-thread.ts'
+ import {ClockAdvance,type ClockActionBinding} from './ClockAdvance.tsx'
+ import {isoDate} from '../core/calendar.ts'
+ 
+-export interface TodayIdleReading{readonly runId:string;readonly revision:number;readonly date:string;readonly waitDate:string;readonly title:string;readonly line:string}
++export interface TodayIdleReading{readonly runId:string;readonly revision:number;readonly date:string;readonly waitDate:string;readonly waitLabel:string;readonly title:string;readonly line:string}
+ export interface TodayIdlePrimary{readonly binding:ClockActionBinding;readonly node:ReactNode}
+ /** A new presentation focus only when no old continuation needs the lead.
+  * Zero action points never disables the original readers or free decisions. */
+@@ -15,10 +15,10 @@ export function todayIdleReading(p:Pick<GamePanelProps,'view'|'features'>,today:
+  if(w.finance.some(a=>a.protectionShortfallFen>0||a.commitmentShortfallFen>0||a.obligations.some(o=>o.remainingFen>0&&o.date<=view.date))||features.life.promises.some(o=>['offered','accepted'].includes(o.status)&&o.offeredAt<=view.date)||features.story.incidents.some(i=>i.resolvedAt===null&&!['normal','resolved'].includes(i.stage)))return null
+  try{isoDate(view.date);isoDate(today.wait.date)}catch{return null}
+  if(today.wait.date<=view.date)return null
+- return {runId:view.runId,revision:view.revision,date:view.date,waitDate:today.wait.date,title:b.reserved>0?'这季的行动，已经排进日历。':'这季的行动，已经用完。',line:b.reserved>0?'预留仍属于原安排。可以继续翻阅，费用和旧约照常发生。':'可以继续翻阅；让日子往前走时，费用和旧约照常发生。'}
++ return {runId:view.runId,revision:view.revision,date:view.date,waitDate:today.wait.date,waitLabel:today.wait.label,title:b.reserved>0?'这季的行动，已经排进日历。':'这季的行动，已经用完。',line:b.reserved>0?'预留仍属于原安排。可以继续翻阅，费用和旧约照常发生。':'可以继续翻阅；让日子往前走时，费用和旧约照常发生。'}
+ }
+ /** Reuse exactly one original clock and its shared object activation. */
+ export function TodayIdleAction({p,value,children}:{p:GamePanelProps;value:TodayIdleReading;children:(primary:TodayIdlePrimary|null)=>ReactNode}){
+  if(value.runId!==p.view.runId||value.revision!==p.view.revision||value.date!==p.view.date)return children(null)
+- return <ClockAdvance p={p} date={value.waitDate} label={'不新增安排，让原日子继续 · '+value.waitDate} room showReason={!p.view.readOnly&&!p.view.hasCandidate&&p.view.saveStatus!=='conflict'} renderAction={binding=>children({binding,node:<div className="moment-wait moment-primary"><div className="clock-advance clock-advance-room">{binding.reviewNode}{binding.mainNode}</div></div>})}/>
++ return <ClockAdvance p={p} date={value.waitDate} label={value.waitLabel+' · '+value.waitDate} room showReason={!p.view.readOnly&&!p.view.hasCandidate&&p.view.saveStatus!=='conflict'} renderAction={binding=>children({binding,node:<div className="moment-wait moment-primary"><div className="clock-advance clock-advance-room">{binding.reviewNode}{binding.mainNode}</div></div>})}/>
+ }
+diff --git a/src/ui/TodayScene.tsx b/src/ui/TodayScene.tsx
+index 22e893ac..1a8deae6 100644
+--- a/src/ui/TodayScene.tsx
++++ b/src/ui/TodayScene.tsx
+@@ -102,7 +102,7 @@ export function TodayScene({p,today,bookmarkReason,initialChoice,headingRef,feed
+    feedback={!statusFeedback&&!calendarStatus&&!repeatedReadOnly&&feedback&&feedback!=='已从本机存档继续。'&&!personalStartNoticeExpired(p,feedback)?<div className={typeof feedback==='string'?'moment-status':'moment-feedback'}>{visibleFeedback}</div>:null}
+    facts={<>{idleReading?<p className="moment-terms">{idleReading.line}</p>:null}{dayResult?.line?<p className="moment-line">{dayResult.line}</p>:null}{situation&&!dayResult?.coversSituation?<p className="moment-line">{ongoingReading?.merged?ongoingReading.line:situation}</p>:null}{one&&!ongoingReading?.merged?<p className="moment-terms">{continuation?.kind==='money'?'原款仍保留：':'仍在继续：'}{one.title.replace(/[。！？]$/u,'')}{one.wait?' · 下一反馈 '+one.wait.date:''}。</p>:null}{holdings.length?<button type="button" className="scene-text-action today-held-link" onClick={ui('翻看保留的持仓',()=>setPage('holdings')).activate}>翻看保留的持仓 · {holdings.length}份 ↗</button>:null}{dueTotal>0?<p className="relay-scene-money">原客户款已到期、尚未收取 {moneyText(dueTotal)}。<button type="button" className="scene-text-action" onClick={ui('翻看这些原客户款',()=>setPage('ongoing')).activate}>逐位翻回原客户 ↗</button></p>:null}</>}
+    decisions={<>{idlePrimary?.node??<div className="command moment-decision moment-primary"><button type="button" aria-label={sceneReadingName(primary.label)} disabled={primary.disabled} onClick={primary.activate}><b aria-hidden="true">01</b><span>{sceneReadingLabel(primary.label)}</span><i aria-hidden="true">→</i></button>{primary.reason?<small className="reason">{primary.reason}</small>:null}</div>}
+-    {idlePrimary?button('翻阅今天的选择',()=>setPage('directions'),undefined,'moment-explore'):today.wait?<div className="moment-wait"><ClockAdvance p={p} date={today.wait.date} label={'不新增安排，让原日子继续 · '+today.wait.date} room showReason={!p.view.readOnly&&!p.view.hasCandidate&&p.view.saveStatus!=='conflict'}/></div>:button('翻看今天的日历',()=>onNavigate('quarter',{accountId:p.accountId}),'原费用、期限和未完约定都在这里')}
++    {idlePrimary?button('翻阅今天的选择',()=>setPage('directions'),undefined,'moment-explore'):today.wait?<div className="moment-wait"><ClockAdvance p={p} date={today.wait.date} label={today.wait.label+' · '+today.wait.date} room showReason={!p.view.readOnly&&!p.view.hasCandidate&&p.view.saveStatus!=='conflict'}/></div>:button('翻看今天的日历',()=>onNavigate('quarter',{accountId:p.accountId}),'原费用、期限和未完约定都在这里')}
+     <button type="button" className="moment-explore" onClick={ui('环顾房间，想想别的可能',onExplore).activate} aria-label="环顾房间，想想别的可能 ↗">环顾房间 <span aria-hidden="true">↗</span></button>
+    </>}
+    object={<OpeningObject copyMode="tableau" kind="calendar" title="今天的日历" displayTitle="" detail={p.view.date} stageLabel={idlePrimary?'今天 · 先不新增':'今天 · 仍可安排'} actionLabel={sceneReadingLabel((idlePrimary?.binding??primary).label)} onActivate={(idlePrimary?.binding??primary).activate} disabled={(idlePrimary?.binding??primary).disabled} textOnly={p.textOnly===true} dayPaper={{kind:'today',state:'ongoing'}} {...(p.view.readOnly?{protection:'readonly' as const}:p.view.hasCandidate||p.view.saveStatus==='conflict'?{protection:'unsaved' as const}:{})}/>}
+diff --git a/src/ui/today-no-actions.test.tsx b/src/ui/today-no-actions.test.tsx
+index e2f13884..6ae7c626 100644
+--- a/src/ui/today-no-actions.test.tsx
++++ b/src/ui/today-no-actions.test.tsx
+@@ -35,14 +35,14 @@ function render(d:ReturnType<typeof data>){hooks.index=0;return renderToStaticMa
+ it('uses the original wait only after all four normal activities have actually consumed this quarter’s points',()=>{
+  const d=data(),value=todayIdleReading(d.p,d.today)!
+  expect(d.p.view.budget.available).toBe(0);expect(d.p.view.budget.spent).toBe(4);expect(d.today.ongoing).toHaveLength(0)
+- expect(value.title).toBe('这季的行动，已经用完。');expect(value.waitDate).toBe(d.today.wait!.date);expect(value.line).toContain('费用和旧约照常发生')
++ expect(value.title).toBe('这季的行动，已经用完。');expect(value.waitDate).toBe(d.today.wait!.date);expect(value.waitLabel).toBe(d.today.wait!.label);expect(value.waitLabel).toContain('最迟');expect(value.line).toContain('费用和旧约照常发生')
+  const html=render(d);expect(html).toContain(value.title);expect(html).toContain('2020-01-15实际完成，投入¥3,000');expect(html).toContain('翻阅今天的选择');expect(html).not.toContain('今天 · 仍可安排');expect(d.p.requestWait).not.toHaveBeenCalled()
+ })
+ it('binds the calendar object and main wait to exactly one original clock with its original confirmation request',()=>{
+  const d=data(),html=render(d),clock=captured.clock as ClockActionBinding,room=captured.room!,object=room.object as Element
+  expect(clock).toBeDefined();expect(object.type).toBe(OpeningObject);expect(object.props.onActivate).toBe(clock.activate);expect(object.props.actionLabel).toBe(clock.label);expect(object.props.stageLabel).toBe('今天 · 先不新增')
+  expect(html.match(/class="clock-advance clock-advance-room"/g)).toHaveLength(1);expect(nodes(room.decisions).filter(n=>n.type===ClockAdvance)).toHaveLength(0)
+- ;(object.props.onActivate as ()=>void)();expect(d.p.requestWait).toHaveBeenCalledExactlyOnceWith(d.today.wait!.date,expect.stringContaining('不新增安排，让原日子继续'),true);expect(d.p.request).not.toHaveBeenCalled()
++ ;(object.props.onActivate as ()=>void)();expect(d.p.requestWait).toHaveBeenCalledExactlyOnceWith(d.today.wait!.date,expect.stringContaining(d.today.wait!.label),true);expect(d.p.request).not.toHaveBeenCalled()
+  let review:SharedActionBinding|undefined;hooks.values=[];hooks.index=0
+  renderToStaticMarkup(<CommandButton {...(clock.reviewNode as ReactElement<ComponentProps<typeof CommandButton>>).props} renderAction={(binding,main)=>{review=binding;return main}}/>);review!.activate()
+  expect(d.p.requestWait).toHaveBeenLastCalledWith(d.today.wait!.date,'核对后推进 · '+d.today.wait!.date,true)
+diff --git a/src/ui/today-wait-reading.test.tsx b/src/ui/today-wait-reading.test.tsx
+index 0690d915..f0986380 100644
+--- a/src/ui/today-wait-reading.test.tsx
++++ b/src/ui/today-wait-reading.test.tsx
+@@ -50,7 +50,7 @@ it('falls back for incomplete, duplicate, stale, mismatched-date and non-persona
+ })
+ it('keeps original Today primary/object, wait date, expenses and complete ongoing reader while adding source-bound date choices',()=>{
+  const c=context(),onFocus=vi.fn(),html=renderToStaticMarkup(<TodayScene p={c.p} today={c.today} headingRef={null} onFocus={onFocus} onPrepare={vi.fn()} onResume={vi.fn()} onExplore={vi.fn()} onRecollection={vi.fn()} onNavigate={vi.fn()}/>),room=capture.room!,cue=room.context as ReactElement<ComponentProps<typeof TodayWaitCue>>,clock=nodes(room.decisions).find(n=>n.type===ClockAdvance)!,primary=nodes(room.decisions).find(n=>n.type==='button'&&n.props['aria-label'])!,object=room.object as ReactElement<ComponentProps<typeof OpeningObject>>
+- expect(cue.type).toBe(TodayWaitCue);expect(cue.props.value.items).toHaveLength(3);expect(clock.props.date).toBe(c.today.wait!.date);expect(clock.props.p).toBe(c.p);expect(object.props.onActivate).toBe(primary.props.onClick);expect(html).toContain('继续哪件事');expect(html).toContain('不新增安排，让原日子继续');expect(html).toContain('2020-01-31')
++ expect(cue.type).toBe(TodayWaitCue);expect(cue.props.value.items).toHaveLength(3);expect(clock.props.date).toBe(c.today.wait!.date);expect(clock.props.p).toBe(c.p);expect(object.props.onActivate).toBe(primary.props.onClick);expect(html).toContain('继续哪件事');expect(html).toContain(c.today.wait!.label);expect(html).toContain('2020-01-31')
+  cue.props.onChoose(c.value!.items[0]!.focus);expect(onFocus).toHaveBeenCalledExactlyOnceWith(c.value!.items[0]!.focus);expect(c.p.request).not.toHaveBeenCalled();expect(c.p.requestWait).not.toHaveBeenCalled()
+ })
+ it('leaves uncertain or single-item Today on its original presentation',()=>{

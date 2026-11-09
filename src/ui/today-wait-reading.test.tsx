@@ -50,7 +50,7 @@ it('falls back for incomplete, duplicate, stale, mismatched-date and non-persona
 })
 it('keeps original Today primary/object, wait date, expenses and complete ongoing reader while adding source-bound date choices',()=>{
  const c=context(),onFocus=vi.fn(),html=renderToStaticMarkup(<TodayScene p={c.p} today={c.today} headingRef={null} onFocus={onFocus} onPrepare={vi.fn()} onResume={vi.fn()} onExplore={vi.fn()} onRecollection={vi.fn()} onNavigate={vi.fn()}/>),room=capture.room!,cue=room.context as ReactElement<ComponentProps<typeof TodayWaitCue>>,clock=nodes(room.decisions).find(n=>n.type===ClockAdvance)!,primary=nodes(room.decisions).find(n=>n.type==='button'&&n.props['aria-label'])!,object=room.object as ReactElement<ComponentProps<typeof OpeningObject>>
- expect(cue.type).toBe(TodayWaitCue);expect(cue.props.value.items).toHaveLength(3);expect(clock.props.date).toBe(c.today.wait!.date);expect(clock.props.p).toBe(c.p);expect(object.props.onActivate).toBe(primary.props.onClick);expect(html).toContain('继续哪件事');expect(html).toContain('不新增安排，让原日子继续');expect(html).toContain('2020-01-31')
+ expect(cue.type).toBe(TodayWaitCue);expect(cue.props.value.items).toHaveLength(3);expect(clock.props.date).toBe(c.today.wait!.date);expect(clock.props.p).toBe(c.p);expect(object.props.onActivate).toBe(primary.props.onClick);expect(html).toContain('继续哪件事');expect(html).toContain(c.today.wait!.label);expect(html).toContain('2020-01-31')
  cue.props.onChoose(c.value!.items[0]!.focus);expect(onFocus).toHaveBeenCalledExactlyOnceWith(c.value!.items[0]!.focus);expect(c.p.request).not.toHaveBeenCalled();expect(c.p.requestWait).not.toHaveBeenCalled()
 })
 it('leaves uncertain or single-item Today on its original presentation',()=>{
