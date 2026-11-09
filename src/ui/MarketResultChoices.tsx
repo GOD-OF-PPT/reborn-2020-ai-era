@@ -18,11 +18,11 @@ export function marketResultReading(p:GamePanelProps,progress:MarketSceneProgres
  if(order&&(orders.length!==1||orders[0]!==order||order.id!==id||order.accountId!==p.accountId||!date(order.submittedAt)||order.submittedAt>p.view.date))return null
  if(progress.phase==='settlement'&&progress.settlement){
   const value=progress.settlement,rows=m.settlements.filter(row=>row.id===value.id)
-  if(rows.length!==1||rows[0]!==value||value.accountId!==p.accountId||!order&&id!==value.id||!date(value.dueAt)||value.paidAt!==null&&(!date(value.paidAt)||value.paidAt>p.view.date))return null
+  if(rows.length!==1||rows[0]!==value||value.accountId!==p.accountId||!order&&id!==value.id||!date(value.dueAt)||value.paidAt!==null&&(!date(value.paidAt)||value.paidAt<value.dueAt||value.paidAt>p.view.date))return null
   const paid=value.paidAt!==null
   return {key:JSON.stringify([...base,value.id,value.sourceId,value.dueAt,value.paidAt]),title:paid?'原款到账，接下来呢？':value.kind==='sale'?'卖出了，等原款到账。':'这笔模拟分红，还在等到账。',label:paid?'收好交收记录，回到今天':'先回到今天，原款照约等待',line:paid?'已经发生的收款留在原账，下一次投入由你另行决定。':'这笔原款仍按'+value.dueAt+'交收，也可以先去安排生活。'}
  }
- if(progress.phase==='history'&&order&&!progress.active&&['filled','cancelled','expired','rejected'].includes(order.status)&&quantity(order.quantity)&&quantity(order.remaining)&&order.remaining<=order.quantity){
+ if(progress.phase==='history'&&order&&!progress.active&&['filled','cancelled','expired','rejected'].includes(order.status)&&quantity(order.quantity)&&order.quantity>0&&quantity(order.remaining)&&order.remaining<=order.quantity&&(order.status!=='filled'||order.remaining===0)){
   const filled=order.status==='filled'
   return {key:JSON.stringify([...base,order.status,order.side,order.remaining]),title:filled?order.side==='buy'?'股份买到了，接下来呢？':'这笔卖出，已有结果。':'这次判断，先收起来。',label:filled?'收好本单，回到今天':'这次先停手，回到今天',line:'成交、费用和未结的原款仍在记录里，接下来也可以把时间留给生活。'}
  }
