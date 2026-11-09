@@ -29,7 +29,7 @@ function elements(value:unknown,path='root'):Element[]{
  if(typeof value.type==='function'&&['VideoSceneChoice','CourseSceneChoice','MarketSceneChoice'].includes(value.type.name)&&typeof value.props.children==='function')return elements(value.props.children(drawers[value.type.name]!),path+'/drawer')
  const own=[value,...elements(value.props.children,path+'/children'),...elements(value.props.footer,path+'/footer')]
  if(typeof value.type==='function'&&value.type.name==='RoomTableau')for(const key of ['heading','facts','decisions','record','object'])own.push(...elements(value.props[key],path+'/'+key))
- if(typeof value.type==='function'&&['OpeningObject','ClockAdvance','CommandButton','TodayHoldings','TodayLifeChoices','TodayDirections'].includes(value.type.name)){const fn=value.type as (props:Record<string,unknown>)=>unknown;own.push(...elements(mounted(path,()=>fn(value.props)),path+'/render'))}
+ if(typeof value.type==='function'&&['OpeningObject','ClockAdvance','CommandButton','TodayHoldings','TodayLifeChoices','TodayDirections','TodayParallelChoice'].includes(value.type.name)){const fn=value.type as (props:Record<string,unknown>)=>unknown;own.push(...elements(mounted(path,()=>fn(value.props)),path+'/render'))}
  return own
 }
 const words=(value:unknown):string=>typeof value==='string'||typeof value==='number'?String(value):Array.isArray(value)?value.map(words).join(''):isValidElement<Record<string,unknown>>(value)?words(value.props.children):''
@@ -44,7 +44,7 @@ function driver(run:GameRun=initial){
  const render=()=>elements(mounted('scene',()=>TodayScene({p,today,headingRef:null,onFocus,onPrepare,onResume:vi.fn(),onNavigate:vi.fn(),onExplore:vi.fn(),onRecollection:vi.fn()})))
  const click=(label:string)=>{const node=render().find(row=>row.type==='button'&&(words(row.props.children)===label||row.props['aria-label']===label||row.props['aria-label']===sceneReadingName(label)));if(!node||typeof node.props.onClick!=='function'||node.props.disabled)throw Error('ENABLED_BUTTON_REQUIRED: '+label);node.props.onClick()}
  const dialog=()=>render().find(row=>row.type===Dialog)
- const open=()=>click('想想今天 · 看看工作、其它尝试与原约定 ↗')
+ const open=()=>{const parallel=render().find(n=>n.type==='button'&&n.props['aria-label']==='等候时，看看工作与生活 ↗');if(parallel){click('等候时，看看工作与生活 ↗');click('其它尝试与原约定')}else click('想想今天 · 看看工作、其它尝试与原约定 ↗')}
  const route=(key:TodayDirectionKey)=>{const sheet=render().find(row=>row.type===TodayDirections)!;const node=(sheet.props.choices as Record<TodayDirectionKey,Element>)[key];(node.props.onClick as ()=>void)()}
  return {p,today,render,click,dialog,open,route,onFocus,onPrepare}
 }
