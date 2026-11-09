@@ -1,0 +1,32 @@
+.cinema-app .dialog.today-daily-dialog .today-life-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:26px}
+.cinema-app .dialog.today-daily-dialog .today-life-heading{gap:10px;align-items:center}
+.cinema-app .dialog.today-daily-dialog .today-life-sketch{width:52px;height:58px}
+.cinema-app .dialog.today-daily-dialog .today-life-terms{flex-wrap:wrap;column-gap:14px;row-gap:0}
+.cinema-app .dialog.today-daily-dialog .today-life-effect{min-height:52px}
+.cinema-app .dialog.today-daily-dialog .today-work-unavailable strong{font:400 22px/1.7 var(--serif);color:#dcc69d}
+.cinema-app .dialog.today-daily-dialog .today-work-reading{display:block;width:100%;min-height:46px;padding:10px 15px;border:1px solid #c7af7955;background:#213d31;color:#ecdbb0;font:17px/1.7 var(--serif);text-align:left;transform:none}
+.cinema-app .dialog.today-daily-dialog .today-life-option button:is(:hover,:focus-visible):not(:disabled){background:#dfc791;color:#152b24;transform:none;box-shadow:none}
+.cinema-app .dialog.today-daily-dialog .today-life-option button:disabled{background:#2a3b30;color:#a7b199;border:1px dashed #7c8c75;box-shadow:none;transform:none}
+.cinema-app .dialog.today-daily-dialog button:focus-visible{outline:2px solid #f0d398;outline-offset:4px}
+
+.cinema-app .dialog.today-daily-dialog .today-daily-readings{display:flex;align-items:baseline;gap:24px;flex-wrap:wrap}
+.cinema-app .dialog.today-daily-dialog .today-daily-readings>button{padding:5px 0;background:none;border:0;border-bottom:1px solid #baa36b66;color:#dfcca2;font:14px/1.8 var(--serif);transform:none}
+
+.cinema-app .dialog.today-daily-dialog .today-life-choices{gap:10px}
+.cinema-app .dialog.today-daily-dialog .today-life-option{padding-top:10px}
+.cinema-app .dialog.today-daily-dialog .today-life-terms{margin-top:10px}
+.cinema-app .dialog.today-daily-dialog>.dialog-direct-body{gap:6px}
+
+/* A disabled choice keeps its reason below the action, without pushing the intro into the title. */
+.cinema-app .dialog.today-daily-dialog>.dialog-direct-body{justify-content:flex-start}
+.cinema-app .dialog.today-daily-dialog .today-life-choices{gap:8px}
+.cinema-app .dialog.today-daily-dialog .today-life-option{padding-top:6px}
+.cinema-app .dialog.today-daily-dialog .today-life-sketch{width:44px;height:46px}
+.cinema-app .dialog.today-daily-dialog .today-life-terms{margin-top:6px}
+.cinema-app .dialog.today-daily-dialog .today-life-date{margin:3px 0}
+.cinema-app .dialog.today-daily-dialog .today-life-effect{margin:3px 0 8px}
+
+/* The life surface loads later; keep this complete daily comparison above its shared centering rule. */
+.cinema-app .dialog.today-daily-dialog.today-life-dialog>.dialog-direct-body{justify-content:flex-start}
+.cinema-app .dialog.today-daily-dialog>.today-choice-footer{display:flex;align-items:center;gap:14px}
+.cinema-app .dialog.today-daily-dialog>.today-choice-footer>.today-daily-readings{margin-right:auto}

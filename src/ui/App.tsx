@@ -395,7 +395,7 @@ export default function App({controller=null,startupError=null,diagnostics=null,
  }
  const openingRoom=!!view&&view.phase==='playing'&&tab==='room'
  const openingThread=openingRoom&&props?(selectedThread??playerThread(props,openingFocus,openingFocusQuarter??undefined)):null
- const displayingToday=openingRoom&&view&&dayPerspectiveCurrent(view,requestedRoomToday)&&openingThread&&!focusRequiresChoice&&openingThread.focusStatus!=='invalid'&&!openingThread.responsibilityOverrideNeeded&&!openingThread.legacyFallbackRequired
+ const displayingToday=openingRoom&&view&&dayPerspectiveCurrent(view,requestedRoomToday)&&openingThread&&!openingThread.responsibilityOverrideNeeded&&!openingThread.legacyFallbackRequired
  const displayAccountId=displayingToday?'personal':openingThread&&!focusRequiresChoice&&openingThread.focusStatus!=='invalid'?openingThread.focus.accountId:accountId
  const closeWorkspace=()=>{
   const back=readerReturn.current,current=controller?.snapshot.view;readerReturn.current=null;setWorkspaceOpen(false)
