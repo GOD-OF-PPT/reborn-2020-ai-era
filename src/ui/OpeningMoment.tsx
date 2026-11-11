@@ -69,7 +69,7 @@ import {TodayScene} from './TodayScene.tsx'
 import {DayThreadAction} from './DayThreadAction.tsx'
 import {VideoThreadAction} from './VideoThreadAction.tsx'
 import {videoPaperFor} from './video-continuity.ts'
-import {dayPerspectiveCurrent,type DayPerspective} from './day-perspective.ts'
+import {dayChoiceCurrent,dayPerspectiveCurrent,type DayPerspective} from './day-perspective.ts'
 import {useCommandPreview} from './use-controller-read.ts'
 import {makeSharedAction,type SharedActionBinding} from './shared-action.ts'
 import './video-scene-object.css'
@@ -186,7 +186,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const currentUnreadOwner=useRef<object|null>(null),unreadMounted=useRef(true)
  useEffect(()=>{unreadMounted.current=true;return()=>{unreadMounted.current=false}},[])
  useEffect(()=>{if(localTodayAt&&!dayPerspectiveCurrent(p.view,localTodayAt))setLocalTodayAt(null)},[localTodayAt,p.view])
- useEffect(()=>{if(todayChoiceAt&&!dayPerspectiveCurrent(p.view,todayChoiceAt))setTodayChoiceAt(null)},[todayChoiceAt,p.view])
+ useEffect(()=>{if(todayChoiceAt&&!dayChoiceCurrent(p.view,todayChoiceAt))setTodayChoiceAt(null)},[todayChoiceAt,p.view])
  const candidates=seasonFocusChoices(p),picked=candidates.find(candidate=>candidate.id===draftId)
  const pickedDirection=picked?seasonChoiceDirection(picked):null
  const groupTitle=seasonFocusGroups.find(group=>group.id===focusGroup)!.label,groupCandidates=candidates.filter(candidate=>seasonFocusGroupFor(candidate)===focusGroup)
@@ -420,7 +420,7 @@ export function OpeningMoment({p,headingRef,fallback,feedback,focus,focusQuarter
  const videoFeedback=!interrupted&&!requiresChoice&&!unknownFocus&&!legacy?videoPublicationFeedbackReading(nearProps,thread):null
  const videoChooseIntent:VideoChoiceAction|undefined=thread.stage==='video-quality'?'rework':thread.stage==='video-ready-to-publish'?'publish':undefined
  const dayArt:DayContinuityArt|undefined=freeChoice?{kind:'today',state:'ongoing'}:dayActive&&['work','life','market'].includes(thread.focus.kind)?{kind:thread.focus.kind as 'work'|'life'|'market',state:thread.focusScope==='history'?'history':day?.primary.classification==='result'?'result':thread.focusScope==='carry'?'carry':'ongoing',...(marketCopy?{orderPhase:marketCopy.paperPhase}:{})}:undefined
- if((todayView??dayPerspectiveCurrent(p.view,localTodayAt))&&day&&!thread.responsibilityOverrideNeeded&&!interrupted&&!thread.legacyFallbackRequired)return <TodayScene p={p} today={day} bookmarkReason={requiresChoice?thread.invalidReason??focusNotice??'原书签尚待重新核对。':null} initialChoice={dayPerspectiveCurrent(p.view,todayChoiceAt)?todayChoiceAt!.choice:null} headingRef={headingRef} feedback={feedback} onFocus={chooseToday} onPrepare={prepareToday} onResume={returnToFocus} onExplore={onExplore} onRecollection={openRecollection} onNavigate={onNavigate}/>
+ if((todayView??dayPerspectiveCurrent(p.view,localTodayAt))&&day&&!thread.responsibilityOverrideNeeded&&!interrupted&&!thread.legacyFallbackRequired)return <TodayScene p={p} today={day} bookmarkReason={requiresChoice?thread.invalidReason??focusNotice??'原书签尚待重新核对。':null} initialChoice={dayChoiceCurrent(p.view,todayChoiceAt)?todayChoiceAt!.choice:null} headingRef={headingRef} feedback={feedback} onFocus={chooseToday} onPrepare={prepareToday} onResume={returnToFocus} onExplore={onExplore} onRecollection={openRecollection} onNavigate={onNavigate}/>
  if(thread.focus.kind==='equity'&&!interrupted&&!unknownFocus&&!legacy){
   const equityFocus=thread.focus
   return <EquityMoment p={{...p,accountId:equityFocus.accountId}} focus={equityFocus} focusQuarter={focusQuarter} headingRef={headingRef} feedback={feedback} onFocus={next=>{
