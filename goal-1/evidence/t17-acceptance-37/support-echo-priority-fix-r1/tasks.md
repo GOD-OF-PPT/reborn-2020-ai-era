@@ -1,2 +1,0 @@
-- [ ] Existing linked cost/actual paid/due first, no mathematical/rule or save change.
-- [ ] Test first summary and scene-result amount occurs before generic phrase; check actual next candidate.

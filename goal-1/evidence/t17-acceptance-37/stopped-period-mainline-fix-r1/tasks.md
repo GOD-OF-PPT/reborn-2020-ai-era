@@ -1,2 +1,0 @@
-- [ ] Main title/factual line preserve stopped request while original live follow-ups remain actionable.
-- [ ] Static review and actual same-state new candidate after owners freeze; prior95 failure frame retained.
