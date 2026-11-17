@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { MAINLINE_ACTS } from '../content/mainline-chapters.ts'
 import { moneyText, wishes } from './game-text.ts'
 import type { GamePanelProps, NavigateScene } from './game-types.ts'
 import { projectMainlineHud } from './mainline-projection.ts'
@@ -9,9 +10,10 @@ interface MainlineCompassProps {
   readonly p: GamePanelProps
   readonly onNavigate: NavigateScene
   readonly compact?: boolean
+  readonly onOpenDirectorCut?: () => void
 }
 
-export function MainlineCompass({ p, onNavigate, compact = false }: MainlineCompassProps) {
+export function MainlineCompass({ p, onNavigate, compact = false, onOpenDirectorCut }: MainlineCompassProps) {
   const [expanded, setExpanded] = useState(!compact)
   const [tab, setTab] = useState<'quests' | 'stats' | 'synergies'>('quests')
   const [soundOn, setSoundOn] = useState<boolean>(() => isSoundEnabled())
@@ -31,7 +33,15 @@ export function MainlineCompass({ p, onNavigate, compact = false }: MainlineComp
           <span className="compass-act-badge">{hud.act.title}</span>
           <strong className="compass-act-sub">{hud.act.subtitle}</strong>
           <span className="compass-progress-inline" title="本章主线里程碑完成度">
-            本章 {hud.actProgressPercent}%
+            主线 {hud.actProgressPercent}%
+          </span>
+          <span className="compass-era-dots" aria-hidden="true" title="2020—2025 六幕时代主线">
+            {MAINLINE_ACTS.map(a => (
+              <i
+                key={a.year}
+                className={'compass-era-dot' + (a.year < hud.act.year ? ' is-past' : a.year === hud.act.year ? ' is-current' : '')}
+              />
+            ))}
           </span>
         </div>
 
@@ -51,6 +61,19 @@ export function MainlineCompass({ p, onNavigate, compact = false }: MainlineComp
         </div>
 
         <div className="compass-controls">
+          {onOpenDirectorCut ? (
+            <button
+              type="button"
+              className="compass-v3-btn"
+              onClick={() => {
+                playConfirmTap()
+                onOpenDirectorCut()
+              }}
+              title="切换至零繁琐、高策略连携的 v4.0 奇点觉醒剧场"
+            >
+              ✦ 奇点觉醒模式
+            </button>
+          ) : null}
           <button
             type="button"
             className="compass-sound-btn"
@@ -69,13 +92,25 @@ export function MainlineCompass({ p, onNavigate, compact = false }: MainlineComp
               setExpanded(prev => !prev)
             }}
           >
-            {expanded ? '收起主线罗盘 ▴' : '展开主线与协同 ▾'}
+            {expanded ? '收起罗盘 ▴' : '主线指引 ▾'}
           </button>
         </div>
       </div>
 
       {expanded ? (
         <div className="compass-drawer">
+          <div className="compass-act-stepper" aria-label="六年六幕时代总览">
+            {MAINLINE_ACTS.map(a => (
+              <div
+                key={a.year}
+                className={'compass-act-node' + (a.year < hud.act.year ? ' is-past' : a.year === hud.act.year ? ' is-current' : '')}
+              >
+                <strong>{a.year} · 第{a.actNumber}幕</strong>
+                <span>{a.title.split(' · ')[1]}</span>
+              </div>
+            ))}
+          </div>
+
           <div className="compass-era-wave">
             <span>时代风向：{hud.act.eraWave}</span>
             <nav className="compass-subtabs" aria-label="主线罗盘视图">
@@ -134,7 +169,9 @@ export function MainlineCompass({ p, onNavigate, compact = false }: MainlineComp
                           type="button"
                           onClick={() => {
                             playConfirmTap()
-                            if (q.target) onNavigate(q.targetScreen, q.target); else onNavigate(q.targetScreen)
+                            setExpanded(false)
+                            if (q.target) onNavigate(q.targetScreen, q.target)
+                            else onNavigate(q.targetScreen)
                           }}
                         >
                           前往 →
@@ -164,6 +201,7 @@ export function MainlineCompass({ p, onNavigate, compact = false }: MainlineComp
                           className="primary"
                           onClick={() => {
                             playConfirmTap()
+                            setExpanded(false)
                             p.request(cue.directCommand!.kind, cue.directCommand!.payload, cue.directCommand!.label, true)
                           }}
                         >
@@ -174,7 +212,9 @@ export function MainlineCompass({ p, onNavigate, compact = false }: MainlineComp
                           type="button"
                           onClick={() => {
                             playConfirmTap()
-                            if (cue.target) onNavigate(cue.screen, cue.target); else onNavigate(cue.screen)
+                            setExpanded(false)
+                            if (cue.target) onNavigate(cue.screen, cue.target)
+                            else onNavigate(cue.screen)
                           }}
                         >
                           打开面板 ↗
