@@ -98,12 +98,12 @@ export function projectMainlineHud(view: PlayingView, features: PlayFeatures): M
   const firstPaid = features.firstOrder.result.paymentFen > 0
   const researchesDone = features.market.researches.filter(r => r.status === 'completed').length
   const marketFills = features.market.fills.filter(f => f.date <= view.date).length
-  const videoWorksDone = (features.video?.works.filter(wk => wk.reviewedAt !== null).length ?? 0) + (firstPaid ? 1 : 0)
-  const videoAudience = features.video?.audiences.reduce((sum, a) => sum + a.size, 0) ?? 0
-  const courseSamplesDone = features.course?.courses.filter(c => c.sampleReady).length ?? 0
+  const videoWorksDone = (features.video?.works.filter(wk => wk.production?.status === 'completed' && wk.reviewedVersion === wk.version && wk.abandonedAt === null).length ?? 0) + (firstPaid ? 1 : 0)
+  const videoAudience = features.video?.channels.reduce((sum, channel) => sum + channel.audience, 0) ?? 0
+  const courseSamplesDone = features.course?.courses.filter(c => c.versions.length > 0).length ?? 0
   const courseCohortsClosed = features.course?.cohorts.filter(c => c.closedAt !== null).length ?? 0
-  const courseGraduates = features.course?.enrollments.filter(e => e.graduated && e.refundedFen === 0).length ?? 0
-  const relayPermissions = features.relay?.applications.filter(a => a.status === 'approved').length ?? 0
+  const courseGraduates = features.course?.courses.reduce((sum, course) => sum + course.graduateCount, 0) ?? 0
+  const relayPermissions = features.relay?.applications.filter(a => a.approved === true).length ?? 0
   const relayPeriodsDone = features.relay?.periods.filter(p => p.status === 'closed').length ?? 0
   const ecoContractsDone = features.deepseek?.contracts.filter(c => c.status === 'completed').length ?? 0
   const equityAgreements = features.deepseek?.agreements.length ?? 0
